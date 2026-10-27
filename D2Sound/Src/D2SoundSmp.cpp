@@ -763,13 +763,18 @@ float SOUNDSMP_LinearToLogNoParam(float fValue, float fValue2) {
 
 // No register arguments: EAX is first written by FNSTSW AX at 00516607 and only carries the x87 status word (1.14d asm).
 float __stdcall SOUNDSMP_ClampVolume(float fValue, float fParam2, float fParam3) {
+    // NOTE: the hex literals below and in ClampAttenuation are IEEE-754 bit patterns
+    // copied out of Ghidra pseudocode, not integers: 0x3f1a36e2e0000000 is the double
+    // 0.0001. Pasted verbatim they evaluate to an astronomically large integer, so the
+    // min-clamp returned -10000 (DSBVOLUME_MIN) for EVERY input and every DDA buffer sat
+    // pinned silent; decode them to their true double values (0.0001, -10000.0, 2000.0).
     long double fVar1 = (long double)fParam3;
-    if (fVar1 <= (long double)fValue + (long double)(double)0x3f1a36e2e0000000) {
+    if (fVar1 <= (long double)fValue + (long double)0.0001) {
       return -10000.0;
     }
 
     long double fVar2 = (long double)fParam2;
-    long double fVar3 = fVar2 - (long double)(double)0x3f1a36e2e0000000;
+    long double fVar3 = fVar2 - (long double)0.0001;
     if (fVar3 < fVar1 != (fVar3 == fVar1)) {
       return 0.0;
     }
@@ -780,19 +785,25 @@ float __stdcall SOUNDSMP_ClampVolume(float fValue, float fParam2, float fParam3)
     }
 
     fVar1 = CRT_CILog10((fVar2 + (long double)fValue) / fVar3);
-    return (float)(fVar1 * (long double)(double)-0x3f60c00000000000);
+    // -0x3f60c00000000000 (-0.00341796875) cannot be right: the exact inverse of this
+    // curve, ClampAttenuation below, divides by 2000.0. With -0.00342 every nonzero
+    // volume collapses to (int)-0.001 = 0 (FULL) and only 0 maps to -10000 — the whole
+    // curve degenerates to binary full/silent. Restore the -2000.0 scale so 20*log10
+    // amplitude-dB semantics hold, matching retail 1.14d FUN_005165f0:
+    // 255->0 dB, 110->-730, 0->-10000.
+    return (float)(fVar1 * -2000.0);
 }
 
 float __stdcall SOUNDSMP_ClampAttenuation(float fParam) {
     long double fVar1 = (long double)fParam;
-    if ((long double)0.0 < fVar1 + (long double)(double)0x3f1a36e2e0000000) {
+    if ((long double)0.0 < fVar1 + (long double)0.0001) {
       return 1.0;
     }
-    if (fVar1 - (long double)(double)0x3f1a36e2e0000000 < (long double)(double)-0x3f3c780000000000) {
+    if (fVar1 - (long double)0.0001 < (long double)-10000.0) {
       return 0.0;
     }
 
-    fVar1 = CRT_CIPow((long double)10.0, fVar1 / (long double)(double)0x409f400000000000);
+    fVar1 = CRT_CIPow((long double)10.0, fVar1 / (long double)2000.0);
     return (float)fVar1;
 }
 

@@ -131,7 +131,11 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
       Storm::Source::SReg::SRegSaveValue("Diablo II", "Resolution", 0, 0);
     }
     if (!pD2IniData->bNOSOUND && geD2ApplicationMode != APPMODE_server) {
-      D2Sound::Sound::SOUND_Initialize(*(uint32_t*)pD2IniData->bD2ExpMpqExistsOrLanugageCode, (HWND)(uint32_t)pD2IniData->bSOUNDBKG);
+      // bSOUNDBKG is a bool (ini struct offset 0x224), not a window handle — passing it
+      // made SOUND_Initialize see hwnd=0/1 and the DDA music stream bind to a dead
+      // window. The game window exists by now (CreateWindowWithChecks above), so hand
+      // over the real one.
+      D2Sound::Sound::SOUND_Initialize(*(uint32_t*)pD2IniData->bD2ExpMpqExistsOrLanugageCode, D2gfx::D2GFX::GetHwnd());
       __frame0.bSoundInit = 1;
     }
 

@@ -522,9 +522,18 @@ int __fastcall SOUND_UpdateChannelParams(int * pSoundChannel) {
     pChannelEntry = (int*)d2_bits_of(*(float*)(nSoundDescSaved + 0x10) * 0.003125);
     pSoundsTxtLine = (D2SoundsTxt*)d2_bits_of(*(float*)(nSoundDescSaved + 0x14) * 0.003125);
     if (!pSoundChannel[1]) {
-      D2Sound::Src::D2SoundSmp::SOUNDSMP_CalculateVolumeAndPan((uint32_t*)&fFalloffMin, (uint32_t*)&fFalloffMax, fEaxObstruction, (float)d2_bits_to_float(pChannelEntry), (float)d2_bits_to_float(pSoundsTxtLine));
-      D2Sound::Src::D2SoundSmp::SOUNDSMP_SetPan((D2SoundSmpStrc*)*pSoundChannel, (int32_t)fFalloffMax);
-      nSoundDescOffset = (int)fFalloffMin * nSoundDescOffset / 0xff;
+      // SOUNDSMP_CalculateVolumeAndPan writes its OUT params as 32-bit integers (volume
+      // 0..255, pan 0..255). Receiving them through the storage of two float locals and
+      // reading them back as floats turns any volume 0..255 (IEEE bits 0x000000xx) into
+      // a subnormal float (~1e-43) whose int conversion truncates to 0 — every channel
+      // taking this block played at att=-10000 (DSBVOLUME_MIN) while music-flagged
+      // channels (pSoundChannel[1] != 0) skip the block and stayed audible. Retail reads
+      // these out params as plain integers.
+      uint32_t nCalcVolume = 0;
+      uint32_t nCalcPan = 0;
+      D2Sound::Src::D2SoundSmp::SOUNDSMP_CalculateVolumeAndPan(&nCalcVolume, &nCalcPan, fEaxObstruction, (float)d2_bits_to_float(pChannelEntry), (float)d2_bits_to_float(pSoundsTxtLine));
+      D2Sound::Src::D2SoundSmp::SOUNDSMP_SetPan((D2SoundSmpStrc*)*pSoundChannel, (int32_t)nCalcPan);
+      nSoundDescOffset = (int)nCalcVolume * nSoundDescOffset / 0xff;
     }
     if (*(uint8_t*)(pSoundChannel + 1) & 2) {
       D2Sound::Src::D2SoundSmp::SOUNDSMP_Set3DPosition((D2SoundSmpStrc*)*pSoundChannel, fEaxObstruction, (float)d2_bits_to_float(pChannelEntry), (float)d2_bits_to_float(pSoundsTxtLine));
