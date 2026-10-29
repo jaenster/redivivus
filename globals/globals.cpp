@@ -28588,7 +28588,20 @@ char * gaLanguageNames_007273a8[15] = {
 
 uint32_t gnCursorInvTypeAutoOpenC[5] = { 0x0, 0x1, 0x4, 0x2, 0x6 }; D2_GLOBAL_GUARD(gnCursorInvTypeAutoOpenC, "gnCursorInvTypeAutoOpenC");
 
-int bUnitSoundTableInit[11] = {
+// gaUnitSoundTableByClassId[0] points here: the Amazon row of the per-class player sound
+// tables, static .data at 0x727eac in the retail 1.14d Game.exe, never runtime-filled. The
+// decompile's "bUnitSoundTableInit" 1-byte stub was this array's first byte, and the six
+// sibling 1-byte stubs are the first bytes of the contiguous 0x729f00..0x72a008 block; the
+// pointer table itself is .data 0x72a008 with entry order [Ama,Sorc,Nec,Pal,Barb,Dru,Ass],
+// and the address-named neighbours (eD2Sounds_ARRAY_00727f48 et al.) bracket the Amazon
+// table exactly. Slots: [0]/[1] hit/death bases, [2..7] event barks (0x13 impossible,
+// 0x15 need-mana, 0x16 need-key, 0x17 cantcarry - the inventory-full pickup-fail voice,
+// 0x14 cant-use-yet, 0x18 not-in-town), [8] chat base (anim events 0x19-0x20 pick [8],
+// [8]+2 .. [8]+14), [9] quest-speech base (act1_complete_andariel; quest events 0x21-0x53
+// are linear, id = [9] + event - 0x21, so 0x53 = [9]+0x32 = act5_defeat_baal), [10]
+// footstep block base (barb heavy / ama+pal medium / sor+nec+dru+ass light). Rows decoded
+// against the LoD sounds.txt sheet order.
+int gaUnitSoundIdsAmazon[11] = {
     0xb3e,
     0xb43,
     0xb89,
@@ -28600,7 +28613,7 @@ int bUnitSoundTableInit[11] = {
     0xb79,
     0xb91,
     0xad0
-}; D2_GLOBAL_GUARD(bUnitSoundTableInit, "bUnitSoundTableInit");
+}; D2_GLOBAL_GUARD(gaUnitSoundIdsAmazon, "gaUnitSoundIdsAmazon");
 
 eD2Sounds eD2Sounds_ARRAY_00727f48[12] = {
     SOUND_NONE,

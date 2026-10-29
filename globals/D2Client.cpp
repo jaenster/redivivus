@@ -44026,7 +44026,7 @@ eD2Sounds gaUnitSoundTableModeChange[12] = {
     SOUND_NONE
 }; D2_GLOBAL_GUARD(gaUnitSoundTableModeChange, "gaUnitSoundTableModeChange");
 
-int * gaUnitSoundTableByClassId[7] = { bUnitSoundTableInit, gaUnitSoundIdsSorceress, gaUnitSoundIdsNecromancer, gaUnitSoundIdsPaladin, gaUnitSoundIdsBarbarian, gaUnitSoundIdsDruid, gaUnitSoundIdsAssassin }; D2_GLOBAL_GUARD(gaUnitSoundTableByClassId, "gaUnitSoundTableByClassId");
+int * gaUnitSoundTableByClassId[7] = { gaUnitSoundIdsAmazon, gaUnitSoundIdsSorceress, gaUnitSoundIdsNecromancer, gaUnitSoundIdsPaladin, gaUnitSoundIdsBarbarian, gaUnitSoundIdsDruid, gaUnitSoundIdsAssassin }; D2_GLOBAL_GUARD(gaUnitSoundTableByClassId, "gaUnitSoundTableByClassId");
 
 int gaAmbientMusicLevelSetTable[168] = {
     0x11,

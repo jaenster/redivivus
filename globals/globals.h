@@ -1932,7 +1932,7 @@ extern uint32_t gnCursorInvTypeAutoOpenC[5];
 extern uint32_t gnCursorInvTypeAutoOpenA;
 extern D2SkillCltDoFunc SKILLCLTDOFUNCS[130];
 extern int SKILLCLTDOFUNCS_SIZE;
-extern int bUnitSoundTableInit[11];
+extern int gaUnitSoundIdsAmazon[11]; // .data 0x727eac; gaUnitSoundTableByClassId[0] - the Amazon row of the per-class player sound tables
 extern int gaUnitSoundTable[28];
 extern eD2Sounds eD2Sounds_ARRAY_00727f48[12];
 extern eD2Sounds eD2Sounds_ARRAY_00727f78[12];

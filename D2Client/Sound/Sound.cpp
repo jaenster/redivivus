@@ -447,6 +447,12 @@ int __fastcall SOUND_PlaySound(eD2Sounds nSoundId, D2UnitStrc * pUnit, int32_t n
 
     D2SoundsTxt* pSoundsTxt;
     pSoundsTxt = DataTbls::TXT_sounds_GetLineBySoundId(nSoundId);
+    if (!pSoundsTxt) {
+      // the lookup returns null for any id outside [0, nTxtSoundsSize); the original
+      // derefs unchecked - with the real static sound tables the case is unreachable,
+      // kept as defense in depth (field crash: jaenster/redivivus#17)
+      return 0;
+    }
     int nGlobal3;
     nGlobal3 = SoundHdr::SOUNDHDR_GetGlobal3();
     if (!pSoundsTxt->Volume) {
