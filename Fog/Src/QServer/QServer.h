@@ -283,7 +283,7 @@ struct D2QServerStrc {
     /* 0x890 */ int nHacklistSize;
     /* 0x894 */ CRITICAL_SECTION csHacklist; // Protects hacklist and ban/rate-limit related state
     /* 0x8AC */ struct D2QServerHacklistEntryStrc * * ppHacklistBuckets; // Hash buckets of active hacklist entries
-    /* 0x8B0 */ int nHacklistBucketCount; // Number of entries in ppHacklistBuckets
+    /* 0x8B0 */ uint32_t nHacklistBucketCount; // Number of entries in ppHacklistBuckets
     /* 0x8B4 */ CRITICAL_SECTION csWorkerTelemetry; // Protects worker telemetry snapshots and accept-stage counters
     /* 0x8CC */ D2QServerWorkerTelemetryStrc aWorkerTelemetry[4]; // Per-worker accept/IO telemetry records
     /* 0xB8C */ int nListeningWorkers; // Number of initialized listener workers

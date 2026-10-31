@@ -557,6 +557,7 @@ void __fastcall SUNITNPC_FillNpcStore(::SGAMEDATA * pGame, D2UnitStrc * pPlayer,
     D2ItemsTxt* pItemTxtTmp;
     void* pvVar1;
     int nTradeListOffset;
+    uint16_t nLayer;
     int nTradeItemClassId;
     int32_t nNpcIndex;
     uint32_t nItemClassId;
@@ -654,9 +655,9 @@ void __fastcall SUNITNPC_FillNpcStore(::SGAMEDATA * pGame, D2UnitStrc * pPlayer,
       if (pGeneratedItem) {
         pItemTxtTmp = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(*(uint32_t*)((int)pTradeState->pTradeList2 + nTradeIdx * 4), &nTradeItemClassId);
         if (pItemTxtTmp->dwCode == 0x20767163 || pItemTxtTmp->dwCode == 0x20767161) {
-          nRolledMax = 0;
+          nLayer = 0;
           nTradeListOffset = D2Common::ITEMS::Items::ITEM_GetMaxStack(pGeneratedItem);
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pGeneratedItem, UNITSTAT_quantity, nTradeListOffset, nRolledMax);
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pGeneratedItem, UNITSTAT_quantity, nTradeListOffset, nLayer);
         }
       } else {
         nFailCount++;
@@ -3073,6 +3074,7 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
 void __fastcall SUNITNPC_ProcessSellConfirmation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMerc) {
     uint16_t wPosY;
     uint16_t nPosX;
+    int32_t nMaxHp;
     int32_t nPosTemp;
     eD2UnitType eMonsterType;
     if (!(pMerc && pUnit)) {
@@ -3091,9 +3093,9 @@ void __fastcall SUNITNPC_ProcessSellConfirmation(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     D2Common::Units::SetupUpdateFlag(pMerc, 1);
-    int32_t nMaxHp = 0;
+    uint16_t nLayer = 0;
     int32_t nPosY = D2Common::Stats::StatsEx::GetTxtMaxHp(pMerc);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_hitpoints, nPosY, nMaxHp);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_hitpoints, nPosY, nLayer);
     PLAYER::PlayerPets::PETS_ResummonPetByUnit(pGame, pUnit, pMerc);
     GAME::Targets::CreateUnitNode(pGame, pMerc, nullptr, pUnit->nNodeTableIndex);
     D2Common::DATATBLS::ItemStats::SetState(pMerc, STATE_freeze, 0);
@@ -3133,11 +3135,11 @@ void __fastcall SUNITNPC_HandleSellAction(::SGAMEDATA * pGame, D2UnitStrc * pUni
     BOOL bCanAfford;
     D2ClientStrc* pClient;
     bool bIsTrader;
+    uint16_t nLayer;
     uint32_t nReviveCostResponse;
     int32_t nLine;
     int nMercGUID;
     uint8_t nResult;
-    int32_t nStatLayer;
     uint8_t nTradeType;
     D2UnitStrc* pNpcOrMerc;
     pNpcOrMerc = SUnit::GetInteractedNpc(pGame, pUnit);
@@ -3192,9 +3194,9 @@ void __fastcall SUNITNPC_HandleSellAction(::SGAMEDATA * pGame, D2UnitStrc * pUni
       } else {
         pNpcOrMerc->eUnitFlags &= ~UNITFLAG_ISDEAD;
         D2Common::Units::SetupUpdateFlag(pNpcOrMerc, 1);
-        nStatLayer = 0;
+        nLayer = 0;
         nLine = D2Common::Stats::StatsEx::GetTxtMaxHp(pNpcOrMerc);
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNpcOrMerc, UNITSTAT_hitpoints, nLine, nStatLayer);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNpcOrMerc, UNITSTAT_hitpoints, nLine, nLayer);
         SUNITNPC_ProcessSellConfirmation(pGame, pUnit, pNpcOrMerc);
         nReviveCostResponse = 0;
         pClient = SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x99d);

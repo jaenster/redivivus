@@ -581,7 +581,7 @@ void __fastcall UNITMODE_ExecuteSkillAction(eD2UnitModeAction nActionType, D2Uni
 
     BOOL nMsgResult = HandleMessage(nLine, pUnit, &msgSkillId, 0);
     if (nMsgResult) {
-      int32_t nLayer;
+      uint16_t nLayer;
       switch (nActionType) {
         case UNITMODEACTION_LEFTSKILL_COORD:
 

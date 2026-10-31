@@ -688,7 +688,7 @@ void __stdcall SetDamageStats(D2UnitStrc * pUnit, D2UnitStrc * pMissile, D2Missi
     }
 
     do {
-      Stats::StatsEx::STATLIST_SetUnitStat(pMissile, UNITSTAT_damage_vs_montype, awBonusLayers[iBonusLayer].nStatValue, (uint32_t)(uint16_t)awBonusLayers[iBonusLayer].wSubIndex);
+      Stats::StatsEx::STATLIST_SetUnitStat(pMissile, UNITSTAT_damage_vs_montype, awBonusLayers[iBonusLayer].nStatValue, awBonusLayers[iBonusLayer].wSubIndex);
       iBonusLayer++;
     } while (iBonusLayer < nBonusCount);
 }

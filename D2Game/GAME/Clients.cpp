@@ -1644,7 +1644,7 @@ int __fastcall CLIENT_GetLangId(D2ClientStrc * pClient) {
 }
 
 // Places player unit into the game world (state 3→waiting rooms). Spawns unit at town coordinates (or provided room), sends ReassignPlayer packet, loads corpses from inventory (resurrects mercs or places corpse objects), restores iron golem from save if present. Core of server-side join flow after character load.
-void __stdcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2DrlgActStrc * pDrlgAct, ::SGAMEDATA * pSpawnXY, uint32_t nUnused) {
+void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2DrlgActStrc * pDrlgAct, ::SGAMEDATA * pSpawnXY) {
     eD2LevelId eLevelId;
     uint32_t dwCorpseGUID;
     D2RoomStrc** pCorpsePlayerData;
@@ -2296,7 +2296,7 @@ D2UnitStrc * __fastcall CLIENT_GetAttachedUnit(::SGAMEDATA * pGame, D2ClientStrc
 }
 
 // Dead code / unused client join path. Sets pClient->nClass to bParam, resolves the player unit and its spawn coords, then deletes the existing unit from the room (AllocDrlgDelete + FreeServerUnit) and reloads it from scratch via CLIENT_LoadCharacterAndSendGameData + CLIENT_PlacePlayerInRoom. Clears the lowest fClientFlags bit and fires GAME_OnClientRoomChange if the room changed. Halts with an internal error if pClient is null. Not referenced by any active join flow.
-void __fastcall UnusedClientJoinGame(D2ClientStrc * pClient, uint8_t bParam) {
+void __fastcall UnusedClientJoinGame(D2ClientStrc * pClient, int bParam) {
     D2RoomStrc* pRoom;
     uint32_t nSpawnX;
     uint32_t nSpawnY;
@@ -2309,10 +2309,10 @@ void __fastcall UnusedClientJoinGame(D2ClientStrc * pClient, uint8_t bParam) {
     }
 
     D2UnitStrc* pUnit;
-    pClient->nClass = bParam;
+    pClient->nClass = (uint8_t)bParam;
     pUnit = CLIENTS_GetControlUnit(pClient, 0);
     pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pClient->nClass = bParam;
+    pClient->nClass = (uint8_t)bParam;
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nSpawnX = pUnit->pPath.pStaticPath->nPosX;
@@ -2337,7 +2337,7 @@ void __fastcall UnusedClientJoinGame(D2ClientStrc * pClient, uint8_t bParam) {
     D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nOldUnitGUID);
     UNIT::SUnit::FreeServerUnit(pGame, pUnit);
     CLIENT_LoadCharacterAndSendGameData(pClient, pGame, 0, pRoom, nSpawnX, nSpawnY);
-    CLIENT_PlacePlayerInRoom(pClient, pClient->pPlayer, pGame, pRoom, (D2DrlgActStrc*)nSpawnX, (::SGAMEDATA*)nSpawnY, nSpawnY);
+    CLIENT_PlacePlayerInRoom(pClient, pClient->pPlayer, pGame, pRoom, (D2DrlgActStrc*)nSpawnX, (::SGAMEDATA*)nSpawnY);
     pClient->fClientFlags &= -2;
     if (pRoom != pClient->pRoom) {
       GAME_OnClientRoomChange(pRoom, pClient);
@@ -2373,7 +2373,7 @@ void __fastcall UnusedClientJoinGame2(::SGAMEDATA * pGame, D2ClientStrc * pClien
     D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nOldUnitGUID);
     UNIT::SUnit::FreeServerUnit(pGame, pUnit);
     CLIENT_LoadCharacterAndSendGameData(pClient, pGame, 0, pRoom, (uint32_t)*(uint32_t*)&bActNo, nSpawnY);
-    CLIENT_PlacePlayerInRoom(pClient, pClient->pPlayer, pGame, pRoom, *(D2DrlgActStrc**)&bActNo, (::SGAMEDATA*)nSpawnY, (uint32_t)*(uint32_t*)&bActNo);
+    CLIENT_PlacePlayerInRoom(pClient, pClient->pPlayer, pGame, pRoom, *(D2DrlgActStrc**)&bActNo, (::SGAMEDATA*)nSpawnY);
 }
 
 // Routes a per-frame unit visibility update to the appropriate type-specific packet handler. If the unit's "new" flag is set and it is not the client's own player, sends an init-unit packet first (skipping missiles). Then dispatches by eUnitType: UNIT_PLAYER to PlayerModes::PacketUpdateForClient, UNIT_MONSTER to Item::PacketUpdateForClient, UNIT_OBJECT to ObjectsMode::PacketUpdateForClient, UNIT_ITEM to ItemMode::PacketUpdateForClient. Halts fatally if pUnit is null.

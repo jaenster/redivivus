@@ -1554,7 +1554,6 @@ int32_t __fastcall PropertyFunc_SimpleStatWithRoll(int32_t nType, D2UnitStrc * p
 }
 
 void __stdcall ITEMMOD_ApplyEtherealBonus(D2UnitStrc * pUnit) {
-    int32_t iVar1;
     int32_t nTempStat;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x706);
@@ -1563,22 +1562,25 @@ void __stdcall ITEMMOD_ApplyEtherealBonus(D2UnitStrc * pUnit) {
 
     Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_ETHEREAL, 1);
     uint32_t bIsWeapon = Items::ITEMS_IsA(pUnit, ITEMTYPE_Weapon);
-    nTempStat = 0;
+    uint16_t uVar1 = 0;
     if (bIsWeapon) {
-      iVar1 = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_mindamage, 0);
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mindamage, iVar1 * 3 / 2, nTempStat);
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxdamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_maxdamage, 0) * 3 / 2, 0);
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_mindamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_secondary_mindamage, 0) * 3 / 2, 0);
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, 0) * 3 / 2, 0);
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, 0) * 3 / 2, 0);
-      iVar1 = 0;
-      nTempStat = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, 0);
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, nTempStat * 3 / 2, iVar1);
+      nTempStat = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_mindamage, 0);
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mindamage, nTempStat * 3 / 2, uVar1);
+      uVar1 = 0;
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxdamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_maxdamage, 0) * 3 / 2, uVar1);
+      uVar1 = 0;
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_mindamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_secondary_mindamage, 0) * 3 / 2, uVar1);
+      uVar1 = 0;
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, 0) * 3 / 2, uVar1);
+      uVar1 = 0;
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, 0) * 3 / 2, uVar1);
+      uVar1 = 0;
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, 0) * 3 / 2, uVar1);
       return;
     }
 
-    iVar1 = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_armorclass, 0);
-    Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_armorclass, iVar1 * 3 / 2, nTempStat);
+    nTempStat = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_armorclass, 0);
+    Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_armorclass, nTempStat * 3 / 2, uVar1);
 }
 
 // Returns 1 if the given automod entry (nParam points to an AutomagicTxt record) can be applied to pUnit. Rejects stackable items, throwables, items without inventory slots, and items whose type matches the automod's exclusion list; passes only if the item type matches at least one inclusion entry.

@@ -321,12 +321,12 @@ void __fastcall GFXUTIL_GetArmorAppearanceFromTorso(D2UnitStrc * pUnitStrc, D2In
 
       pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
       if (pItemsTxt) {
-        *(char*)pOutAppearance = pItemsTxt->bRArm;
-        *(char*)((int)pOutAppearance + 1) = pItemsTxt->bLArm;
-        *(char*)((int)pOutAppearance + 2) = pItemsTxt->bTorso;
-        *(char*)((int)pOutAppearance + 3) = pItemsTxt->bLegs;
-        *(char*)(pOutAppearance + 1) = pItemsTxt->bRSPad;
-        *(char*)((int)pOutAppearance + 5) = pItemsTxt->bLSPad;
+        *(uint8_t*)pOutAppearance = pItemsTxt->bRArm;
+        *(uint8_t*)((int)pOutAppearance + 1) = pItemsTxt->bLArm;
+        *(uint8_t*)((int)pOutAppearance + 2) = pItemsTxt->bTorso;
+        *(uint8_t*)((int)pOutAppearance + 3) = pItemsTxt->bLegs;
+        *(uint8_t*)(pOutAppearance + 1) = pItemsTxt->bRSPad;
+        *(uint8_t*)((int)pOutAppearance + 5) = pItemsTxt->bLSPad;
         return;
       }
     } else {

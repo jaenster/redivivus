@@ -1236,8 +1236,8 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
 
     GAME::Wall2::WALL2_InitUnitGfx(pUnit);
     nPalShiftIdx = 2;
-    if ((uint8_t)pMonStatsTxtNew->TransLvl < 8) {
-      nPalShiftIdx = (uint8_t)pMonStatsTxtNew->TransLvl + 2;
+    if (pMonStatsTxtNew->TransLvl < 8) {
+      nPalShiftIdx = pMonStatsTxtNew->TransLvl + 2;
     }
 
     nMonStats2Idx = pUnit->nClassId;

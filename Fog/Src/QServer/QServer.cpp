@@ -300,7 +300,7 @@ void __fastcall SweepExpiredHackEntries(D2QServerStrc * pQServer) {
     EnterCriticalSection(&pQServer->csHacklist);
     pQServer->dwLastHacklistSweepTick = dwTickCountLog;
     nBucketIndex = 0;
-    if ((uint32_t)pQServer->nHacklistBucketCount > 0) {
+    if (pQServer->nHacklistBucketCount > 0) {
       do {
         pEntry = pQServer->ppHacklistBuckets[nBucketIndex];
         pPrevEntry = 0;
@@ -352,7 +352,7 @@ void __fastcall SweepExpiredHackEntries(D2QServerStrc * pQServer) {
         }
 
         nBucketIndex++;
-      } while (nBucketIndex < (uint32_t)pQServer->nHacklistBucketCount);
+      } while (nBucketIndex < pQServer->nHacklistBucketCount);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQServer->csHacklist);
@@ -378,7 +378,7 @@ void __thiscall HACKL_RemoveIpFromHacklist(D2QServerStrc * pQServer, uint32_t nI
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csHacklist);
-    uint32_t nBucketIndex = nIpAddress % (uint32_t)pQServer->nHacklistBucketCount;
+    uint32_t nBucketIndex = nIpAddress % pQServer->nHacklistBucketCount;
     D2QServerHacklistEntryStrc* pPrevEntry = 0;
     D2QServerHacklistEntryStrc* pEntry = pQServer->ppHacklistBuckets[nBucketIndex];
     while (true) {
@@ -420,7 +420,7 @@ void __thiscall HACKL_RemoveIpFromHacklist(D2QServerStrc * pQServer, uint32_t nI
 int __thiscall HACKL_CheckAndResetHacklistEntry(D2QServerStrc * pQServer, uint32_t nIpAddress) {
     CRITICAL_SECTION* lpCriticalSection = &pQServer->csHacklist;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-    D2QServerHacklistEntryStrc* pDVar1 = pQServer->ppHacklistBuckets[nIpAddress % (uint32_t)pQServer->nHacklistBucketCount];
+    D2QServerHacklistEntryStrc* pDVar1 = pQServer->ppHacklistBuckets[nIpAddress % pQServer->nHacklistBucketCount];
     do {
       if (!pDVar1) {
         LeaveCriticalSection(lpCriticalSection);
@@ -773,7 +773,7 @@ static void FreeHacklistBuckets(D2QServerStrc * pQServer) {
     D2QServerHacklistEntryStrc* pNext;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csHacklist);
     uint32_t nBucketIndex = 0;
-    if ((uint32_t)pQServer->nHacklistBucketCount > 0) {
+    if (pQServer->nHacklistBucketCount > 0) {
       D2QServerHacklistEntryStrc* pMemoryToFree;
       do {
         pMemoryToFree = pQServer->ppHacklistBuckets[nBucketIndex];
@@ -785,7 +785,7 @@ static void FreeHacklistBuckets(D2QServerStrc * pQServer) {
 
         pQServer->ppHacklistBuckets[nBucketIndex] = 0;
         nBucketIndex++;
-      } while (nBucketIndex < (uint32_t)pQServer->nHacklistBucketCount);
+      } while (nBucketIndex < pQServer->nHacklistBucketCount);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServer->nHacklistSize = 0;
@@ -1409,7 +1409,7 @@ void __fastcall BanIpAddress(D2QServerStrc * pQServer, char * szFile, uint32_t n
 
     CRITICAL_SECTION* lpCriticalSection = &pQServer->csHacklist;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-    uint32_t nBucketIndex = nIpAddress % (uint32_t)pQServer->nHacklistBucketCount;
+    uint32_t nBucketIndex = nIpAddress % pQServer->nHacklistBucketCount;
     for (pHacklistEntry = pQServer->ppHacklistBuckets[nBucketIndex]; pHacklistEntry; pHacklistEntry = pHacklistEntry->pNext) {
       if (pHacklistEntry->ipAddress.S_un.S_addr == nIpAddress) {
         pHacklistEntry->nSecondaryTtlSec = 0x78;

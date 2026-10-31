@@ -2399,7 +2399,7 @@ static int __stdcall ITEMS_DeserializeItemHeader(int32_t bIsOnGround, uint32_t n
     uint32_t dwUnitGUID;
     char* pcItemCodeOrName;
     int32_t nSize;
-    int32_t nLayer;
+    uint16_t nLayer;
     D2ItemStatCostTxt* pStatCostTxt;
     int32_t* pnItemSaveAdd;
     uint32_t dwReadValue = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 10);
@@ -4367,6 +4367,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
     D2SetItemsTxt** ppSetItems;
     char* szCharName;
     eD2UnitStat eStatId2;
+    uint16_t uVar1;
     uint32_t nChargeSkillId;
     uint32_t nChargeSkillLevel;
     uint16_t nChargeBuf[2];
@@ -4388,7 +4389,6 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
     eD2ItemQuality eQualityType;
     bool bExtended;
     eD2UnitStat eStatId;
-    int32_t nBitWidth;
     int bError;
     bError = 0;
     uint32_t nBitsRead;
@@ -4885,24 +4885,24 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
 
         nBitVal = ITEM_GetItemData_eD2ItemFlag_IsEthereal(pUnit);
         if (nBitVal) {
-          nBitWidth = 0;
+          uVar1 = 0;
           nClassId = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_mindamage, 0);
-          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mindamage, nClassId * 3 / 2, nBitWidth);
-          nBitWidth = 0;
+          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mindamage, nClassId * 3 / 2, uVar1);
+          uVar1 = 0;
           nClassId = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_maxdamage, 0);
-          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxdamage, nClassId * 3 / 2, nBitWidth);
-          nBitWidth = 0;
+          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxdamage, nClassId * 3 / 2, uVar1);
+          uVar1 = 0;
           nClassId = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_secondary_mindamage, 0);
-          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_mindamage, nClassId * 3 / 2, nBitWidth);
-          nBitWidth = 0;
+          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_mindamage, nClassId * 3 / 2, uVar1);
+          uVar1 = 0;
           nClassId = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, 0);
-          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, nClassId * 3 / 2, nBitWidth);
-          nBitWidth = 0;
+          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, nClassId * 3 / 2, uVar1);
+          uVar1 = 0;
           nClassId = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, 0);
-          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, nClassId * 3 / 2, nBitWidth);
-          nBitWidth = 0;
+          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, nClassId * 3 / 2, uVar1);
+          uVar1 = 0;
           nClassId = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, 0);
-          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, nClassId * 3 / 2, nBitWidth);
+          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, nClassId * 3 / 2, uVar1);
         }
         if (sgptDataTable->nTxtItemStatCostSize <= 0x49) {
           pStatCostTxt = 0;
@@ -4927,7 +4927,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
 
           nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nTmpVal2);
           nBitVal -= pStatCostTxt->saveAdd[nStatIndex];
-          nClassId = 0;
+          uVar1 = 0;
           eStatId = UNITSTAT_durability;
           goto store_gold_or_durability;
         }
@@ -4935,14 +4935,14 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
         nBitVal = ITEMS_IsA(pUnit, ITEMTYPE_Gold);
         if (nBitVal) {
           nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 1);
-          nClassId = 0;
+          uVar1 = 0;
           if (nBitVal) {
-            nBitWidth = 0x20;
+            nClassId = 0x20;
           } else {
-            nBitWidth = 0xc;
+            nClassId = 0xc;
           }
 
-          nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nBitWidth);
+          nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nClassId);
           eStatId = UNITSTAT_gold;
           goto store_gold_or_durability;
         }
@@ -4993,25 +4993,25 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
 
         nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nTmpVal2);
         nBitVal -= pStatCostTxt->saveAdd[nStatIndex];
-        nClassId = 0;
+        uVar1 = 0;
         eStatId = UNITSTAT_durability;
         store_gold_or_durability:
-        Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eStatId, nBitVal, nClassId);
+        Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eStatId, nBitVal, uVar1);
       }
     }
 
     BOOL bIsStackable;
     bIsStackable = IsStackable(pUnit);
     if (bIsStackable) {
-      nClassId = 0;
+      uVar1 = 0;
       if (nParam2 <= 0x50) {
-        nBitWidth = 8;
+        nClassId = 8;
       } else {
-        nBitWidth = 9;
+        nClassId = 9;
       }
 
-      nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nBitWidth);
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_quantity, nBitVal, nClassId);
+      nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nClassId);
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_quantity, nBitVal, uVar1);
     }
     if (!pUnit || pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataItem) {
       eItemFlags = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
@@ -5325,7 +5325,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
                 nSkillTabCount = 7;
               }
 
-              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_addskill_tab, nSkillTabCount, nSkillTabIdx + nSkillTabGroup * 8);
+              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_addskill_tab, nSkillTabCount, (short int)nSkillTabIdx + (short int)nSkillTabGroup * 8);
               break;
               case UNITSTAT_item_elemskill:
                 if (nParam2 > 0x5c) {
@@ -5361,14 +5361,14 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
               ItemMods::ITEMMODS_GetQualityMinMax(nBitVal, &nSkillId, &nSkillLevel);
               nStatVal = 7;
               pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(UNITSTAT_item_singleskill);
-              nBitVal = nSkillId;
+              nTmpVal2 = nSkillId;
               if (pStatCostTxt) {
                 nStatVal = (1 << (pStatCostTxt->saveBits[0] & 0x1f)) - 1;
               }
               if ((int)nSkillLevel > 0 && (int)nSkillLevel <= nStatVal) {
                 bIsStackable = Stats::StatsEx::SKILLS_ValidateSkillDescIndex(nSkillId);
                 if (bIsStackable) {
-                  Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_singleskill, nSkillLevel, nBitVal);
+                  Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_singleskill, nSkillLevel, (uint16_t)nTmpVal2);
                 }
               }
 
@@ -5383,7 +5383,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
                 }
               nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x15);
               ItemMods::ITEMMODS_GetQualityFields2_3_4(nBitVal, &nOnAttackChance, (uint32_t*)nOnAttackSkillBuf, &nOnAttackSkillLevel);
-              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillonattack, nOnAttackSkillLevel, (nOnAttackSkillBuf[0] & 0x3f) + nOnAttackChance * 0x40);
+              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillonattack, nOnAttackSkillLevel, (nOnAttackSkillBuf[0] & 0x3f) + (short int)nOnAttackChance * 0x40);
               break;
               case UNITSTAT_item_skillonhit:
 
@@ -5395,7 +5395,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
                 }
               nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x15);
               ItemMods::ITEMMODS_GetQualityFields2_3_4(nBitVal, &nOnHitChance, (uint32_t*)nOnHitSkillBuf, &nOnHitSkillLevel);
-              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillonhit, nOnHitSkillLevel, (nOnHitSkillBuf[0] & 0x3f) + nOnHitChance * 0x40);
+              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillonhit, nOnHitSkillLevel, (nOnHitSkillBuf[0] & 0x3f) + (short int)nOnHitChance * 0x40);
               break;
               case UNITSTAT_item_skillongethit:
 
@@ -5407,7 +5407,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
                 }
               nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x15);
               ItemMods::ITEMMODS_GetQualityFields2_3_4(nBitVal, &nOnGetHitChance, (uint32_t*)nOnGetHitSkillBuf, &nOnGetHitSkillLevel);
-              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillongethit, nOnGetHitSkillLevel, (nOnGetHitSkillBuf[0] & 0x3f) + nOnGetHitChance * 0x40);
+              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_skillongethit, nOnGetHitSkillLevel, (nOnGetHitSkillBuf[0] & 0x3f) + (short int)nOnGetHitChance * 0x40);
               break;
               case UNITSTAT_item_charged_skill:
 
@@ -5439,8 +5439,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
 
               nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nClassId);
               ItemMods::ITEMMODS_GetQualityAllFields(nBitVal, &nChargeMax, (uint32_t*)nChargeBuf, &nChargeSkillLevel, &nChargeSkillId);
-              nStatVal = nChargeMax << ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
-              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_charged_skill, (nChargeSkillLevel & 0xff) + nChargeSkillId * 0x100, (uint32_t)((uint32_t)(uint16_t)(short int)((uint32_t)nStatVal >> 0x10) << 16 | (uint32_t)(uint16_t)((short int)nStatVal + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & nChargeBuf[0]))));
+              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_charged_skill, (nChargeSkillLevel & 0xff) + nChargeSkillId * 0x100, (short int)(nChargeMax << ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f)) + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & nChargeBuf[0]));
               break;
               default:
                 deserialize_single_stat:

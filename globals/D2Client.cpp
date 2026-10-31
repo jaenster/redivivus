@@ -45760,7 +45760,7 @@ namespace D2Game::GAME::Rendering {
 // Initialized scalars
 // =============================================================================
 
-uint32_t CurrentRendingEngine = 0x3; D2_GLOBAL_GUARD(CurrentRendingEngine, "D2Game::GAME::Rendering::CurrentRendingEngine");
+int CurrentRendingEngine = 0x3; D2_GLOBAL_GUARD(CurrentRendingEngine, "D2Game::GAME::Rendering::CurrentRendingEngine");
 
 } // namespace D2Game::GAME::Rendering
 

@@ -1181,7 +1181,7 @@ int __fastcall LoadPlayerIntro(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, shor
 
 // Deserializes the long-form stat bitstream from a character save buffer into a unit's stat list. Expects a 0x6667 magic header at *ppReadPos. Reads 9-bit stat IDs followed by optional sub-index (csvparam bits) and value (csvbits wide, signed or unsigned per ITEMSTATCOSTFLAG_CSVSIGNED) until stat ID >= 0x1FE (terminator). Applies each stat via STATLIST_SetUnitStat. Advances *ppReadPos past the stream on success; returns 0 on success, 0x12 on bad header or invalid stat.
 static int __fastcall ReadStatsLong(D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwParam) {
-    uint32_t nSubIndexRaw;
+    int32_t nSubIndexRaw;
     int32_t nBitStreamLen;
     uint32_t nStatSubIndex;
     D2ItemStatCostTxt* pStatCostTxt;
@@ -1221,10 +1221,10 @@ static int __fastcall ReadStatsLong(D2UnitStrc * pUnit, short * * ppReadPos, sho
         break;
       }
 
-      nStatSubIndex = 0;
+      *(uint16_t*)(char*)&nStatSubIndex = 0;
       if ((uint8_t)pStatCostTxt->csvparam > 0) {
         nSubIndexRaw = Fog::BitBuffer::ReadSigned(&bitBuf, (uint32_t)(uint8_t)pStatCostTxt->csvparam);
-        nStatSubIndex = nSubIndexRaw & 0xffff;
+        *(uint16_t*)(char*)&nStatSubIndex = (uint16_t)nSubIndexRaw;
       }
 
       byCsvBitWidth = pStatCostTxt->csvbits;
@@ -1234,7 +1234,7 @@ static int __fastcall ReadStatsLong(D2UnitStrc * pUnit, short * * ppReadPos, sho
         nValue = Fog::BitBuffer::ReadUnsigned(&bitBuf, (uint32_t)byCsvBitWidth);
       }
 
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nValue, nStatSubIndex);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nValue, (uint16_t)nStatSubIndex);
       eUnitStat = Fog::BitBuffer::ReadUnsigned(&bitBuf, 9);
     }
 
@@ -1587,7 +1587,7 @@ int __thiscall LoadMerc2(void * pThis, D2UnitStrc * pUnit, D2UnitStrc * * ppUnit
       ITEMS::ItemMode::ITEMMODE_ReturnZero3(0);
       bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
       if (!bIsDead) {
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit), bIsDead);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit), (uint16_t)bIsDead);
       }
     }
 

@@ -117,7 +117,7 @@ struct __attribute__((packed)) D2MonStats2Txt {
     /* 0x00B */ char Height;
     /* 0x00C */ char overlayHeight;
     /* 0x00D */ uint8_t pixHeight;
-    /* 0x00E */ char MeleeRng;
+    /* 0x00E */ uint8_t MeleeRng;
     /* 0x00F */ uint8_t field_0xf;
     /* 0x010 */ int BaseW;
     /* 0x014 */ char HitClass;

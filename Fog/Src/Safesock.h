@@ -7,7 +7,6 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
-#include "D2Net/in_addr.h"
 
 // Forward declarations
 struct D2NetDataStrc;
@@ -74,7 +73,7 @@ int __fastcall Safesock_PollReadReady(struct D2NetDataStrc * pNetData);
 int32_t __fastcall GetPeerNameDoesReturn(struct D2NetDataStrc * pNetData, sockaddr * pName, int * pNameLen);
 uint32_t __fastcall GetSockNameDoesReturn(struct D2NetDataStrc * pNetData, sockaddr * pName, int * pNameLen);
 char * __stdcall NET_GetLocalIp();
-char * __fastcall NET_MakeIPV4AddressHumanFriendly(in_addr sAddr);
+char * __fastcall NET_MakeIPV4AddressHumanFriendly(uint32_t sAddr);
 int __fastcall GetSocketStatusAndWsaResultToArguments(struct D2NetDataStrc * pNetData, int * dwSocketStatus, int * dwWSAResult);
 char * __fastcall inet_nameToIp(char * szText);
 int __fastcall SAFESOCK_SetSocketNonBlocking(struct D2NetDataStrc * pNetData, u_long bNonBlocking);

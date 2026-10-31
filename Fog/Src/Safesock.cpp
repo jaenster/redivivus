@@ -2,7 +2,6 @@
 
 #include "Fog/Src/Safesock.h"
 #include "D2Net/Game/Server.h"
-#include "D2Net/in_addr.h"
 #include "D2Net/sockaddr.h"
 #include "Fog/D2QSSocketStrc.h"
 #include "Fog/Memory.h"
@@ -10,6 +9,7 @@
 #include "Fog/Src/LogManager.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Net/in_addr.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -354,12 +354,12 @@ char * __stdcall NET_GetLocalIp() {
     return cp_0075d040;
 }
 
-char * __fastcall NET_MakeIPV4AddressHumanFriendly(in_addr sAddr) {
+char * __fastcall NET_MakeIPV4AddressHumanFriendly(uint32_t sAddr) {
     // Static local variables (originally global data)
     static char szIPV4Address[32] = {}; D2_STATIC_GUARD(szIPV4Address, "Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly::szIPV4Address");
 
     char cChar;
-    char* pSrc = inet_ntoa(sAddr);
+    char* pSrc = inet_ntoa((in_addr)sAddr);
     char* pDst = szIPV4Address;
     do {
       cChar = *pSrc;

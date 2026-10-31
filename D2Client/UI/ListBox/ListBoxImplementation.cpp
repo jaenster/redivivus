@@ -71,16 +71,17 @@ void __thiscall Clear(::ListBoxImplementation * pThis) {
 }
 
 void __thiscall DrawScrollbar(::ListBoxImplementation * pThis) {
+    uint32_t nThumbEnd;
     D2GfxDataStrc sGfxData;
     int nThumbSegCount;
     uint32_t nScrollStart;
-    uint32_t nFirstVisible = pThis->nFirstVisibleIndex;
+    int nFirstVisible = pThis->nFirstVisibleIndex;
     uint32_t nItemCount = (uint32_t)pThis->nItemCount;
     int nVisibleCount = 0;
     pThis->field_0x180752 = 0;
     pThis->field_0x180756 = 0;
     pThis->nVisibleRows = 0;
-    if ((int)nFirstVisible < (int)nItemCount) {
+    if (nFirstVisible < (int)nItemCount) {
       uint16_t (*pItemEntry)[1024];
       pItemEntry = pThis->aItems[nFirstVisible].wszText + 1;
       do {
@@ -110,58 +111,58 @@ void __thiscall DrawScrollbar(::ListBoxImplementation * pThis) {
 
         nFirstVisible++;
         pItemEntry = (uint16_t (*)[1024])((int)(pItemEntry + 6) + 0xe);
-      } while ((int)nFirstVisible < (int)(uint32_t)pThis->nItemCount);
+      } while (nFirstVisible < (int)(uint32_t)pThis->nItemCount);
     }
 
-    nVisibleCount = pThis->nVisibleRows;
-    if ((int)nItemCount <= nVisibleCount) {
+    nFirstVisible = pThis->nVisibleRows;
+    if ((int)nItemCount <= nFirstVisible) {
       return;
     }
 
-    int nThumbRatio = (nVisibleCount << 7) / (int)nItemCount;
-    nFirstVisible = pThis->nFirstVisibleIndex;
-    if (!nFirstVisible) {
+    int nThumbRatio = (nFirstVisible << 7) / (int)nItemCount;
+    nVisibleCount = pThis->nFirstVisibleIndex;
+    if (!nVisibleCount) {
       nItemCount = 0;
       nScrollStart = pThis->field_0x180718 * nThumbRatio >> 7;
     } else {
       nScrollStart = pThis->field_0x180718;
-      if (!((int)nFirstVisible < (int)(nItemCount - nVisibleCount))) {
+      if (!(nVisibleCount < (int)(nItemCount - nFirstVisible))) {
         nItemCount = nScrollStart - (nScrollStart * nThumbRatio >> 7);
         if ((int)nScrollStart < (int)nItemCount) {
           nItemCount = nScrollStart;
         }
       } else {
-        nItemCount = (int)(nScrollStart * nFirstVisible) / (int)nItemCount;
+        nItemCount = (int)(nScrollStart * nVisibleCount) / (int)nItemCount;
         nItemCount = (int)nItemCount < 0 ? 0 : nItemCount;
-        nFirstVisible = (nScrollStart * nThumbRatio >> 7) + nItemCount;
-        if ((int)nScrollStart >= (int)nFirstVisible) {
-          nScrollStart = nFirstVisible;
+        nThumbEnd = (nScrollStart * nThumbRatio >> 7) + nItemCount;
+        if ((int)nScrollStart >= (int)nThumbEnd) {
+          nScrollStart = nThumbEnd;
         }
       }
     }
 
-    nVisibleCount = pThis->nScrollBarY + 0xd;
-    nThumbRatio = pThis->nScrollBarX - 1;
+    nFirstVisible = pThis->nScrollBarY + 0xd;
+    nVisibleCount = pThis->nScrollBarX - 1;
     memset(&sGfxData, 0, 0x48);
-    int nThumbTop = nVisibleCount + nItemCount * 0xc;
+    int nThumbTop = nFirstVisible + nItemCount * 0xc;
     sGfxData.pDC6 = gpMessageLogDC6;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0x10;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nThumbRatio, nThumbTop, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nVisibleCount, nThumbTop, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 0xe;
-    nFirstVisible = nItemCount;
+    nThumbEnd = nItemCount;
     if ((int)nItemCount < (int)nScrollStart) {
       nThumbSegCount = nScrollStart - nItemCount;
-      nFirstVisible = nThumbSegCount + nItemCount;
+      nThumbEnd = nThumbSegCount + nItemCount;
       do {
         nThumbTop += 0xc;
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nThumbRatio, nThumbTop, -1, DRAW_SOLID, nullptr);
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nVisibleCount, nThumbTop, -1, DRAW_SOLID, nullptr);
         nThumbSegCount--;
       } while (nThumbSegCount);
     }
 
     sGfxData.nFrameNumber = 0xf;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nThumbRatio, nVisibleCount + (nFirstVisible * 3 + 3) * 4, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nVisibleCount, nFirstVisible + (nThumbEnd * 3 + 3) * 4, -1, DRAW_SOLID, nullptr);
     pThis->field_0x180752 = nItemCount;
     pThis->field_0x180756 = nScrollStart;
 }
@@ -176,7 +177,7 @@ int __thiscall GetVisibleItemCount(::ListBoxImplementation * pThis) {
 
     uint16_t (*pItemCols)[1024] = pThis->aItems[0].wszText + 1;
     do {
-      if (i >= (int)pThis->nFirstVisibleIndex && i < (int)nTotalItems) {
+      if (i >= pThis->nFirstVisibleIndex && i < (int)nTotalItems) {
         if (((D2ListBoxItemStrc*)(pItemCols - 1))->wszText[0][0] != L'\0') {
           nAccumHeight += pThis->nLineHeight;
         }
@@ -354,11 +355,11 @@ int __thiscall OnMouseWheel(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * 
 }
 
 void __thiscall EnsureSelectionVisible(::ListBoxImplementation * pThis) {
-    uint32_t nSelIdx = pThis->nSelectedIndex;
-    if ((int)nSelIdx < (int)pThis->nFirstVisibleIndex) {
+    int nSelIdx = pThis->nSelectedIndex;
+    if (nSelIdx < pThis->nFirstVisibleIndex) {
       pThis->nFirstVisibleIndex = nSelIdx;
     }
-    if ((int)nSelIdx < (int)(pThis->nVisibleRows + pThis->nFirstVisibleIndex)) {
+    if (!(nSelIdx >= pThis->nVisibleRows + pThis->nFirstVisibleIndex)) {
       return;
     }
 
@@ -375,11 +376,11 @@ int __thiscall OnUpArrow(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMs
 
     pThis->nSelectedIndex--;
     Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
-    uint32_t nSelIdx = pThis->nSelectedIndex;
-    if ((int)nSelIdx < (int)pThis->nFirstVisibleIndex) {
+    int nSelIdx = pThis->nSelectedIndex;
+    if (nSelIdx < pThis->nFirstVisibleIndex) {
       pThis->nFirstVisibleIndex = nSelIdx;
     }
-    if ((int)nSelIdx >= (int)(pThis->nVisibleRows + pThis->nFirstVisibleIndex)) {
+    if (nSelIdx >= pThis->nVisibleRows + pThis->nFirstVisibleIndex) {
       pThis->nFirstVisibleIndex++;
       return 1;
     }
@@ -402,10 +403,10 @@ int __thiscall OnDownArrow(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
 
     pThis->nSelectedIndex++;
     Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
-    if (pThis->nSelectedIndex < (int)pThis->nFirstVisibleIndex) {
+    if (pThis->nSelectedIndex < pThis->nFirstVisibleIndex) {
       pThis->nFirstVisibleIndex = pThis->nSelectedIndex;
     }
-    if (pThis->nSelectedIndex < (int)(pThis->nVisibleRows + pThis->nFirstVisibleIndex)) {
+    if (!(pThis->nSelectedIndex >= pThis->nVisibleRows + pThis->nFirstVisibleIndex)) {
       return 1;
     }
 
@@ -428,9 +429,9 @@ int __thiscall HitTestItem(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
     }
 
     uint32_t uVar1 = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    uint32_t i = pThis->nFirstVisibleIndex;
+    int i = pThis->nFirstVisibleIndex;
     int nRowTop = 0;
-    if ((int)i < (int)(uint32_t)pThis->nItemCount) {
+    if (i < (int)(uint32_t)pThis->nItemCount) {
       int nRowBottom;
       pItemCols = pThis->aItems[i].wszText + 1;
       do {
@@ -461,7 +462,7 @@ int __thiscall HitTestItem(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
         nRowTop = nRowBottom + pThis->nItemSpacing;
         i++;
         pItemCols = (uint16_t (*)[1024])((int)(pItemCols + 6) + 0xe);
-      } while ((int)i < (int)(uint32_t)pThis->nItemCount);
+      } while (i < (int)(uint32_t)pThis->nItemCount);
     }
 
     i = -1;
@@ -562,14 +563,14 @@ void __thiscall Draw(::ListBoxImplementation * pThis) {
     nVisibleLineCount = 0;
     int nVisibleItemCount;
     nVisibleItemCount = GetVisibleItemCount(pThis);
-    uint32_t nItemIdx;
+    int nItemIdx;
     nItemIdx = pThis->nFirstVisibleIndex;
     nScrollOffset = 0;
-    if ((int)nItemIdx < (int)(nItemIdx + nVisibleItemCount)) {
+    if (nItemIdx < nItemIdx + nVisibleItemCount) {
       uint16_t (*pawVar1)[1024];
       pItemEntry = &pThis->aItems[nItemIdx].dwAuxData;
       do {
-        if ((int)nItemIdx >= 0x80) {
+        if (nItemIdx >= 0x80) {
           break;
         }
         if (pThis->nSelectedIndex == nItemIdx && pThis->pfnOnItemActivated) {
@@ -622,7 +623,7 @@ void __thiscall Draw(::ListBoxImplementation * pThis) {
         pItemEntry = (PD2ListBoxItemAuxData)((int)pItemEntry + 0x300e);
         nItemIdx++;
         nScrollOffset++;
-      } while ((int)nItemIdx < (int)(pThis->nFirstVisibleIndex + nVisibleItemCount));
+      } while (nItemIdx < pThis->nFirstVisibleIndex + nVisibleItemCount);
     }
 
     pThis->pVtable->DrawScrollbar(pThis);

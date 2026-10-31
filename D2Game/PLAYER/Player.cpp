@@ -371,10 +371,10 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
     uint32_t bIsQuiver;
     BOOL nBeltResult;
     eD2UnitStat eUnitStat;
+    uint16_t uVar1;
     eD2UnitStat eStatId;
     eD2UnitType eItemUnitType;
     int32_t nLine;
-    int32_t nStatValue;
     ::SGAMEDATA* pGameLocal;
     D2ItemsTxt* pItemsTxt;
     pItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(*pnParam, &__frame0.nItemTxtLine);
@@ -425,31 +425,32 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
           }
 
           bIsQuiver = D2Common::ITEMS::Items::ITEMS_IsA(pNewItem, ITEMTYPE_BowQuiver);
-          nStatValue = 0;
+          uVar1 = 0;
           if (bIsQuiver) {
             nLine = 0xfa;
             set_quiver_quantity:
-            nStatValue = 0;
+            uVar1 = 0;
             eStatId = UNITSTAT_quantity;
           } else {
             nLine = D2Common::Stats::StatsEx::GetTxtMaxDurability(pNewItem);
             eStatId = UNITSTAT_durability;
           }
 
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eStatId, nLine, nStatValue);
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eStatId, nLine, uVar1);
         } else {
           PLAYER_PlaceItemInInventory(__frame0.pGameSaved, 1, pUnit, pNewItem);
           bIsQuiver = D2Common::ITEMS::Items::ITEMS_IsA(pNewItem, ITEMTYPE_BowQuiver);
-          nLine = 0;
+          uVar1 = 0;
           if (bIsQuiver) {
-            nStatValue = 0xfa;
+            nLine = 0xfa;
             eUnitStat = UNITSTAT_quantity;
           } else {
-            nStatValue = D2Common::Stats::StatsEx::GetTxtMaxDurability(pNewItem);
+            uVar1 = 0;
+            nLine = D2Common::Stats::StatsEx::GetTxtMaxDurability(pNewItem);
             eUnitStat = UNITSTAT_durability;
           }
 
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eUnitStat, nStatValue, nLine);
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eUnitStat, nLine, uVar1);
           bIsQuiver = D2Common::ITEMS::Items::ITEMS_IsA(pNewItem, ITEMTYPE_BowQuiver);
           if (bIsQuiver) {
             nLine = 100;

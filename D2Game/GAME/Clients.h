@@ -156,7 +156,7 @@ BOOL __fastcall CheckSyncWarpRateExceeded(::SGAMEDATA * pGame, struct D2UnitStrc
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __fastcall CLIENT_GetLangId(struct D2ClientStrc * pClient);
 // Places player unit into the game world (state 3→waiting rooms). Spawns unit at town coordinates (or provided room), sends ReassignPlayer packet, loads corpses from inventory (resurrects mercs or places corpse objects), restores iron golem from save if present. Core of server-side join flow after character load.
-void __stdcall CLIENT_PlacePlayerInRoom(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2DrlgActStrc * pDrlgAct, ::SGAMEDATA * pSpawnXY, uint32_t nUnused);
+void __fastcall CLIENT_PlacePlayerInRoom(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2DrlgActStrc * pDrlgAct, ::SGAMEDATA * pSpawnXY);
 // Main client join handler: validates expansion/hardcore compatibility, loads or creates player unit, sends handshake packet (0x0B), portal flags (0x5F), stats, items, hotkeys, selected skills (left/right), life/mana/stamina. Computes A5Q3 resist bonuses if expansion. Returns error code on validation failure (kicks client). State 1→loading character data.
 int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(struct D2ClientStrc * pClient, ::SGAMEDATA * pGame, int32_t bLoadFromSave, struct D2RoomStrc * pRoom, uint32_t nX, uint32_t nY);
 // Allocates and initializes D2ClientStrc (1304 bytes). Sets client ID, 180-second timeout, class (arena template override), char/account names, language. Initializes 16 hotkey slots to -1, zeroes packet lists. Inserts into game's client linked list and two hash tables (by ID and name). Max 8 clients per game. Returns new client or null if full.
@@ -171,7 +171,7 @@ void __fastcall CleanUpClient(::SGAMEDATA * pGame, uint32_t nClientId, int32_t b
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 struct D2UnitStrc * __fastcall CLIENT_GetAttachedUnit(::SGAMEDATA * pGame, struct D2ClientStrc * pClient);
 // Dead code / unused client join path. Sets pClient->nClass to bParam, resolves the player unit and its spawn coords, then deletes the existing unit from the room (AllocDrlgDelete + FreeServerUnit) and reloads it from scratch via CLIENT_LoadCharacterAndSendGameData + CLIENT_PlacePlayerInRoom. Clears the lowest fClientFlags bit and fires GAME_OnClientRoomChange if the room changed. Halts with an internal error if pClient is null. Not referenced by any active join flow.
-void __fastcall UnusedClientJoinGame(struct D2ClientStrc * pClient, uint8_t bParam);
+void __fastcall UnusedClientJoinGame(struct D2ClientStrc * pClient, int bParam);
 void __fastcall UnusedClientJoinGame2(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, uint8_t bActNo);
 void __fastcall SendAdjacentRoomUpdates(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2ClientStrc * pClient);
 // pRoom in EAX, pClient in EDI: UNITS_SendUnitUpdateToClient for every unit in pRoom->pUnitList (pRoomNext chain); halts (line 98) on a NULL room.

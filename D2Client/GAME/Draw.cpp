@@ -600,10 +600,14 @@ void __fastcall dRoofDraw(D2GameViewStrc * pGameView) {
     int nWorldXpos;
     D2GfxLightExStrc aRoofLightGrid8x8[64];
     D2GfxLightExStrc aRoofLightGrid6x6[36];
+    int nPassCount;
+    int nCellsLeft;
+    uint32_t nRenderLayer;
     uint32_t nSavedLayerMask;
     D2Wall2DrawEntryStrc** pCellEntry;
     int32_t nScreenY;
     int nRoomIdx;
+    uint32_t nBorderType;
     D2Wall2DrawEntryStrc* pRoofNode;
     int32_t nWorldY;
     D2GfxLightExStrc* pLight;
@@ -616,12 +620,12 @@ void __fastcall dRoofDraw(D2GameViewStrc * pGameView) {
     BOOL bLowQuality = D2gfx::D2GFX::D2GFX_GetLowQuality();
     int nOffsetX = 0x50 - pGameView->nCenterX;
     int nOffsetY = -0x50 - pGameView->nCenterY;
-    uint32_t uVar1 = pGameView->sWall2.nWall2GridDim;
-    int nGridTotal = uVar1 * uVar1;
-    int nPassCount = nGridTotal;
-    uint32_t nBorderType = UI::Path::DRAW_GetTypeOfBorder();
-    uint32_t nRenderLayer = 1;
-    int nCellsLeft = nGridTotal;
+    int nGridTotal = pGameView->sWall2.nWall2GridDim;
+    nGridTotal *= nGridTotal;
+    nPassCount = nGridTotal;
+    nBorderType = UI::Path::DRAW_GetTypeOfBorder();
+    nRenderLayer = 1;
+    nCellsLeft = nGridTotal;
     do {
       uint32_t nLayerMask;
       nLayerMask = nRenderLayer << 0xe;
@@ -957,10 +961,12 @@ void __fastcall dWallPass(D2GameViewStrc * pGameView) {
     int32_t nScreenX;
     int32_t nScreenY;
     uint32_t nLightIdx;
+    D2Wall2DrawEntryStrc** pCellEntry;
     bool bMoreLights;
     D2GfxLightStrc aLightSamples[8];
     int nSavedCellIdx;
     uint32_t transparancy;
+    D2GameViewStrc* pGameViewSaved;
     uint32_t isPerspective;
     uint32_t nLightCount;
     uint32_t bIs3DEngine;
@@ -978,14 +984,14 @@ void __fastcall dWallPass(D2GameViewStrc * pGameView) {
     D2DrlgTileDataStrc* pWallTile;
     int32_t* pIntensityTable;
     D2Wall2DrawEntryStrc* sLightEntry;
-    uint32_t uVar1 = pGameView->sWall2.nWall2GridDim;
-    int nFadeCalc = uVar1 * uVar1;
+    int nFadeCalc = pGameView->sWall2.nWall2GridDim;
+    nFadeCalc *= nFadeCalc;
     if (!nFadeCalc) {
       return;
     }
 
-    D2Wall2DrawEntryStrc** pCellEntry = &pGameView->sWall2.pWall2->pWallList;
-    D2GameViewStrc* pGameViewSaved = pGameView;
+    pCellEntry = &pGameView->sWall2.pWall2->pWallList;
+    pGameViewSaved = pGameView;
     do {
       D2GfxLightStrc sLight;
       nFadeCalc--;
@@ -1086,10 +1092,9 @@ void __fastcall dWallPass(D2GameViewStrc * pGameView) {
 }
 
 void __fastcall DRAW_WORLD_UnderFloor(D2GameViewStrc * pGameView) {
-    int nGridCount;
-    uint32_t uVar1 = pGameView->sWall2.nWall2GridDim;
+    int nGridCount = pGameView->sWall2.nWall2GridDim;
     D2Wall2CellStrc* pWall2Entry = pGameView->sWall2.pWall2;
-    for (nGridCount = uVar1 * uVar1; nGridCount; nGridCount--) {
+    for (nGridCount *= nGridCount; nGridCount; nGridCount--) {
       WALL2_DrawUnderFloorTiles(pGameView, pWall2Entry);
       pWall2Entry++;
     }
@@ -1102,16 +1107,18 @@ void __fastcall DRAW_WORLD_UnderFloor(D2GameViewStrc * pGameView) {
 // @wasnamed DRAW_WORLD_Shadows
 // Iterates every Wall2 grid cell and renders all shadow-list nodes for that cell. For each node: if flags==0, samples lighting via DRAW_CoordIsInCoord and calls DRAW_WORLD_Unit; if flag bit 1 set, calls DrawUnitShadows; if flag bit 0 set and not perspective, calls D2GFX_DrawShadowTile with view-relative coords; if perspective, calls D2GFX_DrawShadowTile with raw node coords. After shadows, draws any alpha wall tiles for the cell.
 void __fastcall dShadowPass(D2GameViewStrc * pGameView) {
+    uint32_t nScreenPanels;
     uint32_t bIsPerspective;
+    D2Wall2CellStrc* pWall2Entry;
     uint8_t byIntensity;
     uint8_t byRed;
     uint8_t byGreen;
     uint8_t byBlue;
     D2Wall2DrawEntryStrc* pShadowNode;
     int* pWallTileEntry;
-    uint32_t nScreenPanels = pGameView->sWall2.nWall2GridDim;
-    int nGridCount = nScreenPanels * nScreenPanels;
-    D2Wall2CellStrc* pWall2Entry = pGameView->sWall2.pWall2;
+    int nGridCount = pGameView->sWall2.nWall2GridDim;
+    nGridCount *= nGridCount;
+    pWall2Entry = pGameView->sWall2.pWall2;
     nScreenPanels = UI::Path::DRAW_GetTypeOfBorder();
     while (nGridCount) {
       nGridCount--;

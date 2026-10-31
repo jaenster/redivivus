@@ -2154,7 +2154,7 @@ void __stdcall STATLIST_AddStatValue(D2StatListExStrc * pStatsEx, eD2UnitStat eU
 }
 
 // Sets a stat to an absolute value in a D2StatListExStrc's base-stat array. Packs (eUnitStat, low subindex) into a single key, binary-searches the sorted stat array, and either updates an existing entry or inserts a new one. If nParam==0, removes the entry entirely. Computes the delta and propagates it via STATLIST_PropagateStatChange. For player-owned stat lists with the dirty flag set, records the changed stat via STATLIST_TrackChangedStat for client sync. Returns 1 if the value changed, 0 if already equal or list is null.
-BOOL __stdcall STATLIST_SetStatValue(D2StatListExStrc * pStatEx, eD2UnitStat eUnitStat, int32_t nParam, uint32_t low) {
+BOOL __stdcall STATLIST_SetStatValue(D2StatListExStrc * pStatEx, eD2UnitStat eUnitStat, int32_t nParam, uint16_t low) {
     int32_t nSearchIdx;
     D2StatStrc* pStatEntry;
     int32_t nHi;
@@ -2163,7 +2163,7 @@ BOOL __stdcall STATLIST_SetStatValue(D2StatListExStrc * pStatEx, eD2UnitStat eUn
       return 0;
     }
 
-    int32_t nShiftedStat = eUnitStat * 0x10000 + (low & 0xffff);
+    int32_t nShiftedStat = eUnitStat * 0x10000 + (uint32_t)low;
     D2StatInfoStrc* pParam = &pStatEx->sStatList.sBaseStats;
     long int lVar1 = Logging::STATLIST_BinarySearchStatById(nShiftedStat, (int*)pParam);
     if (lVar1 < 0 || (pStatEntry = pParam->pStatInfo + lVar1 , !pStatEntry)) {
@@ -2200,7 +2200,7 @@ BOOL __stdcall D2AddStatToStatsListEx(D2StatListExStrc * pStatsEx, eD2UnitStat e
       return BVar1;
     }
 
-    BVar1 = STATLIST_SetStatValue(pStatsEx, eUnitStat, nValue, nParam);
+    BVar1 = STATLIST_SetStatValue(pStatsEx, eUnitStat, nValue, (uint16_t)nParam);
     return BVar1;
 }
 
@@ -2253,16 +2253,16 @@ void __stdcall STATLIST_SetStatValueInBaseArraySafe(D2StatListExStrc * pStatList
 }
 
 void __stdcall thunk_STATLIST_SetStatValue(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nParam, uint32_t nParam2) {
-    STATLIST_SetStatValue(pStatList, eUnitStat, nParam, nParam2);
+    STATLIST_SetStatValue(pStatList, eUnitStat, nParam, (uint16_t)nParam2);
 }
 
-void __stdcall STATLIST_SetUnitStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue, int32_t nLayer) {
+void __stdcall STATLIST_SetUnitStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nLayer) {
     BOOL bChanged = STATLIST_SetStatValue(pUnit->pStatsEx, eUnitStat, nValue, nLayer);
     if (!(bChanged && pUnit->eUnitType == UNIT_PLAYER)) {
       return;
     }
 
-    STATLIST_TrackChangedStat(eUnitStat * 0x10000 + (nLayer & 0xffffU), pUnit->pStatsEx);
+    STATLIST_TrackChangedStat(eUnitStat * 0x10000 + (uint32_t)nLayer, pUnit->pStatsEx);
 }
 
 void __stdcall thunk_STATLIST_AddStatValue(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nParam, uint16_t nParam2) {

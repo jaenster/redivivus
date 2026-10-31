@@ -21,7 +21,6 @@
 #include "globals/globals.h"
 #include "D2Client/Net/MCP.h"
 #include "D2Launch/MainMenus.h"
-#include "D2Net/in_addr.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -359,7 +358,7 @@ void __stdcall McpConnectionLoop(int * pnParam) {
 // lpStartAddress parameter of CreateThread
 uint32_t __stdcall ThreadHandler() {
     char bySendByte;
-    char* szIpAddress = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly((in_addr)*(uint32_t*)((char*)&gMCPConnectionState + 16));
+    char* szIpAddress = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(*(uint32_t*)((char*)&gMCPConnectionState + 16));
     D2Client::MCP::D2GSJoinResult = 0;
     D2QSSocketStrc* NET_MCP_CLIENT_D2QSSocket = Fog::Src::D2QSSocket::STRUCT_D2QSSocket_Init(szIpAddress, *(uint32_t*)((char*)&gMCPConnectionState + 20), "clt->mcp");
     D2Client::MCP::MCPD2QSSocket = NET_MCP_CLIENT_D2QSSocket;
@@ -797,7 +796,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x04(MCPPacketSrv0x04 * pBytes, size_t nS
       return 1;
     }
 
-    Storm::Source::SSTR::SStrCopy(D2Client::MCP::D2GSConnectIp, Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly((in_addr)pBytes->nGameIp), 0x12);
+    Storm::Source::SSTR::SStrCopy(D2Client::MCP::D2GSConnectIp, Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(pBytes->nGameIp), 0x12);
     return 1;
 }
 
@@ -941,7 +940,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x10(char * pBytes, size_t nSize) {
     uint32_t dwGameHash = *(uint32_t*)(pBytes + 5);
     uint32_t dwGameToken = *(uint32_t*)(pBytes + 1);
     int nResult = *(int*)(pBytes + 0xd);
-    _struct_1227 sAddr = ((_union_1226*)(pBytes + 9))->S_un_b;
+    uint32_t sAddr = *(uint32_t*)(pBytes + 9);
     SetD2GSJoinResult(nResult);
     D2Client::MCP::D2GSGameToken = dwGameToken;
     D2Client::Bnet::D2GSGameHash = dwGameHash;
@@ -957,7 +956,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x10(char * pBytes, size_t nSize) {
       return 1;
     }
 
-    Storm::Source::SSTR::SStrCopy(D2Client::MCP::D2GSConnectIp, Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly((in_addr)sAddr), 0x12);
+    Storm::Source::SSTR::SStrCopy(D2Client::MCP::D2GSConnectIp, Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(sAddr), 0x12);
     MCPSTATE_SetD2GSConnectReady(1);
     return 1;
 }

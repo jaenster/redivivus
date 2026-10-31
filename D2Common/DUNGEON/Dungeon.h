@@ -201,6 +201,8 @@ void __fastcall DUNGEON_ActivationHandler0_SetRoomExPriority0(struct D2RoomExStr
 void __fastcall DRLGROOMEX_ActivateRoomEx(struct D2RoomExStrc * pRoomEx);
 // Ensure tile data and monster presets are initialized for RoomEx. If fRoomStatus > 3, move room into activation list (decompiler omits args).
 void __fastcall DRLGROOMEX_InitTileDataAndPresets(struct D2RoomExStrc * pRoomEx);
+// Recursively activates nearby RoomEx neighbours up to depth 3. For each adjacent room within pRoomEx->ppDrlgRoomsExNear[], calls DRLGROOMEX_InitNearRoomsAndVisTiles if not yet populated, increments the room's reference count at the current priority level, and dispatches gaRoomExActivationHandlers[priority] when the room's fRoomStatus meets the recursion priority threshold.
+void __fastcall InitNearRooms(struct D2PoolManagerStrc * pMemory, struct D2RoomExStrc * pRoomEx, uint8_t nRecursion);
 void __fastcall DRLGROOMEX_RecalcPriority_Case4(struct D2RoomExStrc * pRoomEx);
 void __fastcall DRLGROOMEX_RecalcPriority_Case5(struct D2RoomExStrc * pRoomEx);
 void __fastcall DRLGROOMEX_RecalcPriority_Case6(struct D2RoomExStrc * pRoomEx);
@@ -239,6 +241,6 @@ void __fastcall DRLGROOMEX_DemoteIfReady(struct D2RoomExStrc * pRoomEx);
 void __fastcall thunk_DRLGROOMEX_ActivateRoomEx(struct D2RoomExStrc * pRoomEx);
 // Sets special RGB color values (0xF5, 0xF0, 0xFF) for the Arreat Summit level environment. Only applies when the level ID matches LEVEL_ArreatSummit.
 void __stdcall DRLGROOM_SetArreatSummitColors(struct D2DrlgEnvironmentStrc * pAmbientColorBytes, eD2LevelId nLevelId);
-// 8 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
 } // namespace D2Common::DUNGEON::Dungeon

@@ -426,6 +426,7 @@ BOOL __fastcall CheckComponents(D2UnitStrc * pUnit) {
 void __fastcall MONSTER_CreateAndEquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MonEquipEntryStrc * ppItemId, int32_t nItemLevel, eD2ItemQuality eQuality) {
     bool bEquipSuccess;
     int32_t nItemClassId;
+    int32_t nDurStatLayer;
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
     }
@@ -458,7 +459,8 @@ void __fastcall MONSTER_CreateAndEquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUn
       return;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_durability, D2Common::Stats::StatsEx::GetTxtMaxDurability(pItemUnit), 0);
+    uint16_t nLayer = 0;
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_durability, D2Common::Stats::StatsEx::GetTxtMaxDurability(pItemUnit), nLayer);
 }
 
 // Force-kills all living, non-boss, neutral-alignment monsters of class nAltMonClassId or nAltMonClassId2 in the specified level (or all rooms of the act if eLevel==LEVEL_None). For each match, sets the Death skill and executes the lifecycle transition via MONSTERAI_ExecuteLifecycleTransition.
@@ -510,6 +512,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     D2StatListExStrc* pStatsEx;
     D2InventoryStrc* pNpcInventory;
     D2SkillListStrc* pSkillsList;
+    uint16_t nLayer;
     D2MonStatsInitStrc sMonStats;
     D2MonsterLevelDataStrc monLevelData;
     D2MonStatsExTxtSlot uMonTxt;
@@ -643,9 +646,9 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, nTmpInt, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nTmpInt, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_armorclass, sMonStats.nAC, 0);
-    nStatLayer = 0;
+    nLayer = 0;
     nScaledStat = D2Client::Stats::D2ApplyPercent(sMonStats.nExp, monLevelData.nPlayerMultiplyer2, 100);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_experience, nScaledStat + sMonStats.nExp, nStatLayer);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_experience, nScaledStat + sMonStats.nExp, nLayer);
     dwHpRegenRaw = pMonStatsTxt->DamageRegen;
     if ((int)dwHpRegenRaw < 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xde);

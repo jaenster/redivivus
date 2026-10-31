@@ -445,7 +445,7 @@ uint8_t * __fastcall D2COMP_GetPaletteTransformTable(uint32_t nPaletteShift) {
     return nullptr;
 }
 
-static uint32_t __stdcall D2COMP_ValidateComponentType(uint32_t dwComponentMask, uint8_t bComponentType) {
+static uint8_t __stdcall D2COMP_ValidateComponentType(uint32_t dwComponentMask, uint8_t bComponentType) {
     // Static local variables (originally global data)
     static uint8_t gaComponentValidationData[448] = {
     0x0,
@@ -910,7 +910,7 @@ static uint32_t __stdcall D2COMP_ValidateComponentType(uint32_t dwComponentMask,
       exit(-1);
     }
 
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(nLine * 0x40) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)gaComponentValidationData[(uint32_t)bComponentType + nLine * 0x40]);
+    return gaComponentValidationData[(uint32_t)bComponentType + nLine * 0x40];
 }
 
 static int32_t __stdcall D2COMP_LoadLayerSpritesAndCalcHeight(uint8_t * pbLayerCount, int32_t nLayerTypeArray, int * pnMaxHeight, uint8_t bPaletteShift, uint32_t nFrameNumber, int32_t nCOFContext) {
@@ -1043,8 +1043,8 @@ void __fastcall D2COMP_DrawCompositeUnit(uint32_t * pCompUnit, int32_t nDrawColo
     static uint32_t gnUniqueCursorFrame; D2_STATIC_GUARD_BSS(gnUniqueCursorFrame, "D2Win::Src::D2Comp::D2COMP_DrawCompositeUnit::gnUniqueCursorFrame");
     static uint32_t gnPentaSpinCursorFrame; D2_STATIC_GUARD_BSS(gnPentaSpinCursorFrame, "D2Win::Src::D2Comp::D2COMP_DrawCompositeUnit::gnPentaSpinCursorFrame");
 
+    int* pCOFEntry;
     uint8_t* pLayerFlags;
-    uint32_t nPaletteShift;
     D2GamePalShiftGreenBloodStrc* pPalette;
     DWORD dwTickCount;
     uint32_t nUnitFlags;
@@ -1060,7 +1060,7 @@ void __fastcall D2COMP_DrawCompositeUnit(uint32_t * pCompUnit, int32_t nDrawColo
     DC6* pUniqueCursorDC6 = gpPentaSpinCursorDC6;
     int32_t nDrawColorSaved = nDrawColor;
     if (pCompUnit) {
-      int* pCOFEntry;
+      uint8_t bVar1;
       if (!(gadwBitMasks[0] & *pCompUnit)) {
         return;
       }
@@ -1121,11 +1121,11 @@ void __fastcall D2COMP_DrawCompositeUnit(uint32_t * pCompUnit, int32_t nDrawColo
             do {
               nComponentType = (uint32_t)*(uint8_t*)(nLayerIndex + (int)nLayerTypeListOffset);
               memset(&sGfxData, 0, 0x48);
-              nPaletteShift = D2COMP_ValidateComponentType((uint32_t)*(uint8_t*)((int)pCompUnit + 5), (uint8_t)pCompUnit[1]);
+              bVar1 = D2COMP_ValidateComponentType((uint32_t)*(uint8_t*)((int)pCompUnit + 5), (uint8_t)pCompUnit[1]);
               nUnitFlags = nComponentType;
               sGfxData.nFrameNumber = nWeaponClass;
               sGfxData.pDC6 = 0;
-              sGfxData.nDirection = nPaletteShift & 0xff;
+              sGfxData.nDirection = (int)bVar1;
               sGfxData.nComponentType = (uint8_t)nComponentType;
               D2COMP_PopulateComponentFromCOF((int32_t)pCompUnit, &sGfxData);
               nUnitFlags = (uint32_t)*(uint8_t*)((int)pCompUnit + nUnitFlags + 0x28);

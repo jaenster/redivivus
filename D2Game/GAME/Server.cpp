@@ -3145,11 +3145,6 @@ void __stdcall QSERVER_ClientDisconnectCallback(int32_t nClientId, char * szFile
 void __fastcall NET_D2GS_SERVER_SrvJoinAct(int32_t nClientId) {
     D2ClientStrc* pClient;
     int32_t nReason;
-    D2UnitStrc* pUnit;
-    D2DrlgActStrc* pDrlgActNull;
-    ::SGAMEDATA* pGameArg;
-    ::SGAMEDATA* pGameNull;
-    D2RoomStrc* pRoom;
     uint32_t nToken = D2Net::Game::Server::QSERVER_GetClientGameToken(nClientId);
     ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
     if (pGame) {
@@ -3167,12 +3162,7 @@ void __fastcall NET_D2GS_SERVER_SrvJoinAct(int32_t nClientId) {
         }
 
         CLIENT_LoadActAndSetState2(pGame, pClient);
-        pGameNull = 0;
-        pDrlgActNull = 0;
-        pRoom = 0;
-        pGameArg = pGame;
-        pUnit = Clients::CLIENTS_GetControlUnit(pClient, 1);
-        Clients::CLIENT_PlacePlayerInRoom(pClient, pUnit, pGameArg, pRoom, pDrlgActNull, pGameNull, (uint32_t)pUnit);
+        Clients::CLIENT_PlacePlayerInRoom(pClient, Clients::CLIENTS_GetControlUnit(pClient, 1), pGame, 0, 0, 0);
         Clients::CLIENT_SetConnectionState(pClient, 3);
         Server::Unlock(pGame);
         SRVLog(6, "[JOIN 5] %d clientid, SrvJoinAct: Added to game.", nClientId);

@@ -2127,8 +2127,8 @@ int32_t __stdcall GetMeleeRange(D2UnitStrc * pUnit) {
     }
     if (pUnit->eUnitType != UNIT_PLAYER) {
       if (pUnit->eUnitType == UNIT_MONSTER && (pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId) , pMonStats2 != 0)) {
-        if ((uint8_t)pMonStats2->MeleeRng != 0xff) {
-          return (uint32_t)(uint8_t)pMonStats2->MeleeRng;
+        if (pMonStats2->MeleeRng != 0xff) {
+          return (uint32_t)pMonStats2->MeleeRng;
         }
 
         COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit_00, pUnit_00->pInventory, (uint32_t*)&pUnit, -1, 1);

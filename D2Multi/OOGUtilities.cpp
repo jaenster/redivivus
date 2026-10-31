@@ -41,7 +41,6 @@
 #include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "D2Multi/OOG.h"
-#include "D2Net/in_addr.h"
 #include "D2Win/D2WinEditBox.h"
 #include "D2Win/D2WinImageEx.h"
 #include "D2Win/D2WinScrollbar.h"
@@ -2001,7 +2000,7 @@ int __stdcall OOGUTIL_ProcessGameListEntry(D2ControlStrc * dwParam) {
       do {
         nCmp = strcmp(gbLanGameListEntryNamePadding[nEntryIdx].szName, aPassword->szGameName);
         if (!nCmp) {
-          pbEntryName = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly((in_addr)gbLanGameListEntryNamePadding[nEntryIdx].dwIpAddr);
+          pbEntryName = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(gbLanGameListEntryNamePadding[nEntryIdx].dwIpAddr);
           ChatDlg::OOGMENU_JoinGame(gbLanGameListEntryNamePadding[nEntryIdx].nJoinId, aPassword[0].szGameName, aGameName[0].szGameName, pbEntryName);
           UIMENU_DestroyLobbyAndJoinGameForms();
           pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
@@ -2017,7 +2016,7 @@ int __stdcall OOGUTIL_ProcessGameListEntry(D2ControlStrc * dwParam) {
     if (bHasPeerName) {
       nEntryIdx = strcmp(sGameEntry.szGameName, aPassword->szGameName);
       if (!nEntryIdx) {
-        pbEntryName = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly((in_addr)sGameEntry.dwIpAddress);
+        pbEntryName = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(sGameEntry.dwIpAddress);
         ChatDlg::OOGMENU_JoinGame(sGameEntry.nPort, aPassword[0].szGameName, aGameName[0].szGameName, pbEntryName);
         UIMENU_DestroyLobbyAndJoinGameForms();
         pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x147b);

@@ -753,6 +753,7 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t nParam
 
     uint32_t nDivisor;
     int nPercent;
+    uint16_t nLayer;
     if (!(!nParam && bParam && pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
     }
@@ -775,7 +776,8 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t nParam
         nDivisor = pScalingEntry[2];
       }
 
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, (*(int (*)[5])(pScalingEntry - 2))[0], D2Client::Stats::D2ApplyPercent(nCurrentStatVal, nPercent, nDivisor), 0);
+      nLayer = 0;
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, (*(int (*)[5])(pScalingEntry - 2))[0], D2Client::Stats::D2ApplyPercent(nCurrentStatVal, nPercent, nDivisor), nLayer);
       pScalingEntry += 5;
       nEntriesLeft--;
     } while (nEntriesLeft);

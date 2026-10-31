@@ -2225,8 +2225,8 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
     GAME::Wall2::WALL2_InitUnitGfx(pUnit);
     CLIENT_PlaySkillVisualEffect(pUnit, iVar2);
     nPalShiftIdx = 2;
-    if ((uint8_t)pDVar3->TransLvl < 8) {
-      nPalShiftIdx = (uint8_t)pDVar3->TransLvl + 2;
+    if (pDVar3->TransLvl < 8) {
+      nPalShiftIdx = pDVar3->TransLvl + 2;
     }
 
     bResult = Monster::IsMonsterUnique(pUnit);

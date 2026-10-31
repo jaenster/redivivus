@@ -33,7 +33,7 @@ struct __attribute__((packed)) D2Wall2DrawListStrc {
     /* 0xEA6C */ int nWall2GridOriginY; // iso Y of cell 0
     /* 0xEA70 */ struct D2Wall2CellStrc * pWall2; // nWall2GridDim*nWall2GridDim cells, (re)allocated by WALL2_AllocDrawList
     /* 0xEA74 */ int nWall2CellCount; // cell count of the current pWall2 allocation; WALL2_AllocDrawList reallocates when it changes
-    /* 0xEA78 */ uint32_t nWall2GridDim; // grid side: view width/0xa0 + 0xb + view height/0x50
+    /* 0xEA78 */ int32_t nWall2GridDim; // grid side: view width/0xa0 + 0xb + view height/0x50
     /* 0xEA7C */ int nWall2GridWidth; // view width/0xa0 + 0xb
     /* 0xEA80 */ int nWall2GridHeight; // view height/0x50 + 0xc
 };

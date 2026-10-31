@@ -187,7 +187,6 @@ void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUn
     uint32_t nMonsterGUID;
     int32_t nTmp2;
     uint32_t wTargetX;
-    int32_t nLayer;
     uint32_t dwTmp;
     int byMoveParam2;
     uint16_t wTargetY;
@@ -306,9 +305,9 @@ void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUn
         wTargetY = (uint16_t)nTmp2;
         nTmp2 = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
         GAME::SCmd::NET_D2GS_SERVER_Send_0x6D_UNITCHANGE_MONSTERNEUTRAL(pClientSide, nTargetY, (uint16_t)nTmp2, wTargetY, uVar1);
-        nLayer = 0;
+        wTargetY = 0;
         nTmp2 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0);
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, nTmp2 + 1, nLayer);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, nTmp2 + 1, wTargetY);
         return;
       }
       if (eAnimMode == Knockback) {

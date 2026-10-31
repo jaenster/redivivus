@@ -125,13 +125,13 @@ void __stdcall STATLIST_AttachStatListToUnit(struct D2UnitStrc * pOp45Owner, str
 // Adds nValue to stat (eUnitStat, nSubIndex) in pStatsEx's base array. Inserts the stat entry if absent; removes it if the result is zero. Propagates the delta up the parent chain via STATLIST_PropagateStatChange. Tracks the stat in the changed-stat list for player-owned root stat lists.
 void __stdcall STATLIST_AddStatValue(struct D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nSubIndex);
 // Sets a stat to an absolute value in a D2StatListExStrc's base-stat array. Packs (eUnitStat, low subindex) into a single key, binary-searches the sorted stat array, and either updates an existing entry or inserts a new one. If nParam==0, removes the entry entirely. Computes the delta and propagates it via STATLIST_PropagateStatChange. For player-owned stat lists with the dirty flag set, records the changed stat via STATLIST_TrackChangedStat for client sync. Returns 1 if the value changed, 0 if already equal or list is null.
-BOOL __stdcall STATLIST_SetStatValue(struct D2StatListExStrc * pStatEx, eD2UnitStat eUnitStat, int32_t nParam, uint32_t low);
+BOOL __stdcall STATLIST_SetStatValue(struct D2StatListExStrc * pStatEx, eD2UnitStat eUnitStat, int32_t nParam, uint16_t low);
 BOOL __stdcall D2AddStatToStatsListEx(struct D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nParam);
 // Sets a stat value in the unit's base stat array by binary search on the packed (statId<<16|layer) key. Inserts a new entry if missing and value != 0; removes entry if value == 0; propagates the delta to all dependent stat lists via STATLIST_PropagateStatChange. Also enqueues a change notification for player-owned stat lists (flag 0x80000000). Returns 1 on change, 0 on no-op.
 void __stdcall STATLIST_SetStatValueInBaseArray(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer, struct D2UnitStrc * pUnit);
 void __stdcall STATLIST_SetStatValueInBaseArraySafe(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer, struct D2UnitStrc * pUnit);
 void __stdcall thunk_STATLIST_SetStatValue(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nParam, uint32_t nParam2);
-void __stdcall STATLIST_SetUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue, int32_t nLayer);
+void __stdcall STATLIST_SetUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nLayer);
 void __stdcall thunk_STATLIST_AddStatValue(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nParam, uint16_t nParam2);
 void __stdcall STATLIST_AddUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue, int16_t nLayer);
 void __stdcall STATLIST_MarkUnitStatsChanged(struct D2UnitStrc * pUnit);

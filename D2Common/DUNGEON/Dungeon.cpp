@@ -1748,30 +1748,24 @@ void __fastcall DRLGROOMEX_InitTileDataAndPresets(D2RoomExStrc * pRoomEx) {
 }
 
 // Recursively activates nearby RoomEx neighbours up to depth 3. For each adjacent room within pRoomEx->ppDrlgRoomsExNear[], calls DRLGROOMEX_InitNearRoomsAndVisTiles if not yet populated, increments the room's reference count at the current priority level, and dispatches gaRoomExActivationHandlers[priority] when the room's fRoomStatus meets the recursion priority threshold.
-static void __stdcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx, uint32_t nRecursion, D2DrlgStrc * pDrlg) {
+void __fastcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx, uint8_t nRecursion) {
     D2RoomExStrc* pDVar1;
-    uint32_t nRecursionNextPacked;
+    uint32_t uVar2;
     int nRefSlotIdx;
     uint16_t* pnRefCount;
-    uint32_t nPriority;
-    uint32_t nRecursionHigh3B;
     if (!pRoomEx->nDrlgRoomsExNearCount) {
-      D2DrlgStrc* pDrlgReloaded = pDrlg;
       Drlg::DrlgRoom::DRLGROOMEX_InitNearRoomsAndVisTiles(pMemory, pRoomEx);
-      pDrlg = pDrlgReloaded;
     }
 
     int nNearIndex;
     nNearIndex = 0;
-    if ((uint8_t)nRecursion < 3) {
+    if (nRecursion < 3) {
       if (pRoomEx->nDrlgRoomsExNearCount > 0) {
-        nPriority = nRecursion & 0xff;
-        nRecursionHigh3B = (int32_t)((uint32_t)((uint32_t)pDrlg >> 8) << 8) >> 8;
+        uVar2 = (uint32_t)nRecursion;
         do {
-          nRecursionNextPacked = (uint32_t)((uint32_t)((uint32_t)nRecursionHigh3B & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uint8_t)nRecursion + 1));
           pDVar1 = pRoomEx->ppDrlgRoomsExNear[nNearIndex];
-          InitNearRooms(pMemory, pDVar1, nRecursionNextPacked, (D2DrlgStrc*)nRecursionNextPacked);
-          if (nPriority <= pDVar1->fRoomStatus) {
+          InitNearRooms(pMemory, pDVar1, nRecursion + '\x01');
+          if (uVar2 <= pDVar1->fRoomStatus) {
             nRefSlotIdx = 0;
             pnRefCount = pDVar1->awRoomsInList;
             do {
@@ -1781,25 +1775,24 @@ static void __stdcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * 
 
               nRefSlotIdx++;
               pnRefCount++;
-            } while (nRefSlotIdx <= (int)nPriority);
+            } while (nRefSlotIdx <= (int)uVar2);
 
-            (*gaRoomExActivationHandlers[nPriority])(pDVar1);
+            (*gaRoomExActivationHandlers[uVar2])(pDVar1);
           }
 
           count_reference:
-          pDVar1->awRoomsInList[nPriority]++;
+          pDVar1->awRoomsInList[uVar2]++;
           nNearIndex++;
-          nRecursionHigh3B = d2_load24((char*)&nRecursion + 1);
           if (nNearIndex >= pRoomEx->nDrlgRoomsExNearCount) {
             return;
           }
         } while (true);
       }
     } else if (0 < pRoomEx->nDrlgRoomsExNearCount) {
-      nPriority = nRecursion & 0xff;
+      uVar2 = (uint32_t)nRecursion;
       do {
         pDVar1 = pRoomEx->ppDrlgRoomsExNear[nNearIndex];
-        if (nPriority <= pDVar1->fRoomStatus) {
+        if (uVar2 <= pDVar1->fRoomStatus) {
           nRefSlotIdx = 0;
           pnRefCount = pDVar1->awRoomsInList;
           do {
@@ -1809,13 +1802,13 @@ static void __stdcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * 
 
             nRefSlotIdx++;
             pnRefCount++;
-          } while (nRefSlotIdx <= (int)nPriority);
+          } while (nRefSlotIdx <= (int)uVar2);
 
-          (*gaRoomExActivationHandlers[nPriority])(pDVar1);
+          (*gaRoomExActivationHandlers[uVar2])(pDVar1);
         }
 
         count_reference_no_recurse:
-        pDVar1->awRoomsInList[nPriority]++;
+        pDVar1->awRoomsInList[uVar2]++;
         nNearIndex++;
       } while (nNearIndex < pRoomEx->nDrlgRoomsExNearCount);
     }
@@ -1825,8 +1818,7 @@ static void __stdcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * 
 static void AddRoomDataActual(D2RoomExStrc * pRoomEx, uint8_t nInitDepth) {
     uint16_t* pnRefCount;
     D2DrlgStrc* pAct;
-    pAct = pRoomEx->pLevel->pDrlg;
-    InitNearRooms(pAct->pMemoryPool, pRoomEx, (uint32_t)(uint8_t)(nInitDepth + 1), pAct);
+    InitNearRooms(pRoomEx->pLevel->pDrlg->pMemoryPool, pRoomEx, nInitDepth + 1);
     uint32_t nDepth;
     nDepth = (uint32_t)nInitDepth;
     if (nDepth <= pRoomEx->fRoomStatus) {

@@ -135,7 +135,8 @@ void __fastcall PLAYER_InitBaseStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ui
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, nStatValue, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxstamina, nStatValue, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, 1, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_nextexp, D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(pUnit->nClassId, 1), 0);
+    uint16_t nLayer = 0;
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_nextexp, D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(pUnit->nClassId, 1), nLayer);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_attackrate, 100, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_velocitypercent, 100, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_other_animrate, 100, 0);
@@ -170,7 +171,8 @@ void __fastcall UpdateGameInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint32_t nExperience = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0);
     int nNewLevel = D2Common::DATATBLS::DataTbls::DATATBLS_GetLevelFromExperience(nCurHp, nExperience);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, nNewLevel, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_nextexp, D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(nCurHp, nNewLevel), 0);
+    uint16_t nLayer = 0;
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_nextexp, D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(nCurHp, nNewLevel), nLayer);
     int nLevelDelta = nNewLevel - nCurrentStat;
     if (nLevelDelta <= 0) {
       return;

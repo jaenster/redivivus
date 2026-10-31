@@ -625,9 +625,9 @@ struct D2SkillDescTxt {
     /* 0x005 */ uint8_t ListRow;
     /* 0x006 */ uint8_t ListPool;
     /* 0x007 */ uint8_t iconcel;
-    /* 0x008 */ short strName;
+    /* 0x008 */ uint16_t strName;
     /* 0x00A */ short strShort;
-    /* 0x00C */ short strLong;
+    /* 0x00C */ uint16_t strLong;
     /* 0x00E */ short strAlt;
     /* 0x010 */ short strMana;
     /* 0x012 */ short descdam;

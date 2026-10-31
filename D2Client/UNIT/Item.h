@@ -147,12 +147,12 @@ struct D2ItemsTxt {
     /* 0x113 */ char bNoDurability;
     /* 0x114 */ char bMissile;
     /* 0x115 */ char bComponent;
-    /* 0x116 */ char bRArm;
-    /* 0x117 */ char bLArm;
-    /* 0x118 */ char bTorso;
-    /* 0x119 */ char bLegs;
-    /* 0x11A */ char bRSPad;
-    /* 0x11B */ char bLSPad;
+    /* 0x116 */ uint8_t bRArm;
+    /* 0x117 */ uint8_t bLArm;
+    /* 0x118 */ uint8_t bTorso;
+    /* 0x119 */ uint8_t bLegs;
+    /* 0x11A */ uint8_t bRSPad;
+    /* 0x11B */ uint8_t bLSPad;
     /* 0x11C */ bool b2Handed;
     /* 0x11D */ uint8_t bUseable;
     /* 0x11E */ short wType;

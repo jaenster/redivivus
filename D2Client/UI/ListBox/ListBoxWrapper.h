@@ -220,7 +220,7 @@ struct __attribute__((packed)) ListBoxImplementation {
     /* 0x180724 */ uint32_t bScrollDownPressed; // 004bef7e LISTBOX_Draw / 004bf4xx OnMouseDown - scroll-down pending flag
     /* 0x180728 */ uint32_t bScrollTrackPressed; // 004bf4fc LISTBOX_OnMouseDown - scroll-track pending flag
     /* 0x18072C */ uint32_t field_0x18072c; // 004bf502 LISTBOX_OnMouseDown
-    /* 0x180730 */ uint32_t nFirstVisibleIndex; // 004be11a LISTBOX_DrawScrollbar
+    /* 0x180730 */ int32_t nFirstVisibleIndex; // 004be11a LISTBOX_DrawScrollbar
     /* 0x180734 */ int nPressedItemIndex; // 004bf521 OnMouseDown stores the hit-tested index; OnMouseUp compares it and resets it to -1
     /* 0x180738 */ int nSelectedIndex; // LISTBOX_GetSelectedIndex @004bec30 returns it; compared against -1 in AddItem/OnMouseClick
     /* 0x18073C */ uint32_t field_0x18073c; // 004be579 LISTBOX_AddItem increments it once per non-null column
