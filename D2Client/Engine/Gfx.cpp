@@ -2587,7 +2587,8 @@ D2GfxInfoUnkStrc * __fastcall GFX_IsUnitOnScreen(D2UnitStrc * pUnit, int32_t nOr
     return (D2GfxInfoUnkStrc*)(uint32_t)(*(int*)((int)pvVar1 + 0x10) + nOriginY < ScreenSizeY - 1);
 }
 
-void __stdcall GFX_UpdateGfxThrottled() {
+// Registers: nAct (ECX) is passed by the caller but not read.
+void __fastcall GFX_UpdateGfxThrottled(int32_t nAct) {
     gnGfxThrottleUpdateFrameCountDynamic = 1;
     Gfx_UpdateNearbyUnitGfx(0);
     gnGfxThrottleUpdateFrame = GetTickCount();

@@ -216,7 +216,7 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
         LeaveCriticalSection(&((D2QServerStrc*)lpThreadParam)->csClientLifecycle);
         if (nClientIdx) {
           /* LPCSTR lpOutputString for OutputDebugStringA */ OutputDebugStringA("Server thread close #1\n");
-          ErrorManager::StubHook2();
+          ErrorManager::StubHook2(0);
           /* DWORD dwExitCode for ExitThread */ ExitThread(0);
         }
       } else if (nSelectResult != -1 && (__frame0.nSocketIdx = -1 , -1 < __frame0.nClientCount)) {
@@ -388,7 +388,7 @@ BOOL __fastcall CreateSocketOnline(D2QServerStrc * pQServer, u_short nPort) {
         /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ pQServer->hEmptyEvent = hThread;
         hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)SocketThreadMain, pQServer, 0, (LPDWORD)pQServer->aAcceptThreadIds);
         pQServer->aAcceptThreadHandles[0] = hThread;
-        ErrorManager::StubHook1();
+        ErrorManager::StubHook1(pQServer->aAcceptThreadIds[0], hThread);
         return 1;
       }
 

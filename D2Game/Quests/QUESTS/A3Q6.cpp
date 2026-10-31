@@ -650,7 +650,7 @@ void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
         pAttackerPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
         _bQuestState = D2Common::QuestRecord::GetQuestState(pAttackerPlayerData->pQuestRecord[*(uint8_t*)(nSoulstoneDropLoop + 0x6d)], QUEST_TheGuardian, QUESTSTATE_Completed);
         if (!_bQuestState) {
-          QUEST_StubEmpty(0x3e);
+          QUEST_StubEmpty(pQuestData, pQuestArgs, 0x3e);
           pGameInner = pQuestData->pGame;
           pAttackerPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
           _bQuestState = D2Common::QuestRecord::GetQuestState(pAttackerPlayerData->pQuestRecord[pGameInner->nDifficulty], QUEST_TheGuardian, QUESTSTATE_Step0x11);

@@ -1003,7 +1003,7 @@ void __fastcall Q27_Callback_08_KillHandler(D2QuestDataStrc * pQuestData, D2Ques
             iNotify = 0;
             if (pQuestSpecificData->nPlayerCompletionCount > 0) {
               do {
-                QUEST_StubEmpty(0x40);
+                QUEST_StubEmpty(pQuestData, pQuestArgs, 0x40);
                 iNotify++;
               } while (iNotify < pQuestSpecificData->nPlayerCompletionCount);
             }

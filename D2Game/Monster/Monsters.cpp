@@ -3101,7 +3101,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
 }
 
 void __fastcall MONSTER_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nParam, uint32_t dwParam) {
-    UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, nParam, 0, (eD2UnitType)pUnit2);
+    UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, nParam, 0);
 }
 
 void __fastcall MONSTER_AttackTarget(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
@@ -3112,8 +3112,8 @@ void __fastcall MONSTER_AttackTarget(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
       return;
     }
 
-    void* pDamageStrc = memset(&sDamage, 0, 0x70);
-    *(uint16_t*)(char*)&nHitCheckFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, 0, 0, (eD2UnitType)pDamageStrc);
+    memset(&sDamage, 0, 0x70);
+    *(uint16_t*)(char*)&nHitCheckFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, 0, 0);
     sDamage.wResultFlags = (uint16_t)nHitCheckFlags;
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, 0x80);
 }

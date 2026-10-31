@@ -420,15 +420,16 @@ int __fastcall CLIENT_GetUnitAct(D2UnitStrc * pUnit) {
 // / target. 0x05 @0045ca30 tears down: frees weather DC6s, reinitialises the memory pools, sets
 // ServerLoadingComplete=0 / _gLevelLoadInProgress=1, restarts the connect timeout.
 void __fastcall NET_D2GS_CLIENT_Incoming0x04_STARTACT(char * pBytes) {
+    eD2LevelId eLevel;
     D2UnitStrc* pUnit;
     ServerLoadingComplete = 1;
     gLevelLoadInProgress = 0;
     D2RoomStrc* pRoom = UNIT::CUnit::GetCurrentRoom();
     if (pRoom) {
-      eD2LevelId eLevel;
+      eAct eVar1;
       eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-      /* timing */ Engine::Gfx::GFX_UpdateGfxThrottled();
+      eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+      /* timing */ Engine::Gfx::GFX_UpdateGfxThrottled((uint32_t)eVar1);
       pUnit = UNIT::Player::GetPlayerUnit_UI();
       if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer)) {
         return;

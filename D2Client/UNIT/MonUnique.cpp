@@ -104,12 +104,13 @@ uint16_t __fastcall GetBossId(D2UnitStrc * pUnit) {
     return pUnit->pUnitData.pUnitDataMonster->nBossNo;
 }
 
-BOOL CheckMonTypeForMonster(D2UnitStrc * pUnit, eD2MonsterType eMonsterType, uint8_t byMonTypeMaskHi) {
+// Registers: pUnit in ECX; nTypeFlagMask in DX is tested against the monster's type flags (callers pass 2, 8, 0x80).
+BOOL __fastcall CheckMonTypeForMonster(D2UnitStrc * pUnit, uint16_t nTypeFlagMask) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return 0;
     }
 
-    return (uint32_t)((pUnit->pUnitData.pUnitDataMonster->eMonsterType & (uint16_t)((uint16_t)(uint8_t)byMonTypeMaskHi << 8 | (uint16_t)(uint8_t)eMonsterType)) != 0);
+    return (uint32_t)((pUnit->pUnitData.pUnitDataMonster->eMonsterType & nTypeFlagMask) != 0);
 }
 
 void __fastcall SetUnsetMonsterType(D2UnitStrc * pUnit, uint16_t eMonsterType, BOOL bSetUnset) {
@@ -860,7 +861,7 @@ void __fastcall MONUNIQUE_ApplyModifierNihlathak(D2UnitStrc * pUnit, int32_t nUM
       return;
     }
 
-    BOOL bIsMultishot = CheckMonTypeForMonster(pOwnerUnit, MONTYPE_MULTISHOT, '\0');
+    BOOL bIsMultishot = CheckMonTypeForMonster(pOwnerUnit, 0x80);
     if (bIsMultishot) {
       return;
     }

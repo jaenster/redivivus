@@ -1011,7 +1011,7 @@ void NET_D2GS_SERVER_HandleAnyIncomingPacket() {
         break;
       }
 
-      CCmd::NET_D2GS_SERVER_ProcessClientMessage_GameSetup((D2GSClientMsgEnvelopeStrc*)pBytes);
+      CCmd::NET_D2GS_SERVER_ProcessClientMessage_GameSetup((D2GSClientMsgEnvelopeStrc*)pBytes, nSizeMode0);
     }
 
     while (true) {

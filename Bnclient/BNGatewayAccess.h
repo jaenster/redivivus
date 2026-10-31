@@ -58,7 +58,8 @@ struct D2BnCacheFileHeaderStrc {
 namespace Bnclient::BNGatewayAccess {
 
 // Function declarations
-int32_t __stdcall GetSystemTimeZone();
+// Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
+int32_t __thiscall GetSystemTimeZone(struct D2BNetGatewayAccessStr * pGatewayAccess);
 // @sourcefile .\BNetGW.cpp
 void __stdcall SaveAndUnload(struct D2BNetGatewayAccessStr * pGatewayAccess);
 char * __thiscall Nth(void * pThis, int nIndex);
@@ -79,10 +80,13 @@ void __fastcall GetBattlenetGatewayList(int32_t nGatewayAccess);
 void __fastcall GetBattlenetRealmsList(int32_t nGatewayAccess);
 uint32_t * __stdcall WritingDefaultGatewayList(DWORD * pdwFileSize);
 void __fastcall WriteDefaultGatewayList(char * szText);
-char * __stdcall SkipToEOL(char * szText1, char * szText2);
-char * __stdcall SkipEOL(char * szText1, char * szText2);
+// Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
+char * __thiscall SkipToEOL(struct D2BNetGatewayAccessStr * pGatewayAccess, char * szText1, char * szText2);
+// Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
+char * __thiscall SkipEOL(struct D2BNetGatewayAccessStr * pGatewayAccess, char * szText1, char * szText2);
 char * __thiscall FindSection(struct D2BNetGatewayAccessStr * pThis, char * szText1, char * szText2);
-char * __stdcall FindKey(char * szText1, char * szText2);
+// Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
+char * __thiscall FindKey(struct D2BNetGatewayAccessStr * pGatewayAccess, char * szText1, char * szText2);
 void __thiscall PickClosestZone(void * pThis, int32_t nGmtMinutes);
 // BNGatewayAccess::Load — Battle.net gateway-list loader. Asserts (ERROR_Halt, line 0x6c) when the registry gateway list isn't a 3n+1 entry count (missing/contended registry in a shared wineprefix).
 void __stdcall Load(struct D2BNetGatewayAccessStr * pGatewayAccess);

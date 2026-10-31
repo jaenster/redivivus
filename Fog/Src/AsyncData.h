@@ -50,7 +50,8 @@ struct __attribute__((packed)) D2AsyncData_Line0x128 {
 namespace Fog::Src::AsyncData {
 
 // Function declarations
-void __fastcall STRUCT_AllocAsyncData(int32_t nEnable);
+// Registers: nEnable in ECX; nReserved (EDX) is 0 at the only call site and not read.
+void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved);
 void __stdcall STRUCT_FreeAsyncData();
 void __fastcall ASYNCDATA_CancelAndCleanup(struct D2AsyncData_Line0x128 * pAsyncData);
 struct D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot();

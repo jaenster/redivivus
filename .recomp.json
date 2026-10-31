@@ -58,6 +58,6 @@
     "1.14d"
   ],
   "notes": "Work started on 2021-03-26 in a private repo; this public one is a fresh history from 2026. This is the actual 1.14d Game.exe (classic and LoD are both in there) turned back into C++, and you can build it and play single player. It still crashes now and then. It is a single-player project; online play on Battle.net is outside its scope. We don't edit the generated code by hand much; if something's wrong we fix it in Ghidra or in the generator and regenerate. The percentage is how much of the machine code comes out identical when the tree is compiled with MSVC 2005, which we use as a check on the decompilation.",
-  "x-ghidra-version": "1781",
+  "x-ghidra-version": "1782",
   "started": "2021-03-26"
 }

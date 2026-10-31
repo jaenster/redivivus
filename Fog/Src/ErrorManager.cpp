@@ -264,11 +264,13 @@ void EXIT_AtExit() {
     /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&lpCriticalSection_0074d848);
 }
 
-void __stdcall StubHook1() {
+// Registers: dwThreadId (ECX) and hThread (EDX) are passed by the callers but not read.
+void __fastcall StubHook1(uint32_t dwThreadId, HANDLE hThread) {
 
 }
 
-void __stdcall StubHook2() {
+// Registers: nReserved (ECX) is 0 at every call site and not read.
+void __fastcall StubHook2(int32_t nReserved) {
 
 }
 

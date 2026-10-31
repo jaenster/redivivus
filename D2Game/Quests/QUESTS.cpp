@@ -1359,7 +1359,7 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
           if (pQuestData) {
             do {
               if (pQuestData->nQuestNoInternal == QUESTINT_KhalimsWill) {
-                A3Q2::Q19_UpdateCompellingOrbObject(pQuestData);
+                A3Q2::Q19_UpdateCompellingOrbObject(pQuestData, pUnit);
                 return;
               }
 
@@ -2026,7 +2026,8 @@ void __fastcall QUEST_SendQuestStatePacket(D2UnitStrc * pUnit, int bQuestId, uin
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &aPacketBuf);
 }
 
-void __stdcall QUEST_StubEmpty(uint32_t nUnused) {
+// Registers: pQuestData (ECX) and pQuestArgs (EDX) are passed by the quest callbacks but not read.
+void __fastcall QUEST_StubEmpty(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs, uint32_t nUnused) {
 
 }
 

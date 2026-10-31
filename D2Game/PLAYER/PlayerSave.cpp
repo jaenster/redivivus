@@ -526,13 +526,14 @@ static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDAT
     return 0xd;
 }
 
-int32_t __stdcall SAVE_SerializeItemIfValid(D2UnitStrc * pUnit, char * szText, size_t nSize, int32_t nParam1, int32_t nParam2, int32_t nParam3) {
+// Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.
+int32_t __fastcall SAVE_SerializeItemIfValid(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, char * szText, size_t nSize, int32_t nParam1, int32_t nParam2, int32_t nParam3) {
     BOOL bTaskResult;
     int32_t nSerializeResult;
-    if (!pUnit || pUnit->eUnitFlagsEx >> 0xf & 1 || !nParam1 && nParam2 && !nParam3 && (bTaskResult = GAME::Task::TASK_ReturnTrue() , !bTaskResult)) {
+    if (!pItem || pItem->eUnitFlagsEx >> 0xf & 1 || !nParam1 && nParam2 && !nParam3 && (bTaskResult = GAME::Task::TASK_ReturnTrue() , !bTaskResult)) {
       nSerializeResult = 0;
     } else {
-      nSerializeResult = D2Common::ITEMS::Items::SerializeItem(pUnit, (uint8_t*)szText, nSize, (D2StatListExStrc*)0x1, 1, 0);
+      nSerializeResult = D2Common::ITEMS::Items::SerializeItem(pItem, (uint8_t*)szText, nSize, (D2StatListExStrc*)0x1, 1, 0);
       if (!nSerializeResult) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x75c);
         exit(-1);
@@ -563,7 +564,8 @@ static uint16_t GetCarriedItemsCount(D2InventoryStrc * pInventory) {
 }
 
 // Serializes a player's inventory into the save buffer pBuffer (cap nBufSize). Writes magic 'JM' (0x4d4a), then a 16-bit carried-item count (GetCarriedItemsCount), then each item via SerializeItem/SAVE_SerializeItemIfValid into an 8KB scratch buffer. Handles equipped weapons and L/R-arm items specially (weapon-swap aware), skips arm items already counted in the equipped set, then iterates all carried items and finally the cursor item (only if UNIT_ITEM). Decrements the count for items that serialize to 0 bytes. Returns the total bytes written via the GuardStack tail (stdcall frame). Out: pBuffer filled; the count field is back-patched at the end.
-int __stdcall SAVE_SerializeInventoryItems(D2InventoryStrc * pInventory, uint16_t * pBuffer, int32_t nBufSize, int32_t nParam2, int32_t nParam3, int32_t nParam4) {
+// Registers: pGame (ECX) and pUnit (EDX) are forwarded to SAVE_SerializeItemIfValid.
+int __fastcall SAVE_SerializeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint16_t * pBuffer, int32_t nBufSize, int32_t nParam2, int32_t nParam3, int32_t nParam4) {
     D2UnitStrc* pEquippedWeapon;
     D2UnitStrc* pRightArmItem;
     D2UnitStrc* pLeftArmItem;
@@ -623,7 +625,7 @@ int __stdcall SAVE_SerializeInventoryItems(D2InventoryStrc * pInventory, uint16_
           eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pCarriedItem);
           nWritten = D2Common::INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pInvEntry);
           if (nWritten != 3 || eBodyLoc != BODYLOC_R_ARM && eBodyLoc != BODYLOC_L_ARM) {
-            nWritten = SAVE_SerializeItemIfValid(pCarriedItem, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
+            nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pCarriedItem, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
             if (nWritten < 0) {
               return -1;
             }
@@ -640,7 +642,7 @@ int __stdcall SAVE_SerializeInventoryItems(D2InventoryStrc * pInventory, uint16_
             goto serialize_right_arm_item;
           }
         } else if (pRightArmItem != pEquippedWeapon) {
-          nWritten = SAVE_SerializeItemIfValid(pLeftArmItem, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
+          nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pLeftArmItem, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
           if (nWritten < 0) {
             return -1;
           }
@@ -652,7 +654,7 @@ int __stdcall SAVE_SerializeInventoryItems(D2InventoryStrc * pInventory, uint16_
           }
         } else {
           serialize_right_arm_item:
-          nWritten = SAVE_SerializeItemIfValid(pRightArmItem, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
+          nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pRightArmItem, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
           if (nWritten < 0) {
             return -1;
           }
@@ -663,7 +665,7 @@ int __stdcall SAVE_SerializeInventoryItems(D2InventoryStrc * pInventory, uint16_
           }
         }
         if (pLeftArmItem) {
-          nWritten = SAVE_SerializeItemIfValid(pLeftArmItem, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
+          nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pLeftArmItem, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
           if (nWritten < 0) {
             return -1;
           }
@@ -674,7 +676,7 @@ int __stdcall SAVE_SerializeInventoryItems(D2InventoryStrc * pInventory, uint16_
           }
         }
         if (pCursorItem_lcl && pCursorItem_lcl->eUnitType == UNIT_ITEM) {
-          nWritten = SAVE_SerializeItemIfValid(pCursorItem_lcl, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
+          nWritten = SAVE_SerializeItemIfValid(pGame, pUnit, pCursorItem_lcl, pWriteCursor, (int)pBuffer + (nBufSize - (int)pWriteCursor), nParam2, nParam3, nParam4);
           if (nWritten < 0) {
             return -1;
           }
@@ -703,7 +705,7 @@ D2InventoryStrc * __fastcall GetCopyInventory(::SGAMEDATA * pGameStrc, D2UnitStr
       }
     }
 
-    pCopiedInventory = (D2InventoryStrc*)SAVE_SerializeInventoryItems(pUnit->pInventory, pBuffer, nBufSize, bParam1, bParam2, bParam3);
+    pCopiedInventory = (D2InventoryStrc*)SAVE_SerializeInventoryItems(pGameStrc, pUnit, pUnit->pInventory, pBuffer, nBufSize, bParam1, bParam2, bParam3);
     return pCopiedInventory;
 }
 
@@ -753,7 +755,7 @@ int32_t __fastcall PLRSAVE_SerializeCorpseData(::SGAMEDATA * pGame, D2UnitStrc *
         *(uint32_t*)(pCorpseBuffer + 2) = dwUninitSlot;
         *(int*)(pCorpseBuffer + 4) = nCorpsePosX;
         *(int*)(pCorpseBuffer + 6) = nCorpsePosY;
-        nInventoryBytes = SAVE_SerializeInventoryItems(pCorpseUnit->pInventory, pCorpseBuffer + 8, nBufferSize - 0x10, 0, nParam, 0);
+        nInventoryBytes = SAVE_SerializeInventoryItems(pGame, pCorpseUnit, pCorpseUnit->pInventory, pCorpseBuffer + 8, nBufferSize - 0x10, 0, nParam, 0);
         if (!(nInventoryBytes > 0)) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x984);
           exit(-1);
@@ -1899,7 +1901,7 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
 
         pStreamCursor = (int*)((int)pStreamCursor + nBytesConsumed);
         if (pItem) {
-          GAME::Task::TASK_Nop();
+          GAME::Task::TASK_Nop(pItem);
           if (bUsePageHandler) {
             nRestoreResult = PLRSAVE_RestoreItemToBodyLoc(pItem, pGame, pCurrentUnit, 0);
           } else {
@@ -1932,7 +1934,7 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
                 UNIT::SUnit::FreeServerUnit(pGame, pSocketItem);
               }
             } else if (pSocketItem) {
-              GAME::Task::TASK_Nop();
+              GAME::Task::TASK_Nop(pSocketItem);
               if (bUsePageHandler) {
                 PLRSAVE_RestoreItemToBodyLoc(pSocketItem, pGame, pCurrentUnit, (int32_t)pItem);
               } else {
@@ -2288,7 +2290,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint32_t *
           }
 
           ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pMercUnit, 0, 0);
-          ITEMS::ItemMode::ITEMMODE_ReturnZero3(0);
+          ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pMercUnit, 0);
           nLayer = 0;
           D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMercUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pMercUnit), nLayer);
           Monster::MonsterAI::SendMercPackets(pGame, pUnit, 1);

@@ -161,7 +161,8 @@ void __stdcall nullsub(D2UnitStrc * dwUnused1, uint32_t dwUnused2, uint32_t dwPa
 
 // @wasnamed nullsub - one name on two different functions.
 // @evidence RET 0x10 (c2 10 00) - four dword arguments.
-void __stdcall nullsub_4Arg(D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4) {
+// Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.
+void __fastcall nullsub_4Arg(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4) {
 
 }
 

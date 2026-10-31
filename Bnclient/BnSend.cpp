@@ -47,6 +47,10 @@
 #define RECON_FPTD_fnInterlockedCompareExchange
 typedef LONG (__stdcall *fnInterlockedCompareExchange)(LONG * Destination, LONG Exchange, LONG Comperand);
 #endif
+#ifndef RECON_FPTD_pfnNewsEntryCallback
+#define RECON_FPTD_pfnNewsEntryCallback
+typedef void (__fastcall *pfnNewsEntryCallback)(uint32_t dwEntryId, char * szMessage);
+#endif
 #ifndef RECON_FPTD_pfnVoidNoArgCallback
 #define RECON_FPTD_pfnVoidNoArgCallback
 typedef void (__stdcall *pfnVoidNoArgCallback)();
@@ -450,7 +454,8 @@ int __stdcall NET_SID_CLIENT_Send_0x15_CheckAd() {
     return 1;
 }
 
-int __stdcall NET_SID_CLIENT_Send_0x21_DisplayAd() {
+// Registers: ECX and EDX are loaded by the only caller but not read.
+int __fastcall NET_SID_CLIENT_Send_0x21_DisplayAd(char * szDestPath, void * pPoolMgr) {
     SID_C2S_DisplayAd aGameTag;
     aGameTag.dwPlatformId = 0x49583836;
     BOOL bIsExpansion = BnSend::D2CheckExpansionGame();
@@ -2042,6 +2047,7 @@ void __stdcall BNNEWS_SaveToCache() {
     D2_FREE_AT(pMemoryToFree, ".\\BNNews.cpp", 0x17b);
 }
 
+// Calls g_pfnMotdCallback(dwEntryId in ECX, szMessage in EDX) once per unread news entry.
 void __stdcall BNNEWS_InvokeCallbacks() {
     if (g_pfnNewsCallback) {
       (*g_pfnNewsCallback)();
@@ -2055,8 +2061,10 @@ void __stdcall BNNEWS_InvokeCallbacks() {
       return;
     }
 
+    int iVar1 = g_nNewsMaxCacheSize.nCount * 0x408;
     do {
-      (*g_pfnMotdCallback)();
+      (*g_pfnMotdCallback)(*(uint32_t*)(iVar1 - 0x404 + (int)g_nNewsMaxCacheSize.pEntries), (char*)(iVar1 - 0x400 + (int)g_nNewsMaxCacheSize.pEntries));
+      iVar1 += -0x408;
       nUnreadCount--;
     } while (nUnreadCount);
 }
@@ -2290,7 +2298,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming0x46(char * pBytes, size_t nSize) {
         strncpy((char*)(nCacheByteOffset + 8 + (int)g_nNewsMaxCacheSize.pEntries), (char*)pMessageText, 0x400);
       } else {
         if (g_pfnMotdCallback) {
-          (*g_pfnMotdCallback)();
+          (*g_pfnMotdCallback)(0, (char*)pMessageText);
         }
       }
 
@@ -2425,7 +2433,7 @@ BOOL __stdcall BNNEWS_LoadCachedNews() {
     return __frame0.bLoadSuccess;
 }
 
-int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnVoidNoArgCallback pfnMotdCallback, pfnVoidNoArgCallback pfnNewsCallback) {
+int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnNewsEntryCallback pfnMotdCallback, pfnVoidNoArgCallback pfnNewsCallback) {
     g_pfnNewsChannelCallback = 1;
     g_pfnMotdCallback = pfnMotdCallback;
     g_pfnNewsCallback = pfnNewsCallback;

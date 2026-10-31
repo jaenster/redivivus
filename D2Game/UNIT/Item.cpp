@@ -274,7 +274,7 @@ void __fastcall SendUpdatedItemsToClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pUnit, 0, 1);
-    ITEMS::ItemMode::ITEMMODE_ReturnZero3(1);
+    ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit, 1);
 }
 
 void __fastcall ITEM_ClearFlagsAndCommands(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit) {

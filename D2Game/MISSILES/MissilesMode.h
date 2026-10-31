@@ -44,7 +44,8 @@ uint32_t __thiscall MISSILE_RollAttackHit(void * pThis, struct D2UnitStrc * pUni
 // Packet flows to MISSMODE_ApplyMissileHitDamage:
 // → ToHit → Absorb → Resist → DR → HP update
 // Connects skill calculation → actual damage dealt.
-void __stdcall MISSILE_SetDamage(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamage);
+// Registers: pGame (ECX) and pOwner (EDX) are passed by every caller but not read.
+void __fastcall MISSILE_SetDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pOwner, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamage);
 // Server-side: computes one missile's damage component and writes it into pMissileDamageData, dispatched on the missile's elemental type (from GetElemTypeFromMissileId of pUnit->nClassId). NONE=physical: rolls min/max, applies damage% plus demon/undead bonuses vs pTarget (floored at -90%), and deadly-strike (sets flag bit 0x2000, doubles max). FIRE/LIGHT/MAGIC/COLD/POISON/BURNING/FREEZE roll element damage with the matching mastery stat and store min/max + length/count fields. LIFEDRAIN/MANADRAIN/STAMDRAIN/STUN pull the corresponding drain/stun stat. Returns the computed damage value (poison/burning return min*25). Field naming in the struct appears offset/reused across cases (noted).
 int32_t __fastcall MISSILES_CalculateElementalDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamage);
 void __fastcall MISSILES_SetDamageByElementType(::SGAMEDATA * pGame, struct D2UnitStrc * pMissile, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamageStruct, int nDuration);

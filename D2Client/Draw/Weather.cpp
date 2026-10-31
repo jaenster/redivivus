@@ -407,7 +407,8 @@ void __fastcall WEATHER_InitBlizzardState(int nSpellId) {
     gnBlizzardSoundPlayed = nSpellId;
 }
 
-void __stdcall WEATHER_UpdateSplashes() {
+// Registers: pSeed (ECX) is passed by WeatherEffects but not read.
+void __fastcall WEATHER_UpdateSplashes(D2SeedStrc * pSeed) {
     uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     short int* pSplashData = (short int*)pEnvironmentSplashes->pData;
     int nIndex = 0;
@@ -440,7 +441,8 @@ void __stdcall WEATHER_UpdateSplashes() {
     } while (nIndex <= pSplashArray->nHighestUsedIndex);
 }
 
-void __stdcall WEATHER_UpdateBubbles() {
+// Registers: pSeed (ECX) is passed by WeatherEffects but not read.
+void __fastcall WEATHER_UpdateBubbles(D2SeedStrc * pSeed) {
     uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     short int* pBubbleData = (short int*)pEnvironmentBubbles->pData;
     int nIndex = 0;
@@ -1353,7 +1355,7 @@ void __stdcall WeatherEffects() {
         WEATHER_UpdateParticles(pSeed);
       }
 
-      WEATHER_UpdateSplashes();
+      WEATHER_UpdateSplashes(pSeed);
       WEATHER_UpdateTransition(pSeed);
       WEATHER_UpdateParticleCount(pSeed);
     } else {
@@ -1363,7 +1365,7 @@ void __stdcall WeatherEffects() {
       return;
     }
 
-    WEATHER_UpdateBubbles();
+    WEATHER_UpdateBubbles(pSeed);
 }
 
 uint32_t __fastcall WEATHER_ApproximateDistance(uint32_t nDeltaX, uint32_t nDeltaY) {

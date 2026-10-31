@@ -145,7 +145,8 @@ static int32_t __stdcall MISSILE_RollElementalDamage(D2UnitStrc * pUnit, eD2Unit
 // Packet flows to MISSMODE_ApplyMissileHitDamage:
 // → ToHit → Absorb → Resist → DR → HP update
 // Connects skill calculation → actual damage dealt.
-void __stdcall MISSILE_SetDamage(D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage) {
+// Registers: pGame (ECX) and pOwner (EDX) are passed by every caller but not read.
+void __fastcall MISSILE_SetDamage(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage) {
     int nPhysDamage;
     uint32_t dwTmp;
     int iVar2;
@@ -1093,7 +1094,7 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaPhysicalDamageExplosion(::SGAMEDATA * pG
     }
 
     memset(&sDamage, 0, 0x70);
-    MISSILE_SetDamage(pUnit, pTarget, &sDamage);
+    MISSILE_SetDamage(pGame, pOwner, pUnit, pTarget, &sDamage);
     sDamage.dwHitFlags |= pMissileTxt->HitFlags;
     sDamage.wResultFlags |= pMissileTxt->ResultFlags;
     SKILLS::SkillsServer::SKILLS_ApplyAreaDamage(pGame, pOwner, nPosX, nPosY, nRadius, &sDamage, 0);
@@ -1185,7 +1186,7 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaSplashDamage(::SGAMEDATA * pGame, D2Unit
     }
 
     memset(&sDamage, 0, 0x70);
-    MISSILE_SetDamage(pUnit, pTarget, &sDamage);
+    MISSILE_SetDamage(pGame, pOwner, pUnit, pTarget, &sDamage);
     sDamage.wResultFlags |= pMissileTxt->ResultFlags;
     sDamage.dwHitFlags |= pMissileTxt->HitFlags;
     BVar1 = SKILLS::SkillsServer::SKILLS_ApplyAreaDamage(pGame, pOwner, nPosX, nPosY, nRadius, &sDamage, 0);
@@ -1872,7 +1873,7 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaDamageAndRadialBurst(::SGAMEDATA * pGame
     }
 
     memset(&sDamage, 0, 0x70);
-    MISSILE_SetDamage(pUnit, pTarget, &sDamage);
+    MISSILE_SetDamage(pGame, pOwnerUnit, pUnit, pTarget, &sDamage);
     sDamage.dwHitFlags |= pMissileTxt->HitFlags;
     sDamage.wResultFlags |= pMissileTxt->ResultFlags;
     nTarget = 0x1;
@@ -3209,7 +3210,7 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaDamageLargeMonstersAndRadialBurst(::SGAM
     D2SkillsTxt* pSkillTxt;
     int nStride;
     D2DamageStrc sDamage;
-    D2UnitStrc* pOrigTarget = pTarget;
+    D2UnitStrc* pTarget_00 = pTarget;
     if (!pUnit) {
       return 1;
     }
@@ -3224,8 +3225,8 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaDamageLargeMonstersAndRadialBurst(::SGAM
       return 1;
     }
 
-    D2UnitStrc* pUnit_00 = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-    if (!pUnit_00) {
+    D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
+    if (!pOwner) {
       return 1;
     }
     if (pTarget) {
@@ -3243,7 +3244,7 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaDamageLargeMonstersAndRadialBurst(::SGAM
     int32_t nY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
     BOOL nTarget = 0x1;
     memset(&sDamage, 0, 0x70);
-    MISSILE_SetDamage(pUnit, pOrigTarget, &sDamage);
+    MISSILE_SetDamage(pGame, pOwner, pUnit, pTarget_00, &sDamage);
     nAreaRadiusTxt = pMissileTxt->sHitPar1;
     if (nAreaRadiusTxt <= 0) {
       eD2Skills eSkill;
@@ -3254,7 +3255,7 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaDamageLargeMonstersAndRadialBurst(::SGAM
         return 1;
       }
 
-      nAreaRadiusTxt = D2Common::Skills::D2GetSkillCalc(pUnit_00, pSkillTxt->aurarangecalc, eSkill, nSkillLvl);
+      nAreaRadiusTxt = D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxt->aurarangecalc, eSkill, nSkillLvl);
       if (nAreaRadiusTxt < 1) {
         nAreaRadiusTxt = 1;
       }
@@ -3262,7 +3263,7 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaDamageLargeMonstersAndRadialBurst(::SGAM
 
     sDamage.dwHitFlags |= pMissileTxt->HitFlags;
     sDamage.wResultFlags |= pMissileTxt->ResultFlags;
-    bIsLarge = SKILLS::SkillsServer::SKILLS_ApplyAreaDamage(pGame, pUnit_00, nX, nY, nAreaRadiusTxt, &sDamage, 0);
+    bIsLarge = SKILLS::SkillsServer::SKILLS_ApplyAreaDamage(pGame, pOwner, nX, nY, nAreaRadiusTxt, &sDamage, 0);
     if (!bIsLarge) {
       nTarget = 0x3;
     }
@@ -3594,7 +3595,7 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaDamageAndSpawnSubMissile(::SGAMEDATA * p
       nMissileY = 0;
     }
 
-    MISSILE_SetDamage(pUnit, nullptr, &sDamage);
+    MISSILE_SetDamage(pGame, pUnit_00, pUnit, nullptr, &sDamage);
     nClassId = pMissileTxt->sHitPar1;
     if (nClassId <= 0) {
       if ((int)eSkill < 0) {
@@ -4560,7 +4561,7 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnSubMissileInvertFrameInArea(::SGAMEDATA
         }
       }
 
-      MISSILE_SetDamage(pUnit, pFoundTarget, &dmgData);
+      MISSILE_SetDamage(pGame, pOwner, pUnit, pFoundTarget, &dmgData);
       MISSMODE_HitWithArmorReduction(pGame, pUnit, pFoundTarget, &dmgData);
       dwFindGUID = pSkillsTxt->aurafilter;
       if (!dwFindGUID) {
@@ -4715,7 +4716,7 @@ int __fastcall Hits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarge
       }
     }
     if (pTarget && nKillFlags & 2) {
-      MISSILE_SetDamage(pUnit, pTarget, &tDamage);
+      MISSILE_SetDamage(pGame, pOwner, pUnit, pTarget, &tDamage);
       nFuncIdx = pMissilesTxt->nSrvDmgFunc;
       if (nFuncIdx > 0 && nFuncIdx < MISSILESSRVDMGFUNCS_SIZE) {
         (*MISSILESSRVDMGFUNCS[nFuncIdx])(pGame, pUnit, pTarget, &tDamage);
@@ -6109,7 +6110,7 @@ int __fastcall MISSILESMODE_SrvDoFn27_Tornado(::SGAMEDATA * pGame, D2UnitStrc * 
     }
     if (!(nRemainingFrames % nInterval)) {
       D2DamageStrc sDamageData;
-      MISSILE_SetDamage(pUnit, nullptr, &sDamageData);
+      MISSILE_SetDamage(pGameSaved, pOwner, pUnit, nullptr, &sDamageData);
       nInterval = pMissileTxt->Param2;
       if (nInterval <= 0) {
         nInterval = D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxt->aurarangecalc, eSkill, nSkillLevel);

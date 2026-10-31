@@ -661,7 +661,7 @@ BOOL __fastcall SKILLDRUID_SrvStFn56_FeralRageMaul(::SGAMEDATA * pGame, D2UnitSt
     memset(&sDamage, 0, 0x70);
     int32_t nHitFlags = 0;
     uint32_t uHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, uHitResult, nHitFlags, (eD2UnitType)pTarget);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, uHitResult, nHitFlags);
     if (sDamage.wResultFlags & 1U) {
       if (pSkillTxt->EType != ELEMENTAL_NONE) {
         sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[3], eSkill, nSkillLvl);
@@ -805,9 +805,7 @@ BOOL __fastcall SKILLDRUID_SrvStFn57_Rabies(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     D2Common::Skills::SKILL_SetParam1(pSkill, 0);
-    int32_t nHitFlags = 0;
-    uint32_t uHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-    uint16_t uVar1 = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, uHitResult, nHitFlags, uHitResult);
+    uint16_t uVar1 = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
     if (!(uVar1 & 1)) {
       return 0;
     }
@@ -1463,7 +1461,7 @@ BOOL __fastcall SKILLDRUID_ApplyAccumulatedStateDamage(::SGAMEDATA * pGame, D2Un
     }
 
     memset(&sDamage, 0, 0x70);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nTotalToHit, 0, nTotalToHit);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nTotalToHit, 0);
     sDamage.dwHitClass = 1;
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, bySrcDam);
     return 1;

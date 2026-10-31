@@ -15,6 +15,10 @@ struct D2BNetGatewayAccessStr;
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 struct sockaddr;
 #endif // _WIN32
+#ifndef RECON_FPTD_pfnNewsEntryCallback
+#define RECON_FPTD_pfnNewsEntryCallback
+typedef void (__fastcall *pfnNewsEntryCallback)(uint32_t dwEntryId, char * szMessage);
+#endif
 #ifndef RECON_FPTD_pfnVoidNoArgCallback
 #define RECON_FPTD_pfnVoidNoArgCallback
 typedef void (__stdcall *pfnVoidNoArgCallback)();
@@ -160,7 +164,8 @@ void __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * sz
 uint32_t NET_SID_CLIENT_Send_0x10_LeaveChat();
 void __fastcall NET_SID_CLIENT_Send_0x0E_ChatCommand(uint8_t * pbParam);
 int __stdcall NET_SID_CLIENT_Send_0x15_CheckAd();
-int __stdcall NET_SID_CLIENT_Send_0x21_DisplayAd();
+// Registers: ECX and EDX are loaded by the only caller but not read.
+int __fastcall NET_SID_CLIENT_Send_0x21_DisplayAd(char * szDestPath, void * pPoolMgr);
 void __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * szGamePassword, char * szGameDescription, int32_t nFlags);
 DWORD __stdcall BNCLIENT_SendKeepAlive();
 uint32_t __fastcall thunk_NET_SID_CLIENT_Send(uint8_t bParam, char * szText);
@@ -237,6 +242,7 @@ uint32_t __thiscall BNNEWS_RoundToPowerOfTwo(struct D2BnNewsTableStrc * pNewsTab
 DWORD __stdcall BNNEWS_RoundUpToMultiple(DWORD dwValue, DWORD dwMultiple);
 // @sourcefile .\BNNews.cpp
 void __stdcall BNNEWS_SaveToCache();
+// Calls g_pfnMotdCallback(dwEntryId in ECX, szMessage in EDX) once per unread news entry.
 void __stdcall BNNEWS_InvokeCallbacks();
 void * __thiscall BNNEWS_DestroyNewsTable(void * pNewsTable, uint8_t bFreeMemory);
 void __thiscall BNNEWS_ReallocateNewsTable(struct D2BnNewsTableStrc * pNewsTable, uint32_t dwNewCapacity);
@@ -251,7 +257,7 @@ void __thiscall BNNEWS_SetNewsEntryCount(struct D2BnNewsTableStrc * pNewsTable, 
 BOOL __fastcall NET_SID_CLIENT_Incoming0x46(char * pBytes, size_t nSize);
 // @sourcefile .\BNNews.cpp
 BOOL __stdcall BNNEWS_LoadCachedNews();
-int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnVoidNoArgCallback pfnMotdCallback, pfnVoidNoArgCallback pfnNewsCallback);
+int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnNewsEntryCallback pfnMotdCallback, pfnVoidNoArgCallback pfnNewsCallback);
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 0051dc70..0051dc79; unreferenced in 1.14d.
 __time32_t __stdcall BNSEND_GetTime32(__time32_t * pTime);

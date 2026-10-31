@@ -1449,7 +1449,8 @@ void __fastcall SKILLS_SetPeriodicStatOrSkillTimer(::SGAMEDATA * pGame, D2UnitSt
 }
 
 // Server-side: spawns and links a Town Portal object for pUnit. Finds a free spawn coordinate in eSrcLevel, checks for the special Duriel portal, creates an OBJECT unit of pUnit's class, stores the source level ID in the portal's char name buffer, sets portal flags, and bidirectionally links owner/portal via StoreOwner and LinkPortalCoords. Frees the placeholder pUnit on spawn failure. Returns the new portal unit or NULL on error.
-D2UnitStrc * __thiscall LinkPortal(void * pThis, D2UnitStrc * pUnit, D2RoomStrc * eLevel, eD2LevelId nLevelId2) {
+// Registers: pGame in ECX; pOwner in EDX is passed by the callers but not read.
+D2UnitStrc * __fastcall LinkPortal(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pUnit, D2RoomStrc * eLevel, eD2LevelId nLevelId2) {
     int nUnitGUID;
     D2UnitStrc* pNewPortal;
     eD2LevelId eSrcLevelId;
@@ -1460,10 +1461,9 @@ D2UnitStrc * __thiscall LinkPortal(void * pThis, D2UnitStrc * pUnit, D2RoomStrc 
     int32_t nLine;
     D2RoomStrc* pRoom = eLevel;
     eAct neAct = D2Common::Drlg::GetActNoFromLevelNumber((eD2LevelId)eLevel);
-    uint32_t* puVar1 = (uint32_t*)((int)pThis + (uint32_t)neAct * 4 + 0xbc);
-    eLevel = D2Common::DUNGEON::Dungeon::SpawnUnit((D2DrlgActStrc*)*puVar1, (eD2LevelId)pRoom, 0xb, &nSpawnX, &nSpawnY, 3);
+    eLevel = D2Common::DUNGEON::Dungeon::SpawnUnit(pGame->pAct[neAct], (eD2LevelId)pRoom, 0xb, &nSpawnX, &nSpawnY, 3);
     D2RoomStrc* pSpawnRoom = eLevel;
-    GAME::Server::SetSomeRoomFlags((::SGAMEDATA*)pThis, eLevel);
+    GAME::Server::SetSomeRoomFlags(pGame, eLevel);
     if (!eLevel) {
       if (!pUnit) {
         nUnitGUID = -1;
@@ -1474,14 +1474,14 @@ D2UnitStrc * __thiscall LinkPortal(void * pThis, D2UnitStrc * pUnit, D2RoomStrc 
       eUnitType = UNIT_OBJECT;
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, eUnitType, nUnitGUID);
-      UNIT::SUnit::FreeServerUnit((::SGAMEDATA*)pThis, pUnit);
+      UNIT::SUnit::FreeServerUnit(pGame, pUnit);
       return nullptr;
     }
 
     ptPortalPos.x = nSpawnX;
     ptPortalPos.y = nSpawnY;
-    BOOL BVar2 = Quests::QUESTS::IsPortalFromDuriel((::SGAMEDATA*)pThis, &ptPortalPos, nLevelId2, &eLevel);
-    if (BVar2) {
+    BOOL BVar1 = Quests::QUESTS::IsPortalFromDuriel(pGame, &ptPortalPos, nLevelId2, &eLevel);
+    if (BVar1) {
       eLevel = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(eLevel, ptPortalPos.x, ptPortalPos.y);
     }
     if (!eLevel) {
@@ -1491,7 +1491,7 @@ D2UnitStrc * __thiscall LinkPortal(void * pThis, D2UnitStrc * pUnit, D2RoomStrc 
     }
 
     eLevel = D2Common::Collision::GetFreeCoordinates_WithIncrementValue(eLevel, &ptPortalPos, 3, 0xbe11, 5);
-    if (!eLevel && (eLevel = D2Common::DUNGEON::Dungeon::SpawnUnit((D2DrlgActStrc*)*puVar1, (eD2LevelId)pRoom, 0xb, &nSpawnX, &nSpawnY, 3) , !eLevel) && (eLevel = pSpawnRoom , !pSpawnRoom)) {
+    if (!eLevel && (eLevel = D2Common::DUNGEON::Dungeon::SpawnUnit(pGame->pAct[neAct], (eD2LevelId)pRoom, 0xb, &nSpawnX, &nSpawnY, 3) , !eLevel) && (eLevel = pSpawnRoom , !pSpawnRoom)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe08);
       exit(-1);
     } else {
@@ -1504,7 +1504,7 @@ D2UnitStrc * __thiscall LinkPortal(void * pThis, D2UnitStrc * pUnit, D2RoomStrc 
         nLine = pUnit->nClassId;
       }
 
-      pNewPortal = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nLine, ptPortalPos.x, ptPortalPos.y, (::SGAMEDATA*)pThis, eLevel, 1, 2, nullptr);
+      pNewPortal = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nLine, ptPortalPos.x, ptPortalPos.y, pGame, eLevel, 1, 2, nullptr);
       if (!pNewPortal) {
         if (!pUnit) {
           nUnitGUID = -1;
@@ -1514,7 +1514,7 @@ D2UnitStrc * __thiscall LinkPortal(void * pThis, D2UnitStrc * pUnit, D2RoomStrc 
 
         eUnitType = UNIT_OBJECT;
         D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nUnitGUID);
-        UNIT::SUnit::FreeServerUnit((::SGAMEDATA*)pThis, pUnit);
+        UNIT::SUnit::FreeServerUnit(pGame, pUnit);
         return nullptr;
       }
 
@@ -1587,7 +1587,7 @@ BOOL __fastcall SERVER_SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
       }
 
       D2Common::Units::SetupUpdateFlag(pPortal, 1);
-      pPortal = LinkPortal(pGame, pPortal, (D2RoomStrc*)eLevel, eLevel_00);
+      pPortal = LinkPortal(pGame, pUnit, pPortal, (D2RoomStrc*)eLevel, eLevel_00);
       if (!pPortal) {
         return 0;
       }
@@ -2665,7 +2665,7 @@ int32_t __fastcall SKILLS_GetSummonMonsterClassId(D2UnitStrc * pUnit, int32_t nP
 uint16_t __fastcall SKILLS_CalcToHitAndApply(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2SkillsTxt * pSkillsTxt, int32_t nParam1, int32_t nParam2, D2DamageStrc * pDamage, int32_t nParam4) {
     if (!(pSkillsTxt->ResultFlags & 1U)) {
       uint16_t nToHitFlags;
-      nToHitFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, nParam1, nParam2), nParam4, (eD2UnitType)pTarget);
+      nToHitFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, nParam1, nParam2), nParam4);
       pDamage->wResultFlags = nToHitFlags;
       if (nToHitFlags & 1) {
         nToHitFlags = pSkillsTxt->ResultFlags | nToHitFlags;
@@ -2684,7 +2684,7 @@ uint32_t __fastcall SKILLS_CalcMissileToHit(::SGAMEDATA * pGame, D2UnitStrc * pU
     uint16_t extraout_var;
     if (!(nParam1 & 1)) {
       uint16_t uVar1;
-      uVar1 = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit2, pUnit, nParam12, nParam22, (eD2UnitType)pUnit);
+      uVar1 = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit2, pUnit, nParam12, nParam22);
       nToHit = (uint32_t)(uint32_t)(uint16_t)uVar1;
       *(uint16_t*)(nParam2 + 4) = uVar1;
       if (!(uVar1 & 1)) {
@@ -3277,8 +3277,8 @@ BOOL __fastcall Skills_SrvDoFunc_001_ShootArrow(::SGAMEDATA * pGame, D2UnitStrc 
 
     memset(&DStack_74, 0, 0x70);
     int32_t nParam2 = 0;
-    int eUnitType = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_progressive_tohit, 0);
-    DStack_74.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pWeapon, eUnitType, nParam2, eUnitType);
+    int nParam1 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_progressive_tohit, 0);
+    DStack_74.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pWeapon, nParam1, nParam2);
     DStack_74.dwHitFlags |= 2;
     SkillAss::SKILLASS_ApplyProgressiveDamageToTarget(pUnit, &DStack_74);
     UNIT::SUnitDmg::DAMAGE_CalculateOffensiveDamage(pGame, pUnit, pWeapon, &DStack_74, 0, 0x80);

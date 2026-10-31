@@ -2982,16 +2982,17 @@ static int32_t DAMAGE_GetSkillDamageBonus(D2UnitStrc * pUnit) {
 static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     int32_t nParryBonus;
     uint32_t nRandRoll;
+    ::SGAMEDATA* pSVar2;
     int nDodgeChance;
     uint32_t nEvadeRoll;
     int nAvoidChance;
+    D2UnitStrc* pDVar3;
+    int32_t iVar4;
     uint32_t nWeaponClass3;
     int32_t nDebugAddr;
     uint32_t dwSeedLow;
     eD2PlayerAnimMode eAnimMode;
     char* nSeedMod;
-    int32_t nSkillBonus;
-    D2UnitStrc* pDefender;
     uint32_t nWeaponClass2;
     nWeaponClass2 = 0;
     if (pUnit) {
@@ -3012,8 +3013,8 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
           nSeedMod = "evades";
           nParryBonus = nParam;
           nDodgeChance = nAvoidChance;
-          SUnit::GetGamePointer(pUnit2);
-          nullsub_4Arg(pUnit, nParryBonus, nDodgeChance, (uint32_t)nSeedMod);
+          pSVar2 = SUnit::GetGamePointer(pUnit2);
+          nullsub_4Arg(pSVar2, pUnit2, pUnit, nParryBonus, nDodgeChance, (uint32_t)nSeedMod);
           nRandRoll = 8;
           if (nAvoidChance < nParam) {
             return nRandRoll;
@@ -3029,11 +3030,11 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
           if (nWeaponClass2 == 0xd) {
             nRandRoll = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
             nDebugAddr = (int32_t)s_block_006e1730;
-            pDefender = pUnit;
-            nSkillBonus = nParryBonus;
+            pDVar3 = pUnit;
+            iVar4 = nParryBonus;
             nWeaponClass3 = nRandRoll;
-            SUnit::GetGamePointer(pUnit2);
-            nullsub_4Arg(pDefender, nSkillBonus, nRandRoll, nDebugAddr);
+            pSVar2 = SUnit::GetGamePointer(pUnit2);
+            nullsub_4Arg(pSVar2, pUnit2, pDVar3, iVar4, nRandRoll, nDebugAddr);
             if ((int)nWeaponClass3 < nParryBonus) {
               return 0x10;
             }
@@ -3059,11 +3060,11 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
       if (nWeaponClass3 == 0xd) {
         nRandRoll = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
         nSeedMod = "block";
-        pDefender = pUnit;
-        nSkillBonus = nParryBonus;
+        pDVar3 = pUnit;
+        iVar4 = nParryBonus;
         nWeaponClass2 = nRandRoll;
-        SUnit::GetGamePointer(pUnit2);
-        nullsub_4Arg(pDefender, nSkillBonus, nRandRoll, (uint32_t)nSeedMod);
+        pSVar2 = SUnit::GetGamePointer(pUnit2);
+        nullsub_4Arg(pSVar2, pUnit2, pDVar3, iVar4, nRandRoll, (uint32_t)nSeedMod);
         if ((int)nWeaponClass2 < nParryBonus) {
           return 0x10;
         }
@@ -3078,8 +3079,8 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
         nSeedMod = "dodges";
         nAvoidChance = nDodgeChance;
         nRandRoll = nEvadeRoll;
-        SUnit::GetGamePointer(pUnit2);
-        nullsub_4Arg(pUnit, nAvoidChance, nRandRoll, (uint32_t)nSeedMod);
+        pSVar2 = SUnit::GetGamePointer(pUnit2);
+        nullsub_4Arg(pSVar2, pUnit2, pUnit, nAvoidChance, nRandRoll, (uint32_t)nSeedMod);
         if ((int)nEvadeRoll < nDodgeChance) {
           return 4;
         }
@@ -3091,8 +3092,8 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
         nSeedMod = "avoids";
         nAvoidChance = nDodgeChance;
         nRandRoll = nEvadeRoll;
-        SUnit::GetGamePointer(pUnit2);
-        nullsub_4Arg(pUnit, nAvoidChance, nRandRoll, (uint32_t)nSeedMod);
+        pSVar2 = SUnit::GetGamePointer(pUnit2);
+        nullsub_4Arg(pSVar2, pUnit2, pUnit, nAvoidChance, nRandRoll, (uint32_t)nSeedMod);
         if ((int)nEvadeRoll < nDodgeChance) {
           return 2;
         }
@@ -3126,11 +3127,8 @@ uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, D2UnitStrc 
     pDefUnit->sSeed = DVar1;
     int nSeedMod = DVar1.nSeedLow % 100;
     int32_t nDebugAddr = (int32_t)s_blocks_006e1738;
-    D2UnitStrc* pDefender = pDefUnit;
-    int nBlockRateTmp = nBlockRate;
-    int nRandRoll = nSeedMod;
-    SUnit::GetGamePointer(pUnit);
-    nullsub_4Arg(pDefender, nBlockRateTmp, nRandRoll, nDebugAddr);
+    D2UnitStrc* nRandRoll = pDefUnit;
+    nullsub_4Arg(SUnit::GetGamePointer(pUnit), pUnit, nRandRoll, nBlockRate, nSeedMod, nDebugAddr);
     if (nSeedMod >= nBlockRate) {
       uBlockResult = DAMAGE_CheckDefenseEvasion(nAttackRating, pDefUnit, pUnit);
       return uBlockResult;
@@ -3736,8 +3734,9 @@ void __fastcall DAMAGE_SetUnitToLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
     }
 }
 
-// Server-side melee hit resolution between attacker pUnit and defender pUnit2. Validates both are player/monster, can attack each other, and are within melee range (range widened by nParam2 + the attacker's melee range; monster attackers get +2). Sets a "moving" flag if a player defender is running, then rolls the attack (DAMAGE_RollAttackHit using nParam1) and checks block/evasion (DAMAGE_CheckBlockAndEvasion), folding the resulting STATE_* flags into a packed uint16 result (hit / block / dodge / evade / parry bits, plus an uninterruptable-stun bit). Returns the packed hit-result word (0 = out of range / cannot attack). Custom-register convention.
-uint16_t __stdcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nParam1, int32_t nParam2, eD2UnitType eUnitType) {
+// Server-side melee hit resolution between attacker pUnit and defender pUnit2. Validates both are player/monster, can attack each other, and are within melee range (range widened by nParam2 + the attacker's melee range; monster attackers get +2). Sets a "moving" flag if a player defender is running, then rolls the attack (DAMAGE_RollAttackHit using nParam1) and checks block/evasion (DAMAGE_CheckBlockAndEvasion), folding the resulting STATE_* flags into a packed uint16 result (hit / block / dodge / evade / parry bits, plus an uninterruptable-stun bit). Returns the packed hit-result word (0 = out of range / cannot attack).
+// Registers: pGame in ECX and pUnit in EDX (__fastcall); EAX is not an input.
+uint16_t __fastcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nParam1, int32_t nParam2) {
     bool _bCanAttack;
     bool _bInMeleeRange;
     bool bCanAttack;

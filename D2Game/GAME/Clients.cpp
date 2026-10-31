@@ -618,7 +618,7 @@ void __fastcall UpdateSingleClient(::SGAMEDATA * pGame, D2ClientStrc * pClient) 
     D2Common::Stats::StatsEx::STATLIST_IterateChangedStats(pUnit, pUnit, PLAYER::PlayerMsg::SendAttributeUpdate);
     if (pUnit->eUnitFlagsEx >> 0x15 & 1) {
       ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pUnit, 1, 1);
-      ITEMS::ItemMode::ITEMMODE_ReturnZero3(1);
+      ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit, 1);
     }
 
     pClient->dwRoomTicker++;

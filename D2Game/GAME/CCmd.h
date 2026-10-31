@@ -78,7 +78,8 @@ namespace D2Game::GAME::CCmd {
 // Function declarations
 // D2GS server-side dispatcher for the game-setup / session control packet family (opcodes 0x67..0x70, indexed by pPacket[1]-0x67). Reads the client id from pPacket[0] and routes: 0=GAMELOGON_SP (single-player create via GAME_CreateSingleplayerGame), 1=GAMELOGON_MULTI (token-first-game anti-cheat check, NET_D2GS_SERVER_IsValidChecks then NET_D2GS_SERVER_SrvJoinGame), 2=LEAVEGAME, 3=REQUESTHOSTEDGAMES, 4=JOINGAME (SrvJoinAct), 5=UPLOADSAVE (halts unrecoverably if save size >0x1fff), 6=PING (NET_SendPong), 7=FINDME_6E, 9=force-disconnect (sets QServer nForceTimeoutDisconnect). Most branches gate the action behind a per-command validity/allowed check. Returns via Fog::Debug::GuardStack. pCritSec is the clients-list critical section (released on the force-disconnect path). NOTE: several gate booleans (bSetupCheckResult, bServerValidRequest, bFindMeCheckResult) read as uninitialized in decompile due to lost register-param/inlined-return storage.
 // @sourcefile .\GAME\CCmd.cpp
-void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(struct D2GSClientMsgEnvelopeStrc * pPacket);
+// Registers: pPacket in ECX; nPacketSize in EDX (the received length) is passed but not read.
+void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(struct D2GSClientMsgEnvelopeStrc * pPacket, int32_t nPacketSize);
 // IN-GAME PACKET HANDLER: Processes player actions (movement, skills, items).
 // Packet dispatch via table at 0x006E0D18 (103 opcodes):
 // - 0x01-0x05: Movement (walk, run, teleport)

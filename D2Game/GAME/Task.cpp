@@ -3,14 +3,19 @@
 #include "D2Game/GAME/Task.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
+#include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2RoomStrc.h"
+#include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Game/GAME/Clients.h"
+#include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Server.h"
 #include "D2Game/GAME/Server/ServerCmd.h"
 #include "D2Game/GAME/Targets.h"
+#include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitInactive.h"
+#include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/SMem.h"
@@ -569,7 +574,8 @@ BOOL __stdcall TASK_ReturnTrue() {
     return 1;
 }
 
-void __stdcall TASK_Nop() {
+// Registers: pItem (ECX) is passed by the callers but not read.
+void __fastcall TASK_Nop(D2UnitStrc * pItem) {
 
 }
 

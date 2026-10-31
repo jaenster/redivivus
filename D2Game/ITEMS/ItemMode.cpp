@@ -3333,7 +3333,8 @@ uint32_t __fastcall ITEMMODE_ResolveEquipConflict(D2UnitStrc * pUnit, D2UnitStrc
     return (uint32_t)!*ppConflict1;
 }
 
-void __stdcall ITEMMODE_ReturnZero3(uint32_t dwParam) {
+// Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.
+void __fastcall ITEMMODE_ReturnZero3(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam) {
 
 }
 

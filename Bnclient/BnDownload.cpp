@@ -1071,11 +1071,11 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
           } while ((char)uPoolChar != '\0');
 
           __frame0.dwStackPad2 = (char*)D2_ALLOC_AT((size_t)((int)puPoolCursor + (1 - ((int)pPoolMgr + 1))), ".\\BnDownload.cpp", 0x182);
-          bOpened = (int)__frame0.dwStackPad2 - (int)pPoolMgr;
+          puPoolCursor = pPoolMgr;
           do {
-            uPoolChar = *pPoolMgr;
-            *(char*)(bOpened + (int)pPoolMgr) = (char)uPoolChar;
-            pPoolMgr = (uint32_t*)((int)pPoolMgr + 1);
+            uPoolChar = *puPoolCursor;
+            *(char*)((int)__frame0.dwStackPad2 - (int)pPoolMgr + (int)puPoolCursor) = (char)uPoolChar;
+            puPoolCursor = (uint32_t*)((int)puPoolCursor + 1);
           } while ((char)uPoolChar != '\0');
 
           goto queue_ad;
@@ -1092,7 +1092,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
       }
       __frame0.dwStackPad0 = bDeleteSource;
       __frame0.dwStackPad1 = _Dst;
-      BnSend::NET_SID_CLIENT_Send_0x21_DisplayAd();
+      BnSend::NET_SID_CLIENT_Send_0x21_DisplayAd((char*)szDestPathSave, pPoolMgr);
       sprintf(__frame1.szAdMessage, "<Received Ad: %s, %s>\n", __frame0.dwStackPad3, __frame0.dwStackPad2);
       BNMESSQUEUE_EnqueueString(1, __frame1.szAdMessage);
       BNMESSQUEUE_EnqueueBytes(3, (char*)&__frame0.dwStackPad5, 0x18);

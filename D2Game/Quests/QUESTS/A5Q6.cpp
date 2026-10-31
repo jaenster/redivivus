@@ -608,7 +608,7 @@ void __fastcall Q36_Callback_08_CompleteQuest(D2QuestDataStrc * pQuestData, D2Qu
           }
 
           for (i = 0; i < pA5Q6Data->nPlayersInWorldstone; i++) {
-            QUEST_StubEmpty(0x5f);
+            QUEST_StubEmpty(pQuestData, pQuestArgs, 0x5f);
             nGoldAmount = D2Client::SEED_RollRange(GetQuestControlSeed(pQuestData->pGame), nBaseGold + 0x5dc, nGoldCap);
             ITEMS::Items::Drop::DROP_SpawnGoldOnGround(pQuestData->pGame, pQuestArgs->pTarget, nGoldAmount);
           }

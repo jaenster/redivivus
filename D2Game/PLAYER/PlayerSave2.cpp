@@ -771,7 +771,7 @@ BOOL __fastcall SaveGolemItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * *
     pWritePtr[2] = bHasGolemItem;
     char* pWritePtrAdv = pWritePtr + 3;
     if (bHasGolemItem) {
-      nSerializedSize = PlayerSave::SAVE_SerializeItemIfValid(pGolemItem, pWritePtrAdv, nEndOffset - (int)pWritePtrAdv, 0, bPage1, bPage2);
+      nSerializedSize = PlayerSave::SAVE_SerializeItemIfValid(pGame, pUnit, pGolemItem, pWritePtrAdv, nEndOffset - (int)pWritePtrAdv, 0, bPage1, bPage2);
       if (nSerializedSize <= 0) {
         pWritePtr[2] = '\0';
       }
@@ -1548,11 +1548,12 @@ D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Merc
 }
 
 // Loads a mercenary's equipped items from the save buffer into the given merc unit (expansion-only, magic 0x666a). Calls PLRSAVE_LoadItemsFromBuffer, then recalculates the merc's inventory stats and sets HP to max if the merc is alive. Skipped entirely in classic (non-expansion) games.
-int __thiscall LoadMerc2(void * pThis, D2UnitStrc * pUnit, D2UnitStrc * * ppUnit, D2UnitStrc * pUnit2, uint32_t nParam, int * pnParam) {
+// Registers: pGame (ECX) and pPlayer (EDX) are passed by the caller but not read.
+int __fastcall LoadMerc2(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pUnit, D2UnitStrc * * ppUnit, D2UnitStrc * pUnit2, uint32_t nParam, int * pnParam) {
     BOOL bIsDead;
     D2UnitStrc* pMercUnit = pUnit2;
     D2UnitStrc** ppReadPosOut = ppUnit;
-    if (!*(int*)((int)pThis + 0x70)) {
+    if (!pGame->bExpansion) {
       return 0;
     }
 
@@ -1573,7 +1574,7 @@ int __thiscall LoadMerc2(void * pThis, D2UnitStrc * pUnit, D2UnitStrc * * ppUnit
     if (pUnit) {
       int nLoadResult;
       ppUnit = 0;
-      nLoadResult = PLRSAVE_LoadItemsFromBuffer((::SGAMEDATA*)pThis, pUnit, &pUnit2, (int32_t)pMercUnit, nParam, 0, (int*)&ppUnit);
+      nLoadResult = PLRSAVE_LoadItemsFromBuffer(pGame, pUnit, &pUnit2, (int32_t)pMercUnit, nParam, 0, (int*)&ppUnit);
       if (nLoadResult) {
         if (!pnParam) {
           return 0x16;
@@ -1583,8 +1584,8 @@ int __thiscall LoadMerc2(void * pThis, D2UnitStrc * pUnit, D2UnitStrc * * ppUnit
         return 0x16;
       }
 
-      ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory((::SGAMEDATA*)pThis, pUnit, 0, 0);
-      ITEMS::ItemMode::ITEMMODE_ReturnZero3(0);
+      ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pUnit, 0, 0);
+      ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit, 0);
       bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
       if (!bIsDead) {
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit), (uint16_t)bIsDead);
@@ -1634,7 +1635,7 @@ BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     }
 
     pReadPos += nBytesConsumed;
-    GAME::Task::TASK_Nop();
+    GAME::Task::TASK_Nop(__frame0.nSocketIdx);
     __frame0.nUsedSockets = local_34.usedSockets;
     __frame0.pGolemItem = __frame0.nSocketIdx;
     __frame0.nSocketIdx = 0;
@@ -1649,7 +1650,7 @@ BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
         }
 
         pReadPos += nBytesConsumed;
-        GAME::Task::TASK_Nop();
+        GAME::Task::TASK_Nop(pSocketedItem);
         D2Common::Units::SetupUpdateFlag(pSocketedItem, 4);
         dwSocketedItemGUID = pSocketedItem->nUnitGUID;
         nSocketSlotY = 0;
@@ -1961,7 +1962,7 @@ int32_t __fastcall PLAYERSAVE_LoadModernFormat(::SGAMEDATA * pGame, D2ClientStrc
                   bIsFatalError = nLoadError < 0;
                   if (!nLoadError) {
                     pMerc = LoadMerc(pGame, pUnit, &pSaveHeader->sMerc, dwParam);
-                    nLoadError = LoadMerc2(pGame, pMerc, (D2UnitStrc**)&pReadPos, (D2UnitStrc*)pBufEnd, dwParam, &nSubError);
+                    nLoadError = LoadMerc2(pGame, pUnit, pMerc, (D2UnitStrc**)&pReadPos, (D2UnitStrc*)pBufEnd, dwParam, &nSubError);
                     bIsFatalError = nLoadError < 0;
                     if (!nLoadError) {
                       if (pMerc) {

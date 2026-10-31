@@ -8,6 +8,9 @@
 #include <cstdarg>
 #include "d2_platform.h"
 
+// Forward declarations
+struct D2UnitStrc;
+
 // Data types
 struct D2LinkNodeStrc {
     /* 0x00 */ struct D2LinkNodeStrc * pNext;
@@ -73,7 +76,8 @@ BOOL __fastcall TASK_EnqueueGameTask(struct D2TaskNodeStrc * pTaskNode, uint32_t
 int32_t __fastcall TASK_DequeueReadyTask(uint32_t nSlotToken, struct D2TaskNodeStrc * * ppTaskOut);
 void __fastcall TASK_Dispatch(uint32_t nParam, struct D2TaskNodeStrc * pTaskNode);
 BOOL __stdcall TASK_ReturnTrue();
-void __stdcall TASK_Nop();
+// Registers: pItem (ECX) is passed by the callers but not read.
+void __fastcall TASK_Nop(struct D2UnitStrc * pItem);
 void StaticFini_CriticalSection_0088caa8();
 void StaticFini_aTaskQueueCriticalSections();
 // 1 internal function (defined in .cpp)

@@ -20,7 +20,8 @@
 
 namespace Bnclient::BNGatewayAccess {
 
-int32_t __stdcall GetSystemTimeZone() {
+// Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
+int32_t __thiscall GetSystemTimeZone(D2BNetGatewayAccessStr * pGatewayAccess) {
     int32_t iVar1;
     _TIME_ZONE_INFORMATION tziInfo;
     Storm::Source::SSystem::SMemZero(&tziInfo, 0xac);
@@ -278,14 +279,16 @@ void __fastcall WriteDefaultGatewayList(char * szText) {
     UpdateGatewaysFromIni((D2BNetGatewayAccessStr*)szText, (char*)pFileData);
 }
 
-char * __stdcall SkipToEOL(char * szText1, char * szText2) {
+// Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
+char * __thiscall SkipToEOL(D2BNetGatewayAccessStr * pGatewayAccess, char * szText1, char * szText2) {
     char cCur;
     for (; szText1 < szText2 && (cCur = *szText1 , cCur != '\0') && cCur != '\r' && cCur != '\n'; szText1++) {}
 
     return szText1;
 }
 
-char * __stdcall SkipEOL(char * szText1, char * szText2) {
+// Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
+char * __thiscall SkipEOL(D2BNetGatewayAccessStr * pGatewayAccess, char * szText1, char * szText2) {
     /* 0x1183c0  20  ?SkipEOL@BNGatewayAccess@@AAEPADPAD0@Z */ if (szText1 >= szText2) {
       return szText1;
     }
@@ -311,8 +314,8 @@ char * __stdcall SkipEOL(char * szText1, char * szText2) {
 
 char * __thiscall FindSection(D2BNetGatewayAccessStr * pThis, char * szText1, char * szText2) {
     char* pIniCursor = szText1;
-    char* pBufEnd = pIniCursor + strlen(pIniCursor);
-    pIniCursor = pBufEnd + 1;
+    char* szText2_00 = pIniCursor + strlen(pIniCursor);
+    pIniCursor = szText2_00 + 1;
     pIniCursor = szText2;
     pIniCursor = pIniCursor + strlen(pIniCursor) + 1;
     size_t nSectionNameLen = (int)pIniCursor - (int)(szText2 + 1);
@@ -343,8 +346,8 @@ char * __thiscall FindSection(D2BNetGatewayAccessStr * pThis, char * szText1, ch
 
       nCmp = _strnicmp(szText1 + 1, szText2, nSectionNameLen);
       if (!nCmp) {
-        pIniCursor = SkipToEOL(szText1 + nSectionNameLen + 2, pBufEnd);
-        pIniCursor = SkipEOL(pIniCursor, pBufEnd);
+        pIniCursor = SkipToEOL(pThis, szText1 + nSectionNameLen + 2, szText2_00);
+        pIniCursor = SkipEOL(pThis, pIniCursor, szText2_00);
         return pIniCursor;
       }
 
@@ -356,7 +359,8 @@ char * __thiscall FindSection(D2BNetGatewayAccessStr * pThis, char * szText1, ch
     exit(-1);
 }
 
-char * __stdcall FindKey(char * szText1, char * szText2) {
+// Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
+char * __thiscall FindKey(D2BNetGatewayAccessStr * pGatewayAccess, char * szText1, char * szText2) {
     char* pSrc = szText1;
     char* pEnd = pSrc + strlen(pSrc);
     pSrc = pEnd + 1;
@@ -523,7 +527,7 @@ void __stdcall Load(D2BNetGatewayAccessStr * pGatewayAccess) {
         }
 
         Bnet::BnetLog_WriteLine("Auto-picking gateway based on GMT");
-        nLine = GetSystemTimeZone();
+        nLine = GetSystemTimeZone(pGatewayAccess_00);
         PickClosestZone(pGatewayAccess_00, nLine);
         return;
       }
@@ -573,7 +577,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x277);
       exit(-1);
     } else {
-      pCur = FindKey(pCur, "VER");
+      pCur = FindKey(pClientSideData, pCur, "VER");
       if (!pCur) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x27c);
         exit(-1);
@@ -590,7 +594,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
           nLine = GMT(pClientSideData, pClientSideData->nCurGatewayIdx);
           __frame0.nSystemGmtBias = nLine * 0x3c;
         } else {
-          __frame0.nSystemGmtBias = GetSystemTimeZone();
+          __frame0.nSystemGmtBias = GetSystemTimeZone(pClientSideData);
         }
 
         pClientSideData->bDirty = 0;
@@ -612,18 +616,18 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
         pIniKeyVal = FindSection(pClientSideData, szText, "Server Gateways");
         __frame0.nGatewayIniIdx = 1;
         sprintf(__frame0.szKeyBuf, "%d", 1);
-        pZoneVal = FindKey(pIniKeyVal, __frame0.szKeyBuf);
+        pZoneVal = FindKey(pClientSideData, pIniKeyVal, __frame0.szKeyBuf);
         while (pZoneVal) {
-          __frame0.nTmp1 = SkipToEOL(pZoneVal, __frame0.nTmp2);
+          __frame0.nTmp1 = SkipToEOL(pClientSideData, pZoneVal, __frame0.nTmp2);
           __frame0.nTmp1 += -(int)pZoneVal;
           Storm::Source::SSTR::SStrCopy(pCur, pZoneVal, (int32_t)(__frame0.nTmp1 + 1));
           __frame0.nTmp3 = pCur;
           pZoneVal = FindSection(pClientSideData, szText, pCur);
           if (pZoneVal) {
             __frame0.nTmp1 = pCur + 1 + (int)__frame0.nTmp1;
-            pCur = FindKey(pZoneVal, "ZONE");
+            pCur = FindKey(pClientSideData, pZoneVal, "ZONE");
             if (pCur) {
-              pEnuLineEnd = SkipToEOL(pCur, __frame0.nTmp2);
+              pEnuLineEnd = SkipToEOL(pClientSideData, pCur, __frame0.nTmp2);
               nZoneLen = (int)pEnuLineEnd - (int)pCur;
               nFieldLen = nZoneLen + 1;
             } else {
@@ -634,9 +638,9 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
 
             Storm::Source::SSTR::SStrCopy(__frame0.nTmp1, pCur, nFieldLen);
             __frame0.nTmp1 = __frame0.nTmp1 + nZoneLen + 1;
-            pCur = FindKey(pZoneVal, "ENU");
+            pCur = FindKey(pClientSideData, pZoneVal, "ENU");
             if (pCur) {
-              pZoneVal = SkipToEOL(pCur, __frame0.nTmp2);
+              pZoneVal = SkipToEOL(pClientSideData, pCur, __frame0.nTmp2);
               nFieldLen = (int)pZoneVal - (int)pCur;
             } else {
               pCur = __frame0.nTmp3;
@@ -651,7 +655,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
 
           __frame0.nGatewayIniIdx++;
           sprintf(__frame0.szKeyBuf, "%d", __frame0.nGatewayIniIdx);
-          pZoneVal = FindKey(pIniKeyVal, __frame0.szKeyBuf);
+          pZoneVal = FindKey(pClientSideData, pIniKeyVal, __frame0.szKeyBuf);
         }
 
         *pCur = '\0';

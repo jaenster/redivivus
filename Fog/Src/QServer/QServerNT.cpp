@@ -449,7 +449,7 @@ DWORD __stdcall AcceptThreadMain(void * lpThreadParam) {
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServer->aAcceptThreadStopFlags[nWorkerIndex] = 0;
     LeaveCriticalSection(&pQServer->csClientLifecycle);
     exit_thread:
-    ErrorManager::StubHook2();
+    ErrorManager::StubHook2(0);
     return 1;
 }
 
@@ -654,7 +654,7 @@ DWORD __stdcall IoWorkerThreadMain(void * lpThreadParam) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csClientLifecycle);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServer->aIoWorkerStopFlags[nWorkerIndex] = 0;
       LeaveCriticalSection(&pQServer->csClientLifecycle);
-      ErrorManager::StubHook2();
+      ErrorManager::StubHook2(0);
       return 1;
     }
 }
@@ -742,7 +742,7 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
         pThreadArgs[1] = nResult;
         hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)AcceptThreadMain, pThreadArgs, 0, (LPDWORD)(pQServer->aAcceptThreadIds + nResult));
         pQServer->aAcceptThreadHandles[nResult] = hThread;
-        ErrorManager::StubHook1();
+        ErrorManager::StubHook1(pQServer->aAcceptThreadIds[nResult], hThread);
         if (pQServer->bUseDedicatedIoWorkers) {
           pThreadArgs = (uint32_t*)D2_ALLOC_AT(8, ".\\Src\\QServer\\QServerNT.cpp", 0xb5);
           pIocp = (int32_t)(pQServer->aIoWorkerThreadIds + nResult);
@@ -750,7 +750,7 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
           pThreadArgs[1] = nResult;
           hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)IoWorkerThreadMain, pThreadArgs, 0, (LPDWORD)pIocp);
           pQServer->aIoWorkerThreadHandles[nResult] = hThread;
-          ErrorManager::StubHook1();
+          ErrorManager::StubHook1(*(uint32_t*)pIocp, hThread);
         }
 
         return hListenSocket;

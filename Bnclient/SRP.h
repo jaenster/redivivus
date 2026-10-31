@@ -63,13 +63,16 @@ struct D2Srp * __fastcall SRP_ConstructContext(struct D2Srp * pSrp);
 // Provenance: 1.14d asm 00527dd0..00527e60 (SHA1_Update(ctx, &sSeedEntropy, 0xc) at 00527e0c..00527e14).
 void __thiscall SRP_InitializeRandomState(struct D2Srp * pThis, uint32_t dwSeed);
 void __thiscall SRP_ExtractSessionKeyBytes(void * pThis, void * pDst, uint32_t nBytes);
-void __stdcall SRP_ComputePasswordHash(void * pParam, char * szText1, char * szText2, int * pnParam);
+// Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
+void __thiscall SRP_ComputePasswordHash(struct D2Srp * pSrp, void * pParam, char * szText1, char * szText2, int * pnParam);
 void __thiscall SRP_ComputeScramblingParam(int32_t pThis, struct BigData * * ppBase, struct BigData * * pnParam);
-void __stdcall SRP_HashBigNumToU32(struct BigData * * ppBigNum, uint32_t * pdwOut);
+// Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
+void __thiscall SRP_HashBigNumToU32(struct D2Srp * pSrp, struct BigData * * ppBigNum, uint32_t * pdwOut);
 int __thiscall SRP_ClientComputeSharedSecret(int32_t pSrp, struct BigData * * pPrivateKey, struct BigData * * pnParam1, struct BigData * * pnParam2, struct BigData * * pnParam3);
 int __thiscall SRP_ServerComputeSharedSecret(struct D2Srp * pThis, struct BigData * * ppClientPublic, int * pnParam, struct BigData * * pnParam1, struct BigData * * pnParam2, struct BigData * * pnParam3);
 void __thiscall SRP_ComputeClientProof(int32_t pThis, char * szUsername, void * pParam1, void * pParam2, void * pParam3, void * pParam4, int32_t nParam);
-void __stdcall SRP_ComputeServerProof(void * pParam1, void * pParam2, void * pParam3, int32_t nParam);
+// Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
+void __thiscall SRP_ComputeServerProof(struct D2Srp * pSrp, void * pParam1, void * pParam2, void * pParam3, int32_t nParam);
 BOOL __fastcall SRP_IsContextInitialized(struct D2Srp * pSrp);
 // @sourcefile .\SRP.cpp
 void __fastcall SRP_CreateContext(struct D2Srp * * ppSrp);
@@ -86,6 +89,7 @@ BOOL __thiscall SRP_ClientVerifyServerProof(struct D2Srp * * pThis, void * pSrpC
 uint32_t __stdcall SRP_ParseChallenge(uint32_t * pContext, char * szText, uint32_t * pModulusN, uint32_t * pGenerator, uint32_t * pServerPublicBBytes);
 void __thiscall SRP_ServerComputePublicB(void * pThis, int32_t nContextBase);
 void __thiscall SRP_ClientVerifyAndComputeKey(void * pThis, void * pContext, uint32_t * pServerProof);
-void __stdcall SRP_ComputeFinalProof(int32_t nContextBase);
+// Registers: ppSrp in ECX (__thiscall); *ppSrp is forwarded to SRP_ComputeServerProof.
+void __thiscall SRP_ComputeFinalProof(struct D2Srp * * ppSrp, int32_t nContextBase);
 
 } // namespace Bnclient::SRP

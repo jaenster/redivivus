@@ -255,7 +255,8 @@ BOOL __fastcall PORTAL_ActivateOrDeactivatePortalObject(::SGAMEDATA * * ppGame);
 void __fastcall SendQuestState(struct D2UnitStrc * pUnit, int32_t nQuestId);
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall QUEST_SendQuestStatePacket(struct D2UnitStrc * pUnit, int bQuestId, uint8_t bReasoned);
-void __stdcall QUEST_StubEmpty(uint32_t nUnused);
+// Registers: pQuestData (ECX) and pQuestArgs (EDX) are passed by the quest callbacks but not read.
+void __fastcall QUEST_StubEmpty(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs, uint32_t nUnused);
 // Quest helper that spawns a monster (nMonstatClassId) at or near a desired tile (nSpawnX,nSpawnY) in pRoom. First nudges the point inward if it lies outside the room's DRLG bounds (up to 0x15 diagonal steps), then FindSpawnableLocation searches for a collision-free spot (COLLIDE_MONSTER) and SpawnMonsters as Neutral. On failure it retries with a wider search radius, optionally relocating to a better nearby room (DRLGROOM_FindBetterNearbyRoom), up to ~0x14 attempts, finally falling back to the original coords. If bSetResurrectFlag is set, ORs UNITFLAG_ISRESURRECT|UNITFLAG_ISINIT onto the spawned monster. No return; side effect is the created monster unit.
 struct D2UnitStrc * __fastcall QUEST_SpawnMonsterNearCoords(::SGAMEDATA * pGame, int32_t nSpawnX, int32_t nSpawnY, struct D2RoomStrc * pRoom, int32_t bSetResurrectFlag, uint32_t nMonstatClassId);
 void __fastcall QUEST_OnUniqueMonsterSpawned(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);

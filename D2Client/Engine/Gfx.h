@@ -7317,7 +7317,8 @@ void __fastcall GFX_GetUnitSpriteOffset(struct D2UnitStrc * pUnit, uint8_t byCom
 BOOL __fastcall GFX_IsUnitInsideBounds(struct D2UnitStrc * pUnit, int32_t nOriginX, int32_t nOriginY, int32_t nTestX, int32_t nTestY);
 // @sourcefile .\ENGINE\Gfx.cpp
 struct D2GfxInfoUnkStrc * __fastcall GFX_IsUnitOnScreen(struct D2UnitStrc * pUnit, int32_t nOriginX, int32_t nOriginY, uint32_t nUnused, int32_t bCenterAdjust);
-void __stdcall GFX_UpdateGfxThrottled();
+// Registers: nAct (ECX) is passed by the caller but not read.
+void __fastcall GFX_UpdateGfxThrottled(int32_t nAct);
 // @sourcefile .\ENGINE\Gfx.cpp
 void __fastcall ANIM_ResetMonsterFrameCache(struct D2UnitStrc * pUnit);
 void __fastcall GFX_UpdateOverlayAnimations(struct D2UnitStrc * pUnit);

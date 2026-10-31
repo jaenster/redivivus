@@ -3260,7 +3260,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3B_AllocSkillPoint(::SGAMEDATA * pGame
       return SERVERSTATUS_BAD_DATA;
     }
 
-    ITEMS::ItemMode::ITEMMODE_ReturnZero3(1);
+    ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit, 1);
     SKILLS::SkillsServer::SKILLS_UpdatePassivesAndPets(pUnit);
     eCheckResult = SERVERSTATUS_OK;
     return eCheckResult;
@@ -4159,7 +4159,7 @@ static BOOL __stdcall MERC_SwapEquippedItem(D2UnitStrc * pUnit, D2UnitStrc * pUn
       }
 
       ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pUnit2, 0, 0);
-      ITEMS::ItemMode::ITEMMODE_ReturnZero3(0);
+      ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit2, 0);
       GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit2, UNITEVENTCALLBACK_STATREGEN, 0);
       GAME::Event::SetEvent(pGame, pUnit2, 3, pGame->dwGameFrame + 1, 0, 0);
       return 1;
@@ -4181,7 +4181,7 @@ static BOOL __stdcall MERC_SwapEquippedItem(D2UnitStrc * pUnit, D2UnitStrc * pUn
       D2Common::Units::SetupUpdateFlag(pClonedOldItem, 1);
       D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedOldItem, INVPAGE_None);
       ITEMS::ItemMode::ITEMMODE_AddStatsList_ForMercSwap((uint32_t)pGame, pClonedOldItem, pUnit2, 0);
-      ITEMS::ItemMode::ITEMMODE_ReturnZero3(0);
+      ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit2, 0);
       return 0;
     }
 
@@ -4225,7 +4225,7 @@ static eD2ServerIncomingStatus __stdcall EquipOrUnequipMercItem(D2UnitStrc * pUn
     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pEquippedItem, ITEMFLAG_REMOVED, 1);
     ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pUnit2, 0, 0);
     ITEMS::ItemMode::ITEMMODE_RecalcAllEquippedStats(pGame, pUnit2);
-    ITEMS::ItemMode::ITEMMODE_ReturnZero3(0);
+    ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit2, 0);
     return SERVERSTATUS_OK;
 }
 

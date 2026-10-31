@@ -283,7 +283,7 @@ BOOL __fastcall Skills_SrvDoFunc_034_ChargeUpStackMelee(::SGAMEDATA * pGame, D2U
         memset(&sDamage, 0, 0x70);
         nHitFlags = 0;
         nToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-        sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nToHit, nHitFlags, (eD2UnitType)pTarget);
+        sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nToHit, nHitFlags);
         bySrcDam = pSkillRecord->SrcDam;
         if (!bySrcDam) {
           bySrcDam = 0x80;
@@ -1726,8 +1726,8 @@ static void __stdcall D2CalcKickDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     D2DamageStrc sDamage;
     uint32_t nToHit = D2Common::Skills::SKILLS_CalcToHit(pAttacker, eSkill, nSkillLvl);
     int nProgToHit = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pAttacker, UNITSTAT_progressive_tohit, 0);
-    void* pDamageInit = memset(&sDamage, 0, 0x70);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pAttacker, pUnit, nToHit + nProgToHit, 0, (eD2UnitType)pDamageInit);
+    memset(&sDamage, 0, 0x70);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pAttacker, pUnit, nToHit + nProgToHit, 0);
     if (sDamage.wResultFlags & 1U) {
       D2SkillsTxt* pSkillTxtKick;
       if (bKickCheck) {
@@ -2170,7 +2170,7 @@ static void __stdcall SKILLASS_SkillMeleeAttack(::SGAMEDATA * pGame, D2UnitStrc 
     memset(&sDamage, 0, 0x70);
     uint32_t uVar1 = D2Common::Skills::SKILLS_CalcToHit(pUnit2, eSkill, nParam);
     uint32_t nProgressiveToHit = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_progressive_tohit, 0);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit2, pUnit, uVar1 + nProgressiveToHit, 0, nProgressiveToHit);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit2, pUnit, uVar1 + nProgressiveToHit, 0);
     if (sDamage.wResultFlags & 1U) {
       int32_t nEnDmgCalc;
       sDamage.dwHitFlags |= 2;
@@ -2837,8 +2837,8 @@ BOOL __fastcall SKILLASS_SrvStFn27_DragonTail(::SGAMEDATA * pGame, D2UnitStrc * 
 
     uint32_t nToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
     int nProgToHit = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_progressive_tohit, 0);
-    void* pMemsetResult = memset(&sDamage, 0, 0x70);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nToHit + nProgToHit, 0, (eD2UnitType)pMemsetResult);
+    memset(&sDamage, 0, 0x70);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nToHit + nProgToHit, 0);
     if (!(sDamage.wResultFlags & 1U)) {
       return 0;
     }
@@ -3219,7 +3219,7 @@ BOOL __fastcall Skills_SrvDoFunc_052_DragonFlight(::SGAMEDATA * pGame, D2UnitStr
     memset(&sDamage, 0, 0x70);
     uVar2 = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkillCopy, nSkillLvl);
     nToHit = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_progressive_tohit, 0);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, uVar2 + nToHit, 0, nToHit);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, uVar2 + nToHit, 0);
     if (sDamage.wResultFlags & 1U) {
       sDamage.dwEnDmgPct = D2Client::DataTbls::TXT_Skills_GetSkillRange(eSkill, nSkillLvl);
       SKILLBAR_ApplyWhirlwindDamage(pGame, &sDamage, pTarget, eSkill, (D2UnitStrc*)nSkillLvl, pUnit);

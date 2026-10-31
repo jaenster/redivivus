@@ -1809,7 +1809,7 @@ void __fastcall Q04_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     }
 
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q04_SetSecretCowLevelDiscovered);
-    QUEST_StubEmpty(0x40);
+    QUEST_StubEmpty(pQuestData, pQuestArgs, 0x40);
     pQuestArgs->pTarget->dwDropItemCode = 0x20737076;
     int nDropCount = 8;
     do {

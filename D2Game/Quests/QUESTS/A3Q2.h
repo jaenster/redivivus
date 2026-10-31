@@ -45,7 +45,8 @@ BOOL __fastcall Q19_IsKhalimsWillNotComplete(::SGAMEDATA * pGame);
 // OBJOP_A3Q2_KhalimRelicPedestal (Khalim's Will object op, OperateFn45). Operate handler for the relic pedestal/Compelling Orb object. When triggered and the quest event flag is set, finds the associated object, schedules the orb's operate+death events, marks the GUID completion field (=2), and NotifyPlayersAboutEvent(9) (orb destroyed -> Mephisto path opens). Drives the physical quest-completion event; QuestRecord transition itself happens via the dialog/callbacks.
 BOOL __fastcall OBJOP_A3Q2_KhalimRelicPedestal(struct D2ObjectOperateFnArg * pOperation);
 // Q19_UpdateCompellingOrbObject (Khalim's Will). Per-frame/refresh updater for the Compelling Orb object: if the orb-event flag is set, locates the orb unit, syncs its update flag, and (if changed) schedules its operate event. Maintains orb object state; no QuestRecord transitions.
-void __fastcall Q19_UpdateCompellingOrbObject(struct D2QuestDataStrc * pQuestData);
+// Registers: pQuestData in ECX; pMonster in EDX is passed by the caller but not read.
+void __fastcall Q19_UpdateCompellingOrbObject(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pMonster);
 // Objects_InitFn41 (Khalim's Will, InitFn41). Object init for the Compelling Orb: marks the orb-event flag set, records the object's GUID, and sets the object's update flag (2 during intro, else the tracked GUID). Initializes orb object state; no QuestRecord transitions.
 void __fastcall Objects_InitFn41(struct D2ObjectInitFnArg * pInitArg);
 // Objects_InitFn42 (Khalim's Will, InitFn42). Object init for a related quest object: while quest is still in intro state, sets the object update flag to 2. No QuestRecord transitions.

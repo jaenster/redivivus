@@ -643,7 +643,7 @@ void __fastcall MONSTER_InitLightMap(D2UnitStrc * pUnit) {
 BOOL __fastcall IsMonsterChampion(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       BOOL bIsChampion;
-      bIsChampion = MonUnique::CheckMonTypeForMonster(pUnit, MONTYPE_CHAMPION, '\0');
+      bIsChampion = MonUnique::CheckMonTypeForMonster(pUnit, 4);
       return bIsChampion;
     }
 
@@ -653,7 +653,7 @@ BOOL __fastcall IsMonsterChampion(D2UnitStrc * pUnit) {
 int32_t __fastcall IsMonsterGhostly(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       BOOL bIsGhostly;
-      bIsGhostly = MonUnique::CheckMonTypeForMonster(pUnit, MONTYPE_GHOSTLY, '\0');
+      bIsGhostly = MonUnique::CheckMonTypeForMonster(pUnit, 0x40);
       return bIsGhostly;
     }
 
@@ -664,7 +664,7 @@ int32_t __fastcall IsMonsterGhostly(D2UnitStrc * pUnit) {
 BOOL __fastcall IsMonsterUnique(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       BOOL bIsUnique;
-      bIsUnique = MonUnique::CheckMonTypeForMonster(pUnit, MONTYPE_UNIQUE, '\0');
+      bIsUnique = MonUnique::CheckMonTypeForMonster(pUnit, 8);
       return bIsUnique;
     }
 
@@ -674,7 +674,7 @@ BOOL __fastcall IsMonsterUnique(D2UnitStrc * pUnit) {
 int32_t __fastcall IsMonsterMinion(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       BOOL bIsMinion;
-      bIsMinion = MonUnique::CheckMonTypeForMonster(pUnit, MONTYPE_MINION, '\0');
+      bIsMinion = MonUnique::CheckMonTypeForMonster(pUnit, 0x10);
       return bIsMinion;
     }
 
@@ -684,7 +684,7 @@ int32_t __fastcall IsMonsterMinion(D2UnitStrc * pUnit) {
 BOOL __fastcall IsMonsterSuperUnique(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       BOOL bIsSuperUnique;
-      bIsSuperUnique = MonUnique::CheckMonTypeForMonster(pUnit, MONTYPE_SUPERUNIQUE, '\0');
+      bIsSuperUnique = MonUnique::CheckMonTypeForMonster(pUnit, 2);
       return bIsSuperUnique;
     }
 
@@ -2990,7 +2990,7 @@ int __fastcall MONSTER_CanBeConverted(void * pUnit) {
       return 1;
     }
 
-    bCanSwitch = MonUnique::CheckMonTypeForMonster((D2UnitStrc*)pUnit, MONTYPE_UNIQUE, '\0');
+    bCanSwitch = MonUnique::CheckMonTypeForMonster((D2UnitStrc*)pUnit, 8);
     if (bCanSwitch) {
       return 0;
     }
@@ -2998,7 +2998,7 @@ int __fastcall MONSTER_CanBeConverted(void * pUnit) {
       return 1;
     }
 
-    bCanSwitch = MonUnique::CheckMonTypeForMonster((D2UnitStrc*)pUnit, MONTYPE_SUPERUNIQUE, '\0');
+    bCanSwitch = MonUnique::CheckMonTypeForMonster((D2UnitStrc*)pUnit, 2);
     if (!bCanSwitch) {
       return 1;
     }

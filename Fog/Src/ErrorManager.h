@@ -73,8 +73,10 @@ void __fastcall WriteCrashReportProcessInfo(::Report * pReport);
 void __stdcall InitializeSystemInfo();
 // Registered with atexit. Tears down the Fog error/log subsystem and deletes the two critical sections at 0074c830 and 0074d848. Takes no arguments: the earlier EAX/ESI "parameters" were a callee-save PUSH ESI / POP ESI pair misread as inputs.
 void EXIT_AtExit();
-void __stdcall StubHook1();
-void __stdcall StubHook2();
+// Registers: dwThreadId (ECX) and hThread (EDX) are passed by the callers but not read.
+void __fastcall StubHook1(uint32_t dwThreadId, HANDLE hThread);
+// Registers: nReserved (ECX) is 0 at every call site and not read.
+void __fastcall StubHook2(int32_t nReserved);
 void __fastcall LogStringConditional(int32_t nLogLevel, char * szText);
 uint32_t __stdcall GetErrorState();
 // @sourcefile .\Src\ErrorManager.cpp

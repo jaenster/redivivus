@@ -54,7 +54,7 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
                          determine renderer */ geD2ApplicationMode = eD2ApplicationModeAndRenderer;
     __frame0.bSoundInit = 0;
     Fog::Source::SFile::SFILE_InitializeFileSystem((uint32_t)pD2IniData->bDIRECT, 0);
-    Fog::Src::AsyncData::STRUCT_AllocAsyncData(1);
+    Fog::Src::AsyncData::STRUCT_AllocAsyncData(1, 0);
     Fog::Return();
     Fog::Src::D2Net::NET_SERVER_SentPacketLog_Clear();
     if (geD2ApplicationMode != APPMODE_server) {

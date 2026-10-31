@@ -792,7 +792,7 @@ void __fastcall Q14_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
                   UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestArgs->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q14_SetTombEntryOnPartyMember, 0);
                 }
 
-                QUEST_StubEmpty(0x3d);
+                QUEST_StubEmpty(pQuestData, pQuestArgs, 0x3d);
               }
             }
           }

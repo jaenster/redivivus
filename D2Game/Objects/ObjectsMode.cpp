@@ -203,7 +203,7 @@ void __fastcall OBJMODE_CreateRedPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
         }
     }
 
-    D2UnitStrc* pPortalUnit = SKILLS::SkillsServer::LinkPortal(pGame, pUnit, eLevel, nLevelId2);
+    D2UnitStrc* pPortalUnit = SKILLS::SkillsServer::LinkPortal(pGame, nullptr, pUnit, eLevel, nLevelId2);
     if (pPortalUnit) {
       uint8_t byPortalFlags;
       byPortalFlags = D2Common::Units::GetObjectPortalFlags(pPortalUnit);
@@ -3349,13 +3349,14 @@ void __fastcall OBJMODE_OnWaypointFinish(::SGAMEDATA * pGameStrc, D2UnitStrc * p
 }
 
 // Completes the two-phase town-portal link: given the GUID of a blue portal stub and the destination level, locates the stub object (classId 0x3b), verifies it is unlinked and has an owner unit, then stores the destination level in the portal's component data, sets the linked flag, frees the owner stub unit, and calls LinkPortal to establish the bidirectional connection. Halts with an internal error if preconditions fail.
-void __thiscall OBJMODE_FinalizePortalLink(void * pThis, DWORD dwBluePortalGUID, eD2LevelId eLevel) {
-    if (!pThis) {
+// Registers: pGame in ECX; pOwner in EDX is forwarded to LinkPortal.
+void __fastcall OBJMODE_FinalizePortalLink(::SGAMEDATA * pGame, D2UnitStrc * pOwner, DWORD dwBluePortalGUID, eD2LevelId eLevel) {
+    if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11dd);
       exit(-1);
     }
 
-    D2UnitStrc* pBluePortal = UNIT::SUnit::FindUnitFromTable((::SGAMEDATA*)pThis, UNIT_OBJECT, dwBluePortalGUID);
+    D2UnitStrc* pBluePortal = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, dwBluePortalGUID);
     if (!(pBluePortal && pBluePortal->nClassId == 0x3b)) {
       return;
     }
@@ -3365,7 +3366,7 @@ void __thiscall OBJMODE_FinalizePortalLink(void * pThis, DWORD dwBluePortalGUID,
       return;
     }
 
-    D2UnitStrc* pUnit = UNIT::SUnit::UNITS_FindPortalOwnerUnit((::SGAMEDATA*)pThis, pBluePortal);
+    D2UnitStrc* pUnit = UNIT::SUnit::UNITS_FindPortalOwnerUnit(pGame, pBluePortal);
     if (!pUnit) {
       return;
     }
@@ -3380,10 +3381,10 @@ void __thiscall OBJMODE_FinalizePortalLink(void * pThis, DWORD dwBluePortalGUID,
     int nUnitGUID = pUnit->nUnitGUID;
     eD2UnitType eUnitType = UNIT_OBJECT;
     D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nUnitGUID);
-    UNIT::SUnit::FreeServerUnit((::SGAMEDATA*)pThis, pUnit);
+    UNIT::SUnit::FreeServerUnit(pGame, pUnit);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pBluePortal);
     eD2LevelId nLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    pBluePortal = SKILLS::SkillsServer::LinkPortal(pThis, pBluePortal, (D2RoomStrc*)eLevel, nLevelId2);
+    pBluePortal = SKILLS::SkillsServer::LinkPortal(pGame, pOwner, pBluePortal, (D2RoomStrc*)eLevel, nLevelId2);
     if (!pBluePortal) {
       OBJMODE_FinalizePortalLink_HaltTail(0x11fb);
     }

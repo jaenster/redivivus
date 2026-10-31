@@ -222,7 +222,8 @@ void __stdcall MAINMENU_AppendCreditsEnd();
 uint16_t * __stdcall MAINMENU_LoadCreditsFile(uint32_t * pnCharCount);
 void __stdcall MAINMENU_SyncCreditsColumns();
 // @sourcefile .\Src\MainMenus.cpp
-int __stdcall MAINMENU_DisplayCredits();
+// Registers: nReserved (ECX) is 0 at the only call site and not read.
+int __fastcall MAINMENU_DisplayCredits(int32_t nReserved);
 BOOL __stdcall MAINMENU_InitCreditsScreen(struct D2ControlMsg * pControlMsg);
 void __stdcall UIMENU_SelectCinematics(int32_t nCineLevel);
 void __fastcall UIMENU_PleaseInsertExpansionCdWithNotWorkingCancelButton(int32_t nMode);

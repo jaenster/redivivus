@@ -82,7 +82,8 @@ void __thiscall SRP_ExtractSessionKeyBytes(void * pThis, void * pDst, uint32_t n
     }
 }
 
-void __stdcall SRP_ComputePasswordHash(void * pParam, char * szText1, char * szText2, int * pnParam) {
+// Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
+void __thiscall SRP_ComputePasswordHash(D2Srp * pSrp, void * pParam, char * szText1, char * szText2, int * pnParam) {
     // Static local variables (originally global data)
     static char * g_pColonSeparator = (char *)&s_ColonSeparator; D2_STATIC_GUARD(g_pColonSeparator, "Bnclient::SRP::SRP_ComputePasswordHash::g_pColonSeparator");
 
@@ -108,7 +109,8 @@ void __thiscall SRP_ComputeScramblingParam(int32_t pThis, BigData * * ppBase, Bi
     SHA::SHA1_BigIntPowMod(*pnParam, *(BigData**)(pThis + 4), *ppBase, *(BigData**)(pThis + 8));
 }
 
-void __stdcall SRP_HashBigNumToU32(BigData * * ppBigNum, uint32_t * pdwOut) {
+// Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
+void __thiscall SRP_HashBigNumToU32(D2Srp * pSrp, BigData * * ppBigNum, uint32_t * pdwOut) {
     uint32_t sha1Ctx[23];
     uint8_t bigIntBytes[32];
     uint8_t aHash[20];
@@ -136,7 +138,7 @@ int __thiscall SRP_ClientComputeSharedSecret(int32_t pSrp, BigData * * pPrivateK
       return 0;
     }
 
-    SRP_HashBigNumToU32(pnParam1, &nMultiplierU);
+    SRP_HashBigNumToU32((D2Srp*)pSrp, pnParam1, &nMultiplierU);
     if (nMultiplierU) {
       BigData* pScramblingParam;
       pScramblingParam = SHA::SHA1_BigIntFromUnsigned(0);
@@ -166,7 +168,7 @@ int __thiscall SRP_ClientComputeSharedSecret(int32_t pSrp, BigData * * pPrivateK
 }
 
 int __thiscall SRP_ServerComputeSharedSecret(D2Srp * pThis, BigData * * ppClientPublic, int * pnParam, BigData * * pnParam1, BigData * * pnParam2, BigData * * pnParam3) {
-    SRP_HashBigNumToU32((BigData**)pnParam, (uint32_t*)&pnParam);
+    SRP_HashBigNumToU32(pThis, (BigData**)pnParam, (uint32_t*)&pnParam);
     int* pScramblingHash = pnParam;
     if (!pnParam) {
       return 0;
@@ -244,7 +246,8 @@ void __thiscall SRP_ComputeClientProof(int32_t pThis, char * szUsername, void * 
     SHA::SHA1_Final((uint8_t*)nParam, sha1Ctx);
 }
 
-void __stdcall SRP_ComputeServerProof(void * pParam1, void * pParam2, void * pParam3, int32_t nParam) {
+// Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
+void __thiscall SRP_ComputeServerProof(D2Srp * pSrp, void * pParam1, void * pParam2, void * pParam3, int32_t nParam) {
     uint32_t sha1Ctx[23];
     SHA::SHA1_Init(sha1Ctx);
     SHA::SHA1_Update(sha1Ctx, pParam1, 0x20);
@@ -326,7 +329,7 @@ void __fastcall SRP_FreeParameters(D2Srp * * ppSrp) {
 void __thiscall SRP_ClientGenerateVerifier(void * pThis, char * szUsername, uint32_t * pnParam1, uint32_t * pnParam2, void * pParam) {
     uint32_t* pParam_00 = pnParam2;
     SRP_ExtractSessionKeyBytes(pThis, pnParam2, 0x20);
-    SRP_ComputePasswordHash(pParam_00, szUsername, (char*)pnParam1, (int*)&pnParam2);
+    SRP_ComputePasswordHash(*(D2Srp**)pThis, pParam_00, szUsername, (char*)pnParam1, (int*)&pnParam2);
     BigData* pVerifier = SHA::SHA1_BigIntFromUnsigned(0);
     pnParam1 = (uint32_t*)pVerifier;
     SRP_ComputeScramblingParam(*(int32_t*)pThis, (BigData**)&pnParam2, (BigData**)&pnParam1);
@@ -359,7 +362,7 @@ BOOL __thiscall SRP_ClientKeyExchange(void * pThis, D2SrpCredentialsStrc * pCont
     BigData* pClientPublicA = pSharedSecret;
     int32_t nCompareResult = SHA::SHA1_BigIntCompareValue(pSharedSecret, 0);
     if (nCompareResult == 1) {
-      SRP_ComputePasswordHash(pSalt, pContext->szUsername, pContext->szPassword, (int*)&pPasswordHash);
+      SRP_ComputePasswordHash(*(D2Srp**)pThis, pSalt, pContext->szUsername, pContext->szPassword, (int*)&pPasswordHash);
       pSharedSecret = SHA::SHA1_BigIntFromUnsigned(0);
       pSharedSecretOut = pSharedSecret;
       pServerPublicB = SHA::SHA1_FromBigIntBytes(pContext->aClientPrivateKey_a, 0x20);
@@ -384,7 +387,7 @@ BOOL __thiscall SRP_ClientVerifyServerProof(D2Srp * * pThis, void * pSrpContext,
     int nCmpSign;
     int nCmpDiff;
     uint8_t computedProofBuf[20];
-    SRP_ComputeServerProof((void*)((int)pSrpContext + 0x60), (void*)((int)pSrpContext + 0xa8), (void*)((int)pSrpContext + 0x80), (int32_t)computedProofBuf);
+    SRP_ComputeServerProof(*pThis, (void*)((int)pSrpContext + 0x60), (void*)((int)pSrpContext + 0xa8), (void*)((int)pSrpContext + 0x80), (int32_t)computedProofBuf);
     uint32_t nRemaining;
     nRemaining = 0x14;
     uint8_t* pComputedProof;
@@ -522,8 +525,9 @@ void __thiscall SRP_ClientVerifyAndComputeKey(void * pThis, void * pContext, uin
     } while (nRemaining >= 4);
 }
 
-void __stdcall SRP_ComputeFinalProof(int32_t nContextBase) {
-    SRP_ComputeServerProof((void*)(nContextBase + 0x60), (void*)(nContextBase + 0xe8), (void*)(nContextBase + 0xc0), nContextBase + 0xfc);
+// Registers: ppSrp in ECX (__thiscall); *ppSrp is forwarded to SRP_ComputeServerProof.
+void __thiscall SRP_ComputeFinalProof(D2Srp * * ppSrp, int32_t nContextBase) {
+    SRP_ComputeServerProof(*ppSrp, (void*)(nContextBase + 0x60), (void*)(nContextBase + 0xe8), (void*)(nContextBase + 0xc0), nContextBase + 0xfc);
 }
 
 } // namespace Bnclient::SRP

@@ -400,7 +400,8 @@ BOOL __fastcall OBJOP_A3Q2_KhalimRelicPedestal(D2ObjectOperateFnArg * pOperation
 }
 
 // Q19_UpdateCompellingOrbObject (Khalim's Will). Per-frame/refresh updater for the Compelling Orb object: if the orb-event flag is set, locates the orb unit, syncs its update flag, and (if changed) schedules its operate event. Maintains orb object state; no QuestRecord transitions.
-void __fastcall Q19_UpdateCompellingOrbObject(D2QuestDataStrc * pQuestData) {
+// Registers: pQuestData in ECX; pMonster in EDX is passed by the caller but not read.
+void __fastcall Q19_UpdateCompellingOrbObject(D2QuestDataStrc * pQuestData, D2UnitStrc * pMonster) {
     D2QuestDataA3Q2Strc* pA1Q2Data = pQuestData->pQuestSpecificData.pA3Q2;
     if (pA1Q2Data->bOrbPlaced != '\x01') {
       return;

@@ -2189,7 +2189,7 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
     D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, pUnit->nInitSeed);
     Monster::MONSTER_SetMonStatsTxtAndType(pUnit, 0);
     MonUnique::SetUnsetMonsterType(pUnit, (uint16_t)pCreateData->eMonsterType, 1);
-    BOOL bResult = MonUnique::CheckMonTypeForMonster(pUnit, MONTYPE_SUPERUNIQUE, '\0');
+    BOOL bResult = MonUnique::CheckMonTypeForMonster(pUnit, 2);
     if (bResult) {
       MonUnique::SetBossId(pUnit, nBossId);
     }
@@ -2254,7 +2254,7 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
       }
     }
 
-    bResult = MonUnique::CheckMonTypeForMonster(pUnit, MONTYPE_SUPERUNIQUE, '\0');
+    bResult = MonUnique::CheckMonTypeForMonster(pUnit, 2);
     if (bResult) {
       uint16_t nBossIdLookup;
       nBossIdLookup = MonUnique::GetBossId(pUnit);

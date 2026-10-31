@@ -102,8 +102,8 @@ BOOL __fastcall SKILLAMA_SrvStFn06_PowerStrike(::SGAMEDATA * pGame, D2UnitStrc *
       return 0;
     }
 
-    void* pDamageInit = memset(&sDamage, 0, 0x70);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, 0, 0, (eD2UnitType)pDamageInit);
+    memset(&sDamage, 0, 0x70);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, 0, 0);
     if (sDamage.wResultFlags & 1U) {
       sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
       if (pSkillsTxt->EType != ELEMENTAL_NONE) {
@@ -191,7 +191,7 @@ BOOL __fastcall SKILLAMA_SrvStFn07_Impale(::SGAMEDATA * pGame, D2UnitStrc * pUni
       memset(&sDamage, 0, 0x70);
       nCalcVal = 0;
       nHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-      sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nHitResult, nCalcVal, nHitResult);
+      sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nHitResult, nCalcVal);
       if (sDamage.wResultFlags & 1U) {
         nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
         sDamage.dwPhysDamage = UNIT::SUnitDmg::DAMAGE_CalculatePhysicalDamage(pUnit, 1, nullptr, 0, 0, nCalcVal, 0, pSkillsTxt->SrcDam);
@@ -398,8 +398,8 @@ BOOL __fastcall SKILLAMA_SrvStFn10_LightningStrike(::SGAMEDATA * pGame, D2UnitSt
       return 0;
     }
 
-    void* pDamageInit = memset(&sDamage, 0, 0x70);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, 0, 0, (eD2UnitType)pDamageInit);
+    memset(&sDamage, 0, 0x70);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, 0, 0);
     if (sDamage.wResultFlags & 1U) {
       int32_t nMinDmg;
       nMinDmg = D2Common::Skills::SERVER_MinDamage(pUnit, eSkill, nSkillLvl, 1);
@@ -487,12 +487,12 @@ BOOL __fastcall Skills_SrvDoFunc_007_Jab(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       eSkill = pUnit->eUnitType;
     }
 
-    uint32_t eUnitType = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkillOrig, nSkillLvl);
+    uint32_t nParam1 = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkillOrig, nSkillLvl);
     if (eSkill == SKILL_Kick) {
       Monsters::MONSTER_RecalculateCombatStats(pUnit, 8);
     }
 
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, eUnitType, 0, eUnitType);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, nParam1, 0);
     if (sDamage.wResultFlags & 1U) {
       sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkillOrig, nSkillLvl);
       if (pSkillsTxt->EType != ELEMENTAL_NONE) {
@@ -928,7 +928,7 @@ BOOL __fastcall Skills_SrvDoFunc_013_MultiHitAttack(::SGAMEDATA * pGame, D2UnitS
     memset(&sDamage, 0, 0x70);
     int32_t nHitsLeft = 0;
     nHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pNextTarget, nHitResult, nHitsLeft, nHitResult);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pNextTarget, nHitResult, nHitsLeft);
     if (sDamage.wResultFlags & 1U) {
       sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
       if (pSkillTxt->EType != ELEMENTAL_NONE) {

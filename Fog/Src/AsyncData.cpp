@@ -45,7 +45,8 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2AsyncData_Line0x128) == 0x54, "D2
 
 namespace Fog::Src::AsyncData {
 
-void __fastcall STRUCT_AllocAsyncData(int32_t nEnable) {
+// Registers: nEnable in ECX; nReserved (EDX) is 0 at the only call site and not read.
+void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved) {
     void* pSlot;
     if (gbAsyncDataInitialized) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x7b);
