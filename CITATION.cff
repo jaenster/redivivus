@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+title: "Redivivus: Diablo II 1.14d reverse-engineered into buildable C++"
+message: >-
+  If you refer to Redivivus in writing, or build on the reconstruction, please cite it.
+type: software
+# Entity form rather than a person, to match how the project is credited elsewhere.
+# Replace with given-names/family-names if you would rather be cited by name.
+authors:
+  - name: jaenster
+    alias: jaenster
+    website: "https://github.com/jaenster"
+abstract: >-
+  Diablo II: Lord of Destruction 1.14d recovered as C++ source that compiles, links and plays
+  single player. The tree is generated from reverse-engineered Ghidra databases of the shipped
+  Game.exe (Windows, plus the Intel Mac build from the same source revision) and organised by the
+  module names the game itself uses. Correctness is checked by compiling the tree with Visual C++
+  2005 SP1 and comparing the machine code of each function against the original binary, so a
+  function that comes out byte-identical is evidence the decompilation was read correctly. The
+  project is made to study and preserve the game; it is single-player only and contains no game
+  data.
+keywords:
+  - Diablo II
+  - reverse engineering
+  - decompilation
+  - matching decompilation
+  - game preservation
+  - Ghidra
+  - "C++"
+  - x86
+repository-code: "https://github.com/jaenster/redivivus"
+url: "https://redivivus.app"
