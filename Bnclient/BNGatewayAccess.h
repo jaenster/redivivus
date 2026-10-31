@@ -100,7 +100,8 @@ void __stdcall CACHE_DeleteFile();
 // @sourcefile .\CACHE.CPP
 void __stdcall CACHE_FreeAll();
 // @sourcefile .\CACHE.CPP
-int __fastcall CACHE_FreeMem(void * pParam);
+// EDX dwSize: callers pass the cached block's size; not read here.
+int __fastcall CACHE_FreeMem(void * pParam, uint32_t dwSize);
 // Opens the Fog cache file for reading/writing. Creates %APPDATA%\Blizzard Entertainment\Diablo II\bncache.dat if missing, reads hash table header, validates magic/version, allocates hash table memory. Sets ghCacheFileHandle to opened file handle or INVALID_HANDLE_VALUE on error.
 // @sourcefile .\CACHE.CPP
 int32_t __stdcall CACHE_Open();

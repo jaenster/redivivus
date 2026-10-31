@@ -656,7 +656,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(struct D2ClientStrc * pCl
 void __fastcall NET_D2GS_SERVER_Send_0x78_TRADENAME(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x78 * pPacketData);
 // Server-to-client summon log update. Opcode 0x7A.
 void __fastcall NET_D2GS_SERVER_Send_0x7A_UPDATEPET(struct D2ClientStrc * pClient, uint8_t bParam, uint8_t nUnitType, uint32_t dwGUID, uint32_t dwMercGUID, uint16_t wExperience);
-void __thiscall NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(void * pThis, uint8_t byAction, uint32_t dwPetGUID, uint32_t dwMercUnitGUID, uint16_t wMercType, uint32_t dwOwnerUnitGUID, uint32_t dwMercExperience);
+// DL bUnused: both callers set DL=1 (as for 0x7A); overwritten here before any read.
+void __fastcall NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(struct D2ClientStrc * pClient, uint8_t bUnused, uint8_t byAction, uint32_t dwPetGUID, uint32_t dwMercUnitGUID, uint16_t wMercType, uint32_t dwOwnerUnitGUID, uint32_t dwMercExperience);
 // Server-to-client gold amount in trade. Opcode 0x79.
 void __fastcall NET_D2GS_SERVER_Send_0x79_TRADEGOLD(struct D2ClientStrc * pClient, uint32_t dwGold, uint8_t nTradeId);
 BOOL SCMD_DetectPositionDesync(int32_t pState, int32_t nNewPos);
@@ -798,11 +799,15 @@ void __fastcall Send0x9CItemAddQuantity(struct D2ClientStrc * pClient, struct D2
 void __fastcall Send0x9CItemSwapInContainer(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, eD2ItemFlag eItemFlags);
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall Send0x9CItemPutInBelt(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, eD2ItemFlag eItemFlags);
-void __thiscall Send0x9CItemRemoveFromBelt(void * pThis, struct D2UnitStrc * pUnit, eD2ItemFlag eItemFlag);
-void __thiscall Send0x9CItemSwapInBelt(void * pThis, struct D2UnitStrc * pUnit, eD2ItemFlag eItemFlag);
-void __thiscall Send0x9CItemToCursor(void * pThis, struct D2UnitStrc * pUnit);
+// EDX pPlayer: callers pass the item's owner; overwritten here before any read.
+void __fastcall Send0x9CItemRemoveFromBelt(struct D2ClientStrc * pClient, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pUnit, eD2ItemFlag eItemFlag);
+// EDX pPlayer: callers pass the item's owner; overwritten here before any read.
+void __fastcall Send0x9CItemSwapInBelt(struct D2ClientStrc * pClient, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pUnit, eD2ItemFlag eItemFlag);
+// EDX pPlayer: callers pass the item's owner; overwritten here before any read.
+void __fastcall Send0x9CItemToCursor(struct D2ClientStrc * pClient, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pUnit);
 // @sourcefile .\GAME\SCmd.cpp
-void __thiscall Send0x9CItemHandleInShop(void * pThis, struct D2UnitStrc * pUnit, uint8_t cParam);
+// EDX pPlayer: callers pass the item's owner; overwritten here before any read.
+void __fastcall Send0x9CItemHandleInShop(struct D2ClientStrc * pClient, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pUnit, uint8_t cParam);
 BOOL __fastcall STRING_CheckIfStringLengthDoNotExceedSize(char * szText, int32_t nMaxLength);
 void __fastcall thunk_NET_D2GS_SERVER_Send_0x5A_EventMessages(struct D2ClientStrc * pClient, struct D2Packet0x5aEventStructure * pEventPacket);
 // 4 internal functions (defined in .cpp)

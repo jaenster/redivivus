@@ -432,7 +432,7 @@ uint32_t __stdcall CLIENT_OnDatabaseCharacterReceived(uint32_t nClientId, void *
 uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePassword, char * szGameDescription, eD2ArenaFlags flags, uint8_t bTemplate, uint8_t bReserved, uint8_t bLadder, uint16_t * pServerTokenOut);
 // Already-documented — existing description accurately covers SP/LAN game creation: allocates SGAMEDATA in hash map with generated token, initializes critical section and five unit-type lists, rolls seed, allocates Event/Arena/Party/MonsterRegion/ObjectControl/NpcControl/QuestControl subsystems, creates local D2ClientStrc, sends 0x01 GameFlags and state packets, and enqueues the game-loop task.
 // @sourcefile .\GAME\Game.cpp
-void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName, eD2HostGameType neD2HostGameType, eD2PlayerClassID ePlayerClass, char * szCharName, int16_t Unknown4, eD2ArenaFlags eArenaFlags, uint8_t nTemplate, uint8_t Unknown6, uint8_t Unknown7, uint8_t nDifficulty, uint8_t nLanguageCode, uint32_t arg11, uint32_t arg12);
+void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName, eD2HostGameType neD2HostGameType, eD2PlayerClassID ePlayerClass, char * szCharName, int32_t Unknown4, eD2ArenaFlags eArenaFlags, uint8_t nTemplate, uint8_t Unknown6, uint8_t Unknown7, uint8_t nDifficulty, uint8_t nLanguageCode, uint32_t arg11, uint32_t arg12);
 void __fastcall SetStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue);
 // 11 internal functions (defined in .cpp)
 

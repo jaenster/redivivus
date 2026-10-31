@@ -29,7 +29,8 @@ namespace D2Game::GAME::Arena {
 
 // Function declarations
 // @sourcefile .\GAME\Arena.cpp
-void __thiscall AllocArenaControl(void * pThis, eD2ArenaFlags eArenaFlags, uint8_t nTemplate);
+// EDX nArena: 0 from GAME_CreateBattleNetGame, the arena argument from GAME_CreateSingleplayerGame; not read here.
+void __fastcall AllocArenaControl(::SGAMEDATA * pGame, int32_t nArena, eD2ArenaFlags eArenaFlags, uint8_t nTemplate);
 // @sourcefile .\GAME\Arena.cpp
 void __fastcall FreeArenaControl(::SGAMEDATA * pGame);
 // @sourcefile .\GAME\Arena.cpp

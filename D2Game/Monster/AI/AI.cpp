@@ -274,7 +274,8 @@ void __fastcall SetDwArgsIfNotNeg0x29a(D2AiGeneralStrc * pMonsterAi, int32_t dwA
     pMonsterAi->dwArg2 = dwArg2;
 }
 
-uint32_t __thiscall AI_CanApplyColdState(void * pThis, eD2States eState, int32_t nParam) {
+// EDX pMonStatsTxtRecord: callers pass TXT_MonStats_GetLine(pUnit->dwClassId); not read here.
+uint32_t __fastcall AI_CanApplyColdState(D2UnitStrc * pUnit, D2MonStatsTxt * pMonStatsTxtRecord, eD2States eState, int32_t nParam) {
     uint32_t bCanSwitch;
     if (eState == STATE_none) {
       return 1;
@@ -283,17 +284,17 @@ uint32_t __thiscall AI_CanApplyColdState(void * pThis, eD2States eState, int32_t
       return 1;
     }
     if (nParam) {
-      bCanSwitch = Monsters::CheckMonsterType((D2UnitStrc*)pThis, 2);
+      bCanSwitch = Monsters::CheckMonsterType(pUnit, 2);
       if (bCanSwitch) {
         return 0;
       }
     }
-    if (!pThis) {
+    if (!pUnit) {
       bCanSwitch = D2Common::Units::CanSwitchAI(-1);
       return bCanSwitch;
     }
 
-    bCanSwitch = D2Common::Units::CanSwitchAI(*(int32_t*)((int)pThis + 4));
+    bCanSwitch = D2Common::Units::CanSwitchAI(pUnit->nClassId);
     return bCanSwitch;
 }
 
@@ -2961,8 +2962,8 @@ BOOL __fastcall MONSTERAI_CanApplyDebuffState(D2UnitStrc * pUnit, eD2States eSta
       return 1;
     }
 
-    D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
-    nFlagResult = AI_CanApplyColdState(pUnit, eState, 1);
+    D2MonStatsTxt* pMonStatsTxtRecord = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
+    nFlagResult = AI_CanApplyColdState(pUnit, pMonStatsTxtRecord, eState, 1);
     if (nFlagResult) {
       return 1;
     }
@@ -3434,8 +3435,8 @@ void __fastcall MONSTERAI_ApplyTerrorToMonster(::SGAMEDATA * pGame, D2UnitStrc *
       return;
     }
 
-    D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pTargetMonster->nClassId);
-    nCheckResult = AI_CanApplyColdState(pTargetMonster, STATE_cold, 1);
+    D2MonStatsTxt* pMonStatsTxtRecord = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pTargetMonster->nClassId);
+    nCheckResult = AI_CanApplyColdState(pTargetMonster, pMonStatsTxtRecord, STATE_cold, 1);
     if (!nCheckResult) {
       return;
     }

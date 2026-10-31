@@ -914,7 +914,8 @@ void __stdcall CACHE_FreeAll() {
 }
 
 // @sourcefile .\CACHE.CPP
-int __fastcall CACHE_FreeMem(void * pParam) {
+// EDX dwSize: callers pass the cached block's size; not read here.
+int __fastcall CACHE_FreeMem(void * pParam, uint32_t dwSize) {
     if (!pParam) {
       return 0;
     }

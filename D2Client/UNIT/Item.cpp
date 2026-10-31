@@ -861,7 +861,8 @@ void __fastcall ItemMessage(int32_t eMessageType, D2UnitStrc * pUnit, D2ServerMe
 }
 
 // Client-side handler for S2C packet 0x47. Recalculates all equipped item states for the unit identified in the packet. Walks inventory charms (enables qualifying ones), iterates body slots 0-10 (disables items failing requirements, re-enables items passing requirements in a convergence loop up to 100 iterations), recalculates set bonuses for quality-5 items, and reloads character GFX if equipment changed. Source: .\\UNIT\\Item.cpp
-void __fastcall ITEM_CltRecalcAllEquippedItems(D2GSPacketSrv0x47 * pBytes) {
+// EDX bFromNetwork: 1 from the network handler, 0 from the two local callers; overwritten here before any read.
+void __fastcall ITEM_CltRecalcAllEquippedItems(D2GSPacketSrv0x47 * pBytes, int32_t bFromNetwork) {
     D2UnitStrc* pUnit = Player::UNITS_FindClientSideUnit(pBytes->nUnitGUID, (eD2UnitType)pBytes->eUnitType);
     if (!pUnit) {
       return;

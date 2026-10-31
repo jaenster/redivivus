@@ -112,7 +112,8 @@ void __fastcall AI_Fn1_Idle(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, stru
 uint32_t __fastcall AI_FindClosestAllyOfSameType(int nUnusedCtx, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, struct D2MonsterAiParameterStruct * ppBestResult);
 uint32_t __fastcall ReturnFirstArgument(uint32_t * pdwParam);
 void __fastcall SetDwArgsIfNotNeg0x29a(struct D2AiGeneralStrc * pMonsterAi, int32_t dwArg0, int32_t dwArg1, int32_t dwArg2);
-uint32_t __thiscall AI_CanApplyColdState(void * pThis, eD2States eState, int32_t nParam);
+// EDX pMonStatsTxtRecord: callers pass TXT_MonStats_GetLine(pUnit->dwClassId); not read here.
+uint32_t __fastcall AI_CanApplyColdState(struct D2UnitStrc * pUnit, struct D2MonStatsTxt * pMonStatsTxtRecord, eD2States eState, int32_t nParam);
 // Assigns or switches the active AI function for a monster unit. Validates pGame/pUnit/pMonsterAiGeneral and that nFunctionId < 0x12. If the monster is in STATE_uninterruptable, halts with an error. If the current fpFunction differs from the table entry or there is no secondary function, resets dwArg0/1/2, calls ResetAiGeneralStrc, looks up the new AI entry, runs its fpInit initializer (populating a scratch D2AiParamStrc), then sets fpFunction to fpMain (or AI_Function1_Idle if null). If a valid secondary function exists, installs it instead without reinitializing.
 void __fastcall AttachCorrectAiFunctionToMonster(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiGeneralStrc * pMonsterAiGeneral, int32_t nFunctionId);
 BOOL __fastcall MonsterNeedsToOpenDoor(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);

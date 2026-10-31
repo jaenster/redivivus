@@ -812,7 +812,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
             if (pDownloadCtxCopy->nFileType == 2) {
               bRecvFileOk = BNDOWNLOAD_RecvFileFromSocket((LPCSTR)((int)pServerResp + 0x18), hSocketCopy, pDownloadCtxCopy->nCachedFileSize, *(uint32_t*)((int)pServerResp + 4), pDownloadCtxCopy->nConnMode, (FILETIME*)((int)pServerResp + 0x10));
               if (bRecvFileOk) {
-                NET_BNFTP_CLIENT_ProcessFile(pDownloadCtxCopy->nConnMode, *(uint32_t*)((int)pServerResp + 8), *(FILETIME**)((int)pServerResp + 0xc), (LPCSTR)((int)pServerResp + 0x10), (char*)((int)pServerResp + 0x18), (uint32_t*)pDownloadCtxCopy->szOutputPath, (size_t)__frame0.pFileData, *(int32_t*)((int)pServerResp + 4), 0);
+                NET_BNFTP_CLIENT_ProcessFile(pDownloadCtxCopy->nConnMode, pDownloadCtxCopy->nFileType, *(uint32_t*)((int)pServerResp + 8), *(FILETIME**)((int)pServerResp + 0xc), (LPCSTR)((int)pServerResp + 0x10), (char*)((int)pServerResp + 0x18), (uint32_t*)pDownloadCtxCopy->szOutputPath, (size_t)__frame0.pFileData, *(int32_t*)((int)pServerResp + 4), 0);
                 hSocket = hSocketCopy;
                 break;
               }
@@ -828,7 +828,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
             } else {
               BVar1 = BnetDownloadFile(hSocketCopy, (char*)((int)pServerResp + 0x18), (FILETIME*)((int)pServerResp + 0x10), pDownloadCtxCopy->nConnMode, (uint8_t)pDownloadCtxCopy->nFileType, &__frame0.pFileData, *(uint32_t*)((int)pServerResp + 4));
               if (BVar1) {
-                NET_BNFTP_CLIENT_ProcessFile(pDownloadCtxCopy->nConnMode, *(uint32_t*)((int)pServerResp + 8), *(FILETIME**)((int)pServerResp + 0xc), (LPCSTR)((int)pServerResp + 0x10), (char*)((int)pServerResp + 0x18), (uint32_t*)pDownloadCtxCopy->szOutputPath, (size_t)__frame0.pFileData, *(int32_t*)((int)pServerResp + 4), 0);
+                NET_BNFTP_CLIENT_ProcessFile(pDownloadCtxCopy->nConnMode, pDownloadCtxCopy->nFileType, *(uint32_t*)((int)pServerResp + 8), *(FILETIME**)((int)pServerResp + 0xc), (LPCSTR)((int)pServerResp + 0x10), (char*)((int)pServerResp + 0x18), (uint32_t*)pDownloadCtxCopy->szOutputPath, (size_t)__frame0.pFileData, *(int32_t*)((int)pServerResp + 4), 0);
                 hSocket = hSocketCopy;
                 break;
               }
@@ -947,12 +947,12 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(D2BnetDownloadStateStrc * pDownl
           BNDOWNLOAD_WriteFileWithTimestamp(szBufferInput, (LPCVOID)__frame0.pCachedBuf, (DWORD)szText1, pFileTime);
         }
 
-        NET_BNFTP_CLIENT_ProcessFile((int32_t)__frame0.pCacheData, eFileType, (FILETIME*)nOpcode, (LPCSTR)pFileTime, szBufferInput, (uint32_t*)szText2, (size_t)__frame0.pCachedBuf, (int32_t)szText1, 1);
-        BNGatewayAccess::CACHE_FreeMem(__frame0.pCachedBuf);
+        NET_BNFTP_CLIENT_ProcessFile((int32_t)__frame0.pCacheData, __frame0.nDownloadFlags, eFileType, (FILETIME*)nOpcode, (LPCSTR)pFileTime, szBufferInput, (uint32_t*)szText2, (size_t)__frame0.pCachedBuf, (int32_t)szText1, 1);
+        BNGatewayAccess::CACHE_FreeMem(__frame0.pCachedBuf, (uint32_t)szText1);
         return;
       }
 
-      BNGatewayAccess::CACHE_FreeMem(__frame0.pCachedBuf);
+      BNGatewayAccess::CACHE_FreeMem(__frame0.pCachedBuf, (uint32_t)szText1);
     }
 
     short int* pThreadCtx = (short int*)Storm::SMem::SMemAlloc(0x230, ".\\BnDownload.cpp", 0xa6, 0);
@@ -990,7 +990,8 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(D2BnetDownloadStateStrc * pDownl
 }
 
 // Processes downloaded BNFTP files: version info, cache files, ads, bnserver.ini, and ExtraWork DLLs. Handles extraction, loading, and cleanup.
-void __thiscall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t eFileType, FILETIME * pModTime, LPCSTR szSourcePath, char * szDestPath, uint32_t * pPoolMgr, size_t nSize, int32_t bDeleteSource, int32_t bIsExtraWork) {
+// EDX nDownloadFlags: download context +0x22c (file download) or 2 (patch download); not read here.
+void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownloadFlags, uint32_t eFileType, FILETIME * pModTime, LPCSTR szSourcePath, char * szDestPath, uint32_t * pPoolMgr, size_t nSize, int32_t bDeleteSource, int32_t bIsExtraWork) {
     // Frame slots -4672..-4644 are ONE object: &dwStackPad5 is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -1288,12 +1289,12 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pbParam, size_t nSi
       /* FILETIME * lpFileTime2 for CompareFileTime */ /* FILETIME * lpFileTime1 for CompareFileTime */ nTimeCmp = CompareFileTime(&ftZero, &ftCacheTime);
       if (!nTimeCmp) {
         BNDOWNLOAD_WriteFileWithTimestamp((LPCSTR)pbParam, (LPCVOID)__frame0.pCacheData, __frame0.dwCachedSize, &ftZero);
-        NET_BNFTP_CLIENT_ProcessFile(-0x7ffffffe, 0, nullptr, (LPCSTR)&ftZero, (char*)pbParam, nullptr, (size_t)__frame0.pCacheData, __frame0.dwCachedSize, 1);
-        BNGatewayAccess::CACHE_FreeMem(__frame0.pCacheData);
+        NET_BNFTP_CLIENT_ProcessFile(-0x7ffffffe, 2, 0, nullptr, (LPCSTR)&ftZero, (char*)pbParam, nullptr, (size_t)__frame0.pCacheData, __frame0.dwCachedSize, 1);
+        BNGatewayAccess::CACHE_FreeMem(__frame0.pCacheData, __frame0.dwCachedSize);
         return 0;
       }
 
-      BNGatewayAccess::CACHE_FreeMem(__frame0.pCacheData);
+      BNGatewayAccess::CACHE_FreeMem(__frame0.pCacheData, __frame0.dwCachedSize);
     }
 
     short int* pThreadCtx = (short int*)Storm::SMem::SMemAlloc(0x230, ".\\BnDownload.cpp", 0x698, 0);

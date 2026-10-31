@@ -4440,7 +4440,7 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
         D2Common::ITEMS::Items::ITEM_SetServerSideFlag((uint32_t*)&eItemFlagMask, 0x20, 1);
         pItemInInv = pUnit_00;
         eItemFlag = eItemFlagMask;
-        GAME::SCmd::Send0x9CItemRemoveFromBelt(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0xc1f), pItemInInv, eItemFlag);
+        GAME::SCmd::Send0x9CItemRemoveFromBelt(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0xc1f), pUnit, pItemInInv, eItemFlag);
         pItemInInv = D2Common::INVENTORY::Inventory::ItemBelongsToInventoryOfPlayer(pInventory, pUnit_00);
         if (!pItemInInv) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc22);
@@ -5352,7 +5352,7 @@ void __fastcall ITEMMODE_ConsumeItemAndRemove(::SGAMEDATA * pGame, D2UnitStrc * 
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0xf94);
     local_8 = 0;
     D2Common::ITEMS::Items::ITEM_SetServerSideFlag((uint32_t*)&local_8, 0x20, 1);
-    GAME::SCmd::Send0x9CItemRemoveFromBelt(pClient, pItem, (eD2ItemFlag)local_8);
+    GAME::SCmd::Send0x9CItemRemoveFromBelt(pClient, pUnit, pItem, (eD2ItemFlag)local_8);
     ITEMMODE_DeleteItemFromCorpse(pGame, pUnit, pItem);
 }
 

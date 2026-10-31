@@ -1209,7 +1209,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x7A_UPDATEPET(D2ClientStrc * pClient, uint
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 0xd, pClient);
 }
 
-void __thiscall NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(void * pThis, uint8_t byAction, uint32_t dwPetGUID, uint32_t dwMercUnitGUID, uint16_t wMercType, uint32_t dwOwnerUnitGUID, uint32_t dwMercExperience) {
+// DL bUnused: both callers set DL=1 (as for 0x7A); overwritten here before any read.
+void __fastcall NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(D2ClientStrc * pClient, uint8_t bUnused, uint8_t byAction, uint32_t dwPetGUID, uint32_t dwMercUnitGUID, uint16_t wMercType, uint32_t dwOwnerUnitGUID, uint32_t dwMercExperience) {
     D2GSPacketSrv0x81 cStack_18;
     cStack_18.nOwnerGUID = dwMercUnitGUID;
     cStack_18.nMercGUID = dwPetGUID;
@@ -1218,7 +1219,7 @@ void __thiscall NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(void * pThis, uint8_t 
     cStack_18.nSkillId = byAction;
     cStack_18.nPacketId = 0x81;
     cStack_18.nInitSeed = dwMercExperience;
-    SCMD_QueuePacketForClient(&cStack_18.nPacketId, 0x14, (D2ClientStrc*)pThis);
+    SCMD_QueuePacketForClient(&cStack_18.nPacketId, 0x14, pClient);
 }
 
 // Server-to-client gold amount in trade. Opcode 0x79.
@@ -2746,20 +2747,24 @@ void __fastcall Send0x9CItemPutInBelt(D2ClientStrc * pClient, D2UnitStrc * pUnit
     NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, 0xe, eItemFlags, 0);
 }
 
-void __thiscall Send0x9CItemRemoveFromBelt(void * pThis, D2UnitStrc * pUnit, eD2ItemFlag eItemFlag) {
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX((D2ClientStrc*)pThis, pUnit, 0xf, eItemFlag, 0);
+// EDX pPlayer: callers pass the item's owner; overwritten here before any read.
+void __fastcall Send0x9CItemRemoveFromBelt(D2ClientStrc * pClient, D2UnitStrc * pPlayer, D2UnitStrc * pUnit, eD2ItemFlag eItemFlag) {
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, 0xf, eItemFlag, 0);
 }
 
-void __thiscall Send0x9CItemSwapInBelt(void * pThis, D2UnitStrc * pUnit, eD2ItemFlag eItemFlag) {
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX((D2ClientStrc*)pThis, pUnit, 0x10, eItemFlag, 0);
+// EDX pPlayer: callers pass the item's owner; overwritten here before any read.
+void __fastcall Send0x9CItemSwapInBelt(D2ClientStrc * pClient, D2UnitStrc * pPlayer, D2UnitStrc * pUnit, eD2ItemFlag eItemFlag) {
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, 0x10, eItemFlag, 0);
 }
 
-void __thiscall Send0x9CItemToCursor(void * pThis, D2UnitStrc * pUnit) {
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX((D2ClientStrc*)pThis, pUnit, 0x12, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD), 0);
+// EDX pPlayer: callers pass the item's owner; overwritten here before any read.
+void __fastcall Send0x9CItemToCursor(D2ClientStrc * pClient, D2UnitStrc * pPlayer, D2UnitStrc * pUnit) {
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, 0x12, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD), 0);
 }
 
 // @sourcefile .\GAME\SCmd.cpp
-void __thiscall Send0x9CItemHandleInShop(void * pThis, D2UnitStrc * pUnit, uint8_t cParam) {
+// EDX pPlayer: callers pass the item's owner; overwritten here before any read.
+void __fastcall Send0x9CItemHandleInShop(D2ClientStrc * pClient, D2UnitStrc * pPlayer, D2UnitStrc * pUnit, uint8_t cParam) {
     eInventoryPage eCurrentPage;
     eInventoryPage ePreviousPage;
     int32_t iVar1;
@@ -2777,7 +2782,7 @@ void __thiscall Send0x9CItemHandleInShop(void * pThis, D2UnitStrc * pUnit, uint8
             }
           }
 
-          NET_D2GS_SERVER_Send_0x9C_ITEMEX((D2ClientStrc*)pThis, pUnit, 0xb, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD), nUnidentifiedFlag);
+          NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, 0xb, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD), nUnidentifiedFlag);
           break;
         }
       case '9':
@@ -2785,7 +2790,7 @@ void __thiscall Send0x9CItemHandleInShop(void * pThis, D2UnitStrc * pUnit, uint8
           eCurrentPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pUnit);
           ePreviousPage = D2Common::ITEMS::Items::ITEM_GetItemData_ePreviousPage(pUnit);
           D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pUnit, ePreviousPage);
-          NET_D2GS_SERVER_Send_0x9C_ITEMEX((D2ClientStrc*)pThis, pUnit, 0xc, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD), 0);
+          NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, 0xc, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD), 0);
           D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pUnit, eCurrentPage);
           return;
         }

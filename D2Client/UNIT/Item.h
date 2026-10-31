@@ -337,7 +337,8 @@ void __fastcall ITEM_FreeItemUnit(struct D2UnitStrc * pUnit);
 void __fastcall ITEM_UpdateItemAnimation(struct D2UnitStrc * pUnit);
 void __fastcall ItemMessage(int32_t eMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage, int32_t nUpdateFlag);
 // Client-side handler for S2C packet 0x47. Recalculates all equipped item states for the unit identified in the packet. Walks inventory charms (enables qualifying ones), iterates body slots 0-10 (disables items failing requirements, re-enables items passing requirements in a convergence loop up to 100 iterations), recalculates set bonuses for quality-5 items, and reloads character GFX if equipment changed. Source: .\\UNIT\\Item.cpp
-void __fastcall ITEM_CltRecalcAllEquippedItems(struct D2GSPacketSrv0x47 * pBytes);
+// EDX bFromNetwork: 1 from the network handler, 0 from the two local callers; overwritten here before any read.
+void __fastcall ITEM_CltRecalcAllEquippedItems(struct D2GSPacketSrv0x47 * pBytes, int32_t bFromNetwork);
 // Client-side handler for S2C packet 0x48. Identical logic to ITEM_CltRecalcAllEquippedItems (0x47 handler) — recalculates equipped item requirement states, enables/disables items based on current stats, handles set bonuses and GFX reload.
 void __fastcall ITEM_CltRecalcAllEquippedItems2(struct D2GSPacketSrv0x48 * pBytes);
 void __fastcall ITEM_RecalcAllEquippedItems_ECX(struct D2UnitStrc * pUnit);

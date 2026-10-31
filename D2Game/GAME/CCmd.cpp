@@ -134,7 +134,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(D2GSClientMsgEnve
       case 'g':
         /* D2GS_GAMELOGON_SP */ bFindMeCheckResult = Server::SetupGameChecks(nClientId, &pPacket->uMsg.sGameLogonSP);
       if (bFindMeCheckResult) {
-        Server::GAME_CreateSingleplayerGame(nClientId, pPacket->uMsg.sGameLogonSP.szGameName, pPacket->uMsg.sGameLogonSP.eHostGameType, pPacket->uMsg.sGameLogonSP.ePlayerClass, pPacket->uMsg.sGameLogonSP.szCharName, pPacket->uMsg.sGameLogonSP.field_0x25, pPacket->uMsg.sGameLogonSP.eArenaFlags, pPacket->uMsg.sGameLogonSP.nTemplate, pPacket->uMsg.sGameLogonSP.field_0x2b, pPacket->uMsg.sGameLogonSP.field_0x2c, pPacket->uMsg.sGameLogonSP.nDifficulty, pPacket->uMsg.sGameLogonSP.nLanguageCode, 0, 0);
+        Server::GAME_CreateSingleplayerGame(nClientId, pPacket->uMsg.sGameLogonSP.szGameName, pPacket->uMsg.sGameLogonSP.eHostGameType, pPacket->uMsg.sGameLogonSP.ePlayerClass, pPacket->uMsg.sGameLogonSP.szCharName, (uint32_t)(uint16_t)pPacket->uMsg.sGameLogonSP.field_0x25, pPacket->uMsg.sGameLogonSP.eArenaFlags, pPacket->uMsg.sGameLogonSP.nTemplate, pPacket->uMsg.sGameLogonSP.field_0x2b, pPacket->uMsg.sGameLogonSP.field_0x2c, pPacket->uMsg.sGameLogonSP.nDifficulty, pPacket->uMsg.sGameLogonSP.nLanguageCode, 0, 0);
         return;
       }
 

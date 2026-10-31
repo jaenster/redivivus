@@ -480,7 +480,8 @@ static BOOL __stdcall HasBonusStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     return 1;
 }
 
-// Accumulates all elemental damage stats from pUnit into pMissileDamageData, left-shifted by nShift. Reads fire/lightning/magic/cold/poison/life-drain/mana-drain/burning min+max stats and their durations from pUnit via GetStatUnsignedValue, then adds each (shifted) value to the corresponding field of D2MissileDamageDataStrc. Poison length uses skill_poison_override_length if present, otherwise poisonlength+poison_count. Custom register calling convention: pMissileDamageData=ESI, pUnit=EDI, nShift=BL.
+// Accumulates all elemental damage stats from pUnit into pMissileDamageData, left-shifted by nShift. Reads fire/lightning/magic/cold/poison/life-drain/mana-drain/burning min+max stats and their durations from pUnit via GetStatUnsignedValue, then adds each (shifted) value to the corresponding field of D2MissileDamageDataStrc. Poison length uses skill_poison_override_length if present, otherwise poisonlength+poison_count. Custom register calling convention: pMissileDamageData=ESI, pUnit=EDI, nShift=EBX.
+// nShift is passed in EBX and copied to ECX before each SHL; only CL is used.
 static void AddStatsToDamage(D2MissileDamageDataStrc * pMissileDamageData, D2UnitStrc * pUnit, int32_t nShift) {
     int nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_firemindam, 0);
     uint8_t nShiftTmp = (uint8_t)nShift;
