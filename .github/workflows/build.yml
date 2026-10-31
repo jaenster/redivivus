@@ -1,11 +1,23 @@
 name: build
 
+# Two builds, because they answer different questions.
+#
+#   incremental  - did this change break the build? Recompiles only the translation
+#                  units whose content actually changed, so it is the fast signal on
+#                  every push and pull request.
+#   clean-room   - can a stranger clone this repository and get d2.exe? Deliberately
+#                  reuses nothing. It must stay that way to mean anything, so it runs
+#                  on main and weekly rather than on every commit.
+
 on:
   push:
     branches: [main]
     paths-ignore: ['**.md', '.recomp.json', 'progress/**', '.github/workflows/progress.yml']
   pull_request:
     paths-ignore: ['**.md', '.recomp.json', 'progress/**', '.github/workflows/progress.yml']
+  schedule:
+    # Sunday 04:00 UTC. Catches a clean-build break that only a fresh clone shows.
+    - cron: '0 4 * * 0'
   workflow_dispatch:
 
 # A newer push makes an older build of the same ref pointless.
@@ -13,8 +25,15 @@ concurrency:
   group: build-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+  CCACHE_MAXSIZE: 2G
+  CCACHE_COMPILERCHECK: content
+
 jobs:
-  mingw-i686:
+  incremental:
+    name: incremental (changed units only)
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -22,7 +41,68 @@ jobs:
       - name: Install the toolchain
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq g++-mingw-w64-i686 binutils-mingw-w64-i686 cmake ninja-build
+          sudo apt-get install -y -qq g++-mingw-w64-i686 binutils-mingw-w64-i686 \
+            cmake ninja-build ccache
+
+      # ccache keys on PREPROCESSED CONTENT, not timestamps, and that is the whole
+      # reason this works. actions/checkout writes every file with a fresh mtime, so
+      # caching the build directory instead would leave ninja thinking all 481
+      # translation units are dirty and rebuild the lot - the exact trap this job
+      # exists to avoid.
+      - name: Restore the compiler cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-i686-${{ github.ref_name }}-${{ github.sha }}
+          restore-keys: |
+            ccache-i686-${{ github.ref_name }}-
+            ccache-i686-main-
+            ccache-i686-
+
+      - name: Configure
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-i686.cmake \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+
+      - name: Refuse -fpermissive
+        run: |
+          if grep -q -- '-fpermissive' build/compile_commands.json; then
+            echo "FAIL: the build compiles with -fpermissive" >&2
+            exit 1
+          fi
+          echo "translation units: $(grep -c '\"file\":' build/compile_commands.json)"
+
+      - name: Build
+        run: cmake --build build -j "$(nproc)" -- -k 0
+
+      - name: Check the executable
+        run: |
+          test -f build/d2.exe || { echo "FAIL: no d2.exe" >&2; exit 1; }
+          i686-w64-mingw32-objdump -f build/d2.exe | grep -q 'file format pei-i386' \
+            || { echo "FAIL: d2.exe is not a 32-bit PE" >&2; exit 1; }
+          echo "OK: d2.exe, $(stat -c %s build/d2.exe) bytes"
+
+      # How much was actually reused. A low hit rate on a warm cache means the
+      # generator rewrote content, not just timestamps.
+      - name: Compiler cache statistics
+        if: always()
+        run: ccache --show-stats --verbose | head -25
+
+  clean-room:
+    name: clean-room (full build from a fresh clone)
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the toolchain
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq g++-mingw-w64-i686 binutils-mingw-w64-i686 \
+            cmake ninja-build
 
       - name: Build from a clean clone
         run: tools/check-build.sh "$GITHUB_WORKSPACE" "$GITHUB_SHA"
