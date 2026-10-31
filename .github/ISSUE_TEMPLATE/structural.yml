@@ -1,0 +1,130 @@
+name: "Structural: function discovery/boundary"
+description: A function Ghidra has not found, or one whose boundaries are wrong (data that is really code, code that is really data, a function that should split or merge).
+labels: ["structural"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Use this template when the *set of functions* is wrong**, not when a name, type or
+        prototype is wrong. Those go in as proposals, or as a
+        [Correction](?template=correction.yml) issue.
+
+        This path exists because of cost, not ceremony. A change to the function set moves the
+        set of translation units, so it invalidates every cached artefact - the dependency
+        graph, the per-function export, the emitted tree. The daemon cannot absorb that
+        incrementally: it detects the change and triggers a full rebuild. So a human applies it
+        in the writable database and schedules the rebuild.
+
+        **One issue is one claim.** Two suspected functions are two issues.
+
+  - type: dropdown
+    id: program
+    attributes:
+      label: Program
+      description: Which database. Windows is ground truth.
+      options:
+        - "win - 1.14d Game.exe"
+        - "mac - the Intel Mac build"
+    validations:
+      required: true
+
+  - type: input
+    id: address
+    attributes:
+      label: Address or range
+      description: >-
+        The address this is about, or the range if you are claiming a whole block. Hex, as
+        Ghidra shows it. Never a name - names change, addresses do not.
+      placeholder: "0x005b15d0, or 0x006a1200-0x006a1340"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: current
+    attributes:
+      label: How Ghidra classifies it now
+      description: What you actually see in the database today, not what you think it is.
+      options:
+        - Undefined - no code, no data
+        - Defined data (a type is laid down over it)
+        - Code, but inside an existing function
+        - Code, and already its own function
+        - Unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: claim
+    attributes:
+      label: What it should be
+      description: >-
+        State the structural change you are claiming, in one or two sentences.
+      placeholder: |
+        A function starting at 0x006a1200. The bytes are currently undefined data; the
+        pointer table at 0x0073ca18 has 0x006a1200 in slot 12, and the other slots are all
+        function entry points.
+
+        (Other shapes: "this function should split at 0x...", "these two should be one
+        function", "this is not code at all, it is the string table".)
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence a reviewer can re-check
+      description: >-
+        Strongest first: assert strings or `__FILE__` paths; the paired function on the other
+        build; field accesses on an already-typed struct and the names of the callees it feeds;
+        strings it references; and only then inference from behaviour. "It looks like a
+        function" is not evidence.
+      placeholder: |
+        - Found through: the vtable at 0x..., slot 3 / the pointer table at 0x..., slot 12 /
+          an xref from 0x... / a call site at 0x...
+        - Xrefs to the address: 0x..., 0x...
+        - Disassembly snippet (enough to show the prologue, or the boundary you are claiming):
+
+          006a1200  PUSH EBP
+          006a1201  MOV  EBP,ESP
+          ...
+
+        - Counterpart on the other build, if you checked: 0x... (mac)
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected
+    attributes:
+      label: Functions you expect to change
+      description: >-
+        The addresses of the functions whose decompilation you expect this to alter - the
+        callers, the function being split, the one the bytes are currently inside. This is what
+        makes the rebuild's result checkable, so give your best list even if it is incomplete.
+      placeholder: |
+        0x006a10c0 - currently contains these bytes; should shrink
+        0x00401f30 - caller through the pointer table; should gain a call
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: How you came across it, what you tried, what you are unsure about.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Before filing
+      options:
+        - label: This is one claim. I have not bundled several suspected functions into one issue.
+          required: true
+        - label: I addressed the target by address, and I recorded what the database says today so a reviewer can tell whether it has changed since.
+          required: true
+        - label: >-
+            I did not try to route this through a name, type or prototype proposal. (A proposal
+            that depends on a function which does not exist yet fails at review, later and more
+            expensively than this issue.)
+          required: true
