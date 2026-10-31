@@ -1,0 +1,146 @@
+name: vc8
+
+# Compile the reconstruction with the compiler that built the original.
+#
+# This is NOT the asm-matching oracle. The oracle lives in asm_matching/msvc8,
+# needs the reference Game.exe, and judges each function byte for byte; it runs
+# locally. What this job answers is narrower and still worth knowing on every
+# change: does the tree still compile under Visual C++ 2005 SP1 at all, with the
+# flags the oracle uses?
+#
+# That question used to be unanswerable in CI. The toolchain came from 4 GB of
+# retail ISOs fetched from archive.org and run under wine, which is not
+# something to put in a public pipeline. jaenster/setup-msvc fetches a pinned,
+# hash-verified community pack instead and runs cl.exe natively under WOW64 on
+# a Windows runner, and it verifies the compiler is 14.00.50727.762 rather than
+# trusting the label. RTM and SP1 both stamp 50727 in the Rich header, so that
+# check is the only thing standing between this and quietly using the wrong one.
+#
+# Files that vc8_translate.py rewrites (nested namespaces, packed structs,
+# = default) are expected to fail here: this job does not run the translator.
+# The number to watch is the trend, not the absolute.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md', '.recomp.json', 'progress/**']
+  pull_request:
+    paths-ignore: ['**.md', '.recomp.json', 'progress/**']
+  workflow_dispatch:
+    inputs:
+      sample:
+        description: 'How many translation units to compile (0 = all 481)'
+        required: false
+        default: '40'
+
+concurrency:
+  group: vc8-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compile:
+    name: Visual C++ 2005 SP1
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Visual C++ 2005 SP1
+        id: msvc
+        uses: jaenster/setup-msvc@v1
+        with:
+          version: '14.00.50727.762'
+          runner: native
+
+      - name: The compiler is the exact build the original was made with
+        shell: bash
+        run: |
+          echo "cl.exe: ${{ steps.msvc.outputs.version }}"
+          echo "can link: ${{ steps.msvc.outputs.can-link }}"
+          [ "${{ steps.msvc.outputs.version }}" = "14.00.50727.762" ] || {
+            echo "::error::expected 14.00.50727.762, the build asm_matching/msvc8/evidence/toolchain.md identifies"
+            exit 1
+          }
+
+      - name: Compile the tree with the oracle's flags
+        shell: pwsh
+        env:
+          SAMPLE: ${{ github.event.inputs.sample || '40' }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $oracle = "asm_matching/msvc8"
+
+          # The include set the oracle builds: every directory holding a header,
+          # plus its shim directory. See write_rsp() in asm_matching/msvc8/scripts/build.py.
+          $hdrDirs = Get-ChildItem -Recurse -Filter *.h -File |
+                     Where-Object { $_.FullName -notmatch '\\(thirdparty|asm_matching)\\' } |
+                     ForEach-Object { $_.DirectoryName } | Sort-Object -Unique
+          $incs = @("$PWD\$oracle\shim_include", "$PWD") + $hdrDirs
+          $rsp  = $incs | ForEach-Object { "/I`"$_`"" }
+          $rsp += "/FI`"$PWD\$oracle\vc8_compat.h`""
+          $rsp += "/FI`"$PWD\d2_platform.h`""
+          # DEFAULT_CFLAGS + TOOL_CFLAGS from asm_matching/msvc8/scripts/oracle_config.py
+          $rsp += "/c /nologo /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /Z7 /D WIN32 /D NDEBUG /D _WINDOWS"
+          Set-Content -Path cl.rsp -Value ($rsp -join "`n") -Encoding ascii
+          Write-Host "include directories: $($incs.Count)"
+
+          $all = Get-ChildItem -Recurse -Filter *.cpp -File |
+                 Where-Object { $_.FullName -notmatch '\\(thirdparty|asm_matching|tools)\\' } |
+                 Sort-Object FullName
+          $n = [int]$env:SAMPLE
+          $tus = if ($n -gt 0) { $all | Select-Object -First $n } else { $all }
+          Write-Host "compiling $($tus.Count) of $($all.Count) translation units`n"
+
+          New-Item -ItemType Directory -Force -Path out | Out-Null
+          $ok = 0; $fail = 0; $failed = @()
+          foreach ($tu in $tus) {
+            $obj = "out/" + [IO.Path]::GetFileNameWithoutExtension($tu.Name) + ".obj"
+            $log = & cl.exe "@cl.rsp" "/Fo$obj" $tu.FullName 2>&1 | Out-String
+            if ($LASTEXITCODE -eq 0 -and (Test-Path $obj)) {
+              $ok++
+            } else {
+              $fail++
+              $first = ($log -split "`n" | Where-Object { $_ -match ' (error|fatal error) C\d+' } | Select-Object -First 1)
+              $failed += [pscustomobject]@{ File = (Resolve-Path -Relative $tu.FullName); Error = $first }
+            }
+          }
+
+          Write-Host "`ncompiled $ok, failed $fail, of $($tus.Count)"
+          if ($failed.Count -gt 0) {
+            Write-Host "`nfirst error per failing unit (up to 20):"
+            $failed | Select-Object -First 20 | ForEach-Object {
+              Write-Host ("  {0}`n      {1}" -f $_.File, $_.Error.Trim())
+            }
+          }
+
+          # Written to the summary so the trend is visible without opening logs.
+          $pct = if ($tus.Count) { [math]::Round(100.0 * $ok / $tus.Count, 1) } else { 0 }
+          @"
+          ## Visual C++ 2005 SP1
+
+          Compiler ``${{ steps.msvc.outputs.version }}``, the build identified in
+          ``asm_matching/msvc8/evidence/toolchain.md``.
+
+          | | |
+          |-|-|
+          | compiled | $ok |
+          | failed | $fail |
+          | of | $($tus.Count) translation units |
+          | rate | $pct% |
+
+          Units that ``vc8_translate.py`` rewrites are expected to fail here; this job
+          does not run the translator.
+          "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+
+          if ($ok -eq 0) {
+            Write-Host "::error::nothing compiled at all, which means the toolchain or the flags are wrong rather than the source"
+            exit 1
+          }
+
+      - name: Keep the objects for inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vc8-objects
+          path: out/
+          retention-days: 7
+          if-no-files-found: ignore
