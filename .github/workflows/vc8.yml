@@ -16,9 +16,11 @@ name: vc8
 # trusting the label. RTM and SP1 both stamp 50727 in the Rich header, so that
 # check is the only thing standing between this and quietly using the wrong one.
 #
-# Files that vc8_translate.py rewrites (nested namespaces, packed structs,
-# = default) are expected to fail here: this job does not run the translator.
-# The number to watch is the trend, not the absolute.
+# The tree is written for a C++17 compiler, so it is mirrored through the
+# oracle's own vc8_translate.py first, exactly as the oracle does. That is not
+# optional: d2_platform.h alone declares every Smacker and Bink import as
+# `extern "C" __stdcall void* f(...)`, which GCC accepts and VC8 rejects with
+# C2062, so without the translator nothing compiles at all.
 
 on:
   push:
@@ -61,6 +63,18 @@ jobs:
             exit 1
           }
 
+      # The same rewrite the oracle applies: calling conventions moved after
+      # the return type, packed structs to pragma pack, `= default` removed,
+      # nested namespaces expanded. Python is the oracle's own, not something
+      # this job introduces.
+      - name: Translate the tree into a form VC8 accepts
+        shell: bash
+        run: |
+          python asm_matching/msvc8/scripts/vc8_translate.py . build/src
+          test -f build/src/d2_platform.h || { echo "::error::translator produced no tree"; exit 1; }
+          echo "translated d2_platform.h line 758:"
+          sed -n '758p' build/src/d2_platform.h
+
       - name: Compile the tree with the oracle's flags
         shell: pwsh
         env:
@@ -71,19 +85,20 @@ jobs:
 
           # The include set the oracle builds: every directory holding a header,
           # plus its shim directory. See write_rsp() in asm_matching/msvc8/scripts/build.py.
-          $hdrDirs = Get-ChildItem -Recurse -Filter *.h -File |
+          $src = "$PWD\build\src"
+          $hdrDirs = Get-ChildItem -Path $src -Recurse -Filter *.h -File |
                      Where-Object { $_.FullName -notmatch '\\(thirdparty|asm_matching)\\' } |
                      ForEach-Object { $_.DirectoryName } | Sort-Object -Unique
-          $incs = @("$PWD\$oracle\shim_include", "$PWD") + $hdrDirs
+          $incs = @("$PWD\$oracle\shim_include", $src) + $hdrDirs
           $rsp  = $incs | ForEach-Object { "/I`"$_`"" }
           $rsp += "/FI`"$PWD\$oracle\vc8_compat.h`""
-          $rsp += "/FI`"$PWD\d2_platform.h`""
+          $rsp += "/FI`"$src\d2_platform.h`""
           # DEFAULT_CFLAGS + TOOL_CFLAGS from asm_matching/msvc8/scripts/oracle_config.py
           $rsp += "/c /nologo /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /Z7 /D WIN32 /D NDEBUG /D _WINDOWS"
           Set-Content -Path cl.rsp -Value ($rsp -join "`n") -Encoding ascii
           Write-Host "include directories: $($incs.Count)"
 
-          $all = Get-ChildItem -Recurse -Filter *.cpp -File |
+          $all = Get-ChildItem -Path $src -Recurse -Filter *.cpp -File |
                  Where-Object { $_.FullName -notmatch '\\(thirdparty|asm_matching|tools)\\' } |
                  Sort-Object FullName
           $n = [int]$env:SAMPLE
@@ -127,8 +142,8 @@ jobs:
           | of | $($tus.Count) translation units |
           | rate | $pct% |
 
-          Units that ``vc8_translate.py`` rewrites are expected to fail here; this job
-          does not run the translator.
+          Compiled from the tree as ``vc8_translate.py`` rewrites it, the same input
+          the oracle uses. This job judges nothing byte for byte.
           "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
 
           if ($ok -eq 0) {
