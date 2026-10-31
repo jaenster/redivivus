@@ -2831,8 +2831,8 @@ void __fastcall FreeObjects(::SGAMEDATA * pGame) {
     } while (nBuckets);
 }
 
-int32_t __fastcall OBJECT_GetDoubledTxtSize(int32_t nParam) {
-    return *(int*)(nParam + 0x180) * 2;
+int32_t __fastcall OBJECT_GetDoubledTxtSize(D2ObjectsTxt * pObjectsTxt) {
+    return pObjectsTxt->Parm[2] * 2;
 }
 
 uint8_t __stdcall OBJECT_GetDefaultSize() {

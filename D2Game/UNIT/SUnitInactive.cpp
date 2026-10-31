@@ -1092,7 +1092,7 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
           bIsGrowable = D2Common::Units::IsShrine(pUnit);
           if (!bIsGrowable || !pCurUnitRecord->nGameFrame) {
             if (pObjTxtGrowable->SubClass & 0x20U) {
-              iVar1 = Objects::OBJECT_GetDoubledTxtSize((int32_t)pObjTxtGrowable);
+              iVar1 = Objects::OBJECT_GetDoubledTxtSize(pObjTxtGrowable);
               byMaxStage = (uint8_t)iVar1;
               if (pCurUnitRecord->field_0x28 < byMaxStage) {
                 pObjTxtLine = (D2ObjectsTxt*)pObjTxtGrowable->Parm[0];

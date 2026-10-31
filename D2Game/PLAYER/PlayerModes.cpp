@@ -313,7 +313,7 @@ int32_t __fastcall PLRMODES_ModeCallback_Neutral(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Begins a player movement path and transitions animation mode. Restores velocity/path type, then normalises the requested mode: Run falls back to Walk if stamina is 0; Walk/TownWalk are promoted to TownWalk when in town; KnockBack sets path type 8 and distance 5. Calculates the path; if path has waypoints, calls FreeCombatAndChangeAnimMode + clears anim timers; otherwise falls back to idle mode.
-static void __stdcall PLRMODES_StartPathAndChangeMode(::SGAMEDATA * pGame, eD2PlayerAnimMode dwParam, D2UnitStrc * pUnit) {
+static void __stdcall PLRMODES_StartPathAndChangeMode(::SGAMEDATA * pGame, eD2PlayerAnimMode eAnimMode, D2UnitStrc * pUnit) {
     int nStamina;
     D2RoomStrc* pRoom;
     BOOL bInTown;
@@ -325,7 +325,7 @@ static void __stdcall PLRMODES_StartPathAndChangeMode(::SGAMEDATA * pGame, eD2Pl
 
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2Common::PATH::DynamicPath::PATH_RestoreVelocityAndPathType(pDynamicPath);
-    switch (dwParam) {
+    switch (eAnimMode) {
       case eD2PlayerAnimMode_ns::Run:
         nStamina = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_stamina, 0);
       if (nStamina) {
@@ -337,7 +337,7 @@ static void __stdcall PLRMODES_StartPathAndChangeMode(::SGAMEDATA * pGame, eD2Pl
       case TownWalk:
         pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-      dwParam = (bInTown ? 4 : 0) + Walk;
+      eAnimMode = (bInTown ? 4 : 0) + Walk;
       break;
       case KnockBack:
         D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 8);
@@ -348,7 +348,7 @@ static void __stdcall PLRMODES_StartPathAndChangeMode(::SGAMEDATA * pGame, eD2Pl
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
     nErrorLine = D2Common::PATH::DynamicPath::GetPathPointsSize(pDynamicPath);
     if (nErrorLine) {
-      UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, dwParam);
+      UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, eAnimMode);
       UNIT::SUnit::UNITS_ClearAnimTimerEvents(pGame, pUnit);
       UNIT::SUnit::UNITS_ClearAnimAndTriggerEndAnim(pGame, pUnit);
       return;

@@ -1653,12 +1653,12 @@ D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43] = {
         /* .pfnHandlerInit = */ nullptr
     },
     {
-        /* .pfnHandler0 = */ (fpMonsterUModHandler)&D2Game::Monsters::UMOD_SetRandomElementalDamage,
+        /* .pfnHandler0 = */ &D2Game::Monsters::UMOD_SetRandomElementalDamage,
         /* .pfnHandler1 = */ nullptr,
         /* .pfnHandler2 = */ nullptr,
         /* .pfnHandler3 = */ nullptr,
         /* .pfnHandler4 = */ nullptr,
-        /* .pfnHandlerInit = */ (fpMonsterUModHandler)&D2Game::Monsters::UMOD_SetRandomElementalForMissile
+        /* .pfnHandlerInit = */ &D2Game::Monsters::UMOD_SetRandomElementalForMissile
     },
     {
         /* .pfnHandler0 = */ nullptr,
@@ -1718,7 +1718,7 @@ D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43] = {
     },
     {
         /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ &D2Game::Monsters::FUN_005a3a80,
+        /* .pfnHandler1 = */ &D2Game::Monsters::MONSTER_ShatterOnDeath,
         /* .pfnHandler2 = */ nullptr,
         /* .pfnHandler3 = */ nullptr,
         /* .pfnHandler4 = */ nullptr,
@@ -1758,7 +1758,7 @@ D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43] = {
     },
     {
         /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ &D2Game::Monsters::FUN_005a4200,
+        /* .pfnHandler1 = */ &D2Game::Monsters::MONSTER_SpawnWormOnDeath,
         /* .pfnHandler2 = */ nullptr,
         /* .pfnHandler3 = */ nullptr,
         /* .pfnHandler4 = */ nullptr,
@@ -1767,7 +1767,7 @@ D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43] = {
     {
         /* .pfnHandler0 = */ nullptr,
         /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ &D2Game::Monsters::FUN_005a4230,
+        /* .pfnHandler2 = */ &D2Game::Monsters::MONSTER_PeriodicMageThink,
         /* .pfnHandler3 = */ nullptr,
         /* .pfnHandler4 = */ nullptr,
         /* .pfnHandlerInit = */ nullptr

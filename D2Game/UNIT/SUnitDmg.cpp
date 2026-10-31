@@ -1815,7 +1815,7 @@ void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     pDamage->dwPhysDamage = nDamageOrHp;
     DAMAGE_ApplyLifeAndManaLeech(pGame, pUnit_00, pUnit, pDamage);
     if (pVictim == (D2UnitStrc*)0x1 && pDamage->wResultFlags & 1) {
-      Monsters::MONSTER_DispatchUModOnAttack(pGame, (int*)pUnit);
+      Monsters::MONSTER_DispatchUModOnAttack(pGame, pUnit);
     }
 
     DAMAGE_ApplyHealingToUnit(pDamage->dwAbsLife, pUnit_00);
@@ -2285,7 +2285,7 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
               }
             }
 
-            D2Game::Monster::SetAiState(pVictim, (D2UnitStrc*)0x13);
+            D2Game::Monster::SetAiState(pVictim, 0x13);
             return;
           }
           if (wDmgResultFlags & 4) {
@@ -2293,7 +2293,7 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
             if (pStatList || (nLastBlockFrame = DAMAGE_CheckKnockbackThreshold(pVictim, pDamage, pDamage->dwHitClass) , !nLastBlockFrame)) {
               D2Game::Monster::MonsterMode::SetCurrentSkill(pVictim, eD2MonsterAnimMode_ns::GetHit, &sMonsterKill);
               D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGameLocal, &sMonsterKill, 1);
-              Monsters::MONSTER_DispatchUModOnSpecial(pGameLocal, (int*)pVictim);
+              Monsters::MONSTER_DispatchUModOnSpecial(pGameLocal, pVictim);
               return;
             }
           } else {
@@ -2324,8 +2324,8 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
 
           D2Common::Unit::ROOM_LinkUnitToUpdateList(pVictim);
           pVictim->eUnitFlags |= UNITFLAG_UPGRLIFENHITCLASS;
-          D2Game::Monster::SetAiState(pVictim, (D2UnitStrc*)0x13);
-          Monsters::MONSTER_DispatchUModOnSpecial(pGameLocal, (int*)pVictim);
+          D2Game::Monster::SetAiState(pVictim, 0x13);
+          Monsters::MONSTER_DispatchUModOnSpecial(pGameLocal, pVictim);
           return;
         }
       } else {

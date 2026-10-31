@@ -160,12 +160,12 @@ uint32_t __fastcall CheckMonsterType(D2UnitStrc * pUnit, uint16_t eMonsterType) 
     return (uint32_t)((pUnit->pUnitData.pUnitDataMonster->eMonsterType & eMonsterType) != 0);
 }
 
-void __fastcall MONSTER_SetMonsterDataFlags(int * pUnit, uint16_t nFlagMask, int32_t nFlagValue) {
-    if (!(pUnit && *pUnit == 1)) {
+void __fastcall MONSTER_SetMonsterDataFlags(D2UnitStrc * pUnit, uint16_t nFlagMask, int32_t nFlagValue) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
     }
 
-    int pMonDataPtr = pUnit[5];
+    int pMonDataPtr = *(int*)&pUnit->pUnitData;
     if (!pMonDataPtr) {
       return;
     }
@@ -277,14 +277,14 @@ int32_t __fastcall MONSTER_GetBossNo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // Checks whether a MonUMod.txt unique modifier entry is eligible to be applied to pUnit. Rejects if disabled or version &gt; 99 in non-expansion mode. Rejects if the monster has any excluded monster type (exclude1/exclude2). Respects the fpick field: 1=boss-only, 2=excludes melee/no-multishot monsters, 3=requires a different boss flag. Returns 1 if eligible, 0 otherwise.
-static BOOL __stdcall MONSTER_CanApplyUniqueModifier(D2MonUModTxt * pD2MonUModTxt, int32_t nParam, D2UnitStrc * pUnit) {
+static BOOL __stdcall MONSTER_CanApplyUniqueModifier(D2MonUModTxt * pD2MonUModTxt, int32_t bExpansion, D2UnitStrc * pUnit) {
     bool _bHasFlag;
     bool bHasFlag;
     int32_t nClassId;
     if (pD2MonUModTxt->enabled == '\0') {
       return 0;
     }
-    if (!nParam && (uint16_t)pD2MonUModTxt->version >= 100) {
+    if (!bExpansion && (uint16_t)pD2MonUModTxt->version >= 100) {
       return 0;
     }
 
@@ -787,13 +787,13 @@ void __fastcall UMOD_DispatchInitFunction(D2UnitStrc * pUnit, int32_t nParam, BO
 }
 
 // Applies all active MonUMod enchantment init functions to a monster unit. First, if nParam2 is nonzero, spawns minions via MONSTER_SpawnMinionsForBoss. Then iterates the global gnEnchantmentEffectOffset table, calling each non-null aUmodInitTable entry and dispatching to minions via UMOD_DispatchInitFunction. Finally, iterates the unit's own MonUModList (up to 9 slots) repeating the same init + dispatch for each assigned enchantment ID.
-static void __stdcall UMOD_ApplyEnchantmentsToMonster(int32_t nParam1, D2RoomCoordListStrc * pCoordList, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nParam2, int32_t nParam3) {
+static void __stdcall UMOD_ApplyEnchantmentsToMonster(int32_t nMinionCountMin, D2RoomCoordListStrc * pCoordList, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t bSpawnMinions, int32_t nMinionCountMax) {
     // Static local variables (originally global data)
     static int gnEnchantmentEffectOffset_Lightning[4] = { 0x1, 0x2, 0x3, 0x4 }; D2_STATIC_GUARD(gnEnchantmentEffectOffset_Lightning, "D2Game::Monsters::UMOD_ApplyEnchantmentsToMonster::gnEnchantmentEffectOffset_Lightning");
 
     int32_t nUmodIdUnsigned;
-    if (nParam2) {
-      MONSTER_SpawnMinionsForBoss(pCoordList, nParam1, nParam3, pUnit, pGame);
+    if (bSpawnMinions) {
+      MONSTER_SpawnMinionsForBoss(pCoordList, nMinionCountMin, nMinionCountMax, pUnit, pGame);
     }
 
     int* pEnchantEntry = gnEnchantmentEffectOffset_Lightning;
@@ -833,7 +833,7 @@ static void __stdcall UMOD_ApplyEnchantmentsToMonster(int32_t nParam1, D2RoomCoo
 }
 
 // Computes a unit's elemental min/max damage from its level and writes it into the given stats. nParam points to a game/context struct supplying difficulty (offset 0x6d) and a hardcore/multiplayer flag (0x6a/0x74) used to index the MonLvl.DM damage column. Looks up the level-clamped MonLvl row, reads its base damage, scales min by MonUMod[0x1c].constants/100 and max by MonUMod[0x1f].constants/100, then stores them into stats eUnitStat (min) and eStat1 (max) — via STATLIST_SetUnitStat for non-monsters or D2AddStatToStatsListEx (base stats list) for monsters. If eStat2 is valid, adds the unit's current eStat2 value +0x28 the same way. Skips missiles whose missiles.txt flags2 bit 0x20 is set.
-static void __stdcall MONSTER_SetElementalDamageFromLevel(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, eD2UnitStat eStat1, eD2UnitStat eStat2, int32_t nParam) {
+static void __stdcall MONSTER_SetElementalDamageFromLevel(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, eD2UnitStat eStat1, eD2UnitStat eStat2, ::SGAMEDATA * pGame) {
     int nLvlDamage;
     uint32_t bIsMultiplayer;
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
@@ -853,7 +853,7 @@ static void __stdcall MONSTER_SetElementalDamageFromLevel(D2UnitStrc * pUnit, eD
     }
 
     uint8_t byGameDifficulty;
-    byGameDifficulty = *(uint8_t*)(nParam + 0x6d);
+    byGameDifficulty = pGame->nDifficulty;
     if (byGameDifficulty > 0) {
       if (1 < byGameDifficulty) {
         bIsMultiplayer = 2;
@@ -867,7 +867,7 @@ static void __stdcall MONSTER_SetElementalDamageFromLevel(D2UnitStrc * pUnit, eD
 
     bIsMultiplayer = 0;
     add_level_damage:
-    if (*(char*)(nParam + 0x6a) == '\0' && !*(int*)(nParam + 0x74)) {
+    if (pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER) {
       nLvlDamage = 0;
     } else {
       nLvlDamage = 1;
@@ -1501,7 +1501,7 @@ void __fastcall MONSTER_BugLightningDeathBolts(::SGAMEDATA * pGame, D2UnitStrc *
     } while (nDirLoopIdx < 4);
 }
 
-void __fastcall UMOD_SetRandomElementalDamage(int32_t nModifierLevel, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
+void __fastcall UMOD_SetRandomElementalDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
     // Static local variables (originally global data)
     static int gaMissileOffsets_ColdMinion[15] = {
     0x30,
@@ -1528,15 +1528,15 @@ void __fastcall UMOD_SetRandomElementalDamage(int32_t nModifierLevel, D2UnitStrc
     D2SeedStrc sSeedAdv = D2_SEED_NEXT(pUnit->sSeed);
     pUnit->sSeed = sSeedAdv;
     int nElemIdx = sSeedAdv.nSeedLow % 5;
-    MONSTER_SetElementalDamageFromLevel(pUnit, gaMissileOffsets_ColdMinion[nElemIdx * 3], gaMissileOffsets_ColdMinion[nElemIdx * 3 + 1], gaMissileOffsets_ColdMinion[nElemIdx * 3 + 2], nModifierLevel);
+    MONSTER_SetElementalDamageFromLevel(pUnit, gaMissileOffsets_ColdMinion[nElemIdx * 3], gaMissileOffsets_ColdMinion[nElemIdx * 3 + 1], gaMissileOffsets_ColdMinion[nElemIdx * 3 + 2], pGame);
 }
 
-void __fastcall UMOD_SetRandomElementalForMissile(int32_t nModifierLevel, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
+void __fastcall UMOD_SetRandomElementalForMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
     if (!(bShouldTrigger && pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
       return;
     }
 
-    UMOD_SetRandomElementalDamage(nModifierLevel, pUnit, dwUnused1, bShouldTrigger);
+    UMOD_SetRandomElementalDamage(pGame, pUnit, dwUnused1, bShouldTrigger);
 }
 
 // Server-side tick handler: when bShouldTrigger is set, rolls the unit's seed for a chance (>29/100) to find a player target, picks the first occupied belt slot, clones the item via serialized data, finds a drop spot near the owner, drops the clone, then consumes and removes the original belt item and re-sorts the belt column.
@@ -1941,7 +1941,7 @@ void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
 }
 
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 35. On death (or no unit) sets STATE_shatter.
-void __fastcall FUN_005a3a80(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2) {
+void __fastcall MONSTER_ShatterOnDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2) {
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == Death)) {
       return;
     }
@@ -1980,13 +1980,13 @@ void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Initialises level and attack-rating stats for a monster unit spawned via a UMOD (unit-modifier) entry. Derives monster level from the room's level record and the game difficulty/expansion flags stored in the pUModEntry struct, clamped to minimum 1. Sets UNITSTAT_level and UNITSTAT_tohit (capped at 90). For specific monster class IDs 0x146-0x171 (elemental enchanted types), also adds elemental damage stats (fire, lightning, poison) scaled from the computed level. Halts with an internal error if pUnit is not a monster.
-void __fastcall UMOD_SetLevelAndAttackRating(int32_t pUModEntry, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall UMOD_SetLevelAndAttackRating(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
     int nElMinDmg;
     int32_t nMonLevel = 2;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     if (eLevel != LEVEL_None) {
-      nMonLevel = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevel, *(eD2Difficulty*)(pUModEntry + 0x6d), *(BOOL*)(pUModEntry + 0x70));
+      nMonLevel = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevel, pGame->nDifficulty, pGame->bExpansion);
       if (nMonLevel <= 1) {
         nMonLevel = 1;
       }
@@ -2279,7 +2279,7 @@ void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 40. On death (or no unit) spawns monster 0x227 and sets STATE_corpse_nodraw.
-void __fastcall FUN_005a4200(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2) {
+void __fastcall MONSTER_SpawnWormOnDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2) {
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == Death)) {
       return;
     }
@@ -2289,7 +2289,7 @@ void __fastcall FUN_005a4200(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t d
 }
 
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 41. While alive: MONSTERAI_TriggerMageThink, then event 7 in 75 frames.
-void __fastcall FUN_005a4230(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2) {
+void __fastcall MONSTER_PeriodicMageThink(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2) {
     BOOL BVar1 = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (BVar1) {
       return;
@@ -2300,7 +2300,7 @@ void __fastcall FUN_005a4230(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t d
 }
 
 // Dispatches an event to all of a unique/champion monster's unique-modifier (MonUMod) handlers. Reads the monster's MonUModList (up to 9 mod slots) and, for each active mod, looks up g_MonsterUModHandlerTable[modId] and calls the handler for the requested event: nParam==5 invokes the per-mod init handler (pfnHandlerInit), otherwise invokes pfnHandlerN indexed by nParam (the event/phase). Passes the mod id and a champion flag (derived from the monster's quest-record byte) to each handler. No-op for non-monster units or units with no mod list. Drives unique-monster modifier behavior (e.g. extra-strong, fire-enchanted) at various lifecycle points.
-static void __stdcall MONSTER_DispatchUniqueModifiers(::SGAMEDATA * pGame, D2UnitStrc * dwParam, int32_t nParam, D2UnitStrc * pUnit) {
+static void __stdcall MONSTER_DispatchUniqueModifiers(::SGAMEDATA * pGame, D2UnitStrc * pMissile, int32_t nEvent, D2UnitStrc * pUnit) {
     uint32_t nSecurityCookie;
     int nUModSlot = 0;
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataPlayer) {
@@ -2316,10 +2316,10 @@ static void __stdcall MONSTER_DispatchUniqueModifiers(::SGAMEDATA * pGame, D2Uni
     if (!(pUModList && *pUModList)) {
       return;
     }
-    if (nParam != 5) {
+    if (nEvent != 5) {
       do {
-        if ((&g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnHandler0)[nParam]) {
-          (*(&g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnHandler0)[nParam])(pGame, pUnit, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
+        if ((&g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnHandler0)[nEvent]) {
+          (*(&g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnHandler0)[nEvent])(pGame, pUnit, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
         }
 
         nUModSlot++;
@@ -2330,7 +2330,7 @@ static void __stdcall MONSTER_DispatchUniqueModifiers(::SGAMEDATA * pGame, D2Uni
 
     do {
       if (g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnHandlerInit) {
-        g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnHandlerInit(pGame, dwParam, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
+        g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnHandlerInit(pGame, pMissile, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
       }
 
       nUModSlot++;
@@ -2341,28 +2341,28 @@ void __fastcall MONSTER_DispatchUModOnSpawn(::SGAMEDATA * pGame, D2UnitStrc * pU
     MONSTER_DispatchUniqueModifiers(pGame, nullptr, 0, pUnit);
 }
 
-void __fastcall MONSTER_DispatchUModOnDeath(::SGAMEDATA * pGame, int * pnParam) {
-    MONSTER_DispatchUniqueModifiers(pGame, nullptr, 1, (D2UnitStrc*)pnParam);
+void __fastcall MONSTER_DispatchUModOnDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    MONSTER_DispatchUniqueModifiers(pGame, nullptr, 1, pUnit);
 }
 
 void __fastcall MONSTER_DispatchUModOnHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     MONSTER_DispatchUniqueModifiers(pGame, nullptr, 2, pUnit);
 }
 
-void __fastcall MONSTER_DispatchUModOnAttack(::SGAMEDATA * pGame, int * pnParam) {
-    MONSTER_DispatchUniqueModifiers(pGame, nullptr, 3, (D2UnitStrc*)pnParam);
+void __fastcall MONSTER_DispatchUModOnAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    MONSTER_DispatchUniqueModifiers(pGame, nullptr, 3, pUnit);
 }
 
-void __fastcall MONSTER_DispatchUModOnSpecial(::SGAMEDATA * pGame, int * pnParam) {
-    MONSTER_DispatchUniqueModifiers(pGame, nullptr, 4, (D2UnitStrc*)pnParam);
+void __fastcall MONSTER_DispatchUModOnSpecial(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    MONSTER_DispatchUniqueModifiers(pGame, nullptr, 4, pUnit);
 }
 
-void __fastcall MONSTER_DispatchUModOnSkill(::SGAMEDATA * pGame, int * pnParam, int32_t nSkillLevel) {
-    if (!(pnParam && *pnParam == 1 && nSkillLevel)) {
+void __fastcall MONSTER_DispatchUModOnSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMissile) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pMissile)) {
       return;
     }
 
-    MONSTER_DispatchUniqueModifiers(pGame, (D2UnitStrc*)nSkillLevel, 5, (D2UnitStrc*)pnParam);
+    MONSTER_DispatchUniqueModifiers(pGame, pMissile, 5, pUnit);
 }
 
 D2UnitStrc * __fastcall SpawnUniquePack(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2RoomCoordListStrc * pCoordList, uint32_t nClassId, BOOL bMostOfTimesTrue, uint16_t nX, uint16_t nY, BOOL bSetOrNotUnknown) {

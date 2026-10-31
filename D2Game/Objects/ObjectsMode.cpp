@@ -258,17 +258,17 @@ void __fastcall OBJMODE_UpdateFillProgress(::SGAMEDATA * pGame, D2UnitStrc * pUn
       uint32_t uVar2;
       byComponent++;
       pUnit->pUnitData.pUnitDataMonster->Components[0] = byComponent;
-      uVar2 = OBJECT_GetDoubledTxtSize((int32_t)pObjectTxt);
+      uVar2 = OBJECT_GetDoubledTxtSize(pObjectTxt);
       if ((int)((uVar2 & 0xff) - uFillLevel) < 0) {
-        nErrorLine = OBJECT_GetDoubledTxtSize((int32_t)pObjectTxt);
+        nErrorLine = OBJECT_GetDoubledTxtSize(pObjectTxt);
         pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = (char)nErrorLine;
-        uVar2 = OBJECT_GetDoubledTxtSize((int32_t)pObjectTxt);
+        uVar2 = OBJECT_GetDoubledTxtSize(pObjectTxt);
         if ((int)((uVar2 & 0xff) - uFillLevel) < 0) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe3);
           exit(-1);
         }
       } else {
-        nErrorLine = OBJECT_GetDoubledTxtSize((int32_t)pObjectTxt);
+        nErrorLine = OBJECT_GetDoubledTxtSize(pObjectTxt);
         if (byComponent <= (uint8_t)nErrorLine) {
           bVar1 = OBJECT_GetDefaultSize();
           if (!(int)((uint64_t)(uint32_t)byComponent % (uint64_t)(int64_t)(int)((uint64_t)(uint8_t)nErrorLine / (uint64_t)(int64_t)(int)(uint32_t)bVar1))) {
@@ -913,8 +913,8 @@ BOOL __fastcall OBJOP_OpenBreakableContainer(D2ObjectOperateFnArg * pOperation) 
     return 1;
 }
 
-static BOOL __stdcall OBJMODE_CheckSpawnMonsterFromSkeletonActRestriction(int32_t nParam, D2RoomStrc * pRoom) {
-    if (!(nParam == 0xea && pRoom)) {
+static BOOL __stdcall OBJMODE_CheckSpawnMonsterFromSkeletonActRestriction(int32_t nMonClassId, D2RoomStrc * pRoom) {
+    if (!(nMonClassId == 0xea && pRoom)) {
       return 1;
     }
 
@@ -1902,7 +1902,7 @@ static void __stdcall SKILL_GetAttackRateForWeapon(D2SkillStrc * pSkill, D2UnitS
 }
 
 // Returns a shrine's effective stat bonus for the given unit stat. For most stats (resistances, stamina, experience, etc.) returns nParam unchanged. For UNITSTAT_tohit, computes the attack rate via SKILL_GetAttackRateForWeapon. For UNITSTAT_mindamage, resolves whether to use primary or secondary min-damage stat based on dual-wield handedness, then fetches the raw stat value and scales it as (statValue * nParam) / 100.
-static int32_t __stdcall OBJMODE_GetModifiedStatValueFromShrine(eD2UnitStat eUnitStat, int32_t nParam, D2UnitStrc * pUnit) {
+static int32_t __stdcall OBJMODE_GetModifiedStatValueFromShrine(eD2UnitStat eUnitStat, int32_t nBoostValue, D2UnitStrc * pUnit) {
     D2SkillStrc* pSkill;
     D2UnitStrc* pWeaponBySkill;
     int nHandedness;
@@ -1928,11 +1928,11 @@ static int32_t __stdcall OBJMODE_GetModifiedStatValueFromShrine(eD2UnitStat eUni
       case UNITSTAT_item_addexperience:
 
       case UNITSTAT_skill_armor_percent:
-        return nParam;
+        return nBoostValue;
       case UNITSTAT_tohit:
         pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, SKILL_Attack, -1);
       SKILL_GetAttackRateForWeapon(pSkill, pUnit, (int*)&eUnitStat, 1, pWeapon);
-      return (int)(eUnitStat * nParam) / 100;
+      return (int)(eUnitStat * nBoostValue) / 100;
       case UNITSTAT_mindamage:
         pWeaponBySkill = D2Common::Units::GetWeaponBySkill(pUnit, 1);
       if (!pWeaponBySkill && !pWeapon || (nHandedness = D2Common::INVENTORY::Inventory::INVENTORY_GetWeaponHandedness(pUnit, pUnit->pInventory) , nHandedness != 2)) {
@@ -1948,7 +1948,7 @@ static int32_t __stdcall OBJMODE_GetModifiedStatValueFromShrine(eD2UnitStat eUni
     }
 
     eUnitStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat_00, 0);
-    return (int)(eUnitStat * nParam) / 100;
+    return (int)(eUnitStat * nBoostValue) / 100;
 }
 
 void __fastcall Shrines_CombatBoostFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
@@ -3501,7 +3501,7 @@ BOOL __fastcall OBJOP_ActivateHealingWell(D2ObjectOperateFnArg * pOperation) {
       }
 
       byChargesLeft = cCharges - 1;
-      nDoubledSize = OBJECT_GetDoubledTxtSize((int32_t)pTxtObjects);
+      nDoubledSize = OBJECT_GetDoubledTxtSize(pTxtObjects);
       if (byChargesLeft <= (uint8_t)nDoubledSize) {
         bVar1 = OBJECT_GetDefaultSize();
         if (!(int)((uint64_t)byChargesLeft % (uint64_t)(int64_t)(int)((uint64_t)(uint8_t)nDoubledSize / (uint64_t)(int64_t)(int)(uint32_t)bVar1))) {

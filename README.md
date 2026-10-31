@@ -63,7 +63,7 @@ Copy `build/d2.exe` next to `Game.exe` in your Diablo II folder and run `d2.exe 
 [`asm_matching/`](asm_matching/README.md) compiles the tree with Visual C++ 2005 SP1 and
 compares the machine code of each function with 1.14d. It is a check on the decompilation:
 where the code comes out identical, the decompiled function was read correctly.
-At this commit, generated from version 1780 of the Ghidra database:
+At this commit, generated from version 1781 of the Ghidra database:
 
 |Measure|Identical machine code|
 |-|-|

@@ -91,12 +91,12 @@ void __thiscall SendPlayerEvent(void * pThis, uint32_t pUnitGid, uint8_t bParam)
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG((D2ClientStrc*)pThis, &sEventPacket);
 }
 
-static void __stdcall SendPlayerInfo(uint16_t nParam, uint32_t nParam2, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2) {
+static void __stdcall SendPlayerInfo(uint16_t wRelationFlag, uint32_t nRelationState, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2) {
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pUnit2);
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit2, pUnit);
-    uint32_t uFlags = UNIT::PlayerList::PLAYERLIST_GetFlagsMasked(pUnit, pUnit2, (uint32_t)nParam);
-    if (uFlags != nParam2) {
-      UNIT::PlayerList::SendRelationshipStatus(pGame, pUnit, pUnit2, (uint32_t)nParam, nParam2);
+    uint32_t uFlags = UNIT::PlayerList::PLAYERLIST_GetFlagsMasked(pUnit, pUnit2, (uint32_t)wRelationFlag);
+    if (uFlags != nRelationState) {
+      UNIT::PlayerList::SendRelationshipStatus(pGame, pUnit, pUnit2, (uint32_t)wRelationFlag, nRelationState);
     }
 
     GAME::SCmd::NET_D2GS_SERVER_Send_0x75_UPDATEROSTER(pUnit, pUnit2);

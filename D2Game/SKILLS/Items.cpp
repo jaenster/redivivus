@@ -1420,7 +1420,7 @@ BOOL __fastcall ITEMMOD_RollRareAffixes(D2UnitStrc * pUnit, D2ItemGenContextStrc
 }
 
 // Returns the book-table index for a scroll or tome item. Fetches the global book table via TXT_Books_GetTableInfo; looks up the item's class code in that table, matching either the book code (nParam==0) or the scroll code (nParam!=0). Returns the matched index, or the total book count if not found, or -1 if the table is null.
-int32_t __fastcall ITEMMOD_GetScrollBookIndex(D2UnitStrc * pUnit, int32_t nParam) {
+int32_t __fastcall ITEMMOD_GetScrollBookIndex(D2UnitStrc * pUnit, int32_t bMatchScrollCode) {
     uint32_t nItemTxtIdx;
     D2BooksTableStrc* pBookTableInfo = D2Common::DATATBLS::ItemTbls::TXT_Books_GetTableInfo();
     if (!pUnit) {
@@ -1445,7 +1445,7 @@ int32_t __fastcall ITEMMOD_GetScrollBookIndex(D2UnitStrc * pUnit, int32_t nParam
 
     char* pcVar1 = pBookTableInfo->pTable->bookspellcode;
     while (true) {
-      int nBookCode = !nParam ? *(int*)pcVar1 : *(int*)(pcVar1 - 4);
+      int nBookCode = !bMatchScrollCode ? *(int*)pcVar1 : *(int*)(pcVar1 - 4);
       if (pDVar4->dwCode == nBookCode) {
         break;
       }

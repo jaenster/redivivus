@@ -50,7 +50,7 @@ namespace D2Game::Monster {
 
 // Function declarations
 struct D2MonPropTxt * __fastcall MONSTER_GetMonPropTxtRecord(int32_t nParam);
-void __fastcall SetAiState(struct D2UnitStrc * pMonster, struct D2UnitStrc * nAiState);
+void __fastcall SetAiState(struct D2UnitStrc * pMonster, int nAiState);
 int __fastcall GetAiState(struct D2UnitStrc * pUnit);
 void __fastcall SetLevelId(struct D2UnitStrc * pUnit, eD2LevelId eLevel);
 eD2LevelId __fastcall GetMonsterArea(struct D2UnitStrc * pUnit);

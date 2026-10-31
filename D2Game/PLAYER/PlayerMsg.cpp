@@ -1484,7 +1484,7 @@ eD2ServerIncomingStatus __stdcall CastSkillOnLocation(D2UnitStrc * pUnit, ::SGAM
 
 // Server-side skill dispatch for player targeting an entity. Resolves dual-swing substitution, checks skill usability (SKILLS_CanUseSkill), and if a skill is blocked by a flags4 condition falls back to SKILL_Attack. On usability==0 with a valid mode, looks up the target unit, follows attached-unit ownership, validates melee/range weapon class against target proximity, then routes to StartModeID or PLRMODES_StartModeID. Returns 0 on success, 2 on failure.
 // @sourcefile .\PLAYER\PlrMsg.cpp
-static void __stdcall PLAYER_ProcessSkillOnEntity(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, eD2UnitType eUnitType, DWORD dwParam, int32_t nParam, D2SkillStrc * pSkill) {
+static void __stdcall PLAYER_ProcessSkillOnEntity(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, eD2UnitType eUnitType, DWORD nTargetGUID, int32_t nParam, D2SkillStrc * pSkill) {
     D2UnitStrc* pOwnerUnit;
     int32_t nSkillWeaponClass;
     eD2Skills eSkillId;
@@ -1511,7 +1511,7 @@ static void __stdcall PLAYER_ProcessSkillOnEntity(D2UnitStrc * pUnit, ::SGAMEDAT
       return;
     }
 
-    D2UnitStrc* pTargetUnit = UNIT::SUnit::FindUnitFromTable(pGame, eUnitType, dwParam);
+    D2UnitStrc* pTargetUnit = UNIT::SUnit::FindUnitFromTable(pGame, eUnitType, nTargetGUID);
     if (pTargetUnit) {
       eD2States eTargetState;
       eTargetState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTargetUnit, STATE_attached);
@@ -1519,7 +1519,7 @@ static void __stdcall PLAYER_ProcessSkillOnEntity(D2UnitStrc * pUnit, ::SGAMEDAT
         pOwnerUnit = UNIT::SUnit::GetOwnerUnit(pGame, pTargetUnit);
         if (pOwnerUnit) {
           eUnitType = pOwnerUnit->eUnitType;
-          dwParam = pOwnerUnit->nUnitGUID;
+          nTargetGUID = pOwnerUnit->nUnitGUID;
           pTargetUnit = pOwnerUnit;
         }
       }
@@ -1530,7 +1530,7 @@ static void __stdcall PLAYER_ProcessSkillOnEntity(D2UnitStrc * pUnit, ::SGAMEDAT
         case 4:
           {
             eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\PLAYER\\PlrMsg.cpp", 0x7dd);
-            StartModeID(eSkillId, pGame, eUnitType, pUnit, dwParam);
+            StartModeID(eSkillId, pGame, eUnitType, pUnit, nTargetGUID);
             return;
           }
         case 1:
@@ -1539,7 +1539,7 @@ static void __stdcall PLAYER_ProcessSkillOnEntity(D2UnitStrc * pUnit, ::SGAMEDAT
             bDualWieldOrMeleeCheck = D2Common::Units::IsInMeleeRange(pUnit, pTargetUnit, bDualWieldOrMeleeCheck);
             if (!bDualWieldOrMeleeCheck) {
               eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\PLAYER\\PlrMsg.cpp", 0x7dd);
-              StartModeID(eSkillId, pGame, eUnitType, pUnit, dwParam);
+              StartModeID(eSkillId, pGame, eUnitType, pUnit, nTargetGUID);
               return;
             }
 
@@ -1548,7 +1548,7 @@ static void __stdcall PLAYER_ProcessSkillOnEntity(D2UnitStrc * pUnit, ::SGAMEDAT
       }
     }
 
-    PlayerModes::PLRMODES_StartModeID(pGame, pUnit, pSkill, nSkillModeIdx, eUnitType, dwParam, 0);
+    PlayerModes::PLRMODES_StartModeID(pGame, pUnit, pSkill, nSkillModeIdx, eUnitType, nTargetGUID, 0);
 }
 
 // C->S Packet 0x05 - Left Skill on Location (5 bytes)

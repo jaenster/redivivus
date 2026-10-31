@@ -300,7 +300,7 @@ void __fastcall MONSTERDATA_FreeMonsterMode(::SGAMEDATA * pGame, D2MonsterPathPa
 }
 
 // Death transition handler for a monster unit. Frees hover-text, calls RemoveMinionsFromAiIfFlag1Set2Not, clears targeting flags (ISVALIDTARGET, CANBEATTACKED), recalculates stats, filters states by boss context, removes light state targetability, optionally enables corpse collision (if deadCol flag not set in MonStats2), sets final facing direction, and starts regen timers via MONSTER_StartAiAndRegenTimers.
-static void __stdcall MONSTERMODE_OnDeath(uint8_t bParam, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+static void __stdcall MONSTERMODE_OnDeath(uint8_t nDirection, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     bool _bHasLightState;
     bool bHasLightState;
     D2MonStatsTxt* pMonStats = 0;
@@ -339,7 +339,7 @@ static void __stdcall MONSTERMODE_OnDeath(uint8_t bParam, ::SGAMEDATA * pGame, D
       D2Common::PATH::DynamicPath::PATH_SetCorpseCollision(pUnit, 1);
     }
 
-    D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, bParam);
+    D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, nDirection);
     MONSTER_StartAiAndRegenTimers(pGame, pUnit);
 }
 
@@ -496,14 +496,14 @@ void __fastcall DropItemForVictim_Unused(::SGAMEDATA * pGame, D2ObjectOperateFnA
 void SetAiState(D2UnitStrc * pUnit, uint32_t nParam) {
     int nAiState = GetAiState(pUnit);
     if (nAiState >= 0x10) {
-      D2Game::Monster::SetAiState(pUnit, (D2UnitStrc*)(nAiState - 0x10));
+      D2Game::Monster::SetAiState(pUnit, nAiState - 0x10);
       return;
     }
     if (nAiState == 0xd && nParam == 3) {
       nParam = 0xd;
     }
 
-    D2Game::Monster::SetAiState(pUnit, (D2UnitStrc*)nParam);
+    D2Game::Monster::SetAiState(pUnit, nParam);
 }
 
 // Periodic server HP-regen/poison-tick event handler for a unit (reschedules itself each game frame). Computes net HP regen (subtracting the server-side hpregen component when a progressive state applies); unless STATE_preventheal blocks healing, applies the delta to UNITSTAT_hitpoints clamped to TxtMaxHp. Town rooms skip damage so you don't die in town. When the HP% changes by more than the threshold it broadcasts packet 0xAB and updates last_sent_hp_pct. If HP reaches zero (and not already dying), it locates the poison/state attacker via GetStatsByState/owner-GUID lookup and either sets STATE_death_delay (if uninterruptable) or calls SERVER_KillMonster and dispatches death (event 10) and kill-credit (event 9) events.
@@ -1578,10 +1578,10 @@ D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32
     return DropHandlerArray + nParam;
 }
 
-static void __stdcall MONSTER_InitiateDefaultDeath(::SGAMEDATA * pGame, int32_t nParam, D2UnitStrc * pUnit) {
+static void __stdcall MONSTER_InitiateDefaultDeath(::SGAMEDATA * pGame, eD2MonsterAnimMode eAnimMode, D2UnitStrc * pUnit) {
     D2MonsterKillStrc sMonsterKill;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-    if (nParam && nParam != 0xc) {
+    if (eAnimMode != Death && eAnimMode != eD2MonsterAnimMode_ns::Dead) {
       BOOL bIsModeZeroDeath;
       bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
       if (bIsModeZeroDeath) {
@@ -1604,7 +1604,7 @@ static void __stdcall MONSTER_InitiateDefaultDeath(::SGAMEDATA * pGame, int32_t 
 }
 
 void __fastcall MONMODE_DispatchDeathDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
-    int nCurrentAnimMode = !pUnit ? 0 : pUnit->eAnimMode.ePlayerMode;
+    int nCurrentAnimMode = !pUnit ? 0 : pUnit->eAnimMode.eMonsterMode;
     D2AiDispatchCallbacksStrc* pDropHandler = GetDropHandler(pUnit, nCurrentAnimMode);
     if (pDropHandler && pDropHandler->pFn2) {
       pDropHandler->pFn2(pGame, (D2MonsterKillStrc*)pUnit);
@@ -1615,7 +1615,7 @@ void __fastcall MONMODE_DispatchDeathDrop(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 void __fastcall ExecuteDropHandlerFn3(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
-    eD2PlayerAnimMode eUnitAnimMode = !pUnit ? Death : pUnit->eAnimMode.ePlayerMode;
+    eD2MonsterAnimMode eUnitAnimMode = !pUnit ? Death : pUnit->eAnimMode.eMonsterMode;
     D2AiDispatchCallbacksStrc* pDropHandler = GetDropHandler(pUnit, eUnitAnimMode);
     if (pDropHandler && pDropHandler->pFn3) {
       pDropHandler->pFn3(pGame, pUnit);
@@ -1704,7 +1704,7 @@ int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2Mo
         MONSTER_SetVelocityPercent(pAiParams, pUnit);
       }
 
-      Monsters::MONSTER_DispatchUModOnDeath(pGame, (int*)pUnit);
+      Monsters::MONSTER_DispatchUModOnDeath(pGame, pUnit);
       eActualAnimMode = pUnit->eAnimMode.eMonsterMode;
       if (nParam && eTargetMode == eActualAnimMode) {
         D2Common::Units::SetCurrentSkill(pUnit, nullptr);

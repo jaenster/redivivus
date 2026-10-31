@@ -1,4 +1,4 @@
-tree b5d95c760-dirty; compiler sp1; flags /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS; D2Client/ /GS-; D2DDraw/ /GS-; D2Direct3D/ /GS-; D2Gdi/ /GS-; D2Glide/ /GS-; D2Launch/ /GS-; D2Launch/Engine/ ; D2MCPClient/ /GS-; D2Multi/ /GS-; D2Sound/ /GS-; D2Win/ /GS-; D2gfx/ /GS-; Fog/3rdparty/crashy /Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT
+tree 674e4b9ba-dirty; compiler sp1; flags /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS; D2Client/ /GS-; D2DDraw/ /GS-; D2Direct3D/ /GS-; D2Gdi/ /GS-; D2Glide/ /GS-; D2Launch/ /GS-; D2Launch/Engine/ ; D2MCPClient/ /GS-; D2Multi/ /GS-; D2Sound/ /GS-; D2Win/ /GS-; D2gfx/ /GS-; Fog/3rdparty/crashy /Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT
 Without the C runtime: 5697 of 14812 functions MATCH (38.46%), 394199 of 2555443 bytes (15.43%)
   runtime left out: 709 functions (123094 bytes): libmap pairs, the library run 00681a48..006b00b3, import thunks, runtime.tsv
 whole binary:
@@ -13,8 +13,8 @@ mapped and compared: 13857
   MISSING                0
 matched code: 445194 bytes (16.62% of the original)
   of which the statically linked runtime (libmap.tsv): 421 compared (95143 bytes), 353 MATCH (50983 bytes)
-pairings by funcmap tier: sourcemap 12106, votes 434, exact 371, lib-exact 309, bracket 248, calls 163, lib-order 58, align 40, lib-similar 39, refs 34, string 22, lib-votes 15, name 14, import 4
+pairings by funcmap tier: sourcemap 12106, votes 434, exact 374, lib-exact 309, bracket 248, calls 163, lib-order 58, align 40, lib-similar 39, refs 34, string 22, lib-votes 15, name 11, import 4
 globals seen at aligned instructions: 2281, of which consistent 2210 (datamap.tsv)
-self-check, names carrying their own address: 205 agree, 2 elsewhere
+self-check, names carrying their own address: 202 agree, 2 elsewhere
   look at: D2Direct3D::Renderer::Catch_All_006b4c42 at 006b4770
   look at: D2Direct3D::Renderer::Catch_All_006b4c73 at 006b4900

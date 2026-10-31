@@ -94,12 +94,12 @@ D2MonPropTxt * __fastcall MONSTER_GetMonPropTxtRecord(int32_t nParam) {
     return nullptr;
 }
 
-void __fastcall SetAiState(D2UnitStrc * pMonster, D2UnitStrc * nAiState) {
+void __fastcall SetAiState(D2UnitStrc * pMonster, int nAiState) {
     if (!(pMonster && pMonster->eUnitType == UNIT_MONSTER && pMonster->pUnitData.pUnitDataMonster)) {
       return;
     }
 
-    pMonster->pUnitData.pUnitDataMonster->nAiState = (int)nAiState;
+    pMonster->pUnitData.pUnitDataMonster->nAiState = nAiState;
 }
 
 int __fastcall GetAiState(D2UnitStrc * pUnit) {

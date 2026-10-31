@@ -848,14 +848,14 @@ void __fastcall MISSILES_SpawnSubMissileAlongPath(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // Spawns a missile of a given type at a random position near the parent missile, but only every nParam2 frames (throttled by remaining-frames modulo). Uses remaining-frame count + X-pos as a deterministic seed offset. Picks a random (x,y) offset within nParam1 radius, collision-checks the candidate tile, and calls CreatingMissile if clear. Returns the spawned unit or null.
-static D2UnitStrc * __stdcall MISSILES_SpawnPeriodicRandom(::SGAMEDATA * pGame, int32_t nParam1, eMissilesId pParam, int32_t eCollisionFlag, int32_t nParam2, D2UnitStrc * pUnit) {
+static D2UnitStrc * __stdcall MISSILES_SpawnPeriodicRandom(::SGAMEDATA * pGame, int32_t nRadius, eMissilesId eMissileId, int32_t eCollisionFlag, int32_t nPeriod, D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
-    if (!nParam2) {
+    if (!nPeriod) {
       return nullptr;
     }
 
     int32_t nTempVal = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-    if (nTempVal % nParam2) {
+    if (nTempVal % nPeriod) {
       return nullptr;
     }
 
@@ -878,8 +878,8 @@ static D2UnitStrc * __stdcall MISSILES_SpawnPeriodicRandom(::SGAMEDATA * pGame, 
     sSkillArg.pOwner = pOwnerUnit;
     sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
     sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-    int nHalfRange = nParam1 - 1;
-    sSkillArg.nMissileTxtNo = pParam;
+    int nHalfRange = nRadius - 1;
+    sSkillArg.nMissileTxtNo = eMissileId;
     uint32_t nRandX = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, nHalfRange * 2);
     uint32_t nRandY = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, nHalfRange * 2);
     nTempVal = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
@@ -1730,7 +1730,7 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaDamageWithDurationMod(::SGAMEDATA * pGam
 }
 
 // Spawns up to 18 child missiles in a fixed radial pattern around the parent missile's current position. Iterates the gaMissileOffsets_RadialPattern18 table in steps of nParam2*4 (stride to skip entries), each offset applied to the unit's X/Y center. nParam1 sets fixed lifetime (flag 0x8000). Inherits owner/skill/level from parent.
-static void __stdcall MISSILES_SpawnRadialPattern18(::SGAMEDATA * pGame, eMissilesId pParam, int32_t nParam1, int32_t nParam2, D2UnitStrc * pUnit) {
+static void __stdcall MISSILES_SpawnRadialPattern18(::SGAMEDATA * pGame, eMissilesId eMissileId, int32_t nLifetime, int32_t nStride, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static int gnSubMissileCount_RadialPattern18[18] = {
     0x2,
@@ -1776,7 +1776,7 @@ static void __stdcall MISSILES_SpawnRadialPattern18(::SGAMEDATA * pGame, eMissil
     D2SkillArgStrc sSkillArg;
     int nCenterY;
     int nCenterX;
-    if ((int)pParam < 0) {
+    if ((int)eMissileId < 0) {
       return;
     }
 
@@ -1803,14 +1803,14 @@ static void __stdcall MISSILES_SpawnRadialPattern18(::SGAMEDATA * pGame, eMissil
     int32_t nSkillLvl = D2Common::Units::Missile::GetLevel(pUnit);
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 1;
-    if (nParam1 > 0) {
+    if (nLifetime > 0) {
       sSkillArg.nFlags = 0x8001;
-      sSkillArg.nTotalFrames = nParam1;
+      sSkillArg.nTotalFrames = nLifetime;
     }
 
-    sSkillArg.nMissileTxtNo = pParam;
-    if (nParam2 < 1) {
-      nParam2 = 1;
+    sSkillArg.nMissileTxtNo = eMissileId;
+    if (nStride < 1) {
+      nStride = 1;
     }
 
     int nPatternOffset = 0;
@@ -1821,7 +1821,7 @@ static void __stdcall MISSILES_SpawnRadialPattern18(::SGAMEDATA * pGame, eMissil
       sSkillArg.nY = *(int*)((int)gaMissileOffsets_RadialPattern18 + nPatternOffset) + nCenterY;
       sSkillArg.nX = *(int*)((int)gnSubMissileCount_RadialPattern18 + nPatternOffset) + nCenterX;
       Missiles::CreatingMissile(pGame, &sSkillArg);
-      nPatternOffset += nParam2 * 4;
+      nPatternOffset += nStride * 4;
     } while (nPatternOffset < 0x48);
 }
 
@@ -3207,7 +3207,7 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaDamageLargeMonstersAndRadialBurst(::SGAM
     BOOL bIsLarge;
     int32_t nSkillLvl;
     D2SkillsTxt* pSkillTxt;
-    int nParam2;
+    int nStride;
     D2DamageStrc sDamage;
     D2UnitStrc* pOrigTarget = pTarget;
     if (!pUnit) {
@@ -3267,12 +3267,12 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaDamageLargeMonstersAndRadialBurst(::SGAM
       nTarget = 0x3;
     }
 
-    nParam2 = pMissileTxt->sHitPar2;
-    if (nParam2 < 1) {
-      nParam2 = 1;
+    nStride = pMissileTxt->sHitPar2;
+    if (nStride < 1) {
+      nStride = 1;
     }
 
-    MISSILES_SpawnRadialPattern18(pGame, (int)pMissileTxt->HitSubMissile1, nAreaRadiusTxt, nParam2, pUnit);
+    MISSILES_SpawnRadialPattern18(pGame, (int)pMissileTxt->HitSubMissile1, nAreaRadiusTxt, nStride, pUnit);
     return nTarget;
 }
 

@@ -216,7 +216,7 @@ void __fastcall OBJECT_CallPopulateFn(::SGAMEDATA * pGame, struct D2RoomStrc * p
 void __fastcall OBJECT_PopulateFromObjGroup(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nObjGroupId);
 void __fastcall OBJECT_FreeObjectData(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall FreeObjects(::SGAMEDATA * pGame);
-int32_t __fastcall OBJECT_GetDoubledTxtSize(int32_t nParam);
+int32_t __fastcall OBJECT_GetDoubledTxtSize(struct D2ObjectsTxt * pObjectsTxt);
 uint8_t __stdcall OBJECT_GetDefaultSize();
 void __fastcall OBJECTS_SetUnitIdInTimerArg(struct D2UnitStrc * pUnit, int32_t nParam);
 int32_t __fastcall GetUnitGUIDFromUnitTimerArg(struct D2UnitStrc * pUnit);

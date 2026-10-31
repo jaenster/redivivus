@@ -370,7 +370,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
       D2Common::Units::Missile::SetFlags(pUnit, dwFlags | 2);
     }
 
-    Monsters::MONSTER_DispatchUModOnSkill(pGame, (int*)pArgs->pOwner, (int32_t)pUnit);
+    Monsters::MONSTER_DispatchUModOnSkill(pGame, pArgs->pOwner, pUnit);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_damage_framerate, pMissileTxt->DamageRate, 0);
     return pUnit;
 }

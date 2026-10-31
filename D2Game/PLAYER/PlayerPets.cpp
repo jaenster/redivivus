@@ -289,7 +289,7 @@ static int32_t GetPetUidByIndex(int32_t nIndex, D2UnitStrc * pUnit) {
 
 // Removes a single pet entry (by GUID) from a D2PetListStrc and handles its death. Unlinks the node from the linked list, broadcasts a 0x7A summon-log packet to all units, then either clears the ISREVIVE flag (nParam=0) or actively kills the pet unit. Frees the node memory and decrements the pet count; halts if count goes negative.
 // @sourcefile .\PLAYER\PlayerPets.cpp
-static void __stdcall KillingPets(uint32_t nTargetGUID, D2PetListStrc * pPetList, int32_t nParam, ::SGAMEDATA * pGame) {
+static void __stdcall KillingPets(uint32_t nTargetGUID, D2PetListStrc * pPetList, int32_t bKill, ::SGAMEDATA * pGame) {
     uint32_t petPacketArgs[7];
     D2PetStrc* pMemoryToFree;
     D2PetStrc* pCurPet = pPetList->pPets;
@@ -318,7 +318,7 @@ static void __stdcall KillingPets(uint32_t nTargetGUID, D2PetListStrc * pPetList
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)Send0x7aSummonLog, petPacketArgs);
     D2UnitStrc* pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pMemoryToFree->nPetGUID);
     if (pPetUnit) {
-      if (nParam) {
+      if (bKill) {
         KillHandlerPet(pMemoryToFree->nPetGUID, pGame);
       } else {
         pPetUnit->eUnitFlags &= ~UNITFLAG_ISREVIVE;
