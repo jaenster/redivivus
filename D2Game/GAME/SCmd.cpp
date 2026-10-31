@@ -2605,7 +2605,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA(D2C
 // @evidence Loops INVENTORY_GetFirstItem/GetNextItem plus GetCarriedItem, sets
 // server flag 8 and sends one 0x9D per item. 0053d330 sends exactly one.
 void __fastcall Send0x9DAllSocketedItems(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint32_t eItemFlags) {
-    bool _bHasInv;
+    int32_t _bHasInv;
     bool bHasInv;
     bool bIsRemoved;
     D2UnitStrc* pSocketItem;

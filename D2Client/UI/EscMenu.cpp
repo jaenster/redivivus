@@ -116,7 +116,7 @@ void __fastcall UI_SLIDER_ApplyMusicVolume(D2EscMenuItemStrc * pItem, D2UIMouseM
 }
 
 void __fastcall ESCMENU_Init3DSoundItem(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
-    bool _bIs3DActive;
+    BOOL _bIs3DActive;
     bool bIs3DActive;
     _bIs3DActive = GAME::Sound::SOUND_Is3DMixerActive();
     pItem->nImageIndex = _bIs3DActive;

@@ -1985,6 +1985,7 @@ BOOL __fastcall HasShield(D2UnitStrc * pUnit) {
 
     uint8_t byComponent;
     eD2MonsterClassId nClassId;
+    D2UnitStrc* pShieldItem;
     if (!pUnit || (nClassId = pUnit->nClassId , (int)nClassId < 0) || (int)nClassId >= sgptDataTable->nTxtMonStatsSize) {
       nClassId = ~MonsterUnitSkeleton1;
     }
@@ -2006,7 +2007,6 @@ BOOL __fastcall HasShield(D2UnitStrc * pUnit) {
       byComponent = pUnit->pUnitData.pUnitDataMonster->Components[7];
     }
 
-    D2UnitStrc* pShieldItem = pUnit;
     D2UnitStrc* pOverlayCode = DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay(pUnit, 7, (uint32_t)byComponent);
     if (!pOverlayCode) {
       return 0;
@@ -2345,12 +2345,19 @@ BOOL __stdcall IsInMeleeRange(D2UnitStrc * pUnit, D2UnitStrc * pTarget, int32_t 
       if (nBaseId < 0 || nBaseId >= sgptDataTable->nTxtMonStatsSize) {
         nBaseId = -1;
       }
-      if (nBaseId == 0x102 || nBaseId == 0x105) {
-        nMeleeRangeAttacker = Collision::GetDistanceBetweenUnits(pUnit, pTarget);
-        nMeleeRange = GetMeleeRange(pUnit);
-        if (nMeleeRange + 8 > nMeleeRangeAttacker) {
-          return 1;
-        }
+
+      switch (nBaseId) {
+        case 0x102:
+          case 0x105:
+            {
+              nMeleeRangeAttacker = Collision::GetDistanceBetweenUnits(pUnit, pTarget);
+              nMeleeRange = GetMeleeRange(pUnit);
+              if (nMeleeRange + 8 > nMeleeRangeAttacker) {
+                return 1;
+              }
+
+              break;
+            }
       }
     }
 
@@ -2822,7 +2829,7 @@ BOOL __stdcall CanDualWield(D2UnitStrc * pUnit) {
 }
 
 BOOL __stdcall IsCorpseUseable(D2UnitStrc * pUnit) {
-    bool _bHasPassiveState;
+    int _bHasPassiveState;
     bool bHasPassiveState;
     if ((pUnit ? pUnit->eUnitType : ~UNIT_MONSTER) != UNIT_MONSTER) {
       return 0;

@@ -335,7 +335,7 @@ BOOL __stdcall IsRightScreenOpen() {
 }
 
 static void MINIPANEL_HandleButtonClick(int32_t nButtonId) {
-    bool _bFlagActive;
+    BOOL _bFlagActive;
     bool bFlagActive;
     eD2GSGameType eGameType;
     BOOL bFlagSet;

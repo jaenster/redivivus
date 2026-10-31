@@ -697,7 +697,7 @@ int __fastcall IsActive(D2UnitStrc * pUnit) {
 
 // Returns true if the unit is in a "dead/dying" animation state, per unit type: player=Dead anim, monster=Kick anim (unless unflatDead flag set), object=DrawUnder flags or Walk+flag, missile=UNITFLAG_ISDEAD, item=Run anim. Returns false for null unit or no match.
 int32_t __fastcall IsAlive(D2UnitStrc * pUnit) {
-    bool _bIsUnflatDead;
+    BOOL _bIsUnflatDead;
     bool bIsUnflatDead;
     D2ObjectsTxt* pObjectsTxt;
     if (!pUnit) {
@@ -1260,12 +1260,19 @@ void __fastcall CLIENT_SyncPathFromServer(D2DynamicPathStrc * pDynamicPath) {
               }
             }
           } else {
-            if (eNewMode != Walk && eNewMode != eD2PlayerAnimMode_ns::Skill3) {
-              goto clear_path_flag;
+            switch (eNewMode) {
+              default:
+                {
+                  goto clear_path_flag;
+                }
+              case Walk:
+                case eD2PlayerAnimMode_ns::Skill3:
+                  {
+                    LAB_004652e8:
+                    nAnimMode = eD2PlayerAnimMode_ns::Neutral;
+                    break;
+                  }
             }
-
-            LAB_004652e8:
-            nAnimMode = eD2PlayerAnimMode_ns::Neutral;
           }
 
           goto LAB_004653bb;

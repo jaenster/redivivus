@@ -142,19 +142,25 @@ void __fastcall OBJMODE_UpdateDayNightState(::SGAMEDATA * pGame, D2UnitStrc * pU
       eCollFlags = pUnit->eAnimMode.eMissileCollision;
       if (pUnit->nClassId == 399) {
         eAnimMode = pUnit->eAnimMode.ePlayerMode & 0xffff;
-        if (eAnimMode != eD2ObjectAnimMode_ns::Neutral && eAnimMode != Opened) {
-          return;
+        switch (eAnimMode) {
+          default:
+            {
+              return;
+            }
+          case eD2ObjectAnimMode_ns::Neutral:
+            case Opened:
+              {
+                pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+                pSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
+                sNewSeed = D2_SEED_NEXT(*pSeed);
+                *pSeed = sNewSeed;
+                GAME::Event::SetEvent(pGame, pUnit, 8, sNewSeed.nSeedLow % 0xfa + 0x19 + pGame->dwGameFrame, 0, 0);
+                D2Common::Units::SetupUpdateFlag(pUnit, 1);
+                pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit->nClassId);
+                GAME::Event::SetEvent(pGame, pUnit, 1, (pObjTxt->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
+                return;
+              }
         }
-
-        pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-        pSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
-        sNewSeed = D2_SEED_NEXT(*pSeed);
-        *pSeed = sNewSeed;
-        GAME::Event::SetEvent(pGame, pUnit, 8, sNewSeed.nSeedLow % 0xfa + 0x19 + pGame->dwGameFrame, 0, 0);
-        D2Common::Units::SetupUpdateFlag(pUnit, 1);
-        pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit->nClassId);
-        GAME::Event::SetEvent(pGame, pUnit, 1, (pObjTxt->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
-        return;
       }
     }
 
@@ -1039,7 +1045,7 @@ void __fastcall OBJMODE_SpawnSiegeMonsterD(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 static void __stdcall OBJMODE_DispatchOperateCallback(D2ObjectOperateFnArg * pOperation, uint8_t nFunctionId) {
-    bool _bBadCallback;
+    BOOL _bBadCallback;
     bool bBadCallback;
     bool bActAllowed;
     D2RoomStrc* pRoom;
@@ -1097,7 +1103,7 @@ static BOOL OBJMODE_CheckInventoryHasItemType(eD2ItemTypes eItemType, D2UnitStrc
 // Object operate-fn for the Horadric Cube chest object. If the cube is closed (Death mode or null) and the player is not already trading: checks the player's inventory for a Gem-type item (required to open the cube); if absent plays a sound. If a gem is present, sets interact info to the cube's GUID, marks the cube open (SetupUpdateFlag 3), and sends SCMD 0x58 (OpenUI) to the client. If the cube is already open (Run mode) and it matches the current NPC interaction, closes it (ClearInteractInfo, SetupUpdateFlag 1). Always returns 1.
 // @sourcefile .\OBJECTS\ObjMode.cpp
 BOOL __fastcall OBJOP_OpenHoradricCube(D2ObjectOperateFnArg * pOperation) {
-    bool _bHasGemInInventory;
+    BOOL _bHasGemInInventory;
     bool bHasGemInInventory;
     uint32_t nCubeUnitGUID;
     D2GSPacketSrv0x58 sPacket;
@@ -1145,7 +1151,7 @@ BOOL __fastcall OBJOP_OpenHoradricCube(D2ObjectOperateFnArg * pOperation) {
 
 // Returns 1 if pUnit is a valid targetable monster for pUnit2 (e.g. for shrine/object counter-attack targeting). Checks: pUnit != pUnit2, is UNIT_MONSTER, not an ally of pUnit2, neutral alignment, not dead, in Neutral or Walk anim mode, has the required monster stat flag (index 2), has a non-zero Height in MonStats2, and is neither a boss nor flagged by MonStatFlag bit 7 nor of type 0x1F. Returns 0 otherwise.
 uint32_t __fastcall OBJECT_CanTargetMonster(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    bool _bIsAlly;
+    BOOL _bIsAlly;
     bool bIsAlly;
     bool bIsDead;
     if (pUnit == pUnit2) {
@@ -1283,7 +1289,7 @@ void __fastcall Shrines_ShrineOfEnirhsFunction(D2ObjectOperateFnArg * pArguments
 }
 
 void __fastcall Shrines_PortalShrineFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
-    eAct _eStack_8;
+    uint32_t _eStack_8;
     POINT ptAttackerCoords;
     eAct eStack_8;
     uint32_t uActPad;
@@ -2285,7 +2291,7 @@ BOOL __fastcall OBJOP_SpawnNormalItemDrop(D2ObjectOperateFnArg * pOperation) {
 
 // Iterator callback (EDI = SGAMEDATA**) that applies counter-attack damage from a source object to all nearby units in its room. For each unit in the room: players not in Dead mode within range 3 take MONSTERAI_CalculateCounterAttackDamage; monsters not in Kick mode within range 3 take the same; explosive-barrel objects (pHashLink1==0xb, Death mode) within collision distance 3 are detonated via OBJOP_DetonateExplosiveBarrel. Passes the constructed sOperation for barrel detonation.
 static int OBJMODE_ApplyCounterAttackToNearbyUnits(::SGAMEDATA * * ppGame) {
-    bool _bInRange;
+    uint32_t _bInRange;
     bool bInRange;
     int32_t nCollisionDist;
     D2ObjectOperateFnArg sOperation;
@@ -2476,21 +2482,28 @@ void __thiscall OBJECT_UpdateCollisionOnModeChange(void * pThis, DWORD nGid) {
     uint32_t nVectorX = D2Common::Units::GetUnitSizeX(pUnit);
     uint32_t nVectorY = D2Common::Units::GetUnitSizeY(pUnit);
     eD2ObjectAnimMode eAnimMode = pUnit->eAnimMode.eObjectMode;
-    if (eAnimMode != eD2ObjectAnimMode_ns::Neutral) {
-      if (eAnimMode == Opened || eAnimMode == Special3) {
-        wCollisionResult = D2Common::Collision::CheckCollision_Vector(pRoom, ptPos.x, ptPos.y, nVectorX, nVectorY, 0x8180);
-        if (wCollisionResult == COLBIT_NONE) {
-          if (eAnimMode != Opened) {
-            D2Common::Units::SetupUpdateFlag(pUnit, 2);
-            return;
-          }
-        } else if (eAnimMode != Special3) {
-          D2Common::Units::SetupUpdateFlag(pUnit, 5);
-          return;
+    switch (eAnimMode) {
+      case eD2ObjectAnimMode_ns::Neutral:
+        {
+          D2Common::Collision::CheckCollision_Vector(pRoom, ptPos.x, ptPos.y, nVectorX, nVectorY, 0x8180);
+          break;
         }
-      }
-    } else {
-      D2Common::Collision::CheckCollision_Vector(pRoom, ptPos.x, ptPos.y, nVectorX, nVectorY, 0x8180);
+      case Opened:
+        case Special3:
+          {
+            wCollisionResult = D2Common::Collision::CheckCollision_Vector(pRoom, ptPos.x, ptPos.y, nVectorX, nVectorY, 0x8180);
+            if (wCollisionResult == COLBIT_NONE) {
+              if (eAnimMode != Opened) {
+                D2Common::Units::SetupUpdateFlag(pUnit, 2);
+                return;
+              }
+            } else if (eAnimMode != Special3) {
+              D2Common::Units::SetupUpdateFlag(pUnit, 5);
+              return;
+            }
+
+            break;
+          }
     }
 }
 
@@ -2522,7 +2535,7 @@ BOOL __fastcall OBJOP_A2Q2_ArcaneGateLevelTransition(D2ObjectOperateFnArg * pOpe
 
 // Object operate-fn (index 46): activates the portal to Act 4 (Pandemonium Fortress). Guards: victim object must be alive (not Death mode) and the attacker must have QUEST_TheGuardian in JustCompleted or Completed state. Calls QUEST_HandleKhalimsWillCompletion, and if the victim is in DuranceOfHateLevel3 also unlocks the ThePandemoniumFortress waypoint and calls InitLevel to load Act 4. Returns 0.
 BOOL __fastcall Objects_OperateFn46_PortalToAct4(D2ObjectOperateFnArg * pOperation) {
-    bool _bQuestDone;
+    BOOL _bQuestDone;
     bool bQuestDone;
     bool nWaypointFound;
     int32_t nWaypointId = (int32_t)pOperation;

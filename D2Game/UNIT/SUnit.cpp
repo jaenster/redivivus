@@ -383,7 +383,7 @@ D2ClientStrc * __fastcall SUNIT_GetClient(D2UnitStrc * pUnit, char * szFile, int
 }
 
 void __fastcall UNITS_SendUnitUpdateToClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
-    bool _bNeedsRoomUpdate;
+    uint32_t _bNeedsRoomUpdate;
     bool bNeedsRoomUpdate;
     _bNeedsRoomUpdate = D2Common::Units::NeedsRoomUpdate(pUnit);
     if (!(_bNeedsRoomUpdate && (!pUnit || !(pUnit->eUnitFlags >> 4 & 1)))) {
@@ -1263,7 +1263,7 @@ static void __stdcall UNITS_OnAlignmentChanged(int32_t nParam, int32_t pStatEx, 
 
 // Sets the alignment stat (good/neutral/evil, values 0-2) on a unit via the STATE_alignment stat list. Allocates and attaches the stat list if absent, stores the alignment value, toggles the alignment GFX state (0x69), and calls UNITS_OnAlignmentChanged with old and new values. Skips the change for revived units with alignment 0 (neutral). Certain monster class IDs (0x15F/0x160/0x161) always bypass the revive check. The alignment argument is a single byte: callers set only DL and the prologue does MOVZX EBX, DL, so the upper 24 bits of EDX are dead.
 void __fastcall SetAlignment(D2UnitStrc * pUnit, uint8_t nAlignment, int32_t nOldAlignment) {
-    bool _bIsRevive;
+    uint32_t _bIsRevive;
     bool bIsRevive;
     uint32_t nValue;
     uint32_t nValue_00 = (uint32_t)nAlignment;
@@ -1398,7 +1398,7 @@ BOOL __fastcall SetDamageHitClass(D2DamageStrc * pEvent, uint32_t nParam) {
 
 // Server-side per-unit visibility reconciliation between two client sets (the unit's current room vs its target/destination room). Merge-walks both sorted client lists: clients only in the target room get SERVER_SendInitUnitPacket (unit becomes visible to them); clients only in the current room get SendRemoveObject (unit removed); the unit's own owning client is skipped. No-ops unless Units::NeedsRoomUpdate(pUnit). On completion clears the dynamic-path 0x02 (needs-update) flag. Halts on null client-list pointers.
 void __fastcall UNITS_UpdateRoomClientVisibility(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc * pRoom) {
-    bool _bNeedsRoomUpdate;
+    uint32_t _bNeedsRoomUpdate;
     bool bNeedsRoomUpdate;
     D2RoomStrc* pTargetRoom;
     D2ClientStrc* pClient;
@@ -1706,7 +1706,7 @@ void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 int32_t __fastcall UNITS_ProcessUnitMovement(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bNeedsRoomUpdate;
+    uint32_t _bNeedsRoomUpdate;
     bool bNeedsRoomUpdate;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x72e);
@@ -1779,7 +1779,7 @@ uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Returns 1 if pUnit and pOther are allies (same unit = always ally). For monsters, resolves to owner player first. For two players, checks that both share the same party ID (via GetPartyIdFromUnit) and neither has party ID -1. Falls back to Path::IsAllyOf for non-player pairs. Used to gate friendly-fire vs. ally-targeted skill application.
 BOOL __fastcall SKILL_CanUnitTargetAlly(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pOther) {
-    bool _bIsAlly;
+    BOOL _bIsAlly;
     int16_t nUnitPartyId;
     int16_t nOtherPartyId;
     bool bIsAlly;

@@ -883,7 +883,7 @@ int32_t __fastcall PLAYER_CountLivingPlayersInLevel(::SGAMEDATA * pGame, eD2Leve
 }
 
 void __fastcall CountModeZeroDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * pnAlivePlayerCount) {
-    bool _hasModeZero;
+    BOOL _hasModeZero;
     bool hasModeZero;
     DWORD PlayerCountRelated;
     _hasModeZero = UNIT::SUnit::CheckForModeZeroDeath(pUnit);

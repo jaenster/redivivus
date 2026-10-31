@@ -420,7 +420,7 @@ int __stdcall NET_MCP_CLIENT_SendPacketToQSocket(D2QSSocketStrc * pQSocket, char
 }
 
 int32_t __stdcall NET_MCP_CLIENT_Send(D2QSSocketStrc * pQSocket, char * pBytes, uint16_t nDataSizeNoHeader) {
-    uint16_t _nDataSizeNoHeader;
+    uint32_t _nDataSizeNoHeader;
     uint32_t nTotalSendSize;
     uint8_t abLenHeader[4];
     uint8_t aSendBuf[8292];

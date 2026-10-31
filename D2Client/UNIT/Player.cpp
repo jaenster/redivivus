@@ -523,49 +523,60 @@ static void CLIENT_OnPlayerEnterRoom(D2UnitStrc * pUnit) {
 
 // Client-side collision check for a player unit in Neutral or TownNeutral anim mode. Reads the unit's current tile position, tests for solid-blocking collision via CheckCollision_BlockAll_Type, and if blocked calls GetFreeCoordinates_WithNeighboorRooms + CLIENT_TeleportUnitToPosition to push the unit to the nearest free tile.
 static void CLIENT_ResolvePlayerCollision(D2UnitStrc * pUnit) {
+    eCollisionFlags eCollideResult;
     eD2PlayerAnimMode eAnimMode;
+    D2RoomStrc* pRoom;
+    int32_t nUnitWidth;
+    int32_t eCollisionFlag;
+    int32_t iVar1;
     POINT sTilePos;
+    BOOL bAllowNeighboorRooms;
+    eD2UnitType eUnitType;
     if (!pUnit) {
       eAnimMode = Death;
     } else {
       eAnimMode = pUnit->eAnimMode.ePlayerMode;
     }
-    if (!(eAnimMode == eD2PlayerAnimMode_ns::Neutral || eAnimMode == TownNeutral)) {
-      return;
-    }
 
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      sTilePos.x = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      sTilePos.x = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      sTilePos.x = 0;
-    }
+    switch (eAnimMode) {
+      case eD2PlayerAnimMode_ns::Neutral:
+        case TownNeutral:
+          {
+            eUnitType = pUnit->eUnitType;
+            if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+              sTilePos.x = pUnit->pPath.pStaticPath->nPosX;
+            } else if (pUnit->pPath.pDynamicPath) {
+              sTilePos.x = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+            } else {
+              sTilePos.x = 0;
+            }
 
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      sTilePos.y = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      sTilePos.y = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      sTilePos.y = 0;
-    }
+            eUnitType = pUnit->eUnitType;
+            if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+              sTilePos.y = pUnit->pPath.pStaticPath->nPosY;
+            } else if (pUnit->pPath.pDynamicPath) {
+              sTilePos.y = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+            } else {
+              sTilePos.y = 0;
+            }
 
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return;
-    }
+            pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+            if (pRoom) {
+              iVar1 = 0xc01;
+              nUnitWidth = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
+              eCollideResult = D2Common::Collision::CheckCollision_BlockAll_Type(pRoom, sTilePos.x, sTilePos.y, nUnitWidth, iVar1);
+              if (eCollideResult != COLLIDE_NONE) {
+                bAllowNeighboorRooms = 1;
+                eCollisionFlag = 0xc01;
+                iVar1 = D2Common::Units::GetUnitSizeX(pUnit);
+                D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &sTilePos, iVar1, eCollisionFlag, bAllowNeighboorRooms);
+                CUnit::CLIENT_TeleportUnitToPosition(pUnit, sTilePos.x, sTilePos.y, 0);
+              }
+            }
 
-    int32_t iVar1 = 0xc01;
-    int32_t nUnitWidth = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
-    eCollisionFlags eCollideResult = D2Common::Collision::CheckCollision_BlockAll_Type(pRoom, sTilePos.x, sTilePos.y, nUnitWidth, iVar1);
-    if (eCollideResult == COLLIDE_NONE) {
-      return;
+            break;
+          }
     }
-
-    D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &sTilePos, D2Common::Units::GetUnitSizeX(pUnit), 0xc01, 1);
-    CUnit::CLIENT_TeleportUnitToPosition(pUnit, sTilePos.x, sTilePos.y, 0);
 }
 
 static void CLIENT_HandlePlayerDeath(D2UnitStrc * pUnit) {
@@ -1179,23 +1190,28 @@ static void __stdcall PLAYER_ExecuteSkillAtUnit(eD2UnitType eTargetUnitType, int
           return;
         }
       }
-      if (nWeaponClass == 1 || nWeaponClass == 4) {
-        nWeaponClass = 0;
-        if (!(*(uint8_t*)&pUnderMouse->flags & 0x20)) {
-          UnitMode::UNITMODE_ExecuteSkillAction(pUnderMouse->nAttackActionType, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID, 0);
-          if (*(uint8_t*)&pUnderMouse->flags & 1) {
-            Engine::StoreLastSkillHit(unk1, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
-          }
-          if (!(*(uint8_t*)&pUnderMouse->flags & 2)) {
-            return;
-          }
 
-          Engine::StoreLastSkillHit(unk3 | Poison, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
-          return;
-        }
+      switch (nWeaponClass) {
+        case 1:
+          case 4:
+            {
+              nWeaponClass = 0;
+              if (!(*(uint8_t*)&pUnderMouse->flags & 0x20)) {
+                UnitMode::UNITMODE_ExecuteSkillAction(pUnderMouse->nAttackActionType, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID, 0);
+                if (*(uint8_t*)&pUnderMouse->flags & 1) {
+                  Engine::StoreLastSkillHit(unk1, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+                }
+                if (!(*(uint8_t*)&pUnderMouse->flags & 2)) {
+                  return;
+                }
 
-        PLAYER_ExecuteModeBasedAction(nWeaponClass, pUnderMouse);
-        return;
+                Engine::StoreLastSkillHit(unk3 | Poison, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+                return;
+              }
+
+              PLAYER_ExecuteModeBasedAction(nWeaponClass, pUnderMouse);
+              return;
+            }
       }
     }
 
@@ -2509,8 +2525,8 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
     }
 }; D2_STATIC_GUARD(gaPlayerModeAttribs, "D2Client::UNIT::Player::PLAYER_ProcessPlayerModeSimulation::gaPlayerModeAttribs");
 
-    bool _bStepDone;
-    bool _bHasDmgState;
+    uint32_t _bStepDone;
+    BOOL _bHasDmgState;
     D2DynamicPathStrc* pDynamicPath_00;
     bool bHasDmgState;
     uint16_t nX;

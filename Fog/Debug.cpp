@@ -1887,9 +1887,6 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
     uint32_t nStrLen;
     bool bCarry;
     char* pszRelFileName;
-    ULONGLONG qwSymCycles;
-    ULONGLONG qwModInfoCycles;
-    ULONGLONG qwFmtCycles;
     char* pszSymName;
     HANDLE hProcessCur;
     __frame1.pContextCopy = pContext;
@@ -1903,12 +1900,9 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
     uint32_t nCyclesAcc = 0;
     uint32_t nCycleSample = 0;
     int nWalkCyclesHi = 0;
-    *(uint32_t*)(char*)&qwSymCycles = 0;
-    *(uint32_t*)((char*)&qwSymCycles + 4) = 0;
-    *(uint32_t*)(char*)&qwModInfoCycles = 0;
-    *(uint32_t*)((char*)&qwModInfoCycles + 4) = 0;
-    *(uint32_t*)(char*)&qwFmtCycles = 0;
-    *(uint32_t*)((char*)&qwFmtCycles + 4) = 0;
+    ULONGLONG qwSymCycles = 0;
+    ULONGLONG qwModInfoCycles = 0;
+    ULONGLONG qwFmtCycles = 0;
     __frame1.nLineCycleSample = 0;
     HANDLE hCurrentProcess = GetCurrentProcess();
     int bOk = InitializeSymbolsWithRefcount();
@@ -1968,8 +1962,8 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
         }
 
         bCarry = (uint32_t)((uint32_t)qwSymCycles + (uint32_t)nCycleSample) < (uint32_t)qwSymCycles;
-        *(uint32_t*)(char*)&qwSymCycles = (uint32_t)qwSymCycles + nCycleSample;
-        *(uint32_t*)((char*)&qwSymCycles + 4) = *(uint32_t*)((char*)&qwSymCycles + 4) + nCycleSample + (uint32_t)bCarry;
+        qwSymCycles = (ULONGLONG)((uint64_t)qwSymCycles & 0xffffffff00000000ull | (uint64_t)(uint32_t)((uint32_t)qwSymCycles + nCycleSample));
+        qwSymCycles = (ULONGLONG)((uint64_t)qwSymCycles & 0xffffffffull | (uint64_t)(uint32_t)((uint32_t)((uint64_t)qwSymCycles >> 32) + nCycleSample + (uint32_t)bCarry) << 32);
         memset(&__frame2.moduleInfo, 0, 0x23c);
         __frame2.moduleInfo.SizeOfStruct = 0x23c;
         BVar1 = (*pSymGetModuleInfo)(hCurrentProcess, __frame0.stackFrame[0], &__frame2.moduleInfo);
@@ -1979,8 +1973,8 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
         }
 
         bCarry = (uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)nCycleSample) < (uint32_t)qwModInfoCycles;
-        *(uint32_t*)(char*)&qwModInfoCycles = (uint32_t)qwModInfoCycles + nCycleSample;
-        *(uint32_t*)((char*)&qwModInfoCycles + 4) = *(uint32_t*)((char*)&qwModInfoCycles + 4) + nCycleSample + (uint32_t)bCarry;
+        qwModInfoCycles = (ULONGLONG)((uint64_t)qwModInfoCycles & 0xffffffff00000000ull | (uint64_t)(uint32_t)((uint32_t)qwModInfoCycles + nCycleSample));
+        qwModInfoCycles = (ULONGLONG)((uint64_t)qwModInfoCycles & 0xffffffffull | (uint64_t)(uint32_t)((uint32_t)((uint64_t)qwModInfoCycles >> 32) + nCycleSample + (uint32_t)bCarry) << 32);
         if (__frame1.bHasLineInfo) {
           pszRelFileName = Src::ErrorManager::StripPathPrefixToRelative(__frame1.pszFileName);
           nStrLen = Storm::Source::SSTR::SStrLen(__frame2.moduleInfo.ModuleName);
@@ -2003,8 +1997,8 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
     CleanupSymbolsWithRefcount(0);
     nCycleSample = __frame2.nFrameIdx;
     uint32_t nCyclesLo = (uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles + nCyclesAcc;
-    int64_t nAvgCycles = _alldiv(nCyclesLo + (uint32_t)qwFmtCycles, *(uint32_t*)((char*)&qwModInfoCycles + 4) + *(uint32_t*)((char*)&qwSymCycles + 4) + (uint32_t)((uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles) < (uint32_t)qwModInfoCycles) + nWalkCyclesHi + (uint32_t)((uint32_t)((uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles) + (uint32_t)nCyclesAcc) < (uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles)) + *(uint32_t*)((char*)&qwFmtCycles + 4) + (uint32_t)((uint32_t)((uint32_t)nCyclesLo + (uint32_t)qwFmtCycles) < (uint32_t)nCyclesLo), __frame2.nFrameIdx, (int)__frame2.nFrameIdx >> 0x1f);
-    Src::LogManager::LOGMANAGER_TraceToModuleLog(__frame1.szLogCategory, "QuickStackWalk: %d entries, %I64d+%I64d+%I64d+%I64d cycles, %I64d avg", nCycleSample, nCyclesAcc, nWalkCyclesHi, (uint32_t)qwSymCycles, *(uint32_t*)((char*)&qwSymCycles + 4), (uint32_t)qwModInfoCycles, *(uint32_t*)((char*)&qwModInfoCycles + 4), (uint32_t)qwFmtCycles, *(uint32_t*)((char*)&qwFmtCycles + 4), nAvgCycles);
+    int64_t nAvgCycles = _alldiv(nCyclesLo + (uint32_t)qwFmtCycles, (uint32_t)((uint64_t)qwModInfoCycles >> 32) + (uint32_t)((uint64_t)qwSymCycles >> 32) + (uint32_t)((uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles) < (uint32_t)qwModInfoCycles) + nWalkCyclesHi + (uint32_t)((uint32_t)((uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles) + (uint32_t)nCyclesAcc) < (uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles)) + (uint32_t)((uint64_t)qwFmtCycles >> 32) + (uint32_t)((uint32_t)((uint32_t)nCyclesLo + (uint32_t)qwFmtCycles) < (uint32_t)nCyclesLo), __frame2.nFrameIdx, (int)__frame2.nFrameIdx >> 0x1f);
+    Src::LogManager::LOGMANAGER_TraceToModuleLog(__frame1.szLogCategory, "QuickStackWalk: %d entries, %I64d+%I64d+%I64d+%I64d cycles, %I64d avg", nCycleSample, nCyclesAcc, nWalkCyclesHi, (uint32_t)qwSymCycles, (uint32_t)((uint64_t)qwSymCycles >> 32), (uint32_t)qwModInfoCycles, (uint32_t)((uint64_t)qwModInfoCycles >> 32), (uint32_t)qwFmtCycles, (uint32_t)((uint64_t)qwFmtCycles >> 32), nAvgCycles);
     gnStackWalkInProgress--;
     return 1;
 }
@@ -2270,9 +2264,7 @@ BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) 
           pOutLimit = pOutBufferLocal + nRecDwordCount;
           do {
             recHeader0 = pRecordCur->nFlags;
-            *(uint8_t*)(char*)&recHeader1 = pRecordCur->nAnimSpeed;
-            *(uint8_t*)((char*)&recHeader1 + 1) = pRecordCur->nNumDirections;
-            *(uint16_t*)((char*)&recHeader1 + 2) = pRecordCur->pad_06;
+            recHeader1 = (int)((uint32_t)(uint8_t)pRecordCur->nAnimSpeed | (uint32_t)(uint8_t)pRecordCur->nNumDirections << 8 | (uint32_t)(uint16_t)pRecordCur->pad_06 << 16);
             recHeader2 = pRecordCur->nCurrentFrameFixed;
             nDwordCount = pRecordCur->nNumFrames;
             nFileSize = nDwordCount * 4;

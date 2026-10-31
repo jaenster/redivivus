@@ -774,18 +774,15 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x03(char * pBytes, size_t nSize) {
 }
 
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x04(MCPPacketSrv0x04 * pBytes, size_t nSize) {
-    int nGameTokenUnused;
-    uint32_t dwGameTokenPacked;
-    *(uint16_t*)(char*)&dwGameTokenPacked = pBytes->nGameToken;
-    *(uint16_t*)((char*)&dwGameTokenPacked + 2) = pBytes->nUnkown;
+    int nGameTokenUnused = pBytes->nGameToken;
     int nGameHashValue = pBytes->nGameHash;
     if (pBytes->nRequestId != nMcpPacketSequence) {
       return 1;
     }
 
     D2Client::MCP::D2GSRequestId = nMcpPacketSequence;
+    D2Client::MCP::D2GSGameToken = nGameTokenUnused;
     D2Client::Bnet::D2GSGameHash = nGameHashValue;
-    D2Client::MCP::D2GSGameToken = dwGameTokenPacked;
     if (!pBytes->nGameIp) {
       if (pBytes->nResult) {
         SetD2GSJoinResult(pBytes->nResult);

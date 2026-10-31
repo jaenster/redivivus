@@ -122,7 +122,7 @@ int __thiscall GetRepeatDelta(::SpinnerWrapper * pThis, int nUnused) {
     ExceptionList = &pExcList;
     pThis->pVtable = (SpinnerWrapperVtable*)(void*)SpinnerWrapper::vftable;
     ::SpinnerImplementation* ppSpinner = (::SpinnerImplementation*)Storm::SMem::SMemAlloc(0x54, "new", -1, 0);
-    nExcState = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nExcState + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    nExcState = (uint32_t)((uint32_t)((uint32_t)nExcState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     if (ppSpinner) {
       ppSpinner = SpinnerImplementation::Constructor(ppSpinner, nPosX, nPosY, bHorizontal, pfnRepeatAction);
     } else {

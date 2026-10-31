@@ -1278,8 +1278,8 @@ int32_t __fastcall SKILLITEM_DispatchItemSpell(::SGAMEDATA * pGame, D2UnitStrc *
     // Static local variables (originally global data)
     static int ITEMSPELLFUNCS_SIZE = 0x1f; D2_STATIC_GUARD(ITEMSPELLFUNCS_SIZE, "D2Game::SKILLS::SkillItem::SKILLITEM_DispatchItemSpell::ITEMSPELLFUNCS_SIZE");
 
-    bool _bIsBookOrScrollType;
-    bool _bHasCursorFlag;
+    uint32_t _bIsBookOrScrollType;
+    BOOL _bHasCursorFlag;
     bool bIsBookOrScrollType;
     int* pBookTxt;
     bool bHasCursorFlag;
@@ -1619,7 +1619,7 @@ BOOL __fastcall ITEMEVENT_CrushingBlowChance(::SGAMEDATA * pGame, uint32_t nUnit
 }
 
 BOOL __fastcall ITEMEVENT_ChanceToFear(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
-    bool _bIsUndead;
+    uint32_t _bIsUndead;
     bool bIsUndead;
     if (!(pUnit && pTarget && pTarget->eUnitType == UNIT_MONSTER)) {
       return 0;

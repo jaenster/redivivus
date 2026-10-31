@@ -2551,10 +2551,7 @@ void __fastcall DRAW_OOG_ChannelPlayers(D2QuestDataA3Q6Strc * pA3Q6Data) {
         wszLineText[nIconAnchorY] = L'\0';
       }
 
-      *(uint8_t*)(char*)&dwPlayerInfo = pA3Q6Data->bQuestTimerActive;
-      *(uint8_t*)((char*)&dwPlayerInfo + 1) = pA3Q6Data->bBridgeObjectValid;
-      *(uint8_t*)((char*)&dwPlayerInfo + 2) = pA3Q6Data->bBridge2Valid;
-      *(uint8_t*)((char*)&dwPlayerInfo + 3) = pA3Q6Data->bAcceptedQuest;
+      dwPlayerInfo = (uint32_t)((uint32_t)(uint8_t)pA3Q6Data->bQuestTimerActive | (uint32_t)(uint8_t)pA3Q6Data->bBridgeObjectValid << 8 | (uint32_t)(uint8_t)pA3Q6Data->bBridge2Valid << 16 | (uint32_t)(uint8_t)pA3Q6Data->bAcceptedQuest << 24);
       if (!(dwPlayerInfo & gadwBitMasks[3])) {
         return;
       }
@@ -2589,10 +2586,7 @@ void __fastcall DRAW_OOG_ChannelPlayers(D2QuestDataA3Q6Strc * pA3Q6Data) {
           pWideStr = D2Lang::StrTable::strtable::GetLocaleString(0x1399);
           D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszLineText, pWideStr, nPingMs);
           D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
-          *(uint8_t*)(char*)&dwPlayerInfoCopy = pA3Q6Data->bQuestTimerActive;
-          *(uint8_t*)((char*)&dwPlayerInfoCopy + 1) = pA3Q6Data->bBridgeObjectValid;
-          *(uint8_t*)((char*)&dwPlayerInfoCopy + 2) = pA3Q6Data->bBridge2Valid;
-          *(uint8_t*)((char*)&dwPlayerInfoCopy + 3) = pA3Q6Data->bAcceptedQuest;
+          dwPlayerInfoCopy = (uint32_t)((uint32_t)(uint8_t)pA3Q6Data->bQuestTimerActive | (uint32_t)(uint8_t)pA3Q6Data->bBridgeObjectValid << 8 | (uint32_t)(uint8_t)pA3Q6Data->bBridge2Valid << 16 | (uint32_t)(uint8_t)pA3Q6Data->bAcceptedQuest << 24);
           if (dwPlayerInfoCopy & gadwBitMasks[5]) {
             pnTotalWidthArg = &__frame0.nTotalWidth;
             pnMaxWidthArg = &__frame0.nMaxLineWidth;

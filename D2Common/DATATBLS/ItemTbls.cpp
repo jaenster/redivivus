@@ -4491,7 +4491,7 @@ BOOL __fastcall ITEMTBLS_CheckItemTypeRecursive(int32_t nItemTypeId, int32_t nTa
 // Loads and compiles the itemtypes.txt data table at startup. Builds the 36-entry field-definition array (code/equiv1-2/bodyloc/shoots/quiver/maxsock/class/storepage/invgfx1-6/etc., with code/bodyloc/class/storepage columns linked to their lookup tables), creates the itemtypes TxtLink, and calls CompileTxt to populate sgtDataTable.pTxtItemTypes (record size 0xE4) and its row count. Then allocates and fills pTxtItemTypesUnknown, a per-type bitmap (ceil(count/32) dwords per type) where bit j is set if type j is a recursive subtype of type i (via ITEMTBLS_CheckItemTypeRecursive), giving fast item-type ancestry tests.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __fastcall TXT_AllocTxt_itemtypes(D2PoolManagerStrc * pMemory) {
-    bool _bIsSubtype;
+    BOOL _bIsSubtype;
     bool bIsSubtype;
     uint32_t nCheckTypeId;
     int nTypeCount;

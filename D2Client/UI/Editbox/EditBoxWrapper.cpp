@@ -154,7 +154,7 @@ void __thiscall SetNumericOnly(::EditBoxWrapper * pThis, BOOL bNumericOnly) {
     ExceptionList = &pSavedExceptionList;
     pThis->pVtable = (EditBoxWrapperVtable*)(void*)EditBoxWrapper::vftable;
     ::EditBoxImplementation* ppEditBox = (::EditBoxImplementation*)Storm::SMem::SMemAlloc(0x5a, "new", -1, 0);
-    dwSehState = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&dwSehState + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    dwSehState = (uint32_t)((uint32_t)((uint32_t)dwSehState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     if (ppEditBox) {
       ppEditBox = EditBoxImplementation::Constructor(ppEditBox, nPosX, nPosY, nWidth, nMaxLines, nMaxValue, nMaxLength, pfnOnEnter, nFont);
     } else {

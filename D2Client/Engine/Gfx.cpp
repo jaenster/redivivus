@@ -324,7 +324,7 @@ static void GFX_SyncStateOverlayPriority(int * pOverlay, int32_t pGfxInfo) {
 }
 
 static void __stdcall GFX_RemoveStateOverlayAndReprioritize(D2UnitStrc * pUnit, int32_t pGfxInfo, int32_t pOverlay) {
-    bool _bHasHideState;
+    BOOL _bHasHideState;
     bool bHasHideState;
     int32_t nStateUnused;
     int* pCur;

@@ -34,7 +34,7 @@
 namespace D2Game::MISSILES::MissilesMode::SrvDoFunc {
 
 static BOOL __stdcall fpMissileDoSrvFuncHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2MissilesTxt * pMissileTxt, D2UnitStrc * pUnit2) {
-    bool _bIsOwner;
+    BOOL _bIsOwner;
     bool bIsOwner;
     if (!(pUnit2 && pUnit2->eUnitFlags >> 3 & 1 && pUnit2->eUnitFlags >> 2 & 1)) {
       return 0;

@@ -398,7 +398,7 @@ void __fastcall SetFlag0x1(D2GameViewStrc * pGameView) {
 }
 
 void __fastcall SetViewRectangleSize(D2GameViewStrc * pGameView, int32_t xLeft, int32_t yTop, int32_t xRight, int32_t yBottom) {
-    bool _bPerspective;
+    uint32_t _bPerspective;
     bool bPerspective;
     if (!pGameView) {
       return;
@@ -929,7 +929,7 @@ void __fastcall ViewDraw2(D2GameViewStrc * pGameView) {
     // Static local variables (originally global data)
     static uint32_t gnFrameDrawCounter; D2_STATIC_GUARD_BSS(gnFrameDrawCounter, "D2Client::GAME::View::ViewDraw2::gnFrameDrawCounter");
 
-    bool _bPerspective;
+    uint32_t _bPerspective;
     bool bPerspective;
     D2UnitStrc* pPlayerUnit_lcl;
     int32_t nYScale;

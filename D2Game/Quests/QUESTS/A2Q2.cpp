@@ -576,14 +576,14 @@ void __fastcall Q10_AdjustStaffPieceCount(int pQuestArg, int nCountDelta) {
 // drops that many PlayerBodyPart-table reward items, then rolls chest gold drops.
 // No QuestRecord writes (counting only).
 BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2(D2ObjectOperateFnArg * pOperation) {
-    D2ObjectOperateFnArg* pOperationLocal = pOperation;
+    D2QuestDataA2Q2Strc* pA1Q1Scratch;
     BOOL bPortalActive = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
     if (bPortalActive) {
       pOperation->sArg.pVictim->dwDropItemCode = 0x20317274;
       D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TheHoradricStaff);
       int nDropCount = 0;
       if (pQuestData) {
-        D2QuestDataA2Q2Strc* pA1Q1Scratch;
+        D2ObjectOperateFnArg* pOperationLocal;
         pA1Q1Scratch = pQuestData->pQuestSpecificData.pA2Q2;
         pA1Q1Scratch->nQuestItemPickupNotifyCount = 0;
         UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q10_OnScrollPickup);
@@ -621,8 +621,8 @@ BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2(D2ObjectOperateFnArg * 
 // reward items (marked identified, bumps nMsfCount/bHasViperAmulet), then rolls gold.
 // No QuestRecord writes.
 BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3(D2ObjectOperateFnArg * pOperation) {
+    D2ObjectOperateFnArg* pOperationLocal;
     D2QuestDataA2Q2Strc* pA2Q2Data;
-    D2ObjectOperateFnArg* pOperationLocal = pOperation;
     BOOL nDropIdx = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
     if (nDropIdx) {
       pOperation->sArg.pVictim->dwDropItemCode = 0x2066736d;
@@ -672,8 +672,8 @@ BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3(D2ObjectOperateFnArg * 
 // Q10_OnHoradricCubePickup, drops that many Shield-table reward items (bumps
 // nBoxCount/bHasCube), then rolls gold. No QuestRecord writes.
 BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop1(D2ObjectOperateFnArg * pOperation) {
+    D2ObjectOperateFnArg* pOperationLocal;
     D2QuestDataA2Q2Strc* pA2Q2Data;
-    D2ObjectOperateFnArg* pOperationLocal = pOperation;
     BOOL nDropIdx = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
     if (nDropIdx) {
       pOperation->sArg.pVictim->dwDropItemCode = 0x20786f62;

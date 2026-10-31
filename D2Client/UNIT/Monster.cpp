@@ -831,7 +831,7 @@ static void MONSTER_InitSpecialMonster(D2UnitStrc * pUnit, int32_t nClassId) {
 
 // Returns the catapult's facing direction if pUnit2 is a Catapult (BaseId 0x12a), is within collision distance 2 of pUnit, and pUnit is positioned exactly 3*composite-sprite-dims ahead in the catapult's facing direction. Returns 0 if any condition fails, indicating pUnit is not at the valid firing position.
 uint32_t __fastcall MONSTER_CheckCatapultFiringPosition(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t dwParam1, uint32_t dwParam2) {
-    uint8_t _byDirIndex;
+    uint32_t _byDirIndex;
     uint8_t byDirTable[8];
     int nDimY;
     int nDimX;
@@ -2746,8 +2746,15 @@ void __fastcall MonsterMessage(int32_t nParam, D2UnitStrc * pUnit, D2ServerMessa
         pPlayerUnit_lcl = Missile::CastAttack(pUnit, MISSILE_TowerDeath, nPosY, nBaseId, eDeathSkill, nMissileLevel);
         CUnit::SetDeadFlag(pPlayerUnit_lcl);
       }
-      if (nClassId == 0x158 || nClassId == 0x22f || nClassId == 0x23a) {
-        pUnit->eUnitFlagsEx |= UNITFLAGEX_NODRAW;
+
+      switch (nClassId) {
+        case 0x158:
+          case 0x22f:
+            case 0x23a:
+              {
+                pUnit->eUnitFlagsEx |= UNITFLAGEX_NODRAW;
+                break;
+              }
       }
 
       pUnit->eUnitFlags = pUnit->eUnitFlags & ~UNITFLAG_TARGETABLE | UNITFLAG_DRAWSHADOW;
@@ -3045,8 +3052,7 @@ uint32_t __fastcall CLIENT_UpdateMonsterAnimByMode(D2DynamicPathStrc * pDynamicP
         return 0;
       }
       if (sgptDataTable->pTxtMonStats[nClassId].SplEndDeath == '\x01') {
-        *(uint16_t*)(char*)&nClassId = pDynamicPath->nTargetX;
-        *(uint16_t*)((char*)&nClassId + 2) = pDynamicPath->nTargetY;
+        nClassId = (int)((uint32_t)(uint16_t)pDynamicPath->nTargetX | (uint32_t)(uint16_t)pDynamicPath->nTargetY << 16);
         if (!nClassId) {
           nResult = D2Common::Units::IsAtEndOfFrameCycle((D2UnitStrc*)pDynamicPath);
           if (nResult) {
@@ -3076,8 +3082,7 @@ uint32_t __fastcall CLIENT_UpdateMonsterAnimByMode(D2DynamicPathStrc * pDynamicP
       case 2:
         nResult = D2Common::Units::IsAtEndOfFrameCycle((D2UnitStrc*)pDynamicPath);
       if (nResult) {
-        *(uint16_t*)(char*)&nDeltaCheck = pDynamicPath->nTargetX;
-        *(uint16_t*)((char*)&nDeltaCheck + 2) = pDynamicPath->nTargetY;
+        nDeltaCheck = (int)((uint32_t)(uint16_t)pDynamicPath->nTargetX | (uint32_t)(uint16_t)pDynamicPath->nTargetY << 16);
         pDynamicPath->nUnitSize = pDynamicPath->nUnitWidth - 0x100;
         *(uint16_t*)&pDynamicPath->nCollisionFlag = 0;
         if (nDeltaCheck) {

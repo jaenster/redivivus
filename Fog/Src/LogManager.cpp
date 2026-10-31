@@ -1743,12 +1743,9 @@ void __stdcall GetFreeDiskSpaceForSavePath() {
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ if (hModule) {
       npfnGetDiskFreeSpaceEx = (pfnGetDiskFreeSpaceEx)GetProcAddress(hModule, "GetDiskFreeSpaceExA");
       if (npfnGetDiskFreeSpaceEx) {
-        *(uint32_t*)(char*)&uTotalFreeBytes = 0;
-        *(uint32_t*)((char*)&uTotalFreeBytes + 4) = 0;
-        *(uint32_t*)(char*)&uTotalBytes = 0;
-        *(uint32_t*)((char*)&uTotalBytes + 4) = 0;
-        *(uint32_t*)(char*)&uFreeBytesAvailable = 0;
-        *(uint32_t*)((char*)&uFreeBytesAvailable + 4) = 0;
+        uTotalFreeBytes = 0;
+        uTotalBytes = 0;
+        uFreeBytesAvailable = 0;
         (*npfnGetDiskFreeSpaceEx)(szSavePath, &uFreeBytesAvailable, &uTotalBytes, &uTotalFreeBytes);
         /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(hModule);
         return;
@@ -1797,16 +1794,10 @@ int __stdcall IsWindowsNT() {
 }
 
 void InitHighResTimer() {
-    int64_t qwTestValue;
-    int64_t qwTestTarget;
-    int64_t qwResult;
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&gHighResTimerCS);
-    *(uint32_t*)(char*)&qwTestTarget = 0;
-    *(uint32_t*)((char*)&qwTestTarget + 4) = 0;
-    *(uint32_t*)(char*)&qwTestValue = 0x29a;
-    *(uint32_t*)((char*)&qwTestValue + 4) = 0;
-    *(uint32_t*)(char*)&qwResult = -1;
-    *(uint32_t*)((char*)&qwResult + 4) = -1;
+    int64_t qwTestTarget = 0;
+    int64_t qwTestValue = (int64_t)0x29aull;
+    int64_t qwResult = (int64_t)0xffffffffffffffffull;
     Atomic64Store(&qwTestTarget, &qwTestValue);
     Atomic64Load(&qwResult, &qwTestTarget);
     if ((int)qwResult == 0x29a && !*(uint32_t*)((char*)&qwResult + 4)) {

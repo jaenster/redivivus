@@ -973,7 +973,7 @@ void __stdcall NPCMENU_ExecuteShopTransaction(int32_t nParam, uint8_t bParam) {
       pUnit = UNIT::Player::UNITS_FindClientSideUnit(gnNpcMenuTransactionItemGUID, UNIT_ITEM);
       if (!pUnit) {
         _Interaction::geNpcUiState = NPCUI_SHOP;
-        Inv::INV_HandleGambleMessage(nullptr);
+        Inv::INV_HandleGambleMessage();
         gbNpcMenuShopTransactionActive = GetTickCount();
         gnNpcMenuShopTransactionCost++;
         gbNpcMenuTransactionPending = 0;
@@ -2265,7 +2265,8 @@ int __stdcall NPCMENU_TradeOptionCallback() {
     return 1;
 }
 
-void DRAW_UI_NPC_INTERACTION(short * nParam) {
+// EDI is not an argument: saved at 004b4464 PUSH EDI before any read.
+void DRAW_UI_NPC_INTERACTION() {
     // Static local variables (originally global data)
     static uint32_t gnNpcMenuDialogWidth; D2_STATIC_GUARD_BSS(gnNpcMenuDialogWidth, "D2Client::UI::npcmenu::DRAW_UI_NPC_INTERACTION::gnNpcMenuDialogWidth");
 
@@ -2344,7 +2345,7 @@ void DRAW_UI_NPC_INTERACTION(short * nParam) {
           }
 
           _Interaction::geNpcUiState = NPCUI_SHOP;
-          Inv::INV_HandleGambleMessage(nParam);
+          Inv::INV_HandleGambleMessage();
           gbNpcMenuShopTransactionActive = GetTickCount();
           gnNpcMenuShopTransactionCost++;
           Dialog::FreeDialogStrc(Dialog::gpNpcTransactionConfirmDialog);

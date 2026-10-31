@@ -187,7 +187,8 @@ BOOL __stdcall NPCMENU_ConfirmDialogOkCallback();
 // "trade" (3396 NPCMenuTrade) and "trade/repair" (3334 NPCMenuTradeRepair) option callback: used by every vendor row; also used by NPCMENU_OpenInteractionDialog.
 // Stops the NPC sound and frees the interaction dialog. If the NPC unit exists and has an inventory: sets the NPC UI state to 3, gnNpcMenuShopMode = 0, sets UI_NPCSHOP and sends C->S 0x38 (action 1, NPC GUID, 0) to open the vendor; the player becomes gpNpcShopOwnerUnit. Otherwise closes the interaction. Returns 1.
 int __stdcall NPCMENU_TradeOptionCallback();
-void DRAW_UI_NPC_INTERACTION(short * nParam);
+// EDI is not an argument: saved at 004b4464 PUSH EDI before any read.
+void DRAW_UI_NPC_INTERACTION();
 int __stdcall NPCMENU_GambleDrawCallback();
 int __stdcall NPCMENU_GambleMouseCallback();
 int __stdcall NPCMENU_RepairDrawCallback();

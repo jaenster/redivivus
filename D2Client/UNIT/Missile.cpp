@@ -5830,7 +5830,7 @@ void __fastcall MISSILE_CltDoFn43_FollowOwner(D2UnitStrc * pUnit) {
 // Client-side per-frame missile DoFunc (handler variant 001). Validates the missile's class id against missiles.txt, flags whether the local player owns it, then runs the per-tick missile loop: clears NODRAW after InitSteps frames, explodes immediately if the particle is stopped/fading, advances the animation (honoring LoopAnim/SubLoop/SubStart/SubStop), moves the missile along its path by the client step count, decrements remaining frames (explodes at 0), applies CltSrcTown town-cutoff behavior, and on collision (wall/block) explodes. For ClientCol missiles it walks the per-step collision coords calling the anim-mode collision function to find a hit unit, exploding on the first active target. Loops once more for the local player on the final frame.
 void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
     bool _bIsLocalPlayer;
-    bool _bIsActive;
+    int _bIsActive;
     D2PathPointStrc* pDVar1;
     bool bIsActive;
     D2UnitStrc* pHitUnit;
@@ -6722,7 +6722,7 @@ void __fastcall MISSILE_CltDoFn15_FingerMageSpider(D2UnitStrc * pUnit) {
             }
 
             nNewTargetY = (short int)nClassId;
-            *(uint16_t*)(char*)&nDeltaY = 0;
+            nDeltaY = (int)((uint32_t)nDeltaY & 0xffff0000u);
             nStepSizeShort = nNewTargetY;
             if (nTmpPos <= nVelocity) {
               nStepSizeShort = 0;
@@ -6739,9 +6739,9 @@ void __fastcall MISSILE_CltDoFn15_FingerMageSpider(D2UnitStrc * pUnit) {
               }
             }
 
-            *(uint16_t*)(char*)&nDeltaY = sVar1;
+            nDeltaY = (int)((uint32_t)nDeltaY & 0xffff0000u | (uint32_t)(uint16_t)sVar1);
             nVelocity = Units::GetYPosFromDynamicPathUnit(pUnit);
-            *(uint16_t*)(char*)&nDeltaY = (short int)nVelocity + (short int)nDeltaY;
+            nDeltaY = (int)((uint32_t)nDeltaY & 0xffff0000u | (uint32_t)(uint16_t)((short int)nVelocity + (short int)nDeltaY));
             nVelocity = Units::GetXPosFromDynamicPathUnit(pUnit);
             D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, (short int)nVelocity + nStepSizeShort, (short int)nDeltaY);
             D2Common::PATH::DynamicPath::PATH_CalculatePath(pUnit->pPath.pDynamicPath, pUnit, 0);
@@ -8350,7 +8350,7 @@ void __fastcall MISSILE_CltDoFn56_BaalTauntControl(D2UnitStrc * pUnit) {
 
 // Client-side per-frame do-function for missile type 057 (owner-tracking repeating spawner). Each frame: runs Missiles_CltDoFunc_043 for base movement, fetches the owner's current coordinates via GetCooordinates, increments a spawn counter (TargetY) up to the cap in TargetX, then spawns a CltSubMissile1 child missile at the owner's position with path type 0xE and recalculates its path. Resets TargetY to 0 after spawn and delegates to Missiles_CltDoFunc_001. Removes client-side if owner is gone or TXT invalid.
 void __fastcall MISSILE_CltDoFn57_BladeShield(D2UnitStrc * pUnit) {
-    bool _bHasCoords;
+    BOOL _bHasCoords;
     bool bHasCoords;
     D2UnitStrc* pUnit_00;
     int32_t nMaxSpawnCount;
@@ -9393,7 +9393,7 @@ void __fastcall MISSILE_CltDoFn63_NehlithakOrbit(D2UnitStrc * pUnit) {
       *(uint16_t*)(char*)&nCurX = (short int)pDynamicPath->ScreenPos.y;
     } else if (pDynamicPath) {
       nPosX = D2Common::PATH::DynamicPath::GetXPos(pDynamicPath);
-      *(uint16_t*)(char*)&nPosX = (short int)nPosX;
+      nPosX = (int32_t)((uint32_t)nPosX & 0xffff0000u | (uint32_t)(uint16_t)(short int)nPosX);
       *(uint16_t*)(char*)&nCurX = (short int)nPosX;
     } else {
       *(uint16_t*)(char*)&nCurX = 0;
@@ -9404,7 +9404,7 @@ void __fastcall MISSILE_CltDoFn63_NehlithakOrbit(D2UnitStrc * pUnit) {
       *(uint16_t*)(char*)&nPosY = (short int)pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
       nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      *(uint16_t*)(char*)&nPosY = (short int)nPosY;
+      nPosY = (int32_t)((uint32_t)nPosY & 0xffff0000u | (uint32_t)(uint16_t)(short int)nPosY);
     } else {
       *(uint16_t*)(char*)&nPosY = 0;
     }
@@ -9916,7 +9916,7 @@ void __fastcall MISSILE_CltDoFn60_Hurricane(D2UnitStrc * pUnit) {
         *(uint16_t*)(char*)&nCurX = (short int)pDynamicPath->ScreenPos.y;
       } else if (pDynamicPath) {
         nPosX = D2Common::PATH::DynamicPath::GetXPos(pDynamicPath);
-        *(uint16_t*)(char*)&nPosX = (short int)nPosX;
+        nPosX = (int32_t)((uint32_t)nPosX & 0xffff0000u | (uint32_t)(uint16_t)(short int)nPosX);
         *(uint16_t*)(char*)&nCurX = (short int)nPosX;
       } else {
         *(uint16_t*)(char*)&nCurX = 0;
@@ -9927,7 +9927,7 @@ void __fastcall MISSILE_CltDoFn60_Hurricane(D2UnitStrc * pUnit) {
         *(uint16_t*)(char*)&nPosY = (short int)pUnit->pPath.pStaticPath->nPosY;
       } else if (pUnit->pPath.pDynamicPath) {
         nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-        *(uint16_t*)(char*)&nPosY = (short int)nPosY;
+        nPosY = (int32_t)((uint32_t)nPosY & 0xffff0000u | (uint32_t)(uint16_t)(short int)nPosY);
       } else {
         *(uint16_t*)(char*)&nPosY = 0;
       }

@@ -5253,7 +5253,7 @@ BOOL __stdcall MAINMENU_OnPressReturnToMainMenuAgain_ForBnetDisconnected2(D2Cont
 }
 
 void __stdcall MAINMENU_ShowDisconnectMessage2() {
-    bool _bFieldValid;
+    BOOL _bFieldValid;
     bool bFieldValid;
     char szField1[256];
     char szField3[256];

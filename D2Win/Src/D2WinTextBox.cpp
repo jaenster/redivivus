@@ -1347,7 +1347,7 @@ void __fastcall FORMS_DestroyD2WinTextBox(::D2WinTextBox * pWinTextBox) {
 
 // @sourcefile .\Src\D2WinTextBox.cpp
 BOOL __fastcall SetText(::D2WinTextBox * pTextBox, uint16_t * szText, int32_t nLineStyle, bool bIndent, int nAlignment) {
-    bool _uResult;
+    BOOL _uResult;
     bool uResult;
     void* nPixelWidth;
     int32_t nStrLen;

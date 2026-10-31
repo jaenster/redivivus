@@ -267,6 +267,8 @@ uint32_t __stdcall GetStepsOfMissileMovement();
 eD2GSGameType __stdcall CLIENT_GetD2GSGameType();
 void __fastcall GAMEDATA_ExtendTimeout(int32_t nDelayMs);
 void __stdcall GAMEDATA_LoadActTiles(uint32_t nAct);
+// ESI is not an argument: the body never reads it.
+void GAMEDATA_CheckColorTxtOverride();
 BOOL __stdcall GAMEDATA_GetBloodFlag();
 void __fastcall CLIENT_SetDifficulty(char nDifficulty);
 void __fastcall CLIENT_SetExpansion(bool bExpansion);
@@ -315,6 +317,5 @@ BOOL __stdcall RegisterCmdLineLngOption();
 void __stdcall FreeLanguage();
 void __stdcall thunk_GAMEDATA_CheckAutomapCenterOnLoad();
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca026(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
-// 1 internal function (defined in .cpp)
 
 } // namespace D2Client::GAME::Game

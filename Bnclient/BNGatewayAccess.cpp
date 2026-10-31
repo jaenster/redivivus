@@ -241,7 +241,7 @@ void __fastcall GetBattlenetGatewayList(int32_t nGatewayAccess) {
 }
 
 void __fastcall GetBattlenetRealmsList(int32_t nGatewayAccess) {
-    bool _bFileLoaded;
+    uint32_t _bFileLoaded;
     bool bFileLoaded;
     DWORD dwFileSize = 0;
     _bFileLoaded = Storm::Source::SFile::SFileLoadFile("Data\\Global\\Realms.bin", (void**)(nGatewayAccess + 0x20), &dwFileSize, 0, 0);
@@ -254,7 +254,7 @@ void __fastcall GetBattlenetRealmsList(int32_t nGatewayAccess) {
 }
 
 uint32_t * __stdcall WritingDefaultGatewayList(DWORD * pdwFileSize) {
-    bool _bFileLoaded;
+    uint32_t _bFileLoaded;
     bool bFileLoaded;
     uint32_t* pFileData;
     DWORD dwFileSize = 0;
@@ -269,7 +269,7 @@ uint32_t * __stdcall WritingDefaultGatewayList(DWORD * pdwFileSize) {
 }
 
 void __fastcall WriteDefaultGatewayList(char * szText) {
-    char* szTextCopy = szText;
+    char* szTextCopy;
     /* 0x118360  23  ?WriteDefaultGatewayList@BNGatewayAccess@@AAEXXZ */ Bnet::BnetLog_WriteLine("Writing default gateway list");
     uint32_t* pFileData = WritingDefaultGatewayList((DWORD*)&szTextCopy);
     if (!pFileData) {

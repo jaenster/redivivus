@@ -1235,7 +1235,7 @@ void __fastcall SUNITNPC_ReturnZero2(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 
 // For a stackable auto-stack item being purchased from an NPC, searches the player's main inventory then stash for an existing partial stack of the same type (via INVENTORY_FindSocketableItemInMain/Stash + IsItemSocketable). Returns the matching item and sets *pnStackOut to the remaining capacity, or NULL with *pnStackOut=maxStack if no partial stack exists. Returns NULL immediately for non-stackable or non-auto-stack items.
 D2UnitStrc * __fastcall SUNITNPC_FindExistingStackInInventory(::SGAMEDATA * pGameStrc, D2UnitStrc * pPlayer, D2UnitStrc * pUnit, int * pnStackOut) {
-    bool _Var1;
+    BOOL _Var1;
     bool Var1;
     D2UnitStrc* pMatchItem;
     int nCurQuantity;
@@ -2390,7 +2390,7 @@ void __stdcall HealByPlayerPetsByNPC(D2UnitStrc * pUnit, BOOL * pbChanged) {
 
 // Server-side NPC heal handler. Verifies that pNpc is the player's currently interacted NPC, then restores HP, mana, and stamina to their txt-data maximums, removes poison and freeze state lists, clears any hireable AI state, and iterates pets to apply the same healing. Sends attribute-update packets (ids 6, 8, 10) for each stat that changed. Triggers an AI-reset sound event on the NPC if anything changed.
 void __fastcall HealByPlayerByNPC(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pNpc) {
-    bool _bHireableStateRemoved;
+    BOOL _bHireableStateRemoved;
     bool bHireableStateRemoved;
     D2UnitStrc* pInteractedNpc = SUnit::GetInteractedNpc(pGame, pUnit);
     if (pInteractedNpc != pNpc) {
@@ -2943,7 +2943,7 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
 
         D2Common::Units::SetupUpdateFlag(pClonedItem, 4);
         ePage = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_storepage(pClonedItem);
-        bCanRepurchase = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&bCanRepurchase + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)ePage);
+        bCanRepurchase = (uint32_t)((uint32_t)((uint32_t)bCanRepurchase >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)ePage);
         if (ePage == INVPAGE_None) {
           ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pClonedItem);
           pClonedItem = 0;

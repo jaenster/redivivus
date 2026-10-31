@@ -139,7 +139,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_DoubleSwing_Sound(D2UnitStrc * pUnit, eD2Sk
 
 // Client DoFunc for Barbarian throwing skills (Throw, Double Throw). Retrieves the equipped throwable weapon. Sets UNITFLAG_SKSRVDOFUNC past frame 0x8FF. Validates the item is throwable (item type or UNITSTAT_item_throwable stat). Reads wMissileType from the item's txt entry; if the item is a MissilePotion uses MISSILE_CreateFromUnitWithOffset directly, otherwise calls Skills::MakeMissile.
 BOOL __fastcall Skills_CltDoFunc_Bar_ThrowItem(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bIsThrowableItem;
+    int32_t _bIsThrowableItem;
     uint8_t byThrowableHigh;
     bool bIsThrowableItem;
     D2UnitStrc* pWeapon = D2Common::Units::GetWeaponBySkill(pUnit, 1);
@@ -451,7 +451,7 @@ static BOOL __stdcall SKILL_CanUseAtLocation(D2UnitStrc * pUnit, int32_t nX, int
 // Skill client-state setup func for a teleport/leap-to-location skill: computes and commits the destination into the unit's current D2SkillStrc params. For the local player, aborts if uninterruptable or already casting this very skill. For non-monsters it reads the requested coords (GetCooordinates), checks SKILL_CanUseAtLocation and SKILL_ValidateTeleportDestination. For monsters it targets the confirmed target's mirrored position (2*target - self) or the requested coords. Snaps to a free cell, adds the unit's collision footprint at the destination, stores dest in SKILL param1/param2 (param3/param4 = target type/GUID for monsters), sets skill flags 0x1080 and rebuilds the active-skill stat list. Returns TRUE if a valid destination was set, else FALSE.
 // @sourcefile .\SKILLS\SkillsBar.cpp
 BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bUnitIsMonster;
+    uint32_t _bUnitIsMonster;
     bool bValidDest;
     eD2Skills eCurrentSkillId;
     uint32_t nSkillFlags;
@@ -831,8 +831,7 @@ static BOOL __stdcall CLIENT_PlaySkillSound(D2SkillStrc * pSkill, int32_t nParam
     if (nXcoord == nParam1) {
       nUnitTypeOrMode = pDynamicPath->Coords.tFixed.x;
       if (nUnitTypeOrMode == 2 || nUnitTypeOrMode > 3 && nUnitTypeOrMode <= 5) {
-        *(uint16_t*)(char*)&nUnitTypeOrMode = pDynamicPath->pServerPath->nTargetX;
-        *(uint16_t*)((char*)&nUnitTypeOrMode + 2) = pDynamicPath->pServerPath->nTargetY;
+        nUnitTypeOrMode = (int)((uint32_t)(uint16_t)pDynamicPath->pServerPath->nTargetX | (uint32_t)(uint16_t)pDynamicPath->pServerPath->nTargetY << 16);
       } else if (pDynamicPath->pServerPath) {
         nUnitTypeOrMode = D2Common::PATH::DynamicPath::GetYPos(pDynamicPath->pServerPath);
       } else {
@@ -945,8 +944,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Leap_ArcParticle(D2DynamicPathStrc * pUnit,
     finish_landing:
     iVar1 = pUnit->Coords.tFixed.x;
     if (iVar1 == 2 || iVar1 > 3 && iVar1 <= 5) {
-      *(uint16_t*)(char*)&nSrvPathX = pUnit->pServerPath->nTargetX;
-      *(uint16_t*)((char*)&nSrvPathX + 2) = pUnit->pServerPath->nTargetY;
+      nSrvPathX = (int32_t)((uint32_t)(uint16_t)pUnit->pServerPath->nTargetX | (uint32_t)(uint16_t)pUnit->pServerPath->nTargetY << 16);
     } else if (pUnit->pServerPath) {
       nSrvPathX = D2Common::PATH::DynamicPath::GetYPos(pUnit->pServerPath);
     } else {
@@ -975,7 +973,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Leap_ArcParticle(D2DynamicPathStrc * pUnit,
 // Client-side state function for Barbarian Leap Attack teleport targeting. For the local player, checks that the unit is not in an uninterruptable state and the skill is not already flagged active. Calls SKILL_FindTeleportPosition to locate a valid destination near the confirmed target; on success, registers the collision tile, stores destination coords in skill params 1-2, stores target type/GUID in params 3-4, sets skill flags 0x1080, and creates the active skill stat list. If already in melee range, triggers the melee hit message instead. Plays sound 0x13 when no position is found.
 // @sourcefile .\SKILLS\SkillsBar.cpp
 BOOL __fastcall Skills_CltStFunc_FindTeleportPositionForTarget(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bFoundPos;
+    uint32_t _bFoundPos;
     bool bFoundPos;
     eD2Skills eCurrentSkillId;
     uint32_t nSkillFlags;
@@ -1103,8 +1101,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2DynamicPathStrc * 
     finish_landing:
     iVar1 = pUnit->Coords.tFixed.x;
     if (iVar1 == 2 || iVar1 > 3 && iVar1 <= 5) {
-      *(uint16_t*)(char*)&nDestY = pUnit->pServerPath->nTargetX;
-      *(uint16_t*)((char*)&nDestY + 2) = pUnit->pServerPath->nTargetY;
+      nDestY = (int32_t)((uint32_t)(uint16_t)pUnit->pServerPath->nTargetX | (uint32_t)(uint16_t)pUnit->pServerPath->nTargetY << 16);
     } else if (pUnit->pServerPath) {
       nDestY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pServerPath);
     } else {
@@ -1169,8 +1166,8 @@ void __fastcall SKILL_DrawUnitAtRotatedAngle(D2UnitStrc * pUnit, uint32_t nParam
 // Client start-func for a Leap-style skill (player or monster): computes and commits the leap destination via pathfinding. Validates the unit/skill/server path; for the local player rejects if the skill is already active (flag bit0) or the unit is in an uninterruptable state. If a confirmed target is in melee range it instead forwards a 0x16 unit message and returns. Otherwise it sets the server path's collision pattern (0xc01) and path type 7, runs PATH_CalculatePath, applies the class/monster walk velocity (CharStats WalkVelocity or MonStats Velocity), retakes the path's last point as the destination, adds a collision at that tile, sets the skill active (flag 1) with param1/param2 = dest X/Y, and creates the active-skill stat list. Returns TRUE if a destination was committed, 0 otherwise (restoring the collision pattern on failure).
 // @sourcefile .\SKILLS\SkillsBar.cpp
 BOOL __fastcall Skills_CltStFunc_CalcLeapDestViaPathfind(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bIsPlayer;
-    bool _bPathFound;
+    uint32_t _bIsPlayer;
+    uint32_t _bPathFound;
     bool bPathFound;
     uint32_t nSkillFlags;
     eD2States eUnitState;

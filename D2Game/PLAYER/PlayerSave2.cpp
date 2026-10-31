@@ -1609,7 +1609,7 @@ BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 20, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    bool _bPutResult;
+    BOOL _bPutResult;
     bool bPutResult;
     eD2ItemFlag eItemFlags;
     D2UnitStrc* pSocketedItem;

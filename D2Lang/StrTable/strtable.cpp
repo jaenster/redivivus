@@ -60,7 +60,7 @@ BOOL __stdcall ARCHIVE_LoadMPQFiles() {
 }
 
 static uint16_t * __stdcall STRTABLE_GetStringByIndex(D2StringTableTblFileStrc * pStrTable, uint16_t * * ppEntryTable, uint16_t wRawIndex, DWORD dwErrorCode) {
-    uint16_t _wRawIndex;
+    uint32_t _wRawIndex;
     uint16_t wBoundedIndex = wRawIndex;
     _wRawIndex = (uint32_t)wRawIndex;
     if (wBoundedIndex >= pStrTable->wIndexCount) {

@@ -681,7 +681,7 @@ void __fastcall Q34_SpawnNihlathakPortalTimer(::SGAMEDATA * pGame, D2UnitStrc * 
 // A5Q4 (Betrayal of Harrogath) quest-state-0xd handler. Intro path: forces nStateFlag=5 and, if the Halls of Pain waypoint is not yet found, flags field_0x89 for a deferred portal spawn. Active path: when not RewardAwaits, reads Step0x03/Step0x02 bits and advances group progression, broadcasting nStateFlag 2 or 3 via QUEST_SetStateAndBroadcast.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q4.cpp
 void __fastcall Q34_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    bool _bHasWaypoint;
+    uint32_t _bHasWaypoint;
     ::SGAMEDATA* pSVar1;
     D2BitBufferStrc* pBitBuffer;
     bool bHasWaypoint;

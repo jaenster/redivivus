@@ -244,8 +244,7 @@ void __fastcall Objects_InitFn48(D2ObjectInitFnArg * pInitArg) {
       D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 3);
     } else {
       uint16_t uVar1;
-      *(uint8_t*)(char*)&uVar1 = pQuestData->pQuestSpecificData.pA4Q3->nForgeStage;
-      *(uint8_t*)((char*)&uVar1 + 1) = pQuestData->pQuestSpecificData.pA4Q3->field_0x01;
+      uVar1 = (uint16_t)((uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA4Q3->nForgeStage | (uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA4Q3->field_0x01 << 8);
       D2Common::Units::SetupUpdateFlag(pInitArg->pObject, (uint32_t)uVar1);
       nUpdateFlag = pQuestData->nStateFlagPrev;
       if (nUpdateFlag != 0xd && nUpdateFlag != 2 && nUpdateFlag != 3) {

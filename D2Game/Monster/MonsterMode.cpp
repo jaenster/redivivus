@@ -301,7 +301,7 @@ void __fastcall MONSTERDATA_FreeMonsterMode(::SGAMEDATA * pGame, D2MonsterPathPa
 
 // Death transition handler for a monster unit. Frees hover-text, calls RemoveMinionsFromAiIfFlag1Set2Not, clears targeting flags (ISVALIDTARGET, CANBEATTACKED), recalculates stats, filters states by boss context, removes light state targetability, optionally enables corpse collision (if deadCol flag not set in MonStats2), sets final facing direction, and starts regen timers via MONSTER_StartAiAndRegenTimers.
 static void __stdcall MONSTERMODE_OnDeath(uint8_t nDirection, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bHasLightState;
+    BOOL _bHasLightState;
     bool bHasLightState;
     D2MonStatsTxt* pMonStats = 0;
     if (pUnit && pUnit->pHoverText) {
@@ -344,7 +344,7 @@ static void __stdcall MONSTERMODE_OnDeath(uint8_t nDirection, ::SGAMEDATA * pGam
 }
 
 void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, D2UnitStrc * pUnit, BOOL bIsItemFindDrop, D2ObjectOperateFnArg * pUnitKill) {
-    bool _bHasCurseState;
+    BOOL _bHasCurseState;
     bool bQuestStateCheck;
     eD2LevelId nLevelId;
     D2MonStatsTxt* pMonStats;
@@ -825,7 +825,7 @@ BOOL __fastcall thunk_ExecuteTimerTrigger(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 static void CalculateCollisionDamage_Unused(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bInRange;
+    BOOL _bInRange;
     bool bInRange;
     int32_t nDamage;
     int nTargetHp;
@@ -1110,7 +1110,7 @@ BOOL __fastcall MONMODE_CompleteCastAndReset(::SGAMEDATA * pGame, D2MonsterKillS
 
 // Schedules the deferred death animation for a monster. Clears combat state via FreeCombatAndChangeAnimMode, then if no AITHINK timer is pending: if the unit is stunned, schedules the death event 45 frames out; otherwise reads aidel from MonStatsTxt (SP) or TreasureClass offset by difficulty (MP/BNet) as the death-animation delay, defaulting to 15 frames if zero.
 BOOL __fastcall PlanExecutionOfMonster(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
-    bool _bTimerExists;
+    BOOL _bTimerExists;
     bool bTimerExists;
     uint8_t byAiDel;
     D2UnitStrc* pUnit = pMonsterKill->pVictim;
@@ -1627,7 +1627,7 @@ void __fastcall ExecuteDropHandlerFn3(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
 
 // Server-side monster mode/lifecycle transition driver. Given a D2MonsterKillStrc (victim, attacker/target, requested nUnitMode), validates the victim is a monster, halts on a stuck uninterruptable state, then for non-GetHit modes sets the dynamic-path target/SP and recomputes combat stats & UMod-on-spawn. Looks up the per-mode AI drop/death handler (GetDropHandler) and invokes its pFn1; on a 0 result clears the current skill and schedules execution (PlanExecutionOfMonster). Flags MONMODEISCHANGING, re-inits the anim frame, applies velocity%, dispatches UMod-on-death, then re-resolves the handler for the unit's actual anim mode to (re)arm or clear anim timer events. Returns pFn1's result, or 0 (falling through to MONSTER_InitiateDefaultDeath) when no actual-mode handler exists. __stdcall(pGame,pMonsterKill,nParam).
 int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill, int32_t nParam) {
-    bool _bIsModeZeroDeath;
+    BOOL _bIsModeZeroDeath;
     bool bIsModeZeroDeath;
     BOOL BVar1;
     D2AiDispatchCallbacksStrc* pCurrentModeHandler;

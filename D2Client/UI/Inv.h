@@ -196,7 +196,8 @@ void __stdcall INV_LoadCubeImages();
 void __stdcall INV_FreeCubeImages();
 void __fastcall INV_StartCubeTransmuteAnim(int32_t nMenuActionId);
 void __stdcall INV_FreeItemGfxCache();
-void INV_HandleGambleMessage(short * pPacket);
+// EDI is not an argument: the body never reads it.
+void INV_HandleGambleMessage();
 void __stdcall INV_ResetOverlayFlag();
 void __stdcall INV_ResetShopState();
 void __stdcall INV_SetItemDescPending();

@@ -5431,7 +5431,8 @@ void __stdcall INV_FreeItemGfxCache() {
     gpInvCubeImage3 = 0;
 }
 
-void INV_HandleGambleMessage(short * pPacket) {
+// EDI is not an argument: the body never reads it.
+void INV_HandleGambleMessage() {
     D2Packet0x5aEventStructure byMsgType;
     g_nCurrentInventoryPage = 1;
     D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
@@ -6694,7 +6695,7 @@ void wsprintf(uint16_t * wszDest, uint16_t * wszFormat, ...) {
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 4, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    uint16_t _wszTokenBuf;
+    uint32_t _wszTokenBuf;
     va_list __va;
     va_start(__va, wszFormat);
     short int* pwTokenPtr;

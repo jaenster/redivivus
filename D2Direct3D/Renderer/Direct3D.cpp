@@ -4276,7 +4276,7 @@ BOOL __fastcall DrawShadowTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nP
     BVar1 = RENDERER_D3D_IsShadowBlendingEnabled();
     if (BVar1) {
       SetBlendMode(4);
-      nAlpha = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nAlpha + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)0xc0);
+      nAlpha = (uint32_t)((uint32_t)((uint32_t)nAlpha >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)0xc0);
     } else {
       SetBlendMode(1);
     }

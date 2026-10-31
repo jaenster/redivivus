@@ -109,7 +109,7 @@ static void SKILLSOR_OnInfernoExpire(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
 
 // Per-tick server handler for the Sorceress Inferno skill. Validates the skill/missile records, retrieves the cursor target position, then spawns an Inferno missile each tick for as many frames as the calc specifies. For monsters using Inferno it manages the inferno state and schedules the end-anim event via SetEvent; for players it sets up the anim timer events.
 BOOL __fastcall INFERNO_CastInfernoTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl2, eMissilesId eMissileId) {
-    bool _bHasTarget;
+    BOOL _bHasTarget;
     bool bHasTarget;
     eD2States eInfernoState;
     D2SkillArgStrc sSkillArg;
@@ -257,7 +257,7 @@ BOOL __fastcall SKILLSOR_SrvStFn11_InfernoChannel(::SGAMEDATA * pGame, D2UnitStr
 
 // Server aura stay-function (SrvStFunc 12): tests whether the caster's current target is within the aura's range and eligible to be attacked. Retrieves the target via GetTargetEx, calculates aura range from aurarangecalc, computes squared distance between caster and target, and returns TRUE only if distance^2 <= range^2, target is attackable (UNITS_CheckIfCanAttackTarget), and neither unit is in town. Returns FALSE if no valid target or out of range.
 BOOL __fastcall SKILLSOR_SrvStFn12_TargetInAuraRange(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bCanAttack;
+    uint32_t _bCanAttack;
     bool bCanAttack;
     int32_t nDistSq;
     int32_t nCasterY;
@@ -356,7 +356,7 @@ BOOL __fastcall SKILLSOR_SrvStFn13_ThunderStorm(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 BOOL __fastcall SKILLSOR_SrvStFn14_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bHasTarget;
+    BOOL _bHasTarget;
     bool bHasTarget;
     uint32_t nTargetX;
     uint32_t nTargetY;
@@ -401,7 +401,7 @@ void __fastcall SKILL_InitChargedBoltPath(D2UnitStrc * pUnit, int32_t nParam) {
 
 // Server do-func for Sorceress Charged Bolt (skill 17). Sets UNITFLAG_SKSRVDOFUNC, looks up the charge-up missile ID (SKILLASS_GetChargeUpMissile), evaluates calc[0] for bolt count, then loops that many times calling CreatingMissile with a per-bolt D2SkillArgStrc (fpFunction = SKILL_InitChargedBoltPath, flags 0x21, target from SKILLS_GetTargetOrCursorPos). Each bolt gets an independent random path initialised by SKILL_InitChargedBoltPath.
 BOOL __fastcall Skills_SrvDoFunc_017_ChargedBolt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bGotTarget;
+    BOOL _bGotTarget;
     bool bGotTarget;
     int nMissileLoopIdx;
     D2SkillArgStrc sSkillArg;
@@ -972,7 +972,7 @@ BOOL __fastcall Skills_SrvDoFunc_024_FireWall(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Server do-func for the Sorceress Enchant skill (skill func 0x19/25). Validates the skill's aurastat/aurastate indices against the data tables. Picks the target: the unit's current target if it is a valid ally (SKILL_CanUnitTargetAlly), otherwise the caster itself. Applies the aura state (aurastate) with a duration from auralencalc via SetStateWithExpiryTime, then loops the skill's 6 aurastat/aurastatcalc pairs, computing each via D2GetSkillCalc and adding nonzero values to the new state's stat list (D2AddStatToStatsListEx). Finally toggles the state gfx on the target. Returns TRUE on success, FALSE if validation or state creation fails.
 BOOL __fastcall Skills_SrvDoFunc_025_Enchant(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bTargetIsAlly;
+    BOOL _bTargetIsAlly;
     bool bTargetIsAlly;
     int32_t nValue;
     D2StateExArgStrc sStateArg;
@@ -1154,7 +1154,7 @@ BOOL __fastcall Skills_SrvDoFunc_027_Teleport(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 BOOL __fastcall Skills_SrvDoFunc_028_Meteor_Blizzard(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bCollisionOk;
+    uint32_t _bCollisionOk;
     bool bCollisionOk;
     if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
@@ -1421,7 +1421,7 @@ BOOL __fastcall Skills_SrvDoFunc_144_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUn
     // Static local variables (originally global data)
     static uint32_t gnSkillMissileCount_Hydra[3] = { 0xffffffff, 0x0, 0x1 }; D2_STATIC_GUARD(gnSkillMissileCount_Hydra, "D2Game::SKILLS::SkillSor::Skills_SrvDoFunc_144_Hydra::gnSkillMissileCount_Hydra");
 
-    bool _bGotTarget;
+    BOOL _bGotTarget;
     bool bGotTarget;
     uint32_t bIsMerc;
     D2UnitStrc* pSummon;

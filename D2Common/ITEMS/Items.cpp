@@ -2262,7 +2262,7 @@ int __stdcall ITEM_CalcWeaponAttackSpeed(D2UnitStrc * pUnit, D2UnitStrc * pItem)
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 20, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    bool _bIsWeapon;
+    uint32_t _bIsWeapon;
     bool bIsWeapon;
     BOOL nAttackSpeedResult;
     int32_t iVar1;

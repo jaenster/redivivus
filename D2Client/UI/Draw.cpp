@@ -157,7 +157,7 @@ void __fastcall Draw_UI_LoadGame(int32_t bAdvanceFrame) {
 }
 
 void __stdcall UI_ToggleMiniPanel() {
-    bool _bRegistryRead;
+    int _bRegistryRead;
     bool bRegistryRead;
     uint32_t bScrollActive;
     HWND pHwnd;
@@ -495,7 +495,8 @@ void __stdcall FreeDraw() {
 // UI rendering layer. Drawn AFTER world, BEFORE cursor.
 // All 38 UI panels: inventory, stats, skills, menus, tooltips, automap, chat.
 // GFX_bShowUIFlag controls visibility. UI drawn in screen space (not world).
-void DRAW_UI(D2GameViewStrc * pGameView, short * pnNpcParam) {
+// EDI is not an argument: never read; the callee DRAW_UI_NPC_INTERACTION does not take it either.
+void DRAW_UI(D2GameViewStrc * pGameView) {
     uint32_t eBorderType;
     int bIsActive;
     HWND pHwnd;
@@ -702,7 +703,7 @@ void DRAW_UI(D2GameViewStrc * pGameView, short * pnNpcParam) {
       }
     }
     if (GFX_bShowUIFlag.NpcMenu) {
-      npcmenu::DRAW_UI_NPC_INTERACTION(pnNpcParam);
+      npcmenu::DRAW_UI_NPC_INTERACTION();
     }
     if (GFX_bShowUIFlag.Cash) {
       ui::DRAW_UI_CASH();
@@ -716,7 +717,7 @@ void DRAW_UI(D2GameViewStrc * pGameView, short * pnNpcParam) {
     ui::DRAW_UnitUModsUnderCursor();
     ui::UI_DrawArenaKillCount();
     ui::DRAW_UI_DeathMessage();
-    Source::ClientEngine::thunk_DRAW_Overlay_SecondsLeftToGame(nullptr);
+    Source::ClientEngine::thunk_DRAW_Overlay_SecondsLeftToGame();
 }
 
 void __fastcall CLIENT_AdjustMemoryBudget(D2PoolManagerStrc * pMemory, int32_t bInitSpriteCache) {

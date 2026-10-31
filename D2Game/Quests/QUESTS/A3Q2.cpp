@@ -242,7 +242,7 @@ void __fastcall Q19_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
         return;
       }
     } else {
-      int32_t nQuestStateArg;
+      uint8_t nQuestStateArg;
       if (nItemCode != 0x20316671) {
         if (nItemCode == 0x20796571) {
           if (bMissingKhalimsRib) {
@@ -278,12 +278,12 @@ void __fastcall Q19_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
             goto send_state4_no_heart;
           }
           if (bHasKhalimsFlail) {
-            *(uint8_t*)(char*)&nQuestStateArg = '\x01';
+            nQuestStateArg = '\x01';
             if (bHasKhalimsEye) {
-              *(uint8_t*)(char*)&nQuestStateArg = '\a';
+              nQuestStateArg = '\a';
             }
 
-            Q19_SendQuestStatePacket((uint8_t)nQuestStateArg, pQuestData, pQuestArgs);
+            Q19_SendQuestStatePacket(nQuestStateArg, pQuestData, pQuestArgs);
             return;
           }
         }

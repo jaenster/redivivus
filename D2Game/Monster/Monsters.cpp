@@ -278,7 +278,7 @@ int32_t __fastcall MONSTER_GetBossNo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // Checks whether a MonUMod.txt unique modifier entry is eligible to be applied to pUnit. Rejects if disabled or version &gt; 99 in non-expansion mode. Rejects if the monster has any excluded monster type (exclude1/exclude2). Respects the fpick field: 1=boss-only, 2=excludes melee/no-multishot monsters, 3=requires a different boss flag. Returns 1 if eligible, 0 otherwise.
 static BOOL __stdcall MONSTER_CanApplyUniqueModifier(D2MonUModTxt * pD2MonUModTxt, int32_t bExpansion, D2UnitStrc * pUnit) {
-    bool _bHasFlag;
+    uint32_t _bHasFlag;
     bool bHasFlag;
     int32_t nClassId;
     if (pD2MonUModTxt->enabled == '\0') {
@@ -360,7 +360,7 @@ static BOOL __stdcall MONSTER_CanApplyUniqueModifier(D2MonUModTxt * pD2MonUModTx
 // Selects a champion unique-modifier (UMod) index for a monster using weighted random selection. Iterates the MonUMod txt table, filters entries by applicability to this unit and difficulty, accumulates weights into a candidate list (max 256), then rolls via UNIT_GetModuloFromSeed. Returns the chosen UMod index, or 0 if none qualify.
 static int32_t MONSTER_SelectChampionMod(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     bool _nExpansion;
-    bool _bCanApply;
+    BOOL _bCanApply;
     bool bCanApply;
     int aCandidateTable[513];
     bool nExpansion;
@@ -429,7 +429,7 @@ static int32_t MONSTER_SelectChampionMod(D2UnitStrc * pUnit, ::SGAMEDATA * pGame
 // Randomly selects one unique/champion modifier index from pTxtMonUmod for pUnit. Filters candidates by difficulty-tier cpick weight, champion flag, MONSTER_CanApplyUniqueModifier eligibility, and whether the slot in pD2MonUModTxt is already occupied. Performs a weighted random draw using the unit's seed; returns the selected modifier index (0-based) or 0 on failure.
 static int32_t __stdcall MONUMOD_RollRandomModifier(D2UnitStrc * pUnit, uint8_t * pUsedUModFlags, ::SGAMEDATA * pGame) {
     bool _nExpansion;
-    bool _bCanApply;
+    BOOL _bCanApply;
     bool bCanApply;
     uint32_t nRoll;
     int nCandidates;
@@ -1883,7 +1883,7 @@ void __fastcall MONSTER_OnDeathTryScheduleRevive(::SGAMEDATA * pGame, D2UnitStrc
 
 // AI callback that resurrects a monster that has just died via SKILL_SelfResurrect. Validates that the monster is dead, lacks a passive-state lock, is not a quest-flagged boss, is not Champion-aligned, and that its current tile is unblocked; if all checks pass, casts self-resurrection, clears the NOXP/NOTC flags, increments AI argument 1, and schedules the next think event.
 void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
-    bool _bIsDead;
+    BOOL _bIsDead;
     bool bIsDead;
     int nClassId;
     D2MonStatsTxt* pMonStatsTxt = !pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= sgptDataTable->nTxtMonStatsSize ? 0 : sgptDataTable->pTxtMonStats + nClassId;
@@ -1950,7 +1950,7 @@ void __fastcall MONSTER_ShatterOnDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
-    bool _bIsDead;
+    BOOL _bIsDead;
     bool bIsDead;
     D2MonsterKillStrc sKillStrc;
     _bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);

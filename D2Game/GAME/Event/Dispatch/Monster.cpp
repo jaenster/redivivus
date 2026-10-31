@@ -81,7 +81,7 @@ void __fastcall AI_ClearSwitchAiTargetParamsCallback(::SGAMEDATA * pGame, D2Unit
 
 // Server-side monster timer-event dispatcher. Routes a fired timer event (eTimerType) to the appropriate handler in pTimerMethods.fpFunctionExByType[]. For freeze-sensitive event types (STATREGEN, TRAP, ACTIVESTATE, PERIODICSKILLS, REMOVESTATE), dispatches unconditionally. For all other types, first checks that the monster is not frozen (STATE_freeze) or is in mode-zero-death before dispatching. Events beyond UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN are silently ignored.
 void __fastcall MONSTEREVENT_DefaultCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nArg1, int32_t nArg2) {
-    bool _bIsModeZeroDeath;
+    BOOL _bIsModeZeroDeath;
     bool bIsModeZeroDeath;
     if (eTimerType > UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN) {
       return;
@@ -150,7 +150,7 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
     0x1
 }; D2_STATIC_GUARD(UnknownModeValueArray, "D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch::UnknownModeValueArray");
 
-    bool _bIsModeZeroDeath;
+    BOOL _bIsModeZeroDeath;
     bool bIsModeZeroDeath;
     int nBaseMonClassId;
     D2MonStatsTxt* pMonStats;
@@ -318,7 +318,7 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Kills a monster via a system-generated (non-player) kill. Clears the monster's current skill, builds a D2MonsterKillStrc (attacker from GetTargetEx, death anim mode 'e' for ghosts/non-solid else 'd'), and calls MONSTERAI_ExecuteLifecycleTransition. If the unit is frozen but not in mode-zero-death, returns early; otherwise triggers MONSTERAI_ExecuteAiFunction to process death AI.
 void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bIsModeZeroDeath;
+    BOOL _bIsModeZeroDeath;
     bool bIsModeZeroDeath;
     D2MonsterKillStrc sMonsterKill;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
@@ -359,7 +359,7 @@ void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // Handles a monster's death triggered by its attacker. Clears current skill, builds a D2MonsterKillStrc with victim/attacker (via GetTargetEx), selects death animation mode ('d' normal or 'e' for undead via MvFlags1), then calls MONSTERAI_ExecuteLifecycleTransition. If the monster is frozen and not in mode-0 death it returns early; otherwise drives the monster AI death function.
 void __fastcall MonsterKilledByTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bIsModeZeroDeath;
+    BOOL _bIsModeZeroDeath;
     bool bIsModeZeroDeath;
     D2MonsterKillStrc killStrc;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);

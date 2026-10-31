@@ -291,7 +291,7 @@ void __fastcall D2SetPassiveStatsFromSkills(D2UnitStrc * pUnit, D2StatListExStrc
 
 // Server do-function for Druid shapeshift skill 116 (Werewolf). If the aura state is already active, applies the skill delay and returns 0. Otherwise allocates a new stat list for the shapeshift duration (auralencalc frames), attaches SKILLDRUID_OnShapeshiftExpire, applies aura stats via D2SetAurastatsFromSkills, records the skill/level modifier stats, sets the skill's mode to 10, and schedules a timer event. Returns 1 on successful activation.
 BOOL __fastcall Skills_SrvDoFunc_116_Werewolf(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bStateActive;
+    BOOL _bStateActive;
     bool bStateActive;
     D2StatListExStrc* pStatList;
     eD2UnitType eUnitType;
@@ -351,7 +351,7 @@ BOOL __fastcall Skills_SrvDoFunc_116_Werewolf(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Server helper that spawns nMissileCount missiles of type pMissileId from the caster toward the target/cursor position. If nParam2 is non-zero, fires one missile via SkillsServer::CreatingAMissile first and decrements the count. Remaining missiles are looped through D2Game::Missiles::CreatingMissile using SKILL_InitChargedBoltPath as the path function. Used by Druid multi-projectile skills (e.g. Twister/Tornado variants).
 BOOL __fastcall SKILLDRUID_CastMultiMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMissileCount, eMissilesId pMissileId, eD2Skills eSkill, int32_t nParam1, int32_t nParam2) {
-    bool _bHasTarget;
+    BOOL _bHasTarget;
     bool bHasTarget;
     D2SkillArgStrc sSkillArg;
     if (nParam2) {
@@ -408,7 +408,7 @@ BOOL __fastcall SKILLDRUID_CastMultiMissile(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 // Server-side druid Firestorm do-func (srvdofunc 117). Fires a primary missile then spawns additional fire-streak missiles along a charged-bolt radiating path toward the target. Used by Druid Firestorm (Skills.txt srvdofunc==117).
 BOOL __fastcall Skills_SrvDoFunc_117_Firestorm(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bHasTarget;
+    BOOL _bHasTarget;
     bool bHasTarget;
     int nRemainingMissiles;
     D2SkillArgStrc sSkillArg;
@@ -488,7 +488,7 @@ BOOL __fastcall Skills_SrvDoFunc_117_Firestorm(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Server-side druid Twister/Tornado do-func (srvdofunc 118). Casts multiple missiles via SKILLDRUID_CastMultiMissile using the charge-up missile for the skill. Used by Druid Twister/Tornado family (Skills.txt srvdofunc==118).
 BOOL __fastcall Skills_SrvDoFunc_118_Twister(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bResult;
+    BOOL _bResult;
     bool bResult;
     if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
@@ -518,7 +518,7 @@ BOOL __fastcall Skills_SrvDoFunc_118_Twister(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Server skill-do function for Druid Summon Dire Wolf (skill 119). Looks up the monster class ID and pet mode via SKILLS_GetSummonMonsterClassId, validates the pettype field bounds, gets a target/cursor position, fills a D2MonsterCastPetStrc, and calls SKILL_CreateSummon. On success, registers the summon in the game's unit node table, derives its level from skill calc[1] (min 1), and applies revive-corpse minion buffs plus standard summon buffs. Returns 1 on success, 0 otherwise.
 BOOL __fastcall Skills_SrvDoFunc_119_SummonDireWolf(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bHasTarget;
+    BOOL _bHasTarget;
     bool bHasTarget;
     D2MonsterCastPetStrc sPetCast;
     int32_t nPetMode;
@@ -930,7 +930,7 @@ static void __stdcall SKILLDRUID_CreateAuraMissile(::SGAMEDATA * pGame, D2UnitSt
 }
 
 void __fastcall SKILLDRUID_ApplyAuraWithMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, int32_t nDuration, eD2Skills eSkill, int32_t nParam) {
-    bool _bApplied;
+    BOOL _bApplied;
     bool bApplied;
     if (nParam <= 0) {
       return;
@@ -1336,7 +1336,7 @@ static int32_t SKILLDRUID_GetSummonHealthBonus(int * pnAbsorb, int32_t nAbsorbDe
 
 // Item-event / aura-tick callback for the Druid summon HP-sharing aura (Heart of Wolverine / Spirit of Barbs style). Reads the aura's stat list from the caster, sums health contributions from up to three summon slots in pParam via SKILLDRUID_GetSummonHealthBonus, converts the total to a percentage of the reference value (aurastat[1]), and compares against the previous cached percentage (UNITSTAT_unsentparam1). If the change exceeds 4 percentage points it refreshes the aura GFX and updates the cached value. If the computed absorption drops to zero, deactivates the state, removes and frees the stat list entirely. Returns 1 on any handled path, 0 on invalid inputs.
 BOOL __fastcall ITEMEVENT_DruidSummonHpAura(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bPctChanged;
+    uint32_t _bPctChanged;
     bool bPctChanged;
     int nLastAbsorbPct;
     int32_t nAbsorbCtx0;

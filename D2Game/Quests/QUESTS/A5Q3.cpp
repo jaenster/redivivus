@@ -1104,7 +1104,7 @@ void __fastcall AddBonusResistances(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uin
 // CalculateBonusResistances (PrisonOfIce reward applicator): sums +10 all-res for each difficulty (Normal/NM/Hell record
 // pools 1/2/3) where the player has Step0x07 set (Scroll-of-Resistance used). Applies total via AddBonusResistances on join.
 void __fastcall CalculateBonusResistances(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bHasScrollQuestState;
+    BOOL _bHasScrollQuestState;
     bool bHasScrollQuestState;
     eD2QuestState eScrollState = QUESTSTATE_Step0x07;
     eD2Quests eQuestId = QUEST_PrisonOfIce;

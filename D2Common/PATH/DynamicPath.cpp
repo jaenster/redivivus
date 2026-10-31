@@ -822,7 +822,7 @@ void __stdcall PATH_SetOrClearFlag0x2000(D2DynamicPathStrc * pDynamicPath, int32
 }
 
 void __stdcall PATH_PeriodicPathRecalc(D2UnitStrc * pUnit) {
-    bool _bHasReachedTarget;
+    BOOL _bHasReachedTarget;
     bool bHasReachedTarget;
     if (!(pUnit && !(pUnit->eUnitFlags >> 0x15 & 1) && pUnit->eUnitFlagsEx >> 0xd & 1)) {
       return;
@@ -973,8 +973,7 @@ void __stdcall PATH_AddUnitCollision(D2UnitStrc * pUnit) {
           pDynamicPath = pUnit->pPath.pDynamicPath;
           nUnitWidth = pDynamicPath->nUnitWidth;
           if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-            *(uint16_t*)(char*)&iVar1 = pDynamicPath->nTargetX;
-            *(uint16_t*)((char*)&iVar1 + 2) = pDynamicPath->nTargetY;
+            iVar1 = (int32_t)((uint32_t)(uint16_t)pDynamicPath->nTargetX | (uint32_t)(uint16_t)pDynamicPath->nTargetY << 16);
           } else if (pDynamicPath) {
             iVar1 = GetYPos(pDynamicPath);
           } else {
@@ -1032,7 +1031,7 @@ void __stdcall PATH_AddUnitCollision(D2UnitStrc * pUnit) {
 
 // Removes a unit's collision footprint from its room's collision grid, choosing the removal method by unit type. For players (Dead anim) and monsters (Kick/Death anim), and any unit when forced via nParam, it removes using the dynamic path's target coords + nUnitWidth (RemoveCollision_Type). For objects it removes a size-X box at the unit's position (RemoveCollision_Width). For other unit types it removes a full sizeX-by-sizeY rectangle (RemoveCollision_Vector). Objects/monsters that have no collision and aren't forced (nParam==0) return 0 without acting. Position is read from the static path (objects/types 4-5) or dynamic path Get X/YPos. Returns 1 if collision was removed, 0 if skipped. Called before moving a unit so its old footprint is cleared.
 BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
-    bool _bHasCollision;
+    BOOL _bHasCollision;
     D2DynamicPathStrc* pDynamicPath;
     bool bHasCollision;
     int32_t nPosY;
@@ -1143,8 +1142,7 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
     int32_t nUnitWidth = pDynamicPath->nUnitWidth;
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      *(uint16_t*)(char*)&nPosY = pDynamicPath->nTargetX;
-      *(uint16_t*)((char*)&nPosY + 2) = pDynamicPath->nTargetY;
+      nPosY = (int32_t)((uint32_t)(uint16_t)pDynamicPath->nTargetX | (uint32_t)(uint16_t)pDynamicPath->nTargetY << 16);
     } else if (pDynamicPath) {
       nPosY = GetYPos(pDynamicPath);
     } else {

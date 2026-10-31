@@ -164,7 +164,7 @@ static uint32_t __stdcall DAMAGE_RollElementalDamageWithBonus(eD2UnitStat eUnitS
 }
 
 static int32_t __stdcall DAMAGE_ApplyHealingToUnit(int32_t nParam, D2UnitStrc * pUnit) {
-    bool _bIsDead;
+    BOOL _bIsDead;
     bool bIsDead;
     if (nParam <= 0) {
       return 0;
@@ -438,7 +438,7 @@ int32_t __fastcall DAMAGE_GetMonsterDelayByDifficulty(D2UnitStrc * pUnit, D2Unit
 // Applies cold slow to pUnit2 for nParam frames, sourced from attacker pUnit. Looks up MonStats ColdEffect per difficulty; divides duration for cold-immune monsters. Creates or extends STATE_cold stat list (velocity/attack/anim rate penalties), schedules expiry event, and probabilistically sets STATE_shatter on eligible monsters.
 // @sourcefile .\UNIT\SUnitDmg.cpp
 static void __stdcall DAMAGE_ApplyCold(D2UnitStrc * pUnit, int32_t nParam, D2UnitStrc * pUnit2) {
-    bool _bCanShatter;
+    BOOL _bCanShatter;
     bool bCanShatter;
     eD2UnitType eUnitType;
     int pExistingColdList;
@@ -2096,7 +2096,7 @@ void __fastcall SERVER_KillMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Un
       int32_t nAttackerYPos;
       nAttackerYPos = D2Client::Units::GetYPosFromDynamicPathUnit(pAttacker);
       nDirection = D2Common::Units::GetDirectionToCoords(pUnit, D2Client::Units::GetXPosFromDynamicPathUnit(pAttacker), nAttackerYPos);
-      *(uint8_t*)(char*)&nDirection = (uint8_t)nDirection;
+      nDirection = (int32_t)((uint32_t)nDirection & 0xffffff00u | (uint32_t)(uint8_t)nDirection);
     } else {
       *(uint8_t*)(char*)&nDirection = D2Common::PATH::DynamicPath::GetDirection(pUnit->pPath.pDynamicPath);
     }
@@ -2536,7 +2536,7 @@ static void __stdcall DAMAGE_ReduceEquipmentDurability(::SGAMEDATA * pGame, D2Un
 
 // Resolves a pending deferred-hit combat queue entry between pUnit (attacker) and pVictim. Finds the matching D2CombatEntryStrc, verifies melee range, applies damage via DAMAGE_ApplyDamageToUnit, dispatches hit/defend unit events, applies reflected damage, runs GetHitCalculation, and removes the entry from the queue. No-ops if either unit is null or out of range.
 void __fastcall DAMAGE_ProcessCombatQueueEntry(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pVictim, uint32_t dwParam) {
-    bool _bInMeleeRange;
+    BOOL _bInMeleeRange;
     bool bInMeleeRange;
     eD2UnitType eEntryAttackerType;
     int32_t nGUID;
@@ -3737,8 +3737,8 @@ void __fastcall DAMAGE_SetUnitToLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
 // Server-side melee hit resolution between attacker pUnit and defender pUnit2. Validates both are player/monster, can attack each other, and are within melee range (range widened by nParam2 + the attacker's melee range; monster attackers get +2). Sets a "moving" flag if a player defender is running, then rolls the attack (DAMAGE_RollAttackHit using nParam1) and checks block/evasion (DAMAGE_CheckBlockAndEvasion), folding the resulting STATE_* flags into a packed uint16 result (hit / block / dodge / evade / parry bits, plus an uninterruptable-stun bit). Returns the packed hit-result word (0 = out of range / cannot attack).
 // Registers: pGame in ECX and pUnit in EDX (__fastcall); EAX is not an input.
 uint16_t __fastcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nParam1, int32_t nParam2) {
-    bool _bCanAttack;
-    bool _bInMeleeRange;
+    uint32_t _bCanAttack;
+    BOOL _bInMeleeRange;
     bool bCanAttack;
     bool bIsMonster;
     bool bInMeleeRange;

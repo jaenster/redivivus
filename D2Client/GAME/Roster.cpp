@@ -1309,7 +1309,7 @@ BOOL __fastcall ROSTER_CheckPlayersInSameParty(int32_t nRoster1GUID, int32_t nRo
 }
 
 BOOL __stdcall ROSTER_CheckAnyPlayerHostileToMe() {
-    bool _bHostile;
+    uint32_t _bHostile;
     bool bHostile;
     int nRosterGUID;
     D2RosterStrc* pRosterIter = gpRosterPlayers;

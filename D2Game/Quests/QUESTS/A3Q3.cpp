@@ -893,7 +893,7 @@ uint32_t __fastcall Q20_GetBladeHasBeenGiven(::SGAMEDATA * pGame) {
 // the drop fails, clears bCanDropBlade. No quest-state bit writes.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q3.cpp
 void __fastcall Q20_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2QuestDataStrc* pQuestDataArg = pQuestData;
+    D2QuestDataStrc* pQuestDataArg;
     QUEST_DebugPrint(pQuestData->pGame, "killed boss for quest", "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q3.cpp", 0x3df);
     D2QuestDataA3Q3Strc* pA3Q3Data = pQuestData->pQuestSpecificData.pA3Q3;
     if (!(pA3Q3Data->bCanDropBlade && pQuestData->bIsNotIntroduction != '\0')) {

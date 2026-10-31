@@ -363,10 +363,10 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                   if ((char)__frame0.szItemCode == '\0') {
                     __frame0.nWallLayerIdx = 0x202020;
                   } else if (*(uint8_t*)((char*)&__frame0.szItemCode + 1) == '\0') {
-                    *(uint16_t*)(char*)&__frame0.nWallLayerIdx = (uint16_t)((uint16_t)(uint8_t)0x20 << 8 | (uint16_t)(uint8_t)(char)__frame0.szItemCode);
+                    __frame0.nWallLayerIdx = (int)((uint32_t)__frame0.nWallLayerIdx & 0xffff0000u | (uint32_t)(uint16_t)(uint16_t)((uint16_t)(uint8_t)0x20 << 8 | (uint16_t)(uint8_t)(char)__frame0.szItemCode));
                     __frame0.nWallLayerIdx = (uint32_t)((uint32_t)(uint16_t)0x20 << 16 | (uint32_t)(uint16_t)__frame0.nWallLayerIdx);
                   } else {
-                    *(uint16_t*)(char*)&__frame0.nWallLayerIdx = (uint16_t)__frame0.szItemCode;
+                    __frame0.nWallLayerIdx = (int)((uint32_t)__frame0.nWallLayerIdx & 0xffff0000u | (uint32_t)(uint16_t)(uint16_t)__frame0.szItemCode);
                     __frame0.nWallLayerIdx = (uint32_t)((uint32_t)(uint16_t)0x20 << 16 | (uint32_t)(uint16_t)__frame0.nWallLayerIdx);
                     if (*(uint8_t*)((char*)&__frame0.szItemCode + 2) != '\0') {
                       __frame0.nWallLayerIdx = __frame0.szItemCode & 0xffffff;
@@ -802,7 +802,7 @@ D2RoomExStrc * __fastcall DRLGROOMEX_AllocRoomExTypePreset(D2DrlgLevelStrc * pLe
 
 // Moves preset units from the level's preset list into this room by checking coordinate bounds, adjusting positions to room-local, and linking them into pRoomEx->pPresetUnits.
 static void DRLGPRESET_AddAndSetPresetUnits(D2RoomExStrc * pRoomEx) {
-    bool _bInside;
+    BOOL _bInside;
     bool bInside;
     D2DrlgCoordsStrc roomCoords;
     roomCoords.WorldPosition.y = pRoomEx->sCoords.WorldPosition.y;
@@ -984,14 +984,15 @@ void __fastcall GetTombStoneTileCoords(D2RoomExStrc * pRoomEx, D2CoordStrc * * p
 
 // Initializes the tile data for a preset-area (LvlPrest) DRLG room. Allocates the room tile grid, reads Animate/FillBlanks/KillEdge flags from the LvlPrest txt row, and computes KillEdgeX/Y when the room sits on the map border. For Burial-Grounds-style presets (nLevelPrest 1 or 0x6c) builds two scratch grids. Two passes over the floor layers, wall layers and the cell grid: first DRLGROOMTILE_CountTilesFromGrid/CountWallTilesFromGrid (plus anim counts) to size the arrays, then AllocTileDataArrays, then InitRoomTiles to populate them. Allocates anim tiles if Animate set, fixes up the room's max wall/floor/roof tile counts, and builds the room coordinate list (BuildRoomCoordList if Logicals else AllocDrlgCoordList). Special-cases level 0x11 (Burial Grounds world points). Side effects: heavy server-pool allocation, fully populates pRoomEx tile/collision data. Server-side D2Common DRLG preset rooms.
 void __fastcall DRLGROOMEX_InitializePresetRoom(D2RoomExStrc * pRoomEx) {
-    bool _bKillEdgeX;
-    bool _bKillEdgeY;
+    uint32_t _bKillEdgeX;
+    uint32_t _bKillEdgeY;
     bool _bIsFillBlanks;
     bool _bFillBlanks;
     bool bFillBlanks;
     bool bIsFillBlanks;
     bool bKillEdgeX;
     bool bKillEdgeY;
+    int gridCells1[1024];
     int rowOffsets1[256];
     int gridCells2[1024];
     int rowOffsets2[256];
@@ -1015,12 +1016,16 @@ void __fastcall DRLGROOMEX_InitializePresetRoom(D2RoomExStrc * pRoomEx) {
     }
 
     BOOL bIsBurialGrounds = 0;
-    if (pPresetRoom->nLevelPrest == 1 || pPresetRoom->nLevelPrest == 0x6c) {
-      int gridCells1[1024];
-      bIsBurialGrounds = 1;
-      DrlgGrid::FillGrid(&pGrid, pRoomEx->sCoords.WorldSize.x + 1, pRoomEx->sCoords.WorldSize.y + 1, gridCells2, rowOffsets1);
-      DrlgGrid::FillGrid(&pOtherGrid, pRoomEx->sCoords.WorldSize.x + 1, pRoomEx->sCoords.WorldSize.y + 1, gridCells1, rowOffsets2);
-      pPresetRoom = pDrlgRoomExDataPreset;
+    switch (pPresetRoom->nLevelPrest) {
+      case 1:
+        case 0x6c:
+          {
+            bIsBurialGrounds = 1;
+            DrlgGrid::FillGrid(&pGrid, pRoomEx->sCoords.WorldSize.x + 1, pRoomEx->sCoords.WorldSize.y + 1, gridCells2, rowOffsets1);
+            DrlgGrid::FillGrid(&pOtherGrid, pRoomEx->sCoords.WorldSize.x + 1, pRoomEx->sCoords.WorldSize.y + 1, gridCells1, rowOffsets2);
+            pPresetRoom = pDrlgRoomExDataPreset;
+            break;
+          }
     }
 
     D2DrlgFileStrc* pDrlgFile = pPresetRoom->pMap->pDrlgFile;
@@ -1264,7 +1269,7 @@ void __fastcall DRLGPRESET_GetDrlgFileSize(D2RoomExStrc * pDrlgMap, int32_t * pn
 
 // Already documented — existing description is accurate and meaningful.
 static void __stdcall DRLGPRESET_UpdatePopTiles(int nTickCount, D2RoomExStrc * pRoomEx, D2DrlgCoordsStrc * pPopLocation, uint32_t dwParam3, uint32_t dwParam4) {
-    bool _bInside;
+    BOOL _bInside;
     bool bInside;
     int* pTileFlags;
     D2DrlgCoordsStrc searchBox;
@@ -1334,7 +1339,7 @@ static void __stdcall DRLGPRESET_UpdatePopTiles(int nTickCount, D2RoomExStrc * p
 
 // DRLG preset-area "POP" (preset-object population) updater. Given a RoomEx and an (nX,nY) world coordinate plus bOtherRoom flag: if the room is a preset (type 2), finds which POP bounds rectangle the point falls inside and notes its matched POP id. Then iterates the room's nearby preset RoomEx neighbors and, comparing POP tick deadlines, calls DRLGPRESET_UpdatePopTiles to refresh/expire POP tiles (a fresh GetTickCount+500 deadline for the matched POP, or the stored deadline otherwise). If any update occurred, does a second pass writing back the new deadlines (0 for non-matching POPs, the new deadline for the matched POP). No return. NOTE: pRoomExData POP sub-structure accessed via raw +0x40/+0x44/+0x4c/+0x50 offsets - shared struct lacks named fields here.
 void __fastcall UpdatePops(D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY, BOOL bOtherRoom) {
-    bool _bInsideCoords;
+    BOOL _bInsideCoords;
     D2DrlgMapStrc* pDVar1;
     bool bInsideCoords;
     uint32_t dwParam3;
@@ -1558,26 +1563,34 @@ void __fastcall DRLGPRESET_AddPresetUnitToDrlgMap(D2PoolManagerStrc * pMemory, D
         }
 
         nTableSize = pPresetUnit->nClassId;
-        if (nTableSize != 0xc4 && nTableSize != 0x105) {
-          if (nTableSize == 0x245) {
-            roll_quarter_skip:
-            newSeed = D2_SEED_NEXT(*pSeed);
-            bInclude2 = !(newSeed.nSeedLow & 3);
-            commit_roll:
-            *pSeed = newSeed;
-            if (bInclude2) {
-              continue;
+        switch (nTableSize) {
+          case 0xc4:
+            case 0x105:
+              {
+                newSeed = D2_SEED_NEXT(*pSeed);
+                pSeed->nSeedHigh = newSeed.nSeedHigh;
+                pSeed->nSeedLow = newSeed.nSeedLow;
+                if (!(newSeed.nSeedLow & 1)) {
+                  goto add_preset_copy;
+                }
+
+                break;
+              }
+          case 0x245:
+            {
+              roll_quarter_skip:
+              newSeed = D2_SEED_NEXT(*pSeed);
+              bInclude2 = !(newSeed.nSeedLow & 3);
+              commit_roll:
+              *pSeed = newSeed;
+              if (bInclude2) {
+                continue;
+              }
             }
-          }
-
-          goto add_preset_copy;
-        }
-
-        newSeed = D2_SEED_NEXT(*pSeed);
-        pSeed->nSeedHigh = newSeed.nSeedHigh;
-        pSeed->nSeedLow = newSeed.nSeedLow;
-        if (!(newSeed.nSeedLow & 1)) {
-          goto add_preset_copy;
+          default:
+            {
+              goto add_preset_copy;
+            }
         }
       } else {
         nTableSize = sgptDataTable->nTxtMonStatsSize;

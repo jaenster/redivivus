@@ -383,7 +383,7 @@ void __fastcall UI_StoreGlobalUIText(uint16_t * wszText, DWORD dwTextColor) {
 }
 
 BOOL __fastcall UI_GetUniqueMonsterName(D2UnitStrc * pUnit, uint16_t nNameMode) {
-    D2UnitStrc* pInteractUnit = pUnit;
+    D2UnitStrc* pInteractUnit;
     uint32_t eBorderType = Path::DRAW_GetTypeOfBorder();
     if (eBorderType == 3) {
       return 0;
@@ -6170,32 +6170,33 @@ void __stdcall DRAW_UI_NewStatPoints_II() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nBaseX + 3, ScreenSizeY - 0x6d, -1, DRAW_SOLID, nullptr);
 }
 
-static uint32_t __stdcall UI_GetNewSkillPointsForClass(int32_t nCharClass, uint32_t bResult) {
+// Returns a byte in AL (callers test AL); EAX is not an argument.
+bool __stdcall UI_GetNewSkillPointsForClass(int32_t nCharClass) {
     if (nCharClass == 3) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)(bResult >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+      return true;
     }
 
-    bResult = GetUIFlag(UI_SKILLTREE);
-    if (bResult) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)(bResult >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    BOOL bUIFlagParty = GetUIFlag(UI_SKILLTREE);
+    if (bUIFlagParty) {
+      return true;
     }
 
-    bResult = GetUIFlag(UI_NPCSHOP);
-    if (bResult) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)(bResult >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    bUIFlagParty = GetUIFlag(UI_NPCSHOP);
+    if (bUIFlagParty) {
+      return true;
     }
 
-    BOOL bUIFlagParty = GetUIFlag(UI_PARTYSCREEN);
+    bUIFlagParty = GetUIFlag(UI_PARTYSCREEN);
     if (!bUIFlagParty) {
-      return 0;
+      return false;
     }
 
-    bResult = GetUIFlag(UI_INVENTORY);
-    if (bResult) {
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)(bResult >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    bUIFlagParty = GetUIFlag(UI_INVENTORY);
+    if (!bUIFlagParty) {
+      return false;
     }
 
-    return 0;
+    return true;
 }
 
 void __stdcall UI_DrawLevelUpButtonRight() {
@@ -6238,18 +6239,18 @@ void __stdcall Draw_UI_NewStatPoints() {
     DWORD eResMode;
     eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode != 2) {
-      uint32_t bHasSkillPoints;
-      bHasSkillPoints = UI_GetNewSkillPointsForClass(eBorderType, eResMode);
-      if ((char)bHasSkillPoints != '\0') {
+      bool bVar1;
+      bVar1 = UI_GetNewSkillPointsForClass(eBorderType);
+      if (bVar1) {
         gbUISkillButtonHovered = 0;
         return;
       }
     }
 
-    int iVar1;
-    iVar1 = ScreenSizeX;
+    int iVar2;
+    iVar2 = ScreenSizeX;
     if (eBorderType == 1) {
-      iVar1 = ScreenSizeX - ScreenSizeX / 2;
+      iVar2 = ScreenSizeX - ScreenSizeX / 2;
     }
 
     memset(&sGfxData, 0, 0x48);
@@ -6270,8 +6271,8 @@ void __stdcall Draw_UI_NewStatPoints() {
       bEscMenuOpen = 0;
       nTextColor = 0;
       wszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xf93);
-      D2Win::Src::D2WinFont::DRAW_text(wszLabel, nButtonWidth / 2 - nTextWidth / 2 + 1 + iVar1 - 0x49, bMouseOnButton, nTextColor, bEscMenuOpen);
-      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar1 - 0x49, ScreenSizeY - 0x69, -1, DRAW_SOLID, nullptr);
+      D2Win::Src::D2WinFont::DRAW_text(wszLabel, nButtonWidth / 2 - nTextWidth / 2 + 1 + iVar2 - 0x49, bMouseOnButton, nTextColor, bEscMenuOpen);
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar2 - 0x49, ScreenSizeY - 0x69, -1, DRAW_SOLID, nullptr);
     }
 
     memset(&sGfxData, 0, 0x48);
@@ -6303,16 +6304,16 @@ void __stdcall Draw_UI_NewStatPoints() {
     D2Win::Src::D2WinFont::DRAW_text0(wszLabel);
     eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode == 2) {
-      iVar1 = UI_GetNewSkillPointsCount();
-      if (iVar1) {
+      iVar2 = UI_GetNewSkillPointsCount();
+      if (iVar2) {
         bEscMenuOpen = GetUIFlag(UI_ESCMENU);
         if (!bEscMenuOpen) {
           nTextWidth = 1;
-          iVar1 = ScreenSizeY - 0x32;
+          iVar2 = ScreenSizeY - 0x32;
           nButtonWidth = 0;
           bMouseOnButton = ScreenSizeX / 2;
           wszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xf93);
-          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszLabel, bMouseOnButton + 0xb2, iVar1, nButtonWidth, nTextWidth);
+          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszLabel, bMouseOnButton + 0xb2, iVar2, nButtonWidth, nTextWidth);
         }
       }
 
@@ -6320,7 +6321,7 @@ void __stdcall Draw_UI_NewStatPoints() {
       return;
     }
 
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar1 - 0x46, ScreenSizeY - 0x6d, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar2 - 0x46, ScreenSizeY - 0x6d, -1, DRAW_SOLID, nullptr);
 }
 
 void __fastcall UI_DrawTextCentered(int32_t nPositionXStart, int32_t nParam1, int32_t nPositionXEnd, uint16_t * wszMessage, int32_t nParam2) {

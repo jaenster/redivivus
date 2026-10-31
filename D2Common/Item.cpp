@@ -102,7 +102,7 @@ void __fastcall ITEM_UpdateSetItemStates(D2UnitStrc * pUnit, uint32_t nEquippedM
     0x6
 }; D2_STATIC_GUARD(gnItemQualityByBaseId, "D2Common::ITEM_UpdateSetItemStates::gnItemQualityByBaseId");
 
-    int16_t _nSetIndex;
+    int32_t _nSetIndex;
     int16_t nSetIndex;
     int nBonusIdx;
     eD2States* pStateEntry;

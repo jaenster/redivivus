@@ -252,7 +252,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_CompositeDirMissile(D2UnitStrc * pUnit, eD2
 }; D2_STATIC_GUARD(gaSkillCompositeDirectionalMissileConst, "D2Client::SKILLS::SkillsMon::Skills_CltDoFunc_Mon_CompositeDirMissile::gaSkillCompositeDirectionalMissileConst");
     static uint8_t gaSkillCompositeDirMissileData[8] = { 0x1d, 0x1c, 0x1b, 0x1a, 0x19, 0x18, 0x1f, 0x1e }; D2_STATIC_GUARD(gaSkillCompositeDirMissileData, "D2Client::SKILLS::SkillsMon::Skills_CltDoFunc_Mon_CompositeDirMissile::gaSkillCompositeDirMissileData");
 
-    uint8_t _byDirIdx;
+    uint32_t _byDirIdx;
     BOOL bGotCoords;
     int nTotalFrames;
     uint32_t uStack_1b;

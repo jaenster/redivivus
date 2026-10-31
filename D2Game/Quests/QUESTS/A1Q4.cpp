@@ -1140,7 +1140,7 @@ uint8_t __fastcall Q04_TimerDespawnRogueGuards(::SGAMEDATA * pGame, D2QuestDataS
 // loops and broadcasts step 6 (Cain freed). Asserts/halts if quest data missing.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
 void __fastcall MakeTownPortalFromScroolTree(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bPortalSpawned;
+    BOOL _bPortalSpawned;
     int32_t nSpawnX;
     int32_t nSpawnY;
     D2UnitStrc* pCainUnit;
@@ -1206,7 +1206,7 @@ void __fastcall MakeTownPortalFromScroolTree(::SGAMEDATA * pGame, D2UnitStrc * p
 // Q04_AutoCompleteForActIPlayer. Records the attacker's GUID. This is the act that
 // yields the Scroll of Inifuss and advances the quest.
 BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(D2ObjectOperateFnArg * pOperation) {
-    bool _bQuestState;
+    BOOL _bQuestState;
     uint16_t nPartyId;
     bool bQuestState;
     D2ObjectsTxt* pPlayerData;
@@ -1370,7 +1370,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateHoradricMalusSmith(D2ObjectOperateFnArg * pOp
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    bool _bQuestStateAlt;
+    BOOL _bQuestStateAlt;
     D2QuestDataStrc* pDVar1;
     bool bQuestStateAlt;
     int32_t nStoneIdx;
@@ -2059,8 +2059,7 @@ void __fastcall Q33_UpdateFrozenAnyaNpcState(D2QuestDataStrc * pQuestData, D2Uni
           if (eLevelId == LEVEL_RogueEncampment) {
             pnPlayerArrivalCount = &pA5Q3Specific->sQuestGUID.nPlayerCount;
             (*(int*)pnPlayerArrivalCount)++;
-            *(uint16_t*)(char*)&nPlayerArrivalCount = pA5Q3Specific->sQuestGUID.nPlayerCount;
-            *(uint16_t*)((char*)&nPlayerArrivalCount + 2) = pA5Q3Specific->sQuestGUID.field2_0x82;
+            nPlayerArrivalCount = (int)((uint32_t)(uint16_t)pA5Q3Specific->sQuestGUID.nPlayerCount | (uint32_t)(uint16_t)pA5Q3Specific->sQuestGUID.field2_0x82 << 16);
             if (nPlayerArrivalCount > 5) {
               pA5Q3Specific->bFrozensteinSpawned = 1;
             }

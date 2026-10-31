@@ -705,7 +705,7 @@ bool __stdcall MISSILESMODE_CheckCollisionAtOffset(int32_t nDistance, D2RoomStrc
 
 // Server-side missile spawner that fills a square/circular area around the owning unit's position with copies of missile nMissileId. Centers on pUnit's path position (static or dynamic), then sweeps a (2*nRadiusParam+1) grid; for each cell within the radius (distance^2 <= nRadiusParam^2) it wall-tests via TestCollision(COLLIDE_WALL) and, if clear and the cell maps to a valid non-town room, fills a D2SkillArgStrc (owner, skill id, level) and calls CreatingMissile. nParam (when nonzero) sets a duration/total-frames field and an extra flag. Used for AoE patterns (e.g. nova-/firewall-style area fills).
 void __fastcall MISSILES_SpawnAreaPattern(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nRadiusParam, eMissilesId nMissileId, uint32_t nParam) {
-    bool _bCollides;
+    BOOL _bCollides;
     bool bCollides;
     int nCurY;
     D2SkillArgStrc sSkillArg;
@@ -3866,7 +3866,7 @@ void __fastcall Missiles_SrvDmgFunc_CopyColdLengthToFreezeLength(::SGAMEDATA * p
 
 // Damage modifier that applies bonus elemental damage against undead (dParam1%) and/or demons (dParam2%) separately. Calls MISSILES_CalculateElementalDamage first, then MISSILES_AddElementalDamageBonus for each matching monster type. Used by holy-bolt-style missiles.
 void __fastcall Missiles_SrvDmgFunc_ElementalBonusVsUndeadDemon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage) {
-    bool _bIsDemon;
+    uint32_t _bIsDemon;
     bool bIsDemon;
     BOOL nClassId;
     if (!pUnit) {
@@ -4230,7 +4230,7 @@ void __fastcall MISSMODE_PortalArrival(::SGAMEDATA * pGame, D2UnitStrc * pUnit) 
 }
 
 BOOL __fastcall Missiles_SrvHitFunc_SpawnTyraelAndOpenPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    bool _bQuestFlag;
+    uint32_t _bQuestFlag;
     bool bQuestFlag;
     if (pTarget) {
       return 0;
@@ -4586,7 +4586,7 @@ int __fastcall Hits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarge
     // Static local variables (originally global data)
     static int MISSILESSRVDMGFUNCS_SIZE = 0x1f; D2_STATIC_GUARD(MISSILESSRVDMGFUNCS_SIZE, "D2Game::MISSILES::MissilesMode::Hits::MISSILESSRVDMGFUNCS_SIZE");
 
-    bool _bCanAttackTarget;
+    uint32_t _bCanAttackTarget;
     bool bCanAttackTarget;
     BOOL bIsOwner;
     int iVar1;
@@ -5012,8 +5012,8 @@ int __fastcall MISSMODE_SrvDoFn06_FireWallMaker(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Server per-tick missile update (DoFunc slot 7): homing/tracking missile logic. Validates owner alive and not in town, then if the missile's target-flags bit 0 is set: refreshes the target, discards it if dead or no longer attackable by the owner, and every Param1 frames (default 5) recalculates the path toward the target if within collision distance 4–24 tiles. Delegates standard movement/collision to Missiles_SrvDoFunc_001 each tick.
 int __fastcall MISSMODE_SrvDoFn07_GuidedMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bIsDead;
-    bool _bCanAttack;
+    BOOL _bIsDead;
+    uint32_t _bCanAttack;
     bool bIsDead;
     bool bCanAttack;
     D2UnitStrc* pTargetUnit;

@@ -261,7 +261,7 @@ void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel) {
     static uint32_t gnWeatherSplashMaxCount; D2_STATIC_GUARD_BSS(gnWeatherSplashMaxCount, "D2Client::Draw::Weather::MISC_PrepareWeatherOverlay::gnWeatherSplashMaxCount");
     static int gbWeatherInitialized; D2_STATIC_GUARD_BSS(gbWeatherInitialized, "D2Client::Draw::Weather::MISC_PrepareWeatherOverlay::gbWeatherInitialized");
 
-    uint8_t _byTintComp;
+    uint32_t _byTintComp;
     int32_t iVar1;
     uint8_t nRed;
     char szPath[260];

@@ -9,7 +9,6 @@
 #include "d2_platform.h"
 
 // Forward declarations
-struct D2QServerClientConnectionStrc;
 struct D2RoomStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2UnitType;
@@ -57,9 +56,12 @@ void __fastcall CLIENT_CheckWorldstoneShake(struct D2RoomStrc * pRoom);
 void __stdcall CLIENT_InitializeQuestStateGlobals();
 void __fastcall CLIENT_SetQuestGameEndTimer(int32_t nSeconds);
 void __fastcall CLIENT_SpawnWorldstoneShakeParticle(struct D2UnitStrc * pUnit);
+// EBX is not an argument: the body never reads it.
+void DRAW_Overlay_SecondsLeftToGame();
 // @wasnamed DRAW_Overlay_SecondsLeftToGame - one name on two different functions.
 // @evidence Body is one instruction: JMP 0x0046c060. The apparent 'duplicate body' was Ghidra following the jump.
-void thunk_DRAW_Overlay_SecondsLeftToGame(struct D2QServerClientConnectionStrc * pQServerClientConnection);
+// EBX is not an argument: the target DRAW_Overlay_SecondsLeftToGame never reads it.
+void thunk_DRAW_Overlay_SecondsLeftToGame();
 uint32_t __fastcall GetSomeMonsterStatFlag(int32_t nMonsterClassId, uint32_t nStatBitIndex);
 void __fastcall CLIENT_SpawnMonstersAroundUnit(struct D2UnitStrc * pUnit, int32_t nMonsterClassId, int32_t nSpawnCount);
 void __fastcall DRLGROOM_SpawnRandomMonsters(struct D2RoomStrc * pRoom);
@@ -81,6 +83,6 @@ void __fastcall CLIENT_DispatchMonsterAiBehavior(struct D2UnitStrc * pUnit);
 eD2UnitType __fastcall CLIENT_GetEffectiveUnitType(struct D2UnitStrc * pUnit);
 int __fastcall CLIENT_GetEffectiveAnimMode(struct D2UnitStrc * pUnit);
 DWORD __fastcall CLIENT_GetEffectiveClassId(struct D2UnitStrc * pUnit);
-// 20 internal functions (defined in .cpp)
+// 19 internal functions (defined in .cpp)
 
 } // namespace D2Client::Source::ClientEngine

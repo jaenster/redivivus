@@ -56,7 +56,6 @@
 #include "Fog/Fog.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/LogManager.h"
-#include "Fog/Src/QServer/QServer.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/Unit.h"
@@ -993,7 +992,8 @@ void __fastcall CLIENT_SpawnWorldstoneShakeParticle(D2UnitStrc * pUnit) {
     CLIENT_CheckWorldstoneShake(pRoom);
 }
 
-static void DRAW_Overlay_SecondsLeftToGame(D2QServerClientConnectionStrc * pQServerClientConnection) {
+// EBX is not an argument: the body never reads it.
+void DRAW_Overlay_SecondsLeftToGame() {
     int nClearCount;
     uint16_t wszText[256];
     int32_t nHighResTime = Fog::Src::LogManager::LOGMGR_GetHighResolutionTime();
@@ -1020,8 +1020,8 @@ static void DRAW_Overlay_SecondsLeftToGame(D2QServerClientConnectionStrc * pQSer
 }
 
 // JMP thunk
-void thunk_DRAW_Overlay_SecondsLeftToGame(D2QServerClientConnectionStrc * pQServerClientConnection) {
-    ::D2Client::Source::ClientEngine::DRAW_Overlay_SecondsLeftToGame(pQServerClientConnection);
+void thunk_DRAW_Overlay_SecondsLeftToGame() {
+    ::D2Client::Source::ClientEngine::DRAW_Overlay_SecondsLeftToGame();
 }
 
 uint32_t __fastcall GetSomeMonsterStatFlag(int32_t nMonsterClassId, uint32_t nStatBitIndex) {

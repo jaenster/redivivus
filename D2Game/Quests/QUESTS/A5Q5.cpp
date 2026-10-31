@@ -1445,7 +1445,7 @@ void __fastcall Q35_OnPlayerLeavesSummit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsQuestStateQuery: on altar operate, if quest is Completed but record Step0x04 not yet set, sends npc info packet 0x4ec9 (which makes Q35_Callback_11 write Step0x04). Read-only on records itself.
 BOOL __fastcall OBJOP_A5Q5_AncientsQuestStateQuery(D2ObjectOperateFnArg * pOperation) {
-    bool _bQuestCompleted;
+    BOOL _bQuestCompleted;
     bool bQuestCompleted;
     ::SGAMEDATA* pGame = pOperation->sArg.pGame;
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pOperation->pAttacker)->pQuestRecord[pGame->nDifficulty];

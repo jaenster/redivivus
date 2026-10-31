@@ -403,7 +403,7 @@ BOOL __fastcall SKILL_CheckCorpseCanBeConsumed(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Generic server-side handler for targeted necromancer curses (Lower Resist, Amplify Damage, Life Tap, Iron Maiden, Weaken, Terror, etc). Reads curse stats and state from skills.txt aurastat/aurastatcalc/auratargetstate, applies via SKILLNEC_ApplyCurseToUnit, then forces monster AI re-evaluation.
 BOOL __fastcall Skills_SrvDoFunc_071_IronMaiden_GenericCurse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bCanAttack;
+    uint32_t _bCanAttack;
     bool bCanAttack;
     BOOL nAuraStatIdx;
     D2AiGeneralStrc* pMonsterAi;
@@ -1478,7 +1478,7 @@ static BOOL __stdcall SKILLBAR_CanTargetPosition(D2UnitStrc * pUnit, int32_t nPa
 
 // Server-side skill StFunc 40: start/setup handler for a charge-leap movement skill (e.g. Leap/Charge). Validates the skill id and the unit's current skill. For player units it resolves the target/cursor position and validates it (SKILLBAR_CanTargetPosition / SKILLBAR_FindValidLeapTarget). For monster units it derives a leap-past destination from the target's position (or cursor) and finds free collision coordinates. It then reserves the destination room, adds a COLLIDE_PLAYER collision marker at the landing point, sets the unit uninterruptible + STATE_skill_move, and stores the destination X/Y (and target type/GUID for monsters) into the skill params with flag 0x80. Returns TRUE on success, FALSE if validation fails (clearing the current skill).
 BOOL __fastcall SKILLBAR_SrvStFn40_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bIsMonsterUnit;
+    uint32_t _bIsMonsterUnit;
     D2UnitStrc* pTarget;
     BOOL nResult;
     int32_t nCoordOrWidth;
@@ -1844,7 +1844,7 @@ static D2UnitStrc * __stdcall SKILLBAR_AcquireNextTarget(::SGAMEDATA * pGame, D2
 
 // Server skill-start function for Barbarian skill index 41 (Leap Attack). Looks up the skill, finds a teleport destination via SKILL_FindTeleportPosition. If a valid position is found, marks a collision tile, sets the unit uninterruptable, stores destination coords in skill params 1-2, sets SKILL_MOVE state, and optionally stuns the target. If no teleport pos is found but a target is in melee range, forces a direct attack instead. Returns 1 on success, 0 if the skill is not present.
 BOOL __fastcall SKILLBAR_SrvStFn41_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bFoundTeleportPos;
+    uint32_t _bFoundTeleportPos;
     bool bFoundTeleportPos;
     D2RoomStrc* pRoom;
     eD2CollisionShapeType nWidth;

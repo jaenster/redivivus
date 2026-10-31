@@ -7256,7 +7256,8 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
     return 0;
 }
 
-void __fastcall SKILLDESC_BuildSkillTooltip(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nClassMask, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nScreenX, int32_t nScreenY) {
+// ESI is not an argument: saved at 004eef12 PUSH ESI, then set from EDX.
+void __fastcall SKILLDESC_BuildSkillTooltip(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nScreenX, int32_t nScreenY) {
     BOOL nLineResult;
     uint16_t wStrId;
     int nIter;

@@ -101,7 +101,7 @@ void __fastcall SKILLEMONST_ApplyReflectedDamage(::SGAMEDATA * pGame, D2UnitStrc
 
 // Server do-function for skill 125 (Catapult Fire Bomb, Act 5 siege engine). Resolves the charge-up missile, gets the target/cursor position, computes the delta vector from the unit's current position to the target, spawns the firebomb missile with flags=2 (lobbed), then sets the missile's TargetX/Y to the rotated delta vector (perpendicular). Returns 1 on success, 0 on invalid skill or out-of-range missile ID.
 BOOL __fastcall Skills_SrvDoFunc_125_CatapultFireBomb(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bHasTarget;
+    BOOL _bHasTarget;
     bool bHasTarget;
     D2SkillArgStrc sSkillArg;
     uint32_t nTargetYOrX;
@@ -435,22 +435,26 @@ void __fastcall SKILLEMONST_AttachToHost(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     if (nHostBaseId < 0 || nHostBaseId >= nMonStatsTxtCount) {
       nHostBaseId = -1;
     }
-    if (!(nHostBaseId == 0x1b3 || nHostBaseId == 0x1b9)) {
-      return;
-    }
 
-    D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_attached, 1);
-    D2Common::Units::StoreOwner(pUnit, pHostUnit);
-    D2Common::Units::StoreOwner(pHostUnit, pUnit);
-    GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, eSkill);
-    GAME::Event::EVENT_TriggerImmediate(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, eSkill, nSkillLevel);
-    pUnit->eUnitFlags &= ~(UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE);
-    if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
-      Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, pUnit->pUnitData.pUnitDataMonster->pAiGeneral, 0x10);
-      return;
-    }
+    switch (nHostBaseId) {
+      case 0x1b3:
+        case 0x1b9:
+          {
+            D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_attached, 1);
+            D2Common::Units::StoreOwner(pUnit, pHostUnit);
+            D2Common::Units::StoreOwner(pHostUnit, pUnit);
+            GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, eSkill);
+            GAME::Event::EVENT_TriggerImmediate(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, eSkill, nSkillLevel);
+            pUnit->eUnitFlags &= ~(UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE);
+            if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+              Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, pUnit->pUnitData.pUnitDataMonster->pAiGeneral, 0x10);
+              return;
+            }
 
-    Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, nullptr, 0x10);
+            Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, nullptr, 0x10);
+            break;
+          }
+    }
 }
 
 // Detaches a parasite monster (MonStats id 0x1EC) from its host (ids 0x1B3 or 0x1B9): clears STATE_attached, nulls owner links on both units, and either kills the parasite if below 10% HP or re-enables its targetable flags, fires ACTIVESTATE timer, and reattaches its AI function.
@@ -473,22 +477,27 @@ void __fastcall SKILLEMONST_DetachFromHost(::SGAMEDATA * pGame, D2UnitStrc * pUn
     if (nHostBaseId < 0 || nHostBaseId >= nMonStatsTxtCount) {
       nHostBaseId = -1;
     }
-    if (!(nHostBaseId == 0x1b3 || nHostBaseId == 0x1b9)) {
-      return;
-    }
 
-    D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_attached, 0);
-    D2Common::Units::StoreOwner(pUnit, nullptr);
-    D2Common::Units::StoreOwner(pHostUnit, nullptr);
-    nParasiteBaseId = D2Common::Units::GetCurrentLifePercentage(pUnit);
-    if (nParasiteBaseId < 10) {
-      UNIT::SUnitDmg::SERVER_KillMonster(pGame, pUnit, nullptr, 1);
-      return;
-    }
+    switch (nHostBaseId) {
+      case 0x1b3:
+        case 0x1b9:
+          {
+            D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_attached, 0);
+            D2Common::Units::StoreOwner(pUnit, nullptr);
+            D2Common::Units::StoreOwner(pHostUnit, nullptr);
+            nParasiteBaseId = D2Common::Units::GetCurrentLifePercentage(pUnit);
+            if (nParasiteBaseId < 10) {
+              UNIT::SUnitDmg::SERVER_KillMonster(pGame, pUnit, nullptr, 1);
+              return;
+            }
 
-    pUnit->eUnitFlags |= UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
-    GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, nEventParam);
-    Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, UNIT::Monster::GetAiGeneral(pUnit), 0);
+            pUnit->eUnitFlags |= UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
+            GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, nEventParam);
+            nParasiteBaseId = 0;
+            Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, UNIT::Monster::GetAiGeneral(pUnit), nParasiteBaseId);
+            break;
+          }
+    }
 }
 
 // SrvDoFunc 129: parasite attach/detach dispatch. If unit already has an owner, relocates it to target coords and calls SKILLEMONST_DetachFromHost. If no target exists, falls back to SrvDoFunc_098 teleport. Otherwise relocates unit onto the target and calls SKILLEMONST_AttachToHost.
@@ -560,7 +569,7 @@ static int __stdcall SKILLSOR_GetMeteorSubMissileCount(eMissilesId pParam, eD2Sk
     static int gnSkillOffset_Sorceress_Fireball[4] = { 0x0, 0x0, 0x1, -0x1 }; D2_STATIC_GUARD(gnSkillOffset_Sorceress_Fireball, "D2Game::SKILLS::SkillEMonst::SKILLSOR_GetMeteorSubMissileCount::gnSkillOffset_Sorceress_Fireball");
     static int gnSkillOffset_Sorceress_Meteor[4] = { 0x1, -0x1, 0x0, 0x0 }; D2_STATIC_GUARD(gnSkillOffset_Sorceress_Meteor, "D2Game::SKILLS::SkillEMonst::SKILLSOR_GetMeteorSubMissileCount::gnSkillOffset_Sorceress_Meteor");
 
-    bool _bGotTargetPos;
+    BOOL _bGotTargetPos;
     bool bGotTargetPos;
     D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, 0x5c);
@@ -777,6 +786,8 @@ BOOL __fastcall Skills_SrvDoFunc_132_FireClassUpgradedMissile(::SGAMEDATA * pGam
 }
 
 BOOL __fastcall SKILLSOR_GetFrozenOrbBoltCount(D2UnitStrc * pUnitStrc, D2UnitStrc * pUnit) {
+    eD2States eUnitState;
+    int32_t nAlignment;
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return 0;
     }
@@ -790,15 +801,21 @@ BOOL __fastcall SKILLSOR_GetFrozenOrbBoltCount(D2UnitStrc * pUnitStrc, D2UnitStr
     if (nBaseId < 0 || nBaseId >= sgptDataTable->nTxtMonStatsSize) {
       nBaseId = -1;
     }
-    if (!(nBaseId != 0x222 && nBaseId != 0x227)) {
-      return 0;
-    }
 
-    eD2States eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_pregnant);
-    if (eUnitState == STATE_none) {
-      int32_t nAlignment;
-      nAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
-      return (uint32_t)(nAlignment != 2);
+    switch (nBaseId) {
+      default:
+        {
+          eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_pregnant);
+          if (eUnitState == STATE_none) {
+            nAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
+            return (uint32_t)(nAlignment != 2);
+          }
+        }
+      case 0x222:
+        case 0x227:
+          {
+            break;
+          }
     }
 
     return 0;
@@ -840,7 +857,7 @@ void __fastcall SKILLEMONST_OnDeathSpawnExpire(D2UnitStrc * pUnit, eD2States eSt
 }
 
 BOOL __fastcall Skills_SrvDoFunc_133_SetDeathSpawnState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bCanSpawn;
+    BOOL _bCanSpawn;
     bool bCanSpawn;
     D2StateExArgStrc sStateArg;
     if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill)) {
@@ -1354,7 +1371,7 @@ BOOL __fastcall Skills_SrvDoFunc_140_BaalTentacle(::SGAMEDATA * pGame, D2UnitStr
 }
 
 BOOL __fastcall fpBaalWaveFunction(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, D2UnitStrc * pUnit, int32_t nSkillLvl, uint32_t dwParam) {
-    bool _bResult;
+    BOOL _bResult;
     bool bResult;
     D2Common::Units::SetTargetUnitForDynamicUnit(pAttacker, pUnit);
     _bResult = SkillNec::SKILLNEC_CorpseExplosionDispatch(pGame, pAttacker, SKILL_BaalCorpseExplode, nSkillLvl);
@@ -1408,8 +1425,8 @@ BOOL __fastcall Skills_SrvDoFunc_141_BaalCorpseExplosionWave(::SGAMEDATA * pGame
 
 // Searches for a useable, attackable corpse within nSearchRadius of pUnit. Iterates UnitFind results from neighboring rooms, checks IsCorpseUseable and UNITS_CheckIfCanAttackTarget for each candidate, and returns the first match (or NULL). Excludes pExcludeUnit via find flags.
 D2UnitStrc * __fastcall SKILLEMONST_FindNearbyCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pExcludeUnit, int32_t nSearchRadius) {
-    bool _bIsCorpseUseable;
-    bool _bCanAttack;
+    BOOL _bIsCorpseUseable;
+    uint32_t _bCanAttack;
     bool bIsCorpseUseable;
     bool bCanAttack;
     int nX;

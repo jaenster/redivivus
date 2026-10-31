@@ -1409,7 +1409,7 @@ void __fastcall Objects_PopulateFn1(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uin
     static uint32_t gaObjectSpawnRackIds = 0x2; D2_STATIC_GUARD(gaObjectSpawnRackIds, "D2Game::Objects::Objects_PopulateFn1::gaObjectSpawnRackIds");
     static uint32_t gnObjectSpawnRackCount = 0x2; D2_STATIC_GUARD(gnObjectSpawnRackCount, "D2Game::Objects::Objects_PopulateFn1::gnObjectSpawnRackCount");
 
-    uint8_t _nDensity;
+    BOOL _nDensity;
     int iVar4;
     BOOL BVar5;
     int nXRange;
@@ -2136,7 +2136,7 @@ void __fastcall Objects_PopulateFn4(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uin
 
 // DRLG room object-population routine (server-side, seeded). Rolls nChancePercent against the object-control RNG to decide whether to populate pRoom at all, then computes a target spawn count from room area * nDensity. Repeatedly picks random in-room cells, validates placement via ROOM_CheckSpawnCollisionSimple, and creates UNIT_OBJECT units (nObjectClassId, or a random pick from gaObjectSpawnChanceTbl when class==0x2e) with CreateUnit. Supports growing chains of adjacent objects (offset by Objects.txt XSpace/YSpace via direction tables) up to 8 spawned per cycle. Uses the deterministic LCG seed (0x6ac690c5) so all clients agree. No return.
 void __fastcall Objects_PopulateFn5(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
-    uint8_t _nDensity;
+    int32_t _nDensity;
     uint16_t _nChancePercent;
     BOOL nCollisionResult;
     uint32_t nRandDir;

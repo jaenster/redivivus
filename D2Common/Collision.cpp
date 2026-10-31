@@ -410,7 +410,7 @@ static BOOL CoordIsInRoom(D2RoomStrc * pRoom, int32_t nX, int32_t nSize, int32_t
 
 // Collision/proximity scan (apparently unreferenced): finds the first unit adjacent to pUnit that satisfies a caller-supplied predicate. Bails unless pUnit's X-size is 1..3. Gets pUnit's room and dynamic-path X/Y, enumerates the adjacent-room list (DRLGROOM_GetAdjacentRoomsList), and for each candidate player/monster/missile (skipping dead/special anim modes) computes a size-pair-indexed range test (switch on candidateSizeX + unitSizeX*3 - 4) between the two units' positions. On a position match it invokes pfCallback (a __stdcall code pointer, dwCallbackParam appears unused in the call) and returns the candidate unit if the callback returns nonzero. Returns NULL if none match.
 D2UnitStrc * __stdcall _unused(D2UnitStrc * pUnit, pfnUnitProximityTest pfnCallback, void * pCallbackParam) {
-    bool _bCandidateInRoom;
+    BOOL _bCandidateInRoom;
     bool bCandidateInRoom;
     int32_t nCandidateSizeX;
     int nRoomIdx;
@@ -587,7 +587,7 @@ D2UnitStrc * __stdcall _unused(D2UnitStrc * pUnit, pfnUnitProximityTest pfnCallb
 
 // Scans units near (nX,nY) within a footprint (nWidth 1..3) and invokes a per-unit callback, returning the first unit for which it returns nonzero. Gets the adjacent-room list for pRoom, and for each room whose bounds contain the point iterates its unit list (offset 0x1d). Skips dead/dying players and dead/kicking monsters; only players, monsters and missiles are considered. Computes each candidate's coords (dynamic or static path by unit type), clamps its size to 1..3, and uses a (size,width)-indexed distance test (exact tile, manhattan radius, or bounding box) to decide overlap. On overlap calls pSrvDoFuncData(pUnit, pGame); first nonzero result returns that unit. Returns NULL if none. Used server-side for missile/collision hit detection over an area.
 D2UnitStrc * __stdcall CallCollisionFunction(D2RoomStrc * pRoom, int32_t nX, int32_t nY, fpMissileSrvDoFuncData pfnFilter, void * pContext, int32_t nWidth) {
-    bool _bCandidateInRoom;
+    BOOL _bCandidateInRoom;
     bool bCandidateInRoom;
     int32_t nUnitSizeX;
     int nCandidatePosX;
@@ -1752,7 +1752,7 @@ eCollisionFlags __stdcall CheckCollision_BlockAll_Type(D2RoomStrc * pRoom, int32
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
 int32_t __stdcall CheckCollision_BlockPlayer_Type(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eD2CollisionShapeType nType, int32_t eCollisionFlag) {
-    eCollisionFlags _eVar1;
+    int32_t _eVar1;
     eCollisionFlags eVar1;
     uint32_t uVar1;
     switch (nType) {
@@ -2734,7 +2734,7 @@ eCollisionFlags __fastcall RemoveGetCollision_Type(D2RoomStrc * pRoom, int32_t n
 }
 
 int32_t __fastcall UpdateGetCollision_Unused(D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nCheckX, int32_t nCheckY, int32_t nType, int32_t eCollisionFlag, int32_t eCheckCollisionFlags) {
-    eCollisionFlags _eCheckResult;
+    int32_t _eCheckResult;
     eCollisionFlags eCheckResult;
     RemoveCollision_Type(pRoom, nX, nY, nType, eCollisionFlag);
     _eCheckResult = CheckCollision_BlockPlayer_Type(pRoom, nCheckX, nCheckY, nType, eCheckCollisionFlags);
@@ -2762,7 +2762,7 @@ uint16_t __fastcall UpdateCollision_Width(D2RoomStrc * pOldRoom, int32_t nOldX, 
 }
 
 int32_t __fastcall UpdateGetCollision_Type(D2RoomStrc * pOldRoom, int32_t nOldX, int32_t nOldY, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nType, int32_t eCollisionFlag, int32_t eCollFlags) {
-    eCollisionFlags _eCheckResult;
+    int32_t _eCheckResult;
     eCollisionFlags eCheckResult;
     if (pOldRoom) {
       RemoveCollision_Type(pOldRoom, nOldX, nOldY, nType, eCollisionFlag);

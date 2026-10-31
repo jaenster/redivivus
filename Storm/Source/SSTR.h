@@ -186,14 +186,18 @@ int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnPa
 int __stdcall UTF8_ToUTF16(short * pszUTF16Out, int nOutMaxChars, uint8_t * pbUTF8In, int nInBytes, int * pnCharsWritten, int * pnBytesRead);
 uint32_t __stdcall UTF8_DecodeNextChar(uint8_t * pbParam, int * pnParam);
 void __stdcall UTF8_EncodeChar(uint32_t uCodepoint, uint8_t * pbOut);
-void __thiscall UTF8_StepBackOneChar(uint32_t ecx_passthru, int str_base, int position);
-void __stdcall UTF8_StepForwardOneChar(int str_base, int position, uint32_t ecx_passthru);
+// ECX is not an argument: neither this body nor UTF8_AdvanceToCharBoundary reads it.
+void __stdcall UTF8_StepBackOneChar(int str_base, int position);
+// ECX is not an argument: neither this body nor UTF8_AdvanceToCharBoundary reads it.
+void __stdcall UTF8_StepForwardOneChar(int str_base, int position);
 void __stdcall TRANSTBL_UnicodeToLatin1(uint8_t * pbOut, void * pSrcUTF16, int nCount);
 void __stdcall TRANSTBL_UnicodeToLatin2(uint8_t * pbOut, void * pSrcUTF16, int nCount);
 void __stdcall TRANSTBL_UnicodeToKorean(uint8_t * pbOut, void * pSrcUTF16, int nCount);
 int __stdcall TRANSTBL_Latin1ToUnicode(uint16_t * dest, uint8_t * src, int count);
-void __stdcall TRANSTBL_Latin2ToUnicode(uint16_t * dest, uint8_t * src, int count, uint32_t ecx_passthru);
-void __stdcall TRANSTBL_KoreanToUnicode(uint16_t * dest, uint8_t * src, int count, uint32_t ecx_passthru);
+// ECX is not an argument: neither this body nor TRANSTBL_SingleByteToUnicode reads it.
+void __stdcall TRANSTBL_Latin2ToUnicode(uint16_t * dest, uint8_t * src, int count);
+// ECX is not an argument: neither this body nor TRANSTBL_SingleByteToUnicode reads it.
+void __stdcall TRANSTBL_KoreanToUnicode(uint16_t * dest, uint8_t * src, int count);
 int __fastcall SSTR_StringLength(char * szText);
 // 4 internal functions (defined in .cpp)
 

@@ -369,7 +369,7 @@ static void __stdcall QUEST_DispatchToUnit(D2UnitStrc * pUnit, D2QuestArgStrc * 
 
 // Called server-side when any monster dies. Resolves the effective killer (falls back to the first client in SP if killer is null, or traces a minion back to its owner). Checks if the dead monster is a super-unique with a quest-relevant hcIdx or a special class ID (Diablo seal infectors 0xF2/0xF3, Baal 0x220, super-unique 0x187), then dispatches a QUEST_EVENT=8 (monster killed) to the resolved player unit via QUEST_DispatchToUnit.
 void __fastcall QUEST_OnMonsterKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pKiller) {
-    bool _bIsSuperUnique;
+    uint32_t _bIsSuperUnique;
     bool bIsSuperUnique;
     D2ClientStrc* pFirstClient;
     int nSuperUniqueHcIdx;
@@ -1109,7 +1109,7 @@ uint32_t __fastcall QUEST_GetSistersToTheSlaughterSpecificFlag(::SGAMEDATA * pGa
 }
 
 void __fastcall QUEST_HandleClientQuestMessage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nQuestItemCode) {
-    bool _bHoldingItem;
+    BOOL _bHoldingItem;
     bool bHoldingItem;
     D2UnitStrc* pItemUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_ITEM, nQuestItemCode);
     if (!pItemUnit) {
@@ -2747,7 +2747,7 @@ void __fastcall QUEST_OnPlayerJoinGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // Quest reward delivery: creates an item from a 4-char item code at the given level and quality, sets full durability, and attempts to place it directly into the player's inventory. If inventory is full and bMustDrop is set, finds a nearby spawnable floor tile and drops it there instead; otherwise deletes the item. Returns the created item unit, or null on failure.
 // @sourcefile .\QUESTS\QUESTS.CPP
 D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t szRewardCode, int32_t nRewardLevel, eD2ItemQuality eQuality, BOOL bMustDrop) {
-    bool _bInventoryPlaced;
+    int _bInventoryPlaced;
     bool bInventoryPlaced;
     int32_t nSearchIterations;
     POINT sDropCoords;

@@ -1118,8 +1118,8 @@ int32_t __stdcall MONSTER_FindNearbyAllyUnit(::SGAMEDATA * pGame, int32_t bCheck
 // Validates that a unit may cast a given skill id: rejects a negative id or one past the SkillsTxt row count with 2, an unbound skill with 3, and otherwise returns 0 when the unit has the skill points for it.
 // Returns a FULL 32-bit value. All three return paths write the whole of EAX - MOV EAX,0x3 at 005494ae, MOV EAX,0x2 at 005494d1, and the SBB EAX,EAX / AND EAX,0xfffffffd / ADD EAX,0x3 sequence at 005494c8.
 static int32_t CheckIfCanBeSkilled(D2UnitStrc * pUnit, eD2Skills eSkill) {
-    bool _bSkillBound;
-    bool _bCanSkill;
+    uint32_t _bSkillBound;
+    BOOL _bCanSkill;
     bool bSkillBound;
     bool bCanSkill;
     if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
@@ -3191,13 +3191,11 @@ eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x39_ReturnBadParams(::SGAMEDATA * 
 
 // C->S 0x3A Add Stat Point (3B). Packet: [op:1][statId:u16]. Stat 0-15, supports repeat count up to 100.
 eD2ServerIncomingStatus __fastcall SCMD_0x3A_AllocStatPoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x3A_AllocStatPoint * pPacket, uint32_t nSize) {
-    uint16_t wStatPacked;
     if (nSize != 3) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    *(uint8_t*)(char*)&wStatPacked = pPacket->nStatId;
-    *(uint8_t*)((char*)&wStatPacked + 1) = pPacket->nRepeatCount;
+    uint16_t wStatPacked = (uint16_t)((uint32_t)(uint8_t)pPacket->nStatId | (uint32_t)(uint8_t)pPacket->nRepeatCount << 8);
     int nRemaining = (wStatPacked >> 8) + 1;
     if ((wStatPacked & 0xff) <= 0xf && wStatPacked >> 8 <= 99) {
       BOOL nAssignResult;

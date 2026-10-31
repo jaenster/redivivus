@@ -1231,7 +1231,8 @@ void __fastcall SKILLDESC_DrawSkillInfo(struct D2UnitStrc * pPlayerUnit, struct 
 void __fastcall DRAW_UI_STAT_Damage(struct D2UnitStrc * pUnit);
 BOOL __fastcall SKILLDESC_GetSkillBonusText(struct D2UnitStrc * pUnit, int32_t nParam);
 BOOL __fastcall SKILLDESC_ProcessDescLine(struct D2UnitStrc * pUnit, uint16_t * pwszOutput, struct D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nDescLineIndex, char cCharClass);
-void __fastcall SKILLDESC_BuildSkillTooltip(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nClassMask, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nScreenX, int32_t nScreenY);
+// ESI is not an argument: saved at 004eef12 PUSH ESI, then set from EDX.
+void __fastcall SKILLDESC_BuildSkillTooltip(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nScreenX, int32_t nScreenY);
 void __fastcall SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nScreenX, int32_t nScreenY);
 void __fastcall SKILLDESC_BuildSkillShortTooltip(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nParam1, int32_t nParam2, int32_t nParam3);
 // 65 internal functions (defined in .cpp)

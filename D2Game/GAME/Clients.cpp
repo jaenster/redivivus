@@ -1064,7 +1064,7 @@ uint8_t __fastcall CLIENT_GetCharTemplate(D2ClientStrc * pClient) {
 }
 
 uint32_t __fastcall QSERVER_IsClientAllowedToJoin(uint32_t nClientId, uint32_t nExpectedState) {
-    bool _bResult;
+    uint32_t _bResult;
     bool bResult;
     if (!gQServerClientTablesInitialized) {
       return 0;
@@ -2714,7 +2714,7 @@ void __fastcall CLIENT_RemoveFromAdjacentRooms(D2RoomStrc * pRoom, int32_t nClie
 }
 
 void __fastcall TellClientToLoadAct(::SGAMEDATA * pGame, D2ClientStrc * pClient) {
-    uint8_t _byActNoArg;
+    uint32_t _byActNoArg;
     D2GSPacketSrv0x53 sPacket;
     uint8_t bEclipseOut[4];
     int32_t nTicksOut;

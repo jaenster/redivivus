@@ -102,7 +102,7 @@ static BOOL STATES_IsUnitTransformable(D2UnitStrc * pUnit) {
 
 // @sourcefile .\UNIT\PlrSkills.cpp
 void __fastcall PLRSKILLS_CheckSkillWhipAndLeap(D2UnitStrc * pUnit, uint32_t nParam) {
-    bool _bIsTransformable;
+    BOOL _bIsTransformable;
     bool bIsTransformable;
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
@@ -142,7 +142,7 @@ void __fastcall PLRSKILLS_DrawChargeTrailIfPrimary(D2UnitStrc * pUnit, uint32_t 
 
 // @sourcefile .\UNIT\PlrSkills.cpp
 void __fastcall PLRSKILLS_DrawSkillTrail_Secondary(D2UnitStrc * pUnit, uint32_t nParam) {
-    bool _bIsTransformable;
+    BOOL _bIsTransformable;
     bool bIsTransformable;
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
@@ -1340,7 +1340,7 @@ D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUn
         D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
       } else {
         nBaseStatVal = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, eUnitStat, nParam);
-        *(uint8_t*)(char*)&nBaseStatVal = (char)nBaseStatVal;
+        nBaseStatVal = (int)((uint32_t)nBaseStatVal & 0xffffff00u | (uint32_t)(uint8_t)(char)nBaseStatVal);
         *(uint8_t*)(char*)&byOldAlignment = (char)nBaseStatVal;
       }
     }

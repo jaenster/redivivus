@@ -66,10 +66,7 @@ static void __fastcall SCMD_ConvertBool(D2GameNpcStrc * cmdDef, char * str, uint
     cmdDef->unk0x3C &= dwTradeFlagBits;
     if (bSetFlags) {
       uint32_t dwFlagBits;
-      *(uint8_t*)(char*)&dwFlagBits = cmdDef->sTrade.unk0x04;
-      *(uint8_t*)((char*)&dwFlagBits + 1) = cmdDef->sTrade.unk0x05;
-      *(uint8_t*)((char*)&dwFlagBits + 2) = cmdDef->sTrade.unk0x06;
-      *(uint8_t*)((char*)&dwFlagBits + 3) = cmdDef->sTrade.unk0x07;
+      dwFlagBits = (uint32_t)((uint32_t)(uint8_t)cmdDef->sTrade.unk0x04 | (uint32_t)(uint8_t)cmdDef->sTrade.unk0x05 << 8 | (uint32_t)(uint8_t)cmdDef->sTrade.unk0x06 << 16 | (uint32_t)(uint8_t)cmdDef->sTrade.unk0x07 << 24);
       cmdDef->unk0x3C = dwFlagBits | cmdDef->unk0x3C;
     }
 
@@ -84,10 +81,7 @@ static void __fastcall SCMD_ConvertBool(D2GameNpcStrc * cmdDef, char * str, uint
     }
 
     pTradeBitmask = (uint32_t*)cmdDef->sTrade.pTradeList1;
-    *(uint8_t*)(char*)&dwTradeFlagBits = cmdDef->sTrade.unk0x04;
-    *(uint8_t*)((char*)&dwTradeFlagBits + 1) = cmdDef->sTrade.unk0x05;
-    *(uint8_t*)((char*)&dwTradeFlagBits + 2) = cmdDef->sTrade.unk0x06;
-    *(uint8_t*)((char*)&dwTradeFlagBits + 3) = cmdDef->sTrade.unk0x07;
+    dwTradeFlagBits = (uint32_t)((uint32_t)(uint8_t)cmdDef->sTrade.unk0x04 | (uint32_t)(uint8_t)cmdDef->sTrade.unk0x05 << 8 | (uint32_t)(uint8_t)cmdDef->sTrade.unk0x06 << 16 | (uint32_t)(uint8_t)cmdDef->sTrade.unk0x07 << 24);
     *pTradeBitmask |= dwTradeFlagBits;
 }
 

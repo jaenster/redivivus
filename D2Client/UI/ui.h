@@ -220,6 +220,8 @@ void __stdcall INPUT_SkillTreeButtonUp(struct D2UIMouseMsgStrc * pMsg);
 bool __stdcall UI_CanAllocateStatPoint(int32_t nParam);
 void __stdcall UI_DrawLevelUpButtonLeft();
 void __stdcall DRAW_UI_NewStatPoints_II();
+// Returns a byte in AL (callers test AL); EAX is not an argument.
+bool __stdcall UI_GetNewSkillPointsForClass(int32_t nCharClass);
 void __stdcall UI_DrawLevelUpButtonRight();
 void __stdcall Draw_UI_NewStatPoints();
 void __fastcall UI_DrawTextCentered(int32_t nPositionXStart, int32_t nParam1, int32_t nPositionXEnd, uint16_t * wszMessage, int32_t nParam2);
@@ -252,6 +254,6 @@ void __fastcall UI_HandleHoradricCubePacket(int32_t pPacket);
 void __fastcall UI_OpenHoradricCubeWithNpcInteraction(int nNpcShopTab);
 BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, int * pnBottom, int32_t nPlacementMode, int32_t nMaxX, int32_t nMinX);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca05c(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
-// 27 internal functions (defined in .cpp)
+// 26 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::ui

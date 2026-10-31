@@ -195,7 +195,7 @@ static void __stdcall Q23_SetGuardianQuestComplete(::SGAMEDATA * pGame, D2UnitSt
 // Q23_SetGuardianQuestComplete to mark JustCompleted/Completed/Step0x11 and bumps the participation
 // counter. This is how the killing-area players get individual quest credit.
 BOOL __fastcall Q23_PlayerCheckDuranceLevel3Complete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    bool _bQuestState;
+    BOOL _bQuestState;
     bool bQuestState;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -260,9 +260,9 @@ void __fastcall Q23_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     // Static local variables (originally global data)
     static int32_t gdwQ20QuestStateMessages[8] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6 }; D2_STATIC_GUARD(gdwQ20QuestStateMessages, "D2Game::Quests::QUESTS::A3Q6::Q23_Callback00_NpcActivate::gdwQ20QuestStateMessages");
 
-    bool _bStep11;
-    bool _bCompleted;
-    bool _bJustCompleted;
+    BOOL _bStep11;
+    BOOL _bCompleted;
+    BOOL _bJustCompleted;
     bool bStep11;
     bool bCompleted;
     bool bJustCompleted;
@@ -448,7 +448,7 @@ void __fastcall Q23_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 // the player to the participation GUID list. Resends the NPC gossip packet.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q6.cpp
 void __fastcall Q23_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    bool _bQuestState;
+    BOOL _bQuestState;
     bool bQuestState;
     int32_t nPlayerGUID_00;
     int32_t nPlayerGUID;
@@ -629,7 +629,7 @@ BOOL __fastcall Q23_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStr
 // Killing Mephisto here is what opens Act 4.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q6.cpp
 void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    bool _bQuestState;
+    BOOL _bQuestState;
     bool bQuestState;
     D2ObjectsTxt* pBridgeObjectTxt;
     D2UnitStrc* pDroppedUnit;

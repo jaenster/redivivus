@@ -429,7 +429,7 @@ BOOL __fastcall Skills_SrvDoFunc_088_FireMissileFromBodyPart(::SGAMEDATA * pGame
     // Static local variables (originally global data)
     static uint8_t BYTE_ARRAY_006e3188[8] = { 0x1d, 0x1c, 0x1b, 0x1a, 0x19, 0x18, 0x1f, 0x1e }; D2_STATIC_GUARD(BYTE_ARRAY_006e3188, "D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_088_FireMissileFromBodyPart::BYTE_ARRAY_006e3188");
 
-    uint8_t _local_1c;
+    uint32_t _local_1c;
     BOOL nDirection;
     D2SkillArgStrc sSkillArg;
     int nAnimFrameCount;

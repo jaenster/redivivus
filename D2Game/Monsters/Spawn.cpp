@@ -440,7 +440,7 @@ static D2UnitStrc * __stdcall MONSTER_SpawnMonsterGroup(::SGAMEDATA * pGame, D2R
 }
 
 static BOOL __stdcall SPAWN_SpawnMonsterFormation(::SGAMEDATA * pGame, int32_t nClassId, D2RoomStrc * pRoom, int * pGroupOffsetTable) {
-    bool _bSuccess;
+    BOOL _bSuccess;
     bool bSuccess;
     int32_t nOffsetX;
     int32_t nOffsetY;
@@ -454,7 +454,7 @@ static BOOL __stdcall SPAWN_SpawnMonsterFormation(::SGAMEDATA * pGame, int32_t n
 }
 
 static void __stdcall MONSTER_SetMinionsForBoss(D2RoomCoordListStrc * pRoomCoordList, int32_t nMinionClassId, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bIsBossType;
+    uint32_t _bIsBossType;
     bool bIsBossType;
     _bIsBossType = CheckMonsterType(pUnit, 4);
     if (!_bIsBossType) {
@@ -561,8 +561,8 @@ static BOOL SPAWN_IsExcludedMonsterClass(int32_t nClassId) {
 
 // Spawns a monster at (nX, nY) and, for monsters with the objCol flag set, also creates a paired collision object (object class 0x23b or 0x23c depending on class). Handles the special case of class 0x1b2 (Rescue quest monster): offsets X by -1 and forces Dead mode if the RescueOnMountArreat quest is incomplete. Skips critter-type monsters entirely. Returns the spawned D2UnitStrc or NULL on failure.
 static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithCollisionObj(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, eD2MonsterAnimMode dwParam, int32_t nClassId) {
-    bool _bRescueQuestDone;
-    bool _bObjColFlag;
+    uint32_t _bRescueQuestDone;
+    BOOL _bObjColFlag;
     bool bRescueQuestDone;
     bool bObjColFlag;
     int32_t nValidatedClassId;

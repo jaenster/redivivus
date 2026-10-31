@@ -254,8 +254,8 @@ static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSam
           nChannel = nChannelIdx;
         }
 
-        *(uint8_t*)((char*)&wHeader + 1) = (uint8_t)((uint16_t)wHeader >> 8);
-        nStepBase = nStepSize >> (*(uint8_t*)((char*)&wHeader + 1) & 0x1f);
+        wHeader = (uint16_t)((uint32_t)wHeader & 0xffu | (uint32_t)(uint8_t)((uint16_t)wHeader >> 8) << 8);
+        nStepBase = nStepSize >> ((uint8_t)((uint16_t)wHeader >> 8) & 0x1f);
         nBitMask = 0;
         nChannelTmp = 1 << ((char)nBitCount - 2U & 0x1f);
         nAccum = 0;

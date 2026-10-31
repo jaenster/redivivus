@@ -1475,9 +1475,9 @@ int32_t __fastcall deflateReset(z_stream * pStream) {
 
 uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
     uint16_t uVar1;
+    uint8_t byOsFlags;
     uint8_t bVar3;
     uint32_t nChecksum;
-    int byOsFlags;
     int nLevelFlag;
     block_state nBlockState;
     uint32_t nHeader;
@@ -1531,14 +1531,14 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
           pDeflateState->pending_buf[pDeflateState->pending] = 0;
           pDeflateState->pending++;
           if (pDeflateState->level == 9) {
-            *(uint8_t*)(char*)&byOsFlags = 2;
+            byOsFlags = 2;
           } else if (pDeflateState->strategy < 2 && pDeflateState->level >= 2) {
-            *(uint8_t*)(char*)&byOsFlags = 0;
+            byOsFlags = '\0';
           } else {
-            *(uint8_t*)(char*)&byOsFlags = 4;
+            byOsFlags = 4;
           }
 
-          pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)byOsFlags;
+          pDeflateState->pending_buf[pDeflateState->pending] = byOsFlags;
           pDeflateState->pending++;
           pDeflateState->pending_buf[pDeflateState->pending] = 0xb;
           pDeflateState->pending++;

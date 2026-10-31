@@ -1098,7 +1098,7 @@ void __fastcall SERVER_SendPacket0x23(D2UnitStrc * pMemory, int byTypeId, uint16
 
 // Drains a unit's outbound message queue and sends each pending packet to the given client. Iterates pUnit->pMsgFirst, dispatching on nPacketId: 0x23=SetSkill, 0x99=UnitCastSkill (targeted), 0x9A=UnitCastSkill (XY), 0x9E=MercAttribute, 0xA1=MercExperience, 0xA3=SkillAuraStat, 0xA4=BaalWaves, 0xA5=StateSkillMove, 0xAB=NpcHeal (only if attacker can legally attack the unit).
 void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
-    uint8_t _byAttackerType;
+    int32_t _byAttackerType;
     uint8_t byAttackerType;
     uint32_t dwSkillID;
     eD2UnitType eUnitType;

@@ -704,7 +704,7 @@ void __fastcall DATATBLS_LinkerItemStatCost(char * pszStatName, int32_t * pnStat
 
 // Loads and parses CubMain.txt (or cubeserver.txt/bin) into the pTxtCubeMain table. Allocates D2CubeMainTxt array, parses each line with 50+ fields including enabled, ladder, difficulty, class, op/param/value (conditions), nNumInputs, wVersion, 7 input descriptors (item code, quality, quantity, sockets, ethereal, etc.), and 3 output descriptors (type, level, quality, affixes, mods). Handles both text and binary formats. Stores result in pTxtCubeMain global.
 void __fastcall CUBE_LoadCubeMainTable(D2PoolManagerStrc * pMemory) {
-    bool _bFileExists;
+    BOOL _bFileExists;
     bool bFileExists;
     D2BinFieldInputStrc cubemain[104];
     void* pFileData;

@@ -1499,7 +1499,7 @@ void __fastcall DRLGROOMEX_FreeDrlgRoomEx(D2RoomExStrc * pRoomEx) {
 
 // Links a RoomEx across levels using the vis arrays. For srcVisSlot (0..7), computes dst level id and ensures dst level is initialized. If a warp destination exists, align by matching the Nth occurrence of dst in src vis array with the Nth occurrence of src in dst vis array, then link via DRLGROOMEX_LinkNearRoomByDirection. Fallback: scan dst vis array for src and link first match.
 void __stdcall DRLGROOMEX_LinkNearRoomsByVis(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx, uint8_t srcVisSlot) {
-    bool _bLinkResult;
+    BOOL _bLinkResult;
     bool bLinkResult;
     uint8_t nNextSlot;
     int nSrcOccurrenceIndex;

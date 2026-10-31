@@ -1575,7 +1575,7 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     if ((int)nMinDmg > 0x100000) {
       if ((int)(nMinDmg & -16) < 0x640) {
         nDivResult = _alldiv((uint32_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMinDmg), (uint32_t)((uint64_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMinDmg) >> 0x20), 100, 0);
-        *(uint32_t*)(char*)&nDivResult = (int)nDivResult;
+        nDivResult = (uint64_t)((uint64_t)nDivResult & 0xffffffff00000000ull | (uint64_t)(uint32_t)(int)nDivResult);
       } else {
         *(uint32_t*)(char*)&nDivResult = (int)nMinDmg / 100 * nEnhDmgPctWork;
       }
@@ -1583,7 +1583,7 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
       if ((int)nEnhDmgPctWork > 0x10000) {
         if ((int)(nEnhDmgPctWork & -16) < 0x640) {
           nDivResult = _alldiv((uint32_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMinDmg), (uint32_t)((uint64_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMinDmg) >> 0x20), 100, 0);
-          *(uint32_t*)(char*)&nDivResult = (int)nDivResult;
+          nDivResult = (uint64_t)((uint64_t)nDivResult & 0xffffffff00000000ull | (uint64_t)(uint32_t)(int)nDivResult);
         } else {
           *(uint32_t*)(char*)&nDivResult = (int)nEnhDmgPctWork / 100 * nMinDmg;
         }
@@ -1988,7 +1988,7 @@ BOOL __fastcall Skills_SrvDoFunc_043_ChargeRelease_ScatterMissiles(::SGAMEDATA *
 
 // Assassin summon-skill helper. Resolves the monster class id and pet type for the given skill/level, falls back to the caster's position if no explicit spawn coords are provided, walks up the owner chain if called from a monster context, then calls SKILL_CreateSummon and applies revive/buff logic (SKILLNEC_ReviveCorpseAsMinion + SKILLNEC_ApplySummonBuffs) and sets alignment before triggering lifecycle transition.
 D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nX, uint32_t nSpawnY, int32_t nParam1, eD2Skills eSkill, int32_t nParam2) {
-    bool _bHasPos;
+    BOOL _bHasPos;
     bool bHasPos;
     D2UnitStrc* pUnit_00;
     uint32_t nAlignmentBits;
@@ -2075,7 +2075,7 @@ D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Server Do handler for Shadow Warrior (Assassin skill 44). Resolves the summon monster class via SKILLS_GetSummonMonsterClassId, finds/creates the cursor target position, spawns the shadow clone via SKILLASS_CreateSummon, sets its level to match the caster, relocates it to the caster's room, and queues an AI think event on the next frame. Returns TRUE on success.
 BOOL __fastcall Skills_SrvDoFunc_044_SummonBladeSentinel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bHasTarget;
+    BOOL _bHasTarget;
     bool bHasTarget;
     D2AiCmdArgumentsStrc local_2c;
     int32_t nAnimMode;
@@ -2130,7 +2130,7 @@ BOOL __fastcall Skills_SrvDoFunc_044_SummonBladeSentinel(::SGAMEDATA * pGame, D2
 }
 
 BOOL __fastcall Skills_SrvDoFunc_045_SummonTrapSentry(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bHasPos;
+    BOOL _bHasPos;
     bool bHasPos;
     uint32_t nTargetX;
     eD2Skills eSkillSaved = eSkill;
@@ -2235,7 +2235,7 @@ BOOL __fastcall Skills_SrvDoFunc_046_DragonClaw(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Removes all active charge-up states from pUnit. If the unit has any blue-state, copies the state bitmask, iterates every set state bit, and for each that is in the charge-up single-state table: detaches its stat list (STATLIST_RemoveAndRecalc + FreeStatList) and clears the state flag.
 void __fastcall SKILLASS_ClearAllChargeUpStates(D2UnitStrc * pUnit) {
-    bool _bHasChargeUpState;
+    BOOL _bHasChargeUpState;
     bool bHasChargeUpState;
     D2StatListExStrc* pStatList;
     uint32_t aStateBitWords[8];

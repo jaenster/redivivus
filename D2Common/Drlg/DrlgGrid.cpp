@@ -79,8 +79,8 @@ void __fastcall DRLGGRID_FloodFillGridCoords(int * pFloodFillContext, int nX, in
     0x0
 }; D2_STATIC_GUARD(gnDrlgGridMaxDepth, "D2Common::Drlg::DrlgGrid::DRLGGRID_FloodFillGridCoords::gnDrlgGridMaxDepth");
 
-    bool _bInBounds;
-    bool _bOrientGridValid;
+    uint32_t _bInBounds;
+    BOOL _bOrientGridValid;
     bool bOrientGridValid;
     bool bInBounds;
     int nOrientFlags;
@@ -357,7 +357,7 @@ void __fastcall DRLGGRID_SetEdgeGridFlags(D2DrlgGridStrc * pDrlgGrid, D2DrlgVert
 
 // Bresenham line with perpendicular width, bounds-checked.
 void __fastcall DRLGGRID_SetLineFlagsWithWidth(D2DrlgGridStrc * pDrlgGrid, D2DrlgVertexStrc * pEdge, D2DrlgCoordsStrc * pDrlgCoords, int nFlag, int eOperation, int nLineWidth) {
-    bool _bInside;
+    BOOL _bInside;
     bool bInside;
     int nWidthIndex;
     int nRemainingY;

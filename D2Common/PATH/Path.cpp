@@ -147,8 +147,6 @@ BOOL PATH_FindAlternateAroundObstacle(D2PathTypeArg * pPathState) {
     -0x1
 }; D2_STATIC_GUARD(gnObstacleAvoidanceXOffsets, "D2Common::PATH::Path::PATH_FindAlternateAroundObstacle::gnObstacleAvoidanceXOffsets");
 
-    uint32_t nParam;
-    uint32_t nPackedSrc;
     uint32_t nParam_00;
     uint16_t nAltX;
     int32_t iVar4;
@@ -188,10 +186,10 @@ BOOL PATH_FindAlternateAroundObstacle(D2PathTypeArg * pPathState) {
       nPathMode = pDVar3->eUnitType;
     }
 
-    *(uint16_t*)(char*)&nParam = pPathState->pCoords.nOffsetX;
-    *(uint16_t*)((char*)&nParam + 2) = pPathState->pCoords.nPosX;
-    *(uint16_t*)(char*)&nPackedSrc = pPathState->pCoords.nOffsetY;
-    *(uint16_t*)((char*)&nPackedSrc + 2) = pPathState->pCoords.nPosY;
+    uint32_t nParam;
+    nParam = (uint32_t)((uint32_t)(uint16_t)pPathState->pCoords.nOffsetX | (uint32_t)(uint16_t)pPathState->pCoords.nPosX << 16);
+    uint32_t nPackedSrc;
+    nPackedSrc = (uint32_t)((uint32_t)(uint16_t)pPathState->pCoords.nOffsetY | (uint32_t)(uint16_t)pPathState->pCoords.nPosY << 16);
     Drlg::Path::DRLGPATH_GetDirectionTripletPacked((uint32_t*)anDirections, nPackedSrc, nParam);
     uint16_t nSecAltX;
     nSecAltX = nCurX;
@@ -237,8 +235,7 @@ BOOL PATH_FindAlternateAroundObstacle(D2PathTypeArg * pPathState) {
         }
       }
 
-      *(uint16_t*)(char*)&nParam_00 = pPathState->pCoords.nOffsetX;
-      *(uint16_t*)((char*)&nParam_00 + 2) = pPathState->pCoords.nPosX;
+      nParam_00 = (uint32_t)((uint32_t)(uint16_t)pPathState->pCoords.nOffsetX | (uint32_t)(uint16_t)pPathState->pCoords.nPosX << 16);
       Drlg::Path::DRLGPATH_GetDirectionTripletPacked(nDirTriplet, nPackedCurXY, nParam_00);
       anDirections[0] = nDirTriplet[0];
     }
@@ -1380,21 +1377,27 @@ uint32_t __stdcall PATH_RecalculatePath(D2UnitStrc * pUnit, int32_t nParam) {
     }
 
     int nPathType = pDynamicPath->ePathType;
-    if (nPathType == 2 || nPathType == 0xd || nPathType == 0xf) {
-      if (nParam) {
-        pDynamicPath->ePathType = 0xd;
-      } else {
-        pDynamicPath->ePathType = 2;
-        pDynamicPath->nTargetX = pDynamicPath->nSavedTargetX;
-        pDynamicPath->nTargetY = pDynamicPath->nSavedTargetY;
-      }
+    switch (nPathType) {
+      case 2:
+        case 0xd:
+          case 0xf:
+            {
+              if (nParam) {
+                pDynamicPath->ePathType = 0xd;
+              } else {
+                pDynamicPath->ePathType = 2;
+                pDynamicPath->nTargetX = pDynamicPath->nSavedTargetX;
+                pDynamicPath->nTargetY = pDynamicPath->nSavedTargetY;
+              }
 
-      bPathCalcOk = DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
-      if (bPathCalcOk) {
-        return bPathCalcOk;
-      }
+              bPathCalcOk = DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
+              if (bPathCalcOk) {
+                return bPathCalcOk;
+              }
 
-      pDynamicPath->ePathType = 0xf;
+              pDynamicPath->ePathType = 0xf;
+              break;
+            }
     }
 
     bPathCalcOk = DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
@@ -1712,7 +1715,7 @@ static int __stdcall PATH_MoveObjectToPosition(D2RoomStrc * pRoom, uint32_t nTar
 }
 
 BOOL __stdcall PATH_GetCollisionMaskAt(D2DynamicPathStrc * pDynamicPath, D2UnitStrc * pUnit, D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY) {
-    uint32_t _wPosX;   // packs (Y<<16)|X; a uint16_t here threw the Y away
+    uint32_t _wPosX;
     _wPosX = (uint32_t)((uint32_t)(uint16_t)wPosY << 16 | (uint32_t)(uint16_t)wPosX);
     BOOL bMoved = PATH_MoveUnitToPosition(pRoom, _wPosX, pDynamicPath);
     if (!bMoved) {
@@ -1724,7 +1727,7 @@ BOOL __stdcall PATH_GetCollisionMaskAt(D2DynamicPathStrc * pDynamicPath, D2UnitS
 }
 
 int32_t __stdcall PATH_GetCollisionTypeAt(uint32_t * pDynamicPath, D2UnitStrc * dwUnused, D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY) {
-    uint32_t _wPosX;   // packs (Y<<16)|X; a uint16_t here threw the Y away
+    uint32_t _wPosX;
     _wPosX = (uint32_t)((uint32_t)(uint16_t)wPosY << 16 | (uint32_t)(uint16_t)wPosX);
     PATH_MoveObjectToPosition(pRoom, _wPosX, pDynamicPath);
     pDynamicPath[10] = 0;
@@ -1732,7 +1735,7 @@ int32_t __stdcall PATH_GetCollisionTypeAt(uint32_t * pDynamicPath, D2UnitStrc * 
 }
 
 void __stdcall PATH_CheckCollisionFlags(D2DynamicPathStrc * pDynamicPath, uint32_t dwUnused, D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY) {
-    uint32_t _wPosX;   // packs (Y<<16)|X; a uint16_t here threw the Y away
+    uint32_t _wPosX;
     _wPosX = (uint32_t)((uint32_t)(uint16_t)wPosY << 16 | (uint32_t)(uint16_t)wPosX);
     BOOL bMoved = PATH_MoveUnitToPosition(pRoom, _wPosX, pDynamicPath);
     if (!bMoved) {

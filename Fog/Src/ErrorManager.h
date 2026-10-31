@@ -127,7 +127,8 @@ void ERROR_UnrecoverableInternalError_Warning(char * szUnused, int32_t nAddress,
 void ERROR_DeadlockedThread(DWORD pThread, int32_t nTicks);
 void ERROR_UnrecoverableInternalError_Any(eFOG_ErrorType eErrorType, uint32_t dwParam, int32_t nAddress, int32_t nLine);
 // Displays an unrecoverable error message box and logs to file. Formats the error message via vsnprintf with varargs, optionally prepends file/line info if provided, constructs a "Diablo II Error" title, and shows MessageBoxA with MB_ICONEXCLAMATION. Logs the full error message to the error log before displaying. Uses three buffers: 4096 bytes for vsnprintf formatting, 4096 bytes for final message (with file/line), and 256 bytes for the title string.
-void __stdcall ShowUnrecoverableErrorDialog(int32_t nParam, char * szText, int nLine, char * szSourceFile, va_list vaArgs, DWORD dwParam);
+// EDI is not an argument: saved at 00408b40 PUSH EDI, then loaded from [EBP+0xc].
+void __fastcall ShowUnrecoverableErrorDialog(int32_t nParam, char * szText, int nLine, char * szSourceFile, va_list vaArgs);
 // Initializes Fog error manager and debugging subsystems on first call. Sets up project metadata (ID 0x108, "Diablo II", version "D2 1.14d"), retrieves executable directory via SFILE_GetExecutableDirectory into a 4096-byte buffer, initializes two critical sections for thread safety, starts the log writer thread, validates gadwBitMasks/gadwInvBitMasks lookup tables, and registers the exit handler. On subsequent calls with bLogGameStrartupInfo=TRUE, only logs startup info via LOGFILE_StoreGameStartupInfo.
 void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, BOOL bLogGameStrartupInfo);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9bfb(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);

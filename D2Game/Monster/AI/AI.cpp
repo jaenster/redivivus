@@ -452,7 +452,7 @@ BOOL __fastcall SUMMON_CheckOwnerAlive(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // 3. Summon owner alive check (kills summon if owner dead)
 // Returns 1 to skip remaining AI stages
 BOOL __fastcall CheckStunnedOpenDoorAndParent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    bool _bOpenedDoor;
+    BOOL _bOpenedDoor;
     bool bOpenedDoor;
     bool bOwnerAlive;
     eD2States eStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_stunned);
@@ -590,7 +590,7 @@ BOOL __fastcall CheckIfBossNeedsToTeleport(::SGAMEDATA * pGame, D2UnitStrc * pUn
 // 5. Random wander if all fail
 // Returns 1 to abort AI execution if can't reach target
 BOOL __fastcall DistanceAndCollisionChecks(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    bool _bHasSpecialFlag;
+    uint32_t _bHasSpecialFlag;
     bool bHasSpecialFlag;
     int32_t nClassId;
     D2MonsterAiParameterStruct sMonsterAiParam;
@@ -1701,7 +1701,7 @@ D2AiListStrc * __fastcall MONSTERAI_GetAiFunctionFromTable(D2UnitStrc * pUnit, i
     }
 }; D2_STATIC_GUARD(arrSpecialStateAiList, "D2Game::Monster::AI::MONSTERAI_GetAiFunctionFromTable::arrSpecialStateAiList");
 
-    bool _bCanSwitchAI;
+    BOOL _bCanSwitchAI;
     bool bCanSwitchAI;
     D2MonStatsTxt* pMonStatsTxt = !pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;
     if (nFunctionId) {
@@ -2130,8 +2130,8 @@ BOOL __fastcall TestIfMonsterCanHitTarget(D2UnitStrc * pUnit, D2UnitStrc * pTarg
 }
 
 uint32_t __fastcall MONSTERAI_FindNearestAllyCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2UnitStrc * * ppAllyData) {
-    bool _bIsDead;
-    bool _bCanAttack;
+    BOOL _bIsDead;
+    uint32_t _bCanAttack;
     bool bIsDead;
     bool bCanAttack;
     if (!(pUnit != pOther && pOther && pOther->eUnitType == UNIT_MONSTER)) {
@@ -2197,7 +2197,7 @@ uint32_t __fastcall MONSTERAI_GetThreatLevel(D2UnitStrc * pUnit) {
 
 // Validates that a monster (pUnit) may legally target pTarget. Checks: both are monsters/players, neither is dead, target's room is not a town room, target has UNITFLAG_CANBEATTACKED, and if target is invisible: player invis targets succeed only on melee range or a 50% seed roll; monster invis targets are blocked unless in melee range. Falls through to UNITS_CheckIfCanAttackTarget.
 static uint32_t __stdcall MONSTERAI_CanTargetUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    bool _bAttackable;
+    uint32_t _bAttackable;
     bool bAttackable;
     if (!(pUnit && (int)pUnit->eUnitType >= 0 && (int)pUnit->eUnitType <= 1 && pTarget && (int)pTarget->eUnitType >= 0 && (int)pTarget->eUnitType <= 1)) {
       return 0;
@@ -2246,7 +2246,7 @@ static uint32_t __stdcall MONSTERAI_CanTargetUnit(::SGAMEDATA * pGame, D2UnitStr
 }
 
 uint32_t __stdcall MONSTERAI_IsValidTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    bool _bCanAttack;
+    uint32_t _bCanAttack;
     bool bCanAttack;
     if (!(pUnit2 && (int)pUnit2->eUnitType >= 0 && (int)pUnit2->eUnitType <= 1)) {
       return 0;
@@ -2263,8 +2263,8 @@ uint32_t __stdcall MONSTERAI_IsValidTarget(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
 // ForEach callback used during AI target scanning. For each candidate pOther unit: if it is a valid attackable player/monster (alive, TARGETABLE flag set, can-attack check passes), records it in ppResults as a preferred (threat>=2 → ppResults[0]/[1]) or secondary (ppResults[5]/[6]) target when within distance ppResults[3]/[6] respectively, skipping if already blocked by LOS (TestCollisionWithUnit). If the unit fails those checks but is an aligned monster with nAiFlags bit 3 set, checks grid index against ppResults[4] and clears ppResults[2] on match (pack-leader slot invalidation). Always returns 0.
 uint32_t __fastcall AI_ForEachFn05_ScanTargetsByThreat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2UnitStrc * * ppResults) {
-    bool _bIsDead;
-    bool _bCanAttack;
+    BOOL _bIsDead;
+    uint32_t _bCanAttack;
     bool bIsDead;
     bool bCanAttack;
     D2UnitStrc* pGridIndex;
@@ -2446,7 +2446,7 @@ uint32_t __fastcall AI_ForEachFn08_NearestClosedDoor(uint32_t dwParam, int * pnP
 }
 
 int __fastcall AI_ForEachFn09_FindOwnMinionCorpse(uint32_t dwParam, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2UnitStrc * * ppResults) {
-    bool _bHasPassiveState;
+    int _bHasPassiveState;
     bool bHasPassiveState;
     D2UnitStrc* pDistAsUnit = (D2UnitStrc*)AI::GetDistance(pUnit, pOther);
     if (!((int)pDistAsUnit <= (int)ppResults[3] && pOther && pOther->eUnitType == UNIT_MONSTER && pOther->eAnimMode.ePlayerMode == Kick && pOther->eUnitFlags >> 1 & 1)) {
@@ -2470,7 +2470,7 @@ int __fastcall AI_ForEachFn09_FindOwnMinionCorpse(uint32_t dwParam, D2UnitStrc *
 }
 
 uint32_t __fastcall AI_ForEachFn12_CountClassInRange(uint32_t dwParam, D2UnitStrc * pUnit, D2UnitStrc * pOther, int * pCountBuf) {
-    bool _bIsDead;
+    BOOL _bIsDead;
     bool bIsDead;
     if (!(pOther && pOther->eUnitType == UNIT_MONSTER && pOther->nClassId == *pCountBuf)) {
       return 0;
@@ -2808,7 +2808,7 @@ int32_t __fastcall thunk_GetCurrentLifePercentage(D2UnitStrc * pUnit) {
 }
 
 uint32_t __fastcall CollisionWithWall(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    bool _bCollides;
+    BOOL _bCollides;
     bool bCollides;
     _bCollides = D2Common::Units::TestCollisionWithUnit(pUnit, pUnit2, 4);
     return (uint32_t)!_bCollides;
@@ -4442,7 +4442,7 @@ void __fastcall MONSTERAI_CommandWalkAwayFromUnit(::SGAMEDATA * pGame, D2UnitStr
 
 // Tail-calls MONSTERAI_ExecuteLifecycleTransition (already fixed to return int32_t) as its final statement, dropping the result.
 int32_t __fastcall MONSTERAI_CommandWalkRandomOffset(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCenterUnit, uint8_t nRadius) {
-    uint8_t _nRadius;
+    uint32_t _nRadius;
     uint32_t nRandYOffset;
     D2MonsterKillStrc sWalkArgs;
     int32_t nPosY;
@@ -4961,13 +4961,12 @@ void __stdcall MONSTERAI_Noop() {
 // Called when an Uber Tristram boss dies (UberMephisto 0x2C0, UberDiablo 0x2C1, UberBaal 0x2C5). Sets the corresponding game flags. Once all three are dead, drops the Key-of-Destruction (PlayerBodyPart) and one Shield reward per connected client.
 void __fastcall AI_UberTristram_CheckDeathAndDropLoot(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int nClassId;
+    ::SGAMEDATA* pGameLocal;
     if (!pUnit) {
       nClassId = -1;
     } else {
       nClassId = pUnit->nClassId;
     }
-
-    ::SGAMEDATA* pGameLocal = pGame;
     if (nClassId != 0x2c0) {
       /* uberdiablo */ if (nClassId != 0x2c1) {
         /* uberbaal */ if (nClassId != 0x2c5) {
@@ -6227,7 +6226,7 @@ void __fastcall AI_Fn1_Succubus(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
 
 // Per-tick AI #1 for the Succubus/Witch (Vile Temptress) caster family (server-side). Spell-selection block (gated by distance, a seed roll vs MonStats.TreasureClass AI words, and the target not already carrying a stat flag 0x20, i.e. not already seduced): picks among Skill1..Skill4 by target life percentage and mana-vs-life / player checks (e.g. blood-star, seduce/mind-blast, attract reserved for players) and casts via SERVER_UNIT_CastSkill. If no cast and not yet engaged, may cast the ranged Skill5 on a found target, retreat-walk away from the target (WalkTowardsUnitOffset with negative offset), end the attack, or approach/replan. The engaged branch handles fleeing/kiting and re-engagement. Heavily seed-driven (per-difficulty probability words). No return.
 void __fastcall AI_Fn1_SuccubusWitch(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    bool _bEngagedInCombat;
+    int _bEngagedInCombat;
     D2SeedStrc DVar1;
     bool bEngagedInCombat;
     int32_t nMaxMana;
@@ -6370,7 +6369,7 @@ void __fastcall HirelingRandomMoveCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
 // ForEach callback used by Baal's heal-minion AI. Scans for living, allied Wave-of-Destruction minions (classId 0x1C5) that are not already bloodlusted and are within range. Populates pSearchParams[3] with the lowest-HP candidate and pSearchParams[4] with the nearest non-champion candidate.
 uint32_t __fastcall AI_Baal_FindMinionToHeal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCandidate, int * pSearchParams) {
-    bool _bCanAttackTarget;
+    uint32_t _bCanAttackTarget;
     bool bCanAttackTarget;
     if (!(pUnit != pCandidate && pCandidate && pCandidate->eUnitType == UNIT_MONSTER)) {
       return 0;
@@ -6542,6 +6541,7 @@ void __fastcall AI_Fn1_Overseer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
 }
 
 uint32_t __fastcall MONSTERAI_CountGolemReviveMonsters(uint32_t pGame, D2UnitStrc * pUnit, D2UnitStrc * pMonsterCandidate, int * pCounter) {
+    int32_t nAlignment;
     if (!(pUnit != pMonsterCandidate && pMonsterCandidate && pMonsterCandidate->eUnitType == UNIT_MONSTER)) {
       return 0;
     }
@@ -6555,16 +6555,20 @@ uint32_t __fastcall MONSTERAI_CountGolemReviveMonsters(uint32_t pGame, D2UnitStr
     if (nBaseId < 0 || nBaseId >= sgptDataTable->nTxtMonStatsSize) {
       nBaseId = -1;
     }
-    if (!(nBaseId == 0x1c5 || nBaseId == 0x1cd)) {
-      return 0;
+
+    switch (nBaseId) {
+      case 0x1c5:
+        case 0x1cd:
+          {
+            nAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pMonsterCandidate);
+            if (!nAlignment) {
+              (*pCounter)++;
+            }
+
+            break;
+          }
     }
 
-    int32_t nAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pMonsterCandidate);
-    if (nAlignment) {
-      return 0;
-    }
-
-    (*pCounter)++;
     return 0;
 }
 
@@ -19690,29 +19694,29 @@ uint32_t __fastcall MONSTERAI_FindWoundedHydraGolem(int dwParam, D2UnitStrc * pU
 
     nTmpVal = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pCandidate);
     nTmpVal = D2Client::UNIT::Player::ValidateClassId(nTmpVal);
-    if (!(nTmpVal == 0xeb || nTmpVal == 0xee)) {
-      return 0;
+    switch (nTmpVal) {
+      case 0xeb:
+        case 0xee:
+          {
+            nTmpVal = GetDistanceBetween(pUnit, pCandidate);
+            if (nTmpVal <= (int)ppSearchParams[3]) {
+              nTmpVal = D2Common::Units::GetCurrentLifePercentage(pCandidate);
+              if (nTmpVal <= 0x3c) {
+                if ((int)ppSearchParams[2] <= 0) {
+                  ppSearchParams[2] = (D2UnitStrc*)0x7fffffff;
+                }
+
+                ppSearchParams[1] = (D2UnitStrc*)((uintptr_t)&ppSearchParams[1]->eUnitType + 1);
+                if (nTmpVal < (int)ppSearchParams[2]) {
+                  *ppSearchParams = pCandidate;
+                }
+              }
+            }
+
+            break;
+          }
     }
 
-    nTmpVal = GetDistanceBetween(pUnit, pCandidate);
-    if (nTmpVal > (int)ppSearchParams[3]) {
-      return 0;
-    }
-
-    nTmpVal = D2Common::Units::GetCurrentLifePercentage(pCandidate);
-    if (nTmpVal > 0x3c) {
-      return 0;
-    }
-    if ((int)ppSearchParams[2] <= 0) {
-      ppSearchParams[2] = (D2UnitStrc*)0x7fffffff;
-    }
-
-    ppSearchParams[1] = (D2UnitStrc*)((uintptr_t)&ppSearchParams[1]->eUnitType + 1);
-    if (nTmpVal >= (int)ppSearchParams[2]) {
-      return 0;
-    }
-
-    *ppSearchParams = pCandidate;
     return 0;
 }
 
@@ -22715,7 +22719,7 @@ BOOL __fastcall AI_Monster_AcquireKillerAsTarget(::SGAMEDATA * pGame, D2UnitStrc
 
 // Server-side helper that makes pUnit perform a skill's "ItemEffect" cast (eSkill/nSubSkill), used for item/charge-triggered monster skills. Looks up the SkillsTxt row; bails if Attack or the skill has no ItemEffect. Saves and temporarily overrides the unit's SP1 target coords/target unit (from pUnit2 or nParam1/nParam2), then per the skill's ItemTarget column selects a target: self(1), random walk point(2), corpse(3), or the unit's killer(4), writing the chosen unit type/GUID/coords through the optional out-params (peUnitType,pnParam,pnParam1,pnParam2). Optionally starts the skill and spawns its missile, then restores the original target/coords and the SKSRVDOFUNC unit flag. Returns the spawned missile/unit pointer cast to int32.
 int32_t __fastcall AI_Monster_CastItemEffectSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSubSkill, D2UnitStrc * pUnit2, int16_t nParam1, int16_t nParam2, eD2UnitType * peUnitType, int * pnParam, uint32_t * pnParam1, uint32_t * pnParam2, int32_t nParam) {
-    bool _bStarted;
+    BOOL _bStarted;
     bool bStarted;
     uint32_t nOutCoord;
     uint32_t nOutCoordY;

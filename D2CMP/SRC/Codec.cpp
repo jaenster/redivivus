@@ -413,7 +413,7 @@ void __stdcall CODEC_DecompressFrameData(int32_t nCodecState, D2CodecPixelBuffer
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 60, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    bool _bUseColorStream;
+    uint32_t _bUseColorStream;
     uint32_t nLookupVal;
     uint8_t byBitOffset;
     uint8_t byDecodedColor;

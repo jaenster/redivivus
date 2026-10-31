@@ -350,8 +350,16 @@ static void ITEM_RestoreSkillSelections(int * pSkillSaveState, D2UnitStrc * pUni
         pCurrentSkill = D2Common::Units::GetLeftSkill(pUnit);
         if (pSkillLeft != pCurrentSkill) {
           nCanUseResult = PlrSkills::PLRSKILLS_CanUseSkillCheck(pUnit, pSkillLeft);
-          if (nCanUseResult != 2 && nCanUseResult != 7) {
-            D2Common::Skills::SelectSkillLeft(pUnit, pSkillSaveState[4], pSkillSaveState[6]);
+          switch (nCanUseResult) {
+            default:
+              {
+                D2Common::Skills::SelectSkillLeft(pUnit, pSkillSaveState[4], pSkillSaveState[6]);
+              }
+            case 2:
+              case 7:
+                {
+                  break;
+                }
           }
         }
       }
@@ -371,11 +379,17 @@ static void ITEM_RestoreSkillSelections(int * pSkillSaveState, D2UnitStrc * pUni
     }
 
     nCanUseResult = PlrSkills::PLRSKILLS_CanUseSkillCheck(pUnit, pSkillLeft);
-    if (!(nCanUseResult != 2 && nCanUseResult != 7)) {
-      return;
+    switch (nCanUseResult) {
+      default:
+        {
+          D2Common::Skills::SelectSkillRight(pUnit, pSkillSaveState[3], pSkillSaveState[5]);
+        }
+      case 2:
+        case 7:
+          {
+            break;
+          }
     }
-
-    D2Common::Skills::SelectSkillRight(pUnit, pSkillSaveState[3], pSkillSaveState[5]);
 }
 
 // @sourcefile .\UNIT\Item.cpp
@@ -426,7 +440,7 @@ static void __stdcall ITEM_ReequipItemOnBody(D2UnitStrc * pUnit, int32_t bApplyE
 // @sourcefile .\UNIT\Item.cpp
 static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
     bool _bNeedsGfxReload;
-    bool _bReequippedThisPass;
+    uint32_t _bReequippedThisPass;
     uint8_t bVar1;
     eD2BodyLoc eBodyLoc;
     D2UnitStrc* pEquipItem;
@@ -1437,7 +1451,7 @@ void __fastcall HandleItemPickedFromGround(uint8_t * pbParam) {
 
 // Client-side handler for a server packet indicating an item was dropped to the ground. Extracts item details from the packet; if the item already exists client-side and is the cursor item, clears the cursor. For ITEMFLAG_RELOAD items, removes the old unit and recreates it via ITEM_CreateItemFromGroundPacket. Places the resulting item unit in the world at the packet-specified tile coordinates via ITEM_SetAnimModeAndPlace.
 void __fastcall HandleItemDroppedToGround(uint8_t * pbParam) {
-    uint8_t _bStack_8;
+    uint32_t _bStack_8;
     D2RoomStrc* pRoom;
     D2UnitDataItemDetailsStrc stItemDetails;
     uint8_t bStack_8;
@@ -1559,7 +1573,7 @@ void __fastcall HandleItemOnGround(uint8_t * pBuffer) {
 
 // Places pUnit (an item) into pUnit2's inventory at the given grid coords (nItemX, nYPos), then calls INVENTORY_PlaceItemAtCoords for the resolved inventory page. If the item belongs to the local player: plays a pickup sound (nParam==1) or refreshes cursor item (otherwise). Handles Horadric Cube quest trigger for scroll/tome items (nParam==3). Client-side only (calls D2Client functions).
 static void __stdcall ITEM_PlaceItemInContainer(D2UnitStrc * pUnit, uint32_t nYPos, int32_t nParam, D2UnitStrc * pUnit2, uint32_t nItemX) {
-    bool _bIsExpansion;
+    BOOL _bIsExpansion;
     bool bIsExpansion;
     eD2Sounds eSoundId;
     int32_t nDelay;
@@ -2789,7 +2803,7 @@ void __fastcall HandleItemSwapInContainer(uint8_t * pbParam) {
 
 // Client packet handler that places an item into the player's belt inventory. Extracts item details from the raw packet buffer, locates or creates the item unit, sets its anim/page, positions it in the inventory grid via PutItemInInventory, validates belt slot placement, applies charm stats if active, marks the item as sorted, refreshes the cursor item, sets the belt-slot hover flag, and notifies the NPC-menu system.
 void __fastcall HandleItemPutInBelt(uint8_t * pbParam) {
-    uint8_t _nInvPageByte;
+    uint32_t _nInvPageByte;
     BOOL bPlacedInInv;
     uint32_t nXBeltSlot;
     uint32_t nIndex;
@@ -3200,7 +3214,7 @@ void __fastcall HandleItemAutoUnequip(uint8_t * pPacketData) {
 
 // Client handler for a packet placing a socketable item into an owner unit's socket. Extracts item details, finds the owner unit (any type) and socket item by GUID; creates the socket item if it doesn't exist. Sets the item's position/page, inserts it into the owner's inventory, applies socketable+equip stats via ITEM_ApplySocketableAndEquipStats. If not ITEMFLAG_IGNORE, refreshes the local player's cursor. Halts on missing inventory.
 void __fastcall HandleItemInSocket(uint8_t * pbParam) {
-    uint8_t _nInvPageByte;
+    uint32_t _nInvPageByte;
     D2UnitStrc* pLocalPlayer;
     D2UnitDataItemDetailsStrc stItemDetails;
     uint8_t nInvPageByte;

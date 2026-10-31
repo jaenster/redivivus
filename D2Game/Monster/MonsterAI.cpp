@@ -286,7 +286,7 @@ void __fastcall FreeMonsterAi(::SGAMEDATA * pGame, D2MonsterAiStrc * pMonster) {
 // Initiates a player-NPC interaction on the server. Guards against double-interaction (checks existing pAiSub list and GetInteractedNpc), verifies the NPC is interactable (MonStats interact flag) and not in Death/Kick mode, and that the player is not already trading. Allocates a D2MonsterAiSubStrc to track the interaction participant, sends the mercenary hire list (SendMercForHireList, first-time flag), sets the interact info on the player unit, then sends 0x27 NPC-info and 0x28 player-quest-info packets. Also triggers QUEST_OnNpcInteraction for quest dialogue and 0x29 quest-log prep.
 // @sourcefile .\MONSTER\MonsterAI.cpp
 static uint32_t __stdcall NPC_BeginInteraction(::SGAMEDATA * pGame, D2MonsterAiStrc * pAi, uint8_t questActionType, D2UnitStrc * pPlayer, D2UnitStrc * pNpcUnit) {
-    bool _bFirstInteraction;
+    uint32_t _bFirstInteraction;
     bool bIsTrading;
     uint32_t dwTmp;
     bool bFirstInteraction;
@@ -488,7 +488,7 @@ uint32_t __fastcall NpcStateIs2(D2UnitStrc * pNpc, D2UnitStrc * pPlayer) {
 // Removes a specific unit (pUnit) from a monster's AI sub-list (pMonsterAi->pAiSub), frees the D2MonsterAiSubStrc from the game memory pool, and clears any interact-info on pUnit if it was targeting a monster. If the sub-list becomes empty after removal, also strips the player's proxy inventory via SUNITPROXY_RemovePlayerProxyInventory. Fires QUEST_OnNpcDeactivate on entry. Handles both active (nState > 0) and pending (nState == 0) sub-AI records.
 // @sourcefile .\MONSTER\MonsterAI.cpp
 void __fastcall FreeAndResetAiSub(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMonster, D2MonsterAiStrc * pMonsterAi) {
-    bool _bHasInteractInfo;
+    BOOL _bHasInteractInfo;
     bool bHasInteractInfo;
     uint32_t dwInteractUnitGUID;
     eD2UnitType eInteractUnitType;

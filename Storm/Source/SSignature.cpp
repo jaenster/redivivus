@@ -654,7 +654,7 @@ void __thiscall CryptRSA_Process(BigData * * ppKey, void * pData, uint32_t nData
     local_8 = 0;
     SBig::SBigFromBinary(pPlainBn, pData, nDataLen);
     SBig::SBigNew(&pCipherBn);
-    local_8 = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&local_8 + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    local_8 = (uint32_t)((uint32_t)((uint32_t)local_8 >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     SBig::SBigPowMod(pCipherBn, pPlainBn, ppKey[1], *ppKey);
     SBig::SBigToBinaryBuffer(pCipherBn, pData, nBufCapacity, &nDataLen);
     if (nDataLen < nBufCapacity) {

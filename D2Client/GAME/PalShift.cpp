@@ -54,7 +54,7 @@ namespace D2Client::GAME::PalShift {
 
 // @sourcefile .\GAME\PalShift.cpp
 void __stdcall AllocPalShift_GreenBlood() {
-    bool _bFileExists;
+    BOOL _bFileExists;
     bool bFileExists;
     D2MPQFileStrc* pFileHandle;
     _bFileExists = D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, "Data\\Global\\Monsters\\GreenBlood.dat", &pFileHandle, 1);

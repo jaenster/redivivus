@@ -2019,7 +2019,7 @@ void __stdcall SKILLTREE_DrawSkillNode(eD2Skills eSkill, D2SkillsTxt * pSkillTxt
         nTooltipParam = nDisplayLevel;
         nMouseX = nColumnX;
         pUnit = UNIT::Player::GetPlayerUnit_UI();
-        SkillDesc::SKILLDESC_BuildSkillTooltip(pUnit, eSkill, 0, nTooltipParam, nTextColor, nMouseX, nSkillBonus);
+        SkillDesc::SKILLDESC_BuildSkillTooltip(pUnit, eSkill, nTooltipParam, nTextColor, nMouseX, nSkillBonus);
       } else {
         nTextColor = 0;
         nTooltipParam = nDisplayLevel;

@@ -859,8 +859,8 @@ static uint32_t __stdcall INVENTORY_FindBestPlacementWithScore(int * * ppnOutX, 
       do {
         nCurCol--;
         if (nCurCol < 0) {
-          *(uint8_t*)((char*)&nBestScorePacked + 3) = (uint8_t)((uint32_t)nBestScorePacked >> 0x18);
-          return (uint32_t)(*(uint8_t*)((char*)&nBestScorePacked + 3) != '\0');
+          nBestScorePacked = (uint32_t)((uint32_t)nBestScorePacked & 0xffffffu | (uint32_t)(uint8_t)((uint32_t)nBestScorePacked >> 0x18) << 24);
+          return (uint32_t)((uint8_t)((uint32_t)nBestScorePacked >> 24) != '\0');
         }
 
         nCurRow = *(uint8_t*)(pGridInfo + 9) - 1;
@@ -871,7 +871,7 @@ static uint32_t __stdcall INVENTORY_FindBestPlacementWithScore(int * * ppnOutX, 
           bFits = INVENTORY_IsGridRectEmpty(nCurRow, (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)byItemHeight + nCurRow >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byItemWidth), nCurCol, byItemHeight, pGridInfo);
           if (bFits) {
             nScore = INVENTORY_CalcGridPlacementScore(byItemHeight, pGridInfo, nCurCol, byItemWidth, nCurRow);
-            if ((uint8_t)nScore > *(uint8_t*)((char*)&nBestScorePacked + 3)) {
+            if ((uint8_t)nScore > (uint8_t)((uint32_t)nBestScorePacked >> 24)) {
               *ppnOutX = (int*)nCurCol;
               nBestScorePacked = nScore << 0x18;
               *pnOutY = nCurRow;
@@ -947,9 +947,9 @@ static uint32_t __stdcall INVENTORY_FindBestGridPosition(int * * ppnOutX, int * 
     int* pnCurCol;
     int nY = 0;
     uint32_t nBestScore = 0;
-    *(uint8_t*)((char*)&nBestScore + 3) = '\0';
+    nBestScore = (uint32_t)((uint32_t)nBestScore & 0xffffffu);
     if ((uint8_t)*(char*)(pGridInfo + 9) <= '\0') {
-      return (uint32_t)(*(uint8_t*)((char*)&nBestScore + 3) != '\0');
+      return (uint32_t)((uint8_t)((uint32_t)nBestScore >> 24) != '\0');
     }
 
     do {
@@ -962,7 +962,7 @@ static uint32_t __stdcall INVENTORY_FindBestGridPosition(int * * ppnOutX, int * 
             bRectEmpty = INVENTORY_IsGridRectEmpty(nY, (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)byItemHeight + nY >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byItemWidth), (int32_t)pnCurCol, byItemHeight, pGridInfo);
             if (bRectEmpty) {
               nPlacementScore = INVENTORY_CalcGridPlacementScore(byItemHeight, pGridInfo, (int32_t)pnCurCol, byItemWidth, nY);
-              if ((uint8_t)nPlacementScore > *(uint8_t*)((char*)&nBestScore + 3)) {
+              if ((uint8_t)nPlacementScore > (uint8_t)((uint32_t)nBestScore >> 24)) {
                 *ppnOutX = pnCurCol;
                 nBestScore = nPlacementScore << 0x18;
                 *pnOutY = nY;
@@ -981,7 +981,7 @@ static uint32_t __stdcall INVENTORY_FindBestGridPosition(int * * ppnOutX, int * 
       nY++;
     } while (nY < (int)(uint32_t)*(uint8_t*)(pGridInfo + 9));
 
-    return (uint32_t)(*(uint8_t*)((char*)&nBestScore + 3) != '\0');
+    return (uint32_t)((uint8_t)((uint32_t)nBestScore >> 24) != '\0');
 }
 
 // Finds the first empty grid slot that fits byItemWidth x byItemHeight for non-player inventories (e.g. stash, cube), iterating column-major. Uses raw field offsets relative to pGridInfo->pOwner instead of the player-side grid accessors. Writes result to *pnOutX / *pnOutY. Returns 1 on success, 0 if no slot found. Note: the pGridInfo parameter is typed D2InventoryStrc* but used as a raw grid info block here.
@@ -1599,7 +1599,7 @@ D2UnitStrc * __stdcall INVENTORY_GetHandItem(D2InventoryStrc * pInventory) {
 
 // Searches the stash inventory page for the first item that is socketable with pUnit1 (the socketing reagent) and has remaining stack capacity (quantity &lt; maxStack). If pUnit2 is non-null, scanning starts after pUnit2 in the page-linked list (used to resume past a previously checked item). Returns the matching D2UnitStrc* or null if none found.
 D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInStash(D2InventoryStrc * pInventory, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2) {
-    bool _bSocketable;
+    int _bSocketable;
     int32_t bStackMatches;
     bool bSocketable;
     int32_t nItemMaxStack;
@@ -1683,7 +1683,7 @@ D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInStash(D2InventoryStrc * pIn
 
 // Scans the main inventory grid of pInventory for the first item that is socketable (per IsItemSocketable) relative to pUnit1, is not fully stacked, and — if pUnit2 is non-null — appears after pUnit2 in the item list. Returns the matching D2UnitStrc* or NULL.
 D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInMain(D2InventoryStrc * pInventory, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2) {
-    bool _bSocketable;
+    BOOL _bSocketable;
     bool bSocketable;
     int32_t nMaxStack;
     D2UnitDataItemStrc* pItemData;
@@ -1884,7 +1884,7 @@ void __stdcall INVENTORY_OnBeltChanged_NoOp(D2InventoryStrc * dwParam1, uint32_t
 }
 
 BOOL __stdcall INVENTORY_CanAutoBeltItem(D2InventoryStrc * pInventory, D2UnitStrc * pItem) {
-    bool _bSamePotion;
+    BOOL _bSamePotion;
     bool bSamePotion;
     D2UnitStrc* pItemEx;
     if (!pInventory) {
@@ -1927,7 +1927,7 @@ BOOL __stdcall INVENTORY_CanAutoBeltItem(D2InventoryStrc * pInventory, D2UnitStr
 // Finds the best belt slot index for pUnit (a potion item) and writes it to *dwParam. Prefers a column already containing the same potion type (stacking behaviour), falling back to any empty slot if the item's txt entry has bAutoBelt set. Only considers 1x1 beltable items; slot count is capped by the equipped belt's nBoxes. Does nothing if no valid slot is found.
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall INVENTORY_FindBeltSlotForPotion(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int * pnOutSlotIndex) {
-    bool _bSamePotion;
+    BOOL _bSamePotion;
     bool bSamePotion;
     int32_t iVar1;
     D2UnitStrc* pBeltItem;
@@ -2068,8 +2068,8 @@ BOOL __stdcall INVENTORY_CheckBeltSlotAndGetItem(D2InventoryStrc * pInventory, D
 
 // Returns true if a non-broken, non-disabled shield is equipped in either the primary (grid cell 4) or secondary (grid cell 5) weapon slot of the inventory. If ppUnit is non-null, writes the found shield unit pointer to *ppUnit. Returns false and leaves *ppUnit null if no shield is equipped.
 BOOL __stdcall INVENTORY_GetEquippedShield(D2InventoryStrc * pInventory, D2UnitStrc * * ppUnit) {
-    bool _BVar1;
-    bool _bIsShield;
+    BOOL _BVar1;
+    uint32_t _bIsShield;
     bool BVar1;
     bool bIsShield;
     D2InventoryGridInfoStrc* pGridInfo;
@@ -2852,7 +2852,7 @@ void __stdcall INVENTORY_SwapPrimaryWeaponOnRemoval(D2InventoryStrc * pInventory
 
 // Determines the equipped-weapon handedness for a unit. Returns -1 (no weapon), 1 (dual-wield / Barbarian dual-handed), or 2 (two-handed weapon). Reads the left-arm (slot 5) and right-arm (slot 4) body-location cells from the equipment grid, checks IsTwoHanded and BARBARIAN_CheckItemData for each combination.
 int __stdcall INVENTORY_GetWeaponHandedness(D2UnitStrc * pUnit, D2InventoryStrc * pInventory) {
-    bool _bIsTwoHanded;
+    BOOL _bIsTwoHanded;
     bool bIsTwoHanded;
     D2InventoryGridInfoStrc* pGridInfo;
     int32_t iVar1;
@@ -4459,7 +4459,7 @@ uint8_t __stdcall INVENTORY_CalculateSwapActionCode(int32_t nParam1, int32_t nPa
 
 // Decides whether an item can be equipped alongside the unit's current weapon for dual-wield. pUnit=currently-equipped weapon item, pItem1=item being equipped, pCharUnit=the character. Returns 1 if compatible/allowed, 0 if not. Rejects shoots+ammo mismatches and quivers; blocks two-handers unless the Barbarian's 2H-as-1H check passes; otherwise requires both to be weapons and gates on class (Barbarian dual-wield, Assassin/Druid hand-to-hand) via ValidateClassId. Used by item-equip placement logic.
 static BOOL INVENTORY_CanDualWieldItems(D2UnitStrc * pUnit, D2UnitStrc * pItem1, D2UnitStrc * pCharUnit) {
-    bool _bIsTwoHanded;
+    BOOL _bIsTwoHanded;
     bool bIsTwoHanded;
     eD2ItemTypes eShootsType;
     uint32_t bItemTypeMatch;

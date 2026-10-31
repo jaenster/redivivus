@@ -655,12 +655,11 @@ void __fastcall MakeMonsterCorpseExplodeAttack(D2UnitStrc * pUnit, int32_t nUMod
 void __fastcall MONUNIQUE_SpawnDeathMissile(D2UnitStrc * pUnit, int32_t eModifier, int32_t bApply) {
     int32_t nVelocity;
     int nLevel;
+    int32_t nTotalFrames;
     eD2Skills eSkill;
     if (!(bApply || eModifier != 0x12)) {
       return;
     }
-
-    int32_t nTotalFrames = (int32_t)pUnit;
     if (eModifier == 0x2a && (!pUnit || pUnit->eAnimMode.ePlayerMode == Death)) {
       nVelocity = D2Common::DATATBLS::MissileTbls::MISSILETBLS_CalculateVelocity(0x5a, 0);
       nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);

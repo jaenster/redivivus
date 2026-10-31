@@ -130,7 +130,7 @@ int __thiscall OnMouseWheel(::ListBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     ExceptionList = &pPrevSehFrame;
     pThis->pVtable = (ListBoxWrapperVtable*)(void*)ListBoxWrapper::vftable;
     ::ListBoxImplementation* pListBox = (::ListBoxImplementation*)Storm::SMem::SMemAlloc(0x180776, "new", -1, 0);
-    nSehState = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nSehState + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    nSehState = (uint32_t)((uint32_t)((uint32_t)nSehState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     if (pListBox) {
       pListBox = ListBoxImplementation::Constructor(pListBox, nPosX, nPosY, nWidth, nHeight, nItemSpacing, nDefaultColor, nDefaultFont, pfnOnItemActivated, bTallRows);
     } else {

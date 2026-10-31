@@ -1116,7 +1116,7 @@ uint32_t __stdcall MISSILE_EvalMissileCalc(D2UnitStrc * pMissile, D2UnitStrc * p
 
 // Computes the full damage profile for a missile into a D2MissileDamageDataStrc (zeroed first, 0x7c bytes). Resolves base/elemental damage either from missiles.txt fields (SrcDamage/SrcMissDmg, EType, GetMin/MaxDamage, mastery bonus) or, when the missile carries a skill, from that skill's calc functions (SKILL_CalcMin/MaxDamage, SERVER_Min/MaxDamage, synergy). When SrcDamage applies, folds in the owner's weapon-derived physical damage (mindamage/maxdamage scaled by SrcDamage%, two-handed halving, str/dex item bonuses, throwing/secondary/two-hand weapon-damage stats, blunt-vs-undead bonus) plus damage%, item min/max-damage%, demon/undead/targetAC% and skill bypass-undead/demon/beast flags. When SrcMissDmg applies instead, pulls those stats from pUnit2. Routes elemental min/max/length into the matching fire/light/magic/cold/poison/drain/stun/burning fields, then calls AddStatsToDamage + CalculateFinalDamage. Core server missile-damage calc; no output if the missile/owner is invalid.
 void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageData, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2UnitStrc * pMissile, int32_t nParam) {
-    bool _bHasBonusStats;
+    BOOL _bHasBonusStats;
     bool bHasBonusStats;
     int32_t nElemMinDmg;
     int32_t nMasteryElemMin;

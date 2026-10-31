@@ -165,7 +165,7 @@ static D2RoomExStrc * __stdcall DRLGMAZE_PickRoomPreset(D2RoomExStrc * pRoomEx, 
     {}
 }; D2_STATIC_GUARD(gaMazePresetLookup, "D2Common::Drlg::Maze::DRLGMAZE_PickRoomPreset::gaMazePresetLookup");
 
-    bool _bIsSingleFile;
+    BOOL _bIsSingleFile;
     D2DrlgPresetRoomStrc* pDVar1;
     bool bIsSingleFile;
     D2DrlgOrthStrc* pOrth;
@@ -325,7 +325,7 @@ int __stdcall DRLGMAZE_FindAndReplacePreset(int pCtx, int nPresetId, int nNewPre
 
 // Iterates every room in pRoomEx's level and, for eligible non-preset neighbor pairs that are adjacent but not already linked, rolls the neighbor's seed against LvlMazeTxt.Merge to decide whether to merge them. On a hit, allocates orthogonal link nodes between the two rooms and calls DRLGMAZE_PickRoomPreset on the neighbor.
 void __stdcall DRLGMAZE_PickRoomPresets(D2RoomExStrc * pRoomEx) {
-    bool _bWithinDistance;
+    BOOL _bWithinDistance;
     bool bWithinDistance;
     eDrlgDirection nDirection;
     int nDeltaY;
@@ -390,7 +390,7 @@ static D2RoomExStrc * __stdcall AllocateRoomEx(D2RoomExStrc * pSourceRoom, eDrlg
 }
 
 static D2RoomExStrc * __stdcall DRLGMAZE_AllocRoomExAndPickPreset(eDrlgDirection eDir, D2RoomExStrc * pSourceRoom, uint32_t argPresetIndex, uint32_t argVariant, int32_t argPickSource) {
-    bool _bReplaceOk;
+    int _bReplaceOk;
     bool bReplaceOk;
     D2RoomExStrc* pNewRoom = DrlgRoom::DRLGROOMEX_AllocRoomEx(pSourceRoom->pLevel, 2);
     D2LvlMazeTxt* pLvlMazeTxt = pNewRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;

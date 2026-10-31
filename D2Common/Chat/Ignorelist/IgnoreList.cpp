@@ -210,7 +210,7 @@ int32_t __thiscall CheckCharNameIgnored(::IgnoreList * pThis, char * szCharName)
 
 // Returns whether the player name is on the ignore list. Tail-calls Fog::Debug::GuardStack, which returns its argument, so the result is already in EAX; typed void the reconstruction dropped it.
 int32_t __thiscall CheckIgnored(::IgnoreList * pThis, char * szPlayerName) {
-    bool _bIsEnabled;
+    int32_t _bIsEnabled;
     bool bIsEnabled;
     bool bFound;
     char szSuffix[256];
@@ -256,11 +256,11 @@ void __thiscall Destructor(::IgnoreList * pThis) {
     int nSehState = 3;
     pThis->tIgnoredPatterns.InternalClear(0);
     pThis->tAccountMappings.InternalClear(0);
-    *(uint8_t*)(char*)&nSehState = 2;
+    nSehState = (int)((uint32_t)nSehState & 0xffffff00u | 2u);
     pThis->tAccountMappings.Destructor();
-    *(uint8_t*)(char*)&nSehState = 1;
+    nSehState = (int)((uint32_t)nSehState & 0xffffff00u | 1u);
     pThis->tIgnoredAccounts.Destructor();
-    nSehState = (uint32_t)d2_load24((char*)&nSehState + 1) << 8;
+    nSehState = (uint32_t)(uint32_t)((uint32_t)nSehState >> 8 & 0xffffffu) << 8;
     pThis->tIgnoredPatterns.Destructor();
     pThis->_vfptr = (IgnoreListVtable*)(void*)ChatIgnoreList::vftable;
     ExceptionList = pExSave;
@@ -392,7 +392,7 @@ void __thiscall LoadFromFile(::IgnoreList * pThis) {
     pThis->tIgnoredPatterns.Constructor();
     pThis->tIgnoredAccounts.Constructor();
     pThis->tAccountMappings.Constructor();
-    nSehState = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nSehState + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)3);
+    nSehState = (uint32_t)((uint32_t)((uint32_t)nSehState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)3);
     pThis->pAppendFile = 0;
     pThis->nPersistentIgnore = 1;
     Fog::Source::SFile::SFILE_GetExecutableDirectory(__frame0.szExePath, 0x104);

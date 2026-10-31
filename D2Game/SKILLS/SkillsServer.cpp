@@ -1051,7 +1051,7 @@ void __stdcall SKILLS_GetWeaponBySkillType(int32_t nSkillType, D2InventoryStrc *
 
 // @sourcefile .\SKILLS\Skills.cpp
 void __fastcall Transmorgify(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
-    bool _bTransmorgified;
+    BOOL _bTransmorgified;
     bool bTransmorgified;
     if (pUnit) {
       pUnit->eUnitFlagsEx &= -65;
@@ -3147,7 +3147,7 @@ D2UnitStrc * __fastcall SKILLS_CreateMissileAtTarget(::SGAMEDATA * pGame, D2Unit
 
 // Initializes a D2SkillArgStrc from pUnit's position (plus nParam2/nParam3 offsets) and the given missile ID/skill, resolves the target via SKILLS_GetTargetOrCursorPos or explicit nParam4/nParam5 coords, optionally consumes one ammo charge (RemoveQuanityOnUse) when nParam6!=0 and unit is a player, then calls CreatingMissile to spawn the missile. Returns the new missile unit, or NULL if target resolution or ammo check fails.
 D2UnitStrc * __fastcall SKILLS_CreateMissileFromUnit(::SGAMEDATA * pGame, eMissilesId nMissileId, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nParam1, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5, int32_t nParam6) {
-    bool _bHasTarget;
+    BOOL _bHasTarget;
     bool bHasTarget;
     D2UnitStrc* pMissile;
     D2SkillArgStrc sSkillArg;
@@ -3240,7 +3240,7 @@ void __fastcall SKILLS_ApplySkillDelay(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // Body continues at 0056f115, the JZ target of 0056f0af - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'SKILLS_ExecuteProgressiveAttack'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'SKILLS_ExecuteProgressiveAttack':
 BOOL __fastcall Skills_SrvDoFunc_001_ShootArrow(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bWeaponDrawn;
+    BOOL _bWeaponDrawn;
     bool bWeaponDrawn;
     eMissilesId nArrowMissileId;
     D2DamageStrc* pDamage;
@@ -3408,7 +3408,7 @@ BOOL __fastcall Skills_SrvDoFunc_002_GenericMeleeHit(::SGAMEDATA * pGame, D2Unit
 
 // Server skill-do-func for throwing a weapon from the left hand (skill 3). Queries the equipped weapon info to determine which arm slot is active, verifies the item is throwable (via ITEM_GetTxtItemTypes_throwable or UNITSTAT_item_throwable stat). Sets UNITFLAG_SKSRVDOFUNC, reads the item's missile type, and spawns the throw missile via CreatingAMissile (normal throwable) or SKILLS_CreateMissileFromUnit (missile potion). Applies skill to-hit/damage modifiers via SKILLS_ApplySkillToHitAndDamage.
 BOOL __fastcall Skills_SrvDoFunc_003_ThrowWeaponLeftHand(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bIsMissilePotion;
+    uint32_t _bIsMissilePotion;
     eMissilesId nMissileId;
     bool bIsMissilePotion;
     D2UnitStrc* pMissile;
@@ -3460,7 +3460,7 @@ BOOL __fastcall Skills_SrvDoFunc_003_ThrowWeaponLeftHand(::SGAMEDATA * pGame, D2
 
 // Server do-func for throw skill (eSkill 5). Reads the equipped right-hand weapon from pUnit's inventory; verifies it is throwable (type flag or UNITSTAT_item_throwable). Sets UNITFLAG_SKSRVDOFUNC, spawns either a normal missile (CreatingAMissile) or a potion-type missile (SKILLS_CreateMissileFromUnit) using the weapon's wMissileType, then applies hit/damage stats. Returns FALSE if no valid throwable weapon found.
 BOOL __fastcall Skills_SrvDoFunc_005_ThrowWeaponRightHand(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool _bIsMissilePotion;
+    uint32_t _bIsMissilePotion;
     bool bIsMissilePotion;
     eMissilesId nMissileId;
     D2UnitStrc* pMissile;
@@ -3758,7 +3758,7 @@ int32_t __fastcall SKILL_SpawnMissileFunction(::SGAMEDATA * pGame, D2UnitStrc * 
 // Server-side callback invoked when a unit's animation mode completes. Validates the current skill and its target (cancels into walk if invalid or in town without a usable-in-town skill), then calls SKILLS_SrvStartSkill to begin the server do-function. If SKILLS_SrvStartSkill fails for a player, falls back to PLRMODES_MoveToLocation mode 5 (stand/walk).
 // @sourcefile .\SKILLS\Skills.cpp
 int32_t __fastcall SKILLS_OnModeComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bTargetValid;
+    BOOL _bTargetValid;
     bool bTargetValid;
     D2RoomStrc* pUnitRoom;
     eD2UnitType eUnitTypeForCheck;

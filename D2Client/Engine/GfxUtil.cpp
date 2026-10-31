@@ -813,7 +813,7 @@ static void GFXUTIL_ConvertDirectionBits(int32_t nFromDirs, int32_t nToDirs, uin
 }
 
 void __fastcall GFXUTIL_CalcDirectionAndFrame(D2UnitStrc * pUnit, int32_t nAnimDir, int32_t nTypeId, int32_t nCofComponent, uint32_t * pnParam, uint32_t * pnFrameHandler, int * pnParam2, uint32_t nNumDirs, int32_t nAnimMode) {
-    char _cNumDirs;
+    int32_t _cNumDirs;
     char cNumDirs;
     if (*pnParam >= 0x40) {
       *pnParam2 = 1;
@@ -834,7 +834,7 @@ void __fastcall GFXUTIL_CalcDirectionAndFrame(D2UnitStrc * pUnit, int32_t nAnimD
 
 // @sourcefile .\ENGINE\GfxUtil.cpp
 BOOL __fastcall GFXUTIL_GetEtherealTransparency(D2UnitStrc * pUnit, int32_t nParam, uint32_t * pOutTransTable, uint32_t nItemClassId) {
-    bool _bIsEthereal;
+    BOOL _bIsEthereal;
     bool bIsEthereal;
     int nFade;
     D2UnitStrc* pItem;
@@ -935,7 +935,7 @@ BOOL __fastcall GFXUTIL_GetEtherealTransparency(D2UnitStrc * pUnit, int32_t nPar
 
 // @sourcefile .\ENGINE\GfxUtil.cpp
 uint8_t * __fastcall GFXUTIL_GetItemColorForBodyLoc(D2UnitStrc * pUnit, int32_t nParam, uint8_t * pDefaultColor) {
-    bool _bIsBrokenOrDisabled;
+    BOOL _bIsBrokenOrDisabled;
     bool bIsBrokenOrDisabled;
     int bHasState;
     D2UnitStrc* pOwnerUnit;
@@ -1284,7 +1284,7 @@ int32_t __fastcall DC6_AssignParams(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit
 }
 
 static BOOL __stdcall GFXUTIL_BuildMonsterCofParams(void * pCofFile, int32_t nAnimMode, short * pComponentTable, void * pMonStatsTxt, int32_t nComponentRow, int32_t nWeaponClass, D2GfxDataStrc * pGfxData) {
-    bool _bCompositeDeath;
+    BOOL _bCompositeDeath;
     bool bCompositeDeath;
     int nOverlay;
     uint32_t nComponentIdx;

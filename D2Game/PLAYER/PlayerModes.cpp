@@ -1158,8 +1158,16 @@ static void PLRMODES_RestoreSwappedSkill(eD2Skills * peSkillId, D2UnitStrc * pUn
         pCurrentSkill = D2Common::Units::GetLeftSkill(pUnit);
         if (pSkill != pCurrentSkill) {
           nCanUse = D2Common::Skills::SKILLS_CanUseSkill(pUnit, pSkill);
-          if (nCanUse != 2 && nCanUse != 7) {
-            SKILLS::SkillsServer::Server_SelectSkill(pUnit, 1, peSkillId[1], peSkillId[3]);
+          switch (nCanUse) {
+            default:
+              {
+                SKILLS::SkillsServer::Server_SelectSkill(pUnit, 1, peSkillId[1], peSkillId[3]);
+              }
+            case 2:
+              case 7:
+                {
+                  break;
+                }
           }
         }
       }
@@ -1179,11 +1187,17 @@ static void PLRMODES_RestoreSwappedSkill(eD2Skills * peSkillId, D2UnitStrc * pUn
     }
 
     nCanUse = D2Common::Skills::SKILLS_CanUseSkill(pUnit, pSkill);
-    if (!(nCanUse != 2 && nCanUse != 7)) {
-      return;
+    switch (nCanUse) {
+      default:
+        {
+          SKILLS::SkillsServer::Server_SelectSkill(pUnit, 0, *peSkillId, peSkillId[2]);
+        }
+      case 2:
+        case 7:
+          {
+            break;
+          }
     }
-
-    SKILLS::SkillsServer::Server_SelectSkill(pUnit, 0, *peSkillId, peSkillId[2]);
 }
 
 // End-of-attack maintenance check. Snapshots the current left/right skill assignments, then calls PLRMODES_HandleDepletedAmmoOrThrowable for both the right-arm and left-arm weapon slots to unequip exhausted quivers or thrown weapons. Finally calls PLRMODES_RestoreSwappedSkill with the saved skill snapshot to re-select the appropriate skills after any weapon removal.
@@ -1232,7 +1246,7 @@ void __fastcall PLRMODES_CheckWeaponQuantityAndDurability(::SGAMEDATA * pGame, D
 // Iterates a player's inventory looking for equipped weapons (eInvGridType==3) with zero durability that are not already broken. For each such weapon, sets the ITEMFLAG_BROKEN flag via ITEMMODE_SendItemUpdate and broadcasts the item state change. Sets a unit update flag on the first break found. No-op if pUnit is null or not a player.
 // @sourcefile .\PLAYER\PlrModes.cpp
 void __fastcall PLRMODES_BreakZeroDurabilityWeapons(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bIsWeapon;
+    uint32_t _bIsWeapon;
     bool bIsWeapon;
     int32_t iVar1;
     D2UnitStrc* pWeaponItem;
@@ -1581,7 +1595,7 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 
 // Server-side player movement dispatcher. Checks whether the player's current mode can be interrupted (PLRMODES_CanInterruptCurrentMode); if so, optionally cancels it (PLRMODES_TryCancelModeAndMoveToLocation), sets the active skill, then invokes the mode-specific move function from gaPlayerModeMoveFuncs[nIndex*2]. Halts on null game or invalid function pointer.
 void __fastcall PLRMODES_MoveToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SkillStrc * pSkill, int32_t nIndex, int32_t nX, int32_t nY, int32_t nParam) {
-    bool _bCanInterrupt;
+    BOOL _bCanInterrupt;
     bool bCanInterrupt;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x805);
@@ -1615,7 +1629,7 @@ void __fastcall PLRMODES_MoveToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // Initiates a targeted player animation/action mode by mode index. Looks up the target unit by (eUnitType, nUid), checks PLRMODES_CanInterruptCurrentMode, cancels the current mode if interruptible or nParam!=0, clears queued skill and pending interact flags, then dispatches via gaPlayerModeMoveFuncs[nModeIndex*2+1]. Halts with an internal error if pGame is null or the mode function pointer is bad.
 // @sourcefile .\PLAYER\PlrModes.cpp
 void __fastcall PLRMODES_StartModeID(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SkillStrc * pSkill, int32_t nModeIndex, eD2UnitType eUnitType, DWORD nUid, int32_t nParam) {
-    bool _bCanInterrupt;
+    BOOL _bCanInterrupt;
     bool bCanInterrupt;
     int nCancelResult;
     if (!pGame) {

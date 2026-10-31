@@ -2208,7 +2208,7 @@ void __fastcall SKILL_CreateActiveSkillStatList(D2UnitStrc * pUnit) {
 // Iterates all skills in a player's skill list and adjusts bonus levels by nBonusDelta for skills matching eSkillEType (element type, 0=all) and nSkillPage (skill tree tab, 4=all). Only affects player-owned skills (owner GUID == -1) with base level > 0 and flag bit 1 set. Removes skills whose total level drops to 0. Triggers SKILLS_UpdateAllPassiveSkills afterward.
 // @sourcefile .\SKILLS\Skills.cpp
 void __fastcall SKILLS_CltAdjustSkillTabBonuses(D2UnitStrc * pUnit, int32_t nBonusDelta, uint32_t neSkillEType, uint8_t nSkillPage) {
-    bool _bSkillHasTab;
+    uint32_t _bSkillHasTab;
     bool bSkillHasTab;
     D2SkillStrc* pSkill;
     D2SkillStrc* pSkillAfter;

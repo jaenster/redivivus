@@ -480,7 +480,7 @@ static void TILECMP_Generate25SubTiles(D2TileCmpTileSetStrc * pTileSet, void * p
       TILECMP_ExtractIsometricSubTile((uintptr_t)&__frame0.dwSubTileField4, pDT1Data, pTileSet->dwTransparentColor, gaTileCmpSubTileOffsets[iSubTile].nPixelCol, gaTileCmpSubTileOffsets[iSubTile].nPixelRow);
       cSubTileCol = (char)(iSubTile / 5) + (char)(iSubTile >> 0x1f) - (char)((int64_t)iSubTile * 0x66666667 >> 0x3f);
       bHasPixelData = __frame0.dwSubTileField3 & 0x10000;
-      *(uint16_t*)(char*)&__frame0.dwSubTileField3 = (uint16_t)((uint16_t)(uint8_t)cSubTileCol << 8 | (uint16_t)(uint8_t)((char)iSubTile + cSubTileCol * -5));
+      __frame0.dwSubTileField3 = (uint32_t)((uint32_t)__frame0.dwSubTileField3 & 0xffff0000u | (uint32_t)(uint16_t)(uint16_t)((uint16_t)(uint8_t)cSubTileCol << 8 | (uint16_t)(uint8_t)((char)iSubTile + cSubTileCol * -5)));
       if (bHasPixelData) {
         pNewNode = (uint32_t*)D2_ALLOC_AT(0x14, ".\\SRC\\Tilecmp.cpp", 0x1a7);
         if (!pNewNode) {

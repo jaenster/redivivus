@@ -731,7 +731,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
 
 // Validates that cube items match a recipe's input requirements. Zeroes a 192-byte usage tracking array (48 ints for up to 48 cube items), then calls CheckIfCubeInputIsValidDetails for each of the 7 possible input slots. Returns 1 if all required inputs are satisfied, 0 otherwise. The usage array prevents an item from matching multiple input slots.
 static BOOL __stdcall CUBE_ValidateRecipeInputs(::SGAMEDATA * pGame, D2CubeSetupStrc * pMatchedItems, D2CubeMainTxt * pRecipe, D2InventoryStrc * pInventory) {
-    bool _bInputMatched;
+    uint32_t _bInputMatched;
     bool bInputMatched;
     uint8_t aItemUsedFlags[192];
     if (pInventory && pRecipe) {
@@ -1330,7 +1330,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
     // Static local variables (originally global data)
     static BOOL gbCubeAllowDisabledRecipes; D2_STATIC_GUARD_BSS(gbCubeAllowDisabledRecipes, "D2Game::PLAYER::PlayerTrade::CUBE_MatchAndExecuteRecipe::gbCubeAllowDisabledRecipes");
 
-    bool _bValidInputs;
+    BOOL _bValidInputs;
     bool bValidInputs;
     D2CubeMainTxt* pRecipe;
     uint32_t nClassId;
@@ -1604,7 +1604,7 @@ static void __stdcall CUBE_MatchAndExecuteRecipe(::SGAMEDATA * pGame, D2UnitStrc
 
 // Handles cube transmute button clicks from the client UI. Button 0x17 clears the interact item and checks item levels. Button 0x18 triggers cube transmutation via ItemCubingSetup. This is the entry point for all cube recipe processing.
 static void CUBE_HandleTransmuteButtonClick(D2UnitStrc * pPlayer, uint16_t nButtonId, ::SGAMEDATA * pGame) {
-    bool _bHasInteract;
+    BOOL _bHasInteract;
     bool bHasInteract;
     uint32_t dwInteractGUID;
     eD2UnitType eInteractType;
@@ -1771,7 +1771,7 @@ static BOOL CUBE_HasAnyItemsInCube(D2UnitStrc * pPlayer) {
 // Server-side trade initiation check between two players. Verifies neither player is already trading, the classic game is not completed (A4Q3), and both are in town. Enforces a 5-second accept-trade cooldown and a 1-second throttle on repeated trade messages. On success, sets mutual interact info, sends 0x77 TradeAction packets to both clients (initiator=0, target=1), and sets dwTradeState to 1/2 respectively.
 // @sourcefile .\PLAYER\PlrTrade.cpp
 void __fastcall CheckIfCanStartTradeWithPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOtherUnit) {
-    bool _bIsTown;
+    BOOL _bIsTown;
     bool bIsTown;
     eD2LevelId eLevelId;
     eD2LevelId nLevelId;
@@ -2129,7 +2129,7 @@ int32_t __fastcall CopyInventory(D2UnitStrc * pUnit, uint8_t * pUnit2, int32_t n
 // Server-side guard and initiator for a player-to-player trade session. Verifies both parties are alive (flag 0x800000 clear), Diablo has not been killed (classic trade restriction), the other player's trade inventory exists, and no prohibited item (monster-dropped or quest item with the "box" cube exception) is being offered. On success sets both players' dwTradeState to 7, fires event 0xD on the next frame for each, and sends NET packet 0x77 opcode 6 (TradeAccepted) to both clients. Returns 1 if the offered item needs re-validation, 0 if trade is blocked, or <5 trade-state guard on early-out paths.
 // @sourcefile .\PLAYER\PlrTrade.cpp
 uint32_t __fastcall PLRTRADE_ValidateAndInitiateTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit) {
-    bool _bInteractValid;
+    BOOL _bInteractValid;
     bool bInteractValid;
     uint32_t bDeadFlag;
     uint32_t uVar1;
@@ -2219,7 +2219,7 @@ uint32_t __fastcall PLRTRADE_ValidateAndInitiateTrade(::SGAMEDATA * pGame, D2Uni
 }
 
 BOOL __fastcall PLAYERTRADE_CheckNoEquippedTradeItems(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit) {
-    bool _bHasInteract;
+    BOOL _bHasInteract;
     bool bHasInteract;
     D2UnitStrc* pItemNode;
     uint32_t nInteractGUID;
@@ -2757,7 +2757,7 @@ eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc *
 // Finalises a mutual player-to-player trade. Verifies pUnit is interacting with a player partner who is also interacting back with pUnit (mutual lock). If valid: sets dwTradeState=9 on pUnit, fires update event, calls RemoveTradeItemMaybe for both sides, frees both trade-copy inventories, sends trade-action 0xC (accept/complete) to the partner's client, and clears both interact infos.
 // @sourcefile .\PLAYER\PlrTrade.cpp
 void __fastcall TRADE_CompleteTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bValid;
+    BOOL _bValid;
     bool bValid;
     uint32_t nSelfGUID;
     uint32_t nInteractGUID;
@@ -2809,7 +2809,7 @@ void __fastcall thunk_TRADE_CompleteTrade(::SGAMEDATA * pGame, D2UnitStrc * pUni
 // Server-side trade handler: places pItem (held by pUnit) into the trade partner's trade window. Validates pUnit is interacting with another player and resolves the partner unit by interact GUID; on failure sends trade-action error 0xc (NET_D2GS_SERVER_Send_0x77). Clones the item, copies its tile coords, marks the clone and sets its page to the corpse/trade page, then inserts it into the partner inventory via SERVER_ItemToInventory at the same coords. On success records the trade item link (CreateStructure0xc), and if either side had locked gold (dwTradeState==4) re-syncs both sides' gold and resends trade-complete; on placement failure deletes the clone and cancels the trade (PLRTRADE_CancelTradeAndCleanup reason 9).
 // @sourcefile .\PLAYER\PlrTrade.cpp
 void __fastcall PLRTRADE_AddItemToTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
-    bool _bHasInteract;
+    BOOL _bHasInteract;
     bool bHasInteract;
     D2ClientStrc* pClient;
     int nCloneGUID;

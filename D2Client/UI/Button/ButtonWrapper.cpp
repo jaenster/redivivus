@@ -127,7 +127,7 @@ void __thiscall SetAccelerator(::ButtonWrapper * pThis, BOOL bEnable) {
     ExceptionList = &pPrevExceptionList;
     pThis->pVtable = (ButtonWrapperVtable*)(void*)ButtonWrapper::vftable;
     ::ButtonImplementation* pNewButtonImpl = (::ButtonImplementation*)Storm::SMem::SMemAlloc(0x36, "new", -1, 0);
-    dwExcState = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&dwExcState + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    dwExcState = (uint32_t)((uint32_t)((uint32_t)dwExcState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     if (pNewButtonImpl) {
       pNewButtonImpl = ButtonImplementation::Constructor(pNewButtonImpl, nPosX, nPosY, nButtonKind, pfnOnActivate);
     } else {

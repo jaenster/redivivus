@@ -503,8 +503,8 @@ static void __stdcall ARENA_BroadcastKillToPlayers(::SGAMEDATA * pGame, int32_t 
 }
 
 void __fastcall ARENA_UpdatePlayerKillState(::SGAMEDATA * pGame, D2ClientStrc * pClient) {
-    bool _bScoreDirty;
-    bool _bClientDead;
+    int _bScoreDirty;
+    uint32_t _bClientDead;
     bool bScoreDirty;
     bool bClientDead;
     if (!(pGame->pArenaCtrl && pGame->pArenaCtrl->eArenaFlags & ARENAFLAG_ScoresDirty)) {

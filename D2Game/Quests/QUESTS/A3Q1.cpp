@@ -572,7 +572,7 @@ void __fastcall Q18_Callback05_ItemDropped(D2QuestDataStrc * pQuestData, D2Quest
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
 BOOL __fastcall OBJOP_A3Q1_KhalimsRelicAltar(D2ObjectOperateFnArg * pOperation) {
     int32_t nVictimGUID;
-    D2ObjectOperateFnArg* pDropCountOut = pOperation;
+    D2ObjectOperateFnArg* pDropCountOut;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_LamEsensTome);
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
       return 0;

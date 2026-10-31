@@ -42,7 +42,8 @@ void __stdcall FreeDraw();
 // UI rendering layer. Drawn AFTER world, BEFORE cursor.
 // All 38 UI panels: inventory, stats, skills, menus, tooltips, automap, chat.
 // GFX_bShowUIFlag controls visibility. UI drawn in screen space (not world).
-void DRAW_UI(struct D2GameViewStrc * pGameView, short * pnNpcParam);
+// EDI is not an argument: never read; the callee DRAW_UI_NPC_INTERACTION does not take it either.
+void DRAW_UI(struct D2GameViewStrc * pGameView);
 void __fastcall CLIENT_AdjustMemoryBudget(struct D2PoolManagerStrc * pMemory, int32_t bInitSpriteCache);
 void __fastcall GFX_ShutdownSpriteCacheAndCofSystem(int32_t nMemoryPoolHandle);
 void __stdcall DRAW_NoOp();

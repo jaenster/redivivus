@@ -708,7 +708,8 @@ void ERROR_UnrecoverableInternalError_Any(eFOG_ErrorType eErrorType, uint32_t dw
 }
 
 // Displays an unrecoverable error message box and logs to file. Formats the error message via vsnprintf with varargs, optionally prepends file/line info if provided, constructs a "Diablo II Error" title, and shows MessageBoxA with MB_ICONEXCLAMATION. Logs the full error message to the error log before displaying. Uses three buffers: 4096 bytes for vsnprintf formatting, 4096 bytes for final message (with file/line), and 256 bytes for the title string.
-void __stdcall ShowUnrecoverableErrorDialog(int32_t nParam, char * szText, int nLine, char * szSourceFile, va_list vaArgs, DWORD dwParam) {
+// EDI is not an argument: saved at 00408b40 PUSH EDI, then loaded from [EBP+0xc].
+void __fastcall ShowUnrecoverableErrorDialog(int32_t nParam, char * szText, int nLine, char * szSourceFile, va_list vaArgs) {
     char* szRelativePath2;
     char* pScan;
     char szMessageBoxBuffer[4096];
@@ -726,7 +727,7 @@ void __stdcall ShowUnrecoverableErrorDialog(int32_t nParam, char * szText, int n
       void* pszRelative3;
       pszRelative3 = GetInstructionPointer();
       Safesock::WSACleanup();
-      FOG_ErrorHandler(ERROR_Halt, "", 0x8de, "Unrecoverable internal error %08x", pszRelative3, dwParam);
+      FOG_ErrorHandler(ERROR_Halt, "", 0x8de, "Unrecoverable internal error %08x", pszRelative3);
       LogManager::ExitOrCrashCleanUpJmp();
       exit(-1);
     }

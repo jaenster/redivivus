@@ -2704,7 +2704,7 @@ int32_t __fastcall DRLGPLACE_ACT1_ValidatePlacementList1(D2DrlgLevelPlacementStr
     0x1
 }; D2_STATIC_GUARD(RogueEncampentLayout, "D2Common::Drlg::DRLGPLACE_ACT1_ValidatePlacementList1::RogueEncampentLayout");
 
-    bool _bNoOverlap;
+    int _bNoOverlap;
     bool bNoOverlap;
     int* pLevelDataEntryPtr;
     int* pCurrentDirPtr;
@@ -2756,7 +2756,7 @@ int32_t __fastcall DRLGPLACE_ACT1_ValidatePlacementList1(D2DrlgLevelPlacementStr
 
 // Validates that the candidate node at nIndexMax does not overlap any previously placed nodes (excluding its predecessor). As a special Act 1 rule, it also temporarily inflates node 0's bounding box by 200 units north/south and checks non-overlap against the last node, enforcing a minimum gap between the dungeon entrance and exit.
 int __fastcall DRLGPLACE_ACT1_ValidatePlacementList2WithGap(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
-    bool _bNoOverlap;
+    int _bNoOverlap;
     bool bNoOverlap;
     int nPrevId = ACT1_D2DrlgLevelData2.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
     int i = 0;
@@ -2794,7 +2794,7 @@ int __fastcall DRLGPLACE_ACT1_ValidatePlacementList2WithGap(D2DrlgLevelPlacement
 }
 
 int32_t __fastcall DRLGPLACE_ACT2_ValidatePlacementList1(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
-    bool _bNoOverlap;
+    int _bNoOverlap;
     bool bNoOverlap;
     int i = 0;
     if (nIndexMax <= 0) {
@@ -2819,7 +2819,7 @@ int32_t __fastcall DRLGPLACE_ACT2_ValidatePlacementList1(D2DrlgLevelPlacementStr
 }
 
 int __fastcall DRLGPLACE_ACT2_ValidatePlacementList2(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
-    bool _bNoOverlap;
+    int _bNoOverlap;
     bool bNoOverlap;
     int i = 0;
     if (nIndexMax <= 0) {
@@ -2844,7 +2844,7 @@ int __fastcall DRLGPLACE_ACT2_ValidatePlacementList2(D2DrlgLevelPlacementStrc * 
 }
 
 int32_t __fastcall DRLGPLACE_ACT5_ValidatePlacementList3(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
-    bool _bNoOverlap;
+    int _bNoOverlap;
     bool bNoOverlap;
     int i = 0;
     if (nIndexMax <= 0) {
@@ -2869,7 +2869,7 @@ int32_t __fastcall DRLGPLACE_ACT5_ValidatePlacementList3(D2DrlgLevelPlacementStr
 }
 
 int32_t __fastcall DRLGPLACE_ACT4_ValidatePlacementList1(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
-    bool _bNoOverlap;
+    int _bNoOverlap;
     bool bNoOverlap;
     int i = 0;
     if (nIndexMax <= 0) {
@@ -2894,7 +2894,7 @@ int32_t __fastcall DRLGPLACE_ACT4_ValidatePlacementList1(D2DrlgLevelPlacementStr
 }
 
 int __fastcall DRLGPLACE_ACT4_ValidatePlacementList2(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
-    bool _bNoOverlap;
+    int _bNoOverlap;
     bool bNoOverlap;
     int i = 0;
     if (nIndexMax <= 0) {
@@ -3157,8 +3157,6 @@ int32_t __fastcall PATH_FindPathTowardFallback(D2PathTypeArg * pPathTypeArg) {
     int nPointCount_00;
     D2PathPointStrc aBresenhamPoints[78];
     uint32_t nInitialDir;
-    uint32_t nCurPacked;
-    uint32_t nDstPacked;
     int32_t nErrorLine;
     D2DynamicPathStrc* pDynamicPath = pPathTypeArg->pDynamicPath;
     D2UnitStrc* pOwner = pDynamicPath->pOwner;
@@ -3172,15 +3170,13 @@ int32_t __fastcall PATH_FindPathTowardFallback(D2PathTypeArg * pPathTypeArg) {
     int32_t nCollisionPattern = pPathTypeArg->nCollisionPattern;
     int32_t nPointIdx = 0;
     uint32_t nMaxSteps = (uint32_t)pDynamicPath->nDistMax;
-    *(uint16_t*)(char*)&nCurPacked = pPathTypeArg->pCoords.nOffsetX;
-    *(uint16_t*)((char*)&nCurPacked + 2) = pPathTypeArg->pCoords.nPosX;
+    uint32_t nCurPacked = (uint32_t)((uint32_t)(uint16_t)pPathTypeArg->pCoords.nOffsetX | (uint32_t)(uint16_t)pPathTypeArg->pCoords.nPosX << 16);
     int nBestPointIdx = 0;
     if (pDynamicPath->pTargetUnit && pDynamicPath->nDistMax < 0x28) {
       nMaxSteps = 0x28;
     }
 
-    *(uint16_t*)(char*)&nDstPacked = pPathTypeArg->pCoords.nOffsetY;
-    *(uint16_t*)((char*)&nDstPacked + 2) = pPathTypeArg->pCoords.nPosY;
+    uint32_t nDstPacked = (uint32_t)((uint32_t)(uint16_t)pPathTypeArg->pCoords.nOffsetY | (uint32_t)(uint16_t)pPathTypeArg->pCoords.nPosY << 16);
     uint32_t nStartPacked = nCurPacked;
     nErrorLine = Path::DRLGPATH_BuildBresenhamPointList(nCurPacked, nDstPacked, nMaxSteps, &nInitialDir, aBresenhamPoints);
     int32_t nPointCount = nErrorLine;
@@ -3203,8 +3199,7 @@ int32_t __fastcall PATH_FindPathTowardFallback(D2PathTypeArg * pPathTypeArg) {
         }
 
         nPointIdx = nPrevPointIdx + 1;
-        *(uint16_t*)(char*)&nCurPacked = aBresenhamPoints[nPrevPointIdx].nX;
-        *(uint16_t*)((char*)&nCurPacked + 2) = aBresenhamPoints[nPrevPointIdx].nY;
+        nCurPacked = (uint32_t)((uint32_t)(uint16_t)aBresenhamPoints[nPrevPointIdx].nX | (uint32_t)(uint16_t)aBresenhamPoints[nPrevPointIdx].nY << 16);
         nBestPointIdx = nPointIdx;
       } while (nPointIdx < nErrorLine);
     }

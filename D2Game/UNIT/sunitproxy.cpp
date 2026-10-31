@@ -124,7 +124,7 @@ D2GameNpcStrc * __fastcall GetGameNpcByUnit(::SGAMEDATA * pGame, D2UnitStrc * pU
 // @sourcefile .\UNIT\sunitproxy.cpp
 void __fastcall SUNITPROXY_AddItemToNpcProxy(D2UnitStrc * pNpcUnit, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwTradeParam) {
     int nLookupNpcClassId;
-    D2UnitStrc* nNpcIndex = pNpcUnit;
+    D2UnitStrc* nNpcIndex;
     D2SUnitProxyStrc_Line0x85* pProxyEntry = D2_NEW_POOL_AT(pGame->pMemoryPool, D2SUnitProxyStrc_Line0x85, ".\\UNIT\\sunitproxy.cpp", 0x85);
     if (!pNpcUnit) {
       nLookupNpcClassId = -1;

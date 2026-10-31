@@ -585,7 +585,7 @@ static D2UnitStrc * __stdcall SKILLS_GetWeaponByHand(int32_t nParam, D2Inventory
 // @sourcefile .\SKILLS\Skills.cpp
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
 static int32_t __stdcall SKILLS_CheckItemTypeRequirement(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, short * psSkillFields, int32_t nHandIdx) {
-    bool _bItemFlagSet;
+    BOOL _bItemFlagSet;
     bool bItemFlagSet;
     uint32_t bIsOfType2;
     int32_t nShootsType;
@@ -1954,7 +1954,7 @@ int __stdcall SKILLS_IsSelectableCorpse3(D2UnitStrc * pUnit) {
 
 // Returns the best matching thrown-weapon bonus value for a unit's equipped throwable item and the given skill. Queries stats 0x159/0x15A/0x15B (min/max/bonus depending on nParam 0/1/2) via STATLIST_GetItemStatBonusValues, then iterates entries to find the highest value whose item type matches pUnit1. Returns 0 if the item is not throwable, the skill has no applicable range-2 throwable type, or nParam is out of range.
 int32_t __stdcall SKILL_GetThrownWeaponBonus(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2SkillStrc * pSkill, int32_t nParam, D2UnitStrc * pUnit2) {
-    bool _bIsThrowable;
+    int32_t _bIsThrowable;
     bool bIsThrowable;
     D2StatStrc aBonusEntries[32];
     if (pUnit2) {
@@ -2239,7 +2239,7 @@ static BOOL __stdcall SKILLS_IsCoordInTown(int32_t nX, int32_t nY, D2UnitStrc * 
 
 // Computes a valid teleport/leap destination for pUnit. Returns 0 immediately if pUnit2 is given and already in melee range. Otherwise derives a target point (pUnit2's position, or the caster's SP1 target if pUnit2 is null), extends 2 tiles past it along the caster->target vector, and validates it: if the cell blocks players (CheckCollision_BlockPlayer_Type) it searches for free coordinates in the room/neighbors (GetFreeCoordinates_WithNeighboorRooms), failing with 0 if none. Then requires line of sight (SKILLS_HasLineOfSight, COLLISION_LOS_WALL) from caster to the point. On success writes the chosen tile to *pnDestX/*pnDestY and returns whether that coordinate is inside town (SKILLS_IsCoordInTown). Returns 0 on any failure. Halts via ErrorManager if the caster has no room.
 uint32_t __stdcall SKILL_FindTeleportPosition(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t * pnDestX, uint32_t * pnDestY) {
-    bool _bInMeleeRange;
+    BOOL _bInMeleeRange;
     bool bInMeleeRange;
     uint32_t nDestX;
     uint32_t nRawTargetY;

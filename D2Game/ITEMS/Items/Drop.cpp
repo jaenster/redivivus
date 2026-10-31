@@ -175,7 +175,7 @@ static BOOL __stdcall ITEMDROP_IsItemClassEligible(D2SeedStrc * pSeed, int32_t b
 
 // Selects a random exceptional-tier item class index for a drop roll. Iterates the exceptional slice of the Items txt table (between the exceptional and elite size offsets), filters candidates via MONSTER_ShouldSpawnSuperUnique against level/TC constraints, respects the expansion flag, then picks one uniformly at random using the D2SeedStrc PRNG (power-of-two fast path or modulo). Returns the Items txt index of the chosen class, or -1 if none qualify.
 int32_t __fastcall ITEMDROP_RollExceptionalItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, eD2LevelId eLevel, int32_t nTCFilter, int32_t nMonsterLevel) {
-    bool _bPassesFilter;
+    BOOL _bPassesFilter;
     bool bPassesFilter;
     uint32_t nRandIndex;
     int aiCandidateIdxs[2048];
@@ -240,7 +240,7 @@ int32_t __fastcall ITEMDROP_RollExceptionalItemClass(::SGAMEDATA * pGame, D2Seed
 
 // Selects a random normal-tier item class index for a drop roll. Iterates the normal slice of the Items txt table (between the normal-start and exceptional-start size offsets), filters candidates via MONSTER_ShouldSpawnSuperUnique against level/TC constraints, respects the expansion flag, then picks one uniformly at random using the D2SeedStrc PRNG (power-of-two fast path or modulo). Returns the Items txt index of the chosen class, or -1 if none qualify. Structurally identical to ITEMDROP_RollExceptionalItemClass but over the normal tier.
 int32_t __fastcall ITEMDROP_RollNormalItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, int32_t nMonsterLevel, int32_t nTCFilter, int32_t nLevelFilter) {
-    bool _bPassesFilter;
+    BOOL _bPassesFilter;
     bool bPassesFilter;
     uint32_t nRandIndex;
     int aiCandidateIdxs[2048];
@@ -305,7 +305,7 @@ int32_t __fastcall ITEMDROP_RollNormalItemClass(::SGAMEDATA * pGame, D2SeedStrc 
 
 // Rolls a random elite item class index for a drop. Iterates all elite-tier ItemsTxt entries (from the elite start offset), filtering candidates via MONSTER_ShouldSpawnSuperUnique using the monster level, area level, and TC filter; also excludes non-expansion items when not in expansion. Picks a random candidate from the eligible list using the RNG seed and returns its ItemsTxt index, or -1 if none qualify.
 int32_t __fastcall ITEMDROP_RollEliteItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, eD2LevelId eLevel, int32_t nTCFilter, int32_t nMonsterLevel, int32_t bIsMonsterDrop) {
-    bool _bPassesFilter;
+    BOOL _bPassesFilter;
     bool bPassesFilter;
     uint32_t nRandIndex;
     int aiCandidateArr[2048];
@@ -909,7 +909,7 @@ void __stdcall ITEM_RollSocketCount(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2I
 
 // Conditionally makes an item ethereal during drop generation. Eligible items are weapons or armor with durability, not unique or set quality, not quest items, and not flagged to suppress ethereal (pItemGenContext bit 1). Triggers on a 5% RNG roll or if the drop context forces ethereal (bit 2 or flag 0x400000). Applies ITEMMOD_ApplyEtherealBonus and halves max durability (setting current durability to the new max).
 static void ITEM_ApplyEthereal(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext) {
-    bool _bIsQuestItem;
+    int32_t _bIsQuestItem;
     uint32_t bCheckResult;
     bool bIsQuestItem;
     if ((pItemGenContext->nFlags & ITEMFLAG_BOUGHT) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
@@ -2447,7 +2447,7 @@ static void ITEM_ApplyGoldBonus(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
 
 // Calculates the game-frame at which a ground item should despawn. Quest items never expire (returns 0). Unique/set quality: +30000 frames. High-tier quality (5–9): +45000. Gold &gt;10000: +45000. Socketable items: +30000. All others: +15000.
 int32_t __fastcall ITEM_CalculateDespawnTimer(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bSocketable;
+    uint32_t _bSocketable;
     bool bSocketable;
     int32_t nGoldAmount;
     int32_t iVar1 = D2Common::ITEMS::Items::IsQuestItem(pUnit);
@@ -2971,7 +2971,7 @@ void __fastcall DROP_SpawnExceptionalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoo
 
 // Spawns a normal-quality item drop in the world. Rolls an item class from the treasure-class system (up to 6 retries) using the room seed and effective monster level, finds a free collision-clear tile near the requested coordinates, populates a D2ItemGenContextStrc, and calls ITEM_CreateItemInstance. Silently returns (no item) if no valid class rolls or no free tile is found.
 void __fastcall DROP_SpawnNormalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POINT * pCoords, int32_t nTCFilter, int32_t nMonsterLevel, D2UnitStrc * pUnit) {
-    bool _bIsSpawnable;
+    uint32_t _bIsSpawnable;
     bool bIsSpawnable;
     uint32_t nItemClassId;
     POINT ptCandidatePos;
@@ -3043,7 +3043,7 @@ void __fastcall DROP_SpawnNormalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, PO
 
 // Spawns a single elite/special drop item into the world near pCoords in pRoom. Derives an effective item level from the room's level id (clamped, monster-level-for-difficulty, or 1 in town/no level), then rolls an item class via ITEMDROP_RollEliteItemClass (using the room seed, treasure-class filter nTCFilter, monster level, and whether pUnit is a monster). Finds a nearby better room and a free collision-clear coordinate (GetFreeCoordinates_WithFieldCoords); if a valid spawn spot is found, fills a D2ItemGenContextStrc (mode 3, quality invalid/auto, the rolled class id and item level) and creates the item instance via ITEM_CreateItemInstance. Uses Fog GuardStack as the tail epilogue. No return; side effect is the new world item.
 void __fastcall DROP_SpawnEliteItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POINT * pCoords, int32_t nTCFilter, int32_t nMonsterLevel, D2UnitStrc * pUnit) {
-    bool _bIsTown;
+    BOOL _bIsTown;
     bool bIsTown;
     int32_t bIsMonsterFlag;
     POINT ptCandidatePos;
@@ -3281,8 +3281,8 @@ D2UnitStrc * __fastcall ITEM_CreateFromTemplate(D2UnitStrc * pUnit, int32_t nIte
 // Server-side: probabilistically reduces an item's durability on use (attack/take-hit). Only acts on weapons/armor that have durability. Rolls the item-owner's RNG against a threshold (4, or 10 for throwables / expansion) — i.e. a chance-based decrement, not every hit. On a hit it lowers UNITSTAT_durability by 1: if still >0 it sets the new value (clamped to max) and refreshes; if it would drop to 0 it either breaks the item (sets durability 0) or, for stackable/quantity items (e.g. throwing weapons), decrements quantity and resets durability to max, sending the appropriate 0x3E item-stat updates to the client and running PLRMODES_CheckWeaponQuantityAndDurability when a stack is exhausted. pGame/pUnit=owner, pItem=item. Returns nothing; every exit leaves the last call's EAX.
 // @sourcefile .\ITEMS\Items.cpp
 void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
-    bool _bIsThrowable;
-    bool _bDurabilityBelowOne;
+    int32_t _bIsThrowable;
+    BOOL _bDurabilityBelowOne;
     bool bIsThrowable;
     bool bDurabilityBelowOne;
     D2ClientStrc* pClient;
@@ -3522,7 +3522,7 @@ D2UnitStrc * __fastcall ITEM_CloneFromSerializedData(::SGAMEDATA * pGame, D2Unit
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1052, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    bool _bPutItemSuccess;
+    BOOL _bPutItemSuccess;
     bool bPutItemSuccess;
     D2UnitStrc* pSocketedGem;
     DWORD dwOwnerGUID;

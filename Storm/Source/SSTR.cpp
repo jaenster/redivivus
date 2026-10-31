@@ -2101,11 +2101,13 @@ static void __fastcall UTF8_AdvanceToCharBoundary(int pszBase, int nPosition, in
     for (; nPosition > 0 && *(uint8_t*)(pszBase + nPosition) && (*(uint8_t*)(pszBase + nPosition) & 0xc0) == 0x80; nPosition += nDirection) {}
 }
 
-void __thiscall UTF8_StepBackOneChar(uint32_t ecx_passthru, int str_base, int position) {
+// ECX is not an argument: neither this body nor UTF8_AdvanceToCharBoundary reads it.
+void __stdcall UTF8_StepBackOneChar(int str_base, int position) {
     UTF8_AdvanceToCharBoundary(str_base, position, -1);
 }
 
-void __stdcall UTF8_StepForwardOneChar(int str_base, int position, uint32_t ecx_passthru) {
+// ECX is not an argument: neither this body nor UTF8_AdvanceToCharBoundary reads it.
+void __stdcall UTF8_StepForwardOneChar(int str_base, int position) {
     UTF8_AdvanceToCharBoundary(str_base, position + 1, 1);
 }
 
@@ -2222,11 +2224,13 @@ int __stdcall TRANSTBL_Latin1ToUnicode(uint16_t * dest, uint8_t * src, int count
     return iVar1;
 }
 
-void __stdcall TRANSTBL_Latin2ToUnicode(uint16_t * dest, uint8_t * src, int count, uint32_t ecx_passthru) {
+// ECX is not an argument: neither this body nor TRANSTBL_SingleByteToUnicode reads it.
+void __stdcall TRANSTBL_Latin2ToUnicode(uint16_t * dest, uint8_t * src, int count) {
     TRANSTBL_SingleByteToUnicode(src, count, dest, gszUnicodeLatin2_1);
 }
 
-void __stdcall TRANSTBL_KoreanToUnicode(uint16_t * dest, uint8_t * src, int count, uint32_t ecx_passthru) {
+// ECX is not an argument: neither this body nor TRANSTBL_SingleByteToUnicode reads it.
+void __stdcall TRANSTBL_KoreanToUnicode(uint16_t * dest, uint8_t * src, int count) {
     TRANSTBL_SingleByteToUnicode(src, count, dest, gszUnicodeKorean_1);
 }
 

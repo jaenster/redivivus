@@ -422,6 +422,7 @@ static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDAT
     int32_t nPosX;
     DWORD dwItemGUID;
     uint32_t nBodyLocId;
+    D2UnitStrc* pItem;
     eD2UnitType eUnitType;
     D2InventoryStrc* pInventory;
     if (!pUnit) {
@@ -430,7 +431,6 @@ static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDAT
       eAnimMode = pUnit->eAnimMode.ePlayerMode;
     }
 
-    D2UnitStrc* pItem = pUnit;
     switch (eAnimMode) {
       case Container:
         {
@@ -827,12 +827,9 @@ uint32_t __fastcall PLAYERSAVE_CRC32MissileTable(D2MissilesTxt * pMissilesTxt, i
     uint32_t savedProgSounds = 0;
     uint32_t savedHitFlagsExtra = 0;
     if (nFieldCount > 0x5b) {
-      *(uint16_t*)(char*)&savedCltHitSubs = pMissilesTxt->CltHitSubMissile3;
-      *(uint16_t*)((char*)&savedCltHitSubs + 2) = pMissilesTxt->CltHitSubMissile4;
-      *(uint16_t*)(char*)&savedFuncIds = pMissilesTxt->nSrvDoFunc;
-      *(uint16_t*)((char*)&savedFuncIds + 2) = pMissilesTxt->nSrvHitFunc;
-      *(uint16_t*)(char*)&savedProgSounds = pMissilesTxt->ProgSound;
-      *(uint16_t*)((char*)&savedProgSounds + 2) = pMissilesTxt->ProgOverlay;
+      savedCltHitSubs = (uint32_t)((uint32_t)(uint16_t)pMissilesTxt->CltHitSubMissile3 | (uint32_t)(uint16_t)pMissilesTxt->CltHitSubMissile4 << 16);
+      savedFuncIds = (uint32_t)((uint32_t)(uint16_t)pMissilesTxt->nSrvDoFunc | (uint32_t)(uint16_t)pMissilesTxt->nSrvHitFunc << 16);
+      savedProgSounds = (uint32_t)((uint32_t)(uint16_t)pMissilesTxt->ProgSound | (uint32_t)(uint16_t)pMissilesTxt->ProgOverlay << 16);
       savedHitFlagsExtra = *(uint32_t*)((uintptr_t)&pMissilesTxt->HitFlags + 3);
       pMissilesTxt->nSrvDoFunc = 0;
       pMissilesTxt->nSrvHitFunc = 0;
@@ -849,11 +846,11 @@ uint32_t __fastcall PLAYERSAVE_CRC32MissileTable(D2MissilesTxt * pMissilesTxt, i
     }
 
     pMissilesTxt->CltHitSubMissile3 = (uint16_t)savedCltHitSubs;
-    pMissilesTxt->CltHitSubMissile4 = *(uint16_t*)((char*)&savedCltHitSubs + 2);
+    pMissilesTxt->CltHitSubMissile4 = (uint16_t)((uint32_t)savedCltHitSubs >> 16);
     pMissilesTxt->nSrvDoFunc = (short int)savedFuncIds;
     pMissilesTxt->nSrvHitFunc = (short int)((uint32_t)savedFuncIds >> 0x10);
     pMissilesTxt->ProgSound = (uint16_t)savedProgSounds;
-    pMissilesTxt->ProgOverlay = *(uint16_t*)((char*)&savedProgSounds + 2);
+    pMissilesTxt->ProgOverlay = (uint16_t)((uint32_t)savedProgSounds >> 16);
     *(uint32_t*)((uintptr_t)&pMissilesTxt->HitFlags + 3) = savedHitFlagsExtra;
     return uVar1;
 }
@@ -944,22 +941,10 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitS
         savedNTimeEx = 0;
         savedInitSeed = 0;
         if ((uint32_t)*(uint32_t*)((char*)&__frame0.saveTempBuffer + 4) > 0x5b) {
-          *(uint8_t*)(char*)&savedChecksum2 = __frame0.saveTempBuffer[0xc];
-          *(uint8_t*)((char*)&savedChecksum2 + 1) = __frame0.saveTempBuffer[0xd];
-          *(uint8_t*)((char*)&savedChecksum2 + 2) = __frame0.saveTempBuffer[0xe];
-          *(uint8_t*)((char*)&savedChecksum2 + 3) = __frame0.saveTempBuffer[0xf];
-          *(uint8_t*)(char*)&savedTime32 = __frame0.saveTempBuffer[0x30];
-          *(uint8_t*)((char*)&savedTime32 + 1) = __frame0.saveTempBuffer[0x31];
-          *(uint8_t*)((char*)&savedTime32 + 2) = __frame0.saveTempBuffer[0x32];
-          *(uint8_t*)((char*)&savedTime32 + 3) = __frame0.saveTempBuffer[0x33];
-          *(uint8_t*)(char*)&savedNTimeEx = __frame0.saveTempBuffer[0x34];
-          *(uint8_t*)((char*)&savedNTimeEx + 1) = __frame0.saveTempBuffer[0x35];
-          *(uint8_t*)((char*)&savedNTimeEx + 2) = __frame0.saveTempBuffer[0x36];
-          *(uint8_t*)((char*)&savedNTimeEx + 3) = __frame0.saveTempBuffer[0x37];
-          *(uint8_t*)(char*)&savedInitSeed = __frame0.saveTempBuffer[0xab];
-          *(uint8_t*)((char*)&savedInitSeed + 1) = __frame0.saveTempBuffer[0xac];
-          *(uint8_t*)((char*)&savedInitSeed + 2) = __frame0.saveTempBuffer[0xad];
-          *(uint8_t*)((char*)&savedInitSeed + 3) = __frame0.saveTempBuffer[0xae];
+          savedChecksum2 = (int)((uint32_t)(uint8_t)__frame0.saveTempBuffer[0xc] | (uint32_t)(uint8_t)__frame0.saveTempBuffer[0xd] << 8 | (uint32_t)(uint8_t)__frame0.saveTempBuffer[0xe] << 16 | (uint32_t)(uint8_t)__frame0.saveTempBuffer[0xf] << 24);
+          savedTime32 = (int)((uint32_t)(uint8_t)__frame0.saveTempBuffer[0x30] | (uint32_t)(uint8_t)__frame0.saveTempBuffer[0x31] << 8 | (uint32_t)(uint8_t)__frame0.saveTempBuffer[0x32] << 16 | (uint32_t)(uint8_t)__frame0.saveTempBuffer[0x33] << 24);
+          savedNTimeEx = (int)((uint32_t)(uint8_t)__frame0.saveTempBuffer[0x34] | (uint32_t)(uint8_t)__frame0.saveTempBuffer[0x35] << 8 | (uint32_t)(uint8_t)__frame0.saveTempBuffer[0x36] << 16 | (uint32_t)(uint8_t)__frame0.saveTempBuffer[0x37] << 24);
+          savedInitSeed = (int)((uint32_t)(uint8_t)__frame0.saveTempBuffer[0xab] | (uint32_t)(uint8_t)__frame0.saveTempBuffer[0xac] << 8 | (uint32_t)(uint8_t)__frame0.saveTempBuffer[0xad] << 16 | (uint32_t)(uint8_t)__frame0.saveTempBuffer[0xae] << 24);
           memset(__frame0.saveTempBuffer + 12, 0, 4 * sizeof(__frame0.saveTempBuffer[0]));
           memset(__frame0.saveTempBuffer + 48, 0, 8 * sizeof(__frame0.saveTempBuffer[0]));
           memset(__frame0.saveTempBuffer + 171, 0, 4 * sizeof(__frame0.saveTempBuffer[0]));
@@ -1087,7 +1072,7 @@ static void __stdcall SaveToBuffer(::SGAMEDATA * pGame, int32_t nSaveParam, D2Un
 // Top-level player save dispatcher. Clears UNITFLAGEX_UPDATEINV, detects if the player is currently trading (interact with another UNIT_PLAYER), then routes to SaveToBuffer (OBNet/LAN), SaveToFile (SP without BNet service), or SaveToFileBnet (BNet) based on game type and BattleNetServerService pointer.
 // @sourcefile .\PLAYER\PlrSave.cpp
 BOOL __fastcall SaveGameAllGameTypes(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pCharName, BOOL bUnknown) {
-    bool _bHasInteractInfo;
+    BOOL _bHasInteractInfo;
     bool bHasInteractInfo;
     D2ClientStrc* pClient;
     int nSaveResult;
