@@ -82,6 +82,9 @@ is regenerated, so a fix that belongs in the reverse-engineering (a wrong type, 
 parameter) is best reported as an issue with the evidence; it will land upstream and
 survive the next regeneration.
 
+[CONTRIBUTING.md](CONTRIBUTING.md) has the detail: which paths are generated and which are
+hand-written, and which door a given finding goes through so that it survives.
+
 With an AI agent you can read the Ghidra databases behind the tree (1.14d Windows and Mac)
 through a read-only MCP server, and report such fixes with the evidence. In Claude Code:
 
