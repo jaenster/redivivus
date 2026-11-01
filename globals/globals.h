@@ -832,18 +832,19 @@ struct D2D3DTileCornerStrc {
 };
 
 struct D2EndGameUiState {
-    /* 0x00 */ bool showCongrats; // Show end-game congrats flow
-    /* 0x01 */ uint8_t _pad0[3];
-    /* 0x04 */ bool showCutscene; // End-game cutscene/congrats active flag
-    /* 0x05 */ uint8_t _pad1[3];
-    /* 0x08 */ bool congratzOkClicked; // Congrats OK clicked
-    /* 0x09 */ uint8_t _pad2[3];
+    /* 0x00 */ BOOL showCongrats; // Show end-game congrats flow
+    /* 0x04 */ BOOL showCutscene; // End-game cutscene/congrats active flag
+    /* 0x08 */ BOOL congratzOkClicked; // Congrats OK clicked
 };
 
 struct D2ExitCutsceneState {
+    D2ExitCutsceneState() = default;
+    D2ExitCutsceneState(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+    D2ExitCutsceneState(int a0, BOOL a1) : pendingCutsceneId(a0), cutscenePlayed(a1) {}
+
     /* 0x00 */ int pendingCutsceneId; // Pending exit cutscene id
-    /* 0x04 */ bool cutscenePlayed; // Exit cutscene played/active flag
-    /* 0x05 */ uint8_t _pad0[3];
+    /* 0x04 */ BOOL cutscenePlayed; // Exit cutscene played/active flag
 };
 
 struct __attribute__((packed)) D2GameListEntryStrc {

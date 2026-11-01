@@ -69,22 +69,22 @@ struct SID_C2S_ClickAd {
     /* 0x04 */ uint32_t dwRequestType; // EDX!=0
 };
 
-struct __attribute__((packed)) SID_C2S_ClientId2 {
+struct SID_C2S_ClientId2 {
     /* 0x00 */ uint32_t dwServerVersion;
     /* 0x04 */ uint32_t dwRegVersion;
     /* 0x08 */ uint32_t dwRegAuthority;
     /* 0x0C */ uint32_t dwClientId;
     /* 0x10 */ uint32_t dwClientToken;
     /* 0x14 */ char szComputerName[1];
-    /* 0x15 */ char szUserName[1];
+    /* 0x15 */ char szUserName[1023];
 };
 
-struct __attribute__((packed)) SID_C2S_DisplayAd {
+struct SID_C2S_DisplayAd {
     /* 0x00 */ uint32_t dwPlatformId;
     /* 0x04 */ uint32_t dwProductId;
     /* 0x08 */ uint32_t dwAdId;
     /* 0x0C */ char szFilename[1];
-    /* 0x0D */ char szUrl[1];
+    /* 0x0D */ char szUrl[1279];
 };
 
 struct SID_C2S_GetFileTime {

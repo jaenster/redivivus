@@ -31,7 +31,7 @@ uint32_t __stdcall SSYSTEM_Shutdown(uint32_t nShutdownCode) {
 
 void __stdcall SSYSTEM_Initialize() {
     SMem::SMemInitialize();
-    SSComp::SLogInitialize();
+    SLog::SLogInitialize();
     SSTR::SSTR_InitConversionTables();
 }
 
