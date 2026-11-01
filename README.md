@@ -117,5 +117,9 @@ checked against the databases, reviewed, and applied with you as the git author;
 - [D2MOO](https://github.com/ThePhrozenKeep/D2MOO) supplied many of the structure layouts
   this work started from in 2021, though it went another direction since.
 
+## License
+
+MIT, see [LICENSE](LICENSE). Code under `thirdparty/` keeps its own license.
+
 Diablo and Blizzard Entertainment are trademarks of Blizzard Entertainment, Inc. This
 project is not affiliated with or endorsed by Blizzard.
