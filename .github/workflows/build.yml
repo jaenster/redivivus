@@ -22,7 +22,20 @@ jobs:
       - name: Install the toolchain
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq g++-mingw-w64-i686 binutils-mingw-w64-i686 cmake ninja-build
+          sudo apt-get install -y -qq g++-mingw-w64-i686 binutils-mingw-w64-i686 cmake ninja-build ccache
+
+      # The compile cache. A run saves under its own sha and restores the newest
+      # earlier one, so an unchanged translation unit is not compiled again.
+      - name: Restore the compile cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: ccache-mingw-i686-${{ github.sha }}
+          restore-keys: ccache-mingw-i686-
 
       - name: Build from a clean clone
-        run: tools/check-build.sh "$GITHUB_WORKSPACE" "$GITHUB_SHA"
+        env:
+          CHECK_BUILD_WORK: ${{ runner.temp }}/redivivus
+        run: |
+          export CCACHE_DIR=$HOME/.cache/ccache CCACHE_MAXSIZE=2G CCACHE_COMPRESS=true
+          tools/check-build.sh "$GITHUB_WORKSPACE" "$GITHUB_SHA"
