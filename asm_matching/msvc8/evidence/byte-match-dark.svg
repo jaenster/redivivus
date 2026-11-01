@@ -19,10 +19,10 @@
 <text x="398" y="112" font-size="13" text-anchor="end" fill="#f0f6fc">17.08%</text>
 <text x="416" y="112" font-size="12" fill="#9198a1">functions that compile to the original bytes (MATCH)</text>
 <rect x="24" y="127" width="14" height="14" rx="2" fill="#2f6eb5" stroke="#3d444d"/>
-<text x="46" y="138" font-size="13" fill="#f0f6fc">Identical instructions</text>
+<text x="46" y="138" font-size="13" fill="#f0f6fc">Matching instructions</text>
 <text x="334" y="138" font-size="13" text-anchor="end" fill="#f0f6fc">1,271,608</text>
 <text x="398" y="138" font-size="13" text-anchor="end" fill="#f0f6fc">48.85%</text>
-<text x="416" y="138" font-size="12" fill="#9198a1">identical instructions in functions not yet whole</text>
+<text x="416" y="138" font-size="12" fill="#9198a1">already right, but the function still differs elsewhere</text>
 <rect x="24" y="153" width="14" height="14" rx="2" fill="#bb8009" stroke="#3d444d"/>
 <text x="46" y="164" font-size="13" fill="#f0f6fc">Same instruction, other operands</text>
 <text x="334" y="164" font-size="13" text-anchor="end" fill="#f0f6fc">404,212</text>
@@ -37,7 +37,7 @@
 <text x="46" y="216" font-size="13" fill="#f0f6fc">Tables and padding</text>
 <text x="334" y="216" font-size="13" text-anchor="end" fill="#f0f6fc">33,445</text>
 <text x="398" y="216" font-size="13" text-anchor="end" fill="#f0f6fc">1.28%</text>
-<text x="416" y="216" font-size="12" fill="#9198a1">switch tables and padding in functions not yet whole</text>
+<text x="416" y="216" font-size="12" fill="#9198a1">switch tables and padding in functions that still differ</text>
 <rect x="24" y="231" width="14" height="14" rx="2" fill="#8b949e" stroke="#3d444d"/>
 <text x="46" y="242" font-size="13" fill="#f0f6fc">Not compared</text>
 <text x="334" y="242" font-size="13" text-anchor="end" fill="#f0f6fc">34,676</text>

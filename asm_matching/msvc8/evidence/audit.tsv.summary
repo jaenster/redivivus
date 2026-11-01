@@ -4,10 +4,10 @@ Without the C runtime: 5823 of 14642 functions MATCH (39.77%), 444474 of 2602915
   compiler EH code left out: 117 functions (2245 bytes): __ehhandler stubs and the unwind funclets their FuncInfo names
 byte kinds of the headline total: 2602915 bytes
   kind whole        444474  17.08% functions that compile to the original bytes (MATCH)
-  kind ident       1271608  48.85% identical instructions in functions not yet whole
+  kind ident       1271608  48.85% already right, but the function still differs elsewhere
   kind operand      404212  15.53% same instruction, other registers or offsets
   kind differ       414500  15.92% instructions with no matching partner
-  kind noncode       33445   1.28% switch tables and padding in functions not yet whole
+  kind noncode       33445   1.28% switch tables and padding in functions that still differ
   kind uncompared    34676   1.33% original functions with no counterpart compared
 whole binary:
 original functions: 15711 (2748975 bytes of code)

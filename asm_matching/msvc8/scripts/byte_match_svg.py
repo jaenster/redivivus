@@ -35,7 +35,7 @@ THEMES = {
 }
 LABELS = {
     'whole': 'Whole function identical',
-    'ident': 'Identical instructions',
+    'ident': 'Matching instructions',
     'operand': 'Same instruction, other operands',
     'differ': 'Different instructions',
     'noncode': 'Tables and padding',

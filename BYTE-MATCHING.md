@@ -56,7 +56,7 @@ bytes that sit in identical instructions. That second figure is always higher. B
 honest; they answer different questions:
 
 - **Whole functions:** how much of the program is provably the original code?
-- **Identical instructions:** how much of the code is already read correctly, function or not?
+- **Matching instructions:** how much of the code is already right, even in functions that still differ elsewhere?
 
 The diagram above splits the original's code into these kinds. Its numbers come from
 the same run as [`audit.tsv.summary`](asm_matching/msvc8/evidence/audit.tsv.summary).

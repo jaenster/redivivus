@@ -119,10 +119,10 @@ ROW = '%08x\t%08x\t%s\t%s\t%s\t%d\t%d\t%d\t%.3f\t%s\t%s\t%d\t%d'
 # key, what it is. Every original byte of the game is in exactly one.
 BYTE_KINDS = (
     ('whole', 'functions that compile to the original bytes (MATCH)'),
-    ('ident', 'identical instructions in functions not yet whole'),
+    ('ident', 'already right, but the function still differs elsewhere'),
     ('operand', 'same instruction, other registers or offsets'),
     ('differ', 'instructions with no matching partner'),
-    ('noncode', 'switch tables and padding in functions not yet whole'),
+    ('noncode', 'switch tables and padding in functions that still differ'),
     ('uncompared', 'original functions with no counterpart compared'),
 )
 
