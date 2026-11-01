@@ -1378,7 +1378,7 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
     uint32_t nOpBaseStatId;
     uint8_t* pOpRelPtr;
     short int* pDepArrayCur;
-    short int aDescPrioritySort[1022];
+    D2ItemStatCostDescPriorityStrc aDescPrioritySort[511];
     int nOpStatSlot;
     uint8_t* pHasOp45Dep;
     uint8_t* pHasOpBaseDeps;
@@ -1604,8 +1604,8 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
       pDepArrayCur = &sgtDataTable.pTxtItemStatCost->descpriority;
       do {
         if (*(char*)(pDepArrayCur + 1) != '\0') {
-          aDescPrioritySort[nDescPriorityCount * 2] = (short int)nDepSlotIdx;
-          aDescPrioritySort[nDescPriorityCount * 2 + 1] = *pDepArrayCur;
+          aDescPrioritySort[nDescPriorityCount].nStatId = (short int)nDepSlotIdx;
+          aDescPrioritySort[nDescPriorityCount].nDescPriority = *pDepArrayCur;
           nDescPriorityCount++;
           sgtDataTable.nItemStatCostDescPrioritySize = nDescPriorityCount;
         }
@@ -1622,7 +1622,7 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
     }
 
     do {
-      sgtDataTable.pItemStatCostDescPriority[nDescPriorityCopyIdx] = aDescPrioritySort[nDescPriorityCopyIdx * 2];
+      sgtDataTable.pItemStatCostDescPriority[nDescPriorityCopyIdx] = aDescPrioritySort[nDescPriorityCopyIdx].nStatId;
       nDescPriorityCopyIdx++;
     } while (nDescPriorityCopyIdx < sgtDataTable.nItemStatCostDescPrioritySize);
 }
@@ -1931,7 +1931,7 @@ void __stdcall ITEMTBLS_FreeItemTypes() {
     Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtItemTypesLink);
 }
 
-static BOOL __stdcall ITEMTBLS_CheckIfDataFileExists(char * szFileExt, D2PoolManagerStrc * pPoolManagerStrc, char * szFileName) {
+static BOOL __stdcall ITEMTBLS_CheckIfDataFileExists(char * szFileName, D2PoolManagerStrc * pPoolManagerStrc, char * szFileExt) {
     D2MPQFileStrc* pFile;
     char szFilePath[260];
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szFileName, szFileExt);
@@ -2000,20 +2000,20 @@ void __fastcall TXT_AllocTxt_runes(D2PoolManagerStrc * pMemory) {
     };
     int nRuneIdx = 0;
     sgtDataTable.pTxtRunesLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\ItemTbls.cpp", 0x8ff);
-    BOOL bSrvBinExists = ITEMTBLS_CheckIfDataFileExists(".txt", pMemory, "runessrv");
+    BOOL bSrvBinExists = ITEMTBLS_CheckIfDataFileExists("runessrv", pMemory, ".txt");
     if (bSrvBinExists) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x904);
       exit(-1);
     }
 
     uint32_t nStringId;
-    bSrvBinExists = ITEMTBLS_CheckIfDataFileExists(".bin", pMemory, "runessrv");
+    bSrvBinExists = ITEMTBLS_CheckIfDataFileExists("runessrv", pMemory, ".bin");
     if (bSrvBinExists) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x908);
       exit(-1);
     }
 
-    bSrvBinExists = ITEMTBLS_CheckIfDataFileExists(".xls", pMemory, "runessrv");
+    bSrvBinExists = ITEMTBLS_CheckIfDataFileExists("runessrv", pMemory, ".xls");
     if (bSrvBinExists) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x90c);
       exit(-1);

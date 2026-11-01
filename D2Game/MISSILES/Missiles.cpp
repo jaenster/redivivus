@@ -279,7 +279,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
       }
     }
 
-    D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_MISSILE, pArgs->nMissileTxtNo, nPosX, nPosY, pGame, pSpawnRoom, 1, (uint32_t)(uint8_t)pMissileTxt->CollideType, nullptr);
+    D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_MISSILE, pArgs->nMissileTxtNo, nPosX, nPosY, pGame, pSpawnRoom, 1, (uint32_t)pMissileTxt->CollideType, nullptr);
     if (!pUnit) {
       return nullptr;
     }
@@ -325,7 +325,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
     }
 
     D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, nOwnerX);
-    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, gaMissileSrvDoFuncTable[(uint8_t)pMissileTxt->CollideType].nFlags);
+    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, gaMissileSrvDoFuncTable[pMissileTxt->CollideType].nFlags);
     if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)gadwBitMasks[4]) {
       pUnit->eUnitFlags |= UNITFLAG_CANBEATTACKED;
     }

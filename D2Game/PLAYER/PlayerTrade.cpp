@@ -2504,7 +2504,7 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Several exits go through GuardStack tails with the status (0, 1 or 3) in AL.
-eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int16_t nButtonId, uint32_t dwParam) {
+eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint16_t nButtonId, uint32_t dwParam) {
     bool bHasInteract;
     bool bVar1;
     D2ClientStrc* pClient;
@@ -2536,7 +2536,7 @@ eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc *
       GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 0xc);
       return SERVERSTATUS_OK;
     }
-    if ((uint16_t)(nButtonId - 0x12U) <= 2) {
+    if ((uint16_t)(nButtonId - 0x12) <= 2) {
       if (eInteractType == UNIT_OBJECT) {
         GOLD_HandleStashGoldTransaction(dwParam, pGame, nButtonId, pUnit, dwInteractGUID);
         return SERVERSTATUS_OK;
@@ -2544,7 +2544,7 @@ eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc *
 
       return SERVERSTATUS_BAD_TARGET;
     }
-    if ((uint16_t)(nButtonId - 0x17U) <= 1) {
+    if ((uint16_t)(nButtonId - 0x17) <= 1) {
       if (eInteractType == UNIT_ITEM) {
         CUBE_HandleTransmuteButtonClick(pUnit, nButtonId, pGame);
         return SERVERSTATUS_OK;

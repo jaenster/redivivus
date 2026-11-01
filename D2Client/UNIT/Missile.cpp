@@ -577,7 +577,7 @@ void __fastcall MISSILE_InitMissileUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     }
 
     D2Common::Units::Missile::AllocMissileData(pUnit);
-    D2Common::Units::SetupUpdateFlag(pUnit, (uint32_t)(uint8_t)pMissileTxt->CollideType);
+    D2Common::Units::SetupUpdateFlag(pUnit, (uint32_t)pMissileTxt->CollideType);
     D2Common::PATH::DynamicPath::AllocDynamicPath(nullptr, pRoom, nX, nY, pUnit, 1);
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     if (pMissileTxt->Collision != '\0') {
@@ -587,7 +587,7 @@ void __fastcall MISSILE_InitMissileUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     }
 
     D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, eCollisionFlag);
-    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, MISSILECLTCOLLIDEFUNCS[(uint8_t)pMissileTxt->CollideType].nFlags);
+    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, MISSILECLTCOLLIDEFUNCS[pMissileTxt->CollideType].nFlags);
     if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)gadwBitMasks[4]) {
       pUnit->eUnitFlags |= UNITFLAG_CANBEATTACKED;
     } else {

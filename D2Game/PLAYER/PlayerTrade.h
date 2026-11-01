@@ -117,7 +117,7 @@ void __fastcall RemoveTradeItemMabye(::SGAMEDATA * pGame, struct D2UnitStrc * pU
 // @sourcefile .\PLAYER\PlrTrade.cpp
 void __fastcall PLRTRADE_CancelTradeAndCleanup(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2UnitDataPlayerStrc * pPlayerData, struct D2UnitDataPlayerStrc * pPlayerData2, uint32_t dwTradeStateForUnit);
 // Several exits go through GuardStack tails with the status (0, 1 or 3) in AL.
-eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int16_t nButtonId, uint32_t dwParam);
+eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint16_t nButtonId, uint32_t dwParam);
 // Finalises a mutual player-to-player trade. Verifies pUnit is interacting with a player partner who is also interacting back with pUnit (mutual lock). If valid: sets dwTradeState=9 on pUnit, fires update event, calls RemoveTradeItemMaybe for both sides, frees both trade-copy inventories, sends trade-action 0xC (accept/complete) to the partner's client, and clears both interact infos.
 // @sourcefile .\PLAYER\PlrTrade.cpp
 void __fastcall TRADE_CompleteTrade(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);

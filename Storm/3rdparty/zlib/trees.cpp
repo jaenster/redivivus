@@ -244,7 +244,7 @@ static void __stdcall scan_tree(int32_t nMaxCode, deflate_state * pDeflateState,
     } while (nRemaining);
 }
 
-static void send_tree(int32_t nMaxCode, ct_data * pTree, deflate_state * pDeflateState) {
+static void send_tree(deflate_state * pDeflateState, ct_data * pTree, int32_t nMaxCode) {
     uint8_t byBitCount;
     int32_t iVar1;
     uint32_t nSymBitLen;
@@ -699,7 +699,7 @@ static void __stdcall send_all_trees(int32_t nLCodes, int32_t nDCodes, int32_t n
       } while (iStack_34);
     }
 
-    send_tree(nDCodes - 1, pDeflateState->dyn_dtree, pDeflateState);
+    send_tree(pDeflateState, pDeflateState->dyn_dtree, nDCodes - 1);
 }
 
 uint32_t __fastcall _tr_tally(deflate_state * pDeflateState, int32_t nDist, int32_t nLc) {

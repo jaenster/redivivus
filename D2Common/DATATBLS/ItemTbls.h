@@ -26,6 +26,17 @@ struct D2RareAffixTableStrc;
 struct D2RareAffixTxt;
 struct D2RunesTxtTableStrc;
 
+// Data types
+struct D2ItemStatCostDescPriorityStrc {
+    D2ItemStatCostDescPriorityStrc() = default;
+    D2ItemStatCostDescPriorityStrc(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    D2ItemStatCostDescPriorityStrc(short a0, short a1) : nStatId(a0), nDescPriority(a1) {}
+
+    /* 0x00 */ short nStatId; // ItemStatCost row index
+    /* 0x02 */ short nDescPriority; // descpriority column; qsort key (SORT_ItemDescPriority)
+};
+
 namespace D2Common::DATATBLS::ItemTbls {
 
 // Function declarations
