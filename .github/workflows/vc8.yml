@@ -31,9 +31,9 @@ on:
   workflow_dispatch:
     inputs:
       sample:
-        description: 'How many translation units to compile (0 = all 481)'
+        description: 'How many translation units to compile (0 = all)'
         required: false
-        default: '40'
+        default: '0'
 
 concurrency:
   group: vc8-${{ github.ref }}
@@ -52,6 +52,7 @@ jobs:
         with:
           version: '14.00.50727.762'
           runner: native
+          cache: 'true'
 
       - name: The compiler is the exact build the original was made with
         shell: bash
@@ -75,10 +76,20 @@ jobs:
           echo "translated d2_platform.h line 758:"
           sed -n '758p' build/src/d2_platform.h
 
+      # Objects keyed by content: a unit is compiled again only when its source,
+      # any header in the tree or the flags changed. A run saves under its own
+      # sha and restores the newest earlier one.
+      - name: Restore the object cache
+        uses: actions/cache@v4
+        with:
+          path: objcache
+          key: vc8-obj-${{ github.sha }}
+          restore-keys: vc8-obj-
+
       - name: Compile the tree with the oracle's flags
         shell: pwsh
         env:
-          SAMPLE: ${{ github.event.inputs.sample || '40' }}
+          SAMPLE: ${{ github.event.inputs.sample || '0' }}
         run: |
           $ErrorActionPreference = 'Stop'
           $oracle = "asm_matching/msvc8"
@@ -105,13 +116,31 @@ jobs:
           $tus = if ($n -gt 0) { $all | Select-Object -First $n } else { $all }
           Write-Host "compiling $($tus.Count) of $($all.Count) translation units`n"
 
-          New-Item -ItemType Directory -Force -Path out | Out-Null
-          $ok = 0; $fail = 0; $failed = @()
+          New-Item -ItemType Directory -Force -Path out, objcache | Out-Null
+          # Every header and the response file go into one hash; each unit's key
+          # is that hash plus the unit itself.
+          $sha = [Security.Cryptography.SHA256]::Create()
+          $hex = { param($b) -join ($sha.ComputeHash($b) | ForEach-Object { $_.ToString('x2') }) }
+          $common = [Collections.Generic.List[byte]]::new()
+          $common.AddRange([IO.File]::ReadAllBytes("$PWD\cl.rsp"))
+          Get-ChildItem -Path $src, "$PWD\$oracle" -Recurse -Include *.h, *.hpp, *.inl -File |
+            Sort-Object FullName | ForEach-Object { $common.AddRange([IO.File]::ReadAllBytes($_.FullName)) }
+          $commonHash = & $hex $common.ToArray()
+          $used = @{}
+          $ok = 0; $fail = 0; $hit = 0; $failed = @()
           foreach ($tu in $tus) {
             $obj = "out/" + [IO.Path]::GetFileNameWithoutExtension($tu.Name) + ".obj"
+            $rel = [IO.Path]::GetRelativePath($src, $tu.FullName)
+            $key = & $hex ([byte[]]([Text.Encoding]::UTF8.GetBytes("$commonHash`n$rel`n") + [IO.File]::ReadAllBytes($tu.FullName)))
+            $cached = "objcache/$key.obj"
+            $used["$key.obj"] = $true
+            if (Test-Path $cached) {
+              Copy-Item $cached $obj; $ok++; $hit++; continue
+            }
             $log = & cl.exe "@cl.rsp" "/Fo$obj" $tu.FullName 2>&1 | Out-String
             if ($LASTEXITCODE -eq 0 -and (Test-Path $obj)) {
               $ok++
+              Copy-Item $obj $cached
             } else {
               $fail++
               $first = ($log -split "`n" | Where-Object { $_ -match ' (error|fatal error) C\d+' } | Select-Object -First 1)
@@ -119,7 +148,9 @@ jobs:
             }
           }
 
-          Write-Host "`ncompiled $ok, failed $fail, of $($tus.Count)"
+          # Drop objects this run did not use, so the cache does not grow forever.
+          Get-ChildItem objcache -File | Where-Object { -not $used.ContainsKey($_.Name) } | Remove-Item
+          Write-Host "`ncompiled $ok ($hit from the cache), failed $fail, of $($tus.Count)"
           if ($failed.Count -gt 0) {
             Write-Host "`nfirst error per failing unit (up to 20):"
             $failed | Select-Object -First 20 | ForEach-Object {
@@ -138,6 +169,7 @@ jobs:
           | | |
           |-|-|
           | compiled | $ok |
+          | from the cache | $hit |
           | failed | $fail |
           | of | $($tus.Count) translation units |
           | rate | $pct% |
