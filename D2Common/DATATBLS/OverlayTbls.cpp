@@ -3,7 +3,6 @@
 #include "D2Common/DATATBLS/OverlayTbls.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/DataTbls/MonsterTbls.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
@@ -21,6 +20,7 @@
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
@@ -225,18 +225,18 @@ uint32_t __stdcall MONSTER_GetComponentOverlay(D2UnitStrc * pUnit, uint32_t nCom
     eD2LevelId eLevelId;
     int32_t nBaseClassId;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
-      return nullptr;
+      return 0;
     }
     if (nComponentIdx >= 0x10) {
-      return nullptr;
+      return 0;
     }
 
     D2MonStats2Txt* pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
     if (!pMonStats2) {
-      return nullptr;
+      return 0;
     }
     if (pMonStats2->aComponents[nComponentIdx] <= nVariantIdx) {
-      return nullptr;
+      return 0;
     }
 
     D2UnitStrc* pCompCodeStr = (D2UnitStrc*)DataTbls::DATATBLS_GetCompCodeByIndex((uint32_t)pMonStats2->aCompCodes[nVariantIdx + nComponentIdx * 0xc]);
@@ -250,7 +250,7 @@ uint32_t __stdcall MONSTER_GetComponentOverlay(D2UnitStrc * pUnit, uint32_t nCom
         nBaseClassId = D2Client::UNIT::Player::ValidateClassId(nBaseClassId);
         if (nBaseClassId) {
           if (nBaseClassId == 0xaa && gnOverlayTblsMaxId[nComponentIdx]) {
-            return (D2UnitStrc*)gnOverlayTblsMaxId[nComponentIdx][nVariantIdx];
+            return gnOverlayTblsMaxId[nComponentIdx][nVariantIdx];
           }
         } else {
           if (gnOverlayTblsCount[nComponentIdx]) {
@@ -260,8 +260,8 @@ uint32_t __stdcall MONSTER_GetComponentOverlay(D2UnitStrc * pUnit, uint32_t nCom
       }
     }
 
-    pUnit = pCompCodeStr;
-    return pUnit;
+    uint32_t nUnit = (uint32_t)pCompCodeStr;
+    return nUnit;
 }
 
 // 2022.01.09 - dzik

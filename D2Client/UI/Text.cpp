@@ -30,6 +30,7 @@
 #include "D2Client/UI/npcmenu.h"
 #include "D2Client/UI/ui.h"
 #include "D2Client/UNIT/CUnit.h"
+#include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/UNIT/PlayerList.h"
 #include "D2Client/UNIT/UnitSnd.h"
@@ -73,7 +74,7 @@
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/MessageStrc.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Storm.h"
@@ -4259,7 +4260,7 @@ void __stdcall TEXT_OpenMessageLogDialog() {
       nPosY = 0;
       nPosX = ScreenSizeY - 0xa5;
       Dialog::AddStringData(Dialog::DialogHandle, D2Lang::StrTable::strtable::GetLocaleString(0x1030), nPosX, nPosY, nField, nEnabled, pfnCloseCallback, nEntryIdx);
-      pLogListAlloc = (::ListBoxWrapper*)Storm::SMem::SMemAlloc(0xc, "new", -1, 0);
+      pLogListAlloc = (::ListBoxWrapper*)Storm::Source::SMem::SMemAlloc(0xc, "new", -1, 0);
       nSehTryLevel = 0;
       if (pLogListAlloc) {
         gpTextMessageLogHead = ListBox::ListBoxWrapper::Constructor(pLogListAlloc, 5, 0x41, ScreenSizeX - 0x14, ScreenSizeY - 200, 2, 0, 0xd, nullptr, true);
@@ -5258,13 +5259,13 @@ int __stdcall TEXT_HandleEscapeKey() {
     return 0;
 }
 
-static void __stdcall TEXT_DrawUnitOverheadText(D2HoverTextStrc * pHoverText, int32_t pUnit, uint16_t * wszText, int * pScreenPos) {
+static void __stdcall TEXT_DrawUnitOverheadText(D2HoverTextStrc * pHoverText, D2UnitStrc * pUnit, uint16_t * wszText, int * pScreenPos) {
     RECT rcBox;
     uint32_t nExpireFrame = D2Common::Chat::GetExpireFrame(pHoverText);
     if (gnTextOverheadCounter > nExpireFrame) {
       D2Common::Chat::Free(nullptr, pHoverText);
       if (pUnit) {
-        *(uint32_t*)(pUnit + 0xa4) = 0;
+        pUnit->pHoverText = 0;
       }
     }
 
@@ -5360,7 +5361,7 @@ void __fastcall TEXT_DrawMonsterHoverText(D2UnitStrc * pUnit) {
           }
 
           D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLocaleString, wszString, nSizeMaybe);
-          TEXT_DrawUnitOverheadText(pHover, (int32_t)pUnit, wszLocaleString, (int*)&ptScreenPos2.x);
+          TEXT_DrawUnitOverheadText(pHover, pUnit, wszLocaleString, (int*)&ptScreenPos2.x);
           return;
         }
       }
@@ -5370,7 +5371,7 @@ void __fastcall TEXT_DrawMonsterHoverText(D2UnitStrc * pUnit) {
       bVar1 = TEXT_ConvertCharToWideWithLanguage(nConvertedLen, szMessage, (uint32_t)bVar1, (uint16_t*)wszConverted);
       if (bVar1) {
         wszConverted[0xff] = L'\0';
-        TEXT_DrawUnitOverheadText(pHover, (int32_t)pUnit, wszConverted, (int*)&ptScreenPos2.x);
+        TEXT_DrawUnitOverheadText(pHover, pUnit, wszConverted, (int*)&ptScreenPos2.x);
       }
     }
 }
@@ -5435,7 +5436,7 @@ void __fastcall TEXT_DrawObjectHoverText(D2UnitStrc * pUnit) {
           }
 
           D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLocaleString, wszString, nSizeMaybe);
-          TEXT_DrawUnitOverheadText(pHoverText, (int32_t)pUnit, wszLocaleString, (int*)&ptScreenPos.x);
+          TEXT_DrawUnitOverheadText(pHoverText, pUnit, wszLocaleString, (int*)&ptScreenPos.x);
         }
       }
     }
@@ -5888,6 +5889,10 @@ void __stdcall INPUT_TextKeyFilter(D2UIMouseMsgStrc * pMsg) {
 // compiler-generated C++ EH handler; its frame is never registered with the OS
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca07b(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
     return ExceptionContinueSearch;
+}
+
+void StaticInit_6cac10() {
+    gnTextBoxExclusionX = (ScreenSizeX - 0x145) / 2;
 }
 
 } // namespace D2Client::UI::Text

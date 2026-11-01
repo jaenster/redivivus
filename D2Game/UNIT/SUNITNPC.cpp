@@ -6,7 +6,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GSPacketSrv0x4E.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UI/npcmenu/Merc.h"
 #include "D2Client/UNIT/Item.h"
@@ -2225,7 +2224,7 @@ void __fastcall SUNITNPC_ValidateNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Dispatches an NPC interaction for a player. nMode==0: repair/trade path — registers player interaction, repairs items, and initialises inventory for vendor NPCs (Charsi=0x96, Fara=0xC6, Larzuk=0x203, Halbu=0xFC) if not yet done. nMode!=0 with a personal inventory: registers gamble interaction and validates it via SUNITNPC_ValidateNpcInteraction.
 void __fastcall SUNITNPC_ProcessNpcAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pNpc, int32_t nMode) {
-    int32_t nGambleInteractNode;
+    D2NpcPlayerInteractionStrc* nGambleInteractNode;
     int nNpcDataIdx;
     if (!pNpc) {
       return;
@@ -2240,7 +2239,7 @@ void __fastcall SUNITNPC_ProcessNpcAction(::SGAMEDATA * pGame, D2UnitStrc * pUni
     if (nMode) {
       if (pNpcData->flags0x0C) {
         nGambleInteractNode = sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pPlayerUnit_lcl);
-        *(uint8_t*)(nGambleInteractNode + 4) = 1;
+        *(uint8_t*)&nGambleInteractNode->unk0x04 = 1;
         SUNITNPC_ValidateNpcInteraction(pGame, pNpc, pPlayerUnit_lcl, (int32_t)pNpcData);
         return;
       }
@@ -2249,7 +2248,7 @@ void __fastcall SUNITNPC_ProcessNpcAction(::SGAMEDATA * pGame, D2UnitStrc * pUni
       pTradeState = &pNpcData->sTrade;
       if (pTradeState && pNpcData->sTrade.unk0x03) {
         nGambleInteractNode = sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pPlayerUnit_lcl);
-        *(uint8_t*)(nGambleInteractNode + 4) = 0;
+        *(uint8_t*)&nGambleInteractNode->unk0x04 = 0;
         if (!pTradeState->bStoreFilled) {
           SUNITNPC_FillNpcStore(pGame, pPlayerUnit_lcl, pNpc, pTradeState);
           pTradeState->bStoreFilled = 1;
@@ -2660,7 +2659,7 @@ BOOL __fastcall SUNITNPC_OpenTradeScreen(::SGAMEDATA * pGame, D2UnitStrc * pPlay
     } else {
       nPlayerUnitGUID = pPlayer->nUnitGUID;
     }
-    if (!pInteractionNode || *(char*)(pInteractionNode + 4) == '\0') {
+    if (!pInteractionNode || *(char*)&pInteractionNode->unk0x04 == '\0') {
       BOOL bIsIdentified;
       bIsIdentified = D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_IDENTIFIED, 0x100d, ".\\UNIT\\SUNITNPC.CPP");
       if (!bIsIdentified) {
@@ -2741,10 +2740,10 @@ void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, D2UnitStrc * pUn
 eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, int32_t nNpcGUID, int32_t nItemGUID, int32_t nMode, int32_t nPrice) {
     eInventoryPage ePage;
     uint16_t uVar2;
-    void* iVar4;
     D2ClientStrc* pClient;
     int eVar9;
     D2LowQualityItemsTxt* pLowQualityName;
+    D2BooksTxt* pBooksTxt;
     eD2Skills eSkill;
     int nNpcDataIdx;
     int32_t nClonedItemGUID;

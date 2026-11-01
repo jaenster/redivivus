@@ -11,7 +11,6 @@
 #include "Fog/Src/D2Net.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/Safesock.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "Fog/D2QServerStrc.h"
 

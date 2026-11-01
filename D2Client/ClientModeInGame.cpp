@@ -23,6 +23,7 @@
 #include "D2Win/Src/D2WinArchive.h"
 #include "D2Win/Src/D2WinMain.h"
 #include "D2gfx/D2GFX.h"
+#include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Fog.h"
 #include "Fog/Memory.h"
@@ -33,7 +34,10 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/Engine.h"
+#include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "Fog/D2QServerStrc.h"
+#include "Storm/H/CCritSect.h"
+#include "Storm/H/stpl.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -561,6 +565,32 @@ eD2ClientAppMode __stdcall NET_QServer_ShutdownServer() {
 
     eD2ClientAppMode eAppMode = CLIENTMODE_GetCurrentAppMode();
     return eAppMode;
+}
+
+void StaticInit_6ca9a0() {
+    gpszCmdLineCaptionStr = gpszDiabloIICaption;
+}
+
+void StaticInit_6ca9b0() {
+    // Static local variables (originally global data)
+    // also labelled: gbCmdLineCaptionPadding
+static LPCSTR gpszDiabloIICaptionCopy; D2_STATIC_GUARD_BSS(gpszDiabloIICaptionCopy, "D2Client::ClientModeInGame::StaticInit_6ca9b0::gpszDiabloIICaptionCopy");
+
+    gpszDiabloIICaptionCopy = gpszDiabloIICaption;
+}
+
+void __stdcall QSERVER_InitGlobalGameState() {
+    gQServerGameState.TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>::Constructor();
+    /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ gQServerGameState.nSequence = 0xf85f96f;
+    gQServerGameState.bWrapped = 0;
+    gQServerGameState.pVtable = (TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Vtable*)(void*)TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::vftable;
+    InitializeCriticalSection(&gQServerGameState.tSync.m_critsect);
+    atexit(QSERVER_DestroyGlobalGameState);
+}
+
+void QSERVER_DestroyGlobalGameState() {
+    DeleteCriticalSection(&gQServerGameState.tSync.m_critsect);
+    gQServerGameState.TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>::Destructor();
 }
 
 } // namespace D2Client::ClientModeInGame

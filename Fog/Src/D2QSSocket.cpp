@@ -30,7 +30,21 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QSSocketStrc) == 0x194, "D2_NEW_A
 #endif
 
 
+#ifndef RECON_FPTD_fpD2QSSocketPacketHandler
+#define RECON_FPTD_fpD2QSSocketPacketHandler
+typedef int (__stdcall *fpD2QSSocketPacketHandler)(void * pContext);
+#endif
+
 namespace Fog::Src::D2QSSocket {
+
+void __stdcall QSSOCKET_SetCallbackHandler1(D2QSSocketStrc * pQSSocket, void * fpCallback, void * pContext) {
+    if (!pQSSocket) {
+      return;
+    }
+
+    pQSSocket->pfnPacketHandler = (fpD2QSSocketPacketHandler)fpCallback;
+    pQSSocket->pHandlerContext = pContext;
+}
 
 int __fastcall NET_MCP_CLIENT_SendPacketToSafesocket(D2NetDataStrc * pSafesocket, char * pBytes, size_t nSize) {
     if (!pSafesocket || pSafesocket->bBlocked) {

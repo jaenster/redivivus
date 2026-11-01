@@ -142,6 +142,7 @@ void __fastcall CHARSEL_LoadCharList(char * szText);
 // Initializes character selection screen. Creates 8 D2WinTextBox controls stored in gaCharSelScreenSlotControls[0-7] for character name display slots. Sets up UI callbacks, loads DC6 assets, initializes character list data structures.
 void __stdcall CHARSEL_InitCharSelScreen();
 void __stdcall UIMENU_CharacterSelectAllGameTypes();
+void StaticInit_6ca940();
 // 9 internal functions (defined in .cpp)
 
 } // namespace D2Launch::CharSel

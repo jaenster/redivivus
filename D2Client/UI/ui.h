@@ -254,6 +254,11 @@ void __fastcall UI_HandleHoradricCubePacket(uint8_t * pPacket);
 void __fastcall UI_OpenHoradricCubeWithNpcInteraction(int nNpcShopTab);
 BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, int * pnBottom, int32_t nPlacementMode, int32_t nMaxX, int32_t nMinX);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca05c(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
+void StaticInit_6caa10();
+void StaticInit_6caa30();
+void StaticInit_6caa50();
+void StaticInit_6caa70();
+void StaticInit_6cace0();
 // 26 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::ui

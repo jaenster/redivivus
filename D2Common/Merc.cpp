@@ -3,7 +3,6 @@
 #include "D2Common/Merc.h"
 #include "D2Client/Archive.h"
 #include "D2Client/DataTbls/MonsterTbls.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UI/npcmenu/Merc.h"
 #include "D2Client/UNIT/Monster.h"

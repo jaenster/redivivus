@@ -5,7 +5,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
@@ -397,7 +396,7 @@ static int __stdcall PLRSAVE_RestoreEquippedItem(::SGAMEDATA * pGame, D2UnknownI
 
 // Restores an item from a save onto a body location.
 // @sourcefile .\PLAYER\PlrSave.cpp
-static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2, int32_t nParam) {
+static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2UnitStrc * pParentItem) {
     eD2BodyLoc eBodyLoc;
     eD2ItemAnimMode eAnimMode;
     int nPlaceResult;
@@ -487,7 +486,7 @@ static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDAT
         }
       case InItem:
         {
-          if (!nParam) {
+          if (!pParentItem) {
             return 0xd;
           }
 
@@ -498,7 +497,7 @@ static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDAT
             dwItemGUID = pUnit->nUnitGUID;
           }
 
-          nPlaceResult = ITEMS::ItemMode::PutItemInItem(pGame, pUnit2, dwItemGUID, *(DWORD*)(nParam + 0xc), (int32_t*)&pItem, 0, 1, 0, 0);
+          nPlaceResult = ITEMS::ItemMode::PutItemInItem(pGame, pUnit2, dwItemGUID, pParentItem->nUnitGUID, (int32_t*)&pItem, 0, 1, 0, 0);
           break;
         }
     }
@@ -1503,23 +1502,23 @@ void __stdcall PLAYERSAVE_RestoreSkillLevel(D2UnitStrc * pUnit, eD2Skills eSkill
 
 // Body continues at 00532eb7, the JZ target of 00532eaa - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named '_oldSaveGameLoadingPart6_part1'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from '_oldSaveGameLoadingPart6_part1':
-static int __stdcall _oldSaveGameLoadingPart6(D2UnitStrc * dwParam1, short * nParam, uint32_t dwParam2, uint32_t dwParam3, uint32_t * pdwParam, int32_t nParam2) {
+static int __stdcall _oldSaveGameLoadingPart6(D2UnitStrc * pUnit, short * pSkillSection, uint32_t dwParam2, uint32_t nFormat, uint32_t * pdwParam, D2ClientStrc * pClient) {
     eD2Skills eSkill;
     *pdwParam = 0;
-    if (*nParam != 0x6669) {
+    if (*pSkillSection != 0x6669) {
       return 5;
     }
 
-    uint32_t nClassId = GAME::Clients::GetPlayerClassId((D2ClientStrc*)nParam2);
+    uint32_t nClassId = GAME::Clients::GetPlayerClassId(pClient);
     int nSkillIndex = 0;
     int32_t iVar2 = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
     if (iVar2 > 0) {
       uint8_t bVar1;
       do {
         eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, nSkillIndex);
-        bVar1 = *(uint8_t*)(nSkillIndex + 2 + (int)nParam);
+        bVar1 = *(uint8_t*)(nSkillIndex + 2 + (int)pSkillSection);
         if (bVar1) {
-          SKILLS::SkillsServer::SetSkill(dwParam1, eSkill, (uint32_t)bVar1, 1);
+          SKILLS::SkillsServer::SetSkill(pUnit, eSkill, (uint32_t)bVar1, 1);
         }
 
         nSkillIndex++;
@@ -1527,9 +1526,9 @@ static int __stdcall _oldSaveGameLoadingPart6(D2UnitStrc * dwParam1, short * nPa
       } while (nSkillIndex < iVar2);
     }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x94_SETALLSKILLS((D2ClientStrc*)nParam2, dwParam1);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x94_SETALLSKILLS(pClient, pUnit);
     iVar2 = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
-    SKILLS::SkillsServer::SKILLS_UpdatePassivesAndPets(dwParam1);
+    SKILLS::SkillsServer::SKILLS_UpdatePassivesAndPets(pUnit);
     *pdwParam = iVar2 + 2;
     return 0;
 }
@@ -1887,7 +1886,7 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
         if (pItem) {
           GAME::Task::TASK_Nop(pItem);
           if (bUsePageHandler) {
-            nRestoreResult = PLRSAVE_RestoreItemToBodyLoc(pItem, pGame, pCurrentUnit, 0);
+            nRestoreResult = PLRSAVE_RestoreItemToBodyLoc(pItem, pGame, pCurrentUnit, nullptr);
           } else {
             nRestoreResult = PLRSAVE_RestoreItemToUnit(pGame, pCurrentUnit, pItem, 0);
           }
@@ -1920,7 +1919,7 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
             } else if (pSocketItem) {
               GAME::Task::TASK_Nop(pSocketItem);
               if (bUsePageHandler) {
-                PLRSAVE_RestoreItemToBodyLoc(pSocketItem, pGame, pCurrentUnit, (int32_t)pItem);
+                PLRSAVE_RestoreItemToBodyLoc(pSocketItem, pGame, pCurrentUnit, pItem);
               } else {
                 PLRSAVE_RestoreItemToUnit(pGame, pCurrentUnit, pSocketItem, (int32_t)pItem);
               }
@@ -1966,7 +1965,7 @@ int __fastcall PLRSAVE_DispatchItemLoadByFormat(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Creates a player corpse unit during save-game loading. Allocates a UNIT_PLAYER ghost with UNITFLAG_CANBEATTACKED cleared and STATE_playerbody set, copies client/name/seed from the live unit, sets inventory owner GUID, then restores the corpse's items from the save stream (either PLRSAVE_RestoreItemsFromStream for format 0x47 or PLRSAVE_LoadItemListFromStream for 0x48-0x60). On success appends an inventory notification and sends 0x8E CorpseAssign.
 // @sourcefile .\PLAYER\PlrSave.cpp
-static int32_t __stdcall _oldSaveGameLoadingPart7_part1(uint8_t * nParam1, uint32_t nParam, int32_t nParam2, uint32_t * pbParam, D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
+static int32_t __stdcall _oldSaveGameLoadingPart7_part1(uint8_t * pCorpseData, uint32_t nFormat, int32_t nSize, uint32_t * pbParam, D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     char* szCharName;
     int32_t nItemLoadResult;
     uint8_t* pCorpseBytesRead;
@@ -2000,14 +1999,14 @@ static int32_t __stdcall _oldSaveGameLoadingPart7_part1(uint8_t * nParam1, uint3
 
     D2Common::INVENTORY::Inventory::INVENTORY_SetOwnerGUID(pCorpseUnit->pInventory, nClassId);
     pClientLocal = 0;
-    if (nParam == 0x47) {
-      nItemLoadResult = PLRSAVE_RestoreItemsFromStream(pGame, pCorpseUnit, (short int*)(nParam1 + 0xc), 0x47, nParam2 - 0xc, 1, (int*)&pClientLocal);
+    if (nFormat == 0x47) {
+      nItemLoadResult = PLRSAVE_RestoreItemsFromStream(pGame, pCorpseUnit, (short int*)(pCorpseData + 0xc), 0x47, nSize - 0xc, 1, (int*)&pClientLocal);
     } else {
-      if (nParam - 0x48 > 0x18) {
+      if (nFormat - 0x48 > 0x18) {
         return 1;
       }
 
-      nItemLoadResult = PLRSAVE_LoadItemListFromStream(pGame, pCorpseUnit, (D2UnitStrc*)(nParam1 + 0xc), nParam, nParam2 - 0xc, 1, (short int**)&pClientLocal);
+      nItemLoadResult = PLRSAVE_LoadItemListFromStream(pGame, pCorpseUnit, (D2UnitStrc*)(pCorpseData + 0xc), nFormat, nSize - 0xc, 1, (short int**)&pClientLocal);
     }
     if (nItemLoadResult) {
       return nItemLoadResult;
@@ -2434,7 +2433,7 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
 
     pSkillsData = (short int*)((int)pSkillsData + (int)ppUnit);
     nBytesRemaining -= (int)ppUnit;
-    iVar1 = _oldSaveGameLoadingPart6(pUnit, pSkillsData, nSkillMax, nSavefileSize, (uint32_t*)&ppUnit, (int32_t)__frame0.pClientOrig);
+    iVar1 = _oldSaveGameLoadingPart6(pUnit, pSkillsData, nSkillMax, nSavefileSize, (uint32_t*)&ppUnit, __frame0.pClientOrig);
     if (iVar1) {
       return iVar1;
     }
@@ -2547,23 +2546,23 @@ static int32_t __fastcall CLIENT_ReadAndLoadSaveFile(D2ClientStrc * pClient, D2R
 }
 
 // Offline save load. The game arrives in EDI; modelled as a local, the reconstruction loaded the character through an uninitialised game pointer.
-static int32_t __fastcall CLIENT_LoadPlayerFromDisk(::SGAMEDATA * pGame, uint32_t dwParam1, char * szText, D2ClientStrc * pClient, D2UnitStrc * pOutUnitHolder, uint32_t dwParam2, uint32_t nX, uint32_t nY) {
+static int32_t __fastcall CLIENT_LoadPlayerFromDisk(::SGAMEDATA * pGame, uint32_t dwParam1, char * szText, D2ClientStrc * pClient, D2UnitStrc * * pOutUnitHolder, D2RoomStrc * dwParam2, uint32_t nX, uint32_t nY) {
     ::SGAMEDATA* pGameLocalTmp;
     D2UnitStrc* pUnit = 0;
     if (!BattleNetServerService) {
-      int32_t nResult = CLIENT_ReadAndLoadSaveFile(pClient, (D2RoomStrc*)dwParam2, &pUnit, pGame, szText, nX, nY);
+      int32_t nResult = CLIENT_ReadAndLoadSaveFile(pClient, dwParam2, &pUnit, pGame, szText, nX, nY);
       if (pUnit) {
         D2UnitStrc* pLoadedUnit = pUnit;
         Quests::QUESTS::QUEST_OnPlayerJoinGame(pGame, pUnit, 0);
-        pOutUnitHolder->eUnitType = (eD2UnitType)pLoadedUnit;
+        *pOutUnitHolder = pLoadedUnit;
         return nResult;
       }
 
-      pOutUnitHolder->eUnitType = UNIT_PLAYER;
+      *pOutUnitHolder = 0;
       return nResult;
     }
 
-    pOutUnitHolder->eUnitType = UNIT_PLAYER;
+    *pOutUnitHolder = 0;
     return 0xe;
 }
 
@@ -2601,7 +2600,7 @@ BOOL __fastcall CLIENT_LoadOrCreatePlayerUnit(::SGAMEDATA * pGame, D2ClientStrc 
         goto finish_player_unit;
       }
     } else if (bLoadFromSave) {
-      bResult = CLIENT_LoadPlayerFromDisk(pGame, pRoomOrNull, (char*)pClientCharName, pClient, (D2UnitStrc*)ppUnitOut, pRoomOrNull, nX, nY);
+      bResult = CLIENT_LoadPlayerFromDisk(pGame, pRoomOrNull, (char*)pClientCharName, pClient, ppUnitOut, (D2RoomStrc*)pRoomOrNull, nX, nY);
       goto finish_player_unit;
     }
 

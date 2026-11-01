@@ -10,7 +10,6 @@
 
 // Forward declarations
 struct D2DataArrayStrc;
-struct D2MissilesTxt;
 
 namespace Fog::Src::DataArrays {
 

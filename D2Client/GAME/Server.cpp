@@ -4,7 +4,6 @@
 #include "D2Client/ClientModeInGame.h"
 #include "D2Client/D2IniConfigStrc.h"
 #include "D2Game/GAME/Server.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

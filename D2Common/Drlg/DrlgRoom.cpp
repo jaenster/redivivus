@@ -21,6 +21,7 @@
 #include "D2Common/Drlg/D2DrlgActWarpsInfoStrc.h"
 #include "D2Common/Drlg/D2DrlgCoordsStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
+#include "D2Common/Drlg/D2DrlgGridStrc.h"
 #include "D2Common/Drlg/D2DrlgLevelStrc.h"
 #include "D2Common/Drlg/D2DrlgMapStrc.h"
 #include "D2Common/Drlg/D2DrlgOrthStrc.h"

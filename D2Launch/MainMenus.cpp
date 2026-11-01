@@ -13,7 +13,6 @@
 #include "D2Lang/Unicode/UNISYS.h"
 #include "D2Launch/CharSel.h"
 #include "D2Launch/Launcher.h"
-#include "D2Launch/Source/SBig.h"
 #include "D2MCPClient/McpConnect.h"
 #include "D2Multi/McpConnect.h"
 #include "D2Multi/OOGUtilities.h"
@@ -93,6 +92,32 @@ namespace D2Launch::MainMenus {
 
 static char dwIntroFrameRate_24_36[8] = { "640x146" }; D2_STATIC_GUARD(dwIntroFrameRate_24_36, "D2Launch::MainMenus::dwIntroFrameRate_24_36");
 static char dwIntroFrameRate_29_32[8] = { "640x292" }; D2_STATIC_GUARD(dwIntroFrameRate_29_32, "D2Launch::MainMenus::dwIntroFrameRate_29_32");
+
+void __fastcall CRYPTO_ByteSwap16Array(uint16_t * pArray, uint32_t nCount) {
+    uint32_t nIndex = 0;
+    if (nCount <= 0) {
+      return;
+    }
+
+    do {
+      pArray[nIndex] = pArray[nIndex] << 8 | (uint16_t)pArray[nIndex] >> 8;
+      nIndex++;
+    } while (nIndex < nCount);
+}
+
+void __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue) {
+    *pwOut = wValue;
+}
+
+void __thiscall CRYPTO_ByteSwap64Array(uint16_t * pwIn, uint16_t * pwOut) {
+    uint16_t wValue = *pwIn;
+    if (wValue < 0x100) {
+      *pwOut = D2Client::UI::ui::CharacterLookupTable[wValue];
+      return;
+    }
+
+    *pwOut = wValue;
+}
 
 void __fastcall MAINMENU_SetGlobalValue1(pfnUIMenuInstance pfnMenuInstance) {
     gpCurrentUIMenuInstance = pfnMenuInstance;
@@ -1556,7 +1581,7 @@ uint16_t * __stdcall MAINMENU_LoadCreditsFile(uint32_t * pnCharCount) {
         *pnCharCount = nCharCount;
         pwText = (uint16_t*)D2_ALLOC_AT(nCharCount * 2, ".\\Src\\MainMenus.cpp", 0x13bf);
         memcpy(pwText, pFileBuf + 1, *pnCharCount * 2);
-        Source::SBig::CRYPTO_ByteSwap16Array(pwText, *pnCharCount);
+        CRYPTO_ByteSwap16Array(pwText, *pnCharCount);
       } else {
         *pnCharCount = nFileSize;
         pwText = (uint16_t*)D2_ALLOC_AT(nFileSize * 2 + 1, ".\\Src\\MainMenus.cpp", 0x13c8);
@@ -1725,7 +1750,7 @@ BOOL __stdcall MAINMENU_InitCreditsScreen(D2ControlMsg * pControlMsg) {
     // Static local variables (originally global data)
     static D2ControlStrc * gpMainMenuCreditTimerControl; D2_STATIC_GUARD_BSS(gpMainMenuCreditTimerControl, "D2Launch::MainMenus::MAINMENU_InitCreditsScreen::gpMainMenuCreditTimerControl");
 
-    int32_t nParam;
+    int32_t nFormIndex;
     FORMS_DestroyLists();
     D2GFX_SetPaletteForDraw("palette\\sky\\pal.dat", "palette\\sky\\pal.pl2");
     FORMS_CreateAnyFormFromListExEx(0x29);
@@ -1734,11 +1759,11 @@ BOOL __stdcall MAINMENU_InitCreditsScreen(D2ControlMsg * pControlMsg) {
     if (!BVar1) {
       gpMainMenuCreditsPairLeftTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x2b);
       gpMainMenuCreditsPairRightTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x2c);
-      nParam = 0x2d;
+      nFormIndex = 0x2d;
     } else {
       gpMainMenuCreditsPairLeftTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x2f);
       gpMainMenuCreditsPairRightTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x30);
-      nParam = 0x31;
+      nFormIndex = 0x31;
     }
 
     gpMainMenuCreditsLineTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(nFormIndex);
@@ -2982,7 +3007,7 @@ BOOL __stdcall UIMENU_ShowTermsOfService() {
       } else if (*pFileBuffer == L'\xfffe') {
         pwszText = pFileBuffer + 1;
         nCharCount = nAllocSize - 2 >> 1;
-        Source::SBig::CRYPTO_ByteSwap16Array(pwszText, nCharCount);
+        CRYPTO_ByteSwap16Array(pwszText, nCharCount);
       } else {
         pwszText = (uint16_t*)D2_ALLOC_AT(nAllocSize * 2 + 1, ".\\Src\\MainMenus.cpp", 0xc6b);
         D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(pwszText, (char*)pFileBufferSrc, nAllocSize);

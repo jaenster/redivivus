@@ -10,6 +10,7 @@
 
 // Forward declarations
 struct D2GSPacketClt0x5D;
+struct D2GSPacketSrv0x50;
 struct D2UIMouseMsgStrc;
 struct DC6;
 
@@ -130,6 +131,8 @@ void __stdcall QUESTLOG_OnButtonMouseUp(struct D2UIMouseMsgStrc * pMsg);
 // Checks quest availability by index. Scans gQuestIconsPerActTable to map index to quest ID, validates quest state (not just completed, reward awaits, can complete). Returns 1 if quest is available for interaction.
 BOOL __fastcall QUESTLOG_IsQuestAvailableForInteraction(int32_t nQuestIconIndex);
 void __stdcall QUESTLOG_OnMouseUp(struct D2UIMouseMsgStrc * pMsg);
+void StaticInit_6cac30();
+void StaticInit_6cacd0();
 // 9 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::QuestLog

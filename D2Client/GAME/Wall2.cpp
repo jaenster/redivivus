@@ -240,7 +240,6 @@ void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nParam, uint32_t nD
     D2ObjectsTxt* pObjTxt;
     int32_t nAnimMode;
     D2MissilesTxt* pMissileTxt;
-    D2GfxInfoUnkStrc* pGfxResult;
     int nMissileId;
     BOOL bOrder;
     DRAWMODE nDrawY;

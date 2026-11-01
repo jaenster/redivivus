@@ -4,7 +4,7 @@
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2SeedStrc.h"
 #include "Fog/BitBuffer.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -195,7 +195,7 @@ void __fastcall ARCHIVE_ClearAndFreeHead(int32_t nList) {
 }
 
 int * * __thiscall ARCHIVE_AllocNode(int * * ppList, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags) {
-    int** ppNodeNew = (int**)Storm::SMem::SMemAlloc(nSize + 0x130, s___AUTALLOCREC___00711480, -2, dwAllocFlags | 8);
+    int** ppNodeNew = (int**)Storm::Source::SMem::SMemAlloc(nSize + 0x130, s___AUTALLOCREC___00711480, -2, dwAllocFlags | 8);
     int** ppNode;
     if (ppNodeNew) {
       *ppNodeNew = 0;
@@ -233,7 +233,7 @@ int * __thiscall ARCHIVE_FreeNode(int * pNode, uint8_t byFree) {
       return pNode;
     }
 
-    Storm::SMem::SMemFree(pNode, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pNode, "delete", -1, 0);
     return pNode;
 }
 
@@ -260,7 +260,7 @@ uint32_t __thiscall ARCHIVE_RemoveNode(int32_t pThis, int * pNode) {
       pNode[1] = 0;
     }
 
-    Storm::SMem::SMemFree(pNode, s___AUTALLOCREC___00711480, -2, 0);
+    Storm::Source::SMem::SMemFree(pNode, s___AUTALLOCREC___00711480, -2, 0);
     return (int)nValue <= 0 ? 0 : nValue;
 }
 
@@ -296,10 +296,10 @@ void ARCHIVE_WriteMemoryCheckReport() {
     __frame0.pListTail = 0;
     uint16_t** pHeapEnum = 0;
     sHeapDetails.dwSize = 0x128;
-    int nResult = Storm::SMem::SMemFindNextHeap(0, (int*)&pHeapEnum, &sHeapDetails);
+    int nResult = Storm::Source::SMem::SMemFindNextHeap(0, (int*)&pHeapEnum, &sHeapDetails);
     while (nResult) {
       int**** pNewRec;
-      int**** pNewRecNew = (int****)Storm::SMem::SMemAlloc(0x130, s___AUTALLOCREC___00711480, -2, 8);
+      int**** pNewRecNew = (int****)Storm::Source::SMem::SMemAlloc(0x130, s___AUTALLOCREC___00711480, -2, 8);
       if (pNewRecNew) {
         *pNewRecNew = 0;
         pNewRecNew[1] = 0;
@@ -359,7 +359,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
         ARCHIVE_LinkNode(&__frame0.pListTail, (int**)pNewRec, 1, (int**)ppInsertAfter);
       }
 
-      nResult = Storm::SMem::SMemFindNextHeap((uint32_t)pHeapEnum, (int*)&pHeapEnum, &sHeapDetails);
+      nResult = Storm::Source::SMem::SMemFindNextHeap((uint32_t)pHeapEnum, (int*)&pHeapEnum, &sHeapDetails);
       hFileTmp = hFile;
     }
 
@@ -393,13 +393,13 @@ void ARCHIVE_WriteMemoryCheckReport() {
     ARCHIVE_WriteFormattedText(hFileTmp, "TOTAL MAX:       %10d\n", nTotalRegions);
     ARCHIVE_WriteFormattedText(hFileTmp, "TOTAL REGIONS:   %10d\n\n\n\n\n", nTotalReserved);
     ARCHIVE_WriteFormattedText(hFileTmp, "================================================\n\n");
-    pHeapEnum = (uint16_t**)Storm::SMem::SMemGetHeapByCaller((int*)"SOURCE\\D2HELL\\Src\\Archive.cpp", 0xf5);
+    pHeapEnum = (uint16_t**)Storm::Source::SMem::SMemGetHeapByCaller((int*)"SOURCE\\D2HELL\\Src\\Archive.cpp", 0xf5);
     nResult = 0;
     sBlockInfo.dwSize = 0x1c;
     uint16_t* pBlock = 0;
     nTotalReserved = 0;
     nTotalBytes = 0;
-    int bFoundNextBlock = Storm::SMem::SMemFindNextBlock(pHeapEnum, 0, &pBlock, (int*)&sBlockInfo);
+    int bFoundNextBlock = Storm::Source::SMem::SMemFindNextBlock(pHeapEnum, 0, &pBlock, (int*)&sBlockInfo);
     do {
       if (!bFoundNextBlock) {
         ARCHIVE_WriteFormattedText(hFileTmp, "TOTAL MEMORY: %8d\n", nResult);
@@ -433,7 +433,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
         }
       }
 
-      bFoundNextBlock = Storm::SMem::SMemFindNextBlock(pHeapEnum, (int32_t)pBlock, &pBlock, (int*)&sBlockInfo);
+      bFoundNextBlock = Storm::Source::SMem::SMemFindNextBlock(pHeapEnum, (int32_t)pBlock, &pBlock, (int*)&sBlockInfo);
     } while (true);
 }
 

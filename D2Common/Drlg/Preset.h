@@ -414,6 +414,7 @@ void __fastcall DRLGPRESET_ReleaseDrlgFile(struct D2DrlgFileStrc * * ppDrlgFile)
 void __fastcall DRLGPRESET_FreeDrlgMapList(struct D2PoolManagerStrc * pMemory, struct D2DrlgMapStrc * pDrlgMap);
 // Searches for a matching preset type in the static preset type table. Compares the level ID, orientation bits, sub-type byte, and additional parameter against the table entries. Returns the matching index or -1 if not found. From Preset.cpp area.
 int32_t __stdcall DRLGPRESET_FindPresetTypeIndex(int32_t nLevelType, uint32_t nOrientationFlags, uint32_t nSubIndex);
+void StaticInit_6cb010();
 void StaticFini_CriticalSection_0096d610();
 // 10 internal functions (defined in .cpp)
 

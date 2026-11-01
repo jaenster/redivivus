@@ -17,6 +17,14 @@ typedef uint32_t (*pfnPkwareRead)(void * pBuf, uint32_t * pnSize, void * pParam)
 #define RECON_FPTD_pfnPkwareWrite
 typedef void (*pfnPkwareWrite)(void * pBuf, uint32_t * pnSize, void * pParam);
 #endif
+#ifndef RECON_FPTD_pfnSCompCodec
+#define RECON_FPTD_pfnSCompCodec
+typedef void (__fastcall *pfnSCompCodec)(void * pDst, uint32_t * pnDstLen, void * pSrc, uint32_t nSrcLen, uint32_t dwParam);
+#endif
+#ifndef RECON_FPTD_pfnSCompEncodeCodec
+#define RECON_FPTD_pfnSCompEncodeCodec
+typedef void (__fastcall *pfnSCompEncodeCodec)(short * pDst, uint32_t * pnDstLen, short * pSrc, uint32_t nSrcLen, void * pUserData, uint32_t nBitsPerSample);
+#endif
 
 // Data types
 struct D2BitStreamWriterStrc {
@@ -42,17 +50,6 @@ struct D2ScompArenaStrc {
     /* 0x08 */ uint8_t * pBase;
 };
 
-struct __attribute__((packed)) D2SLogStrc {
-    /* 0x00 */ uint32_t nHandle; // the HSLOG this entry belongs to (slot = nHandle & 3)
-    /* 0x04 */ struct D2SLogStrc * pNext; // next log in the slot's list
-    /* 0x08 */ HANDLE hFile; // WriteFile/FlushFileBuffers target (SLOG_FlushLog); 0xffffffff until opened
-    /* 0x0C */ uint32_t nUsed; // bytes in acBuffer; flushed at >= 0xc000
-    /* 0x10 */ uint32_t nLineStart; // start of the current entry (OutputDebugString from here when gbCompressionDebugOutput)
-    /* 0x14 */ int32_t nIndent; // spaces written by SLOG_OutputIndent (capped at 0x80)
-    /* 0x18 */ BOOL bTimestamps; // SLOG_OutputTime writes the time prefix only when set
-    /* 0x1C */ char acBuffer[65536];
-};
-
 struct PKWARE_STREAM {
     /* 0x00 */ void * pOutBuf; // destination base; write callback writes at pOutBuf+nOutPos
     /* 0x04 */ uint32_t nOutPos; // bytes written so far; returned to caller via *pdwOutLength
@@ -60,6 +57,16 @@ struct PKWARE_STREAM {
     /* 0x0C */ void * pInBuf; // source base; read callback reads at pInBuf+nInPos
     /* 0x10 */ uint32_t nInPos; // bytes consumed so far
     /* 0x14 */ uint32_t nInLen; // source length
+};
+
+struct SCompCodecEntryStrc {
+    /* 0x00 */ uint32_t dwMethodMask;
+    /* 0x04 */ void (__fastcall *pfnCodec)(void *, uint32_t *, void *, uint32_t, uint32_t);
+};
+
+struct SCompEncodeCodecEntryStrc {
+    /* 0x00 */ uint32_t dwMethodMask;
+    /* 0x04 */ void (__fastcall *pfnCodec)(short *, uint32_t *, short *, uint32_t, void *, uint32_t);
 };
 
 struct TCmpStruct {
@@ -129,7 +136,7 @@ struct __attribute__((packed)) D2CompressEncoderStrc {
     /* 0x306C */ struct D2CompressHuffNodeStrc * apSymbolNodes[258]; // +0x306c: symbol-to-node lookup table (0x102 entries)
 };
 
-namespace Storm::Source::SSComp {
+namespace Storm::Source::SComp {
 
 // Function declarations
 void __thiscall LINKEDLIST_Unlink(int * pList, uint32_t * pNode);
@@ -159,11 +166,11 @@ void __fastcall SCOMP_Bzip2Decompress(uint8_t * pDst, uint32_t * pnDstLen, uint8
 // @blizzard AdpcmMonoCompress (SCOMP.CPP)
 void __fastcall SCOMP_AdpcmMonoCompress(short * pDst, uint32_t * pnDstLen, short * pSrc, uint32_t nSrcLen, uint32_t * pUserData, uint32_t nBitsPerSample);
 // @blizzard AdpcmMonoDecompress (SCOMP.CPP)
-void __fastcall SCOMP_AdpcmMonoDecompress(short * pDst, short * * pnDstLen, int32_t pSrc, int32_t nSrcLen, uint32_t pUserData);
+void __fastcall SCOMP_AdpcmMonoDecompress(short * pDst, uint32_t * pnDstLen, uint8_t * pSrc, int32_t nSrcLen, uint32_t pUserData);
 // @blizzard AdpcmStereoCompress (SCOMP.CPP)
 void __fastcall SCOMP_AdpcmStereoCompress(short * pDst, uint32_t * pnDstLen, short * pSrc, uint32_t nSrcLen, uint32_t * pUserData, uint32_t nBitsPerSample);
 // @blizzard AdpcmStereoDecompress (SCOMP.CPP)
-void __fastcall SCOMP_AdpcmStereoDecompress(short * pDst, short * * pnDstLen, int32_t pSrc, int32_t nSrcLen, uint32_t pUserData);
+void __fastcall SCOMP_AdpcmStereoDecompress(short * pDst, uint32_t * pnDstLen, uint8_t * pSrc, int32_t nSrcLen, uint32_t pUserData);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SCompCompress". SComp exports exactly two symbols, SCompCompress and SCompDecompress.
 // @wasnamed SCOMP_Compress
 // @basis behaviour-confirmed. (dst, pdstlen, src, srclen, methodmask, level, userdata). Counts the set bits of the method mask, rejects any bit outside the supported set (mask & 0xffffff34), walks the codec dispatch table paSCompCompressCodecTable forward applying each selected codec, ping-pongs between the destination and a scratch buffer from SCOMP_AcquireTempBuffer, drops any codec that failed to shrink the data, and writes the surviving method mask as the FIRST OUTPUT BYTE - the byte SCompDecompress reads back.
@@ -202,37 +209,10 @@ int32_t __fastcall HUFFMAN_ConstructorWithTable(int32_t pHuffCtx);
 void __fastcall SCOMP_HuffmanCompress(uint8_t * pBitStreamCtx, uint32_t * pnBytesWritten, uint8_t * pbSrc, int32_t nSrcLen, uint8_t * pbTableSel, uint32_t dwFlags);
 // @blizzard HuffmanDecompress (SCOMP.CPP)
 void __fastcall SCOMP_HuffmanDecompress(uint8_t * pDst, int * pnDstSize, uint32_t * pBitStreamCtx, uint32_t dwFlags, uint32_t dwParam);
-// @blizzard SLogClose (SLOG.CPP)
-void __stdcall SLogClose(uint32_t nHandle);
-// @blizzard SLogCreate (SLOG.CPP)
-void __stdcall SLogCreate(LPCSTR szFileName, uint32_t dwUnused, int * pnHandleOut);
-// @blizzard SLogDump (SLOG.CPP)
-void __stdcall SLogDump(uint32_t nHandle, int32_t pData, uint32_t nLength);
-// @blizzard SLogFlush (SLOG.CPP)
-void __stdcall SLogFlush(uint32_t nHandle);
-// @blizzard SLogFlushAll (SLOG.CPP)
-void __stdcall SLogFlushAll();
-// @blizzard SLogInitialize (SLOG.CPP)
-void __stdcall SLogInitialize();
-// @blizzard SLogPend (SLOG.CPP)
-void SLogPend(uint32_t nHandle, char * szFormat, ...);
-// Sets the log's indent (D2SLogStrc.nIndent) to nIndent and returns the previous indent; 0 if nHandle has no log.
-// Provenance: 1.14d asm 004200e0 (SLOG_LockLog, [ctx+0x14] = value).
-int32_t __stdcall SLogSetAbsIndent(uint32_t nHandle, int32_t nIndent);
-// Adds nDelta to the log's indent (D2SLogStrc.nIndent) and returns the previous indent; 0 if nHandle has no log.
-// Provenance: 1.14d asm 00420120 (SLOG_LockLog, [ctx+0x14] += delta); caller BNET_LogIndent.
-int32_t __stdcall SLogSetIndent(uint32_t nHandle, int32_t nDelta);
-// Sets D2SLogStrc.bTimestamps, which makes SLOG_OutputTime prefix each entry with the local time.
-// Provenance: 1.14d asm 00420160 (SLOG_LockLog, [ctx+0x18] = flag); name from the Mac PPC Storm import list (SLogSetTimestamp).
-void __stdcall SLogSetTimestamp(uint32_t nHandle, uint32_t bTimestamps);
-// @blizzard SLogWrite (SLOG.CPP)
-void SLogWrite(uint32_t nHandle, char * szFormat, ...);
-// @blizzard SLogDestroy (SLOG.CPP)
-void __stdcall SLogDestroy();
 // PKWARE Data Compression Library explode(): callback-driven decompressor.
 uint8_t PKWARE_explode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, struct TDcmpStruct * pWorkBuf, void * pParam);
 uint32_t PKWARE_ExplodeStream(struct TDcmpStruct * pItemData);
-uint32_t PKWARE_ProcessItemInventory(struct TDcmpStruct * nParam);
+uint32_t PKWARE_ProcessItemInventory(struct TDcmpStruct * pDcmp);
 int PKWARE_GetItemDataValue(struct TDcmpStruct * pClientSideData, int nParam);
 BOOL PKWARE_CheckItemDataRange(struct TDcmpStruct * pClientSideData, uint32_t nParam);
 void PKWARE_CompareItemValues(int nCount, uint8_t * pBitsTable, uint8_t * pBaseTable, char * pOutTable);
@@ -251,12 +231,13 @@ void PKWARE_SetMemoryValue(uint32_t * pdwParam1, uint32_t * pdwParam2, uint32_t 
 uint32_t PKWARE_implode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, struct TCmpStruct * pWorkBuf, void * pParam, uint32_t * pnType, uint32_t * pnDictSize);
 void PKWARE_ProcessMemoryBlock(struct TCmpStruct * pnParam);
 int PKWARE_ParseByteStream(struct TCmpStruct * pCmpState, uint8_t * pbSrcPos);
-void PKWARE_CalculateOffset(struct TCmpStruct * nParam, uint32_t nBitCount, uint32_t nBitValue);
+void PKWARE_CalculateOffset(struct TCmpStruct * pCmp, uint32_t nBitCount, uint32_t nBitValue);
 void PKWARE_CopyMemoryValue(uint32_t * pdwParam1, uint32_t * pdwParam2, uint32_t nParam);
 void PKWARE_SetByteValue(uint32_t * pnParam, uint8_t bParam, uint32_t nParam);
-void PKWARE_ProcessBuffer(struct TCmpStruct * nParam);
-void PKWARE_CopyBufferData(struct TCmpStruct * nParam, uint8_t * pbStart, uint8_t * pbEnd);
+void PKWARE_ProcessBuffer(struct TCmpStruct * pCmp);
+void PKWARE_CopyBufferData(struct TCmpStruct * pCmp, uint8_t * pbStart, uint8_t * pbEnd);
+void StaticInit_6ca8c0();
 void StaticFini_CriticalSection_00779214();
-// 14 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
-} // namespace Storm::Source::SSComp
+} // namespace Storm::Source::SComp

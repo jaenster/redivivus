@@ -2,7 +2,7 @@
 
 #include "Bnclient/Debug.h"
 #include "Bnclient/net_sid.h"
-#include "Storm/Source/SSComp.h"
+#include "Storm/Source/SLog.h"
 #include "globals/globals.h"
 #include "D2Game/Objects/ObjectsRgn.h"
 
@@ -12,7 +12,7 @@
 namespace Bnclient::Debug {
 
 void __thiscall DEBUG_LogFormattedMessage(void * pThis, char * szMessage) {
-    Storm::Source::SSComp::SLogWrite(*(uint32_t*)pThis, szMessage);
+    Storm::Source::SLog::SLogWrite(*(uint32_t*)pThis, szMessage);
 }
 
 void __fastcall DEBUG_SetLoggingFlag(int dwParam) {

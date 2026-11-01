@@ -4,7 +4,7 @@
 #include "Bnclient/SHA.h"
 #include "Bnclient/net_sid.h"
 #include "Storm/D2Srp.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 
@@ -262,7 +262,7 @@ BOOL __fastcall SRP_IsContextInitialized(D2Srp * pSrp) {
 
 // @sourcefile .\SRP.cpp
 void __fastcall SRP_CreateContext(D2Srp * * ppSrp) {
-    D2Srp* pAllocated = (D2Srp*)Storm::SMem::SMemAlloc(0x4c, ".\\SRP.cpp", 0x157, 0);
+    D2Srp* pAllocated = (D2Srp*)Storm::Source::SMem::SMemAlloc(0x4c, ".\\SRP.cpp", 0x157, 0);
     if (pAllocated) {
       D2Srp* pConstructed;
       pConstructed = SRP_ConstructContext(pAllocated);

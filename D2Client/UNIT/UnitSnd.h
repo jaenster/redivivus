@@ -9,6 +9,7 @@
 #include "d2_platform.h"
 
 // Forward declarations
+struct D2DrlgTileDataStrc;
 struct D2MonSoundsTxt;
 struct D2RoomStrc;
 struct D2UnitStrc;

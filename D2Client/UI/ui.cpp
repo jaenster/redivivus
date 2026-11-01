@@ -27,7 +27,6 @@
 #include "D2Client/GAME/Select.h"
 #include "D2Client/GAME/View.h"
 #include "D2Client/Message.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/Chat.h"
@@ -85,6 +84,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
@@ -115,8 +115,8 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/D2ArchiveStrc.h"
 #include "Storm/D2MPQFileStrc.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SFile.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Storm.h"
@@ -749,14 +749,14 @@ static void __stdcall UI_ShowMonsterNameBar(int32_t bStoreMode, D2UnitStrc * pUn
     }
 }
 
-static uint32_t __stdcall UI_GetRosterPlayerInfoForDisplay(uint16_t * wszText, int * pnHpBarValue, int32_t * pbIsPartied, int32_t pPetEntry) {
+static uint32_t __stdcall UI_GetRosterPlayerInfoForDisplay(uint16_t * wszText, int * pnHpBarValue, int32_t * pbIsPartied, D2UnitStrc * pPetEntry) {
     int nRoster1GUID;
-    D2RosterStrc* nOwnerGUID = !pPetEntry ? (D2RosterStrc*)-1 : *(D2RosterStrc**)(pPetEntry + 0xc);
-    DWORD nRosterGUID = GAME::RosterPets::GetRosterOwnerGUID((DWORD)nOwnerGUID);
+    DWORD nOwnerGUID = !pPetEntry ? -1 : pPetEntry->nUnitGUID;
+    DWORD nRosterGUID = GAME::RosterPets::GetRosterOwnerGUID(nOwnerGUID);
     if (nRosterGUID == -1) {
       return 0;
     }
-    if (!(pPetEntry && *(int*)(pPetEntry + 0x10) && *(int*)(pPetEntry + 0x10) != 0xc)) {
+    if (!(pPetEntry && pPetEntry->eAnimMode.ePlayerMode != Death && pPetEntry->eAnimMode.ePlayerMode != Kick)) {
       return 1;
     }
 
@@ -1851,7 +1851,7 @@ void __fastcall UI_ShowGoldTransactionDialog(int32_t nTransactionType) {
             nTransactionType = (int32_t)pAllocCtx;
           }
 
-          pAllocCtx = (::EditBoxWrapper*)Storm::SMem::SMemAlloc(0xc, "new", -1, 0);
+          pAllocCtx = (::EditBoxWrapper*)Storm::Source::SMem::SMemAlloc(0xc, "new", -1, 0);
           nCleanupStage = 0;
           if (pAllocCtx) {
             gpCurrentDialog = Spinner::SpinnerWrapper::Constructor((::SpinnerWrapper*)pAllocCtx, 0xdf, 0xdb, 0, (fpSpinnerRepeatAction)UI_GoldDialogScrollCallback);
@@ -1861,7 +1861,7 @@ void __fastcall UI_ShowGoldTransactionDialog(int32_t nTransactionType) {
 
           nCleanupStage = -1;
           Dialog::AllocDialogSub(Dialog::gpDialog, gpCurrentDialog, 0, 0);
-          pAllocCtx = (::EditBoxWrapper*)Storm::SMem::SMemAlloc(0xc, "new", -1, 0);
+          pAllocCtx = (::EditBoxWrapper*)Storm::Source::SMem::SMemAlloc(0xc, "new", -1, 0);
           nCleanupStage = 1;
           if (pAllocCtx) {
             gpDialogDefaultActionCallback = Editbox::EditBoxWrapper::Constructor(pAllocCtx, 0x102, 0xe4, 100, 1, pnCurrentGold, 10, UI_GoldInputCallback_ReturnZero, 1);
@@ -1875,7 +1875,7 @@ void __fastcall UI_ShowGoldTransactionDialog(int32_t nTransactionType) {
             gpDialogDefaultActionCallback->pVtable->SetKeyRepeat(gpDialogDefaultActionCallback, 1);
           }
 
-          pAllocCtx = (::EditBoxWrapper*)Storm::SMem::SMemAlloc(0xc, "new", -1, 0);
+          pAllocCtx = (::EditBoxWrapper*)Storm::Source::SMem::SMemAlloc(0xc, "new", -1, 0);
           nCleanupStage = 2;
           if (pAllocCtx) {
             gpUiGoldTransactionDialog = Button::ButtonWrapper::Constructor((::ButtonWrapper*)pAllocCtx, 0xfa, 0x11f, 0, UI_GoldDialogConfirmCallback);
@@ -1886,7 +1886,7 @@ void __fastcall UI_ShowGoldTransactionDialog(int32_t nTransactionType) {
           nCleanupStage = -1;
           Dialog::AllocDialogSub(Dialog::gpDialog, gpUiGoldTransactionDialog, 0, 0);
           gpUiGoldTransactionDialog->pVtable->SetAccelerator(gpUiGoldTransactionDialog, 1);
-          pAllocCtx = (::EditBoxWrapper*)Storm::SMem::SMemAlloc(0xc, "new", -1, 0);
+          pAllocCtx = (::EditBoxWrapper*)Storm::Source::SMem::SMemAlloc(0xc, "new", -1, 0);
           nCleanupStage = 3;
           if (pAllocCtx) {
             gpUiGoldDialogCancelButton = Button::ButtonWrapper::Constructor((::ButtonWrapper*)pAllocCtx, 0x163, 0x11f, 1, UI_ButtonCallback_CloseDialog);
@@ -2449,7 +2449,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
             __frame0.nScreenX = 3;
             Fog::File::CONTAINER_InitializeBuffer(__frame0.wszNameBuf, 2, 0x80, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
             __frame0.pLevelTxtResult = 0;
-            nResult = UI_GetRosterPlayerInfoForDisplay(__frame0.wszNameBuf, (int*)&__frame0.pLevelTxtResult, &__frame0.nScreenX, (int32_t)pUnit);
+            nResult = UI_GetRosterPlayerInfoForDisplay(__frame0.wszNameBuf, (int*)&__frame0.pLevelTxtResult, &__frame0.nScreenX, pUnit);
             if (nResult) {
               if (__frame0.nScreenX == 3) {
                 return;
@@ -6224,7 +6224,7 @@ void __fastcall UI_DrawTextCentered(int32_t nPositionXStart, int32_t nPositionY,
     D2Win::Src::D2WinFont::DRAW_text(wszMessage, nPositionXStart, nPositionY, dwColor, 0);
 }
 
-static int32_t UI_GetStatDescriptionStringId(int32_t nUnit) {
+static int32_t UI_GetStatDescriptionStringId(D2UnitStrc * nUnit) {
     eD2ItemTypes eItemType;
     D2StatStrc aBonusStringIds[32];
     int nCandidateStringId;
@@ -6233,7 +6233,7 @@ static int32_t UI_GetStatDescriptionStringId(int32_t nUnit) {
       return 0;
     }
 
-    D2InventoryStrc* pPlayerInventory = *(D2InventoryStrc**)(nUnit + 0x60);
+    D2InventoryStrc* pPlayerInventory = nUnit->pInventory;
     D2UnitStrc* pRightHandItem = 0;
     D2UnitStrc* pLeftHandItem = 0;
     if (pPlayerInventory) {
@@ -6241,7 +6241,7 @@ static int32_t UI_GetStatDescriptionStringId(int32_t nUnit) {
       pLeftHandItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pPlayerInventory, 5);
     }
 
-    int32_t iVar1 = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues((D2UnitStrc*)nUnit, 0x15c, aBonusStringIds, 0x20);
+    int32_t iVar1 = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(nUnit, 0x15c, aBonusStringIds, 0x20);
     int nBestStringId = 0;
     if (iVar1 <= 0) {
       return nBestStringId;
@@ -6285,7 +6285,7 @@ static void __fastcall DRAW_UI_StatWindow_III(int32_t nX, int32_t nY, int32_t nV
     BOOL bExpansion = GAME::Game::CLIENT_CheckExpansion();
     int32_t nBlockRateOrDescStrId = D2Common::Units::GetBlockRate(pUnit, bExpansion);
     if (nBlockRateOrDescStrId <= 0) {
-      nBlockRateOrDescStrId = UI_GetStatDescriptionStringId((int32_t)pUnit);
+      nBlockRateOrDescStrId = UI_GetStatDescriptionStringId(pUnit);
       if (nBlockRateOrDescStrId > 0) {
         D2Common::COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit, pUnit->pInventory, (uint32_t*)&nWeaponClass, -1, 1);
         if (nWeaponClass != 0xd) {
@@ -8029,6 +8029,42 @@ BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, in
 // compiler-generated C++ EH handler; its frame is never registered with the OS
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca05c(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
     return ExceptionContinueSearch;
+}
+
+void StaticInit_6caa10() {
+    int iVar1;
+    uint16_t* pWVar2;
+    for (iVar1 = 0; iVar1 < 0x50; iVar1++) {
+      UNICODE_007a2c80[iVar1] = L'\0';
+    }
+}
+
+void StaticInit_6caa30() {
+    int nWordsRemaining;
+    uint16_t* pImmunityBuf1;
+    for (nWordsRemaining = 0; nWordsRemaining < 0x100; nWordsRemaining++) {
+      gU16ImmunityStringBuffer1[nWordsRemaining] = 0;
+    }
+}
+
+void StaticInit_6caa50() {
+    int nWordsRemaining;
+    uint16_t* pImmunityBuf2;
+    for (nWordsRemaining = 0; nWordsRemaining < 0x100; nWordsRemaining++) {
+      gU16ImmunityStringBuffer2[nWordsRemaining] = 0;
+    }
+}
+
+void StaticInit_6caa70() {
+    int nWordsRemaining;
+    uint16_t* pHealthBarBuf;
+    for (nWordsRemaining = 0; nWordsRemaining < 0x100; nWordsRemaining++) {
+      gnMonsterHealthBarValue[nWordsRemaining] = 0;
+    }
+}
+
+void StaticInit_6cace0() {
+    gnUICtrlConfigScrollPosition = (WindowSizeY - 0x1a4) / 2 + 0x2f;
 }
 
 } // namespace D2Client::UI::ui

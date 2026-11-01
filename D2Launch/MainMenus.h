@@ -106,6 +106,9 @@ struct __attribute__((packed)) D2ControlMsg {
 namespace D2Launch::MainMenus {
 
 // Function declarations
+void __fastcall CRYPTO_ByteSwap16Array(uint16_t * pArray, uint32_t nCount);
+void __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue);
+void __thiscall CRYPTO_ByteSwap64Array(uint16_t * pwIn, uint16_t * pwOut);
 void __fastcall MAINMENU_SetGlobalValue1(pfnUIMenuInstance pfnMenuInstance);
 void __stdcall MAINMENU_SetGlobalFlag();
 // Loads all predefined DC6 image resources for main menus and UI elements. Constructs file paths using wsprintfA into a stack buffer, then loads 40+ DC6 images (buttons, backgrounds, popups) via IMAGE_LoadDC6. Expansion detection switches between classic and expansion asset paths for 8 conditional images.

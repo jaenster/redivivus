@@ -3,9 +3,9 @@
 #include "Fog/Memory.h"
 #include "Fog/D2MemoryManagerStrc.h"
 #include "Fog/D2PoolManagerStrc.h"
-#include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/LogManager.h"
+#include "Fog/Src/String/FogString.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "Storm/_unnamespaced.h"
@@ -27,17 +27,17 @@ void OutOfMemoryHandler(char * format, ...) {
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "ERROR: Out of memory!");
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "%s", szMessage);
     /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ GlobalMemoryStatus(&memStatus);
-    char* szTotalPhys = SMem::SMemFormat64BitWithSeparators(szFormattedSize, 0x20, memStatus.dwTotalPhys, 0);
+    char* szTotalPhys = Src::String::FogString::SMemFormat64BitWithSeparators(szFormattedSize, 0x20, memStatus.dwTotalPhys, 0);
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "total physical:     %s", szTotalPhys);
-    char* szAvailPhys = SMem::SMemFormat64BitWithSeparators(szFormattedSize, 0x20, memStatus.dwAvailPhys, 0);
+    char* szAvailPhys = Src::String::FogString::SMemFormat64BitWithSeparators(szFormattedSize, 0x20, memStatus.dwAvailPhys, 0);
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "available physical: %s", szAvailPhys);
-    char* szTotalPage = SMem::SMemFormat64BitWithSeparators(szFormattedSize, 0x20, memStatus.dwTotalPageFile, 0);
+    char* szTotalPage = Src::String::FogString::SMemFormat64BitWithSeparators(szFormattedSize, 0x20, memStatus.dwTotalPageFile, 0);
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "total page:         %s", szTotalPage);
-    char* szAvailPage = SMem::SMemFormat64BitWithSeparators(szFormattedSize, 0x20, memStatus.dwAvailPageFile, 0);
+    char* szAvailPage = Src::String::FogString::SMemFormat64BitWithSeparators(szFormattedSize, 0x20, memStatus.dwAvailPageFile, 0);
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "available page:     %s", szAvailPage);
-    char* szTotalVirtual = SMem::SMemFormat64BitWithSeparators(szFormattedSize, 0x20, memStatus.dwTotalVirtual, 0);
+    char* szTotalVirtual = Src::String::FogString::SMemFormat64BitWithSeparators(szFormattedSize, 0x20, memStatus.dwTotalVirtual, 0);
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "total virtual:      %s", szTotalVirtual);
-    char* szAvailVirtual = SMem::SMemFormat64BitWithSeparators(szFormattedSize, 0x20, memStatus.dwAvailVirtual, 0);
+    char* szAvailVirtual = Src::String::FogString::SMemFormat64BitWithSeparators(szFormattedSize, 0x20, memStatus.dwAvailVirtual, 0);
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "available virtual:  %s", szAvailVirtual);
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "");
 }
@@ -184,83 +184,81 @@ static int32_t FindFreeSlotInBitmap(uint32_t * pnBitmap, uint32_t nTotalBits) {
     }
 }
 
-static void __stdcall InsertBlockIntoSortedArray(uint32_t * pBlock, int32_t nManager) {
-    int nLo;
-    void* nFaultAddress;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)(nManager + 4));
-    if (*(int*)(nManager + 0x7a0) >= *(int*)(nManager + 0x7a4)) {
-      nLo = *(int*)(nManager + 0x7a4) + 0x20;
-      *(int*)(nManager + 0x7a4) = nLo;
-      nFaultAddress = realloc(*(void**)(nManager + 0x7a8), nLo * 8);
-      *(void**)(nManager + 0x7a8) = (void*)nFaultAddress;
-      if (!nFaultAddress) {
-        OutOfMemoryHandler("(1) Pool Blocks overflowed at %d", *(uint32_t*)(nManager + 0x7a4));
+static void __stdcall InsertBlockIntoSortedArray(D2PoolBlockStrc * pBlock, D2PoolManagerStrc * nManager) {
+    D2PoolBlockEntryStrc* pSortedArray;
+    size_t nMidIdx;
+    size_t nHi;
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&nManager->pSync);
+    if ((int)nManager->nBlocks >= (int)nManager->nTotalBlocks) {
+      nHi = nManager->nTotalBlocks + 0x20;
+      nManager->nTotalBlocks = nHi;
+      pSortedArray = (D2PoolBlockEntryStrc*)realloc(nManager->pBlocks, nHi * 8);
+      nManager->pBlocks = pSortedArray;
+      if (!pSortedArray) {
+        OutOfMemoryHandler("(1) Pool Blocks overflowed at %d", nManager->nTotalBlocks);
         Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x261);
         exit(-1);
       }
     }
 
-    *(int*)(nManager + 0x17a8) = *(int*)(nManager + 0x17a8) + *(int*)(pBlock[5] + 0x20) + 0x18 + (*(int*)(pBlock[5] + 0x1c) + 0x1f >> 5) * 4;
-    int nHi = *(int*)(nManager + 0x7a0);
-    int nArrayBase = *(int*)(nManager + 0x7a8);
-    nLo = 0;
-    if (nHi > 0) {
-      int nMidIdx;
+    nManager->dwMemory = nManager->dwMemory + pBlock->pPool->nSize + 0x18 + ((int)(pBlock->pPool->nBlocks + 0x1f) >> 5) * 4;
+    nHi = nManager->nBlocks;
+    pSortedArray = nManager->pBlocks;
+    int iVar1 = 0;
+    if ((int)nHi > 0) {
       do {
-        nMidIdx = (nHi - nLo >> 1) + nLo;
-        if (*pBlock > *(uint32_t*)(nArrayBase + 4 + nMidIdx * 8)) {
-          nLo = nMidIdx + 1;
+        nMidIdx = ((int)(nHi - iVar1) >> 1) + iVar1;
+        if (pBlock->pCommit > (unsigned char*)pSortedArray[nMidIdx].pCommit) {
+          iVar1 = nMidIdx + 1;
           nMidIdx = nHi;
         }
 
         nHi = nMidIdx;
-      } while (nLo < nMidIdx);
+      } while (iVar1 < (int)nMidIdx);
 
-      nHi = *(int*)(nManager + 0x7a0);
+      nHi = nManager->nBlocks;
     }
-    if (nLo < nHi) {
-      nFaultAddress = (void*)(nArrayBase + nLo * 8);
-      memmove((void*)((int)nFaultAddress + 8), nFaultAddress, (nHi - nLo) * 8);
+    if (iVar1 < (int)nHi) {
+      memmove(pSortedArray + iVar1 + 1, pSortedArray + iVar1, (nHi - iVar1) * 8);
     }
 
-    *(uint32_t**)(nArrayBase + nLo * 8) = (uint32_t*)pBlock;
-    *(uint32_t*)(nArrayBase + 4 + nLo * 8) = *pBlock;
-    (*(int*)(nManager + 0x7a0))++;
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection((LPCRITICAL_SECTION)(nManager + 4));
+    pSortedArray[iVar1].pBlock = pBlock;
+    pSortedArray[iVar1].pCommit = pBlock->pCommit;
+    nManager->nBlocks++;
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&nManager->pSync);
 }
 
-static void __stdcall RemoveBlockFromSortedArray(uint32_t * pBlock, int32_t nManager) {
-    void* pArrayElem;
-    uint32_t nKey;
-    int pArrayBase = *(int*)(nManager + 0x7a8);
-    LPCRITICAL_SECTION lpCriticalSection = (LPCRITICAL_SECTION)(nManager + 4);
+static void __stdcall RemoveBlockFromSortedArray(D2PoolBlockStrc * pBlock, D2PoolManagerStrc * nManager) {
+    uint8_t* nKey;
+    D2PoolBlockEntryStrc* pArrayElem = nManager->pBlocks;
+    CRITICAL_SECTION* lpCriticalSection = &nManager->pSync;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-    int nCount = *(int*)(nManager + 0x7a0);
+    size_t nCount = nManager->nBlocks;
     int nLow = 0;
-    int nHigh = nCount;
-    if (nCount > 0) {
-      int nMid;
+    size_t nHigh = nCount;
+    if ((int)nCount > 0) {
+      size_t nMid;
       do {
-        nMid = (nHigh - nLow >> 1) + nLow;
-        nKey = *(uint32_t*)(pArrayBase + 4 + nMid * 8);
-        if (*pBlock > nKey) {
+        nMid = ((int)(nHigh - nLow) >> 1) + nLow;
+        nKey = (uint8_t*)pArrayElem[nMid].pCommit;
+        if (pBlock->pCommit > nKey) {
           nLow = nMid + 1;
           nMid = nHigh;
-        } else if (nKey <= *pBlock) {
-          if (nMid < nCount - 1) {
-            pArrayElem = (void*)(pArrayBase + nMid * 8);
-            memmove(pArrayElem, (void*)((int)pArrayElem + 8), (nCount - nMid) * 8 - 8);
+        } else if (nKey <= pBlock->pCommit) {
+          if ((int)nMid < (int)(nCount - 1)) {
+            pArrayElem += nMid;
+            memmove(pArrayElem, pArrayElem + 1, (nCount - nMid) * 8 - 8);
           }
 
-          (*(int*)(nManager + 0x7a0))--;
-          *(int*)(nManager + 0x17a8) += -((*(int*)(pBlock[5] + 0x1c) + 0x1f >> 5) * 4 + 0x18) - *(int*)(pBlock[5] + 0x20);
-          if (*(int*)(nManager + 0x7a0) + 0x40 < *(int*)(nManager + 0x7a4)) {
-            nLow = *(int*)(nManager + 0x7a4) - 0x20;
-            *(int*)(nManager + 0x7a4) = nLow;
-            pArrayElem = realloc(*(void**)(nManager + 0x7a8), nLow * 8);
-            *(void**)(nManager + 0x7a8) = (void*)pArrayElem;
+          nManager->nBlocks--;
+          nManager->dwMemory += -(((int)(pBlock->pPool->nBlocks + 0x1f) >> 5) * 4 + 0x18) - pBlock->pPool->nSize;
+          if ((int)(nManager->nBlocks + 0x40) < (int)nManager->nTotalBlocks) {
+            nCount = nManager->nTotalBlocks - 0x20;
+            nManager->nTotalBlocks = nCount;
+            pArrayElem = (D2PoolBlockEntryStrc*)realloc(nManager->pBlocks, nCount * 8);
+            nManager->pBlocks = pArrayElem;
             if (!pArrayElem) {
-              OutOfMemoryHandler("(1) Pool Blocks overflowed at %d", *(uint32_t*)(nManager + 0x7a4));
+              OutOfMemoryHandler("(1) Pool Blocks overflowed at %d", nManager->nTotalBlocks);
               Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x2b4);
               exit(-1);
             }
@@ -271,7 +269,7 @@ static void __stdcall RemoveBlockFromSortedArray(uint32_t * pBlock, int32_t nMan
         }
 
         nHigh = nMid;
-      } while (nLow < nMid);
+      } while (nLow < (int)nMid);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
@@ -279,43 +277,43 @@ static void __stdcall RemoveBlockFromSortedArray(uint32_t * pBlock, int32_t nMan
     exit(-1);
 }
 
-static LPVOID * __stdcall AllocatePoolBlock(LPVOID pPool, int32_t nManager) {
-    void* nErrAddress;
-    if (*(int*)(nManager + 0x7a0) >= *(int*)(nManager + 0x7a4)) {
-      int nNewCapacity;
-      nNewCapacity = *(int*)(nManager + 0x7a4) + 0x20;
-      *(int*)(nManager + 0x7a4) = nNewCapacity;
-      nErrAddress = realloc(*(void**)(nManager + 0x7a8), nNewCapacity * 8);
-      *(void**)(nManager + 0x7a8) = (void*)nErrAddress;
-      if (!nErrAddress) {
-        OutOfMemoryHandler("(1) Pool Blocks overflowed at %d", *(uint32_t*)(nManager + 0x7a4));
+static LPVOID * __stdcall AllocatePoolBlock(D2PoolStrc * pPool, D2PoolManagerStrc * nManager) {
+    size_t nNewCapacity;
+    if ((int)nManager->nBlocks >= (int)nManager->nTotalBlocks) {
+      D2PoolBlockEntryStrc* pReallocResult;
+      nNewCapacity = nManager->nTotalBlocks + 0x20;
+      nManager->nTotalBlocks = nNewCapacity;
+      pReallocResult = (D2PoolBlockEntryStrc*)realloc(nManager->pBlocks, nNewCapacity * 8);
+      nManager->pBlocks = pReallocResult;
+      if (!pReallocResult) {
+        OutOfMemoryHandler("(1) Pool Blocks overflowed at %d", nManager->nTotalBlocks);
         Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x2ff);
         exit(-1);
       }
     }
 
-    size_t _Size = (*(int*)((int)pPool + 0x1c) + 0x1f >> 5) * 4;
-    LPVOID* pBlockHeader = (LPVOID*)malloc(_Size + 0x18);
-    LPVOID pRegion = VirtualAlloc((LPVOID)0x0, *(SIZE_T*)((int)pPool + 0x20), 0x1000, 4);
+    nNewCapacity = ((int)(pPool->nBlocks + 0x1f) >> 5) * 4;
+    D2PoolBlockStrc* pBlockHeader = (D2PoolBlockStrc*)malloc(nNewCapacity + 0x18);
+    uint8_t* pRegion = (uint8_t*)VirtualAlloc((LPVOID)0x0, pPool->nSize, 0x1000, 4);
     if (pBlockHeader && pRegion) {
-      pBlockHeader[2] = (LPVOID)0x0;
-      pBlockHeader[3] = (LPVOID)0x0;
-      pBlockHeader[4] = (LPVOID)0x0;
-      pBlockHeader[1] = pBlockHeader + 6;
-      memset(pBlockHeader + 6, 0, _Size);
-      *pBlockHeader = pRegion;
-      pBlockHeader[5] = pPool;
-      (*(int*)((int)pPool + 0x24))++;
-      InsertBlockIntoSortedArray((uint32_t*)pBlockHeader, nManager);
-      return pBlockHeader;
+      pBlockHeader->nBlocks = 0;
+      pBlockHeader->pPrev = 0;
+      pBlockHeader->pNext = 0;
+      pBlockHeader->pUsage = (DWORD*)(pBlockHeader + 1);
+      memset(pBlockHeader + 1, 0, nNewCapacity);
+      pBlockHeader->pCommit = pRegion;
+      pBlockHeader->pPool = pPool;
+      pPool->nAllocBlock++;
+      InsertBlockIntoSortedArray(pBlockHeader, nManager);
+      return (LPVOID*)&pBlockHeader->pCommit;
     }
 
-    OutOfMemoryHandler("(2) nPoolBlocks = %d/%d  nBlockSize = %d  nUsageTableSize = %d", *(uint32_t*)(nManager + 0x7a0), *(uint32_t*)(nManager + 0x7a4), *(uint32_t*)((int)pPool + 0x20), _Size);
+    OutOfMemoryHandler("(2) nPoolBlocks = %d/%d  nBlockSize = %d  nUsageTableSize = %d", nManager->nBlocks, nManager->nTotalBlocks, pPool->nSize, nNewCapacity);
     Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 800);
     exit(-1);
 }
 
-static int32_t __stdcall FindOrCreateBlockWithFreeSlots(LPVOID * ppOutBlock, int32_t nManager, D2PoolStrc * pPool) {
+static int32_t __stdcall FindOrCreateBlockWithFreeSlots(D2PoolBlockStrc * * ppOutBlock, D2PoolManagerStrc * nManager, D2PoolStrc * pPool) {
     int32_t nSlotIndex;
     D2PoolBlockStrc* pOverflowBlock = pPool->pBlocks;
     if (!pOverflowBlock) {
@@ -566,7 +564,7 @@ void InitializeMemoryManagers(D2PoolManagerStrc * pMemory) {
             }
 
             pPool->nAllocBlock--;
-            RemoveBlockFromSortedArray((uint32_t*)_Memory, (int32_t)pManager);
+            RemoveBlockFromSortedArray(_Memory, pManager);
             /* DWORD dwFreeType for VirtualFree */ /* SIZE_T dwSize for VirtualFree */ /* LPVOID lpAddress for VirtualFree */ VirtualFree(_Memory->pCommit, 0, 0x8000);
             free(_Memory);
           }
@@ -803,7 +801,7 @@ void * __fastcall Alloc(D2PoolManagerStrc * pMemory, size_t MemSize, char * szFi
 
     D2PoolStrc* pPool = pMemory->pPools + nSizeClass;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pPool->pSync);
-    uint32_t nSlotIndex = FindOrCreateBlockWithFreeSlots((LPVOID*)&Line, (int32_t)pMemory, pPool);
+    uint32_t nSlotIndex = FindOrCreateBlockWithFreeSlots((D2PoolBlockStrc**)&Line, pMemory, pPool);
     if ((int)nSlotIndex < (int)pPool->nBlocks) {
       int nBitmapByteOff;
       if (!Line) {

@@ -7,7 +7,6 @@
 #include "D2Client/Archive.h"
 #include "D2Client/DataTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Common/D2MissilesTxt.h"
@@ -41,6 +40,7 @@
 #include "D2Common/Drlg/DrlgWarp.h"
 #include "D2Common/Drlg/RoomTile.h"
 #include "D2Common/Drlg/Transform.h"
+#include "D2Common/Merc.h"
 #include "D2Game/Ai/AiGeneral.h"
 #include "D2Game/Ai/D2AiGeneralStrc.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
@@ -55,7 +55,6 @@
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Common/Drlg/D2DrlgTileDataStrc.h"
@@ -2198,6 +2197,11 @@ int32_t __stdcall DRLGPRESET_FindPresetTypeIndex(int32_t nLevelType, uint32_t nO
         return -1;
       }
     } while (true);
+}
+
+void StaticInit_6cb010() {
+    InitializeCriticalSection(&lpCriticalSection_0096d610);
+    atexit(StaticFini_CriticalSection_0096d610);
 }
 
 void StaticFini_CriticalSection_0096d610() {

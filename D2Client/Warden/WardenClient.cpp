@@ -10,8 +10,8 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/3rdparty/zlib/uncompr.h"
 #include "Storm/D2Srp.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SBig.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSignature.h"
 #include "Storm/Source/SSystem.h"
@@ -62,7 +62,7 @@ uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nDataLen, uint32_t nTotalL
     return 0;
 }
 
-static void __stdcall WARDEN_ComputeModuleHash(char * szModuleName, int32_t pHashOut, uint32_t nSplitOffset, uint32_t nTotalLen, uint8_t * pModuleData) {
+static void __stdcall WARDEN_ComputeModuleHash(char * szModuleName, uint8_t * pHashOut, uint32_t nSplitOffset, uint32_t nTotalLen, uint8_t * pModuleData) {
     uint8_t szUpperName[1024];
     D2Sha1ContextStrc sha1Ctx;
     Fog::Source::SSignature::Sha1_Initialize(&sha1Ctx);
@@ -76,12 +76,12 @@ static void __stdcall WARDEN_ComputeModuleHash(char * szModuleName, int32_t pHas
     Storm::Source::SSTR::SStrUpper((char*)szUpperName);
     uint32_t nNameLen = Storm::Source::SSTR::SStrLen((char*)szUpperName);
     Storm::Source::SSignature::Sha1_Append(&sha1Ctx, szUpperName, nNameLen);
-    Storm::Source::SSignature::Sha1_Finalize(&sha1Ctx, (uint8_t*)pHashOut);
+    Storm::Source::SSignature::Sha1_Finalize(&sha1Ctx, pHashOut);
 }
 
 // Verifies a Warden module's RSA signature: checks the 'NGIS' tag at the end of the module, builds the expected padded SHA-1 hash of the module and its name, decrypts the trailing signature with the supplied modulus and exponent (SBigPowMod) and returns TRUE when the two match.
 // Source file WARDEN/WardenClient.cpp (__FILE__ literal, 4 sites).
-static BOOL __stdcall WARDEN_VerifyModuleSignature(size_t nKeySize, char * szModuleName, int32_t pData, void * pModulus, void * pExponent, uint32_t nExponentLen, uint32_t nSigDataLen, uint32_t nTotalLen) {
+static BOOL __stdcall WARDEN_VerifyModuleSignature(size_t nKeySize, char * szModuleName, uint8_t * pData, void * pModulus, void * pExponent, uint32_t nExponentLen, uint32_t nSigDataLen, uint32_t nTotalLen) {
     // Frame slots -24..-4 are ONE object: &pExpectedHash is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -93,7 +93,6 @@ static BOOL __stdcall WARDEN_VerifyModuleSignature(size_t nKeySize, char * szMod
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 20, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    void* nErrAddr;
     if (nSigDataLen > nTotalLen) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa3);
       exit(-1);
@@ -104,19 +103,18 @@ static BOOL __stdcall WARDEN_VerifyModuleSignature(size_t nKeySize, char * szMod
       return 0;
     }
 
-    nErrAddr = (void*)(nSigOffset + pData);
-    Storm::Source::SSystem::SMemCopy(&__frame0.pExpectedHash, nErrAddr, 4);
+    Storm::Source::SSystem::SMemCopy(&__frame0.pExpectedHash, pData + nSigOffset, 4);
     if (__frame0.pExpectedHash != (uint8_t*)0x5349474e) {
       return 0;
     }
 
-    uint8_t* pHashBuf = (uint8_t*)Storm::SMem::SMemAlloc(nKeySize, ".\\WARDEN\\WardenClient.cpp", 0xab, 0);
+    uint8_t* pHashBuf = (uint8_t*)Storm::Source::SMem::SMemAlloc(nKeySize, ".\\WARDEN\\WardenClient.cpp", 0xab, 0);
     __frame0.pExpectedHash = pHashBuf;
     Storm::Source::SSystem::SMemFill(pHashBuf, nKeySize, 0xbb);
     pHashBuf[nKeySize - 1] = '\v';
-    WARDEN_ComputeModuleHash(szModuleName, (int32_t)pHashBuf, nSigDataLen, nSigOffset, (uint8_t*)pData);
-    uint8_t* pDecryptedSig = (uint8_t*)Storm::SMem::SMemAlloc(nKeySize, ".\\WARDEN\\WardenClient.cpp", 0xb5, 0);
-    Storm::Source::SSystem::SMemCopy(pDecryptedSig, (void*)((int)nErrAddr + 4), nKeySize);
+    WARDEN_ComputeModuleHash(szModuleName, pHashBuf, nSigDataLen, nSigOffset, pData);
+    uint8_t* pDecryptedSig = (uint8_t*)Storm::Source::SMem::SMemAlloc(nKeySize, ".\\WARDEN\\WardenClient.cpp", 0xb5, 0);
+    Storm::Source::SSystem::SMemCopy(pDecryptedSig, pData + nSigOffset + 4, nKeySize);
     Storm::Source::SBig::SBigNew(&__frame0.pBnResult);
     Storm::Source::SBig::SBigNew(&__frame0.pBnSig);
     Storm::Source::SBig::SBigNew(&__frame0.pBnExponent);
@@ -128,8 +126,8 @@ static BOOL __stdcall WARDEN_VerifyModuleSignature(size_t nKeySize, char * szMod
     Storm::Source::SBig::SBigToBinaryBuffer(__frame0.pBnResult, pDecryptedSig, nKeySize, nullptr);
     pHashBuf = __frame0.pExpectedHash;
     int nCmpResult = Storm::Source::SSystem::SSYSTEM_MemCompare(pDecryptedSig, __frame0.pExpectedHash, nKeySize);
-    Storm::SMem::SMemFree(pHashBuf, ".\\WARDEN\\WardenClient.cpp", 0xcc, 0);
-    Storm::SMem::SMemFree(pDecryptedSig, ".\\WARDEN\\WardenClient.cpp", 0xcd, 0);
+    Storm::Source::SMem::SMemFree(pHashBuf, ".\\WARDEN\\WardenClient.cpp", 0xcc, 0);
+    Storm::Source::SMem::SMemFree(pDecryptedSig, ".\\WARDEN\\WardenClient.cpp", 0xcd, 0);
     Storm::Source::SBig::SBigDel(__frame0.pBnResult);
     Storm::Source::SBig::SBigDel(__frame0.pBnSig);
     Storm::Source::SBig::SBigDel(__frame0.pBnExponent);
@@ -144,7 +142,7 @@ void __fastcall WARDEN_CbAllocModuleStruct(uint32_t nSize) {
 
 // @sourcefile .\WARDEN\WardenClient.cpp
 void __fastcall WARDEN_CbFreeModuleStruct(void * pParam) {
-    Storm::SMem::SMemFree(pParam, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
+    Storm::Source::SMem::SMemFree(pParam, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
 }
 
 // @sourcefile .\WARDEN\WardenClient.cpp
@@ -154,7 +152,7 @@ LPVOID * __thiscall WARDEN_DestroyModuleObject(LPVOID * ppModule, uint8_t bFreeS
       return ppModule;
     }
 
-    Storm::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
+    Storm::Source::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
     return ppModule;
 }
 
@@ -450,13 +448,13 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
       ppModule = gpWardenPendingModule;
       if (gpWardenPendingModule) {
         WARDEN_FreeModuleLibraries(&gpWardenPendingModule->pLibrary);
-        Storm::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
+        Storm::Source::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
       }
 
       gpWardenPendingModule = 0;
     }
 
-    uint32_t* pDecrypted = (uint32_t*)Storm::SMem::SMemAlloc(nSize, ".\\WARDEN\\WardenClient.cpp", 0x16e, 0);
+    uint32_t* pDecrypted = (uint32_t*)Storm::Source::SMem::SMemAlloc(nSize, ".\\WARDEN\\WardenClient.cpp", 0x16e, 0);
     Storm::Source::SSystem::SMemCopy(pDecrypted, pSrcData, nSize);
     if (!pDecrypted) {
       return 0;
@@ -466,27 +464,27 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
     WARDEN_RC4Decrypt(&rc4State, (uint8_t*)pDecrypted, nSize);
     BOOL BVar1 = WARDEN_VerifyModuleSignature(0x100, szModuleName, (uint8_t*)pDecrypted, gabWardenModuleRsaModulus, &gdwWardenModuleRsaExponent, 4, 0, nSize);
     if (!BVar1) {
-      Storm::SMem::SMemFree(pDecrypted, ".\\WARDEN\\WardenClient.cpp", 0x17c, 0);
+      Storm::Source::SMem::SMemFree(pDecrypted, ".\\WARDEN\\WardenClient.cpp", 0x17c, 0);
       return 0;
     }
 
     uint32_t** pDecompressed;
     nDecompressedSize = *pDecrypted;
-    pDecompressed = (uint32_t**)Storm::SMem::SMemAlloc(nDecompressedSize, ".\\WARDEN\\WardenClient.cpp", 0x182, 0);
+    pDecompressed = (uint32_t**)Storm::Source::SMem::SMemAlloc(nDecompressedSize, ".\\WARDEN\\WardenClient.cpp", 0x182, 0);
     if (!pDecompressed) {
-      Storm::SMem::SMemFree(pDecrypted, ".\\WARDEN\\WardenClient.cpp", 0x185, 0);
+      Storm::Source::SMem::SMemFree(pDecrypted, ".\\WARDEN\\WardenClient.cpp", 0x185, 0);
       return 0;
     }
 
     nErrLine = Storm::_3rdparty::zlib::uncompr::uncompress((uint8_t*)pDecompressed, (int*)&nDecompressedSize, (uint8_t*)(pDecrypted + 1), nSize - 4);
     if (nErrLine) {
-      Storm::SMem::SMemFree(pDecrypted, ".\\WARDEN\\WardenClient.cpp", 0x18d, 0);
-      Storm::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x18e, 0);
+      Storm::Source::SMem::SMemFree(pDecrypted, ".\\WARDEN\\WardenClient.cpp", 0x18d, 0);
+      Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x18e, 0);
       return 0;
     }
 
-    Storm::SMem::SMemFree(pDecrypted, ".\\WARDEN\\WardenClient.cpp", 0x193, 0);
-    ppModule = (D2WardenModuleStrc*)Storm::SMem::SMemAlloc(0x14, ".\\WARDEN\\WardenClient.cpp", 0x10d, 0);
+    Storm::Source::SMem::SMemFree(pDecrypted, ".\\WARDEN\\WardenClient.cpp", 0x193, 0);
+    ppModule = (D2WardenModuleStrc*)Storm::Source::SMem::SMemAlloc(0x14, ".\\WARDEN\\WardenClient.cpp", 0x10d, 0);
     if (ppModule) {
       ppModule->pLibrary = 0;
       ppModule->field_0x4 = 0;
@@ -500,7 +498,7 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
         pLoadedLib = (pfnWardenCreateInterface)WARDEN_DecryptBuffer((int*)ppModule, 1);
         ppModule->pfnCreateInterface = pLoadedLib;
         if (pLoadedLib) {
-          Storm::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1b0, 0);
+          Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1b0, 0);
           gpWardenPendingModule = ppModule;
           return 1;
         }
@@ -509,13 +507,13 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
         nErrLine = 0x1aa;
       }
 
-      Storm::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", nErrLine, 0);
+      Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", nErrLine, 0);
       WARDEN_FreeModuleLibraries(&ppModule->pLibrary);
-      Storm::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
+      Storm::Source::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
       return 0;
     }
 
-    Storm::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x199, 0);
+    Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x199, 0);
     return 0;
 }
 
@@ -795,22 +793,22 @@ void __thiscall LoadModule(::WardenClient * pThis, uint8_t * pModuleHash, void *
 
 // @sourcefile .\WARDEN\WardenClient.cpp
 void * __thiscall AllocateMemory(::WardenClient * pThis, uint32_t nSize) {
-    void* pvVar1 = Storm::SMem::SMemAlloc(nSize, ".\\WARDEN\\WardenClient.cpp", 0x274, 0);
+    void* pvVar1 = Storm::Source::SMem::SMemAlloc(nSize, ".\\WARDEN\\WardenClient.cpp", 0x274, 0);
     return pvVar1;
 }
 
 // @sourcefile .\WARDEN\WardenClient.cpp
 void __thiscall FreeMemory(::WardenClient * pThis, void * pMem) {
-    Storm::SMem::SMemFree(pMem, ".\\WARDEN\\WardenClient.cpp", 0x27b, 0);
+    Storm::Source::SMem::SMemFree(pMem, ".\\WARDEN\\WardenClient.cpp", 0x27b, 0);
 }
 
 // @sourcefile .\WARDEN\WardenClient.cpp
 void __thiscall SetRC4Data(::WardenClient * pThis, void * pData, uint32_t nSize) {
     if (gpWardenResponseData) {
-      Storm::SMem::SMemFree(gpWardenResponseData, ".\\WARDEN\\WardenClient.cpp", 0x283, 0);
+      Storm::Source::SMem::SMemFree(gpWardenResponseData, ".\\WARDEN\\WardenClient.cpp", 0x283, 0);
     }
 
-    gpWardenResponseData = Storm::SMem::SMemAlloc(nSize, ".\\WARDEN\\WardenClient.cpp", 0x284, 0);
+    gpWardenResponseData = Storm::Source::SMem::SMemAlloc(nSize, ".\\WARDEN\\WardenClient.cpp", 0x284, 0);
     gnWardenResponseSize = nSize;
     Storm::Source::SSystem::SMemCopy(gpWardenResponseData, pData, nSize);
 }
@@ -829,7 +827,7 @@ bool __thiscall GetRC4Data(::WardenClient * pThis, void * pDest, uint32_t * pnSi
 
     *pnSize = nCopySize;
     Storm::Source::SSystem::SMemCopy(pDest, pSrc, nCopySize);
-    Storm::SMem::SMemFree(gpWardenResponseData, ".\\WARDEN\\WardenClient.cpp", 0x292, 0);
+    Storm::Source::SMem::SMemFree(gpWardenResponseData, ".\\WARDEN\\WardenClient.cpp", 0x292, 0);
     gpWardenResponseData = 0;
     gnWardenResponseSize = 0;
     return true;
@@ -849,7 +847,7 @@ void __stdcall WARDEN_UnloadActiveModule() {
       pModule = gpWardenActiveModule;
       if (gpWardenActiveModule) {
         WARDEN_FreeModuleLibraries(&gpWardenActiveModule->pLibrary);
-        Storm::SMem::SMemFree(pModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
+        Storm::Source::SMem::SMemFree(pModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
       }
 
       gpWardenActiveModule = 0;
@@ -877,7 +875,7 @@ void __fastcall WARDEN_ActivatePendingModule(uint32_t dwModuleParam) {
         pModule = gpWardenActiveModule;
         if (gpWardenActiveModule) {
           WARDEN_FreeModuleLibraries(&gpWardenActiveModule->pLibrary);
-          Storm::SMem::SMemFree(pModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
+          Storm::Source::SMem::SMemFree(pModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
         }
       }
 
@@ -920,7 +918,7 @@ void __stdcall WARDEN_Cleanup() {
       pModule = gpWardenPendingModule;
       if (gpWardenPendingModule) {
         WARDEN_FreeModuleLibraries(&gpWardenPendingModule->pLibrary);
-        Storm::SMem::SMemFree(pModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
+        Storm::Source::SMem::SMemFree(pModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
       }
 
       gpWardenPendingModule = 0;
@@ -930,7 +928,7 @@ void __stdcall WARDEN_Cleanup() {
     gpWardenModuleParam = -1;
     sgpUnknownSequence = 0;
     if (gpWardenResponseData) {
-      Storm::SMem::SMemFree(gpWardenResponseData, ".\\WARDEN\\WardenClient.cpp", 0x24f, 0);
+      Storm::Source::SMem::SMemFree(gpWardenResponseData, ".\\WARDEN\\WardenClient.cpp", 0x24f, 0);
     }
 
     gnWardenResponseSize = 0;

@@ -7,7 +7,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
@@ -37,6 +36,7 @@
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Item.h"
 #include "D2Common/Logging.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
@@ -626,16 +626,15 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
     D2ClientStrc* pClient;
     char* szName;
     D2UnitStrc* pItemUnit;
-    int* pGridSlot;
-    BOOL BVar2;
+    BOOL pGridSlot;
     uint32_t dwParam;
-    uint32_t uVar3;
-    int iVar4;
+    uint32_t uVar2;
+    int iVar3;
     int nExpQuotient;
     int64_t lExpTimes75;
     POINT* pNewPosition;
     uint8_t nMaxSearchRadius;
-    int32_t iVar5;
+    int32_t iVar4;
     POINT sUnitCoords;
     POINT sDropCoords;
     D2UnitStrc* pSavedBodyUnit;
@@ -684,18 +683,18 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
           pUnit_00->eUnitFlags |= UNITFLAG_TARGETABLE;
           uVar1 = GAME::Clients::GetExperience(pClient);
           if ((int)uVar1 > 0x100000) {
-            iVar4 = (int)uVar1 >> 0x1f;
+            iVar3 = (int)uVar1 >> 0x1f;
             if ((int)(uVar1 & -16) < 0x640) {
-              lExpTimes75 = _allmul(uVar1, iVar4, 0x4b, 0);
+              lExpTimes75 = _allmul(uVar1, iVar3, 0x4b, 0);
               lExpTimes75 = lExpTimes75 / 100;
             } else {
-              nExpQuotient = (int)uVar1 / 100 + iVar4;
-              lExpTimes75 = (uint64_t)((uint64_t)(uint32_t)nExpQuotient << 32 | (uint64_t)(uint32_t)((nExpQuotient - iVar4) * 0x4b));
+              nExpQuotient = (int)uVar1 / 100 + iVar3;
+              lExpTimes75 = (uint64_t)((uint64_t)(uint32_t)nExpQuotient << 32 | (uint64_t)(uint32_t)((nExpQuotient - iVar3) * 0x4b));
             }
           } else {
-            iVar4 = (int)(uVar1 * 0x4b) >> 0x1f;
-            nExpQuotient = (int)(uVar1 * 0x4b) / 100 + iVar4;
-            lExpTimes75 = (uint64_t)((uint64_t)(uint32_t)nExpQuotient << 32 | (uint64_t)(uint32_t)(nExpQuotient - iVar4));
+            iVar3 = (int)(uVar1 * 0x4b) >> 0x1f;
+            nExpQuotient = (int)(uVar1 * 0x4b) / 100 + iVar3;
+            lExpTimes75 = (uint64_t)((uint64_t)(uint32_t)nExpQuotient << 32 | (uint64_t)(uint32_t)(nExpQuotient - iVar3));
           }
 
           pCorpseInventory = (D2InventoryStrc*)lExpTimes75;
@@ -711,14 +710,14 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
           D2Common::INVENTORY::Inventory::INVENTORY_SetOwnerGUID(pCorpseInventory, pUnit->nUnitGUID);
           nBodyLocIndex = -1;
           do {
-            iVar5 = nBodyLocIndex;
+            iVar4 = nBodyLocIndex;
             if (nBodyLocIndex == -1) {
               pSlotItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerInventory);
             } else {
               pSlotItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pPlayerInventory, nBodyLocIndex);
             }
             if (pSlotItem) {
-              if (iVar5 == -1) {
+              if (iVar4 == -1) {
                 PLRMODES_ClearCursorAndDeleteItem(pUnit, pSlotItem);
                 pUnit = pOrigUnit;
               } else {
@@ -727,7 +726,7 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
                   exit(-1);
                 }
 
-                PLRMODES_UnequipAndPrepareItemForDrop(pSavedGame, pUnit, pSlotItem, iVar5);
+                PLRMODES_UnequipAndPrepareItemForDrop(pSavedGame, pUnit, pSlotItem, iVar4);
                 pUnit_00 = pSavedBodyUnit;
               }
 
@@ -738,8 +737,8 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
                 iVar4 = D2Common::Units::GetInventoryPage(pUnit_00, '\0', pSavedGame->bExpansion);
                 pGridSlot = D2Common::INVENTORY::Inventory::INVENTORY_AutoPlaceItemInGrid(pCorpseInventory, pItemUnit, iVar4, 0, 0, ".\\PLAYER\\PlrModes.cpp", 0x349);
                 if (pGridSlot) {
-                  BVar2 = D2Common::INVENTORY::Inventory::PutItemInInventory(pCorpseInventory, pItemUnit, 1);
-                  if (BVar2) {
+                  pGridSlot = D2Common::INVENTORY::Inventory::PutItemInInventory(pCorpseInventory, pItemUnit, 1);
+                  if (pGridSlot) {
                     if (pItemUnit) {
                       pItemUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
                     }
@@ -754,15 +753,15 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
                   }
                 }
               } else {
-                BVar2 = D2Common::INVENTORY::Inventory::INVENTORY_GetItemAtBodyLoc(pCorpseInventory, pItemUnit, nBodyLocIndex);
-                if (BVar2) {
+                pGridSlot = D2Common::INVENTORY::Inventory::INVENTORY_GetItemAtBodyLoc(pCorpseInventory, pItemUnit, nBodyLocIndex);
+                if (pGridSlot) {
                   dwParam = 3;
                   if (nBodyLocIndex == 0xb || nBodyLocIndex == 0xc) {
                     dwParam = 4;
                   }
 
-                  BVar2 = D2Common::INVENTORY::Inventory::PutItemInInventory(pCorpseInventory, pItemUnit, dwParam);
-                  if (BVar2) {
+                  pGridSlot = D2Common::INVENTORY::Inventory::PutItemInInventory(pCorpseInventory, pItemUnit, dwParam);
+                  if (pGridSlot) {
                     D2Common::ITEMS::Items::SetBodyLoc(pItemUnit, (eD2BodyLoc)nBodyLocIndex);
                     if (pItemUnit) {
                       pItemUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
@@ -782,25 +781,25 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
 
               D2Common::Units::GetCoords(pUnit, &sUnitCoords);
               nMaxSearchRadius = 1;
-              uVar3 = 1;
+              uVar2 = 1;
               pNewPosition = &sDropCoords;
               pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-              pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pSpawnRoom, &sUnitCoords, pNewPosition, uVar3, nMaxSearchRadius);
+              pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pSpawnRoom, &sUnitCoords, pNewPosition, uVar2, nMaxSearchRadius);
               ITEMS::Items::Drop::DropItem(pSavedGame, (int32_t)pUnit, pItemUnit, pSpawnRoom, sDropCoords.x, sDropCoords.y);
-              iVar5 = nBodyLocIndex;
+              iVar4 = nBodyLocIndex;
             }
 
             next_body_loc:
-            nBodyLocIndex = iVar5 + 1;
+            nBodyLocIndex = iVar4 + 1;
             if (nBodyLocIndex >= 0xd) {
-              uVar3 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
+              uVar2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
               if (pUnit->eUnitType == UNIT_PLAYER) {
                 D2Common::Units::GetInventoryGoldLimit(pUnit);
               }
 
               D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_gold, 0, 0);
               pGame_00 = pSavedGame;
-              SERVERUNIT_GoldAmmountForDeadBody(pSavedGame, pUnit, pUnit_00, uVar3, 1);
+              SERVERUNIT_GoldAmmountForDeadBody(pSavedGame, pUnit, pUnit_00, uVar2, 1);
               GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame_00, pUnit->nUnitGUID, pUnit_00->nUnitGUID, 1);
               return pUnit_00;
             }
@@ -809,7 +808,7 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
           D2Common::INVENTORY::Inventory::UpsertToUpdateList(pCorpseInventory, pItemUnit);
           D2Common::Units::RefreshInventory(pUnit_00, 1);
           Quests::QUESTS::QUEST_OnItemPickedUp(pSavedGame, pUnit_00, pItemUnit);
-          iVar5 = nBodyLocIndex;
+          iVar4 = nBodyLocIndex;
           goto next_body_loc;
         }
       }

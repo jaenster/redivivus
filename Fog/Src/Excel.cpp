@@ -6,8 +6,8 @@
 #include "D2Common/Txt/D2TxtLinkNodeStrc.h"
 #include "Fog/BitBuffer.h"
 #include "Fog/Memory.h"
-#include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
+#include "Fog/Src/String/FogString.h"
 #include "Storm/D2ArchiveStrc.h"
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
@@ -414,7 +414,7 @@ int32_t __stdcall GetLinkNodeIndex(D2TxtLinkStrc * pLink, char * szItemCode, uin
     int32_t iVar1;
     uint8_t szUpperItemCode[32];
     Storm::Source::SSTR::SStrCopy((char*)szUpperItemCode, szItemCode, 0x20);
-    SMem::SMemStringToUppercase((char*)szUpperItemCode, 0x20);
+    String::FogString::SMemStringToUppercase((char*)szUpperItemCode, 0x20);
     D2TxtLinkNodeStrc* pCurNode = pLink->pTxtLinkNode;
     if (pLink->nRecords) {
       if (!pCurNode) {
@@ -485,7 +485,7 @@ int __stdcall FOG_ParseStringField(D2TxtLinkStrc * pTxtLink, char * szText) {
       pKey = (uint8_t*)D2_ALLOC_POOL_AT(nullptr, 0x2c, ".\\Src\\Excel\\Excel.cpp", 0x4b9);
       memset(pKey, 0, 0x2c);
       Storm::Source::SSTR::SStrCopy((char*)pKey, szText, 0x20);
-      SMem::SMemStringToUppercase((char*)pKey, 0x20);
+      String::FogString::SMemStringToUppercase((char*)pKey, 0x20);
       *(int*)(pKey + 0x20) = pTxtLink->nRecords;
       FOG_ValidateBytePtr((uint8_t*)&pTxtLink->pTxtLinkNode, pKey);
       iVar1 = pTxtLink->nRecords;
@@ -514,7 +514,7 @@ int __fastcall FOG_ParseTxtLink(D2TxtLinkStrc * pTxtLink, char * szText) {
       pKey = (uint8_t*)D2_ALLOC_POOL_AT(nullptr, 0x2c, ".\\Src\\Excel\\Excel.cpp", 0x4d9);
       memset(pKey, 0, 0x2c);
       Storm::Source::SSTR::SStrCopy((char*)pKey, szText, 0x20);
-      SMem::SMemStringToUppercase((char*)pKey, 0x20);
+      String::FogString::SMemStringToUppercase((char*)pKey, 0x20);
       *(int*)(pKey + 0x20) = pTxtLink->nRecords;
       FOG_ValidateBytePtr((uint8_t*)&pTxtLink->pTxtLinkNode, pKey);
       iVar1 = pTxtLink->nRecords;

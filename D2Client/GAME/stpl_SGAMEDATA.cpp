@@ -15,7 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 
@@ -443,7 +443,7 @@ TSExplicitList<::SGAMEDATA, -572662307>* __thiscall CopyConstructor_Unreferenced
 // @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0>::InternalDelete (STORM.H)
 template<> void __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalDelete(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, ::SGAMEDATA * pNode) {
     pNode->Destructor();
-    Storm::SMem::SMemFree(pNode, s___AUSGAMEDATA___0070f56c, -2, 0);
+    Storm::Source::SMem::SMemFree(pNode, s___AUSGAMEDATA___0070f56c, -2, 0);
 }
 
 template<> void TSGrowableArray<SGAMEDATA>::ReallocData(uint32_t nAlloc) {
@@ -461,13 +461,13 @@ template<> void TSGrowableArray<SGAMEDATA>::ReallocData(uint32_t nAlloc) {
     }
 
     this->m_alloc = nCapacity;
-    pGameEntry = (::SGAMEDATA*)Storm::SMem::SMemReAlloc((uint32_t*)pOldBuffer, nCapacity * 0x1df4, s___AUSGAMEDATA___0070f56c, -2, 0x10);
+    pGameEntry = (::SGAMEDATA*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pOldBuffer, nCapacity * 0x1df4, s___AUSGAMEDATA___0070f56c, -2, 0x10);
     this->m_data = pGameEntry;
     if (pGameEntry) {
       return;
     }
 
-    pGameEntry = (::SGAMEDATA*)Storm::SMem::SMemAlloc(nCapacity * 0x1df4, s___AUSGAMEDATA___0070f56c, -2, 0);
+    pGameEntry = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nCapacity * 0x1df4, s___AUSGAMEDATA___0070f56c, -2, 0);
     this->m_data = pGameEntry;
     if (!pOldBuffer) {
       return;
@@ -494,7 +494,7 @@ template<> void TSGrowableArray<SGAMEDATA>::ReallocData(uint32_t nAlloc) {
       } while (nAlloc);
     }
 
-    Storm::SMem::SMemFree(pOldBuffer, s___AUSGAMEDATA___0070f56c, -2, 0);
+    Storm::Source::SMem::SMemFree(pOldBuffer, s___AUSGAMEDATA___0070f56c, -2, 0);
 }
 
 template<> void TSGrowableArray<SGAMEDATA>::Reserve(uint32_t nCount, int32_t bRound) {
@@ -556,7 +556,7 @@ template<> void TSGrowableArray<SGAMEDATA>::ReserveNoRound(uint32_t nCount) {
 }
 
 template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunkNew = (TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>*)Storm::SMem::SMemAlloc(nExtraBytes + 0x18, s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, -2, dwFlags | 8);
+    TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunkNew = (TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, -2, dwFlags | 8);
     TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunk;
     if (pChunkNew) {
       pChunkNew->nArrayAlloc = 0;
@@ -581,7 +581,7 @@ template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSExplicitList<TSHashOb
 template<> ::SGAMEDATA * __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalNew(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, TSExplicitList<::SGAMEDATA, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
     TSLink<::SGAMEDATA>* ppSlot;
     uint32_t pTailLink;
-    ::SGAMEDATA* pGame = (::SGAMEDATA*)Storm::SMem::SMemAlloc(nExtraBytes + 0x1df4, s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
+    ::SGAMEDATA* pGame = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1df4, s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
     if (pGame) {
       pGame->m_linktoslot.m_prevlink = 0;
       pGame->m_linktoslot.m_next = 0;
@@ -642,7 +642,7 @@ template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* __thiscall TSHashTabl
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -688,7 +688,7 @@ template<> TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>* __thiscall TSExpo
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -714,7 +714,7 @@ template<> TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCri
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

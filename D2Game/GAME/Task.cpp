@@ -22,7 +22,6 @@
 #include "Fog/Save.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/LogManager.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "Fog/Fog.h"
 
@@ -577,6 +576,16 @@ BOOL __stdcall TASK_ReturnTrue() {
 // Registers: pItem (ECX) is passed by the callers but not read.
 void __fastcall TASK_Nop(D2UnitStrc * pItem) {
 
+}
+
+void StaticInit_6caf70() {
+    InitializeCriticalSection(&lpCriticalSection_0088caa8);
+    atexit(StaticFini_CriticalSection_0088caa8);
+}
+
+void StaticInit_6caf90() {
+    _eh_vector_constructor_iterator_(aTaskQueueCriticalSections, 0x18, 0x20, Fog::Src::LogManager::InitCriticalSection, Fog::THREADING_DeleteCriticalSection_Thunk);
+    atexit(StaticFini_aTaskQueueCriticalSections);
 }
 
 void StaticFini_CriticalSection_0088caa8() {

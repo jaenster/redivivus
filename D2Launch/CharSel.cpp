@@ -33,7 +33,7 @@
 #include "Fog/SMem.h"
 #include "Fog/Source/SFile.h"
 #include "Fog/Src/ErrorManager.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
@@ -124,9 +124,9 @@ void __fastcall CHARSEL_CacheRealmData(char * szRealmName, void * pData, size_t 
     D2RealmCharListCacheEntryStrc* pEntry = gpRealmCharListCache;
     while (true) {
       if (!pEntry) {
-        pEntry = (D2RealmCharListCacheEntryStrc*)Storm::SMem::SMemAlloc(0x10, ".\\Src\\CharSel.cpp", 0xfa, 0);
+        pEntry = (D2RealmCharListCacheEntryStrc*)Storm::Source::SMem::SMemAlloc(0x10, ".\\Src\\CharSel.cpp", 0xfa, 0);
         pEntry->nHash = nHash;
-        pCopy = Storm::SMem::SMemAlloc(nDataSize, ".\\Src\\CharSel.cpp", 0xfc, 0);
+        pCopy = Storm::Source::SMem::SMemAlloc(nDataSize, ".\\Src\\CharSel.cpp", 0xfc, 0);
         pEntry->pData = pCopy;
         memcpy(pCopy, pData, nDataSize);
         dwTick = GetTickCount();
@@ -142,8 +142,8 @@ void __fastcall CHARSEL_CacheRealmData(char * szRealmName, void * pData, size_t 
       pEntry = pEntry->pNext;
     }
 
-    Storm::SMem::SMemFree(pEntry->pData, ".\\Src\\CharSel.cpp", 0xf1, 0);
-    pCopy = Storm::SMem::SMemAlloc(nDataSize, ".\\Src\\CharSel.cpp", 0xf2, 0);
+    Storm::Source::SMem::SMemFree(pEntry->pData, ".\\Src\\CharSel.cpp", 0xf1, 0);
+    pCopy = Storm::Source::SMem::SMemAlloc(nDataSize, ".\\Src\\CharSel.cpp", 0xf2, 0);
     pEntry->pData = pCopy;
     memcpy(pCopy, pData, nDataSize);
     dwTick = GetTickCount();
@@ -156,8 +156,8 @@ void __stdcall CHARSEL_FreeCachedRealmData() {
     while (pObject) {
       D2RealmCharListCacheEntryStrc* pNext;
       pNext = pObject->pNext;
-      Storm::SMem::SMemFree(pObject->pData, ".\\Src\\CharSel.cpp", 0x10c, 0);
-      Storm::SMem::SMemFree(pObject, ".\\Src\\CharSel.cpp", 0x10d, 0);
+      Storm::Source::SMem::SMemFree(pObject->pData, ".\\Src\\CharSel.cpp", 0x10c, 0);
+      Storm::Source::SMem::SMemFree(pObject, ".\\Src\\CharSel.cpp", 0x10d, 0);
       pObject = pNext;
     }
 
@@ -2479,6 +2479,16 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
     }
 
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCharSelExitButton, 1);
+}
+
+void StaticInit_6ca940() {
+    int iVar1 = 0x380;
+    uint16_t* pWVar2 = pBetaRealmNames[0];
+    for (; iVar1; iVar1--) {
+      pWVar2[0] = L'\0';
+      pWVar2[1] = L'\0';
+      pWVar2 += 2;
+    }
 }
 
 } // namespace D2Launch::CharSel

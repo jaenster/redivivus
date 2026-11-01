@@ -77,6 +77,7 @@ void __stdcall GFX_InitGlobalCriticalSection();
 void __stdcall GFX_DestroyGlobalCriticalSection();
 void __fastcall CELCMP_ApplyColorKeyToAllPixels(void * pFrameData, pfnTilecmpPixelCallback pfnPixelCallback, uint32_t dwColorKey);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca286(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
+void StaticInit_6cafc0();
 void StaticFini_gCelCmpCacheHandler();
 
 } // namespace D2CMP::SRC::CelCmp

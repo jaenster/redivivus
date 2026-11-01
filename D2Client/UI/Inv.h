@@ -216,6 +216,7 @@ void __stdcall INV_HandleMercInvMouseMove(struct D2UIMouseMsgStrc * pMsg);
 void __thiscall CloseScrollOfWhatever(void * pThis, int32_t nColor);
 void __stdcall INV_DrawRecipeScroll();
 void __stdcall INV_HandleRecipeScrollClick(struct D2UIMouseMsgStrc * pMsg);
+void __stdcall INV_PanelKeyNoOp(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall INV_ExtractTextBetweenBrackets(uint16_t * wszText, short * wszDelimStart);
 void wsprintf(uint16_t * wszDest, uint16_t * wszFormat, ...);
 void __fastcall GetItemName(struct D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize);
@@ -244,6 +245,7 @@ void __stdcall INPUT_WeaponSwap(struct D2UIMouseMsgStrc * pMsg);
 // Input handler for cube left-click. Maps mouse coords to cube grid, calls INV_HandleCubeLeftClick. Clears gbInventoryDragInProgress on cancel, sets on drag start. Handles transmute button.
 void __stdcall INPUT_CubeLeftClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall DrawMercInventory();
+void StaticInit_6cabf0();
 // 50 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Inv

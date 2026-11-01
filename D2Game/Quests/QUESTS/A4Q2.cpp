@@ -24,6 +24,7 @@
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Common/Waypoints.h"
+#include "D2Game/D2ObjectInitFnArg.h"
 #include "D2Game/D2ObjectOperateFnArg.h"
 #include "D2Game/D2QuestDataStrc.h"
 #include "D2Game/GAME/Clients.h"

@@ -15,7 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Common/Chat.h"
@@ -86,7 +86,7 @@ template<> TSExplicitList<::StringEntryNode, -572662307>* TSExplicitList<StringE
       return this;
     }
 
-    Storm::SMem::SMemFree(this, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     return this;
 }
 
@@ -94,7 +94,7 @@ template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::Dele
     TSLink<::StringEntryNode>* pNextLink = !pNode ? &this->m_terminator : (TSLink<::StringEntryNode>*)((uintptr_t)&pNode->m_hashval + this->m_linkoffset);
     uint32_t uNextEntry = pNextLink->m_next;
     pNode->Destructor();
-    Storm::SMem::SMemFree(pNode, s___AUStringEntryNode___0074364c, -2, 0);
+    Storm::Source::SMem::SMemFree(pNode, s___AUStringEntryNode___0074364c, -2, 0);
     return (::StringEntryNode*)((int)uNextEntry <= 0 ? 0 : uNextEntry);
 }
 
@@ -157,13 +157,13 @@ template<> void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::Re
     }
 
     this->m_alloc = nCapacityOrig;
-    pBucket = (TSExplicitList<::StringEntryNode, -572662307>*)Storm::SMem::SMemReAlloc((uint32_t*)pBlock, nCapacityOrig * 0xc, s___AV__TSExplicitList_UStringEntr_0074366c, -2, 0x10);
+    pBucket = (TSExplicitList<::StringEntryNode, -572662307>*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pBlock, nCapacityOrig * 0xc, s___AV__TSExplicitList_UStringEntr_0074366c, -2, 0x10);
     this->m_data = pBucket;
     if (pBucket) {
       return;
     }
 
-    pBucket = (TSExplicitList<::StringEntryNode, -572662307>*)Storm::SMem::SMemAlloc(nCapacityOrig * 0xc, s___AV__TSExplicitList_UStringEntr_0074366c, -2, 0);
+    pBucket = (TSExplicitList<::StringEntryNode, -572662307>*)Storm::Source::SMem::SMemAlloc(nCapacityOrig * 0xc, s___AV__TSExplicitList_UStringEntr_0074366c, -2, 0);
     this->m_data = pBucket;
     if (!pBlock) {
       return;
@@ -210,7 +210,7 @@ template<> void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::Re
       } while (nAlloc);
     }
 
-    Storm::SMem::SMemFree(pBlock, s___AV__TSExplicitList_UStringEntr_0074366c, -2, 0);
+    Storm::Source::SMem::SMemFree(pBlock, s___AV__TSExplicitList_UStringEntr_0074366c, -2, 0);
 }
 
 template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::Ptr(uint32_t dwHashVal, ::HASHKEY_STRI * pKey) {
@@ -268,7 +268,7 @@ template<> void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::De
       return;
     }
 
-    Storm::SMem::SMemFree(this->m_data, s___AV__TSExplicitList_UStringEntr_0074366c, -2, 0);
+    Storm::Source::SMem::SMemFree(this->m_data, s___AV__TSExplicitList_UStringEntr_0074366c, -2, 0);
 }
 
 template<> void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::Reserve(uint32_t nCount, int32_t bRound) {
@@ -299,11 +299,11 @@ template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::Ptr(c
     char* pDupStr = Storm::Source::SSTR::SStrDup(szKey);
     ::HASHKEY_STRI* ppszKey = (::HASHKEY_STRI*)&szKey;
     nExState = 0;
-    szKey = (char*)pDupStr;
+    szKey = pDupStr;
     uint32_t uHash = Storm::Source::SSTR::SStrHash(pszText, 0, 0);
     ::StringEntryNode* pEntry = this->Ptr(uHash, ppszKey);
     if (pDupStr) {
-      Storm::SMem::SMemFree(pDupStr, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
+      Storm::Source::SMem::SMemFree(pDupStr, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
     }
 
     ExceptionList = pExSave;
@@ -427,7 +427,7 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Destructor() {
 }
 
 template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::StringEntryNode* pNodeNew = (::StringEntryNode*)Storm::SMem::SMemAlloc(nExtraBytes + 0x18, s___AUStringEntryNode___0074364c, -2, dwFlags | 8);
+    ::StringEntryNode* pNodeNew = (::StringEntryNode*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, s___AUStringEntryNode___0074364c, -2, dwFlags | 8);
     ::StringEntryNode* pNode;
     if (pNodeNew) {
       pNodeNew->m_linktoslot.m_prevlink = 0;
@@ -451,7 +451,7 @@ template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::NewN
 template<> ::StringEntryNode * __thiscall TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalNew(TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pThis, TSExplicitList<::StringEntryNode, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
     TSLink<::StringEntryNode>* pBucketHead;
     uint32_t piVar2;
-    ::StringEntryNode* pNode = (::StringEntryNode*)Storm::SMem::SMemAlloc(nExtraBytes + 0x18, s___AUStringEntryNode___0074364c, -2, dwFlags | 8);
+    ::StringEntryNode* pNode = (::StringEntryNode*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, s___AUStringEntryNode___0074364c, -2, dwFlags | 8);
     if (pNode) {
       pNode->m_linktoslot.m_prevlink = 0;
       pNode->m_linktoslot.m_next = 0;
@@ -502,7 +502,7 @@ template<> ::StringEntryNode * __thiscall TSHashTable<StringEntryNode, HASHKEY_S
 // @blizzard TSHashTable<StringEntryNode,HASHKEY_STRI>::InternalDelete (STORM.H)
 template<> void __thiscall TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalDelete(TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pThis, ::StringEntryNode * pNode) {
     pNode->Destructor();
-    Storm::SMem::SMemFree(pNode, s___AUStringEntryNode___0074364c, -2, 0);
+    Storm::Source::SMem::SMemFree(pNode, s___AUStringEntryNode___0074364c, -2, 0);
 }
 
 template<> TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>> * TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::ScalarDeletingDestructor(uint32_t dwFlags) {
@@ -511,7 +511,7 @@ template<> TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>> * TSGrow
       return this;
     }
 
-    Storm::SMem::SMemFree(this, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     return this;
 }
 
@@ -540,7 +540,7 @@ template<> TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* __thiscall TSHashTabl
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -795,9 +795,9 @@ template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::New(u
     pTVar1->m_next = (int)pEntry;
     this->tFullList.m_terminator.m_prevlink = pListNode;
     pEntry->m_hashval = dwHashVal;
-    char* pObject = pEntry->m_key.szString;
-    if (pObject) {
-      Storm::SMem::SMemFree(pObject, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e9, 0);
+    char* pDupStr = pEntry->m_key.szString;
+    if (pDupStr) {
+      Storm::Source::SMem::SMemFree(pDupStr, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e9, 0);
     }
 
     pDupStr = Storm::Source::SSTR::SStrDup(pKey->szString);
@@ -814,13 +814,13 @@ template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::New(c
     char* pObject = Storm::Source::SSTR::SStrDup(szKey);
     ::HASHKEY_STRI* dwSavedCompareArg1 = (::HASHKEY_STRI*)&szKey;
     nSehState = 0;
-    szKey = (char*)pObject;
+    szKey = pObject;
     uint32_t dwSavedCompareArg2 = nExtraBytes;
     uint32_t dwFlags_00 = dwFlags;
     uint32_t dwHash = Storm::Source::SSTR::SStrHash(pszText, 0, 0);
     ::StringEntryNode* pEntry = this->New(dwHash, dwSavedCompareArg1, dwSavedCompareArg2, dwFlags_00);
     if (pObject) {
-      Storm::SMem::SMemFree(pObject, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
+      Storm::Source::SMem::SMemFree(pObject, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
     }
 
     ExceptionList = pPrevExceptionList;

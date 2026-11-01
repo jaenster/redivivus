@@ -15,7 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 
@@ -330,7 +330,7 @@ template<> void TSHashObject<StringEntryNode, HASHKEY_STRI>::Destructor() {
     uint32_t nNextLink;
     char* pObject = this->m_key.szString;
     if (pObject) {
-      Storm::SMem::SMemFree(pObject, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
+      Storm::Source::SMem::SMemFree(pObject, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
     }
 
     TSLink<::StringEntryNode>* nHeadEntry = this->m_linktofull.m_prevlink;

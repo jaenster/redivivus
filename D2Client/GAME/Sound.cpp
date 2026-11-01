@@ -332,7 +332,7 @@ static BOOL SOUND_InitStreamChannels(int32_t nParam) {
 }
 
 // Finds a free or preemptable sound channel for playback. First scans the global sound instance pool for a channel matching pnParam (sound type/category) that is not currently playing and has no active sound. If none found, scans for the best occupied channel that can be preempted via SOUND_IsChannelAvailable; if preemptable, stops the current sample, saves its stream progress, marks the channel free, and returns it. Returns NULL if no channel is available.
-static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(uint32_t nParam, int pnParam) {
+static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(D2SoundChannelStrc * nParam, int pnParam) {
     int32_t bIsPlaying;
     BOOL BVar1;
     uint32_t nStreamProgress;
@@ -618,22 +618,23 @@ void __stdcall SOUND_ShutdownAudio_Thunk() {
 
 // Plays a positioned (panned) sound effect using the game's channel system. Resolves the sound ID (randomizing from a group if flagged), checks for a duplicate already-playing instance, loads the sound file if needed, selects a mono/stereo/EAX channel, sets reverb and frequency, loads WAV data or opens a streaming file, and calls SOUNDSMP_Play/SOUNDSMP_OpenAndStreamFile. Returns the allocated channel slot on success, null on failure or if a duplicate throttle fires.
 D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelStrc * pMemory) {
+    int32_t pRandomizedSoundId;
     int nResult;
-    BOOL BVar1;
+    BOOL BVar2;
     char szSoundPath[80];
     float fReverbLevel;
     D2SoundChannelStrc* pSoundDesc = pMemory;
     D2SoundsTxt* pSoundsTxtLine = D2Client::Sound::SoundHdr::TXT_sounds_GetLineBySoundId(pMemory->nSoundId);
     if (!(pMemory->nVolume & 1)) {
-      int32_t pRandomizedSoundId;
       pRandomizedSoundId = D2Client::Sound::SoundHdr::SOUNDHDR_RandomizeSoundFromGroup(pMemory->nSoundId);
       pMemory->nSoundId = pRandomizedSoundId;
     }
 
     D2ClientSoundChannelStrc* pPlayingChannel = SOUND_FindPlayingByIdSafe(pMemory->nSoundId);
     if (pPlayingChannel) {
-      nResult = pPlayingChannel[2];
-      if (!*(int*)(nResult + 0x3d) && pMemory->nScheduledTime - *(int*)(nResult + 0x34) < 2 && *(uint8_t*)(nResult + 0x3c) >= pMemory->nPriorityByte) {
+      D2SoundChannelStrc* pDVar1;
+      pDVar1 = pPlayingChannel->pActiveSound;
+      if (!pDVar1->bStopFlag && pMemory->nScheduledTime - pDVar1->nScheduledTime < 2 && pDVar1->nPriorityByte >= pMemory->nPriorityByte) {
         return nullptr;
       }
     }
@@ -659,25 +660,25 @@ D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelS
       }
     }
 
-    D2ClientSoundChannelStrc* ppChannel = SOUND_FindAvailableChannel((uint32_t)pMemory, pnParam);
-    if (!ppChannel) {
+    pPlayingChannel = SOUND_FindAvailableChannel(pMemory, pnParam);
+    if (!pPlayingChannel) {
       return nullptr;
     }
 
-    D2Sound::Src::D2SoundSmp::SOUNDSMP_Reset(ppChannel->pSoundSmp);
+    D2Sound::Src::D2SoundSmp::SOUNDSMP_Reset(pPlayingChannel->pSoundSmp);
     if (!pSoundTxt->Stream) {
-      D2Sound::Src::D2SoundSmp::SOUNDSMP_SetFrequency((int32_t)ppChannel->pSoundSmp, (uint32_t)pSoundTxt->Loop);
+      D2Sound::Src::D2SoundSmp::SOUNDSMP_SetFrequency((int32_t)pPlayingChannel->pSoundSmp, (uint32_t)pSoundTxt->Loop);
       if (pSoundTxt->nBlockCount == 1) {
         D2Sound::Src::D2SoundSmp::SOUNDSMP_SetMinDistance(pPlayingChannel->pSoundSmp, pSoundTxt->Block[0] * 2);
       }
 
-      BVar1 = D2Sound::Src::D2SoundSmp::SOUNDSMP_LoadWavDataIntoBuffer(ppChannel->pSoundSmp, (int*)pSoundTxt->pSoundDataBuffer, pSoundTxt->nSoundDataBytes);
-      if (!BVar1) {
+      BVar2 = D2Sound::Src::D2SoundSmp::SOUNDSMP_LoadWavDataIntoBuffer(pPlayingChannel->pSoundSmp, (int*)pSoundTxt->pSoundDataBuffer, pSoundTxt->nSoundDataBytes);
+      if (!BVar2) {
         return nullptr;
       }
     }
 
-    ppChannel->pActiveSound = pSoundDesc;
+    pPlayingChannel->pActiveSound = pSoundDesc;
     if (pnParam & 4) {
       if (pSoundTxt->Reverb) {
         fReverbLevel = 1.0;
@@ -685,28 +686,28 @@ D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelS
         fReverbLevel = 0.0;
       }
 
-      D2Sound::Src::D2SoundSmp::SOUNDSMP_SetEaxRoomLevel(ppChannel->pSoundSmp, fReverbLevel);
+      D2Sound::Src::D2SoundSmp::SOUNDSMP_SetEaxRoomLevel(pPlayingChannel->pSoundSmp, fReverbLevel);
     }
 
-    ppChannel->field_0x1c = 0;
-    ppChannel->field_0x18 = -1;
-    ppChannel->field_0x0c = 0;
-    ppChannel->field_0x10 = 0;
-    ppChannel->field_0x14 = 0;
-    SOUND_UpdateChannelParams((int*)ppChannel);
+    pPlayingChannel->field_0x1c = 0;
+    pPlayingChannel->field_0x18 = -1;
+    pPlayingChannel->field_0x0c = 0;
+    pPlayingChannel->field_0x10 = 0;
+    pPlayingChannel->field_0x14 = 0;
+    SOUND_UpdateChannelParams((int*)pPlayingChannel);
     D2SoundChannelStrc* pSoundDescBackup = pSoundDesc;
     if (!pSoundTxt->Stream) {
-      nResult = D2Sound::Src::D2SoundSmp::SOUNDSMP_Play(ppChannel->pSoundSmp);
+      nResult = D2Sound::Src::D2SoundSmp::SOUNDSMP_Play(pPlayingChannel->pSoundSmp);
     } else {
       D2Client::Sound::SoundHdr::SOUNDHDR_BuildSoundPath(pSoundDesc->nSoundId, (uint32_t*)szSoundPath);
-      nResult = D2Sound::Src::D2SoundSmp::SOUNDSMP_OpenAndStreamFile((int**)ppChannel->pSoundSmp, szSoundPath, pSoundDescBackup->nParam, (uint32_t)pSoundTxt->Loop);
+      nResult = D2Sound::Src::D2SoundSmp::SOUNDSMP_OpenAndStreamFile((int**)pPlayingChannel->pSoundSmp, szSoundPath, pSoundDescBackup->nParam, (uint32_t)pSoundTxt->Loop);
     }
     if (!nResult) {
-      ppChannel->pActiveSound = 0;
+      pPlayingChannel->pActiveSound = 0;
       return nullptr;
     }
 
-    return ppChannel;
+    return pPlayingChannel;
 }
 
 // Returns the unit's greeting sound set &gaNpcGreetingSounds[n] by class id (pUnit+4, nClassId), or NULL if pUnit is NULL or the class has none. The callers pass the interacted NPC or the mercenary; every Cain class (0x92, 0xf4-0xf6, 0x109, 0x208) maps to entry 4.

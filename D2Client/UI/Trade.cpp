@@ -301,4 +301,8 @@ void __stdcall CancelTrade() {
     g_nTradeWindowState = 3;
 }
 
+void StaticInit_6cad80() {
+    memset(gwszTradePartnerName, 0, 16 * sizeof(gwszTradePartnerName[0]));
+}
+
 } // namespace D2Client::UI::Trade

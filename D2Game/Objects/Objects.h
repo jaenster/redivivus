@@ -226,6 +226,7 @@ struct D2UnitStrc * __fastcall Objects_PopulateFn2(::SGAMEDATA * pGame, struct D
 // Stores pCoordList (the spawn room's D2RoomCoordListStrc) at monster data +0x50 when pUnit is a monster with unit data.
 // Provenance: asm 00552d64..00552d70 (unit type 1, [unit+0x14]+0x50 = EDX); only caller CreateMonster (005b2e8f) passes the coord list from DRLGROOM_GetCoordListFromSubtilePos.
 void __fastcall MONSTER_SetSpawnCoordList(struct D2UnitStrc * pUnit, struct D2RoomCoordListStrc * pCoordList);
+void StaticInit_6caf30();
 // 7 internal functions (defined in .cpp)
 
 } // namespace D2Game::Objects

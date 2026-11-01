@@ -15,7 +15,7 @@
 #include "D2Win/Src/D2WinTextBox.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/Memory.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Dialog.h"
@@ -571,7 +571,7 @@ int __thiscall OnLeftArrow(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * p
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

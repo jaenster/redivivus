@@ -5,7 +5,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
@@ -42,6 +41,7 @@
 #include "D2Common/Environment.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
@@ -925,14 +925,14 @@ static BOOL __stdcall OBJMODE_CheckSpawnMonsterFromSkeletonActRestriction(int32_
     return 1;
 }
 
-static void OBJMODE_SpawnMonsterFromObject(eD2MonsterAnimMode eMonsterAnimMode, int32_t nParam, D2ObjectModeArg * pObjectModeArg) {
+static void OBJMODE_SpawnMonsterFromObject(eD2MonsterAnimMode eMonsterAnimMode, int32_t nMonsterId, D2ObjectModeArg * pObjectModeArg) {
     eD2LevelId eLevel;
-    if (!(nParam >= 0 && nParam < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nMonsterId >= 0 && nMonsterId < sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
 
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pObjectModeArg->pVictim);
-    if (nParam == 0xea && pRoom) {
+    if (nMonsterId == 0xea && pRoom) {
       eAct eVar1;
       eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
       eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
@@ -941,17 +941,17 @@ static void OBJMODE_SpawnMonsterFromObject(eD2MonsterAnimMode eMonsterAnimMode, 
       }
     }
 
-    D2UnitStrc* pSpawnedMonster = Monster::Create::SpawnMonsterBase(pObjectModeArg->pGame, pObjectModeArg->pVictim, nParam, eMonsterAnimMode, -1, 0);
+    D2UnitStrc* pSpawnedMonster = Monster::Create::SpawnMonsterBase(pObjectModeArg->pGame, pObjectModeArg->pVictim, nMonsterId, eMonsterAnimMode, -1, 0);
     if (pSpawnedMonster) {
       return;
     }
 
-    pSpawnedMonster = Monster::Create::SpawnMonsterBase(pObjectModeArg->pGame, pObjectModeArg->pVictim, nParam, eMonsterAnimMode, 1, 0);
+    pSpawnedMonster = Monster::Create::SpawnMonsterBase(pObjectModeArg->pGame, pObjectModeArg->pVictim, nMonsterId, eMonsterAnimMode, 1, 0);
     if (pSpawnedMonster) {
       return;
     }
 
-    Monster::Create::SpawnMonsterBase(pObjectModeArg->pGame, pObjectModeArg->pVictim, nParam, eMonsterAnimMode, 3, 0);
+    Monster::Create::SpawnMonsterBase(pObjectModeArg->pGame, pObjectModeArg->pVictim, nMonsterId, eMonsterAnimMode, 3, 0);
 }
 
 void __fastcall OBJMODE_SpawnRandomMonsters(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
@@ -993,7 +993,7 @@ void __fastcall OBJMODE_SpawnCompanionChests(::SGAMEDATA * pGame, D2UnitStrc * p
     UNIT::SUnit::SetSparklyChestFlag(pNewChest, true);
 }
 
-static void OBJMODE_SpawnMonsterAtObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam) {
+static void OBJMODE_SpawnMonsterAtObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nClassId) {
     POINT ptCoords;
     D2RoomStrc* pFreeRoom;
     D2Common::Units::GetCoords(pUnit, &ptCoords);
@@ -1001,7 +1001,7 @@ static void OBJMODE_SpawnMonsterAtObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     eD2MonsterAnimMode eSpawnAnimMode = eD2MonsterAnimMode_ns::Neutral;
     LONG nX = ptCoords.x;
     LONG nY = ptCoords.y;
-    uint32_t nMonClassId = dwParam;
+    uint32_t nMonClassId = nClassId;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     D2UnitStrc* bSpawnedAtExact = Monster::Create::SpawnMonsterAtRoomPosSimple(pGame, pRoom, nX, nY, nMonClassId, eSpawnAnimMode, wSpawnMode);
     if (bSpawnedAtExact) {
@@ -1014,7 +1014,7 @@ static void OBJMODE_SpawnMonsterAtObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       return;
     }
 
-    Monster::Create::SpawnMonsterAtRoomPos(pGame, pFreeRoom, ptCoords.x, ptCoords.y, dwParam, eD2MonsterAnimMode_ns::Neutral, 3, 8);
+    Monster::Create::SpawnMonsterAtRoomPos(pGame, pFreeRoom, ptCoords.x, ptCoords.y, nClassId, eD2MonsterAnimMode_ns::Neutral, 3, 8);
 }
 
 void __fastcall OBJMODE_SpawnSiegeMonsterA(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {

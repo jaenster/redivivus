@@ -3763,6 +3763,8 @@ D2ControlStrc * gaCharSelExpansionIconControls[8] = {}; D2_GLOBAL_GUARD(gaCharSe
 
 char PreferedClosedRealm2[256] = {}; D2_GLOBAL_GUARD(PreferedClosedRealm2, "PreferedClosedRealm2");
 
+uint16_t pBetaRealmNames[7][256] = {}; D2_GLOBAL_GUARD(pBetaRealmNames, "pBetaRealmNames");
+
 D2SaveFileHeaderStrc SAVEFILE = {}; D2_GLOBAL_GUARD(SAVEFILE, "SAVEFILE");
 
 // =============================================================================
@@ -4057,9 +4059,9 @@ namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

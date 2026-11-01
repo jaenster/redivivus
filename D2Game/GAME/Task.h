@@ -78,6 +78,8 @@ void __fastcall TASK_Dispatch(uint32_t nParam, struct D2TaskNodeStrc * pTaskNode
 BOOL __stdcall TASK_ReturnTrue();
 // Registers: pItem (ECX) is passed by the callers but not read.
 void __fastcall TASK_Nop(struct D2UnitStrc * pItem);
+void StaticInit_6caf70();
+void StaticInit_6caf90();
 void StaticFini_CriticalSection_0088caa8();
 void StaticFini_aTaskQueueCriticalSections();
 // 1 internal function (defined in .cpp)

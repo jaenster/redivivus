@@ -12,15 +12,7 @@
 // Forward declarations
 struct D2MPQFileStrc;
 struct D2PoolManagerStrc;
-struct D2QSSocketStrc;
-struct D2UIMouseMsgStrc;
 struct D2UnitStrc;
-struct EHExceptionRecord;
-struct EHRegistrationNode;
-typedef int _EXCEPTION_DISPOSITION;
-#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
-struct _CONTEXT;
-#endif // _WIN32
 #ifndef RECON_FPTD_pfnFaultError
 #define RECON_FPTD_pfnFaultError
 typedef void (__stdcall *pfnFaultError)(LPCSTR szFile, int nLine, LPCSTR szExpression);
@@ -32,10 +24,6 @@ typedef BOOL (__stdcall *pfnStormErrorHandler)(DWORD dwErrorCode, char * szBuffe
 
 // Data types
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
-
-typedef _s_FuncInfo FuncInfo;
-
-typedef struct _RTL_CRITICAL_SECTION_DEBUG * PRTL_CRITICAL_SECTION_DEBUG;
 
 struct _STARTUPINFOA {
     /* 0x00 */ DWORD cb;
@@ -72,15 +60,6 @@ struct D2GroundItemLabelStrc {
     /* 0x11C */ int nTextColor;
 };
 
-struct __attribute__((packed)) D2TooltipTextStrc {
-    /* 0x000 */ uint16_t wszString[1024];
-    /* 0x800 */ int nX;
-    /* 0x804 */ int nY;
-    /* 0x808 */ int nColor;
-    /* 0x80C */ int nCenterFlag;
-    /* 0x810 */ int nLoadProgress;
-};
-
 struct StormFaultHandlerNode {
     /* 0x00 */ void * pPrevLink; // TSLink prev (Storm list: may hold ~&link)
     /* 0x04 */ struct StormFaultHandlerNode * pNext; // TSLink next; <=0 ends the walk next handler; the walk stops at a non-positive link (Storm list tag)
@@ -92,24 +71,8 @@ struct __attribute__((packed)) StormFaultHandlerNodeStrc {
     /* 0x08 */ BOOL (__stdcall *pfnHandler)(DWORD, char *, DWORD);
 };
 
-#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
-
-struct _RTL_CRITICAL_SECTION {
-    /* 0x00 */ PRTL_CRITICAL_SECTION_DEBUG DebugInfo;
-    /* 0x04 */ LONG LockCount;
-    /* 0x08 */ LONG RecursionCount;
-    /* 0x0C */ HANDLE OwningThread;
-    /* 0x10 */ HANDLE LockSemaphore;
-    /* 0x14 */ ULONG_PTR SpinCount;
-};
-
-#endif // _WIN32
-
 // Function declarations
 void thunk__strstr(char * szText1, char * szText2);
-void __stdcall INV_PanelKeyNoOp(struct D2UIMouseMsgStrc * pMsg);
-void __stdcall HELP_MiniPanelKeyNoOp(struct D2UIMouseMsgStrc * pMsg);
-void __stdcall HELP_OnEscapeOrSpace(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall D2FILE_CreateProcess(LPCSTR szText);
 // Closes an open Storm file (ERRORMANAGER_FCloseFile) and halts on line 0x49 if pFile is null. ECX pMemory is unused; callers pass their pool or 0.
 // Provenance: 1.14d asm 00516e84..00516ea6.
@@ -137,61 +100,16 @@ void __fastcall D2MEM_CopyRows(char * pCharSelComp, uint32_t * pSrc, int32_t nDs
 uint32_t __fastcall D2MEM_CompareBytes(int * pBuf1, int * pBuf2, uint32_t nByteCount);
 int32_t D2MEM_FindLowestSetBit(uint32_t dwMask);
 uint32_t __stdcall FOG_ParseStringValue(char * szText, uint32_t nParam);
-void __stdcall QSSOCKET_SetCallbackHandler1(struct D2QSSocketStrc * pQSSocket, void * fpCallback, void * pContext);
 uint32_t __fastcall FOG_ParseFieldValue(char * szText, char * * ppszCursor, int * pnOut);
 char * __fastcall FOG_FindCharInString(char * szText, char cParam);
-_EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca138(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
-_EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca183(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
-_EXCEPTION_DISPOSITION SehHandler_6ca203(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
-_EXCEPTION_DISPOSITION SehHandler_6ca263(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
-void StaticInit_6ca700();
-void StaticInit_6ca720();
-void StaticInit_6ca7b0();
-void StaticInit_6ca7d0();
-void StaticInit_6ca7f0();
-void StaticInit_6ca810();
-void StaticInit_6ca830();
-void StaticInit_6ca850();
-void StaticInit_6ca870();
-void StaticInit_6ca8a0();
-void StaticInit_6ca8c0();
-void StaticInit_6ca8e0();
-void StaticInit_6ca900();
-void StaticInit_6ca920();
-void StaticInit_6ca940();
 void StaticInit_6ca960();
 void StaticInit_6ca980();
-void StaticInit_6ca9a0();
-void StaticInit_6ca9b0();
-void __stdcall QSERVER_InitGlobalGameState();
-void StaticInit_6caa10();
-void StaticInit_6caa30();
-void StaticInit_6caa50();
-void StaticInit_6caa70();
 void StaticInit_6caa90();
 void StaticInit_6caaa0();
 void StaticInit_6caab0();
-void StaticInit_6caad0();
-void StaticInit_6caaf0();
-void StaticInit_6cab10();
-void StaticInit_6cab30();
-void StaticInit_6cab90();
-void StaticInit_6cabf0();
-void StaticInit_6cac10();
-void StaticInit_6cac30();
-void StaticInit_6cacd0();
-void StaticInit_6cace0();
 void StaticInit_6cad00();
-void StaticInit_6cad10();
-void StaticInit_6cad80();
 void StaticInit_6cadb0();
 void StaticInit_6cade0();
-void StaticInit_6cadf0();
-void StaticInit_6cae00();
-void StaticInit_6cae10();
-void StaticInit_6cae20();
-void StaticInit_6cae40();
-void StaticInit_6cae50();
 // @evidence MOV EAX,0x72fa18 / NOT EAX / MOV [0x72fa1c],EAX - writes the
 // end-of-list terminator into gFaultHandlerList.head.pNext. The .data image
 // already carries head.pPrevLink = &gFaultHandlerList.head (0x0072fa18); only
@@ -203,17 +121,3 @@ void StaticInit_6cae50();
 // LINKEDLIST_GetNodePointer return ~0xff8d05e7 == 0x0072fa18, i.e. a write to
 // the ORIGINAL image address. Address-relative, not a constant.
 void StaticInit_gFaultHandlerList();
-void StaticInit_6cae80();
-void StaticInit_6caea0();
-void StaticInit_6caec0();
-void StaticInit_6caed0();
-void StaticInit_6caf10();
-void StaticInit_6caf30();
-void StaticInit_6caf60();
-void StaticInit_6caf70();
-void StaticInit_6caf90();
-void StaticInit_6cafc0();
-void StaticInit_6cb010();
-void StaticInit_6cb030();
-void StaticInit_6cb050();
-void QSERVER_DestroyGlobalGameState();

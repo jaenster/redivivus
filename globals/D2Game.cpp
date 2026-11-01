@@ -55,7 +55,6 @@
 #include "D2Game/SKILLS/SkillSor.h"
 #include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Game/UNIT/sunitproxy.h"
-#include "Storm/_unnamespaced.h"
 
 
 // =============================================================================
@@ -2148,6 +2147,10 @@ D2LinkNodeStrc gsTaskQueueListHead = {}; D2_GLOBAL_GUARD(gsTaskQueueListHead, "g
 // also labelled: lpFrequency_0088c790
 LARGE_INTEGER gnPerformanceFrequency = {}; D2_GLOBAL_GUARD(gnPerformanceFrequency, "gnPerformanceFrequency");
 
+CRITICAL_SECTION aTaskQueueCriticalSections[32] = {}; D2_GLOBAL_GUARD(aTaskQueueCriticalSections, "aTaskQueueCriticalSections");
+
+_RTL_CRITICAL_SECTION lpCriticalSection_0088caa8 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0088caa8, "lpCriticalSection_0088caa8");
+
 // =============================================================================
 // Initialized scalars
 // =============================================================================
@@ -2155,6 +2158,7 @@ LARGE_INTEGER gnPerformanceFrequency = {}; D2_GLOBAL_GUARD(gnPerformanceFrequenc
 unsigned short QServerNextToken = 0x1; D2_GLOBAL_GUARD(QServerNextToken, "QServerNextToken");
 uint32_t GameSeed = -0x1; D2_GLOBAL_GUARD(GameSeed, "GameSeed");
 uint32_t dwCycleLastSecond = 0x19; D2_GLOBAL_GUARD(dwCycleLastSecond, "dwCycleLastSecond");
+int32_t Frames_PerSecond = 0x19; D2_GLOBAL_GUARD(Frames_PerSecond, "Frames_PerSecond");
 BOOL DontNoSafeGameBool = 0x1; D2_GLOBAL_GUARD(DontNoSafeGameBool, "DontNoSafeGameBool");
 uint32_t gpInactiveMonsterStateFlagSentinel = 0xdeaddead; D2_GLOBAL_GUARD(gpInactiveMonsterStateFlagSentinel, "gpInactiveMonsterStateFlagSentinel");
 uint32_t gnMonsterStateFlagMask1 = 0x1; D2_GLOBAL_GUARD(gnMonsterStateFlagMask1, "gnMonsterStateFlagMask1");
@@ -2173,6 +2177,7 @@ uint32_t maxMemoryUsage = 0; D2_GLOBAL_GUARD(maxMemoryUsage, "maxMemoryUsage");
 int gbQServerSendPlayerPos = 0; D2_GLOBAL_GUARD(gbQServerSendPlayerPos, "gbQServerSendPlayerPos");
 D2BattleNetEventCallbackTable * BattleNetServerService = 0; D2_GLOBAL_GUARD(BattleNetServerService, "BattleNetServerService");
 BOOL IsBattleNetServer = 0; D2_GLOBAL_GUARD(IsBattleNetServer, "IsBattleNetServer");
+uint32_t Frames_TimeBetweenFrames = 0; D2_GLOBAL_GUARD(Frames_TimeBetweenFrames, "Frames_TimeBetweenFrames");
 // also labelled: nCOMMAND_playersX
 uint32_t PlayerCountOverride = 0; D2_GLOBAL_GUARD(PlayerCountOverride, "PlayerCountOverride");
 uint32_t gptItemCodeArmor = 0; D2_GLOBAL_GUARD(gptItemCodeArmor, "gptItemCodeArmor");
@@ -2181,6 +2186,7 @@ int gQServerClientTablesInitialized = 0; D2_GLOBAL_GUARD(gQServerClientTablesIni
 BOOL DEBUGPRINT = 0; D2_GLOBAL_GUARD(DEBUGPRINT, "DEBUGPRINT");
 uint32_t g_bWhisperSquelched = 0; D2_GLOBAL_GUARD(g_bWhisperSquelched, "g_bWhisperSquelched");
 uint32_t g_bWhisperDelivered = 0; D2_GLOBAL_GUARD(g_bWhisperDelivered, "g_bWhisperDelivered");
+uint32_t gnSeedCounter = 0; D2_GLOBAL_GUARD(gnSeedCounter, "gnSeedCounter");
 uint32_t gnTaskQueueSlotCounter = 0; D2_GLOBAL_GUARD(gnTaskQueueSlotCounter, "gnTaskQueueSlotCounter");
 uint32_t gnTaskQueueTailIndex = 0; D2_GLOBAL_GUARD(gnTaskQueueTailIndex, "gnTaskQueueTailIndex");
 uint32_t gbPerformanceCounterAvailable = 0; D2_GLOBAL_GUARD(gbPerformanceCounterAvailable, "gbPerformanceCounterAvailable");
@@ -2380,9 +2386,9 @@ namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

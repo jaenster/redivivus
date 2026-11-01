@@ -19,6 +19,8 @@ struct _CONTEXT;
 namespace D2Client::UI::Editbox {
 
 // Function declarations
+_EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca138(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca158(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
+_EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca183(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 
 } // namespace D2Client::UI::Editbox

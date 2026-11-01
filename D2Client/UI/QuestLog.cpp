@@ -14,6 +14,7 @@
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/UI/EscMenu.h"
 #include "D2Client/UI/Path.h"
+#include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UI/Text.h"
 #include "D2Client/UI/npcmenu.h"
 #include "D2Client/UI/npcmenu/Merc.h"
@@ -1712,7 +1713,7 @@ void __stdcall DRAW_UI_Quest() {
 
     D2Win::Src::D2WinFont::SetAndReturnLastFont(8);
     if (gQuestLog.nQuestLogActiveAct != -1 && (int)gQuestLog.nQuestLogActiveAct < 6 && (int)gQuestLog.nQuestLogActiveAct < gQuestLog.nQuestLogQuestCount) {
-      uint16_t nParam;
+      uint16_t nStringIndex;
       nActIndex = 0;
       if (gQuestLog.nQuestLogQuestCount > 0) {
         pQuestEntry = &gQuestLog.aQuestLogEntries[0].nQuestTableIndex;
@@ -2079,6 +2080,29 @@ void __stdcall QUESTLOG_OnMouseUp(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
+}
+
+void StaticInit_6cac30() {
+    gaQuestLogPanelRects[0].nBottom = ScreenSizeY - 0x69;
+    gaQuestLogPanelRects[1].nBottom = ScreenSizeY - 0x69;
+    gaQuestLogPanelRects[0].nTop = ScreenSizeY - 0x8c;
+    gaQuestLogPanelRects[1].nTop = ScreenSizeY - 0x8c;
+    gaQuestLogPanelRects[1].nLeft = ScreenSizeX / 2 + 0x28;
+    gaQuestLogPanelRects[2].nBottom = ScreenSizeY - 0xa0;
+    gaQuestLogPanelRects[3].nBottom = ScreenSizeY - 0xa0;
+    gaQuestLogPanelRects[1].nRight = ScreenSizeX / 2 + 0x4b;
+    gaQuestLogPanelRects[2].nTop = ScreenSizeY - 0xc3;
+    gaQuestLogPanelRects[3].nTop = ScreenSizeY - 0xc3;
+    gaQuestLogPanelRects[0].nTextY = ScreenSizeY - 0x8f;
+    gaQuestLogPanelRects[1].nTextY = ScreenSizeY - 0x8f;
+    gaQuestLogPanelRects[2].nTextY = ScreenSizeY - 0xc6;
+    gaQuestLogPanelRects[3].nLeft = gaQuestLogPanelRects[1].nLeft;
+    gaQuestLogPanelRects[3].nRight = gaQuestLogPanelRects[1].nRight;
+    gaQuestLogPanelRects[3].nTextY = ScreenSizeY - 0xc6;
+}
+
+void StaticInit_6cacd0() {
+    SkillDesc::SKILLDESC_InitMissileBuffers(&gQuestLog);
 }
 
 } // namespace D2Client::UI::QuestLog

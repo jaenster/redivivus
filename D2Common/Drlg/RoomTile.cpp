@@ -410,7 +410,7 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateShadowTileData(D2RoomExStrc *
 
 // Creates a shadow tile data entry from grid cell flags. Gets the tile library entry for shadow type (0xd) and creates the shadow tile data for the room.
 void __fastcall DRLGROOMTILE_CreateShadowTileFromGrid(D2RoomExStrc * pRoomEx, D2RoomExStrc * nPosX, int nPosY, uint32_t nGridFlags) {
-    int nTileLibEntry = DRLG_FindHTile(pRoomEx, 0xd, nGridFlags);
+    D2TileLibraryEntryStrc* nTileLibEntry = (D2TileLibraryEntryStrc*)DRLG_FindHTile(pRoomEx, 0xd, nGridFlags);
     DRLGROOMTILE_CreateShadowTileData(pRoomEx, nullptr, (int)nPosX, nPosY, nGridFlags, nTileLibEntry);
 }
 
@@ -512,6 +512,7 @@ static BOOL __stdcall DRLGROOMTILE_CreateExitWarp(uint32_t nTileFlags, int32_t n
 static void __stdcall DRLGROOMTILE_SetupWarpTile(D2RoomExStrc * pRoomExStrc, D2DrlgTileDataStrc * pTileData, uint32_t nGridInfo, int nTileType) {
     D2LvlWarpTxt* pDVar1;
     BOOL BVar2;
+    D2TileLibraryEntryStrc* pTileLibEntry;
     D2DrlgTileDataStrc* pWallTile;
     uint32_t nGridFlags;
     D2DrlgRoomExRoomTileNodeStrc* pWarpCacheHead = pRoomExStrc->pRoomTileNodes;
@@ -709,7 +710,7 @@ static inline D2DrlgTileLinkStrc * __stdcall DRLGROOMTILE_AllocTileLink(D2PoolMa
 // @sourcefile .\DRLG\RoomTile.cpp
 static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_AddTileData(D2RoomExStrc * pRoomEx, int nTileType, D2PoolManagerStrc * pPoolManager, uint32_t nGridInfo, int32_t nX, int32_t nY) {
     D2DrlgTileLinkStrc* pTileLink;
-    int nTileLibEntry;
+    D2TileLibraryEntryStrc* nTileLibEntry;
     D2DrlgTileDataStrc* pTileData;
     if (nTileType == 0xb || nTileType == 10) {
       BOOL bInside;
@@ -735,7 +736,7 @@ static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_AddTileData(D2RoomExStrc * pR
 
     pTileLink = DRLGROOMTILE_AllocTileLink(pPoolManager, pRoomEx, nIsFloorLink);
     create_tile_in_link:
-    nTileLibEntry = DRLG_FindHTile(pRoomEx, nTileType, nGridInfo);
+    nTileLibEntry = (D2TileLibraryEntryStrc*)DRLG_FindHTile(pRoomEx, nTileType, nGridInfo);
     if (!nTileType) {
       pTileData = DRLGROOMTILE_CreateFloorTileData(pRoomEx, &pTileLink->pTileData, nX, nY, nGridInfo, nTileLibEntry);
       return pTileData;
@@ -828,18 +829,19 @@ static void __stdcall DRLGROOMTILE_UpdateTileType(D2DrlgTileDataStrc * pTileData
 }; D2_STATIC_GUARD(gnRoomTileMappingByTypeAndLayer, "D2Common::Drlg::RoomTile::DRLGROOMTILE_UpdateTileType::gnRoomTileMappingByTypeAndLayer");
 
     D2DrlgTileLinkStrc* pTileLink;
+    D2TileLibraryEntryStrc* nTileTypeMapping;
     int32_t nTileIndex;
     bool bNeedUpdate;
     int* pFlags;
-    int nTileTypeMapping;
-    nTileTypeMapping = gnRoomTileMappingByTypeAndLayer[nTileLayer];
+    int iVar1;
+    iVar1 = gnRoomTileMappingByTypeAndLayer[nTileLayer];
     if (pTileData->nFlags & 1U) {
-      nTileTypeMapping = pTileData->nTileType;
-      if (nTileTypeMapping != 9 && nTileTypeMapping != 8) {
+      iVar1 = pTileData->nTileType;
+      if (iVar1 != 9 && iVar1 != 8) {
         return;
       }
 
-      DRLGROOMTILE_SetWallTileFlags(pTileData, nTileTypeMapping, pRoomExStrc, nPosX, nGridFlags, nPosY);
+      DRLGROOMTILE_SetWallTileFlags(pTileData, iVar1, pRoomExStrc, nPosX, nGridFlags, nPosY);
       return;
     }
     if (!(nGridFlags & 0x80)) {
@@ -855,12 +857,12 @@ static void __stdcall DRLGROOMTILE_UpdateTileType(D2DrlgTileDataStrc * pTileData
           return;
         }
       }
-      if (nTileTypeMapping < 0 || pTileData->nTileType > 7) {
-        if (nTileTypeMapping != -1) {
+      if (iVar1 < 0 || pTileData->nTileType > 7) {
+        if (iVar1 != -1) {
           return;
         }
       } else {
-        nTileLayer = gnRoomTileMappingTransitionByType[nTileTypeMapping * 7 + pTileData->nTileType];
+        nTileLayer = gnRoomTileMappingTransitionByType[iVar1 * 7 + pTileData->nTileType];
       }
     }
 
@@ -882,7 +884,7 @@ static void __stdcall DRLGROOMTILE_UpdateTileType(D2DrlgTileDataStrc * pTileData
 
       pTileLink = DRLGROOMTILE_AllocTileLink(pPoolManager, pRoomExStrc, 0);
       add_wall_tile:
-      nTileTypeMapping = DRLG_FindHTile(pRoomExStrc, 3, nGridFlags);
+      nTileTypeMapping = (D2TileLibraryEntryStrc*)DRLG_FindHTile(pRoomExStrc, 3, nGridFlags);
       DRLGROOMTILE_CreateWallTileData(pRoomExStrc, &pTileLink->pTileData, nPosX, nPosY, nGridFlags, nTileTypeMapping, 3);
     }
     if (!pTileData->nTileType && (nTileIndex = D2CMP::DUNGEON::Dungeon::GetIndex(pTileData->pTileLibraryEntry) , nTileIndex == 0x1e) && (nTileIndex = D2CMP::DUNGEON::Dungeon::GetSubIndex(pTileData->pTileLibraryEntry) , !nTileIndex)) {
@@ -891,14 +893,13 @@ static void __stdcall DRLGROOMTILE_UpdateTileType(D2DrlgTileDataStrc * pTileData
       bNeedUpdate = false;
     }
     if (nTileLayer != pTileData->nTileType || bNeedUpdate) {
-      D2TileLibraryEntryStrc* pNewTileLibEntry;
-      pNewTileLibEntry = (D2TileLibraryEntryStrc*)DRLG_FindHTile(pNeighborRoom, nTileLayer, nGridFlags);
+      nTileTypeMapping = (D2TileLibraryEntryStrc*)DRLG_FindHTile(pNeighborRoom, nTileLayer, nGridFlags);
       pTileData->nTileType = nTileLayer;
-      if (pNewTileLibEntry != pTileData->pTileLibraryEntry && pNeighborRoom->pRoom) {
-        Collision::TileLibrary_UpdateCollision(pNeighborRoom->pRoom, pTileData, pNewTileLibEntry);
+      if (nTileTypeMapping != pTileData->pTileLibraryEntry && pNeighborRoom->pRoom) {
+        Collision::TileLibrary_UpdateCollision(pNeighborRoom->pRoom, pTileData, nTileTypeMapping);
       }
 
-      pTileData->pTileLibraryEntry = pNewTileLibEntry;
+      pTileData->pTileLibraryEntry = nTileTypeMapping;
     }
 
     DRLGROOMTILE_SetWallTileFlags(pTileData, pTileData->nTileType, pRoomExStrc, nPosX, nGridFlags, nPosY);
@@ -920,6 +921,7 @@ static void __stdcall DRLGROOMTILE_UpdateOrAddTile(int32_t nX, int32_t nY, D2Poo
 static void __stdcall DRLGROOMTILE_ProcessTile(eD2GridCellFlags nFlags, D2RoomExStrc * pRoom, D2PoolManagerStrc * pMemory, int32_t nX, int32_t nSizeMaybe, int32_t nParam, eD2GridCellFlags nOtherFlags) {
     int nTileLibEntry;
     eD2GridCellFlags nGridFlags;
+    D2TileLibraryEntryStrc* pDVar1;
     uint32_t nBlankTileFlags;
     uint8_t nMainIndex;
     nMainIndex = (uint8_t)(nFlags >> 0x14) & 0x3f;

@@ -3,9 +3,9 @@
 #include "Storm/Source/SSystem.h"
 #include "Fog/3rdparty/crashy.h"
 #include "Fog/Engine/Application.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SErr.h"
-#include "Storm/Source/SSComp.h"
+#include "Storm/Source/SLog.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
@@ -20,7 +20,7 @@ uint32_t __stdcall SSYSTEM_Shutdown(uint32_t nShutdownCode) {
     static pfnSSystemShutdown fpSSystemShutdownCallback; D2_STATIC_GUARD_BSS(fpSSystemShutdownCallback, "Storm::Source::SSystem::SSYSTEM_Shutdown::fpSSystemShutdownCallback");
 
     SSYSTEM_SetShutdownFlag(1);
-    SSComp::SLogFlushAll();
+    SLog::SLogFlushAll();
     if (!fpSSystemShutdownCallback) {
       return 0;
     }

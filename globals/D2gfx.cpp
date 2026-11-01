@@ -32,16 +32,21 @@ D2GFXWindowPlacementStrc gaD2GFXWindowPlacements[4] = {}; D2_GLOBAL_GUARD(gaD2GF
 
 BOOL bAspect = 0x1; D2_GLOBAL_GUARD(bAspect, "bAspect");
 uint32_t IsOSCursorVisible = 0x1; D2_GLOBAL_GUARD(IsOSCursorVisible, "IsOSCursorVisible");
+// also labelled: gnGFXUnknownA
+char * gpszDiabloIIClassNameSource = s_Diablo_II_006cc8b8; D2_GLOBAL_GUARD(gpszDiabloIIClassNameSource, "gpszDiabloIIClassNameSource");
 uint32_t gnD2GFX_ActiveScaleFactor = 0x100; D2_GLOBAL_GUARD(gnD2GFX_ActiveScaleFactor, "gnD2GFX_ActiveScaleFactor");
 HINSTANCE hInstance = 0; D2_GLOBAL_GUARD(hInstance, "hInstance");
 BOOL bD2GFX_Windowed = 0; D2_GLOBAL_GUARD(bD2GFX_Windowed, "bD2GFX_Windowed");
 uint32_t nResolutionMode = 0; D2_GLOBAL_GUARD(nResolutionMode, "nResolutionMode");
 HWND hwndD2GFX_Window = 0; D2_GLOBAL_GUARD(hwndD2GFX_Window, "hwndD2GFX_Window");
 D2RendererFunctionsStrc * RENDERER_CurrentRenderedFunctions = 0; D2_GLOBAL_GUARD(RENDERER_CurrentRenderedFunctions, "RENDERER_CurrentRenderedFunctions");
+LPCSTR gpszWindowClassName = 0; D2_GLOBAL_GUARD(gpszWindowClassName, "gpszWindowClassName");
 int32_t nWindowSizeY = 0; D2_GLOBAL_GUARD(nWindowSizeY, "nWindowSizeY");
 uint32_t ghWndMain = 0; D2_GLOBAL_GUARD(ghWndMain, "ghWndMain");
 uint32_t D2GFX_EndCutSceneCurrentState = 0; D2_GLOBAL_GUARD(D2GFX_EndCutSceneCurrentState, "D2GFX_EndCutSceneCurrentState");
 uint32_t D2GFX_EndCutScene = 0; D2_GLOBAL_GUARD(D2GFX_EndCutScene, "D2GFX_EndCutScene");
+LPCSTR szWindowClassName = 0; D2_GLOBAL_GUARD(szWindowClassName, "szWindowClassName");
+LPCSTR gpszWindowTitle = 0; D2_GLOBAL_GUARD(gpszWindowTitle, "gpszWindowTitle");
 int nD2GFX_PerspectiveScaleY = 0; D2_GLOBAL_GUARD(nD2GFX_PerspectiveScaleY, "nD2GFX_PerspectiveScaleY");
 int32_t nD2GFX_PerspectiveScaleX = 0; D2_GLOBAL_GUARD(nD2GFX_PerspectiveScaleX, "nD2GFX_PerspectiveScaleX");
 
@@ -141,9 +146,9 @@ namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

@@ -10,7 +10,6 @@
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/SKILLS.h"
 #include "D2Client/SKILLS/Skills.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
@@ -37,6 +36,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
 #include "D2Common/Skills.h"
@@ -185,7 +185,7 @@ BOOL __fastcall SKILLBAR_SrvStFn33_TargetRevivableCorpse(::SGAMEDATA * pGame, D2
 }
 
 // Resolves the Lightning Fury bolt-count offset for the Find Potion item-code table. Determines act from the unit's room level, rolls the unit's RNG seed mod 100, compares against SkilParam2/SkilParam3 thresholds to pick bolt-count offset (0/1/2), and returns the corresponding entry from gaMapAiDirectionHandlersPtr table indexed by [act*3 + offset]. Returns 0 if out of bounds.
-static uint32_t __stdcall SKILLAMZ_CreateLightningFuryBolts(int32_t nParam1, int32_t nParam2, D2UnitStrc * pUnit) {
+static uint32_t __stdcall SKILLAMZ_CreateLightningFuryBolts(::SGAMEDATA * pGame, eD2Skills eSkill, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static int gnLightningFuryBoltCount = 0xf; D2_STATIC_GUARD(gnLightningFuryBoltCount, "D2Game::SKILLS::SkillBar::SKILLAMZ_CreateLightningFuryBolts::gnLightningFuryBoltCount");
     static uint32_t gaAmzLightningFuryBoltTable[15][3] = {
@@ -218,16 +218,16 @@ static uint32_t __stdcall SKILLAMZ_CreateLightningFuryBolts(int32_t nParam1, int
       return 0;
     }
 
-    int iVar1 = (uint32_t)eVar2 + (uint32_t)*(uint8_t*)(nParam1 + 0x6d) * 5;
+    int iVar1 = (uint32_t)eVar2 + (uint32_t)pGame->nDifficulty * 5;
     D2SeedStrc sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
     pUnit->sSeed = sNewSeed;
     int nRoll = sNewSeed.nSeedLow % 100;
-    int32_t nBoltChance1 = D2Client::SKILLS::GetSkilParam2(nParam2);
+    int32_t nBoltChance1 = D2Client::SKILLS::GetSkilParam2(eSkill);
     if (nRoll < nBoltChance1) {
       nBoltCountOffset = 1;
     } else {
       int32_t nBoltChance2;
-      nBoltChance2 = D2Client::SKILLS::GetSkilParam3(nParam2);
+      nBoltChance2 = D2Client::SKILLS::GetSkilParam3(eSkill);
       nBoltCountOffset = 2;
       if (nRoll >= nBoltChance2 + nBoltChance1) {
         nBoltCountOffset = 0;
@@ -270,7 +270,7 @@ BOOL __fastcall Skills_SrvDoFunc_069_FindPotion(::SGAMEDATA * pGame, D2UnitStrc 
       return 1;
     }
 
-    uint32_t szItemCode = SKILLAMZ_CreateLightningFuryBolts((int32_t)pGame, eSkill, pUnit);
+    uint32_t szItemCode = SKILLAMZ_CreateLightningFuryBolts(pGame, eSkill, pUnit);
     SkillsServer::SKILLS_DropItemByCode(pGame, pCorpse, szItemCode, QUALITY_NORMAL);
     return 1;
 }
@@ -983,7 +983,7 @@ static BOOL SKILLAMZ_GetPlagueJavelinCloudCount(int32_t nParam) {
 }
 
 // Per-frame tick callback for Amazon Plague Javelin. For monster units returns a seeded RNG result. For players, checks whether the current frame has reached the stored next-cloud-frame (skill param4); if so, computes the next cloud interval based on the active weapon attack speed (bucketed into 4/6/8/10/12/14/16 frames), and returns 1 or 2 indicating how many poison clouds to spawn this tick.
-static int32_t __stdcall SKILLAMZ_CreatePlagueJavelinClouds(int32_t nParam, D2SkillStrc * pSkill, D2UnitStrc * pUnit) {
+static int32_t __stdcall SKILLAMZ_CreatePlagueJavelinClouds(::SGAMEDATA * pGame, D2SkillStrc * pSkill, D2UnitStrc * pUnit) {
     int nAttackFrames;
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       D2SeedStrc DVar1;
@@ -991,16 +991,16 @@ static int32_t __stdcall SKILLAMZ_CreatePlagueJavelinClouds(int32_t nParam, D2Sk
       pUnit->sSeed = DVar1;
       return (uint8_t)~(uint8_t)DVar1.nSeedLow & 1;
     }
-    if (!*(int*)(nParam + 0x70)) {
+    if (!pGame->bExpansion) {
       return 1;
     }
 
     int32_t nLastCloudFrame = D2Common::Skills::SKILL_GetParam4(pSkill);
     if (!nLastCloudFrame) {
-      D2Common::Skills::SKILL_SetParam4(pSkill, *(int*)(nParam + 0xa8) + 4);
+      D2Common::Skills::SKILL_SetParam4(pSkill, pGame->dwGameFrame + 4);
       return 1;
     }
-    if (*(int*)(nParam + 0xa8) < nLastCloudFrame) {
+    if (pGame->dwGameFrame < nLastCloudFrame) {
       return 0;
     }
 
@@ -1031,8 +1031,8 @@ static int32_t __stdcall SKILLAMZ_CreatePlagueJavelinClouds(int32_t nParam, D2Sk
     }
 
     int nParam4 = nLastCloudFrame + nAttackFrames;
-    if (nParam4 < *(int*)(nParam + 0xa8)) {
-      nParam4 = *(int*)(nParam + 0xa8) + nAttackFrames;
+    if (nParam4 < pGame->dwGameFrame) {
+      nParam4 = pGame->dwGameFrame + nAttackFrames;
     }
 
     D2Common::Skills::SKILL_SetParam4(pSkill, nParam4);
@@ -1119,7 +1119,7 @@ BOOL __fastcall Skills_SrvDoFunc_076_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc *
             UNIT::SUnit::UNITS_SetupAnimTimerEventsFromFrame(pGame, pUnit, 3);
           }
 
-          nCloudHitCount = SKILLAMZ_CreatePlagueJavelinClouds((int32_t)pGame, pSkill, pUnit);
+          nCloudHitCount = SKILLAMZ_CreatePlagueJavelinClouds(pGame, pSkill, pUnit);
           nCloudHitIdx = 0;
           if (nCloudHitCount <= 0) {
             return 1;
@@ -1390,13 +1390,13 @@ static void __stdcall SKILLBAR_InitChargeTarget(::SGAMEDATA * pGame, D2UnitStrc 
     D2Common::Skills::SKILL_SetParam4(pSkill, pUnit2->nUnitGUID);
 }
 
-static BOOL __stdcall SKILLBAR_CanTargetPosition(D2UnitStrc * pUnit, int32_t nParam1, int32_t nParam2, int32_t nParam3) {
-    if (!(nParam3 >= 0 && nParam3 < sgptDataTable->nTxtSkillsCount)) {
+static BOOL __stdcall SKILLBAR_CanTargetPosition(D2UnitStrc * pUnit, int32_t nX, int32_t nY, int32_t nSkillId) {
+    if (!(nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
     D2SkillsTxt* pSkillsTxtBase = sgptDataTable->pTxtSkills;
-    if (!(pSkillsTxtBase + nParam3)) {
+    if (!(pSkillsTxtBase + nSkillId)) {
       return 0;
     }
 
@@ -1405,11 +1405,11 @@ static BOOL __stdcall SKILLBAR_CanTargetPosition(D2UnitStrc * pUnit, int32_t nPa
       return 0;
     }
 
-    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nParam1, nParam2);
+    pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pRoom) {
       return 0;
     }
-    if (*((uint8_t*)&pSkillsTxtBase[nParam3] + 0x5) & (uint8_t)gadwBitMasks[0]) {
+    if (*((uint8_t*)&pSkillsTxtBase[nSkillId] + 0x5) & (uint8_t)gadwBitMasks[0]) {
       return 1;
     }
 

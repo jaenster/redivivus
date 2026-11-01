@@ -35,6 +35,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/LogManager.h"
 #include "Fog/Src/Safesock.h"
+#include "Fog/Src/String/FogString.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
@@ -1960,8 +1961,8 @@ int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, i
 
 int __stdcall OOGUTIL_ProcessGameListEntry(D2ControlStrc * dwParam) {
     char* pbEntryName;
-    mcp0x03data aGameName[3];
-    mcp0x03data aPassword[3];
+    char aGameName[256];
+    uint8_t aPassword[256];
     D2LanGameEntryStrc sGameEntry;
     BOOL bStatusVisible = D2Win::Src::D2WinMain::D2WINMAIN_GetControlVisible(gpCtlGameListStatus);
     if (!bStatusVisible) {
@@ -1980,7 +1981,7 @@ int __stdcall OOGUTIL_ProcessGameListEntry(D2ControlStrc * dwParam) {
     Fog::Src::String::FogString::SMEM_TitleCaseString(aGameName);
     int32_t bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
     if (bHasPeerName) {
-      ChatDlg::OOGMENU_JoinGame(0, aPassword[0].szGameName, aGameName[0].szGameName, nullptr);
+      ChatDlg::OOGMENU_JoinGame(0, (char*)aPassword, aGameName, nullptr);
       UIMENU_DestroyLobbyAndJoinGameForms();
       pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
       ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszLocaleStr, nullptr);
@@ -1991,10 +1992,10 @@ int __stdcall OOGUTIL_ProcessGameListEntry(D2ControlStrc * dwParam) {
     if (nGameListDifficultyFilter > 0) {
       int nCmp;
       do {
-        nCmp = strcmp(gbLanGameListEntryNamePadding[nEntryIdx].szName, aPassword->szGameName);
+        nCmp = strcmp(gbLanGameListEntryNamePadding[nEntryIdx].szName, (char*)aPassword);
         if (!nCmp) {
           pbEntryName = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(gbLanGameListEntryNamePadding[nEntryIdx].dwIpAddr);
-          ChatDlg::OOGMENU_JoinGame(gbLanGameListEntryNamePadding[nEntryIdx].nJoinId, aPassword[0].szGameName, aGameName[0].szGameName, pbEntryName);
+          ChatDlg::OOGMENU_JoinGame(gbLanGameListEntryNamePadding[nEntryIdx].nJoinId, (char*)aPassword, aGameName, pbEntryName);
           UIMENU_DestroyLobbyAndJoinGameForms();
           pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
           ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszLocaleStr, nullptr);
@@ -2005,12 +2006,12 @@ int __stdcall OOGUTIL_ProcessGameListEntry(D2ControlStrc * dwParam) {
       } while (nEntryIdx < nGameListDifficultyFilter);
     }
 
-    bHasPeerName = OOGUTIL_HandleGameListEntry(aPassword[0].szGameName, aGameName[0].szGameName, (uintptr_t)&sGameEntry);
+    bHasPeerName = OOGUTIL_HandleGameListEntry((char*)aPassword, aGameName, (uintptr_t)&sGameEntry);
     if (bHasPeerName) {
-      nEntryIdx = strcmp(sGameEntry.szGameName, aPassword->szGameName);
+      nEntryIdx = strcmp(sGameEntry.szGameName, (char*)aPassword);
       if (!nEntryIdx) {
         pbEntryName = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(sGameEntry.dwIpAddress);
-        ChatDlg::OOGMENU_JoinGame(sGameEntry.nPort, aPassword[0].szGameName, aGameName[0].szGameName, pbEntryName);
+        ChatDlg::OOGMENU_JoinGame(sGameEntry.nPort, (char*)aPassword, aGameName, pbEntryName);
         UIMENU_DestroyLobbyAndJoinGameForms();
         pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
         ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszLocaleStr, nullptr);

@@ -20,9 +20,9 @@
 #include "D2gfx/D2GFX.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SBMP.h"
 #include "Storm/Source/SFile.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -1423,7 +1423,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       uVar2 = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &nFileSize, 0, 3, 0);
       if (uVar2 && nVersion) {
         iVar3 = Storm::Source::SBMP::SBmpDecodeImage(2, (void*)nVersion, nFileSize, aPaletteBuf, (uint8_t*)gnSmackerGlideYOffset.pFrameBuffer, 0x6db0, &nImgWidth, &nImgHeight, &nImgBitDepth);
-        Storm::SMem::SMemFree((void*)nVersion, ".\\Src\\gdiSmack.cpp", 0x78, 0);
+        Storm::Source::SMem::SMemFree((void*)nVersion, ".\\Src\\gdiSmack.cpp", 0x78, 0);
         if (iVar3 && nImgWidth == 0x1d4 && nImgHeight == 0x3c && nImgBitDepth == 8) {
           iVar3 = 0;
           do {

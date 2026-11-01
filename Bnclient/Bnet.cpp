@@ -2,8 +2,7 @@
 
 #include "Bnclient/Bnet.h"
 #include "Bnclient/Bnclient.h"
-#include "Storm/Source/SSComp.h"
-#include "Storm/_unnamespaced.h"
+#include "Storm/Source/SLog.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -50,12 +49,17 @@ void BnetLog_WriteLine(char * Format, ...) {
     szBuf[0x1ff] = '\0';
     if (!(gbBnetLogInitialized & 1)) {
       gbBnetLogInitialized |= 1;
-      Storm::Source::SSComp::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
+      Storm::Source::SLog::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
       atexit(StaticFini_gnBnetLogFileHandle);
     }
 
-    Storm::Source::SSComp::SLogWrite(gnBnetLogFileHandle, szBuf);
+    Storm::Source::SLog::SLogWrite(gnBnetLogFileHandle, szBuf);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00881860);
+}
+
+void StaticInit_6cae80() {
+    InitializeCriticalSection(&lpCriticalSection_00881860);
+    atexit(StaticFini_CriticalSection_00881860);
 }
 
 void StaticFini_CriticalSection_00881860() {
@@ -63,7 +67,7 @@ void StaticFini_CriticalSection_00881860() {
 }
 
 void StaticFini_gnBnetLogFileHandle() {
-    Storm::Source::SSComp::SLogClose(gnBnetLogFileHandle);
+    Storm::Source::SLog::SLogClose(gnBnetLogFileHandle);
 }
 
 } // namespace Bnclient::Bnet

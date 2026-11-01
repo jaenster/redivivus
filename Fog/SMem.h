@@ -8,9 +8,6 @@
 #include <cstdarg>
 #include "d2_platform.h"
 
-// Forward declarations
-struct mcp0x03data;
-
 // Data types
 struct SMemHeapStatsStrc {
     /* 0x00 */ int field_0x0;
@@ -29,11 +26,5 @@ void __stdcall SMemInitPerfCounters();
 void __stdcall SMemResetHeapStats();
 DWORD __stdcall GetTickCount();
 uint16_t __stdcall HashForName(char * szText);
-void __stdcall SMEM_TitleCaseString(mcp0x03data * pMcpData);
-void __fastcall SMemStringToUppercase(char * szText, int32_t nMaxLen);
-uint8_t * __fastcall SMemEscapeString(uint8_t * pbDst, uint8_t * pbSrc, size_t nBufSize, uint8_t byQuoteChar);
-char * __fastcall SMemFormat64BitWithSeparators(char * szText, uint32_t nWidth, uint32_t nValueLo, uint32_t nValueHi);
-uint32_t __stdcall SMemExtractBucketIndex(uint32_t nParam);
-uint32_t * __stdcall SMemFindHeapByHash(uint32_t * pnOutBucket, int32_t nFlags, uint32_t nHash);
 
 } // namespace Fog::SMem

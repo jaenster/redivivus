@@ -4,7 +4,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Monster.h"
@@ -2528,6 +2527,10 @@ void __fastcall UNITS_FreeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     FreeServerUnit(pGame, pCurItem);
+}
+
+void StaticInit_6caf60() {
+    gnSeedCounter = GetTickCount();
 }
 
 } // namespace D2Game::UNIT::SUnit

@@ -11,7 +11,6 @@
 // Forward declarations
 struct D2HirelingHireData;
 struct D2MonSeqMonsterTbls;
-struct D2MonSeqTxt;
 struct D2UnitStrc;
 
 // Data types
@@ -33,6 +32,14 @@ struct D2MercRolledStatsStrc {
     /* 0x38 */ uint16_t wFlags; // bit0 set when quaternary defenseFlag==0
     /* 0x3A */ uint16_t _pad3a; // padding
     /* 0x3C */ int field_3C; // buffer tail (pHirelingList[15], unused here)
+};
+
+struct D2MonSeqTxt {
+    /* 0x00 */ short sequence;
+    /* 0x02 */ uint8_t mode;
+    /* 0x03 */ uint8_t frame;
+    /* 0x04 */ uint8_t dir;
+    /* 0x05 */ uint8_t event;
 };
 
 namespace D2Common::Merc {

@@ -201,7 +201,7 @@ void __stdcall INPUT_UseItemPassthrough(D2UIMouseMsgStrc * pMsg) {
 void __stdcall TEXT_DrawCashDisplay() {
     uint16_t* pszTooltipStr;
     D2TextLineStrc* pMemoryToFree;
-    uint16_t nParam;
+    uint16_t nStringIndex;
     uint32_t* pTabEntry;
     uint16_t nStringId;
     int nTabIdx;
@@ -286,14 +286,14 @@ void __stdcall TEXT_DrawCashDisplay() {
         }
       }
       if (nHoradricCubeUIState == 1) {
-        nParam = 0x275c;
+        nStringIndex = 0x275c;
         dwColor = npcmenu::GetInteractedUnitClassId();
         if (dwColor == 0x1ff) {
-          nParam = 0x58de;
+          nStringIndex = 0x58de;
         } else {
           dwColor = npcmenu::GetInteractedUnitClassId();
           if (dwColor == 0x200) {
-            nParam = 0x58db;
+            nStringIndex = 0x58db;
           }
         }
 

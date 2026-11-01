@@ -11,9 +11,11 @@
 // Forward declarations
 struct D2GSPacketSrv0x27;
 struct D2GSPacketSrv0x27_TextStrc;
+struct D2GSPacketSrv0x50;
 struct D2GSPacketSrv0x76;
 struct D2GameViewStrc;
 struct D2HoverTextStrc;
+struct D2ItemsTxt;
 struct D2Packet0x5aEventStructure;
 struct D2UIMouseMsgStrc;
 struct D2UnitStrc;
@@ -135,6 +137,7 @@ void __stdcall INPUT_TextClickHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_TextKeyHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_TextKeyFilter(struct D2UIMouseMsgStrc * pMsg);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca07b(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
+void StaticInit_6cac10();
 // 11 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Text

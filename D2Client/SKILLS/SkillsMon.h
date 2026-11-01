@@ -9,6 +9,7 @@
 #include "d2_platform.h"
 
 // Forward declarations
+struct D2SkillsTxt;
 struct D2UnitStrc;
 typedef uint32_t eD2Skills;
 

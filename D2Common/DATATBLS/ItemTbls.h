@@ -10,6 +10,7 @@
 
 // Forward declarations
 struct D2BooksTableStrc;
+struct D2BooksTxt;
 struct D2GambleTableStrc;
 struct D2GemsTxt;
 struct D2ItemRatioTxt;
@@ -24,6 +25,7 @@ struct D2QualityItemsTableStrc;
 struct D2QualityItemsTxt;
 struct D2RareAffixTableStrc;
 struct D2RareAffixTxt;
+struct D2RunesTxt;
 struct D2RunesTxtTableStrc;
 
 // Data types

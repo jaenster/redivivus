@@ -474,17 +474,17 @@ D2UIFlagInitStrc gsUIDrawFlagInit0[5] = {
     {
         /* .eEventType = */ 0x3,
         /* .nMessageOrKeyCode = */ 0x20,
-        /* .pfHandler = */ &HELP_OnEscapeOrSpace
+        /* .pfHandler = */ &D2Client::UI::Help::HELP_OnEscapeOrSpace
     },
     {
         /* .eEventType = */ 0x3,
         /* .nMessageOrKeyCode = */ 0x1b,
-        /* .pfHandler = */ &HELP_OnEscapeOrSpace
+        /* .pfHandler = */ &D2Client::UI::Help::HELP_OnEscapeOrSpace
     },
     {
         /* .eEventType = */ 0x0,
         /* .nMessageOrKeyCode = */ 0x102,
-        /* .pfHandler = */ &HELP_MiniPanelKeyNoOp
+        /* .pfHandler = */ &D2Client::UI::Help::HELP_MiniPanelKeyNoOp
     }
 }; D2_GLOBAL_GUARD(gsUIDrawFlagInit0, "gsUIDrawFlagInit0");
 
@@ -546,7 +546,7 @@ D2UIFlagInitStrc g_UIFlagInitDrawPanel4[2] = {
     {
         /* .eEventType = */ 0x0,
         /* .nMessageOrKeyCode = */ 0x200,
-        /* .pfHandler = */ &INV_PanelKeyNoOp
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_PanelKeyNoOp
     }
 }; D2_GLOBAL_GUARD(g_UIFlagInitDrawPanel4, "g_UIFlagInitDrawPanel4");
 
@@ -2306,7 +2306,7 @@ D2UIFlagInitStrc gUIFlagGeneralInit[3] = {
     {
         /* .eEventType = */ 0x0,
         /* .nMessageOrKeyCode = */ 0xa0,
-        /* .pfHandler = */ (fnD2InitUIFlagFunction)&D2Client::UI::ui::UI_HandleCursorMouseDown
+        /* .pfHandler = */ &D2Client::UI::ui::UI_HandleCursorMouseDown
     },
     {
         /* .eEventType = */ 0x0,
@@ -44474,9 +44474,11 @@ D2EndGameUiState gEndGameUiState = {}; D2_GLOBAL_GUARD(gEndGameUiState, "gEndGam
 
 eD2GSGameType eD2GSGameType_007a0610 = 0; D2_GLOBAL_GUARD(eD2GSGameType_007a0610, "eD2GSGameType_007a0610");
 
-D2ExitCutsceneState gExitCutsceneState = {}; D2_GLOBAL_GUARD(gExitCutsceneState, "gExitCutsceneState");
+D2ExitCutsceneState gExitCutsceneState = D2ExitCutsceneState(); D2_GLOBAL_GUARD(gExitCutsceneState, "gExitCutsceneState");
 
 D2ClientTimerStrc gLoadTimerDurationMs = D2ClientTimerStrc(); D2_GLOBAL_GUARD(gLoadTimerDurationMs, "gLoadTimerDurationMs");
+
+TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0> gQServerGameState; D2_GLOBAL_GUARD(gQServerGameState, "gQServerGameState");
 
 HACCEL gbLanguageDllLoaded = nullptr; D2_GLOBAL_GUARD(gbLanguageDllLoaded, "gbLanguageDllLoaded");
 
@@ -44490,6 +44492,14 @@ D2UIFlagStrc GFX_bShowUIFlag = {}; D2_GLOBAL_GUARD(GFX_bShowUIFlag, "GFX_bShowUI
 
 D2UIFlagDescStrc gaUIFlagDescsClient[3] = {}; D2_GLOBAL_GUARD(gaUIFlagDescsClient, "gaUIFlagDescsClient");
 
+uint16_t gU16ImmunityStringBuffer2[256] = {}; D2_GLOBAL_GUARD(gU16ImmunityStringBuffer2, "gU16ImmunityStringBuffer2");
+
+uint16_t UNICODE_007a2c80[80] = {}; D2_GLOBAL_GUARD(UNICODE_007a2c80, "UNICODE_007a2c80");
+
+uint16_t gU16ImmunityStringBuffer1[256] = {}; D2_GLOBAL_GUARD(gU16ImmunityStringBuffer1, "gU16ImmunityStringBuffer1");
+
+uint16_t gnMonsterHealthBarValue[256] = {}; D2_GLOBAL_GUARD(gnMonsterHealthBarValue, "gnMonsterHealthBarValue");
+
 uint32_t gnAutoMapCellPriority[2048] = {}; D2_GLOBAL_GUARD(gnAutoMapCellPriority, "gnAutoMapCellPriority");
 
 D2UnitStrc * ClientSideUnitHashTables[6][128] = {}; D2_GLOBAL_GUARD(ClientSideUnitHashTables, "ClientSideUnitHashTables");
@@ -44499,6 +44509,8 @@ D2UnitStrc * ServerSideUnitHashTables[6][128] = {}; D2_GLOBAL_GUARD(ServerSideUn
 D2KeyBindStrc gaKeyBindingsBackup[114] = {}; D2_GLOBAL_GUARD(gaKeyBindingsBackup, "gaKeyBindingsBackup");
 
 D2KeyBindStrc g_KeyBindingsTable[114] = {}; D2_GLOBAL_GUARD(g_KeyBindingsTable, "g_KeyBindingsTable");
+
+uint16_t gwKeyNameBuffer[4] = {}; D2_GLOBAL_GUARD(gwKeyNameBuffer, "gwKeyNameBuffer");
 
 D2ClientLightPulseStrc gRoomLightPulse = {}; D2_GLOBAL_GUARD(gRoomLightPulse, "gRoomLightPulse");
 
@@ -44556,6 +44568,16 @@ uint8_t PalShift_RandTransform[7680] = {}; D2_GLOBAL_GUARD(PalShift_RandTransfor
 
 LPCANDIDATELIST gpIMECandidateList = nullptr; D2_GLOBAL_GUARD(gpIMECandidateList, "gpIMECandidateList");
 
+uint16_t gwcImeCompositionBuffer[32] = {}; D2_GLOBAL_GUARD(gwcImeCompositionBuffer, "gwcImeCompositionBuffer");
+
+// also labelled: ChatValue
+uint16_t gwszChatInputText[257] = {}; D2_GLOBAL_GUARD(gwszChatInputText, "gwszChatInputText");
+
+uint8_t gaChatHistoryBuffer[4112] = {}; D2_GLOBAL_GUARD(gaChatHistoryBuffer, "gaChatHistoryBuffer");
+
+// also labelled: gpIMECompositionString
+uint16_t gwcIMECompositionString[32] = {}; D2_GLOBAL_GUARD(gwcIMECompositionString, "gwcIMECompositionString");
+
 int gnMiniPanelButtonX[8] = {}; D2_GLOBAL_GUARD(gnMiniPanelButtonX, "gnMiniPanelButtonX");
 
 uint32_t gnMiniPanelButtonY[8] = {}; D2_GLOBAL_GUARD(gnMiniPanelButtonY, "gnMiniPanelButtonY");
@@ -44571,6 +44593,8 @@ D2NpcShopButtonStrc gaNpcShopButtons[4] = {}; D2_GLOBAL_GUARD(gaNpcShopButtons, 
 D2InventoryEntryStrc gaPlayerBodySlotScreenCoords[11] = {}; D2_GLOBAL_GUARD(gaPlayerBodySlotScreenCoords, "gaPlayerBodySlotScreenCoords");
 
 D2InventoryEntryStrc gaHirelingBodySlotScreenCoords[11] = {}; D2_GLOBAL_GUARD(gaHirelingBodySlotScreenCoords, "gaHirelingBodySlotScreenCoords");
+
+uint8_t gpInvRecipeScrollImage[8192] = {}; D2_GLOBAL_GUARD(gpInvRecipeScrollImage, "gpInvRecipeScrollImage");
 
 RGBQUAD nColor = RGBQUAD(); D2_GLOBAL_GUARD(nColor, "nColor");
 
@@ -44600,6 +44624,8 @@ RECT lprcTextOverheadRect = {}; D2_GLOBAL_GUARD(lprcTextOverheadRect, "lprcTextO
 
 int gQuestLogSelectedQuestByAct[5] = {}; D2_GLOBAL_GUARD(gQuestLogSelectedQuestByAct, "gQuestLogSelectedQuestByAct");
 
+D2QuestLogStrc gQuestLog = {}; D2_GLOBAL_GUARD(gQuestLog, "gQuestLog");
+
 int gaControlConfigRegionMouseState[7] = {}; D2_GLOBAL_GUARD(gaControlConfigRegionMouseState, "gaControlConfigRegionMouseState");
 
 uint64_t gbUIGoldStashMode = 0; D2_GLOBAL_GUARD(gbUIGoldStashMode, "gbUIGoldStashMode");
@@ -44621,6 +44647,10 @@ int gaSpellSelSkillTreeState[128] = {}; D2_GLOBAL_GUARD(gaSpellSelSkillTreeState
 D2GSPacketSrv0x2A D2GSPacketSrv0x2A_007c0d87 = {}; D2_GLOBAL_GUARD(D2GSPacketSrv0x2A_007c0d87, "D2GSPacketSrv0x2A_007c0d87");
 
 short gaNpcMenuHandledMessageIds[9] = {}; D2_GLOBAL_GUARD(gaNpcMenuHandledMessageIds, "gaNpcMenuHandledMessageIds");
+
+uint16_t gNpcMenuConfirmDialogStrings[40] = {}; D2_GLOBAL_GUARD(gNpcMenuConfirmDialogStrings, "gNpcMenuConfirmDialogStrings");
+
+uint16_t gwszTradePartnerName[16] = {}; D2_GLOBAL_GUARD(gwszTradePartnerName, "gwszTradePartnerName");
 
 uint8_t aQuestAvailabilityPacket[37] = {}; D2_GLOBAL_GUARD(aQuestAvailabilityPacket, "aQuestAvailabilityPacket");
 
@@ -44647,6 +44677,7 @@ int32_t gaYBufferRowOffsets[732] = {}; D2_GLOBAL_GUARD(gaYBufferRowOffsets, "gaY
 // =============================================================================
 
 int cChatCmdExclaim = 0x21; D2_GLOBAL_GUARD(cChatCmdExclaim, "cChatCmdExclaim");
+char * gpszDiabloIICaption = s_Diablo_II_006cc8b8; D2_GLOBAL_GUARD(gpszDiabloIICaption, "gpszDiabloIICaption");
 BOOL gbQuitGame = 0x1; D2_GLOBAL_GUARD(gbQuitGame, "gbQuitGame");
 uint32_t gnPrimaryClickState = 0x10; D2_GLOBAL_GUARD(gnPrimaryClickState, "gnPrimaryClickState");
 int gnMouseButtonEventState = 0x10; D2_GLOBAL_GUARD(gnMouseButtonEventState, "gnMouseButtonEventState");
@@ -44712,6 +44743,7 @@ uint32_t gnDialogDataInitialized = 0x1; D2_GLOBAL_GUARD(gnDialogDataInitialized,
 D2IniConfigStrc * D2IniData_client = 0; D2_GLOBAL_GUARD(D2IniData_client, "D2IniData_client");
 uint32_t gnClientAppModeQueueState = 0; D2_GLOBAL_GUARD(gnClientAppModeQueueState, "gnClientAppModeQueueState");
 int gClientAppModeQueueCounter = 0; D2_GLOBAL_GUARD(gClientAppModeQueueCounter, "gClientAppModeQueueCounter");
+LPCSTR gpszCmdLineCaptionStr = 0; D2_GLOBAL_GUARD(gpszCmdLineCaptionStr, "gpszCmdLineCaptionStr");
 uint32_t gbQServerRunning = 0; D2_GLOBAL_GUARD(gbQServerRunning, "gbQServerRunning");
 unsigned int gdwLastPacketActivityTick = {}; D2_GLOBAL_GUARD(gdwLastPacketActivityTick, "gdwLastPacketActivityTick");
 uint32_t gnClientModeInitValue = 0; D2_GLOBAL_GUARD(gnClientModeInitValue, "gnClientModeInitValue");
@@ -45066,6 +45098,7 @@ uint32_t gpTextScrollBoxDC6 = 0; D2_GLOBAL_GUARD(gpTextScrollBoxDC6, "gpTextScro
 DC6 * gpQuestScrollImageTop = 0; D2_GLOBAL_GUARD(gpQuestScrollImageTop, "gpQuestScrollImageTop");
 DC6 * gpQuestScrollImageBottom = 0; D2_GLOBAL_GUARD(gpQuestScrollImageBottom, "gpQuestScrollImageBottom");
 DC6 * gpQuestScrollImageBg = 0; D2_GLOBAL_GUARD(gpQuestScrollImageBg, "gpQuestScrollImageBg");
+uint32_t gnTextBoxExclusionX = 0; D2_GLOBAL_GUARD(gnTextBoxExclusionX, "gnTextBoxExclusionX");
 uint32_t gbTextEventHandlersRegistered = 0; D2_GLOBAL_GUARD(gbTextEventHandlersRegistered, "gbTextEventHandlersRegistered");
 int gnUICtrlConfigTotalRows = 0; D2_GLOBAL_GUARD(gnUICtrlConfigTotalRows, "gnUICtrlConfigTotalRows");
 int gnUICtrlConfigScrollMaxLines = 0; D2_GLOBAL_GUARD(gnUICtrlConfigScrollMaxLines, "gnUICtrlConfigScrollMaxLines");
@@ -45079,6 +45112,7 @@ BOOL gbUICtrlConfigKeyBindMode = 0; D2_GLOBAL_GUARD(gbUICtrlConfigKeyBindMode, "
 DC6 * gpUICtrlConfigScrollbarDC6 = 0; D2_GLOBAL_GUARD(gpUICtrlConfigScrollbarDC6, "gpUICtrlConfigScrollbarDC6");
 int gnUICtrlConfigPendingKeyStrId = 0; D2_GLOBAL_GUARD(gnUICtrlConfigPendingKeyStrId, "gnUICtrlConfigPendingKeyStrId");
 unsigned int gdwUICtrlConfigKeyBindTimestamp = {}; D2_GLOBAL_GUARD(gdwUICtrlConfigKeyBindTimestamp, "gdwUICtrlConfigKeyBindTimestamp");
+int gnUICtrlConfigScrollPosition = 0; D2_GLOBAL_GUARD(gnUICtrlConfigScrollPosition, "gnUICtrlConfigScrollPosition");
 DC6 * gpUIStatLevelUpPanelImages = 0; D2_GLOBAL_GUARD(gpUIStatLevelUpPanelImages, "gpUIStatLevelUpPanelImages");
 DC6 * gpUIStatLevelUpButtonImages = 0; D2_GLOBAL_GUARD(gpUIStatLevelUpButtonImages, "gpUIStatLevelUpButtonImages");
 BOOL gbUIStatButtonHovered = 0; D2_GLOBAL_GUARD(gbUIStatButtonHovered, "gbUIStatButtonHovered");
@@ -45687,9 +45721,9 @@ namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

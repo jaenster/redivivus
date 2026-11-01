@@ -9,7 +9,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/SkillDesc.h"
@@ -2018,7 +2017,7 @@ BOOL __fastcall HasShield(D2UnitStrc * pUnit) {
     if (UINT_00744584 > 0) {
       uint32_t nComponentIdx = 0;
       do {
-        if (pOverlayCode == (D2UnitStrc*)gaHasShieldItemCodes[nComponentIdx]) {
+        if (pOverlayCode == gaHasShieldItemCodes[nComponentIdx]) {
           return 0;
         }
 
@@ -2026,7 +2025,7 @@ BOOL __fastcall HasShield(D2UnitStrc * pUnit) {
       } while (nComponentIdx < UINT_00744584);
     }
 
-    D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine((uint32_t)pOverlayCode, (int*)&pShieldItem);
+    D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(pOverlayCode, (int*)&pShieldItem);
     if (!pItemsTxt) {
       return 0;
     }

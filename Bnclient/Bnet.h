@@ -13,6 +13,7 @@ namespace Bnclient::Bnet {
 // Function declarations
 int BNET_LogIndent(int32_t nIndentAction, int32_t nDelta);
 void BnetLog_WriteLine(char * Format, ...);
+void StaticInit_6cae80();
 void StaticFini_CriticalSection_00881860();
 void StaticFini_gnBnetLogFileHandle();
 

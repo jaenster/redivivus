@@ -17,7 +17,6 @@
 #include "D2Client/GAME/Wall2.h"
 #include "D2Client/Message.h"
 #include "D2Client/Renderer/Renderer.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/Sound/SoundHdr.h"
 #include "D2Client/Source/ClientEngine.h"
@@ -60,6 +59,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/Environment.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Units.h"
@@ -141,10 +141,7 @@ BOOL __stdcall WINMAIN_TestMemoryAccess(CMDPARAMS * pParams, char * szCmdLine) {
 
 // Triggers end-game congrats flow: set gShowEndGameCongrats, reset beta index, send exit packet, set ExitVar3.
 void TriggerEndGameCongratsExit() {
-    gEndGameUiState.showCongrats = true;
-    gEndGameUiState._pad0[0] = '\0';
-    gEndGameUiState._pad0[1] = '\0';
-    gEndGameUiState._pad0[2] = '\0';
+    gEndGameUiState.showCongrats = 1;
     gBetaScreenIndex = 0;
     GAME::Msg::NET_D2GS_CLIENT_Send_0x69();
     D2CLIENT_ExitVar3 = 1;

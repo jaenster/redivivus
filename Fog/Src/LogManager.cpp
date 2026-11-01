@@ -7,11 +7,10 @@
 #include "Fog/SMem.h"
 #include "Fog/Source/SFile.h"
 #include "Fog/Src/ErrorManager.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "D2Launch/CharSel.h"
 
@@ -1292,7 +1291,7 @@ void * __thiscall DestroyListNodeAndFree(void * pThis, uint8_t bFreeMemory) {
     uint32_t dwSEHTryLevel = -1;
     UnlinkListNodeDouble((int*)pThis);
     if (bFreeMemory & 1 && pThis) {
-      Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
     ExceptionList = pPrevExceptionList;
@@ -1313,7 +1312,7 @@ void __fastcall DestroyAllListNodes(void * pListHead) {
 
       dwSEHTryLevel = -1;
       UnlinkListNodeDouble(pObject);
-      Storm::SMem::SMemFree(pObject, s___AUMessage_LogManager___00708124, -2, 0);
+      Storm::Source::SMem::SMemFree(pObject, s___AUMessage_LogManager___00708124, -2, 0);
     }
 
     ExceptionList = pPrevExceptionList;
@@ -1324,7 +1323,7 @@ int * * __thiscall AllocateAndInsertMessageNode(int * * ppListHead, int32_t nIns
     pfnEHHandlerRoutine pfnSEHHandler = __GSHandlerCheck_EH_6c9e11;
     void* pPrevExceptionList = ExceptionList;
     ExceptionList = &pPrevExceptionList;
-    int** pNodeNew = (int**)Storm::SMem::SMemAlloc(nPayloadSize + 0x24, s___AUMessage_LogManager___00708124, -2, dwAllocFlags | 8);
+    int** pNodeNew = (int**)Storm::Source::SMem::SMemAlloc(nPayloadSize + 0x24, s___AUMessage_LogManager___00708124, -2, dwAllocFlags | 8);
     int** pNode;
     if (pNodeNew) {
       *pNodeNew = 0;
@@ -1496,7 +1495,7 @@ DWORD __stdcall LOGMANAGER_LogWriterThreadProc(void * lpThreadParam) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gLogFileCS);
         dwSEHTryLevel = -1;
         UnlinkListNodeDouble(pNode);
-        Storm::SMem::SMemFree(pNode, "delete", -1, 0);
+        Storm::Source::SMem::SMemFree(pNode, "delete", -1, 0);
       }
       if (!gLogWriterThreadStopFlag) {
         /* DWORD dwMilliseconds for Sleep */ Sleep(dwSleepMs);
@@ -1857,6 +1856,16 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9e38(EHExceptionRecord * pException
 // compiler-generated C++ EH handler; its frame is never registered with the OS
 int SehHandler_6c9e6a(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
     return ExceptionContinueSearch;
+}
+
+void StaticInit_6ca700() {
+    InitializeCriticalSection(&gLogMessageQueueCS);
+    atexit(StaticFini_gLogMessageQueueCS);
+}
+
+void StaticInit_6ca720() {
+    InitializeCriticalSection(&gLogFileCS);
+    atexit(StaticFini_gLogFileCS);
 }
 
 void __stdcall LOGMGR_InitMessageQueue() {

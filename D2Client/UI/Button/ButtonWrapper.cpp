@@ -6,7 +6,7 @@
 #include "D2Client/UI/EscMenu.h"
 #include "D2Win/Src/D2WinTextBox.h"
 #include "Fog/3rdparty/crashy/Report.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Button.h"
 #include "D2Client/UI/Dialog.h"
@@ -58,7 +58,7 @@ void __thiscall Destructor(::ButtonWrapper * pThis) {
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -126,7 +126,7 @@ void __thiscall SetAccelerator(::ButtonWrapper * pThis, BOOL bEnable) {
     int32_t dwExcState = 0;
     ExceptionList = &pPrevExceptionList;
     pThis->pVtable = (ButtonWrapperVtable*)(void*)ButtonWrapper::vftable;
-    ::ButtonImplementation* pNewButtonImpl = (::ButtonImplementation*)Storm::SMem::SMemAlloc(0x36, "new", -1, 0);
+    ::ButtonImplementation* pNewButtonImpl = (::ButtonImplementation*)Storm::Source::SMem::SMemAlloc(0x36, "new", -1, 0);
     dwExcState = (uint32_t)((uint32_t)((uint32_t)dwExcState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     if (pNewButtonImpl) {
       pNewButtonImpl = ButtonImplementation::Constructor(pNewButtonImpl, nPosX, nPosY, nButtonKind, pfnOnActivate);

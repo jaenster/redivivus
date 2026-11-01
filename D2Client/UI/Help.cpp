@@ -281,6 +281,10 @@ void __stdcall INPUT_HelpCloseButtonDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+void __stdcall HELP_MiniPanelKeyNoOp(D2UIMouseMsgStrc * pMsg) {
+
+}
+
 void __stdcall HELP_HideMiniPanel() {
     if (!gbMiniPanel) {
       return;
@@ -920,6 +924,16 @@ void __stdcall INPUT_HelpCloseButtonUp(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
+}
+
+void __stdcall HELP_OnEscapeOrSpace(D2UIMouseMsgStrc * pMsg) {
+    ui::SetUIFlag(UI_HELPSCREEN, UI_RESET, 0);
+    if (!gbMiniPanel) {
+      return;
+    }
+
+    ui::SetUIFlag(UI_MINIPANEL, UI_RESET, 0);
+    gbMiniPanel = 0;
 }
 
 void __fastcall HELP_SetUIVarW(eD2UIvars eUIVar, eD2UIvarsSetType eUIVarSetType, uint32_t dwArg1) {

@@ -7,7 +7,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/Panel.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
@@ -39,6 +38,7 @@
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Item.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
@@ -57,6 +57,7 @@
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
+#include "D2Game/SKILLS/Items.h"
 #include "D2Game/SKILLS/SkillItem.h"
 #include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Game/UNIT/Party.h"
@@ -75,7 +76,6 @@
 #include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Game/Ai/AiGeneral.h"
 #include "D2Game/Monster/AI/AI.h"
-#include "D2Game/SKILLS/Items.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -453,7 +453,7 @@ static eD2Skills ITEMMODE_GetItemSkillId(D2UnitStrc * pUnit) {
 
     _bIsScrollOrBookType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Scroll);
     if (_bIsScrollOrBookType) {
-      return *(eD2Skills*)((int)pBookLine + 8);
+      return pBookLine->scrollskill;
     }
 
     _bIsScrollOrBookType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Book);
@@ -461,7 +461,7 @@ static eD2Skills ITEMMODE_GetItemSkillId(D2UnitStrc * pUnit) {
       return ~SKILL_Attack;
     }
 
-    return *(eD2Skills*)((int)pBookLine + 0xc);
+    return pBookLine->bookskill;
 }
 
 // Adjusts the quantity of the skill associated with a scroll/book item (pUnit2) on the caster unit (pUnit) by nParam (positive=add, negative=subtract). After updating the skill quantity via SKILL_SetQuantity, sends 0x22 UpdateItemSkill packet to the client. Halts if either unit pointer is null.
@@ -707,10 +707,10 @@ void __fastcall ITEMMODE_AddStatsList_ForMercSwap(uint32_t dwParam, D2UnitStrc *
     ITEMMODE_AddStatsList(pUnit, pUnit2, nApply);
 }
 
-static void ITEMMODE_GetEquippedWeapons(D2UnitStrc * * ppUnit1, D2UnitStrc * * ppUnit2, int32_t nParam) {
+static void ITEMMODE_GetEquippedWeapons(D2UnitStrc * * ppUnit1, D2UnitStrc * * ppUnit2, D2UnitStrc * pUnit) {
     *ppUnit2 = 0;
     *ppUnit1 = 0;
-    D2InventoryStrc* pInventory = *(D2InventoryStrc**)(nParam + 0x60);
+    D2InventoryStrc* pInventory = pUnit->pInventory;
     if (!pInventory) {
       return;
     }
@@ -751,13 +751,13 @@ static BOOL ITEMMODE_IsSkillUsableCheck(D2UnitStrc * pUnit, D2SkillStrc * pSkill
     }
 }
 
-static void ITEMMODE_ResetSkillToDefault(D2SkillStrc * pSkill, D2UnitStrc * pUnit, int32_t nParam) {
+static void ITEMMODE_ResetSkillToDefault(D2SkillStrc * pSkill, D2UnitStrc * pUnit, int32_t bIsLeftSkill) {
     eD2Skills eSkillId;
     uint32_t nSkillGUID;
     if (!(pUnit && pSkill)) {
       return;
     }
-    if (nParam) {
+    if (bIsLeftSkill) {
       D2Common::Units::GetLeftSkillData(pUnit, &eSkillId, (int*)&nSkillGUID);
     } else {
       D2Common::Units::GetRightSkillData(pUnit, &eSkillId, (int*)&nSkillGUID);
@@ -772,7 +772,7 @@ static void ITEMMODE_ResetSkillToDefault(D2SkillStrc * pSkill, D2UnitStrc * pUni
     switch (nCanUse) {
       default:
         {
-          SKILLS::SkillsServer::Server_SelectSkill(pUnit, nParam, eSkillId, nSkillGUID);
+          SKILLS::SkillsServer::Server_SelectSkill(pUnit, bIsLeftSkill, eSkillId, nSkillGUID);
         }
       case 2:
         case 7:
@@ -811,7 +811,7 @@ static void ITEMMODE_ValidateWeaponSkills(D2UnitStrc * pUnit) {
       return;
     }
 
-    ITEMMODE_GetEquippedWeapons(&pLeftWeapon, &pRightWeapon, (int32_t)pUnit);
+    ITEMMODE_GetEquippedWeapons(&pLeftWeapon, &pRightWeapon, pUnit);
     if (!pLeftWeapon) {
       return;
     }
@@ -1018,7 +1018,7 @@ static void __stdcall PickingGold(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Uni
     UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit2, 0x17, pUnit2);
 }
 
-static void __stdcall ITEMMODE_GetItemPageForUnit(int32_t nParam, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+static void __stdcall ITEMMODE_GetItemPageForUnit(int32_t nUpdateType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     eD2UnitType eUnitType;
     int nUnit2Guid;
     if (!pUnit2) {
@@ -1036,7 +1036,7 @@ static void __stdcall ITEMMODE_GetItemPageForUnit(int32_t nParam, D2UnitStrc * p
     }
 
     D2Common::Units::SetupUpdateFlag(pUnit2, 3);
-    UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, nParam, pUnit);
+    UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, nUpdateType, pUnit);
 }
 
 uint32_t __fastcall ITEMMODE_CheckQuestItemCodePair(D2ItemsTxt * pItemsTxt1, D2ItemsTxt * pItemsTxt2, int32_t nCode1, int32_t nCode2) {
@@ -2270,7 +2270,6 @@ static void __stdcall ITEMMODE_ConsumeItem(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
 static eD2Skills ITEMMODE_GetItemCastSkill(D2UnitStrc * pUnit) {
     uint16_t uVar1;
-    void* pvVar2;
     eD2Skills eSkillId = ~SKILL_Attack;
     uint32_t bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Book);
     if (bIsType) {
@@ -2297,7 +2296,7 @@ static eD2Skills ITEMMODE_GetItemCastSkill(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    eSkillId = *(eD2Skills*)((int)pvVar2 + 8);
+    eSkillId = pDVar2->scrollskill;
     return eSkillId;
 }
 
@@ -3889,13 +3888,10 @@ static BOOL ITEMMODE_CheckInventorySpace(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 // Places an item into a unit's inventory grid at the given page, applies it to the owner, sets its page, fires QUEST_OnItemPickedUp and refreshes inventory.
 static BOOL __stdcall ITEMMODE_PlaceItemInInventoryPage(::SGAMEDATA * pGame, int32_t bRemoveFromRoom, int32_t nInvPage, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, char * szSourceFile, int32_t dwParam2) {
-    int* pGridSlotResult;
     D2RoomStrc* pRoom;
     BOOL bPutResult;
     uint32_t uVar2;
     eD2UnitType eUnitType;
-    uint32_t bActiveCharmResult;
-    int32_t dwZero;
     D2InventoryStrc* pInventory;
     if (pGame) {
       int32_t iVar1;
@@ -3972,7 +3968,7 @@ static BOOL __stdcall ITEMMODE_PlaceItemInInventoryPage(::SGAMEDATA * pGame, int
 // Stack-slot reuse: the low byte of the pUnit slot holds eSrcPage (ITEM_GetContainingInventoryPage of the item) for the rest of the function.
 int __fastcall SERVER_ItemToInventory(char * szSourceFile, int32_t bAutoPlaceGrid2, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nItemGUID, int32_t nDestX, int32_t nDestY, int32_t nParam1, int32_t nParam2, D2InventoryStrc * pInventory) {
     bool bIsDisabled;
-    int* pGridSlot;
+    int pGridSlot;
     uint32_t bIsActiveCharm;
     uint32_t uVar1;
     D2UnitStrc* pOwnerUnit = pUnit;
@@ -4019,7 +4015,7 @@ int __fastcall SERVER_ItemToInventory(char * szSourceFile, int32_t bAutoPlaceGri
         nDestY = 0;
       }
 
-      pGridSlot = (int*)D2Common::INVENTORY::Inventory::INVENTORY_PlaceItemAtCoords(pInventory, pItem, nDestX, nDestY, eInvPage, 0, eSrcPage);
+      pGridSlot = D2Common::INVENTORY::Inventory::INVENTORY_PlaceItemAtCoords(pInventory, pItem, nDestX, nDestY, eInvPage, 0, eSrcPage);
     }
     if (!pGridSlot) {
       return 0;
@@ -4321,10 +4317,9 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2UnitStrc* pUnit_00;
     D2UnitStrc* pItemInInv;
     int nPutResult;
-    int* pGridSlot;
-    BOOL BVar1;
+    BOOL pGridSlot;
     uint32_t bIsActiveCharm;
-    uint32_t uVar2;
+    uint32_t uVar1;
     D2RoomStrc* pRoom;
     eD2ItemFlag eItemFlag;
     POINT ptDropOrigin;
@@ -4392,10 +4387,10 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
         D2Common::Units::SetupUpdateFlag(pItemInInv, 4);
         ITEMMODE_RemoveItemStates(pUnit, pUnit_00);
         D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pUnit_00, INVPAGE_INVENTORY);
-        uVar2 = pUnit_00->nUnitGUID;
+        uVar1 = pUnit_00->nUnitGUID;
         if (pGameSaved) {
           SERVER_ITEM_SendStackableUsagePackets(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x87b);
-          pItemInInv = UNIT::SUnit::FindUnitFromTable(pGameSaved, UNIT_ITEM, uVar2);
+          pItemInInv = UNIT::SUnit::FindUnitFromTable(pGameSaved, UNIT_ITEM, uVar1);
           if (pItemInInv && pItemInInv->eUnitType == UNIT_ITEM && pItemInInv->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::GetHit) {
             eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItemInInv);
             nSrcPage = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nSrcPage + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eInvPage);
@@ -4416,8 +4411,8 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
 
               pGridSlot = D2Common::INVENTORY::Inventory::INVENTORY_AutoPlaceItemInGrid(pReinventory, pItemInInv, nErrorLine, 0, nSrcPage, ".\\ITEMS\\ItemMode.cpp", 0xc29);
               if (pGridSlot) {
-                BVar1 = D2Common::INVENTORY::Inventory::PutItemInInventory(pReinventory, pItemInInv, 1);
-                if (BVar1) {
+                pGridSlot = D2Common::INVENTORY::Inventory::PutItemInInventory(pReinventory, pItemInInv, 1);
+                if (pGridSlot) {
                   eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItemInInv);
                   if (eInvPage != INVPAGE_STASH) {
                     ITEMMODE_ApplyItemToOwner(pUnit, pItemInInv);
@@ -4434,8 +4429,8 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
 
                   D2Common::Units::SetupUpdateFlag(pItemInInv, 0);
                   D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pItemInInv, ITEMCMD_INVENTORY_PUT_ITEM, 1);
-                  BVar1 = ITEMMODE_HasSocketedItems(pItemInInv, ".\\ITEMS\\ItemMode.cpp", 0x8ea);
-                  if (BVar1) {
+                  pGridSlot = ITEMMODE_HasSocketedItems(pItemInInv, ".\\ITEMS\\ItemMode.cpp", 0x8ea);
+                  if (pGridSlot) {
                     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItemInInv, ITEMFLAG_RELOAD, 1);
                   }
 
@@ -4450,8 +4445,8 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
                     PLAYER::PlayerTrade::PLRTRADE_AddItemToTrade(pGameSaved, pUnit, pItemInInv);
                   }
 
-                  uVar2 = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pItemInInv, pUnit);
-                  if (uVar2) {
+                  uVar1 = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pItemInInv, pUnit);
+                  if (uVar1) {
                     ITEMS_RecalcEquippedItemStates(pGameSaved, pUnit, 0);
                     D2Common::Units::RefreshInventory(pUnit, 1);
                   }
@@ -4465,10 +4460,10 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
 
         D2Common::Units::GetCoords(pUnit, &ptDropOrigin);
         bSparseDrop = 1;
-        uVar2 = 1;
+        uVar1 = 1;
         pDropSpotOut = &ptDropSpot;
         pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-        pBestDropRoom = Items::Drop::FindBestSpotToSpawnItem(pRoom, &ptDropOrigin, pDropSpotOut, uVar2, bSparseDrop);
+        pBestDropRoom = Items::Drop::FindBestSpotToSpawnItem(pRoom, &ptDropOrigin, pDropSpotOut, uVar1, bSparseDrop);
         pGameDrop = pGameSaved;
         if (pBestDropRoom) {
           ITEMMODE_UnequipItemStats(pGameSaved, pUnit_00, pUnit, 0, 1);
@@ -4730,7 +4725,6 @@ BOOL __fastcall ITEMMODE_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pU
     BOOL nPutResult;
     D2UnitStrc* pSwapArmItem;
     D2UnitStrc* pInvVerifiedItem;
-    int* pGridSlot;
     eD2BodyLocDWORD nSwapBodyLoc;
     D2InventoryStrc* pInventory;
     if (!pGame) {
@@ -6532,11 +6526,10 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
     bool bIsDisabled;
     D2UnitStrc* pCarriedItem;
     int nPutResult;
-    int* pGridPos;
-    BOOL BVar1;
+    BOOL pGridPos;
     D2RoomStrc* pDropRoom;
     eD2ItemFlag eItemFlag;
-    int32_t iVar2;
+    int32_t iVar1;
     POINT ptUnitPos;
     POINT ptDropPos;
     D2UnitStrc* pNextItem;
@@ -6627,7 +6620,7 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
           if (pPlayerInventory) {
             bInTrade = 0;
             bRefreshInv = 1;
-            iVar2 = D2Common::Units::GetInventoryPage(pUnit2, eInvPage, pGame->bExpansion);
+            iVar1 = D2Common::Units::GetInventoryPage(pUnit2, eInvPage, pGame->bExpansion);
             if (pUnit2->eUnitType == UNIT_PLAYER) {
               if ((nSrcPage & 0xff) != 1) {
                 if ((nSrcPage & 0xff) == 2) {
@@ -6640,8 +6633,8 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
 
             pGridPos = D2Common::INVENTORY::Inventory::INVENTORY_AutoPlaceItemInGrid(pPlayerInventory, pCubeItem, iVar1, 0, nSrcPage, ".\\ITEMS\\ItemMode.cpp", 0x817);
             if (pGridPos) {
-              BVar1 = D2Common::INVENTORY::Inventory::PutItemInInventory(pPlayerInventory, pCubeItem, 1);
-              if (BVar1) {
+              pGridPos = D2Common::INVENTORY::Inventory::PutItemInInventory(pPlayerInventory, pCubeItem, 1);
+              if (pGridPos) {
                 eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pCubeItem);
                 if (eInvPage != INVPAGE_STASH) {
                   ITEMMODE_ApplyItemToOwner(pUnit2, pCubeItem);
@@ -6658,8 +6651,8 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
 
                 D2Common::Units::SetupUpdateFlag(pCubeItem, 0);
                 D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pCubeItem, ITEMCMD_INVENTORY_PUT_ITEM, 1);
-                BVar1 = ITEMMODE_HasSocketedItems(pCubeItem, ".\\ITEMS\\ItemMode.cpp", 0x8ea);
-                if (BVar1) {
+                pGridPos = ITEMMODE_HasSocketedItems(pCubeItem, ".\\ITEMS\\ItemMode.cpp", 0x8ea);
+                if (pGridPos) {
                   D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pCubeItem, ITEMFLAG_RELOAD, 1);
                 }
 

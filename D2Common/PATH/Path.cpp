@@ -1213,7 +1213,7 @@ static BOOL __stdcall PATH_CheckCollisionOnStep(uint32_t nParam1, uint32_t nPara
 }
 
 // Computes a direct (non-pathfound) movement velocity vector toward the current path target. Reads existing velocity into pVelOut[0/1]. If the path type is not 4, calculates the delta to the target waypoint in fixed-point; if both delta components are within the current speed magnitude, snaps the velocity exactly to the remaining delta and returns 1 (target reached this step). Otherwise leaves velocity unchanged and returns 0.
-static BOOL __stdcall PATH_ComputeDirectMovementVector(int * pVelOut, int * pDynamicPath) {
+static BOOL __stdcall PATH_ComputeDirectMovementVector(int * pVelOut, D2DynamicPathStrc * pDynamicPath) {
     int nAbsDeltaX;
     int nAbsVelY;
     int nAbsDeltaY;
@@ -1221,18 +1221,18 @@ static BOOL __stdcall PATH_ComputeDirectMovementVector(int * pVelOut, int * pDyn
     int nTargetXfp;
     int nAbsVelX;
     int nAbsVelYCopy;
-    *pVelOut = *(int*)((int)pDynamicPath + 0x72);
-    pVelOut[1] = *(int*)((int)pDynamicPath + 0x76);
-    if (pDynamicPath[0xf] != 4) {
+    *pVelOut = pDynamicPath->nVelocityX;
+    pVelOut[1] = pDynamicPath->nVelocityY;
+    if (pDynamicPath->ePathType != 4) {
       int nDeltaX;
-      nTargetXfp = (uint32_t)*(uint16_t*)((int)pDynamicPath + pDynamicPath[9] * 4 + 0x9e) * 0x10000 + 0x8000;
-      nDeltaX = (uint32_t)*(uint16_t*)(pDynamicPath + pDynamicPath[9] + 0x27) * 0x10000 + 0x8000 - *pDynamicPath;
+      nTargetXfp = (uint32_t)pDynamicPath->PathPoints[pDynamicPath->nPathPointIndex].nY * 0x10000 + 0x8000;
+      nDeltaX = (uint32_t)pDynamicPath->PathPoints[pDynamicPath->nPathPointIndex].nX * 0x10000 + 0x8000 - pDynamicPath->Coords.tFixed.x;
       nAbsDeltaX = nDeltaX;
       if (nDeltaX < 0) {
         nAbsDeltaX = -nDeltaX;
       }
 
-      nAbsDeltaY = nTargetXfp - pDynamicPath[1];
+      nAbsDeltaY = nTargetXfp - pDynamicPath->Coords.tFixed.y;
       if (nAbsDeltaY < 0) {
         nAbsDeltaY = -nAbsDeltaY;
       }
@@ -1260,7 +1260,7 @@ static BOOL __stdcall PATH_ComputeDirectMovementVector(int * pVelOut, int * pDyn
       }
       if (nAbsDeltaX <= nMaxVelComponent && nAbsDeltaY <= nMaxVelComponent) {
         *pVelOut = nDeltaX;
-        pVelOut[1] = nTargetXfp - pDynamicPath[1];
+        pVelOut[1] = nTargetXfp - pDynamicPath->Coords.tFixed.y;
         return 1;
       }
     }
@@ -1564,7 +1564,7 @@ static bool __stdcall PATH_ComputeMovementStep(uint32_t * pnOutX, uint32_t * pnO
       return false;
     }
 
-    BOOL BVar4 = PATH_ComputeDirectMovementVector(&sVelocity.nX, (int*)pSkillsTxt);
+    BOOL BVar4 = PATH_ComputeDirectMovementVector(&sVelocity.nX, pSkillsTxt);
     int iVar1 = pSkillsTxt->Coords.tFixed.y;
     int iVar2 = pSkillsTxt->Coords.tFixed.x;
     uint32_t nNewSubX = sVelocity.nX + iVar2;
@@ -1688,25 +1688,25 @@ static BOOL __stdcall PATH_MoveUnitToPosition(D2RoomStrc * pRoom, uint32_t nTarg
     return 1;
 }
 
-static int __stdcall PATH_MoveObjectToPosition(D2RoomStrc * pRoom, uint32_t nTargetPos, uint32_t * pPath) {
-    uint16_t wPosX = *(uint16_t*)((int)pPath + 2);
-    uint16_t wPosY = *(uint16_t*)((int)pPath + 6);
-    if (!(int*)pPath[0xc] || *(int*)pPath[0xc] != 3) {
+static int __stdcall PATH_MoveObjectToPosition(D2RoomStrc * pRoom, uint32_t nTargetPos, D2DynamicPathStrc * pPath) {
+    uint16_t wPosX = pPath->Coords.tSubtile.nPosX;
+    uint16_t wPosY = pPath->Coords.tSubtile.nPosY;
+    if (!pPath->pOwner || pPath->pOwner->eUnitType != UNIT_MISSILE) {
       if (nTargetPos || false) {
-        Collision::UpdateCollision_Type((D2RoomStrc*)pPath[7], (uint32_t)wPosX, (uint32_t)wPosY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath[0x12], pPath[0x13]);
+        Collision::UpdateCollision_Type(pPath->pRoom, (uint32_t)wPosX, (uint32_t)wPosY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath->nUnitWidth, pPath->nCollisionFlag);
       } else {
-        Collision::RemoveCollision_Type((D2RoomStrc*)pPath[7], (uint32_t)wPosX, (uint32_t)wPosY, pPath[0x12], pPath[0x13]);
+        Collision::RemoveCollision_Type(pPath->pRoom, (uint32_t)wPosX, (uint32_t)wPosY, pPath->nUnitWidth, pPath->nCollisionFlag);
       }
     } else if (!(short int)nTargetPos && !(nTargetPos >> 0x10)) {
-      Collision::RemoveCollision_Width((D2RoomStrc*)pPath[7], (uint32_t)wPosX, (uint32_t)wPosY, pPath[0x11], pPath[0x13]);
+      Collision::RemoveCollision_Width(pPath->pRoom, (uint32_t)wPosX, (uint32_t)wPosY, pPath->nUnitSize, pPath->nCollisionFlag);
     } else {
-      Collision::UpdateCollision_Width((D2RoomStrc*)pPath[7], (uint32_t)wPosX, (uint32_t)wPosY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath[0x11], pPath[0x13]);
+      Collision::UpdateCollision_Width(pPath->pRoom, (uint32_t)wPosX, (uint32_t)wPosY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath->nUnitSize, pPath->nCollisionFlag);
     }
-    if ((D2RoomStrc*)pPath[7] != pRoom) {
-      pPath[0xd] |= 1;
+    if (pPath->pRoom != pRoom) {
+      pPath->nFlags |= 1;
     }
 
-    DRLGPATH_SetPathPosition(nTargetPos * 0x10000 + 0x8000, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2) * 0x10000 + 0x8000, pRoom, (D2DynamicPathStrc*)pPath);
+    DRLGPATH_SetPathPosition(nTargetPos * 0x10000 + 0x8000, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2) * 0x10000 + 0x8000, pRoom, pPath);
     if (nTargetPos || false) {
       D2RoomStrc* pBetterRoom;
       pBetterRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2));
@@ -1716,7 +1716,7 @@ static int __stdcall PATH_MoveObjectToPosition(D2RoomStrc * pRoom, uint32_t nTar
       }
     }
 
-    PATH_ResetPathState((D2DynamicPathStrc*)pPath);
+    PATH_ResetPathState(pPath);
     return 1;
 }
 

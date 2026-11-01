@@ -10,8 +10,8 @@
 #include "D2Game/Monster/Monsters.h"
 #include "D2Game/UNIT/sunitproxy.h"
 #include "Storm/SCMD.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SErr.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
@@ -1127,6 +1127,16 @@ void __stdcall SCmdProcessCommandLine(pfnSCmdUnknownArgCallback pfnUnknownCallba
     int bSkipFirstToken = 1;
     LPSTR szCommandLine = GetCommandLineA();
     SCmdProcess(szCommandLine, bSkipFirstToken, pfnUnknownCallback, pfnErrorCallback);
+}
+
+void StaticInit_6cb030() {
+    gStormCmdListHeadBackslash.pNext = ~(uintptr_t)((char*)&gStormCmdListHeadBackslash + 4);
+    atexit(StaticFini_gStormCmdListBackslash);
+}
+
+void StaticInit_6cb050() {
+    gStormCmdListHeadSlash.pNext = ~(uintptr_t)((char*)&gStormCmdListHeadSlash + 4);
+    atexit(StaticFini_gStormCmdListSlash);
 }
 
 // Runs at exit: removes every element from the Storm command-argument list gStormCmdListHeadBackslash, then unlinks the list head itself.

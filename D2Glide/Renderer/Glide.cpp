@@ -26,9 +26,9 @@
 #include "Fog/Src/DataArrays.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/LogManager.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SBMP.h"
 #include "Storm/Source/SFile.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2CMP/tagPALETTEENTRY.h"
 
@@ -105,10 +105,10 @@ BOOL __fastcall SetGamma(int32_t nGamma) {
         nGrGetResult = (*GLIDEDLL_grGet_12)(0x2a, 4, &fGammaVal.nValue);
         FVar1 = 0;
         if (nGrGetResult) {
-          pGammaTable = (FxU32*)Storm::SMem::SMemAlloc(nTableSize * 4, ".\\Src\\glCore.cpp", 0x42f, 0);
+          pGammaTable = (FxU32*)Storm::Source::SMem::SMemAlloc(nTableSize * 4, ".\\Src\\glCore.cpp", 0x42f, 0);
           Fog::Src::DataArrays::FOG_FillArrayWithRandomInts(nGamma, pGammaTable, (double)gbWINDOWED, (uint32_t*)0x4, nTableSize, (1 << ((uint8_t)fGammaVal.nValue & 0x1f)) - 1);
           (*GLIDEDLL_grLoadGammaTable_16)(nTableSize, pGammaTable, pGammaTable, pGammaTable);
-          nFreeResult = Storm::SMem::SMemFree(pGammaTable, ".\\Src\\glCore.cpp", 0x43a, 0);
+          nFreeResult = Storm::Source::SMem::SMemFree(pGammaTable, ".\\Src\\glCore.cpp", 0x43a, 0);
           return nFreeResult;
         }
       }
@@ -3359,7 +3359,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       bFileLoadOk = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &dwFileSize, 0, 3, 0);
       if (bFileLoadOk && nVersion) {
         iVar1 = Storm::Source::SBMP::SBmpDecodeImage(2, (void*)nVersion, dwFileSize, abImgBuf, *gpGlideSmackerTexBuf2, 0x6db0, &nImgWidth, &nImgHeight, &nImgBpp);
-        Storm::SMem::SMemFree((void*)nVersion, ".\\Src\\glSmack.cpp", 0xdb, 0);
+        Storm::Source::SMem::SMemFree((void*)nVersion, ".\\Src\\glSmack.cpp", 0xdb, 0);
         bFileLoadOk = nImgWidth;
         if (iVar1 && nImgWidth == 0x1d4 && nImgHeight == 0x3c && nImgBpp == 8) {
           iVar1 = 0;

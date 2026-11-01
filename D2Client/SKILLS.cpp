@@ -8,7 +8,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/SKILLS/SkillsAss.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/CUnit.h"
@@ -35,6 +34,7 @@
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Path.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Seed.h"
@@ -202,7 +202,7 @@ BOOL __fastcall Skills_CltDoFunc_BaalCorpseExplosion(D2UnitStrc * pUnit, eD2Skil
 }
 
 // Spawns a single directed missile as part of a multi-missile/spread skill effect. Advances the owner unit's RNG seed to pick one of 8 directional offsets (gnSkillBaseTableIndex/Offset), derives the spawn X/Y from the owner's static or dynamic path position, and selects a missile id from a 3-entry table at nParam1+0xEA/0xEC/0xEE (seed-randomized choice). Builds a zeroed D2SkillArgStrc, calls MakeMissile, then sets a seed-derived Z position (via D2GetSkillCalc + UNIT_GetModuloFromSeed) and the missile target X/Y to the owner's current position. No return value; nParam1 points to the skill/missile parameter record.
-static void __stdcall SKILLSCLT_CreateMultiMissileDirected(int32_t nParam1, eD2Skills eSkill, int32_t nParam2, D2UnitStrc * pUnit) {
+static void __stdcall SKILLSCLT_CreateMultiMissileDirected(D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nParam2, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static int gnSkillBaseTableOffset[8] = { 0x7, 0x5, 0x0, -0x5, -0x7, -0x5, 0x0, 0x5 }; D2_STATIC_GUARD(gnSkillBaseTableOffset, "D2Client::SKILLS::SKILLSCLT_CreateMultiMissileDirected::gnSkillBaseTableOffset");
     static int gnSkillBaseTableIndex[8] = { 0x0, 0x5, 0x7, 0x5, 0x0, -0x5, -0x7, -0x5 }; D2_STATIC_GUARD(gnSkillBaseTableIndex, "D2Client::SKILLS::SKILLSCLT_CreateMultiMissileDirected::gnSkillBaseTableIndex");
@@ -242,7 +242,7 @@ static void __stdcall SKILLSCLT_CreateMultiMissileDirected(int32_t nParam1, eD2S
     int nDirOffsetX;
     nDirOffsetX = gnSkillBaseTableOffset[nRandIdx2];
     eMissilesId eMissileA;
-    eMissileA = (eMissilesId)*(short int*)(nParam1 + 0xea);
+    eMissileA = (eMissilesId)pSkillsTxt->cltmissile[1];
     int nMissileSpawnX;
     nMissileSpawnX = eMissileSelected + nDirOffsetX;
     if ((int)eMissileA < 0) {
@@ -250,15 +250,15 @@ static void __stdcall SKILLSCLT_CreateMultiMissileDirected(int32_t nParam1, eD2S
     }
 
     eMissileSelected = eMissileA;
-    if (*(short int*)(nParam1 + 0xec) >= 0) {
-      if (*(short int*)(nParam1 + 0xee) >= 0) {
+    if (pSkillsTxt->cltmissile[2] >= 0) {
+      if (pSkillsTxt->cltmissile[3] >= 0) {
         seedNext = D2_SEED_NEXT(*pSeed);
         *pSeed = seedNext;
         nRandIdx2 = seedNext.nSeedLow % 3;
         switch (nRandIdx2) {
           case 1:
             {
-              eMissileSelected = (int)*(short int*)(nParam1 + 0xee);
+              eMissileSelected = (int)pSkillsTxt->cltmissile[3];
             }
           default:
             {
@@ -278,7 +278,7 @@ static void __stdcall SKILLSCLT_CreateMultiMissileDirected(int32_t nParam1, eD2S
         }
       }
 
-      eMissileSelected = (int)*(short int*)(nParam1 + 0xec);
+      eMissileSelected = (int)pSkillsTxt->cltmissile[2];
     }
 
     spawn_selected_missile:
@@ -296,7 +296,7 @@ static void __stdcall SKILLSCLT_CreateMultiMissileDirected(int32_t nParam1, eD2S
       return;
     }
 
-    uint32_t nRandZOffset = D2Common::Skills::D2GetSkillCalc(pUnit, *(int32_t*)(nParam1 + 0x118), eSkill, nParam2);
+    uint32_t nRandZOffset = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->cltcalc[1], eSkill, nParam2);
     nRandZOffset = Archive::UNIT_GetModuloFromSeed(pSeed, nRandZOffset);
     Engine::Particle::SetPosVectorShifted(pMissile, 0, 0, nRandZOffset);
     eD2UnitType eUnitTypeC = pUnit->eUnitType;
@@ -369,9 +369,9 @@ BOOL __fastcall Skills_CltDoFunc_MultiMissileDirected(D2UnitStrc * pUnit, eD2Ski
     }
 
     do {
-      SKILLSCLT_CreateMultiMissileDirected((int32_t)pSkillTxt, eSkill, nRepeatCount, pUnit);
-      SKILLSCLT_CreateMultiMissileDirected((int32_t)pSkillTxt, eSkill, nRepeatCount, pUnit);
-      SKILLSCLT_CreateMultiMissileDirected((int32_t)pSkillTxt, eSkill, nRepeatCount, pUnit);
+      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
+      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
+      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
       nSkillLvl--;
     } while (nSkillLvl);
 

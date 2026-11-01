@@ -72,6 +72,7 @@ uint32_t __thiscall WND_ByteBuffer_HasRoom(int32_t pThis, int32_t nAddBytes);
 int32_t __thiscall WND_EntryArray_AllocNext(int32_t pThis, int * pnCount);
 void __thiscall WND_EntryArray_FreeEntries(int32_t pThis, int32_t nFreeCount);
 int32_t __thiscall WND_EntryArray_AllocOrReuse(int32_t pThis, int32_t pReuseEntry, int32_t bAllocNew);
+void StaticInit_6ca8e0();
 // Runs at exit: removes every element from the tracked window list, then unlinks the list head itself.
 void StaticFini_gWndTrackingList();
 // 3 internal functions (defined in .cpp)

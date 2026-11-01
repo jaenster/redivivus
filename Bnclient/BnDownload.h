@@ -50,6 +50,7 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(struct D2BnetDownloadStateStrc *
 // EDX nDownloadFlags: download context +0x22c (file download) or 2 (patch download); not read here.
 void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownloadFlags, uint32_t eFileType, FILETIME * pModTime, LPCSTR szSourcePath, char * szDestPath, uint32_t * pPoolMgr, size_t nSize, int32_t bDeleteSource, int32_t bIsExtraWork);
 uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pbParam, size_t nSize);
+void StaticInit_6caed0();
 void StaticFini_CriticalSection_00881f64();
 // 7 internal functions (defined in .cpp)
 

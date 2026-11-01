@@ -15,7 +15,6 @@
 #include "D2Client/GAME/View.h"
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/SKILLS/SkillsMon.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/Path.h"
@@ -49,6 +48,7 @@
 #include "D2Common/Drlg/Path.h"
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/Drlg/Transform.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
@@ -159,18 +159,18 @@ static int32_t MISSILE_GetSpeedByRemainingFrames(D2UnitStrc * pUnit) {
     return nRemainingFrames >= 300 ? 0xf : 0x3;
 }
 
-static int32_t MISSILE_GetPoisonNovaRadius(int32_t pMissileTxtRaw, int32_t nCurrentFrame) {
+static int32_t MISSILE_GetPoisonNovaRadius(D2MissilesTxt * pMissileTxtRaw, int32_t nCurrentFrame) {
     if (nCurrentFrame >= 0x1e) {
       int nMaxRadius;
       if (nCurrentFrame < 0x55) {
         return (nCurrentFrame - 0xf) / 4;
       }
 
-      nMaxRadius = *(short int*)(pMissileTxtRaw + 0x96) - 0x32;
+      nMaxRadius = pMissileTxtRaw->Range - 0x32;
       if (nCurrentFrame < nMaxRadius) {
         return 0xc;
       }
-      if (nCurrentFrame < *(short int*)(pMissileTxtRaw + 0x96)) {
+      if (nCurrentFrame < pMissileTxtRaw->Range) {
         nMaxRadius = nCurrentFrame - nMaxRadius;
         return 0xc - ((int)((nMaxRadius >> 0x1f & 3U) + nMaxRadius) >> 2);
       }
@@ -4593,16 +4593,16 @@ int32_t __fastcall MISSILE_CltHitFn37_RadamentHandOfGod(D2UnitStrc * pUnit, D2Un
     }
 
     do {
-      int nParam;
+      int nSeedOffset;
       uVar2 = (uint64_t)pSeed->nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
-      nParam = (int)uVar2 + (int)((uVar2 & 0xffffffff) / 0x14) * -0x14 - 10 + iStack_8;
+      nSeedOffset = (int)uVar2 + (int)((uVar2 & 0xffffffff) / 0x14) * -0x14 - 10 + iStack_8;
       DVar3 = D2_SEED_NEXT_VAL(uVar2);
       *pSeed = DVar3;
       DStack_70.nUnitY = DVar3.nSeedLow % 0x14 - 10 + iStack_c;
-      if (nParam == iStack_8 && DStack_70.nUnitY == iStack_c) {
+      if (nSeedOffset == iStack_8 && DStack_70.nUnitY == iStack_c) {
         iStack_10--;
       } else {
-        DStack_70.nUnitX = nParam;
+        DStack_70.nUnitX = nSeedOffset;
         pUnit_00 = Missile::MakeMissile(&DStack_70);
         if (pUnit_00) {
           SKILLS::SkillsMon::SKILLSMON_SetMissilePathLinear(pUnit_00, nSeedOffset);
@@ -7439,7 +7439,7 @@ void __fastcall MISSILE_CltDoFn29_AndyControl(D2UnitStrc * pUnit) {
 
         nRemainingFrames2 = D2Common::Units::Missile::GetRemainingFrames(pUnit);
         if (pMissileTxt->CltSubMissile1 > 0 && (int)nRemainingFrames2 > 10) {
-          nNovaRadius = MISSILE_GetPoisonNovaRadius((int32_t)pMissileTxt, nRemainingFrames2);
+          nNovaRadius = MISSILE_GetPoisonNovaRadius(pMissileTxt, nRemainingFrames2);
           MISSILE_CreateSubWithSound(pOwner, pUnit, (int)pMissileTxt->CltSubMissile1, nRemainingFrames2, nNovaRadius);
         }
 

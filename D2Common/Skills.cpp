@@ -41,6 +41,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Stats/StatsEx.h"
@@ -751,7 +752,7 @@ static BOOL __stdcall SKILLS_CheckWeaponRequirements(D2UnitStrc * pUnit, D2Skill
 }
 
 // Checks whether a skill's use-restriction condition is satisfied for the caster. Reads the restrict field from the skill record: 0 = requires no active poison state (returns true if not poisoned); 1 = always allowed; 2 = requires a poison state AND at least one of the skill's three state[] entries active on the unit. Returns 1 if the restriction passes, 0 otherwise. Returns 0 immediately if unit or skill pointer is null.
-static int SKILLS_CheckRestriction(int * pSkillTxt, D2UnitStrc * pUnitStrc) {
+static int SKILLS_CheckRestriction(D2SkillStrc * pSkillTxt, D2UnitStrc * pUnitStrc) {
     eD2States eActiveState;
     int32_t nHasPoisonState2;
     int32_t nStateIdx;
@@ -761,7 +762,7 @@ static int SKILLS_CheckRestriction(int * pSkillTxt, D2UnitStrc * pUnitStrc) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillRecord = (D2SkillsTxt*)*pSkillTxt;
+    D2SkillsTxt* pSkillRecord = pSkillTxt->pRecord;
     if (pSkillRecord) {
       int32_t nHasPoisonState;
       cRestrictionType = pSkillRecord->restrict;
@@ -3677,7 +3678,7 @@ int32_t __stdcall SKILLS_CanUseSkill(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
       return 1;
     }
 
-    int iVar2 = SKILLS_CheckRestriction((int*)pSkill, pUnit);
+    int iVar2 = SKILLS_CheckRestriction(pSkill, pUnit);
     if (!iVar2) {
       return 4;
     }

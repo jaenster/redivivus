@@ -9,7 +9,6 @@
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/SKILLS.h"
 #include "D2Client/SKILLS/SkillsAma.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Missile.h"
@@ -39,6 +38,7 @@
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Path.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
@@ -4077,18 +4077,18 @@ void __fastcall MISSMODE_ExpireAndFree(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     UNIT::SUnit::FreeServerUnit(pGame, pUnit);
 }
 
-static BOOL MISSMODE_CheckCollisionMode(int nCollisionMode, int * pnParam) {
-    int nCurMode = !pnParam ? 6 : *pnParam;
+static BOOL MISSMODE_CheckCollisionMode(int nCollisionMode, D2UnitStrc * pnParam) {
+    eD2UnitType nCurMode = !pnParam ? UNIT_COUNT : pnParam->eUnitType;
     switch (nCollisionMode) {
       case 0:
         return 0;
       case 1:
-        if (nCurMode) {
+        if (nCurMode != UNIT_PLAYER) {
           return 0;
         }
       break;
       case 2:
-        if (nCurMode != 1) {
+        if (nCurMode != UNIT_MONSTER) {
           return 0;
         }
       return 1;
@@ -4439,7 +4439,7 @@ int __fastcall Hits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarge
         eCurrMode = pUnit->eAnimMode.ePlayerMode;
       }
 
-      bIsOwner = MISSMODE_CheckCollisionMode(eCurrMode, (int*)pTarget);
+      bIsOwner = MISSMODE_CheckCollisionMode(eCurrMode, pTarget);
       if (!bIsOwner) {
         return 1;
       }

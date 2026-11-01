@@ -17,7 +17,7 @@
 #include "Fog/File.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/H/stpl.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/D2Client.h"
@@ -888,7 +888,7 @@ int __thiscall OnMouseUp(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMs
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

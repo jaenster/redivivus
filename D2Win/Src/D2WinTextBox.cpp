@@ -18,7 +18,7 @@
 #include "Fog/File.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2Client/UI/EscMenu.h"
 #include "D2Win/D2WinEditBox.h"
@@ -1579,7 +1579,7 @@ BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint1
         nMaxPixelWidth = nAvailWidth - nLine;
       }
 
-      pFirstLine = (uint16_t*)Storm::SMem::SMemAlloc(0x800, ".\\Src\\D2WinTextBox.cpp", 0x497, 0);
+      pFirstLine = (uint16_t*)Storm::Source::SMem::SMemAlloc(0x800, ".\\Src\\D2WinTextBox.cpp", 0x497, 0);
       pWorkBuf = pFirstLine;
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(pFirstLine, wszText);
       nTotalLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pFirstLine);
@@ -1610,22 +1610,22 @@ BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint1
         } while ((int)nWrapCharCount < nTotalLen);
       }
 
-      pFirstLine = (uint16_t*)Storm::SMem::SMemAlloc(0x800, ".\\Src\\D2WinTextBox.cpp", 0x4b7, 0);
-      pSecondLine = (uint16_t*)Storm::SMem::SMemAlloc(0x800, ".\\Src\\D2WinTextBox.cpp", 0x4b8, 0);
+      pFirstLine = (uint16_t*)Storm::Source::SMem::SMemAlloc(0x800, ".\\Src\\D2WinTextBox.cpp", 0x4b7, 0);
+      pSecondLine = (uint16_t*)Storm::Source::SMem::SMemAlloc(0x800, ".\\Src\\D2WinTextBox.cpp", 0x4b8, 0);
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pFirstLine, pWorkBuf, nWrapCharCount);
       pszCurScan = (uint16_t*)(nTotalLen - nWrapCharCount);
       pFirstLine[nWrapCharCount] = L'\0';
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pSecondLine, pCharCursor, (size_t)pszCurScan);
       pSecondLine[(int)pszCurScan] = L'\0';
-      Storm::SMem::SMemFree(pWorkBuf, ".\\Src\\D2WinTextBox.cpp", 0x4bf, 0);
+      Storm::Source::SMem::SMemFree(pWorkBuf, ".\\Src\\D2WinTextBox.cpp", 0x4bf, 0);
       D2WinTextBox::SetText(pTextBoxSaved, pFirstLine, nLineStyle, true, nAlignment);
       if (nAlignment == 1) {
         nAlignment = 2;
       }
 
       D2WinTextBox::SetText(pTextBoxSaved, pSecondLine, nLineStyle, false, nAlignment);
-      Storm::SMem::SMemFree(pFirstLine, ".\\Src\\D2WinTextBox.cpp", 0x4c4, 0);
-      Storm::SMem::SMemFree(pSecondLine, ".\\Src\\D2WinTextBox.cpp", 0x4c5, 0);
+      Storm::Source::SMem::SMemFree(pFirstLine, ".\\Src\\D2WinTextBox.cpp", 0x4c4, 0);
+      Storm::Source::SMem::SMemFree(pSecondLine, ".\\Src\\D2WinTextBox.cpp", 0x4c5, 0);
       return 1;
     }
 }

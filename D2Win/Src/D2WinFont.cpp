@@ -18,7 +18,6 @@
 #include "Fog/Memory.h"
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Panel.h"
 
@@ -1453,6 +1452,26 @@ void __stdcall Draw_UnitNameUnderCursor() {
     }
 
     SetAndReturnLastFont(pSavedFont);
+}
+
+void StaticInit_6cae20() {
+    int iVar1;
+    D2TooltipTextStrc* pDVar2 = &DisplayedTooltip;
+    for (iVar1 = 0x200; iVar1; iVar1--) {
+      pDVar2->wszString[0] = L'\0';
+      pDVar2->wszString[1] = L'\0';
+      pDVar2 = (D2TooltipTextStrc*)(pDVar2->wszString + 2);
+    }
+}
+
+void StaticInit_6cae40() {
+    gwFontHeightDefault[0] = 0;
+    gwFontHeightDefault[1] = 0;
+}
+
+void StaticInit_6cae50() {
+    gnFontTableCharWidthCache[0] = 0;
+    gnFontTableCharWidthCache[1] = 0;
 }
 
 } // namespace D2Win::Src::D2WinFont

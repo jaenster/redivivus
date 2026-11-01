@@ -3,7 +3,7 @@
 #include "D2CMP/SRC/CelCmp/CELLIST.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Storm/H/stpl.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2CMP/SRC/CelCmp/TCELENTRY.h"
 
@@ -60,7 +60,7 @@ void __thiscall Destructor(::CELLIST * pThis) {
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

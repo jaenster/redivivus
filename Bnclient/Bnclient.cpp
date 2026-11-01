@@ -7,8 +7,8 @@
 #include "Fog/Engine/Application.h"
 #include "Fog/Memory.h"
 #include "Storm/D2Srp.h"
-#include "Storm/SMem.h"
-#include "Storm/Source/SSComp.h"
+#include "Storm/Source/SLog.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "Bnclient/Bnet.h"
@@ -223,17 +223,17 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
 }
 
 int * __thiscall BNCLIENT_InitFilestream(int * pStream, char * szFilePath) {
-    Storm::Source::SSComp::SLogCreate(szFilePath, 0, pStream);
+    Storm::Source::SLog::SLogCreate(szFilePath, 0, pStream);
     return pStream;
 }
 
 void * __thiscall BNCLIENT_DestroyCompressor(void * pCompressor, uint8_t bFreeMemory) {
-    Storm::Source::SSComp::SLogClose(*(uint32_t*)pCompressor);
+    Storm::Source::SLog::SLogClose(*(uint32_t*)pCompressor);
     if (!(bFreeMemory & 1)) {
       return pCompressor;
     }
 
-    Storm::SMem::SMemFree(pCompressor, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pCompressor, "delete", -1, 0);
     return pCompressor;
 }
 
@@ -254,7 +254,7 @@ void * __stdcall BNCLIENT_GetBnetLogFilestream() {
     }
 
     gbBnetLogInitialized |= 1;
-    Storm::Source::SSComp::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
+    Storm::Source::SLog::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
     atexit(Bnet::StaticFini_gnBnetLogFileHandle);
     return &gnBnetLogFileHandle;
 }
@@ -304,7 +304,7 @@ void __fastcall SRP_DestroyContext(D2Srp * * ppContext) {
       return;
     }
 
-    Storm::SMem::SMemFree(*ppContext, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(*ppContext, "delete", -1, 0);
 }
 
 } // namespace Bnclient

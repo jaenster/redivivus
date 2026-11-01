@@ -1593,4 +1593,8 @@ void __fastcall CMD_InitKeyConfigUI(int32_t nFadeInDuration, int32_t nHoldDurati
     gRoomLightPulse.nHoldDuration = nHoldDuration;
 }
 
+void StaticInit_6caad0() {
+    memset(gwKeyNameBuffer, 0, 4 * sizeof(gwKeyNameBuffer[0]));
+}
+
 } // namespace D2Client::UI::CmdTbl

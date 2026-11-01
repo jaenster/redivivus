@@ -2093,11 +2093,11 @@ short * __stdcall DRLGPATH_FindNodeInClosedList(int32_t nOpenListBase, uint32_t 
 }
 
 // Inserts a node into the open list hash table and the sorted priority linked list. Nodes are sorted by their f-cost (ascending) for efficient best-first retrieval.
-static void DRLGPATH_InsertNodeSorted(int32_t nParam, D2DrlgPathNodeStrc * pNode) {
-    D2DrlgPathNodeStrc* pNextSortedNode = *(D2DrlgPathNodeStrc**)(nParam + 0x400);
+static void DRLGPATH_InsertNodeSorted(D2DrlgPathSearchCtxStrc * nParam, D2DrlgPathNodeStrc * pNode) {
+    D2DrlgPathNodeStrc* pNextSortedNode = (D2DrlgPathNodeStrc*)nParam->pSortedHead;
     uint32_t nHashIdx = gnPathNodeMax[(uint8_t)pNode->nY & 0x7f] + gnPathSearchMax[(uint8_t)pNode->nX & 0x7f] & 0x7f;
-    pNode->pHashNext = *(D2DrlgPathNodeStrc**)(nParam + nHashIdx * 4);
-    *(D2DrlgPathNodeStrc**)(nParam + nHashIdx * 4) = (D2DrlgPathNodeStrc*)pNode;
+    pNode->pHashNext = *(D2DrlgPathNodeStrc**)(nParam->abyOpenBuckets + nHashIdx * 4);
+    *(D2DrlgPathNodeStrc**)(nParam->abyOpenBuckets + nHashIdx * 4) = (D2DrlgPathNodeStrc*)pNode;
     D2DrlgPathNodeStrc* pPrevSortedNode = 0;
     if (pNextSortedNode) {
       D2DrlgPathNodeStrc* pSortedNode;
@@ -2119,28 +2119,28 @@ static void DRLGPATH_InsertNodeSorted(int32_t nParam, D2DrlgPathNodeStrc * pNode
       }
     }
 
-    pNode->pSortedNext = *(D2DrlgPathNodeStrc**)(nParam + 0x400);
-    *(D2DrlgPathNodeStrc**)(nParam + 0x400) = (D2DrlgPathNodeStrc*)pNode;
+    pNode->pSortedNext = (D2DrlgPathNodeStrc*)nParam->pSortedHead;
+    nParam->pSortedHead = pNode;
 }
 
 // Removes the best (lowest f-cost) node from the open priority list and moves it to the closed list hash table. This is the standard A* open list pop operation.
-static int32_t * DRLGPATH_PopBestNodeFromOpenList(int32_t nOpenListBase) {
+static int32_t * DRLGPATH_PopBestNodeFromOpenList(D2DrlgPathSearchCtxStrc * nOpenListBase) {
     uint8_t* pbVar1;
-    pbVar1 = *(uint8_t**)(nOpenListBase + 0x400);
+    pbVar1 = (uint8_t*)nOpenListBase->pSortedHead;
     if (!pbVar1) {
       return (int32_t*)pbVar1;
     }
 
-    *(uint32_t*)(nOpenListBase + 0x400) = *(uint32_t*)(pbVar1 + 0x34);
+    nOpenListBase->pSortedHead = *(void**)(pbVar1 + 0x34);
     uint32_t nHashIdx;
     nHashIdx = gnPathNodeMax[pbVar1[2] & 0x7f] + gnPathSearchMax[*pbVar1 & 0x7f] & 0x7f;
-    uint8_t* pHashChainHead;
-    pHashChainHead = *(uint8_t**)(nOpenListBase + nHashIdx * 4);
-    if (pHashChainHead != pbVar1) {
+    uint8_t* pbVar2;
+    pbVar2 = *(uint8_t**)(nOpenListBase->abyOpenBuckets + nHashIdx * 4);
+    if (*(uint8_t**)(nOpenListBase->abyOpenBuckets + nHashIdx * 4) != pbVar1) {
       uint8_t* pHashWalker;
       do {
-        pHashWalker = pHashChainHead;
-        pHashChainHead = *(uint8_t**)(pHashWalker + 0x30);
+        pHashWalker = pbVar2;
+        pbVar2 = *(uint8_t**)(pHashWalker + 0x30);
       } while (*(uint8_t**)(pHashWalker + 0x30) != pbVar1);
 
       if (pHashWalker) {
@@ -2149,15 +2149,15 @@ static int32_t * DRLGPATH_PopBestNodeFromOpenList(int32_t nOpenListBase) {
       }
     }
 
-    *(uint32_t*)(nOpenListBase + nHashIdx * 4) = *(uint32_t*)(pbVar1 + 0x30);
+    *(uint32_t*)(nOpenListBase->abyOpenBuckets + nHashIdx * 4) = *(uint32_t*)(pbVar1 + 0x30);
     push_to_closed_list:
     pbVar1[0x30] = 0;
     pbVar1[0x31] = 0;
     pbVar1[0x32] = 0;
     pbVar1[0x33] = 0;
     nHashIdx = gnPathNodeMax[pbVar1[2] & 0x7f] + gnPathSearchMax[*pbVar1 & 0x7f] & 0x7f;
-    *(uint32_t*)(pbVar1 + 0x30) = *(uint32_t*)(nOpenListBase + 0x200 + nHashIdx * 4);
-    *(uint8_t**)(nOpenListBase + 0x200 + nHashIdx * 4) = (uint8_t*)pbVar1;
+    *(uint32_t*)(pbVar1 + 0x30) = *(uint32_t*)(nOpenListBase->abyClosedBuckets + nHashIdx * 4);
+    *(uint8_t**)(nOpenListBase->abyClosedBuckets + nHashIdx * 4) = (uint8_t*)pbVar1;
     return (int32_t*)pbVar1;
 }
 
@@ -2347,7 +2347,7 @@ static BOOL __stdcall DRLGPATH_TryExpandNeighborNode(int32_t nOpenList, uint32_t
         pNewNode->nX = (uint16_t)nPackedNeighbor;
         pNewNode->nY = *(uint16_t*)((char*)&nPackedNeighbor + 2);
         pNewNode->nFCost = (short int)nHCost + nEdgeCost;
-        DRLGPATH_InsertNodeSorted(nOpenList, pNewNode);
+        DRLGPATH_InsertNodeSorted((D2DrlgPathSearchCtxStrc*)nOpenList, pNewNode);
         if (!pParentNode->pChildren[0]) {
           pParentNode->pChildren[0] = pNewNode;
           return 1;
@@ -2612,9 +2612,9 @@ int32_t __fastcall PATH_FindPathAStarLocalPool(D2PathTypeArg * pPathTypeArg) {
     pNewNode->nY = (uint16_t)((uint32_t)nPackedSrc >> 16);
     pNewNode->nHCost = nHeuristic;
     pNewNode->nFCost = nHeuristic;
-    DRLGPATH_InsertNodeSorted((uintptr_t)&abyOpenList, pNewNode);
+    DRLGPATH_InsertNodeSorted(&abyOpenList, pNewNode);
     void** pClosestNode = 0;
-    void** pBestNodeOut = (void**)DRLGPATH_PopBestNodeFromOpenList((uintptr_t)&abyOpenList);
+    void** pBestNodeOut = (void**)DRLGPATH_PopBestNodeFromOpenList(&abyOpenList);
     if (pBestNodeOut) {
       BOOL bExpandedAny;
       do {
@@ -2630,7 +2630,7 @@ int32_t __fastcall PATH_FindPathAStarLocalPool(D2PathTypeArg * pPathTypeArg) {
           break;
         }
 
-        pBestNodeOut = (void**)DRLGPATH_PopBestNodeFromOpenList((uintptr_t)&abyOpenList);
+        pBestNodeOut = (void**)DRLGPATH_PopBestNodeFromOpenList(&abyOpenList);
       } while (pBestNodeOut);
 
       if (pClosestNode) {

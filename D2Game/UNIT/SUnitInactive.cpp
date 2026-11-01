@@ -3,7 +3,6 @@
 #include "D2Game/UNIT/SUnitInactive.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Item.h"
@@ -31,6 +30,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Unit.h"
@@ -99,45 +99,45 @@ void SUNITINACTIVE_FreeInactiveMonster(::SGAMEDATA * pGame, D2InventoryToBeUpdat
 }
 
 // @sourcefile .\UNIT\SUnitInactive.cpp
-static void __stdcall SUNITINACTIVE_FindAndRemoveInactiveUnitsByRoom(int * pnParam1, int * pnParam2, D2RoomStrc * pRoom, int32_t nParam) {
+static void __stdcall SUNITINACTIVE_FindAndRemoveInactiveUnitsByRoom(D2InactiveUnitRecordStrc * * pnParam1, D2InactiveItemRecordStrc * * pnParam2, D2RoomStrc * pRoom, ::SGAMEDATA * pGame) {
     D2DrlgRoomCoordsStrc sRoomCoords;
     *pnParam1 = 0;
     *pnParam2 = 0;
     eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     eAct neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
-    int* pMemoryToFree = *(int**)(nParam + 0xd8 + (uint32_t)neAct * 4);
-    int* pPrevNode = 0;
+    D2InactiveUnitListStrc* pMemoryToFree = pGame->pInactiveUnitList[neAct];
+    D2InactiveUnitListStrc* pPrevNode = 0;
     if (!pMemoryToFree) {
       return;
     }
 
-    while (sRoomCoords.dwXStart <= *pMemoryToFree) {
-      int* pNextLink;
-      if (sRoomCoords.dwXStart == *pMemoryToFree && sRoomCoords.dwYStart == pMemoryToFree[1]) {
+    while (sRoomCoords.dwXStart <= pMemoryToFree->nX) {
+      D2InactiveUnitListStrc** pNextLink;
+      if (sRoomCoords.dwXStart == pMemoryToFree->nX && sRoomCoords.dwYStart == pMemoryToFree->nY) {
         if (pPrevNode) {
-          pPrevNode[5] = pMemoryToFree[5];
+          pPrevNode->pNext = pMemoryToFree->pNext;
         } else {
-          *(int*)(nParam + 0xd8 + (uint32_t)neAct * 4) = pMemoryToFree[5];
+          pGame->pInactiveUnitList[neAct] = pMemoryToFree->pNext;
         }
 
-        *pnParam1 = pMemoryToFree[4];
-        *pnParam2 = pMemoryToFree[2];
-        D2_FREE_POOL_AT(*(D2PoolManagerStrc**)(nParam + 0x1c), pMemoryToFree, ".\\UNIT\\SUnitInactive.cpp", 0xb6);
+        *pnParam1 = pMemoryToFree->pInactiveUnits;
+        *pnParam2 = pMemoryToFree->pInactiveItems;
+        D2_FREE_POOL_AT(pGame->pMemoryPool, pMemoryToFree, ".\\UNIT\\SUnitInactive.cpp", 0xb6);
         return;
       }
 
-      pNextLink = pMemoryToFree + 5;
+      pNextLink = &pMemoryToFree->pNext;
       pPrevNode = pMemoryToFree;
-      pMemoryToFree = (int*)*pNextLink;
-      if (!(int*)*pNextLink) {
+      pMemoryToFree = *pNextLink;
+      if (!*pNextLink) {
         return;
       }
     }
 }
 
 // Deserialises a ground item from its inactive (saved-room) binary record and re-creates it as a live D2UnitStrc in pRoom. Extracts item details, calls ITEM_CreateFromSaveData, clamps the despawn frame to at most 15000 frames from now, then iterates any socketed items in the serialised stream — deserialising each and inserting into the item's inventory via PutItemInInventory and ITEMMODE_IsItemOnCursor.
-static D2UnitStrc * __stdcall SUNITINACTIVE_RestoreInactiveItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int * pInactiveData) {
+static D2UnitStrc * __stdcall SUNITINACTIVE_RestoreInactiveItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2InactiveItemRecordStrc * pInactiveData) {
     int nNewDespawnFrame;
     size_t nBytesRemaining;
     D2UnitDataItemDetailsStrc local_2c;
@@ -145,15 +145,15 @@ static D2UnitStrc * __stdcall SUNITINACTIVE_RestoreInactiveItem(::SGAMEDATA * pG
     int iSocket;
     D2InventoryStrc* pInventory;
     int32_t nItemDataSize;
-    uint32_t nTotalSerializedSize = (uint32_t)*(uint16_t*)(pInactiveData + 3);
-    uint8_t* pbSerializedData = (uint8_t*)((int)pInactiveData + 0xe);
+    uint32_t nTotalSerializedSize = (uint32_t)(uint16_t)pInactiveData->nItemDataSize;
+    uint8_t* pbSerializedData = pInactiveData->itemData;
     D2Common::ITEMS::Items::ExtractItemDetails(pbSerializedData, nTotalSerializedSize, 1, &local_2c);
     D2UnitStrc* pUnit = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, pRoom, pbSerializedData, nTotalSerializedSize, 1, &local_2c, &nItemDataSize, 0x60);
     if (!pUnit) {
       return pUnit;
     }
 
-    int nSavedDespawnFrame = pInactiveData[1];
+    int nSavedDespawnFrame = pInactiveData->nDespawnTimer;
     pbSerializedData += nItemDataSize;
     nBytesRemaining = nTotalSerializedSize - nItemDataSize;
     if (!nSavedDespawnFrame || (nNewDespawnFrame = pGame->dwGameFrame + 15000 , nSavedDespawnFrame >= nNewDespawnFrame)) {
@@ -196,22 +196,22 @@ static D2UnitStrc * __stdcall SUNITINACTIVE_RestoreInactiveItem(::SGAMEDATA * pG
 }
 
 // @sourcefile .\UNIT\SUnitInactive.cpp
-static void __stdcall SUNITINACTIVE_RestoreInactiveItemList(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int * pnParam) {
+static void __stdcall SUNITINACTIVE_RestoreInactiveItemList(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2InactiveItemRecordStrc * pnParam) {
     while (pnParam) {
-      int* piVar1;
-      piVar1 = (int*)*pnParam;
-      if (!pnParam[1] || pGame->dwGameFrame <= pnParam[1]) {
+      D2InactiveItemRecordStrc* pDVar1;
+      pDVar1 = pnParam->pNext;
+      if (!pnParam->nDespawnTimer || pGame->dwGameFrame <= pnParam->nDespawnTimer) {
         SUNITINACTIVE_RestoreInactiveItem(pGame, pRoom, pnParam);
       }
 
       D2_FREE_POOL_AT(pGame->pMemoryPool, pnParam, ".\\UNIT\\SUnitInactive.cpp", 0x126);
-      pnParam = piVar1;
+      pnParam = pDVar1;
     }
 }
 
 // Serializes a ground/dropped item into a bitstream (up to 1024 bytes), allocates an inactive record (serialized bytes + 0xF header) in the game memory pool, calculates a despawn timer, then frees the unit and any socketed items via FreeServerUnit. Appends the record to pInactiveList->next chain, or if pOutInactiveRecord is non-null writes the pointer there instead.
 // @sourcefile .\UNIT\SUnitInactive.cpp
-static void __stdcall SUNITINACTIVE_SerializeAndDeactivateItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t pInactiveList, int * pOutInactiveRecord) {
+static void __stdcall SUNITINACTIVE_SerializeAndDeactivateItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2InactiveUnitListStrc * pInactiveList, D2InactiveItemRecordStrc * * pOutInactiveRecord) {
     D2UnitStrc* pNextSocketedItem;
     D2InactiveItemRecordBufferStrc sRecord;
     D2InventoryStrc* pInventory;
@@ -241,12 +241,12 @@ static void __stdcall SUNITINACTIVE_SerializeAndDeactivateItem(::SGAMEDATA * pGa
 
     SUnit::FreeServerUnit(pGame, pUnit);
     if (!pOutInactiveRecord) {
-      *pNewInactiveRecord = *(int*)(pInactiveList + 8);
-      *(int**)(pInactiveList + 8) = (int*)pNewInactiveRecord;
+      *pNewInactiveRecord = (int)pInactiveList->pInactiveItems;
+      pInactiveList->pInactiveItems = (D2InactiveItemRecordStrc*)pNewInactiveRecord;
       return;
     }
 
-    *pOutInactiveRecord = (int)pNewInactiveRecord;
+    *pOutInactiveRecord = (D2InactiveItemRecordStrc*)pNewInactiveRecord;
 }
 
 // Locates and removes an inactive monster record matching nClassId (record +8, stored from pUnit->nClassId by SUNITINACTIVE_DeactivateMonster at 005422b1) from the bucket list indexed by byActNo in the game's inactive monster table. On match: unlinks the node, clears its minion list via ClearMinionList, frees its AI/spawn-point list, and frees the record. Searches all D2InactiveUnitListStrc chained entries in the bucket.
@@ -366,14 +366,14 @@ void __stdcall SUNITINACTIVE_AllocInactiveListForRoom(::SGAMEDATA * pGame, int32
 }
 
 // Restores a monster's AI/quest state when re-activating it from an inactive (saved/persisted) record. Reads the MonStats line by pnParam[1]; for NPC/interact/inTown monsters (re)creates AI command 10 and seeds its args from the inactive record's nAiArgument/nAiArgument2, and transfers the saved map-AI file via DRLGPRESET_TakeFileFromDrlgMap. Special-cases certain class ids (0x10b/0xf3, super-unique boss flag, plus BaseId 0x44/0x21f via SetAiArgument, and 0x137/0x138 byte fields) to re-apply per-monster AI arguments, and patches monster state flags when the AI-argument pointer equals the DEADEAD sentinel. pnParam is the monster D2UnitStrc.
-static void __stdcall SUNITINACTIVE_RestoreMonsterStateFromInactive(::SGAMEDATA * pGame, D2InactiveMonsterRecordStrc * pInactiveMonRec, int * pnParam) {
+static void __stdcall SUNITINACTIVE_RestoreMonsterStateFromInactive(::SGAMEDATA * pGame, D2InactiveMonsterRecordStrc * pInactiveMonRec, D2UnitStrc * pnParam) {
     D2MonStatsTxt* pAiCmd;
     D2MonsterAiCmdStrc* pAiCmdNpc;
     int nBaseId;
     int32_t nArgNumber;
-    uint8_t byAiArgByte;
+    char byAiArgByte;
     int nMonStatsIdx;
-    nMonStatsIdx = pnParam[1];
+    nMonStatsIdx = pnParam->nClassId;
     if (nMonStatsIdx < 0 || nMonStatsIdx >= sgptDataTable->nTxtMonStatsSize) {
       pAiCmd = 0;
     } else {
@@ -384,27 +384,27 @@ static void __stdcall SUNITINACTIVE_RestoreMonsterStateFromInactive(::SGAMEDATA 
     uVar1 = (uint32_t)(uint8_t)*((uint8_t*)pAiCmd + 0xd);
     if (gadwBitMasks[1] & uVar1 || gadwBitMasks[0] & uVar1 || gadwBitMasks[2] & uVar1) {
       D2MapAIStrc** ppMapAi;
-      pAiCmdNpc = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, (D2UnitStrc*)pnParam, 10, 0);
+      pAiCmdNpc = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pnParam, 10, 0);
       if (pAiCmdNpc) {
         pAiCmdNpc->nCmdArg[1] = pInactiveMonRec->nAiArgument;
         pAiCmdNpc->nCmdArg[2] = pInactiveMonRec->nAiArgument2;
         pAiCmdNpc->nCmdArg[3] = 0;
       }
 
-      ppMapAi = Ai::AiGeneral::GetMonsterMapAi((D2UnitStrc*)pnParam);
+      ppMapAi = Ai::AiGeneral::GetMonsterMapAi(pnParam);
       if (pInactiveMonRec->pAiGeneral) {
         D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI((D2MapAIStrc**)&pInactiveMonRec->pAiGeneral, ppMapAi);
       }
     }
     if ((nMonStatsIdx == 0x10b || nMonStatsIdx == 0xf3 || pInactiveMonRec->nTypeFlags & 0x800 && pInactiveMonRec->nBossNo == 6) && (pInactiveMonRec->nAiArgument || pInactiveMonRec->nAiArgument2)) {
-      pAiCmdNpc = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, (D2UnitStrc*)pnParam, 10, 0);
+      pAiCmdNpc = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pnParam, 10, 0);
       if (pAiCmdNpc) {
         pAiCmdNpc->nCmdArg[1] = pInactiveMonRec->nAiArgument;
         pAiCmdNpc->nCmdArg[2] = pInactiveMonRec->nAiArgument2;
       }
     }
-    if (*pnParam == 1) {
-      nBaseId = pnParam[1];
+    if (pnParam->eUnitType == UNIT_MONSTER) {
+      nBaseId = pnParam->nClassId;
       if (nBaseId >= 0) {
         D2MonStatsTxt* pMonStatsTxt = nBaseId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nBaseId : nullptr;
         if (pMonStatsTxt) {
@@ -423,40 +423,40 @@ static void __stdcall SUNITINACTIVE_RestoreMonsterStateFromInactive(::SGAMEDATA 
             nArgNumber = 1;
           }
 
-          Ai::AiGeneral::SetAiArgument((D2UnitStrc*)pnParam, nArgNumber, nBaseId);
+          Ai::AiGeneral::SetAiArgument(pnParam, nArgNumber, nBaseId);
         }
       }
     }
 
     restore_class_bytes_and_flags:
     if (nMonStatsIdx == 0x138) {
-      byAiArgByte = (uint8_t)pInactiveMonRec->nAiArgument;
-      if (*pnParam == 1) {
-        if (pnParam[5]) {
-          *(uint8_t*)(pnParam[5] + 0xe) = byAiArgByte;
+      byAiArgByte = (char)pInactiveMonRec->nAiArgument;
+      if (pnParam->eUnitType == UNIT_MONSTER) {
+        if (pnParam->pUnitData.pUnitDataPlayer) {
+          pnParam->pUnitData.pUnitDataPlayer->szCharName[0xe] = byAiArgByte;
         }
-        if (*pnParam == 1 && pnParam[5]) {
-          *(uint8_t*)(pnParam[5] + 0xf) = byAiArgByte;
+        if (pnParam->eUnitType == UNIT_MONSTER && pnParam->pUnitData.pUnitDataPlayer) {
+          pnParam->pUnitData.pUnitDataPlayer->szCharName[0xf] = byAiArgByte;
         }
       }
-    } else if (nMonStatsIdx == 0x137 && *pnParam == 1 && pnParam[5]) {
-      *(char*)(pnParam[5] + 0xe) = (char)pInactiveMonRec->nAiArgument;
+    } else if (nMonStatsIdx == 0x137 && pnParam->eUnitType == UNIT_MONSTER && pnParam->pUnitData.pUnitDataPlayer) {
+      pnParam->pUnitData.pUnitDataPlayer->szCharName[0xe] = (char)pInactiveMonRec->nAiArgument;
     }
     if (pInactiveMonRec->nAiArgument != gpInactiveMonsterStateFlagSentinel) {
       return;
     }
     if (pInactiveMonRec->nAiArgument2 & gnMonsterStateFlagMask1) {
-      pnParam[0x31] |= 0x4000000;
+      pnParam->eUnitFlags |= UNITFLAG_NOXP;
     }
     if (!(pInactiveMonRec->nAiArgument2 & gnMonsterStateFlagMask2)) {
       return;
     }
 
-    pnParam[0x31] |= 0x20000;
+    pnParam->eUnitFlags |= UNITFLAG_NOTC;
 }
 
 // Serializes a monster's transient state into an inactive-unit save record (nParam1 = destination record, pnParam = the D2UnitStrc). Writes a DEADEAD death marker + state flag masks when the corresponding mode flags are set, persists NPC/interact AI command args and any preset map-AI file reference, and stores special-case AI arguments for certain monster base ids (0x44, 0x21f) and class ids (0x10b, 0xf3). For super-unique boss types (0x137/0x138) saves a byte from the monster's extra data, else zeroes the saved arg field. Uses register-passed params (EDI/EBX/EAX).
-static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc * pInactiveMonsterRecord, ::SGAMEDATA * pGame, int * pnParam) {
+static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc * pInactiveMonsterRecord, ::SGAMEDATA * pGame, D2UnitStrc * pnParam) {
     D2MonStatsTxt* pAiCmd;
     D2MonsterAiCmdStrc* pAiCmdNpc;
     uint32_t dwSavedAiArg;
@@ -465,17 +465,17 @@ static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc
     uint32_t pDeadMarker;
     pDeadMarker = gpInactiveMonsterStateFlagSentinel;
     int nMonStatsIdx;
-    nMonStatsIdx = pnParam[1];
+    nMonStatsIdx = pnParam->nClassId;
     if (nMonStatsIdx < 0 || nMonStatsIdx >= sgptDataTable->nTxtMonStatsSize) {
       pAiCmd = 0;
     } else {
       pAiCmd = sgptDataTable->pTxtMonStats + nMonStatsIdx;
     }
-    if ((uint32_t)pnParam[0x31] >> 0x1a & 1) {
+    if (pnParam->eUnitFlags >> 0x1a & 1) {
       pInactiveMonsterRecord->nAiArgument2 |= gnMonsterStateFlagMask1;
       pInactiveMonsterRecord->nAiArgument = pDeadMarker;
     }
-    if ((uint32_t)pnParam[0x31] >> 0x11 & 1) {
+    if (pnParam->eUnitFlags >> 0x11 & 1) {
       pInactiveMonsterRecord->nAiArgument = pDeadMarker;
       pInactiveMonsterRecord->nAiArgument2 |= gnMonsterStateFlagMask2;
     }
@@ -484,26 +484,26 @@ static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc
     uVar1 = (uint32_t)(uint8_t)*((uint8_t*)pAiCmd + 0xd);
     if (gadwBitMasks[1] & uVar1 || gadwBitMasks[0] & uVar1 || gadwBitMasks[2] & uVar1) {
       D2MapAIStrc** ppMapAi;
-      pAiCmdNpc = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, (D2UnitStrc*)pnParam, 10, 0);
+      pAiCmdNpc = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pnParam, 10, 0);
       if (pAiCmdNpc && pAiCmdNpc->nCmdArg[1]) {
         pInactiveMonsterRecord->nAiArgument = pAiCmdNpc->nCmdArg[1];
         pInactiveMonsterRecord->nAiArgument2 = pAiCmdNpc->nCmdArg[2];
       }
 
-      ppMapAi = Ai::AiGeneral::GetMonsterMapAi((D2UnitStrc*)pnParam);
+      ppMapAi = Ai::AiGeneral::GetMonsterMapAi(pnParam);
       if (*ppMapAi) {
         D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(ppMapAi, (D2MapAIStrc**)&pInactiveMonsterRecord->pAiGeneral);
       }
     }
     if (nMonStatsIdx == 0x10b || nMonStatsIdx == 0xf3 || pInactiveMonsterRecord->nTypeFlags & 0x800 && pInactiveMonsterRecord->nBossNo == 6) {
-      pAiCmdNpc = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, (D2UnitStrc*)pnParam, 10, 0);
+      pAiCmdNpc = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pnParam, 10, 0);
       if (pAiCmdNpc) {
         pInactiveMonsterRecord->nAiArgument = pAiCmdNpc->nCmdArg[1];
         pInactiveMonsterRecord->nAiArgument2 = pAiCmdNpc->nCmdArg[2];
       }
     }
-    if (*pnParam == 1) {
-      nBaseId = pnParam[1];
+    if (pnParam->eUnitType == UNIT_MONSTER) {
+      nBaseId = pnParam->nClassId;
       if (nBaseId >= 0) {
         D2MonStatsTxt* pMonStatsTxt = nBaseId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nBaseId : nullptr;
         if (pMonStatsTxt) {
@@ -520,7 +520,7 @@ static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc
             nArgNumber = 1;
           }
 
-          dwSavedAiArg = Ai::AiGeneral::GetAiArgument((D2UnitStrc*)pnParam, nArgNumber);
+          dwSavedAiArg = Ai::AiGeneral::GetAiArgument(pnParam, nArgNumber);
           pInactiveMonsterRecord->nAiArgument = dwSavedAiArg;
         }
       }
@@ -531,16 +531,16 @@ static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc
       if (nMonStatsIdx != 0x137) {
         return;
       }
-      if (*pnParam == 1 && pnParam[5]) {
-        pInactiveMonsterRecord->nAiArgument = (uint32_t)*(uint8_t*)(pnParam[5] + 0xe);
+      if (pnParam->eUnitType == UNIT_MONSTER && pnParam->pUnitData.pUnitDataMonster) {
+        pInactiveMonsterRecord->nAiArgument = (uint32_t)pnParam->pUnitData.pUnitDataMonster->Components[10];
         return;
       }
 
       pInactiveMonsterRecord->nAiArgument = 0;
       return;
     }
-    if (*pnParam == 1 && pnParam[5]) {
-      pInactiveMonsterRecord->nAiArgument = (uint32_t)*(uint8_t*)(pnParam[5] + 0xe);
+    if (pnParam->eUnitType == UNIT_MONSTER && pnParam->pUnitData.pUnitDataMonster) {
+      pInactiveMonsterRecord->nAiArgument = (uint32_t)pnParam->pUnitData.pUnitDataMonster->Components[10];
       return;
     }
 
@@ -619,7 +619,7 @@ static void __stdcall SUNITINACTIVE_DeactivateMonster(::SGAMEDATA * pGame, D2Uni
     pInactiveRec->nAiCmdType = nTmpVal;
     uint16_t wMonNameSeed = Monsters::GetNameSeed(pUnit);
     pInactiveRec->nNameSeed = wMonNameSeed;
-    SUNITINACTIVE_SaveMonsterStateToInactive(pInactiveRec, pGame, (int*)pUnit);
+    SUNITINACTIVE_SaveMonsterStateToInactive(pInactiveRec, pGame, pUnit);
     uint32_t dwMonTypeFlags = Monsters::CheckMonsterType(pUnit, 4);
     if (dwMonTypeFlags) {
       pInactiveRec->nTypeFlags |= 2;
@@ -878,7 +878,7 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
               }
 
               D2Game::Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pSpawnedMonster, pAiGeneral, pInactiveMonRec->nAiCmdType);
-              SUNITINACTIVE_RestoreMonsterStateFromInactive(pGame, pInactiveMonRec, (int*)pSpawnedMonster);
+              SUNITINACTIVE_RestoreMonsterStateFromInactive(pGame, pInactiveMonRec, pSpawnedMonster);
               if (pInactiveMonRec->nTypeFlags & 0x400) {
                 if (nAlignmentVal == 2) {
                   nNodeTableIdx = 8;
@@ -1043,8 +1043,8 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
     pNextUnitRecord = 0;
     D2ObjectsTxt* pObjTxtLine;
     pObjTxtLine = 0;
-    SUNITINACTIVE_FindAndRemoveInactiveUnitsByRoom((int*)&pNextUnitRecord, (int*)&pObjTxtLine, pRoom, (int32_t)pGame);
-    SUNITINACTIVE_RestoreInactiveItemList(pGame, pRoom, (int*)pObjTxtLine);
+    SUNITINACTIVE_FindAndRemoveInactiveUnitsByRoom(&pNextUnitRecord, (D2InactiveItemRecordStrc**)&pObjTxtLine, pRoom, pGame);
+    SUNITINACTIVE_RestoreInactiveItemList(pGame, pRoom, (D2InactiveItemRecordStrc*)pObjTxtLine);
     D2InactiveUnitRecordStrc* pCurUnitRecord;
     pCurUnitRecord = pNextUnitRecord;
     if (!pNextUnitRecord) {
@@ -1236,7 +1236,7 @@ static void __stdcall SUNITINACTIVE_SaveInactiveUnit(::SGAMEDATA * pGame, D2Unit
 
     eStack_8 = pUnit->eUnitType;
     if (eStack_8 == UNIT_ITEM) {
-      SUNITINACTIVE_SerializeAndDeactivateItem(pGame, pUnit, (int32_t)pDVar5, nullptr);
+      SUNITINACTIVE_SerializeAndDeactivateItem(pGame, pUnit, pDVar5, nullptr);
       return;
     }
 

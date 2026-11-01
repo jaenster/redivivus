@@ -15,7 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2CMP/SRC/CelCmp.h"
@@ -97,7 +97,7 @@ template<> TSExplicitList<::CELLIST, -572662307>* TSExplicitList<CELLIST, -57266
       return this;
     }
 
-    Storm::SMem::SMemFree(this, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     return this;
 }
 
@@ -162,7 +162,7 @@ template<> void TSExplicitList<CELLIST, -572662307>::Clear() {
         *(uint32_t*)((int)pObject + 8) = 0;
       }
 
-      Storm::SMem::SMemFree(pObject, s___AUCELLIST___00741f2c, -2, 0);
+      Storm::Source::SMem::SMemFree(pObject, s___AUCELLIST___00741f2c, -2, 0);
     }
 }
 
@@ -218,7 +218,7 @@ template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::DeleteNode(::CELLIST
     }
 
     pNode->Destructor();
-    Storm::SMem::SMemFree(pNode, s___AUCELLIST___00741f2c, -2, 0);
+    Storm::Source::SMem::SMemFree(pNode, s___AUCELLIST___00741f2c, -2, 0);
     return (::CELLIST*)((int)uReturnLink <= 0 ? 0 : uReturnLink);
 }
 
@@ -282,13 +282,13 @@ template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::ReallocDat
     }
 
     this->m_alloc = nSavedNewCount;
-    pBucketSlot = (TSExplicitList<::CELLIST, -572662307>*)Storm::SMem::SMemReAlloc((uint32_t*)pBlock, nSavedNewCount * 0xc, s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0x10);
+    pBucketSlot = (TSExplicitList<::CELLIST, -572662307>*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pBlock, nSavedNewCount * 0xc, s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0x10);
     this->m_data = pBucketSlot;
     if (pBucketSlot) {
       return;
     }
 
-    pBucketSlot = (TSExplicitList<::CELLIST, -572662307>*)Storm::SMem::SMemAlloc(nSavedNewCount * 0xc, s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
+    pBucketSlot = (TSExplicitList<::CELLIST, -572662307>*)Storm::Source::SMem::SMemAlloc(nSavedNewCount * 0xc, s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
     this->m_data = pBucketSlot;
     if (!pBlock) {
       return;
@@ -335,7 +335,7 @@ template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::ReallocDat
       } while (nAlloc);
     }
 
-    Storm::SMem::SMemFree(pBlock, s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
+    Storm::Source::SMem::SMemFree(pBlock, s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
 }
 
 template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor() {
@@ -372,7 +372,7 @@ template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor
       return;
     }
 
-    Storm::SMem::SMemFree(this->m_data, s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
+    Storm::Source::SMem::SMemFree(this->m_data, s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
 }
 
 template<> ::CELLIST * TSHashTable<CELLIST, HASHKEY_NONE>::Ptr(uint32_t dwHashVal, HASHKEY_NONE * pKey) {
@@ -427,7 +427,7 @@ template<> void TSGrowableArray<CELLIST>::Destructor() {
       return;
     }
 
-    Storm::SMem::SMemFree(this->m_data, s___AUCELLIST___00741f2c, -2, 0);
+    Storm::Source::SMem::SMemFree(this->m_data, s___AUCELLIST___00741f2c, -2, 0);
 }
 
 template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Reserve(uint32_t nCount, int32_t bRound) {
@@ -613,7 +613,7 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::Destructor() {
 }
 
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::CELLIST* pNewEntry = (::CELLIST*)Storm::SMem::SMemAlloc(nExtraBytes + 0x38, s___AUCELLIST___00741f2c, -2, dwFlags | 8);
+    ::CELLIST* pNewEntry = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, s___AUCELLIST___00741f2c, -2, dwFlags | 8);
     if (pNewEntry) {
       TSLink<::TCELENTRY>* pTVar1;
       pNewEntry->m_linktoslot.m_prevlink = 0;
@@ -641,7 +641,7 @@ template<> ::CELLIST * __thiscall TSHashTable<CELLIST, HASHKEY_NONE>::InternalNe
     TSLink<::CELLIST>* pInsertPoint;
     int* pPrevLink;
     uint32_t pTailLink;
-    ::CELLIST* pNewEntry = (::CELLIST*)Storm::SMem::SMemAlloc(nExtraBytes + 0x38, s___AUCELLIST___00741f2c, -2, dwFlags | 8);
+    ::CELLIST* pNewEntry = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, s___AUCELLIST___00741f2c, -2, dwFlags | 8);
     if (pNewEntry) {
       TSLink<::TCELENTRY>* pTVar1;
       pNewEntry->m_linktoslot.m_prevlink = 0;
@@ -715,7 +715,7 @@ template<> void __thiscall TSHashTable<CELLIST, HASHKEY_NONE>::InternalDelete(TS
     }
 
     pNode->Destructor();
-    Storm::SMem::SMemFree(pNode, s___AUCELLIST___00741f2c, -2, 0);
+    Storm::Source::SMem::SMemFree(pNode, s___AUCELLIST___00741f2c, -2, 0);
 }
 
 template<> TSGrowableArray<TSExplicitList<CELLIST, -572662307>> * TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::ScalarDeletingDestructor(uint32_t dwFlags) {
@@ -724,7 +724,7 @@ template<> TSGrowableArray<TSExplicitList<CELLIST, -572662307>> * TSGrowableArra
       return this;
     }
 
-    Storm::SMem::SMemFree(this, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     return this;
 }
 
@@ -753,7 +753,7 @@ template<> TSHashTable<::CELLIST, HASHKEY_NONE>* __thiscall TSHashTable<CELLIST,
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -781,7 +781,7 @@ template<> TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* TSHashObjectChunk<CELLIST
       return this;
     }
 
-    Storm::SMem::SMemFree(this, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     return this;
 }
 
@@ -813,7 +813,7 @@ template<> void __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::InternalD
     }
 
     pNode->Destructor();
-    Storm::SMem::SMemFree(pNode, s___AUCELLIST___00741f2c, -2, 0);
+    Storm::Source::SMem::SMemFree(pNode, s___AUCELLIST___00741f2c, -2, 0);
 }
 
 // Resize the pool block array to nNewCapacity slots; realloc or alloc+copy; re-init moved nodes
@@ -852,13 +852,13 @@ template<> void TSGrowableArray<CELLIST>::ReallocData(uint32_t nAlloc) {
     }
 
     this->m_alloc = nNewCapacityValue;
-    ::CELLIST* pFallbackBlock = (::CELLIST*)Storm::SMem::SMemReAlloc((uint32_t*)pOldBlock, nNewCapacityValue * 0x38, s___AUCELLIST___00741f2c, -2, 0x10);
+    ::CELLIST* pFallbackBlock = (::CELLIST*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pOldBlock, nNewCapacityValue * 0x38, s___AUCELLIST___00741f2c, -2, 0x10);
     this->m_data = pFallbackBlock;
     if (pFallbackBlock) {
       return;
     }
 
-    pFallbackBlock = (::CELLIST*)Storm::SMem::SMemAlloc(nNewCapacityValue * 0x38, s___AUCELLIST___00741f2c, -2, 0);
+    pFallbackBlock = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nNewCapacityValue * 0x38, s___AUCELLIST___00741f2c, -2, 0);
     this->m_data = pFallbackBlock;
     if (!pOldBlock) {
       return;
@@ -914,7 +914,7 @@ template<> void TSGrowableArray<CELLIST>::ReallocData(uint32_t nAlloc) {
       } while (nAlloc);
     }
 
-    Storm::SMem::SMemFree(pOldBlock, s___AUCELLIST___00741f2c, -2, 0);
+    Storm::Source::SMem::SMemFree(pOldBlock, s___AUCELLIST___00741f2c, -2, 0);
 }
 
 template<> void TSGrowableArray<CELLIST>::Reserve(uint32_t nCount, int32_t bRound) {
@@ -980,7 +980,7 @@ template<> void TSGrowableArray<CELLIST>::ReserveNoRound(uint32_t nCount) {
 }
 
 template<> TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNewChunkNew = (TSHashObjectChunk<::CELLIST, HASHKEY_NONE>*)Storm::SMem::SMemAlloc(nExtraBytes + 0x18, s___AV__TSHashObjectChunk_UCELLIST_00741fb4, -2, dwFlags | 8);
+    TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNewChunkNew = (TSHashObjectChunk<::CELLIST, HASHKEY_NONE>*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, s___AV__TSHashObjectChunk_UCELLIST_00741fb4, -2, dwFlags | 8);
     TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNewChunk;
     if (pNewChunkNew) {
       pNewChunkNew->nArrayAlloc = 0;
@@ -1006,7 +1006,7 @@ template<> ::CELLIST * __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::In
     TSLink<::CELLIST>* ppInsertSlot;
     int* pBackLink;
     uint32_t pOldTail;
-    ::CELLIST* pNewNode = (::CELLIST*)Storm::SMem::SMemAlloc(nExtraBytes + 0x38, s___AUCELLIST___00741f2c, -2, dwFlags | 8);
+    ::CELLIST* pNewNode = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, s___AUCELLIST___00741f2c, -2, dwFlags | 8);
     if (pNewNode) {
       TSLink<::TCELENTRY>* pTVar1;
       pNewNode->m_linktoslot.m_prevlink = 0;
@@ -1157,7 +1157,7 @@ template<> TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* __thiscall TSHashTableR
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -1234,7 +1234,7 @@ template<> TSExportTableSimple<::CELLIST, HCELLIST__*, 0>* __thiscall TSExportTa
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -1261,6 +1261,6 @@ template<> TSExportTableSync<::CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSec
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }

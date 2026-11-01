@@ -3,9 +3,9 @@
 #include "Storm/WindowHandle.h"
 #include "D2Client/Message.h"
 #include "D2Client/UI/EscMenu.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SEVT.h"
 #include "Storm/Source/SErr.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
@@ -252,7 +252,7 @@ void __fastcall WND_DetachAndClearChildren(D2StormListHead * pWindow) {
 }
 
 int * * __thiscall WND_AllocRecord(int * * ppList, int32_t nMode, int32_t nSize, uint32_t dwFlags) {
-    int** ppRecordNew = (int**)SMem::SMemAlloc(nSize + 0xc, s___AUWNDREC___00708850, -2, dwFlags | 8);
+    int** ppRecordNew = (int**)Source::SMem::SMemAlloc(nSize + 0xc, s___AUWNDREC___00708850, -2, dwFlags | 8);
     int** ppRecord;
     if (ppRecordNew) {
       *ppRecordNew = 0;
@@ -290,7 +290,7 @@ int * __thiscall WND_UnlinkAndFreeRecord(int * pRecord, uint8_t byFreeFlags) {
       return pRecord;
     }
 
-    SMem::SMemFree(pRecord, "delete", -1, 0);
+    Source::SMem::SMemFree(pRecord, "delete", -1, 0);
     return pRecord;
 }
 
@@ -298,7 +298,7 @@ int * __thiscall WND_UnlinkAndFreeRecord(int * pRecord, uint8_t byFreeFlags) {
 void __stdcall SMSG_AddWindow(uint32_t hWnd) {
     StormWndRecStrc* pEntry;
     uint32_t nOffset;
-    StormWndRecStrc* pRecord = (StormWndRecStrc*)SMem::SMemAlloc(0xc, s___AUWNDREC___00708850, -2, 8);
+    StormWndRecStrc* pRecord = (StormWndRecStrc*)Source::SMem::SMemAlloc(0xc, s___AUWNDREC___00708850, -2, 8);
     if (pRecord) {
       pRecord->link.pPrevLink = 0;
       pRecord->link.pNext = 0;
@@ -355,7 +355,7 @@ uint32_t __thiscall WND_RemoveAndFreeRecord(void * pListHead, StormWndRecStrc * 
       pRecord->link.pNext = 0;
     }
 
-    SMem::SMemFree(pRecord, s___AUWNDREC___00708850, -2, 0);
+    Source::SMem::SMemFree(pRecord, s___AUWNDREC___00708850, -2, 0);
     return (int)nResult <= 0 ? 0 : nResult;
 }
 
@@ -568,6 +568,11 @@ int32_t __thiscall WND_EntryArray_AllocOrReuse(int32_t pThis, int32_t pReuseEntr
     }
 
     return pReuseEntry;
+}
+
+void StaticInit_6ca8e0() {
+    gpWndTrackingListHead.pNext = ~(uintptr_t)((char*)&gpWndTrackingListHead + 4);
+    atexit(StaticFini_gWndTrackingList);
 }
 
 // Runs at exit: removes every element from the tracked window list, then unlinks the list head itself.

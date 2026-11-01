@@ -12,15 +12,6 @@
 struct D2UnitStrc;
 typedef uint32_t eD2Skills;
 
-// Data types
-struct D2MonSeqTxt {
-    /* 0x00 */ short sequence;
-    /* 0x02 */ uint8_t mode;
-    /* 0x03 */ uint8_t frame;
-    /* 0x04 */ uint8_t dir;
-    /* 0x05 */ uint8_t event;
-};
-
 namespace D2Client::SKILLS::SkillsPal {
 
 // Function declarations

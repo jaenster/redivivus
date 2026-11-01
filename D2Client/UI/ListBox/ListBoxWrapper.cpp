@@ -5,12 +5,12 @@
 #include "D2Win/Src/D2WinTextBox.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Storm/H/stpl.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2Client/D2Client.h"
+#include "D2Client/UI/ListBox.h"
 #include "D2Client/UI/ListBox/ListBoxImplementation.h"
 #include "Fog/Debug.h"
-#include "Storm/_unnamespaced.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -47,7 +47,7 @@ void __thiscall Destructor(::ListBoxWrapper * pThis) {
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -129,7 +129,7 @@ int __thiscall OnMouseWheel(::ListBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     uint32_t nSehState = 0;
     ExceptionList = &pPrevSehFrame;
     pThis->pVtable = (ListBoxWrapperVtable*)(void*)ListBoxWrapper::vftable;
-    ::ListBoxImplementation* pListBox = (::ListBoxImplementation*)Storm::SMem::SMemAlloc(0x180776, "new", -1, 0);
+    ::ListBoxImplementation* pListBox = (::ListBoxImplementation*)Storm::Source::SMem::SMemAlloc(0x180776, "new", -1, 0);
     nSehState = (uint32_t)((uint32_t)((uint32_t)nSehState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     if (pListBox) {
       pListBox = ListBoxImplementation::Constructor(pListBox, nPosX, nPosY, nWidth, nHeight, nItemSpacing, nDefaultColor, nDefaultFont, pfnOnItemActivated, bTallRows);

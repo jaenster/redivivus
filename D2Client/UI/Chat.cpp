@@ -1530,4 +1530,37 @@ void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+void StaticInit_6caaf0() {
+    int nWordsRemaining;
+    uint16_t* pChatInputBuf = gwszChatInputText;
+    for (nWordsRemaining = 0x80; nWordsRemaining; nWordsRemaining--) {
+      pChatInputBuf[0] = L'\0';
+      pChatInputBuf[1] = L'\0';
+      pChatInputBuf += 2;
+    }
+
+    *pChatInputBuf = L'\0';
+}
+
+void StaticInit_6cab10() {
+    int nDwordsRemaining;
+    uint8_t* pChatHistoryBuf = gaChatHistoryBuffer;
+    for (nDwordsRemaining = 0x404; nDwordsRemaining; nDwordsRemaining--) {
+      memset(pChatHistoryBuf, 0, 4 * sizeof(pChatHistoryBuf[0]));
+      pChatHistoryBuf += 4;
+    }
+}
+
+void StaticInit_6cab30() {
+    for (int iFill = 0; iFill < 32; iFill++) {
+      gwcIMECompositionString[iFill] = L'\0';
+    }
+}
+
+void StaticInit_6cab90() {
+    for (int iFill = 0; iFill < 32; iFill++) {
+      gwcImeCompositionBuffer[iFill] = L'\0';
+    }
+}
+
 } // namespace D2Client::UI::Chat

@@ -11,7 +11,6 @@
 #include "D2Client/GAME/Msg.h"
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/Inv.h"
 #include "D2Client/UI/Panel.h"
@@ -43,6 +42,7 @@
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Item.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
@@ -1361,18 +1361,18 @@ void __fastcall ITEM_HandleUnsocketItems(D2UnitStrc * pUnit) {
     }
 }
 
-static void __stdcall ITEM_DropItemToGroundWithMode(int32_t nParam1, int32_t nParam2, eInventoryPage eInvPage, uint16_t nParam12, D2UnitStrc * pUnit, uint16_t nParam22) {
+static void __stdcall ITEM_DropItemToGroundWithMode(int32_t nAnimMode, int32_t nParam2, eInventoryPage eInvPage, uint16_t nX, D2UnitStrc * pUnit, uint16_t nY) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xac);
       exit(-1);
     }
 
     D2RoomStrc* pRoom = 0;
-    if (nParam2 && (nParam12 || nParam22)) {
-      pRoom = CUnit::FindRoom((uint32_t)nParam12, (uint32_t)nParam22);
+    if (nParam2 && (nX || nY)) {
+      pRoom = CUnit::FindRoom((uint32_t)nX, (uint32_t)nY);
     }
 
-    ITEM_SetAnimModeAndPlace(pUnit, pRoom, (uint32_t)nParam12, (uint32_t)nParam22, nParam1, 0);
+    ITEM_SetAnimModeAndPlace(pUnit, pRoom, (uint32_t)nX, (uint32_t)nY, nAnimMode, 0);
     D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pUnit, eInvPage);
 }
 

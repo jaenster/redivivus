@@ -8,7 +8,7 @@
 #include "Fog/File.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Launch/MainMenus.h"
@@ -972,11 +972,11 @@ void UNICODE_FreeBuffer(void * pParam) {
       return;
     }
 
-    Storm::SMem::SMemFree(pParam, "delete[]", -1, 0);
+    Storm::Source::SMem::SMemFree(pParam, "delete[]", -1, 0);
 }
 
 void UNICODE_AllocBuffer(uint32_t nSize) {
-    Storm::SMem::SMemAlloc(nSize, "new[]", -1, 0);
+    Storm::Source::SMem::SMemAlloc(nSize, "new[]", -1, 0);
 }
 
 void __thiscall UNICODE_ReadByteRange(void * pThis, uint8_t * pByteRange) {
@@ -1013,18 +1013,18 @@ static int32_t __stdcall UNICODE_IsControlChar(uint8_t byChar) {
 
 void __stdcall UNICODE_FreeKamapTables() {
     if (g_pUnicodeKamapTable) {
-      Storm::SMem::SMemFree(g_pUnicodeKamapTable, "delete[]", -1, 0);
+      Storm::Source::SMem::SMemFree(g_pUnicodeKamapTable, "delete[]", -1, 0);
       g_pUnicodeKamapTable = 0;
     }
     if (gpUnicodeKamapToCodeTable) {
-      Storm::SMem::SMemFree(gpUnicodeKamapToCodeTable, "delete[]", -1, 0);
+      Storm::Source::SMem::SMemFree(gpUnicodeKamapToCodeTable, "delete[]", -1, 0);
       gpUnicodeKamapToCodeTable = 0;
     }
     if (!gpUnicodeCodeToMapTable) {
       return;
     }
 
-    Storm::SMem::SMemFree(gpUnicodeCodeToMapTable, "delete[]", -1, 0);
+    Storm::Source::SMem::SMemFree(gpUnicodeCodeToMapTable, "delete[]", -1, 0);
     gpUnicodeCodeToMapTable = 0;
 }
 
@@ -1062,10 +1062,10 @@ void __fastcall UNICODE_LoadKamapFile(D2PoolManagerStrc * pMemory, char * szFile
     uint16_t* pFilePtr = (uint16_t*)(pFileData + nOffset + 0xb);
     uint16_t* pGroupCount = pFilePtr + 1;
     if (g_pUnicodeKamapTable) {
-      Storm::SMem::SMemFree(g_pUnicodeKamapTable, "delete[]", -1, 0);
+      Storm::Source::SMem::SMemFree(g_pUnicodeKamapTable, "delete[]", -1, 0);
     }
 
-    g_pUnicodeKamapTable = Storm::SMem::SMemAlloc((uint32_t)(uint8_t)*pGroupCount * 2, "new[]", -1, 0);
+    g_pUnicodeKamapTable = Storm::Source::SMem::SMemAlloc((uint32_t)(uint8_t)*pGroupCount * 2, "new[]", -1, 0);
     if (!g_pUnicodeKamapTable) {
       D2_FREE_AT(pFileData, ".\\Unicode\\UNISYS.CPP", 0x91);
       return;
@@ -1074,10 +1074,10 @@ void __fastcall UNICODE_LoadKamapFile(D2PoolManagerStrc * pMemory, char * szFile
     memcpy(g_pUnicodeKamapTable, (void*)((int)pFilePtr + 3), (uint32_t)(uint8_t)*pGroupCount * 2);
     uint16_t* pEntryData = (uint16_t*)((int)pFilePtr + 3 + (uint32_t)(uint8_t)*pGroupCount * 2);
     if (gpUnicodeKamapToCodeTable) {
-      Storm::SMem::SMemFree(gpUnicodeKamapToCodeTable, "delete[]", -1, 0);
+      Storm::Source::SMem::SMemFree(gpUnicodeKamapToCodeTable, "delete[]", -1, 0);
     }
 
-    void* pAllocBuf = Storm::SMem::SMemAlloc((uint32_t)*pFilePtr * 4, "new[]", -1, 0);
+    void* pAllocBuf = Storm::Source::SMem::SMemAlloc((uint32_t)*pFilePtr * 4, "new[]", -1, 0);
     gpUnicodeKamapToCodeTable = pAllocBuf;
     if (!pAllocBuf) {
       D2_FREE_AT(pFileData, ".\\Unicode\\UNISYS.CPP", 0x9e);
@@ -1094,10 +1094,10 @@ void __fastcall UNICODE_LoadKamapFile(D2PoolManagerStrc * pMemory, char * szFile
       } while (nOffset < (int)(uint32_t)*pFilePtr);
     }
     if (gpUnicodeCodeToMapTable) {
-      Storm::SMem::SMemFree(gpUnicodeCodeToMapTable, "delete[]", -1, 0);
+      Storm::Source::SMem::SMemFree(gpUnicodeCodeToMapTable, "delete[]", -1, 0);
     }
 
-    uint16_t* pwCodeToMapTable = (uint16_t*)Storm::SMem::SMemAlloc((uint32_t)*pFilePtr * 2, "new[]", -1, 0);
+    uint16_t* pwCodeToMapTable = (uint16_t*)Storm::Source::SMem::SMemAlloc((uint32_t)*pFilePtr * 2, "new[]", -1, 0);
     gpUnicodeCodeToMapTable = pwCodeToMapTable;
     if (!pwCodeToMapTable) {
       D2_FREE_AT(pFileData, ".\\Unicode\\UNISYS.CPP", 0xb0);

@@ -23,7 +23,6 @@
 #include "D2Common/Drlg/DrlgGrid.h"
 #include "D2Common/Drlg/DrlgRoom.h"
 #include "D2Common/Drlg/DrlgVer.h"
-#include "D2Common/Drlg/Maze.h"
 #include "D2Common/Drlg/OutJung.h"
 #include "D2Common/Drlg/OutSiege.h"
 #include "D2Common/Drlg/Outdoors.h"

@@ -10,14 +10,13 @@
 #include "Storm/D2ArchiveStrc.h"
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/H/stpl.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SComp.h"
 #include "Storm/Source/SErr.h"
-#include "Storm/Source/SSComp.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSignature.h"
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "support/d2_trace.h"
 
@@ -136,7 +135,7 @@ int32_t __stdcall SFILE_DecompressLzw(int32_t pSrcData, int32_t pDstData, int32_
     bufState[1] = 0;
     bufState[3] = 0;
     bufState[4] = nDstSize;
-    SSComp::PKWARE_explode(SFILE_DecompressLzw_BufferRead, SFILE_DecompressLzw_BufferWrite, (TDcmpStruct*)gpSFileExplodeWorkBuffer, bufState);
+    SComp::PKWARE_explode(SFILE_DecompressLzw_BufferRead, SFILE_DecompressLzw_BufferWrite, (TDcmpStruct*)gpSFileExplodeWorkBuffer, bufState);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779080);
     return 1;
 }
@@ -1698,7 +1697,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
                          (compressed). Destination advance is therefore bounded by nReadLen rounded up
                          to whole
                          sectors; SFILE_ReadSectors cannot itself walk pDstBuf out of the caller's
-                         buffer. */ BVar1 = SSComp::SCompDecompress((uint32_t*)(__frame0.nBaseOffset + (int)pDstBuf), &nDestSize, (uint32_t*)((int)__frame0.pReadBuffer + (int)(pArchive->szFileName - 8)), nSectorSize, (uint32_t)pMpqArchive->szArchivePath);
+                         buffer. */ BVar1 = SComp::SCompDecompress((uint32_t*)(__frame0.nBaseOffset + (int)pDstBuf), &nDestSize, (uint32_t*)((int)__frame0.pReadBuffer + (int)(pArchive->szFileName - 8)), nSectorSize, (uint32_t)pMpqArchive->szArchivePath);
                   if (!BVar1) {
                     SErr::SErrDisplayError(0x85100083, (uint32_t*)pMPQFileSaved->pArchive->szArchivePath, -4, nullptr, 0, 1);
                   }
@@ -3432,9 +3431,8 @@ int __stdcall SFileOpenFileEx(D2ArchiveStrc * pArchive, char * szFileName, uint3
     int nOpenResult;
     HANDLE hDiskFile;
     D2MPQFileStrc* pFileRecord;
-    uint32_t* pPathCopy;
+    char* pPathCopy;
     HANDLE hOpenedFile;
-    char* pSep;
     D2MPQFileStrc* pMpqFileRecord;
     void* pReadBuffer;
     uint32_t nDecryptKey;
@@ -3471,7 +3469,7 @@ int __stdcall SFileOpenFileEx(D2ArchiveStrc * pArchive, char * szFileName, uint3
             pFileRecord = SFILE_AllocFileRecord((int**)&gSFileOpenFileList, 1, 0, 0);
             SSTR::SStrCopy(pFileRecord->szFileName, pFileName, 0x104);
             pPathCopy = SSTR::SStrDup(szResolvedPath);
-            pFileRecord->szFilePath = (char*)pPathCopy;
+            pFileRecord->szFilePath = pPathCopy;
             pFileRecord->hFile = hDiskFile;
             pFileRecord->nRefCount = 1;
             pFileRecord->bChecksumEnabled = 0;
@@ -3492,14 +3490,14 @@ int __stdcall SFileOpenFileEx(D2ArchiveStrc * pArchive, char * szFileName, uint3
           SErr::SErrSetLastError(2);
         }
       } else {
-        pSep = SSTR::SStrChrR(szFileName, ':');
-        if (pSep) {
-          szFileName = pSep + 1;
+        pPathCopy = SSTR::SStrChrR(szFileName, ':');
+        if (pPathCopy) {
+          szFileName = pPathCopy + 1;
         }
 
-        pSep = SSTR::SStrChrR(szFileName, '\\');
-        if (pSep) {
-          szFileName = pSep + 1;
+        pPathCopy = SSTR::SStrChrR(szFileName, '\\');
+        if (pPathCopy) {
+          szFileName = pPathCopy + 1;
         }
 
         nDecryptKey = SFILE_Hash(3, szFileName);
@@ -7900,6 +7898,41 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9e98(EHExceptionRecord * pException
 // compiler-generated C++ EH handler; its frame is never registered with the OS
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9ec8(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
     return ExceptionContinueSearch;
+}
+
+void StaticInit_6ca7b0() {
+    gMpqArchiveList.pNext = ~(uintptr_t)((char*)&gMpqArchiveList + 4);
+    atexit(StaticFini_gMpqArchiveList);
+}
+
+void StaticInit_6ca7d0() {
+    gSFileAsyncReqQueue.pNext = ~(uintptr_t)((char*)&gSFileAsyncReqQueue + 4);
+    atexit(StaticFini_gSFileAsyncReqQueue);
+}
+
+void StaticInit_6ca7f0() {
+    InitializeCriticalSection(&lpCriticalSection_00779068);
+    atexit(StaticFini_CriticalSection_00779068);
+}
+
+void StaticInit_6ca810() {
+    gSFileOpenFileList.pNext = ~(uintptr_t)((char*)&gSFileOpenFileList + 4);
+    atexit(StaticFini_gSFileOpenFileList);
+}
+
+void StaticInit_6ca830() {
+    gSFileAudioStreamList.pNext = ~(uintptr_t)((char*)&gSFileAudioStreamList + 4);
+    atexit(StaticFini_gSFileAudioStreamList);
+}
+
+void StaticInit_6ca850() {
+    gSFileStreamRecordList.pNext = ~(uintptr_t)((char*)&gSFileStreamRecordList + 4);
+    atexit(StaticFini_gSFileStreamRecordList);
+}
+
+void StaticInit_6ca870() {
+    InitializeCriticalSection(&lpCriticalSection_00779080);
+    atexit(StaticFini_CriticalSection_00779080);
 }
 
 void StaticFini_CriticalSection_00779068() {

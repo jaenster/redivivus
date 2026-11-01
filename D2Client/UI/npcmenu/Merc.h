@@ -11,6 +11,7 @@
 // Forward declarations
 struct D2BitBufferStrc;
 struct D2GSPacketSrv0x4E;
+struct D2GSPacketSrv0x8A;
 struct D2UnitStrc;
 
 // Data types

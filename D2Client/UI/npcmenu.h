@@ -11,6 +11,7 @@
 // Forward declarations
 struct D2BitBufferStrc;
 struct D2GSPacketSrv0x2A;
+struct D2GSPacketSrv0x50;
 struct D2GSPacketSrv0x91;
 struct D2UnitStrc;
 struct EHExceptionRecord;
@@ -266,6 +267,7 @@ int __stdcall NPCMENU_AkaraRespecOptionCallback();
 // NPC quest table entry 4: quest 1, state flag 0 (Den of Evil).
 int __stdcall NPCMENU_EnableAkaraRespecOption();
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca09b(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
+void StaticInit_6cad10();
 // 6 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::npcmenu

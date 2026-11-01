@@ -4,7 +4,7 @@
 #include "D2Common/Chat/Ignorelist/IgnoreList.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/Src/ErrorManager.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Common/Chat.h"
@@ -116,7 +116,7 @@ void __stdcall MISC_InitIgnorelist() {
     pfnEHHandlerRoutine pExceptionLabel = __GSHandlerCheck_EH_6ca4b1;
     void* pPrevExceptionList = ExceptionList;
     ExceptionList = &pPrevExceptionList;
-    ::IgnoreList* ppIgnoreListVTable = (::IgnoreList*)Storm::SMem::SMemAlloc(0x188, ".\\Chat\\Ignorelist.cpp", 0x41, 0);
+    ::IgnoreList* ppIgnoreListVTable = (::IgnoreList*)Storm::Source::SMem::SMemAlloc(0x188, ".\\Chat\\Ignorelist.cpp", 0x41, 0);
     nSehState = 0;
     if (ppIgnoreListVTable) {
       gpIgnoreList = IgnoreList::Constructor(ppIgnoreListVTable);
@@ -142,7 +142,7 @@ void __stdcall MISC_InitIgnorelist() {
     ExceptionList = &pPrevExceptionList;
     if (!gpIgnoreList) {
       ::IgnoreList* pRawAlloc;
-      pRawAlloc = (::IgnoreList*)Storm::SMem::SMemAlloc(0x188, ".\\Chat\\Ignorelist.cpp", 0x48, 0);
+      pRawAlloc = (::IgnoreList*)Storm::Source::SMem::SMemAlloc(0x188, ".\\Chat\\Ignorelist.cpp", 0x48, 0);
       nSehState = 0;
       if (pRawAlloc) {
         pNewIgnoreList = IgnoreList::Constructor(pRawAlloc);

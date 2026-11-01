@@ -475,7 +475,7 @@ eD2ServerIncomingStatus __fastcall PlayerScreen_DispatchAction(::SGAMEDATA * pGa
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_UpdateSquelchRelation,
     (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_ToggleHostile,
     nullptr,
-    (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SendPartyInvite,
+    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SendPartyInvite,
     (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SetMutualPlayerRelationship,
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_AcceptPartyInvite,
     (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::CallPlayerEventForEachPlayer

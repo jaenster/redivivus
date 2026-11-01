@@ -3,13 +3,12 @@
 #include "Storm/Source/SErr.h"
 #include "Fog/3rdparty/crashy.h"
 #include "Fog/Source/SFile.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
 #include "Storm/WindowHandle.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -669,6 +668,11 @@ void __stdcall SErrDisplayAppFatal(char * szText, ...) {
 // @oracle-basis Instruction-for-instruction the same forwarder. The oracle body is li r4,0x0 ; bl 0x100156d0 (= SErrReportNamedResourceLeak) and nothing else; this one is DebugMemoryHandleError(szMessage, NULL). Same argument passed through in slot 1, same NULL in slot 2, same sole callee, one parameter against the target's two.
 void __stdcall SErrReportResourceLeak(char * szMessage) {
     SErrReportNamedResourceLeak(szMessage, nullptr);
+}
+
+void StaticInit_6ca8a0() {
+    gnStormErrorCallbackCount.pNext = ~(uintptr_t)((char*)&gnStormErrorCallbackCount + 4);
+    atexit(StaticFini_gStormErrorCallbackList);
 }
 
 // Runs at exit: removes every element from the Storm error callback list, then unlinks the list head itself.

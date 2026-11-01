@@ -170,6 +170,7 @@ void __fastcall SUNIT_SpawnPresetUnitsForRoom(::SGAMEDATA * pGame, struct D2Room
 // Server-side teardown of a unit's entire inventory when the unit is being freed. Walks each inventory node: for equipped items (grid type 3) removes equip stats and clears the body location; for active charms unequips stats and emits a debug record of their grid position/page; then detaches the item from the inventory and frees the underlying server unit (any unit type < 6). Finally frees any item held on the cursor. Halts via ErrorManager on null unit or inventory-consistency failures.
 // @sourcefile .\UNIT\SUnit.cpp
 void __fastcall UNITS_FreeInventoryItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void StaticInit_6caf60();
 // 4 internal functions (defined in .cpp)
 
 } // namespace D2Game::UNIT::SUnit

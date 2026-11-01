@@ -5,13 +5,12 @@
 #include "D2Client/D2BNetGatewayAccessStr.h"
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SErr.h"
 #include "Storm/Source/SFile.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Chat.h"
 
@@ -64,7 +63,7 @@ void __stdcall SaveAndUnload(D2BNetGatewayAccessStr * pGatewayAccess) {
       Storm::Source::SReg::SRegSaveData("Configuration", szSourceFileName, 0x82, pbGatewayData, dwGatewayDataSize);
     }
     if (pGatewayAccess->pGatewayData) {
-      Storm::SMem::SMemFree(pGatewayAccess->pGatewayData, ".\\BNetGW.cpp", 0xc6, 0);
+      Storm::Source::SMem::SMemFree(pGatewayAccess->pGatewayData, ".\\BNetGW.cpp", 0xc6, 0);
       pGatewayAccess->pGatewayData = 0;
       pGatewayAccess->nGatewayDataSize = 0;
     }
@@ -72,7 +71,7 @@ void __stdcall SaveAndUnload(D2BNetGatewayAccessStr * pGatewayAccess) {
       return;
     }
 
-    Storm::SMem::SMemFree(pGatewayAccess->pRealmsData, ".\\BNetGW.cpp", 0xcc, 0);
+    Storm::Source::SMem::SMemFree(pGatewayAccess->pRealmsData, ".\\BNetGW.cpp", 0xcc, 0);
     pGatewayAccess->pRealmsData = 0;
 }
 
@@ -205,11 +204,11 @@ void __thiscall GetGatewayList(void * pThis, char * szText) {
     }
 
     *(uint32_t**)((int)pThis + 0x14) = (uint32_t*)dwRegDataSize;
-    LPBYTE pGatewayBuf = (LPBYTE)Storm::SMem::SMemAlloc((uint32_t)dwRegDataSize, ".\\BNetGW.cpp", 0x156, 0);
+    LPBYTE pGatewayBuf = (LPBYTE)Storm::Source::SMem::SMemAlloc((uint32_t)dwRegDataSize, ".\\BNetGW.cpp", 0x156, 0);
     *(LPBYTE*)((int)pThis + 0x10) = pGatewayBuf;
     nLine = Storm::Source::SReg::SRegLoadData((uint32_t*)"Configuration", pDataCursor, 0x82, pGatewayBuf, *(DWORD*)((int)pThis + 0x14), nullptr);
     if (!nLine) {
-      Storm::SMem::SMemFree(*(void**)((int)pThis + 0x10), ".\\BNetGW.cpp", 0x15e, 0);
+      Storm::Source::SMem::SMemFree(*(void**)((int)pThis + 0x10), ".\\BNetGW.cpp", 0x15e, 0);
       *(uint32_t*)((int)pThis + 0x10) = 0;
       *(uint32_t*)((int)pThis + 0x14) = 0;
     }
@@ -589,7 +588,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
         pCur = szText;
         pCur = pCur + strlen(pCur) + 1;
         nSize = ((int)pCur - (int)(szText + 1)) * 2;
-        pRegMultiSzBuf = (char*)Storm::SMem::SMemAlloc(nSize, ".\\BNetGW.cpp", 0x297, 0);
+        pRegMultiSzBuf = (char*)Storm::Source::SMem::SMemAlloc(nSize, ".\\BNetGW.cpp", 0x297, 0);
         sprintf(pRegMultiSzBuf, "%d", nGatewayIniIdx);
         pSectionGateways = Storm::Source::SSTR::SStrLen(pRegMultiSzBuf);
         pCur = pRegMultiSzBuf + pSectionGateways + 1;
@@ -878,15 +877,15 @@ void __stdcall CACHE_FreeAll() {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00881894);
     gbCacheIsOpen = 0;
     if (gpCacheBlockTable) {
-      Storm::SMem::SMemFree(gpCacheBlockTable, ".\\CACHE.CPP", 0x155, 0);
+      Storm::Source::SMem::SMemFree(gpCacheBlockTable, ".\\CACHE.CPP", 0x155, 0);
       gpCacheBlockTable = 0;
     }
     if (gpCacheBufferPoolFirst) {
-      Storm::SMem::SMemFree(gpCacheBufferPoolFirst, ".\\CACHE.CPP", 0x159, 0);
+      Storm::Source::SMem::SMemFree(gpCacheBufferPoolFirst, ".\\CACHE.CPP", 0x159, 0);
       gpCacheBufferPoolFirst = 0;
     }
     if (gpCacheFileHeader) {
-      Storm::SMem::SMemFree(gpCacheFileHeader, ".\\CACHE.CPP", 0x15d, 0);
+      Storm::Source::SMem::SMemFree(gpCacheFileHeader, ".\\CACHE.CPP", 0x15d, 0);
       gpCacheFileHeader = 0;
     }
     if (ghCacheFileHandle != (HANDLE)-1) {
@@ -894,7 +893,7 @@ void __stdcall CACHE_FreeAll() {
       ghCacheFileHandle = (HANDLE)-1;
     }
     if (g_pCacheCryptTable) {
-      Storm::SMem::SMemFree(g_pCacheCryptTable, ".\\CACHE.CPP", 0x165, 0);
+      Storm::Source::SMem::SMemFree(g_pCacheCryptTable, ".\\CACHE.CPP", 0x165, 0);
       g_pCacheCryptTable = 0;
     }
 
@@ -908,7 +907,7 @@ int __fastcall CACHE_FreeMem(void * pParam, uint32_t dwSize) {
       return 0;
     }
 
-    Storm::SMem::SMemFree(pParam, ".\\CACHE.CPP", 0x16f, 0);
+    Storm::Source::SMem::SMemFree(pParam, ".\\CACHE.CPP", 0x16f, 0);
     return 1;
 }
 
@@ -940,9 +939,9 @@ int32_t __stdcall CACHE_Open() {
       return 0;
     }
 
-    g_pCacheCryptTable = Storm::SMem::SMemAlloc(0x1400, ".\\CACHE.CPP", 0x193, 0);
+    g_pCacheCryptTable = Storm::Source::SMem::SMemAlloc(0x1400, ".\\CACHE.CPP", 0x193, 0);
     CACHE_InitCryptTable();
-    gpCacheFileHeader = (D2BnCacheFileHeaderStrc*)Storm::SMem::SMemAlloc(0x2c, ".\\CACHE.CPP", 0x197, 8);
+    gpCacheFileHeader = (D2BnCacheFileHeaderStrc*)Storm::Source::SMem::SMemAlloc(0x2c, ".\\CACHE.CPP", 0x197, 8);
     uint32_t nFileSize;
     nFileSize = GetFileSize(ghCacheFileHandle, (LPDWORD)0x0);
     if (!nFileSize || nFileSize > 0xa00000) {
@@ -951,10 +950,10 @@ int32_t __stdcall CACHE_Open() {
         goto unlock_and_succeed;
       }
       if (gpCacheBufferPoolFirst) {
-        Storm::SMem::SMemFree(gpCacheBufferPoolFirst, ".\\CACHE.CPP", 0x1fc, 0);
+        Storm::Source::SMem::SMemFree(gpCacheBufferPoolFirst, ".\\CACHE.CPP", 0x1fc, 0);
       }
       if (gpCacheBlockTable) {
-        Storm::SMem::SMemFree(gpCacheBlockTable, ".\\CACHE.CPP", 0x1fe, 0);
+        Storm::Source::SMem::SMemFree(gpCacheBlockTable, ".\\CACHE.CPP", 0x1fe, 0);
       }
 
       CACHE_DeleteFile();
@@ -969,7 +968,7 @@ int32_t __stdcall CACHE_Open() {
       memset(gpCacheFileHeader, 0, 0x2c);
       pHeaderBuf->dwSignature = 0x1a334e42;
       pHeaderBuf->dwHeaderSize = 0x2c;
-      pHashTableBuf = (uint8_t*)Storm::SMem::SMemAlloc(0x4000, ".\\CACHE.CPP", 0x21c, 8);
+      pHashTableBuf = (uint8_t*)Storm::Source::SMem::SMemAlloc(0x4000, ".\\CACHE.CPP", 0x21c, 8);
       pHeaderBuf = gpCacheFileHeader;
       nCrc32 = gpCacheFileHeader->dwFileSize;
       gpCacheBufferPoolFirst = pHashTableBuf;
@@ -991,7 +990,7 @@ int32_t __stdcall CACHE_Open() {
         nInitCounter--;
       } while (nInitCounter);
 
-      gpCacheBlockTable = Storm::SMem::SMemAlloc(0x4000, ".\\CACHE.CPP", 0x229, 8);
+      gpCacheBlockTable = Storm::Source::SMem::SMemAlloc(0x4000, ".\\CACHE.CPP", 0x229, 8);
       pHeaderBuf = gpCacheFileHeader;
       nCrc32 = gpCacheFileHeader->dwFileSize;
       gpCacheFileHeader->dwBlockTableOffset = 0x402c;
@@ -1058,7 +1057,7 @@ int32_t __stdcall CACHE_Open() {
         goto warn_invalid_cache;
       }
 
-      gpCacheBufferPoolFirst = (uint8_t*)Storm::SMem::SMemAlloc(nTableByteSize, ".\\CACHE.CPP", 0x1cc, 8);
+      gpCacheBufferPoolFirst = (uint8_t*)Storm::Source::SMem::SMemAlloc(nTableByteSize, ".\\CACHE.CPP", 0x1cc, 8);
       /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(ghCacheFileHandle, gpCacheFileHeader->dwHashTableOffset, (PLONG)0x0, 0);
       /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(ghCacheFileHandle, gpCacheBufferPoolFirst, nTableByteSize, &nBytesRead2, (LPOVERLAPPED)0x0);
       if (nBytesRead2 != nTableByteSize) {
@@ -1085,7 +1084,7 @@ int32_t __stdcall CACHE_Open() {
         goto warn_invalid_cache;
       }
 
-      gpCacheBlockTable = Storm::SMem::SMemAlloc(nTableByteSize, ".\\CACHE.CPP", 0x1e2, 8);
+      gpCacheBlockTable = Storm::Source::SMem::SMemAlloc(nTableByteSize, ".\\CACHE.CPP", 0x1e2, 8);
       /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(ghCacheFileHandle, gpCacheFileHeader->dwBlockTableOffset, (PLONG)0x0, 0);
       /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(ghCacheFileHandle, gpCacheBlockTable, nTableByteSize, &nBytesRead2, (LPOVERLAPPED)0x0);
       if (nBytesRead2 != nTableByteSize) {
@@ -1173,7 +1172,7 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
           CACHE_Rebuild();
           discard_output:
           if (*ppDataBuf) {
-            Storm::SMem::SMemFree(*ppDataBuf, ".\\CACHE.CPP", 0x2de, 0);
+            Storm::Source::SMem::SMemFree(*ppDataBuf, ".\\CACHE.CPP", 0x2de, 0);
             *ppDataBuf = 0;
           }
           *pDataSizeOut = 0;
@@ -1274,7 +1273,7 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
             goto rebuild_corrupt_cache;
           }
 
-          pDataAlloc = (uint32_t*)Storm::SMem::SMemAlloc(*(uint32_t*)(nBlockEntryOffset + 8 + (int)gpCacheBlockTable), ".\\CACHE.CPP", 0x2b5, 0);
+          pDataAlloc = (uint32_t*)Storm::Source::SMem::SMemAlloc(*(uint32_t*)(nBlockEntryOffset + 8 + (int)gpCacheBlockTable), ".\\CACHE.CPP", 0x2b5, 0);
           pvVar1 = gpCacheBlockTable;
           hFile = ghCacheFileHandle;
           *ppDataBuf = pDataAlloc;
@@ -1499,7 +1498,7 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
               nProbeSlot = nHashCount;
             }
 
-            pBlockEntry = (uint32_t*)Storm::SMem::SMemAlloc(nProbeSlot, ".\\CACHE.CPP", 0x391, 0);
+            pBlockEntry = (uint32_t*)Storm::Source::SMem::SMemAlloc(nProbeSlot, ".\\CACHE.CPP", 0x391, 0);
             /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(ghCacheFileHandle, gpCacheFileHeader->dwHashTableOffset, (PLONG)0x0, 0);
             memcpy(pBlockEntry, gpCacheBufferPoolFirst, nBlockIdx);
             nHashKey = CACHE_HashString(3, "(hash table)");
@@ -1508,7 +1507,7 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
             /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ gpCacheFileHeader->dwHashTableCrc32 = nHashKey;
             /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(ghCacheFileHandle, (LPCVOID)pBlockEntry, nBlockIdx, &nBytesReadWrite, (LPOVERLAPPED)0x0);
             if (nBytesReadWrite != nBlockIdx) {
-              Storm::SMem::SMemFree(pBlockEntry, ".\\CACHE.CPP", 0x39d, 0);
+              Storm::Source::SMem::SMemFree(pBlockEntry, ".\\CACHE.CPP", 0x39d, 0);
               nRebuildReason = 0xf;
             } else {
               /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(ghCacheFileHandle, gpCacheFileHeader->dwBlockTableOffset, (PLONG)0x0, 0);
@@ -1519,7 +1518,7 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
               hFile = ghCacheFileHandle;
               /* LPOVERLAPPED lpOverlapped for WriteFile */ gpCacheFileHeader->dwBlockTableCrc32 = nHashKey;
               /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)pBlockEntry, nHashCount, &nBytesReadWrite, (LPOVERLAPPED)0x0);
-              Storm::SMem::SMemFree(pBlockEntry, ".\\CACHE.CPP", 0x3ab, 0);
+              Storm::Source::SMem::SMemFree(pBlockEntry, ".\\CACHE.CPP", 0x3ab, 0);
               pFileHeader = gpCacheFileHeader;
               if (nBytesReadWrite != nHashCount) {
                 nRebuildReason = 0x10;

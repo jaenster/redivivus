@@ -12,7 +12,6 @@
 struct D2DamageStrc;
 struct D2InventoryStrc;
 struct D2MonsterCastPetStrc;
-struct D2PoolManagerStrc;
 struct D2RoomStrc;
 struct D2SUnitEventStrc;
 struct D2SkillArgStrc;

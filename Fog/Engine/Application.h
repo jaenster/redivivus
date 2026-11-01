@@ -10,6 +10,7 @@
 
 // Forward declarations
 struct D2CrashFrameStrc;
+struct D2FogDebugModuleEntryStrc;
 struct D2IniConfigStrc;
 
 // Data types

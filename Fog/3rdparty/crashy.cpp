@@ -5,7 +5,6 @@
 #include "Fog/File.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/Safesock.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "D2Game/Objects/ObjectsRgn.h"
 #include "Fog/3rdparty/crashy/Report.h"

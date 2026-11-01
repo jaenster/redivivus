@@ -8,7 +8,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
@@ -28,6 +27,7 @@
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Logging.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2Game.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
@@ -261,9 +261,9 @@ static void __stdcall STATLIST_TrackChangedStat(int32_t nShiftedStat, D2StatList
 }
 
 // Binary-searches the base stat array of pStatList for a packed stat key (wStatIndex:wSubIndex = nParam). If found and the ItemStatCost entry has FMIN flag set, the stat list is owned by a player/monster unit, and the raw value is below the minaccr threshold, returns minaccr left-shifted by valshift instead. Otherwise returns the raw stat value, or 0 if not found. Uses a custom calling convention (pStatList in EBX, nParam in EDI).
-static int32_t __stdcall STATLIST_LookupBaseStatWithMinAccr(D2ItemStatCostTxt * pItemStatCostLine, D2StatListExStrc * pStatList, int32_t nParam) {
+static int32_t __stdcall STATLIST_LookupBaseStatWithMinAccr(D2ItemStatCostTxt * pItemStatCostLine, D2StatListExStrc * pStatList, int32_t nStatKey) {
     D2StatInfoStrc* pnParam = &pStatList->sStatList.sBaseStats;
-    long int lVar2 = Logging::STATLIST_BinarySearchStatById(nParam, (int*)pnParam);
+    long int lVar2 = Logging::STATLIST_BinarySearchStatById(nStatKey, (int*)pnParam);
     D2StatStrc* pDVar1 = lVar2 >= 0 ? pnParam->pStatInfo + lVar2 : nullptr;
     if (!pDVar1) {
       return 0;
@@ -292,14 +292,14 @@ static void * STATLIST_GetEffectiveStatsArray(D2StatListExStrc * pStatList) {
 }
 
 // Binary-searches pStatEx's stat array for the packed stat key (wStatIndex:wSubIndex == nParam), returns its nStatValue. If the ItemStatCost record has ITEMSTATCOSTFLAG_FMIN set and the owning unit is a player or monster and the found value is below minaccr, returns minaccr left-shifted by valshift instead. Returns 0 if stat not found.
-static int32_t __stdcall TXT_ItemStatCost_GetMinimumStatValueShifted(D2ItemStatCostTxt * pItemStatCostLine, D2StatListExStrc * pStatEx, int32_t nParam) {
+static int32_t __stdcall TXT_ItemStatCost_GetMinimumStatValueShifted(D2ItemStatCostTxt * pItemStatCostLine, D2StatListExStrc * pStatEx, int32_t nStatKey) {
     uint32_t bIsFullList = pStatEx->sStatList.nFlags & 0x80000000;
     D2StatInfoStrc* pStatInfoArray = &pStatEx->sFullStats;
     if (!bIsFullList) {
       pStatInfoArray = &pStatEx->sStatList.sBaseStats;
     }
 
-    long int lVar1 = Logging::STATLIST_BinarySearchStatById(nParam, (int*)pStatInfoArray);
+    long int lVar1 = Logging::STATLIST_BinarySearchStatById(nStatKey, (int*)pStatInfoArray);
     D2StatStrc* pStatInfoRecord = lVar1 >= 0 ? pStatInfoArray->pStatInfo + lVar1 : nullptr;
     if (!pStatInfoRecord) {
       return 0;
@@ -385,31 +385,31 @@ static int32_t __stdcall STATLIST_CalcFullStatFromChildren(int32_t nStatId, D2It
 }
 
 // Applies an additive delta (nParam2) to a packed stat entry identified by a combined stat+subindex key (nParam1) within a stat array (pStatArray inferred from pSkillsTxt). Uses an inlined binary search (STATLIST_BinarySearchStatById) to find the entry; inserts a new entry via STATLIST_InsertStatIntoArray if not found. After updating nStatValue, sets a dirty flag (bit 0x20000000) if the result is positive and a condition at nParam3+0x53 is set. Removes the entry if the new value is zero and nParam3+0x50 permits. Fires a registered change-callback (pSkillsTxt->aurastat+4) if present and the stat flags at nParam3+5 have bit 8 set. Returns the new stat value.
-static int32_t __stdcall STATLIST_PropagateStatDelta(int32_t nParam1, int32_t nParam2, D2ItemStatCostTxt * nParam3, int32_t nCallbackArg, D2StatListExStrc * pSkillsTxt) {
+static int32_t __stdcall STATLIST_PropagateStatDelta(int32_t nShiftedStat, int32_t nDelta, D2ItemStatCostTxt * pItemStatCostTxt, D2UnitStrc * nCallbackArg, D2StatListExStrc * pSkillsTxt) {
     D2PoolManagerStrc* pPoolManager1;
     D2StatStrc* pStatEntry;
     D2StatInfoStrc* pStatArray;
     D2StatInfoStrc* pParam = &pSkillsTxt->sFullStats;
-    long int lVar2 = Logging::STATLIST_BinarySearchStatById(nParam1, (int*)pParam);
+    long int lVar2 = Logging::STATLIST_BinarySearchStatById(nShiftedStat, (int*)pParam);
     if (lVar2 < 0 || (pStatEntry = pParam->pStatInfo + lVar2 , !pStatEntry)) {
-      pStatEntry = STATLIST_InsertStatIntoArray(pParam, nParam1, pSkillsTxt->sStatList.pMemory);
+      pStatEntry = STATLIST_InsertStatIntoArray(pParam, nShiftedStat, pSkillsTxt->sStatList.pMemory);
     }
 
     int nOldValue = pStatEntry->nStatValue;
-    int nNewValue = nOldValue + nParam2;
+    int nNewValue = nOldValue + nDelta;
     pStatEntry->nStatValue = nNewValue;
-    if (nNewValue > 0 && nParam3->bHasOp4Or5Dependency) {
+    if (nNewValue > 0 && pItemStatCostTxt->bHasOp4Or5Dependency) {
       pSkillsTxt->sStatList.nFlags |= 0x20000000;
     }
-    if (!pStatEntry->nStatValue && nParam3->keepzero == '\0') {
+    if (!pStatEntry->nStatValue && pItemStatCostTxt->keepzero == '\0') {
       pPoolManager1 = pSkillsTxt->sStatList.pMemory;
       STATLIST_RemoveStatFromArray(pPoolManager1, pStatEntry, pPoolManager1, (void**)&pParam->pStatInfo);
     }
-    if (!(pSkillsTxt->fpCallback && *(uint8_t*)((uintptr_t)&nParam3->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[3])) {
+    if (!(pSkillsTxt->fpCallback && *(uint8_t*)((uintptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[3])) {
       return nNewValue;
     }
 
-    pSkillsTxt->fpCallback(pSkillsTxt->pGame, pSkillsTxt->pOwner, (D2UnitStrc*)nCallbackArg, nParam1, nOldValue, nNewValue);
+    pSkillsTxt->fpCallback(pSkillsTxt->pGame, pSkillsTxt->pOwner, nCallbackArg, nShiftedStat, nOldValue, nNewValue);
     return nNewValue;
 }
 
@@ -1744,7 +1744,7 @@ void __fastcall STATLIST_PropagateStatChange(D2StatListExStrc * pStatsEx, int32_
 
     while (pStatsEx) {
       if (!pItemStatCostLine->bHasOpBaseDependencies && !pItemStatCostLine->bReferencedByOpStat) {
-        STATLIST_PropagateStatDelta(nShiftedStat, nDelta, pItemStatCostLine, (int32_t)pUnit, pStatsEx);
+        STATLIST_PropagateStatDelta(nShiftedStat, nDelta, pItemStatCostLine, pUnit, pStatsEx);
       } else {
         STATLIST_ApplyComplexStatFormula(pStatsEx, nShiftedStat, &pItemStatCostLine->stat, pUnit);
       }

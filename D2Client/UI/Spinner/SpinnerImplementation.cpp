@@ -14,7 +14,7 @@
 #include "D2gfx/D2GFX.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/SMem.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Dialog.h"
@@ -278,7 +278,7 @@ int __thiscall OnLeftArrow(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * p
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

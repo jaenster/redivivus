@@ -7,7 +7,6 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/QServer/QServer.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "D2Client/UI/MiniPanel.h"
 #include "Fog/D2QServerStrc.h"

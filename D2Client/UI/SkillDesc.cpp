@@ -8,7 +8,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/QuestLog.h"
 #include "D2Client/UI/SpellSel.h"
@@ -39,6 +38,7 @@
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Txt/D2TxtLinkNodeStrc.h"
@@ -5618,14 +5618,14 @@ static void __stdcall SKILLDESC_DescLineA_AppendDamageType(D2UnitStrc * pUnit, u
     DamgeTypeToText((uint32_t)pSkillsTxt->EType, wDmgTypeLocaleId, nMinDmg >> 8, nMaxDmg >> 8, wszText);
 }
 
-static void __stdcall SKILLDESC_DescLine32_MissileDamage(D2UnitStrc * pUnit, int32_t nParam1, int32_t nParam2, uint16_t * wszText, uint16_t wDmgTypeLocaleId) {
-    int32_t nMinElemDmg = D2Common::Units::Missile::GetMinElemDamage(nullptr, pUnit, nParam2, nParam1);
-    int32_t nMaxElemDmg = D2Common::Units::Missile::GetMaxElemDamage(nullptr, pUnit, nParam2, nParam1);
+static void __stdcall SKILLDESC_DescLine32_MissileDamage(D2UnitStrc * pUnit, int32_t nLevel, int32_t nMissileId, uint16_t * wszText, uint16_t wDmgTypeLocaleId) {
+    int32_t nMinElemDmg = D2Common::Units::Missile::GetMinElemDamage(nullptr, pUnit, nMissileId, nLevel);
+    int32_t nMaxElemDmg = D2Common::Units::Missile::GetMaxElemDamage(nullptr, pUnit, nMissileId, nLevel);
     if (!(nMinElemDmg >> 8) && !(nMaxElemDmg >> 8)) {
       return;
     }
 
-    uint8_t byElemType = D2Common::Units::Missile::GetElemTypeFromMissileId(nParam2);
+    uint8_t byElemType = D2Common::Units::Missile::GetElemTypeFromMissileId(nMissileId);
     DamgeTypeToText((uint32_t)byElemType, wDmgTypeLocaleId, nMinElemDmg >> 8, nMaxElemDmg >> 8, wszText);
 }
 
@@ -5712,8 +5712,8 @@ static void __stdcall SKILLDESC_DescLine9_ElemDamage(D2UnitStrc * pUnit, uint16_
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
 }
 
-static void SKILLDESC_DescLine8_AppendMana(int32_t nParam1, D2UnitStrc * pUnit, uint16_t * wszText, int32_t nParam2) {
-    uint32_t nToHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, nParam1, nParam2);
+static void SKILLDESC_DescLine8_AppendMana(int32_t eSkill, D2UnitStrc * pUnit, uint16_t * wszText, int32_t nSkillLevel) {
+    uint32_t nToHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLevel);
     if (!nToHitResult) {
       return;
     }
@@ -5792,16 +5792,16 @@ static void __stdcall SKILLDESC_DescLine16_MissileDamage(int32_t nMissileId, D2U
     SKILLDESC_FormatMissileDamage(nMaxDmgRaw, nMaxDamage, wElemLocaleId, wszText);
 }
 
-static void __stdcall SKILLDESC_DescLine1B_AppendDamage(D2UnitStrc * pUnit, int32_t nParam1, int32_t nParam2, uint16_t * wszText) {
-    int32_t nMinDmgScaled = D2Common::Skills::SERVER_MinDamage(pUnit, nParam2, nParam1, 1);
-    int32_t nMaxDmgScaled = D2Common::Skills::SERVER_MaxDamage(pUnit, nParam2, nParam1, 1);
+static void __stdcall SKILLDESC_DescLine1B_AppendDamage(D2UnitStrc * pUnit, int32_t nSkillLevel, int32_t eSkillId, uint16_t * wszText) {
+    int32_t nMinDmgScaled = D2Common::Skills::SERVER_MinDamage(pUnit, eSkillId, nSkillLevel, 1);
+    int32_t nMaxDmgScaled = D2Common::Skills::SERVER_MaxDamage(pUnit, eSkillId, nSkillLevel, 1);
     SKILLDESC_FormatMissileDamage(nMinDmgScaled * 0x4b >> 8, nMaxDmgScaled * 0x4b >> 8, 0x10a1, wszText);
 }
 
-static void __stdcall SKILLDESC_DescLine1A_SkillDamage(uint16_t * wszText, D2SkillsTxt * pSkillsTxt, int32_t nParam2, int32_t nParam3, D2UnitStrc * pUnit) {
+static void __stdcall SKILLDESC_DescLine1A_SkillDamage(uint16_t * wszText, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t eSkillId, D2UnitStrc * pUnit) {
     uint16_t wDmgTypeStringId;
-    int32_t nMinDmgRaw = D2Common::Skills::SERVER_MinDamage(pUnit, nParam3, nParam2, 1);
-    int32_t nMaxDmgRaw = D2Common::Skills::SERVER_MaxDamage(pUnit, nParam3, nParam2, 1);
+    int32_t nMinDmgRaw = D2Common::Skills::SERVER_MinDamage(pUnit, eSkillId, nSkillLevel, 1);
+    int32_t nMaxDmgRaw = D2Common::Skills::SERVER_MaxDamage(pUnit, eSkillId, nSkillLevel, 1);
     switch (pSkillsTxt->EType) {
       case ELEMENTAL_LIGHTNING:
         wDmgTypeStringId = 0x10a3;
@@ -6136,8 +6136,8 @@ void __stdcall SKILLDESC_DescLine29_FormatMonster(uint16_t * wszText, D2SkillsTx
       wszFormattedW[iFill] = L'\0';
     }
 
-    uint16_t nParam = GetDamageTypeLocale((uint32_t)pSkillsTxt->EType);
-    if (!nParam) {
+    uint16_t nStringIndex = GetDamageTypeLocale((uint32_t)pSkillsTxt->EType);
+    if (!nStringIndex) {
       return;
     }
     if (!nMaxDmgResult) {
@@ -6638,8 +6638,8 @@ static int __stdcall SKILLDESC_DescLineE_PerLevelBonus(int32_t nSkillId, D2UnitS
       wszDamageRange[iFill] = L'\0';
     }
 
-    uint16_t nParam = GetDamageTypeLocale((uint32_t)pSkillsTxt->EType);
-    if (!nParam) {
+    uint16_t nStringIndex = GetDamageTypeLocale((uint32_t)pSkillsTxt->EType);
+    if (!nStringIndex) {
       return 1;
     }
     if (!nMinDamage) {

@@ -8,6 +8,9 @@
 #include <cstdarg>
 #include "d2_platform.h"
 
+// Forward declarations
+struct inflate_code;
+
 namespace D2Client::Source::SSComp {
 
 // Function declarations

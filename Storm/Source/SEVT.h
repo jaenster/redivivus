@@ -119,6 +119,8 @@ uint32_t __thiscall LINKEDLIST_UnlinkFreeAndGetCount(void * pListHead, int * pNo
 // @rename-basis Behaviour. The only function in SEVT that invokes registered handler callbacks: SEVT_LookupEvent(arg1, arg2), then walks the event's handler table selecting nodes whose node[0] equals arg3 with a strictly decreasing node[1] priority, calling node[2] with arg4 as its single argument, and returning whether any handler ran. Nothing in the body is Windows-message specific - the old name's uMsg is the handler key that SEvtRegisterHandler stores at node[0], and the callback receives only arg4.
 // @former-name SEVT_DispatchWindowMessage (invented. Its caller WND_DispatchWindowMessage 00420b00 is the Windows-message layer; this is not.)
 BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey, void * pData);
+void StaticInit_6ca900();
+void StaticInit_6ca920();
 void StaticFini_CriticalSection_0077930c();
 // Runs at exit: removes every element from the SEvt break command list, then unlinks the list head itself.
 void StaticFini_gSevtBreakCmdList();

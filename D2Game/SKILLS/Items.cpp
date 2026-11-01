@@ -3,7 +3,6 @@
 #include "D2Game/SKILLS/Items.h"
 #include "D2Client/Archive.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Seed.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
@@ -23,6 +22,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
@@ -197,7 +197,7 @@ void __stdcall STAFFMOD_RollStaffModSkills(D2UnitStrc * pUnit, int32_t nSkillId,
     int32_t dwUnitGUID;
     D2PoolManagerStrc* pMemory;
     int32_t nSkillLevel;
-    uint32_t nParam;
+    uint32_t nLayer;
     uint32_t anSkillIds[4];
     int nRetryCount;
     eD2UnitType eUnitType;
@@ -281,9 +281,9 @@ void __stdcall STAFFMOD_RollStaffModSkills(D2UnitStrc * pUnit, int32_t nSkillId,
         sNewSeed = D2_SEED_NEXT(*pItemSeed);
         nSkillLevel = 1;
         *pItemSeed = sNewSeed;
-        nParam = sNewSeed.nSeedLow + (nSkillId - (int)(sNewSeed.nSeedLow / 5) - 1) * 5 + nSkillBaseOffset;
-        if (((int)nParam < 0 || (int)nParam >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + nParam) || (wITypeA1 = sgptDataTable->pTxtSkills[nParam].itypea1 , wITypeA1 <= 0 || (bIsOfType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, (int)wITypeA1) , bIsOfType != 0))) && nParam != anSkillIds[0] && nParam != anSkillIds[1] && nParam != anSkillIds[2]) {
-          anSkillIds[iSkillSlot] = nParam;
+        nLayer = sNewSeed.nSeedLow + (nSkillId - (int)(sNewSeed.nSeedLow / 5) - 1) * 5 + nSkillBaseOffset;
+        if (((int)nLayer < 0 || (int)nLayer >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + nLayer) || (wITypeA1 = sgptDataTable->pTxtSkills[nLayer].itypea1 , wITypeA1 <= 0 || (bIsOfType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, (int)wITypeA1) , bIsOfType != 0))) && nLayer != anSkillIds[0] && nLayer != anSkillIds[1] && nLayer != anSkillIds[2]) {
+          anSkillIds[iSkillSlot] = nLayer;
           break;
         }
 

@@ -131,6 +131,7 @@ void __stdcall SErrDisplayAppFatal(char * szText, ...);
 // @oracle Storm 1.10b PPC export SErrReportResourceLeak, code vector 10015840 (TVector 100cbeb4).
 // @oracle-basis Instruction-for-instruction the same forwarder. The oracle body is li r4,0x0 ; bl 0x100156d0 (= SErrReportNamedResourceLeak) and nothing else; this one is DebugMemoryHandleError(szMessage, NULL). Same argument passed through in slot 1, same NULL in slot 2, same sole callee, one parameter against the target's two.
 void __stdcall SErrReportResourceLeak(char * szMessage);
+void StaticInit_6ca8a0();
 // Runs at exit: removes every element from the Storm error callback list, then unlinks the list head itself.
 void StaticFini_gStormErrorCallbackList();
 // 2 internal functions (defined in .cpp)

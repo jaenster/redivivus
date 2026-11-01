@@ -10,7 +10,6 @@
 
 // Forward declarations
 struct D2CreateMonsterUnitStrc;
-struct D2DynamicPathStrc;
 struct D2GfxInfoStrc;
 struct D2ObjectsTxt;
 struct D2RoomStrc;

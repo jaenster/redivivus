@@ -5,7 +5,7 @@
 #include "Fog/Debug.h"
 #include "Storm/D2Srp.h"
 #include "Storm/H/stpl.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
@@ -4415,22 +4415,8 @@ static void __stdcall BigBuffer_FindPrime(int32_t nBitLength, BigBuffer * pnLowe
 // @renamed-from SBIG_GeneratePrimeWrapper (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigFindPrime -> 10099d20, single bl .FindPrime__FR9BigBufferUiRC9BigBufferRC9BigBufferR8BigStack (5 args -> 4-arg C API). 1.14d: 4-arg forwarder onto BigBuffer_FindPrime 004255e0, whose callee set matches .FindPrime's nine callees one for one.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
-void __stdcall SBigFindPrime(BigData * pResult, int32_t nParam2, BigData * pnParam1, BigData * pnParam2) {
-    BigBuffer_FindPrime(nParam2, &pnParam1->sPrimary, &pnParam2->sPrimary, &pResult->sStack, &pResult->sPrimary);
-}
-
-void __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue) {
-    *pwOut = wValue;
-}
-
-void __thiscall CRYPTO_ByteSwap64Array(uint16_t * pwIn, uint16_t * pwOut) {
-    uint16_t wValue = *pwIn;
-    if (wValue < 0x100) {
-      *pwOut = D2Client::UI::ui::CharacterLookupTable[wValue];
-      return;
-    }
-
-    *pwOut = wValue;
+void __stdcall SBigFindPrime(BigData * pResult, int32_t nBitLength, BigData * pnParam1, BigData * pnParam2) {
+    BigBuffer_FindPrime(nBitLength, &pnParam1->sPrimary, &pnParam2->sPrimary, &pResult->sStack, &pResult->sPrimary);
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

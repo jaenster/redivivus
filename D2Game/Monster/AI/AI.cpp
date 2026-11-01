@@ -10,7 +10,6 @@
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Seed.h"
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/UI/SkillDesc.h"
@@ -46,6 +45,7 @@
 #include "D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
@@ -4639,16 +4639,16 @@ void __fastcall MONSTERAI_CastSkillAtRandomOffset(D2UnitStrc * pUnit, int32_t nR
     SERVER_UNIT_CastSkill(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nSkillMode, eSkill, 0, nTargetX, nPos);
 }
 
-static uint32_t MONSTERAI_CalculateTrapDamage(uint32_t dwParam, uint32_t nParam1, uint32_t nParam2, DWORD dwParam2, int32_t nParam) {
+static uint32_t MONSTERAI_CalculateTrapDamage(uint32_t dwParam, uint32_t nParam1, uint32_t nParam2, DWORD dwParam2, D2UnitStrc * pUnit) {
     D2ObjectsTxt* pObjTxt;
-    int32_t nClassId;
+    int nClassId;
     if (nParam2 <= nParam1) {
       uint32_t nDamageRoll;
-      nDamageRoll = D2Client::Archive::RANDOM_RandomNumberSelector((D2SeedStrc*)(nParam + 0x20), nParam1 - nParam2 + 0x100);
-      if (!nParam) {
+      nDamageRoll = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, nParam1 - nParam2 + 0x100);
+      if (!pUnit) {
         nClassId = -1;
       } else {
-        nClassId = *(int32_t*)(nParam + 4);
+        nClassId = pUnit->nClassId;
       }
 
       pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
@@ -4713,7 +4713,7 @@ void __fastcall MONSTERAI_CalculateCounterAttackDamage(::SGAMEDATA * pGame, D2Un
       return;
     }
 
-    nTrapDamageRoll = MONSTERAI_CalculateTrapDamage(dwParam, nDmgMin, nDmgMax, (DWORD)pVictim, (int32_t)pUnit);
+    nTrapDamageRoll = MONSTERAI_CalculateTrapDamage(dwParam, nDmgMin, nDmgMax, (DWORD)pVictim, pUnit);
     if (!nTrapDamageRoll) {
       return;
     }

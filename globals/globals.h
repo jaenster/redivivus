@@ -34,7 +34,6 @@
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/GAME/Sound.h"
 #include "D2Client/Renderer/Glide.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/Chat.h"
@@ -72,6 +71,7 @@
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Logging/ProfCore.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Unit.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
 #include "D2Direct3D/d3dFloorCache.h"
@@ -115,6 +115,7 @@
 #include "Storm/3rdparty/zlib/deflate.h"
 #include "Storm/3rdparty/zlib/trees.h"
 #include "Storm/Source/SCMD.h"
+#include "Storm/Source/SComp.h"
 #include "Storm/Source/SErr.h"
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
@@ -483,6 +484,8 @@ struct IDirectSoundBuffer;
 struct IKsPropertySet;
 struct IgnoreList;
 struct ListBoxWrapper;
+struct SCompCodecEntryStrc;
+struct SCompEncodeCodecEntryStrc;
 struct SErrAppFatalContextStrc;
 struct SGAMEDATA;
 struct SMemHeapStatsStrc;
@@ -1178,16 +1181,6 @@ struct DSCAPS {
     /* 0x54 */ uint32_t dwPlayCpuOverheadSwBuffers;
     /* 0x58 */ uint32_t dwReserved1;
     /* 0x5C */ uint32_t dwReserved2;
-};
-
-struct SCompCodecEntryStrc {
-    /* 0x00 */ uint32_t dwMethodMask;
-    /* 0x04 */ void (__fastcall *pfnCodec)(void *, uint32_t *, void *, uint32_t, uint32_t);
-};
-
-struct SCompEncodeCodecEntryStrc {
-    /* 0x00 */ uint32_t dwMethodMask;
-    /* 0x04 */ void (__fastcall *pfnCodec)(short *, uint32_t *, short *, uint32_t, void *, uint32_t);
 };
 
 struct ZlibHuffCode {
@@ -4678,12 +4671,12 @@ extern void * vftable[1];
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
 // struct Storm::SFile::ARCHIVEREC RTTI Type Descriptor
 extern uint8_t RTTI_Type_Descriptor;
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

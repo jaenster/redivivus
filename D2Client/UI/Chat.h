@@ -65,6 +65,10 @@ void __stdcall CHAT_ClearInput();
 // Routes incoming BNet chat packet by type - handles whispers, emotes, broadcasts, system messages
 void __stdcall CHAT_ProcessBattleNetMessage();
 void __stdcall INPUT_HandleChatCharInput(struct D2UIMouseMsgStrc * pMsg);
+void StaticInit_6caaf0();
+void StaticInit_6cab10();
+void StaticInit_6cab30();
+void StaticInit_6cab90();
 // 10 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Chat

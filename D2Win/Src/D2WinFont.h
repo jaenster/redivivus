@@ -36,6 +36,15 @@ struct D2FontTableHeaderStrc {
     /* 0x0B */ uint8_t nUnverified0b;
 };
 
+struct __attribute__((packed)) D2TooltipTextStrc {
+    /* 0x000 */ uint16_t wszString[1024];
+    /* 0x800 */ int nX;
+    /* 0x804 */ int nY;
+    /* 0x808 */ int nColor;
+    /* 0x80C */ int nCenterFlag;
+    /* 0x810 */ int nLoadProgress;
+};
+
 namespace D2Win::Src::D2WinFont {
 
 // Function declarations
@@ -82,6 +91,9 @@ struct D2TextLineStrc * __fastcall D2WINFONT_WordWrapString(uint16_t * wszText, 
 void __stdcall D2WINFONT_InitFontSystem();
 int32_t __fastcall SetAndReturnLastFont(int32_t nFontId);
 void __stdcall Draw_UnitNameUnderCursor();
+void StaticInit_6cae20();
+void StaticInit_6cae40();
+void StaticInit_6cae50();
 // 9 internal functions (defined in .cpp)
 
 } // namespace D2Win::Src::D2WinFont

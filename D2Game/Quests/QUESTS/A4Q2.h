@@ -10,6 +10,7 @@
 
 // Forward declarations
 struct D2BitBufferStrc;
+struct D2ObjectInitFnArg;
 struct D2ObjectOperateFnArg;
 struct D2QuestArgStrc;
 struct D2QuestDataA4Q2Strc;

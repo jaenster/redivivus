@@ -5,7 +5,6 @@
 #include "D2Client/D2Client.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Object.h"
@@ -31,6 +30,7 @@
 #include "D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Unit.h"
@@ -374,7 +374,7 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     &D2Game::Objects::Objects_InitFn03,
     &D2Game::Quests::QUESTS::A1Q6::Objects_InitFn04,
     &D2Game::Objects::Objects_InitFn05,
-    (D2ObjectsInitFnFunc)&D2Game::Quests::QUESTS::A1Q4::Objects_InitFn06,
+    &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn06,
     &D2Game::Quests::QUESTS::Objects_InitFn07,
     &D2Game::Objects::Objects_InitFn08,
     &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn09,
@@ -389,7 +389,7 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     &D2Game::Quests::QUESTS::Objects_InitFn18,
     &D2Game::Quests::QUESTS::Objects_InitFn19,
     &D2Game::Quests::QUESTS::Objects_InitFn20,
-    (D2ObjectsInitFnFunc)&D2Game::Quests::QUESTS::A2Q7::Objects_InitFn21,
+    &D2Game::Quests::QUESTS::A2Q7::Objects_InitFn21,
     &D2Game::Objects::Objects_InitFn22,
     &D2Game::Quests::QUESTS::Objects_InitFn23,
     &D2Game::Objects::Objects_InitFn24,
@@ -418,12 +418,12 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     &D2Game::Quests::QUESTS::A1Q6::Objects_InitFn47,
     &D2Game::Quests::QUESTS::A4Q3::Objects_InitFn48,
     &D2Game::Quests::QUESTS::A3Q1::Objects_InitFn49,
-    (D2ObjectsInitFnFunc)&D2Game::Quests::QUESTS::A3Q1::Objects_InitFn50,
+    &D2Game::Quests::QUESTS::A3Q1::Objects_InitFn50,
     &D2Game::Objects::Objects_InitFn51,
     &D2Game::Quests::QUESTS::A3Q7::Objects_InitFn52,
     &D2Game::Quests::QUESTS::A3Q5::Objects_InitFn53,
     &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn54,
-    (D2ObjectsInitFnFunc)&D2Game::Quests::QUESTS::A4Q2::Objects_InitFn55,
+    &D2Game::Quests::QUESTS::A4Q2::Objects_InitFn55,
     &D2Game::Objects_InitFn56,
     &D2Game::Objects::Objects_InitFn57,
     &D2Game::Objects::Objects_InitFn58,
@@ -2993,6 +2993,13 @@ void __fastcall MONSTER_SetSpawnCoordList(D2UnitStrc * pUnit, D2RoomCoordListStr
     }
 
     pUnit->pUnitData.pUnitDataMonster->pVision = (uint8_t*)pCoordList;
+}
+
+void StaticInit_6caf30() {
+    gaObjectSpawnOffsetTables[0].nCount = gaObjectSpawnOffsetGroup0[0xc];
+    gaObjectSpawnOffsetTables[1].nCount = gaObjectSpawnOffsetGroup0[0x17];
+    gaObjectSpawnOffsetTables[2].nCount = gaObjectSpawnOffsetGroup0[0x22];
+    gaObjectSpawnOffsetTables[3].nCount = gaObjectSpawnOffsetGroup0[0x31];
 }
 
 } // namespace D2Game::Objects

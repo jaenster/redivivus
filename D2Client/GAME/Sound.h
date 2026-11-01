@@ -11,6 +11,7 @@
 // Forward declarations
 struct D2ClientSoundChannelStrc;
 struct D2SoundChannelStrc;
+struct D2SoundsTxt;
 struct D2UnitStrc;
 
 // Data types

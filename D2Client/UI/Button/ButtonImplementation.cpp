@@ -15,7 +15,7 @@
 #include "D2Win/Src/D2WinTextBox.h"
 #include "D2gfx/D2GFX.h"
 #include "Fog/3rdparty/crashy/Report.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Button.h"
 #include "D2Client/UI/Dialog.h"
@@ -162,7 +162,7 @@ int __thiscall OnMouseWheel(::ButtonImplementation * pThis, D2UIMouseMsgStrc * p
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

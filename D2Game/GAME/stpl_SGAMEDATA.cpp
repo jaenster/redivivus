@@ -15,7 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 
@@ -122,7 +122,7 @@ template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::DeleteNode(::SGA
     TSLink<::SGAMEDATA>* pSlotPtr = !pNode ? &this->m_terminator : (TSLink<::SGAMEDATA>*)(pNode->szGameName + this->m_linkoffset - 0x2a);
     uint32_t nSlotValue = pSlotPtr->m_next;
     pNode->Destructor();
-    Storm::SMem::SMemFree(pNode, s___AUSGAMEDATA___0070f56c, -2, 0);
+    Storm::Source::SMem::SMemFree(pNode, s___AUSGAMEDATA___0070f56c, -2, 0);
     return (::SGAMEDATA*)((int)nSlotValue <= 0 ? 0 : nSlotValue);
 }
 

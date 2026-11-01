@@ -6,12 +6,12 @@
 #include "D2Client/UI/EscMenu.h"
 #include "D2Win/Src/D2WinTextBox.h"
 #include "Fog/3rdparty/crashy/Report.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Dialog.h"
+#include "D2Client/UI/Editbox.h"
 #include "D2Client/UI/UIWidget.h"
 #include "Fog/Debug.h"
-#include "Storm/_unnamespaced.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -54,7 +54,7 @@ void __thiscall Destructor(::EditBoxWrapper * pThis) {
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -153,7 +153,7 @@ void __thiscall SetNumericOnly(::EditBoxWrapper * pThis, BOOL bNumericOnly) {
     uint32_t dwSehState = 0;
     ExceptionList = &pSavedExceptionList;
     pThis->pVtable = (EditBoxWrapperVtable*)(void*)EditBoxWrapper::vftable;
-    ::EditBoxImplementation* ppEditBox = (::EditBoxImplementation*)Storm::SMem::SMemAlloc(0x5a, "new", -1, 0);
+    ::EditBoxImplementation* ppEditBox = (::EditBoxImplementation*)Storm::Source::SMem::SMemAlloc(0x5a, "new", -1, 0);
     dwSehState = (uint32_t)((uint32_t)((uint32_t)dwSehState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     if (ppEditBox) {
       ppEditBox = EditBoxImplementation::Constructor(ppEditBox, nPosX, nPosY, nWidth, nMaxLines, nMaxValue, nMaxLength, pfnOnEnter, nFont);

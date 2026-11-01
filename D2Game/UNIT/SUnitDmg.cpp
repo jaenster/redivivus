@@ -6,7 +6,6 @@
 #include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Seed.h"
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/Stats.h"
@@ -145,21 +144,21 @@ static uint32_t __stdcall DAMAGE_RollPhysicalDamageRange(int32_t nDamageRange, i
     return (int)nDamageAccum < 0 ? 0 : nDamageAccum;
 }
 
-static uint32_t __stdcall DAMAGE_RollElementalDamageWithBonus(eD2UnitStat eUnitStat, eD2UnitStat eStat1, int32_t nParam1, int32_t nParam2, uint32_t nParam, D2UnitStrc * pUnit, eD2UnitStat eStat2) {
+static uint32_t __stdcall DAMAGE_RollElementalDamageWithBonus(eD2UnitStat eUnitStat, eD2UnitStat eStat1, int32_t nMinPctBonus, int32_t nRangePctBonus, uint32_t nDamageAccum, D2UnitStrc * pUnit, eD2UnitStat eStat2) {
     int nDamageBase = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eStat2, 0);
     if (nDamageBase * 0x100 < 8) {
-      return (int)nParam < 0 ? 0 : nParam;
+      return (int)nDamageAccum < 0 ? 0 : nDamageAccum;
     }
 
     int nMinDamage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0);
     if (eStat1 != ~UNITSTAT_strength) {
       int nBonusStat;
       nBonusStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eStat1, 0);
-      nParam1 += nBonusStat;
-      nParam2 += nBonusStat;
+      nMinPctBonus += nBonusStat;
+      nRangePctBonus += nBonusStat;
     }
 
-    uint32_t nResult = DAMAGE_RollPhysicalDamageRange(nDamageBase * 0x100, nParam1, pUnit, nMinDamage << 8, nParam2, nParam);
+    uint32_t nResult = DAMAGE_RollPhysicalDamageRange(nDamageBase * 0x100, nMinPctBonus, pUnit, nMinDamage << 8, nRangePctBonus, nDamageAccum);
     return nResult;
 }
 
@@ -748,13 +747,13 @@ static void DAMAGE_ApplyUndeadBonusDamage(int32_t nParam, D2UnitStrc * pUnit, D2
     *(int*)(nParam + 0xc) = *(int*)(nParam + 0xc) + iVar1 + nUndeadDmgPct;
 }
 
-static void __stdcall DAMAGE_ApplyMonsterTypeBonusDamage(D2UnitStrc * pUnit, D2DamageStrc * pDamage, int * pnParam) {
+static void __stdcall DAMAGE_ApplyMonsterTypeBonusDamage(D2UnitStrc * pUnit, D2DamageStrc * pDamage, D2UnitStrc * pnParam) {
     D2StatStrc anBonusValues[128];
-    if (!(pnParam && *pnParam == 1)) {
+    if ((pnParam ? pnParam->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 
-    int nMonTypeCount = pnParam[1];
+    int nMonTypeCount = pnParam->nClassId;
     D2MonStatsTxt* pMonStatsTxt = nMonTypeCount >= 0 && nMonTypeCount < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonTypeCount : nullptr;
     if (!pMonStatsTxt) {
       return;
@@ -1918,27 +1917,27 @@ void __fastcall DAMAGE_RemoveDamageListEntry(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // @sourcefile .\UNIT\SUnitDmg.cpp
-static void __stdcall DAMAGE_AddDamageListEntry(int32_t nGamePtr, int * pnParam1, int * pnParam2, int * pnParam3) {
+static void __stdcall DAMAGE_AddDamageListEntry(::SGAMEDATA * nGamePtr, D2DamageStrc * pnParam1, D2UnitStrc * pnParam2, D2UnitStrc * pnParam3) {
     int i;
-    if (!((!pnParam3 || *pnParam3 != 2 || pnParam3[1] != 7 && pnParam3[1] != 0xb) && (*pnParam3 == 1 || !*pnParam3))) {
+    if (!((!pnParam3 || pnParam3->eUnitType != UNIT_OBJECT || pnParam3->nClassId != 7 && pnParam3->nClassId != 0xb) && (pnParam3->eUnitType == UNIT_MONSTER || pnParam3->eUnitType == UNIT_PLAYER))) {
       return;
     }
 
-    D2CombatEntryStrc* pNewCombatEntry = D2_NEW_POOL_AT(*(D2PoolManagerStrc**)(nGamePtr + 0x1c), D2CombatEntryStrc, ".\\UNIT\\SUnitDmg.cpp", 0x7cb);
-    pNewCombatEntry->field_0 = nGamePtr;
-    pNewCombatEntry->eAttackerType = *pnParam2;
-    pNewCombatEntry->nAttackerGUID = pnParam2[3];
-    pNewCombatEntry->eDefenderType = *pnParam3;
-    pNewCombatEntry->nDefenderGUID = pnParam3[3];
+    D2CombatEntryStrc* pNewCombatEntry = D2_NEW_POOL_AT(nGamePtr->pMemoryPool, D2CombatEntryStrc, ".\\UNIT\\SUnitDmg.cpp", 0x7cb);
+    pNewCombatEntry->field_0 = (uint32_t)(uintptr_t)nGamePtr;
+    pNewCombatEntry->eAttackerType = pnParam2->eUnitType;
+    pNewCombatEntry->nAttackerGUID = pnParam2->nUnitGUID;
+    pNewCombatEntry->eDefenderType = pnParam3->eUnitType;
+    pNewCombatEntry->nDefenderGUID = pnParam3->nUnitGUID;
     D2CombatEntryStrc* pEntryData = (D2CombatEntryStrc*)&pNewCombatEntry->sDamage;
     for (i = 0x1c; i; i--) {
-      pEntryData->field_0 = *pnParam1;
-      pnParam1++;
+      pEntryData->field_0 = pnParam1->dwHitFlags;
+      pnParam1 = (D2DamageStrc*)&pnParam1->wResultFlags;
       pEntryData = (D2CombatEntryStrc*)&pEntryData->eAttackerType;
     }
 
-    pNewCombatEntry->pNext = (D2CombatEntryStrc*)pnParam2[0x2b];
-    pnParam2[0x2b] = (int)pNewCombatEntry;
+    pNewCombatEntry->pNext = (D2CombatEntryStrc*)pnParam2->pCombat;
+    pnParam2->pCombat = (uint8_t*)pNewCombatEntry;
 }
 
 // Returns 1 (no knockback) if unit is frozen, damage is pure poison, or total damage is below 256. Otherwise tests whether damage meets a fraction of max HP threshold (divisor varies by elemental type: physical=16, lightning/drain/burn=8, cold=32, poison=64) with probabilistic fallback rolls. Also checks a monster stat flag (index 3) to allow knockback immunity on specific monster types. Returns 0 if knockback should be applied.
@@ -2978,7 +2977,7 @@ static int32_t DAMAGE_GetSkillDamageBonus(D2UnitStrc * pUnit) {
 }
 
 // Rolls a unit's passive defensive avoidance against an incoming attack. For players in Run/Walk mode (or matching monster mode) rolls passive_evade; otherwise checks dodge (passive_dodge) when nParam==0 or avoid (passive_avoid) when nParam!=0, plus a weapon-class-0xD parry/block path keyed on DAMAGE_GetSkillDamageBonus. Uses the unit RNG seed (advances pUnit->sSeed). Returns a result bitcode: 0x10 (block/parry), 8 (evade), 4 (dodge), 2 (avoid), or 0 (none). __fastcall with pUnit in ESI, attacker pUnit2 in EDI.
-static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     int32_t nParryBonus;
     uint32_t nRandRoll;
     int nDodgeChance;
@@ -2998,8 +2997,8 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
       eAnimMode = pUnit->eAnimMode.ePlayerMode;
       if (pUnit->eUnitType == UNIT_PLAYER) {
         if (eAnimMode == eD2PlayerAnimMode_ns::Run || eAnimMode == Walk) {
-          nParam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_evade, 0);
-          if (nParam <= 0) {
+          bIsMissile = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_evade, 0);
+          if (bIsMissile <= 0) {
             return 0;
           }
 
@@ -3009,10 +3008,10 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
           pUnit->sSeed = DVar1;
           nAvoidChance = DVar1.nSeedLow % 100;
           nSeedMod = "evades";
-          nParryBonus = nParam;
+          nParryBonus = bIsMissile;
           nullsub_4Arg(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nParryBonus, nAvoidChance, (uint32_t)nSeedMod);
           nRandRoll = 8;
-          if (nAvoidChance < nParam) {
+          if (nAvoidChance < bIsMissile) {
             return nRandRoll;
           }
 
@@ -3039,8 +3038,8 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
         goto roll_dodge_or_avoid;
       }
       if (eAnimMode == eD2PlayerAnimMode_ns::Skill3 || eAnimMode == Walk) {
-        nParam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_evade, 0);
-        if (nParam <= 0) {
+        bIsMissile = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_evade, 0);
+        if (bIsMissile <= 0) {
           return 0;
         }
 
@@ -3066,7 +3065,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
     }
 
     roll_dodge_or_avoid:
-    if (!nParam) {
+    if (!bIsMissile) {
       nDodgeChance = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_dodge, 0);
       if (nDodgeChance > 0) {
         nEvadeRoll = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);

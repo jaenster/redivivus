@@ -3,11 +3,10 @@
 #include "Storm/Source/SEVT.h"
 #include "Fog/Engine/Application.h"
 #include "Storm/H/stpl.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SErr.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -920,6 +919,16 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0077930c);
     return bResult;
+}
+
+void StaticInit_6ca900() {
+    gpSevtBreakCmdListHead.pNext = ~(uintptr_t)((char*)&gpSevtBreakCmdListHead + 4);
+    atexit(StaticFini_gSevtBreakCmdList);
+}
+
+void StaticInit_6ca920() {
+    InitializeCriticalSection(&lpCriticalSection_0077930c);
+    atexit(StaticFini_CriticalSection_0077930c);
 }
 
 void StaticFini_CriticalSection_0077930c() {

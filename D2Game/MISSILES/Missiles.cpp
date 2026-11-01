@@ -5,7 +5,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GSPacketSrv0x73.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Missile.h"
@@ -29,6 +28,7 @@
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Stats/StatsEx.h"
@@ -100,11 +100,11 @@ void __fastcall ClearMissileUnitData(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GAME::Event::EVENT_FreeAllTimersForUnit(pGame, pUnit);
 }
 
-static void __stdcall MISSILES_EvalDamageAndSetStats(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2, int32_t nParam) {
+static void __stdcall MISSILES_EvalDamageAndSetStats(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2, int32_t nLevel) {
     D2MissileDamageDataStrc sDamageData;
     PLAYER::Player::EQUIPMENT_RecalcDualWieldWeaponStats(pUnit1, 0);
-    D2Common::Units::Missile::EvaluateMissileFormula(&sDamageData, pUnit1, pUnit, pUnit2, nParam);
-    D2Common::Units::Missile::SetDamageStats(pUnit1, pUnit2, &sDamageData, nParam);
+    D2Common::Units::Missile::EvaluateMissileFormula(&sDamageData, pUnit1, pUnit, pUnit2, nLevel);
+    D2Common::Units::Missile::SetDamageStats(pUnit1, pUnit2, &sDamageData, nLevel);
     PLAYER::Player::WEAPON_ApplyEquippedWeaponStats(pUnit1, 0);
 }
 

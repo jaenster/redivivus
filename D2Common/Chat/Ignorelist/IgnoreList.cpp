@@ -7,7 +7,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/Source/SFile.h"
 #include "Storm/H/stpl.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
@@ -272,7 +272,7 @@ void __thiscall Destructor(::IgnoreList * pThis) {
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -409,7 +409,7 @@ void __thiscall LoadFromFile(::IgnoreList * pThis) {
 void __thiscall AddAccountMapping(::IgnoreList * pThis, char * szRaw, int32_t nRawLen) {
     int32_t bIsOnline;
     ::MappingEntryNode* pNameEntry;
-    uint32_t* pszPatternDup;
+    char* pszPatternDup;
     size_t nOpenParenIdx;
     uint32_t nCharIdx;
     char cPatternPrefix[256];
@@ -447,14 +447,14 @@ void __thiscall AddAccountMapping(::IgnoreList * pThis, char * szRaw, int32_t nR
             pNameEntry = pThis->tAccountMappings.New(szAccountName, 0, 0);
           }
           if (pNameEntry->szMappedValue) {
-            Storm::SMem::SMemFree(pNameEntry->szMappedValue, ".\\Chat\\Ignorelist.cpp", 0x142, 0);
+            Storm::Source::SMem::SMemFree(pNameEntry->szMappedValue, ".\\Chat\\Ignorelist.cpp", 0x142, 0);
           }
 
           memset(cPatternPrefix + 1, 0, 0xff);
           cPatternPrefix[0] = '*';
           Storm::Source::SSTR::SStrPack(cPatternPrefix, szCharName, 0x100);
           pszPatternDup = Storm::Source::SSTR::SStrDup(cPatternPrefix);
-          pNameEntry->szMappedValue = (char*)pszPatternDup;
+          pNameEntry->szMappedValue = pszPatternDup;
           return;
         }
 

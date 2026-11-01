@@ -1560,4 +1560,19 @@ BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode) {
     return 1;
 }
 
+void StaticInit_6cadf0() {
+    // Static local variables (originally global data)
+    static char * fnCursorVisibilityHook = s_Diablo_II_006cc8b8; D2_STATIC_GUARD(fnCursorVisibilityHook, "D2gfx::D2GFX::StaticInit_6cadf0::fnCursorVisibilityHook");
+
+    gpszWindowClassName = fnCursorVisibilityHook;
+}
+
+void StaticInit_6cae00() {
+    szWindowClassName = gpszDiabloIIClassNameSource;
+}
+
+void StaticInit_6cae10() {
+    gpszWindowTitle = gpszDiabloIIClassNameSource;
+}
+
 } // namespace D2gfx::D2GFX

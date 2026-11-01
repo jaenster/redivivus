@@ -16,7 +16,6 @@
 #include "D2Client/GAME/Select.h"
 #include "D2Client/GAME/Wall2.h"
 #include "D2Client/SKILLS/Skills.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/UI/Automap.h"

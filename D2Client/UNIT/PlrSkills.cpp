@@ -44,6 +44,7 @@
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
@@ -180,8 +181,8 @@ void __fastcall PLRSKILLS_DrawChargeTrailIfSecondary(D2UnitStrc * pUnit, uint32_
     ::D2Client::UNIT::PlrSkills::PLRSKILLS_DrawSkillTrail_Secondary(pUnit, nParam);
 }
 
-static void __stdcall STATES_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nParam) {
-    if (nParam == -1) {
+static void __stdcall STATES_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nOverlayId) {
+    if (nOverlayId == -1) {
       return;
     }
 
@@ -192,7 +193,7 @@ static void __stdcall STATES_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nPara
     }
 
     do {
-      Engine::Gfx::GFX_RemoveOverlayById(pUnit, 0, i + nParam);
+      Engine::Gfx::GFX_RemoveOverlayById(pUnit, 0, i + nOverlayId);
       i++;
     } while (i < nOverlayCount);
 }

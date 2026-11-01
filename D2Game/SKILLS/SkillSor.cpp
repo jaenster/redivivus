@@ -8,7 +8,6 @@
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/SKILLS.h"
 #include "D2Client/SKILLS/Skills.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
@@ -34,6 +33,7 @@
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
@@ -1130,7 +1130,7 @@ BOOL __fastcall Skills_SrvDoFunc_028_Meteor_Blizzard(::SGAMEDATA * pGame, D2Unit
     return 0;
 }
 
-static D2UnitStrc * __stdcall SKILLSOR_CreateMissileAtTarget(::SGAMEDATA * pGame, eMissilesId eMissileId, eD2Skills eSkill, int32_t nParam, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+static D2UnitStrc * __stdcall SKILLSOR_CreateMissileAtTarget(::SGAMEDATA * pGame, eMissilesId eMissileId, eD2Skills eSkill, int32_t nSkillLvl, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2UnitStrc* pResult;
     if (!(pUnit2 && pUnit)) {
       return nullptr;
@@ -1147,7 +1147,7 @@ static D2UnitStrc * __stdcall SKILLSOR_CreateMissileAtTarget(::SGAMEDATA * pGame
     if (!bIsInTown) {
       uint32_t nUnitY;
       nUnitY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-      pResult = SkillsServer::SKILLS_CreateMissileAtTarget(pGame, pUnit2, eSkill, nParam, eMissileId, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), nUnitY);
+      pResult = SkillsServer::SKILLS_CreateMissileAtTarget(pGame, pUnit2, eSkill, nSkillLvl, eMissileId, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), nUnitY);
       return pResult;
     }
 

@@ -14,7 +14,6 @@
 #include "Bnclient/net_sid.h"
 #include "D2Client/D2BNetGatewayAccessStr.h"
 #include "D2Client/D2IniConfigStrc.h"
-#include "Storm/_unnamespaced.h"
 
 
 // =============================================================================
@@ -373,11 +372,17 @@ char s___AUItem_NewsTable___0072ff8c[24] = {
 
 D2BNetGatewayAccessStr ActualRealmInfo = {}; D2_GLOBAL_GUARD(ActualRealmInfo, "ActualRealmInfo");
 
+_RTL_CRITICAL_SECTION lpCriticalSection_00881860 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00881860, "lpCriticalSection_00881860");
+
+_RTL_CRITICAL_SECTION lpCriticalSection_00881894 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00881894, "lpCriticalSection_00881894");
+
 D2BnNewsTableStrc g_nNewsMaxCacheSize = {}; D2_GLOBAL_GUARD(g_nNewsMaxCacheSize, "g_nNewsMaxCacheSize");
 
 char lpFileName_00881c58[260] = {}; D2_GLOBAL_GUARD(lpFileName_00881c58, "lpFileName_00881c58");
 
 char gszBNetChatInputBuffer[260] = {}; D2_GLOBAL_GUARD(gszBNetChatInputBuffer, "gszBNetChatInputBuffer");
+
+_RTL_CRITICAL_SECTION lpCriticalSection_00881f64 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00881f64, "lpCriticalSection_00881f64");
 
 char g_szBnetConnectionStateString[128] = {}; D2_GLOBAL_GUARD(g_szBnetConnectionStateString, "g_szBnetConnectionStateString");
 
@@ -549,9 +554,9 @@ namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

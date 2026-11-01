@@ -23,6 +23,7 @@
 #include "D2Common/QuestRecord.h"
 #include "D2Game/GAME/Arena.h"
 #include "D2Game/GAME/Event.h"
+#include "D2Game/GAME/SCmd.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "D2Win/DC6.h"
