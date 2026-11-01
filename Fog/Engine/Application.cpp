@@ -1159,15 +1159,9 @@ BOOL __stdcall ReturnTrue() {
 }
 
 void __stdcall CreateRegedit() {
-    // Frame slots -1568..-1560 are ONE object: &dwValueNameLen is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      DWORD dwValueNameLen;
-      DWORD dwValueDataSize;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     LPDWORD dwValueInfo;
+    DWORD dwValueNameLen;
+    DWORD dwValueDataSize;
     HKEY hKeyDest;
     HKEY hKeySrc;
     uint8_t dataBuf[1024];
@@ -1179,15 +1173,15 @@ void __stdcall CreateRegedit() {
       /* PHKEY phkResult for RegCreateKeyA */ /* LPCSTR lpSubKey for RegCreateKeyA */ /* HKEY hKey for RegCreateKeyA */ RegCreateKeyA((HKEY)0x80000002, "SOFTWARE\\Blizzard Entertainment\\Diablo II", &hKeyDest);
       dwIndex = 0;
       do {
-        /* LPDWORD lpcbData for RegEnumValueA */ /* LPBYTE lpData for RegEnumValueA */ /* LPDWORD lpType for RegEnumValueA */ /* LPDWORD lpReserved for RegEnumValueA */ /* LPDWORD lpcchValueName for RegEnumValueA */ /* LPSTR lpValueName for RegEnumValueA */ /* DWORD dwIndex for RegEnumValueA */ /* HKEY hKey for RegEnumValueA */ __frame0.dwValueNameLen = 0x104;
-        __frame0.dwValueDataSize = 0x400;
-        nRegStatus = RegEnumValueA(hKeySrc, dwIndex, szValueName, &__frame0.dwValueNameLen, (LPDWORD)0x0, (LPDWORD)&dwValueInfo, dataBuf, &__frame0.dwValueDataSize);
+        /* LPDWORD lpcbData for RegEnumValueA */ /* LPBYTE lpData for RegEnumValueA */ /* LPDWORD lpType for RegEnumValueA */ /* LPDWORD lpReserved for RegEnumValueA */ /* LPDWORD lpcchValueName for RegEnumValueA */ /* LPSTR lpValueName for RegEnumValueA */ /* DWORD dwIndex for RegEnumValueA */ /* HKEY hKey for RegEnumValueA */ dwValueNameLen = 0x104;
+        dwValueDataSize = 0x400;
+        nRegStatus = RegEnumValueA(hKeySrc, dwIndex, szValueName, &dwValueNameLen, (LPDWORD)0x0, (LPDWORD)&dwValueInfo, dataBuf, &dwValueDataSize);
         dwIndex++;
         if (nRegStatus) {
           break;
         }
 
-        /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ nRegStatus = RegSetValueExA(hKeyDest, szValueName, 0, (DWORD)dwValueInfo, dataBuf, __frame0.dwValueDataSize);
+        /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ nRegStatus = RegSetValueExA(hKeyDest, szValueName, 0, (DWORD)dwValueInfo, dataBuf, dwValueDataSize);
       } while (!nRegStatus);
 
       /* HKEY hKey for RegCloseKey */ RegCloseKey(hKeyDest);

@@ -378,22 +378,16 @@ int __fastcall GetSocketStatusAndWsaResultToArguments(D2NetDataStrc * pNetData, 
 }
 
 char * __fastcall inet_nameToIp(char * szText) {
-    // Frame slots -20..-4 are ONE object: &nOctet0 is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nOctet0;
-      int nOctets;
-      int nOctet2;
-      int nOctet3;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 16, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     char* pDstIp;
+    int nOctet0;
+    int nOctets;
+    int nOctet2;
+    int nOctet3;
     char cChar;
     bool bDidStartUp;
     bDidStartUp = false;
     int nResult;
-    nResult = sscanf(szText, "%d.%d.%d.%d", &__frame0.nOctet0, &__frame0.nOctets, &__frame0.nOctet2, &__frame0.nOctet3);
+    nResult = sscanf(szText, "%d.%d.%d.%d", &nOctet0, &nOctets, &nOctet2, &nOctet3);
     if (nResult == 4) {
       return szText;
     }

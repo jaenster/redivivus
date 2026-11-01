@@ -2,6 +2,7 @@
 """check.py - re-judge some TUs' functions against the committed audit.
 
     check.py [--update] PATTERN ...      (PATTERN: a path substring, e.g. D2Game/PLAYER)
+    check.py                             (the carve check alone)
 
 The inner loop and the regression gate. For every mapped function whose TU
 path contains a PATTERN, compares the object on disk (rebuild it first) with
@@ -11,6 +12,10 @@ similarity moves. Exit status 1 if anything regressed.
 
 --update writes the new rows into evidence/audit.tsv (the summary is only
 rewritten by a full `oracle audit`).
+
+Every run first checks the carve of the original (build/ref/functions.tsv)
+against CARVE: extents that the carving has got wrong before, each confirmed
+against Ghidra's body and the disassembly. Exit status 1 if one differs.
 """
 import argparse
 import os
@@ -21,9 +26,49 @@ sys.path.insert(0, HERE)
 import audit            # noqa: E402
 import compare          # noqa: E402
 import ours as ourslib  # noqa: E402
-from oracle_config import BUILD, ORACLE  # noqa: E402
+import refimage         # noqa: E402
+from oracle_config import BUILD, ORACLE, REFCACHE  # noqa: E402
 
 AUDIT = os.path.join(ORACLE, 'evidence', 'audit.tsv')
+
+# start, end (exclusive), roots, name: what refimage.py must carve.
+CARVE = [
+    # A 16-aligned 0xCC that is an operand byte of the last instruction
+    # (call rel32 at 0066a15d) is not a padded start.
+    (0x00669130, 0x0066a19f, (), 'CUBE_LoadCubeMainTable'),
+    (0x00401f10, 0x004020c2, (), 'GetSymbolNameForAddress'),
+    (0x00409dd0, 0x00409fea, (), 'InitializePoolSystem'),
+    # A branch past a padded start into its body: the switch table lies beyond.
+    (0x00626200, 0x006266bc, (), 'STATLIST_CalcCombinedStatValue'),
+    # An SEH prolog starts a function nothing calls (_tsopen_helper); its
+    # __finally funclet is its root, not _tsopen_nolock's.
+    (0x0069b08a, 0x0069b7e3, (), '_tsopen_nolock'),
+    (0x0069b7e3, 0x0069b85f, (0x0069b85d,), '_tsopen_helper'),
+    (0x006a8b91, 0x006a92eb, (), '_tsopen_nolock (wopen)'),
+    (0x006a92eb, 0x006a9367, (0x006a9365,), '_tsopen_helper (wopen)'),
+    # A callback held in data, right after its predecessor's ret with no padding.
+    (0x005ee040, 0x005ee260, (), 'AITHINK_Fn1_CatapultSpotter'),
+    (0x005ee260, 0x005ee3b6, (), 'AITHINK_Fn1_DeathMauler'),
+    (0x0046a840, 0x0046a940, (), 'WindowsKeyPressedEvent'),
+    (0x0046a940, 0x0046aa1b, (), 'INPUT_DispatchKeyCommand'),
+    # Funclets the exception tables name stay roots, even on the 16-byte grid.
+    (0x0069ac98, 0x0069ad85, (0x0069ad80,), 'SEH function, __finally on the grid'),
+    (0x006b42f0, 0x006b4c86, (0x006b4c42, 0x006b4c73), 'Direct3DCallBack catch funclets'),
+]
+
+
+def check_carve(functions):
+    """Lines describing every CARVE entry the carve gets wrong."""
+    bad = []
+    for s, e, roots, name in CARVE:
+        got = functions.get(s)
+        if got is None:
+            bad.append('carve: %08x %s is not a function start' % (s, name))
+        elif got[0] != e or tuple(got[3]) != roots:
+            bad.append('carve: %08x %s is %08x..%08x roots %s, expected ..%08x roots %s' % (
+                s, name, s, got[0], ','.join('%08x' % r for r in got[3]) or '-', e,
+                ','.join('%08x' % r for r in roots) or '-'))
+    return bad
 
 
 def judge(rows, pats, model, syms, quarantined):
@@ -59,8 +104,15 @@ def judge(rows, pats, model, syms, quarantined):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--update', action='store_true')
-    ap.add_argument('patterns', nargs='+')
+    ap.add_argument('patterns', nargs='*')
     args = ap.parse_args()
+    ref = refimage.Reference(os.path.join(ORACLE, 'reference', 'Game.exe'))
+    bad = check_carve(ref.load(os.path.join(REFCACHE, 'functions.tsv')))
+    for line in bad:
+        print(line)
+    print('carve: %d of %d checked extents as expected' % (len(CARVE) - len(bad), len(CARVE)))
+    if not args.patterns:
+        return 1 if bad else 0
     rows = audit.load_funcmap(os.path.join(ORACLE, 'evidence', 'funcmap.tsv'))
     _ref, model = audit.load_context()
     syms = audit.sym_map(rows)
@@ -90,7 +142,7 @@ def main():
     print('%d functions: %d MATCH (%+d, -%d), similarity +%.2f / -%.2f' % (len(new), match, gained, lost, up, down))
     if args.update:
         update_rows(new)
-    return 1 if lost else 0
+    return 1 if lost or bad else 0
 
 
 def update_rows(state):

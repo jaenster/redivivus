@@ -21,21 +21,14 @@ namespace D2Net::SRC::D2Net {
 
 // Gets local IP address as string. Calls getsockname on CLIENT_SocketToServer, converts sockaddr to string via inet_ntoa, copies to output buffer.
 void __stdcall NET_GetLocalIPAddressString(char * szIpAddressOut) {
-    // Frame slots -28..-8 are ONE object: &nAddrLen is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nAddrLen;
-      sockaddr_in sSockAddr;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 20, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    __frame0.sSockAddr.sin_family = 0;
-    __frame0.sSockAddr.sin_port = 0;
-    __frame0.sSockAddr.sin_addr = 0;
-    memset(__frame0.sSockAddr.sin_zero, 0, 8 * sizeof(__frame0.sSockAddr.sin_zero[0]));
-    __frame0.nAddrLen = 0x10;
-    getsockname(CLIENT_SocketToServer, (sockaddr*)&__frame0.sSockAddr, &__frame0.nAddrLen);
-    char* szInetNtoaResult = inet_ntoa((in_addr)__frame0.sSockAddr.sin_addr);
+    sockaddr_in sSockAddr;
+    sSockAddr.sin_family = 0;
+    sSockAddr.sin_port = 0;
+    sSockAddr.sin_addr = 0;
+    memset(sSockAddr.sin_zero, 0, 8 * sizeof(sSockAddr.sin_zero[0]));
+    int nAddrLen = 0x10;
+    getsockname(CLIENT_SocketToServer, (sockaddr*)&sSockAddr, &nAddrLen);
+    char* szInetNtoaResult = inet_ntoa((in_addr)sSockAddr.sin_addr);
     Storm::Source::SSTR::SStrCopy(szIpAddressOut, szInetNtoaResult, 0x7fffffff);
 }
 

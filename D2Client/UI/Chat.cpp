@@ -221,15 +221,9 @@ void __stdcall CHAT_ResetIMEState(int32_t nParam) {
 }
 
 void __stdcall CHAT_InitIME() {
-    // Frame slots -12..-4 are ONE object: &dwConversionMode is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      DWORD dwConversionMode;
-      DWORD dwSentenceMode;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     BOOL bResult;
+    DWORD dwConversionMode;
+    DWORD dwSentenceMode;
     DWORD dwHotKeyId;
     int32_t nEventCount;
     nEventCount = 4;
@@ -291,10 +285,10 @@ void __stdcall CHAT_InitIME() {
             goto release_ime_context;
           }
         /* BOOL param_2 for ImmSetOpenStatus */ /* HIMC param_1 for ImmSetOpenStatus */ ImmSetOpenStatus(hIMC, 1);
-        /* LPDWORD lpfdwSentence for ImmGetConversionStatus */ /* LPDWORD lpfdwConversion for ImmGetConversionStatus */ /* HIMC param_1 for ImmGetConversionStatus */ ImmGetConversionStatus(hIMC, &__frame0.dwConversionMode, &__frame0.dwSentenceMode);
-        /* DWORD param_3 for ImmSetConversionStatus */ /* DWORD param_2 for ImmSetConversionStatus */ /* HIMC param_1 for ImmSetConversionStatus */ ImmSetConversionStatus(hIMC, 1, __frame0.dwSentenceMode);
-        /* LPDWORD lpfdwSentence for ImmGetConversionStatus */ /* LPDWORD lpfdwConversion for ImmGetConversionStatus */ /* HIMC param_1 for ImmGetConversionStatus */ ImmGetConversionStatus(hIMC, &__frame0.dwConversionMode, &__frame0.dwSentenceMode);
-        if ((uint8_t)__frame0.dwConversionMode & 1) {
+        /* LPDWORD lpfdwSentence for ImmGetConversionStatus */ /* LPDWORD lpfdwConversion for ImmGetConversionStatus */ /* HIMC param_1 for ImmGetConversionStatus */ ImmGetConversionStatus(hIMC, &dwConversionMode, &dwSentenceMode);
+        /* DWORD param_3 for ImmSetConversionStatus */ /* DWORD param_2 for ImmSetConversionStatus */ /* HIMC param_1 for ImmSetConversionStatus */ ImmSetConversionStatus(hIMC, 1, dwSentenceMode);
+        /* LPDWORD lpfdwSentence for ImmGetConversionStatus */ /* LPDWORD lpfdwConversion for ImmGetConversionStatus */ /* HIMC param_1 for ImmGetConversionStatus */ ImmGetConversionStatus(hIMC, &dwConversionMode, &dwSentenceMode);
+        if ((uint8_t)dwConversionMode & 1) {
           gnIMEInputMode = 1;
           gaChatInputBuffer = '\x01';
           gbChatInputEnabled = 1;
@@ -348,14 +342,7 @@ void __stdcall CHAT_InitIME() {
 
 // @sourcefile .\UI\chat.cpp
 void __stdcall CHAT_ShutdownIME() {
-    // Frame slots -12..-4 are ONE object: &dwConversionMode is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      DWORD dwConversionMode;
-      DWORD dwSentenceMode;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    DWORD dwSentenceMode;
     int32_t nEventCount = 4;
     HWND hWnd = D2gfx::D2GFX::GetHwnd();
     _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, &gUIFlagChatInit, nEventCount);
@@ -369,10 +356,11 @@ void __stdcall CHAT_ShutdownIME() {
     hWnd = D2gfx::D2GFX::GetHwnd();
     HIMC hIMC = ImmGetContext(hWnd);
     if (hIMC) {
+      DWORD dwConversionMode;
       /* BOOL param_2 for ImmSetOpenStatus */ /* HIMC param_1 for ImmSetOpenStatus */ ImmSetOpenStatus(hIMC, 0);
       if (gaIMECompositionBuffer == 7 || gaIMECompositionBuffer == 0xc) {
-        /* LPDWORD lpfdwSentence for ImmGetConversionStatus */ /* LPDWORD lpfdwConversion for ImmGetConversionStatus */ /* HIMC param_1 for ImmGetConversionStatus */ ImmGetConversionStatus(hIMC, &__frame0.dwConversionMode, &__frame0.dwSentenceMode);
-        /* DWORD param_3 for ImmSetConversionStatus */ /* DWORD param_2 for ImmSetConversionStatus */ /* HIMC param_1 for ImmSetConversionStatus */ ImmSetConversionStatus(hIMC, 0, __frame0.dwSentenceMode);
+        /* LPDWORD lpfdwSentence for ImmGetConversionStatus */ /* LPDWORD lpfdwConversion for ImmGetConversionStatus */ /* HIMC param_1 for ImmGetConversionStatus */ ImmGetConversionStatus(hIMC, &dwConversionMode, &dwSentenceMode);
+        /* DWORD param_3 for ImmSetConversionStatus */ /* DWORD param_2 for ImmSetConversionStatus */ /* HIMC param_1 for ImmSetConversionStatus */ ImmSetConversionStatus(hIMC, 0, dwSentenceMode);
       }
 
       /* HIMC param_2 for ImmReleaseContext */ /* HWND param_1 for ImmReleaseContext */ ImmReleaseContext(D2gfx::D2GFX::GetHwnd(), hIMC);

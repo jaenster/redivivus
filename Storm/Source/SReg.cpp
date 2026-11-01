@@ -152,17 +152,11 @@ static BOOL __stdcall SREG_InternalLoadEntry(LPDWORD pdwType, LPBYTE pbData, cha
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
 // @blizzard InternalSaveEntry (SREG.CPP)
 static int __stdcall SREG_InternalSaveEntry(char * pszSubKey, LPCSTR szValueName, uint32_t dwType, uint8_t * pbData, uint32_t dwDataLen, uint8_t byFlags) {
-    // Frame slots -280..-272 are ONE object: &dwDisposition is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      DWORD dwDisposition;
-      uint8_t* pbDataLocal;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    DWORD dwDisposition;
     HKEY hKey;
     char szKeyPath[260];
-    __frame0.pbDataLocal = pbData;
+    uint8_t* pbDataLocal;
+    pbDataLocal = pbData;
     szKeyPath[0] = '\0';
     if (!(byFlags & 0x10)) {
       SRegGetBaseKey(byFlags, szKeyPath, 0x104);
@@ -170,9 +164,9 @@ static int __stdcall SREG_InternalSaveEntry(char * pszSubKey, LPCSTR szValueName
 
     SSTR::SStrPack(szKeyPath, pszSubKey, 0x104);
     DWORD dwErrCode;
-    dwErrCode = RegCreateKeyExA((HKEY)(((byFlags & 4) != 0) + 0x80000001), szKeyPath, 0, (LPSTR)0x0, 0, 0x20006, (LPSECURITY_ATTRIBUTES)0x0, &hKey, &__frame0.dwDisposition);
+    dwErrCode = RegCreateKeyExA((HKEY)(((byFlags & 4) != 0) + 0x80000001), szKeyPath, 0, (LPSTR)0x0, 0, 0x20006, (LPSECURITY_ATTRIBUTES)0x0, &hKey, &dwDisposition);
     if (!dwErrCode) {
-      /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ dwErrCode = RegSetValueExA(hKey, szValueName, 0, dwType, __frame0.pbDataLocal, dwDataLen);
+      /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ dwErrCode = RegSetValueExA(hKey, szValueName, 0, dwType, pbDataLocal, dwDataLen);
       if (!dwErrCode) {
         if (byFlags & 8) {
           /* HKEY hKey for RegFlushKey */ dwErrCode = RegFlushKey(hKey);

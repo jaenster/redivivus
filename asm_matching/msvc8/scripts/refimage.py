@@ -9,10 +9,17 @@ image alone:
   starts   every 16-aligned address after int3 padding (MSVC 8 aligns each
            function to 16 and pads with 0xCC), every direct call target (to a
            fixpoint: a new function's calls are followed too), the exports, the
-           entry point, and every code address held in a run of two or more
+           entry point, every code address held in a run of two or more
            consecutive code pointers in a data section - vtables and function
-           tables. A padded "start" that the previous function falls through
-           into is an operand byte that happened to be 0xCC, and is dropped.
+           tables - and every SEH prolog (`push n; push offset scopetable;
+           call __SEH_prolog4`), which marks a function even when nothing
+           calls it. Any other code address held in data that lies past the
+           end of the function before it, with only padding between, starts a
+           function too, unless the exception tables name it as a funclet. A
+           padded "start" that the previous function falls through into, that
+           lies inside its last instruction, or past which it branches into
+           the next body, is an operand byte that happened to be 0xCC, and is
+           dropped.
   roots    any other code address held in data (SEH scope tables, C++ EH
            unwind and catch maps) is an entry into the function that contains
            it - a filter, handler or funclet - and is decoded as part of it.
@@ -21,7 +28,8 @@ image alone:
            mistaken for code.
 
 Output columns: start, end (exclusive), instruction count, why it is a start
-(pad / call / vtbl / export / entry, '+'-joined), extra roots (comma list).
+(pad / call / vtbl / export / entry / fptr / seh / data, '+'-joined),
+extra roots (comma list).
 """
 import argparse
 import bisect
@@ -121,7 +129,15 @@ class Reference:
                     calls.update(t for _a, t in f.calls if self.in_text(t))
                     if f.insns and i + 1 < len(starts):
                         last = f.insns[-1]
-                        if last.addr + last.size == limit and not funcdecode_terminates(last):
+                        end = last.addr + last.size
+                        if end > limit or (end == limit and not funcdecode_terminates(last)):
+                            fallthrough.add(limit)
+                        # A branch past the next start into that start's body:
+                        # no function jumps into another one's middle, so the
+                        # start is an operand byte and the body continues
+                        # (a switch whose table lies beyond it, 00626200).
+                        beyond = starts[i + 2] if i + 2 < len(starts) else te
+                        if any(limit < t < beyond for _a, t in f.exits):
                             fallthrough.add(limit)
                 changed = False
                 for t in calls:
@@ -135,10 +151,11 @@ class Reference:
                 if not changed:
                     break
             starts = sorted(why)
-            reached, targets = set(), set()
+            reached, targets, ends = set(), set(), {}
             for i, s in enumerate(starts):
                 limit = starts[i + 1] if i + 1 < len(starts) else te
                 f = funcdecode.decode_function(code, ts, s, limit, self.reloc_at)
+                ends[s] = f.end
                 for ins in f.insns:
                     reached.add(ins.addr)
                     if ins.size < 5 or (ins.addr + ins.size - 4) not in self.relocs:
@@ -151,7 +168,23 @@ class Reference:
             new = targets - reached - set(why)
             for v in new:
                 add(v, 'fptr')
-            if not new:
+            seh = self.seh_prologs(data_ptrs) - reached - set(why)
+            for v in seh:
+                add(v, 'seh')
+            # A code address held in data that lies past the end of the
+            # function before it, with nothing but padding between, is a
+            # function of its own (a callback in a table of structs, whose
+            # predecessor ended on the 16-byte grid and so left no padding);
+            # an exception handler, filter or funclet the EH and SEH tables
+            # name stays a root of the function it belongs to.
+            data = set()
+            for v in others - reached - set(why) - self.eh_targets(data_ptrs):
+                i = bisect.bisect_right(starts, v) - 1
+                if i >= 0 and ends[starts[i]] <= v and all(b == 0xCC for b in code[ends[starts[i]] - ts:v - ts]):
+                    data.add(v)
+            for v in data:
+                add(v, 'data')
+            if not new and not seh and not data:
                 break
 
         starts = sorted(why)
@@ -165,6 +198,113 @@ class Reference:
             f = self.decode(s, limit, sorted(roots.get(s, ())))
             self.functions[s] = (f.end, len(f.insns), '+'.join(sorted(why[s])), sorted(roots.get(s, ())))
         return self.functions
+
+    def seh_prologs(self, data_ptrs):
+        """Every `push frame size; push offset scope table; call __SEH_prolog4`
+        in the image: the first instruction of a function with a __try. A
+        function nothing calls or takes the address of (the CRT's
+        _tsopen_helper at 0069b7e3, linked in beside _tsopen_nolock) has no
+        other mark, and its __finally funclet, which the scope table names,
+        would otherwise be decoded as part of the function before it.
+        __SEH_prolog4 is the callee such sites share; a scope table is the
+        one that holds a code pointer within its first 0x40 bytes."""
+        if getattr(self, '_seh', None) is not None:
+            return self._seh
+        code, ts = self.code, self.ts
+        ptr_at = set(data_ptrs)
+        sites = {}
+        for k in range(len(code) - 12):
+            if code[k] == 0x6A:
+                q = k + 2
+            elif code[k] == 0x68 and (ts + k + 1) not in self.relocs:
+                q = k + 5
+            else:
+                continue
+            if q + 10 > len(code) or code[q] != 0x68 or (ts + q + 1) not in self.relocs or code[q + 5] != 0xE8:
+                continue
+            tbl = struct.unpack_from('<I', code, q + 1)[0]
+            if self.in_text(tbl) or not any(r in ptr_at for r in range(tbl, tbl + 0x40, 4)):
+                continue
+            callee = ts + q + 10 + struct.unpack_from('<i', code, q + 6)[0]
+            sites.setdefault(callee, []).append(ts + k)
+        out = set()
+        for callee, at in sites.items():
+            if len(at) >= 8 and self.in_text(callee):
+                out.update(at)
+        self._seh = out
+        return out
+
+    def eh_targets(self, data_ptrs):
+        """The code addresses the image's exception tables name: SEH4 scope
+        tables (filters and __finally/__except handlers) and C++ EH FuncInfo
+        (unwind actions and catch handlers). Each is part of the function that
+        owns the table."""
+        if getattr(self, '_eh', None) is not None:
+            return self._eh
+        pe = self.pe
+        out = set()
+
+        def ptr(a):
+            return data_ptrs.get(a)
+
+        # SEH4: 16-byte cookie header, then {EnclosingLevel, Filter, Handler}.
+        code, ts = self.code, self.ts
+        for k in range(len(code) - 12):
+            if code[k] in (0x6A, 0x68) and code[k + (2 if code[k] == 0x6A else 5)] == 0x68:
+                q = k + (2 if code[k] == 0x6A else 5)
+                if (ts + q + 1) not in self.relocs:
+                    continue
+                tbl = struct.unpack_from('<I', code, q + 1)[0]
+                if pe.section_at(tbl) is None or self.in_text(tbl):
+                    continue
+                rec = tbl + 16
+                while True:
+                    try:
+                        lvl = pe.u32(rec)
+                    except Exception:
+                        break
+                    h = ptr(rec + 8)
+                    if h is None or not (lvl == 0xFFFFFFFE or lvl < 0x100):
+                        break
+                    out.add(h)
+                    if ptr(rec + 4) is not None:
+                        out.add(ptr(rec + 4))
+                    rec += 12
+        # C++ EH: FuncInfo {magic, maxState, pUnwindMap, nTryBlocks,
+        # pTryBlockMap, ...}; UnwindMapEntry {toState, action};
+        # TryBlockMapEntry {tryLow, tryHigh, catchHigh, nCatches, pHandlerArray};
+        # HandlerType {adjectives, pType, dispCatchObj, addressOfHandler}.
+        for sec in pe.sections:
+            if sec.name not in ('.rdata', '.data'):
+                continue
+            base = pe.base + sec.va
+            buf = pe.read(base, sec.vsize)
+            for o in range(0, len(buf) - 20, 4):
+                magic = struct.unpack_from('<I', buf, o)[0]
+                if magic not in (0x19930520, 0x19930521, 0x19930522):
+                    continue
+                fi = base + o
+                nstate, punw, ntry, ptry = struct.unpack_from('<IIII', buf, o + 4)
+                if nstate > 0x1000 or ntry > 0x100:
+                    continue
+                if punw and (fi + 8) in self.relocs:
+                    for j in range(nstate):
+                        a = ptr(punw + 8 * j + 4)
+                        if a is not None:
+                            out.add(a)
+                if ptry and (fi + 16) in self.relocs:
+                    for j in range(ntry):
+                        e = ptry + 20 * j
+                        try:
+                            ncatch, phand = pe.u32(e + 12), pe.u32(e + 16)
+                        except Exception:
+                            break
+                        for c in range(min(ncatch, 0x100)):
+                            a = ptr(phand + 16 * c + 12)
+                            if a is not None:
+                                out.add(a)
+        self._eh = out
+        return out
 
     # -- what each function refers to --------------------------------------
     def string_at(self, va):

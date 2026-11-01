@@ -463,16 +463,10 @@ void __stdcall DRAW_UI_Sprites() {
 }
 
 void __stdcall RENDERER_DrawOutOfGameScene() {
-    // Frame slots -12..-4 are ONE object: &nScreenWidth is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int32_t nScreenWidth;
-      int nScreenHeight;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     int nPosition;
     D2GfxDataStrc sGfxData;
+    int32_t nScreenWidth;
+    int nScreenHeight;
     DC6* pBackgroundDC6;
     int32_t nSceneState = D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState();
     D2ControlStrc* pForm = D2Client::Forms::pFormsList;
@@ -490,7 +484,7 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
       return;
     }
 
-    D2gfx::D2GFX::D2GFX_GetScreenSize(&__frame0.nScreenWidth, &__frame0.nScreenHeight);
+    D2gfx::D2GFX::D2GFX_GetScreenSize(&nScreenWidth, &nScreenHeight);
     BOOL bSceneBegun = D2gfx::D2GFX::D2GFX_BeginScene(0, 0, 0, 0);
     if (bSceneBegun) {
       int nPositionX;
@@ -516,7 +510,7 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
 
         nPosition = 0;
         do {
-          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPosition, __frame0.nScreenHeight - 1, -1, DRAW_SOLID, nullptr);
+          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPosition, nScreenHeight - 1, -1, DRAW_SOLID, nullptr);
           sGfxData.nFrameNumber++;
           nPosition += 0x100;
           pForm = D2Client::Forms::pFormsList;
@@ -532,7 +526,7 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
       DRAW_UI_Sprites();
       pForm = D2Client::Forms::pFormsList;
       if (gnInitialFormState) {
-        D2gfx::D2GFX::D2GFX_DrawSolidRectAlpha(0, 0, __frame0.nScreenWidth, __frame0.nScreenHeight, 0, 0x7f);
+        D2gfx::D2GFX::D2GFX_DrawSolidRectAlpha(0, 0, nScreenWidth, nScreenHeight, 0, 0x7f);
         pForm = D2Client::Forms::pFormsList;
       }
 
@@ -899,26 +893,18 @@ static void __stdcall D2WIN_SaveScreenshotToFile(uint8_t * pDibBytes, LPCSTR szF
 
 // @sourcefile .\Src\D2WinMain.cpp
 void __fastcall D2WIN_TakeThrottledScreenshot(LPCSTR szFileName) {
-    // Frame slots -12..-4 are ONE object: &nScreenWidth is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nScreenWidth;
-      int nScreenHeight;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     DWORD dwTickCount = GetTickCount();
     if (!(dwTickCount - gdwLastScreenshotTick >= 1000 || szFileName)) {
       return;
     }
 
-    __frame0.nScreenWidth = 0;
-    __frame0.nScreenHeight = 0;
-    D2gfx::D2GFX::D2GFX_GetScreenSize(&__frame0.nScreenWidth, &__frame0.nScreenHeight);
-    uint8_t* pBuffer = (uint8_t*)D2_ALLOC_AT(__frame0.nScreenHeight * __frame0.nScreenWidth * 3, ".\\Src\\D2WinMain.cpp", 0x6a7);
+    int nScreenWidth = 0;
+    int nScreenHeight = 0;
+    D2gfx::D2GFX::D2GFX_GetScreenSize(&nScreenWidth, &nScreenHeight);
+    uint8_t* pBuffer = (uint8_t*)D2_ALLOC_AT(nScreenHeight * nScreenWidth * 3, ".\\Src\\D2WinMain.cpp", 0x6a7);
     BOOL bGotBackBuffer = D2gfx::D2GFX::D2GFX_GetBackBuffer(pBuffer);
     if (bGotBackBuffer) {
-      D2WIN_SaveScreenshotToFile(pBuffer, szFileName, __frame0.nScreenWidth, __frame0.nScreenHeight);
+      D2WIN_SaveScreenshotToFile(pBuffer, szFileName, nScreenWidth, nScreenHeight);
     }
 
     gdwLastScreenshotTick = dwTickCount;
@@ -1284,26 +1270,18 @@ void __stdcall INPUT_FormTabKey(D2UIMouseMsgStrc * pMsg) {
 
 // @sourcefile .\Src\D2WinMain.cpp
 void __stdcall TakeScreenshot() {
-    // Frame slots -12..-4 are ONE object: &nScreenWidth is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nScreenWidth;
-      int nScreenHeight;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     DWORD dwTickCount = GetTickCount();
     if (!(dwTickCount - gdwLastScreenshotTick >= 1000)) {
       return;
     }
 
-    __frame0.nScreenWidth = 0;
-    __frame0.nScreenHeight = 0;
-    D2gfx::D2GFX::D2GFX_GetScreenSize(&__frame0.nScreenWidth, &__frame0.nScreenHeight);
-    uint8_t* pBuffer = (uint8_t*)D2_ALLOC_AT(__frame0.nScreenHeight * __frame0.nScreenWidth * 3, ".\\Src\\D2WinMain.cpp", 0x6a7);
+    int nScreenWidth = 0;
+    int nScreenHeight = 0;
+    D2gfx::D2GFX::D2GFX_GetScreenSize(&nScreenWidth, &nScreenHeight);
+    uint8_t* pBuffer = (uint8_t*)D2_ALLOC_AT(nScreenHeight * nScreenWidth * 3, ".\\Src\\D2WinMain.cpp", 0x6a7);
     BOOL bGotBackBuffer = D2gfx::D2GFX::D2GFX_GetBackBuffer(pBuffer);
     if (bGotBackBuffer) {
-      D2WIN_SaveScreenshotToFile(pBuffer, (LPCSTR)0x0, __frame0.nScreenWidth, __frame0.nScreenHeight);
+      D2WIN_SaveScreenshotToFile(pBuffer, (LPCSTR)0x0, nScreenWidth, nScreenHeight);
     }
 
     gdwLastScreenshotTick = dwTickCount;

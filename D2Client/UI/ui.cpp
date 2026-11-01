@@ -786,16 +786,10 @@ static uint32_t __stdcall UI_GetRosterPlayerInfoForDisplay(uint16_t * wszText, i
 }
 
 void __stdcall UI_DrawMercenaryHealthBar() {
-    // Frame slots -12..-4 are ONE object: &nScreenY is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nScreenY;
-      int nScreenX;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     int32_t nWorldOffset;
     int nBorderShift;
+    int nScreenY;
+    int nScreenX;
     uint32_t eBorderType;
     eBorderType = Path::DRAW_GetTypeOfBorder();
     if (eBorderType == 3) {
@@ -841,7 +835,7 @@ void __stdcall UI_DrawMercenaryHealthBar() {
       return;
     }
 
-    D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(nCoord, nWorldOffset, 0, &__frame0.nScreenX, &__frame0.nScreenY);
+    D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(nCoord, nWorldOffset, 0, &nScreenX, &nScreenY);
     eBorderType = Path::DRAW_GetTypeOfBorder();
     switch (eBorderType) {
       case 1:
@@ -860,10 +854,10 @@ void __stdcall UI_DrawMercenaryHealthBar() {
         }
     }
 
-    __frame0.nScreenX += nBorderShift;
+    nScreenX += nBorderShift;
     place_health_bar:
-    gnMercenaryHealthBarScreenY = __frame0.nScreenY + 0x10;
-    nHealthBarScreenX = __frame0.nScreenX;
+    gnMercenaryHealthBarScreenY = nScreenY + 0x10;
+    nHealthBarScreenX = nScreenX;
     UI_ShowMonsterNameBar(1, pMercUnit);
 }
 
@@ -1966,20 +1960,13 @@ DC6 * __stdcall GetBuySellBtnDC6() {
 
 // @sourcefile .\UI\ui.cpp
 void * __fastcall UI_LoadFileToMemory(LPCSTR szFilename, size_t * pSize) {
-    // Frame slots -12..-4 are ONE object: &dwBytesRead is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      DWORD dwBytesRead;
-      size_t* pSizeOut;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     uint32_t nCopyCount;
     char* pCopySrc;
     char szNameCopy[260];
+    DWORD dwBytesRead;
     char cChar;
     LPCSTR pSrcName = szFilename;
-    __frame0.pSizeOut = pSize;
+    size_t* pSizeOut = pSize;
     do {
       cChar = (char)*pSrcName;
       ((char*)pSrcName)[(int)(szNameCopy - (int)szFilename)] = cChar;
@@ -2014,11 +2001,11 @@ void * __fastcall UI_LoadFileToMemory(LPCSTR szFilename, size_t * pSize) {
     }
 
     DWORD dwFileSize = GetFileSize(hFile, (LPDWORD)0x0);
-    size_t* pSizeTmp = __frame0.pSizeOut;
-    *__frame0.pSizeOut = dwFileSize;
+    size_t* pSizeTmp = pSizeOut;
+    *pSizeOut = dwFileSize;
     void* pBuffer = D2_ALLOC_AT(dwFileSize, ".\\UI\\ui.cpp", 0x18ad);
     memset(pBuffer, 0, *pSizeTmp);
-    /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, pBuffer, *pSizeTmp, &__frame0.dwBytesRead, (LPOVERLAPPED)0x0);
+    /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, pBuffer, *pSizeTmp, &dwBytesRead, (LPOVERLAPPED)0x0);
     /* HANDLE hObject for CloseHandle */ CloseHandle(hFile);
     return pBuffer;
 }

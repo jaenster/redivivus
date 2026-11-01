@@ -233,16 +233,9 @@ void __stdcall DRAW_SetTransparentColorRGB(uint32_t nRGB) {
 }
 
 BOOL __fastcall DRAW_LoadPaletteFromPCX(LPCSTR szFilePath) {
-    // Frame slots -140..-8 are ONE object: &nBytesRead is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      DWORD nBytesRead;
-      D2PcxHeaderStrc sPcxHeader;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 132, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     uint8_t* pbPaletteEntry;
     PcxPaletteTrailer pcxPaletteTrailer;
+    D2PcxHeaderStrc sPcxHeader;
     char* lpOutputString;
     HANDLE hFile = CreateFileA(szFilePath, 0x80000000, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0, (HANDLE)0x0);
     if (hFile == (HANDLE)-1) {
@@ -252,15 +245,15 @@ BOOL __fastcall DRAW_LoadPaletteFromPCX(LPCSTR szFilePath) {
       return 0;
     }
 
-    memset(&__frame0.sPcxHeader, 0, 0x80);
-    __frame0.nBytesRead = 0;
-    ReadFile(hFile, &__frame0.sPcxHeader, 0x80, &__frame0.nBytesRead, (LPOVERLAPPED)0x0);
-    if (__frame0.nBytesRead == 0x80 && __frame0.sPcxHeader.byManufacturer == '\n' && __frame0.sPcxHeader.byVersion == '\x05' && __frame0.sPcxHeader.byBitsPerPixel == '\b') {
+    memset(&sPcxHeader, 0, 0x80);
+    DWORD nBytesRead = 0;
+    ReadFile(hFile, &sPcxHeader, 0x80, &nBytesRead, (LPOVERLAPPED)0x0);
+    if (nBytesRead == 0x80 && sPcxHeader.byManufacturer == '\n' && sPcxHeader.byVersion == '\x05' && sPcxHeader.byBitsPerPixel == '\b') {
       uint32_t iPaletteEntry;
       memset(&pcxPaletteTrailer, 0, 0x301);
       /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(hFile, -0x301, (PLONG)0x0, 2);
-      /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, &pcxPaletteTrailer, 0x301, &__frame0.nBytesRead, (LPOVERLAPPED)0x0);
-      if (__frame0.nBytesRead == 0x301 && pcxPaletteTrailer.nMarker == 0xc) {
+      /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, &pcxPaletteTrailer, 0x301, &nBytesRead, (LPOVERLAPPED)0x0);
+      if (nBytesRead == 0x301 && pcxPaletteTrailer.nMarker == 0xc) {
         pbPaletteEntry = pcxPaletteTrailer.rgb + 1;
         iPaletteEntry = 0;
         do {

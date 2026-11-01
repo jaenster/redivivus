@@ -1064,39 +1064,32 @@ void __stdcall DRAW_AfterDraw() {
 }
 
 void __fastcall SOUNDHDR_UpdateRegistryVersion(int32_t nSoundHeaderIndex) {
-    // Frame slots -20..-4 are ONE object: &nVersionMajor is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nVersionMajor;
-      int nVersionMinor;
-      int nVersionRevision;
-      uint32_t dwVersionBuild;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 16, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     uint8_t byRequiredVersionFlag;
     uint8_t byCurrentVersionFlag;
     char szVersionString[100];
+    int nVersionMinor;
+    int nVersionRevision;
     int dwRequiredVersion = gdwSoundHeaderCacheIndex[nSoundHeaderIndex].nCutsceneId;
-    __frame0.dwVersionBuild = 0x22;
+    uint32_t dwVersionBuild = 0x22;
     int32_t bReadOk = Storm::Source::SReg::SRegLoadString("Diablo II", "Aux Battle.net", 0, szVersionString, 100);
     if (bReadOk) {
-      sscanf(szVersionString, "%d.%d.%d.%d", &__frame0.nVersionMajor, &__frame0.nVersionMinor, &__frame0.nVersionRevision, (int*)&__frame0.dwVersionBuild);
-      if (__frame0.dwVersionBuild & 1) {
+      int nVersionMajor;
+      sscanf(szVersionString, "%d.%d.%d.%d", &nVersionMajor, &nVersionMinor, &nVersionRevision, (int*)&dwVersionBuild);
+      if (dwVersionBuild & 1) {
         byCurrentVersionFlag = 7;
       } else {
-        if ((char)__frame0.dwVersionBuild < '\0') {
+        if ((char)dwVersionBuild < '\0') {
           byCurrentVersionFlag = 6;
-        } else if (__frame0.dwVersionBuild & 0x10) {
+        } else if (dwVersionBuild & 0x10) {
           byCurrentVersionFlag = 5;
         } else {
-          if (__frame0.dwVersionBuild & 8) {
+          if (dwVersionBuild & 8) {
             byCurrentVersionFlag = 4;
           } else {
-            if (__frame0.dwVersionBuild & 0x40) {
+            if (dwVersionBuild & 0x40) {
               byCurrentVersionFlag = 3;
             } else {
-              byCurrentVersionFlag = ((__frame0.dwVersionBuild & 4) != 0) + 1;
+              byCurrentVersionFlag = ((dwVersionBuild & 4) != 0) + 1;
             }
           }
         }
@@ -1133,26 +1126,26 @@ void __fastcall SOUNDHDR_UpdateRegistryVersion(int32_t nSoundHeaderIndex) {
 
     switch (byRequiredVersionFlag) {
       case 7:
-        __frame0.dwVersionBuild = 0x23;
+        dwVersionBuild = 0x23;
       break;
       case 5:
-        __frame0.dwVersionBuild = 0xb2;
+        dwVersionBuild = 0xb2;
       break;
       case 4:
-        __frame0.dwVersionBuild = 0x2a;
+        dwVersionBuild = 0x2a;
       break;
       case 3:
-        __frame0.dwVersionBuild = 0x62;
+        dwVersionBuild = 0x62;
       break;
       case 2:
-        __frame0.dwVersionBuild = 0x26;
+        dwVersionBuild = 0x26;
       break;
       default:
-        __frame0.dwVersionBuild = 0x22;
+        dwVersionBuild = 0x22;
       break;
     }
 
-    sprintf(szVersionString, "%d.%d.%d.%d", 0xd8, 0x94, 0xf6, __frame0.dwVersionBuild);
+    sprintf(szVersionString, "%d.%d.%d.%d", 0xd8, 0x94, 0xf6, dwVersionBuild);
     Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Aux Battle.net", 0, szVersionString);
 }
 

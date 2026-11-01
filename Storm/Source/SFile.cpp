@@ -448,20 +448,20 @@ static int __stdcall SFILE_CheckFileHandle(D2MPQFileStrc * pMPQFile, D2MPQFileSt
 
 // @blizzard CheckForCdRom (SFILE.CPP)
 BOOL __stdcall SFILE_CheckForCdRom(char * szText) {
-    // Frame slots -288..-8 are ONE object: &dwTotalClusters is passed out and the callee reaches the rest by byte offset.
+    // Frame slots -284..-8 are ONE object: &dwFsFlags is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
-      DWORD dwTotalClusters;
       DWORD dwFsFlags;
       DWORD dwFreeClusters;
       DWORD dwBytesPerSector;
       char szRootPath[4];
       uint32_t szFsName[65];
     };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 280, "frame group __frame0_t must reproduce the Ghidra frame layout");
+    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 276, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     uint32_t nChecksum;
     LPDWORD dwSectorsPerCluster;
+    DWORD dwTotalClusters;
     uint16_t nFoldedChecksum;
     SSTR::SStrCopy(__frame0.szRootPath, szText, 4);
     UINT nDriveType = GetDriveTypeA(__frame0.szRootPath);
@@ -472,8 +472,8 @@ BOOL __stdcall SFILE_CheckForCdRom(char * szText) {
       /* LPDWORD lpTotalNumberOfClusters for GetDiskFreeSpaceA */ /* LPDWORD lpNumberOfFreeClusters for GetDiskFreeSpaceA */ /* LPDWORD lpBytesPerSector for GetDiskFreeSpaceA */ /* LPDWORD lpSectorsPerCluster for GetDiskFreeSpaceA */ /* LPCSTR lpRootPathName for GetDiskFreeSpaceA */ dwSectorsPerCluster = (LPDWORD)0x0;
       __frame0.dwBytesPerSector = 0;
       __frame0.dwFreeClusters = 0;
-      __frame0.dwTotalClusters = 0;
-      bApiOk = GetDiskFreeSpaceA(__frame0.szRootPath, (LPDWORD)&dwSectorsPerCluster, &__frame0.dwBytesPerSector, &__frame0.dwFreeClusters, &__frame0.dwTotalClusters);
+      dwTotalClusters = 0;
+      bApiOk = GetDiskFreeSpaceA(__frame0.szRootPath, (LPDWORD)&dwSectorsPerCluster, &__frame0.dwBytesPerSector, &__frame0.dwFreeClusters, &dwTotalClusters);
       if (bApiOk) {
         nChecksum = __frame0.dwFsFlags & 4 ^ __frame0.szFsName[0] ^ __frame0.dwFreeClusters ^ __frame0.dwBytesPerSector ^ nDriveType;
         nFoldedChecksum = (uint16_t)(nChecksum >> 0x10) ^ (uint16_t)nChecksum;

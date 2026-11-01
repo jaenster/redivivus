@@ -724,16 +724,10 @@ static BOOL __stdcall WARDEN_ResolveAndLoadModule(void * pRc4Key, uint8_t * pMod
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 16, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    // Frame slots -12..-4 are ONE object: &pFileData is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame1_t {
-      void* pFileData;
-      uint32_t nFileSize;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame1_t) == 8, "frame group __frame1_t must reproduce the Ghidra frame layout");
-    __frame1_t __frame1;
     BOOL bCacheReadSuccess;
     char szModuleHashHex[32];
+    void* pFileData;
+    uint32_t nFileSize;
     int nCmpResult = Storm::Source::SSystem::SSYSTEM_MemCompare(pModuleHash, gabWardenEmbeddedModuleHash, 0x10);
     if (!nCmpResult) {
       bCacheReadSuccess = WARDEN_DecryptAndLoadModule(gaWardenModuleLoadData, gabWardenModuleRc4Key, 0x12b2);
@@ -753,13 +747,13 @@ static BOOL __stdcall WARDEN_ResolveAndLoadModule(void * pRc4Key, uint8_t * pMod
       return 0;
     }
 
-    bCacheReadSuccess = sgpUnknownSequence->pfnCacheReadData(szModuleHashHex, __frame0.aiStack_14, &__frame1.pFileData, (int*)&__frame1.nFileSize);
+    bCacheReadSuccess = sgpUnknownSequence->pfnCacheReadData(szModuleHashHex, __frame0.aiStack_14, &pFileData, (int*)&nFileSize);
     if (!bCacheReadSuccess) {
       return 0;
     }
 
-    bCacheReadSuccess = WARDEN_DecryptAndLoadModule(__frame1.pFileData, pRc4Key, __frame1.nFileSize);
-    sgpUnknownSequence->pfnCacheFreeMem(__frame1.pFileData);
+    bCacheReadSuccess = WARDEN_DecryptAndLoadModule(pFileData, pRc4Key, nFileSize);
+    sgpUnknownSequence->pfnCacheFreeMem(pFileData);
     return bCacheReadSuccess;
 }
 

@@ -367,16 +367,10 @@ static BOOL __stdcall BnetDownloadFile(SOCKET hSocket, char * szText, FILETIME *
 }
 
 static int32_t __stdcall BNDOWNLOAD_RecvFileFromSocket(LPCSTR pThis, SOCKET hSocket, uint32_t nOffset, uint32_t nTotalSize, int32_t nProgressMode, FILETIME * pFileTime) {
-    // Frame slots -1472..-8 are ONE object: &nBytesWritten is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      DWORD nBytesWritten;
-      char szRecvChunk[1460];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1464, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     uint32_t len;
     DWORD nNumberOfBytesToWrite;
+    DWORD nBytesWritten;
+    char szRecvChunk[1460];
     HANDLE hFile = Fog::Source::SFile::thunk_CreateFileA(pThis, 0x40000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 4, 0x80, (HANDLE)0x0);
     if (hFile == (HANDLE)-1) {
       return 0;
@@ -400,12 +394,12 @@ static int32_t __stdcall BNDOWNLOAD_RecvFileFromSocket(LPCSTR pThis, SOCKET hSoc
         len = 0x5b4;
       }
 
-      /* int flags for recv */ /* int len for recv */ /* char * buf for recv */ /* SOCKET s for recv */ nNumberOfBytesToWrite = recv(hSocket, __frame0.szRecvChunk, len, 0);
+      /* int flags for recv */ /* int len for recv */ /* char * buf for recv */ /* SOCKET s for recv */ nNumberOfBytesToWrite = recv(hSocket, szRecvChunk, len, 0);
       if (nNumberOfBytesToWrite == -1 || (int)nNumberOfBytesToWrite <= 0 || gbBnetDownloadCancelFlag) {
         break;
       }
 
-      Fog::Source::SFile::thunk_WriteFile(hFile, (LPCVOID)__frame0.szRecvChunk, nNumberOfBytesToWrite, &__frame0.nBytesWritten, (LPOVERLAPPED)0x0);
+      Fog::Source::SFile::thunk_WriteFile(hFile, (LPCVOID)szRecvChunk, nNumberOfBytesToWrite, &nBytesWritten, (LPOVERLAPPED)0x0);
       /* FILETIME * lpLastWriteTime for SetFileTime */ /* FILETIME * lpLastAccessTime for SetFileTime */ /* FILETIME * lpCreationTime for SetFileTime */ /* HANDLE hFile for SetFileTime */ SetFileTime(hFile, pFileTime, pFileTime, pFileTime);
       nOffset += nNumberOfBytesToWrite;
       if (nProgressMode == -0x7ffffffe) {
@@ -896,17 +890,9 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
 }
 
 void __fastcall BNDOWNLOAD_InitiateFileDownload(D2BnetDownloadStateStrc * pDownloadCtx, uint32_t nParam, uint32_t eFileType, uint32_t nOpcode, FILETIME * pFileTime, char * szText1, char * szText2) {
-    // Frame slots -20..-4 are ONE object: &nThreadId is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint32_t nThreadId;
-      D2BnetDownloadStateStrc* pCacheData;
-      uint32_t nDownloadFlags;
-      uint32_t* pCachedBuf;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 16, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     FILETIME ftCacheTime;
+    uint32_t nThreadId;
+    uint32_t* pCachedBuf;
     char cVar1;
     char* szBufferInput = szText1;
     if (!(szText1 && *szText1 != '\0')) {
@@ -916,23 +902,23 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(D2BnetDownloadStateStrc * pDownl
       szText2 = "";
     }
 
-    __frame0.pCacheData = pDownloadCtx;
-    __frame0.nDownloadFlags = nParam;
-    BOOL bCacheHit = BNGatewayAccess::CACHE_ReadData(szText1, (uint32_t*)&ftCacheTime.dwLowDateTime, &__frame0.pCachedBuf, (LPDWORD)&szText1);
+    D2BnetDownloadStateStrc* pCacheData = pDownloadCtx;
+    uint32_t nDownloadFlags = nParam;
+    BOOL bCacheHit = BNGatewayAccess::CACHE_ReadData(szText1, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCachedBuf, (LPDWORD)&szText1);
     if (bCacheHit) {
       LONG nTimeCmp;
       /* FILETIME * lpFileTime2 for CompareFileTime */ /* FILETIME * lpFileTime1 for CompareFileTime */ nTimeCmp = CompareFileTime(pFileTime, &ftCacheTime);
       if (!nTimeCmp) {
-        if (__frame0.nDownloadFlags & 2) {
-          BNDOWNLOAD_WriteFileWithTimestamp(szBufferInput, (LPCVOID)__frame0.pCachedBuf, (DWORD)szText1, pFileTime);
+        if (nDownloadFlags & 2) {
+          BNDOWNLOAD_WriteFileWithTimestamp(szBufferInput, (LPCVOID)pCachedBuf, (DWORD)szText1, pFileTime);
         }
 
-        NET_BNFTP_CLIENT_ProcessFile((int32_t)__frame0.pCacheData, __frame0.nDownloadFlags, eFileType, (FILETIME*)nOpcode, (LPCSTR)pFileTime, szBufferInput, (uint32_t*)szText2, (size_t)__frame0.pCachedBuf, (int32_t)szText1, 1);
-        BNGatewayAccess::CACHE_FreeMem(__frame0.pCachedBuf, (uint32_t)szText1);
+        NET_BNFTP_CLIENT_ProcessFile((int32_t)pCacheData, nDownloadFlags, eFileType, (FILETIME*)nOpcode, (LPCSTR)pFileTime, szBufferInput, (uint32_t*)szText2, (size_t)pCachedBuf, (int32_t)szText1, 1);
+        BNGatewayAccess::CACHE_FreeMem(pCachedBuf, (uint32_t)szText1);
         return;
       }
 
-      BNGatewayAccess::CACHE_FreeMem(__frame0.pCachedBuf, (uint32_t)szText1);
+      BNGatewayAccess::CACHE_FreeMem(pCachedBuf, (uint32_t)szText1);
     }
 
     short int* pThreadCtx = (short int*)Storm::SMem::SMemAlloc(0x230, ".\\BnDownload.cpp", 0xa6, 0);
@@ -946,7 +932,7 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(D2BnetDownloadStateStrc * pDownl
     *(uint32_t*)(pThreadCtx + 6) = eFileType;
     *pThreadCtx = (short int)(uintptr_t)pcNameEnd - ((short int)(uintptr_t)szBufferInput + 1) + 0x21;
     *(uint8_t*)(pThreadCtx + 1) = 0;
-    *(uint32_t*)(pThreadCtx + 0x116) = __frame0.nDownloadFlags;
+    *(uint32_t*)(pThreadCtx + 0x116) = nDownloadFlags;
     *(uint8_t*)((int)pThreadCtx + 3) = 1;
     pThreadCtx[2] = 0x3836;
     pThreadCtx[3] = 0x4958;
@@ -955,13 +941,13 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(D2BnetDownloadStateStrc * pDownl
     *(uint32_t*)(pThreadCtx + 8) = nOpcode;
     pThreadCtx[10] = 0;
     pThreadCtx[0xb] = 0;
-    *(D2BnetDownloadStateStrc**)(pThreadCtx + 0x114) = (D2BnetDownloadStateStrc*)__frame0.pCacheData;
+    *(D2BnetDownloadStateStrc**)(pThreadCtx + 0x114) = (D2BnetDownloadStateStrc*)pCacheData;
     *(DWORD*)(pThreadCtx + 0xc) = pFileTime->dwLowDateTime;
     *(DWORD*)(pThreadCtx + 0xe) = pFileTime->dwHighDateTime;
     Storm::Source::SSTR::SStrCopy((char*)(pThreadCtx + 0x10), szBufferInput, 0x104);
     Storm::Source::SSTR::SStrCopy((char*)(pThreadCtx + 0x92), szText2, 0x104);
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_00881d5c);
-    HANDLE hObject = (HANDLE)_beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &__frame0.nThreadId);
+    HANDLE hObject = (HANDLE)_beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId);
     if (!hObject) {
       return;
     }
@@ -1233,17 +1219,11 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
 }
 
 uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pbParam, size_t nSize) {
-    // Frame slots -16..-4 are ONE object: &nThreadId is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint32_t nThreadId;
-      uint32_t* pCacheData;
-      DWORD dwCachedSize;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     FILETIME ftCacheTime;
     FILETIME ftZero;
+    uint32_t nThreadId;
+    uint32_t* pCacheData;
+    DWORD dwCachedSize;
     uint8_t BVar1;
     BOOL bCacheHit = Fog::Src::Safesock::StartUp();
     if (!bCacheHit) {
@@ -1262,18 +1242,18 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pbParam, size_t nSi
       return 0;
     }
 
-    bCacheHit = BNGatewayAccess::CACHE_ReadData((char*)pbParam, (uint32_t*)&ftCacheTime.dwLowDateTime, &__frame0.pCacheData, &__frame0.dwCachedSize);
+    bCacheHit = BNGatewayAccess::CACHE_ReadData((char*)pbParam, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCacheData, &dwCachedSize);
     if (bCacheHit) {
       LONG nTimeCmp;
       /* FILETIME * lpFileTime2 for CompareFileTime */ /* FILETIME * lpFileTime1 for CompareFileTime */ nTimeCmp = CompareFileTime(&ftZero, &ftCacheTime);
       if (!nTimeCmp) {
-        BNDOWNLOAD_WriteFileWithTimestamp((LPCSTR)pbParam, (LPCVOID)__frame0.pCacheData, __frame0.dwCachedSize, &ftZero);
-        NET_BNFTP_CLIENT_ProcessFile(-0x7ffffffe, 2, 0, nullptr, (LPCSTR)&ftZero, (char*)pbParam, nullptr, (size_t)__frame0.pCacheData, __frame0.dwCachedSize, 1);
-        BNGatewayAccess::CACHE_FreeMem(__frame0.pCacheData, __frame0.dwCachedSize);
+        BNDOWNLOAD_WriteFileWithTimestamp((LPCSTR)pbParam, (LPCVOID)pCacheData, dwCachedSize, &ftZero);
+        NET_BNFTP_CLIENT_ProcessFile(-0x7ffffffe, 2, 0, nullptr, (LPCSTR)&ftZero, (char*)pbParam, nullptr, (size_t)pCacheData, dwCachedSize, 1);
+        BNGatewayAccess::CACHE_FreeMem(pCacheData, dwCachedSize);
         return 0;
       }
 
-      BNGatewayAccess::CACHE_FreeMem(__frame0.pCacheData, __frame0.dwCachedSize);
+      BNGatewayAccess::CACHE_FreeMem(pCacheData, dwCachedSize);
     }
 
     short int* pThreadCtx = (short int*)Storm::SMem::SMemAlloc(0x230, ".\\BnDownload.cpp", 0x698, 0);
@@ -1301,7 +1281,7 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pbParam, size_t nSi
     Storm::Source::SSTR::SStrCopy((char*)(pThreadCtx + 0x10), (char*)pbParam, 0x104);
     Storm::Source::SSTR::SStrCopy((char*)(pThreadCtx + 0x92), "", 0x104);
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_00881d5c);
-    uintptr_t nThreadHandle = _beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &__frame0.nThreadId);
+    uintptr_t nThreadHandle = _beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId);
     return nThreadHandle;
 }
 

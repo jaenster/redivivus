@@ -393,11 +393,10 @@ static int __stdcall SBMP_LoadFromMemory(uint8_t * pData, uint32_t dataSize, uin
 }
 
 static int __thiscall SBMP_WriteTGA(void * pPixels, void * hFile, int nPalettePtr, int width, int height, int bpp, uint32_t stride) {
-    // Frame slots -800..-8 are ONE object: &dwBytesWritten is passed out and the callee reaches the rest by byte offset.
+    // Frame slots -796..-8 are ONE object: &tgaIdLen is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     #pragma pack(push, 1)
     struct __frame0_t {
-      DWORD dwBytesWritten;
       uint8_t tgaIdLen;
       bool bTgaHasPalette;
       uint8_t nTgaImageType;
@@ -410,13 +409,14 @@ static int __thiscall SBMP_WriteTGA(void * pPixels, void * hFile, int nPalettePt
       uint16_t wTgaHeight;
       uint8_t nTgaBpp;
       uint8_t nTgaDescriptor;
-      uint8_t __pad22[2];
+      uint8_t __pad18[2];
       uint8_t aPaletteBuf[768];
     };
     #pragma pack(pop)
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 792, "frame group __frame0_t must reproduce the Ghidra frame layout");
+    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 788, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     uint8_t* pDstPalEntry;
+    DWORD dwBytesWritten;
     __frame0.tgaIdLen = 0;
     int nPalIdx = 0x100;
     __frame0.wTgaColorMapOrigin = 0;
@@ -437,7 +437,7 @@ static int __thiscall SBMP_WriteTGA(void * pPixels, void * hFile, int nPalettePt
     __frame0.wTgaWidth = (uint16_t)width;
     __frame0.wTgaHeight = (uint16_t)height;
     __frame0.nTgaDescriptor = (bpp != 0x20 ? 0 : 0x8) | 0x20;
-    /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)&__frame0.tgaIdLen, 0x12, &__frame0.dwBytesWritten, (LPOVERLAPPED)0x0);
+    /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)&__frame0.tgaIdLen, 0x12, &dwBytesWritten, (LPOVERLAPPED)0x0);
     if (bpp == 8) {
       uint8_t* pSrcPalEntry;
       pDstPalEntry = __frame0.aPaletteBuf + 1;
@@ -451,15 +451,15 @@ static int __thiscall SBMP_WriteTGA(void * pPixels, void * hFile, int nPalettePt
         nPalIdx--;
       } while (nPalIdx);
 
-      /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)__frame0.aPaletteBuf, 0x300, &__frame0.dwBytesWritten, (LPOVERLAPPED)0x0);
+      /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)__frame0.aPaletteBuf, 0x300, &dwBytesWritten, (LPOVERLAPPED)0x0);
     }
 
     DWORD nNumberOfBytesToWrite = (bpp + 7) / 8 * width;
     if (stride == nNumberOfBytesToWrite) {
-      /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, pPixels, nNumberOfBytesToWrite * height, &__frame0.dwBytesWritten, (LPOVERLAPPED)0x0);
+      /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, pPixels, nNumberOfBytesToWrite * height, &dwBytesWritten, (LPOVERLAPPED)0x0);
     } else {
       for (; height; height--) {
-        /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, pPixels, nNumberOfBytesToWrite, &__frame0.dwBytesWritten, (LPOVERLAPPED)0x0);
+        /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, pPixels, nNumberOfBytesToWrite, &dwBytesWritten, (LPOVERLAPPED)0x0);
         pPixels = (void*)((int)pPixels + stride);
       }
     }
@@ -594,41 +594,34 @@ static void __fastcall SBMP_CompressPcxRow(int count, int * ppInput, int * ppOut
 // @sourcefile .\SOURCE\SBMP.CPP
 // @blizzard EncodePcx256File (SBMP.CPP)
 int __fastcall SBMP_EncodePcx256File(int nWidth, int nHeight, HANDLE hFile, int nPalettePtr, void * pPixels) {
-    // Frame slots -144..-8 are ONE object: &pSrcRow is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      void* pSrcRow;
-      void* pRLEOut;
-      D2PcxHeaderStrc sPcxHeader;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 136, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     int iVar1;
     uint8_t aPaletteBlock[772];
     DWORD dwBytesWritten;
+    void* pSrcRow;
+    D2PcxHeaderStrc sPcxHeader;
     HANDLE hFileLocal = hFile;
-    __frame0.pRLEOut = pPixels;
-    SSystem::SMemZero(&__frame0.sPcxHeader, 0x80);
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ __frame0.sPcxHeader.wBytesPerLine = (uint16_t)nHeight;
-    /* LPDWORD lpNumberOfBytesWritten for WriteFile */ __frame0.sPcxHeader.wXMax = __frame0.sPcxHeader.wBytesPerLine - 1;
-    /* DWORD nNumberOfBytesToWrite for WriteFile */ __frame0.sPcxHeader.wYMax = (short int)nWidth - 1;
-    __frame0.sPcxHeader.byManufacturer = '\n';
-    __frame0.sPcxHeader.byVersion = '\x05';
-    /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ __frame0.sPcxHeader.byEncoding = '\x01';
-    __frame0.sPcxHeader.byBitsPerPixel = '\b';
-    __frame0.sPcxHeader.wHDpi = 0x48;
-    __frame0.sPcxHeader.wVDpi = 0x48;
-    __frame0.sPcxHeader.byPlanes = '\x01';
-    WriteFile(hFile, (LPCVOID)&__frame0.sPcxHeader, 0x80, (LPDWORD)&__frame0.pSrcRow, (LPOVERLAPPED)0x0);
+    void* pRLEOut = pPixels;
+    SSystem::SMemZero(&sPcxHeader, 0x80);
+    /* LPOVERLAPPED lpOverlapped for WriteFile */ sPcxHeader.wBytesPerLine = (uint16_t)nHeight;
+    /* LPDWORD lpNumberOfBytesWritten for WriteFile */ sPcxHeader.wXMax = sPcxHeader.wBytesPerLine - 1;
+    /* DWORD nNumberOfBytesToWrite for WriteFile */ sPcxHeader.wYMax = (short int)nWidth - 1;
+    sPcxHeader.byManufacturer = '\n';
+    sPcxHeader.byVersion = '\x05';
+    /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ sPcxHeader.byEncoding = '\x01';
+    sPcxHeader.byBitsPerPixel = '\b';
+    sPcxHeader.wHDpi = 0x48;
+    sPcxHeader.wVDpi = 0x48;
+    sPcxHeader.byPlanes = '\x01';
+    WriteFile(hFile, (LPCVOID)&sPcxHeader, 0x80, (LPDWORD)&pSrcRow, (LPOVERLAPPED)0x0);
     void* lpBuffer = SMem::SMemAlloc(nHeight * nWidth * 2, ".\\SOURCE\\SBMP.CPP", 0x4eb, 0);
-    __frame0.pSrcRow = __frame0.pRLEOut;
+    pSrcRow = pRLEOut;
     int nRowIdx = nWidth;
-    __frame0.pRLEOut = lpBuffer;
+    pRLEOut = lpBuffer;
     if (nWidth > 0) {
       int nRowsRemaining;
       do {
         nRowsRemaining = nRowIdx;
-        SBMP_CompressPcxRow(nHeight, (int*)&__frame0.pSrcRow, (int*)&__frame0.pRLEOut);
+        SBMP_CompressPcxRow(nHeight, (int*)&pSrcRow, (int*)&pRLEOut);
         nRowIdx = nRowsRemaining - 1;
       } while (nRowsRemaining - 1);
 
@@ -636,7 +629,7 @@ int __fastcall SBMP_EncodePcx256File(int nWidth, int nHeight, HANDLE hFile, int 
     }
 
     HANDLE hFile_00 = hFileLocal;
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFileLocal, lpBuffer, (int)__frame0.pRLEOut - (int)lpBuffer, &dwBytesWritten, (LPOVERLAPPED)0x0);
+    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFileLocal, lpBuffer, (int)pRLEOut - (int)lpBuffer, &dwBytesWritten, (LPOVERLAPPED)0x0);
     SMem::SMemFree(lpBuffer, ".\\SOURCE\\SBMP.CPP", 0x4f2, 0);
     aPaletteBlock[0] = '\f';
     uint8_t* pDstPalEntry = aPaletteBlock + 2;
@@ -1114,65 +1107,56 @@ int __fastcall SBMP_CompressGifImage(int nSrcLen, uint8_t * pSrcPixels, int pDst
 
 // @blizzard EncodeGif256File (SBMP.CPP)
 static int __thiscall SBMP_EncodeGif256File(int width, void * hFile, int palette, uint8_t * pixels, int height) {
-    // Frame slots -40..-8 are ONE object: &dwBytesWritten is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      DWORD dwBytesWritten;
-      uint8_t* pPixelsCopy;
-      void* pCompressedBuf;
-      uint8_t __pad12[3];
-      uint8_t bySentinel;
-      uint8_t abGifHeader[13];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 32, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     uint8_t aPaletteBuf[768];
+    DWORD dwBytesWritten;
+    void* pCompressedBuf;
+    uint8_t abGifHeader[13];
     int iVar1 = height;
-    __frame0.pPixelsCopy = pixels;
-    /* DWORD nNumberOfBytesToWrite for WriteFile */ __frame0.abGifHeader[0] = 0x47;
-    __frame0.abGifHeader[1] = 0x49;
-    /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ __frame0.abGifHeader[2] = 0x46;
-    __frame0.abGifHeader[3] = 0x38;
-    __frame0.abGifHeader[4] = 0x37;
-    __frame0.abGifHeader[5] = 0x61;
-    __frame0.abGifHeader[8] = (uint8_t)height;
-    __frame0.abGifHeader[9] = *(uint8_t*)((char*)&height + 1);
-    __frame0.abGifHeader[10] = 0xf7;
-    __frame0.abGifHeader[0xb] = 0;
-    __frame0.abGifHeader[0xc] = 0;
-    *(uint16_t*)((char*)&__frame0.abGifHeader + 6) = (short int)width;
-    WriteFile(hFile, (LPCVOID)__frame0.abGifHeader, 0xd, (LPDWORD)&__frame0.pCompressedBuf, (LPOVERLAPPED)0x0);
+    uint8_t* pPixelsCopy = pixels;
+    /* DWORD nNumberOfBytesToWrite for WriteFile */ abGifHeader[0] = 0x47;
+    abGifHeader[1] = 0x49;
+    /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ abGifHeader[2] = 0x46;
+    abGifHeader[3] = 0x38;
+    abGifHeader[4] = 0x37;
+    abGifHeader[5] = 0x61;
+    abGifHeader[8] = (uint8_t)height;
+    abGifHeader[9] = *(uint8_t*)((char*)&height + 1);
+    abGifHeader[10] = 0xf7;
+    abGifHeader[0xb] = 0;
+    abGifHeader[0xc] = 0;
+    *(uint16_t*)((char*)&abGifHeader + 6) = (short int)width;
+    WriteFile(hFile, (LPCVOID)abGifHeader, 0xd, (LPDWORD)&pCompressedBuf, (LPOVERLAPPED)0x0);
     uint8_t* pDstPalEntry = aPaletteBuf + 1;
     uint8_t* pSrcPalEntry = (uint8_t*)(palette + 2);
-    __frame0.pCompressedBuf = (void*)0x100;
+    pCompressedBuf = (void*)0x100;
     do {
       pDstPalEntry[-1] = pSrcPalEntry[-2];
       *pDstPalEntry = pSrcPalEntry[-1];
       pDstPalEntry[1] = *pSrcPalEntry;
       pSrcPalEntry += 4;
       pDstPalEntry += 3;
-      __frame0.pCompressedBuf = (void*)((int)__frame0.pCompressedBuf - 1);
-    } while (__frame0.pCompressedBuf);
+      pCompressedBuf = (void*)((int)pCompressedBuf - 1);
+    } while (pCompressedBuf);
 
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)aPaletteBuf, 0x300, (LPDWORD)&__frame0.pCompressedBuf, (LPOVERLAPPED)0x0);
-    __frame0.bySentinel = 0x2c;
-    WriteFile(hFile, (LPCVOID)&__frame0.bySentinel, 1, (LPDWORD)&__frame0.pCompressedBuf, (LPOVERLAPPED)0x0);
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ memset(__frame0.abGifHeader, 0, 4 * sizeof(__frame0.abGifHeader[0]));
-    /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ __frame0.abGifHeader[6] = (uint8_t)height;
-    __frame0.abGifHeader[7] = *(uint8_t*)((char*)&height + 1);
-    __frame0.abGifHeader[8] = 0;
-    __frame0.abGifHeader[9] = 8;
-    *(uint16_t*)((char*)&__frame0.abGifHeader + 4) = (short int)width;
-    WriteFile(hFile, (LPCVOID)__frame0.abGifHeader, 10, (LPDWORD)&__frame0.pCompressedBuf, (LPOVERLAPPED)0x0);
-    __frame0.pCompressedBuf = SMem::SMemAlloc(width * iVar1 * 2, ".\\SOURCE\\SBMP.CPP", 1000, 0);
-    DWORD nNumberOfBytesToWrite = SBMP_CompressGifImage(width * iVar1, __frame0.pPixelsCopy, (int)__frame0.pCompressedBuf);
-    void* pFreeThis = __frame0.pCompressedBuf;
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, __frame0.pCompressedBuf, nNumberOfBytesToWrite, &__frame0.dwBytesWritten, (LPOVERLAPPED)0x0);
+    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)aPaletteBuf, 0x300, (LPDWORD)&pCompressedBuf, (LPOVERLAPPED)0x0);
+    uint8_t bySentinel = 0x2c;
+    WriteFile(hFile, (LPCVOID)&bySentinel, 1, (LPDWORD)&pCompressedBuf, (LPOVERLAPPED)0x0);
+    /* LPOVERLAPPED lpOverlapped for WriteFile */ memset(abGifHeader, 0, 4 * sizeof(abGifHeader[0]));
+    /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ abGifHeader[6] = (uint8_t)height;
+    abGifHeader[7] = *(uint8_t*)((char*)&height + 1);
+    abGifHeader[8] = 0;
+    abGifHeader[9] = 8;
+    *(uint16_t*)((char*)&abGifHeader + 4) = (short int)width;
+    WriteFile(hFile, (LPCVOID)abGifHeader, 10, (LPDWORD)&pCompressedBuf, (LPOVERLAPPED)0x0);
+    pCompressedBuf = SMem::SMemAlloc(width * iVar1 * 2, ".\\SOURCE\\SBMP.CPP", 1000, 0);
+    DWORD nNumberOfBytesToWrite = SBMP_CompressGifImage(width * iVar1, pPixelsCopy, (int)pCompressedBuf);
+    void* pFreeThis = pCompressedBuf;
+    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, pCompressedBuf, nNumberOfBytesToWrite, &dwBytesWritten, (LPOVERLAPPED)0x0);
     SMem::SMemFree(pFreeThis, ".\\SOURCE\\SBMP.CPP", 0x3ee, 0);
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ __frame0.bySentinel = 0;
-    WriteFile(hFile, (LPCVOID)&__frame0.bySentinel, 1, (LPDWORD)&__frame0.pPixelsCopy, (LPOVERLAPPED)0x0);
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ __frame0.bySentinel = 0x3b;
-    WriteFile(hFile, (LPCVOID)&__frame0.bySentinel, 1, (LPDWORD)&__frame0.pPixelsCopy, (LPOVERLAPPED)0x0);
+    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ bySentinel = 0;
+    WriteFile(hFile, (LPCVOID)&bySentinel, 1, (LPDWORD)&pPixelsCopy, (LPOVERLAPPED)0x0);
+    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ bySentinel = 0x3b;
+    WriteFile(hFile, (LPCVOID)&bySentinel, 1, (LPDWORD)&pPixelsCopy, (LPOVERLAPPED)0x0);
     return 1;
 }
 

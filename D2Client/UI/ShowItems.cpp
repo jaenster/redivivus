@@ -35,29 +35,6 @@ namespace D2Client::UI::ShowItems {
 
 // @sourcefile .\UI\showitems.cpp
 void __stdcall DRAW_AltItems() {
-    // Frame slots -68..-4 are ONE object: &nPerspY is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nPerspY;
-      uint32_t bPerspectiveActive;
-      D2RoomStrc** pRoomList;
-      uint32_t nRoomCount;
-      uint32_t nRoomIndex;
-      int32_t nPrecisionX;
-      int nItemNameWidth;
-      int nItemVisY;
-      int nMaxX;
-      int bFoundMatch;
-      int nItemNameHeight;
-      int nItemPosY;
-      int nItemPosX;
-      int nItemX;
-      D2UnitStrc* pCurrentItem;
-      uint8_t __pad60[3];
-      uint8_t bColorKey;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 64, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     bool bVar1;
     uint8_t nMaxSockets;
     int32_t nWorldOffsetX;
@@ -68,7 +45,20 @@ void __stdcall DRAW_AltItems() {
     D2UnitStrc* pItem;
     int nColorIdx;
     int nItemSlotIdx;
-    __frame0.bPerspectiveActive = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
+    int nPerspY;
+    D2RoomStrc** pRoomList;
+    uint32_t nRoomCount;
+    int32_t nPrecisionX;
+    int nItemNameWidth;
+    int nItemVisY;
+    int nMaxX;
+    int nItemNameHeight;
+    int nItemPosY;
+    int nItemPosX;
+    int nItemX;
+    D2UnitStrc* pCurrentItem;
+    uint32_t bPerspectiveActive;
+    bPerspectiveActive = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     D2UnitStrc* pPlayerUnit_lcl;
     pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     int nDrawCount;
@@ -88,94 +78,97 @@ void __stdcall DRAW_AltItems() {
     nMouseX = ui::GetMouseX();
     int nMouseY;
     nMouseY = ui::GetMouseY();
-    D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pPlayerRoom, &__frame0.pRoomList, (int*)&__frame0.nRoomCount);
-    __frame0.bColorKey = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0x40, 0x80);
+    D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pPlayerRoom, &pRoomList, (int*)&nRoomCount);
+    uint8_t bColorKey;
+    bColorKey = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0x40, 0x80);
     gItemDrawFlags = 0;
-    __frame0.bFoundMatch = 0;
-    __frame0.nRoomIndex = 0;
-    if (__frame0.nRoomCount) {
+    int bFoundMatch;
+    bFoundMatch = 0;
+    uint32_t nRoomIndex;
+    nRoomIndex = 0;
+    if (nRoomCount) {
       uint16_t* wszText;
       do {
-        pItem = __frame0.pRoomList[__frame0.nRoomIndex]->pUnitList;
+        pItem = pRoomList[nRoomIndex]->pUnitList;
         nItemSlotIdx = nDrawCount;
-        __frame0.pCurrentItem = pItem;
+        pCurrentItem = pItem;
         if (pItem) {
           for (; pItem; pItem = pItem->pRoomNext , nItemSlotIdx = nDrawCount) {
             nDrawCount = nItemSlotIdx;
             if (pItem && pItem->eUnitFlagsEx >> 7 & 1 && pItem->eUnitType == UNIT_ITEM && nItemSlotIdx < 0x20) {
               gaGroundItemLabels[nItemSlotIdx].pItem = pItem;
-              __frame0.pCurrentItem = pItem;
-              if (__frame0.bPerspectiveActive) {
+              pCurrentItem = pItem;
+              if (bPerspectiveActive) {
                 nWorldOffsetX = D2Common::Units::GetPrecisionX(pItem);
-                __frame0.nPrecisionX = D2Common::Units::GetPrecisionY(pItem);
-                uBorderType = D2gfx::D2GFX::D2GFX_IsInPerspectiveBounds(nWorldOffsetX, __frame0.nPrecisionX);
+                nPrecisionX = D2Common::Units::GetPrecisionY(pItem);
+                uBorderType = D2gfx::D2GFX::D2GFX_IsInPerspectiveBounds(nWorldOffsetX, nPrecisionX);
                 nDrawCount = gItemDrawFlags;
                 if (!uBorderType) {
                   continue;
                 }
 
-                D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(nWorldOffsetX, __frame0.nPrecisionX, 0, &__frame0.nItemPosX, &__frame0.nPerspY);
+                D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(nWorldOffsetX, nPrecisionX, 0, &nItemPosX, &nPerspY);
                 uBorderType = Path::DRAW_GetTypeOfBorder();
-                nColorIdx = __frame0.nPerspY;
+                nColorIdx = nPerspY;
                 switch (uBorderType) {
                   case 1:
                     {
-                      __frame0.nItemPosX -= ScreenSizeX / 4;
+                      nItemPosX -= ScreenSizeX / 4;
                       break;
                     }
                   case 2:
                     {
-                      __frame0.nItemPosX += ScreenSizeX / 4;
-                      __frame0.nItemX = __frame0.nItemPosX;
+                      nItemPosX += ScreenSizeX / 4;
+                      nItemX = nItemPosX;
                       goto layout_label;
                     }
                 }
 
-                __frame0.nItemX = __frame0.nItemPosX;
+                nItemX = nItemPosX;
               } else {
                 nWorldOffsetX = D2Common::Units::GetTargetX(pItem);
                 nCoordTemp = Path::DRAW_GetWorldOffsetX();
-                __frame0.nItemX = nWorldOffsetX - nCoordTemp;
+                nItemX = nWorldOffsetX - nCoordTemp;
                 nWorldOffsetX = Path::DRAW_GetWorldOffsetY();
-                nCoordTemp = D2Common::Units::GetTargetY(__frame0.pCurrentItem);
+                nCoordTemp = D2Common::Units::GetTargetY(pCurrentItem);
                 nColorIdx = nCoordTemp + (-0x10 - nWorldOffsetX);
-                pItem = __frame0.pCurrentItem;
+                pItem = pCurrentItem;
               }
 
               layout_label:
-              __frame0.nItemPosY = 0;
-              __frame0.nItemVisY = nColorIdx;
-              __frame0.nMaxX = ScreenSizeX;
+              nItemPosY = 0;
+              nItemVisY = nColorIdx;
+              nMaxX = ScreenSizeX;
               uBorderType = Path::DRAW_GetTypeOfBorder();
               switch (uBorderType) {
                 case 1:
                   {
-                    __frame0.nMaxX = ScreenSizeX / 2 - 0x20;
+                    nMaxX = ScreenSizeX / 2 - 0x20;
                     break;
                   }
                 case 2:
                   {
-                    __frame0.nItemPosY = ScreenSizeX / 2;
+                    nItemPosY = ScreenSizeX / 2;
                     break;
                   }
               }
 
               nDrawCount = gItemDrawFlags;
-              if (__frame0.nItemX >= __frame0.nItemPosY && __frame0.nItemX <= __frame0.nMaxX && nColorIdx >= -8 && nColorIdx <= ScreenSizeY - 0x10) {
+              if (nItemX >= nItemPosY && nItemX <= nMaxX && nColorIdx >= -8 && nColorIdx <= ScreenSizeY - 0x10) {
                 wszText = gaGroundItemLabels[nItemSlotIdx].wszName;
                 *wszText = L'\0';
-                ui::UI_FormatItemNameWithQuality(__frame0.pCurrentItem, wszText, 0x100);
-                D2Win::Src::D2WinFont::TEXT_CalcTextDimensions(wszText, &__frame0.nItemNameWidth, &__frame0.nItemNameHeight);
-                __frame0.nItemNameWidth += 8;
-                __frame0.nItemX -= __frame0.nItemNameWidth >> 1;
-                __frame0.nItemNameHeight = nColorIdx - __frame0.nItemNameHeight + 4;
-                __frame0.nPrecisionX = __frame0.nItemNameWidth + __frame0.nItemX;
+                ui::UI_FormatItemNameWithQuality(pCurrentItem, wszText, 0x100);
+                D2Win::Src::D2WinFont::TEXT_CalcTextDimensions(wszText, &nItemNameWidth, &nItemNameHeight);
+                nItemNameWidth += 8;
+                nItemX -= nItemNameWidth >> 1;
+                nItemNameHeight = nColorIdx - nItemNameHeight + 4;
+                nPrecisionX = nItemNameWidth + nItemX;
                 nDrawCount = 0;
                 bVar1 = true;
                 do {
-                  nColorIdx = __frame0.nMaxX;
-                  bSocketedFlag = ui::UI_DrawGroundItemTooltip(&__frame0.nItemX, &__frame0.nItemNameHeight, &__frame0.nPrecisionX, &__frame0.nItemVisY, nDrawCount, __frame0.nMaxX, __frame0.nItemPosY);
-                  pItem = __frame0.pCurrentItem;
+                  nColorIdx = nMaxX;
+                  bSocketedFlag = ui::UI_DrawGroundItemTooltip(&nItemX, &nItemNameHeight, &nPrecisionX, &nItemVisY, nDrawCount, nMaxX, nItemPosY);
+                  pItem = pCurrentItem;
                   if (bSocketedFlag) {
                     goto commit_label;
                   }
@@ -186,36 +179,36 @@ void __stdcall DRAW_AltItems() {
                 bVar1 = false;
                 commit_label:
                 nDrawCount = gItemDrawFlags;
-                if (__frame0.nPrecisionX <= nColorIdx && __frame0.nItemX >= __frame0.nItemPosY && bVar1) {
-                  gaGroundItemLabels[nItemSlotIdx].nLeft = __frame0.nItemX;
-                  gaGroundItemLabels[nItemSlotIdx].nTop = __frame0.nItemNameHeight;
-                  gaGroundItemLabels[nItemSlotIdx].nRight = __frame0.nPrecisionX;
-                  gaGroundItemLabels[nItemSlotIdx].nBottom = __frame0.nItemVisY;
-                  if (!__frame0.bFoundMatch) {
-                    if (nMouseX < __frame0.nItemX || nMouseX > __frame0.nPrecisionX || nMouseY < __frame0.nItemNameHeight || nMouseY > __frame0.nItemVisY + 4) {
-                      if (__frame0.pCurrentItem != pPlayerUnit_lcl) {
+                if (nPrecisionX <= nColorIdx && nItemX >= nItemPosY && bVar1) {
+                  gaGroundItemLabels[nItemSlotIdx].nLeft = nItemX;
+                  gaGroundItemLabels[nItemSlotIdx].nTop = nItemNameHeight;
+                  gaGroundItemLabels[nItemSlotIdx].nRight = nPrecisionX;
+                  gaGroundItemLabels[nItemSlotIdx].nBottom = nItemVisY;
+                  if (!bFoundMatch) {
+                    if (nMouseX < nItemX || nMouseX > nPrecisionX || nMouseY < nItemNameHeight || nMouseY > nItemVisY + 4) {
+                      if (pCurrentItem != pPlayerUnit_lcl) {
                         goto color_by_quality;
                       }
 
-                      gaGroundItemLabels[nItemSlotIdx].nColorKey = (uint32_t)__frame0.bColorKey;
+                      gaGroundItemLabels[nItemSlotIdx].nColorKey = (uint32_t)bColorKey;
                       gaGroundItemLabels[nItemSlotIdx].nDrawPosition = 5;
                       gaGroundItemLabels[nItemSlotIdx].nTextColor = 0;
                       D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(nullptr, 0, 0, 0, 0);
                       GAME::Select::ClearSelectedUnit();
-                      __frame0.bFoundMatch = 1;
+                      bFoundMatch = 1;
                     } else {
-                      gaGroundItemLabels[nItemSlotIdx].nColorKey = (uint32_t)__frame0.bColorKey;
+                      gaGroundItemLabels[nItemSlotIdx].nColorKey = (uint32_t)bColorKey;
                       gaGroundItemLabels[nItemSlotIdx].nDrawPosition = 5;
                       gaGroundItemLabels[nItemSlotIdx].nTextColor = 0;
-                      GAME::Select::SELECT_UpdateUnitSelection(__frame0.pCurrentItem);
-                      __frame0.bFoundMatch = 1;
+                      GAME::Select::SELECT_UpdateUnitSelection(pCurrentItem);
+                      bFoundMatch = 1;
                     }
                   } else {
                     color_by_quality:
                     nColorIdx = 0;
                     gaGroundItemLabels[nItemSlotIdx].nColorKey = 0;
                     gaGroundItemLabels[nItemSlotIdx].nDrawPosition = 1;
-                    nDrawCount = D2Common::ITEMS::Items::GetItemQuality(__frame0.pCurrentItem);
+                    nDrawCount = D2Common::ITEMS::Items::GetItemQuality(pCurrentItem);
                     switch (nDrawCount) {
                       case 4:
                         nColorIdx = 3;
@@ -251,18 +244,18 @@ void __stdcall DRAW_AltItems() {
                   }
 
                   gItemDrawFlags++;
-                  pItem = __frame0.pCurrentItem;
+                  pItem = pCurrentItem;
                   nDrawCount = gItemDrawFlags;
                 }
               }
             }
           }
 
-          __frame0.pCurrentItem = 0;
+          pCurrentItem = 0;
         }
 
-        __frame0.nRoomIndex++;
-      } while (__frame0.nRoomIndex < __frame0.nRoomCount);
+        nRoomIndex++;
+      } while (nRoomIndex < nRoomCount);
     }
 
     nMouseX = 0;
@@ -272,7 +265,7 @@ void __stdcall DRAW_AltItems() {
         nMouseX++;
       } while (nMouseX < gItemDrawFlags);
     }
-    if (__frame0.bFoundMatch) {
+    if (bFoundMatch) {
       return;
     }
 

@@ -679,25 +679,15 @@ int __fastcall PumpIoCompletionQueues(D2QServerStrc * pQServer, uint32_t dwTimeo
 }
 
 SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
-    // Frame slots -40..-24 are ONE object: &optKeepAlive is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int optKeepAlive;
-      int local_24;
-      uint32_t nPortLocal;
-      int32_t pIocp;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 16, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     int nResult;
     uint32_t* pThreadArgs;
     HANDLE hThread;
     char optTcpNoDelay[4];
     sockaddr bindAddr;
     char* pszErrFmt;
-    __frame0.nPortLocal = nPort;
-    __frame0.pIocp = (int32_t)CreateIoCompletionPort((HANDLE)-1, (HANDLE)0x0, 0, 0);
-    if (!(HANDLE)__frame0.pIocp) {
+    uint32_t nPortLocal = nPort;
+    int32_t pIocp = (int32_t)CreateIoCompletionPort((HANDLE)-1, (HANDLE)0x0, 0, 0);
+    if (!(HANDLE)pIocp) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x4e);
       exit(-1);
     }
@@ -714,17 +704,17 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
     optTcpNoDelay[2] = '\0';
     optTcpNoDelay[3] = '\0';
     /* char * optval for setsockopt */ /* int optname for setsockopt */ /* int level for setsockopt */ /* SOCKET s for setsockopt */ setsockopt(hListenSocket, 6, 1, optTcpNoDelay, 4);
-    __frame0.optKeepAlive = 1;
-    setsockopt(hListenSocket, 0xffff, 8, (char*)&__frame0.optKeepAlive, 4);
-    __frame0.local_24 = 1;
-    setsockopt(hListenSocket, 0xffff, 4, (char*)&__frame0.local_24, 4);
+    int optKeepAlive = 1;
+    setsockopt(hListenSocket, 0xffff, 8, (char*)&optKeepAlive, 4);
+    int local_24 = 1;
+    setsockopt(hListenSocket, 0xffff, 4, (char*)&local_24, 4);
     u_long ulNonBlocking = 1;
     ioctlsocket(hListenSocket, -0x7ffb9982, &ulNonBlocking);
     memset(bindAddr.sa_data + 2, 0, 12 * sizeof(bindAddr.sa_data[0]));
     bindAddr.sa_family = 2;
     bindAddr.sa_data[0] = '\0';
     bindAddr.sa_data[1] = '\0';
-    u_short uPortNetOrder = ntohs((u_short)__frame0.nPortLocal);
+    u_short uPortNetOrder = ntohs((u_short)nPortLocal);
     /* int namelen for bind */ /* sockaddr * addr for bind */ /* SOCKET s for bind */ bindAddr.sa_data[0] = (char)uPortNetOrder;
     bindAddr.sa_data[1] = (char)(uPortNetOrder >> 8);
     nResult = _Wrappers::bind(hListenSocket, &bindAddr, 0x10);
@@ -736,8 +726,8 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
       if (nResult != -1) {
         nResult = pQServer->nListeningWorkers;
         pQServer->nListeningWorkers = nResult + 1;
-        pQServer->aIoCompletionPorts[nResult] = (HANDLE)__frame0.pIocp;
-        pQServer->aListenPorts[nResult] = (u_short)__frame0.nPortLocal;
+        pQServer->aIoCompletionPorts[nResult] = (HANDLE)pIocp;
+        pQServer->aListenPorts[nResult] = (u_short)nPortLocal;
         pQServer->aListenSockets[nResult] = hListenSocket;
         pQServer->aWorkerSlotValues[nResult] = 1;
         pThreadArgs = (uint32_t*)D2_ALLOC_AT(8, ".\\Src\\QServer\\QServerNT.cpp", 0xa2);
@@ -748,12 +738,12 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
         ErrorManager::StubHook1(pQServer->aAcceptThreadIds[nResult], hThread);
         if (pQServer->bUseDedicatedIoWorkers) {
           pThreadArgs = (uint32_t*)D2_ALLOC_AT(8, ".\\Src\\QServer\\QServerNT.cpp", 0xb5);
-          __frame0.pIocp = (int32_t)(pQServer->aIoWorkerThreadIds + nResult);
+          pIocp = (int32_t)(pQServer->aIoWorkerThreadIds + nResult);
           /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ *pThreadArgs = (uint32_t)(uintptr_t)pQServer;
           pThreadArgs[1] = nResult;
-          hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)IoWorkerThreadMain, pThreadArgs, 0, (LPDWORD)__frame0.pIocp);
+          hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)IoWorkerThreadMain, pThreadArgs, 0, (LPDWORD)pIocp);
           pQServer->aIoWorkerThreadHandles[nResult] = hThread;
-          ErrorManager::StubHook1(*(uint32_t*)__frame0.pIocp, hThread);
+          ErrorManager::StubHook1(*(uint32_t*)pIocp, hThread);
         }
 
         return hListenSocket;

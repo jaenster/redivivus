@@ -562,58 +562,51 @@ void __fastcall SFILE_DeleteOldLogFiles(char * szLogPrefix) {
 }
 
 void __stdcall LOGFILE_StoreGameStartupInfo() {
-    // Frame slots -8268..-4152 are ONE object: &nNameSize is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      DWORD nNameSize;
-      char szAppPath[4096];
-      char szOsName[13];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 4116, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     _SYSTEMTIME systemTime;
+    char szAppPath[4096];
+    char szOsName[13];
     char szComputerName[64];
     Src::LogManager::LOGFILE_WriteStringToFile("------------------------------------------------------");
     /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ GetLocalTime(&systemTime);
     Src::LogManager::LOGFILE_WriteStringToFile("%04d-%02d-%02d %02d:%02d:%02d", (uint32_t)systemTime.wYear, (uint32_t)systemTime.wMonth, (uint32_t)systemTime.wDay, (uint32_t)systemTime.wHour, (uint32_t)systemTime.wMinute, (uint32_t)systemTime.wSecond);
     switch (g_eOSType) {
       case 1:
-        memcpy(__frame0.szOsName, "Windows NT", 0xb);
+        memcpy(szOsName, "Windows NT", 0xb);
       break;
       case 2:
-        memcpy(__frame0.szOsName, "Windows 2000", 0xd);
+        memcpy(szOsName, "Windows 2000", 0xd);
       break;
       case 3:
-        __frame0.szOsName[4] = 'o';
-      __frame0.szOsName[5] = 'w';
-      __frame0.szOsName[6] = 's';
-      __frame0.szOsName[7] = ' ';
-      memcpy(__frame0.szOsName, "Wind", 4);
-      __frame0.szOsName[8] = 'X';
-      __frame0.szOsName[9] = 'P';
-      __frame0.szOsName[10] = '\0';
+        szOsName[4] = 'o';
+      szOsName[5] = 'w';
+      szOsName[6] = 's';
+      szOsName[7] = ' ';
+      memcpy(szOsName, "Wind", 4);
+      szOsName[8] = 'X';
+      szOsName[9] = 'P';
+      szOsName[10] = '\0';
       break;
       case 4:
-        memcpy(__frame0.szOsName, "Windows .Net", 0xd);
+        memcpy(szOsName, "Windows .Net", 0xd);
       break;
       case 9:
-        memcpy(__frame0.szOsName, "MacO", 4);
-      __frame0.szOsName[4] = 'S';
-      __frame0.szOsName[5] = '\0';
+        memcpy(szOsName, "MacO", 4);
+      szOsName[4] = 'S';
+      szOsName[5] = '\0';
       break;
       case 10:
-        memcpy(__frame0.szOsName, "MacOS X", 8);
+        memcpy(szOsName, "MacOS X", 8);
       break;
       default:
-        __frame0.szOsName[4] = 'o';
-      __frame0.szOsName[5] = 'w';
-      __frame0.szOsName[6] = 'n';
-      __frame0.szOsName[7] = '\0';
-      memcpy(__frame0.szOsName, "unkn", 4);
+        szOsName[4] = 'o';
+      szOsName[5] = 'w';
+      szOsName[6] = 'n';
+      szOsName[7] = '\0';
+      memcpy(szOsName, "unkn", 4);
       break;
     }
 
-    Src::LogManager::LOGFILE_WriteStringToFile("%s running under %s (Version %.3f)", "Diablo II", __frame0.szOsName, (double)(float)fGameVersion);
+    Src::LogManager::LOGFILE_WriteStringToFile("%s running under %s (Version %.3f)", "Diablo II", szOsName, (double)(float)fGameVersion);
     Src::LogManager::LogCpuInfo();
     float fMemBytes = (float)g_dwTotalPhysicalMemory;
     if (g_dwTotalPhysicalMemory < 0) {
@@ -621,15 +614,15 @@ void __stdcall LOGFILE_StoreGameStartupInfo() {
     }
 
     Src::LogManager::LOGFILE_WriteStringToFile("Total Physical Memory: %.2fMB", (double)(fMemBytes * 9.536743e-07));
-    BOOL bGotName = Debug::FILETOOLS_GetExecutableFolderPath(__frame0.szAppPath, 0x1000);
+    BOOL bGotName = Debug::FILETOOLS_GetExecutableFolderPath(szAppPath, 0x1000);
     if (bGotName) {
-      Src::LogManager::LOGFILE_WriteStringToFile("Application Path: %s", __frame0.szAppPath);
+      Src::LogManager::LOGFILE_WriteStringToFile("Application Path: %s", szAppPath);
     }
 
     char* pszArg = Src::Safesock::NET_GetLocalIp();
     Src::LogManager::LOGFILE_WriteStringToFile("Local IP: %s", pszArg);
-    __frame0.nNameSize = 0x40;
-    bGotName = GetComputerNameA(szComputerName, &__frame0.nNameSize);
+    DWORD nNameSize = 0x40;
+    bGotName = GetComputerNameA(szComputerName, &nNameSize);
     if (!bGotName) {
       szComputerName[0] = '\0';
     }
