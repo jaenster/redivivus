@@ -2004,11 +2004,11 @@ uint32_t __stdcall UTF8_DecodeNextChar(uint8_t * pbParam, int * pnParam) {
       nContinuationBytesNeeded = 2;
     } else {
       if ((bByte & 0xe0) != 0xc0) {
-        if ((char)bByte < 0) {
-          return 0x80000000;
+        if ((char)bByte >= 0) {
+          return dwCodepoint;
         }
 
-        return dwCodepoint;
+        return 0x80000000;
       }
 
       dwCodepoint &= 0x1f;

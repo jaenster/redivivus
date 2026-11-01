@@ -171,11 +171,11 @@ static int32_t __stdcall UTF8_GetNextCharWidth(uint8_t * pUtf8, int32_t nMaxByte
 
       nByteWidth++;
       if (((int)(short int)wTableMask & (uint32_t)byCurByte) == (int)(short int)gaUtf8DecodeTable[nByteWidth - 1].wExpect) {
-        if ((int)(gaUtf8DecodeTable[nByteWidth - 1].dwCodePointMask & uCodePoint) >= (int)gaUtf8DecodeTable[nByteWidth - 1].dwMinValue) {
-          return nByteWidth;
+        if ((int)(gaUtf8DecodeTable[nByteWidth - 1].dwCodePointMask & uCodePoint) < (int)gaUtf8DecodeTable[nByteWidth - 1].dwMinValue) {
+          return -1;
         }
 
-        return -1;
+        return nByteWidth;
       }
       if (nMaxBytes <= nByteWidth) {
         return -1;

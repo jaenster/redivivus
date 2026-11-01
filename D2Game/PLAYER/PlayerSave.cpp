@@ -503,11 +503,11 @@ static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDAT
         }
     }
 
-    if (nPlaceResult) {
-      return 0;
+    if (!nPlaceResult) {
+      return 0xd;
     }
 
-    return 0xd;
+    return 0;
 }
 
 // Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.
@@ -2550,21 +2550,21 @@ static int32_t __fastcall CLIENT_ReadAndLoadSaveFile(D2ClientStrc * pClient, D2R
 static int32_t __fastcall CLIENT_LoadPlayerFromDisk(::SGAMEDATA * pGame, uint32_t dwParam1, char * szText, D2ClientStrc * pClient, D2UnitStrc * pOutUnitHolder, uint32_t dwParam2, uint32_t nX, uint32_t nY) {
     ::SGAMEDATA* pGameLocalTmp;
     D2UnitStrc* pUnit = 0;
-    if (BattleNetServerService) {
-      pOutUnitHolder->eUnitType = UNIT_PLAYER;
-      return 0xe;
-    }
+    if (!BattleNetServerService) {
+      int32_t nResult = CLIENT_ReadAndLoadSaveFile(pClient, (D2RoomStrc*)dwParam2, &pUnit, pGame, szText, nX, nY);
+      if (pUnit) {
+        D2UnitStrc* pLoadedUnit = pUnit;
+        Quests::QUESTS::QUEST_OnPlayerJoinGame(pGame, pUnit, 0);
+        pOutUnitHolder->eUnitType = (eD2UnitType)pLoadedUnit;
+        return nResult;
+      }
 
-    int32_t nResult = CLIENT_ReadAndLoadSaveFile(pClient, (D2RoomStrc*)dwParam2, &pUnit, pGame, szText, nX, nY);
-    if (pUnit) {
-      D2UnitStrc* pLoadedUnit = pUnit;
-      Quests::QUESTS::QUEST_OnPlayerJoinGame(pGame, pUnit, 0);
-      pOutUnitHolder->eUnitType = (eD2UnitType)pLoadedUnit;
+      pOutUnitHolder->eUnitType = UNIT_PLAYER;
       return nResult;
     }
 
     pOutUnitHolder->eUnitType = UNIT_PLAYER;
-    return nResult;
+    return 0xe;
 }
 
 static int32_t __stdcall CLIENT_LoadPlayerFromNetworkSave(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2UnitStrc * * ppUnit, uint32_t dwParam1, uint32_t dwParam2, uint32_t dwParam3) {

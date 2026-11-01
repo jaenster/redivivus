@@ -2701,12 +2701,12 @@ D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, D2ItemGenCo
             uVar1 = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(pItem), eFlagToCheck);
             if (!uVar1) {
               byMaxSocksCheck = D2Common::ITEMS::Items::ITEM_GetMaxSockCount(pItem);
-              if (!byMaxSocksCheck) {
-                D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_SOCKETED, 0);
-              } else {
+              if (byMaxSocksCheck) {
                 byMaxSocksCheck = D2Common::ITEMS::Items::ITEM_GetMaxSockCount(pItem);
                 nModSeed = D2Common::ITEMS::Items::GetModSeed(pItem);
                 D2Common::ITEMS::Items::ITEM_RollSocketCount(pItem, nModSeed % (uint32_t)byMaxSocksCheck + 1);
+              } else {
+                D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_SOCKETED, 0);
               }
             }
           }
@@ -2772,14 +2772,14 @@ D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, D2ItemGenCo
     eFlagToCheck = ITEMFLAG_PLAYERNAME;
     uVar1 = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(pItem), eFlagToCheck);
     if (uVar1) {
-      if (!pItemGenCtx->bFromCustomData) {
+      if (pItemGenCtx->bFromCustomData) {
+        szCustomName = pItemGenCtx->szCustomName;
+      } else {
         szCustomName = D2Common::Units::GetPlayerData(pItemGenCtx->pUnit)->szCharName;
         if (!szCustomName) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x892);
           exit(-1);
         }
-      } else {
-        szCustomName = pItemGenCtx->szCustomName;
       }
 
       D2Common::ITEMS::Items::ITEM_GetPlayerNameAkaNamedString(pItem, szCustomName);
@@ -3156,12 +3156,12 @@ D2UnitStrc * __fastcall ITEM_RewardItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * 
         nRollRetry = 0;
         pItemsTxtLine = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
         while (!pItemsTxtLine || !(pItemsTxtLine->dwBitfield1 & 1)) {
-          if (nRollRetry <= 0xa) {
-            nItemClassId = ITEMDROP_RollItemClassByLevel(pGame, &pUnit->sSeed, nParam1, nParam2, bIsMonster, *pnParam);
+          if (nRollRetry > 0xa) {
+            nItemClassId = ITEMDROP_RollNormalItemClass(pGame, &pUnit->sSeed, *pnParam, nParam1, nParam2);
             pItemsTxtLine = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
             nRollRetry++;
           } else {
-            nItemClassId = ITEMDROP_RollNormalItemClass(pGame, &pUnit->sSeed, *pnParam, nParam1, nParam2);
+            nItemClassId = ITEMDROP_RollItemClassByLevel(pGame, &pUnit->sSeed, nParam1, nParam2, bIsMonster, *pnParam);
             pItemsTxtLine = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
             nRollRetry++;
           }
@@ -3945,10 +3945,10 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
                       wTempMod = puVar10[-1];
                       pChildQualMods[-1] = wTempMod;
                     } else {
-                      if ((uint16_t)puVar10[-1] <= wTempMod) {
-                        pChildQualMods[-1] = wTempMod;
-                      } else {
+                      if (!((uint16_t)puVar10[-1] <= wTempMod)) {
                         pChildQualMods[-1] = puVar10[-1];
+                      } else {
+                        pChildQualMods[-1] = wTempMod;
                       }
                     }
 
@@ -3957,10 +3957,10 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
                       wTempMod = *puVar10;
                       *pChildQualMods = wTempMod;
                     } else {
-                      if ((uint16_t)*puVar10 <= wTempMod) {
-                        *pChildQualMods = wTempMod;
-                      } else {
+                      if (!((uint16_t)*puVar10 <= wTempMod)) {
                         *pChildQualMods = *puVar10;
+                      } else {
+                        *pChildQualMods = wTempMod;
                       }
                     }
 
@@ -3969,10 +3969,10 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
                       wTempMod = puVar10[1];
                       pChildQualMods[1] = wTempMod;
                     } else {
-                      if ((uint16_t)puVar10[1] <= wTempMod) {
-                        pChildQualMods[1] = wTempMod;
-                      } else {
+                      if (!((uint16_t)puVar10[1] <= wTempMod)) {
                         pChildQualMods[1] = puVar10[1];
+                      } else {
+                        pChildQualMods[1] = wTempMod;
                       }
                     }
 

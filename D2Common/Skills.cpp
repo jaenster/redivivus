@@ -441,11 +441,10 @@ BOOL __stdcall SKILLS_GetSkillData(D2SkillStrc * pSkill, int32_t * pOwnerGUID, e
     if (pLevel) {
       *pLevel = pSkill->nLevel;
     }
-    if (!pCharges) {
-      return 1;
+    if (pCharges) {
+      *pCharges = pSkill->nCharges;
     }
 
-    *pCharges = pSkill->nCharges;
     return 1;
 }
 
@@ -753,52 +752,53 @@ static BOOL __stdcall SKILLS_CheckWeaponRequirements(D2UnitStrc * pUnit, D2Skill
 
 // Checks whether a skill's use-restriction condition is satisfied for the caster. Reads the restrict field from the skill record: 0 = requires no active poison state (returns true if not poisoned); 1 = always allowed; 2 = requires a poison state AND at least one of the skill's three state[] entries active on the unit. Returns 1 if the restriction passes, 0 otherwise. Returns 0 immediately if unit or skill pointer is null.
 static int SKILLS_CheckRestriction(int * pSkillTxt, D2UnitStrc * pUnitStrc) {
+    eD2States eActiveState;
     int32_t nHasPoisonState2;
+    int32_t nStateIdx;
+    short int* psReqState;
+    char cRestrictionType;
     if (!pUnitStrc || !pSkillTxt) {
       return 0;
     }
 
     D2SkillsTxt* pSkillRecord = (D2SkillsTxt*)*pSkillTxt;
-    if (!pSkillRecord) {
-      return 0;
-    }
-
-    char cRestrictionType = pSkillRecord->restrict;
-    if (cRestrictionType != '\0') {
+    if (pSkillRecord) {
+      int32_t nHasPoisonState;
+      cRestrictionType = pSkillRecord->restrict;
+      if (cRestrictionType == '\0') {
+        nHasPoisonState2 = DATATBLS::ItemStats::STATES_HasPoisonState(pUnitStrc);
+        return (uint32_t)!nHasPoisonState2;
+      }
       if (cRestrictionType == '\x01' || cRestrictionType != '\x02') {
         return 1;
       }
 
-      int32_t nHasPoisonState = DATATBLS::ItemStats::STATES_HasPoisonState(pUnitStrc);
-      if (!nHasPoisonState) {
-        return 0;
+      nHasPoisonState = DATATBLS::ItemStats::STATES_HasPoisonState(pUnitStrc);
+      if (nHasPoisonState) {
+        nStateIdx = 0;
+        psReqState = pSkillRecord->state;
+        while (true) {
+          if (*psReqState < 0) {
+            return 0;
+          }
+
+          eActiveState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnitStrc, (int)*psReqState);
+          if (eActiveState != STATE_none) {
+            break;
+          }
+
+          nStateIdx++;
+          psReqState++;
+          if (nStateIdx >= 3) {
+            return 0;
+          }
+        }
+
+        return 1;
       }
-
-      int32_t nStateIdx = 0;
-      short int* psReqState = pSkillRecord->state;
-      while (true) {
-        eD2States eActiveState;
-        if (*psReqState < 0) {
-          return 0;
-        }
-
-        eActiveState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnitStrc, (int)*psReqState);
-        if (eActiveState != STATE_none) {
-          break;
-        }
-
-        nStateIdx++;
-        psReqState++;
-        if (nStateIdx >= 3) {
-          return 0;
-        }
-      }
-
-      return 1;
     }
 
-    nHasPoisonState2 = DATATBLS::ItemStats::STATES_HasPoisonState(pUnitStrc);
-    return (uint32_t)!nHasPoisonState2;
+    return 0;
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pint (ESI): int*, pint (EDI): int*
@@ -3271,19 +3271,19 @@ D2SkillStrc * __stdcall AllocSkill(D2UnitStrc * pUnit, eD2Skills eSkill) {
     pNewSkill->nOwnerGUID = -1;
     pNewSkill->pNext = 0;
     D2SkillStrc* pLastSkill = pSkillsList->pFirstSkill;
-    if (!pLastSkill) {
-      pSkillsList->pFirstSkill = pNewSkill;
+    if (pLastSkill) {
+      D2SkillStrc* pNextSkill = pLastSkill->pNext;
+      while (pNextSkill) {
+        pLastSkill = pLastSkill->pNext;
+        pNextSkill = pLastSkill->pNext;
+      }
+
+      pLastSkill->pNext = pNewSkill;
       SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
       return pNewSkill;
     }
 
-    D2SkillStrc* pNextSkill = pLastSkill->pNext;
-    while (pNextSkill) {
-      pLastSkill = pLastSkill->pNext;
-      pNextSkill = pLastSkill->pNext;
-    }
-
-    pLastSkill->pNext = pNewSkill;
+    pSkillsList->pFirstSkill = pNewSkill;
     SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
     return pNewSkill;
 }

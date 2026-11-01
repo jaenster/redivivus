@@ -67,11 +67,10 @@ uint32_t __fastcall deflatePending(z_stream * pStream, uint32_t * pPending, uint
       if (pPending) {
         *pPending = *(uint32_t*)((int)pStream->state + 0x14);
       }
-      if (!pBits) {
-        return 0;
+      if (pBits) {
+        *pBits = *(uint32_t*)((int)pStream->state + 0x16bc);
       }
 
-      *pBits = *(uint32_t*)((int)pStream->state + 0x16bc);
       return 0;
     }
 
@@ -644,11 +643,11 @@ int32_t __fastcall deflate_stored(deflate_state * pDeflateState, int32_t nFlush)
             trees::_tr_flush_block(pDeflateState, (char*)pBlockStart, pDeflateState->strstart - nBlockStartOff, 0);
             pDeflateState->block_start = pDeflateState->strstart;
             flush_pending(pDeflateState->strm);
-            if (pDeflateState->strm->avail_out) {
-              return 1;
+            if (!pDeflateState->strm->avail_out) {
+              return 0;
             }
 
-            return 0;
+            return 1;
           }
 
           nBlockStartOff = pDeflateState->block_start;
@@ -799,11 +798,11 @@ int32_t __fastcall deflate_fast(deflate_state * pDeflateState, int32_t nFlush) {
           trees::_tr_flush_block(pDeflateState, (char*)pBlockStart, nHashHead - nBlockStartOff, 0);
           pDeflateState->block_start = pDeflateState->strstart;
           flush_pending(pDeflateState->strm);
-          if (pDeflateState->strm->avail_out) {
-            return 1;
+          if (!pDeflateState->strm->avail_out) {
+            return 0;
           }
 
-          return 0;
+          return 1;
         }
       }
       if (nHashHead >= 3) {
@@ -958,11 +957,11 @@ int32_t __fastcall deflate_slow(deflate_state * pDeflateState, int32_t nFlush) {
             trees::_tr_flush_block(pDeflateState, (char*)pBlockStart, nLookahead - nBlockStartOff2, 0);
             pDeflateState->block_start = pDeflateState->strstart;
             flush_pending(pDeflateState->strm);
-            if (pDeflateState->strm->avail_out) {
-              return 1;
+            if (!pDeflateState->strm->avail_out) {
+              return 0;
             }
 
-            return 0;
+            return 1;
           }
 
           nBlockStartOff2 = pDeflateState->block_start;
@@ -1175,11 +1174,11 @@ static block_state __stdcall deflate_rle(int32_t nFlush, deflate_state * pDeflat
           trees::_tr_flush_block(pDeflateState, (char*)pBlockStart, pDeflateState->strstart - nBlockStartOff2, 0);
           pDeflateState->block_start = pDeflateState->strstart;
           flush_pending(pDeflateState->strm);
-          if (pDeflateState->strm->avail_out) {
-            return block_done;
+          if (!pDeflateState->strm->avail_out) {
+            return need_more;
           }
 
-          return need_more;
+          return block_done;
         }
       }
 
@@ -1382,11 +1381,11 @@ static block_state __stdcall deflate_huff(int32_t nFlush, deflate_state * pDefla
     trees::_tr_flush_block(pDeflateState, (char*)pBlockStart, pDeflateState->strstart - nBlockStartOff, 0);
     pDeflateState->block_start = pDeflateState->strstart;
     flush_pending(pDeflateState->strm);
-    if (pDeflateState->strm->avail_out) {
-      return block_done;
+    if (!pDeflateState->strm->avail_out) {
+      return need_more;
     }
 
-    return need_more;
+    return block_done;
 }
 
 int __fastcall deflateSetDictionary(z_stream * pStream, uint8_t * pDictionary, uint32_t nDictLength) {

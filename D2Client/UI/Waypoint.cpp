@@ -57,11 +57,11 @@ static int32_t WAYPOINT_GetActIndexFromMouse(int32_t nMouseX, int32_t nMouseY) {
       if (nMouseX < 0x50) {
         return 0;
       }
-      if (nMouseX >= 0xa0) {
-        return (nMouseX >= 0xf0) + 2;
+      if (nMouseX < 0xa0) {
+        return 1;
       }
 
-      return 1;
+      return (nMouseX >= 0xf0) + 2;
     }
     if (nMouseY > 0x1e) {
       return -1;
@@ -372,12 +372,12 @@ void __stdcall WAYPOINT_PopulateList() {
         bFound = D2Common::Waypoints::FindLevelIdByWaypointId(nWaypointId, &nWaypointIdOut);
         if (bFound) {
           gaWaypointListEntries[MaximumAmountOfWaypointInSelectedAct].eLevelId = nWaypointIdOut;
-          if (eCurrentLevel == nWaypointIdOut) {
-            gaWaypointListEntries[MaximumAmountOfWaypointInSelectedAct].bActivated = '\0';
-            MaximumAmountOfWaypointInSelectedAct++;
-          } else {
+          if (eCurrentLevel != nWaypointIdOut) {
             NoOtherWaypointAvailableBool++;
             gaWaypointListEntries[MaximumAmountOfWaypointInSelectedAct].bActivated = '\x01';
+            MaximumAmountOfWaypointInSelectedAct++;
+          } else {
+            gaWaypointListEntries[MaximumAmountOfWaypointInSelectedAct].bActivated = '\0';
             MaximumAmountOfWaypointInSelectedAct++;
           }
         }

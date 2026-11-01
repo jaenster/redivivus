@@ -1114,12 +1114,12 @@ static int32_t DAMAGE_AbsorbDamageByPercent(D2DamageContext * pCtx, D2ResistTabl
 
     int32_t nAbsorbPct;
     nAbsorbPct = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCtx->pDefender, pEntry->eAbsorbPctStat, 0);
-    if (nAbsorbPct < 0x28) {
+    if (nAbsorbPct >= 0x28) {
+      nAbsorbPct = 0x28;
+    } else {
       if (nAbsorbPct <= 0) {
         goto apply_flat_absorb;
       }
-    } else {
-      nAbsorbPct = 0x28;
     }
 
     nAbsorbPct = D2Client::Stats::D2ApplyPercent(nDamage, nAbsorbPct, 100);
@@ -1237,18 +1237,16 @@ static int32_t DAMAGE_CalculateExperienceMultiplier(D2DamageContext * pCtx) {
     }
 
     uMercType = D2Common::Monsters::MONSTERS::MONSTERS_CheckMonStatFlag0xc_Bit7(pCtx->pAttacker);
-    if (!uMercType) {
-      return 100;
+    if (uMercType) {
+      pAttackerSave = pCtx->pDefender;
+      uMercType = D2Client::UNIT::CheckFlags(pAttackerSave, UNITFLAG_ISREVIVE);
+      if (uMercType) {
+        uMercType = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pAttackerSave);
+        return (uMercType ? -200 : 0) + 400;
+      }
     }
 
-    pAttackerSave = pCtx->pDefender;
-    uMercType = D2Client::UNIT::CheckFlags(pAttackerSave, UNITFLAG_ISREVIVE);
-    if (!uMercType) {
-      return 100;
-    }
-
-    uMercType = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pAttackerSave);
-    return (uMercType ? -200 : 0) + 400;
+    return 100;
 }
 
 // Zeroes out cold/freeze lengths if defender has UNITSTAT_item_cannotbefrozen, or halves them if they have UNITSTAT_item_halffreezeduration. Also clears poison DoT duration if defender has STATE_shrine_resist_poison, and burn duration if they have STATE_shrine_resist_fire. Modifies pCtx->pDamage in place.

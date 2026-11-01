@@ -2825,10 +2825,10 @@ int __fastcall BNSEND_DecodeCDKeyString(uint32_t * pOutProduct, uint32_t * pOutP
     uint32_t iChar = 0;
     do {
       nLoopIdx = tolower((int)(char)__frame1.abWorkBuf[iChar]);
-      if ((char)nLoopIdx < 'a') {
-        nCharBase = -0x30;
-      } else {
+      if (!((char)nLoopIdx < 'a')) {
         nCharBase = -0x57;
+      } else {
+        nCharBase = -0x30;
       }
 
       iChar++;

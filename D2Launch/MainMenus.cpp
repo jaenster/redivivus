@@ -854,11 +854,11 @@ int __stdcall MAINMENU_ValidateCharNameChar(::D2WinEditBox * pEditBox, int nText
         return 0;
     }
 
-    if (cVar1 > ' ') {
-      return (uint32_t)(cVar1 < '\x7f');
+    if (cVar1 <= ' ') {
+      return 0;
     }
 
-    return 0;
+    return (uint32_t)(cVar1 < '\x7f');
 }
 
 // Edit-box key filter installed via D2WINEDITBOX_SetMaxLength @004fdad0 into D2WinEditBox+0x268 (fpFilterCallback, fpD2WinEditBoxFilter). Body is MOV EAX,1 / RET 0xc - accepts every character. Signature proven by RET 0xc (3 stack args, callee cleans) and by the funcdef of the slot it is stored into.
@@ -891,11 +891,11 @@ int __stdcall MAINMENU_ValidateGameNameChar(::D2WinEditBox * pEditBox, int nText
         return 0;
     }
 
-    if (cVar1 > ' ') {
-      return (uint32_t)(cVar1 < '\x7f');
+    if (cVar1 <= ' ') {
+      return 0;
     }
 
-    return 0;
+    return (uint32_t)(cVar1 < '\x7f');
 }
 
 // Tail-JMP thunk to MAINMENU_ValidateCharNameChar @0042fde0; propagates that function's EAX result. Installed as the edit-box key filter (D2WinEditBox+0x268) for the char-select account and password fields. Return type was void, which discarded the accept/reject result.
@@ -1267,12 +1267,11 @@ int __fastcall MAINMENU_SetClassDescriptionTooltip(int32_t bSetTooltip, int32_t 
       gnClassDescriptionTooltipClassId = nClassId;
       return 1;
     }
-    if (gnClassDescriptionTooltipClassId != nClassId) {
-      return 1;
+    if (gnClassDescriptionTooltipClassId == nClassId) {
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCtlClassDescriptionTooltipPrimary);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCtlClassDescriptionTooltipSecondary);
     }
 
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCtlClassDescriptionTooltipPrimary);
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCtlClassDescriptionTooltipSecondary);
     return 1;
 }
 
@@ -2143,12 +2142,11 @@ int __stdcall MAINMENU_CreateGameServerThreadPump(int nFrameIndex) {
       D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
       return 1;
     }
-    if (iVar1 != 2) {
-      return 1;
+    if (iVar1 == 2) {
+      gnTcpIpConnectionSuccessFlag = 1;
+      D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     }
 
-    gnTcpIpConnectionSuccessFlag = 1;
-    D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;
 }
 
@@ -3624,16 +3622,15 @@ BOOL __stdcall UIMENU_ConnectToServerCallback(D2ControlStrc * pUnusedArg) {
     D2Win::Src::D2WinMain::MessagePump(MAINMENU_HandleNetworkPacket);
     D2Net::SRC::Client::NET_CLIENT_ShutdownConnection();
     FORMS_DestroyList();
-    if (gnMainMenuConnectFlag) {
-      return 1;
+    if (!gnMainMenuConnectFlag) {
+      OogCurrentCharSelectionMode = CHAR_SELECTION_TCP_IP;
+      D2IniData_launcher->nGAMETYPE = GAMETYPE_LAN_JOIN;
+      D2IniData_launcher->nJOINID = 1;
+      D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects();
+      FORMS_DestroyLists();
+      CharSel::UIMENU_CharacterSelectAllGameTypes();
     }
 
-    OogCurrentCharSelectionMode = CHAR_SELECTION_TCP_IP;
-    D2IniData_launcher->nGAMETYPE = GAMETYPE_LAN_JOIN;
-    D2IniData_launcher->nJOINID = 1;
-    D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects();
-    FORMS_DestroyLists();
-    CharSel::UIMENU_CharacterSelectAllGameTypes();
     return 1;
 }
 
@@ -4560,25 +4557,24 @@ BOOL __stdcall MAINMENU_Unused13(D2ControlStrc * nParam) {
 
     MAINMENU_SaveAccountAndPasswordToINI(&gpBnetAccountEditBox->sControl, &gpBnetPasswordEditBox->sControl);
     int nAuthResult = Launcher::EnterEmailMessagePumper(D2IniData_launcher, 0, 0);
-    if (!nAuthResult) {
-      return 1;
+    if (nAuthResult) {
+      Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Last BNet", 0, D2IniData_launcher->szLastBnetAccount);
+      if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
+        D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects();
+        FORMS_DestroyLists();
+        CharSel::UIMENU_CharacterSelectAllGameTypes();
+        return 1;
+      }
+
+      bVisibleOrSave = SAVEFILE_FindAllSaveFiles();
+      if (bVisibleOrSave) {
+        MAINMENU_CloseAndLaunchCharSelect();
+        return 1;
+      }
+
+      UIMENU_CreateHeroSinglePlayer();
     }
 
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Last BNet", 0, D2IniData_launcher->szLastBnetAccount);
-    if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
-      D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects();
-      FORMS_DestroyLists();
-      CharSel::UIMENU_CharacterSelectAllGameTypes();
-      return 1;
-    }
-
-    bVisibleOrSave = SAVEFILE_FindAllSaveFiles();
-    if (bVisibleOrSave) {
-      MAINMENU_CloseAndLaunchCharSelect();
-      return 1;
-    }
-
-    UIMENU_CreateHeroSinglePlayer();
     return 1;
 }
 
@@ -4669,11 +4665,10 @@ BOOL __stdcall MAINMENU_OnPressCommitNewCharacterAndStartGame(D2ControlMsg * pCo
       D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
       return 1;
     }
-    if (OogCurrentCharSelectionMode != CHAR_SELECTION_BNET) {
-      return 1;
+    if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
+      NET_MCP_CLIENT_HandleCharCreation();
     }
 
-    NET_MCP_CLIENT_HandleCharCreation();
     return 1;
 }
 

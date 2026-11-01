@@ -463,22 +463,22 @@ D2UnitStrc * __fastcall MakeMissile(eMissilesId neMissilesId, D2UnitStrc * pUnit
 
 static int32_t SKILL_CanTargetDeadMonster(D2UnitStrc * pUnit, eD2Skills eSkills) {
     D2UnitStrc* pTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
-    if (!pTarget) {
-      return 1;
-    }
-    if ((int)eSkills < 0) {
-      return 0;
-    }
-    if ((int)eSkills >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
+    if (pTarget) {
+      D2SkillsTxt* pSkillTxt;
+      if ((int)eSkills < 0) {
+        return 0;
+      }
+      if ((int)eSkills >= sgptDataTable->nTxtSkillsCount) {
+        return 0;
+      }
 
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkills;
-    if (!pSkillTxt) {
-      return 0;
-    }
-    if (*((uint8_t*)pSkillTxt + 0x6) & (uint8_t)gadwBitMasks[5] && pTarget->eUnitType == UNIT_MONSTER && pTarget->eAnimMode.ePlayerMode == Kick) {
-      return (uint32_t)((*((uint8_t*)pSkillTxt + 0x7) & (uint8_t)gadwBitMasks[0]) != 0);
+      pSkillTxt = sgptDataTable->pTxtSkills + eSkills;
+      if (!pSkillTxt) {
+        return 0;
+      }
+      if (*((uint8_t*)pSkillTxt + 0x6) & (uint8_t)gadwBitMasks[5] && pTarget->eUnitType == UNIT_MONSTER && pTarget->eAnimMode.ePlayerMode == Kick) {
+        return (uint32_t)((*((uint8_t*)pSkillTxt + 0x7) & (uint8_t)gadwBitMasks[0]) != 0);
+      }
     }
 
     return 1;

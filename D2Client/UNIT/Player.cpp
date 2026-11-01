@@ -667,11 +667,10 @@ uint32_t __stdcall PLAYER_ValidateSkillMessage(int * pnUsabilityCode, D2UnitStrc
     eD2Skills eOrigSkillId = pServerMessageHandle->nSkillId;
     eD2Skills eResolvedSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\Player.cpp", 0x32c);
     pServerMessageHandle->nSkillId = eResolvedSkillId;
-    if (eResolvedSkillId == eOrigSkillId) {
-      return 1;
+    if (eResolvedSkillId != eOrigSkillId) {
+      pServerMessageHandle->nItemId = -1;
     }
 
-    pServerMessageHandle->nItemId = -1;
     return 1;
 }
 
@@ -2886,10 +2885,10 @@ uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
           insert_sorted:
           UnitSnd::MuteOrUnmuteUnitSounds(pUnit, 1);
           nHashBucket = pUnit->nUnitGUID & 0x7f;
-          if (!(pUnit->eUnitFlags >> 0x15 & 1)) {
-            papDVar1 = ServerSideUnitHashTables;
-          } else {
+          if (pUnit->eUnitFlags >> 0x15 & 1) {
             papDVar1 = ClientSideUnitHashTables;
+          } else {
+            papDVar1 = ServerSideUnitHashTables;
           }
 
           pNextUnit = papDVar1[pUnit->eUnitType][nHashBucket];
@@ -2905,12 +2904,12 @@ uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
           }
 
           pUnit->pListNext = pCurUnit;
-          if (!pPrevUnit) {
-            papDVar1[pUnit->eUnitType][nHashBucket] = pUnit;
+          if (pPrevUnit) {
+            pPrevUnit->pListNext = pUnit;
             return 1;
           }
 
-          pPrevUnit->pListNext = pUnit;
+          papDVar1[pUnit->eUnitType][nHashBucket] = pUnit;
           return 1;
         }
 

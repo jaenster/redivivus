@@ -2613,30 +2613,28 @@ int32_t __fastcall PATH_FindPathAStarLocalPool(D2PathTypeArg * pPathTypeArg) {
     DRLGPATH_InsertNodeSorted((uintptr_t)&abyOpenList, pNewNode);
     void** pClosestNode = 0;
     void** pBestNodeOut = (void**)DRLGPATH_PopBestNodeFromOpenList((uintptr_t)&abyOpenList);
-    if (!pBestNodeOut) {
-      return 0;
-    }
-
-    do {
+    if (pBestNodeOut) {
       BOOL bExpandedAny;
-      if (!pClosestNode || (short int)*(uint16_t*)((int)pBestNodeOut + 6) < (short int)*(uint16_t*)((int)pClosestNode + 6) || *(uint16_t*)((int)pBestNodeOut + 6) == *(uint16_t*)((int)pClosestNode + 6) && (int)(short int)*(uint16_t*)(pBestNodeOut + 2) > *(short int*)(pClosestNode + 2) + 5) {
-        pClosestNode = pBestNodeOut;
-      }
-      if (!*(uint16_t*)((int)pBestNodeOut + 6)) {
-        break;
-      }
+      do {
+        if (!pClosestNode || (short int)*(uint16_t*)((int)pBestNodeOut + 6) < (short int)*(uint16_t*)((int)pClosestNode + 6) || *(uint16_t*)((int)pBestNodeOut + 6) == *(uint16_t*)((int)pClosestNode + 6) && (int)(short int)*(uint16_t*)(pBestNodeOut + 2) > *(short int*)(pClosestNode + 2) + 5) {
+          pClosestNode = pBestNodeOut;
+        }
+        if (!*(uint16_t*)((int)pBestNodeOut + 6)) {
+          break;
+        }
 
-      bExpandedAny = DRLGPATH_ExpandAllNeighbors((uint16_t*)pBestNodeOut, (uintptr_t)&abyOpenList, nUnusedParam, pPathTypeArg);
-      if (!bExpandedAny) {
-        break;
+        bExpandedAny = DRLGPATH_ExpandAllNeighbors((uint16_t*)pBestNodeOut, (uintptr_t)&abyOpenList, nUnusedParam, pPathTypeArg);
+        if (!bExpandedAny) {
+          break;
+        }
+
+        pBestNodeOut = (void**)DRLGPATH_PopBestNodeFromOpenList((uintptr_t)&abyOpenList);
+      } while (pBestNodeOut);
+
+      if (pClosestNode) {
+        nExtractResult = DRLGPATH_ExtractPathFromResult2((int32_t)pPathTypeArg, pClosestNode);
+        return nExtractResult;
       }
-
-      pBestNodeOut = (void**)DRLGPATH_PopBestNodeFromOpenList((uintptr_t)&abyOpenList);
-    } while (pBestNodeOut);
-
-    if (pClosestNode) {
-      nExtractResult = DRLGPATH_ExtractPathFromResult2((int32_t)pPathTypeArg, pClosestNode);
-      return nExtractResult;
     }
 
     return 0;

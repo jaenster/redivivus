@@ -2030,12 +2030,8 @@ int32_t __fastcall ITEMMODE_CheckItemRequirements(D2UnitStrc * pUnit, D2UnitStrc
         if (pEquippedItem == pUnit2) {
           pEquippedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
         }
-        if (!pEquippedItem) {
-          return 0;
-        }
 
-        eItemType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit2);
-        bIsOfType = D2Common::ITEMS::Items::ITEMS_IsA(pEquippedItem, eItemType);
+        bIsOfType = pEquippedItem ? (eItemType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit2), D2Common::ITEMS::Items::ITEMS_IsA(pEquippedItem, eItemType)) : 0;
         if (!bIsOfType) {
           return 0;
         }
@@ -2869,10 +2865,10 @@ BOOL __fastcall SERVER_BeltSwapItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
 
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x12d4);
           exit(-1);
+        } else {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x12d8);
+          exit(-1);
         }
-
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x12d8);
-        exit(-1);
       }
     }
 }

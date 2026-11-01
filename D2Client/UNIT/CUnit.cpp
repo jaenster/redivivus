@@ -677,18 +677,17 @@ void __fastcall SetDeadFlag(D2UnitStrc * pUnit) {
 }
 
 int __fastcall IsActive(D2UnitStrc * pUnit) {
-    if (pUnit->eUnitFlags & UNITFLAG_ISDEAD) {
-      return 1;
-    }
-
-    eD2PlayerAnimMode nAnimMode = pUnit->eAnimMode.ePlayerMode;
-    if (pUnit->eUnitType != UNIT_PLAYER) {
-      if (pUnit->eUnitType != UNIT_MONSTER || nAnimMode != Death && nAnimMode != Kick) {
-        return 0;
-      }
-    } else {
-      if (nAnimMode != Death && nAnimMode != eD2PlayerAnimMode_ns::Dead) {
-        return 0;
+    if (!(pUnit->eUnitFlags & UNITFLAG_ISDEAD)) {
+      eD2PlayerAnimMode nAnimMode;
+      nAnimMode = pUnit->eAnimMode.ePlayerMode;
+      if (pUnit->eUnitType != UNIT_PLAYER) {
+        if (pUnit->eUnitType != UNIT_MONSTER || nAnimMode != Death && nAnimMode != Kick) {
+          return 0;
+        }
+      } else {
+        if (nAnimMode != Death && nAnimMode != eD2PlayerAnimMode_ns::Dead) {
+          return 0;
+        }
       }
     }
 
@@ -959,23 +958,21 @@ void __fastcall SetLightRadius(D2UnitStrc * pUnit, int32_t nLightRadiusX) {
 }
 
 static uint32_t __stdcall CUNIT_IsItemInUnitInventory(D2UnitStrc * pExcludeUnit, D2UnitStrc * pUnit, D2UnitStrc * pContainerUnit) {
-    D2UnitStrc* pInvSlotItem;
+    D2UnitStrc* pCarriedItem;
     if (pExcludeUnit == pContainerUnit) {
       return 0;
     }
-    if (!pContainerUnit->pInventory) {
-      return 0;
-    }
-
-    for (pInvSlotItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pContainerUnit->pInventory); pInvSlotItem; pInvSlotItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvSlotItem)) {
-      D2UnitStrc* pCarriedItem;
-      pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pInvSlotItem);
-      if (!pCarriedItem) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa5b);
-        exit(-1);
-      }
-      if (pCarriedItem == pUnit) {
-        return 1;
+    if (pContainerUnit->pInventory) {
+      D2UnitStrc* pInvSlotItem;
+      for (pInvSlotItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pContainerUnit->pInventory); pInvSlotItem; pInvSlotItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvSlotItem)) {
+        pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pInvSlotItem);
+        if (!pCarriedItem) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa5b);
+          exit(-1);
+        }
+        if (pCarriedItem == pUnit) {
+          return 1;
+        }
       }
     }
 

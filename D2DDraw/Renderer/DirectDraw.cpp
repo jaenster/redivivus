@@ -1816,27 +1816,27 @@ void __fastcall DrawRect(RECT * pRect, BYTE nColor) {
       uint32_t nWidth;
       nMidX.y = pRect->bottom;
       nMidXSave.y = pRect->top;
-      if (nMidXSave.y <= nMidX.y) {
-        nWidth = pRect->right - nLeft.x;
-        if (!(nWidth && nMidX.y - nMidXSave.y)) {
-          return;
-        }
+      if (!(nMidXSave.y <= nMidX.y)) {
+        nLeft.y = nMidX.y;
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x12e);
+        exit(-1);
+      }
 
-        nRight.x = pRect->right;
-        nRight.y = pRect->top + ((uint32_t)(nMidX.y - nMidXSave.y) >> 1);
-        nMidXSave.x = (nWidth >> 1) + nLeft.x;
-        nMidX.x = nMidXSave.x;
-        nLeft.y = nRight.y;
-        RENDERER_DDRAW_DrawLine(&nRight, &nMidXSave, nColor);
-        RENDERER_DDRAW_DrawLine(&nMidX, &nRight, nColor);
-        RENDERER_DDRAW_DrawLine(&nLeft, &nMidX, nColor);
-        RENDERER_DDRAW_DrawLine(&nMidXSave, &nLeft, nColor);
+      nWidth = pRect->right - nLeft.x;
+      if (!(nWidth && nMidX.y - nMidXSave.y)) {
         return;
       }
 
-      nLeft.y = nMidX.y;
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x12e);
-      exit(-1);
+      nRight.x = pRect->right;
+      nRight.y = pRect->top + ((uint32_t)(nMidX.y - nMidXSave.y) >> 1);
+      nMidXSave.x = (nWidth >> 1) + nLeft.x;
+      nMidX.x = nMidXSave.x;
+      nLeft.y = nRight.y;
+      RENDERER_DDRAW_DrawLine(&nRight, &nMidXSave, nColor);
+      RENDERER_DDRAW_DrawLine(&nMidX, &nRight, nColor);
+      RENDERER_DDRAW_DrawLine(&nLeft, &nMidX, nColor);
+      RENDERER_DDRAW_DrawLine(&nMidXSave, &nLeft, nColor);
+      return;
     }
 }
 

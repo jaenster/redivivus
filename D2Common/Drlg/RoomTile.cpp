@@ -722,12 +722,14 @@ static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_AddTileData(D2RoomExStrc * pR
     uint32_t nIsFloorLink;
     nIsFloorLink = (uint32_t)!nTileType;
     for (pTileLink = pRoomEx->pRoomTiles->pMapLinks; pTileLink; pTileLink = pTileLink->pNext) {
-      if (!*(int*)pTileLink) {
+      if (*(int*)pTileLink) {
+        if (nIsFloorLink) {
+          goto create_tile_in_link;
+        }
+      } else {
         if (!nIsFloorLink) {
           goto create_tile_in_link;
         }
-      } else if (nIsFloorLink) {
-        goto create_tile_in_link;
       }
     }
 

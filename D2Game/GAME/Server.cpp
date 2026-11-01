@@ -2533,13 +2533,13 @@ int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32
         pClassIds++;
       } while (nSearchIdx < nCount);
     }
-    if (pGame->lpCriticalSection) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
-      return _nServerId;
-    } else {
+    if (!pGame->lpCriticalSection) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
       exit(-1);
     }
+
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
+    return _nServerId;
 }
 
 // Aggregates unit statistics across all active games in the global token table. For each game, iterates all 128 unit buckets and counts: players (bucket-type 0, increments pBucketCountdown[3]) and objects/monsters at bucket offset 0x19 (increments pBucketCountdown[1]). Also increments pBucketCountdown[0] per game found. Used for server-capacity and monitoring queries.

@@ -1573,12 +1573,12 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
     nEleConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillData->calc[2], eSkill, nSkillLvl);
     uint32_t nEleConvPctClamped;
     nEleConvPctClamped = (int)nEleConvPct <= 0 ? 0 : nEleConvPct;
-    if ((int)nEleConvPctClamped < 100) {
+    if ((int)nEleConvPctClamped >= 100) {
+      nEleConvPctClamped = 100;
+    } else {
       if ((int)nEleConvPctClamped <= 0) {
         goto apply_explosion_damage;
       }
-    } else {
-      nEleConvPctClamped = 100;
     }
     if (pSkillData->EType != ELEMENTAL_NONE) {
       int32_t nCalcResult;

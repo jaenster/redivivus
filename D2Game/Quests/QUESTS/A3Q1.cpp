@@ -200,11 +200,11 @@ bool __fastcall Q18_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
     }
 
     D2UnitStrc* pTomeItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20626262);
-    if (!pTomeItem) {
-      return false;
+    if (pTomeItem) {
+      return true;
     }
 
-    return true;
+    return false;
 }
 
 // Q18_InitObjectMode — Lam Esen's Tome. Sets the render/update mode of the associated object: default mode 2 when a flag byte is clear, otherwise a mode read from the quest data table. No quest-state record access.

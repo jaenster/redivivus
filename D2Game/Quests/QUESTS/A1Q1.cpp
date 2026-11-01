@@ -528,11 +528,11 @@ bool __fastcall Q01_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
       }
 
       /* If reward is available: active */ bIsQuestInState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
-      if (bIsQuestInState != 1) {
-        /* Otherwise: inactive */ return false;
+      if (bIsQuestInState == 1) {
+        return true;
       }
 
-      return true;
+      /* Otherwise: inactive */ return false;
     }
 
     return false;

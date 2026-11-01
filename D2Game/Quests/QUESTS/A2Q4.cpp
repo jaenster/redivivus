@@ -604,14 +604,13 @@ void __stdcall A2Q4_OnMonsterDeathClass331_NoOp(uint32_t dwArg1, uint32_t dwArg2
 // A2Q4 - CheckJerhynGateOpen. One-shot edge detector: returns 1 the first time Jerhyn's initial-talk flag is set and the gate has not yet been opened (then latches bJerhynGateOpened). Used to open the Lut Gholein palace harem gate once Jerhyn has been spoken to.
 BOOL __fastcall Q12_CheckJerhynGateOpen(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheArcaneSanctuary);
-    if (!pDVar2) {
-      return 0;
-    }
-
-    D2QuestDataA2Q4Strc* pDVar1 = pDVar2->pQuestSpecificData.pA2Q4;
-    if (pDVar1->bJerhynInitial == '\x01' && !pDVar1->bJerhynGateOpened) {
-      pDVar1->bJerhynGateOpened = true;
-      return 1;
+    if (pDVar2) {
+      D2QuestDataA2Q4Strc* pDVar1;
+      pDVar1 = pDVar2->pQuestSpecificData.pA2Q4;
+      if (pDVar1->bJerhynInitial == '\x01' && !pDVar1->bJerhynGateOpened) {
+        pDVar1->bJerhynGateOpened = true;
+        return 1;
+      }
     }
 
     return 0;
@@ -723,21 +722,20 @@ BOOL __fastcall Q12_IsSanctuaryComplete(::SGAMEDATA * pGame) {
 // A2Q4 - GetSummonerCoords. Outputs the Summoner location into pnParam[0/1]. If bSummonerKilled, returns exact (X,Y); if bSummonerCoordsFallback, returns (X, Y-4). Returns 1 if coords written, else 0. Used to place the Canyon-of-the-Magi portal near where the Summoner was.
 BOOL __fastcall Q12_GetSummonerCoords(::SGAMEDATA * pGame, D2CoordStrc * pCoord) {
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheArcaneSanctuary);
-    if (!pDVar2) {
-      return 0;
-    }
-
-    D2QuestDataA2Q4Strc* pDVar1 = pDVar2->pQuestSpecificData.pA2Q4;
-    if (pDVar1->bSummonerKilled) {
-      pCoord->nX = pDVar1->nSummonerX;
-      pCoord->nY = pDVar1->nSummonerY;
-      return 1;
-    }
-    if (pDVar1->bSummonerCoordsFallback) {
-      pCoord->nX = pDVar1->nSummonerX;
-      pCoord->nY = pDVar1->nSummonerY;
-      pCoord->nY += -4;
-      return 1;
+    if (pDVar2) {
+      D2QuestDataA2Q4Strc* pDVar1;
+      pDVar1 = pDVar2->pQuestSpecificData.pA2Q4;
+      if (pDVar1->bSummonerKilled) {
+        pCoord->nX = pDVar1->nSummonerX;
+        pCoord->nY = pDVar1->nSummonerY;
+        return 1;
+      }
+      if (pDVar1->bSummonerCoordsFallback) {
+        pCoord->nX = pDVar1->nSummonerX;
+        pCoord->nY = pDVar1->nSummonerY;
+        pCoord->nY += -4;
+        return 1;
+      }
     }
 
     return 0;

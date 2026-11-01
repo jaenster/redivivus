@@ -2764,10 +2764,10 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
       nErrLine = D2Client::Units::GetXPosFromDynamicPathUnit(pItem);
       if ((uint32_t)nErrLine <= 0 || (uVal = D2Client::Units::GetXPosFromDynamicPathUnit(pItem) , uVal < 0xf)) {
         nErrLine = D2Client::Units::GetXPosFromDynamicPathUnit(pItem);
-        if ((uint32_t)nErrLine <= 0) {
-          uVal = 0;
-        } else {
+        if ((uint32_t)nErrLine > 0) {
           uVal = D2Client::Units::GetXPosFromDynamicPathUnit(pItem);
+        } else {
+          uVal = 0;
         }
       } else {
         uVal = 0xf;
@@ -2782,10 +2782,10 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
       nErrLine = D2Client::Units::GetYPosFromDynamicPathUnit(pItem);
       if ((uint32_t)nErrLine <= 0 || (uVal = D2Client::Units::GetYPosFromDynamicPathUnit(pItem) , uVal < 0xf)) {
         nErrLine = D2Client::Units::GetYPosFromDynamicPathUnit(pItem);
-        if ((uint32_t)nErrLine <= 0) {
-          uVal = 0;
-        } else {
+        if ((uint32_t)nErrLine > 0) {
           uVal = D2Client::Units::GetYPosFromDynamicPathUnit(pItem);
+        } else {
+          uVal = 0;
         }
       } else {
         uVal = 0xf;
@@ -2857,17 +2857,7 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
     } else {
       eUnitType = pItem->pUnitData.pUnitDataMissile->eOwnerType;
     }
-    if ((eUnitType & 0x10000) == UNIT_PLAYER) {
-      nClassId = ITEM_GetItemsTxt_szCode(pItem);
-      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nClassId, 0x20);
-      nClassId = ITEMS_IsA(pItem, ITEMTYPE_Gold);
-      if (nClassId) {
-        nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_gold, 0);
-        Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, (uint32_t)((int)nClassId >= 0x1000), 1);
-        ITEMS_WriteClampedValueToBitBuffer((int)nClassId < 0x1000 ? 0xc : 0x20, nClassId, pBitBuffer);
-        txtLine = pItemsTxtLine;
-      }
-    } else {
+    if ((eUnitType & 0x10000) != UNIT_PLAYER) {
       if (!pItem || pItem->eUnitType != UNIT_ITEM || !pItem->pUnitData.pUnitDataItem) {
         pcName = 0;
       } else {
@@ -2904,6 +2894,16 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
         pcName++;
         txtLine = pItemsTxtLine;
       } while (cNameChar != '\0');
+    } else {
+      nClassId = ITEM_GetItemsTxt_szCode(pItem);
+      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nClassId, 0x20);
+      nClassId = ITEMS_IsA(pItem, ITEMTYPE_Gold);
+      if (nClassId) {
+        nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_gold, 0);
+        Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, (uint32_t)((int)nClassId >= 0x1000), 1);
+        ITEMS_WriteClampedValueToBitBuffer((int)nClassId < 0x1000 ? 0xc : 0x20, nClassId, pBitBuffer);
+        txtLine = pItemsTxtLine;
+      }
     }
     if (txtLine->bQuest != '\0' && txtLine->bQuestDiffCheck != '\0') {
       if (sgptDataTable->nTxtItemStatCostSize <= 0x164 || (pStatCostTxt = sgptDataTable->pTxtItemStatCost , pStatCostTxt == (D2ItemStatCostTxt*)-115344)) {

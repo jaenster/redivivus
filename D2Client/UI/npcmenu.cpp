@@ -463,11 +463,10 @@ static int NPCMENU_CalculateDialogPosition(POINT * pPoint) {
       /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rcViewport, nViewCenterY, nViewCenterX, nViewWidth - nViewOriginX + nViewCenterY, nViewHeight - nViewOriginY + nViewCenterX);
       pPoint->x -= rcViewport.left;
       pPoint->y += -0x96 - rcViewport.top;
-      if (pPoint->y >= 0x14) {
-        return 1;
+      if (pPoint->y < 0x14) {
+        pPoint->y = 0x14;
       }
 
-      pPoint->y = 0x14;
       return 1;
     }
 

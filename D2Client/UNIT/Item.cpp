@@ -283,12 +283,8 @@ int32_t __fastcall ITEM_CheckItemEquipRequirements(D2UnitStrc * pUnit, D2UnitStr
         if (pWeaponSlot == pUnit2) {
           pWeaponSlot = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
         }
-        if (!pWeaponSlot) {
-          return 0;
-        }
 
-        eQuiverType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit2);
-        bQuiverTypeMatches = D2Common::ITEMS::Items::ITEMS_IsA(pWeaponSlot, eQuiverType);
+        bQuiverTypeMatches = pWeaponSlot ? (eQuiverType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit2), D2Common::ITEMS::Items::ITEMS_IsA(pWeaponSlot, eQuiverType)) : 0;
         if (!bQuiverTypeMatches) {
           return 0;
         }
@@ -2034,21 +2030,21 @@ void __fastcall HandleItemIndirectSwapBodyItem(uint8_t * pBytes) {
       ITEM_RemoveUninterruptableState(pSwappedOutItem);
       pBytesPacket = pBytesSaved;
       pNewItem = Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytesSaved + 4), UNIT_ITEM);
-      if (!pNewItem) {
-        pNewItem = ITEM_CreateItemFromBodyPacket(0, 0, 0, pBytesPacket, &stItemDetails);
-      } else {
+      if (pNewItem) {
         uVar1 = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(stItemDetails.flags, ITEMFLAG_RELOAD);
-        if (!uVar1) {
-          ITEM_DropItemToGroundWithMode((uint32_t)stItemDetails.nAnimMode, 0, stItemDetails.nInvPage, 0, pNewItem, 0);
-          pCharmItem = pOwnerUnit;
-        } else {
+        if (uVar1) {
           CUnit::RemoveObjectFromServerObjectTable(*(uint32_t*)(pBytesPacket + 4), UNIT_ITEM);
           pNewItem = ITEM_CreateItemFromBodyPacket(0, 0, 0, pBytesPacket, &stItemDetails);
           if (!pNewItem) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x618);
             exit(-1);
           }
+        } else {
+          ITEM_DropItemToGroundWithMode((uint32_t)stItemDetails.nAnimMode, 0, stItemDetails.nInvPage, 0, pNewItem, 0);
+          pCharmItem = pOwnerUnit;
         }
+      } else {
+        pNewItem = ITEM_CreateItemFromBodyPacket(0, 0, 0, pBytesPacket, &stItemDetails);
       }
 
       D2Common::ITEMS::Items::SetBodyLoc(pNewItem, stItemDetails.nBodyLoc);

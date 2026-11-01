@@ -146,11 +146,13 @@ void __fastcall D3D_PlayBinkVideo(char * szVideoPath, int nAudioMode, fnBinkFram
             if (sMsg.message == 0x201) {
               goto request_skip;
             }
-            if (sMsg.message == 0x12) {
+            if (sMsg.message != 0x12) {
+              if (sMsg.message == 0x102) {
+                goto request_skip;
+              }
+            } else {
               gbBinkVideoShouldStop = 1;
               gbBinkVideoExitProcess = 1;
-            } else if (sMsg.message == 0x102) {
-              goto request_skip;
             }
           } else {
             if (!(sMsg.message != 0x204 && sMsg.message != 0x207)) {

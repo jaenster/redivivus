@@ -1031,28 +1031,28 @@ void __fastcall DrawRect(uint8_t * pRect, int nPaletteIndex) {
       uint32_t uHeight;
       nRight.y = *(LONG*)(pRect + 0xc);
       nMidX.y = *(LONG*)(pRect + 4);
-      if (nMidX.y <= nRight.y) {
-        uHeight = *(int*)(pRect + 8) - nTop.x;
-        if (!(uHeight && nRight.y - nMidX.y)) {
-          return;
-        }
+      if (!(nMidX.y <= nRight.y)) {
+        nTop.y = nRight.y;
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x127);
+        exit(-1);
+      }
 
-        nTopX.x = *(LONG*)(pRect + 8);
-        nTopX.y = *(int*)(pRect + 4) + ((uint32_t)(nRight.y - nMidX.y) >> 1);
-        nMidX.x = (uHeight >> 1) + nTop.x;
-        byColorParam = (uint8_t)nPaletteIndex;
-        nRight.x = nMidX.x;
-        nTop.y = nTopX.y;
-        RENDERER_WINDOWED_DrawLineBresenham(&nTopX, &nMidX, byColorParam);
-        RENDERER_WINDOWED_DrawLineBresenham(&nRight, &nTopX, byColorParam);
-        RENDERER_WINDOWED_DrawLineBresenham(&nTop, &nRight, byColorParam);
-        RENDERER_WINDOWED_DrawLineBresenham(&nMidX, &nTop, byColorParam);
+      uHeight = *(int*)(pRect + 8) - nTop.x;
+      if (!(uHeight && nRight.y - nMidX.y)) {
         return;
       }
 
-      nTop.y = nRight.y;
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x127);
-      exit(-1);
+      nTopX.x = *(LONG*)(pRect + 8);
+      nTopX.y = *(int*)(pRect + 4) + ((uint32_t)(nRight.y - nMidX.y) >> 1);
+      nMidX.x = (uHeight >> 1) + nTop.x;
+      byColorParam = (uint8_t)nPaletteIndex;
+      nRight.x = nMidX.x;
+      nTop.y = nTopX.y;
+      RENDERER_WINDOWED_DrawLineBresenham(&nTopX, &nMidX, byColorParam);
+      RENDERER_WINDOWED_DrawLineBresenham(&nRight, &nTopX, byColorParam);
+      RENDERER_WINDOWED_DrawLineBresenham(&nTop, &nRight, byColorParam);
+      RENDERER_WINDOWED_DrawLineBresenham(&nMidX, &nTop, byColorParam);
+      return;
     }
 }
 

@@ -437,16 +437,15 @@ int32_t __stdcall SBIG_BigBuffer_FindHighestBit(BigBuffer * pBitSet) {
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
 static BOOL __fastcall SBIG_BigBuffer_IsLowestBitClear(BigBuffer * pBitSet) {
     uint32_t uWord = pBitSet->nStartWord;
-    if (pBitSet->nCount == uWord) {
-      return 1;
-    }
-    if (uWord < pBitSet->nCount) {
-      uWord = pBitSet->pData[uWord];
-    } else {
-      uWord = 0;
-    }
-    if (uWord & 1) {
-      return 0;
+    if (pBitSet->nCount != uWord) {
+      if (uWord < pBitSet->nCount) {
+        uWord = pBitSet->pData[uWord];
+      } else {
+        uWord = 0;
+      }
+      if (uWord & 1) {
+        return 0;
+      }
     }
 
     return 1;

@@ -2170,20 +2170,21 @@ uint32_t __fastcall MONSTERAI_GetThreatLevel(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    if (pUnit->eUnitType == UNIT_PLAYER) {
-      return 0xe;
-    }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
-      return 0;
+    if (pUnit->eUnitType != UNIT_PLAYER) {
+      if (pUnit->eUnitType != UNIT_MONSTER) {
+        return 0;
+      }
+
+      int pAiGeneral = pUnit->nClassId;
+      D2MonStatsTxt* pMonStatsTxt = pAiGeneral >= 0 && pAiGeneral < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + pAiGeneral : nullptr;
+      if (!pMonStatsTxt) {
+        return 0;
+      }
+
+      return (uint32_t)pMonStatsTxt->threat;
     }
 
-    int pAiGeneral = pUnit->nClassId;
-    D2MonStatsTxt* pMonStatsTxt = pAiGeneral >= 0 && pAiGeneral < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + pAiGeneral : nullptr;
-    if (!pMonStatsTxt) {
-      return 0;
-    }
-
-    return (uint32_t)pMonStatsTxt->threat;
+    return 0xe;
 }
 
 // Validates that a monster (pUnit) may legally target pTarget. Checks: both are monsters/players, neither is dead, target's room is not a town room, target has UNITFLAG_CANBEATTACKED, and if target is invisible: player invis targets succeed only on melee range or a 50% seed roll; monster invis targets are blocked unless in melee range. Falls through to UNITS_CheckIfCanAttackTarget.
@@ -2949,16 +2950,22 @@ BOOL __fastcall MONSTERAI_CanApplyDebuffState(D2UnitStrc * pUnit, eD2States eSta
 
     D2MonStatsTxt* pMonStatsTxtRecord = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
     nFlagResult = AI_CanApplyColdState(pUnit, pMonStatsTxtRecord, eState, 1);
-    if (nFlagResult) {
-      return 1;
+    if (!nFlagResult) {
+      return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 // Validates and optionally replaces a candidate switch-target (*ppUnit). Returns 0 (keep candidate) if pUnit is a player or nParam1==0. If nParam2 &lt; 6, probes a path to the candidate; if unreachable (zero path points), runs a ForEach scan for an alternative unit within distance 0x13 and updates *ppUnit and *pDistance accordingly. Returns 1 to signal the caller should use the secondary (LOS) target instead.
 static BOOL __stdcall MONSTERAI_ValidateSwitchTarget(D2UnitStrc * * ppUnit, int * pDistance, int32_t nParam1, int32_t nParam2, D2UnitStrc * pUnit) {
+    uint32_t nPathSP1Y;
     D2MonsterAiParameterStruct sAiParams;
+    int32_t nSavedPathType;
+    uint32_t nPathSP1X;
+    int32_t nPathPoints;
+    D2MonsterAiParameterStruct* pAiParamsPtr;
+    D2DynamicPathStrc* pDynamicPath;
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
       return 0;
     }
@@ -2970,41 +2977,39 @@ static BOOL __stdcall MONSTERAI_ValidateSwitchTarget(D2UnitStrc * * ppUnit, int 
     if (!pSwitchTarget) {
       return 1;
     }
-    if (nParam2 > 5) {
-      return 0;
+    if (nParam2 <= 5) {
+      D2UnitStrc* pPrevTarget;
+      pDynamicPath = pUnit->pPath.pDynamicPath;
+      nSavedPathType = D2Common::PATH::DynamicPath::GetPathType(pDynamicPath);
+      pPrevTarget = D2Common::PATH::DynamicPath::GetTargetUnit(pDynamicPath);
+      nPathSP1X = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
+      nPathSP1Y = D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath);
+      D2Common::PATH::DynamicPath::SetTarget(pDynamicPath, pSwitchTarget);
+      D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 2);
+      D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
+      D2Common::PATH::DynamicPath::SetTarget(pDynamicPath, pPrevTarget);
+      D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nPathSP1X, (int16_t)nPathSP1Y);
+      D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, nSavedPathType);
+      pPrevTarget = (D2UnitStrc*)D2Common::PATH::DynamicPath::GetPathPointsSize(pDynamicPath);
+      if (!pPrevTarget) {
+        nPathPoints = 7;
+        pAiParamsPtr = &sAiParams;
+        sAiParams.pBestUnit = pPrevTarget;
+        sAiParams.nBestDistance = 0x7fffffff;
+        sAiParams.pLOSFlagOrSecondary = pSwitchTarget;
+        ForEach(UNIT::SUnit::GetGamePointer(pUnit), pUnit, pAiParamsPtr, (fpMonsterAiForEach)pPrevTarget, nPathPoints);
+        if (!sAiParams.pBestUnit) {
+          return 1;
+        }
+        if ((int)sAiParams.nBestDistance >= 0x14) {
+          return 1;
+        }
+
+        *ppUnit = sAiParams.pBestUnit;
+        *pDistance = sAiParams.nBestDistance;
+      }
     }
 
-    D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    int32_t nSavedPathType = D2Common::PATH::DynamicPath::GetPathType(pDynamicPath);
-    D2UnitStrc* pPrevTarget = D2Common::PATH::DynamicPath::GetTargetUnit(pDynamicPath);
-    uint32_t nPathSP1X = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
-    uint32_t nPathSP1Y = D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath);
-    D2Common::PATH::DynamicPath::SetTarget(pDynamicPath, pSwitchTarget);
-    D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 2);
-    D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
-    D2Common::PATH::DynamicPath::SetTarget(pDynamicPath, pPrevTarget);
-    D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nPathSP1X, (int16_t)nPathSP1Y);
-    D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, nSavedPathType);
-    pPrevTarget = (D2UnitStrc*)D2Common::PATH::DynamicPath::GetPathPointsSize(pDynamicPath);
-    if (pPrevTarget) {
-      return 0;
-    }
-
-    int32_t nPathPoints = 7;
-    D2MonsterAiParameterStruct* pAiParamsPtr = &sAiParams;
-    sAiParams.pBestUnit = pPrevTarget;
-    sAiParams.nBestDistance = 0x7fffffff;
-    sAiParams.pLOSFlagOrSecondary = pSwitchTarget;
-    ForEach(UNIT::SUnit::GetGamePointer(pUnit), pUnit, pAiParamsPtr, (fpMonsterAiForEach)pPrevTarget, nPathPoints);
-    if (!sAiParams.pBestUnit) {
-      return 1;
-    }
-    if ((int)sAiParams.nBestDistance >= 0x14) {
-      return 1;
-    }
-
-    *ppUnit = sAiParams.pBestUnit;
-    *pDistance = sAiParams.nBestDistance;
     return 0;
 }
 
@@ -7485,11 +7490,11 @@ int32_t __fastcall AI_Pet_ExecuteMovementBehavior(::SGAMEDATA * pGame, D2UnitStr
       if (!bWalkStarted1) {
         ApplyCombatAndMonStats(pAdjacentUnit, 0, 0, '(');
         bWalkStarted1 = MONSTERAI_CommandWalkToCoords(pGame, pAdjacentUnit, nLoopIdx, pSpawnedRoom);
-        if (!bWalkStarted1) {
-          return 0;
+        if (bWalkStarted1) {
+          return 1;
         }
 
-        return 1;
+        return 0;
       }
 
       return 1;
@@ -18682,12 +18687,12 @@ void __fastcall AITHINK_Fn1_Fetish(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
         pMonsterAiGeneral->dwArg0 = 1;
         sSeedNext = D2_SEED_NEXT(pUnit->sSeed);
         pUnit->sSeed = sSeedNext;
-        if ((int)(sSeedNext.nSeedLow % 100) >= (int)pMonStats->aip[0][pGame->nDifficulty]) {
-          PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[1][pGame->nDifficulty]);
+        if (!((int)(sSeedNext.nSeedLow % 100) >= (int)pMonStats->aip[0][pGame->nDifficulty])) {
+          AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
           return;
         }
 
-        AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
+        PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[1][pGame->nDifficulty]);
         return;
       }
     }

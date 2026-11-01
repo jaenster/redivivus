@@ -635,11 +635,10 @@ int __fastcall BNDOWNLOAD_ApplyPrepatch(uint32_t * pdwParam) {
     uint32_t* pResultLocal = pdwParam;
     BNDOWNLOAD_ProcessPrepatchList((uint32_t*)&pResultLocal);
     if (pResultLocal && pResultLocal != (uint32_t*)0x1) {
-      if (pResultLocal != (uint32_t*)0x2) {
-        return 0;
+      if (pResultLocal == (uint32_t*)0x2) {
+        *pdwParam = 1;
       }
 
-      *pdwParam = 1;
       return 0;
     }
 

@@ -466,12 +466,12 @@ D2UnitStrc * __stdcall _unused(D2UnitStrc * pUnit, pfnUnitProximityTest pfnCallb
               case UNIT_MISSILE:
                 case_UNIT_MISSILE:
                 nCandidateSizeX = Units::GetUnitSizeX(pCandidate);
-              if (nCandidateSizeX < 3) {
+              if (nCandidateSizeX >= 3) {
+                nCandidateSizeX = 3;
+              } else {
                 if (nCandidateSizeX <= 0) {
                   break;
                 }
-              } else {
-                nCandidateSizeX = 3;
               }
 
               eUnitType = pCandidate->eUnitType;
@@ -631,12 +631,12 @@ D2UnitStrc * __stdcall CallCollisionFunction(D2RoomStrc * pRoom, int32_t nX, int
               case UNIT_MISSILE:
                 case_UNIT_MISSILE:
                 nUnitSizeX = Units::GetUnitSizeX(pUnit);
-              if (nUnitSizeX < 3) {
+              if (nUnitSizeX >= 3) {
+                nUnitSizeX = 3;
+              } else {
                 if (nUnitSizeX <= 0) {
                   break;
                 }
-              } else {
-                nUnitSizeX = 3;
               }
 
               eUnitType = pUnit->eUnitType;

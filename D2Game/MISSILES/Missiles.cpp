@@ -300,10 +300,10 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
 
     D2Common::Units::Missile::SetTotalFrames(pUnit, nPosX);
     D2Common::Units::Missile::SetCurrentFrame(pUnit, nPosX);
-    if (!(pArgs->nFlags & 0x800U)) {
-      dwFlags = (uint32_t)pMissileTxt->Activate;
-    } else {
+    if (pArgs->nFlags & 0x800U) {
       dwFlags = pArgs->nActivateFrame;
+    } else {
+      dwFlags = (uint32_t)pMissileTxt->Activate;
     }
 
     D2Common::Units::Missile::SetActivateFrame(pUnit, nPosX - dwFlags);

@@ -1205,58 +1205,64 @@ static BOOL __stdcall PATH_CheckCollisionOnStep(uint32_t nParam1, uint32_t nPara
         return 1;
       }
     }
-    if (!(pDynamicPath->eCollisionFlag & 5U)) {
-      return 1;
+    if (pDynamicPath->eCollisionFlag & 5U) {
+      return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 // Computes a direct (non-pathfound) movement velocity vector toward the current path target. Reads existing velocity into pVelOut[0/1]. If the path type is not 4, calculates the delta to the target waypoint in fixed-point; if both delta components are within the current speed magnitude, snaps the velocity exactly to the remaining delta and returns 1 (target reached this step). Otherwise leaves velocity unchanged and returns 0.
 static BOOL __stdcall PATH_ComputeDirectMovementVector(int * pVelOut, int * pDynamicPath) {
+    int nAbsDeltaX;
+    int nAbsVelY;
+    int nAbsDeltaY;
+    int nMaxVelComponent;
+    int nTargetXfp;
+    int nAbsVelX;
+    int nAbsVelYCopy;
     *pVelOut = *(int*)((int)pDynamicPath + 0x72);
     pVelOut[1] = *(int*)((int)pDynamicPath + 0x76);
-    if (pDynamicPath[0xf] == 4) {
-      return 0;
-    }
+    if (pDynamicPath[0xf] != 4) {
+      int nDeltaX;
+      nTargetXfp = (uint32_t)*(uint16_t*)((int)pDynamicPath + pDynamicPath[9] * 4 + 0x9e) * 0x10000 + 0x8000;
+      nDeltaX = (uint32_t)*(uint16_t*)(pDynamicPath + pDynamicPath[9] + 0x27) * 0x10000 + 0x8000 - *pDynamicPath;
+      nAbsDeltaX = nDeltaX;
+      if (nDeltaX < 0) {
+        nAbsDeltaX = -nDeltaX;
+      }
 
-    int nTargetXfp = (uint32_t)*(uint16_t*)((int)pDynamicPath + pDynamicPath[9] * 4 + 0x9e) * 0x10000 + 0x8000;
-    int nDeltaX = (uint32_t)*(uint16_t*)(pDynamicPath + pDynamicPath[9] + 0x27) * 0x10000 + 0x8000 - *pDynamicPath;
-    int nAbsDeltaX = nDeltaX;
-    if (nDeltaX < 0) {
-      nAbsDeltaX = -nDeltaX;
-    }
+      nAbsDeltaY = nTargetXfp - pDynamicPath[1];
+      if (nAbsDeltaY < 0) {
+        nAbsDeltaY = -nAbsDeltaY;
+      }
 
-    int nAbsDeltaY = nTargetXfp - pDynamicPath[1];
-    if (nAbsDeltaY < 0) {
-      nAbsDeltaY = -nAbsDeltaY;
-    }
-
-    int nMaxVelComponent = *pVelOut;
-    int nAbsVelX = nMaxVelComponent;
-    if (nMaxVelComponent < 0) {
-      nAbsVelX = -nMaxVelComponent;
-    }
-
-    int nAbsVelYCopy = pVelOut[1];
-    int nAbsVelY = nAbsVelYCopy;
-    if (nAbsVelYCopy < 0) {
-      nAbsVelY = -nAbsVelYCopy;
-    }
-    if (nAbsVelX > nAbsVelY) {
+      nMaxVelComponent = *pVelOut;
+      nAbsVelX = nMaxVelComponent;
       if (nMaxVelComponent < 0) {
-        nMaxVelComponent = -nMaxVelComponent;
+        nAbsVelX = -nMaxVelComponent;
       }
-    } else {
-      nMaxVelComponent = nAbsVelYCopy;
+
+      nAbsVelYCopy = pVelOut[1];
+      nAbsVelY = nAbsVelYCopy;
       if (nAbsVelYCopy < 0) {
-        nMaxVelComponent = -nAbsVelYCopy;
+        nAbsVelY = -nAbsVelYCopy;
       }
-    }
-    if (nAbsDeltaX <= nMaxVelComponent && nAbsDeltaY <= nMaxVelComponent) {
-      *pVelOut = nDeltaX;
-      pVelOut[1] = nTargetXfp - pDynamicPath[1];
-      return 1;
+      if (nAbsVelX > nAbsVelY) {
+        if (nMaxVelComponent < 0) {
+          nMaxVelComponent = -nMaxVelComponent;
+        }
+      } else {
+        nMaxVelComponent = nAbsVelYCopy;
+        if (nAbsVelYCopy < 0) {
+          nMaxVelComponent = -nAbsVelYCopy;
+        }
+      }
+      if (nAbsDeltaX <= nMaxVelComponent && nAbsDeltaY <= nMaxVelComponent) {
+        *pVelOut = nDeltaX;
+        pVelOut[1] = nTargetXfp - pDynamicPath[1];
+        return 1;
+      }
     }
 
     return 0;

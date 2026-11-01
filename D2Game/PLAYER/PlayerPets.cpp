@@ -1387,10 +1387,10 @@ static BOOL __stdcall KillPetOnRecast(D2UnitStrc * pUnit, D2UnitStrc * pMinion, 
     pNewPetNode->pPetData.nSeed = pPetArgs->nSeed;
     pNewPetNode->pPetData.nNameId = pPetArgs->nNameId;
     pNewPetNode->pPetData.nType = pPetArgs->nType;
-    if (!pLastPetNode) {
-      pPetList->pPets = pNewPetNode;
-    } else {
+    if (pLastPetNode) {
       pLastPetNode->pNext = pNewPetNode;
+    } else {
+      pPetList->pPets = pNewPetNode;
     }
 
     pPetList->nPets2++;

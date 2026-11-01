@@ -1347,16 +1347,16 @@ static uint32_t UI_HandleKeyInputAndDismiss(int32_t nKeyAction, int32_t nUIFlagT
           UNIT::CUnit::IsAttackable(pPlayerUnit_lcl);
           GAME::Msg::NET_D2GS_CLIENT_Send_CMD(0x41);
           bTextScrolling = ClientModeInGame::CLIENTMODE_GetIngameUIFlags();
-          if (!bTextScrolling) {
+          if (bTextScrolling) {
+            GAME::Msg::NET_D2GS_CLIENT_Send_0x69();
+            ServerLoadingComplete = 0;
+            D2GS_Connected = 0;
+            ClientModeInGame::CLIENTMODE_ClearIngameUIFlag();
+            ClientModeInGame::D2CLIENT_SetExitVar1(0);
+            GAME::Game::D2CLIENT_SetExitVar3ToTrue();
             return 0;
           }
 
-          GAME::Msg::NET_D2GS_CLIENT_Send_0x69();
-          ServerLoadingComplete = 0;
-          D2GS_Connected = 0;
-          ClientModeInGame::CLIENTMODE_ClearIngameUIFlag();
-          ClientModeInGame::D2CLIENT_SetExitVar1(0);
-          GAME::Game::D2CLIENT_SetExitVar3ToTrue();
           return 0;
         }
       }
@@ -6638,12 +6638,12 @@ void __stdcall INPUT_StatScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
         if (nMouseY > nBtnY - 0x1f6 && nMouseY < nBtnY - 0x1e0 && nMouseX > (int)(pBtnEntry[-1] + gnPanelOffsetX) && nMouseX < (int)(pBtnEntry[-1] + gnPanelOffsetX + 0x28)) {
           dwScreenSizeY = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_statpts, 0);
           /* int nVirtKey for GetKeyState */ wShiftKey = GetKeyState(0x10);
-          if (wShiftKey < 0) {
+          if (wShiftKey >= 0) {
+            dwScreenSizeY = 1;
+          } else {
             if (!dwScreenSizeY) {
               break;
             }
-          } else {
-            dwScreenSizeY = 1;
           }
 
           do {

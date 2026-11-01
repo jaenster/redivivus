@@ -164,20 +164,20 @@ static int32_t MISSILE_GetSpeedByRemainingFrames(D2UnitStrc * pUnit) {
 }
 
 static int32_t MISSILE_GetPoisonNovaRadius(int32_t pMissileTxtRaw, int32_t nCurrentFrame) {
-    if (nCurrentFrame < 0x1e) {
-      return 1;
-    }
-    if (nCurrentFrame < 0x55) {
-      return (nCurrentFrame - 0xf) / 4;
-    }
+    if (nCurrentFrame >= 0x1e) {
+      int nMaxRadius;
+      if (nCurrentFrame < 0x55) {
+        return (nCurrentFrame - 0xf) / 4;
+      }
 
-    int nMaxRadius = *(short int*)(pMissileTxtRaw + 0x96) - 0x32;
-    if (nCurrentFrame < nMaxRadius) {
-      return 0xc;
-    }
-    if (nCurrentFrame < *(short int*)(pMissileTxtRaw + 0x96)) {
-      nMaxRadius = nCurrentFrame - nMaxRadius;
-      return 0xc - ((int)((nMaxRadius >> 0x1f & 3U) + nMaxRadius) >> 2);
+      nMaxRadius = *(short int*)(pMissileTxtRaw + 0x96) - 0x32;
+      if (nCurrentFrame < nMaxRadius) {
+        return 0xc;
+      }
+      if (nCurrentFrame < *(short int*)(pMissileTxtRaw + 0x96)) {
+        nMaxRadius = nCurrentFrame - nMaxRadius;
+        return 0xc - ((int)((nMaxRadius >> 0x1f & 3U) + nMaxRadius) >> 2);
+      }
     }
 
     return 1;
@@ -350,11 +350,10 @@ int32_t __fastcall MISSILE_CltHitFn13_Homing(D2UnitStrc * pUnit, D2UnitStrc * pT
 
 int32_t __fastcall MISSILE_CltHitFn34_MephistoDoNotDraw(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2UnitStrc* pOwner = Player::MISSILE_GetOwnerUnit(pUnit);
-    if (!pOwner) {
-      return 1;
+    if (pOwner) {
+      pOwner->eUnitFlagsEx |= UNITFLAGEX_NODRAW;
     }
 
-    pOwner->eUnitFlagsEx |= UNITFLAGEX_NODRAW;
     return 1;
 }
 
@@ -991,10 +990,10 @@ D2UnitStrc * __fastcall MakeMissile(D2SkillArgStrc * pSkillArg) {
 
     D2Common::Units::Missile::SetTotalFrames(pDVar6, nMissileX);
     D2Common::Units::Missile::SetCurrentFrame(pDVar6, nMissileX);
-    if (!(pSkillArg->nFlags & 0x800U)) {
-      nFlags = (uint32_t)pMissileTxt->Activate;
-    } else {
+    if (pSkillArg->nFlags & 0x800U) {
       nFlags = pSkillArg->nActivateFrame;
+    } else {
+      nFlags = (uint32_t)pMissileTxt->Activate;
     }
 
     D2Common::Units::Missile::SetActivateFrame(pDVar6, nMissileX - nFlags);

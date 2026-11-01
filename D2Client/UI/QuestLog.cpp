@@ -2016,11 +2016,11 @@ BOOL __fastcall QUESTLOG_IsQuestAvailableForInteraction(int32_t nQuestIconIndex)
 
     byQuestEntryHdr.eQuestId = eQuestIdFromIcon;
     QUESTLOG_PopulateQuestEntry(&byQuestEntryHdr);
-    if (byQuestEntryHdr.bQuestActive < 5) {
-      return 1;
+    if (byQuestEntryHdr.bQuestActive >= 5) {
+      return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 void __stdcall QUESTLOG_OnMouseUp(D2UIMouseMsgStrc * pMsg) {

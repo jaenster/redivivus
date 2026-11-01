@@ -310,11 +310,10 @@ BOOL __fastcall Q10_OnHoradricCubePickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     D2QuestDataStrc* pCubeItem = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheHoradricStaff);
-    if (!pCubeItem) {
-      return 0;
+    if (pCubeItem) {
+      pCubeItem->pQuestSpecificData.pA2Q2->nQuestItemPickupNotifyCount++;
     }
 
-    pCubeItem->pQuestSpecificData.pA2Q2->nQuestItemPickupNotifyCount++;
     return 0;
 }
 

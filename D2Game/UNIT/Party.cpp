@@ -622,10 +622,10 @@ void __fastcall PARTY_RemoveUnitFromParty(::SGAMEDATA * pGame, D2UnitStrc * pUni
             break;
           }
           if (pMemoryToFree->nUnitGUID == nUnitGUID) {
-            if (!pPrevSubSub) {
-              pPartySub->pSub = pMemoryToFree->pNext;
-            } else {
+            if (pPrevSubSub) {
               pPrevSubSub->pNext = pMemoryToFree->pNext;
+            } else {
+              pPartySub->pSub = pMemoryToFree->pNext;
             }
 
             PLAYER::PlayerScreen::SendAllPlayersPartyInfo(pGame, pUnit);

@@ -3063,11 +3063,11 @@ uint32_t __fastcall CLIENT_UpdateMonsterAnimByMode(D2DynamicPathStrc * pDynamicP
         nDeltaCheck = (int)((uint32_t)(uint16_t)pDynamicPath->nTargetX | (uint32_t)(uint16_t)pDynamicPath->nTargetY << 16);
         pDynamicPath->nUnitSize = pDynamicPath->nUnitWidth - 0x100;
         *(uint16_t*)&pDynamicPath->nCollisionFlag = 0;
-        if (nDeltaCheck) {
+        if (!nDeltaCheck) {
+          pDynamicPath->PathPoints[10] = (D2PathPointStrc)((uint32_t)d2_bits_of(pDynamicPath->PathPoints[10]) | 0x20);
           return 0;
         }
 
-        pDynamicPath->PathPoints[10] = (D2PathPointStrc)((uint32_t)d2_bits_of(pDynamicPath->PathPoints[10]) | 0x20);
         return 0;
       }
 

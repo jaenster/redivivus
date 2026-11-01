@@ -731,12 +731,12 @@ void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwPa
     } else {
       int nOutPos;
       nMagnitude = (nDigitCount - 1) / 3 - 1;
-      if (nMagnitude < 4) {
+      if (nMagnitude >= 4) {
+        nMagnitude = 4;
+      } else {
         if (nMagnitude < 0) {
           nMagnitude = 0;
         }
-      } else {
-        nMagnitude = 4;
       }
 
       nDigitCount += nMagnitude * -3;

@@ -238,10 +238,10 @@ void __fastcall PlaceAct1245OutdoorBorders(D2DrlgLevelStrc * pLevel) {
       nCurY = pVertexCopy->nPosY;
       nX = pNextVertex->nPosX;
       nY = pNextVertex->nPosY;
-      if (!park_24) {
-        park_1c = nCurY - nY;
-      } else {
+      if (park_24) {
         park_1c = nCornerPresetId - nX;
+      } else {
+        park_1c = nCurY - nY;
       }
       if (park_1c < 0) {
         park_1c = -park_1c;
@@ -876,14 +876,14 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
                     }
 
                     pExitCount = 0;
-                    if (!nFlipState) {
-                      nConnFlags = 1;
-                      nExitCol++;
-                      nFlipState = 1;
-                    } else {
+                    if (nFlipState) {
                       nExitCol--;
                       nConnFlags = (uint32_t)pExitCount;
                       nFlipState = (uint32_t)pExitCount;
+                    } else {
+                      nConnFlags = 1;
+                      nExitCol++;
+                      nFlipState = 1;
                     }
                   }
                 } while (nRowIter >= bNoOverlap);
@@ -897,16 +897,16 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
               } else {
                 uSeedHigh64 = (uint64_t)pDrlg->nSeed.nSeedHigh;
                 nConnFlags = pDrlg->nSeed.nSeedLow;
-                if (!(nRandIdx & nRandIdx - 1)) {
-                  sNewSeed = (D2SeedStrc)((uint64_t)nConnFlags * 0x6ac690c5 + uSeedHigh64);
-                  pDrlg->nSeed.nSeedHigh = sNewSeed.nSeedHigh;
-                  pDrlg->nSeed.nSeedLow = sNewSeed.nSeedLow;
-                  nRandExitIdx = nRandIdx - 1 & sNewSeed.nSeedLow;
-                } else {
+                if (nRandIdx & nRandIdx - 1) {
                   sNewSeed = (D2SeedStrc)((uint64_t)nConnFlags * 0x6ac690c5 + uSeedHigh64);
                   pDrlg->nSeed.nSeedHigh = sNewSeed.nSeedHigh;
                   pDrlg->nSeed.nSeedLow = sNewSeed.nSeedLow;
                   nRandExitIdx = (uint32_t)(sNewSeed.nSeedLow % nRandIdx);
+                } else {
+                  sNewSeed = (D2SeedStrc)((uint64_t)nConnFlags * 0x6ac690c5 + uSeedHigh64);
+                  pDrlg->nSeed.nSeedHigh = sNewSeed.nSeedHigh;
+                  pDrlg->nSeed.nSeedLow = sNewSeed.nSeedLow;
+                  nRandExitIdx = nRandIdx - 1 & sNewSeed.nSeedLow;
                 }
               }
 

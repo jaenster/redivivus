@@ -1892,12 +1892,12 @@ BOOL __fastcall ITEMEVENT_CrushingBlow(::SGAMEDATA * pGame, uint32_t nUnitEvent,
     nTargetHP = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
     nCrushDivisor = nTargetHP / nCrushDivisor;
     nChance = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_damageresist, 0);
-    if (nChance < 100) {
+    if (nChance >= 100) {
+      nChance = 100;
+    } else {
       if (nChance <= 0) {
         goto apply_crush_damage;
       }
-    } else {
-      nChance = 100;
     }
 
     nChance = D2Client::Stats::D2ApplyPercent(nCrushDivisor, nChance, 100);

@@ -4050,11 +4050,13 @@ void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFram
               if (msgPeek.message == 0x201) {
                 goto request_skip;
               }
-              if (msgPeek.message == 0x12) {
+              if (msgPeek.message != 0x12) {
+                if (msgPeek.message == 0x102) {
+                  goto request_skip;
+                }
+              } else {
                 g_bBinkDDrawVideoQuitRequested = 1;
                 gbBinkDDrawVideoExitRequested = 1;
-              } else if (msgPeek.message == 0x102) {
-                goto request_skip;
               }
             } else {
               if (!(msgPeek.message != 0x204 && msgPeek.message != 0x207)) {

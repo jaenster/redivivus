@@ -469,11 +469,10 @@ BOOL __stdcall SMsgDispatchMessage(HWND handle, UINT uMsg, WPARAM nWParam, LPARA
         if (pbHandled) {
           *pbHandled = hMsgWnd.bHandled;
         }
-        if (!plResult) {
-          return 1;
+        if (plResult) {
+          *plResult = hMsgWnd.dwResult;
         }
 
-        *plResult = hMsgWnd.dwResult;
         return 1;
       }
 

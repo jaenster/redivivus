@@ -2287,11 +2287,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x18_ItemToInventory(::SGAMEDATA * pGame
       if (nTradeTick || !bufferId) {
         if (bufferId == 4) {
           pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          if (!pRoom) {
-            return SERVERSTATUS_BAD_PARAMS;
-          }
-
-          bIsRoomInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
+          bIsRoomInTown = pRoom ? D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) : 0;
           if (!bIsRoomInTown) {
             return SERVERSTATUS_BAD_PARAMS;
           }
@@ -3672,11 +3668,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x4B_ForceUnitUpdate(::SGAMEDATA * pGame
     if (eUnitType == UNIT_PLAYER && pSrcUnit != pUnit) {
       return SERVERSTATUS_BAD_PARAMS;
     }
-    if (!pSrcUnit) {
-      return SERVERSTATUS_BAD_TARGET;
-    }
 
-    BOOL bInNeighborRoom = D2Common::Units::UnitFinds::AreUnitsInNeighboredRooms(pUnit, pSrcUnit);
+    BOOL bInNeighborRoom = pSrcUnit ? D2Common::Units::UnitFinds::AreUnitsInNeighboredRooms(pUnit, pSrcUnit) : 0;
     if (!bInNeighborRoom) {
       return SERVERSTATUS_BAD_TARGET;
     }
@@ -4082,9 +4075,14 @@ eD2ServerIncomingStatus __fastcall SCMD_0x60_WeaponSwap(::SGAMEDATA * pGame, D2U
 
 // Server-side: equips an item onto a hireling/mercenary, swapping out whatever it currently has in the matching body location(s). Expansion-only (returns 3 in classic). pUnit=owning player, pUnit1=item to equip, pUnit2=merc, pGame=game. Resolves the item's BodyLoc1/BodyLoc2; for Iron Wolf mercs (classId 0x167) a shield routes to the secondary slot. If a slot is occupied, validates the new item's equip requirements (ITEM_CheckEquipRequirements): on success it removes the old item to the player's cursor and unequips it; on failure it returns the old item to the merc's inventory and aborts. Then clones the new item onto the merc, equips it via SERVER_EquipItemToBodyLoc, refreshes stats, fires PERIODICSTATS/STATREGEN timer triggers, and schedules a follow-up event. Returns 1 on a completed swap, 0 on no-op/abort, 3 in classic. Side effects: item clone/free, inventory mutation, stat recalc, event scheduling.
 static BOOL __stdcall MERC_SwapEquippedItem(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2) {
+    uint32_t bIsShield;
+    BOOL bMeetsEquipReqs;
     DWORD dwOldItemGUID;
+    D2UnitStrc* pClonedOldItem;
     uint32_t bEquipOk;
     D2UnitStrc* pClonedNewItemLocal;
+    D2UnitStrc* pItemAtBodyLoc;
+    D2InventoryStrc* pMercInventory;
     eD2BodyLoc eBodyLoc1;
     eD2BodyLoc eBodyLoc2;
     if (!pGame->bExpansion) {
@@ -4102,84 +4100,77 @@ static BOOL __stdcall MERC_SwapEquippedItem(D2UnitStrc * pUnit, D2UnitStrc * pUn
 
     D2InventoryStrc* pInventory;
     pInventory = pUnit2->pInventory;
-    if (!pInventory) {
-      return 0;
-    }
-
-    D2InventoryStrc* pMercInventory;
-    pMercInventory = pInventory;
-    D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(pUnit1, &eBodyLoc1, &eBodyLoc2);
-    D2UnitStrc* pItemAtBodyLoc;
-    pItemAtBodyLoc = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, (uint32_t)eBodyLoc1);
-    D2UnitStrc* pItemSlot2;
-    pItemSlot2 = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, (uint32_t)eBodyLoc2);
-    D2UnitStrc* pClonedOldItem;
-    pClonedOldItem = pItemAtBodyLoc;
-    /* Iron wolf, merc */ if (pUnit2->nClassId == 0x167) {
-      uint32_t bIsShield;
-      bIsShield = D2Common::ITEMS::Items::ITEMS_IsA(pUnit1, ITEMTYPE_Shield);
+    if (pInventory) {
+      D2UnitStrc* pItemSlot2;
+      pMercInventory = pInventory;
+      D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(pUnit1, &eBodyLoc1, &eBodyLoc2);
+      pItemAtBodyLoc = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, (uint32_t)eBodyLoc1);
+      pItemSlot2 = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, (uint32_t)eBodyLoc2);
       pClonedOldItem = pItemAtBodyLoc;
-      if (bIsShield) {
-        pClonedOldItem = pItemSlot2;
-        eBodyLoc1 = eBodyLoc2;
+      /* Iron wolf, merc */ if (pUnit2->nClassId == 0x167) {
+        bIsShield = D2Common::ITEMS::Items::ITEMS_IsA(pUnit1, ITEMTYPE_Shield);
+        pClonedOldItem = pItemAtBodyLoc;
+        if (bIsShield) {
+          pClonedOldItem = pItemSlot2;
+          eBodyLoc1 = eBodyLoc2;
+        }
+      }
+
+      pItemAtBodyLoc = (D2UnitStrc*)(uint32_t)eBodyLoc1;
+      if (!pClonedOldItem) {
+        equip_new_item:
+        pClonedNewItemLocal = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGame, pUnit1, pUnit2, 1);
+        D2Common::Units::SetupUpdateFlag(pClonedNewItemLocal, 4);
+        pMercInventory = (D2InventoryStrc*)pUnit1->nUnitGUID;
+        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit2, UNITEVENTCALLBACK_PERIODICSTATS, (int32_t)pMercInventory);
+        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, (int32_t)pMercInventory);
+        if (!pClonedNewItemLocal) {
+          dwOldItemGUID = -1;
+        } else {
+          dwOldItemGUID = pClonedNewItemLocal->nUnitGUID;
+        }
+
+        ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit2, dwOldItemGUID, (eD2BodyLoc)(uintptr_t)pItemAtBodyLoc, 1, &bEquipOk);
+        ITEMS::ItemMode::ToCursorItem(pGame, pUnit, pUnit1);
+        D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pPlayerInv, nullptr);
+        if (pClonedOldItem) {
+          pClonedOldItem = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGame, pClonedOldItem, pUnit, 1);
+          D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pPlayerInv, pClonedOldItem);
+          ITEMS::ItemMode::ITEMMODE_ApplyQuestReward(pGame, pUnit, pClonedOldItem);
+        }
+
+        ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pUnit2, 0, 0);
+        ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit2, 0);
+        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit2, UNITEVENTCALLBACK_STATREGEN, 0);
+        GAME::Event::SetEvent(pGame, pUnit2, 3, pGame->dwGameFrame + 1, 0, 0);
+        return 1;
+      }
+
+      pItemSlot2 = D2Common::INVENTORY::Inventory::ItemBelongsToInventoryOfPlayer(pMercInventory, pClonedOldItem);
+      if (pClonedOldItem == pItemSlot2) {
+        D2Common::INVENTORY::Inventory::NullSub_2Arg(pMercInventory, (uint32_t)pItemAtBodyLoc);
+        ITEMS::ItemMode::ITEMMODE_UnequipItemStats(pGame, pClonedOldItem, pUnit2, 0, 0);
+        ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pUnit2, 0, 0);
+        bMeetsEquipReqs = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pUnit1, pUnit2, 0, nullptr, nullptr, nullptr);
+        if (bMeetsEquipReqs) {
+          D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pClonedOldItem, ITEMCMD_BODYLOC_TAKE_ITEM, 1);
+          D2Common::INVENTORY::Inventory::UpsertToUpdateList(pMercInventory, pClonedOldItem);
+          D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pClonedOldItem, ITEMFLAG_REMOVED, 1);
+          D2Common::Units::RefreshInventory(pUnit2, 1);
+          goto equip_new_item;
+        }
+
+        D2Common::INVENTORY::Inventory::INVENTORY_GetItemAtBodyLoc(pMercInventory, pClonedOldItem, (int32_t)pItemAtBodyLoc);
+        D2Common::INVENTORY::Inventory::PutItemInInventory(pMercInventory, pClonedOldItem, 3);
+        D2Common::ITEMS::Items::SetBodyLoc(pClonedOldItem, (eD2BodyLoc)(uintptr_t)pItemAtBodyLoc);
+        D2Common::Units::SetupUpdateFlag(pClonedOldItem, 1);
+        D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedOldItem, INVPAGE_None);
+        ITEMS::ItemMode::ITEMMODE_AddStatsList_ForMercSwap((uint32_t)pGame, pClonedOldItem, pUnit2, 0);
+        ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit2, 0);
       }
     }
 
-    pItemAtBodyLoc = (D2UnitStrc*)(uint32_t)eBodyLoc1;
-    if (!pClonedOldItem) {
-      equip_new_item:
-      pClonedNewItemLocal = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGame, pUnit1, pUnit2, 1);
-      D2Common::Units::SetupUpdateFlag(pClonedNewItemLocal, 4);
-      pMercInventory = (D2InventoryStrc*)pUnit1->nUnitGUID;
-      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit2, UNITEVENTCALLBACK_PERIODICSTATS, (int32_t)pMercInventory);
-      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, (int32_t)pMercInventory);
-      if (!pClonedNewItemLocal) {
-        dwOldItemGUID = -1;
-      } else {
-        dwOldItemGUID = pClonedNewItemLocal->nUnitGUID;
-      }
-
-      ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit2, dwOldItemGUID, (eD2BodyLoc)(uintptr_t)pItemAtBodyLoc, 1, &bEquipOk);
-      ITEMS::ItemMode::ToCursorItem(pGame, pUnit, pUnit1);
-      D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pPlayerInv, nullptr);
-      if (pClonedOldItem) {
-        pClonedOldItem = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGame, pClonedOldItem, pUnit, 1);
-        D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pPlayerInv, pClonedOldItem);
-        ITEMS::ItemMode::ITEMMODE_ApplyQuestReward(pGame, pUnit, pClonedOldItem);
-      }
-
-      ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pUnit2, 0, 0);
-      ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit2, 0);
-      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit2, UNITEVENTCALLBACK_STATREGEN, 0);
-      GAME::Event::SetEvent(pGame, pUnit2, 3, pGame->dwGameFrame + 1, 0, 0);
-      return 1;
-    }
-
-    pItemSlot2 = D2Common::INVENTORY::Inventory::ItemBelongsToInventoryOfPlayer(pMercInventory, pClonedOldItem);
-    if (pClonedOldItem != pItemSlot2) {
-      return 0;
-    }
-
-    D2Common::INVENTORY::Inventory::NullSub_2Arg(pMercInventory, (uint32_t)pItemAtBodyLoc);
-    ITEMS::ItemMode::ITEMMODE_UnequipItemStats(pGame, pClonedOldItem, pUnit2, 0, 0);
-    ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pUnit2, 0, 0);
-    BOOL bMeetsEquipReqs = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pUnit1, pUnit2, 0, nullptr, nullptr, nullptr);
-    if (!bMeetsEquipReqs) {
-      D2Common::INVENTORY::Inventory::INVENTORY_GetItemAtBodyLoc(pMercInventory, pClonedOldItem, (int32_t)pItemAtBodyLoc);
-      D2Common::INVENTORY::Inventory::PutItemInInventory(pMercInventory, pClonedOldItem, 3);
-      D2Common::ITEMS::Items::SetBodyLoc(pClonedOldItem, (eD2BodyLoc)(uintptr_t)pItemAtBodyLoc);
-      D2Common::Units::SetupUpdateFlag(pClonedOldItem, 1);
-      D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedOldItem, INVPAGE_None);
-      ITEMS::ItemMode::ITEMMODE_AddStatsList_ForMercSwap((uint32_t)pGame, pClonedOldItem, pUnit2, 0);
-      ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit2, 0);
-      return 0;
-    }
-
-    D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pClonedOldItem, ITEMCMD_BODYLOC_TAKE_ITEM, 1);
-    D2Common::INVENTORY::Inventory::UpsertToUpdateList(pMercInventory, pClonedOldItem);
-    D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pClonedOldItem, ITEMFLAG_REMOVED, 1);
-    D2Common::Units::RefreshInventory(pUnit2, 1);
-    goto equip_new_item;
+    return 0;
 }
 
 static eD2ServerIncomingStatus __stdcall EquipOrUnequipMercItem(D2UnitStrc * pUnit, int32_t eBodyLoc, D2UnitStrc * pUnit2, ::SGAMEDATA * pGame) {

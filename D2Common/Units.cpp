@@ -1894,11 +1894,11 @@ int32_t __stdcall GetOverlayHeight(D2UnitStrc * pUnit) {
           }
 
           pMonStats2Txt = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
-          if (pMonStats2Txt) {
-            return (uint8_t)pMonStats2Txt->overlayHeight - 1;
+          if (!pMonStats2Txt) {
+            break;
           }
 
-          break;
+          return (uint8_t)pMonStats2Txt->overlayHeight - 1;
         }
     }
 
@@ -2097,11 +2097,11 @@ int32_t __stdcall GetBlockRate(D2UnitStrc * pUnit, BOOL bExpansion) {
         }
     }
 
-    if (nToBlock >= 0x4b) {
-      return 0x4b;
+    if (nToBlock < 0x4b) {
+      return nToBlock;
     }
 
-    return nToBlock;
+    return 0x4b;
 }
 
 D2UnitStrc * __stdcall GetEquippedWeapon(D2UnitStrc * pUnit) {
@@ -2131,12 +2131,12 @@ int32_t __stdcall GetMeleeRange(D2UnitStrc * pUnit) {
     }
     if (pUnit->eUnitType != UNIT_PLAYER) {
       if (pUnit->eUnitType == UNIT_MONSTER && (pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId) , pMonStats2 != 0)) {
-        if (pMonStats2->MeleeRng != 0xff) {
-          return (uint32_t)pMonStats2->MeleeRng;
+        if (pMonStats2->MeleeRng == 0xff) {
+          COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit_00, pUnit_00->pInventory, (uint32_t*)&pUnit, -1, 1);
+          return pUnit != (D2UnitStrc*)0x6 ? 0 : 0x2;
         }
 
-        COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit_00, pUnit_00->pInventory, (uint32_t*)&pUnit, -1, 1);
-        return pUnit != (D2UnitStrc*)0x6 ? 0 : 0x2;
+        return (uint32_t)pMonStats2->MeleeRng;
       }
     } else {
       uint8_t nRangeAdder;
@@ -3816,14 +3816,16 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
         }
 
         nAnimRate = (uint32_t)pMissileTxt->animrate;
-        if ((int)nAnimRate <= 0x10000) {
-          wAnimSpeed = (short int)((int)(nAnimRate * 0x100) / 1024);
-        } else if ((int)(nAnimRate & -16) < 0x4000) {
-          qwAnimCalc = (int64_t)(int)nAnimRate * 0x100;
-          lVar2 = (int64_t)qwAnimCalc / 0x400;
-          wAnimSpeed = (short int)lVar2;
+        if ((int)nAnimRate > 0x10000) {
+          if ((int)(nAnimRate & -16) < 0x4000) {
+            qwAnimCalc = (int64_t)(int)nAnimRate * 0x100;
+            lVar2 = (int64_t)qwAnimCalc / 0x400;
+            wAnimSpeed = (short int)lVar2;
+          } else {
+            wAnimSpeed = (short int)((int)nAnimRate / 1024 << 8);
+          }
         } else {
-          wAnimSpeed = (short int)((int)nAnimRate / 1024 << 8);
+          wAnimSpeed = (short int)((int)(nAnimRate * 0x100) / 1024);
         }
 
         pUnit_00->nAnimSpeed = wAnimSpeed;

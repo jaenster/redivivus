@@ -695,11 +695,11 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
           if ((nInConsumed || nAvailOutStart) && nFlush != 4) {
             return nRet;
           }
-          if (!nRet) {
-            return -5;
+          if (nRet) {
+            return nRet;
           }
 
-          return nRet;
+          return -5;
         }
 
         pState->mode = 0x1e;

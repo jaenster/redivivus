@@ -650,7 +650,10 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
       StoreDataTables((uint32_t)szTableNameBuf, (D2InventoryToBeUpdatedStrc*)pDataTable, nBinAllocSize, sVar5);
       D2_FREE_POOL_AT(nullptr, pDataTable, ".\\DATATBLS\\DataTbls.cpp", 0x8d6);
     }
-    if (!gpaMiscTxtTables) {
+    if (gpaMiscTxtTables) {
+      nErrorLine = 0x8de;
+      szEffectiveName = ".bin";
+    } else {
       nStrCmpResult = _stricmp(szTableName, "leveldefs");
       if (!nStrCmpResult) {
         nErrorLine = 0x8e2;
@@ -660,9 +663,6 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
         nErrorLine = 0x8e4;
         szEffectiveName = ".txt";
       }
-    } else {
-      nErrorLine = 0x8de;
-      szEffectiveName = ".bin";
     }
 
     D2ArchiveStrc* pArchive2 = ARCHIVE_LoadDataTables(pMemory, szTableName, szEffectiveName, &nSize, ".\\DATATBLS\\DataTbls.cpp", nErrorLine);
@@ -670,16 +670,16 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8e7);
       exit(-1);
     }
-    if (!gpaMiscTxtTables) {
+    if (gpaMiscTxtTables) {
+      pArchiveTxt = pArchive2->pPrevLink;
+      pParsedData = &pArchive2->pNext;
+    } else {
       pBinField = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pArchive2, nSize);
       pArchiveTxt = (D2ArchiveStrc*)Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinField);
       pParsedData = (D2ArchiveStrc**)D2_ALLOC_POOL_AT(nullptr, (int)pArchiveTxt * nEndOffset, ".\\DATATBLS\\DataTbls.cpp", 0x904);
       memset(pParsedData, 0, (int)pArchiveTxt * nEndOffset);
       Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinField, pBinFieldInput, (char*)pParsedData, (size_t)pArchiveTxt, nEndOffset);
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinField);
-    } else {
-      pArchiveTxt = pArchive2->pPrevLink;
-      pParsedData = &pArchive2->pNext;
     }
     if (nTxtTableSize) {
       *nTxtTableSize = (int)pArchiveTxt;

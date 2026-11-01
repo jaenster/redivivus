@@ -425,11 +425,10 @@ static BOOL TEXT_DrawScrollingTextBox(uint16_t * * ppwszText) {
       iVar1 = 1;
     }
     if ((uint32_t)ppwszText[2] >> 10 > iVar1 * 0x12 + 0x70U) {
-      if (gnTextScrollBoxLineHeight != 1) {
-        return 1;
+      if (gnTextScrollBoxLineHeight == 1) {
+        gnTextScrollBoxLineHeight = 0;
       }
 
-      gnTextScrollBoxLineHeight = 0;
       return 1;
     }
 
@@ -5235,27 +5234,28 @@ int __stdcall TEXT_HandleEscapeKey() {
       gpTextDismissCallback = 0;
       return 1;
     }
-    if (gbTextStaticPopupActive != 1) {
-      gbTextScrollBoxAnimating = 1;
+    if (gbTextStaticPopupActive == 1) {
+      if (gpTextStaticPopupBox == 1) {
+        gpTextDismissCallback = 0;
+        return 0;
+      }
+      if (!gpStaticTextPopup) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x947);
+        exit(-1);
+      }
+
+      TEXT_FreeTextBox(gpStaticTextPopup);
+      D2_FREE_AT(gpStaticTextPopup, ".\\UI\\text.cpp", 0x949);
+      gpStaticTextPopup = 0;
+      gbTextStaticPopupActive = 0;
+      gpTextStaticPopupBox = 0;
       gpTextDismissCallback = 0;
-      return 0;
-    }
-    if (gpTextStaticPopupBox == 1) {
-      gpTextDismissCallback = 0;
-      return 0;
-    }
-    if (!gpStaticTextPopup) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x947);
-      exit(-1);
+      return 1;
     }
 
-    TEXT_FreeTextBox(gpStaticTextPopup);
-    D2_FREE_AT(gpStaticTextPopup, ".\\UI\\text.cpp", 0x949);
-    gpStaticTextPopup = 0;
-    gbTextStaticPopupActive = 0;
-    gpTextStaticPopupBox = 0;
+    gbTextScrollBoxAnimating = 1;
     gpTextDismissCallback = 0;
-    return 1;
+    return 0;
 }
 
 static void __stdcall TEXT_DrawUnitOverheadText(D2HoverTextStrc * pHoverText, int32_t pUnit, uint16_t * wszText, int * pScreenPos) {

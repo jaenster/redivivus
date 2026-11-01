@@ -1002,11 +1002,11 @@ uint32_t __stdcall CHATDLG_ToggleLadderNews(D2ControlMsg * pControlMsg) {
           if (!(nRand % 1000)) {
             Fog::File::CONTAINER_InitializeBuffer(awszMessage, 2, 0x14, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
             D2Lang::UTF8_ConvertToWideChar(awszMessage, "Moooooooo!", 0xc);
-            if (gpChatMessagesTextBox) {
-              D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, awszMessage, 9, false, 1);
+            if (!gpChatMessagesTextBox) {
               return 1;
             }
 
+            D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, awszMessage, 9, false, 1);
             return 1;
           }
         }
@@ -1016,11 +1016,10 @@ uint32_t __stdcall CHATDLG_ToggleLadderNews(D2ControlMsg * pControlMsg) {
     }
 
     uint16_t* szText = D2Lang::StrTable::strtable::GetLocaleString(nStringId);
-    if (!gpChatMessagesTextBox) {
-      return 1;
+    if (gpChatMessagesTextBox) {
+      D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, szText, 0xb, false, 1);
     }
 
-    D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, szText, 0xb, false, 1);
     return 1;
 }
 
@@ -1184,16 +1183,15 @@ int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char 
       return 0;
     }
     if (*szText == '\t') {
-      if (!gnChatHistoryEntryCount) {
-        return 0;
+      if (gnChatHistoryEntryCount) {
+        gnChatTabCompletionIndex++;
+        if (gnChatTabCompletionIndex >= gnChatHistoryEntryCount) {
+          gnChatTabCompletionIndex = 0;
+        }
+
+        D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpChatDlgInputEditBox, gaChatDlgHistoryBuffer[gnChatTabCompletionIndex]);
       }
 
-      gnChatTabCompletionIndex++;
-      if (gnChatTabCompletionIndex >= gnChatHistoryEntryCount) {
-        gnChatTabCompletionIndex = 0;
-      }
-
-      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpChatDlgInputEditBox, gaChatDlgHistoryBuffer[gnChatTabCompletionIndex]);
       return 0;
     }
 

@@ -1050,11 +1050,7 @@ BOOL __fastcall Skills_SrvDoFunc_137_CorpseConsumptionAura(::SGAMEDATA * pGame, 
     }
 
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (!pTarget) {
-      return 0;
-    }
-
-    uint32_t bIsValidCorpse = D2Common::Skills::SKILLS_IsCorpseValidForRevive(pTarget);
+    uint32_t bIsValidCorpse = pTarget ? D2Common::Skills::SKILLS_IsCorpseValidForRevive(pTarget) : 0;
     if (!bIsValidCorpse) {
       return 0;
     }

@@ -3020,13 +3020,13 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
       x1 = (tempMult3 ^ tempMult1) + roundMult1 & 0xffff;
       if (x1) {
         x4 = (uint32_t)pRoundKey[5];
-        if (!x4) {
-          tempResult = 1 - x1;
-        } else {
+        if (x4) {
           x1 *= x4;
           tempResult = (uint16_t)x1;
           x1 >>= 0x10;
           tempResult = (tempResult < x1) - x1 + tempResult;
+        } else {
+          tempResult = 1 - x1;
         }
       } else {
         x1 = (uint32_t)pRoundKey[5];

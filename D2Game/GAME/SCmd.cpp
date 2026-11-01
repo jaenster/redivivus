@@ -1236,19 +1236,18 @@ void __fastcall NET_D2GS_SERVER_Send_0x79_TRADEGOLD(D2ClientStrc * pClient, uint
 
 BOOL SCMD_DetectPositionDesync(int32_t pState, int32_t nNewPos) {
     int nDelta = nNewPos - *(int*)(pState + 4);
-    if (!nDelta) {
-      return 0;
-    }
-    if (nDelta < 0) {
-      nDelta = -nDelta;
-    }
-    if (!(nDelta > 8 || (*(char*)(pState + 0xc) += '\x01' , *(uint8_t*)(pState + 0xc) > 6))) {
-      return 0;
+    if (nDelta) {
+      if (nDelta < 0) {
+        nDelta = -nDelta;
+      }
+      if (nDelta > 8 || (*(char*)(pState + 0xc) += '\x01' , *(uint8_t*)(pState + 0xc) > 6)) {
+        *(uint8_t*)(pState + 0xc) = 0;
+        *(int32_t*)(pState + 4) = nNewPos;
+        return 1;
+      }
     }
 
-    *(uint8_t*)(pState + 0xc) = 0;
-    *(int32_t*)(pState + 4) = nNewPos;
-    return 1;
+    return 0;
 }
 
 // Detects position desync for an owned monster. Verifies pUnit2 is a monster owned by pUnit, then compares its stored position against nNewPos. If the delta exceeds 8 units, or if a consecutive-desync counter exceeds 6, resets the counter and snaps the stored position to nNewPos, returning 1. Returns 0 if in sync or guard conditions fail.

@@ -179,11 +179,10 @@ BOOL __fastcall Skills_CltDoFunc_Mon_AdvanceFrameMetrics(D2UnitStrc * pUnit, eD2
     int nCurrentFrame;
     D2Common::Units::GetShiftedFrameMetrics(pUnit, &nCurrentFrame, &nFrameCount);
     pUnit->nActionFrame = 0;
-    if (nCurrentFrame > 0) {
-      return 1;
+    if (nCurrentFrame <= 0) {
+      pUnit->nSeqAnimSpeed = 0;
     }
 
-    pUnit->nSeqAnimSpeed = 0;
     return 1;
 }
 
@@ -591,11 +590,10 @@ BOOL __fastcall Skills_CltDoFunc_Mon_AdvanceFrameMetrics2(D2UnitStrc * pUnit, eD
     int nCurrentFrame;
     D2Common::Units::GetShiftedFrameMetrics(pUnit, &nCurrentFrame, &nTotalFrames);
     pUnit->nActionFrame = 0;
-    if (nCurrentFrame > 0) {
-      return 1;
+    if (nCurrentFrame <= 0) {
+      pUnit->nSeqAnimSpeed = 0;
     }
 
-    pUnit->nSeqAnimSpeed = 0;
     return 1;
 }
 
@@ -827,11 +825,10 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetClearNodrawFlag(D2UnitStrc * pUnit, 
     if (!pTarget) {
       return 0;
     }
-    if (!pUnit) {
-      return 1;
+    if (pUnit) {
+      pUnit->eUnitFlagsEx &= ~UNITFLAGEX_NODRAW;
     }
 
-    pUnit->eUnitFlagsEx &= ~UNITFLAGEX_NODRAW;
     return 1;
 }
 

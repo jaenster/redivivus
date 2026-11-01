@@ -1451,32 +1451,32 @@ BOOL __fastcall MONSTER_SpawnPredefinedAtUnit(::SGAMEDATA * pGame, D2RoomStrc * 
     int32_t nPosX;
     int32_t nPosY;
     int32_t nResult = 0;
-    if (nParam != 0x154) {
-      return nResult;
-    }
-    if (!pUnit) {
-      return nResult;
+    if (nParam == 0x154) {
+      if (!pUnit) {
+        return nResult;
+      }
+
+      eD2UnitType eUnitType = pUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nPosX = pUnit->pPath.pStaticPath->nPosX;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      } else {
+        nPosX = 0;
+      }
+
+      eUnitType = pUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nPosY = pUnit->pPath.pStaticPath->nPosY;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      } else {
+        nPosY = 0;
+      }
+
+      nResult = SpawnMonsterAtUnitOffset(pGame, pRoom, nPosX, nPosY, nullptr, 0x154, eD2MonsterAnimMode_ns::Skill1, (int*)sPredefinedDataUnknown, nParam2);
     }
 
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPosX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nPosX = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPosY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nPosY = 0;
-    }
-
-    nResult = SpawnMonsterAtUnitOffset(pGame, pRoom, nPosX, nPosY, nullptr, 0x154, eD2MonsterAnimMode_ns::Skill1, (int*)sPredefinedDataUnknown, nParam2);
     return nResult;
 }
 

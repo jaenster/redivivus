@@ -1757,11 +1757,11 @@ int32_t __fastcall HOTKEY_GetAssignedItemGUID(::SGAMEDATA * pGame, D2UnitStrc * 
       iVar2++;
     }
 
-    if (pDVar1) {
-      return pDVar1->nUnitGUID;
+    if (!pDVar1) {
+      return -1;
     }
 
-    return -1;
+    return pDVar1->nUnitGUID;
 }
 
 // Post-load fixup of a player unit's stats and hotkey/skill bindings (player save-restore path, PlrSave2.cpp). Clamps gold and stashed gold (goldbank) to their inventory/stash limits (zeroing if invalid), resets stamina to max, then remaps all 16 client hotkey item GUIDs and the four selected-skill owner GUIDs (left/right/switch) from save-relative to live unit GUIDs via HOTKEY_GetAssignedItemGUID. Re-selects left/right skills (Server_SelectSkill) when not SKILL_Attack, sets hitpoints/mana to the passed nHitpoints/nMana, resets attackrate/velocity%/animrate to 100, recomputes nextexp from the class' experience table, and sends a 0x97 weapon-switch packet if the client is on the swapped weapon set. __fastcall(pGameStrc,pUnit,nHitpoints,nMana).

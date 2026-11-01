@@ -963,11 +963,10 @@ BOOL __fastcall Skills_SrvDoFunc_094_ResetAnimFrame(::SGAMEDATA * pGame, D2UnitS
     int nFrameShiftX;
     D2Common::Units::GetShiftedFrameMetrics(pUnit, &nFrameShiftX, &nFrameShiftY);
     pUnit->nActionFrame = 0;
-    if (nFrameShiftX > 0) {
-      return 1;
+    if (nFrameShiftX <= 0) {
+      pUnit->nSeqAnimSpeed = 0;
     }
 
-    pUnit->nSeqAnimSpeed = 0;
     return 1;
 }
 

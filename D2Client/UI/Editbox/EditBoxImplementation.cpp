@@ -285,12 +285,11 @@ int __thiscall OnMouseWheel(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * 
 }
 
 int __thiscall OnMouseUp(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
-    if (!pThis->bHasFocus) {
-      return 0;
+    if (pThis->bHasFocus) {
+      pThis->nBlinkTick = 0;
+      pThis->bHasFocus = 0;
     }
 
-    pThis->nBlinkTick = 0;
-    pThis->bHasFocus = 0;
     return 0;
 }
 
@@ -492,20 +491,18 @@ void __thiscall SetKeyRepeat(::EditBoxImplementation * pThis, BOOL bAllow) {
 }
 
 int __thiscall OnRightArrow(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
-    if (pThis->nCursorPos >= pThis->nTextLength) {
-      return 1;
+    if (pThis->nCursorPos < pThis->nTextLength) {
+      pThis->nCursorPos++;
     }
 
-    pThis->nCursorPos++;
     return 1;
 }
 
 int __thiscall OnLeftArrow(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
-    if (pThis->nCursorPos <= 0) {
-      return 1;
+    if (pThis->nCursorPos > 0) {
+      pThis->nCursorPos--;
     }
 
-    pThis->nCursorPos--;
     return 1;
 }
 

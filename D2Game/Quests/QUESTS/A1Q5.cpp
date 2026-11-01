@@ -776,11 +776,11 @@ bool __fastcall Q05_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
         /* If target is Wariv; inactive */ if (nTargetClassId == 0x9b) {
           return false;
         }
-        /* If target is Gheed: inactive */ if (nTargetClassId != 0x93) {
-          /* Otherwise active */ return true;
+        /* If target is Gheed: inactive */ if (nTargetClassId == 0x93) {
+          return false;
         }
 
-        return false;
+        /* Otherwise active */ return true;
       }
 
       iTmpCount++;

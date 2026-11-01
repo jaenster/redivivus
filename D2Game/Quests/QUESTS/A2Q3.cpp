@@ -200,11 +200,14 @@ bool __fastcall Q11_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
     /* GetQuestState(buf, nQuestIdReal=A2Q3, 1=RewardAwaits) - gossip enabled only
                          while reward pending */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
-    if (!(BVar1 == 1 && (nTargetClassId == 0xb0 || nTargetClassId == 0xaf || nTargetClassId == 0xc6 || nTargetClassId == 199 || nTargetClassId == 0xb1 || nTargetClassId == 0xca || nTargetClassId == 0xf4 || nTargetClassId == 0xd2 || nTargetClassId == 200 || nTargetClassId == 0xc9) || nTargetClassId == 0xb1 && pQuestData->nStateFlag == 1)) {
-      return false;
+    if (BVar1 == 1 && (nTargetClassId == 0xb0 || nTargetClassId == 0xaf || nTargetClassId == 0xc6 || nTargetClassId == 199 || nTargetClassId == 0xb1 || nTargetClassId == 0xca || nTargetClassId == 0xf4 || nTargetClassId == 0xd2 || nTargetClassId == 200 || nTargetClassId == 0xc9)) {
+      return true;
+    }
+    if (nTargetClassId == 0xb1 && pQuestData->nStateFlag == 1) {
+      return true;
     }
 
-    return true;
+    return false;
 }
 
 // A2Q3 - state-0 quest-event callback (fpQuestStateHandler[0], Q11_Callback_00): drives monster gossip

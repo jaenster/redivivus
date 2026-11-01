@@ -1723,11 +1723,11 @@ BOOL __stdcall OOGUTIL_SendPasswordPacket(DWORD dwParam1, DWORD dwParam2, char *
     if (cVar1 >= 'A' && cVar1 <= 'Z') {
       return 1;
     }
-    if (!(cVar1 >= 'a' && cVar1 <= 'z')) {
-      return 0;
+    if (cVar1 >= 'a' && cVar1 <= 'z') {
+      return 1;
     }
 
-    return 1;
+    return 0;
 }
 
 BOOL __stdcall OOGUTIL_Unused9(DWORD dwParam1, DWORD dwParam2, char * szText) {
@@ -3023,7 +3023,11 @@ int __stdcall OOGUTILITIES_EditBoxInput_RefreshGameList_ForLevelRestriction(void
 
 // Prepares and sends MCP game creation packet (0x02). Validates game name input, reads difficulty/max players/level restrictions from UI controls, converts wide strings to multibyte, applies title casing, and constructs the 71-byte mcp0x03data packet. For Battle.net connections, saves registry settings and displays "Please Wait" message. For TCP/IP, creates the game directly via OOGMENU_CreateGame with local IP.
 BOOL __stdcall NET_MCP_CLIENT_PrepareGameCreatePacket(D2ControlStrc * pControl) {
+    uint16_t* pwszDescription;
+    int32_t bHasPeerName;
+    uint16_t* pwszLevelRestriction;
     long int nParsedValue;
+    mcp0x03data* pPacketScan;
     uint32_t nFlags;
     char szDifficultyAndDescription[512];
     char szGameNameBuffer[256];
@@ -3045,128 +3049,126 @@ BOOL __stdcall NET_MCP_CLIENT_PrepareGameCreatePacket(D2ControlStrc * pControl) 
     D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szGameNameBuffer, (uint16_t*)pwszGameName, 0xff);
     char* pcScan = szGameNameBuffer;
     pcScan = pcScan + strlen(pcScan) + 1;
-    if (pcScan == szGameNameBuffer + 1) {
-      return 0;
-    }
+    if (pcScan != szGameNameBuffer + 1) {
+      uint16_t* pwszPassword;
+      pwszPassword = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListGameNameEditBox->sControl);
+      pwszDescription = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListGamePasswordEditBox->sControl);
+      bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
+      if (bHasPeerName) {
+        *(uint32_t*)(char*)&szTempBuffer = (uint32_t)(uintptr_t)D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListMaxPlayersEditBox->sControl);
+        *(uint8_t*)((char*)&sGameCreatePacket + 68) = 1;
+        bCallResult = D2Win::Src::D2WinButton::D2WINBUTTON_IsPressed(gUIGameListLevelRestrictionCheckbox);
+        if (bCallResult) {
+          pwszLevelRestriction = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUILevelRestrictionEditBox->sControl);
+          D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szNumberBuffer, (uint16_t*)pwszLevelRestriction, 3);
+          nParsedValue = atoi(szNumberBuffer);
+          sGameCreatePacket.nDifference = (char)nParsedValue;
+        } else {
+          sGameCreatePacket.nDifference = -1;
+        }
 
-    uint16_t* pwszPassword = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListGameNameEditBox->sControl);
-    uint16_t* pwszDescription = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListGamePasswordEditBox->sControl);
-    int32_t bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
-    if (bHasPeerName) {
-      uint16_t* pwszLevelRestriction;
-      *(uint32_t*)(char*)&szTempBuffer = (uint32_t)(uintptr_t)D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListMaxPlayersEditBox->sControl);
-      *(uint8_t*)((char*)&sGameCreatePacket + 68) = 1;
-      bCallResult = D2Win::Src::D2WinButton::D2WINBUTTON_IsPressed(gUIGameListLevelRestrictionCheckbox);
-      if (bCallResult) {
-        pwszLevelRestriction = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUILevelRestrictionEditBox->sControl);
-        D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szNumberBuffer, (uint16_t*)pwszLevelRestriction, 3);
+        D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szNumberBuffer, (uint16_t*)*(uint32_t*)(char*)&szTempBuffer, 3);
         nParsedValue = atoi(szNumberBuffer);
-        sGameCreatePacket.nDifference = (char)nParsedValue;
-      } else {
-        sGameCreatePacket.nDifference = -1;
+        sGameCreatePacket.nMaxPlayers = (char)nParsedValue;
       }
 
-      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szNumberBuffer, (uint16_t*)*(uint32_t*)(char*)&szTempBuffer, 3);
-      nParsedValue = atoi(szNumberBuffer);
-      sGameCreatePacket.nMaxPlayers = (char)nParsedValue;
-    }
+      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(sGameCreatePacket.szGameName, (uint16_t*)pwszGameName, 0x10);
+      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(sGameCreatePacket.szGamePassword, (uint16_t*)pwszPassword, 0x10);
+      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(sGameCreatePacket.szGameDescription, (uint16_t*)pwszDescription, 0x20);
+      sGameCreatePacket.nGameFlags = 0;
+      Fog::SMem::SMEM_TitleCaseString(&sGameCreatePacket);
+      Fog::SMem::SMEM_TitleCaseString((mcp0x03data*)sGameCreatePacket.szGamePassword);
+      pPacketScan = &sGameCreatePacket;
+      sGameCreatePacket.nGameFlags = sGameCreatePacket.nGameFlags & 0b11111111111111111000111111111111U | CreateGameDifflevel << 0xc;
+      do {
+        pcScan = pPacketScan->szGameName;
+        pPacketScan = (mcp0x03data*)(pPacketScan->szGameName + 1);
+      } while (*pcScan != '\0');
 
-    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(sGameCreatePacket.szGameName, (uint16_t*)pwszGameName, 0x10);
-    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(sGameCreatePacket.szGamePassword, (uint16_t*)pwszPassword, 0x10);
-    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(sGameCreatePacket.szGameDescription, (uint16_t*)pwszDescription, 0x20);
-    sGameCreatePacket.nGameFlags = 0;
-    Fog::SMem::SMEM_TitleCaseString(&sGameCreatePacket);
-    Fog::SMem::SMEM_TitleCaseString((mcp0x03data*)sGameCreatePacket.szGamePassword);
-    mcp0x03data* pPacketScan = &sGameCreatePacket;
-    sGameCreatePacket.nGameFlags = sGameCreatePacket.nGameFlags & 0b11111111111111111000111111111111U | CreateGameDifflevel << 0xc;
-    do {
-      pcScan = pPacketScan->szGameName;
-      pPacketScan = (mcp0x03data*)(pPacketScan->szGameName + 1);
-    } while (*pcScan != '\0');
+      if (pPacketScan != (mcp0x03data*)(sGameCreatePacket.szGameName + 1)) {
+        bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
+        if (!bHasPeerName) {
+          ePlayerStatus = D2IniData_multiplayer->eCTEMP_eD2PlayerStatus;
+          if (ePlayerStatus & PLAYERSTATUS_Hardcore) {
+            D2IniData_multiplayer->eArenaFlags |= ARENAFLAG_Hardcore;
+          }
+          if (ePlayerStatus & PLAYERSTATUS_Expansion) {
+            D2IniData_multiplayer->eArenaFlags |= ARENAFLAG_Expansion;
+          }
 
-    if (pPacketScan == (mcp0x03data*)(sGameCreatePacket.szGameName + 1)) {
-      return 0;
-    }
+          szDifficultyAndDescription[0] = (ePlayerStatus & PLAYERSTATUS_Hardcore ? 3U : 0) + (char)CreateGameDifflevel + '1';
+          Storm::Source::SSTR::SStrCopy(szDifficultyAndDescription + 1, sGameCreatePacket.szGameDescription, 0x7fffffff);
+          nFlags = (uint32_t)(D2IniData_multiplayer->nDifficulty == 1);
+          if (D2IniData_multiplayer->nDifficulty == 2) {
+            nFlags = 2;
+          }
+          if (D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Hardcore) {
+            nFlags |= 4;
+          }
+          if (D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Expansion) {
+            nFlags |= 8;
+          }
 
-    bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
-    if (!bHasPeerName) {
-      ePlayerStatus = D2IniData_multiplayer->eCTEMP_eD2PlayerStatus;
-      if (ePlayerStatus & PLAYERSTATUS_Hardcore) {
-        D2IniData_multiplayer->eArenaFlags |= ARENAFLAG_Hardcore;
-      }
-      if (ePlayerStatus & PLAYERSTATUS_Expansion) {
-        D2IniData_multiplayer->eArenaFlags |= ARENAFLAG_Expansion;
-      }
+          pNetworkUnknown->pfnSendStartAdvEx3(sGameCreatePacket.szGameName, sGameCreatePacket.szGamePassword, szDifficultyAndDescription, nFlags);
+          /* Please Wait */ pwszGameName = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
+          ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszGameName, nullptr);
+          D2Win::Src::D2WinMain::MessagePump(OOGUTIL_Unused11);
+          ChatDlg::FORMS_DestroyListEx();
+          pNetworkUnknown->pfnGetEnterChatResponseFlags((uint32_t*)szTempBuffer);
+          if (!*(uint32_t*)(char*)&szTempBuffer) {
+            /* A Game Already Exists With That Name */ pwszGameName = D2Lang::StrTable::strtable::GetLocaleString(0x1412);
+            ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszGameName, nullptr);
+            return 1;
+          }
+        } else {
+          pwszGameName = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListMaxPlayersEditBox->sControl);
+          D2Lang::WideCharToUTF8(szTempBuffer, pwszGameName, 5);
+          nParsedValue = atoi(szTempBuffer);
+          Storm::Source::SReg::SRegSaveValue("Diablo II", "MAX_PLAYER", 0, nParsedValue);
+          Storm::Source::SReg::SRegSaveValue("Diablo II", "DIFF_LEVEL", 0, CreateGameDifflevel);
+          bCallResult = D2Win::Src::D2WinButton::D2WINBUTTON_IsPressed(gUIGameListLevelRestrictionCheckbox);
+          if (!bCallResult) {
+            nParsedValue = 0x29a;
+          } else {
+            pwszGameName = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUILevelRestrictionEditBox->sControl);
+            D2Lang::WideCharToUTF8(szTempBuffer, pwszGameName, 5);
+            nParsedValue = atoi(szTempBuffer);
+          }
 
-      szDifficultyAndDescription[0] = (ePlayerStatus & PLAYERSTATUS_Hardcore ? 3U : 0) + (char)CreateGameDifflevel + '1';
-      Storm::Source::SSTR::SStrCopy(szDifficultyAndDescription + 1, sGameCreatePacket.szGameDescription, 0x7fffffff);
-      nFlags = (uint32_t)(D2IniData_multiplayer->nDifficulty == 1);
-      if (D2IniData_multiplayer->nDifficulty == 2) {
-        nFlags = 2;
-      }
-      if (D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Hardcore) {
-        nFlags |= 4;
-      }
-      if (D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Expansion) {
-        nFlags |= 8;
-      }
+          Storm::Source::SReg::SRegSaveValue("Diablo II", "LVL_REST", 0, nParsedValue);
+        }
 
-      pNetworkUnknown->pfnSendStartAdvEx3(sGameCreatePacket.szGameName, sGameCreatePacket.szGamePassword, szDifficultyAndDescription, nFlags);
-      /* Please Wait */ pwszGameName = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
-      ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszGameName, nullptr);
-      D2Win::Src::D2WinMain::MessagePump(OOGUTIL_Unused11);
-      ChatDlg::FORMS_DestroyListEx();
-      pNetworkUnknown->pfnGetEnterChatResponseFlags((uint32_t*)szTempBuffer);
-      if (!*(uint32_t*)(char*)&szTempBuffer) {
-        /* A Game Already Exists With That Name */ pwszGameName = D2Lang::StrTable::strtable::GetLocaleString(0x1412);
-        ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszGameName, nullptr);
+        pcScan = Fog::Src::Safesock::NET_GetLocalIp();
+        ChatDlg::OOGMENU_CreateGame(&sGameCreatePacket, pcScan);
+        bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
+        if (!bHasPeerName) {
+          pwszGameName = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
+          ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszGameName, nullptr);
+          OOGUTIL_UpdateGameListFilter();
+          return 1;
+        }
+
+        gnMCPCreateGamePendingFlag = 0;
+        pwszGameName = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
+        ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszGameName, (ChatDlgCallback)UIMENU_TitleClickCallback);
+        D2Win::Src::D2WinMain::MessagePump(OOG_PollMCPJoinD2GSPump);
+        ChatDlg::FORMS_DestroyListEx();
+        if (gnMCPCreateGamePendingFlag) {
+          ChatDlg::CHATDLG_CancelGameCreate();
+        }
+
+        OOGUTIL_UpdateGameListFilter();
+        bCallResult = D2MCPClient::McpConnect::getIsMPCJoinSuccesfull();
+        if (bCallResult) {
+          UIMENU_WaitInLine();
+          return 1;
+        }
+
         return 1;
       }
-    } else {
-      pwszGameName = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListMaxPlayersEditBox->sControl);
-      D2Lang::WideCharToUTF8(szTempBuffer, pwszGameName, 5);
-      nParsedValue = atoi(szTempBuffer);
-      Storm::Source::SReg::SRegSaveValue("Diablo II", "MAX_PLAYER", 0, nParsedValue);
-      Storm::Source::SReg::SRegSaveValue("Diablo II", "DIFF_LEVEL", 0, CreateGameDifflevel);
-      bCallResult = D2Win::Src::D2WinButton::D2WINBUTTON_IsPressed(gUIGameListLevelRestrictionCheckbox);
-      if (!bCallResult) {
-        nParsedValue = 0x29a;
-      } else {
-        pwszGameName = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUILevelRestrictionEditBox->sControl);
-        D2Lang::WideCharToUTF8(szTempBuffer, pwszGameName, 5);
-        nParsedValue = atoi(szTempBuffer);
-      }
-
-      Storm::Source::SReg::SRegSaveValue("Diablo II", "LVL_REST", 0, nParsedValue);
     }
 
-    pcScan = Fog::Src::Safesock::NET_GetLocalIp();
-    ChatDlg::OOGMENU_CreateGame(&sGameCreatePacket, pcScan);
-    bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
-    if (!bHasPeerName) {
-      pwszGameName = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
-      ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszGameName, nullptr);
-      OOGUTIL_UpdateGameListFilter();
-      return 1;
-    }
-
-    gnMCPCreateGamePendingFlag = 0;
-    pwszGameName = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
-    ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszGameName, (ChatDlgCallback)UIMENU_TitleClickCallback);
-    D2Win::Src::D2WinMain::MessagePump(OOG_PollMCPJoinD2GSPump);
-    ChatDlg::FORMS_DestroyListEx();
-    if (gnMCPCreateGamePendingFlag) {
-      ChatDlg::CHATDLG_CancelGameCreate();
-    }
-
-    OOGUTIL_UpdateGameListFilter();
-    bCallResult = D2MCPClient::McpConnect::getIsMPCJoinSuccesfull();
-    if (!bCallResult) {
-      return 1;
-    }
-
-    UIMENU_WaitInLine();
-    return 1;
+    return 0;
 }
 
 // Opens the editable profile dialog for the logged-in account (D2IniData_multiplayer->szLastBnetAccount). CHATDLG_ReadUserProfile reads the current sex, location and description; on success the edit forms are created (gnProfileDialogMode = 2) with edit limits 8, 40 and 200, focus goes to the sex box (all empty) or the description box, and OOGUTIL_SetProfileUser records szCharacterName and the hardcore/expansion flags. OOGUTIL_OnPressProfileOK writes the edits back.

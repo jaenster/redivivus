@@ -324,12 +324,12 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 
     gdwListLastClickTick = dwTickCount;
     OnPress pOVar1 = pList->sControl.fpOnPress;
-    if (!pOVar1) {
-      return 0;
+    if (pOVar1) {
+      bCallbackResult = (*pOVar1)(pControlMsg);
+      return bCallbackResult;
     }
 
-    bCallbackResult = (*pOVar1)(pControlMsg);
-    return bCallbackResult;
+    return 0;
 }
 
 BOOL __stdcall ListCheck(D2ControlMsg * pList) {

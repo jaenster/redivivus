@@ -892,11 +892,11 @@ static int __thiscall SBMP_DecodeBmpFile(int * pWidth, void * palette, D2MPQFile
 
     SBMP_FlipImage(aBmpInfoExtraBuf.biHeight, pixels, pRawBits, nDstStride, rowWidth, srcStride);
     SMem::SMemFree(pRawBits, ".\\SOURCE\\SBMP.CPP", 0x20b, 0);
-    if ((uintptr_t)pHeight >= aBmpInfoExtraBuf.biSizeImage) {
-      return 1;
+    if ((uintptr_t)pHeight < aBmpInfoExtraBuf.biSizeImage) {
+      return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 // Load a BMP from a raw in-memory file blob; pData points at the BITMAPFILEHEADER (14 bytes) followed immediately by BITMAPINFOHEADER and palette/pixel data

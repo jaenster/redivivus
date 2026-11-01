@@ -1075,11 +1075,10 @@ static BOOL __stdcall GetSourceLineWithRetry(HANDLE hProcess, DWORD nAddress, vo
       bLineFound = (*pSymGetLineFromAddr)(hProcess, nAddress - nSearchOffset, pdwDisplacement, pLine);
     } while (!bLineFound);
 
-    if (!nSearchOffset) {
-      return 1;
+    if (nSearchOffset) {
+      *(int*)pdwDisplacement = nSearchOffset;
     }
 
-    *(int*)pdwDisplacement = nSearchOffset;
     return 1;
 }
 

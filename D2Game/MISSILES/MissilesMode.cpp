@@ -4665,35 +4665,37 @@ int __fastcall Hits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarge
     if (pMissilesTxt->CollideKill != '\0') {
       nKillFlags |= 1;
     }
-    if (!pTarget) {
+    if (pTarget) {
+      if (pMissilesTxt->ToHit != '\0') {
+        nToHitThenStat = 0;
+        if (pUnit) {
+          nToHitThenStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_tohit, 0);
+        }
+
+        bIsOwner = UNIT::SUnitDmg::DAMAGE_RollAttackHit(pOwner, pTarget, nToHitThenStat, 1);
+        if (!bIsOwner) {
+          MISSMODE_ApplyNextHitState(pUnit, pTarget);
+          UNIT::SUnitEvent::UNITEVENT_DispatchEventsByType(pGame, 0, pTarget, pUnit, nullptr);
+          if (pMissilesTxt->AlwaysExplode == '\0') {
+            return 2;
+          }
+
+          nFuncIdx = pMissilesTxt->nSrvHitFunc;
+          if (!(nFuncIdx > 0 && nFuncIdx < MISSILESSRVHITFUNCS_SIZE)) {
+            return 2;
+          }
+
+          nHitFuncResult = (*MISSILESSRVHITFUNCS[nFuncIdx])(pGame, pUnit, pTarget);
+          if (!(nHitFuncResult & 4)) {
+            return 2;
+          }
+
+          return 1;
+        }
+      }
+    } else {
       if (!bForceHit && pMissilesTxt->AlwaysExplode == '\0') {
         goto check_kill_on_collide;
-      }
-    } else if (pMissilesTxt->ToHit != '\0') {
-      nToHitThenStat = 0;
-      if (pUnit) {
-        nToHitThenStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_tohit, 0);
-      }
-
-      bIsOwner = UNIT::SUnitDmg::DAMAGE_RollAttackHit(pOwner, pTarget, nToHitThenStat, 1);
-      if (!bIsOwner) {
-        MISSMODE_ApplyNextHitState(pUnit, pTarget);
-        UNIT::SUnitEvent::UNITEVENT_DispatchEventsByType(pGame, 0, pTarget, pUnit, nullptr);
-        if (pMissilesTxt->AlwaysExplode == '\0') {
-          return 2;
-        }
-
-        nFuncIdx = pMissilesTxt->nSrvHitFunc;
-        if (!(nFuncIdx > 0 && nFuncIdx < MISSILESSRVHITFUNCS_SIZE)) {
-          return 2;
-        }
-
-        nHitFuncResult = (*MISSILESSRVHITFUNCS[nFuncIdx])(pGame, pUnit, pTarget);
-        if (!(nHitFuncResult & 4)) {
-          return 2;
-        }
-
-        return 1;
       }
     }
     if (nHitResult & 2) {

@@ -201,11 +201,11 @@ int __thiscall GetVisibleItemCount(::ListBoxImplementation * pThis) {
       }
       if (nAccumHeight > pThis->nHeight - 0x14) {
         i -= pThis->nFirstVisibleIndex;
-        if (i < 1) {
-          return 1;
+        if (i >= 1) {
+          return i;
         }
 
-        return i;
+        return 1;
       }
 
       i++;
@@ -406,11 +406,10 @@ int __thiscall OnDownArrow(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
     if (pThis->nSelectedIndex < pThis->nFirstVisibleIndex) {
       pThis->nFirstVisibleIndex = pThis->nSelectedIndex;
     }
-    if (!(pThis->nSelectedIndex >= pThis->nVisibleRows + pThis->nFirstVisibleIndex)) {
-      return 1;
+    if (pThis->nSelectedIndex >= pThis->nVisibleRows + pThis->nFirstVisibleIndex) {
+      pThis->nFirstVisibleIndex++;
     }
 
-    pThis->nFirstVisibleIndex++;
     return 1;
 }
 

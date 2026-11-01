@@ -267,11 +267,11 @@ int __fastcall ROSTER_GetPetOwnershipRelation(int32_t nRosterGUID) {
 
     pRoster = Roster::GetRosterByGUID(pPet->nOwnerGUID);
     int16_t nOwnerPartyId = Roster::GetRosterPartyId(pRoster);
-    if (nMyPartyId == nOwnerPartyId) {
-      return 2;
+    if (nMyPartyId != nOwnerPartyId) {
+      return 0;
     }
 
-    return 0;
+    return 2;
 }
 
 D2RosterPetSeedStrc * __fastcall GetSeed(int32_t nRosterGUID) {

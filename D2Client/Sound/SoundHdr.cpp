@@ -91,16 +91,8 @@ eD2LevelId __stdcall SOUND_GetCurrentLevelId() {
 
 uint32_t __stdcall GetSoundEnv() {
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    if (!pUnit) {
-      return 0;
-    }
-
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return 0;
-    }
-
-    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+    D2RoomStrc* pRoom = pUnit ? D2Common::Units::UNITS_GetRoom(pUnit) : nullptr;
+    eD2LevelId eLevel = pRoom ? D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom) : LEVEL_None;
     if (eLevel == LEVEL_None) {
       return 0;
     }

@@ -228,52 +228,52 @@ BOOL __fastcall Skills_SrvDoFunc_150_Smite(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 
     BVar1 = D2Common::INVENTORY::Inventory::INVENTORY_GetEquippedShield(pUnit->pInventory, &pDStack_1c);
-    if (!BVar1) {
-      return 0;
-    }
-    if (!pDStack_1c) {
-      nItemClassId = -1;
-    } else {
-      nItemClassId = pDStack_1c->nClassId;
-    }
-
-    D2ItemsTxt* pDVar2 = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
-    if (!pDVar2) {
-      return 0;
-    }
-
-    int iStack_8 = (uint32_t)pDVar2->nMinDam << 8;
-    int iStack_c = (uint32_t)pDVar2->nMaxDam << 8;
-    eD2States eVar3 = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_holyshield);
-    if (eVar3 != STATE_none) {
-      pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_holyshield);
-      if (pStatList) {
-        eStack_14 = D2Common::Stats::StatsEx::GetSkillId(pStatList);
-        nSkillLevel = D2Common::Stats::StatsEx::GetSkillLevel(pStatList);
-        iVar4 = D2Common::Skills::SKILL_CalcMinDamage(pUnit, eStack_14, nSkillLevel, 1);
-        iStack_8 += iVar4;
-        iVar4 = D2Common::Skills::SKILL_CalcMaxDamage(pUnit, eStack_14, nSkillLevel, 1);
-        iStack_c += iVar4;
+    if (BVar1) {
+      if (!pDStack_1c) {
+        nItemClassId = -1;
+      } else {
+        nItemClassId = pDStack_1c->nClassId;
       }
-    }
 
-    iVar4 = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar5->calc[0], eSkill, nSkillLvl);
-    DStack_8c.dwPhysDamage = UNIT::SUnitDmg::DAMAGE_CalculatePhysicalDamage(pUnit, 0, pDStack_1c, iStack_8, iStack_c, iVar4, 0, 0x80);
-    iVar4 = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar5->calc[1], eSkill, nSkillLvl);
-    if (pDVar5->EType != ELEMENTAL_NONE) {
-      DStack_8c.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar5->calc[3], eSkill, nSkillLvl);
-      if (DStack_8c.dwConvPct > 0) {
-        DStack_8c.nConvType = pDVar5->EType;
+      D2ItemsTxt* pDVar2 = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
+      if (!pDVar2) {
+        return 0;
       }
+
+      int iStack_8 = (uint32_t)pDVar2->nMinDam << 8;
+      int iStack_c = (uint32_t)pDVar2->nMaxDam << 8;
+      eD2States eVar3 = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_holyshield);
+      if (eVar3 != STATE_none) {
+        pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_holyshield);
+        if (pStatList) {
+          eStack_14 = D2Common::Stats::StatsEx::GetSkillId(pStatList);
+          nSkillLevel = D2Common::Stats::StatsEx::GetSkillLevel(pStatList);
+          iVar4 = D2Common::Skills::SKILL_CalcMinDamage(pUnit, eStack_14, nSkillLevel, 1);
+          iStack_8 += iVar4;
+          iVar4 = D2Common::Skills::SKILL_CalcMaxDamage(pUnit, eStack_14, nSkillLevel, 1);
+          iStack_c += iVar4;
+        }
+      }
+
+      iVar4 = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar5->calc[0], eSkill, nSkillLvl);
+      DStack_8c.dwPhysDamage = UNIT::SUnitDmg::DAMAGE_CalculatePhysicalDamage(pUnit, 0, pDStack_1c, iStack_8, iStack_c, iVar4, 0, 0x80);
+      iVar4 = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar5->calc[1], eSkill, nSkillLvl);
+      if (pDVar5->EType != ELEMENTAL_NONE) {
+        DStack_8c.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar5->calc[3], eSkill, nSkillLvl);
+        if (DStack_8c.dwConvPct > 0) {
+          DStack_8c.nConvType = pDVar5->EType;
+        }
+      }
+
+      SkillsServer::SetDamageOnEvent(pUnit, &DStack_8c, eSkill, nSkillLvl);
+      DStack_8c.dwHitFlags = 2;
+      DStack_8c.dwStunLen = iVar4;
+      DStack_8c.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(nSkillLvlSaved, pUnit, pDStack_18, 0, 0);
+      DStack_8c.wResultFlags |= 1;
+      pTarget = pDStack_18;
+      goto apply_damage;
     }
 
-    SkillsServer::SetDamageOnEvent(pUnit, &DStack_8c, eSkill, nSkillLvl);
-    DStack_8c.dwHitFlags = 2;
-    DStack_8c.dwStunLen = iVar4;
-    DStack_8c.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(nSkillLvlSaved, pUnit, pDStack_18, 0, 0);
-    DStack_8c.wResultFlags |= 1;
-    pTarget = pDStack_18;
-    goto apply_damage;
     return 0;
 }
 

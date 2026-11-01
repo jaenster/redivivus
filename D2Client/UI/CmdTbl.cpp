@@ -302,11 +302,10 @@ void __fastcall CMD_InvokeCallbackByParam(int32_t nParam) {
 // Validates whether a command can be bound to mouse buttons (0x103-0x104). Returns false if command handler exists and button is left/right click, true otherwise. Used during key binding setup to prevent invalid mouse button assignments.
 static BOOL CMD_ValidateMouseButtonBinding(int32_t nCmdIndex, uint16_t * pErrorCode, uint32_t nMouseButton) {
     if ((nMouseButton & 0xffff) - 0x103 <= 1 && gaCmdBindings[nCmdIndex].pfnAltHandler) {
-      if (!pErrorCode) {
-        return 0;
+      if (pErrorCode) {
+        *pErrorCode = 0xf8a;
       }
 
-      *pErrorCode = 0xf8a;
       return 0;
     }
 

@@ -402,11 +402,11 @@ D2LvlWarpTxt * __fastcall DRLGROOM_GetLvlWarpTxtForWarpUnit(D2RoomExStrc * pRoom
 
     while (pTileGrid) {
       if (pTileGrid->pLvlWarpTxt->Id == (uint8_t)nClassId) {
-        if (pTileGrid->bEnabled) {
-          return pTileGrid->pLvlWarpTxt;
+        if (!pTileGrid->bEnabled) {
+          return nullptr;
         }
 
-        return nullptr;
+        return pTileGrid->pLvlWarpTxt;
       }
 
       pTileGrid = pTileGrid->pRoomTileNext;
@@ -786,30 +786,28 @@ BOOL __fastcall DRLGORTH_CompareByDirectionAndCoord(D2DrlgOrthStrc * pOrth1, D2D
     if ((int)pOrth2->neDrlgDirection > (int)eDir1) {
       return 1;
     }
-    if (pOrth2->neDrlgDirection != eDir1) {
-      return 0;
-    }
-
-    switch (eDir1) {
-      case DIRECTION_SOUTHEAST:
-        if (pOrth2->psCoordinatesAndSize->WorldPosition.y > pOrth1->psCoordinatesAndSize->WorldPosition.y) {
-          return 1;
-        }
-      break;
-      case DIRECTION_NORTHEAST:
-        if (pOrth2->psCoordinatesAndSize->WorldPosition.x < pOrth1->psCoordinatesAndSize->WorldPosition.x) {
-          return 1;
-        }
-      break;
-      case DIRECTION_SOUTHWEST:
-        if (pOrth2->psCoordinatesAndSize->WorldPosition.y < pOrth1->psCoordinatesAndSize->WorldPosition.y) {
-          return 1;
-        }
-      break;
-      case DIRECTION_NORTHWEST:
-        if (pOrth2->psCoordinatesAndSize->WorldPosition.x > pOrth1->psCoordinatesAndSize->WorldPosition.x) {
-          return 1;
-        }
+    if (pOrth2->neDrlgDirection == eDir1) {
+      switch (eDir1) {
+        case DIRECTION_SOUTHEAST:
+          if (pOrth2->psCoordinatesAndSize->WorldPosition.y > pOrth1->psCoordinatesAndSize->WorldPosition.y) {
+            return 1;
+          }
+        break;
+        case DIRECTION_NORTHEAST:
+          if (pOrth2->psCoordinatesAndSize->WorldPosition.x < pOrth1->psCoordinatesAndSize->WorldPosition.x) {
+            return 1;
+          }
+        break;
+        case DIRECTION_SOUTHWEST:
+          if (pOrth2->psCoordinatesAndSize->WorldPosition.y < pOrth1->psCoordinatesAndSize->WorldPosition.y) {
+            return 1;
+          }
+        break;
+        case DIRECTION_NORTHWEST:
+          if (pOrth2->psCoordinatesAndSize->WorldPosition.x > pOrth1->psCoordinatesAndSize->WorldPosition.x) {
+            return 1;
+          }
+      }
     }
 
     return 0;

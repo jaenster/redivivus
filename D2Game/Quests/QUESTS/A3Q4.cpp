@@ -563,25 +563,25 @@ bool __fastcall Q21_SequenceFilter(D2QuestDataStrc * pQuestData) {
     }
 
     pNextQuestData = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_BladeOfTheOldReligion);
-    if (!pNextQuestData) {
-      return cPrereqFilterResult;
-    }
-
-    /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
-    if (bBadCodePtr) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x28a);
-      exit(-1);
-    }
-
-    {
-      bool cGidbinnFilterResult;
-      cGidbinnFilterResult = pNextQuestData->fpSequenceFilter(pNextQuestData);
-      if (!cGidbinnFilterResult && !cPrereqFilterResult) {
-        return false;
+    if (pNextQuestData) {
+      /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
+      if (bBadCodePtr) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x28a);
+        exit(-1);
       }
 
-      return true;
+      {
+        bool cGidbinnFilterResult;
+        cGidbinnFilterResult = pNextQuestData->fpSequenceFilter(pNextQuestData);
+        if (!cGidbinnFilterResult && !cPrereqFilterResult) {
+          return false;
+        }
+
+        return true;
+      }
     }
+
+    return cPrereqFilterResult;
 }
 
 // Q21_Callback_13 (__fastcall) -- Golden Bird quest-load / state-flag reconstruction (event 0xd, run

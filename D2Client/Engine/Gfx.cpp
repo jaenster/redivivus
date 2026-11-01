@@ -2509,11 +2509,11 @@ BOOL __fastcall GFX_IsUnitInsideBounds(D2UnitStrc * pUnit, int32_t nOriginX, int
         if (nTestY < *(int*)((int)pvVar1 + 0x10) - 0x10 + nOriginY) {
           return 0;
         }
-        if (!(nTestY >= *(int*)((int)pvVar1 + 0x14) + 0x10 + nOriginY)) {
-          return 1;
+        if (nTestY >= *(int*)((int)pvVar1 + 0x14) + 0x10 + nOriginY) {
+          return 0;
         }
 
-        return 0;
+        return 1;
       }
     }
 

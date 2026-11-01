@@ -246,12 +246,12 @@ void __fastcall MERC_ApplyLevelStats(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, 
           if (pSkillTxt && nLevel >= pSkillTxt->reqlevel) {
             uVar1 = ((char)pHirelingTxt->nSkillLvlPerLvl[nLevelDiff] * nTmp >> 5) + (int)(char)pHirelingTxt->nSkillLevel[nLevelDiff];
             uVar1 = (int)uVar1 <= 0 ? 0 : uVar1;
-            if ((int)uVar1 < 0x20) {
+            if ((int)uVar1 >= 0x20) {
+              uVar1 = 0x20;
+            } else {
               if ((int)uVar1 <= 0) {
                 continue;
               }
-            } else {
-              uVar1 = 0x20;
             }
 
             SKILLS::SkillsServer::SetSkill(pMerc, *pSkillEntry, uVar1, 0);

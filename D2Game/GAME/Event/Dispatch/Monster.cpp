@@ -162,9 +162,7 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
       nBaseMonClassId = -1;
     } else {
       eAnimMode = pUnit->eAnimMode.ePlayerMode;
-      if (pUnit->eUnitType != UNIT_MONSTER) {
-        nBaseMonClassId = -1;
-      } else {
+      if (pUnit->eUnitType == UNIT_MONSTER) {
         nBaseMonClassId = pUnit->nClassId;
         D2MonStatsTxt* pMonStatsTxt = nBaseMonClassId >= 0 && nBaseMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nBaseMonClassId : nullptr;
         if (pMonStatsTxt) {
@@ -176,6 +174,8 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
             goto dispatch_by_base_id;
           }
         }
+      } else {
+        nBaseMonClassId = -1;
       }
     }
 

@@ -472,12 +472,14 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     } else {
       nAnimModeOrGUID = 0;
     }
-    if (!pObjectsTxt->IsAttackable) {
+    if (pObjectsTxt->IsAttackable) {
+      if (pUnit) {
+        pUnit->eUnitFlags |= UNITFLAG_CANBEATTACKED;
+      }
+    } else {
       if (pUnit) {
         pUnit->eUnitFlags &= ~UNITFLAG_CANBEATTACKED;
       }
-    } else if (pUnit) {
-      pUnit->eUnitFlags |= UNITFLAG_CANBEATTACKED;
     }
 
     pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = '\0';
@@ -507,10 +509,10 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
         s0x00.pObjectTxt = pObjectsTxt;
         (*OBJECTSINITFN[pObjectsTxt->InitFn])(&s0x00);
       }
-      if (!pObjectsTxt->Selectable[nAnimModeOrGUID]) {
-        pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
-      } else {
+      if (pObjectsTxt->Selectable[nAnimModeOrGUID]) {
         pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
+      } else {
+        pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
       }
       if (pObjectsTxt->PreOperate && !(pUnit->eUnitFlags >> 7 & 1)) {
         nPreOpSeedRoll = D2Client::Archive::UNIT_GetModuloFromSeed(pSeed, 0xe);

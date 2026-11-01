@@ -743,11 +743,7 @@ static BOOL __stdcall WARDEN_ResolveAndLoadModule(void * pRc4Key, uint8_t * pMod
     } while (nHashByteIndex < 0x10);
 
     Storm::Source::SSTR::SStrCopy(__frame0.szExt, ".mod", 5);
-    if (!sgpUnknownSequence) {
-      return 0;
-    }
-
-    bCacheReadSuccess = sgpUnknownSequence->pfnCacheReadData(szModuleHashHex, __frame0.aiStack_14, &pFileData, (int*)&nFileSize);
+    bCacheReadSuccess = sgpUnknownSequence ? sgpUnknownSequence->pfnCacheReadData(szModuleHashHex, __frame0.aiStack_14, &pFileData, (int*)&nFileSize) : 0;
     if (!bCacheReadSuccess) {
       return 0;
     }

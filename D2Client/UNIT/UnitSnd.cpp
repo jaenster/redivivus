@@ -603,28 +603,27 @@ static int * UNITSND_GetTileDataAtPosition(int32_t nPosX, D2RoomStrc * pRoom, in
 }
 
 static uint32_t UNITSND_GetGroundMaterialType(int32_t pUnit) {
-    if (!*(int*)(pUnit + 0x18)) {
-      return 0;
-    }
-
-    uint16_t wTileFlags = *(uint16_t*)(*(int*)(pUnit + 0x18) + 6);
-    if (wTileFlags & 0x20) {
-      return 1;
-    }
-    if (wTileFlags & 8) {
-      return 2;
-    }
-    if (wTileFlags & 0x10) {
-      return 3;
-    }
-    if (wTileFlags & 0x40) {
-      return 4;
-    }
-    if ((char)wTileFlags < '\0') {
-      return 6;
-    }
-    if (wTileFlags & 0x400) {
-      return 5;
+    if (*(int*)(pUnit + 0x18)) {
+      uint16_t wTileFlags;
+      wTileFlags = *(uint16_t*)(*(int*)(pUnit + 0x18) + 6);
+      if (wTileFlags & 0x20) {
+        return 1;
+      }
+      if (wTileFlags & 8) {
+        return 2;
+      }
+      if (wTileFlags & 0x10) {
+        return 3;
+      }
+      if (wTileFlags & 0x40) {
+        return 4;
+      }
+      if ((char)wTileFlags < '\0') {
+        return 6;
+      }
+      if (wTileFlags & 0x400) {
+        return 5;
+      }
     }
 
     return 0;

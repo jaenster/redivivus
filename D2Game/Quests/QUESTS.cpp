@@ -1974,12 +1974,12 @@ BOOL __fastcall PORTAL_ActivateOrDeactivatePortalObject(::SGAMEDATA * * ppGame) 
     } else {
       D2Common::Units::SetupUpdateFlag((D2UnitStrc*)ppGame[1], 2);
     }
-    if (!ppGame[1]) {
-      return 1;
+    if (ppGame[1]) {
+      D2DrlgActStrc** ppActField;
+      ppActField = ppGame[1]->pAct + 2;
+      *ppActField = (D2DrlgActStrc*)((uint32_t)*ppActField & -3);
     }
 
-    D2DrlgActStrc** ppActField = ppGame[1]->pAct + 2;
-    *ppActField = (D2DrlgActStrc*)((uint32_t)*ppActField & -3);
     return 1;
 }
 

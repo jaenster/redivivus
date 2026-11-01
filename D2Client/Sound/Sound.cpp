@@ -213,11 +213,11 @@ int __fastcall SOUND_GetSoundByIndex(int32_t nChannelHandle) {
         }
 
         bIsActive = GAME::Sound::SOUND_GetPlaybackStatus((int**)pSoundHandle);
-        if (bIsActive) {
-          return 1;
+        if (!bIsActive) {
+          return 0;
         }
 
-        return 0;
+        return 1;
       }
     }
 
@@ -534,11 +534,11 @@ int __fastcall SOUND_GetSoundChannel(int32_t nSoundId) {
         if (!pSmpData) {
           return 0;
         }
-        if (pSmpData[1]) {
-          return 1;
+        if (!pSmpData[1]) {
+          return 0;
         }
 
-        return 0;
+        return 1;
       }
     }
 
@@ -663,11 +663,11 @@ BOOL __fastcall SOUND_IsChannelAvailable(uint32_t pChanA, uint32_t pChanB, int32
     if (nStartTick1 >= nStartTick2 && nStartTick1 != nStartTick2) {
       return 1;
     }
-    if (nStartTick1 >= nStartTick2) {
-      return (uint32_t)(pChanB < pChanA);
+    if (nStartTick1 < nStartTick2) {
+      return 0;
     }
 
-    return 0;
+    return (uint32_t)(pChanB < pChanA);
 }
 
 uint32_t __fastcall SOUND_FindChannelForSound(int32_t nSoundId) {
@@ -974,12 +974,14 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
           SOUND_Calculate3DPosition(afSoundDir, pChanEntry);
           __frame0.fClosestDist.fValue = __frame0.fIndoorsSum / (float)__frame0.nUnitCount;
           fIndoorsSmoothed = pChanEntry->fUnitDistance;
-          if (__frame0.fClosestDist.fValue <= pChanEntry->fUnitDistance) {
+          if (!(__frame0.fClosestDist.fValue <= pChanEntry->fUnitDistance)) {
+            if (fIndoorsSmoothed + 0.05 < __frame0.fClosestDist.fValue) {
+              __frame0.fClosestDist.fValue = fIndoorsSmoothed + 0.05;
+            }
+          } else {
             if (__frame0.fClosestDist.fValue < fIndoorsSmoothed - 0.05) {
               __frame0.fClosestDist.fValue = fIndoorsSmoothed - 0.05;
             }
-          } else if (fIndoorsSmoothed + 0.05 < __frame0.fClosestDist.fValue) {
-            __frame0.fClosestDist.fValue = fIndoorsSmoothed + 0.05;
           }
 
           pChanEntry->fUnitDistance = (float)d2_bits_to_float(__frame0.fClosestDist);
@@ -1052,16 +1054,16 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
 
             nFadeSize = 0;
             nGlobal3OrSortA = 0;
-            if (!nFadeVolStart) {
+            if (nFadeVolStart) {
+              nGlobal3OrSortA = 3;
+              nFadeSize = pChanEntry->nPriority;
+              pChanEntry->nPriority = 0;
+            } else {
               if (__frame0.pSoundsTxtLocal->Fade_In && !pChanEntry->bFadeActive && !(pChanEntry->nVolume & 2)) {
                 nGlobal3OrSortA = (uint32_t)__frame0.pSoundsTxtLocal->Fade_In;
                 nFadeSize = pChanEntry->nPriority;
                 pChanEntry->nPriority = 0;
               }
-            } else {
-              nGlobal3OrSortA = 3;
-              nFadeSize = pChanEntry->nPriority;
-              pChanEntry->nPriority = 0;
             }
 
             ppStreamHandle = GAME::Sound::SOUND_PlaySoundWithPanning(pChanEntry);
@@ -1147,18 +1149,18 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
           nSoundVolumeLeftChannel = nFadeVolStart;
         }
       }
-      if (!__frame0.fClosestDist.nValue) {
-        nSoundVolumeRightChannel += 2;
-        if (100 < nSoundVolumeRightChannel) {
-          nSoundVolumeRightChannel = 100;
-          gnSoundVolumeUpdateFrame = __frame0.pFrameTime;
-          return;
-        }
-      } else {
+      if (__frame0.fClosestDist.nValue) {
         nSoundVolumeRightChannel += -2;
         if (nSoundVolumeRightChannel < 0x46) {
           gnSoundVolumeUpdateFrame = __frame0.pFrameTime;
           nSoundVolumeRightChannel = 0x46;
+          return;
+        }
+      } else {
+        nSoundVolumeRightChannel += 2;
+        if (100 < nSoundVolumeRightChannel) {
+          nSoundVolumeRightChannel = 100;
+          gnSoundVolumeUpdateFrame = __frame0.pFrameTime;
           return;
         }
       }

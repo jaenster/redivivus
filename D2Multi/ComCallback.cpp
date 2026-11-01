@@ -2226,10 +2226,10 @@ BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * p
     uint32_t nIdx = 0;
     do {
       nVal = tolower((int)(char)abKeyBuf[nIdx]);
-      if ((char)nVal < 'a') {
-        nDelta = -0x30;
-      } else {
+      if (!((char)nVal < 'a')) {
         nDelta = -0x57;
+      } else {
+        nDelta = -0x30;
       }
 
       nIdx++;

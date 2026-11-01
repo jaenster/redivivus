@@ -444,11 +444,10 @@ int32_t __stdcall DRLGENV_GetIntensityFromAct(D2DrlgActStrc * pDrlgAct) {
 int32_t __stdcall DRLGENV_GetPeriodOfDayFromAct(D2DrlgActStrc * pDrlgAct, int32_t * pBaseTime) {
     D2DrlgEnvironmentStrc* pEnv = DUNGEON::Dungeon::DRLGENV_GetEnvironmentFromAct(pDrlgAct);
     if (!pEnv) {
-      if (!pBaseTime) {
-        return 0;
+      if (pBaseTime) {
+        *pBaseTime = 0;
       }
 
-      *pBaseTime = 0;
       return 0;
     }
     if (!pBaseTime) {

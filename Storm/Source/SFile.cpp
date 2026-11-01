@@ -1367,12 +1367,12 @@ DWORD __stdcall SFileSetFilePointer(D2MPQFileStrc * pMPQFile, int32_t nParam, in
       switch (dwParam) {
         case 1:
           {
-            if (nParam >= 0 || (uint32_t)pnParam[0x48] >= (uint32_t)-nParam) {
-              pnParam[0x48] += nParam;
-              goto finish_seek;
+            if (!(nParam >= 0 || (uint32_t)pnParam[0x48] >= (uint32_t)-nParam)) {
+              break;
             }
 
-            break;
+            pnParam[0x48] += nParam;
+            goto finish_seek;
           }
         default:
           {

@@ -274,11 +274,11 @@ int32_t __fastcall GFXUTIL_GetUnitToken(D2UnitStrc * pUnitStrc, eD2UnitType eUni
         }
     }
 
-    if (pTokenLine) {
-      return *(int32_t*)pTokenLine->token;
+    if (!pTokenLine) {
+      return 0;
     }
 
-    return 0;
+    return *(int32_t*)pTokenLine->token;
 }
 
 // Register params: pUnitStrc (ECX): D2UnitStrc *, pnMode (EDX): uint32_t *

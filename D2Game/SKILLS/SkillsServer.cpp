@@ -2608,18 +2608,17 @@ void __fastcall SKILLS_FreeMonsterMinions(D2UnitStrc * pUnit) {
 }
 
 int32_t __fastcall SKILLS_GetUnitWalkVelocity(D2UnitStrc * pnParam) {
-    int nWalkVelocity;
-    if (!pnParam) {
-      return 0x600;
-    }
-    if (pnParam->eUnitType == UNIT_PLAYER) {
-      nWalkVelocity = pnParam->nClassId;
-      D2CharStatsTxt* pCharStatsTxt = nWalkVelocity >= 0 && nWalkVelocity < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nWalkVelocity : nullptr;
-      if (pCharStatsTxt) {
-        return (uint32_t)pCharStatsTxt->WalkVelocity << 8;
+    if (pnParam) {
+      int nWalkVelocity;
+      if (pnParam->eUnitType == UNIT_PLAYER) {
+        nWalkVelocity = pnParam->nClassId;
+        D2CharStatsTxt* pCharStatsTxt = nWalkVelocity >= 0 && nWalkVelocity < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nWalkVelocity : nullptr;
+        if (pCharStatsTxt) {
+          return (uint32_t)pCharStatsTxt->WalkVelocity << 8;
+        }
+      } else if (pnParam->eUnitType == UNIT_MONSTER && (nWalkVelocity = pnParam->nClassId , nWalkVelocity >= 0) && nWalkVelocity < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nWalkVelocity) {
+        return (int)sgptDataTable->pTxtMonStats[nWalkVelocity].Velocity << 8;
       }
-    } else if (pnParam->eUnitType == UNIT_MONSTER && (nWalkVelocity = pnParam->nClassId , nWalkVelocity >= 0) && nWalkVelocity < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nWalkVelocity) {
-      return (int)sgptDataTable->pTxtMonStats[nWalkVelocity].Velocity << 8;
     }
 
     return 0x600;

@@ -916,19 +916,17 @@ static BOOL MONSTER_CanSpawnInRoom(D2RoomStrc * pRoom, ::SGAMEDATA * pGame) {
 }
 
 BOOL __fastcall CheckIfBaseIsFallenOrScarabAndSet(int32_t nMonstatId) {
-    if (nMonstatId < 0) {
-      return 0;
+    if (nMonstatId >= 0) {
+      D2MonStatsTxt* pMonStatsTxt = nMonstatId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonstatId : nullptr;
+      if (pMonStatsTxt) {
+        nMonstatId = (int32_t)pMonStatsTxt->BaseId;
+      }
+      if (nMonstatId >= 0 && nMonstatId < sgptDataTable->nTxtMonStatsSize && (nMonstatId == 19 || nMonstatId == 91)) {
+        return 1;
+      }
     }
 
-    D2MonStatsTxt* pMonStatsTxt = nMonstatId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonstatId : nullptr;
-    if (pMonStatsTxt) {
-      nMonstatId = (int32_t)pMonStatsTxt->BaseId;
-    }
-    if (!(nMonstatId >= 0 && nMonstatId < sgptDataTable->nTxtMonStatsSize && (nMonstatId == 19 || nMonstatId == 91))) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 // Server-side: populates a freshly-loaded room with monsters per the level's MonsterRegion density. Clamps the region monster density to 10000, then walks the room's coord-list nodes; for each spawnable rect it computes density slots ((w/3)*(h/3)) and rolls the game seed per slot against density. On a hit it rolls a random monster type (MONREGION_RollRandomMonsterType) and spawns either a unique pack (SpawnUniquePack + boss minions), a formation (SPAWN_SpawnMonsterFormation), or a normal group with minions (SPAWN_SpawnMonsterWithMinions, group size from MonStats MinGrp/MaxGrp, gated by sparsePopulate roll). Increments the region's nRoomsWithMonsters if anything spawned. Mutates pGame->pGameSeed.

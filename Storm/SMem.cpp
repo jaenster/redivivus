@@ -150,19 +150,17 @@ static BOOL SMEM_CheckValidBlock(int32_t nSourceLine, int32_t bReportError, uint
       return 0;
     }
     if (*(short int*)((uintptr_t)&pBlock[-1].dwHeapSignature + 2) != 0x6f6d) {
-      if (!bReportError) {
-        return 0;
+      if (bReportError) {
+        SMEM_Warning(pnName, nSourceLine, 0x8510007c);
       }
 
-      SMEM_Warning(pnName, nSourceLine, 0x8510007c);
       return 0;
     }
     if (pBlock[-1].byFlags & 2) {
-      if (!bReportError) {
-        return 0;
+      if (bReportError) {
+        SMEM_Warning(pnName, nSourceLine, 0x8510007a);
       }
 
-      SMEM_Warning(pnName, nSourceLine, 0x8510007a);
       return 0;
     }
     if (!(pBlock[-1].byFlags & 1 && *(short int*)((uint32_t)pBlock[-1].wBlockSize - (uint32_t)pBlock[-1].byPadding - 10 + (int)pBlock) != 0x12b1 && bReportError)) {

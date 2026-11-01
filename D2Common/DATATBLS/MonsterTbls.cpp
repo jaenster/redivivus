@@ -183,11 +183,10 @@ int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, ui
     if (pUpgradeCount) {
       *pUpgradeCount = 0;
     }
-    if (!eSkill) {
-      return 0;
+    if (eSkill) {
+      *eSkill = SKILL_Attack;
     }
 
-    *eSkill = SKILL_Attack;
     return 0;
 }
 

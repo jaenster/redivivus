@@ -91,11 +91,11 @@ bool __fastcall Q09_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
       }
 
       bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
-      if (bQuestState != 1) {
-        return false;
+      if (bQuestState == 1) {
+        return true;
       }
 
-      return true;
+      return false;
     }
 
     return false;

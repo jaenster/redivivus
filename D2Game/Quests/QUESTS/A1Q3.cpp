@@ -522,11 +522,11 @@ bool __fastcall Q03_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
       }
 
       D2UnitStrc* pMalusItem = ITEMS::Items::Drop::HasQuestItem(UNIT::SUnit::GetGamePointer(pUnit), pUnit, 0x206d6468);
-      /* If the player carries the Horadric Hammer: active */ if (!pMalusItem) {
-        return false;
+      /* If the player carries the Horadric Hammer: active */ if (pMalusItem) {
+        return true;
       }
 
-      return true;
+      return false;
     }
 
     return false;

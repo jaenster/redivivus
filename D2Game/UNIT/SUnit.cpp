@@ -1845,60 +1845,38 @@ BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
       uint8_t bVar1;
       pCurrentRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       pDynamicPath = pUnit->pPath.pDynamicPath;
-      if (pDynamicPath) {
-        ptTarget.x = nX;
-        ptTarget.y = nY;
+      if (!pDynamicPath) {
+        pDynamicPath = 0;
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc25);
+        exit(-1);
+      }
+
+      ptTarget.x = nX;
+      ptTarget.y = nY;
+      if (!pRoom) {
+        pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(nullptr, nX, nY);
         if (!pRoom) {
-          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(nullptr, nX, nY);
+          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, ptTarget.x, ptTarget.y);
           if (!pRoom) {
-            pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, ptTarget.x, ptTarget.y);
-            if (!pRoom) {
-              return 0;
-            }
+            return 0;
           }
         }
-        if (!bFindFreeSpace) {
-          pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &ptTarget, D2Common::Units::GetUnitSizeX(pUnit), 0x1c09, 0);
-        }
-        if (!pRoom) {
-          return 0;
-        }
+      }
+      if (!bFindFreeSpace) {
+        pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &ptTarget, D2Common::Units::GetUnitSizeX(pUnit), 0x1c09, 0);
+      }
+      if (!pRoom) {
+        return 0;
+      }
 
-        nCollisionMask = D2Common::PATH::Path::PATH_GetCollisionMaskAt(pDynamicPath, pUnit, pRoom, (uint16_t)ptTarget.x, (uint16_t)ptTarget.y);
-        if (!nCollisionMask) {
-          return 0;
-        }
-        if (pUnit->eUnitType == UNIT_PLAYER) {
-          pPlayerClient = SUNIT_GetClient(pUnit, ".\\UNIT\\SUnit.cpp", 0xc3c);
-          D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pPlayerClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)roomCoords.sTileRect.left, (uint16_t)roomCoords.sTileRect.top);
-          D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
-          if (nRelocMode) {
-            pUnit->eUnitFlagsEx |= 0x800;
-          } else {
-            pUnit->eUnitFlagsEx |= UNITFLAGEX_TELEPORTED;
-          }
-
-          UNITS_UpdateRoomClientVisibility(pGameLocal, pUnit, nullptr);
-          pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-          bVar1 = pPlayerData->nPosHistoryIndex;
-          pPlayerData->nRevealingMapRelated = ptTarget.x;
-          pPlayerData->nRevealingMapRelated2 = ptTarget.y;
-          dwTickCount = GetTickCount();
-          pGameSave = pGameLocal;
-          pPlayerData->dwPosHistoryTick = dwTickCount;
-          pPlayerData->aPosHistory[bVar1].nX = ptTarget.x;
-          pPlayerData->aPosHistory[bVar1].nY = ptTarget.y;
-          pPlayerData->nPosHistoryIndex += '\x01';
-          if (pPlayerData->nPosHistoryIndex >= 0x14) {
-            pPlayerData->nPosHistoryIndex = '\0';
-          }
-
-          GAME::Event::SetEventMapReveal(pGameLocal, pUnit, UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN, pGameLocal->dwGameFrame + 0x32, PLAYER_CancelMapReveal, 0, 0);
-          PLAYER::PlayerPets::PETS_ManagePetsByType(pGameSave, pUnit, (uint16_t)ptTarget.x, (uint16_t)ptTarget.y);
-          return 1;
-        }
-
+      nCollisionMask = D2Common::PATH::Path::PATH_GetCollisionMaskAt(pDynamicPath, pUnit, pRoom, (uint16_t)ptTarget.x, (uint16_t)ptTarget.y);
+      if (!nCollisionMask) {
+        return 0;
+      }
+      if (pUnit->eUnitType == UNIT_PLAYER) {
+        pPlayerClient = SUNIT_GetClient(pUnit, ".\\UNIT\\SUnit.cpp", 0xc3c);
+        D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pPlayerClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)roomCoords.sTileRect.left, (uint16_t)roomCoords.sTileRect.top);
         D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
         if (nRelocMode) {
           pUnit->eUnitFlagsEx |= 0x800;
@@ -1907,12 +1885,34 @@ BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
         }
 
         UNITS_UpdateRoomClientVisibility(pGameLocal, pUnit, nullptr);
+        pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+        bVar1 = pPlayerData->nPosHistoryIndex;
+        pPlayerData->nRevealingMapRelated = ptTarget.x;
+        pPlayerData->nRevealingMapRelated2 = ptTarget.y;
+        dwTickCount = GetTickCount();
+        pGameSave = pGameLocal;
+        pPlayerData->dwPosHistoryTick = dwTickCount;
+        pPlayerData->aPosHistory[bVar1].nX = ptTarget.x;
+        pPlayerData->aPosHistory[bVar1].nY = ptTarget.y;
+        pPlayerData->nPosHistoryIndex += '\x01';
+        if (pPlayerData->nPosHistoryIndex >= 0x14) {
+          pPlayerData->nPosHistoryIndex = '\0';
+        }
+
+        GAME::Event::SetEventMapReveal(pGameLocal, pUnit, UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN, pGameLocal->dwGameFrame + 0x32, PLAYER_CancelMapReveal, 0, 0);
+        PLAYER::PlayerPets::PETS_ManagePetsByType(pGameSave, pUnit, (uint16_t)ptTarget.x, (uint16_t)ptTarget.y);
         return 1;
       }
 
-      pDynamicPath = 0;
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc25);
-      exit(-1);
+      D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
+      if (nRelocMode) {
+        pUnit->eUnitFlagsEx |= 0x800;
+      } else {
+        pUnit->eUnitFlagsEx |= UNITFLAGEX_TELEPORTED;
+      }
+
+      UNITS_UpdateRoomClientVisibility(pGameLocal, pUnit, nullptr);
+      return 1;
     }
 }
 
