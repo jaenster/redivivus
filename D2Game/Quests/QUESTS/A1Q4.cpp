@@ -1255,16 +1255,16 @@ BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(D2ObjectOperateFnArg * pOperation
 }
 
 // A1Q4 (Search for Cain) object init/refresh callback for the Cairn-Stones portal object (classId 0x11). If the quest is active and the portal object has not yet been armed, stores the object GUID and schedules Q04_SpawnTristramPortal via AddQuestTimer. Calls SetupUpdateFlag on the object unit to trigger a rendering update. Guards against re-entry via flag bytes on the quest-specific data struct.
-void __fastcall Objects_InitFn06(uint32_t * pdwParam) {
+void __fastcall Objects_InitFn06(D2ObjectInitFnArg * pdwParam) {
     uint32_t nPortalSpawned;
     D2QuestDataA1Q4Strc* pObject;
     D2QuestDataA1Q1Strc* pA1Q1Data;
     char cFlagByte;
     D2UnitStrc* pObjectUnit;
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal((::SGAMEDATA*)*pdwParam, QUESTINT_TheSearchForCain);
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pdwParam->pGame, QUESTINT_TheSearchForCain);
     if (pQuestData) {
       int32_t nClassId;
-      pObjectUnit = (D2UnitStrc*)pdwParam[1];
+      pObjectUnit = pdwParam->pObject;
       if (!pObjectUnit) {
         nClassId = -1;
       } else {
@@ -1276,10 +1276,10 @@ void __fastcall Objects_InitFn06(uint32_t * pdwParam) {
         cFlagByte = *(char*)((uintptr_t)&pObject->sSub.nStoneAttemptCount + 1);
         pObject->sSub.field_0x34 = 0;
         if (cFlagByte == '\0' && nClassId == 0x11) {
-          if (!pdwParam[1]) {
+          if (!pdwParam->pObject) {
             nPortalSpawned = -1;
           } else {
-            nPortalSpawned = *(uint32_t*)(pdwParam[1] + 0xc);
+            nPortalSpawned = pdwParam->pObject->nUnitGUID;
           }
 
           pObject->sSub.nPortalGUID = nPortalSpawned;
@@ -1289,20 +1289,20 @@ void __fastcall Objects_InitFn06(uint32_t * pdwParam) {
           }
         }
 
-        D2Common::Units::SetupUpdateFlag((D2UnitStrc*)pdwParam[1], 2);
+        D2Common::Units::SetupUpdateFlag(pdwParam->pObject, 2);
         return;
       }
       if (!pObject->sSub.field_0x35 && pObject->sSub.bQuestObjectsActivated == '\0') {
         if (pObject->sSub.bPortalSpawnPending[nClassId - 0x11] == 1) {
           pObject->sSub.bPortalSpawnPending[nClassId - 0x11] = 0;
-          D2Common::Units::SetupUpdateFlag((D2UnitStrc*)pdwParam[1], 0);
+          D2Common::Units::SetupUpdateFlag(pdwParam->pObject, 0);
           return;
         }
       } else {
         D2Common::Units::SetupUpdateFlag(pObjectUnit, 2);
       }
     } else {
-      pA1Q1Data = (D2QuestDataA1Q1Strc*)pdwParam[1];
+      pA1Q1Data = (D2QuestDataA1Q1Strc*)pdwParam->pObject;
       if (!pA1Q1Data || pA1Q1Data->sQuestGUID.aPlayerGUID[4] != 2) {
         D2Common::Units::SetupUpdateFlag((D2UnitStrc*)pA1Q1Data, 2);
         return;

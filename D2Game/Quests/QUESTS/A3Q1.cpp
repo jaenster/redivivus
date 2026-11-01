@@ -116,31 +116,31 @@ uint32_t __fastcall Q17_GetHratliCoords(::SGAMEDATA * pGame, int32_t * pdwParam)
 }
 
 // Objects_InitFn50 — (QUEST_SpokeToHratli helper, not Lam Esen). Second-stage init for the Q17 monster: records Charsi-notified flag + monster GUIDs, then — only if record state 0xd (JustCompleted) IS set and the monster was not yet taken — spawns the unique monster (monstats 0xfd), flags it ISRESURRECT|ISINIT, and transplants the DRLG preset map-AI file onto it. Reads SpokeToHratli record state; writes only the quest-specific struct, not the player quest record.
-void __fastcall Objects_InitFn50(int32_t * pdwParam) {
+void __fastcall Objects_InitFn50(D2ObjectInitFnArg * pdwParam) {
     D2UnitStrc* pMonster;
     D2MapAIStrc** ppMonsterMapAi;
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal((::SGAMEDATA*)*pdwParam, QUESTINT_SpokeToHratli);
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pdwParam->pGame, QUESTINT_SpokeToHratli);
     if (!pQuestData) {
       return;
     }
 
     D2QuestDataA3Q0Strc* pA1Q3Data = pQuestData->pQuestSpecificData.pA3Q0;
     pA1Q3Data->bHratliCoordsValid = '\x01';
-    pA1Q3Data->nHratliX = pdwParam[5];
-    pA1Q3Data->nHratliY = pdwParam[6];
-    int bIsJustCompleted = QUEST_GetQuestRecordState((::SGAMEDATA*)*pdwParam, QUEST_SpokeToHratli, 0xd);
+    pA1Q3Data->nHratliX = pdwParam->nX;
+    pA1Q3Data->nHratliY = pdwParam->nY;
+    int bIsJustCompleted = QUEST_GetQuestRecordState(pdwParam->pGame, QUEST_SpokeToHratli, 0xd);
     if (!(bIsJustCompleted && !pA1Q3Data->bHratliMapAiSet)) {
       return;
     }
     if (pA1Q3Data->bHratliSpawned) {
-      pMonster = UNIT::SUnit::FindUnitFromTable((::SGAMEDATA*)*pdwParam, UNIT_MONSTER, pA1Q3Data->nHratliGUID);
+      pMonster = UNIT::SUnit::FindUnitFromTable(pdwParam->pGame, UNIT_MONSTER, pA1Q3Data->nHratliGUID);
       if (pMonster) {
         pA1Q3Data->bHasHratliCoords = true;
         return;
       }
     }
 
-    pMonster = Monster::Create::SpawnMonsterAtRoomPos((::SGAMEDATA*)*pdwParam, (D2RoomStrc*)pdwParam[2], pdwParam[5], pdwParam[6], 0xfd, eD2MonsterAnimMode_ns::Neutral, -1, 0);
+    pMonster = Monster::Create::SpawnMonsterAtRoomPos(pdwParam->pGame, pdwParam->pRoom, pdwParam->nX, pdwParam->nY, 0xfd, eD2MonsterAnimMode_ns::Neutral, -1, 0);
     if (!pMonster) {
       return;
     }

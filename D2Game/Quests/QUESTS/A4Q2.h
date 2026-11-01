@@ -84,7 +84,7 @@ void __fastcall Q27_Callback_08_KillHandler(struct D2QuestDataStrc * pQuestData,
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 void __fastcall Q27_InitData(struct D2QuestDataStrc * pQuestData);
 // [A4Q3 Terror's End] Object init-fn (seal object): records which seal/lever was touched into the A4Q2 struct; if all 5 seals + 3 bosses are accounted for, triggers Q27_ActivateAllSealsKillChaos and arms the spawn-Diablo timer (QuitGameAfterDia).
-void __fastcall Objects_InitFn55(uint32_t * pdwParam);
+void __fastcall Objects_InitFn55(struct D2ObjectInitFnArg * pdwParam);
 // [A4Q3 Terror's End] Object operate-fn for the 5 Chaos Sanctuary seal objects (class 0x188-0x18c). On activation sets the corresponding per-seal flag in the A4Q2 struct; once all 5 seals + 3 seal-bosses are done, calls Q27_ActivateAllSealsKillChaos (summon Diablo) and arms the spawn timer.
 BOOL __fastcall OBJOP_A4Q2_DiabloSealActivateKillChaos(struct D2ObjectOperateFnArg * pOperation);
 // [A4Q3 Terror's End] Getter: returns the "Diablo currently spawned" flag (field_0x14) from the A4Q2 quest-specific struct.

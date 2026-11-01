@@ -363,19 +363,19 @@ BOOL __fastcall Q14_IsPortalNotCreated(::SGAMEDATA * pGame) {
 }
 
 // Q14 object InitFn (Objects_InitFn21): orifice/Tal Rasha chamber object init. Records GUID, marks present. If the staff has been used (state byte [3]) but portal not yet created ([0xb]==0), schedules the Q14_TimerCreatePortal timer to spawn the portals and marks timer-armed. Sets object hidden(2). No quest-record state change.
-void __fastcall Objects_InitFn21(uint32_t * pInitArg) {
+void __fastcall Objects_InitFn21(D2ObjectInitFnArg * pInitArg) {
     int nStaffUsedFlag;
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal((::SGAMEDATA*)*pInitArg, QUESTINT_TheSevenTombs);
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheSevenTombs);
     if (!pQuestData) {
       return;
     }
 
     D2QuestDataA2Q6Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA2Q6;
     pQuestSpecificData->field_0x4 = 1;
-    if (!pInitArg[1]) {
+    if (!pInitArg->pObject) {
       nStaffUsedFlag = -1;
     } else {
-      nStaffUsedFlag = *(int*)(pInitArg[1] + 0xc);
+      nStaffUsedFlag = pInitArg->pObject->nUnitGUID;
     }
 
     pQuestSpecificData->field_0x20 = nStaffUsedFlag;
@@ -386,11 +386,11 @@ void __fastcall Objects_InitFn21(uint32_t * pInitArg) {
     } else if (!pQuestSpecificData->bPortalCreated) {
       AddQuestTimer(pQuestData, Q14_TimerCreatePortal, 1);
       pQuestSpecificData->bPortalTimerArmed = 1;
-      D2Common::Units::SetupUpdateFlag((D2UnitStrc*)pInitArg[1], 2);
+      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag((D2UnitStrc*)pInitArg[1], 2);
+    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
 }
 
 // Q14 per-party-member callback: completes The Horadric Staff quest record for one player if not already complete and the player is in Act II. Sets Completed+JustCompleted and (unless mid-trade) strips the 3 staff component quest items (hsu/vip/msf). Invoked for every party member when the staff is placed in the orifice.

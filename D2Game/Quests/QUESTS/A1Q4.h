@@ -172,7 +172,7 @@ void __fastcall MakeTownPortalFromScroolTree(::SGAMEDATA * pGame, struct D2UnitS
 // yields the Scroll of Inifuss and advances the quest.
 BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(struct D2ObjectOperateFnArg * pOperation);
 // A1Q4 (Search for Cain) object init/refresh callback for the Cairn-Stones portal object (classId 0x11). If the quest is active and the portal object has not yet been armed, stores the object GUID and schedules Q04_SpawnTristramPortal via AddQuestTimer. Calls SetupUpdateFlag on the object unit to trigger a rendering update. Guards against re-entry via flag bytes on the quest-specific data struct.
-void __fastcall Objects_InitFn06(uint32_t * pdwParam);
+void __fastcall Objects_InitFn06(struct D2ObjectInitFnArg * pdwParam);
 // A1Q4 — Q04_HandleNpcInteraction (party-member callback).
 // For each Act I party member not yet Completed/RewardAwaits, set their quest record
 // Step0x04 (the Cairn-stones-solved sub-step) so the journal reflects the puzzle
