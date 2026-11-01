@@ -1227,7 +1227,7 @@ int __fastcall DRLG_FindHTile(D2RoomExStrc * pRoomEx, int nTileType, uint32_t nG
       nRaritySum = 0;
     }
 
-    uint32_t nTileMatchCount = D2CMP::DUNGEON::Dungeon::TILEPROJECT_LookupTilesInAllProjects(pRoomEx->apTiles, nTileType, (uint32_t)nMainIndex, nRaritySum & 0xff, aTileResults, 0x28);
+    uint32_t nTileMatchCount = D2CMP::DUNGEON::Dungeon::TILEPROJECT_LookupTilesInAllProjects(pRoomEx->apTiles, nTileType, (uint32_t)nMainIndex, (uint8_t)nRaritySum, aTileResults, 0x28);
     if (!nTileMatchCount) {
       nTileMatchCount = D2CMP::DUNGEON::Dungeon::TILEPROJECT_LookupTilesInAllProjects(pRoomEx->apTiles, 10, 0, 0, aTileResults, 0x28);
       if (!nTileMatchCount) {

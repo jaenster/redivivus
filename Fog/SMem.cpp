@@ -277,7 +277,7 @@ int32_t __stdcall SMemSizeClassBucketLookup(uint32_t nAllocSize) {
       return -1;
     }
     if ((uint8_t)(char)nAllocSize > '\0') {
-      return g_SMemSizeClassTable[nAllocSize & 0xff];
+      return g_SMemSizeClassTable[(uint8_t)nAllocSize];
     }
 
     uint8_t byClassByte = (uint8_t)(nAllocSize >> 8);
@@ -1120,7 +1120,7 @@ uint32_t __stdcall SMemExtractBucketIndex(uint32_t nParam) {
 }
 
 uint32_t * __stdcall SMemFindHeapByHash(uint32_t * pnOutBucket, int32_t nFlags, uint32_t nHash) {
-    uint32_t uBucketIndex = nHash & 0xff;
+    uint32_t uBucketIndex = (uint8_t)nHash;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + uBucketIndex);
     *pnOutBucket = uBucketIndex;
     D2FogHeapDescStrc* pHeapNode = (D2FogHeapDescStrc*)g_SMemHeapBuckets[uBucketIndex];

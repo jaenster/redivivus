@@ -1591,7 +1591,7 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
           nAutoMagicAffixId = SKILLS::Items::ITEMMOD_RollMagicAffixVersionedEx(*ppItem, 0, 1, 0, 1, 0, (uint32_t)(uint16_t)pItemTxt->wAutoPrefix);
           if ((uint16_t)(short int)nAutoMagicAffixId > 0) {
             D2Common::ITEMS::Items::SetAutoMagic(*ppItem, (short int)nAutoMagicAffixId);
-            pMagicAffixLine = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine(nAutoMagicAffixId & 0xffff);
+            pMagicAffixLine = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint16_t)nAutoMagicAffixId);
             D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(0, nullptr, *ppItem, pMagicAffixLine, 0, 0);
           }
         }

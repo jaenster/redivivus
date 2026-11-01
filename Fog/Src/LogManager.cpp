@@ -835,6 +835,7 @@ void __fastcall WriteHexDumpLogEntry(int32_t pLogRecord) {
 }
 
 void __stdcall CloseStaleLogFileHandles() {
+    char byUnused[260];
     DWORD dwNow = GetTickCount();
     int nSlotOffset = 0;
     do {

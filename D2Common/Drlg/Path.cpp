@@ -64,7 +64,7 @@ int32_t __fastcall DRLGPATH_GetApproxDistance(int32_t nY1, int32_t nY2, int32_t 
 // Same heuristic as DRLGPATH_GetApproxDistance: min(|dx|,|dy|) + max(|dx|,|dy|) * 2.
 int32_t __stdcall DRLGPATH_GetApproxDistancePacked(uint32_t nPackedCoord1, uint32_t nPackedCoord2) {
     int nResult;
-    int nDx = (nPackedCoord2 & 0xffff) - (nPackedCoord1 & 0xffff);
+    int nDx = (uint16_t)nPackedCoord2 - (uint16_t)nPackedCoord1;
     if (nDx < 0) {
       nDx = -nDx;
     }
@@ -144,7 +144,7 @@ static int32_t __stdcall DRLGPATH_GetDirectionIndex(int32_t nY2, int32_t nY1, in
 // for lookup into direction and path vector tables.
 int32_t __stdcall DRLGPATH_GetDirectionIndexPacked(uint32_t nParam1, uint32_t nParam2) {
     uint32_t nDeltaX;
-    nDeltaX = (nParam2 & 0xffff) - (nParam1 & 0xffff);
+    nDeltaX = (uint16_t)nParam2 - (uint16_t)nParam1;
     uint32_t nDeltaY;
     nDeltaY = (nParam2 >> 0x10) - (nParam1 >> 0x10);
     uint32_t nAbsDeltaX;
@@ -635,7 +635,7 @@ int32_t __stdcall DRLGPATH_GetWeightedDistancePacked(uint32_t nParam1, uint32_t 
     0xb
 }; D2_STATIC_GUARD(gaPathWeightTable, "D2Common::Drlg::Path::DRLGPATH_GetWeightedDistancePacked::gaPathWeightTable");
 
-    int nAbsDX = (nParam1 & 0xffff) - (nParam2 & 0xffff);
+    int nAbsDX = (uint16_t)nParam1 - (uint16_t)nParam2;
     if (nAbsDX < 0) {
       nAbsDX = -nAbsDX;
     }
@@ -714,7 +714,7 @@ static BOOL __stdcall DRLGPATH_RaycastCollisionLine(int * pVelocity, uint32_t nP
     uint32_t nPackedSrc = nParam;
     int nFpIterX = nParam * 0x10000 + 0x8000;
     uint32_t nPackedDst = *pnParam;
-    int nAbsDX = (nPackedDst & 0xffff) - (nFpIterX >> 0x10 & 0xffffU);
+    int nAbsDX = (uint16_t)nPackedDst - (nFpIterX >> 0x10 & 0xffffU);
     int nFpIterY = (nParam & -65536) + 0x8000;
     int nVelX = *pVelocity;
     int nVelY = pVelocity[1];
@@ -807,7 +807,7 @@ static BOOL __stdcall DRLGPATH_RaycastBresenhamLine(uint32_t nPackedSrc, uint32_
     int32_t nUnitWidth = pPathArg->nUnitWidth;
     int32_t eCollisionFlag_00 = pPathArg->nCollisionPattern;
     uint32_t nPackedDst = *pnParam;
-    int nDeltaX = (nPackedDst & 0xffff) - (nPackedSrc & 0xffff);
+    int nDeltaX = (uint16_t)nPackedDst - (uint16_t)nPackedSrc;
     int nDeltaY = (nPackedDst >> 0x10) - (nPackedSrc >> 0x10);
     uint32_t nPackedCur = nPackedSrc;
     int nStepsX = nDeltaX;
@@ -834,7 +834,7 @@ static BOOL __stdcall DRLGPATH_RaycastBresenhamLine(uint32_t nPackedSrc, uint32_
             nPackedPrev = nPackedCur;
             nCurY = nCurY + (uint16_t)(nDeltaY >= 0) * 2 - 1;
             nPackedCur = (uint32_t)((uint32_t)(uint16_t)nCurY << 16 | (uint32_t)(uint16_t)(short int)nPackedCur);
-            iVar1 = Collision::CheckCollision_BlockPlayer_Type(pRoom, nPackedSrc & 0xffff, (uint32_t)nCurY, nUnitWidth, eCollisionFlag_00);
+            iVar1 = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint16_t)nPackedSrc, (uint32_t)nCurY, nUnitWidth, eCollisionFlag_00);
             if (iVar1) {
               break;
             }
@@ -1564,7 +1564,7 @@ uint32_t __fastcall DRLGPATH_ValidateFullPath(D2PathTypeArg * pPathTypeArgs) {
     do {
       int nDelta;
       nPackedWaypoint = pDynamicPath->PathPoints[nWaypointIdx];
-      nDelta = ((uint32_t)d2_bits_of(nPackedWaypoint) & 0xffff) - ((uint32_t)d2_bits_of(nPackedPrev) & 0xffff);
+      nDelta = (uint16_t)(uint32_t)d2_bits_of(nPackedWaypoint) - (uint16_t)(uint32_t)d2_bits_of(nPackedPrev);
       if (nDelta < 0) {
         nDelta = -nDelta;
       }
@@ -1579,7 +1579,7 @@ uint32_t __fastcall DRLGPATH_ValidateFullPath(D2PathTypeArg * pPathTypeArgs) {
             return 0;
           }
         } else {
-          iVar1 = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint32_t)d2_bits_of(nPackedWaypoint) & 0xffff, (uint32_t)d2_bits_of(nPackedWaypoint) >> 0x10, nUnitWidth, eCollisionFlag);
+          iVar1 = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint16_t)(uint32_t)d2_bits_of(nPackedWaypoint), (uint32_t)d2_bits_of(nPackedWaypoint) >> 0x10, nUnitWidth, eCollisionFlag);
           if (iVar1) {
             return 0;
           }
@@ -1601,7 +1601,7 @@ uint32_t __fastcall DRLGPATH_ValidateFullPath(D2PathTypeArg * pPathTypeArgs) {
 // Computes a simple distance heuristic between two packed coordinates: min(dx,dy) + max(dx,dy)*2. This is equivalent to a simple diagonal distance estimation.
 int32_t __stdcall DRLGPATH_GetSimpleDistancePacked(uint32_t nParam1, uint32_t nParam2) {
     int nResult;
-    int nDX = (nParam2 & 0xffff) - (nParam1 & 0xffff);
+    int nDX = (uint16_t)nParam2 - (uint16_t)nParam1;
     if (nDX < 0) {
       nDX = -nDX;
     }
@@ -1916,7 +1916,7 @@ int32_t __thiscall DRLGPATH_FindPathAStar(D2DrlgRoomCoordsStrc * pRoomCoords, D2
     sStartNode.nX = pPathTypeArg->pCoords.nOffsetX;
     sStartNode.nY = pPathTypeArg->pCoords.nPosX;
     uint32_t nCostLimit = (uint32_t)((uint32_t)(uint16_t)pPathTypeArg->pCoords.nOffsetY | (uint32_t)(uint16_t)pPathTypeArg->pCoords.nPosY << 16);
-    int nPathLength = (nCostLimit & 0xffff) - (*(uint32_t*)((char*)&sStartNode + 8) & 0xffff);
+    int nPathLength = (uint16_t)nCostLimit - (uint16_t)*(uint32_t*)((char*)&sStartNode + 8);
     if (nPathLength < 0) {
       nPathLength = -nPathLength;
     }
@@ -2045,7 +2045,7 @@ int32_t __fastcall PATH_FindPathAStar(D2PathTypeArg * pPathTypeArg) {
 
 // Alternate simple distance heuristic between two packed coordinates. Same formula as DRLGPATH_GetSimpleDistancePacked but used by the secondary A* pathfinder (PathTypeFunc_01).
 int32_t __stdcall DRLGPATH_GetSimpleDistancePacked2(uint32_t nParam1, uint32_t nParam2) {
-    int nAbsDX = (nParam1 & 0xffff) - (nParam2 & 0xffff);
+    int nAbsDX = (uint16_t)nParam1 - (uint16_t)nParam2;
     if (nAbsDX < 0) {
       nAbsDX = -nAbsDX;
     }
@@ -2590,7 +2590,7 @@ int32_t __fastcall PATH_FindPathAStarLocalPool(D2PathTypeArg * pPathTypeArg) {
       memset(pNewNode, 0, 0x38);
     }
 
-    int32_t nDeltaX = (nPackedSrc & 0xffff) - (nUnusedParam & 0xffff);
+    int32_t nDeltaX = (uint16_t)nPackedSrc - (uint16_t)nUnusedParam;
     pNewNode->nGCost = 0;
     if (nDeltaX < 0) {
       nDeltaX = -nDeltaX;
@@ -2644,7 +2644,7 @@ int32_t __fastcall PATH_FindPathAStarLocalPool(D2PathTypeArg * pPathTypeArg) {
 
 // Computes the squared Euclidean distance between two packed (X|Y) coordinates. Returns dx*dx + dy*dy. No callers found - likely referenced via function pointer table or dead code.
 int32_t __stdcall DRLGPATH_GetSquaredDistancePacked(uint32_t nPackedA, uint32_t nPackedB) {
-    int nDeltaX = (nPackedA & 0xffff) - (nPackedB & 0xffff);
+    int nDeltaX = (uint16_t)nPackedA - (uint16_t)nPackedB;
     int nDeltaY = (nPackedA >> 0x10) - (nPackedB >> 0x10);
     return nDeltaY * nDeltaY + nDeltaX * nDeltaX;
 }
@@ -2655,7 +2655,7 @@ int32_t __stdcall DRLGPATH_BuildBresenhamPointList(uint32_t nSrcPacked, uint32_t
     uint32_t nCurX;
     int nMaxStepsM1 = nMaxSteps - 1;
     *pnInitDir = 0;
-    int32_t nDeltaX = (nDstPacked & 0xffff) - (nSrcPacked & 0xffff);
+    int32_t nDeltaX = (uint16_t)nDstPacked - (uint16_t)nSrcPacked;
     uint32_t nSrcY = nSrcPacked >> 0x10;
     uint32_t nDeltaY = (nDstPacked >> 0x10) - nSrcY;
     int nPointCount = 0;
@@ -2761,7 +2761,7 @@ int32_t __stdcall DRLGPATH_BuildBresenhamPointList(uint32_t nSrcPacked, uint32_t
 
 // Computes a direction lookup value from two packed coordinates using a table at 0x6F1E28. The index is computed as (dy*3 - srcX + dstX), suggesting a 3-state direction encoding. No callers found - likely used via function pointer.
 uint32_t __stdcall DRLGPATH_GetDirectionLookupFromPacked(uint32_t nSrcPacked, uint32_t nDstPacked) {
-    return gaPathDirectionLookupTable[((nDstPacked >> 0x10) - (nSrcPacked >> 0x10)) * 3 - (nSrcPacked & 0xffff) + (nDstPacked & 0xffff)];
+    return gaPathDirectionLookupTable[((nDstPacked >> 0x10) - (nSrcPacked >> 0x10)) * 3 - (uint16_t)nSrcPacked + (uint16_t)nDstPacked];
 }
 
 // Attempts to step in a preferred direction, falling back to alternate directions on collision. Uses direction lookup tables at 0x6F1D98 to compute the target position. Tries up to 4 directions before marking the step as failed. Used by the dual-scan pathfinder (PathTypeFunc_15).
@@ -2977,11 +2977,11 @@ int32_t __fastcall DRLGPATH_FindPathDualScan(uint32_t * pPathGrid, int32_t nGrid
     uint32_t uVar1;
     uVar1 = *(uint32_t*)(nGridSize + *pStartX * 4);
     uint32_t uVar2;
-    uVar2 = nStartPos & 0xffff;
+    uVar2 = (uint16_t)nStartPos;
     D2DrlgPathScannerStrc* pScannerB;
     pScannerB = &nScannerADir;
-    nScannerADir.nDir = gaPathDirectionLookupTable[((uVar1 >> 0x10) - (nStartPos >> 0x10)) * 3 - uVar2 + (uVar1 & 0xffff)] + 1;
-    nScannerBDir.nDir = gaPathDirectionLookupTable[((uVar1 >> 0x10) - (nStartPos >> 0x10)) * 3 - uVar2 + (uVar1 & 0xffff)] + 7;
+    nScannerADir.nDir = gaPathDirectionLookupTable[((uVar1 >> 0x10) - (nStartPos >> 0x10)) * 3 - uVar2 + (uint16_t)uVar1] + 1;
+    nScannerBDir.nDir = gaPathDirectionLookupTable[((uVar1 >> 0x10) - (nStartPos >> 0x10)) * 3 - uVar2 + (uint16_t)uVar1] + 7;
     nScannerBDir.nPosPacked = nStartPos;
     nScannerADir.nPosPacked = nStartPos;
     D2DrlgPathScannerStrc* pDVar5;
@@ -3073,17 +3073,17 @@ int32_t __fastcall DRLGPATH_FindPathDualScan(uint32_t * pPathGrid, int32_t nGrid
 
     uVar1 = pPathGrid[1];
     int32_t nDistSqDiff;
-    nDistSqDiff = ((uint32_t)d2_bits_of(nScannerADir.anWaypoints[nScannerADir.nWaypointCount - 1]) & 0xffff) - (uVar1 & 0xffff);
+    nDistSqDiff = (uint16_t)(uint32_t)d2_bits_of(nScannerADir.anWaypoints[nScannerADir.nWaypointCount - 1]) - (uint16_t)uVar1;
     int32_t nWaypointIdx;
     nWaypointIdx = ((uint32_t)d2_bits_of(nScannerADir.anWaypoints[nScannerADir.nWaypointCount - 1]) >> 0x10) - (uVar1 >> 0x10);
     int nDistSqScanA;
     nDistSqScanA = nWaypointIdx * nWaypointIdx + nDistSqDiff * nDistSqDiff;
     int32_t nDistSqA;
-    nDistSqA = ((uint32_t)d2_bits_of(nScannerBDir.anWaypoints[nScannerBDir.nWaypointCount - 1]) & 0xffff) - (uVar1 & 0xffff);
+    nDistSqA = (uint16_t)(uint32_t)d2_bits_of(nScannerBDir.anWaypoints[nScannerBDir.nWaypointCount - 1]) - (uint16_t)uVar1;
     iVar4 = ((uint32_t)d2_bits_of(nScannerBDir.anWaypoints[nScannerBDir.nWaypointCount - 1]) >> 0x10) - (uVar1 >> 0x10);
     int nDistSqScanB;
     nDistSqScanB = iVar4 * iVar4 + nDistSqA * nDistSqA;
-    iVar4 = (*pPathGrid & 0xffff) - (uVar1 & 0xffff);
+    iVar4 = (uint16_t)*pPathGrid - (uint16_t)uVar1;
     int32_t nDistSqB;
     nDistSqB = (*pPathGrid >> 0x10) - (uVar1 >> 0x10);
     iVar4 = nDistSqB * nDistSqB + iVar4 * iVar4;
@@ -3146,7 +3146,7 @@ int32_t __fastcall DRLGPATH_SimplifyCollinearWaypoints(D2PathPointStrc * pDstPoi
     }
 
     int32_t nOutCount;
-    nPrevDeltaX = (uint32_t)pSrcPoints->nX - (nStartPacked & 0xffff);
+    nPrevDeltaX = (uint32_t)pSrcPoints->nX - (uint16_t)nStartPacked;
     nPrevDeltaY = (uint32_t)pSrcPoints->nY - (nStartPacked >> 0x10);
     nOutCount = 0;
     i = 0;

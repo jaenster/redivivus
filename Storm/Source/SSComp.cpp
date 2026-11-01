@@ -545,7 +545,7 @@ void __fastcall SCOMP_ArenaFree(D2ScompArenaStrc * pArenaState, void * pBlock) {
 static int __stdcall SCOMP_ZlibCompress(uint8_t * pSrc, uint32_t nSrcLen, uint32_t nLevel, uint32_t * pnOutLen) {
     z_stream zStream;
     D2ScompArenaStrc sArena;
-    uint8_t aArenaBuf[300004];
+    uint8_t aArenaBuf[300000];
     zStream.avail_out = *pnOutLen;
     zStream.next_out = pSrc;
     sArena.pCur = aArenaBuf;
@@ -4197,7 +4197,7 @@ int __thiscall HUFFMAN_DecompressBlock(uint32_t * pDecoderCtx, uint8_t * pDst, i
     uint16_t* puVar1 = pBitBuf[1];
     pBitBuf[2] += -4;
     pBitBuf[1] = (uint16_t*)((uint32_t)puVar1 >> 8);
-    COMPRESS_InitEncoderContext((D2CompressEncoderStrc*)pDecoderCtx, (int**)((uint32_t)puVar1 & 0xff));
+    COMPRESS_InitEncoderContext((D2CompressEncoderStrc*)pDecoderCtx, (int**)(uint8_t)(uint32_t)puVar1);
     pBitBuf = (uint16_t**)pDst;
     *pDecoderCtx = (uint32_t)((char)(uintptr_t)puVar1 == '\0');
     while (true) {
@@ -4213,7 +4213,7 @@ int __thiscall HUFFMAN_DecompressBlock(uint32_t * pDecoderCtx, uint8_t * pDst, i
         }
 
         pBitBufAlias[2] += -4;
-        nSymbol = (uint32_t)pBitBufAlias[1] & 0xff;
+        nSymbol = (uint8_t)(uint32_t)pBitBufAlias[1];
         pBitBufAlias[1] = (uint16_t*)((uint32_t)pBitBufAlias[1] >> 8);
         COMPRESS_EncodeSymbol((D2CompressEncoderStrc*)pDecoderCtx, (int*)nSymbol);
         if (!*pDecoderCtx) {
@@ -4245,7 +4245,7 @@ int __thiscall COMPRESS_EncodeBuffer(uint32_t * pHuffCtx, int32_t pBitStream, ui
     uint32_t nBitsAvail;
     COMPRESS_InitEncoderContext((D2CompressEncoderStrc*)pHuffCtx, nTableSel);
     *pHuffCtx = (uint32_t)((char)(uintptr_t)nTableSel == '\0');
-    BITSTREAM_WriteBits((D2BitStreamWriterStrc*)pBitStream, (uint32_t)nTableSel & 0xff, 8);
+    BITSTREAM_WriteBits((D2BitStreamWriterStrc*)pBitStream, (uint8_t)(uint32_t)nTableSel, 8);
     while (true) {
       uint32_t nSymbol;
       if (!nSrcLen) {

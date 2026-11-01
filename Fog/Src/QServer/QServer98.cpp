@@ -346,7 +346,7 @@ BOOL __fastcall CreateSocketOnline(D2QServerStrc * pQServer, u_short nPort) {
     HANDLE hThread;
     char optTcpNoDelay[8];
     u_long ulNonBlocking;
-    char optReuseAddr[4];
+    int optReuseAddr;
     sockaddr bindAddr;
     /* int protocol for socket */ /* int type for socket */ /* int af for socket */ pQServer->nPerIpConnectionLimit = 1;
     SOCKET s = socket(2, 1, 0);
@@ -362,11 +362,8 @@ BOOL __fastcall CreateSocketOnline(D2QServerStrc * pQServer, u_short nPort) {
       optTcpNoDelay[2] = '\0';
       optTcpNoDelay[3] = '\0';
       /* char * optval for setsockopt */ /* int optname for setsockopt */ /* int level for setsockopt */ /* SOCKET s for setsockopt */ setsockopt(s, 0xffff, 8, optTcpNoDelay, 4);
-      /* int optlen for setsockopt */ optReuseAddr[0] = '\x01';
-      optReuseAddr[1] = '\0';
-      optReuseAddr[2] = '\0';
-      optReuseAddr[3] = '\0';
-      /* char * optval for setsockopt */ /* int optname for setsockopt */ /* int level for setsockopt */ /* SOCKET s for setsockopt */ setsockopt(pQServer->aListenSockets[0], 0xffff, 4, optReuseAddr, 4);
+      /* int optlen for setsockopt */ /* char * optval for setsockopt */ /* int optname for setsockopt */ /* int level for setsockopt */ /* SOCKET s for setsockopt */ optReuseAddr = 1;
+      setsockopt(pQServer->aListenSockets[0], 0xffff, 4, (char*)&optReuseAddr, 4);
       /* u_long * argp for ioctlsocket */ /* long cmd for ioctlsocket */ /* SOCKET s for ioctlsocket */ ulNonBlocking = 1;
       ioctlsocket(s, -0x7ffb9982, &ulNonBlocking);
       memset(bindAddr.sa_data + 2, 0, 12 * sizeof(bindAddr.sa_data[0]));

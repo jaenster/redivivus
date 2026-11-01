@@ -852,7 +852,6 @@ void __fastcall SKILLBAR_OnWarCryExpire(D2UnitStrc * pUnit, eD2States eState, in
 // Server-side skill "start" function (srvstfunc 38): a charge/leap-to-target movement skill (e.g. War Cry / charge class). Validates eSkill against skills.txt and that the unit has the skill; resolves target/cursor position. If a melee target is already in range, queues client packet 0xA5 and force-attacks it. Otherwise sets the unit's dynamic path collision pattern/type, calculates a path toward the cursor, applies walk velocities, lands the unit at the final path point, registers collision there, sets uninterruptable + skill_move state, and stores the destination into the skill's Param1-4. Finally applies the skill's aurastate (if valid): updates state, sets an expiry-timed state via SetStateWithExpiryTime (OnWarCryExpire callback), copies aura/passive stats and the modifier skill/level stats, and fires up to 3 auraevent handlers. Returns 1 on success, 0 on any validation/path failure (queuing 0xA5 to the client on failure).
 BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bHasTargetPos;
-    D2StateExArgStrc sStateArgs;
     D2PathPointStrc* pPathPoints;
     uint32_t nTargetY;
     uint32_t nTargetX;
@@ -949,11 +948,7 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     }
 
     SkillsServer::D2UpdateState(pUnit, (int)eAuraState, 0);
-    sStateArgs.nDurationInFrames = 0;
-    sStateArgs.eStat = UNITSTAT_strength;
-    sStateArgs.nSkillCalc = 0;
-    sStateArgs.eAuraState = STATE_none;
-    sStateArgs.pFunction = 0;
+    D2StateExArgStrc sStateArgs = {0};
     sStateArgs.eSkill = eSkill;
     sStateArgs.nSkillLvl = nSkillLvl;
     sStateArgs.pUnit = pUnit;
@@ -1478,13 +1473,11 @@ static BOOL __stdcall SKILLBAR_CanTargetPosition(D2UnitStrc * pUnit, int32_t nPa
 
 // Server-side skill StFunc 40: start/setup handler for a charge-leap movement skill (e.g. Leap/Charge). Validates the skill id and the unit's current skill. For player units it resolves the target/cursor position and validates it (SKILLBAR_CanTargetPosition / SKILLBAR_FindValidLeapTarget). For monster units it derives a leap-past destination from the target's position (or cursor) and finds free collision coordinates. It then reserves the destination room, adds a COLLIDE_PLAYER collision marker at the landing point, sets the unit uninterruptible + STATE_skill_move, and stores the destination X/Y (and target type/GUID for monsters) into the skill params with flag 0x80. Returns TRUE on success, FALSE if validation fails (clearing the current skill).
 BOOL __fastcall SKILLBAR_SrvStFn40_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    uint32_t _bIsMonsterUnit;
     D2UnitStrc* pTarget;
     BOOL nResult;
     int32_t nCoordOrWidth;
     D2RoomStrc* pRoom;
     POINT local_18;
-    bool bIsMonsterUnit;
     uint32_t nDestY;
     POINT* pTargetPoint;
     eD2Skills eSkillOrig;
@@ -1507,8 +1500,9 @@ BOOL __fastcall SKILLBAR_SrvStFn40_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       eUnitType = pUnit->eUnitType;
     }
 
-    _bIsMonsterUnit = (uint32_t)(eUnitType == UNIT_MONSTER);
-    if (_bIsMonsterUnit) {
+    BOOL bIsMonsterUnit;
+    bIsMonsterUnit = (BOOL)(eUnitType == UNIT_MONSTER);
+    if (bIsMonsterUnit) {
       int32_t eCollisionFlag;
       pTarget = UNIT::SUnit::GetTargetEx(pGame2, pUnit);
       if (!pTarget) {
@@ -1575,7 +1569,7 @@ BOOL __fastcall SKILLBAR_SrvStFn40_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 1);
     D2Common::Skills::SKILL_SetParam1(pSkill, eSkill);
     D2Common::Skills::SKILL_SetParam2(pSkill, nDestY);
-    if (_bIsMonsterUnit) {
+    if (bIsMonsterUnit) {
       pTarget = UNIT::SUnit::GetTargetEx(pGame2, pUnit);
       if (pTarget) {
         D2Common::Skills::SKILL_SetParam3(pSkill, pTarget->eUnitType);

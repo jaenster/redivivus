@@ -207,7 +207,7 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
         uAlphaR = 0xff;
       }
 
-      bVar2 = D2CMP::Draw::D2GFX_GetColorWithAlphaFromPallete(MostLikelyCurrentPalletePtr, 0x100, nText1 & 0xff, uAlphaG & 0xff, uAlphaR & 0xff);
+      bVar2 = D2CMP::Draw::D2GFX_GetColorWithAlphaFromPallete(MostLikelyCurrentPalletePtr, 0x100, nText1 & 0xff, (uint8_t)uAlphaG, (uint8_t)uAlphaR);
       gPaletteMenuInGame[nPaletteIdx] = bVar2;
       bVar2 = D2CMP::Draw::D2GFX_GetColorWithAlphaFromPallete(MostLikelyCurrentPalletePtr, 0x100, (uint32_t)((PALETTEENTRY*)(pSrcBytes - 2))->peRed, 0, 0);
       gPaletteDataMenuInGame[nPaletteIdx] = bVar2;

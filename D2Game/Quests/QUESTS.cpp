@@ -1991,9 +1991,7 @@ BOOL __fastcall PORTAL_ActivateOrDeactivatePortalObject(::SGAMEDATA * * ppGame) 
 
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall SendQuestState(D2UnitStrc * pUnit, int32_t nQuestId) {
-    D2GSPacketSrv0x5D sPacket;
-    sPacket.nAlertFlags = '\0';
-    sPacket.nFilterStatus = '\0';
+    D2GSPacketSrv0x5D sPacket = {0};
     sPacket.nQuestId = (uint8_t)nQuestId;
     sPacket.nExtra = 0;
     sPacket.nPacketId = ']';

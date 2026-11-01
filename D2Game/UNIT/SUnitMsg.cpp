@@ -1271,7 +1271,7 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
         BVar1 = SUnit::CheckForModeZeroDeath(pUnit);
       if (!BVar1 || (nSkillLevel = D2Common::DATATBLS::ItemStats::STATES_HasLightState(pUnit) , !nSkillLevel)) {
         GAME::SCmd::NET_D2GS_SERVER_Send_0xAC_AddMonster(pClient, pUnit);
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, ptCoords.x + ptCoords.y & 0xffff, 0);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, (uint16_t)(ptCoords.x + ptCoords.y), 0);
         if (pUnit->nClassId == 0x210) {
           nMiscVal = Ai::AiGeneral::MONSTER_GetUnitData_AiGeneral_Offset0x3C(pUnit);
           GAME::SCmd::NET_D2GS_SERVER_Send_0x98_SETSPAWNERMONSTER(pClient, pUnit->nUnitGUID, (uint16_t)nMiscVal);

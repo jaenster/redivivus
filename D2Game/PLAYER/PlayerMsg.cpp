@@ -493,6 +493,7 @@ static uint8_t GetMPRegen(D2UnitStrc * pUnit) {
 // @sourcefile .\PLAYER\PlrMsg.cpp
 BOOL __fastcall NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t bForceUpdate) {
     uint32_t dwGold;
+    int lifeShort;
     if (!pUnit2 || !pUnit) {
       return 0;
     }
@@ -544,10 +545,10 @@ BOOL __fastcall NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate(D2UnitStrc * 
     if (pDynamicPath) {
       char byPosY;
       dwGold = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
-      *(uint8_t*)(char*)&bForceUpdate = (char)(nUnitPosX & 0xffff);
+      *(uint8_t*)(char*)&bForceUpdate = (char)(uint16_t)nUnitPosX;
       byVelX = (char)bForceUpdate - (char)dwGold;
       dwGold = D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath);
-      byPosY = (char)(nUnitPosY & 0xffff);
+      byPosY = (char)(uint16_t)nUnitPosY;
       byVelY = byPosY - (char)dwGold;
     }
 
@@ -580,12 +581,12 @@ BOOL __fastcall NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate(D2UnitStrc * 
             goto send_gold_exp_and_cache_vitals;
           }
 
-          nHpDiff = (uint32_t)pBasics->x - (nUnitPosX & 0xffff);
+          nHpDiff = (uint32_t)pBasics->x - (uint16_t)nUnitPosX;
           if (nHpDiff < 0) {
             nHpDiff = -nHpDiff;
           }
           if (nHpDiff < 2) {
-            nHpDiff = (uint32_t)pBasics->y - (nUnitPosY & 0xffff);
+            nHpDiff = (uint32_t)pBasics->y - (uint16_t)nUnitPosY;
             if (nHpDiff < 0) {
               nHpDiff = -nHpDiff;
             }

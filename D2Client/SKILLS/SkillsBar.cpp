@@ -451,7 +451,6 @@ static BOOL __stdcall SKILL_CanUseAtLocation(D2UnitStrc * pUnit, int32_t nX, int
 // Skill client-state setup func for a teleport/leap-to-location skill: computes and commits the destination into the unit's current D2SkillStrc params. For the local player, aborts if uninterruptable or already casting this very skill. For non-monsters it reads the requested coords (GetCooordinates), checks SKILL_CanUseAtLocation and SKILL_ValidateTeleportDestination. For monsters it targets the confirmed target's mirrored position (2*target - self) or the requested coords. Snaps to a free cell, adds the unit's collision footprint at the destination, stores dest in SKILL param1/param2 (param3/param4 = target type/GUID for monsters), sets skill flags 0x1080 and rebuilds the active-skill stat list. Returns TRUE if a valid destination was set, else FALSE.
 // @sourcefile .\SKILLS\SkillsBar.cpp
 BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    uint32_t _bUnitIsMonster;
     bool bValidDest;
     eD2Skills eCurrentSkillId;
     uint32_t nSkillFlags;
@@ -459,7 +458,6 @@ BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Sk
     D2RoomStrc* pRoom;
     int32_t eCollisionFlag;
     POINT nFreeCoordTmp;
-    bool bUnitIsMonster;
     int32_t nDestY;
     int32_t nDestX;
     BOOL bGotCoords;
@@ -494,8 +492,9 @@ BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Sk
       eUnitType = pUnit->eUnitType;
     }
 
-    _bUnitIsMonster = (uint32_t)(eUnitType == UNIT_MONSTER);
-    if (_bUnitIsMonster) {
+    BOOL bUnitIsMonster;
+    bUnitIsMonster = (BOOL)(eUnitType == UNIT_MONSTER);
+    if (bUnitIsMonster) {
       pPlayerOrTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
       if (!pPlayerOrTarget) {
         bGotCoords = Skills::GetCooordinates(pUnit, &nDestX, &nDestY);
@@ -532,7 +531,7 @@ BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Sk
         D2Common::Collision::AddCollision_Type(pRoom, nDestX, nDestY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), nCalcTmp);
         D2Common::Skills::SKILL_SetParam1(pSkill, nDestX);
         D2Common::Skills::SKILL_SetParam2(pSkill, nDestY);
-        if (_bUnitIsMonster) {
+        if (bUnitIsMonster) {
           pPlayerOrTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
           if (pPlayerOrTarget) {
             D2Common::Skills::SKILL_SetParam3(pSkill, pPlayerOrTarget->eUnitType);
@@ -1166,7 +1165,6 @@ void __fastcall SKILL_DrawUnitAtRotatedAngle(D2UnitStrc * pUnit, uint32_t nParam
 // Client start-func for a Leap-style skill (player or monster): computes and commits the leap destination via pathfinding. Validates the unit/skill/server path; for the local player rejects if the skill is already active (flag bit0) or the unit is in an uninterruptable state. If a confirmed target is in melee range it instead forwards a 0x16 unit message and returns. Otherwise it sets the server path's collision pattern (0xc01) and path type 7, runs PATH_CalculatePath, applies the class/monster walk velocity (CharStats WalkVelocity or MonStats Velocity), retakes the path's last point as the destination, adds a collision at that tile, sets the skill active (flag 1) with param1/param2 = dest X/Y, and creates the active-skill stat list. Returns TRUE if a destination was committed, 0 otherwise (restoring the collision pattern on failure).
 // @sourcefile .\SKILLS\SkillsBar.cpp
 BOOL __fastcall Skills_CltStFunc_CalcLeapDestViaPathfind(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    uint32_t _bIsPlayer;
     uint32_t _bPathFound;
     bool bPathFound;
     uint32_t nSkillFlags;
@@ -1176,7 +1174,6 @@ BOOL __fastcall Skills_CltStFunc_CalcLeapDestViaPathfind(D2UnitStrc * pUnit, eD2
     eD2CollisionShapeType nType;
     D2RoomStrc* pRoom;
     D2PathPointStrc* pPathPoints;
-    bool bIsPlayer;
     uint32_t nSrcY;
     uint32_t nSrcX;
     char* szSkillsBarCpp;
@@ -1226,14 +1223,14 @@ BOOL __fastcall Skills_CltStFunc_CalcLeapDestViaPathfind(D2UnitStrc * pUnit, eD2
       }
     }
 
-    _bIsPlayer = (uint32_t)(pUnit->eUnitType == UNIT_PLAYER);
-    bool bIsPlayerBool = _bIsPlayer != 0;
-    int eCollisionFlag = (_bIsPlayer ? -128 : 0) + 0x100;
+    BOOL bIsPlayer = (BOOL)(pUnit->eUnitType == UNIT_PLAYER);
+    bool bIsPlayerBool = bIsPlayer != 0;
+    int eCollisionFlag = (bIsPlayer ? -128 : 0) + 0x100;
     D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pServerPath, 0xc01);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pServerPath, 7);
     _bPathFound = D2Common::PATH::DynamicPath::PATH_CalculatePath(pServerPath, pUnit, 0);
     if (_bPathFound) {
-      if (_bIsPlayer) {
+      if (bIsPlayer) {
         pCharStatsTxt = DataTbls::INV_GetCharStatsTxtLine(pUnit->nClassId);
         if (pCharStatsTxt) {
           nSkillFlags = (uint32_t)pCharStatsTxt->WalkVelocity;

@@ -2237,7 +2237,7 @@ BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * p
       nHash += nHash * 2 ^ (char)nVal + nDelta;
     } while (nIdx < 0x10);
 
-    if ((nHash & 0xff) != nChecksum) {
+    if ((uint8_t)nHash != nChecksum) {
       return 0;
     }
 

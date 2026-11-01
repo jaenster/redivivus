@@ -1435,7 +1435,7 @@ static BOOL PLRMODES_RegenHp(D2UnitStrc * pUnit) {
 
     nNewHpPct128 = 0x80;
     send_hp_pct_if_changed:
-    nHpRegen = (nLastSentHpPct & 0xff) - (nNewHpPct128 & 0xff);
+    nHpRegen = (nLastSentHpPct & 0xff) - (uint8_t)nNewHpPct128;
     if (nHpRegen < 0) {
       nHpRegen = -nHpRegen;
     }
@@ -1444,7 +1444,7 @@ static BOOL PLRMODES_RegenHp(D2UnitStrc * pUnit) {
     }
 
     UNIT::SUnitMsg::UnitQueuePacket0xAB(pUnit, (uint8_t)nNewHpPct128);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, nNewHpPct128 & 0xff, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, (uint8_t)nNewHpPct128, 0);
     return 1;
 }
 

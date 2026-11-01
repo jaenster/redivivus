@@ -642,20 +642,13 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthInfo(SID_S2C_AuthInfo * pPacketData,
 // Key status: 0x200=invalid, 0x201=in use, 0x202=disabled, 0x203=wrong product
 // Initiates MPQ patch download for upgrade paths or sets login state for authentication flow.
 BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketData, size_t nPacketSize) {
-    // Frame slots -264..-8 are ONE object: &szPatchFilename is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint8_t szPatchFilename;
-      uint8_t szPatchFilenameBuffer[255];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 256, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    uint32_t nByteIndex;
     uint32_t nPatchNameLen;
     int nNullCount;
     uint32_t dwResultCode;
     FILETIME szAdditionalInfo;
+    char szPatchFilename[256];
     if (nPacketSize >= 5 && *(char*)((int)pPacketData + (nPacketSize - 1)) == '\0') {
+      uint32_t nByteIndex;
       nByteIndex = 4;
       nNullCount = 0;
       if (4 < nPacketSize - 1) {
@@ -703,13 +696,13 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
                 }
               case 0x100:
                 {
-                  nPatchNameLen = Storm::Source::SSTR::SStrCopy((char*)&__frame0.szPatchFilename, (char*)szAdditionalInfo.dwHighDateTime, 0xfe);
-                  __frame0.szPatchFilenameBuffer[nPatchNameLen] = 0;
-                  BnSend::BNSEND_SendRawBytes(&__frame0.szPatchFilename, nPatchNameLen + 2);
-                  Storm::Source::SReg::SRegSaveData((uint32_t*)"Patch", "Patches", 0x82, &__frame0.szPatchFilename, nPatchNameLen + 2);
+                  nPatchNameLen = Storm::Source::SSTR::SStrCopy(szPatchFilename, (char*)szAdditionalInfo.dwHighDateTime, 0xfe);
+                  szPatchFilename[nPatchNameLen + 1] = '\0';
+                  BnSend::BNSEND_SendRawBytes(szPatchFilename, nPatchNameLen + 2);
+                  Storm::Source::SReg::SRegSaveData((uint32_t*)"Patch", "Patches", 0x82, (uint8_t*)szPatchFilename, nPatchNameLen + 2);
                   szAdditionalInfo.dwLowDateTime = 0;
                   szAdditionalInfo.dwHighDateTime = 0;
-                  BnDownload::BNDOWNLOAD_InitiateFileDownload((D2BnetDownloadStateStrc*)0x80000002, 2, 0, 0, &szAdditionalInfo, (char*)&__frame0.szPatchFilename, nullptr);
+                  BnDownload::BNDOWNLOAD_InitiateFileDownload((D2BnetDownloadStateStrc*)0x80000002, 2, 0, 0, &szAdditionalInfo, szPatchFilename, nullptr);
                   g_SIDPacketResponseFlags[0x51] = 0;
                   Debug::DEBUG_UnusedDebugFunction("Downloading Upgrade");
                   break;
@@ -1336,7 +1329,7 @@ int __stdcall NET_SID_CLIENT_Send_0x50_AuthInfo() {
       /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pfnGetSystemDefaultUILanguage = GetProcAddress(hKernel32, "GetSystemDefaultUILanguage");
       if (pfnGetSystemDefaultUILanguage) {
         uVar1 = (*pfnGetSystemDefaultUILanguage)();
-        /* HMODULE hLibModule for FreeLibrary */ __frame0.sAuthInfoPacket.dwLanguageId = uVar1 & 0xffff;
+        /* HMODULE hLibModule for FreeLibrary */ __frame0.sAuthInfoPacket.dwLanguageId = (uint16_t)uVar1;
         FreeLibrary(hKernel32);
         goto add_country_and_send;
       }
@@ -1480,13 +1473,13 @@ int __fastcall NET_SID_CLIENT_Send_0x52_AuthAccountCreate(char * pUsername, char
     uint32_t salt[8];
     uint8_t verifier[32];
     char usernameBuffer[256];
-    uint32_t passwordUpper[64];
+    char passwordUpper[256];
     char usernameUpper[256];
     Storm::Source::SSTR::SStrCopy(usernameUpper, pUsername, 0x100);
     Storm::Source::SSTR::SStrUpper(usernameUpper);
-    Storm::Source::SSTR::SStrCopy((char*)passwordUpper, pPassword, 0x100);
-    Storm::Source::SSTR::SStrUpper((char*)passwordUpper);
-    SRP::SRP_ClientGenerateVerifier(&g_pSrpContext, usernameUpper, passwordUpper, salt, verifier);
+    Storm::Source::SSTR::SStrCopy(passwordUpper, pPassword, 0x100);
+    Storm::Source::SSTR::SStrUpper(passwordUpper);
+    SRP::SRP_ClientGenerateVerifier(&g_pSrpContext, usernameUpper, (uint32_t*)passwordUpper, salt, verifier);
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(usernameBuffer, pUsername, 0x7fffffff);
     BnSend::NET_SID_CLIENT_Send(0x52, (char*)salt, nUsernameLen + 0x41);
     return 1;
@@ -1497,7 +1490,7 @@ int __fastcall NET_SID_CLIENT_Send_0x55_AuthAccountChange(char * pUsername, char
     char srpClientPublicKeyA[32];
     char usernameBuffer[256];
     char oldPasswordUpper[256];
-    uint32_t newPasswordUpperBuf[64];
+    char newPasswordUpperBuf[256];
     char usernameUpper[256];
     g_bSIDFlag2 = 0;
     Storm::Source::SSystem::SMemZero(&g_srpCredentials, 0xbc);
@@ -1505,9 +1498,9 @@ int __fastcall NET_SID_CLIENT_Send_0x55_AuthAccountChange(char * pUsername, char
     Storm::Source::SSTR::SStrUpper(usernameUpper);
     Storm::Source::SSTR::SStrCopy(oldPasswordUpper, pOldPassword, 0x100);
     Storm::Source::SSTR::SStrUpper(oldPasswordUpper);
-    Storm::Source::SSTR::SStrCopy((char*)newPasswordUpperBuf, pNewPassword, 0x100);
-    Storm::Source::SSTR::SStrUpper((char*)newPasswordUpperBuf);
-    SRP::SRP_ClientGenerateVerifier(&g_pSrpContext, usernameUpper, newPasswordUpperBuf, (uint32_t*)&g_srpSaltVerifier, g_srpSaltVerifier.aVerifier);
+    Storm::Source::SSTR::SStrCopy(newPasswordUpperBuf, pNewPassword, 0x100);
+    Storm::Source::SSTR::SStrUpper(newPasswordUpperBuf);
+    SRP::SRP_ClientGenerateVerifier(&g_pSrpContext, usernameUpper, (uint32_t*)newPasswordUpperBuf, (uint32_t*)&g_srpSaltVerifier, g_srpSaltVerifier.aVerifier);
     SRP::SRP_GenerateAccountCredentials(&g_pSrpContext, g_srpCredentials.szUsername, usernameUpper, oldPasswordUpper);
     Storm::Source::SSystem::SMemCopy(srpClientPublicKeyA, g_srpCredentials.aClientPublicKey_A, 0x20);
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(usernameBuffer, pUsername, 0x100);
@@ -2016,14 +2009,14 @@ void __stdcall NET_SID_CLIENT_SubstitutionBoxShuffle(int32_t pToken) {
           innerNibbleIdx = innerLoopCounter >> 3;
           innerBitShift = ((uint8_t)innerLoopCounter & 7) * '\x04';
           innerLoopCounter--;
-          accumulator = (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + ((*(uint32_t*)(pToken + (3 - innerNibbleIdx) * 4) & 0xf << innerBitShift) >> innerBitShift & 0xff ^ (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + (accumulator & 0xff)])];
+          accumulator = (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + ((uint8_t)((*(uint32_t*)(pToken + (3 - innerNibbleIdx) * 4) & 0xf << innerBitShift) >> innerBitShift) ^ (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + (accumulator & 0xff)])];
         } while ((int)innerLoopCounter > (int)nibbleIdx);
       }
 
       nibbleIdx--;
       for (innerNibbleIdx = nibbleIdx; (int)innerNibbleIdx >= 0; innerNibbleIdx--) {
         innerBitShift = ((uint8_t)innerNibbleIdx & 7) * '\x04';
-        accumulator = (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + ((*(uint32_t*)(pToken + (3 - (innerNibbleIdx >> 3)) * 4) & 0xf << innerBitShift) >> innerBitShift & 0xff ^ (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + (accumulator & 0xff)])];
+        accumulator = (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + ((uint8_t)((*(uint32_t*)(pToken + (3 - (innerNibbleIdx >> 3)) * 4) & 0xf << innerBitShift) >> innerBitShift) ^ (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + (accumulator & 0xff)])];
       }
 
       sboxLookupIdx = sboxTableOffset + (accumulator & 0xff);
@@ -2981,7 +2974,7 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
       x1 &= 0xffff;
       if (x1) {
         if (tempMult1) {
-          tempMult2 = x1 * tempMult1 & 0xffff;
+          tempMult2 = (uint16_t)(x1 * tempMult1);
           x1 = x1 * tempMult1 >> 0x10;
           tempMult2 = (tempMult2 < x1) - x1 + tempMult2;
         } else {
@@ -2996,7 +2989,7 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
       x4 &= 0xffff;
       if (x4) {
         if (x1) {
-          tempMult3 = x4 * x1 & 0xffff;
+          tempMult3 = (uint16_t)(x4 * x1);
           x1 = x4 * x1 >> 0x10;
           tempMult3 = (tempMult3 < x1) - x1 + tempMult3;
         } else {
@@ -3010,7 +3003,7 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
       x1 = (x3 + pRoundKey[2] ^ tempMult2) & 0xffff;
       if (x1) {
         if (x4) {
-          tempResult = x1 * x4 & 0xffff;
+          tempResult = (uint16_t)(x1 * x4);
           x1 = x1 * x4 >> 0x10;
           roundMult1 = (tempResult < x1) - x1 + tempResult;
         } else {
@@ -3027,7 +3020,7 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
           tempResult = 1 - x1;
         } else {
           x1 *= x4;
-          tempResult = x1 & 0xffff;
+          tempResult = (uint16_t)x1;
           x1 >>= 0x10;
           tempResult = (tempResult < x1) - x1 + tempResult;
         }
@@ -3044,10 +3037,10 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
       pSubkeys = pRoundKey + 6;
       if (!roundCounter) {
         finalKey0 = pRoundKey[6];
-        if (x1 & 0xffff) {
+        if ((uint16_t)x1) {
           if (finalKey0) {
-            x1 = (x1 & 0xffff) * (uint32_t)finalKey0;
-            finalMult0 = (uint16_t)((x1 & 0xffff) < x1 >> 0x10) - (short int)(x1 >> 0x10) + (short int)x1;
+            x1 = (uint16_t)x1 * (uint32_t)finalKey0;
+            finalMult0 = (uint16_t)((uint16_t)x1 < x1 >> 0x10) - (short int)(x1 >> 0x10) + (short int)x1;
           } else {
             finalMult0 = 1 - (short int)x1;
           }
@@ -3060,7 +3053,7 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
         pCiphertext[2] = pRoundKey[8] + (short int)x2;
         finalKey0 = pRoundKey[9];
         pOut3 = pCiphertext + 3;
-        if (!(x4 & 0xffff)) {
+        if (!(uint16_t)x4) {
           *pOut3 = 1 - finalKey0;
           return;
         }
@@ -3069,8 +3062,8 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
           return;
         }
 
-        x3 = (x4 & 0xffff) * (uint32_t)finalKey0;
-        *pOut3 = (uint16_t)((x3 & 0xffff) < x3 >> 0x10) - (short int)(x3 >> 0x10) + (short int)x3;
+        x3 = (uint16_t)x4 * (uint32_t)finalKey0;
+        *pOut3 = (uint16_t)((uint16_t)x3 < x3 >> 0x10) - (short int)(x3 >> 0x10) + (short int)x3;
         return;
       }
     } while (true);

@@ -717,7 +717,7 @@ int32_t __stdcall SMemFindNextBlock(uint16_t * * nHeapId, int32_t pPrevBlock, ui
     }
 
     int* pHeapListHead;
-    pHeapListHead = (int*)g_SMemHeapBuckets[(uint32_t)nHeapId & 0xff];
+    pHeapListHead = (int*)g_SMemHeapBuckets[(uint8_t)(uint32_t)nHeapId];
     D2FogHeapBlockHdrStrc* pFoundBlock;
     pFoundBlock = 0;
     bool bFound;
@@ -810,7 +810,7 @@ int32_t __stdcall SMemFindNextHeap(uint32_t nCurHeapId, int * pnNextHeapId, SMem
     uint32_t nBucketIndex;
     nBucketIndex = 0;
     if (nCurHeapId) {
-      nBucketIndex = nCurHeapId & 0xff;
+      nBucketIndex = (uint8_t)nCurHeapId;
     }
 
     uint32_t nPrevHeapId;
@@ -995,7 +995,7 @@ uint32_t __stdcall SMemHeapCreate(int32_t nReserved, uint32_t nMaxSize, uint32_t
       }
 
       nHeapId = gnSMemHeapIdCounter;
-      nBucketIndex = gnSMemHeapIdCounter & 0xff;
+      nBucketIndex = (uint8_t)gnSMemHeapIdCounter;
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
       pHeap = (uint32_t*)g_SMemHeapBuckets[nBucketIndex];
       while (true) {
@@ -1449,7 +1449,7 @@ uint32_t * __stdcall SMemHeapAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t dw
     }
 
     uint32_t nHeapIdSaved = nHeapId;
-    uint32_t nBucketIndex = nHeapId & 0xff;
+    uint32_t nBucketIndex = (uint8_t)nHeapId;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
     D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)g_SMemHeapBuckets[nBucketIndex];
     while (true) {

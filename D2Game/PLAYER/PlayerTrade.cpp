@@ -733,7 +733,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
 static BOOL __stdcall CUBE_ValidateRecipeInputs(::SGAMEDATA * pGame, D2CubeSetupStrc * pMatchedItems, D2CubeMainTxt * pRecipe, D2InventoryStrc * pInventory) {
     uint32_t _bInputMatched;
     bool bInputMatched;
-    uint8_t aItemUsedFlags[192];
+    int aItemUsedFlags[48];
     if (pInventory && pRecipe) {
       int nInputSlotIndex;
       memset(aItemUsedFlags, 0, 0xc0);
@@ -1051,7 +1051,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
                 eSourceQuality = D2Common::ITEMS::Items::GetItemQuality(pDVar2);
                 eItemFlags = eSourceQuality & 0xff;
                 uSourceFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pDVar2);
-                aOutputMeta[3] = uSourceFileIndex + 1 & 0xffff;
+                aOutputMeta[3] = (uint16_t)(uSourceFileIndex + 1);
                 nOutItemLevel = D2Common::ITEMS::Items::ITEM_GetItemData_nItemLevel(pDVar2);
                 if ((char)eSourceQuality == '\a' && !(gadwBitMasks[uSourceFileIndex & 0x1f] & pGameLocal->fUniqueSpawn[(int)uSourceFileIndex >> 5])) {
                   local_ac = uSourceFileIndex;

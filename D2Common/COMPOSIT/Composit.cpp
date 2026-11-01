@@ -396,7 +396,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
     uint32_t* pszWeaponToken;
     uint32_t dwModeToken;
     uint32_t nMonModeItemCode;
-    uint8_t byObjTypeToken0;
+    char byObjTypeToken0[4];
     char szModeToken[4];
     char szWeaponToken[4];
     char szModeTokenObj[4];
@@ -540,7 +540,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
           pObjModeLine = DATATBLS::TokTbls::TxtGetObjTypeModeLine(nPlrClass, 0);
           nResolvedClass = nItemCode;
           nModeOrClass = *(uint32_t*)pObjModeLine->token;
-          byObjTypeToken0 = (uint8_t)nModeOrClass;
+          byObjTypeToken0[0] = (char)nModeOrClass;
           pObjModeLine = DATATBLS::TokTbls::TxtGetObjTypeModeLine(nItemCode, 1);
           nMode2 = *(uint32_t*)pObjModeLine->token;
           szModeToken[0] = (char)nMode2;
@@ -556,7 +556,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
           szWeaponTokenObj[2] = *(uint8_t*)((int)pOutWeaponClass + 2) == 0x20 ? 0 : *(uint8_t*)((int)pOutWeaponClass + 2);
           byRawTokenChar1 = (uint8_t)((uint32_t)nModeOrClass >> 8);
           byRawTokenChar2 = (uint8_t)((uint32_t)nModeOrClass >> 0x10);
-          nCompType = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(byRawTokenChar2 == 0x20 ? 0 : byRawTokenChar2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(byRawTokenChar1 == 0x20 ? 0 : byRawTokenChar1) << 8 | (uint16_t)(uint8_t)(byObjTypeToken0 == 0x20 ? 0 : byObjTypeToken0))) & 0xffffffu);
+          nCompType = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(byRawTokenChar2 == 0x20 ? 0 : byRawTokenChar2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(byRawTokenChar1 == 0x20 ? 0 : byRawTokenChar1) << 8 | (uint16_t)(uint8_t)(byObjTypeToken0[0] == ' ' ? 0 : byObjTypeToken0[0]))) & 0xffffffu);
           szModeTokenObj[0] = szModeToken[0] == ' ' ? 0 : szModeToken[0];
           szModeTokenObj[1] = szModeToken[1] == ' ' ? 0 : szModeToken[1];
           szModeTokenObj[2] = szModeToken[2] == ' ' ? 0 : szModeToken[2];

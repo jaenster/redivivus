@@ -76,7 +76,7 @@ BOOL __stdcall NET_MCP_CLIENT_ReadAndParsePacket() {
       return 1;
     }
 
-    /* At self point nSize is removed from packet structure */ HandleIncomingPacket(szPacketBuf, nSize & 0xffff);
+    /* At self point nSize is removed from packet structure */ HandleIncomingPacket(szPacketBuf, (uint16_t)nSize);
     return 1;
 }
 
@@ -476,25 +476,17 @@ void __fastcall NET_MCP_CLIENT_Send_0x02_CharCreate(char * szCharName, DWORD dwC
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x07_CharLogon(char * szText) {
-    // Frame slots -1036..-4 are ONE object: &byPacketId is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char byPacketId;
-      uint8_t payloadBuffer[1027];
-      char* pStrLen;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1032, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    char byPacketId[1028];
     SetD2GSJoinResult(0);
-    __frame0.pStrLen = 0;
-    __frame0.byPacketId = '\a';
-    STRING_GetStringLength(szText, &__frame0.pStrLen, (char*)0x400, (int32_t)__frame0.payloadBuffer);
-    if ((char*)0xfffe < __frame0.pStrLen + 1) {
+    char* pStrLen = 0;
+    byPacketId[0] = '\a';
+    STRING_GetStringLength(szText, &pStrLen, (char*)0x400, (int32_t)(byPacketId + 1));
+    if ((char*)0xfffe < pStrLen + 1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9a);
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, &__frame0.byPacketId, (uint16_t)(uintptr_t)(__frame0.pStrLen + 1));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, byPacketId, (uint16_t)(uintptr_t)(pStrLen + 1));
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x03_CreateGame(mcp0x03data * pMcpData, int16_t nRequestId) {
@@ -604,42 +596,27 @@ void __fastcall NET_MCP_CLIENT_Send_0x0A_CharDelete(D2CharSelStrc * pCharSel, ui
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x18_CharUpgrade(D2CharSelStrc * pCharSel) {
-    // Frame slots -1032..-4 are ONE object: &byPacketId is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char byPacketId;
-      char szCharBuffer[1027];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1028, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    char byPacketId[1028];
     SetD2GSJoinResult(0);
-    __frame0.byPacketId = '\x18';
-    Storm::Source::SSTR::SStrCopy(__frame0.szCharBuffer, pCharSel->szCharname, 0x400);
-    uint32_t pStrLen = Storm::Source::SSTR::SStrLen(__frame0.szCharBuffer);
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, &__frame0.byPacketId, (short int)pStrLen + 2);
+    byPacketId[0] = '\x18';
+    Storm::Source::SSTR::SStrCopy(byPacketId + 1, pCharSel->szCharname, 0x400);
+    uint32_t pStrLen = Storm::Source::SSTR::SStrLen(byPacketId + 1);
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, byPacketId, (short int)pStrLen + 2);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x0B(char * szText1, char * szText2) {
-    // Frame slots -1036..-4 are ONE object: &byPacketId is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char byPacketId;
-      uint8_t payloadBuffer[1027];
-      char* pStrLen;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1032, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    char byPacketId[1028];
     SetD2GSJoinResult(0);
-    __frame0.pStrLen = 0;
-    __frame0.byPacketId = '\v';
-    char* pszBufCursor = STRING_GetStringLength(szText1, &__frame0.pStrLen, (char*)0x400, (int32_t)__frame0.payloadBuffer);
-    STRING_GetStringLength(szText2, &__frame0.pStrLen, (char*)0x400, (int32_t)pszBufCursor);
-    if ((char*)0xfffe < __frame0.pStrLen + 1) {
+    char* pStrLen = 0;
+    byPacketId[0] = '\v';
+    char* pszBufCursor = STRING_GetStringLength(szText1, &pStrLen, (char*)0x400, (int32_t)(byPacketId + 1));
+    STRING_GetStringLength(szText2, &pStrLen, (char*)0x400, (int32_t)pszBufCursor);
+    if ((char*)0xfffe < pStrLen + 1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1c2);
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, &__frame0.byPacketId, (uint16_t)(uintptr_t)(__frame0.pStrLen + 1));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(D2Client::MCP::MCPD2QSSocket, byPacketId, (uint16_t)(uintptr_t)(pStrLen + 1));
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x0C(char * szText) {
@@ -1017,7 +994,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x11(char * pBytes, size_t nSize) {
         (*g_pfnMCPGameListCallback)(*pnEntry, nEntryCount, nEntryField2, local_c, pnEntry + 3);
       }
 
-      nRemaining = gnMCPGameListBufferSize - (nTotalSize & 0xffff);
+      nRemaining = gnMCPGameListBufferSize - (uint16_t)nTotalSize;
       pnEntry = (uint32_t*)((int)(pnEntry + 3) + nTotalSize);
     } while ((int)nRemaining > 0);
 

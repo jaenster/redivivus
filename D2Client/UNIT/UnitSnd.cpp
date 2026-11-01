@@ -1639,7 +1639,7 @@ void __fastcall UNITSND_PlaySoundForMercenary(int32_t nUnitGUID, uint8_t eUnitTy
       return;
     }
 
-    switch (nSoundCmd & 0xffff) {
+    switch ((uint16_t)nSoundCmd) {
       case 0x5a:
         Sound::SOUND_PlaySound(0x111b, pMercUnit, 0, 0, 0);
       return;

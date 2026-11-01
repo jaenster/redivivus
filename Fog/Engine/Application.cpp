@@ -1167,22 +1167,15 @@ void __stdcall CreateRegedit() {
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    // Frame slots -268..-8 are ONE object: &szInstallPath is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame1_t {
-      char szInstallPath;
-      uint8_t szInstallPathBuf[259];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame1_t) == 260, "frame group __frame1_t must reproduce the Ghidra frame layout");
-    __frame1_t __frame1;
-    DWORD dwIndex;
     LPDWORD dwValueInfo;
     HKEY hKeyDest;
     HKEY hKeySrc;
     uint8_t dataBuf[1024];
     char szValueName[260];
+    char szInstallPath[260];
     LSTATUS nRegStatus = RegOpenKeyA((HKEY)0x80000002, "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta", &hKeySrc);
     if (!nRegStatus) {
+      DWORD dwIndex;
       /* PHKEY phkResult for RegCreateKeyA */ /* LPCSTR lpSubKey for RegCreateKeyA */ /* HKEY hKey for RegCreateKeyA */ RegCreateKeyA((HKEY)0x80000002, "SOFTWARE\\Blizzard Entertainment\\Diablo II", &hKeyDest);
       dwIndex = 0;
       do {
@@ -1202,11 +1195,11 @@ void __stdcall CreateRegedit() {
       /* LPCSTR lpSubKey for RegDeleteKeyA */ /* HKEY hKey for RegDeleteKeyA */ RegDeleteKeyA((HKEY)0x80000002, "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta");
     }
 
-    __frame1.szInstallPath = '\0';
-    memset(__frame1.szInstallPathBuf, 0, 0x103);
-    Source::SFile::SFILE_GetInstallPath(&__frame1.szInstallPath, 0x104);
+    szInstallPath[0] = '\0';
+    memset(szInstallPath + 1, 0, 0x103);
+    Source::SFile::SFILE_GetInstallPath(szInstallPath, 0x104);
     if (gnServiceRunning) {
-      /* LPCSTR lpPathName for SetCurrentDirectoryA */ SetCurrentDirectoryA(&__frame1.szInstallPath);
+      /* LPCSTR lpPathName for SetCurrentDirectoryA */ SetCurrentDirectoryA(szInstallPath);
     }
 }
 

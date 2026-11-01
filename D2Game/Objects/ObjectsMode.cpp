@@ -141,7 +141,7 @@ void __fastcall OBJMODE_UpdateDayNightState(::SGAMEDATA * pGame, D2UnitStrc * pU
       eD2ObjectAnimMode eAnimMode;
       eCollFlags = pUnit->eAnimMode.eMissileCollision;
       if (pUnit->nClassId == 399) {
-        eAnimMode = pUnit->eAnimMode.ePlayerMode & 0xffff;
+        eAnimMode = (uint16_t)pUnit->eAnimMode.ePlayerMode;
         switch (eAnimMode) {
           default:
             {
@@ -265,11 +265,11 @@ void __fastcall OBJMODE_UpdateFillProgress(::SGAMEDATA * pGame, D2UnitStrc * pUn
       byComponent++;
       pUnit->pUnitData.pUnitDataMonster->Components[0] = byComponent;
       uVar2 = OBJECT_GetDoubledTxtSize(pObjectTxt);
-      if ((int)((uVar2 & 0xff) - uFillLevel) < 0) {
+      if ((int)((uint8_t)uVar2 - uFillLevel) < 0) {
         nErrorLine = OBJECT_GetDoubledTxtSize(pObjectTxt);
         pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = (char)nErrorLine;
         uVar2 = OBJECT_GetDoubledTxtSize(pObjectTxt);
-        if ((int)((uVar2 & 0xff) - uFillLevel) < 0) {
+        if ((int)((uint8_t)uVar2 - uFillLevel) < 0) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe3);
           exit(-1);
         }
@@ -1213,9 +1213,7 @@ uint32_t __fastcall OBJECT_CanTargetMonster(D2UnitStrc * pUnit, D2UnitStrc * pUn
 }
 
 D2StatListExStrc * __fastcall ApplyShrineBonus(D2UnitStrc * pUnit, D2UnitStrc * pAttacker, uint32_t nDurationInFrames, int32_t nSkillCalc, eD2UnitStat eStat, eD2States eAuraState, PFN_StatExpireCallback pFunction) {
-    D2StateExArgStrc stateArg;
-    stateArg.eSkill = SKILL_Attack;
-    stateArg.nSkillLvl = 0;
+    D2StateExArgStrc stateArg = {0};
     stateArg.eStat = eStat;
     stateArg.nDurationInFrames = nDurationInFrames;
     stateArg.pFunction = pFunction;
@@ -2808,7 +2806,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
     }
     /* Red portal */ if (!__frame0.pPortalOwnerObj || (short int)nVictimClassId == 0x3c) {
       if (pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral) {
-        pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nVictimClassId & 0xffff);
+        pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine((uint16_t)nVictimClassId);
         pGame = pOperation->sArg.pGame;
         GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pTxtObjects->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
       }

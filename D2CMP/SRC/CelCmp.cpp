@@ -2080,7 +2080,7 @@ void __stdcall GFX_DestroyGlobalCriticalSection() {
 void __fastcall CELCMP_ApplyColorKeyToAllPixels(void * pFrameData, pfnTilecmpPixelCallback pfnPixelCallback, uint32_t dwColorKey) {
     uint32_t nColorKeyR = dwColorKey >> 0x10;
     uint32_t nColorKeyG = dwColorKey >> 8;
-    uint32_t nColorKeyB = dwColorKey & 0xff;
+    uint32_t nColorKeyB = (uint8_t)dwColorKey;
     uint32_t* pPixel = (uint32_t*)((int)pFrameData + 0x20);
     dwColorKey = 0;
     if ((uint32_t)(*(int*)((int)pFrameData + 4) * *(int*)((int)pFrameData + 8)) <= 0) {
@@ -2091,7 +2091,7 @@ void __fastcall CELCMP_ApplyColorKeyToAllPixels(void * pFrameData, pfnTilecmpPix
       uint32_t uVar1;
       uVar1 = d2_load24(pPixel);
       pPixel = (uint32_t*)((int)pPixel + 3);
-      if ((uint32_t)uVar1 != ((nColorKeyR & 0xff) * 0x100 + (nColorKeyG & 0xff)) * 0x100 + nColorKeyB) {
+      if ((uint32_t)uVar1 != ((nColorKeyR & 0xff) * 0x100 + (uint8_t)nColorKeyG) * 0x100 + nColorKeyB) {
         (*pfnPixelCallback)((uint32_t)uVar1);
       }
 

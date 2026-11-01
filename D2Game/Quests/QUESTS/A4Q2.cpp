@@ -315,12 +315,12 @@ void __fastcall Q27_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     // Static local variables (originally global data)
     static int32_t gdwQ14QuestStateMessages[5] = { -0x1, 0x0, 0x1, -0x1, -0x1 }; D2_STATIC_GUARD(gdwQ14QuestStateMessages, "D2Game::Quests::QUESTS::A4Q2::Q27_Callback00_NpcActivate::gdwQ14QuestStateMessages");
 
-    bool bCompletedB;
-    bool bJustCompletedB;
-    bool bStep0x09b;
-    bool bStep0x08b;
-    bool bStep0x07b;
-    bool bStep0x06b;
+    BOOL bCompletedB;
+    BOOL bJustCompletedB;
+    BOOL bStep0x09b;
+    BOOL bStep0x08b;
+    BOOL bStep0x07b;
+    BOOL bStep0x06b;
     int nTargetClassId;
     uint32_t nGossipMsgIdx;
     uint8_t nStateFlag;

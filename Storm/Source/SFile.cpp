@@ -184,19 +184,19 @@ static void SFILE_InitializeHashSource(uint32_t nSeed) {
       uint32_t nHi;
       nHi = (nSeed * 0x7d + 3) % 0x2aaaab;
       nLo = (nHi * 0x7d + 3) % 0x2aaaab;
-      pCryptEntry[-0x200] = nHi << 0x10 | nLo & 0xffff;
+      pCryptEntry[-0x200] = nHi << 0x10 | (uint16_t)nLo;
       nHi = (nLo * 0x7d + 3) % 0x2aaaab;
       nLo = (nHi * 0x7d + 3) % 0x2aaaab;
-      pCryptEntry[-0x100] = nHi << 0x10 | nLo & 0xffff;
+      pCryptEntry[-0x100] = nHi << 0x10 | (uint16_t)nLo;
       nHi = (nLo * 0x7d + 3) % 0x2aaaab;
       nLo = (nHi * 0x7d + 3) % 0x2aaaab;
-      *pCryptEntry = nHi << 0x10 | nLo & 0xffff;
+      *pCryptEntry = nHi << 0x10 | (uint16_t)nLo;
       nHi = (nLo * 0x7d + 3) % 0x2aaaab;
       nLo = (nHi * 0x7d + 3) % 0x2aaaab;
-      pCryptEntry[0x100] = nHi << 0x10 | nLo & 0xffff;
+      pCryptEntry[0x100] = nHi << 0x10 | (uint16_t)nLo;
       nHi = (nLo * 0x7d + 3) % 0x2aaaab;
       nSeed = (nHi * 0x7d + 3) % 0x2aaaab;
-      pCryptEntry[0x200] = nHi << 0x10 | nSeed & 0xffff;
+      pCryptEntry[0x200] = nHi << 0x10 | (uint16_t)nSeed;
       pCryptEntry++;
       nEntriesLeft--;
     } while (nEntriesLeft);
@@ -7876,7 +7876,7 @@ uint32_t __fastcall CRC32_Calculate(uint8_t * pbData, int nLen) {
 
     uint32_t uCRC = -1;
     do {
-      uCRC = uCRC >> 8 ^ CRC32_LookupTable[(uint32_t)*pbData ^ uCRC & 0xff];
+      uCRC = uCRC >> 8 ^ CRC32_LookupTable[(uint32_t)*pbData ^ (uint8_t)uCRC];
       nLen--;
       pbData++;
     } while (nLen);

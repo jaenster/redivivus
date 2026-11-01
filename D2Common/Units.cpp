@@ -1632,7 +1632,7 @@ void __stdcall SetOverlay(D2UnitStrc * pUnit, uint32_t nOverlay, int32_t nParam)
     }
 
     Stats::StatsEx::STATLIST_ClearOverlayFlags(pUnit);
-    Stats::StatsEx::STATLIST_SetStatValueSimple(pStatsEx, UNITSTAT_unit_dooverlay, nOverlay & 0xffff, nParam);
+    Stats::StatsEx::STATLIST_SetStatValueSimple(pStatsEx, UNITSTAT_unit_dooverlay, (uint16_t)nOverlay, nParam);
     Unit::ROOM_LinkUnitToUpdateList(pUnit);
 }
 

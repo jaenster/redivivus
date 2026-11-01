@@ -293,7 +293,7 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
 
       break;
       case UNITSTAT_item_addclassskills:
-        if (pUnit->eUnitType == UNIT_PLAYER && pUnit->nClassId == (fOldMaxStat & 0xffff) || (_bIsMercUnit = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit) , _bIsMercUnit != 0)) {
+        if (pUnit->eUnitType == UNIT_PLAYER && pUnit->nClassId == (uint16_t)fOldMaxStat || (_bIsMercUnit = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit) , _bIsMercUnit != 0)) {
           goto apply_passive_states;
         }
       nNewValue = pUnit->eUnitType;
@@ -307,7 +307,7 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
       fOldMaxStat &= 0xffff;
       goto match_transformed_class;
       case UNITSTAT_item_addskill_tab:
-        if (pUnit->eUnitType == UNIT_PLAYER && pUnit->nClassId == (fOldMaxStat & 0xffff) >> 3 || (bIsMerc = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit) , bIsMerc != 0)) {
+        if (pUnit->eUnitType == UNIT_PLAYER && pUnit->nClassId == (uint16_t)fOldMaxStat >> 3 || (bIsMerc = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit) , bIsMerc != 0)) {
           goto apply_passive_states;
         }
       nNewValue = pUnit->eUnitType;
@@ -318,7 +318,7 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
         return;
       }
 
-      fOldMaxStat = (fOldMaxStat & 0xffff) >> 3;
+      fOldMaxStat = (uint16_t)fOldMaxStat >> 3;
       match_transformed_class:
       if (nOldValue == fOldMaxStat) {
         apply_passive_states:
@@ -328,14 +328,14 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
       break;
       case UNITSTAT_item_aura:
         if (!nNewValue) {
-          SKILLS::SkillItem::SKILL_DeactivateAura(pGame, pUnit, eSkill, fOldMaxStat & 0xffff);
+          SKILLS::SkillItem::SKILL_DeactivateAura(pGame, pUnit, eSkill, (uint16_t)fOldMaxStat);
           return;
         }
-      SKILLS::SkillItem::SKILL_ProcessPeriodicAuraTick(pGame, pUnit, eSkill, fOldMaxStat & 0xffff, nNewValue);
+      SKILLS::SkillItem::SKILL_ProcessPeriodicAuraTick(pGame, pUnit, eSkill, (uint16_t)fOldMaxStat, nNewValue);
       return;
       case UNITSTAT_item_charged_skill:
         if (pItemOwner) {
-          nChargedSkillParam = fOldMaxStat & 0xffff;
+          nChargedSkillParam = (uint16_t)fOldMaxStat;
           nChargedSkillId = sgptDataTable->dwChargedSkillLevelMask & nChargedSkillParam;
           nSkillLevel = (int)nChargedSkillParam >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
           _bChargedCountActive = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItemOwner, eStat, (uint16_t)fOldMaxStat);
@@ -354,7 +354,7 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
         }
       break;
       case UNITSTAT_state:
-        eState = fOldMaxStat & 0xffff;
+        eState = (uint16_t)fOldMaxStat;
       if (true && (int)eState < sgptDataTable->nTxtStatesSize) {
         eCurrentState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
         if (nNewValue) {
@@ -3926,7 +3926,7 @@ void __fastcall ITEMMODE_HandleCursorItem(::SGAMEDATA * pGame, D2UnitStrc * pUni
       if ((int)(aStatBonusData[nChargedStatIdx].nStatValue & 0xffU) < (int)nMaxCharges) {
         D2Common::ITEMS::ItemMods::ITEMMOD_SetChargedSkillCharges(pItem, nLevel, nSkillId, nMaxCharges);
         if (pClient) {
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItem, '\x01', 0xcc, (nMaxCharges & 0xff) + nMaxCharges * 0x100, (short int)(nLevel << ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f)) + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nSkillId));
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItem, '\x01', 0xcc, (uint8_t)nMaxCharges + nMaxCharges * 0x100, (short int)(nLevel << ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f)) + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nSkillId));
         }
       }
 
@@ -5857,7 +5857,7 @@ BOOL __fastcall PutItemInItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nIt
 
           nMaxSockets = D2Common::ITEMS::Items::ITEM_GetSocketsCount(pContainer);
           nCurrentSockets = D2Common::INVENTORY::Inventory::ITEM_ItemsInItem(pInventory);
-          if (nCurrentSockets >= (nMaxSockets & 0xff)) {
+          if (nCurrentSockets >= (uint8_t)nMaxSockets) {
             return 0;
           }
 

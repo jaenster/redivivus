@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
+#include "D2Common/D2WaypointStrc.h"
 
 // Forward declarations
 struct D2ClientStrc;
@@ -87,11 +88,35 @@ struct __attribute__((packed)) D2OldSaveHeaderStrc {
     /* 0x81 */ uint8_t byInitSeedByte;
 };
 
+struct __attribute__((packed)) D2SaveFileNpcStrc {
+    /* 0x00 */ short szMagic;
+    /* 0x02 */ short nSize;
+    /* 0x04 */ uint8_t pActNpcData[3][8];
+    /* 0x1C */ uint8_t pActNpcBitInfo[3][8];
+};
+
 struct __attribute__((packed)) D2SaveFileQuestsStrc {
     /* 0x00 */ int nMagic;
     /* 0x04 */ int nVersion;
     /* 0x08 */ short nSize;
     /* 0x0A */ char pActQuests[3][96];
+};
+
+struct __attribute__((packed)) D2SaveWaypointListEntryStrc {
+    /* 0x00 */ D2WaypointStrc pWaypoints;
+    /* 0x10 */ uint32_t field1_0x10;
+    /* 0x14 */ uint32_t field2_0x14;
+};
+
+struct D2SaveWaypointListStrc {
+    /* 0x00 */ D2SaveWaypointListEntryStrc pWaypoints[3];
+};
+
+struct __attribute__((packed)) D2SaveFileWaypointsStrc {
+    /* 0x00 */ short szMagic;
+    /* 0x02 */ int nVersion;
+    /* 0x06 */ short nSize;
+    /* 0x08 */ D2SaveWaypointListStrc pActWaypoints;
 };
 
 namespace D2Game::PLAYER::PlayerSave {

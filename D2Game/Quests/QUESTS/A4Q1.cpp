@@ -233,8 +233,8 @@ void __fastcall Q26_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     static int32_t gdwQ15QuestStateMessages[6] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4 }; D2_STATIC_GUARD(gdwQ15QuestStateMessages, "D2Game::Quests::QUESTS::A4Q1::Q26_Callback00_NpcActivate::gdwQ15QuestStateMessages");
 
     BOOL bJustCompleted;
-    bool bStep0x05;
-    bool bParticipated;
+    BOOL bStep0x05;
+    BOOL bParticipated;
     int32_t nTargetClassId;
     uint32_t nGossipMsgIdx;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;

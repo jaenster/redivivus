@@ -140,7 +140,7 @@ static uint32_t __stdcall ZLIB_Adler32Combine(uint32_t nAdler1, uint32_t nLen2Lo
 
     int64_t nLen2Mod = _allrem(nLen2Lo, nLen2Hi, 0xfff1, 0);
     uint32_t nSum2 = (nAdler1 & 0xffff) * (int)nLen2Mod;
-    uint32_t nSum1 = (nAdler1 & 0xffff) + 0xfff0 + (nAdler2 & 0xffff);
+    uint32_t nSum1 = (nAdler1 & 0xffff) + 0xfff0 + (uint16_t)nAdler2;
     nSum2 = nSum2 + 0xfff1 + ((nAdler1 >> 0x10) + nSum2 / 0xfff1 * -0xfff1 + (nAdler2 >> 0x10) - (int)nLen2Mod);
     uint32_t nSum1Mod = nSum1;
     if (nSum1 >= 0xfff1) {
@@ -224,7 +224,7 @@ void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos) {
       dwCodeEntry = *(uint32_t*)(pLenCodeTable + ((1 << ((uint8_t)nLenCodeBits & 0x1f)) - 1U & dwBitHold) * 4);
       dwBitHold >>= (uint8_t)(dwCodeEntry >> 8) & 0x1f;
       nBitCount -= dwCodeEntry >> 8 & 0xff;
-      while (dwCodeEntry & 0xff) {
+      while ((uint8_t)dwCodeEntry) {
         if (dwCodeEntry & 0x10) {
           nMatchLen = dwCodeEntry >> 0x10;
           dwCodeEntry &= 0xf;
@@ -247,7 +247,7 @@ void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos) {
           }
 
           dwDistEntry = *(uint32_t*)(pDistCodeTable + ((1 << ((uint8_t)nDistCodeBits & 0x1f)) - 1U & dwBitHold) * 4);
-          dwCodeEntry = dwDistEntry & 0xff;
+          dwCodeEntry = (uint8_t)dwDistEntry;
           dwBitHold >>= (uint8_t)(dwDistEntry >> 8) & 0x1f;
           nBitCount -= dwDistEntry >> 8 & 0xff;
           if (!(dwDistEntry & 0x10)) {
@@ -284,7 +284,7 @@ void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos) {
         }
 
         dwDistEntry = *(uint32_t*)(pDistCodeTable + (((1 << ((uint8_t)dwCodeEntry & 0x1f)) - 1U & dwBitHold) + (dwDistEntry >> 0x10)) * 4);
-        dwCodeEntry = dwDistEntry & 0xff;
+        dwCodeEntry = (uint8_t)dwDistEntry;
         dwBitHold >>= (uint8_t)(dwDistEntry >> 8) & 0x1f;
         nBitCount -= dwDistEntry >> 8 & 0xff;
         if (dwDistEntry & 0x10) {

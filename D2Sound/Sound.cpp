@@ -105,7 +105,6 @@ void __stdcall SOUND_InitDirectSound() {
 
     char* szErrorMsg;
     BOOL BVar2;
-    DSBCAPS sPrimaryBufferCaps;
     DSBUFFERDESC tEaxBufferDesc;
     DSBUFFERDESC tPrimaryBufferDesc;
     WAVEFORMATEX tSecondaryFormat;
@@ -218,10 +217,7 @@ void __stdcall SOUND_InitDirectSound() {
       }
     }
 
-    sPrimaryBufferCaps.dwFlags = 0;
-    sPrimaryBufferCaps.dwBufferBytes = 0;
-    sPrimaryBufferCaps.dwUnlockTransferRate = 0;
-    sPrimaryBufferCaps.dwPlayCpuOverhead = 0;
+    DSBCAPS sPrimaryBufferCaps = {0};
     sPrimaryBufferCaps.dwSize = 0x14;
     gpDSoundPrimaryBuffer->lpVtbl->GetCaps(gpDSoundPrimaryBuffer, &sPrimaryBufferCaps);
     SOUNDSMP_ClearBuffer(gpDSoundPrimaryBuffer, 0, sPrimaryBufferCaps.dwBufferBytes);

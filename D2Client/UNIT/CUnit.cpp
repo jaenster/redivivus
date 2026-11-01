@@ -2305,9 +2305,7 @@ D2UnitStrc * __fastcall CreateMissileOrMonster(int32_t nMonstatId, int32_t nX, i
       nNextGUID = 0;
     }
     if (eUnitType == UNIT_MONSTER) {
-      D2CreateMonsterUnitStrc sCreateData;
-      sCreateData.eMonsterType = 0;
-      sCreateData.nOwnerGUID = 0;
+      D2CreateMonsterUnitStrc sCreateData = {0};
       sCreateData.nY = nY;
       sCreateData.eUnitType = eUnitType;
       sCreateData.nUnitGUID = nNextGUID;

@@ -446,7 +446,7 @@ BOOL __stdcall SMsgDispatchMessage(HWND handle, UINT uMsg, WPARAM nWParam, LPARA
       Source::SEVT::SEvtDispatch(0x534d5347, hCur, uMsg, &hMsgWnd);
       if (uMsg == 0x111) {
         dwEventTag = 0x534d5348;
-        nMsgParam = nWParam & 0xffff;
+        nMsgParam = (uint16_t)nWParam;
         Source::SEVT::SEvtDispatch(dwEventTag, hCur, nMsgParam, &hMsgWnd);
       } else {
         nMsgParam = nWParam;

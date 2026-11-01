@@ -740,7 +740,7 @@ void __fastcall Objects_InitFn02(D2ObjectInitFnArg * pInitArg) {
     D2SeedStrc* pObjSeed = pInitArg->pSeed;
     D2SeedStrc seedRolled = D2_SEED_NEXT(*pObjSeed);
     *pObjSeed = seedRolled;
-    if ((int)(seedRolled.nSeedLow % 100) < (int)(pLevelsTxt->MonLvl[0] / 8 + 5U & 0xffff)) {
+    if ((int)(seedRolled.nSeedLow % 100) < (int)(uint16_t)(pLevelsTxt->MonLvl[0] / 8 + 5U)) {
       int32_t nRolledFrame;
       nRolledFrame = D2Client::SEED_RollRange(pInitArg->pSeed, 1, 9);
       pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = (char)nRolledFrame;
@@ -1050,7 +1050,7 @@ D2UnitStrc * __stdcall OBJECT_PlaceAtRandomPosition(::SGAMEDATA * pGame, int32_t
       }
 
       nY += sRoomCoords.dwYStart;
-      if (dwTmp && nY && (int)(dwTmp & 0xffff) >= sRoomCoords.dwXStart + 1 && (int)(nY & 0xffff) >= sRoomCoords.dwYStart + 1 && (int)(dwTmp & 0xffff) < sRoomCoords.dwXStart - 1 + sRoomCoords.dwXSize && (int)(nY & 0xffff) < sRoomCoords.dwYStart - 1 + sRoomCoords.dwYSize) {
+      if (dwTmp && nY && (int)(uint16_t)dwTmp >= sRoomCoords.dwXStart + 1 && (int)(uint16_t)nY >= sRoomCoords.dwYStart + 1 && (int)(uint16_t)dwTmp < sRoomCoords.dwXStart - 1 + sRoomCoords.dwXSize && (int)(uint16_t)nY < sRoomCoords.dwYStart - 1 + sRoomCoords.dwYSize) {
         nCandX = dwTmp;
         wCollisionResult = D2Common::Collision::CheckCollision_Vector(pRoom, dwTmp, nY, nXMargin + 6, nYMargin + 6, 0x3f11);
         if (wCollisionResult == COLBIT_NONE) {
@@ -1109,7 +1109,7 @@ D2UnitStrc * __stdcall OBJECT_PlaceWithCallback(::SGAMEDATA * pGame, int32_t nOb
       nX = nCallbackResult + sRoomCoords.dwXStart;
       nCallbackResult = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, sRoomCoords.dwYSize - nSizeY - 1);
       nY = nCallbackResult + nYStart;
-      if (nX && nY && (int)(nX & 0xffff) >= sRoomCoords.dwXStart + 1 && (int)(nY & 0xffff) >= nYStart + 1 && (int)(nX & 0xffff) < sRoomCoords.dwXStart - 1 + sRoomCoords.dwXSize && (int)(nY & 0xffff) < nYStart - 1 + sRoomCoords.dwYSize) {
+      if (nX && nY && (int)(uint16_t)nX >= sRoomCoords.dwXStart + 1 && (int)(uint16_t)nY >= nYStart + 1 && (int)(uint16_t)nX < sRoomCoords.dwXStart - 1 + sRoomCoords.dwXSize && (int)(uint16_t)nY < nYStart - 1 + sRoomCoords.dwYSize) {
         /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pfnProc);
         if (bBadCodePtr) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x588);
@@ -1366,7 +1366,7 @@ D2UnitStrc * __stdcall OBJECT_PlaceAtBiasedPosition(::SGAMEDATA * pGame, int32_t
           }
       }
 
-      if (nCandidateX && nCandidateY && (int)(nCandidateX & 0xffff) >= sRoomCoords.dwXStart + 1 && (int)(nCandidateY & 0xffff) >= sRoomCoords.dwYStart + 1 && (int)(nCandidateX & 0xffff) < sRoomCoords.dwXStart - 1 + sRoomCoords.dwXSize && (int)(nCandidateY & 0xffff) < sRoomCoords.dwYStart - 1 + sRoomCoords.dwYSize) {
+      if (nCandidateX && nCandidateY && (int)(uint16_t)nCandidateX >= sRoomCoords.dwXStart + 1 && (int)(uint16_t)nCandidateY >= sRoomCoords.dwYStart + 1 && (int)(uint16_t)nCandidateX < sRoomCoords.dwXStart - 1 + sRoomCoords.dwXSize && (int)(uint16_t)nCandidateY < sRoomCoords.dwYStart - 1 + sRoomCoords.dwYSize) {
         /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pfnProc);
         if (bBadCodePtr) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x634);

@@ -1498,14 +1498,7 @@ static void __stdcall CLIENT_SendMonsterMoveToTargetMessage(int32_t nTargetX, in
 }
 
 static void CLIENT_SendMonsterAttackMessage(D2UnitStrc * pUnit) {
-    D2ServerMessageHandleStrc sMsg;
-    sMsg.nSkillId = 0;
-    sMsg.nItemId = 0;
-    sMsg.nTargetUnitType = 0;
-    sMsg.nTargetUnitId = 0;
-    sMsg.nSkillLvl = 0;
-    sMsg.nMaxDistance = 0;
-    sMsg.nTargetX = 0;
+    D2ServerMessageHandleStrc sMsg = {0};
     eD2UnitType eVar1 = pUnit->eUnitType;
     if (eVar1 == UNIT_OBJECT || (int)eVar1 > 3 && (int)eVar1 <= 5) {
       sMsg.nSkillId = pUnit->pPath.pStaticPath->nPosX;
@@ -1528,14 +1521,7 @@ static void CLIENT_SendMonsterAttackMessage(D2UnitStrc * pUnit) {
 }
 
 static void CLIENT_SendMonsterWanderMessage(D2UnitStrc * pUnit) {
-    D2ServerMessageHandleStrc sMsg;
-    sMsg.nSkillId = 0;
-    sMsg.nItemId = 0;
-    sMsg.nTargetUnitType = 0;
-    sMsg.nTargetUnitId = 0;
-    sMsg.nSkillLvl = 0;
-    sMsg.nMaxDistance = 0;
-    sMsg.nTargetX = 0;
+    D2ServerMessageHandleStrc sMsg = {0};
     eD2UnitType eVar1 = pUnit->eUnitType;
     if (eVar1 == UNIT_OBJECT || (int)eVar1 > 3 && (int)eVar1 <= 5) {
       sMsg.nSkillId = pUnit->pPath.pStaticPath->nPosX;

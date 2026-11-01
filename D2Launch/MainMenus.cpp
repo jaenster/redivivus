@@ -734,10 +734,8 @@ void __stdcall UIMENU_MainScreenBeforeMenu() {
       uint16_t wszWideBuffer;
       uint16_t wszWideBufferRest[510];
       uint8_t __pad1022[2];
-      char szTempBuffer;
-      char szTempBufferRest[511];
-      char szUTF8Buffer;
-      char szUTF8BufferRest[511];
+      char szTempBuffer[512];
+      char szUTF8Buffer[512];
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 2048, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
@@ -745,7 +743,6 @@ void __stdcall UIMENU_MainScreenBeforeMenu() {
     int nBufferSize;
     char* szYearPosition;
     int32_t nSetTextParam2;
-    int32_t nMaxLength;
     FORMS_DestroyLists();
     FORMS_CreateAnyFormFromListExEx(2);
     FORMS_CreateAnyFormFromListExEx(3);
@@ -753,10 +750,10 @@ void __stdcall UIMENU_MainScreenBeforeMenu() {
     FORMS_CreateAnyFormFromListExEx(7);
     D2GFX_SetPaletteForDraw("palette\\sky\\pal.dat", "palette\\sky\\pal.pl2");
     ::D2WinTextBox* pTextControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(4);
-    __frame0.szTempBuffer = '\0';
-    memset(__frame0.szTempBufferRest, 0, 0x1ff);
-    __frame0.szUTF8Buffer = '\0';
-    memset(__frame0.szUTF8BufferRest, 0, 0x1ff);
+    __frame0.szTempBuffer[0] = '\0';
+    memset(__frame0.szTempBuffer + 1, 0, 0x1ff);
+    __frame0.szUTF8Buffer[0] = '\0';
+    memset(__frame0.szUTF8Buffer + 1, 0, 0x1ff);
     __frame0.wszWideBuffer = L'\0';
     uint16_t* pWidePtr = __frame0.wszWideBufferRest;
     for (nBufferSize = 0xff; nBufferSize; nBufferSize--) {
@@ -770,26 +767,23 @@ void __stdcall UIMENU_MainScreenBeforeMenu() {
     nBufferSize = 0x200;
     if (bIsExpansion) {
       wszLocaleString = D2Lang::StrTable::strtable::GetLocaleString(0x557a);
-      D2Lang::WideCharToUTF8(&__frame0.szUTF8Buffer, wszLocaleString, nBufferSize);
+      D2Lang::WideCharToUTF8(__frame0.szUTF8Buffer, wszLocaleString, nBufferSize);
       szYearPosition = "2001";
     } else {
       wszLocaleString = D2Lang::StrTable::strtable::GetLocaleString(0x13f0);
-      D2Lang::WideCharToUTF8(&__frame0.szUTF8Buffer, wszLocaleString, nBufferSize);
+      D2Lang::WideCharToUTF8(__frame0.szUTF8Buffer, wszLocaleString, nBufferSize);
       szYearPosition = "2000";
     }
 
     uint32_t nNewYearStrLen = Storm::Source::SSTR::SStrLen(szYearPosition);
-    szYearPosition = strstr(&__frame0.szUTF8Buffer, szYearPosition);
+    szYearPosition = strstr(__frame0.szUTF8Buffer, szYearPosition);
     if (szYearPosition) {
-      char* szBufferInput;
-      Storm::Source::SSTR::SStrCopy(&__frame0.szTempBuffer, szYearPosition + nNewYearStrLen, 0x7fffffff);
+      Storm::Source::SSTR::SStrCopy(__frame0.szTempBuffer, szYearPosition + nNewYearStrLen, 0x7fffffff);
       Storm::Source::SSTR::SStrCopy(szYearPosition, "2000 - 2016", 0x7fffffff);
-      nMaxLength = 0x7fffffff;
-      szBufferInput = &__frame0.szTempBuffer;
-      Storm::Source::SSTR::SStrCopy(szYearPosition + Storm::Source::SSTR::SStrLen("2000 - 2016"), szBufferInput, nMaxLength);
+      Storm::Source::SSTR::SStrCopy(szYearPosition + Storm::Source::SSTR::SStrLen("2000 - 2016"), __frame0.szTempBuffer, 0x7fffffff);
     }
 
-    D2Lang::UTF8_ConvertToWideChar(&__frame0.wszWideBuffer, &__frame0.szUTF8Buffer, 0x200);
+    D2Lang::UTF8_ConvertToWideChar(&__frame0.wszWideBuffer, __frame0.szUTF8Buffer, 0x200);
     D2Win::Src::D2WinTextBox::SetText(pTextControl, &__frame0.wszWideBuffer, 4, false, 0);
     int32_t nSetTextParam3 = 0;
     bool bySetTextParam = false;

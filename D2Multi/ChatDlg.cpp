@@ -1148,20 +1148,13 @@ uint32_t __stdcall CHATDLG_SetDestroyCallback(uint32_t dwUnused, ChatDlgCallback
 }
 
 int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char * szText) {
-    // Frame slots -1028..-4 are ONE object: &szArgRemainder is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char szArgRemainder;
-      char acStack1027[255];
-      char szArgPrefix[256];
-      char szChannelName[256];
-      char szInputText[256];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1024, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     char* pcInputEnd;
     char* pcChannelEnd;
     uint16_t wszResult[256];
+    char szArgRemainder[256];
+    char szArgPrefix[256];
+    char szChannelName[256];
+    char szInputText[256];
     char cCur;
     if (*szText == '\x0e') {
       uint16_t* pwszInput;
@@ -1170,23 +1163,23 @@ int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char 
         return 0;
       }
 
-      OOGUtilities::OOGUTIL_CopyChannelName((char*)((int)gpCurrentChatRoomContext + 4), __frame0.szChannelName);
+      OOGUtilities::OOGUTIL_CopyChannelName((char*)((int)gpCurrentChatRoomContext + 4), szChannelName);
       Fog::File::CONTAINER_InitializeBuffer(wszResult, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(__frame0.szInputText, (uint16_t*)pwszInput, 0x100);
-      pcInputEnd = __frame0.szInputText;
+      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szInputText, (uint16_t*)pwszInput, 0x100);
+      pcInputEnd = szInputText;
       pcInputEnd = pcInputEnd + strlen(pcInputEnd) + 1;
-      pcChannelEnd = __frame0.szChannelName;
+      pcChannelEnd = szChannelName;
       pcChannelEnd = pcChannelEnd + strlen(pcChannelEnd) + 1;
-      if ((int)(pcInputEnd + (int)(pcChannelEnd + (-(int)(__frame0.szChannelName + 1) - (int)(__frame0.szInputText + 1)))) > 0xff) {
+      if ((int)(pcInputEnd + (int)(pcChannelEnd + (-(int)(szChannelName + 1) - (int)(szInputText + 1)))) > 0xff) {
         return 0;
       }
 
-      strncpy(__frame0.szArgPrefix, __frame0.szInputText, nSize);
-      __frame0.szArgPrefix[nSize] = '\0';
-      strncpy(&__frame0.szArgRemainder, __frame0.szInputText + nSize, (size_t)(pcInputEnd + (-nSize - (int)(__frame0.szInputText + 1))));
-      __frame0.acStack1027[(int)(pcInputEnd + (-nSize - (int)(__frame0.szInputText + 1)) - 1)] = '\0';
-      sprintf(__frame0.szInputText, "%s%s%s", __frame0.szArgPrefix, __frame0.szChannelName, &__frame0.szArgRemainder);
-      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszResult, __frame0.szInputText, 0x100);
+      strncpy(szArgPrefix, szInputText, nSize);
+      szArgPrefix[nSize] = '\0';
+      strncpy(szArgRemainder, szInputText + nSize, (size_t)(pcInputEnd + (-nSize - (int)(szInputText + 1))));
+      szArgRemainder[(int)(pcInputEnd + (-nSize - (int)(szInputText + 1)))] = '\0';
+      sprintf(szInputText, "%s%s%s", szArgPrefix, szChannelName, szArgRemainder);
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszResult, szInputText, 0x100);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpChatDlgInputEditBox, wszResult);
       return 0;
     }

@@ -408,7 +408,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
     __frame0.szErrorText[0] = '\0';
     SErrGetErrorStr(nErrorCode, __frame0.szErrorText, 0x100);
     if (__frame0.szErrorText[0] == '\0') {
-      nCallbackNode = nErrorCode & 0xffff;
+      nCallbackNode = (uint16_t)nErrorCode;
       nErrorCodeArg = nErrorCode;
       ppFormat = SERR_GetString(0);
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(__frame0.szErrorText, (LPCSTR)ppFormat, nCallbackNode, nErrorCodeArg);
@@ -438,7 +438,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
       pCustomMsgArg += nLen;
     }
 
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pCustomMsgArg, " : error %u: ", nErrorCode & 0xffff);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pCustomMsgArg, " : error %u: ", (uint16_t)nErrorCode);
     nErrorCodeArg = SSTR::SStrLen(pCustomMsgArg);
     SSTR::SStrCopy(pCustomMsgArg + nErrorCodeArg, __frame0.szErrorText, 0x7fffffff);
     /* LPCSTR lpOutputString for OutputDebugStringA */ OutputDebugStringA(__frame0.szFullMessage);
@@ -598,20 +598,20 @@ void __stdcall SErrReportNamedResourceLeak(char * szMessage, char * szText) {
     static int gnDebugMemoryInitFlag; D2_STATIC_GUARD_BSS(gnDebugMemoryInitFlag, "Storm::Source::SErr::SErrReportNamedResourceLeak::gnDebugMemoryInitFlag");
     static uint32_t gbDebugMemoryInitialized; D2_STATIC_GUARD_BSS(gbDebugMemoryInitialized, "Storm::Source::SErr::SErrReportNamedResourceLeak::gbDebugMemoryInitialized");
 
-    char szDebugOutput[200];
-    uint32_t szFormatted[64];
+    char szFormatted[256];
     if (!gbDebugMemoryInitialized) {
       gbDebugMemoryInitialized = 1;
       SReg::SRegLoadValue("Internal", "Debug Memory", 0, &gnDebugMemoryInitFlag);
     }
     if (gnDebugMemoryInitFlag) {
+      char szDebugOutput[200];
       if (!szText || *szText == '\0') {
-        SSTR::SStrPrintf((char*)szFormatted, 0x100, "%s", szMessage);
+        SSTR::SStrPrintf(szFormatted, 0x100, "%s", szMessage);
       } else {
-        SSTR::SStrPrintf((char*)szFormatted, 0x100, "%s (%s)", szMessage, szText);
+        SSTR::SStrPrintf(szFormatted, 0x100, "%s (%s)", szMessage, szText);
       }
       if (!gnSSystemOption1) {
-        SErrDisplayError(0x8510007f, szFormatted, -3, nullptr, 1, 1);
+        SErrDisplayError(0x8510007f, (uint32_t*)szFormatted, -3, nullptr, 1, 1);
         return;
       }
 

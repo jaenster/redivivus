@@ -164,14 +164,10 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
       uint32_t* local_424;
       int nCheckResult;
       D2ArchiveStrc* pArchive;
-      char szVersionString;
-      uint8_t aVersionStringTail[259];
-      char szArchivePath;
-      uint8_t aArchivePathTail[259];
-      char szGameExePath;
-      uint8_t aGameExePathTail[259];
-      char szDllPath;
-      uint8_t aDllPathTail[259];
+      char szVersionString[260];
+      char szArchivePath[260];
+      char szGameExePath[260];
+      char szDllPath[260];
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1060, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
@@ -195,10 +191,10 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
     }
 
     __frame0.pArchive = 0;
-    __frame0.szDllPath = '\0';
+    __frame0.szDllPath[0] = '\0';
     __frame0.local_428 = pdwVersionOut;
     __frame0.local_424 = pdwChecksumOut;
-    memset(__frame0.aDllPathTail, 0, 0x103);
+    memset(__frame0.szDllPath + 1, 0, 0x103);
     __frame0.nCheckResult = 0;
     DWORD dwStartTick = GetTickCount();
     do {
@@ -210,25 +206,25 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
 
         Storm::Source::SFile::SFileAuthenticateArchive(__frame0.pArchive, &__frame0.dwAuthResult);
         if (!__frame0.dwAuthResult || __frame0.dwAuthResult >= 5) {
-          BVar1 = NET_CopyDllFromArchive(__frame0.pArchive, lpFileName_00881c58, &__frame0.szDllPath);
+          BVar1 = NET_CopyDllFromArchive(__frame0.pArchive, lpFileName_00881c58, __frame0.szDllPath);
           if (BVar1) {
-            bSigValid = D2FILE_VerifyFileSignature(&__frame0.szDllPath);
+            bSigValid = D2FILE_VerifyFileSignature(__frame0.szDllPath);
             if (bSigValid != '\0') {
-              /* LPCSTR lpLibFileName for LoadLibraryA */ hCheckRevDll = LoadLibraryA(&__frame0.szDllPath);
+              /* LPCSTR lpLibFileName for LoadLibraryA */ hCheckRevDll = LoadLibraryA(__frame0.szDllPath);
               if (hCheckRevDll) {
                 /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pCheckRevision = (pfnCheckRevision)GetProcAddress(hCheckRevDll, "CheckRevision");
                 if (pCheckRevision) {
-                  __frame0.szGameExePath = '\0';
-                  memset(__frame0.aGameExePathTail, 0, 0x103);
-                  __frame0.szArchivePath = '\0';
-                  memset(__frame0.aArchivePathTail, 0, 0x103);
-                  __frame0.szVersionString = '\0';
-                  memset(__frame0.aVersionStringTail, 0, 0x103);
+                  __frame0.szGameExePath[0] = '\0';
+                  memset(__frame0.szGameExePath + 1, 0, 0x103);
+                  __frame0.szArchivePath[0] = '\0';
+                  memset(__frame0.szArchivePath + 1, 0, 0x103);
+                  __frame0.szVersionString[0] = '\0';
+                  memset(__frame0.szVersionString + 1, 0, 0x103);
                   /* DWORD nSize for GetModuleFileNameA */ dwStartTick = 0x104;
-                  szGameExePathPtr = &__frame0.szGameExePath;
+                  szGameExePathPtr = __frame0.szGameExePath;
                   /* LPSTR lpFilename for GetModuleFileNameA */ /* LPCSTR lpModuleName for GetModuleHandleA */ hGameModule = GetModuleHandleA((LPCSTR)0x0);
                   /* HMODULE hModule for GetModuleFileNameA */ GetModuleFileNameA(hGameModule, szGameExePathPtr, dwStartTick);
-                  __frame0.nCheckResult = (*pCheckRevision)(&__frame0.szGameExePath, &__frame0.szArchivePath, &__frame0.szVersionString, gszBNetChatInputBuffer, (DWORD*)__frame0.local_428, (DWORD*)__frame0.local_424, pbResultOut);
+                  __frame0.nCheckResult = (*pCheckRevision)(__frame0.szGameExePath, __frame0.szArchivePath, __frame0.szVersionString, gszBNetChatInputBuffer, (DWORD*)__frame0.local_428, (DWORD*)__frame0.local_424, pbResultOut);
                 }
 
                 /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(hCheckRevDll);
@@ -242,8 +238,8 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
 
         /* DWORD dwMilliseconds for Sleep */ Sleep(0x32);
         /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(lpFileName_00881c58);
-        if (__frame0.szDllPath != '\0') {
-          /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(&__frame0.szDllPath);
+        if (__frame0.szDllPath[0] != '\0') {
+          /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(__frame0.szDllPath);
         }
 
         iVar2 = __frame0.nCheckResult;
@@ -430,47 +426,31 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
       char* dwTmp2;
       D2MPQFileStrc* dwTmp;
       uint32_t* pOpenFileOut;
-      uint8_t* pVerifySigOut;
+      char* pVerifySigOut;
       D2ArchiveStrc* pArchiveHandle;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 24, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    // Frame slots -3992..-1044 are ONE object: &cArchiveListBuf is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame1_t {
-      char cArchiveListBuf;
-      uint8_t szArchiveListBufTail[1023];
-      uint8_t cRegistryValue;
-      uint8_t szRegistryValueTail[1023];
-      char szRegistryPath[900];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame1_t) == 2948, "frame group __frame1_t must reproduce the Ghidra frame layout");
-    __frame1_t __frame1;
     // Frame -1044..-784 is ONE object: a call writes 260 literal bytes starting at &szEntryName.
     // Separate locals let the compiler reorder them, and the write would run off the frame.
-    struct __frame2_t {
+    struct __frame1_t {
       char szEntryName;
       uint8_t auStack_413[259];
     };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame2_t) == 260, "frame group __frame2_t must reproduce the Ghidra frame layout");
-    __frame2_t __frame2;
-    // Frame slots -784..-8 are ONE object: &cDestPathBuf is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame3_t {
-      char cDestPathBuf;
-      uint8_t szDestPathTail[259];
-      char szLineBuffer[256];
-      char szModulePath[260];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame3_t) == 776, "frame group __frame3_t must reproduce the Ghidra frame layout");
-    __frame3_t __frame3;
-    uint8_t* pBVar1;
+    static_assert(sizeof(void*) != 4 || sizeof(__frame1_t) == 260, "frame group __frame1_t must reproduce the Ghidra frame layout");
+    __frame1_t __frame1;
     int bArchiveOpened;
     DWORD nSize;
-    char* pcFileListPtr;
-    uint32_t uVar2;
+    uint32_t uVar1;
     uint32_t nLineOffset;
+    char* pbArchivePath;
     char* pListCursor;
+    char cArchiveListBuf[1024];
+    char cRegistryValue[1024];
+    char szRegistryPath[900];
+    char cDestPathBuf[260];
+    char szLineBuffer[256];
+    char szModulePath[260];
     D2MPQFileStrc* pcStrLenResult;
     int32_t nErrorLine;
     __frame0.pOpenFileOut = pResultOut;
@@ -479,41 +459,41 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
       exit(-1);
     }
 
-    __frame3.szModulePath[0] = '\0';
-    memset(__frame3.szModulePath + 1, 0, 0x103);
-    /* DWORD nSize for GetModuleFileNameA */ /* LPSTR lpFilename for GetModuleFileNameA */ /* HMODULE hModule for GetModuleFileNameA */ GetModuleFileNameA((HMODULE)0x0, __frame3.szModulePath, 0x104);
-    __frame3.szModulePath[0x103] = '\0';
-    char* pbArchivePath = __frame3.szModulePath;
-    char cCurrentChar = __frame3.szModulePath[0];
+    szModulePath[0] = '\0';
+    memset(szModulePath + 1, 0, 0x103);
+    /* DWORD nSize for GetModuleFileNameA */ /* LPSTR lpFilename for GetModuleFileNameA */ /* HMODULE hModule for GetModuleFileNameA */ GetModuleFileNameA((HMODULE)0x0, szModulePath, 0x104);
+    szModulePath[0x103] = '\0';
+    char* lpFileName = szModulePath;
+    char cCurrentChar = szModulePath[0];
     while (cCurrentChar != '\0') {
-      pListCursor = Storm::Source::SSTR::SStrChr(pbArchivePath + 1, '\\');
-      if (!pListCursor) {
+      pbArchivePath = Storm::Source::SSTR::SStrChr(lpFileName + 1, '\\');
+      if (!pbArchivePath) {
         break;
       }
 
-      pbArchivePath = Storm::Source::SSTR::SStrChr(pbArchivePath + 1, '\\');
-      cCurrentChar = *pbArchivePath;
+      lpFileName = Storm::Source::SSTR::SStrChr(lpFileName + 1, '\\');
+      cCurrentChar = *lpFileName;
     }
 
-    *pbArchivePath = '\0';
-    __frame1.cRegistryValue = '\0';
-    memset(__frame1.szRegistryValueTail, 0, 0x3ff);
-    nErrorLine = Storm::Source::SReg::SRegLoadData((uint32_t*)"Patch", "Patches", 2, &__frame1.cRegistryValue, 0x3fe, nullptr);
-    if (!nErrorLine || __frame1.cRegistryValue == '\0') {
+    *lpFileName = '\0';
+    cRegistryValue[0] = '\0';
+    memset(cRegistryValue + 1, 0, 0x3ff);
+    nErrorLine = Storm::Source::SReg::SRegLoadData((uint32_t*)"Patch", "Patches", 2, (LPBYTE)cRegistryValue, 0x3fe, nullptr);
+    if (!nErrorLine || cRegistryValue[0] == '\0') {
       *pResultOut = 0;
       return;
     }
 
-    __frame1.cArchiveListBuf = '\0';
-    memset(__frame1.szArchiveListBufTail, 0, 0x3ff);
-    LPSTR szSourceFileName = &__frame1.cArchiveListBuf;
-    uint8_t* lpFileName = &__frame1.cRegistryValue;
+    cArchiveListBuf[0] = '\0';
+    memset(cArchiveListBuf + 1, 0, 0x3ff);
+    LPSTR szSourceFileName = cArchiveListBuf;
+    lpFileName = cRegistryValue;
     LPSTR pVerifySigResult = szSourceFileName;
     do {
       __frame0.pVerifySigOut = lpFileName;
-      bArchiveOpened = Storm::Source::SFile::SFileOpenArchive((char*)lpFileName, nullptr, 0, &__frame0.pArchiveHandle);
+      bArchiveOpened = Storm::Source::SFile::SFileOpenArchive(lpFileName, nullptr, 0, &__frame0.pArchiveHandle);
       if (!bArchiveOpened) {
-        /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA((LPCSTR)lpFileName);
+        /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(lpFileName);
         *__frame0.pOpenFileOut = -1;
         return;
       }
@@ -521,7 +501,7 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
       Storm::Source::SFile::SFileAuthenticateArchive(__frame0.pArchiveHandle, &__frame0.dwAuthResult);
       if (__frame0.dwAuthResult && __frame0.dwAuthResult < 5) {
         Storm::Source::SFile::SFileCloseArchive(__frame0.pArchiveHandle);
-        /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA((LPCSTR)lpFileName);
+        /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(lpFileName);
         *__frame0.pOpenFileOut = -1;
         return;
       }
@@ -537,10 +517,10 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
           lpFileName = __frame0.pVerifySigOut;
           if (nSize > 0) {
             do {
-              __frame3.szLineBuffer[0] = '\0';
-              memset(__frame3.szLineBuffer + 1, 0, 0xff);
+              szLineBuffer[0] = '\0';
+              memset(szLineBuffer + 1, 0, 0xff);
               nLineOffset = (int)pListCursor - (int)pbArchivePath;
-              pcFileListPtr = __frame3.szLineBuffer;
+              lpFileName = szLineBuffer;
               if (nLineOffset < nSize) {
                 bArchiveOpened = 0;
                 do {
@@ -560,12 +540,12 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
                     break;
                   }
 
-                  *pcFileListPtr = cCurrentChar;
-                  pcFileListPtr++;
+                  *lpFileName = cCurrentChar;
+                  lpFileName++;
                   nLineOffset++;
                   bArchiveOpened++;
                   pListCursor++;
-                  *pcFileListPtr = '\0';
+                  *lpFileName = '\0';
                 } while (nLineOffset < nSize);
               }
 
@@ -574,37 +554,37 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
                 nLineOffset++;
               }
 
-              __frame2.szEntryName = '\0';
-              memset(__frame2.auStack_413, 0, 0x103);
-              __frame3.cDestPathBuf = '\0';
-              memset(__frame3.szDestPathTail, 0, 0x103);
-              pcFileListPtr = Storm::Source::SSTR::SStrChr(__frame3.szLineBuffer, ' ');
-              if (pcFileListPtr) {
-                pbArchivePath = Storm::Source::SSTR::SStrChr(__frame3.szLineBuffer, ' ');
-                pbArchivePath++;
-                cCurrentChar = *pbArchivePath;
+              __frame1.szEntryName = '\0';
+              memset(__frame1.auStack_413, 0, 0x103);
+              cDestPathBuf[0] = '\0';
+              memset(cDestPathBuf + 1, 0, 0x103);
+              lpFileName = Storm::Source::SSTR::SStrChr(szLineBuffer, ' ');
+              if (lpFileName) {
+                lpFileName = Storm::Source::SSTR::SStrChr(szLineBuffer, ' ');
+                lpFileName++;
+                cCurrentChar = *lpFileName;
                 while (cCurrentChar == ' ') {
-                  pbArchivePath++;
-                  cCurrentChar = *pbArchivePath;
+                  lpFileName++;
+                  cCurrentChar = *lpFileName;
                 }
 
-                Storm::Source::SSTR::SStrCopy(&__frame2.szEntryName, pbArchivePath, 0x104);
-                /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(&__frame3.cDestPathBuf, "%s\\%s", __frame3.szModulePath, pbArchivePath);
+                Storm::Source::SSTR::SStrCopy(&__frame1.szEntryName, lpFileName, 0x104);
+                /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(cDestPathBuf, "%s\\%s", szModulePath, lpFileName);
                 pbArchivePath = __frame0.dwTmp2;
               }
 
-              bArchiveOpened = _strnicmp(__frame3.szLineBuffer, "delete ", 7);
+              bArchiveOpened = _strnicmp(szLineBuffer, "delete ", 7);
               if (!bArchiveOpened) {
-                /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(&__frame3.cDestPathBuf);
+                /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(cDestPathBuf);
               } else {
-                bArchiveOpened = _strnicmp(__frame3.szLineBuffer, "extract ", 8);
+                bArchiveOpened = _strnicmp(szLineBuffer, "extract ", 8);
                 if (!bArchiveOpened) {
-                  BNDOWNLOAD_ExtractFileFromArchive(&__frame2.szEntryName, __frame0.pArchiveHandle, &__frame3.cDestPathBuf);
+                  BNDOWNLOAD_ExtractFileFromArchive(&__frame1.szEntryName, __frame0.pArchiveHandle, cDestPathBuf);
                 } else {
-                  bArchiveOpened = _strnicmp(__frame3.szLineBuffer, "execute ", 8);
+                  bArchiveOpened = _strnicmp(szLineBuffer, "execute ", 8);
                   if (!bArchiveOpened) {
-                    uVar2 = Storm::Source::SSTR::SStrCopy(pVerifySigResult, &__frame3.cDestPathBuf, 0x7fffffff);
-                    pVerifySigResult = pVerifySigResult + uVar2 + 1;
+                    uVar1 = Storm::Source::SSTR::SStrCopy(pVerifySigResult, cDestPathBuf, 0x7fffffff);
+                    pVerifySigResult = pVerifySigResult + uVar1 + 1;
                   }
                 }
               }
@@ -620,35 +600,35 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
       }
 
       Storm::Source::SFile::SFileCloseArchive(__frame0.pArchiveHandle);
-      uVar2 = Storm::Source::SSTR::SStrLen((char*)lpFileName);
-      pBVar1 = lpFileName + uVar2 + 1;
-      lpFileName = lpFileName + uVar2 + 1;
-    } while (*pBVar1 != '\0');
+      uVar1 = Storm::Source::SSTR::SStrLen(lpFileName);
+      pbArchivePath = lpFileName + uVar1 + 1;
+      lpFileName = lpFileName + uVar1 + 1;
+    } while (*pbArchivePath != '\0');
 
-    pbArchivePath = __frame1.szRegistryPath;
+    pbArchivePath = szRegistryPath;
     __frame0.pVerifySigOut = lpFileName;
-    sprintf(pbArchivePath, "%s\\Game.exe", __frame3.szModulePath);
+    sprintf(pbArchivePath, "%s\\Game.exe", szModulePath);
     Storm::Source::SReg::SRegSaveString((uint32_t*)"Patch", "Launcher", 2, pbArchivePath);
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     if (bIsExpansion) {
-      bArchiveOpened = sprintf(pbArchivePath, "%s\\%s;", __frame3.szModulePath, "d2exp.mpq");
-      pbArchivePath = __frame1.szRegistryPath + bArchiveOpened;
+      bArchiveOpened = sprintf(pbArchivePath, "%s\\%s;", szModulePath, "d2exp.mpq");
+      pbArchivePath = szRegistryPath + bArchiveOpened;
     }
 
-    sprintf(pbArchivePath, "%s\\%s;%s\\%s", __frame3.szModulePath, "d2data.mpq", __frame3.szModulePath, "d2sfx.mpq");
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Patch", "SrcData", 2, __frame1.szRegistryPath);
-    sprintf(__frame1.szRegistryPath, "%s\\%s", __frame3.szModulePath, "patch_d2.mpq");
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Patch", "DstData", 2, __frame1.szRegistryPath);
-    if (szSourceFileName == &__frame1.cArchiveListBuf) {
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szSourceFileName, "%s\\bnupdate.exe", __frame3.szModulePath);
-      uVar2 = Storm::Source::SSTR::SStrLen(szSourceFileName);
-      szSourceFileName = szSourceFileName + uVar2 + 1;
+    sprintf(pbArchivePath, "%s\\%s;%s\\%s", szModulePath, "d2data.mpq", szModulePath, "d2sfx.mpq");
+    Storm::Source::SReg::SRegSaveString((uint32_t*)"Patch", "SrcData", 2, szRegistryPath);
+    sprintf(szRegistryPath, "%s\\%s", szModulePath, "patch_d2.mpq");
+    Storm::Source::SReg::SRegSaveString((uint32_t*)"Patch", "DstData", 2, szRegistryPath);
+    if (szSourceFileName == cArchiveListBuf) {
+      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szSourceFileName, "%s\\bnupdate.exe", szModulePath);
+      uVar1 = Storm::Source::SSTR::SStrLen(szSourceFileName);
+      szSourceFileName = szSourceFileName + uVar1 + 1;
       pVerifySigResult = szSourceFileName;
     }
 
     *szSourceFileName = '\0';
     BNGatewayAccess::SaveAndUnload(&ActualRealmInfo);
-    bIsExpansion = BNDOWNLOAD_LaunchVerifiedExecutables(__frame3.szModulePath, &__frame1.cArchiveListBuf);
+    bIsExpansion = BNDOWNLOAD_LaunchVerifiedExecutables(szModulePath, cArchiveListBuf);
     if (bIsExpansion) {
       *__frame0.pOpenFileOut = 2;
       return;
@@ -1013,8 +993,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
       D2MPQFileStrc* archiveFileCtx;
       SID_C2S_ExtraWork sExtraWork;
       char szAdMessage[252];
-      char cTempDllPath;
-      uint8_t szTempDllPathTail[259];
+      char cTempDllPath[260];
     };
     #pragma pack(pop)
     static_assert(sizeof(void*) != 4 || sizeof(__frame1_t) == 4617, "frame group __frame1_t must reproduce the Ghidra frame layout");
@@ -1140,8 +1119,8 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
           case_0x80000006:
           pArchiveHandle = 0;
           __frame1.archiveFileCtx = 0;
-          __frame1.cTempDllPath = '\0';
-          memset(__frame1.szTempDllPathTail, 0, 0x103);
+          __frame1.cTempDllPath[0] = '\0';
+          memset(__frame1.cTempDllPath + 1, 0, 0x103);
           Debug::DEBUG_UnusedDebugFunction("Processing ExtraWork file");
           bOpened = Storm::Source::SFile::SFileOpenArchive(szDestPath, nullptr, 0, &pArchiveHandle);
           if (!bOpened) {
@@ -1150,11 +1129,11 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
 
           Storm::Source::SFile::SFileAuthenticateArchive(pArchiveHandle, &__frame0.dwAuthResult);
           if (!__frame0.dwAuthResult || __frame0.dwAuthResult >= 5) {
-            BVar1 = NET_CopyDllFromArchive(pArchiveHandle, szDestPath, &__frame1.cTempDllPath);
+            BVar1 = NET_CopyDllFromArchive(pArchiveHandle, szDestPath, __frame1.cTempDllPath);
             if (!BVar1) {
               Debug::DEBUG_UnusedDebugFunction("<ERROR: Failed to extract ExtraWork DLL!>");
             } else {
-              /* LPCSTR lpLibFileName for LoadLibraryA */ hModule = LoadLibraryA(&__frame1.cTempDllPath);
+              /* LPCSTR lpLibFileName for LoadLibraryA */ hModule = LoadLibraryA(__frame1.cTempDllPath);
               if (!hModule) {
                 pDestPtr = "<ERROR: Failed to load ExtraWork DLL!>";
                 log_extrawork_error:
@@ -1211,8 +1190,8 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
 
           /* DWORD dwMilliseconds for Sleep */ Sleep(0x32);
           /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(szDestPath);
-          if (__frame1.cTempDllPath != '\0') {
-            /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(&__frame1.cTempDllPath);
+          if (__frame1.cTempDllPath[0] != '\0') {
+            /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(__frame1.cTempDllPath);
             return;
           }
 

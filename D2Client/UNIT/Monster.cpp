@@ -3040,7 +3040,6 @@ uint32_t __fastcall CLIENT_UpdateMonsterAnimByMode(D2DynamicPathStrc * pDynamicP
       return 0;
     }
     if (pDynamicPath->Coords.tFixed.x == 1) {
-      D2ServerMessageHandleStrc nMsgOwnerGUID;
       nClassId = pDynamicPath->Coords.tFixed.y;
       if (nClassId < 0) {
         return 0;
@@ -3056,13 +3055,7 @@ uint32_t __fastcall CLIENT_UpdateMonsterAnimByMode(D2DynamicPathStrc * pDynamicP
         if (!nClassId) {
           nResult = D2Common::Units::IsAtEndOfFrameCycle((D2UnitStrc*)pDynamicPath);
           if (nResult) {
-            nMsgOwnerGUID.nSkillId = 0;
-            nMsgOwnerGUID.nItemId = 0;
-            nMsgOwnerGUID.nTargetUnitType = 0;
-            nMsgOwnerGUID.nTargetUnitId = 0;
-            nMsgOwnerGUID.nSkillLvl = 0;
-            nMsgOwnerGUID.nMaxDistance = 0;
-            nMsgOwnerGUID.nTargetX = 0;
+            D2ServerMessageHandleStrc nMsgOwnerGUID = {0};
             MonsterMessage(9, (D2UnitStrc*)pDynamicPath, &nMsgOwnerGUID);
           }
         }

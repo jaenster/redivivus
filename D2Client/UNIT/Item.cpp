@@ -439,8 +439,6 @@ static void __stdcall ITEM_ReequipItemOnBody(D2UnitStrc * pUnit, int32_t bApplyE
 // Re-evaluates and reapplies every equipped/carried item on a player (or merc-flagged unit) after a stat-affecting change. Saves the unit's skill selections, first (re)enables qualifying active charms applying their stats, then in three passes over the 11 body-location slots: disables items whose equip requirements are no longer met (removing their stats and flagging a gfx reload), iteratively re-enables items that now qualify (up to 100 passes, reapplying socketable/equip stats and updating the primary weapon/swap state), and recalculates set-quality items (quality 5). Restores skill selections, and if anything changed triggers a gfx/COF reload for players or a MonsterMessage(7) for mercs. Pure side effects on pUnit's inventory/stats; no return.
 // @sourcefile .\UNIT\Item.cpp
 static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
-    bool _bNeedsGfxReload;
-    uint32_t _bReequippedThisPass;
     uint8_t bVar1;
     eD2BodyLoc eBodyLoc;
     D2UnitStrc* pEquipItem;
@@ -453,8 +451,7 @@ static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
     bool bIterRemaining;
     int nSkillState[7];
     D2InventoryStrc* pInventoryReequip;
-    bool bReequippedThisPass;
-    bool bNeedsGfxReload;
+    BOOL bReequippedThisPass;
     D2UnitStrc* pBodyLocItem;
     if (!(pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitFlags >> 9 & 1))) {
       return;
@@ -465,7 +462,7 @@ static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
       return;
     }
 
-    _bNeedsGfxReload = 0;
+    BOOL bNeedsGfxReload = 0;
     D2InventoryStrc* pInventoryRef = pInventory;
     ITEM_SaveSkillSelections(nSkillState, pUnit);
     for (pEquipItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory); pEquipItem; pEquipItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pEquipItem)) {
@@ -504,7 +501,7 @@ static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
               D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pCarriedItem, ITEMFLAG_DISABLED, 1);
               bVar1 = D2Common::Units::GetItemComponent(pUnit, pCarriedItem);
               ITEM_RemoveItemFromBodyAndRecalc((uint32_t)bVar1, pCarriedItem, pUnit);
-              _bNeedsGfxReload = 1;
+              bNeedsGfxReload = 1;
               pEquipItem = pBodyLocItem;
             }
           }
@@ -516,7 +513,7 @@ static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
 
     int nBodyLocIter = 100;
     do {
-      _bReequippedThisPass = 0;
+      bReequippedThisPass = 0;
       pBodyLocItem = 0;
       do {
         pEquipItem = pBodyLocItem;
@@ -531,15 +528,15 @@ static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
                 D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pCarriedItem, ITEMFLAG_DISABLED, 0);
                 bVar1 = D2Common::Units::GetItemComponent(pUnit, pCarriedItem);
                 pInventory = pUnit->pInventory;
-                _bNeedsGfxReload = pCarriedItem->eAnimMode.ePlayerMode;
-                _bReequippedThisPass = (uint32_t)bVar1;
+                bNeedsGfxReload = pCarriedItem->eAnimMode.ePlayerMode;
+                bReequippedThisPass = (BOOL)bVar1;
                 pInventoryReequip = pInventory;
                 if (pInventory) {
                   eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pCarriedItem);
                   if (eBodyLoc != BODYLOC_SWAPPED_R_ARM && eBodyLoc != BODYLOC_SWAPPED_L_ARM) {
                     D2Common::INVENTORY::Inventory::INVENTORY_SwapPrimaryWeaponOnRemoval(pInventory, pCarriedItem);
-                    Engine::Gfx::GFX_ClearAllModeFlags(pUnit, _bReequippedThisPass);
-                    if (_bNeedsGfxReload == eD2PlayerAnimMode_ns::Neutral) {
+                    Engine::Gfx::GFX_ClearAllModeFlags(pUnit, bReequippedThisPass);
+                    if (bNeedsGfxReload == 1) {
                       pEquipItem = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pCarriedItem, nullptr);
                       if (!pEquipItem) {
                         ITEM_ApplySocketableAndEquipStats(1, pUnit, pCarriedItem);
@@ -551,8 +548,8 @@ static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
                   }
                 }
 
-                _bReequippedThisPass = 1;
-                _bNeedsGfxReload = 1;
+                bReequippedThisPass = 1;
+                bNeedsGfxReload = 1;
                 pEquipItem = pBodyLocItem;
               }
             }
@@ -561,7 +558,7 @@ static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
 
         pBodyLocItem = (D2UnitStrc*)((int)pEquipItem + 1);
       } while ((int)pBodyLocItem < 0xb);
-    } while (_bReequippedThisPass && (bIterRemaining = nBodyLocIter != 0 , nBodyLocIter-- , bIterRemaining));
+    } while (bReequippedThisPass && (bIterRemaining = nBodyLocIter != 0 , nBodyLocIter-- , bIterRemaining));
 
     nBodyLocIter = 0;
     do {
@@ -592,7 +589,7 @@ static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
     } while (nBodyLocIter < 0xb);
 
     ITEM_RestoreSkillSelections(nSkillState, pUnit);
-    if (!_bNeedsGfxReload) {
+    if (!bNeedsGfxReload) {
       return;
     }
     if (pUnit->eUnitType == UNIT_PLAYER) {
@@ -1579,7 +1576,7 @@ static void __stdcall ITEM_PlaceItemInContainer(D2UnitStrc * pUnit, uint32_t nYP
     int32_t nDelay;
     int32_t nLine;
     int32_t nSoundVolume;
-    D2Common::Units::SetXForStaticUnit(pUnit, nItemX & 0xffff);
+    D2Common::Units::SetXForStaticUnit(pUnit, (uint16_t)nItemX);
     D2Common::Units::SetYForStaticUnit(pUnit, nYPos & 0xffff);
     D2InventoryStrc* pInventory = pUnit2->pInventory;
     int nXPos = 0;

@@ -41,6 +41,22 @@ struct PcxPaletteTrailer {
     /* 0x01 */ uint8_t rgb[768]; // 256 R,G,B triplets
 };
 
+#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
+
+struct __attribute__((packed)) tagRGBQUAD {
+    tagRGBQUAD() = default;
+    tagRGBQUAD(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    tagRGBQUAD(BYTE a0, BYTE a1, BYTE a2, BYTE a3) : rgbBlue(a0), rgbGreen(a1), rgbRed(a2), rgbReserved(a3) {}
+
+    /* 0x00 */ BYTE rgbBlue;
+    /* 0x01 */ BYTE rgbGreen;
+    /* 0x02 */ BYTE rgbRed;
+    /* 0x03 */ BYTE rgbReserved;
+};
+
+#endif // _WIN32
+
 namespace D2CMP::Draw {
 
 // Function declarations

@@ -347,7 +347,7 @@ void __fastcall CLIENT_OnStatChanged(uint32_t dwUnused, D2UnitStrc * pUnit, D2Un
 
       case UNITSTAT_item_singleskill:
         if (pUnit->eUnitType == UNIT_PLAYER) {
-          eSkill = dwStatIdAndSubIndex & 0xffff;
+          eSkill = (uint16_t)dwStatIdAndSubIndex;
           pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
           if (!nValue) {
             if (pSkill) {
@@ -365,8 +365,8 @@ void __fastcall CLIENT_OnStatChanged(uint32_t dwUnused, D2UnitStrc * pUnit, D2Un
       break;
       case UNITSTAT_item_charged_skill:
         if (pUnit->eUnitType == UNIT_PLAYER) {
-          nSkillIdOrLevel = (int)(dwStatIdAndSubIndex & 0xffff) >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
-          nChargeMax = sgptDataTable->dwChargedSkillLevelMask & dwStatIdAndSubIndex & 0xffff;
+          nSkillIdOrLevel = (int)(uint16_t)dwStatIdAndSubIndex >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
+          nChargeMax = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & dwStatIdAndSubIndex);
           if (pItem) {
             nItemGUID = pItem->nUnitGUID;
             nChargeCount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, eUnitStat, (uint16_t)dwStatIdAndSubIndex);
@@ -2069,7 +2069,6 @@ static BOOL INPUT_HandleRightClickWithPet(D2UnderMouseStrc * pUnderMouse) {
 // Client input dispatcher for map clicks. Converts raw screen coordinates to perspective-view world coords, builds a D2UnderMouseStrc with the player and currently selected unit, sets run/walk and force-move flags from mouseEventFlags, then dispatches to the appropriate handler based on clickType (0=left-down, 1=left-hold, 2=left-up, 3=right-down, 4=right-hold, 5=right-up). Guards against re-entrant calls and ESC-menu-open state.
 int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint8_t mouseEventFlags) {
     uint32_t uVar1;
-    D2UnderMouseStrc mouse;
     int nXConverted = nX;
     BOOL bEscOpen = UI::ui::GetUIFlag(UI_ESCMENU);
     if (bEscOpen) {
@@ -2081,13 +2080,7 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint8_t mouse
 
     bRecursionClick = 1;
     UI::Path::ConvertCoordToPerspectiveView(&nXConverted, &nY);
-    mouse.pPlayer = 0;
-    mouse.pTarget = 0;
-    mouse.nX = 0;
-    mouse.nY = 0;
-    mouse.nMoveActionType = 0;
-    mouse.nAttackActionType = 0;
-    mouse.pSkill = 0;
+    D2UnderMouseStrc mouse = {0};
     mouse.flags = 0;
     mouse.pPlayer = GetPlayerUnit_UI();
     mouse.pTarget = GAME::Select::GetSelectedUnit();

@@ -148,7 +148,6 @@ static void __stdcall PETS_FreeOrKillPetList(D2UnitStrc * pUnit, D2PetListStrc *
     D2RoomStrc* pPetRoom;
     uint32_t nReviveCost;
     D2MonsterKillStrc killData;
-    D2PetArgStrc sPetArgs;
     eD2UnitType ePetUnitType;
     int32_t nPetUnitGUID;
     D2PetStrc* pCurPet = pPetList->pPets;
@@ -168,13 +167,7 @@ static void __stdcall PETS_FreeOrKillPetList(D2UnitStrc * pUnit, D2PetListStrc *
       if (nParam1) {
         pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pPetStrc->nPetGUID);
         if (pPetUnit) {
-          sPetArgs.nOwnerGUID = 0;
-          sPetArgs.nPetClassId = 0;
-          sPetArgs._pad0A = 0;
-          sPetArgs.nPetType = 0;
-          sPetArgs.nSeed = 0;
-          sPetArgs.nNameId = 0;
-          sPetArgs.nUnused18 = 0;
+          D2PetArgStrc sPetArgs = {0};
           sPetArgs.nPetGUID = pPetStrc->nPetGUID;
           UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)Send0x7aSummonLog, &sPetArgs);
           nPetUnitGUID = pPetUnit->nUnitGUID;

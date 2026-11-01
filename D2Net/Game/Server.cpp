@@ -69,10 +69,10 @@ int32_t __fastcall NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect(uint8_t * pbPacket
     if (byOpcode >= 0x71 && byOpcode != 0xff || (uint16_t)(uintptr_t)pPacketEnd > 0x204) {
       return 4;
     }
-    if ((int)((uint32_t)pPacketEnd & 0xffff) <= (int)nSize) {
+    if ((int)(uint16_t)(uint32_t)pPacketEnd <= (int)nSize) {
       int nTokenMatch;
       *pnUnknown = 0;
-      *pnPacketSize = (uint32_t)pPacketEnd & 0xffff;
+      *pnPacketSize = (uint16_t)(uint32_t)pPacketEnd;
       if (byOpcode < 0x67) {
         *pnPacketClass = 1;
       } else if (byOpcode < 0x71) {

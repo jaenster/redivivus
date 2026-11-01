@@ -1405,24 +1405,30 @@ int __fastcall _oldSaveGameLoadingPart2(D2UnitStrc * pUnit, int * pnParam, uint3
 }
 
 int __fastcall _oldSaveGameLoadingPart3(D2UnitStrc * pUnit, uint32_t * pdwParam, uint32_t dwUnused, uint32_t * pnBytesConsumed) {
-    uint8_t aWaypointBlock[80];
+    int nDiffIndex;
+    D2SaveFileWaypointsStrc aWaypointBlock;
     int16_t wWaypointVersion;
     *pnBytesConsumed = 0;
-    uint8_t* pCopyDst = aWaypointBlock;
-    memcpy(pCopyDst, pdwParam, 0x50);
+    D2SaveFileWaypointsStrc* pCopyDst = &aWaypointBlock;
+    for (nDiffIndex = 0x14; nDiffIndex; nDiffIndex--) {
+      *(uint32_t*)pCopyDst = *pdwParam;
+      pdwParam++;
+      pCopyDst = (D2SaveFileWaypointsStrc*)((uintptr_t)&pCopyDst->nVersion + 2);
+    }
+
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    if (*(uint16_t*)(char*)&aWaypointBlock != 0x5357) {
+    if (aWaypointBlock.szMagic != 0x5357) {
       return 3;
     }
 
-    int nDiffIndex = 0;
+    nDiffIndex = 0;
     D2WaypointStrc** ppWaypoint = pPlayerData->pWaypoint;
-    pCopyDst = aWaypointBlock + 8;
-    while ((wWaypointVersion = *(int16_t*)pCopyDst , wWaypointVersion == 0x102 || wWaypointVersion == 0x101) || !wWaypointVersion) {
-      D2Common::Waypoints::CopyWaypointBits(*ppWaypoint, pCopyDst);
+    D2SaveWaypointListStrc* pWaypointBits = &aWaypointBlock.pActWaypoints;
+    while ((wWaypointVersion = pWaypointBits->pWaypoints[0].pWaypoints.nSignature , wWaypointVersion == 0x102 || wWaypointVersion == 0x101) || !wWaypointVersion) {
+      D2Common::Waypoints::CopyWaypointBits(*ppWaypoint, (uint8_t*)pWaypointBits);
       nDiffIndex++;
       ppWaypoint++;
-      pCopyDst += 0x18;
+      pWaypointBits = (D2SaveWaypointListStrc*)(pWaypointBits->pWaypoints + 1);
       if (nDiffIndex >= 3) {
         *pnBytesConsumed = 0x50;
         return 0;
@@ -1433,24 +1439,33 @@ int __fastcall _oldSaveGameLoadingPart3(D2UnitStrc * pUnit, uint32_t * pdwParam,
 }
 
 int __fastcall _oldSaveGameLoadingPart4(D2UnitStrc * pUnit, uint32_t * pdwParam, uint32_t dwUnused, uint32_t * pnBytesConsumed) {
-    uint8_t aIntroBlock[52];
+    D2UnitDataPlayerStrc* pPlayerData;
+    int nIntroOffset;
+    D2SaveFileNpcStrc aIntroBlock;
     *pnBytesConsumed = 0;
-    uint8_t* pCopyDst = aIntroBlock;
-    memcpy(pCopyDst, pdwParam, 0x34);
-    if (*(uint16_t*)(char*)&aIntroBlock != 0x7701) {
+    D2SaveFileNpcStrc* pCopyDst = &aIntroBlock;
+    for (nIntroOffset = 0xd; nIntroOffset; nIntroOffset--) {
+      uint32_t uVar1;
+      uVar1 = *pdwParam;
+      pCopyDst->szMagic = (short int)uVar1;
+      pCopyDst->nSize = (short int)((uint32_t)uVar1 >> 0x10);
+      pdwParam++;
+      pCopyDst = (D2SaveFileNpcStrc*)pCopyDst->pActNpcData;
+    }
+
+    if (aIntroBlock.szMagic != 0x7701) {
       return 0xb;
     }
 
-    int nIntroOffset = 0x60;
-    uint32_t* pIntroBufPos = (uint32_t*)(aIntroBlock + 0x1c);
+    nIntroOffset = 0x60;
+    uint8_t (*pIntroBufPos)[8] = aIntroBlock.pActNpcBitInfo;
     do {
-      D2UnitDataPlayerStrc* pPlayerData;
       pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-      PlayerIntro::PLAYERINTRO_CopyIntroData8Bytes(*(uint32_t**)(pPlayerData->szCharName + nIntroOffset), pIntroBufPos - 6);
+      PlayerIntro::PLAYERINTRO_CopyIntroData8Bytes(*(uint32_t**)(pPlayerData->szCharName + nIntroOffset), (uint32_t*)(pIntroBufPos - 3));
       pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-      PlayerIntro::PLAYERINTRO_CopyIntroDataIndirect(*(int32_t*)(pPlayerData->szCharName + nIntroOffset), pIntroBufPos);
+      PlayerIntro::PLAYERINTRO_CopyIntroDataIndirect(*(int32_t*)(pPlayerData->szCharName + nIntroOffset), (uint32_t*)pIntroBufPos);
       nIntroOffset += 4;
-      pIntroBufPos += 2;
+      pIntroBufPos++;
     } while (nIntroOffset < 0x6c);
 
     *pnBytesConsumed = 0x34;
@@ -1559,16 +1574,16 @@ int32_t __fastcall PLAYERSAVE_ParseItemFromBuffer(D2UnknownItemRelatedStruct * p
       nBits = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(pItemUnknownStructure->neD2ItemFlag, ITEMFLAG_COMPACT);
       if (nBits) {
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 10);
-        pItemUnknownStructure->wItemFormat = (uint16_t)dwReadValue & 0xff;
+        pItemUnknownStructure->wItemFormat = (uint8_t)(uint16_t)dwReadValue;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 5);
         pItemUnknownStructure->nEquipLoc = (char)dwReadValue;
         pItemUnknownStructure->nItemLevel = 1;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 3);
         pItemUnknownStructure->Mode = (char)dwReadValue;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 5);
-        pItemUnknownStructure->nPosX = dwReadValue & 0xff;
+        pItemUnknownStructure->nPosX = (uint8_t)dwReadValue;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 3);
-        pItemUnknownStructure->nPosY = dwReadValue & 0xff;
+        pItemUnknownStructure->nPosY = (uint8_t)dwReadValue;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 8);
         pItemUnknownStructure->pageMaybe = (char)dwReadValue;
         dwReadValue = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(pItemUnknownStructure->neD2ItemFlag, ITEMFLAG_BODYPART);
@@ -1590,7 +1605,7 @@ int32_t __fastcall PLAYERSAVE_ParseItemFromBuffer(D2UnknownItemRelatedStruct * p
         }
       } else {
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 10);
-        pItemUnknownStructure->wItemFormat = (uint16_t)dwReadValue & 0xff;
+        pItemUnknownStructure->wItemFormat = (uint8_t)(uint16_t)dwReadValue;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 0x20);
         *(uint32_t*)pItemUnknownStructure->szCode = dwReadValue;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 5);
@@ -1598,7 +1613,7 @@ int32_t __fastcall PLAYERSAVE_ParseItemFromBuffer(D2UnknownItemRelatedStruct * p
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 3);
         pItemUnknownStructure->nStorageType = (uint8_t)dwReadValue;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 0xc);
-        pItemUnknownStructure->nItemLevel = dwReadValue & 0xff;
+        pItemUnknownStructure->nItemLevel = (uint8_t)dwReadValue;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 3);
         pItemUnknownStructure->Mode = (char)dwReadValue;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 4);
@@ -1606,13 +1621,13 @@ int32_t __fastcall PLAYERSAVE_ParseItemFromBuffer(D2UnknownItemRelatedStruct * p
         nPrice = Fog::BitBuffer::ReadSigned(&bitBuffer, 0x14);
         pItemUnknownStructure->nPriceMaybe = nPrice;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 8);
-        pItemUnknownStructure->durability = dwReadValue & 0xff;
+        pItemUnknownStructure->durability = (uint8_t)dwReadValue;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 8);
-        pItemUnknownStructure->maxDurability = dwReadValue & 0xff;
+        pItemUnknownStructure->maxDurability = (uint8_t)dwReadValue;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 5);
-        pItemUnknownStructure->nPosX = dwReadValue & 0xff;
+        pItemUnknownStructure->nPosX = (uint8_t)dwReadValue;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 3);
-        pItemUnknownStructure->nPosY = dwReadValue & 0xff;
+        pItemUnknownStructure->nPosY = (uint8_t)dwReadValue;
         nItemClassIdTmp = Fog::BitBuffer::ReadSigned(&bitBuffer, 10);
         pItemUnknownStructure->dwFileIndex = nItemClassIdTmp;
         dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 0x20);
@@ -1641,9 +1656,9 @@ int32_t __fastcall PLAYERSAVE_ParseItemFromBuffer(D2UnknownItemRelatedStruct * p
       dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 3);
       pItemUnknownStructure->Mode = (char)dwReadValue;
       dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 5);
-      pItemUnknownStructure->nPosX = dwReadValue & 0xff;
+      pItemUnknownStructure->nPosX = (uint8_t)dwReadValue;
       dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 3);
-      pItemUnknownStructure->nPosY = dwReadValue & 0xff;
+      pItemUnknownStructure->nPosY = (uint8_t)dwReadValue;
       nItemClassIdTmp = Fog::BitBuffer::ReadSigned(&bitBuffer, 10);
       pItemUnknownStructure->dwFileIndex = nItemClassIdTmp;
       dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 8);
@@ -1670,7 +1685,7 @@ int32_t __fastcall PLAYERSAVE_ParseItemFromBuffer(D2UnknownItemRelatedStruct * p
     dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 3);
     pItemUnknownStructure->nStorageType = (uint8_t)dwReadValue;
     dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 0xc);
-    pItemUnknownStructure->nItemLevel = dwReadValue & 0xff;
+    pItemUnknownStructure->nItemLevel = (uint8_t)dwReadValue;
     nItemClassIdTmp = Fog::BitBuffer::ReadSigned(&bitBuffer, 10);
     dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 3);
     pItemUnknownStructure->Mode = (char)dwReadValue;
@@ -1679,13 +1694,13 @@ int32_t __fastcall PLAYERSAVE_ParseItemFromBuffer(D2UnknownItemRelatedStruct * p
     nItemFileIndex = Fog::BitBuffer::ReadSigned(&bitBuffer, 0x14);
     pItemUnknownStructure->nPriceMaybe = nItemFileIndex;
     dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 8);
-    pItemUnknownStructure->durability = dwReadValue & 0xff;
+    pItemUnknownStructure->durability = (uint8_t)dwReadValue;
     dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 8);
-    pItemUnknownStructure->maxDurability = dwReadValue & 0xff;
+    pItemUnknownStructure->maxDurability = (uint8_t)dwReadValue;
     dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 5);
-    pItemUnknownStructure->nPosX = dwReadValue & 0xff;
+    pItemUnknownStructure->nPosX = (uint8_t)dwReadValue;
     dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 3);
-    pItemUnknownStructure->nPosY = dwReadValue & 0xff;
+    pItemUnknownStructure->nPosY = (uint8_t)dwReadValue;
     nFileIndexSigned = Fog::BitBuffer::ReadSigned(&bitBuffer, 10);
     pItemUnknownStructure->dwFileIndex = nFileIndexSigned;
     dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 0x20);

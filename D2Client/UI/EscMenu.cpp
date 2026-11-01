@@ -723,82 +723,70 @@ void __stdcall INPUT_EscMenuExecuteSelection(D2UIMouseMsgStrc * pMsg) {
 
 // Loads all localized DC6 images for an escape menu table. Iterates menu items, fetches language abbreviation from INI config (e.g., "ENG", "DEU"), constructs paths like "DATA\LOCAL\{lang}\UI\{item}.dc6" and loads main image plus up to 4 sub-images per item. Skips expansion-only items in classic mode. Calls item initialization callbacks after loading.
 void __fastcall ESCMENU_LoadLocalizedImages(int * pMenuHeader, D2EscMenuItemStrc * pMenuTable) {
-    // Frame slots -284..-8 are ONE object: &szImagePath is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char szImagePath;
-      uint8_t szImagePathBuffer[259];
-      D2EscMenuItemStrc* nUnused18;
-      int* nUnused14;
-      int nItemIndex;
-      int nSubImageOffset;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 276, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     BOOL bIsExpansion;
     DC6* pLoadedDC6;
     int nTableOffset;
     uint32_t nSubImageIndex;
     char* pSubImagePath;
+    char szImagePath[260];
+    int nItemIndex;
+    int nSubImageOffset;
     char szLangAbbrev[4];
     uint32_t nSubImageCount;
-    __frame0.nUnused18 = pMenuTable;
-    __frame0.nUnused14 = pMenuHeader;
     if (!pMenuHeader) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e8);
       exit(-1);
     }
     if (pMenuTable) {
-      __frame0.szImagePath = '\0';
-      memset(__frame0.szImagePathBuffer, 0, 0x103);
+      szImagePath[0] = '\0';
+      memset(szImagePath + 1, 0, 0x103);
       memset(szLangAbbrev, 0, 4 * sizeof(szLangAbbrev[0]));
       D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbrev, 0);
-      __frame0.nItemIndex = 0;
+      nItemIndex = 0;
       if (*pMenuHeader <= 0) {
         return;
       }
 
-      __frame0.nSubImageOffset = 0x150;
+      nSubImageOffset = 0x150;
       do {
-        if (!pMenuTable[__frame0.nItemIndex].nExpansionOnly || (bIsExpansion = Fog::D2CheckExpansionGame() , bIsExpansion != 0)) {
-          if (pMenuTable[__frame0.nItemIndex].szLocalizedImagePath[0] != '\0') {
-            sprintf(&__frame0.szImagePath, "%s\\UI\\%s\\%s", "DATA\\LOCAL", szLangAbbrev, pMenuTable[__frame0.nItemIndex].szLocalizedImagePath);
-            pLoadedDC6 = Core::Archive::IMAGE_LoadDC6Ex(&__frame0.szImagePath, 0);
-            nSubImageCount = pMenuTable[__frame0.nItemIndex].nMenuItemType;
-            pMenuTable[__frame0.nItemIndex].pDC6Main = pLoadedDC6;
+        if (!pMenuTable[nItemIndex].nExpansionOnly || (bIsExpansion = Fog::D2CheckExpansionGame() , bIsExpansion != 0)) {
+          if (pMenuTable[nItemIndex].szLocalizedImagePath[0] != '\0') {
+            sprintf(szImagePath, "%s\\UI\\%s\\%s", "DATA\\LOCAL", szLangAbbrev, pMenuTable[nItemIndex].szLocalizedImagePath);
+            pLoadedDC6 = Core::Archive::IMAGE_LoadDC6Ex(szImagePath, 0);
+            nSubImageCount = pMenuTable[nItemIndex].nMenuItemType;
+            pMenuTable[nItemIndex].pDC6Main = pLoadedDC6;
             if (nSubImageCount == 1) {
-              nSubImageCount = pMenuTable[__frame0.nItemIndex].nSubImageCount;
+              nSubImageCount = pMenuTable[nItemIndex].nSubImageCount;
               if (nSubImageCount <= 0 || nSubImageCount > 4) {
                 ESCMENU_LoadLocalizedImages_HaltTail(0x4fe);
               }
 
               nSubImageIndex = 0;
               if (nSubImageCount > 0) {
-                pSubImagePath = pMenuTable[__frame0.nItemIndex].szSubImage1Path;
+                pSubImagePath = pMenuTable[nItemIndex].szSubImage1Path;
                 do {
                   if (*pSubImagePath == '\0') {
                     ESCMENU_LoadLocalizedImages_HaltTail(0x501);
                   }
 
-                  sprintf(&__frame0.szImagePath, "%s\\UI\\%s\\%s", "DATA\\LOCAL", szLangAbbrev, pSubImagePath);
-                  pLoadedDC6 = Core::Archive::IMAGE_LoadDC6Ex(&__frame0.szImagePath, 0);
-                  nTableOffset = __frame0.nSubImageOffset + nSubImageIndex;
+                  sprintf(szImagePath, "%s\\UI\\%s\\%s", "DATA\\LOCAL", szLangAbbrev, pSubImagePath);
+                  pLoadedDC6 = Core::Archive::IMAGE_LoadDC6Ex(szImagePath, 0);
+                  nTableOffset = nSubImageOffset + nSubImageIndex;
                   nSubImageIndex++;
-                  *(DC6**)(__frame0.nUnused18->szLocalizedImagePath + nTableOffset * 4 - 0xc) = (DC6*)pLoadedDC6;
+                  *(DC6**)(pMenuTable->szLocalizedImagePath + nTableOffset * 4 - 0xc) = (DC6*)pLoadedDC6;
                   pSubImagePath += 0x104;
-                  pMenuHeader = __frame0.nUnused14;
-                } while (nSubImageIndex < (uint32_t)pMenuTable[__frame0.nItemIndex].nSubImageCount);
+                } while (nSubImageIndex < (uint32_t)pMenuTable[nItemIndex].nSubImageCount);
               }
             }
           }
-          if (pMenuTable[__frame0.nItemIndex].fpInitCallback) {
-            (*pMenuTable[__frame0.nItemIndex].fpInitCallback)(&pMenuTable[__frame0.nItemIndex], nullptr);
+          if (pMenuTable[nItemIndex].fpInitCallback) {
+            (*pMenuTable[nItemIndex].fpInitCallback)(&pMenuTable[nItemIndex], nullptr);
           }
         }
 
-        __frame0.nSubImageOffset += 0x154;
-        __frame0.nItemIndex++;
-      } while (__frame0.nItemIndex < *pMenuHeader);
+        nSubImageOffset += 0x154;
+        nItemIndex++;
+      } while (nItemIndex < *pMenuHeader);
 
       return;
     }
@@ -815,17 +803,10 @@ void __stdcall ESCMENU_LoadLocalizedImages_HaltTail(int nLine) {
 
 // Initializes escape menu system. Loads all DC6 images for 5 menu tables (main, options, help, and two save/exit variants for classic vs expansion). Loads widget decorations (OptBar progress bar, OptBarC colored bar, OptSkull slider marker). Measures rotating star cursor icon to determine maximum frame width for centering calculations. Sets gpEscMenuItemCount and gpEscMenuCurrentTable to main menu.
 void __stdcall ESCMENU_Initialize() {
-    // Frame slots -336..-76 are ONE object: &szWidgetPath is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char szWidgetPath;
-      uint8_t szWidgetPathBuffer[259];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 260, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     int32_t nFrameWidth;
     D2EscMenuHeaderStrc* pSaveExitHeader;
     D2EscMenuItemStrc* pSaveExitTable;
+    char szWidgetPath[260];
     D2GfxDataStrc sStarGfxData;
     ESCMENU_LoadLocalizedImages(&gEscMenuHeaderInitData.nItemCount, gaEscMenuMainTable);
     ESCMENU_LoadLocalizedImages(&gaEscMenuHeaderOptions.nItemCount, gaEscMenuOptionsTable);
@@ -844,14 +825,14 @@ void __stdcall ESCMENU_Initialize() {
     ESCMENU_LoadLocalizedImages(&pSaveExitHeader->nItemCount, pSaveExitTable);
     gpEscMenuItemCount = &gEscMenuHeaderInitData;
     gpEscMenuCurrentTable = gaEscMenuMainTable;
-    __frame0.szWidgetPath = '\0';
-    memset(__frame0.szWidgetPathBuffer, 0, 0x103);
-    sprintf(&__frame0.szWidgetPath, "%s\\UI\\Widgets\\OptBar", "DATA\\GLOBAL");
-    gpEscMenuOptBarDC6 = Core::Archive::IMAGE_LoadDC6Ex(&__frame0.szWidgetPath, 0);
-    sprintf(&__frame0.szWidgetPath, "%s\\UI\\Widgets\\OptBarC", "DATA\\GLOBAL");
-    gpEscMenuOptBarCDC6 = Core::Archive::IMAGE_LoadDC6Ex(&__frame0.szWidgetPath, 0);
-    sprintf(&__frame0.szWidgetPath, "%s\\UI\\Widgets\\OptSkull", "DATA\\GLOBAL");
-    gpEscMenuOptSkullDC6 = Core::Archive::IMAGE_LoadDC6Ex(&__frame0.szWidgetPath, 0);
+    szWidgetPath[0] = '\0';
+    memset(szWidgetPath + 1, 0, 0x103);
+    sprintf(szWidgetPath, "%s\\UI\\Widgets\\OptBar", "DATA\\GLOBAL");
+    gpEscMenuOptBarDC6 = Core::Archive::IMAGE_LoadDC6Ex(szWidgetPath, 0);
+    sprintf(szWidgetPath, "%s\\UI\\Widgets\\OptBarC", "DATA\\GLOBAL");
+    gpEscMenuOptBarCDC6 = Core::Archive::IMAGE_LoadDC6Ex(szWidgetPath, 0);
+    sprintf(szWidgetPath, "%s\\UI\\Widgets\\OptSkull", "DATA\\GLOBAL");
+    gpEscMenuOptSkullDC6 = Core::Archive::IMAGE_LoadDC6Ex(szWidgetPath, 0);
     memset(&sStarGfxData, 0, 0x48);
     sStarGfxData.pDC6 = ui::UI_GetCursorIconIndex();
     uint32_t nStarFrameCount = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(sStarGfxData.pDC6);

@@ -302,7 +302,6 @@ uint32_t __fastcall AI_CanApplyColdState(D2UnitStrc * pUnit, D2MonStatsTxt * pMo
 void __fastcall AttachCorrectAiFunctionToMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiGeneralStrc * pMonsterAiGeneral, int32_t nFunctionId) {
     D2AiListStrc* pAiListEntry;
     AI_Main lpfn;
-    D2AiParamStrc pAiParam;
     D2UnitStrc* pUnitOrErrCode = pUnit;
     eD2States eStateResult = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
     if (eStateResult != STATE_none) {
@@ -326,14 +325,7 @@ void __fastcall AttachCorrectAiFunctionToMonster(::SGAMEDATA * pGame, D2UnitStrc
       pAiListEntry = MONSTERAI_GetAiFunctionFromTable(pUnit, nFunctionId);
       if (pAiListEntry) {
         if (pAiListEntry->fpInit) {
-          pAiParam.fpAiFunction = 0;
-          pAiParam.pTarget = 0;
-          pAiParam.field_0xC = 0;
-          pAiParam.nVelocity = 0;
-          pAiParam.nDistanceToTarget = 0;
-          pAiParam.bEngagedInCombat = 0;
-          pAiParam.pMonStats = 0;
-          pAiParam.pMonStats2 = 0;
+          D2AiParamStrc pAiParam = {0};
           pAiParam.pMonsterAiGeneral = pMonsterAiGeneral;
           pAiParam.pMonStats = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(nMonsterClassId);
           pAiParam.pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nMonsterClassId);
@@ -3406,7 +3398,6 @@ D2UnitStrc * __fastcall FindTargetAndDistance(::SGAMEDATA * pGame, D2UnitStrc * 
 // Applies the Terror state to a target monster on behalf of pUnit. Guards: target must be alive, a UNIT_MONSTER, not uninterruptable, CanSwitchAI, not monster-type 10, and AI_CanApplyColdState must pass. Calls SetStateWithExpiryTime(STATE_terror, SKILL_Terror, nTerrorDurationFrames), redirects the target's path toward pUnit, reassigns AI to mode 0xb, then fires UNITEVENTCALLBACK_AITHINK and schedules a frame-advance event.
 void __fastcall MONSTERAI_ApplyTerrorToMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetMonster, uint32_t nUnused, uint32_t nUnused2, int32_t nTerrorDurationFrames) {
     D2AiGeneralStrc* pMonsterAiGeneral;
-    D2StateExArgStrc sStateArg;
     BOOL bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pTargetMonster);
     if (!(!bIsDead && pTargetMonster && pTargetMonster->eUnitType == UNIT_MONSTER)) {
       return;
@@ -3441,8 +3432,7 @@ void __fastcall MONSTERAI_ApplyTerrorToMonster(::SGAMEDATA * pGame, D2UnitStrc *
       return;
     }
 
-    sStateArg.nSkillCalc = 0;
-    sStateArg.pFunction = 0;
+    D2StateExArgStrc sStateArg = {0};
     sStateArg.pTarget = pTargetMonster;
     sStateArg.nSkillLvl = 1;
     sStateArg.nDurationInFrames = nTerrorDurationFrames;
@@ -3681,7 +3671,7 @@ void __fastcall SendNpcMessageOrHoverText(::SGAMEDATA * pGame, D2UnitStrc * pNpc
         return;
       }
 
-      sprintf(szMessageIdStr, "%d", nMessageId & 0xffff);
+      sprintf(szMessageIdStr, "%d", (uint16_t)nMessageId);
       if (pNpc && pNpc->pHoverText) {
         D2Common::Chat::Free(pGame->pMemoryPool, pNpc->pHoverText);
       }
@@ -5930,18 +5920,17 @@ void __fastcall AI_Fn1_SiegeTower(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 
 // AI Function1 handler for Siege Beast monster type. Handles retreat logic, skill casting based on MonStats2 difficulty thresholds, and catapult rider mounting behavior.
 void __fastcall AI_Fn1_SiegeBeast(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    bool _bEngagedInCombat;
     int32_t nAlignmentOrSkillParam;
     D2UnitStrc* pNeutralOrSelf;
     uint32_t uRandPct;
     D2MonsterAiParameterStruct tNeutralSearchParams;
-    bool bEngagedInCombat;
     int64_t lSeedProduct;
     short int nAnimSpeed;
     D2SeedStrc sNewSeed;
     int nDistRange;
     nDistRange = pAiParam->nDistanceToTarget;
-    _bEngagedInCombat = pAiParam->bEngagedInCombat;
+    BOOL bEngagedInCombat;
+    bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pSeedPtr;
     pSeedPtr = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats;
@@ -5969,7 +5958,7 @@ void __fastcall AI_Fn1_SiegeBeast(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
         }
       }
     }
-    if (_bEngagedInCombat) {
+    if (bEngagedInCombat) {
       if (pMonStats->aSkill[0] >= 0) {
         lSeedProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
         nDistRange = (int)((uint64_t)lSeedProduct >> 0x20);
@@ -12249,7 +12238,7 @@ BOOL __fastcall MONSTERAI_CanSummonPetType(::SGAMEDATA * pGameStrc, D2UnitStrc *
     } else {
       nExistingPetClass = byPetTypeA->nPetGUID;
     }
-    if ((int)pDVar1->summon == (nExistingPetClass & 0xffff)) {
+    if ((int)pDVar1->summon == (uint16_t)nExistingPetClass) {
       return 0;
     }
 
@@ -19889,14 +19878,7 @@ uint32_t __fastcall CollectMephistoTargetInfo(::SGAMEDATA * pGame, D2UnitStrc * 
 
 int32_t __fastcall DecideMephistoAlternateTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMonStatsOffset, int32_t fallback) {
     D2SeedStrc DVar1;
-    D2MonsterAiParameterStruct searchParams;
-    searchParams.pBestUnit = 0;
-    searchParams.pLOSFlagOrSecondary = 0;
-    searchParams.nMaxScanRadius = 0;
-    searchParams.pBestSwitchUnit = 0;
-    searchParams.nInRangeCount = 0;
-    searchParams.nMinionCount = 0;
-    searchParams.pResurrectTarget = 0;
+    D2MonsterAiParameterStruct searchParams = {0};
     searchParams.nBestDistance = 0x7fffffff;
     searchParams.nGridIndex = 0x7fffffff;
     searchParams.nBestSwitchDistance = 0x7fffffff;
@@ -21036,7 +21018,7 @@ void __fastcall AI_Fn1_GargoyleTrap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 
     uint32_t nDirection;
     nDirection = D2Common::Units::GetDirectionToCoords(pUnit, nTargetX, nSelfY);
-    D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pUnit->pPath.pDynamicPath, gaGargoyleTrapDirRemap[gaGargoyleTrapDirToOctant[nDirection & 0xff]]);
+    D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pUnit->pPath.pDynamicPath, gaGargoyleTrapDirRemap[gaGargoyleTrapDirToOctant[(uint8_t)nDirection]]);
     if (nDeltaX < 0) {
       nDeltaX = -nDeltaX;
     }

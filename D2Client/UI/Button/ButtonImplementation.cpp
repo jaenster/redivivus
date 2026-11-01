@@ -175,7 +175,7 @@ void __thiscall Draw(::ButtonImplementation * pThis) {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pThis->nPosX, pThis->nPosY, -1, DRAW_SOLID, nullptr);
     uint32_t nCurMouseX = ui::GetMouseX();
     uint32_t nCurMouseY = ui::GetMouseY();
-    if (!((int)(nCurMouseX & 0xffff) >= pThis->nPosX && (int)(nCurMouseX & 0xffff) <= pThis->nWidth + pThis->nPosX && (int)(nCurMouseY & 0xffff) >= pThis->nPosY - pThis->nHeight && (int)(nCurMouseY & 0xffff) <= pThis->nPosY)) {
+    if (!((int)(uint16_t)nCurMouseX >= pThis->nPosX && (int)(uint16_t)nCurMouseX <= pThis->nWidth + pThis->nPosX && (int)(nCurMouseY & 0xffff) >= pThis->nPosY - pThis->nHeight && (int)(nCurMouseY & 0xffff) <= pThis->nPosY)) {
       return;
     }
 

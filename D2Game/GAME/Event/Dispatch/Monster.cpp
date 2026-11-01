@@ -289,7 +289,6 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
         return;
       }
     } else {
-      D2MonsterKillStrc sMonsterKill;
       eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
       if (eUnitState != STATE_none) {
         UNIT::SUnit::SetUninterruptableState(pUnit, 0);
@@ -300,11 +299,7 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
       }
 
       D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-      sMonsterKill.pAttacker = 0;
-      sMonsterKill.nTargetX = 0;
-      sMonsterKill.nTargetY = 0;
-      sMonsterKill.nMonType1 = 0;
-      sMonsterKill.nMonType2 = 0;
+      D2MonsterKillStrc sMonsterKill = {0};
       sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Neutral;
       sMonsterKill.nAnimatedMode1 = '\0';
       sMonsterKill.nAnimatedMode2 = 'd';
@@ -320,17 +315,8 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
 void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL _bIsModeZeroDeath;
     bool bIsModeZeroDeath;
-    D2MonsterKillStrc sMonsterKill;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-    sMonsterKill.pAttacker = 0;
-    sMonsterKill.nTargetX = 0;
-    sMonsterKill.nTargetY = 0;
-    sMonsterKill.nAnimatedMode1 = '\0';
-    sMonsterKill.nAnimatedMode2 = '\0';
-    sMonsterKill.nUnknown1 = '\0';
-    sMonsterKill.nUnknown2 = '\0';
-    sMonsterKill.nMonType1 = 0;
-    sMonsterKill.nMonType2 = 0;
+    D2MonsterKillStrc sMonsterKill = {0};
     sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Skill1;
     uint8_t byAnimMode2 = 'd';
     sMonsterKill.pVictim = pUnit;
@@ -361,17 +347,8 @@ void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 void __fastcall MonsterKilledByTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL _bIsModeZeroDeath;
     bool bIsModeZeroDeath;
-    D2MonsterKillStrc killStrc;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-    killStrc.pAttacker = 0;
-    killStrc.nTargetX = 0;
-    killStrc.nTargetY = 0;
-    killStrc.nAnimatedMode1 = '\0';
-    killStrc.nAnimatedMode2 = '\0';
-    killStrc.nUnknown1 = '\0';
-    killStrc.nUnknown2 = '\0';
-    killStrc.nMonType1 = 0;
-    killStrc.nMonType2 = 0;
+    D2MonsterKillStrc killStrc = {0};
     killStrc.nUnitMode = eD2MonsterAnimMode_ns::Skill1;
     uint8_t byAnimMode2 = 'd';
     killStrc.pVictim = pUnit;

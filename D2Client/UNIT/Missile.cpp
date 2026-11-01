@@ -5829,7 +5829,6 @@ void __fastcall MISSILE_CltDoFn43_FollowOwner(D2UnitStrc * pUnit) {
 
 // Client-side per-frame missile DoFunc (handler variant 001). Validates the missile's class id against missiles.txt, flags whether the local player owns it, then runs the per-tick missile loop: clears NODRAW after InitSteps frames, explodes immediately if the particle is stopped/fading, advances the animation (honoring LoopAnim/SubLoop/SubStart/SubStop), moves the missile along its path by the client step count, decrements remaining frames (explodes at 0), applies CltSrcTown town-cutoff behavior, and on collision (wall/block) explodes. For ClientCol missiles it walks the per-step collision coords calling the anim-mode collision function to find a hit unit, exploding on the first active target. Loops once more for the local player on the final frame.
 void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
-    bool _bIsLocalPlayer;
     int _bIsActive;
     D2PathPointStrc* pDVar1;
     bool bIsActive;
@@ -5845,7 +5844,6 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
     D2MissileCltCollideCtxStrc sCollideCtx;
     D2PathPointStrc* sPathPoint;
     uint32_t nCollidePathSteps;
-    bool bIsLocalPlayer;
     D2DynamicPathStrc* pCurDynPath;
     uint8_t bySubStop;
     if (!pUnit) {
@@ -5865,7 +5863,7 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
       return;
     }
 
-    _bIsLocalPlayer = 0;
+    BOOL bIsLocalPlayer = 0;
     switch (eD2GSGameType_007a0610) {
       case GAMETYPE_SINGLEPLAYER:
 
@@ -5877,7 +5875,7 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
         pOwner = Player::MISSILE_GetOwnerUnit(pUnit);
       pHitUnit = Player::GetPlayerUnit_UI();
       if (pOwner == pHitUnit) {
-        _bIsLocalPlayer = 1;
+        bIsLocalPlayer = 1;
       }
     }
 
@@ -5993,7 +5991,7 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
           } while (nClassId < (int)nCollidePathSteps);
         }
       }
-      if (!_bIsLocalPlayer) {
+      if (!bIsLocalPlayer) {
         return;
       }
 
@@ -6007,7 +6005,7 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
         return;
       }
 
-      _bIsLocalPlayer = 0;
+      bIsLocalPlayer = 0;
     } while (true);
 
     MISSILE_ClientHitExplode(pUnit, nullptr, 1);

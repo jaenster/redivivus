@@ -156,7 +156,7 @@ void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID) {
       return;
       case UNIT_ITEM:
         bInventoryOpen = UI::ui::GetUIFlag(UI_INVENTORY);
-      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT(0x16, 4, nUnitGUID, bInventoryOpen & 0xff);
+      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT(0x16, 4, nUnitGUID, (uint8_t)bInventoryOpen);
       return;
     }
 
@@ -470,7 +470,6 @@ void __fastcall UNITMODE_SendWalkToPosition(D2UnitStrc * pUnit, int32_t nTargetX
 void __fastcall UNITMODE_ExecuteSkillAction(eD2UnitModeAction nActionType, D2UnitStrc * pUnit, int32_t nTargetOrX, int32_t nTargetGUIDOrY, uint32_t dwUnused) {
     D2UnitStrc* pItemUnit;
     D2SkillStrc* pSkill;
-    D2ServerMessageHandleStrc msgSkillId;
     int32_t nAction;
     int32_t nLine;
     char* szFile;
@@ -479,11 +478,7 @@ void __fastcall UNITMODE_ExecuteSkillAction(eD2UnitModeAction nActionType, D2Uni
       return;
     }
 
-    msgSkillId.nTargetUnitType = 0;
-    msgSkillId.nTargetUnitId = 0;
-    msgSkillId.nSkillLvl = 0;
-    msgSkillId.nMaxDistance = 0;
-    msgSkillId.nTargetX = 0;
+    D2ServerMessageHandleStrc msgSkillId = {0};
     msgSkillId.nSkillId = nTargetOrX;
     msgSkillId.nItemId = nTargetGUIDOrY;
     switch (nActionType) {

@@ -401,7 +401,7 @@ D2LvlWarpTxt * __fastcall DRLGROOM_GetLvlWarpTxtForWarpUnit(D2RoomExStrc * pRoom
     }
 
     while (pTileGrid) {
-      if (pTileGrid->pLvlWarpTxt->Id == (nClassId & 0xff)) {
+      if (pTileGrid->pLvlWarpTxt->Id == (uint8_t)nClassId) {
         if (pTileGrid->bEnabled) {
           return pTileGrid->pLvlWarpTxt;
         }

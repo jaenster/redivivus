@@ -469,7 +469,6 @@ void __fastcall SetFrozenArmorState(D2UnitStrc * pUnit, eD2States eState, int32_
 
 // Server skill-do function shared by Sorceress frozen-armor skills (Frozen Armor, Shiver Armor, Chilling Armor — skill index 018 group). Validates the skill entry, sets UNITFLAG_SKSRVDOFUNC, activates the aura state, builds a D2StateExArgStrc with the duration calc result, attaches a stat list with SetFrozenArmorState as the expiry callback, adds aura/passive stats and modifier-list entries, registers aura-target events and up to 3 aura events, then toggles the GFX state. Returns the stat list pointer cast to BOOL on success.
 BOOL __fastcall Skills_SrvDoFunc_018_Armor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2StateExArgStrc sStateArgs;
     D2StatListExStrc* pStatsEx;
     int iAuraEvent;
     /* Set State (Armor buff), set Auratarget event, event, event func */ if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
@@ -486,11 +485,7 @@ BOOL __fastcall Skills_SrvDoFunc_018_Armor(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
     ::SGAMEDATA* pGameCtx = pGame;
     SkillsServer::D2UpdateState(pUnit, (int)pSkillTxt->aurastate, 1);
-    sStateArgs.nDurationInFrames = 0;
-    sStateArgs.eStat = UNITSTAT_strength;
-    sStateArgs.nSkillCalc = 0;
-    sStateArgs.eAuraState = STATE_none;
-    sStateArgs.pFunction = 0;
+    D2StateExArgStrc sStateArgs = {0};
     sStateArgs.eSkill = eSkill;
     sStateArgs.nSkillLvl = nSkillLvl;
     sStateArgs.pUnit = pUnit;
@@ -787,7 +782,6 @@ BOOL __fastcall Skills_SrvDoFunc_022_Nova_FrostNova(::SGAMEDATA * pGame, D2UnitS
 
 // Server do-func shared by Blaze and Energy Shield (skill 23 dispatch). Validates the skill's aurastat and aurastate entries in skills.txt, allocates a timed stat list via SetStateWithExpiryTime (duration = auralencalc), applies passive stats via D2SetPassiveStatsFromSkills, records skill/level modifier stats, then iterates the up-to-3 auraevent entries to register aura target events via D2SetAuraTargetEvent and D2SetAuraEvent.
 BOOL __fastcall Skills_SrvDoFunc_023_Blaze_EnergyShield(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2StateExArgStrc sStateArgs;
     if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
@@ -797,11 +791,7 @@ BOOL __fastcall Skills_SrvDoFunc_023_Blaze_EnergyShield(::SGAMEDATA * pGame, D2U
       return 0;
     }
 
-    sStateArgs.nDurationInFrames = 0;
-    sStateArgs.eStat = UNITSTAT_strength;
-    sStateArgs.nSkillCalc = 0;
-    sStateArgs.eAuraState = STATE_none;
-    sStateArgs.pFunction = 0;
+    D2StateExArgStrc sStateArgs = {0};
     sStateArgs.eSkill = eSkill;
     sStateArgs.nSkillLvl = nSkillLvl;
     sStateArgs.pUnit = pUnit;
@@ -1208,7 +1198,6 @@ BOOL __fastcall Skills_SrvDoFunc_029_ThunderStorm(::SGAMEDATA * pGame, D2UnitStr
     int32_t nAreaRange;
     D2UnitStrc* pThunderTarget;
     D2StatListExStrc* pStatsEx;
-    D2StateExArgStrc sStateArgs;
     D2SkillsTxt* pSkillTxt2;
     if ((int)eSkill < 0) {
       return 0;
@@ -1244,11 +1233,7 @@ BOOL __fastcall Skills_SrvDoFunc_029_ThunderStorm(::SGAMEDATA * pGame, D2UnitStr
 
     eD2States eThunderState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)pDVar1->aurastate);
     if (eThunderState == STATE_none || (nSkillParam2 = D2Common::Skills::SKILL_GetParam2(pSkill) , nSkillParam2 != 0)) {
-      sStateArgs.nDurationInFrames = 0;
-      sStateArgs.eStat = UNITSTAT_strength;
-      sStateArgs.nSkillCalc = 0;
-      sStateArgs.eAuraState = STATE_none;
-      sStateArgs.pFunction = 0;
+      D2StateExArgStrc sStateArgs = {0};
       sStateArgs.eSkill = eSkill;
       sStateArgs.nSkillLvl = nSkillLvl;
       sStateArgs.pUnit = pUnit;

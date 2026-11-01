@@ -236,21 +236,14 @@ void __fastcall SYSTEM_SetGlobalString(char * szText) {
 }
 
 bool __fastcall ErrorReportingLaunch(char * szText, D2BlizzardErrorArgument * pArg) {
-    // Frame slots -5128..-8 are ONE object: &szCmdLine is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char szCmdLine;
-      uint8_t szCmdLineRest[4095];
-      char szExePath[1024];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 5120, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     bool bExists;
     uint32_t nAttach;
     char** ppAttachment;
+    char szCmdLine[4096];
+    char szExePath[1024];
     char cCh;
     char* pDst;
-    pDst = __frame0.szExePath;
+    pDst = szExePath;
     char* pSrcCur;
     pSrcCur = gszSystemGlobalString;
     int nRemaining;
@@ -275,36 +268,36 @@ bool __fastcall ErrorReportingLaunch(char * szText, D2BlizzardErrorArgument * pA
     pSrcCur = pSrcCur + strlen(pSrcCur) + 1;
     launch_error_reporter:
     if ((char*)(pSrcCur - ((char*)&gszSystemGlobalString + 1)) < (char*)0x400) {
-      if ((__frame0.szCmdLineRest + 0xffe)[(int)(char*)(pSrcCur - ((char*)&gszSystemGlobalString + 1))] != '/' && (__frame0.szCmdLineRest + 0xffe)[(int)(char*)(pSrcCur - ((char*)&gszSystemGlobalString + 1))] != '\\') {
-        File::STRING_AppendStringToString(__frame0.szExePath, 0x400, "\\");
+      if ((szCmdLine + 0xfff)[(int)(char*)(pSrcCur - ((char*)&gszSystemGlobalString + 1))] != '/' && (szCmdLine + 0xfff)[(int)(char*)(pSrcCur - ((char*)&gszSystemGlobalString + 1))] != '\\') {
+        File::STRING_AppendStringToString(szExePath, 0x400, "\\");
       }
 
-      File::STRING_AppendStringToString(__frame0.szExePath, 0x400, "BlizzardError.exe");
-      bExists = File::FILETOOLS_CheckIfFileExists_UTF8(__frame0.szExePath);
+      File::STRING_AppendStringToString(szExePath, 0x400, "BlizzardError.exe");
+      bExists = File::FILETOOLS_CheckIfFileExists_UTF8(szExePath);
       if (bExists) {
-        __frame0.szCmdLine = '\0';
-        memset(__frame0.szCmdLineRest, 0, 0xfff);
+        szCmdLine[0] = '\0';
+        memset(szCmdLine + 1, 0, 0xfff);
         if (pArg->nFlags & FLAGS_auto) {
-          File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, " -auto");
+          File::STRING_AppendStringToString(szCmdLine, 0x1000, " -auto");
         }
         if (pArg->nFlags & FLAGS_nocancel) {
-          File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, " -nocancel");
+          File::STRING_AppendStringToString(szCmdLine, 0x1000, " -nocancel");
         }
         if (pArg->nFlags & FLAGS_simple) {
-          File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, " -simple");
+          File::STRING_AppendStringToString(szCmdLine, 0x1000, " -simple");
         }
         if (pArg->szFrom) {
-          File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, " -from ");
-          File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, pArg->szFrom);
+          File::STRING_AppendStringToString(szCmdLine, 0x1000, " -from ");
+          File::STRING_AppendStringToString(szCmdLine, 0x1000, pArg->szFrom);
         }
         if (pArg->szLocale) {
-          File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, " -locale ");
-          File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, pArg->szLocale);
+          File::STRING_AppendStringToString(szCmdLine, 0x1000, " -locale ");
+          File::STRING_AppendStringToString(szCmdLine, 0x1000, pArg->szLocale);
         }
         if (pArg->szProduct) {
-          File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, " -product \"");
-          File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, pArg->szProduct);
-          File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, "\"");
+          File::STRING_AppendStringToString(szCmdLine, 0x1000, " -product \"");
+          File::STRING_AppendStringToString(szCmdLine, 0x1000, pArg->szProduct);
+          File::STRING_AppendStringToString(szCmdLine, 0x1000, "\"");
         }
 
         nAttach = 0;
@@ -312,9 +305,9 @@ bool __fastcall ErrorReportingLaunch(char * szText, D2BlizzardErrorArgument * pA
           ppAttachment = pArg->szAttachment;
           do {
             if (*ppAttachment && **ppAttachment != '\0') {
-              File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, " -attachment \"");
-              File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, *ppAttachment);
-              File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, "\"");
+              File::STRING_AppendStringToString(szCmdLine, 0x1000, " -attachment \"");
+              File::STRING_AppendStringToString(szCmdLine, 0x1000, *ppAttachment);
+              File::STRING_AppendStringToString(szCmdLine, 0x1000, "\"");
             }
 
             nAttach++;
@@ -322,10 +315,10 @@ bool __fastcall ErrorReportingLaunch(char * szText, D2BlizzardErrorArgument * pA
           } while (nAttach < (uint32_t)pArg->nAttachmentCount);
         }
 
-        File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, " \"");
-        File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, szText);
-        File::STRING_AppendStringToString(&__frame0.szCmdLine, 0x1000, "\"");
-        bExists = File::FILETOOLS_StartApplicationWithCommandLine_UTF8(__frame0.szExePath, &__frame0.szCmdLine);
+        File::STRING_AppendStringToString(szCmdLine, 0x1000, " \"");
+        File::STRING_AppendStringToString(szCmdLine, 0x1000, szText);
+        File::STRING_AppendStringToString(szCmdLine, 0x1000, "\"");
+        bExists = File::FILETOOLS_StartApplicationWithCommandLine_UTF8(szExePath, szCmdLine);
         return bExists;
       }
     }

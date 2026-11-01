@@ -808,14 +808,7 @@ void __fastcall PLRSKILLS_StateRemFn10_Pregnant(D2UnitStrc * pUnit) {
 }
 
 void __fastcall PLRSKILLS_StateSetFn14_Shapeshift(D2UnitStrc * pUnit, eD2States eState) {
-    D2ServerMessageHandleStrc nPosX;
-    nPosX.nSkillId = 0;
-    nPosX.nItemId = 0;
-    nPosX.nTargetUnitType = 0;
-    nPosX.nTargetUnitId = 0;
-    nPosX.nSkillLvl = 0;
-    nPosX.nMaxDistance = 0;
-    nPosX.nTargetX = 0;
+    D2ServerMessageHandleStrc nPosX = {0};
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nPosX.nSkillId = pUnit->pPath.pStaticPath->nPosX;

@@ -332,16 +332,18 @@ void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH(D2ClientStrc 
 
 // Server-to-client monster move message. Opcode 0x67, 16 bytes.
 void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH(D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nMoveType, uint16_t wX, uint16_t wY, uint8_t bParam) {
-    uint8_t uStack_14[16];
-    uStack_14[5] = nMoveType;
-    memset(uStack_14 + 12, 0, 4 * sizeof(uStack_14[0]));
-    uStack_14[10] = '\0';
-    uStack_14[0xb] = '\0';
-    *(uint16_t*)((char*)&uStack_14 + 8) = wY;
-    d2_store24((char*)&uStack_14 + 1, (uint32_t)nMonsterGUID & 0xffffffu);
-    uStack_14[0] = nPacketId;
-    uStack_14[4] = (uint8_t)(nMonsterGUID >> 0x18);
-    *(uint16_t*)((char*)&uStack_14 + 6) = wX;
+    D2GSPacketSrv0x67 uStack_14;
+    uStack_14.nMoveType = nMoveType;
+    uStack_14.nParam3 = '\0';
+    uStack_14.wParam = 0;
+    uStack_14.nParam4 = '\0';
+    uStack_14.nParam1 = '\0';
+    uStack_14.nParam2 = '\0';
+    uStack_14.wY = wY;
+    d2_store24((char*)&uStack_14.dwMonsterGUID, (uint32_t)nMonsterGUID & 0xffffffu);
+    uStack_14.nPacketId = nPacketId;
+    *(uint8_t*)((char*)&uStack_14.dwMonsterGUID + 3) = (uint8_t)(nMonsterGUID >> 0x18);
+    uStack_14.wX = wX;
     ::SGAMEDATA* pGame = Clients::CLIENT_GetGame(pClient);
     D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nMonsterGUID);
     if (!pUnit) {
@@ -349,23 +351,22 @@ void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH(D2ClientStrc 
     }
 
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    uStack_14[10] = bParam;
+    uStack_14.nParam1 = bParam;
     int eVar2 = D2Common::PATH::DynamicPath::GetPathType(pDynamicPath);
     uint8_t byPathType = (uint8_t)eVar2;
-    uStack_14[0xc] = byPathType;
+    uStack_14.nParam3 = byPathType;
     if (byPathType >= 5) {
       int32_t nPathPointCoord;
       if (byPathType > 6) {
         if (byPathType == 8) {
-          uStack_14[0xc] = '\v';
+          uStack_14.nParam3 = '\v';
         }
       } else {
-        uStack_14[0xc] = '\x01';
+        uStack_14.nParam3 = '\x01';
         nPathPointCoord = D2Common::PATH::DynamicPath::GetLastPathPointX(pDynamicPath);
-        *(uint16_t*)((char*)&uStack_14 + 6) = (uint16_t)nPathPointCoord;
+        uStack_14.wX = (uint16_t)nPathPointCoord;
         nPathPointCoord = D2Common::PATH::DynamicPath::GetLastPathPointY(pDynamicPath);
-        uStack_14[8] = (char)(short int)nPathPointCoord;
-        uStack_14[9] = (char)((uint16_t)(short int)nPathPointCoord >> 8);
+        uStack_14.wY = (uint16_t)nPathPointCoord;
       }
     }
 
@@ -378,11 +379,10 @@ void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH(D2ClientStrc 
       eVar2 = -0x8000;
     }
 
-    uStack_14[0xd] = (char)(short int)eVar2;
-    uStack_14[0xe] = (char)((uint16_t)(short int)eVar2 >> 8);
+    uStack_14.wParam = (uint16_t)eVar2;
     byPathType = D2Common::PATH::DynamicPath::GetMaxDistance(pDynamicPath);
-    uStack_14[0xf] = byPathType;
-    SCMD_QueuePacketForClient(uStack_14, 0x10, pClient);
+    uStack_14.nParam4 = byPathType;
+    SCMD_QueuePacketForClient(&uStack_14.nPacketId, 0x10, pClient);
 }
 
 // Sends S→C packet 0x68 (NPC move-to-entity, extended form) to one client. Looks up the monster unit by GUID, reads its current X/Y position (dynamic path for monsters/players, static path for objects/missiles), reads path type (remapping 0x08→0x0B) and clamped velocity-percent stat. Packs all fields into a 0x15-byte stack buffer and delivers via NET_D2GS_SERVER_SendPacket_Helper. No-ops silently if the unit is not found.
@@ -940,7 +940,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(D2ClientStrc * pClient, 
     packet.skill = (uint16_t)eSkill;
     packet.packetId = 0x21;
     packet.nBaseAmount = nBaseAmount;
-    int32_t nLevelBonus = D2Common::Skills::GetSkillBonus(pUnit, eSkill & 0xffff);
+    int32_t nLevelBonus = D2Common::Skills::GetSkillBonus(pUnit, (uint16_t)eSkill);
     packet.nLevelBonus = (uint8_t)nLevelBonus;
     SCMD_QueuePacketForClient(&packet.packetId, 0xc, pClient);
 }
@@ -1414,7 +1414,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x7F_AllyPartyInfo_0x90_PartyAutoMapInfo(D2
 
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     eD2LevelId eLevelRaw = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    eD2LevelId eLevel = eLevelRaw & 0xffff;
+    eD2LevelId eLevel = (uint16_t)eLevelRaw;
     *(uint8_t*)(char*)&aPacket.p7F.nAreaID = (uint8_t)eLevelRaw;
     *(uint8_t*)((char*)&aPacket.p7F.nAreaID + 1) = (uint8_t)(eLevelRaw >> 8);
     D2UnitStrc* pPlayer = Clients::CLIENTS_GetControlUnit(pClient, 0);
@@ -1484,7 +1484,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x9D_ITEMUNITEX(D2ClientStrc * pClient, D2U
     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD, 0);
     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, eSavedItemFlag, 1);
     sPacket.nPacketSize = (uint8_t)nTotalPacketLen;
-    SCMD_QueuePacketForClient(&sPacket.nPacketId, nTotalPacketLen & 0xff, pClient);
+    SCMD_QueuePacketForClient(&sPacket.nPacketId, (uint8_t)nTotalPacketLen, pClient);
     Send0x9DAllSocketedItems(pClient, pItem, eItemFlag);
     return;
 }

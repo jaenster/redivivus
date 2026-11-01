@@ -946,7 +946,7 @@ void __fastcall MONSTER_SpawnRoomMonsters(::SGAMEDATA * pGame, D2RoomStrc * pRoo
     D2UnitStrc* pFormationUnit;
     uint32_t dwClassId;
     RECT sRoomRect;
-    bool bAnySpawned;
+    BOOL bAnySpawned;
     int32_t nMinGrp;
     int32_t nMaxGrp;
     D2MonStatsTxt* pMonStatLine;

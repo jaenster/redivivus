@@ -2208,7 +2208,6 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnSubMissileAtFrameInArea(::SGAMEDATA * p
 
 // Server hit callback: like ApplyTimedAuraState but first applies an aurafilter target-flag check (mask 0xA783 if aurafilter is set). Only applies the auratargetstate if the target passes SKILLS_CheckTargetFlags. Uses SetStateWithExpiryTime helper and D2SetAurastatsFromSkills. Returns 0 on success, 1 on bad owner/target/skill/state or filter failure.
 BOOL __fastcall Missiles_SrvHitFunc_ApplyTimedAuraStateFiltered(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    D2StateExArgStrc local_2c;
     D2UnitStrc* pUnit_00 = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
     if (!pUnit_00 || !pTarget) {
       return 1;
@@ -2233,11 +2232,7 @@ BOOL __fastcall Missiles_SrvHitFunc_ApplyTimedAuraStateFiltered(::SGAMEDATA * pG
     uTargetFlags = SKILLS::SkillsServer::SKILLS_CheckTargetFlags(pUnit_00, pTarget, uTargetFlags);
     if (uTargetFlags) {
       D2StatListExStrc* pStatList;
-      local_2c.nDurationInFrames = 0;
-      local_2c.eStat = UNITSTAT_strength;
-      local_2c.nSkillCalc = 0;
-      local_2c.eAuraState = STATE_none;
-      local_2c.pFunction = 0;
+      D2StateExArgStrc local_2c = {0};
       local_2c.pTarget = pTarget;
       local_2c.nSkillLvl = nSkillLvl;
       local_2c.pUnit = pUnit_00;

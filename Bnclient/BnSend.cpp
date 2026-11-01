@@ -2835,7 +2835,7 @@ int __fastcall BNSEND_DecodeCDKeyString(uint32_t * pOutProduct, uint32_t * pOutP
       nChecksumAccum += nChecksumAccum * 2 ^ (char)nLoopIdx + nCharBase;
     } while (iChar < 0x10);
 
-    if ((nChecksumAccum & 0xff) != __frame0.szProductBuf) {
+    if ((uint8_t)nChecksumAccum != __frame0.szProductBuf) {
       return 0;
     }
 

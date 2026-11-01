@@ -359,18 +359,16 @@ static BOOL __stdcall MONSTER_CanApplyUniqueModifier(D2MonUModTxt * pD2MonUModTx
 
 // Selects a champion unique-modifier (UMod) index for a monster using weighted random selection. Iterates the MonUMod txt table, filters entries by applicability to this unit and difficulty, accumulates weights into a candidate list (max 256), then rolls via UNIT_GetModuloFromSeed. Returns the chosen UMod index, or 0 if none qualify.
 static int32_t MONSTER_SelectChampionMod(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
-    bool _nExpansion;
     BOOL _bCanApply;
     bool bCanApply;
     int aCandidateTable[513];
-    bool nExpansion;
     uint16_t wCpick;
     int nCandidates = 0;
     if (!(pGame && pGame->nDifficulty < 3)) {
       return 0;
     }
 
-    _nExpansion = pGame->bExpansion;
+    BOOL nExpansion = pGame->bExpansion;
     int nTxtSize = sgptDataTable->nTxtMonUmodSize;
     uint32_t nTotalWeight = 0;
     if (nTxtSize <= 0) {
@@ -390,7 +388,7 @@ static int32_t MONSTER_SelectChampionMod(D2UnitStrc * pUnit, ::SGAMEDATA * pGame
       wCpick = *(uint16_t*)((int)pUmodEntry->cpick + aCandidateTable[0x200] - 0xe);
       nCpickWeight = (uint32_t)wCpick;
       if ((short int)wCpick > 0 && pUmodEntry->champion != '\0') {
-        _bCanApply = MONSTER_CanApplyUniqueModifier(pUmodEntry, _nExpansion, pUnit);
+        _bCanApply = MONSTER_CanApplyUniqueModifier(pUmodEntry, nExpansion, pUnit);
         nTxtSize = nTxtSizeSaved;
         if (_bCanApply) {
           nTotalWeight += (int)(short int)nCpickWeight;
@@ -428,14 +426,13 @@ static int32_t MONSTER_SelectChampionMod(D2UnitStrc * pUnit, ::SGAMEDATA * pGame
 
 // Randomly selects one unique/champion modifier index from pTxtMonUmod for pUnit. Filters candidates by difficulty-tier cpick weight, champion flag, MONSTER_CanApplyUniqueModifier eligibility, and whether the slot in pD2MonUModTxt is already occupied. Performs a weighted random draw using the unit's seed; returns the selected modifier index (0-based) or 0 on failure.
 static int32_t __stdcall MONUMOD_RollRandomModifier(D2UnitStrc * pUnit, uint8_t * pUsedUModFlags, ::SGAMEDATA * pGame) {
-    bool _nExpansion;
     BOOL _bCanApply;
     bool bCanApply;
     uint32_t nRoll;
     int nCandidates;
     int nUmodIdx;
     int aCandidateTable[512];
-    bool nExpansion;
+    BOOL nExpansion;
     int nTxtSizeSaved;
     uint32_t nCpickWeight;
     int nCpickOffset;
@@ -450,7 +447,7 @@ static int32_t __stdcall MONUMOD_RollRandomModifier(D2UnitStrc * pUnit, uint8_t 
     uint8_t byDifficulty = pGame->nDifficulty;
     if (byDifficulty < 3) {
       int nPickIdx;
-      _nExpansion = pGame->bExpansion;
+      nExpansion = pGame->bExpansion;
       nPickIdx = sgptDataTable->nTxtMonUmodSize;
       nCandidates = 0;
       nTotalWeight = 0;
@@ -468,7 +465,7 @@ static int32_t __stdcall MONUMOD_RollRandomModifier(D2UnitStrc * pUnit, uint8_t 
           wCpick = *(uint16_t*)((int)pUmodEntry->cpick + nCpickOffset - 0xe);
           nCpickWeight = (uint32_t)wCpick;
           if ((short int)wCpick > 0 && pUmodEntry->champion == '\0') {
-            _bCanApply = MONSTER_CanApplyUniqueModifier(pUmodEntry, _nExpansion, pUnit);
+            _bCanApply = MONSTER_CanApplyUniqueModifier(pUmodEntry, nExpansion, pUnit);
             nPickIdx = nTxtSizeSaved;
             if (_bCanApply && pUsedUModFlags[nUmodIdx] == '\0') {
               nTotalWeight += (int)(short int)nCpickWeight;

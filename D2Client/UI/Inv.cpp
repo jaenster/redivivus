@@ -954,7 +954,7 @@ void __stdcall INV_DrawSocketedItems(D2UnitStrc * pUnit, D2GridScreenCoordinates
 
       nSocketIndex++;
       nSocketCount = D2Common::ITEMS::Items::ITEM_GetSocketsCount(pUnit);
-    } while (nSocketIndex < (nSocketCount & 0xff));
+    } while (nSocketIndex < (uint8_t)nSocketCount);
 }
 
 static BOOL INV_IsQuestItemConsumable(int32_t pUnit) {
@@ -1239,7 +1239,7 @@ static uint32_t __fastcall ITEM_CanTheseBeSocketed(D2UnitStrc * pUnit, D2UnitStr
 
       nSocketCount = D2Common::ITEMS::Items::ITEM_GetSocketsCount(pTargetItem);
       nItemsInItem = D2Common::INVENTORY::Inventory::ITEM_ItemsInItem(pInventory);
-      return (uint32_t)(nItemsInItem < (nSocketCount & 0xff));
+      return (uint32_t)(nItemsInItem < (uint8_t)nSocketCount);
     }
 
     return 0;
@@ -1527,7 +1527,7 @@ static void __stdcall INV_FormatEtherealSocketedText(D2UnitStrc * pUnit, uint16_
       memset(wszTmp + 16, 0, 10 * sizeof(wszTmp[0]));
       pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
       nSocketCount = D2Common::ITEMS::Items::ITEM_GetSocketsCount(pUnit);
-      Storm::Source::SSTR::SStrPrintf(szSocketCount, 10, "(%i)", nSocketCount & 0xff);
+      Storm::Source::SSTR::SStrPrintf(szSocketCount, 10, "(%i)", (uint8_t)nSocketCount);
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTmp + 0x10, szSocketCount, 9);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwLocaleStr);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszTmp + 0x10);
@@ -6811,8 +6811,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
     struct __frame0_t {
       uint16_t wszRareName;
       uint8_t wszRareNameBuf[198];
-      uint16_t wszPossessive;
-      uint16_t wszAffixWork[99];
+      uint16_t wszPossessive[100];
       uint8_t szUtf8Buf[512];
       char szPlayerNameCopy[20];
     };
@@ -6997,14 +6996,14 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
             pwLocaleStr = INV_GetInventoryPageName(nCopyLen);
             D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutCursor, pwLocaleStr);
             D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutCursor, pwSeparator);
-            __frame0.wszPossessive = L'\0';
-            Fog::File::CONTAINER_InitializeBuffer(__frame0.wszAffixWork, 2, 99, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+            __frame0.wszPossessive[0] = L'\0';
+            Fog::File::CONTAINER_InitializeBuffer(__frame0.wszPossessive + 1, 2, 99, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
             Fog::File::CONTAINER_InitializeBuffer(wszBaseName, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
             pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
             D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszBaseName, pwLocaleStr);
             nIsOfType = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
-            D2Lang::Unicode::UNISYS::UNICODE_FormatPossessiveName(&__frame0.wszPossessive, (uint16_t*)__frame0.szUtf8Buf, wszBaseName, 100, nIsOfType);
-            D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutCursor, &__frame0.wszPossessive);
+            D2Lang::Unicode::UNISYS::UNICODE_FormatPossessiveName(__frame0.wszPossessive, (uint16_t*)__frame0.szUtf8Buf, wszBaseName, 100, nIsOfType);
+            D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutCursor, __frame0.wszPossessive);
             break;
           }
 
@@ -7087,7 +7086,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
               __frame0.szUtf8Buf[1] = 0;
               pAffixNameTail = pPrefixAffix->name;
               pAffixNameTail = pAffixNameTail + strlen(pAffixNameTail) + 1;
-              pwLocaleStr2 = (char*)((int)__frame0.wszAffixWork + 0xc5);
+              pwLocaleStr2 = (char*)((int)__frame0.wszPossessive + 199);
               do {
                 pcNameSrc = pwLocaleStr2 + 1;
                 pwLocaleStr2++;
@@ -7154,13 +7153,13 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszNameScratch, pwLocaleStr);
               bFlagCheck = INV_FormatPlayerNameWithBase(wszBaseName, wszNameScratch, pUnit);
               if (!bFlagCheck) {
-                __frame0.wszPossessive = L'\0';
-                Fog::File::CONTAINER_InitializeBuffer(__frame0.wszAffixWork, 2, 99, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+                __frame0.wszPossessive[0] = L'\0';
+                Fog::File::CONTAINER_InitializeBuffer(__frame0.wszPossessive + 1, 2, 99, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
                 uVar6 = 0;
                 pwLocaleStr = wszNameScratch;
                 pwFmtStr = D2Lang::StrTable::strtable::GetLocaleString(0x2769);
-                wsprintf(&__frame0.wszPossessive, pwFmtStr, pwLocaleStr, uVar6);
-                pwLocaleStr = &__frame0.wszPossessive;
+                wsprintf(__frame0.wszPossessive, pwFmtStr, pwLocaleStr, uVar6);
+                pwLocaleStr = __frame0.wszPossessive;
               } else {
                 pwLocaleStr = wszBaseName;
               }
@@ -9424,7 +9423,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
         }
 
         /* Insert item into buffer 18 [DWORD id] [DWORD xpos] [DWORD ypos] [DWORD
-                         buffer] */ uVar4 = nPage & 0xff;
+                         buffer] */ uVar4 = (uint8_t)nPage;
         bVar1 = 0x18;
         pInvWork = pInventory;
         pTargetItem = pUnit;
@@ -10143,7 +10142,7 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
                 iVar3 = pItem->nUnitGUID;
               }
 
-              GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x1a, iVar3, bodyLocation & 0xffff);
+              GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x1a, iVar3, (uint16_t)bodyLocation);
               UNIT::ITEM_RemoveClientSide(pItem);
               nSoundParam2 = 0;
               nSoundParam = 0;
@@ -10191,7 +10190,7 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
                 iVar3 = pItem->nUnitGUID;
               }
 
-              GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x1d, iVar3, bodyLocation & 0xffff);
+              GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x1d, iVar3, (uint16_t)bodyLocation);
               UNIT::ITEM_RemoveClientSide(pItem);
               nSoundParam2 = 0;
               nSoundParam = 0;

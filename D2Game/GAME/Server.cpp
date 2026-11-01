@@ -2046,7 +2046,7 @@ void __fastcall QSERVER_DestroyGameByToken(uint32_t nToken) {
 }
 
 void __stdcall RequestHostedGames(int32_t nParam) {
-    uint32_t szGameNameCopy[4];
+    char szGameNameCopy[16];
     uint32_t dwStackCookie;
     int nClientsCount;
     uint16_t wServerToken;
@@ -2059,14 +2059,14 @@ void __stdcall RequestHostedGames(int32_t nParam) {
         if (pGame) {
           nClientsCount = pGame->nClientsCount;
           wServerToken = pGame->nServerToken;
-          Storm::Source::SSTR::SStrCopy((char*)szGameNameCopy, pGame->szGameName, 0x7fffffff);
+          Storm::Source::SSTR::SStrCopy(szGameNameCopy, pGame->szGameName, 0x7fffffff);
           if (!pGame->lpCriticalSection) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
             exit(-1);
           }
 
           /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
-          ServerCmd::SERVERCMD_SendBufferToClient(nParam, wServerToken, (uint16_t)nClientsCount, (char*)szGameNameCopy);
+          ServerCmd::SERVERCMD_SendBufferToClient(nParam, wServerToken, (uint16_t)nClientsCount, szGameNameCopy);
         }
       }
 

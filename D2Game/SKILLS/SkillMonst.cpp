@@ -369,7 +369,7 @@ BOOL __fastcall Skills_SrvDoFunc_087_SpawnBehindTarget(::SGAMEDATA * pGame, D2Un
     int nSpawnX = D2Common::Units::GetDirectionToCoords(pUnit, D2Client::Units::GetXPosFromDynamicPathUnit(pTargetUnit), nTargetY);
     uint8_t bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2((uint8_t)nSpawnX);
     uint32_t nGfxDirMasked = bVar1 & 0x80000007;
-    D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(BYTE_ARRAY_006e3138[nGfxDirMasked & 0xff], &nSkillLvl, &nOffsetY);
+    D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(BYTE_ARRAY_006e3138[(uint8_t)nGfxDirMasked], &nSkillLvl, &nOffsetY);
     nTargetY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
     nSpawnX = nTargetY + nSkillLvl;
     nTargetY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);

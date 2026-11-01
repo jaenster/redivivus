@@ -1371,11 +1371,11 @@ uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitSt
         sPathTypeArg.pCoords.nOffsetY = pDynamicPath_00->nTargetX;
         sPathTypeArg.pCoords.nPosY = pDynamicPath_00->nTargetY;
         if (sPathTypeArg.pCoords.nOffsetX != sPathTypeArg.pCoords.nOffsetY || sPathTypeArg.pCoords.nPosX != sPathTypeArg.pCoords.nPosY) {
-          nDeltaX = (*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) & 0xffff) - (*(uint32_t*)(char*)&sPathTypeArg.pCoords & 0xffff);
+          nDeltaX = (uint16_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) - (uint16_t)*(uint32_t*)(char*)&sPathTypeArg.pCoords;
           bCanPath = ((uint32_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) >> 0x10) - (uint32_t)(uint16_t)sPathTypeArg.pCoords.nPosX;
           if (nDeltaX <= 0x64 && (nDeltaX == -100 || -nDeltaX < 100 && bCanPath <= 0x64) && (bCanPath == -100 || -bCanPath < 100)) {
             sPathTypeArg.pRoom = pDynamicPath_00->pRoom;
-            sPathTypeArg.pRoomNext = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(sPathTypeArg.pRoom, *(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) & 0xffff, (uint32_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) >> 0x10);
+            sPathTypeArg.pRoomNext = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(sPathTypeArg.pRoom, (uint16_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4), (uint32_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) >> 0x10);
             if (sPathTypeArg.pRoom && sPathTypeArg.pRoomNext) {
               uVar9 = Path::PATH_CanMonsterPathInArea(pUnit, (uint16_t*)&sPathTypeArg);
               if (uVar9 || nParam) {

@@ -355,13 +355,13 @@ static void __stdcall FormatDebugOutput(uint8_t bFlags, va_list vaArgs, char * s
 void OutputDebugStringSimple(char * szText, ...) {
     va_list __va;
     va_start(__va, szText);
-    char szBuffer[4095];
+    char szBuffer[4096];
     char cCurrent;
     char* pScan = szBuffer;
     szBuffer[0] = '\0';
     pScan = pScan + strlen(pScan) + 1;
     vsnprintf(szBuffer + ((int)pScan - (int)(szBuffer + 1)), 0x1000 - ((int)pScan - (int)(szBuffer + 1)), szText, __va);
-    uint8_t cNull = 0;
+    /* LPCSTR lpOutputString for OutputDebugStringA */ szBuffer[0xfff] = '\0';
     OutputDebugStringA(szBuffer);
 }
 
@@ -369,8 +369,7 @@ void OutputDebugStringIfCapsLock(char * szText, ...) {
     va_list __va;
     va_start(__va, szText);
     char* pScan;
-    char szBuffer[4095];
-    uint8_t cNull;
+    char szBuffer[4096];
     char cCurrent;
     uint16_t wKeyState = GetAsyncKeyState(0x14);
     if (wKeyState & 1) {
@@ -378,7 +377,7 @@ void OutputDebugStringIfCapsLock(char * szText, ...) {
       szBuffer[0] = '\0';
       pScan = pScan + strlen(pScan) + 1;
       vsnprintf(szBuffer + ((int)pScan - (int)(szBuffer + 1)), 0x1000 - ((int)pScan - (int)(szBuffer + 1)), szText, __va);
-      /* LPCSTR lpOutputString for OutputDebugStringA */ cNull = 0;
+      /* LPCSTR lpOutputString for OutputDebugStringA */ szBuffer[0xfff] = '\0';
       OutputDebugStringA(szBuffer);
     }
 }

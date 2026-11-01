@@ -87,7 +87,7 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
     char bQuestDone;
     uint16_t wszNumberBuffer[10];
     char szNumberString[8];
-    bool bJustCompleted;
+    BOOL bJustCompleted;
     int nQuestTableIndex;
     D2BitBufferStrc* pQuestRecord;
     size_t nDescLen;

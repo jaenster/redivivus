@@ -205,7 +205,7 @@ int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, int32_t pResultArray, uin
       }
 
       i = FINDTILE_ComputeHash((char)nParam4, (char)nTileSubType, (char)nTileType);
-      pEntry = pHashTable[i & 0xff];
+      pEntry = pHashTable[(uint8_t)i];
       if (!pEntry) {
         return nResultCount;
       }

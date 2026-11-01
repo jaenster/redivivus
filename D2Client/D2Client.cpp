@@ -3923,7 +3923,7 @@ void __thiscall WARDEN_RC4Init(D2RC4StateStrc * pRc4State, uint8_t * pKey, uint3
     do {
       uint8_t bySwapTemp;
       nNextIdx = nByteIdx + 1;
-      bySwapIndex = bySwapIndex + pKey[nKeyIdx & 0xff] + pRc4State->sbox[nByteIdx];
+      bySwapIndex = bySwapIndex + pKey[(uint8_t)nKeyIdx] + pRc4State->sbox[nByteIdx];
       bySwapTemp = pRc4State->sbox[nByteIdx];
       pRc4State->sbox[nByteIdx] = pRc4State->sbox[bySwapIndex];
       pRc4State->sbox[bySwapIndex] = bySwapTemp;

@@ -143,7 +143,7 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
           /* LPCVOID lpBaseAddress for ReadProcessMemory */ hProcess = GetCurrentProcess();
           /* HANDLE hProcess for ReadProcessMemory */ bReadOk = ReadProcessMemory(hProcess, pReadAddr, pReadBuffer, nBytesToRead, pBytesRead);
           if (bReadOk) {
-            nWardenChecksum = (((uint32_t)(wReadWord2[0] >> 8) << 8 | wReadWord2[0] & 0xff) << 8 | (uint32_t)(wReadWord1[0] >> 8)) << 8 | wReadWord1[0] & 0xff;
+            nWardenChecksum = (((uint32_t)(wReadWord2[0] >> 8) << 8 | (uint8_t)wReadWord2[0]) << 8 | (uint32_t)(wReadWord1[0] >> 8)) << 8 | (uint8_t)wReadWord1[0];
           }
         }
       }

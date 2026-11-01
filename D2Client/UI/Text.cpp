@@ -945,23 +945,14 @@ void __stdcall TEXT_DrawAllMessageLog() {
 }
 
 void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor) {
-    // Frame slots -276..-4 are ONE object: &szUtf8 is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char szUtf8;
-      uint8_t szUtf8Rest[255];
-      int32_t nPrevFont;
-      D2TextLineStrc* pNextWrapNode;
-      uint32_t nWrapCount;
-      uint8_t byColor;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 272, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    D2TextLineStrc* pDVar2;
     ::IgnoreList* ppIgnoreList;
+    char szUtf8[256];
+    uint32_t nWrapCount;
     ScreenMessage_t** ppNextLink;
     ScreenMessage_t* pTailMsg;
     int nLineIdx = 0;
-    __frame0.byColor = nColor;
+    uint8_t byColor = nColor;
     ScreenMessage_t* pNewMsg = D2_NEW_AT(ScreenMessage_t, ".\\UI\\text.cpp", 0xd46);
     memset(pNewMsg->apwszLines, 0, 6 * sizeof(pNewMsg->apwszLines[0]));
     *(uint32_t*)&pNewMsg->nLineCount = 0;
@@ -970,15 +961,15 @@ void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor) {
     pNewMsg->pNext = 0;
     DWORD dwNow = GetTickCount();
     pNewMsg->dwMessageExpiration = dwNow + 10000;
-    __frame0.nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
-    D2TextLineStrc* pNewMessage = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(wMessage, (int*)&__frame0.nWrapCount, ScreenSizeX - 0x46);
-    uint32_t nLineCount = __frame0.nWrapCount;
-    if (__frame0.nWrapCount > 6) {
+    int32_t nLine = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
+    D2TextLineStrc* pNewMessage = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(wMessage, (int*)&nWrapCount, ScreenSizeX - 0x46);
+    uint32_t nLineCount = nWrapCount;
+    if (nWrapCount > 6) {
       nLineCount = 6;
     }
 
     pNewMsg->nLineCount = (uint16_t)nLineCount;
-    if (0 < (int)__frame0.nWrapCount) {
+    if (0 < (int)nWrapCount) {
       do {
         if (nLineIdx < (int)(uint32_t)pNewMsg->nLineCount) {
           pNewMsg->apwszLines[nLineIdx] = pNewMessage->wszLine;
@@ -986,14 +977,14 @@ void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor) {
           D2_FREE_AT(pNewMessage->wszLine, ".\\UI\\text.cpp", 0xd5a);
         }
 
-        __frame0.pNextWrapNode = pNewMessage->pNext;
+        pDVar2 = pNewMessage->pNext;
         D2_FREE_AT(pNewMessage, ".\\UI\\text.cpp", 0xd5d);
         nLineIdx++;
-        pNewMessage = __frame0.pNextWrapNode;
-      } while (nLineIdx < (int)__frame0.nWrapCount);
+        pNewMessage = pDVar2;
+      } while (nLineIdx < (int)nWrapCount);
     }
 
-    pNewMsg->color = (uint32_t)__frame0.byColor;
+    pNewMsg->color = (uint32_t)byColor;
     ScreenMessage_t* pIterMsg = pNewMsg;
     if (ScreenMessagesMaybe.pHead) {
       nLineCount = 0;
@@ -1007,7 +998,7 @@ void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor) {
         pIterMsg = *ppNextLink;
       }
 
-      if ((nLineCount & 0xffff) != ScreenMessagesMaybe.nCount - 1) {
+      if ((uint16_t)nLineCount != ScreenMessagesMaybe.nCount - 1) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd6c);
         exit(-1);
       }
@@ -1018,11 +1009,11 @@ void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor) {
 
     ScreenMessagesMaybe.pHead = pIterMsg;
     if (pNewMsg->color == 4 && pNewMsg->nLineCount == 1) {
-      __frame0.szUtf8 = '\0';
-      memset(__frame0.szUtf8Rest, 0, 0xff);
-      D2Lang::WideCharToUTF8(&__frame0.szUtf8, pNewMsg->apwszLines[0], 0x100);
+      szUtf8[0] = '\0';
+      memset(szUtf8 + 1, 0, 0xff);
+      D2Lang::WideCharToUTF8(szUtf8, pNewMsg->apwszLines[0], 0x100);
       ppIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-      ppIgnoreList->_vfptr->AddAccountMapping(ppIgnoreList, &__frame0.szUtf8, 0x100);
+      ppIgnoreList->_vfptr->AddAccountMapping(ppIgnoreList, szUtf8, 0x100);
     }
 
     TEXT_InsertScreenMessage(pNewMsg->apwszLines);
@@ -1053,7 +1044,7 @@ void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor) {
       TEXT_DrawAllMessageLog();
     }
 
-    D2Win::Src::D2WinFont::SetAndReturnLastFont(__frame0.nPrevFont);
+    D2Win::Src::D2WinFont::SetAndReturnLastFont(nLine);
 }
 
 void __fastcall TEXT_PrintPartyMessage(uint16_t * wszText, uint8_t byColor) {
@@ -1139,7 +1130,7 @@ void __fastcall TEXT_PrintPartyMessage(uint16_t * wszText, uint8_t byColor) {
         pSVar1 = *ppNextMsg;
       }
 
-      if ((nMsgCount & 0xffff) != ScreenPartyMessages.nCount - 1) {
+      if ((uint16_t)nMsgCount != ScreenPartyMessages.nCount - 1) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdf1);
         exit(-1);
       }
@@ -4069,19 +4060,12 @@ void __stdcall TEXT_DrawQuestScrollAnimation(int32_t bDraw) {
     static uint32_t gnQuestScrollAnimFrame; D2_STATIC_GUARD_BSS(gnQuestScrollAnimFrame, "D2Client::UI::Text::TEXT_DrawQuestScrollAnimation::gnQuestScrollAnimFrame");
     static uint32_t gnQuestScrollAnimMaxFrame; D2_STATIC_GUARD_BSS(gnQuestScrollAnimMaxFrame, "D2Client::UI::Text::TEXT_DrawQuestScrollAnimation::gnQuestScrollAnimMaxFrame");
 
-    // Frame slots -408..-4 are ONE object: &byPathPad is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char byPathPad;
-      uint8_t szImagePath[259];
-      D2GfxDataStrc sGfxData2;
-      D2GfxDataStrc sGfxData;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 404, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     DRAWMODE eDrawMode;
     uint32_t nLineIdx;
     uint32_t nElapsed;
+    char szImagePath[260];
+    D2GfxDataStrc sGfxData2;
+    D2GfxDataStrc sGfxData;
     uint16_t nLineValue;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     if (!pPlayer) {
@@ -4089,26 +4073,26 @@ void __stdcall TEXT_DrawQuestScrollAnimation(int32_t bDraw) {
     }
 
     int nFrameIdx = 0;
-    memset(&__frame0.sGfxData2, 0, 0x48);
+    memset(&sGfxData2, 0, 0x48);
     TEXT_DrawScrollBackground();
     if (!gpQuestScrollImageBottom) {
-      __frame0.byPathPad = '\0';
-      memset(__frame0.szImagePath, 0, 0x103);
-      sprintf(&__frame0.byPathPad, "%s\\%s", "DATA\\GLOBAL", "UI\\menu\\scroin2");
-      gpQuestScrollImageBottom = Core::Archive::IMAGE_LoadDC6Ex(&__frame0.byPathPad, 0);
+      szImagePath[0] = '\0';
+      memset(szImagePath + 1, 0, 0x103);
+      sprintf(szImagePath, "%s\\%s", "DATA\\GLOBAL", "UI\\menu\\scroin2");
+      gpQuestScrollImageBottom = Core::Archive::IMAGE_LoadDC6Ex(szImagePath, 0);
     }
     if (!gpQuestScrollImageTop) {
-      __frame0.byPathPad = '\0';
-      memset(__frame0.szImagePath, 0, 0x103);
-      sprintf(&__frame0.byPathPad, "%s\\%s", "DATA\\GLOBAL", "UI\\menu\\scroin3");
-      gpQuestScrollImageTop = Core::Archive::IMAGE_LoadDC6Ex(&__frame0.byPathPad, 0);
+      szImagePath[0] = '\0';
+      memset(szImagePath + 1, 0, 0x103);
+      sprintf(szImagePath, "%s\\%s", "DATA\\GLOBAL", "UI\\menu\\scroin3");
+      gpQuestScrollImageTop = Core::Archive::IMAGE_LoadDC6Ex(szImagePath, 0);
     }
     if (!bDraw) {
       return;
     }
 
     int32_t nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(5);
-    __frame0.sGfxData2.pDC6 = gpQuestScrollImageBottom;
+    sGfxData2.pDC6 = gpQuestScrollImageBottom;
     if (!gnQuestScrollAnimFrame) {
       gnQuestScrollAnimFrame = GetTickCount();
       gnQuestScrollAnimMaxFrame = 0;
@@ -4127,7 +4111,7 @@ void __stdcall TEXT_DrawQuestScrollAnimation(int32_t bDraw) {
       if (gnQuestScrollAnimMaxFrame > gaQuestScrollFrameDelay[nFrameIdx]) {
         nElapsed = gnQuestScrollAnimMaxFrame - gaQuestScrollFrameDelay[nFrameIdx];
         eDrawMode = DRAW_SOLID;
-        __frame0.sGfxData2.nFrameNumber = nFrameIdx;
+        sGfxData2.nFrameNumber = nFrameIdx;
         if (nElapsed == 1) {
           Sound::SOUND_PlaySound(SOUND_AKARA_ACT1_Q4_EARLY_SCROLL, nullptr, 0, 0, 0);
           eDrawMode = DRAW_VERYTRANSPARENT;
@@ -4147,11 +4131,11 @@ void __stdcall TEXT_DrawQuestScrollAnimation(int32_t bDraw) {
           }
 
           nLineIdx = (uint32_t)nLineValue;
-          D2gfx::D2GFX::D2GFX_DrawImage(&__frame0.sGfxData2, gaTextDrawAnimPos[nLineIdx * 2] + gnPanelOffsetX, gaTextDrawAnimPos[nLineIdx * 2 + 1] - gnPanelOffsetY, -1, eDrawMode, nullptr);
-          memset(&__frame0.sGfxData, 0, 0x48);
-          __frame0.sGfxData.pDC6 = gpQuestScrollImageTop;
-          __frame0.sGfxData.nFrameNumber = (int)nElapsed >= 0x15 ? 0 : nElapsed;
-          D2gfx::D2GFX::D2GFX_DrawImage(&__frame0.sGfxData, gaTextAnimBounds[nLineIdx * 2] + gnPanelOffsetX, gaTextAnimBounds[nLineIdx * 2 + 1] - gnPanelOffsetY, -1, DRAW_LIGHTTRANSPARENT, nullptr);
+          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData2, gaTextDrawAnimPos[nLineIdx * 2] + gnPanelOffsetX, gaTextDrawAnimPos[nLineIdx * 2 + 1] - gnPanelOffsetY, -1, eDrawMode, nullptr);
+          memset(&sGfxData, 0, 0x48);
+          sGfxData.pDC6 = gpQuestScrollImageTop;
+          sGfxData.nFrameNumber = (int)nElapsed >= 0x15 ? 0 : nElapsed;
+          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gaTextAnimBounds[nLineIdx * 2] + gnPanelOffsetX, gaTextAnimBounds[nLineIdx * 2 + 1] - gnPanelOffsetY, -1, DRAW_LIGHTTRANSPARENT, nullptr);
         }
       }
 

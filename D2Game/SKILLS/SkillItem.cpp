@@ -2109,8 +2109,8 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
       return 0;
     }
 
-    uint32_t eSkillLevel = sgptDataTable->dwChargedSkillLevelMask & eSkill & 0xffff;
-    eD2Skills eProcSkill = (int)(eSkill & 0xffff) >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
+    uint32_t eSkillLevel = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & eSkill);
+    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
     if (!(!pDamage || pDamage->dwHitFlags & 0x20)) {
       return 0;
     }
@@ -2157,8 +2157,8 @@ BOOL __fastcall ITEMEVENT_CastOnStriking(::SGAMEDATA * pGame, uint32_t nUnitEven
       return 0;
     }
 
-    uint32_t eSkillLevel = sgptDataTable->dwChargedSkillLevelMask & eSkill & 0xffff;
-    eD2Skills eProcSkill = (int)(eSkill & 0xffff) >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
+    uint32_t eSkillLevel = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & eSkill);
+    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
     if (!(pDamage && pDamage->wResultFlags & 4)) {
       return 0;
     }
@@ -2197,8 +2197,8 @@ BOOL __fastcall ITEMEVENT_CastOnDeath(::SGAMEDATA * pGame, uint32_t nUnitEvent, 
       return 0;
     }
 
-    eD2Skills eProcSkill = (int)(eSkill & 0xffff) >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
-    uint32_t eSkillLevel = sgptDataTable->dwChargedSkillLevelMask & eSkill & 0xffff;
+    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
+    uint32_t eSkillLevel = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & eSkill);
     D2SeedStrc DVar1 = D2_SEED_NEXT(pUnit->sSeed);
     pUnit->sSeed = DVar1;
     if (!((int)(DVar1.nSeedLow % 100) < nProcChance && (int)eProcSkill >= 0 && (int)eProcSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eProcSkill)) {
@@ -2329,7 +2329,7 @@ BOOL __fastcall ITEMEVENT_ReviveMonster(::SGAMEDATA * pGame, uint32_t nUnitEvent
 
     do {
       if (pUnit->eUnitType == UNIT_PLAYER) {
-        UNIT::SUnitEvent::SUNITEVENT_Alloc(pGame, pTarget, 0xd, eSkill & 0xffff, pUnit->nUnitGUID, (D2ItemStatCostItemEventFunc)SKILL_ReviveMonsterFromCorpse, 0, pUnit->nUnitGUID);
+        UNIT::SUnitEvent::SUNITEVENT_Alloc(pGame, pTarget, 0xd, (uint16_t)eSkill, pUnit->nUnitGUID, (D2ItemStatCostItemEventFunc)SKILL_ReviveMonsterFromCorpse, 0, pUnit->nUnitGUID);
         return 1;
       }
 

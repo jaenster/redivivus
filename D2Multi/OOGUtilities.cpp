@@ -106,23 +106,16 @@ int __stdcall OOG_PollMCPCharLogonPump(int nFrameIndex) {
 
 // Opens a URL in the default system browser by querying registry for .html file association. Reads "SOFTWARE\\Classes\\.html" to get file type, then reads "SOFTWARE\\Classes\\{type}\\shell\\open\\command" to get the command line. Appends the URL to the command string, creates a process via CreateProcessA with NORMAL_PRIORITY_CLASS flag, and closes process handles. Shows error dialog (locale 5340) if registry lookup fails. Uses 1024-byte buffers for registry paths and 1025-byte buffer for final command line construction.
 int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
-    // Frame slots -5216..-12 are ONE object: &szFileType is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint8_t szFileType;
-      uint8_t local_145f[2047];
-      char szRegistryCommandPath[1024];
-      char szRegistryKeyPath[1023];
-      char szCommandLineBuffer[1025];
-      _STARTUPINFOA sStartupInfo;
-      _PROCESS_INFORMATION sProcessInfo;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 5204, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     uint32_t nCopyCount;
     char* pcCopySrc;
     char* pcScan;
     char* pcCopyDst;
+    char szFileType[2048];
+    char szRegistryCommandPath[1024];
+    char szRegistryKeyPath[1023];
+    char szCommandLineBuffer[1025];
+    _STARTUPINFOA sStartupInfo;
+    _PROCESS_INFORMATION sProcessInfo;
     LPDWORD dwBytesRead;
     char cChar;
     char* pszUrl;
@@ -131,24 +124,24 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
       return 1;
     }
 
-    __frame0.szFileType = '\0';
-    memset(__frame0.local_145f, 0, 0x7ff);
+    szFileType[0] = '\0';
+    memset(szFileType + 1, 0, 0x7ff);
     int local_8;
     local_8 = 0;
     HWND hWnd;
     hWnd = GetDesktopWindow();
     /* HWND hWnd for SetForegroundWindow */ SetForegroundWindow(hWnd);
-    sprintf(__frame0.szRegistryKeyPath, "%s\\.html", "SOFTWARE\\Classes");
+    sprintf(szRegistryKeyPath, "%s\\.html", "SOFTWARE\\Classes");
     uint32_t nRegOk;
-    nRegOk = Launcher::LAUNCHER_ReadRegistryValue(__frame0.szRegistryKeyPath, (LPCSTR)0x0, &__frame0.szFileType, 0x400, (LPDWORD)&dwBytesRead);
+    nRegOk = Launcher::LAUNCHER_ReadRegistryValue(szRegistryKeyPath, (LPCSTR)0x0, (LPBYTE)szFileType, 0x400, (LPDWORD)&dwBytesRead);
     if (nRegOk) {
       BOOL bCreated;
-      sprintf(__frame0.szRegistryCommandPath, "%s\\%s\\shell\\open\\command", "SOFTWARE\\Classes", (char*)&__frame0.szFileType);
-      __frame0.szCommandLineBuffer[1] = '\0';
-      memset(__frame0.szCommandLineBuffer + 2, 0, 0x3ff);
-      nRegOk = Launcher::LAUNCHER_ReadRegistryValue(__frame0.szRegistryCommandPath, (LPCSTR)0x0, (LPBYTE)(__frame0.szCommandLineBuffer + 1), 0x400, (LPDWORD)&dwBytesRead);
+      sprintf(szRegistryCommandPath, "%s\\%s\\shell\\open\\command", "SOFTWARE\\Classes", szFileType);
+      szCommandLineBuffer[1] = '\0';
+      memset(szCommandLineBuffer + 2, 0, 0x3ff);
+      nRegOk = Launcher::LAUNCHER_ReadRegistryValue(szRegistryCommandPath, (LPCSTR)0x0, (LPBYTE)(szCommandLineBuffer + 1), 0x400, (LPDWORD)&dwBytesRead);
       if (nRegOk) {
-        pcScan = __frame0.szCommandLineBuffer;
+        pcScan = szCommandLineBuffer;
         do {
           pcCopyDst = pcScan + 1;
           pcScan++;
@@ -158,7 +151,7 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
         pcScan[1] = '\0';
         pcScan = pszUrl;
         pcScan = pcScan + strlen(pcScan) + 1;
-        pcCopyDst = __frame0.szCommandLineBuffer;
+        pcCopyDst = szCommandLineBuffer;
         do {
           pcCopySrc = pcCopyDst + 1;
           pcCopyDst++;
@@ -177,12 +170,12 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
           pcCopyDst++;
         }
 
-        Storm::Source::SSystem::SMemZero(&__frame0.sStartupInfo, 0x44);
-        /* LPPROCESS_INFORMATION lpProcessInformation for CreateProcessA */ /* LPSTARTUPINFOA lpStartupInfo for CreateProcessA */ /* LPCSTR lpCurrentDirectory for CreateProcessA */ /* LPVOID lpEnvironment for CreateProcessA */ /* DWORD dwCreationFlags for CreateProcessA */ /* BOOL bInheritHandles for CreateProcessA */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateProcessA */ /* LPSECURITY_ATTRIBUTES lpProcessAttributes for CreateProcessA */ /* LPSTR lpCommandLine for CreateProcessA */ /* LPCSTR lpApplicationName for CreateProcessA */ __frame0.sStartupInfo.cb = 0x44;
-        bCreated = CreateProcessA((LPCSTR)0x0, __frame0.szCommandLineBuffer + 1, (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0x20, (LPVOID)0x0, (LPCSTR)0x0, &__frame0.sStartupInfo, &__frame0.sProcessInfo);
+        Storm::Source::SSystem::SMemZero(&sStartupInfo, 0x44);
+        /* LPPROCESS_INFORMATION lpProcessInformation for CreateProcessA */ /* LPSTARTUPINFOA lpStartupInfo for CreateProcessA */ /* LPCSTR lpCurrentDirectory for CreateProcessA */ /* LPVOID lpEnvironment for CreateProcessA */ /* DWORD dwCreationFlags for CreateProcessA */ /* BOOL bInheritHandles for CreateProcessA */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateProcessA */ /* LPSECURITY_ATTRIBUTES lpProcessAttributes for CreateProcessA */ /* LPSTR lpCommandLine for CreateProcessA */ /* LPCSTR lpApplicationName for CreateProcessA */ sStartupInfo.cb = 0x44;
+        bCreated = CreateProcessA((LPCSTR)0x0, szCommandLineBuffer + 1, (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0x20, (LPVOID)0x0, (LPCSTR)0x0, &sStartupInfo, &sProcessInfo);
         if (bCreated) {
-          /* HANDLE hObject for CloseHandle */ CloseHandle(__frame0.sProcessInfo.hThread);
-          /* HANDLE hObject for CloseHandle */ CloseHandle(__frame0.sProcessInfo.hProcess);
+          /* HANDLE hObject for CloseHandle */ CloseHandle(sProcessInfo.hThread);
+          /* HANDLE hObject for CloseHandle */ CloseHandle(sProcessInfo.hProcess);
           local_8 = 1;
           goto report_click_result;
         }

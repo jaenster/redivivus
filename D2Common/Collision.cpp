@@ -1758,7 +1758,7 @@ int32_t __stdcall CheckCollision_BlockPlayer_Type(D2RoomStrc * pRoom, int32_t nX
     switch (nType) {
       case COLLISION_PATTERN_NONE:
         uVar1 = COLLISN_CheckCellMaskOrBlocked(pRoom, nX, nY, (eCollisionFlags)eCollisionFlag);
-      return uVar1 & 0xffff;
+      return (uint16_t)uVar1;
       case COLLISION_PATTERN_SMALL_UNIT_PRESENCE:
 
       case COLLISION_PATTERN_SMALL_PET_PRESENCE:

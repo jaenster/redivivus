@@ -726,7 +726,6 @@ static void __stdcall SUNITINACTIVE_DeactivateMonster(::SGAMEDATA * pGame, D2Uni
 // Server-side re-activation of stored ("inactive") monsters when a room is loaded/entered. Finds the inactive-unit list for the room's act and DRLG coordinates, then iterates each saved D2InactiveMonsterRecordStrc and respawns the monster: chooses spawn flags (flying/initial), picks the right spawn path (plain SpawnMonster with fallback to random/spiral free positions, SERVER_SpawnMonster for boss/superunique, or MONSTER_SpawnWithUniqueModifiers), then restores its alignment, minion list, experience/maxhp/hitpoints stats (decayed if offline > ~0x1d4c frames), AI function, saved state, unique mods, and unit flags. Handles Chaos Sanctuary seal-Diablo special case (corpse/skip), relocation of already-existing units, node-table registration, and monster-region update. Frees each record after processing. Pure side-effects on game world; no return.
 // @sourcefile .\UNIT\SUnitInactive.cpp
 static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2RoomStrc * pRoom) {
-    bool _bDiabloSealsAllActive;
     bool bFreePosFound;
     BOOL nHitpoints;
     D2MonStatsTxt* pMonStatsTxt;
@@ -743,7 +742,6 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
     int32_t nFreeSpawnY;
     eD2LevelId eInactiveFlags;
     D2InactiveMonsterRecordStrc* pNextInactiveRec;
-    bool bDiabloSealsAllActive;
     uint8_t* pbyClassId;
     eD2MonsterAnimMode eSpawnAnimMode;
     int nAlignmentVal;
@@ -765,12 +763,13 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
 
     D2InactiveMonsterRecordStrc* pInactiveMonRec;
     pInactiveMonRec = pFoundList->pInactiveMonsters;
-    _bDiabloSealsAllActive = 0;
+    BOOL bDiabloSealsAllActive;
+    bDiabloSealsAllActive = 0;
     eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     if (eLevelId == LEVEL_ChaosSanctuary) {
       nHitpoints = Quests::QUESTS::A4Q2::Q27_GetAllSealsActivated(pGame);
       if (nHitpoints) {
-        _bDiabloSealsAllActive = 1;
+        bDiabloSealsAllActive = 1;
       }
     }
     if (!pInactiveMonRec) {
@@ -785,7 +784,7 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
       eInactiveFlags = pInactiveMonRec->nTypeFlags;
       eSpawnAnimMode = eD2MonsterAnimMode_ns::Neutral;
       if ((eInactiveFlags & LEVEL_StonyField) == LEVEL_None) {
-        if (!_bDiabloSealsAllActive || pbyClassId == (uint8_t*)0xf3) {
+        if (!bDiabloSealsAllActive || pbyClassId == (uint8_t*)0xf3) {
           goto restore_monster;
         }
       } else {
@@ -1280,7 +1279,7 @@ static void __stdcall SUNITINACTIVE_SaveInactiveUnit(::SGAMEDATA * pGame, D2Unit
           uVar9 = GAME::Event::EVENT_TimerTypeExistsOnUnit(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE);
           _Dst->nUnitGUID = uVar9 >> 0x10;
           uVar9 = GAME::Event::EVENT_TimerTypeExistsOnUnit(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE);
-          _Dst->nDropItemCode = uVar9 & 0xffff;
+          _Dst->nDropItemCode = (uint16_t)uVar9;
         } else {
           iVar6 = pUnit->nClassId;
           if (iVar6 == 0x3b || iVar6 == 0x3c || iVar6 == 100) {
@@ -1366,7 +1365,7 @@ void __fastcall SUNITINACTIVE_RemoveInactiveUnitByTypeAndId(::SGAMEDATA * pGame,
         pNextRecord = pCurListNode->pInactiveUnits;
         do {
           pCurRecord = pNextRecord;
-          if (pCurRecord->eUnitType == (uint32_t)nUnitType && pCurRecord->nClassId == (nClassId & 0xffff)) {
+          if (pCurRecord->eUnitType == (uint32_t)nUnitType && pCurRecord->nClassId == (uint16_t)nClassId) {
             if (pCurRecord == pCurListNode->pInactiveUnits) {
               pCurListNode->pInactiveUnits = pCurRecord->pNext;
             } else {

@@ -2504,7 +2504,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
           pwszTemp = UNIT::CUnit::GetName(pUnit);
           nObjClassId = pUnit->nClassId;
           __frame0.nScreenX = D2Common::Units::GetNameOffsetFromObject(pUnit);
-          pObjectTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nObjClassId & 0xffff);
+          pObjectTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine((uint16_t)nObjClassId);
           byObjSubClass = pObjectTxt->SubClass;
           if (byObjSubClass & 4) {
             Fog::File::CONTAINER_InitializeBuffer(__frame0.wszNameBuf, 2, 0x80, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
@@ -7596,7 +7596,7 @@ void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnit
       Text::TEXT_ShowNpcDialog(pNpcUnit, wMsgType0, 1);
       npcmenu::NPCMENU_AddHandledMessageId(wMsgType0);
       gnNpcMenuTradeActionGold = npcmenu::NPCMENU_FindNextUnhandledMessage(wMsgType0);
-      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x31, pNpcUnit->nUnitGUID, dwMsgType & 0xffff);
+      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x31, pNpcUnit->nUnitGUID, (uint16_t)dwMsgType);
       gnNpcMenuActiveMode = 1;
       Text::TEXT_SetScrollCompleteCallback((pfnTextScrollComplete)npcmenu::NPCMENU_OnScrollComplete, nullptr);
       npcmenu::SetInteractedUnitInfo(pNpcUnit);
