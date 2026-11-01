@@ -66,7 +66,7 @@ uint16_t * __fastcall ROOM_GetWarpDestinationName(struct D2RoomStrc * pRoom, str
 // Returns the localized display name (WCHAR*) of a unit by its type. Monsters: returns the player-owner override name if set, else the monstats NameStr locale string. Items: the items.txt wNameStr locale string. Objects: for open-warp objects walks the current and adjacent rooms to find the linked warp unit and returns its destination name; for shrines returns the shrine name string, for lockable/locked objects a generic locked string, doors map their anim mode to closed/open/destroyed strings, otherwise the objects.txt NameWideString. Halts (unrecoverable error) if pUnit is NULL; returns NULL for unknown unit types.
 uint16_t * __fastcall GetName(struct D2UnitStrc * pUnit);
 uint32_t __fastcall DecrementGfxTimer(struct D2UnitStrc * pUnit);
-void __fastcall CUNIT_SetUnitFlag3(int32_t pUnit);
+void __fastcall CUNIT_SetUnitFlag3(struct D2UnitStrc * pUnit);
 // Returns the client-side dwStartLight (+0x68) of pUnit; halts (CUnit.cpp line 2623) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 uint32_t __fastcall CUNIT_GetStartLight(struct D2UnitStrc * pUnit);

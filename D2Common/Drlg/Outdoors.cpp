@@ -211,7 +211,7 @@ int __stdcall DRLGOUTDOOR_ApplySubTileToGrid(int nBaseX, int nBaseY, D2UnkOutdoo
 }
 
 // Shuffles candidate border subtile positions using current level seed, then tries each until `ValidateSubTilePlacement` approves and calls `ApplySubTileToGrid`. Defaults to random variant (pRect[5]) and returns as soon as a placement succeeds when the level flag indicates only one patch per run.
-BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(D2UnkOutdoorStrc * pOutdoorCtx, int32_t pLevelPtr, int * pRect) {
+BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(D2UnkOutdoorStrc * pOutdoorCtx, D2LvlSubTxt * pLevelPtr, int * pRect) {
     uint32_t randIndexA;
     int tempY;
     uint32_t randIndexB;
@@ -233,8 +233,8 @@ BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(D2UnkOutdoorStrc * pOutdoor
       posIter = 1;
     }
 
-    posIter = pOutdoorCtx->pCoordsGrid->nWidth - pRect[2] * *(int*)(pLevelPtr + 0x4c) + posIter;
-    int posIndex = pOutdoorCtx->pCoordsGrid->nHeight - pRect[3] * *(int*)(pLevelPtr + 0x4c) + 1;
+    posIter = pOutdoorCtx->pCoordsGrid->nWidth - pRect[2] * pLevelPtr->GridSize + posIter;
+    int posIndex = pOutdoorCtx->pCoordsGrid->nHeight - pRect[3] * pLevelPtr->GridSize + 1;
     uint32_t totalPositions = posIndex * posIter;
     if (!totalPositions) {
       return 0;
@@ -315,7 +315,7 @@ BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(D2UnkOutdoorStrc * pOutdoor
 
     do {
       if (!strictCornerLimit || aPositions[posIter * 2] != 2 || aPositions[posIter * 2 + 1] != 2) {
-        posIndex = DRLGOUTDOOR_ValidateSubTilePlacement(pOutdoorCtx, aPositions[posIter * 2], aPositions[posIter * 2 + 1], (D2DrlgCoordStrc*)pRect, (D2LvlSubTxt*)pLevelPtr);
+        posIndex = DRLGOUTDOOR_ValidateSubTilePlacement(pOutdoorCtx, aPositions[posIter * 2], aPositions[posIter * 2 + 1], (D2DrlgCoordStrc*)pRect, pLevelPtr);
         if (posIndex) {
           variantCount = pRect[5];
           if ((int)variantCount <= 0) {
@@ -335,8 +335,8 @@ BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(D2UnkOutdoorStrc * pOutdoor
             }
           }
 
-          DRLGOUTDOOR_ApplySubTileToGrid(aPositions[posIter * 2], aPositions[posIter * 2 + 1], pOutdoorCtx, (D2DrlgCoordStrc*)pRect, (D2LvlSubTxt*)pLevelPtr, (pRect[2] + 1) * (randIndexA + 1));
-          if (!*(int*)(pLevelPtr + 0x44) || *(int*)(pLevelPtr + 0x44) == 1) {
+          DRLGOUTDOOR_ApplySubTileToGrid(aPositions[posIter * 2], aPositions[posIter * 2 + 1], pOutdoorCtx, (D2DrlgCoordStrc*)pRect, pLevelPtr, (pRect[2] + 1) * (randIndexA + 1));
+          if (!pLevelPtr->BordType || pLevelPtr->BordType == 1) {
             return 1;
           }
         }

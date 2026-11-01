@@ -438,12 +438,12 @@ int __stdcall JoinOrCreateGame(DWORD dwParam) {
                   OOGMENU_RefreshGameListDisplay();
                   D2MCPClient::McpConnect::MCPCONNECT_ClearCharSelectBuffer();
                 } else {
-                  OOGMENU_AddGameToCache((int32_t)pMcpCharBuf);
+                  OOGMENU_AddGameToCache(pMcpCharBuf);
                   D2MCPClient::McpConnect::MCPCONNECT_ClearCharSelectBuffer();
                 }
               } else {
                 if (nGSRequestId == gwLastGameInfoRequestId) {
-                  OOGMENU_DisplayGameDetails((int32_t)pMcpCharBuf);
+                  OOGMENU_DisplayGameDetails(pMcpCharBuf);
                 }
 
                 D2MCPClient::McpConnect::MCPCONNECT_ClearCharSelectBuffer();
@@ -1301,14 +1301,14 @@ uint32_t __fastcall OOGUTIL_CheckCharacterLevel(uint8_t * pszLevelChars) {
 // display cache (stride 0x3b per entry, count=nGameListDifficultyFilter). Dedups on (u16)pGameInfo[+8]=gameid.
 // Copies: +8 gameid -> gwGameListCacheEntryPort; +0x14 -> gwOOGLobbyScreenState; +0x1c -> gszLanGameListEntryName;
 // +0x2c -> gszLanGameListEntryDescription. Called once per incoming MCP 0x05 game packet from JoinOrCreateGame.
-void __fastcall OOGMENU_AddGameToCache(int32_t pGameInfo) {
+void __fastcall OOGMENU_AddGameToCache(D2McpGameInfoStrc * pGameInfo) {
     char cChar;
     int nIndex = 0;
     if (nGameListDifficultyFilter > 0) {
       uint16_t* pwCachePort;
       pwCachePort = &gbLanGameListEntryNamePadding2[0].nJoinId;
       do {
-        if (*pwCachePort == *(uint16_t*)(pGameInfo + 8)) {
+        if (*pwCachePort == (uint16_t)pGameInfo->dwGameId) {
           return;
         }
 
@@ -1317,10 +1317,10 @@ void __fastcall OOGMENU_AddGameToCache(int32_t pGameInfo) {
       } while (nIndex < nGameListDifficultyFilter);
     }
 
-    gbLanGameListEntryNamePadding2[nGameListDifficultyFilter].nJoinId = *(uint16_t*)(pGameInfo + 8);
+    gbLanGameListEntryNamePadding2[nGameListDifficultyFilter].nJoinId = (uint16_t)pGameInfo->dwGameId;
     gbLanGameListEntryNamePadding2[nGameListDifficultyFilter].dwIpAddr = 0;
-    gbLanGameListEntryNamePadding2[nGameListDifficultyFilter].wDisplayedCount = *(uint16_t*)(pGameInfo + 0x14);
-    char* pszSrc = (char*)(pGameInfo + 0x1c);
+    gbLanGameListEntryNamePadding2[nGameListDifficultyFilter].wDisplayedCount = (uint16_t)pGameInfo->nPlayerCount;
+    char* pszSrc = pGameInfo->szGameName;
     nIndex = nGameListDifficultyFilter * 0x3b + (intptr_t)&gbLanGameListEntryNamePadding2[0].szName - (int)pszSrc;
     do {
       cChar = *pszSrc;
@@ -1328,7 +1328,7 @@ void __fastcall OOGMENU_AddGameToCache(int32_t pGameInfo) {
       pszSrc++;
     } while (cChar != '\0');
 
-    pszSrc = (char*)(pGameInfo + 0x2c);
+    pszSrc = pGameInfo->szGameDescription;
     nIndex = nGameListDifficultyFilter * 0x3b + (intptr_t)&gbLanGameListEntryNamePadding2[0].szDescription - (int)pszSrc;
     do {
       cChar = *pszSrc;
@@ -1446,49 +1446,49 @@ static void OOGUTIL_Unused2(int32_t nEntryIndex) {
 }
 
 // Displays game details in the lobby textbox. Shows game description, elapsed time (HH:MM:SS), level restrictions (single level or range), max players, and iterates through all players to display their names and levels with class-specific formatting (Amazon/Sorceress/Necromancer/Paladin/Barbarian/Druid/Assassin). All formatted strings are written to a 256-byte buffer before being added to the display.
-void __fastcall OOGMENU_DisplayGameDetails(int32_t pGameInfo) {
+void __fastcall OOGMENU_DisplayGameDetails(D2McpGameInfoStrc * pGameInfo) {
     uint16_t* pwCurPlayerLevel;
+    char (*szText)[16];
     char szFormatBuffer[256];
-    char* _Format;
     char cChar;
     if (!gpOogGameListDetailsPanelControl) {
       return;
     }
 
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpOogGameListDetailsPanelControl);
-    char* pszCurPlayerName = (char*)(pGameInfo + 0x2c);
+    char* pszCurPlayerName = pGameInfo->szGameDescription;
     pszCurPlayerName = pszCurPlayerName + strlen(pszCurPlayerName) + 1;
-    if (pszCurPlayerName != (char*)(pGameInfo + 0x2d)) {
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, (char*)(pGameInfo + 0x2c));
+    if (pszCurPlayerName != pGameInfo->szGameDescription + 1) {
+      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, pGameInfo->szGameDescription);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, "");
     }
 
-    uint32_t nFmtLevel = *(uint32_t*)(pGameInfo + 0xc);
+    uint32_t nFmtLevel = pGameInfo->dwElapsedSeconds;
     sprintf(szFormatBuffer, "Elapsed Time: %d:%02d:%02d", nFmtLevel / 0xe10, (int)(nFmtLevel % 0xe10 / 0x3c), nFmtLevel % 0x3c);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, szFormatBuffer);
-    uint8_t byLevelMax = *(uint8_t*)(pGameInfo + 0x11);
+    uint8_t byLevelMax = pGameInfo->nLevelRange;
     if (byLevelMax < 100) {
       int nLevelRangeLow;
       if (byLevelMax) {
-        nLevelRangeLow = (uint32_t)*(uint8_t*)(pGameInfo + 0x10) - (uint32_t)byLevelMax;
+        nLevelRangeLow = (uint32_t)pGameInfo->nLevelMin - (uint32_t)byLevelMax;
         if (nLevelRangeLow <= 1) {
           nLevelRangeLow = 1;
         }
 
-        nFmtLevel = (uint32_t)byLevelMax + (uint32_t)*(uint8_t*)(pGameInfo + 0x10);
+        nFmtLevel = (uint32_t)byLevelMax + (uint32_t)pGameInfo->nLevelMin;
         if (0x62 < nFmtLevel) {
           nFmtLevel = 99;
         }
 
         sprintf(szFormatBuffer, "Level %d to %d", nLevelRangeLow, nFmtLevel);
       } else {
-        sprintf(szFormatBuffer, "Level %d", (uint32_t)*(uint8_t*)(pGameInfo + 0x10));
+        sprintf(szFormatBuffer, "Level %d", (uint32_t)pGameInfo->nLevelMin);
       }
 
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, szFormatBuffer);
     }
 
-    byLevelMax = *(uint8_t*)(pGameInfo + 0x12);
+    byLevelMax = pGameInfo->nMaxPlayers;
     if (byLevelMax > 0 && byLevelMax < 8) {
       sprintf(szFormatBuffer, "Up to %d Players", (uint32_t)byLevelMax);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, szFormatBuffer);
@@ -1496,54 +1496,54 @@ void __fastcall OOGMENU_DisplayGameDetails(int32_t pGameInfo) {
 
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, "");
     int nPlayerIndex = 0;
-    if (*(int*)(pGameInfo + 0x14) > 0) {
-      pwCurPlayerLevel = (uint16_t*)(pGameInfo + 0x6c);
-      pszCurPlayerName = (char*)(pGameInfo + 0x8c);
+    if (pGameInfo->nPlayerCount > 0) {
+      pwCurPlayerLevel = pGameInfo->awPlayerLevel;
+      szText = pGameInfo->aszPlayerName;
       do {
-        if (*pszCurPlayerName != '\0') {
-          D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, pszCurPlayerName);
+        if ((*szText)[0] != '\0') {
+          D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, *szText);
           switch (pwCurPlayerLevel[-0x10]) {
             case 0:
               nFmtLevel = (uint32_t)*pwCurPlayerLevel;
-            _Format = "Level %d Amazon";
+            pszCurPlayerName = "Level %d Amazon";
             break;
             case 1:
               nFmtLevel = (uint32_t)*pwCurPlayerLevel;
-            _Format = "Level %d Sorceress";
+            pszCurPlayerName = "Level %d Sorceress";
             break;
             case 2:
               nFmtLevel = (uint32_t)*pwCurPlayerLevel;
-            _Format = "Level %d Necromancer";
+            pszCurPlayerName = "Level %d Necromancer";
             break;
             case 3:
               nFmtLevel = (uint32_t)*pwCurPlayerLevel;
-            _Format = "Level %d Paladin";
+            pszCurPlayerName = "Level %d Paladin";
             break;
             case 4:
               nFmtLevel = (uint32_t)*pwCurPlayerLevel;
-            _Format = "Level %d Barbarian";
+            pszCurPlayerName = "Level %d Barbarian";
             break;
             case 5:
               nFmtLevel = (uint32_t)*pwCurPlayerLevel;
-            _Format = "Level %d Druid";
+            pszCurPlayerName = "Level %d Druid";
             break;
             case 6:
               nFmtLevel = (uint32_t)*pwCurPlayerLevel;
-            _Format = "Level %d Assassin";
+            pszCurPlayerName = "Level %d Assassin";
             break;
             default:
               nFmtLevel = (uint32_t)*pwCurPlayerLevel;
-            _Format = "Level %d";
+            pszCurPlayerName = "Level %d";
           }
 
-          sprintf(szFormatBuffer, _Format, nFmtLevel);
+          sprintf(szFormatBuffer, pszCurPlayerName, nFmtLevel);
           D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpOogGameListDetailsPanelControl, szFormatBuffer, 5);
         }
 
         nPlayerIndex++;
         pwCurPlayerLevel++;
-        pszCurPlayerName += 0x10;
-      } while (nPlayerIndex < *(int*)(pGameInfo + 0x14));
+        szText++;
+      } while (nPlayerIndex < pGameInfo->nPlayerCount);
     }
 
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpOogGameListDetailsPanelControl, 0);

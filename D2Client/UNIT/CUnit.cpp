@@ -927,13 +927,13 @@ uint32_t __fastcall DecrementGfxTimer(D2UnitStrc * pUnit) {
     return (uint32_t)(eAttachedState == STATE_none);
 }
 
-void __fastcall CUNIT_SetUnitFlag3(int32_t pUnit) {
+void __fastcall CUNIT_SetUnitFlag3(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa34);
       exit(-1);
     }
 
-    *(uint32_t*)(pUnit + 0x58) = 3;
+    pUnit->pGfxDataCopy = (uint8_t*)0x3;
 }
 
 // Returns the client-side dwStartLight (+0x68) of pUnit; halts (CUnit.cpp line 2623) on NULL.

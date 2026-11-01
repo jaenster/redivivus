@@ -187,7 +187,7 @@ void __fastcall CLIENT_RevealRoomAndSendUnits(::SGAMEDATA * pGame, struct D2Room
 void __fastcall RoomClearForClientAndHideMap(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2ClientStrc * pClient);
 void __fastcall MovementUpdateForClient(::SGAMEDATA * pGame, struct D2RoomStrc * * ppRoom, struct D2UnitStrc * pUnit);
 void __fastcall CLIENT_BroadcastMovementToAdjacentRooms(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit);
-void __fastcall CLIENT_RemoveFromAdjacentRooms(struct D2RoomStrc * pRoom, int32_t nClientId);
+void __fastcall CLIENT_RemoveFromAdjacentRooms(struct D2RoomStrc * pRoom, struct D2ClientStrc * nClientId);
 void __fastcall TellClientToLoadAct(::SGAMEDATA * pGame, struct D2ClientStrc * pClient);
 // 6 internal functions (defined in .cpp)
 

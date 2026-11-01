@@ -138,16 +138,16 @@ typedef void (__fastcall *D2NET_CLIENT_D2GStoCLT_Unit)(D2UnitStrc * pUnit, char 
 
 namespace D2Client::GAME::SCmd {
 
-void __fastcall SCMD_SetOrClearBitFlag(int32_t pUnit, uint32_t dwFlagMask, int32_t bSet) {
+void __fastcall SCMD_SetOrClearBitFlag(D2UnitStrc * pUnit, uint32_t dwFlagMask, int32_t bSet) {
     if (!pUnit) {
       return;
     }
     if (bSet) {
-      *(uint32_t*)(pUnit + 200) |= dwFlagMask;
+      pUnit->eUnitFlagsEx |= dwFlagMask;
       return;
     }
 
-    *(uint32_t*)(pUnit + 200) &= ~dwFlagMask;
+    pUnit->eUnitFlagsEx &= ~dwFlagMask;
 }
 
 int32_t __stdcall GetTxtMonStatsSize() {

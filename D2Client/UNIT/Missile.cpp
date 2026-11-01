@@ -6183,7 +6183,7 @@ void __fastcall MISSILE_CltDoFn09_MeteorCenter(D2UnitStrc * pUnit) {
               }
             }
             if (nRemainingFrames2 == nStepFrames - 2) {
-              nClassId = UnitSnd::UNITSND_GetMissileLoopSound((int32_t)pUnit);
+              nClassId = UnitSnd::UNITSND_GetMissileLoopSound(pUnit);
               if (nClassId) {
                 Sound::SOUND_StopUnitSoundByIndex(nClassId, pUnit, 1);
               }

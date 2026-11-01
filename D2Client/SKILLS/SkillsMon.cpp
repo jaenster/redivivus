@@ -922,7 +922,7 @@ BOOL __fastcall Skills_CltStFunc_SetParam1FromCltCalc(D2UnitStrc * pUnit, eD2Ski
     return 1;
 }
 
-void __fastcall SKILLSMON_SetMonsterDeathFrame(int32_t nParam, D2UnitStrc * pUnit) {
+void __fastcall SKILLSMON_SetMonsterDeathFrame(D2SkillsTxt * pSkillsTxt, D2UnitStrc * pUnit) {
     D2MonStats2Txt* pMonStats2Txt;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       int nMonStatsEx;
@@ -936,7 +936,7 @@ void __fastcall SKILLSMON_SetMonsterDeathFrame(int32_t nParam, D2UnitStrc * pUni
       if (!pMonStats2Txt) {
         return;
       }
-      if (*(char*)(nParam + 0x11) == '\x0e') {
+      if (pSkillsTxt->monanim == '\x0e') {
         D2Common::Units::SetSequenceFrame(pUnit, (uint8_t)pMonStats2Txt->byInfernoAnim - 1);
         pUnit->nFrameCount = ((uint8_t)pMonStats2Txt->byInfernoAnim + 1) * 0x100;
         return;
@@ -1004,7 +1004,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_PeriodicMissile(D2UnitStrc * pUnit, eD2Skil
       if (bGotCoords) {
         D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, nTargetX, nTargetY, 0);
         SKILLSMON_CreateMissileWithSeed((int32_t*)gnMercenaryMaxHireCount, nTargetX, nTargetY, eSkill, nSkillLvl, pUnit, nMissileId);
-        SKILLSMON_SetMonsterDeathFrame((int32_t)pSkillTxt, pUnit);
+        SKILLSMON_SetMonsterDeathFrame(pSkillTxt, pUnit);
         return 1;
       }
     }

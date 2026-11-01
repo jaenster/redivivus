@@ -1583,7 +1583,7 @@ BOOL __stdcall ITEMMODE_CheckAutoStack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     if (pGame) {
       D2UnitStrc* pDstBook;
       pInventory = pUnit->pInventory;
-      pDstBook = D2Common::INVENTORY::Inventory::INVENTORY_FindMatchingScrollBook(&pInventory->nSignatureMagic, pUnit2, nullptr);
+      pDstBook = D2Common::INVENTORY::Inventory::INVENTORY_FindMatchingScrollBook(pInventory, pUnit2, nullptr);
       if (!pDstBook) {
         return 0;
       }
@@ -3837,7 +3837,7 @@ static BOOL ITEMMODE_ValidateInventorySlot(D2UnitStrc * pUnit, ::SGAMEDATA * pGa
       exit(-1);
     }
 
-    D2UnitStrc* pMatchingBook = D2Common::INVENTORY::Inventory::INVENTORY_FindMatchingScrollBook(&pUnit->pInventory->nSignatureMagic, (D2UnitStrc*)pScrollItem, nullptr);
+    D2UnitStrc* pMatchingBook = D2Common::INVENTORY::Inventory::INVENTORY_FindMatchingScrollBook(pUnit->pInventory, (D2UnitStrc*)pScrollItem, nullptr);
     if (pMatchingBook) {
       if (!pScrollItem) {
         bInserted = ITEM_InsertScrollIntoBook(pGame, pUnit, -1, pMatchingBook->nUnitGUID, (uint32_t*)&nInsertResult);

@@ -142,7 +142,7 @@ bool __stdcall DEBUG_IsValidDebugDirectorySize(uint32_t nDirSize) {
     return nDirSize >= 0x1c;
 }
 
-uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, int pModuleInfoOut) {
+uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, D2FogDebugModuleEntryStrc * pModuleInfoOut) {
     uint32_t nParseResult;
     uint32_t extraout_var;
     if (nDataSize < 4) {
@@ -902,7 +902,7 @@ static void INI_StripDelimiters(char * szText) {
     szText[nWriteIdx] = '\0';
 }
 
-int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, int32_t pOutValue) {
+int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, char * pOutValue) {
     char szArgNameBuf[256];
     char cChar;
     int nDstOffset;
@@ -970,12 +970,12 @@ int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, in
     nCmdLen = 0;
     while (szArgNameBuf[0] != '\0') {
       szArgNameBuf[0] = szArgNameBuf[nCmdLen + 1];
-      *(uint8_t*)(pOutValue + nCmdLen) = pbArgName[(int)(szArgNameBuf + (nCmdLen - (int)pbScan))];
+      pOutValue[nCmdLen] = pbArgName[(int)(szArgNameBuf + (nCmdLen - (int)pbScan))];
       nCmdLen++;
     }
 
-    *(uint8_t*)(pOutValue + nCmdLen) = 0;
-    INI_StripDelimiters((char*)pOutValue);
+    pOutValue[nCmdLen] = '\0';
+    INI_StripDelimiters(pOutValue);
     return nConfigIdx;
 }
 
@@ -1000,7 +1000,7 @@ void __thiscall MISC_ParseCommandLineAndPutIntoD2IniData(char * szText, D2IniCon
         if (szText[nPos] == '-') {
           nPos++;
           if (nPos < iVar1) {
-            nDstOffset = INI_ParseCommandLineArg(szArgName, szText + nPos, (int32_t)szArgValue);
+            nDstOffset = INI_ParseCommandLineArg(szArgName, szText + nPos, szArgValue);
             if (nDstOffset != -1) {
               bVar2 = D2IniConfigValues[nDstOffset].nType;
               pCmdEnd = pD2IniData->bD2ExpMpqExistsOrLanugageCode + D2IniConfigValues[nDstOffset].nOffset;

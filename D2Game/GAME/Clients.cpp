@@ -2236,7 +2236,7 @@ void __fastcall CleanUpClient(::SGAMEDATA * pGame, uint32_t nClientId, int32_t b
         }
       }
       if (pRemovedClient->pRoom) {
-        CLIENT_RemoveFromAdjacentRooms(pRemovedClient->pRoom, (int32_t)pRemovedClient);
+        CLIENT_RemoveFromAdjacentRooms(pRemovedClient->pRoom, pRemovedClient);
       }
       if (pRemovedClient->pSaveGame) {
         D2_FREE_POOL_AT(pRemovedClient->pGame->pMemoryPool, pRemovedClient->pSaveGame, ".\\GAME\\Clients.cpp", 0x5f5);
@@ -2678,7 +2678,7 @@ void __fastcall CLIENT_BroadcastMovementToAdjacentRooms(::SGAMEDATA * pGame, D2R
     }
 }
 
-void __fastcall CLIENT_RemoveFromAdjacentRooms(D2RoomStrc * pRoom, int32_t nClientId) {
+void __fastcall CLIENT_RemoveFromAdjacentRooms(D2RoomStrc * pRoom, D2ClientStrc * nClientId) {
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nRoomCount;
     if (!pRoom) {
@@ -2693,7 +2693,7 @@ void __fastcall CLIENT_RemoveFromAdjacentRooms(D2RoomStrc * pRoom, int32_t nClie
     }
 
     do {
-      D2Common::DUNGEON::Dungeon::DRLGROOM_RemoveClientFromRoom(ppAdjacentRooms[nRoomIdx], nClientId);
+      D2Common::DUNGEON::Dungeon::DRLGROOM_RemoveClientFromRoom(ppAdjacentRooms[nRoomIdx], (int32_t)nClientId);
       nRoomIdx++;
     } while (nRoomIdx < nRoomCount);
 }

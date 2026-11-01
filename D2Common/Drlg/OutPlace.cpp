@@ -509,10 +509,10 @@ static void __stdcall DRLGACT_SetWarpConnectionsBetweenTwoAreas(D2DrlgStrc * pDr
 // Computes the direction between the two levels' coordinate rects, then calls AllocDrlgOrth
 // on the RoomEx at offset +0x264 of the level data struct.
 // Used as a callback during level chain parsing to establish orthogonal room linkage.
-void DRLGLEVEL_AllocOrthForAdjacentLevel(D2DrlgStrc * pDrlg, int32_t pLevelData, eD2LevelId eLevel) {
-    int pLevelDataBase = *(int*)(pLevelData + 0x14);
+void DRLGLEVEL_AllocOrthForAdjacentLevel(D2DrlgStrc * pDrlg, D2DrlgLevelStrc * pLevelData, eD2LevelId eLevel) {
+    int pLevelDataBase = *(int*)&pLevelData->pDrlgLevelData;
     D2DrlgLevelStrc* pLevel = GetLevelAndAlloc(pDrlg, eLevel);
-    eDrlgDirection eDirection = GetDirectionFromCoordinates((D2DrlgCoordsStrc*)(pLevelData + 0x1c), &pLevel->sCoordinatesAndSize);
+    eDrlgDirection eDirection = GetDirectionFromCoordinates(&pLevelData->sCoordinatesAndSize, &pLevel->sCoordinatesAndSize);
     DrlgRoom::AllocDrlgOrth((D2DrlgOrthStrc**)(pLevelDataBase + 0x264), pLevel, eDirection, (uint32_t)(pLevel->eDrlgType == 2));
 }
 

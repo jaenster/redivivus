@@ -820,7 +820,7 @@ uint32_t __fastcall CheckItemMovePermission(::SGAMEDATA * pGame, D2UnitStrc * pU
             }
           case UNIT_MONSTER:
             {
-              bCanMove = Monster::MonsterAI::NpcStateIsntZero(pInteractUnit, (int32_t)pUnit);
+              bCanMove = Monster::MonsterAI::NpcStateIsntZero(pInteractUnit, pUnit);
               return bCanMove;
             }
         }

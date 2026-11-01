@@ -26,8 +26,8 @@ int __fastcall UNITSND_GetHitSound(int32_t pSoundTable, uint32_t nAnimMode);
 void __fastcall AllocUnitSfxData(struct D2UnitStrc * pUnit, int32_t nChannelHandle);
 void __fastcall FreeSfxData(struct D2UnitStrc * pUnit, int32_t nParam);
 int32_t __fastcall UNITSND_GetMissileSound(struct D2UnitStrc * pUnit, int32_t nParam2);
-int __fastcall UNITSND_GetMissileLoopSound(int32_t nParam);
-void __fastcall IterateUnitSfxData(struct D2UnitStrc * pUnit, int32_t nParam);
+int __fastcall UNITSND_GetMissileLoopSound(struct D2UnitStrc * pUnit);
+void __fastcall IterateUnitSfxData(struct D2UnitStrc * pUnit, int32_t bForceStop);
 void __fastcall UNITSND_UpdatePositionalAudio(struct D2UnitStrc * pUnit);
 void __stdcall UNITSND_Unused_Placeholder_3(uint8_t bParam, int32_t nParam);
 // Returns pUnit's client-side nSfxMode (+0x74); halts (UnitSnd.cpp line 3237) on NULL.

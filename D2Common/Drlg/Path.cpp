@@ -1420,9 +1420,9 @@ void * __fastcall DRLGPATH_BuildCircularPathPoints(D2DynamicPathStrc * pStaticPa
 }
 
 // Builds a set of randomized path waypoints using a seed-based random direction offset. Computes direction triplets and applies random perturbations to create organic-looking movement paths.
-void __fastcall DRLGPATH_BuildRandomizedPathPoints(int32_t pPathStrc, D2DynamicPathStrc * pDynamicPath) {
+void __fastcall DRLGPATH_BuildRandomizedPathPoints(D2DynamicPathStrc * pPathStrc, D2SeedStrc * pDynamicPath) {
     uint32_t nChosenDir;
-    uint32_t* pWaypointOut;
+    D2PathPointStrc* pWaypointOut;
     int aDirTriplet[3];
     int aDirDeltaTable[32];
     int nDirOffsetTmp;
@@ -1437,7 +1437,7 @@ void __fastcall DRLGPATH_BuildRandomizedPathPoints(int32_t pPathStrc, D2DynamicP
     aDirDeltaTable[0x18] = -1;
     aDirDeltaTable[0x1b] = -1;
     aDirDeltaTable[0x1e] = -1;
-    uint32_t nStepsRemain = (uint32_t)(*(uint8_t*)(pPathStrc + 0x91) >> 1);
+    uint32_t nStepsRemain = (uint32_t)(pPathStrc->nDistMax >> 1);
     aDirDeltaTable[1] = 0;
     aDirDeltaTable[4] = 0;
     aDirDeltaTable[7] = 0;
@@ -1449,7 +1449,8 @@ void __fastcall DRLGPATH_BuildRandomizedPathPoints(int32_t pPathStrc, D2DynamicP
     aDirDeltaTable[0x19] = 0;
     aDirDeltaTable[0x1c] = 0;
     uint32_t nTotalSteps = 0;
-    uint32_t nPackedPos = (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)(pPathStrc + 6) << 16 | (uint32_t)(uint16_t)*(uint16_t*)(pPathStrc + 2));
+    uint32_t nPackedDst = (uint32_t)((uint32_t)(uint16_t)pPathStrc->nTargetX | (uint32_t)(uint16_t)pPathStrc->nTargetY << 16);
+    uint32_t nPackedPos = (uint32_t)((uint32_t)(uint16_t)pPathStrc->Coords.tSubtile.nPosY << 16 | (uint32_t)(uint16_t)pPathStrc->Coords.tSubtile.nPosX);
     aDirDeltaTable[2] = 1;
     aDirDeltaTable[5] = 1;
     aDirDeltaTable[8] = 1;
@@ -1461,27 +1462,29 @@ void __fastcall DRLGPATH_BuildRandomizedPathPoints(int32_t pPathStrc, D2DynamicP
     aDirDeltaTable[0x1a] = 1;
     aDirDeltaTable[0x1d] = 1;
     aDirDeltaTable[0x1f] = 1;
-    int32_t pPathStrcSave = pPathStrc;
-    DRLGPATH_GetPathDirectionTripletPacked(aDirTriplet, nPackedPos, *(uint32_t*)(pPathStrc + 0x10));
+    int32_t pPathStrcSave = (int32_t)pPathStrc;
+    DRLGPATH_GetPathDirectionTripletPacked(aDirTriplet, nPackedPos, nPackedDst);
     if ((int)nStepsRemain > 0) {
-      POINT PVar1;
-      pWaypointOut = (uint32_t*)(pPathStrc + 0x9c);
+      D2SeedStrc DVar1;
+      pWaypointOut = pPathStrc->PathPoints;
       nTotalSteps = nStepsRemain;
       do {
-        PVar1 = d2_bits_as<POINT>((uint64_t)(uint32_t)pDynamicPath->Coords.tFixed.x * 0x6ac690c5 + (uint64_t)(uint32_t)pDynamicPath->Coords.tFixed.y);
-        nDirOffsetTmp = aDirDeltaTable[PVar1.x & 0x1f];
-        pDynamicPath->Coords.tFixed = PVar1;
+        DVar1 = D2_SEED_NEXT(*pDynamicPath);
+        nDirOffsetTmp = aDirDeltaTable[DVar1.nSeedLow & 0x1f];
+        *pDynamicPath = DVar1;
         nChosenDir = nDirOffsetTmp + aDirTriplet[0] & 7;
-        *pWaypointOut = nPackedPos;
+        pWaypointOut->nX = (short int)nPackedPos;
+        pWaypointOut->nY = (uint16_t)((uint32_t)nPackedPos >> 16);
         nPackedPos = (uint32_t)((uint32_t)(uint16_t)((uint16_t)((uint32_t)nPackedPos >> 16) + (short int)gPathDirectionOffsetsX[nChosenDir * 2 + 1] * 2) << 16 | (uint32_t)(uint16_t)((short int)nPackedPos + (short int)gPathDirectionOffsetsX[nChosenDir * 2] * 2));
         pWaypointOut++;
         nStepsRemain--;
-        pPathStrc = pPathStrcSave;
+        pPathStrc = (D2DynamicPathStrc*)pPathStrcSave;
       } while (nStepsRemain);
     }
 
-    *(uint32_t*)(pPathStrc + 0x9c + nTotalSteps * 4) = nPackedPos;
-    *(uint32_t*)(pPathStrc + 0x28) = nTotalSteps + 1;
+    pPathStrc->PathPoints[nTotalSteps].nX = (short int)nPackedPos;
+    pPathStrc->PathPoints[nTotalSteps].nY = (uint16_t)((uint32_t)nPackedPos >> 16);
+    pPathStrc->dwPathPoints = nTotalSteps + 1;
 }
 
 // Scales a direction vector by a velocity factor (fixed-point). Computes a normalized velocity direction and validates the resulting magnitude does not exceed 0x200000.

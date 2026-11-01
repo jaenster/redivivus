@@ -29,7 +29,7 @@ uint32_t __stdcall OVERLAYTBLS_GetDir(int32_t nParam);
 // 2022.01.09 - dzik
 uint32_t __stdcall GetComponentsData(struct D2UnitStrc * pUnit, uint32_t nIndex);
 // Resolves the graphic-component (DCC/COF token) for one of a monster's render components by index and variant. Validates the unit is a monster, reads its MonStats2 component table, bounds-checks the variant, and looks up the base comp-code via DATATBLS_GetCompCodeByIndex. For Act II monsters it may override the component from the gnOverlayTblsCount / gnOverlayTblsMaxId tables depending on the monster's validated base class id (special-cases base id 0xaa). Returns the resolved component token (cast as D2UnitStrc*), or NULL for non-monsters / out-of-range component or variant.
-struct D2UnitStrc * __stdcall MONSTER_GetComponentOverlay(struct D2UnitStrc * pUnit, uint32_t nComponentIdx, uint32_t nVariantIdx);
+uint32_t __stdcall MONSTER_GetComponentOverlay(struct D2UnitStrc * pUnit, uint32_t nComponentIdx, uint32_t nVariantIdx);
 // 2022.01.09 - dzik
 uint32_t __stdcall OVERLAYTBLS_GetMonsterComponentOverlay(int32_t nMonStatId, uint32_t nComponentIdx, uint32_t nVariantIdx);
 

@@ -1727,15 +1727,15 @@ void __stdcall SKILLS_GetStateTransformGfx(D2UnitStrc * pUnit, eD2UnitType * pUn
 }
 
 // Initialises or advances a skill sequence entry for a unit. Searches the unit's sequence list for the entry matching nSeqId that has not yet been committed (pSeqEntry[0xd] == -1). Derives a position seed from the unit's dynamic path sub-positions (or player-specific fields). If the seed matches the stored seed, advances the sequence frame by 7; otherwise resets both seed and frame to the new value. Writes the resulting frame and constant 0x29A into the unit param array. Halts fatally if no matching sequence entry is found.
-void __stdcall SKILLS_InitSkillSequence(int * pnParam, int32_t bIsPlayerUnit, int32_t nSeqId) {
+void __stdcall SKILLS_InitSkillSequence(D2UnitStrc * pnParam, int32_t bIsPlayerUnit, int32_t nSeqId) {
     uint32_t uXSP1;
     uint32_t uYSP1;
+    int nInitSeed;
     int nPosSeed;
-    uint32_t* pSeqEntry;
-    int nPrevSeqFrame;
-    if (pnParam[0x2a]) {
-      for (pSeqEntry = *(uint32_t**)(pnParam[0x2a] + 4); pSeqEntry; pSeqEntry = (uint32_t*)pSeqEntry[1]) {
-        if (*(short int*)*pSeqEntry == nSeqId && pSeqEntry[0xd] == -1) {
+    D2SkillStrc* pSeqEntry;
+    if (pnParam->pSkillsList) {
+      for (pSeqEntry = pnParam->pSkillsList->pFirstSkill; pSeqEntry; pSeqEntry = pSeqEntry->pNext) {
+        if (pSeqEntry->pRecord->skill == nSeqId && pSeqEntry->nOwnerGUID == -1) {
           goto update_seq_entry;
         }
       }
@@ -1744,29 +1744,29 @@ void __stdcall SKILLS_InitSkillSequence(int * pnParam, int32_t bIsPlayerUnit, in
     pSeqEntry = 0;
     update_seq_entry:
     if (!bIsPlayerUnit) {
-      uXSP1 = PATH::DynamicPath::GetXSP1((D2DynamicPathStrc*)pnParam[0xb]);
-      uYSP1 = PATH::DynamicPath::GetYSP1((D2DynamicPathStrc*)pnParam[0xb]);
+      uXSP1 = PATH::DynamicPath::GetXSP1(pnParam->pPath.pDynamicPath);
+      uYSP1 = PATH::DynamicPath::GetYSP1(pnParam->pPath.pDynamicPath);
       nPosSeed = uXSP1 + uYSP1 * 2;
     } else {
-      uYSP1 = pnParam[3];
-      nPosSeed = *pnParam << 0x10;
+      uYSP1 = pnParam->nUnitGUID;
+      nPosSeed = pnParam->eUnitType << 0x10;
     }
     nPosSeed += uYSP1;
     if (!pSeqEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa52);
       exit(-1);
     }
-    if (pSeqEntry[6] == nPosSeed) {
-      nPrevSeqFrame = pSeqEntry[7];
-      pSeqEntry[6] = nPosSeed;
-      pSeqEntry[7] = nPrevSeqFrame + 7;
-      Seed::InitSeed_Param_666((D2SeedStrc*)(pnParam + 8), nPrevSeqFrame + 7);
+    if (pSeqEntry->nPar1 == nPosSeed) {
+      nInitSeed = pSeqEntry->nPar2 + 7;
+      pSeqEntry->nPar1 = nPosSeed;
+      pSeqEntry->nPar2 = nInitSeed;
+      Seed::InitSeed_Param_666(&pnParam->sSeed, nInitSeed);
       return;
     }
 
-    pSeqEntry[7] = nPosSeed;
-    pSeqEntry[6] = nPosSeed;
-    Seed::InitSeed_Param_666((D2SeedStrc*)(pnParam + 8), pSeqEntry[7]);
+    pSeqEntry->nPar2 = nPosSeed;
+    pSeqEntry->nPar1 = nPosSeed;
+    Seed::InitSeed_Param_666(&pnParam->sSeed, pSeqEntry->nPar2);
 }
 
 int32_t __stdcall SKILLS_GetSkillWeaponClass(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {

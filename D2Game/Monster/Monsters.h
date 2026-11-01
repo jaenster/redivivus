@@ -110,7 +110,7 @@ void __fastcall MONSTER_OnDeathTryScheduleRevive(::SGAMEDATA * pGame, struct D2U
 // AI callback that resurrects a monster that has just died via SKILL_SelfResurrect. Validates that the monster is dead, lacks a passive-state lock, is not a quest-flagged boss, is not Champion-aligned, and that its current tile is unblocked; if all checks pass, casts self-resurrection, clears the NOXP/NOTC flags, increments AI argument 1, and schedules the next think event.
 void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 35. On death (or no unit) sets STATE_shatter.
-void __fastcall MONSTER_ShatterOnDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
+void __fastcall MONSTER_ShatterOnDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUModId, int32_t nParam2);
 void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
 // Initialises level and attack-rating stats for a monster unit spawned via a UMOD (unit-modifier) entry. Derives monster level from the room's level record and the game difficulty/expansion flags stored in the pUModEntry struct, clamped to minimum 1. Sets UNITSTAT_level and UNITSTAT_tohit (capped at 90). For specific monster class IDs 0x146-0x171 (elemental enchanted types), also adds elemental damage stats (fire, lightning, poison) scaled from the computed level. Halts with an internal error if pUnit is not a monster.
 void __fastcall UMOD_SetLevelAndAttackRating(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
@@ -120,9 +120,9 @@ void __fastcall MONSTER_HandleModeTransition(::SGAMEDATA * pGame, struct D2UnitS
 // Trigger suicide monster explosion. Loads MonStats treasure class, rolls damage, chooses missile based on TC result (fire/corpse/ice), spawns missile at unit location and applies area damage.
 void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUnused1, uint32_t nUnused2);
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 40. On death (or no unit) spawns monster 0x227 and sets STATE_corpse_nodraw.
-void __fastcall MONSTER_SpawnWormOnDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
+void __fastcall MONSTER_SpawnWormOnDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUModId, int32_t nParam2);
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 41. While alive: MONSTERAI_TriggerMageThink, then event 7 in 75 frames.
-void __fastcall MONSTER_PeriodicMageThink(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
+void __fastcall MONSTER_PeriodicMageThink(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUModId, int32_t nParam2);
 void __fastcall MONSTER_DispatchUModOnSpawn(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall MONSTER_DispatchUModOnDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall MONSTER_DispatchUModOnHit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
@@ -139,16 +139,16 @@ void __fastcall MONSTER_AddUniqueModifier(::SGAMEDATA * pGame, struct D2UnitStrc
 void __fastcall MONSTER_PromoteToUnique(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Server-side spawner for SuperUnique (named boss) monsters from the superuniques.txt entry nClassId. Bails if already spawned (boss-flag bitset in pGame->nBossFlagList) unless Stacks allows; applies AutoPos. Creates the base monster via SERVER_SpawnMonsterInternal, marks it superunique, sets boss flags, and rolls its UMod (monster modifier) list: copies the txt's fixed Mod entries (noting aura-enchant 0x1e), then rolls difficulty-scaled random mods via MONUMOD_RollRandomModifier, and applies them with UMOD_ApplyEnchantmentsToMonster and group min/max minion counts. A switch on the superunique's hardcoded index drives quest hooks and special minion spawns (e.g. Countess/ForgottenTower, Diablo, Baal-act bosses). Wraps return in Fog stack guard; returns the spawned unit or 0.
 struct D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, uint32_t nClassId);
-int32_t __fastcall MONSTER_IsMonsterUnit(int * pnParam);
+int32_t __fastcall MONSTER_IsMonsterUnit(struct D2UnitStrc * pnParam);
 void __fastcall SERVER_AwardKillExperience(struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim, ::SGAMEDATA * pGame);
-int32_t __fastcall MONSTER_CalculateCorpseBombDamage(int32_t nParam1, int32_t nParam2);
+int32_t __fastcall MONSTER_CalculateCorpseBombDamage(::SGAMEDATA * pGame, int32_t nPlayerCount);
 // Recomputes a monster unit's combat damage/to-hit stats and elemental on-hit damage from monstats.txt, scaling by monster level, difficulty, multiplayer player-count, and a scaling-mode selector (5/normal vs 6-8 vs default difficulty bands). Adds pet-skill damage bonuses, applies the classic (non-expansion) difficulty damage/to-hit penalty divisors, and an expansion corpse-bomb/playercount damage multiplier. Writes mindamage/maxdamage/tohit into the unit's flag-1 stat list, then iterates the three elemental damage slots (El1/El2/El3 mode/type/chance) rolling chance from the unit seed and adding the matching elemental min/max/length stats (fire, lightning, magic, cold, poison, drains, stun, burning). Server/common monster setup; no-op for non-monster units.
 void __fastcall MONSTER_RecalculateCombatStats(struct D2UnitStrc * pUnit, uint32_t nDifficultyScaling);
 void __fastcall MONSTER_CalculateHitCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nParam, uint32_t dwParam);
 void __fastcall MONSTER_AttackTarget(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
 void __stdcall MONSTER_CheckSpecialDeathFlag(struct D2UnitStrc * pUnit, struct D2DamageStrc * pDamage);
 // Rolls a critical-hit check for a monster attack using the monster's MonStats Crit percentage. If pnParam[0]==1, the class id in pnParam[1] is valid, and the RNG roll (stored in pnParam[8/9]) is below the Crit threshold, all damage fields in pEvent are doubled and the critical-hit overlay (0x36) is shown on pUnit.
-void __fastcall ApplyDamageCritical(int * pnParam, struct D2UnitStrc * pUnit, struct D2DamageStrc * pEvent);
+void __fastcall ApplyDamageCritical(struct D2UnitStrc * pnParam, struct D2UnitStrc * pUnit, struct D2DamageStrc * pEvent);
 uint8_t __fastcall MONSTER_GetHpPercent128(struct D2UnitStrc * pUnit);
 // 12 internal functions (defined in .cpp)
 

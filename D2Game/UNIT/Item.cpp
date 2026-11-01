@@ -515,7 +515,7 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
         if (pPlayer) {
           bIsInNpcState2 = D2Game::Monster::MonsterAI::NpcStateIs2(pUnit, pPlayer);
           if (bIsInNpcState2) {
-            sunitproxy::SUNITPROXY_SendProxyItemsToClient(pGame, pUnit, (int32_t)pPlayer, pClient);
+            sunitproxy::SUNITPROXY_SendProxyItemsToClient(pGame, pUnit, pPlayer, pClient);
             goto send_sound_and_health;
           }
         }

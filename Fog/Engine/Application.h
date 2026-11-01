@@ -40,7 +40,7 @@ namespace Fog::Engine::Application {
 // Function declarations
 bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext);
 bool __stdcall DEBUG_IsValidDebugDirectorySize(uint32_t nDirSize);
-uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, int pModuleInfoOut);
+uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, struct D2FogDebugModuleEntryStrc * pModuleInfoOut);
 bool __stdcall DEBUG_EnumerateModulesViaPsapi(int * pnParam);
 bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList);
 bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pnParam);
@@ -59,7 +59,7 @@ void * MISC_OperatorNewShim(uint32_t nSize);
 void __stdcall MISC_GetValueFromD2Ini(struct D2IniConfigStrc * pD2IniData);
 int32_t __stdcall INI_FindConfigValueIndex(uint8_t * pbArgName);
 uint32_t __fastcall INI_IsDelimiterChar(char cChar);
-int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, int32_t pOutValue);
+int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, char * pOutValue);
 void __stdcall CloseDiablo();
 void __thiscall MISC_ParseCommandLineAndPutIntoD2IniData(char * szText, struct D2IniConfigStrc * pD2IniData);
 void __fastcall MISC_InitD2IniAndIgnorelist(struct D2IniConfigStrc * D2IniData, char * szCommandLine);

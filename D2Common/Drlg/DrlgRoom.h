@@ -58,7 +58,7 @@ struct D2RoomStrc * __fastcall DRLGWARP_GetWarpDestinationRoom(struct D2RoomExSt
 // Iterates all warp tiles in a room (linked list at offset 0x4c)
 // and sets each tile's select value (offset 0x8) to nSelectValue.
 // Called by DRLGROOM_SetWarpTileSelect.
-void __fastcall DRLGWARP_SetAllWarpTilesSelectValue(int32_t pRoomEx, uint32_t nSelectValue);
+void __fastcall DRLGWARP_SetAllWarpTilesSelectValue(struct D2RoomExStrc * pRoomEx, BOOL nSelectValue);
 void __fastcall DRLGWARP_UpdateWarpRoomExSelect(struct D2RoomExStrc * pRoomEx, eD2LevelId eLevel);
 void __fastcall DRLGWARP_UpdateWarpRoomExDeselect(struct D2RoomExStrc * pRoomEx, eD2LevelId eLevel);
 // Picks a random spawn point from the level's preset unit array.

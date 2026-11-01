@@ -1960,7 +1960,7 @@ void __fastcall SKILLDESC_BuildStatBuffDesc(D2UnitStrc * pUnit, uint16_t * wszOu
       do {
         nStatId = (int32_t)pDataTable->pItemStatCostDescPriority[eState2];
         if (nStatId >= 0 && nStatId < pDataTable->nTxtItemStatCostSize) {
-          nResult = D2Common::Stats::StatsEx::STATSEX_CopyStatPairsFromStatList((int32_t)pStatListNew, nStatId, aStatBonusEntries, 0x1ff);
+          nResult = D2Common::Stats::StatsEx::STATSEX_CopyStatPairsFromStatList(pStatListNew, nStatId, (D2StatStrc*)aStatBonusEntries, 0x1ff);
           eState = STATE_none;
           pDataTable = sgptDataTable;
           if (nResult > 0) {

@@ -748,8 +748,8 @@ D2UnitStrc * __stdcall INVENTORY_GetLastItem(D2InventoryStrc * pInventory) {
     return pInventory->pLastItem;
 }
 
-uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint32_t nGridCol, int32_t nY, int32_t nX, uint8_t byItemHeight, int32_t pGridInfo) {
-    if ((int)((nGridCol & 0xff) + nX) <= (int)(uint32_t)*(uint8_t*)(pGridInfo + 8) && (int)((uint32_t)byItemHeight + nY) <= (int)(uint32_t)*(uint8_t*)(pGridInfo + 9)) {
+uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint32_t nGridCol, int32_t nY, int32_t nX, uint8_t byItemHeight, D2InventoryGridInfoStrc * pGridInfo) {
+    if ((int)((nGridCol & 0xff) + nX) <= (int)(uint32_t)pGridInfo->bWidth && (int)((uint32_t)byItemHeight + nY) <= (int)(uint32_t)pGridInfo->bHeight) {
       uint32_t bFits;
       bFits = INVENTORY_IsGridRectEmpty(nY, nGridCol, nX, byItemHeight, pGridInfo);
       return bFits;
@@ -1749,7 +1749,7 @@ D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInMain(D2InventoryStrc * pInv
 }
 
 // Searches the player inventory grid for a tome (ITEMTYPE_Book) that matches pScrollItem's magic suffix and is not yet full (quantity < max stack). Iterates the stash grid's item linked list starting from pStartAfterItem (or from the beginning if NULL). Returns the first matching non-full tome, or NULL if none found. Used when auto-stacking a scroll pickup into an existing tome.
-D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(int * pnParam, D2UnitStrc * pScrollItem, D2UnitStrc * pStartAfterItem) {
+D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(D2InventoryStrc * pnParam, D2UnitStrc * pScrollItem, D2UnitStrc * pStartAfterItem) {
     int32_t neInventoryPage;
     eD2ItemTypes eItemType;
     uint16_t uVar2;
@@ -1757,12 +1757,12 @@ D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(int * pnParam, D2UnitStr
     int32_t nBookMaxStack;
     D2GridScreenCoordinates local_1c;
     D2UnitDataItemStrc* pItemData;
-    if (!(pnParam && *pnParam == 0x1020304)) {
+    if (!(pnParam && pnParam->nSignatureMagic == 0x1020304)) {
       return nullptr;
     }
 
     D2UnitStrc* pCurItem;
-    pCurItem = (D2UnitStrc*)pnParam[2];
+    pCurItem = pnParam->pOwner;
     D2GridScreenCoordinates* pGridDims;
     pGridDims = 0;
     if (pCurItem && pCurItem->eUnitType == UNIT_PLAYER) {
@@ -1772,7 +1772,7 @@ D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(int * pnParam, D2UnitStr
     }
 
     D2InventoryGridInfoStrc* pStashGridInfo;
-    pStashGridInfo = ReinitializeInventoryGrid((D2InventoryStrc*)pnParam, (D2InventorySizesStrc*)pGridDims, 2);
+    pStashGridInfo = ReinitializeInventoryGrid(pnParam, (D2InventorySizesStrc*)pGridDims, 2);
     if (!pStashGridInfo) {
       return nullptr;
     }
@@ -2508,7 +2508,7 @@ D2UnitStrc * __stdcall INVENTORY_FindItemOfTypeInMain(D2InventoryStrc * pInvento
 }
 
 // Searches the player's main inventory grid (page 0, grid index 0x4F) for an item matching nItemCode (4-char item code). Converts the code to a class id via ConvertItemCodeToClassIdAndGetItemsTxtLine, then walks the item linked list starting after pAfterItem (NULL = from the beginning). Returns the first matching D2UnitStrc* whose nClassId matches and whose X position is below column 11, or NULL if not found.
-int * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInventory, uint32_t nItemCode, D2UnitStrc * pAfterItem) {
+D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInventory, uint32_t nItemCode, D2UnitStrc * pAfterItem) {
     eD2UnitType eUnitType;
     D2UnitDataItemStrc* pItemData;
     D2InventoryStrc* pInventory_00;
@@ -2564,13 +2564,13 @@ int * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInventory, uin
               nPosX = pGridInfo->pPath.pStaticPath->nPosX;
             } else {
               if (!pGridInfo->pPath.pDynamicPath) {
-                return (int*)pGridInfo;
+                return pGridInfo;
               }
 
               nPosX = PATH::DynamicPath::GetXPos(pGridInfo->pPath.pDynamicPath);
             }
             if (nPosX < 0xb) {
-              return (int*)pGridInfo;
+              return pGridInfo;
             }
           }
           if (pGridInfo->eUnitType != UNIT_ITEM) {
@@ -2599,7 +2599,7 @@ int * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInventory, uin
 }
 
 // Same logic as INVENTORY_FindItemByCodeInMain but targets the stash grid (page index 2, grid 0x4F). Searches the stash item linked list for the first item whose class id matches nItemCode and X position is below column 11, optionally starting after pAfterItem. Returns the matching D2UnitStrc* or NULL.
-int * __stdcall INVENTORY_FindItemByCodeInStash(D2InventoryStrc * pInventory, uint32_t nItemCode, D2UnitStrc * pAfterItem) {
+D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInStash(D2InventoryStrc * pInventory, uint32_t nItemCode, D2UnitStrc * pAfterItem) {
     eD2UnitType eUnitType;
     D2UnitDataItemStrc* pItemData;
     D2InventoryStrc* pInventoryCopy;
@@ -2655,13 +2655,13 @@ int * __stdcall INVENTORY_FindItemByCodeInStash(D2InventoryStrc * pInventory, ui
               nPosX = pCurItem->pPath.pStaticPath->nPosX;
             } else {
               if (!pCurItem->pPath.pDynamicPath) {
-                return (int*)pCurItem;
+                return pCurItem;
               }
 
               nPosX = PATH::DynamicPath::GetXPos(pCurItem->pPath.pDynamicPath);
             }
             if (nPosX < 0xb) {
-              return (int*)pCurItem;
+              return pCurItem;
             }
           }
           if (pCurItem->eUnitType != UNIT_ITEM) {
@@ -3020,21 +3020,21 @@ D2CorpseStrc * __stdcall INVENTORY_GetCorpse(D2InventoryStrc * pInventory) {
 }
 
 // @sourcefile .\INVENTORY\Inventory.cpp
-void __stdcall INVENTORY_FreeNotifications(int * pnParam) {
-    if (!(pnParam && *pnParam == 0x1020304)) {
+void __stdcall INVENTORY_FreeNotifications(D2InventoryStrc * pnParam) {
+    if (!(pnParam && pnParam->nSignatureMagic == 0x1020304)) {
       return;
     }
 
-    void* pMemoryToFree = (void*)pnParam[0xd];
+    D2CorpseStrc* pMemoryToFree = pnParam->pCorpse;
     while (pMemoryToFree) {
-      void* pNextNotification;
-      pNextNotification = *(void**)((int)pMemoryToFree + 0xc);
-      D2_FREE_POOL_AT((D2PoolManagerStrc*)pnParam[1], pMemoryToFree, ".\\INVENTORY\\Inventory.cpp", 0x1071);
+      D2CorpseStrc* pNextNotification;
+      pNextNotification = pMemoryToFree->pNext;
+      D2_FREE_POOL_AT(pnParam->pMemory, pMemoryToFree, ".\\INVENTORY\\Inventory.cpp", 0x1071);
       pMemoryToFree = pNextNotification;
     }
 
-    pnParam[0xd] = 0;
-    pnParam[0xe] = 0;
+    pnParam->pCorpse = 0;
+    pnParam->pCorpseLast = 0;
 }
 
 int32_t __stdcall INVENTORY_GetCorpseCount(D2InventoryStrc * pInventory) {

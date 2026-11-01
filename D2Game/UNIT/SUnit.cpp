@@ -1214,13 +1214,13 @@ uint32_t __fastcall UNITS_CheckIfCanAttackTarget(::SGAMEDATA * pGame, D2UnitStrc
     return (uint32_t)!bIsAlly;
 }
 
-BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, int * pnParam, D2UnitStrc * pTarget, eD2Skills eSkill) {
-    if (!(pnParam && pTarget && (!*pnParam || pTarget->eUnitType == UNIT_MONSTER) && (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&sgptDataTable->pTxtSkills[eSkill] + 0x7) & (uint8_t)gadwBitMasks[1])) {
+BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, D2UnitStrc * pnParam, D2UnitStrc * pTarget, eD2Skills eSkill) {
+    if (!(pnParam && pTarget && (pnParam->eUnitType == UNIT_PLAYER || pTarget->eUnitType == UNIT_MONSTER) && (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&sgptDataTable->pTxtSkills[eSkill] + 0x7) & (uint8_t)gadwBitMasks[1])) {
       return 0;
     }
 
     Ai::AiGeneral::GetMonsterNameAndAi(pTarget, &eSkill, (int*)&pTarget);
-    if (!pTarget && eSkill == pnParam[3]) {
+    if (!pTarget && eSkill == pnParam->nUnitGUID) {
       return 1;
     }
 

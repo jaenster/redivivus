@@ -124,7 +124,7 @@ int __stdcall SKILLS_ValidateAnimModeForMonster(int32_t eAnimMode, int32_t nMonI
 // Resolves the visual transform imposed on a unit by its active transformation state (flag 0x08 on eUnitFlagsEx). Iterates the global transform-state list; for each active state with gfxtype==1 (monster form) or gfxtype==2 (player form), writes the target unit type and gfx class to the out-params, and remaps *pAnimMode for cross-type animation compatibility. Returns without writing if no transform state is active or the unit lacks the transform flag.
 void __stdcall SKILLS_GetStateTransformGfx(struct D2UnitStrc * pUnit, eD2UnitType * pUnitType, int * pGfxClass, int * pAnimMode, char * szFile, int32_t nLine);
 // Initialises or advances a skill sequence entry for a unit. Searches the unit's sequence list for the entry matching nSeqId that has not yet been committed (pSeqEntry[0xd] == -1). Derives a position seed from the unit's dynamic path sub-positions (or player-specific fields). If the seed matches the stored seed, advances the sequence frame by 7; otherwise resets both seed and frame to the new value. Writes the resulting frame and constant 0x29A into the unit param array. Halts fatally if no matching sequence entry is found.
-void __stdcall SKILLS_InitSkillSequence(int * pnParam, int32_t bIsPlayerUnit, int32_t nSeqId);
+void __stdcall SKILLS_InitSkillSequence(struct D2UnitStrc * pnParam, int32_t bIsPlayerUnit, int32_t nSeqId);
 int32_t __stdcall SKILLS_GetSkillWeaponClass(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
 uint32_t __stdcall SKILLS_CheckMonsterCorpseSelectable(int32_t bCheckDead, struct D2UnitStrc * pUnit);
 uint32_t __stdcall D2CheckIfCorpseIsConsumable(struct D2UnitStrc * pUnit, int32_t bCheckDead);

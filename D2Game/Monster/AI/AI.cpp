@@ -3466,7 +3466,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindNearestInteractNpc(::SGAMEDATA * pGame, D2
     }
 
     D2UnitStrc* pFoundTarget = (D2UnitStrc*)AI::GetDistance(pUnit, pPlayerCandidate);
-    if (!((int)pFoundTarget <= 0xf && (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nClassId) || !((uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nClassId] + 0xd) & gadwBitMasks[1]) || (nDistance = Quests::QUESTS::QUEST_NpcWantsInteract(pGame, pPlayerCandidate, (int32_t)pUnit) , nDistance && (int)pFoundTarget < (int)pSearchData[1])))) {
+    if (!((int)pFoundTarget <= 0xf && (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nClassId) || !((uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nClassId] + 0xd) & gadwBitMasks[1]) || (nDistance = Quests::QUESTS::QUEST_NpcWantsInteract(pGame, pPlayerCandidate, pUnit) , nDistance && (int)pFoundTarget < (int)pSearchData[1])))) {
       return nullptr;
     }
 
@@ -4292,7 +4292,7 @@ int32_t __fastcall WalkTowardsUnitOffset(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Tail-calls StartMonsterMove (already fixed to return int32_t) as its final statement, dropping the result.
-int32_t __fastcall MONSTERAI_CommandRunAwayFromUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int * pFleeTarget, uint8_t nFleeDistance, int32_t nParam) {
+int32_t __fastcall MONSTERAI_CommandRunAwayFromUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pFleeTarget, uint8_t nFleeDistance, int32_t nParam) {
     uint32_t nFleeTargetPosX;
     uint32_t nFleeTargetPosY;
     uint32_t nPosX;
@@ -4315,25 +4315,25 @@ int32_t __fastcall MONSTERAI_CommandRunAwayFromUnit(::SGAMEDATA * pGame, D2UnitS
       nPosY = 0;
     }
 
-    int nDeltaY = *pFleeTarget;
-    if (nDeltaY == 2 || nDeltaY > 3 && nDeltaY <= 5) {
-      nFleeTargetPosX = *(uint32_t*)(pFleeTarget[0xb] + 0xc);
-    } else if ((D2DynamicPathStrc*)pFleeTarget[0xb]) {
-      nFleeTargetPosX = D2Common::PATH::DynamicPath::GetXPos((D2DynamicPathStrc*)pFleeTarget[0xb]);
+    eUnitTypeForY = pFleeTarget->eUnitType;
+    if (eUnitTypeForY == UNIT_OBJECT || (int)eUnitTypeForY > 3 && (int)eUnitTypeForY <= 5) {
+      nFleeTargetPosX = pFleeTarget->pPath.pStaticPath->nPosX;
+    } else if (pFleeTarget->pPath.pDynamicPath) {
+      nFleeTargetPosX = D2Common::PATH::DynamicPath::GetXPos(pFleeTarget->pPath.pDynamicPath);
     } else {
       nFleeTargetPosX = 0;
     }
 
-    nDeltaY = *pFleeTarget;
-    if (nDeltaY == 2 || nDeltaY > 3 && nDeltaY <= 5) {
-      nFleeTargetPosY = *(uint32_t*)(pFleeTarget[0xb] + 0x10);
-    } else if ((D2DynamicPathStrc*)pFleeTarget[0xb]) {
-      nFleeTargetPosY = D2Common::PATH::DynamicPath::GetYPos((D2DynamicPathStrc*)pFleeTarget[0xb]);
+    eUnitTypeForY = pFleeTarget->eUnitType;
+    if (eUnitTypeForY == UNIT_OBJECT || (int)eUnitTypeForY > 3 && (int)eUnitTypeForY <= 5) {
+      nFleeTargetPosY = pFleeTarget->pPath.pStaticPath->nPosY;
+    } else if (pFleeTarget->pPath.pDynamicPath) {
+      nFleeTargetPosY = D2Common::PATH::DynamicPath::GetYPos(pFleeTarget->pPath.pDynamicPath);
     } else {
       nFleeTargetPosY = 0;
     }
 
-    nDeltaY = 0;
+    int nDeltaY = 0;
     int nDeltaX = 0;
     if (nFleeTargetPosX > nPosX) {
       nDeltaX = -1;
@@ -5846,7 +5846,7 @@ uint32_t __fastcall MONSTERAI_FindNeutralMonsterInRange(::SGAMEDATA * pGame, D2U
     return nBaseId > *pBestDist ? 0 : (uint32_t)pCandidate;
 }
 
-void __fastcall MONSTERAI_UpdateClosestTarget(D2UnitStrc * pUnit, int * pnParam) {
+void __fastcall MONSTERAI_UpdateClosestTarget(D2UnitStrc * pUnit, D2UnitStrc * pnParam) {
     int32_t nDistToCandidate;
     D2AiGeneralStrc* pAiGeneral = !pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
     if (!pnParam) {
@@ -5859,13 +5859,13 @@ void __fastcall MONSTERAI_UpdateClosestTarget(D2UnitStrc * pUnit, int * pnParam)
     if (pCurrentTarget) {
       int32_t nDistToCurrent;
       nDistToCurrent = GetDistanceBetween(pUnit, pCurrentTarget);
-      nDistToCandidate = GetDistanceBetween(pUnit, (D2UnitStrc*)pnParam);
+      nDistToCandidate = GetDistanceBetween(pUnit, pnParam);
       if (nDistToCandidate > nDistToCurrent) {
         return;
       }
     }
 
-    pAiGeneral->dwArg0 = pnParam[3];
+    pAiGeneral->dwArg0 = pnParam->nUnitGUID;
 }
 
 void __fastcall AI_Fn1_SiegeTower(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
@@ -5888,7 +5888,7 @@ void __fastcall AI_Fn1_SiegeTower(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
       DStack_2c.nBestDistance = 0;
       pNeutralTarget = (D2UnitStrc*)ForEach(pGame, pUnit, &DStack_2c, (fpMonsterAiForEach)MONSTERAI_FindNeutralMonsterInRange, 1);
       if (pNeutralTarget) {
-        MONSTERAI_UpdateClosestTarget(pNeutralTarget, (int*)pUnit);
+        MONSTERAI_UpdateClosestTarget(pNeutralTarget, pUnit);
         PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[0][pGame->nDifficulty]);
       }
     }
@@ -5932,7 +5932,7 @@ void __fastcall AI_Fn1_SiegeBeast(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
         tNeutralSearchParams.pBestUnit = (D2UnitStrc*)(nNeutralScanRadius * nNeutralScanRadius);
         pNeutralOrSelf = (D2UnitStrc*)ForEach(pGame, pSelf, &tNeutralSearchParams, (fpMonsterAiForEach)MONSTERAI_FindNeutralMonsterInRange, 1);
         if (pNeutralOrSelf) {
-          MONSTERAI_UpdateClosestTarget(pNeutralOrSelf, (int*)pSelf);
+          MONSTERAI_UpdateClosestTarget(pNeutralOrSelf, pSelf);
         }
       }
     }
@@ -8982,7 +8982,7 @@ void __fastcall AITHINK_Fn1_BloodRaven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     *pSeed = sNewSeed;
     if (sNewSeed.nSeedLow % 100 < 0x1e && (int)nDistToTarget < 0xc) {
       ApplyCombatAndMonStats(pUnit, 7, 100, '\0');
-      bMoveOk1 = MONSTERAI_CommandRunAwayFromUnit(pGame, pUnit, (int*)pTarget, 0xc - (char)nDistToTarget, 0);
+      bMoveOk1 = MONSTERAI_CommandRunAwayFromUnit(pGame, pUnit, pTarget, 0xc - (char)nDistToTarget, 0);
       if (bMoveOk1) {
         return;
       }
@@ -10229,7 +10229,7 @@ void __fastcall AITHINK_Fn1_SpecialTerror(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
       nMonFlag = D2Client::Source::ClientEngine::GetSomeMonsterStatFlag(nClassId, 0xf);
       if (nMonFlag) {
-        MONSTERAI_CommandRunAwayFromUnit(pGame, pUnit, (int*)pTarget, 0x1e, 0);
+        MONSTERAI_CommandRunAwayFromUnit(pGame, pUnit, pTarget, 0x1e, 0);
         return;
       }
 
@@ -10269,7 +10269,7 @@ void __fastcall AITHINK_Fn1_SpecialTerror(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
     nMonFlag = D2Client::Source::ClientEngine::GetSomeMonsterStatFlag(nClassId, 0xf);
     if (nMonFlag) {
-      bEngagedCopy = MONSTERAI_CommandRunAwayFromUnit(pGame, pUnit, (int*)pTarget, 0x1e, 1);
+      bEngagedCopy = MONSTERAI_CommandRunAwayFromUnit(pGame, pUnit, pTarget, 0x1e, 1);
     } else {
       bEngagedCopy = WalkTowardsUnitOffset(pGame, pUnit, pTarget, '\x1e', 1);
     }
@@ -13104,7 +13104,7 @@ void __fastcall AITHINK_Fn1_ShadowMaster(::SGAMEDATA * pGame, D2UnitStrc * pUnit
           }
         }
 
-        bFleeResult = MONSTERAI_CommandRunAwayFromUnit(pGameCopy, pUnit, (int*)pTmpUnit, 8, 1);
+        bFleeResult = MONSTERAI_CommandRunAwayFromUnit(pGameCopy, pUnit, pTmpUnit, 8, 1);
         if (bFleeResult) {
           return;
         }
@@ -14590,10 +14590,10 @@ void __fastcall AITHINK_Fn1_Wussie(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     D2SeedStrc newSeed;
     D2UnitStrc* pPortal = 0;
     D2SeedStrc* pSeed = &pUnit->sSeed;
-    BOOL nQuestResult = Quests::QUESTS::A5Q2::Q32_FindBarricadePortal(pGame, (int32_t)pUnit, &pPortal);
+    BOOL nQuestResult = Quests::QUESTS::A5Q2::Q32_FindBarricadePortal(pGame, pUnit, &pPortal);
     if (nQuestResult) {
       if (pPortal) {
-        nQuestResult = Quests::QUESTS::A5Q2::Q32_CheckWussieBarricade(pGame, (int32_t)pUnit);
+        nQuestResult = Quests::QUESTS::A5Q2::Q32_CheckWussieBarricade(pGame, pUnit);
         if (!nQuestResult) {
           nY = D2Client::Units::GetYPosFromDynamicPathUnit(pPortal);
           nDistToPortal = MONSTERAI_GetDistanceToCoords(pUnit, D2Client::Units::GetXPosFromDynamicPathUnit(pPortal), nY);
@@ -14623,7 +14623,7 @@ void __fastcall AITHINK_Fn1_Wussie(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
           }
         }
 
-        Quests::QUESTS::A5Q2::Q32_IncrementWussieKillCount(pGame, (int32_t)pUnit);
+        Quests::QUESTS::A5Q2::Q32_IncrementWussieKillCount(pGame, pUnit);
         D2Common::PATH::DynamicPath::ZeroPathPointsSize(pUnit->pPath.pDynamicPath);
         GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
         iVar2 = pUnit->nUnitGUID;
@@ -18807,7 +18807,7 @@ void __fastcall AITHINK_Fn1_CorruptArcher(::SGAMEDATA * pGame, D2UnitStrc * pUni
       *pSeed = DVar2;
       if ((int)(DVar2.nSeedLow % 100) < (int)pMonStats->aip[3][pGame->nDifficulty]) {
         ApplyCombatAndMonStats(pUnitSelf, 0, 100, '\0');
-        bRunAwaySucceeded = MONSTERAI_CommandRunAwayFromUnit(pGame, pUnitSelf, (int*)pAttacker, 0xc, 1);
+        bRunAwaySucceeded = MONSTERAI_CommandRunAwayFromUnit(pGame, pUnitSelf, pAttacker, 0xc, 1);
         if (bRunAwaySucceeded) {
           return;
         }
@@ -19349,7 +19349,7 @@ void __fastcall AITHINK_Fn1_ZakarumZealot(::SGAMEDATA * pGame, D2UnitStrc * pUni
           bBlackenedTempleComplete = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
           if (bBlackenedTempleComplete) {
             ApplyCombatAndMonStats(pUnit, 0, eRunSpeedPct, '\0');
-            bRanAway = MONSTERAI_CommandRunAwayFromUnit(pGame, pUnit, (int*)pTargetRaw, 8, 1);
+            bRanAway = MONSTERAI_CommandRunAwayFromUnit(pGame, pUnit, pTargetRaw, 8, 1);
             if (bRanAway) {
               return;
             }
@@ -19366,7 +19366,7 @@ void __fastcall AITHINK_Fn1_ZakarumZealot(::SGAMEDATA * pGame, D2UnitStrc * pUni
       if (!pAiGeneral->dwArg1 && bRanAway < pMonStats->aip[2][pGame->nDifficulty]) {
         pAiGeneral->dwArg0 = 0;
         ApplyCombatAndMonStats(pUnit, 0, eRunSpeedPct, '\0');
-        bRanAway = MONSTERAI_CommandRunAwayFromUnit(pGame, pUnit, (int*)pTargetRaw, 8, 1);
+        bRanAway = MONSTERAI_CommandRunAwayFromUnit(pGame, pUnit, pTargetRaw, 8, 1);
         if (bRanAway) {
           return;
         }

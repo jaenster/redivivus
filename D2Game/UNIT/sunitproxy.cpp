@@ -1110,7 +1110,7 @@ D2InventoryStrc * __fastcall SUNITPROXY_GetPlayerProxyInventory(::SGAMEDATA * pG
 }
 
 // Finds or creates this player's interaction node on an NPC proxy and RETURNS THE NODE. The node is the 12 bytes allocated at 00536cef with EDX = 0xc: player GUID at +0, a flag the trade path reads at +4, next at +8. On the found path the search loop at 00536cd0 jumps to the epilogue with the node still in EAX; on the allocate path the new node is in EAX and the code falls into the same epilogue, so both exits return it. It had been typed void, which left its caller SUNITNPC_OpenTradeScreen at 00579360 reading a declared-but-never-assigned local, taking the identified-item branch for the merchant's own unidentified stock and returning null - no vendor item ever reached the client.
-int32_t __fastcall SUNITPROXY_AddPlayerInteraction(::SGAMEDATA * pGame, D2GameNpcStrc * pNpcProxy, D2UnitStrc * pPlayerUnit) {
+D2NpcPlayerInteractionStrc * __fastcall SUNITPROXY_AddPlayerInteraction(::SGAMEDATA * pGame, D2GameNpcStrc * pNpcProxy, D2UnitStrc * pPlayerUnit) {
     int nPlayerGuid = !pPlayerUnit ? -1 : pPlayerUnit->nUnitGUID;
     D2NpcPlayerInteractionStrc* pInteractionEntry = pNpcProxy->pPlayerInteractions;
     while (true) {
@@ -1119,7 +1119,7 @@ int32_t __fastcall SUNITPROXY_AddPlayerInteraction(::SGAMEDATA * pGame, D2GameNp
         pInteractionEntry->nPlayerGUID = nPlayerGuid;
         pInteractionEntry->pNext = pNpcProxy->pPlayerInteractions;
         pNpcProxy->pPlayerInteractions = pInteractionEntry;
-        return (int32_t)pInteractionEntry;
+        return pInteractionEntry;
       }
       if (pInteractionEntry->nPlayerGUID == nPlayerGuid) {
         break;
@@ -1128,7 +1128,7 @@ int32_t __fastcall SUNITPROXY_AddPlayerInteraction(::SGAMEDATA * pGame, D2GameNp
       pInteractionEntry = pInteractionEntry->pNext;
     }
 
-    return (int32_t)pInteractionEntry;
+    return pInteractionEntry;
 }
 
 void __fastcall SUNITPROXY_ResetNpcProxy(::SGAMEDATA * pGame, D2GameNpcStrc * pNpcProxy, D2UnitStrc * pUnit) {
@@ -1514,9 +1514,9 @@ void __fastcall SERVER_InitClassicTowns(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
     SUNITPROXY_UpdateNpcProxiesForAct(pGame, nActByte, (uint32_t)!sArgs.nCount);
 }
 
-void __fastcall SUNITPROXY_SendProxyItemsToClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nNpcProxy, D2ClientStrc * pClient) {
+void __fastcall SUNITPROXY_SendProxyItemsToClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * nNpcProxy, D2ClientStrc * pClient) {
     SendUpdatedItemsToClient(pGame, pUnit, pClient, nullptr);
-    D2InventoryStrc* pInventory = SUNITPROXY_GetPlayerProxyInventory(pGame, (D2UnitStrc*)nNpcProxy, pUnit);
+    D2InventoryStrc* pInventory = SUNITPROXY_GetPlayerProxyInventory(pGame, nNpcProxy, pUnit);
     if (!pInventory) {
       return;
     }

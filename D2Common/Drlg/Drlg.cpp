@@ -1392,7 +1392,7 @@ void __stdcall DRLGOUTDOOR_ApplySubstitutionGroup(D2UnkOutdoorStrc * pUnkOutdoor
 
     do {
       BOOL bPlaced;
-      bPlaced = Outdoors::DRLGOUTDOOR_PlaceRandomBorderSubTiles(pUnkOutdoor, (int32_t)pLvlSub, (int*)(pFile->pSubstGroups + (int)(nRandStartGroup + nGroupIter) % (int)nModulo));
+      bPlaced = Outdoors::DRLGOUTDOOR_PlaceRandomBorderSubTiles(pUnkOutdoor, pLvlSub, (int*)(pFile->pSubstGroups + (int)(nRandStartGroup + nGroupIter) % (int)nModulo));
       if (bPlaced && !pLvlSub->BordType) {
         return;
       }

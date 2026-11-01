@@ -2011,7 +2011,7 @@ BOOL __fastcall HasShield(D2UnitStrc * pUnit) {
       byComponent = pUnit->pUnitData.pUnitDataMonster->Components[7];
     }
 
-    D2UnitStrc* pOverlayCode = DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay(pUnit, 7, (uint32_t)byComponent);
+    uint32_t pOverlayCode = DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay(pUnit, 7, (uint32_t)byComponent);
     if (!pOverlayCode) {
       return 0;
     }

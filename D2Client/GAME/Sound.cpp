@@ -240,7 +240,7 @@ uint32_t __stdcall SOUND_IsEaxMixerActive() {
 
 // Body continues at 004df9e6, the JNZ target of 004df9de - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'SOUND_FindPlayingById'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'SOUND_FindPlayingById':
-int * __fastcall SOUND_FindPlayingByIdSafe(int32_t nId) {
+D2ClientSoundChannelStrc * __fastcall SOUND_FindPlayingByIdSafe(int32_t nId) {
     D2SoundChannelStrc* pDVar1;
     if (!pAudioMixerInterface) {
       return nullptr;
@@ -261,7 +261,7 @@ int * __fastcall SOUND_FindPlayingByIdSafe(int32_t nId) {
       ppDVar3 += 8;
     } while ((int)ppDVar3 < (intptr_t)((char*)&gaSoundChannels + sizeof(gaSoundChannels) + 8));
 
-    return (int*)pDVar4;
+    return pDVar4;
 }
 
 uint32_t __fastcall SOUND_GetPlaybackStatus(int * * ppnParam) {
@@ -630,7 +630,7 @@ D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelS
       pMemory->nSoundId = pRandomizedSoundId;
     }
 
-    int* pPlayingChannel = SOUND_FindPlayingByIdSafe(pMemory->nSoundId);
+    D2ClientSoundChannelStrc* pPlayingChannel = SOUND_FindPlayingByIdSafe(pMemory->nSoundId);
     if (pPlayingChannel) {
       nResult = pPlayingChannel[2];
       if (!*(int*)(nResult + 0x3d) && pMemory->nScheduledTime - *(int*)(nResult + 0x34) < 2 && *(uint8_t*)(nResult + 0x3c) >= pMemory->nPriorityByte) {

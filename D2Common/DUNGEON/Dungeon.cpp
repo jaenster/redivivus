@@ -137,7 +137,7 @@ void __stdcall DRLGROOM_SetWarpTileSelect(D2RoomStrc * pRoom, BOOL bSelect) {
       exit(-1);
     }
 
-    Drlg::DrlgRoom::DRLGWARP_SetAllWarpTilesSelectValue((int32_t)pRoom->pRoomEx, bSelect);
+    Drlg::DrlgRoom::DRLGWARP_SetAllWarpTilesSelectValue(pRoom->pRoomEx, bSelect);
 }
 
 // The unit-list search loop leaves its found (or NULL) D2UnitStrc* result in EAX at the fallthrough return, unused by the body itself; caller evidence names the read pStaircaseUnit.

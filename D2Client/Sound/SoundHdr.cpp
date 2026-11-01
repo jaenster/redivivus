@@ -431,7 +431,7 @@ void __fastcall SOUNDHDR_FreeSoundBuffer(int32_t nSoundId) {
       return;
     }
 
-    int* pPlaying = GAME::Sound::SOUND_FindPlayingByIdSafe(nSoundId);
+    D2ClientSoundChannelStrc* pPlaying = GAME::Sound::SOUND_FindPlayingByIdSafe(nSoundId);
     if (pPlaying) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x259);
       exit(-1);

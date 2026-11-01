@@ -501,7 +501,7 @@ uint32_t __fastcall MISSILESMODE_GetElementalDamageField(int32_t nUnused1, int32
 }
 
 // Zeroes all damage fields in a D2DamageStrc for the given missile. Clears phys/fire/lightning/magic/cold/poison/leech/stun/burn damage and flags, then based on the missile's elemental type also clears the appropriate duration fields (cold/freeze/poison/burn lengths), leaving only the relevant ones intact.
-void __fastcall MISSILES_ClearDamageStruct(::SGAMEDATA * pGameStrc, int32_t nMissileId, D2DamageStrc * pDamage) {
+void __fastcall MISSILES_ClearDamageStruct(::SGAMEDATA * pGameStrc, D2UnitStrc * nMissileId, D2DamageStrc * pDamage) {
     eD2ElementalDamageType byElemType;
     if (!nMissileId) {
       return;
@@ -519,7 +519,7 @@ void __fastcall MISSILES_ClearDamageStruct(::SGAMEDATA * pGameStrc, int32_t nMis
     pDamage->dwStamLeech = 0;
     pDamage->dwStunLen = 0;
     pDamage->dwBurnDmg = 0;
-    byElemType = D2Common::Units::Missile::GetElemTypeFromMissileId(*(int32_t*)(nMissileId + 4));
+    byElemType = D2Common::Units::Missile::GetElemTypeFromMissileId(nMissileId->nClassId);
     switch (byElemType) {
       case ELEMENTAL_POISON:
         pDamage->dwColdLength = 0;
@@ -1207,7 +1207,7 @@ BOOL __fastcall Missiles_SrvHitFunc_HealTarget(::SGAMEDATA * pGame, D2UnitStrc *
     D2UnitStrc* pOwnerUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
     if (pMissileTxt->sHitPar1 && pOwnerUnit) {
       D2SkillsTxt* pSkillTxt;
-      nMissileClassId = UNIT::SUnit::UNITS_CheckSkillTargetAlignment(pGame, (int*)pOwnerUnit, pTarget, eSkill);
+      nMissileClassId = UNIT::SUnit::UNITS_CheckSkillTargetAlignment(pGame, pOwnerUnit, pTarget, eSkill);
       if (nMissileClassId || (dwTmp = UNIT::SUnit::UNITS_CanUseSkillOnTarget(pGame, pOwnerUnit, pTarget, eSkill) , dwTmp != 0)) {
         pSkillTxt = D2Client::GAME::SCmd::TXT_Skills_GetLine(eSkill);
         if (!pSkillTxt) {
@@ -3622,7 +3622,7 @@ void __fastcall Missiles_SrvDmgFunc_RecalcElementalWithClear(::SGAMEDATA * pGame
     }
 
     int32_t nElemDamage = MISSILES_CalculateElementalDamage(pGame, pUnit, pTarget, pDamage);
-    MISSILES_ClearDamageStruct(pGame, (int32_t)pUnit, pDamage);
+    MISSILES_ClearDamageStruct(pGame, pUnit, pDamage);
     MISSILES_AddElementalDamageBonus(pGame, pUnit, pTarget, pDamage, nScaledDamage + nElemDamage);
 }
 
@@ -3994,7 +3994,7 @@ void __fastcall MISSMODE_ApplyMissileHitDamage(::SGAMEDATA * pGame, D2UnitStrc *
       pEvent->nHitClassActiveSet = 1;
     }
 
-    Monsters::ApplyDamageCritical((int*)pOwner, pTarget, pEvent);
+    Monsters::ApplyDamageCritical(pOwner, pTarget, pEvent);
     nFlags = D2Common::Units::Missile::GetFlags(pUnit);
     if (nFlags & 1) {
       pEvent->dwHitFlags |= 0x20;
@@ -4015,12 +4015,12 @@ void __fastcall MISSMODE_ApplyMissileHitDamage(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 BOOL __fastcall MISSMODE_RedemptionHitNoMana(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, int nEvent, uint32_t dwReserved) {
-    BOOL BVar1 = SKILLS::SkillPal::SKILLSOR_GetBlizzardSubMissileCount((uint32_t)pGame, pUnit, pTarget, SKILL_Redemption, nEvent, 0);
+    BOOL BVar1 = SKILLS::SkillPal::SKILLSOR_GetBlizzardSubMissileCount(pGame, pUnit, pTarget, SKILL_Redemption, nEvent, 0);
     return BVar1;
 }
 
 BOOL __fastcall MISSMODE_RedemptionHitWithMana(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, int nEvent, uint32_t dwReserved) {
-    BOOL BVar1 = SKILLS::SkillPal::SKILLSOR_GetBlizzardSubMissileCount((uint32_t)pGame, pUnit, pTarget, SKILL_Redemption, nEvent, 1);
+    BOOL BVar1 = SKILLS::SkillPal::SKILLSOR_GetBlizzardSubMissileCount(pGame, pUnit, pTarget, SKILL_Redemption, nEvent, 1);
     return BVar1;
 }
 

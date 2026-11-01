@@ -140,7 +140,7 @@ struct D2ServerMessageHandleStrc {
 namespace D2Client::GAME::SCmd {
 
 // Function declarations
-void __fastcall SCMD_SetOrClearBitFlag(int32_t pUnit, uint32_t dwFlagMask, int32_t bSet);
+void __fastcall SCMD_SetOrClearBitFlag(struct D2UnitStrc * pUnit, uint32_t dwFlagMask, int32_t bSet);
 int32_t __stdcall GetTxtMonStatsSize();
 void __fastcall SCMD_ClearPlayerTradeFields(struct D2UnitStrc * pUnit);
 struct D2SkillsTxt * __fastcall TXT_Skills_GetLine(eD2Skills eSkill);

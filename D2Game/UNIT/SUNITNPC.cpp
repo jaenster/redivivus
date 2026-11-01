@@ -382,13 +382,13 @@ D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(D2UnitStrc * pUnit, uint32_t n
     }
 }
 
-void __fastcall SUNITNPC_RefreshNpcItem(int32_t nParam1, D2UnitStrc * pUnit, D2UnitStrc * pItem, ::SGAMEDATA * pGame, int32_t nParam2) {
+void __fastcall SUNITNPC_RefreshNpcItem(D2UnitStrc * nParam1, D2UnitStrc * pUnit, D2UnitStrc * pItem, ::SGAMEDATA * pGame, int32_t nParam2) {
     D2UnitStrc* pItemSaved = pItem;
     if (!(pItem && pUnit)) {
       return;
     }
 
-    D2InventoryStrc* pInventory = sunitproxy::SUNITPROXY_GetPlayerProxyInventory(pGame, (D2UnitStrc*)nParam1, pUnit);
+    D2InventoryStrc* pInventory = sunitproxy::SUNITPROXY_GetPlayerProxyInventory(pGame, nParam1, pUnit);
     if (!pInventory) {
       return;
     }
@@ -829,7 +829,7 @@ void __fastcall SUNITNPC_ReturnOne(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int3
 }
 
 // Handles post-purchase NPC item refresh. For gamble mode (nBuyMode==2) with a personal NPC inventory, scans the player's carried items and refreshes the matching gamble item via SUNITNPC_RefreshNpcItem. Otherwise checks if the NPC can still sell the item; if not, refills the NPC's inventory slot via SUNITNPC_FillNpcInventory.
-void __fastcall SUNITNPC_DeductGoldForPurchase(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * param_1, int32_t pPlayerRaw, int32_t nBuyMode) {
+void __fastcall SUNITNPC_DeductGoldForPurchase(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * param_1, D2UnitStrc * pPlayerRaw, int32_t nBuyMode) {
     D2UnitStrc* pFirstItem;
     D2UnitStrc* pCarriedItem;
     int nClientGUID;
@@ -844,7 +844,7 @@ void __fastcall SUNITNPC_DeductGoldForPurchase(::SGAMEDATA * pGame, D2UnitStrc *
       if (!pPlayerRaw) {
         nClientGUID = -1;
       } else {
-        nClientGUID = *(int*)(pPlayerRaw + 0xc);
+        nClientGUID = pPlayerRaw->nUnitGUID;
       }
 
       for (; pDVar1; pDVar1 = pDVar1->pNext) {
@@ -1186,13 +1186,13 @@ D2UnitStrc * __fastcall CreateMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
     return pNewMerc;
 }
 
-D2UnitStrc * __fastcall SUNITNPC_GetBuyableStackSize(int32_t pNpcUnit, int32_t nTargetClassId) {
+D2UnitStrc * __fastcall SUNITNPC_GetBuyableStackSize(D2UnitStrc * pNpcUnit, int32_t nTargetClassId) {
     int nItemClassId;
-    if (!*(D2InventoryStrc**)(pNpcUnit + 0x60)) {
+    if (!pNpcUnit->pInventory) {
       return nullptr;
     }
 
-    D2UnitStrc* pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(*(D2InventoryStrc**)(pNpcUnit + 0x60));
+    D2UnitStrc* pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pNpcUnit->pInventory);
     while (pCurItem) {
       D2UnitStrc* pCarriedItem;
       pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pCurItem);
@@ -1433,7 +1433,7 @@ BOOL __fastcall SUNITNPC_BuyItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2Un
                   nErrorCode = 0xc;
                   nLine = 0x89f;
                 } else {
-                  SUNITNPC_DeductGoldForPurchase(pGame, pBoughtItem, pClonedItem, (int32_t)pPlayer, (uint32_t)nBuyMode);
+                  SUNITNPC_DeductGoldForPurchase(pGame, pBoughtItem, pClonedItem, pPlayer, (uint32_t)nBuyMode);
                   uVar10 = __frame0.pScrollSocketItem;
                   D2Common::Stats::StatsEx::STATLIST_AddUnitStat((D2UnitStrc*)__frame0.pScrollSocketItem, UNITSTAT_quantity, nNpcId, 0);
                   GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(SUnit::SUNIT_GetClient(pPlayer, ".\\UNIT\\SUNITNPC.CPP", 0x8a6), (D2UnitStrc*)uVar10, '\x01', 0x46, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat((D2UnitStrc*)uVar10, UNITSTAT_quantity, 0), 0);
@@ -1556,7 +1556,7 @@ BOOL __fastcall SUNITNPC_BuyItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2Un
           }
 
           charge_for_item:
-          SUNITNPC_DeductGoldForPurchase(pGame, pBoughtItem, __frame0.pNpcUnit, (int32_t)pPlayer, (uint32_t)nBuyMode);
+          SUNITNPC_DeductGoldForPurchase(pGame, pBoughtItem, __frame0.pNpcUnit, pPlayer, (uint32_t)nBuyMode);
           D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pClonedItem, ITEMFLAG_BOUGHT, 1);
           nGoldValue = pClonedItem->nUnitGUID;
           GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pPlayer, ".\\UNIT\\SUNITNPC.CPP", 0x932), 0x2a, 0, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_gold, 0), nGoldValue, 4);
@@ -1582,7 +1582,7 @@ BOOL __fastcall SUNITNPC_BuyItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2Un
         nLine = 0x872;
       } else {
         ITEMS::ItemMode::ITEMMODE_CheckItemEthereal(pGame, pPlayer, (D2UnitStrc*)__frame0.pScrollSocketItem, nNpcId);
-        SUNITNPC_DeductGoldForPurchase(pGame, pBoughtItem, pClonedItem, (int32_t)pPlayer, (uint32_t)nBuyMode);
+        SUNITNPC_DeductGoldForPurchase(pGame, pBoughtItem, pClonedItem, pPlayer, (uint32_t)nBuyMode);
         nErrorLine = *(int32_t*)(__frame0.pScrollSocketItem + 0xc);
         nResultCode = 5;
         nGoldValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_gold, 0);
@@ -2654,7 +2654,7 @@ BOOL __fastcall SUNITNPC_OpenTradeScreen(::SGAMEDATA * pGame, D2UnitStrc * pPlay
       return 1;
     }
 
-    int32_t pInteractionNode = sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pPlayer);
+    D2NpcPlayerInteractionStrc* pInteractionNode = sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pPlayer);
     if (!pPlayer) {
       nPlayerUnitGUID = -1;
     } else {
@@ -2862,7 +2862,7 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
     D2GameNpcStrc* pNpcData;
     pNpcData = sunitproxy::GetGameNpcByUnit(pGame, pDVar5, &nNpcDataIdx);
     int32_t nInteractionNode;
-    nInteractionNode = sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pPlayer);
+    nInteractionNode = (int32_t)sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pPlayer);
     if (*(char*)(nInteractionNode + 4) != '\0') {
       bCanRepurchase = 0;
     }

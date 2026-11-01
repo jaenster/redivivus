@@ -407,13 +407,15 @@ int32_t __fastcall UNITSND_GetMissileSound(D2UnitStrc * pUnit, int32_t nParam2) 
     return nSfxSoundId;
 }
 
-int __fastcall UNITSND_GetMissileLoopSound(int32_t nParam) {
-    if (!nParam) {
+int __fastcall UNITSND_GetMissileLoopSound(D2UnitStrc * pUnit) {
+    if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc63);
       exit(-1);
     }
-    if (*(int**)(nParam + 0x78)) {
-      return **(int**)(nParam + 0x78);
+
+    int* piVar1 = (int*)pUnit->uSideData.pClientSide.pUnitSfxData;
+    if (piVar1) {
+      return *piVar1;
     }
 
     return 0;

@@ -1936,7 +1936,7 @@ BOOL __fastcall Skills_SrvDoFunc_043_ChargeRelease_ScatterMissiles(::SGAMEDATA *
 }
 
 // Assassin summon-skill helper. Resolves the monster class id and pet type for the given skill/level, falls back to the caster's position if no explicit spawn coords are provided, walks up the owner chain if called from a monster context, then calls SKILL_CreateSummon and applies revive/buff logic (SKILLNEC_ReviveCorpseAsMinion + SKILLNEC_ApplySummonBuffs) and sets alignment before triggering lifecycle transition.
-D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nX, uint32_t nSpawnY, int32_t nParam1, eD2Skills eSkill, int32_t nParam2) {
+D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nX, uint32_t nSpawnY, D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL _bHasPos;
     bool bHasPos;
     D2UnitStrc* pUnit_00;
@@ -1946,22 +1946,22 @@ D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * 
     eD2MonsterAnimMode eAnimMode;
     eD2UnitType eUnitType;
     uint32_t nY;
-    int32_t nSkillLvl;
-    nSkillLvl = nParam2;
+    int32_t nSkillLvl_00;
+    nSkillLvl_00 = nSkillLvl;
     int32_t nMonClassId;
-    nMonClassId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nParam2, (int*)&eAnimMode, nullptr, nullptr);
+    nMonClassId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, (int*)&eAnimMode, nullptr, nullptr);
     if (!(nMonClassId >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize)) {
       return nullptr;
     }
 
     uint32_t nPetType;
-    nPetType = (uint32_t)*(char*)(nParam1 + 0xbe);
+    nPetType = (uint32_t)pSkillsTxt->pettype;
     if ((int)nPetType < 0 || (int)nPetType >= sgptDataTable->nTxtPetTypeSize) {
       nPetType = 0;
     }
 
     uint32_t nSkillCalcResult;
-    nSkillCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, *(int32_t*)(nParam1 + 0xc0), eSkill, nSkillLvl);
+    nSkillCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->petmax, eSkill, nSkillLvl_00);
     if (!nX || !nSpawnY) {
       eUnitType = pUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -1996,7 +1996,7 @@ D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * 
         nY = nSpawnY;
         pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
         pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
-        if (pRoom && (*(uint8_t*)(nParam1 + 5) & (uint8_t)gadwBitMasks[0] || (_bHasPos = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , !_bHasPos))) {
+        if (pRoom && (*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)gadwBitMasks[0] || (_bHasPos = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , !_bHasPos))) {
           sSummonArgs.nMode = eAnimMode;
           sSummonArgs.nFunctionId = 0;
           sSummonArgs.nX = nX;
@@ -2008,8 +2008,8 @@ D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * 
           sSummonArgs.nSkillCalc = nSkillCalcResult;
           pUnit_00 = SkillsServer::SKILL_CreateSummon(pGame, (D2MonsterCastPetStrc*)&sSummonArgs);
           if (pUnit_00) {
-            SkillNec::SKILLNEC_ReviveCorpseAsMinion(pGame, pUnit, pUnit_00, 0, nParam2);
-            SkillNec::SKILLNEC_ApplySummonBuffs(pGame, pUnit, pUnit_00, eSkill, nParam2, 0);
+            SkillNec::SKILLNEC_ReviveCorpseAsMinion(pGame, pUnit, pUnit_00, 0, nSkillLvl);
+            SkillNec::SKILLNEC_ApplySummonBuffs(pGame, pUnit, pUnit_00, eSkill, nSkillLvl, 0);
             UNIT::SUnit::SetAlignment(pUnit_00, '\x02', 1);
             Monster::MonsterMode::SetCurrentSkill(pUnit_00, eAnimMode, &sMonsterKill);
             Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
@@ -2047,7 +2047,7 @@ BOOL __fastcall Skills_SrvDoFunc_044_SummonBladeSentinel(::SGAMEDATA * pGame, D2
       return 0;
     }
 
-    D2UnitStrc* pUnit_00 = SKILLASS_CreateSummon(pGame, pUnit, 0, 0, (int32_t)pSkillTxtBase, eSkill, nSkillLvl);
+    D2UnitStrc* pUnit_00 = SKILLASS_CreateSummon(pGame, pUnit, 0, 0, pSkillTxtBase, eSkill, nSkillLvl);
     if (!pUnit_00) {
       return 0;
     }
@@ -2089,7 +2089,7 @@ BOOL __fastcall Skills_SrvDoFunc_045_SummonTrapSentry(::SGAMEDATA * pGame, D2Uni
       return 0;
     }
 
-    D2UnitStrc* pSummon = SKILLASS_CreateSummon(pGame, pUnit, nTargetX, eSkill, (int32_t)pSkillTxt, eSkillSaved, nSkillLvl);
+    D2UnitStrc* pSummon = SKILLASS_CreateSummon(pGame, pUnit, nTargetX, eSkill, pSkillTxt, eSkillSaved, nSkillLvl);
     return (uint32_t)(pSummon != 0);
 }
 

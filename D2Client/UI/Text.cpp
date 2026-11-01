@@ -4197,20 +4197,20 @@ void __fastcall TEXT_HandleScrollLinePacket(D2GSPacketSrv0x50 * pPacket) {
     gpQuestScrollUI = 0;
 }
 
-void __fastcall TEXT_OpenQuestScroll(int32_t pUnit, int32_t pTextBlock) {
+void __fastcall TEXT_OpenQuestScroll(D2UnitStrc * pUnit, D2ItemsTxt * pTextBlock) {
     // Static local variables (originally global data)
     static int gaQuestScrollRect; D2_STATIC_GUARD_BSS(gaQuestScrollRect, "D2Client::UI::Text::TEXT_OpenQuestScroll::gaQuestScrollRect");
 
-    gpQuestScrollTextBlock = (void*)pTextBlock;
+    gpQuestScrollTextBlock = pTextBlock;
     ui::SetUIFlag(UI_QUESTSCROLL, UI_TOGGLE, 0);
     GAME::Game::UI_ResetInputState();
     if (*(int*)((int)gpQuestScrollTextBlock + 0x80) == 0x20646b62) {
-      int32_t nUnitId;
+      int nUnitId;
       gpQuestScrollUI = 1;
       if (!pUnit) {
         nUnitId = -1;
       } else {
-        nUnitId = *(int32_t*)(pUnit + 0xc);
+        nUnitId = pUnit->nUnitGUID;
       }
 
       GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x3e, nUnitId);

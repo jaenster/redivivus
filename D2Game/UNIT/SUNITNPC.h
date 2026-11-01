@@ -54,7 +54,7 @@ void __fastcall SUNITNPC_SetItemForNpc(struct D2UnitStrc * pUnit, struct D2UnitS
 // @sourcefile .\UNIT\SUNITNPC.CPP
 // Stack-slot reuse: the low byte of the nParam2 slot holds eStorePage (ItemTypes storepage of the created item, 00576571); then the whole slot holds pCreatedItem->nUnitGUID (005765ea), passed as the item GUID to SERVER_ItemToInventory.
 struct D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(struct D2UnitStrc * pUnit, uint32_t nParam1, ::SGAMEDATA * pGame, int32_t bIsVendorItem, eD2ItemQuality eQuality, uint32_t nParam2, int32_t nParam);
-void __fastcall SUNITNPC_RefreshNpcItem(int32_t nParam1, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, ::SGAMEDATA * pGame, int32_t nParam2);
+void __fastcall SUNITNPC_RefreshNpcItem(struct D2UnitStrc * nParam1, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, ::SGAMEDATA * pGame, int32_t nParam2);
 void __fastcall SUNITNPC_FillNpcInventory(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, ::SGAMEDATA * pGame, int32_t bDeleteItem);
 // Server-side handler that sends the mercenary-for-hire list to a client when they interact with an NPC hireling vendor (Kashya, Greiz, Farah, Meshif). Validates the NPC class ID, initialises the NPC inventory on first interaction, then iterates the available hire slots and sends a 0x4E packet for each available (unsold, unstocked) mercenary entry. Calls ERROR_Halt on bad NPC or name-range data.
 void __fastcall SendMercForHireList(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, struct D2UnitStrc * pNpcUnit, BOOL bFirstInteraction);
@@ -73,7 +73,7 @@ void __fastcall SUNITNPC_ApplyScrollSkill(struct D2UnitStrc * pUnit, eD2Skills e
 bool __fastcall SUNITNPC_CheckNpcCanSellItem(::SGAMEDATA * pGame, struct D2UnitStrc * pNpcUnit, struct D2UnitStrc * pUnit);
 void __fastcall SUNITNPC_ReturnOne(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nParam);
 // Handles post-purchase NPC item refresh. For gamble mode (nBuyMode==2) with a personal NPC inventory, scans the player's carried items and refreshes the matching gamble item via SUNITNPC_RefreshNpcItem. Otherwise checks if the NPC can still sell the item; if not, refills the NPC's inventory slot via SUNITNPC_FillNpcInventory.
-void __fastcall SUNITNPC_DeductGoldForPurchase(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * param_1, int32_t pPlayerRaw, int32_t nBuyMode);
+void __fastcall SUNITNPC_DeductGoldForPurchase(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * param_1, struct D2UnitStrc * pPlayerRaw, int32_t nBuyMode);
 // Checks the hireling slot array for an NPC (indexed by nNpcClassId via D2HirelingTxt name range). If all slots with valid entries are unfilled (count==0), frees the slot array, clears the pointer and a flags byte, then re-initialises the NPC's hireling inventory via SUNITNPC_InitNpcInventory. Halts if the hireling entry or name range is invalid.
 // @sourcefile .\UNIT\SUNITNPC.CPP
 void __fastcall ResetNpcHireListIfEmpty(::SGAMEDATA * pGame, int32_t nNpcClassId, uint32_t nFilledSlots);
@@ -85,7 +85,7 @@ void __fastcall SUNITNPC_ProcessGambleResult(struct D2UnitStrc * pUnit);
 // Creates and hires a mercenary unit for player pUnit. Validates act/expansion eligibility, resolves the HirelingTxt row (by nNameIdOverride or the act/difficulty table), clamps nMercNameId to the valid name range, marks the seller NPC slot, spawns a UNIT_MONSTER via CreateUnit, then finalises hiring via MERC_HireAndReplaceMerc. Returns the new merc unit or null on failure.
 // @sourcefile .\UNIT\SUNITNPC.CPP
 struct D2UnitStrc * __fastcall CreateMerc(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint16_t nMercNameId, uint32_t dwHireFlags, uint16_t nNameIdOverride, int32_t nClassIdOverride, int32_t nReplaceFlag);
-struct D2UnitStrc * __fastcall SUNITNPC_GetBuyableStackSize(int32_t pNpcUnit, int32_t nTargetClassId);
+struct D2UnitStrc * __fastcall SUNITNPC_GetBuyableStackSize(struct D2UnitStrc * pNpcUnit, int32_t nTargetClassId);
 void __fastcall SUNITNPC_ReturnZero2(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pSourceItem);
 // For a stackable auto-stack item being purchased from an NPC, searches the player's main inventory then stash for an existing partial stack of the same type (via INVENTORY_FindSocketableItemInMain/Stash + IsItemSocketable). Returns the matching item and sets *pnStackOut to the remaining capacity, or NULL with *pnStackOut=maxStack if no partial stack exists. Returns NULL immediately for non-stackable or non-auto-stack items.
 struct D2UnitStrc * __fastcall SUNITNPC_FindExistingStackInInventory(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pUnit, int * pnStackOut);

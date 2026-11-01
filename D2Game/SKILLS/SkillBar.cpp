@@ -790,7 +790,7 @@ BOOL __fastcall Skills_SrvDoFunc_009_FrenzyMeleeHit(::SGAMEDATA * pGame, D2UnitS
     }
     if (bIsFirstHit) {
       UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
-      UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, (int*)pUnit, (int*)pTarget);
+      UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, pUnit, pTarget);
       PLAYER::PlayerModes::PLRMODES_CheckWeaponQuantityAndDurability(pGame, pUnit);
       PLAYER::PlayerModes::PLRMODES_BreakZeroDurabilityWeapons(pGame, pUnit);
       SKILLBAR_ApplyFrenzyStack(pGame, pUnit, eSkill, nSkillLvl);

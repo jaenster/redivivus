@@ -291,9 +291,9 @@ void __fastcall PARTYSCREEN_SetMutualPlayerRelationship(int32_t nParam, D2UnitSt
 }
 
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall PARTYSCREEN_SendPartyInvite(int32_t nParam, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t dwUnused1, uint32_t dwUnused2) {
-    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry((::SGAMEDATA*)nParam, pUnit, pTarget);
-    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry((::SGAMEDATA*)nParam, pTarget, pUnit);
+void __fastcall PARTYSCREEN_SendPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t dwUnused1, uint32_t dwUnused2) {
+    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pTarget);
+    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pTarget, pUnit);
     uint16_t uVar1 = UNIT::PlayerList::PLAYERLIST_IsPartied(pUnit, pTarget);
     if (!uVar1) {
       uint32_t nInviterGUID;

@@ -123,7 +123,7 @@ void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, struct D2UnitStrc 
 // @sourcefile .\UNIT\SUnitDmg.cpp
 void __fastcall FreeCombat(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // @sourcefile .\UNIT\SUnitDmg.cpp
-void __fastcall DAMAGE_RemoveDamageListEntry(::SGAMEDATA * pGame, int * pnParam, int * pUnit2);
+void __fastcall DAMAGE_RemoveDamageListEntry(::SGAMEDATA * pGame, struct D2UnitStrc * pnParam, struct D2UnitStrc * pUnit2);
 // Returns 1 (no knockback) if unit is frozen, damage is pure poison, or total damage is below 256. Otherwise tests whether damage meets a fraction of max HP threshold (divisor varies by elemental type: physical=16, lightning/drain/burn=8, cold=32, poison=64) with probabilistic fallback rolls. Also checks a monster stat flag (index 3) to allow knockback immunity on specific monster types. Returns 0 if knockback should be applied.
 BOOL __stdcall DAMAGE_CheckKnockbackThreshold(struct D2UnitStrc * pUnit, struct D2DamageStrc * pDamage1, eD2ElementalDamageTypeDWORD pDamage2);
 // Server-side kill handler for player and monster units. Guards against already-dead or unkillable units (MonStats killable flag). For monsters: optionally removes the unit from its owner's pet list, awards kill XP and arena credit to the attacker, fires the Death lifecycle transition (computing facing direction from attacker position), triggers quest callbacks, and handles objCol-flagged monster cleanup (e.g. removing companion objects at coords 0x23B/0x23C). No-ops on invalid unit types.

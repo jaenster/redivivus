@@ -120,7 +120,7 @@ void INVENTORY_AppendItemToList(struct D2UnitStrc * pItem, struct D2InventoryStr
 BOOL __stdcall PutItemInInventory(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, uint32_t dwParam);
 struct D2UnitStrc * __stdcall INVENTORY_GetFirstItem(struct D2InventoryStrc * pInventory);
 struct D2UnitStrc * __stdcall INVENTORY_GetLastItem(struct D2InventoryStrc * pInventory);
-uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint32_t nGridCol, int32_t nY, int32_t nX, uint8_t byItemHeight, int32_t pGridInfo);
+uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint32_t nGridCol, int32_t nY, int32_t nX, uint8_t byItemHeight, struct D2InventoryGridInfoStrc * pGridInfo);
 // Finds a valid grid position in pInventory for pUnit (must be UNIT_ITEM) on the inventory page eInvPage. Queries the item's width/height via ITEM_GetItemsTxt_nWidthAndHeight, retrieves or creates the grid via ReinitializeInventoryGrid, then dispatches to INVENTORY_FindPlacementSlot, INVENTORY_FindGridPositionByOwner, INVENTORY_FindGridPositionByOwner2, or INVENTORY_FindGridPositionByOwner3 depending on item/inventory size class. Returns 0 on any validation failure.
 // @sourcefile .\INVENTORY\Inventory.cpp
 int __stdcall INVENTORY_FindItemGridPosition(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t eInvPage, int * ppnOutX, int * pnOutY, uint8_t bParam);
@@ -159,7 +159,7 @@ struct D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInStash(struct D2Inven
 // Scans the main inventory grid of pInventory for the first item that is socketable (per IsItemSocketable) relative to pUnit1, is not fully stacked, and — if pUnit2 is non-null — appears after pUnit2 in the item list. Returns the matching D2UnitStrc* or NULL.
 struct D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInMain(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit1, struct D2UnitStrc * pUnit2);
 // Searches the player inventory grid for a tome (ITEMTYPE_Book) that matches pScrollItem's magic suffix and is not yet full (quantity < max stack). Iterates the stash grid's item linked list starting from pStartAfterItem (or from the beginning if NULL). Returns the first matching non-full tome, or NULL if none found. Used when auto-stacking a scroll pickup into an existing tome.
-struct D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(int * pnParam, struct D2UnitStrc * pScrollItem, struct D2UnitStrc * pStartAfterItem);
+struct D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(struct D2InventoryStrc * pnParam, struct D2UnitStrc * pScrollItem, struct D2UnitStrc * pStartAfterItem);
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall INVENTORY_CanPlaceItemInBelt(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, uint32_t nParam);
 void __stdcall INVENTORY_OnBeltChanged_NoOp(struct D2InventoryStrc * dwParam1, uint32_t dwParam2);
@@ -192,9 +192,9 @@ struct D2UnitStrc * __stdcall INVENTORY_FindItemByType(struct D2InventoryStrc * 
 // Iterates the main inventory grid linked list to find the first item of the given eD2ItemTypes, optionally starting after pAfterItem. Returns the matching D2UnitStrc* or NULL. Only searches items with X position &lt; 11 (main grid) and validates the page signature (0x1020304) first.
 struct D2UnitStrc * __stdcall INVENTORY_FindItemOfTypeInMain(struct D2InventoryStrc * pInventory, eD2ItemTypes nItemTypeToFind, struct D2UnitStrc * pAfterItem);
 // Searches the player's main inventory grid (page 0, grid index 0x4F) for an item matching nItemCode (4-char item code). Converts the code to a class id via ConvertItemCodeToClassIdAndGetItemsTxtLine, then walks the item linked list starting after pAfterItem (NULL = from the beginning). Returns the first matching D2UnitStrc* whose nClassId matches and whose X position is below column 11, or NULL if not found.
-int * __stdcall INVENTORY_FindItemByCodeInMain(struct D2InventoryStrc * pInventory, uint32_t nItemCode, struct D2UnitStrc * pAfterItem);
+struct D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInMain(struct D2InventoryStrc * pInventory, uint32_t nItemCode, struct D2UnitStrc * pAfterItem);
 // Same logic as INVENTORY_FindItemByCodeInMain but targets the stash grid (page index 2, grid 0x4F). Searches the stash item linked list for the first item whose class id matches nItemCode and X position is below column 11, optionally starting after pAfterItem. Returns the matching D2UnitStrc* or NULL.
-int * __stdcall INVENTORY_FindItemByCodeInStash(struct D2InventoryStrc * pInventory, uint32_t nItemCode, struct D2UnitStrc * pAfterItem);
+struct D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInStash(struct D2InventoryStrc * pInventory, uint32_t nItemCode, struct D2UnitStrc * pAfterItem);
 // Counts how many items belonging to a specific set (nSetIndex) are present in the player's main inventory grid (not belt/cube). Iterates the inventory's first-item linked list, checking item quality == 5 (set) and nFileIndex == nSetIndex; only counts items whose X position is ≤ 10 (main grid columns). Returns 0 if the inventory is null or has an invalid signature.
 int32_t __stdcall INVENTORY_CountSetItemsInMain(struct D2InventoryStrc * pInventory, int32_t nSetIndex);
 void __fastcall INVENTORY_SetOrClearCursorItem(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, BOOL bSet);
@@ -212,7 +212,7 @@ void __stdcall INVENTORY_AddCorpse(struct D2InventoryStrc * pInventory, int32_t 
 BOOL __stdcall INVENTORY_RemoveCorpse(struct D2InventoryStrc * pInventory, int32_t nGUID, int32_t eUnitType);
 struct D2CorpseStrc * __stdcall INVENTORY_GetCorpse(struct D2InventoryStrc * pInventory);
 // @sourcefile .\INVENTORY\Inventory.cpp
-void __stdcall INVENTORY_FreeNotifications(int * pnParam);
+void __stdcall INVENTORY_FreeNotifications(struct D2InventoryStrc * pnParam);
 int32_t __stdcall INVENTORY_GetCorpseCount(struct D2InventoryStrc * pInventory);
 // Returns pCorpse->pNext (+0xc).
 struct D2CorpseStrc * __stdcall INVENTORY_GetNextCorpse(struct D2CorpseStrc * pCorpse);

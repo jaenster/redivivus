@@ -1637,7 +1637,7 @@ BOOL __fastcall Skills_SrvDoFunc_081_HolyFreeze(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Redemption skill server callback (misnamed Blizzard). Checks pCorpse is a selectable corpse, optionally rolls a chance check against calc[0], then heals pUnit by calc[1] life and calc[2] mana (both capped to txt max), sets STATE_redeemed on the corpse, and clears its CANBEATTACKED/TARGETABLE flags. Returns 1 if redemption was applied.
-BOOL __fastcall SKILLSOR_GetBlizzardSubMissileCount(uint32_t dwParam, D2UnitStrc * pUnit, D2UnitStrc * pCorpse, eD2Skills eSkill, int32_t nParam1, int32_t nParam2) {
+BOOL __fastcall SKILLSOR_GetBlizzardSubMissileCount(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpse, eD2Skills eSkill, int32_t nParam1, int32_t nParam2) {
     int32_t nCalcVal;
     D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!(pSkillRecord && pCorpse)) {

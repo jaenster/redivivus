@@ -37,7 +37,7 @@ namespace Fog::Src::Excel {
 // @sourcefile .\Src\Excel\Excel.cpp
 void __stdcall TXT_FreeBinFieldExcel(struct D2BinFieldExcelStrc * pBinFieldExcel);
 size_t __stdcall TXT_GetLinesCountFromBinFieldExcel(struct D2BinFieldExcelStrc * pBinFieldExcel);
-int __stdcall FOG_ParseBinField(int pOutMapping, struct D2BinFieldExcelStrc * pBinFieldExcel, struct D2BinFieldInputStrc * pBinFieldInput);
+int __stdcall FOG_ParseBinField(short * pOutMapping, struct D2BinFieldExcelStrc * pBinFieldExcel, struct D2BinFieldInputStrc * pBinFieldInput);
 struct D2TxtLinkStrc * __stdcall STRUCT_CreateTxtLinkStrc(char * szFile, int nLine);
 // @sourcefile .\Src\Excel\Excel.cpp
 void __fastcall STRUCT_FreeTxtLinkNode(struct D2TxtLinkNodeStrc * pTxtLinkNode);

@@ -532,7 +532,7 @@ void __fastcall SKILLS_ApplyDamageToTarget(::SGAMEDATA * pGame, D2UnitStrc * pUn
       }
     }
 
-    Monsters::ApplyDamageCritical((int*)pUnit, pTargetUnit, pDamage);
+    Monsters::ApplyDamageCritical(pUnit, pTargetUnit, pDamage);
     if (pDamage->wResultFlags & 1) {
       UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pUnit, pTargetUnit, 1, pDamage);
     }
@@ -1331,7 +1331,7 @@ static BOOL __stdcall SKILLS_ValidateSkillTarget(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!(pSkillTxt && (!(*((uint8_t*)pSkillTxt + 0x6) & (uint8_t)gadwBitMasks[4]) || (bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pTarget) , bCanAttack != 0) || (nAlignmentCheck = UNIT::SUnit::UNITS_CheckSkillTargetAlignment(pGame, (int*)pUnit, pTarget, eSkill) , nAlignmentCheck || (bCanAttack = UNIT::SUnit::UNITS_CanUseSkillOnTarget(pGame, pUnit, pTarget, eSkill) , bCanAttack != 0))))) {
+    if (!(pSkillTxt && (!(*((uint8_t*)pSkillTxt + 0x6) & (uint8_t)gadwBitMasks[4]) || (bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pTarget) , bCanAttack != 0) || (nAlignmentCheck = UNIT::SUnit::UNITS_CheckSkillTargetAlignment(pGame, pUnit, pTarget, eSkill) , nAlignmentCheck || (bCanAttack = UNIT::SUnit::UNITS_CanUseSkillOnTarget(pGame, pUnit, pTarget, eSkill) , bCanAttack != 0))))) {
       return 0;
     }
     if (pTarget->eUnitFlags >> 1 & 1) {

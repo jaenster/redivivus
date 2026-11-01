@@ -1534,7 +1534,7 @@ static BOOL __fastcall PANEL_CheckEquipmentClickable(D2ItemsTxt * pItemTxt, D2Un
 
     BOOL bClickable = 1;
     if (pItemTxt->bUnique == '\x01' || pItemTxt->bQuest == '\x01') {
-      Text::TEXT_OpenQuestScroll(nItemSlot, (int32_t)pItemTxt);
+      Text::TEXT_OpenQuestScroll((D2UnitStrc*)nItemSlot, pItemTxt);
       bClickable = 0;
     } else if (pItemTxt->bUseable != '\x01') {
       UNIT::UnitSnd::UNITSND_PlayPlayerSound(pUnit, 0x14);

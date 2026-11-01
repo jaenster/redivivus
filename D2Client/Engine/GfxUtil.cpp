@@ -1157,13 +1157,13 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2GfxDataStrc * pGfxData, D2UnitStr
                       nPaletteIdx = GFXUTIL_GetCompositePaletteIndex(pUnit, byComponentType);
                       byPaletteIdx = nPaletteIdx;
                       if (!iVar3 || iVar3 == 0xc) {
-                        BVar1 = UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pGfxData->nClassId, compositeDeath);
-                        if (BVar1) {
-                          pDVar2 = D2Common::DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay(pUnit, (uint32_t)byComponentType, (uint32_t)byPaletteIdx);
-                          pGfxData->nArmorToken = (int)pDVar2;
+                        BVar2 = UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pGfxData->nClassId, compositeDeath);
+                        if (BVar2) {
+                          nArmTypeIndex = D2Common::DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay(pUnit, (uint32_t)byComponentType, (uint32_t)byPaletteIdx);
+                          pGfxData->nArmorToken = nArmTypeIndex;
                         }
                       } else {
-                        pOverlay = D2Common::DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay(pUnit, (uint32_t)byComponentType, (uint32_t)nPaletteIdx);
+                        pOverlay = (D2UnitStrc*)D2Common::DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay(pUnit, (uint32_t)byComponentType, (uint32_t)nPaletteIdx);
                         pGfxData->nArmorToken = (int)pOverlay;
                       }
                     }

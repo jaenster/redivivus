@@ -145,12 +145,12 @@ BOOL __fastcall Q32_PlayCompletionSound(::SGAMEDATA * pGame, struct D2UnitStrc *
 // Returns 1 if the given unit (nParam) belongs to a barricade group whose 'all prisoners dead' kill-count byte
 // (group[+0x18] / +0x54) is set, i.e. that group's barbarians were slaughtered. Used by barricade/AI logic to
 // detect a botched ("wussie") group. Quest must be in log (bIsNotIntroduction).
-BOOL __fastcall Q32_CheckWussieBarricade(::SGAMEDATA * pGame, int32_t nParam);
+BOOL __fastcall Q32_CheckWussieBarricade(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Q32_IncrementWussieKillCount (A5Q2 Rescue on Mount Arreat) -- bumps a barricade group's prisoner-kill count.
 // Maps nBarricadeGroupId to a group via Q32_FindBarricadeGroup, increments that group's kill count
 // (group[+0x18]); when it exceeds 4 (>=5 = whole group of 5 barbarians dead) sets the group's 'all dead'
 // byte (+0x54). No QuestRecord access.
-void __thiscall Q32_IncrementWussieKillCount(::SGAMEDATA * pGameStrc, int32_t nBarricadeGroupId);
+void __thiscall Q32_IncrementWussieKillCount(::SGAMEDATA * pGameStrc, struct D2UnitStrc * nBarricadeGroupId);
 // Q32_OnBarricadeDestroyed (A5Q2 Rescue on Mount Arreat) -- core "free the prisoners" handler (the big one).
 // When a barricade is destroyed, finds its group, scans adjacent rooms for a caged barbarian (classId 0x1b2 in Kick
 // anim) within range, then spawns a town-portal-like UNIT_OBJECT 0xbd (the escape portal) near it and schedules the
@@ -177,7 +177,7 @@ void __fastcall Q32_PrisonerTimerCallback(struct D2QuestDataStrc * pQuestData, s
 // For the barricade group containing nParam, if its portal-spawned flag (group[+0x44]) is set, finds the escape
 // portal unit by GUID (group[+0xe]) and returns it via ppPortalOut (returns 1). Else returns 0. Used to locate
 // the prisoner-escape town portal created by Q32_OnBarricadeDestroyed.
-BOOL __fastcall Q32_FindBarricadePortal(::SGAMEDATA * pGame, int32_t nParam, struct D2UnitStrc * * ppPortalOut);
+BOOL __fastcall Q32_FindBarricadePortal(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppPortalOut);
 // Q32_OnWussieAllPrisonersFreed (A5Q2 Rescue on Mount Arreat) -- broadcasts the "all freed cleanly" state.
 // If quest in log, not already at stateFlagPrev 5, and quest not failed (field_0xA8 < 5), broadcasts server
 // stateFlag 5 (terminal "fully complete, top reward tier" state) via Q32_NotifyQuestState. Triggered when all

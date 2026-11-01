@@ -3416,7 +3416,7 @@ int32_t __stdcall ClickItemRight(D2UnitStrc * pItem, D2InventoryStrc * pGridCoor
           return 1;
         }
 
-        Text::TEXT_OpenQuestScroll((int32_t)pItemAtCell, (int32_t)pItemsTxt);
+        Text::TEXT_OpenQuestScroll(pItemAtCell, pItemsTxt);
         return 1;
       }
     }
@@ -3552,16 +3552,16 @@ void __stdcall INV_SetMercInventoryMode() {
     g_nCurrentInventoryPage = 0x13;
 }
 
-void __stdcall INV_HandleShopAction(DWORD nAction, int32_t pTarget, D2UnitStrc * pUnit, DWORD dwParam1, DWORD dwParam2, DWORD dwParam3, DWORD dwParam4) {
+void __stdcall INV_HandleShopAction(DWORD nAction, D2UnitStrc * pTarget, D2UnitStrc * pUnit, DWORD dwSell, DWORD dwParam2, DWORD bSkipConfirm, DWORD dwMode) {
     if (!pTarget) {
       return;
     }
 
-    int nShopResult = npcmenu::ShopAction(pUnit, (D2UnitStrc*)pTarget, dwParam1, dwParam2, nAction, dwParam4, dwParam3, 0);
+    int nShopResult = npcmenu::ShopAction(pUnit, pTarget, dwSell, dwParam2, nAction, dwMode, bSkipConfirm, 0);
     if (!nShopResult) {
       return;
     }
-    if (!dwParam3) {
+    if (!bSkipConfirm) {
       g_nCurrentInventoryPage = 5;
     }
 

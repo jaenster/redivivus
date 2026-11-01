@@ -477,26 +477,26 @@ static int32_t SKILL_CanTargetDeadMonster(D2UnitStrc * pUnit, eD2Skills eSkills)
     return 1;
 }
 
-uint32_t __fastcall SKILLS_GetTargetTypeForSkill(int32_t nParam, int * pnParam) {
+uint32_t __fastcall SKILLS_GetTargetTypeForSkill(D2UnitStrc * pUnit, D2UnitStrc * pnParam) {
     DWORD nResolvedTargetGUID;
     BOOL bInSameParty;
     if (!pnParam) {
       nResolvedTargetGUID = -1;
     } else {
-      nResolvedTargetGUID = pnParam[3];
-      if (*pnParam == 1) {
+      nResolvedTargetGUID = pnParam->nUnitGUID;
+      if (pnParam->eUnitType == UNIT_MONSTER) {
         nResolvedTargetGUID = GAME::RosterPets::GetRosterOwnerGUID(nResolvedTargetGUID);
         if (nResolvedTargetGUID == -1) {
           return 0;
         }
       }
     }
-    if (!nParam) {
+    if (!pUnit) {
       bInSameParty = GAME::Roster::ROSTER_CheckPlayersInSameParty(-1, nResolvedTargetGUID);
       return (uint32_t)(bInSameParty != 0);
     }
 
-    bInSameParty = GAME::Roster::ROSTER_CheckPlayersInSameParty(*(int32_t*)(nParam + 0xc), nResolvedTargetGUID);
+    bInSameParty = GAME::Roster::ROSTER_CheckPlayersInSameParty(pUnit->nUnitGUID, nResolvedTargetGUID);
     return (uint32_t)(bInSameParty != 0);
 }
 
@@ -622,7 +622,7 @@ uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2
         return 0;
       }
     }
-    if (!(!(nTargetFlags & 0x10000) || (bTargetCheck = SKILLS_GetTargetTypeForSkill((int32_t)pUnit, (int*)pUnit2) , bTargetCheck && (pUnit2->eUnitType != UNIT_MONSTER || (pMonStats = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit2->nClassId) , pMonStats && !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[0])))))) {
+    if (!(!(nTargetFlags & 0x10000) || (bTargetCheck = SKILLS_GetTargetTypeForSkill(pUnit, pUnit2) , bTargetCheck && (pUnit2->eUnitType != UNIT_MONSTER || (pMonStats = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit2->nClassId) , pMonStats && !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[0])))))) {
       return 0;
     }
     if (!(!(nTargetFlags & 0x8000) || (bTargetCheck = UNIT::CUnit::CanInteractWith(pUnit, pUnit2) , bTargetCheck != 0))) {

@@ -1889,21 +1889,21 @@ void __fastcall FreeCombat(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNIT\SUnitDmg.cpp
-void __fastcall DAMAGE_RemoveDamageListEntry(::SGAMEDATA * pGame, int * pnParam, int * pUnit2) {
+void __fastcall DAMAGE_RemoveDamageListEntry(::SGAMEDATA * pGame, D2UnitStrc * pnParam, D2UnitStrc * pUnit2) {
     D2CombatEntryStrc* pNextCombatEntry;
-    if (!(pnParam && pUnit2 && (D2CombatEntryStrc*)pnParam[0x2b])) {
+    if (!(pnParam && pUnit2 && (D2CombatEntryStrc*)pnParam->pCombat)) {
       return;
     }
 
     D2CombatEntryStrc* pPrevCombatEntry = 0;
-    D2CombatEntryStrc* pCombatEntry = (D2CombatEntryStrc*)pnParam[0x2b];
+    D2CombatEntryStrc* pCombatEntry = (D2CombatEntryStrc*)pnParam->pCombat;
     do {
       D2CombatEntryStrc* pCurCombatEntry;
       pNextCombatEntry = pCombatEntry->pNext;
       pCurCombatEntry = pCombatEntry;
-      if (pCombatEntry->eAttackerType == *pnParam && pCombatEntry->nAttackerGUID == pnParam[3] && pCombatEntry->eDefenderType == *pUnit2 && pCombatEntry->nDefenderGUID == pUnit2[3]) {
+      if (pCombatEntry->eAttackerType == pnParam->eUnitType && pCombatEntry->nAttackerGUID == pnParam->nUnitGUID && pCombatEntry->eDefenderType == pUnit2->eUnitType && pCombatEntry->nDefenderGUID == pUnit2->nUnitGUID) {
         if (!pPrevCombatEntry) {
-          pnParam[0x2b] = (int)pNextCombatEntry;
+          pnParam->pCombat = (uint8_t*)pNextCombatEntry;
         } else {
           pPrevCombatEntry->pNext = pNextCombatEntry;
         }
@@ -2603,11 +2603,11 @@ void __fastcall DAMAGE_ProcessCombatQueueEntry(::SGAMEDATA * pGame, D2UnitStrc *
       }
 
       SERVER_GetHitCalculation(pGameLocal, pUnit, pVictim, &sDamage);
-      DAMAGE_RemoveDamageListEntry(pGameLocal, (int*)pUnit, (int*)pVictim);
+      DAMAGE_RemoveDamageListEntry(pGameLocal, pUnit, pVictim);
       return;
     }
 
-    DAMAGE_RemoveDamageListEntry(pGameCopy, (int*)pUnit, (int*)pVictim);
+    DAMAGE_RemoveDamageListEntry(pGameCopy, pUnit, pVictim);
 }
 
 D2DamageStrc * __fastcall DAMAGE_FindCombatEntry(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {

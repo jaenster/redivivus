@@ -1323,8 +1323,8 @@ static int __stdcall STATLIST_CopyStatPairsByStatIndex(D2StatStrc * pOutStatPair
     return iVar1;
 }
 
-int32_t __stdcall STATSEX_CopyStatPairsFromStatList(int32_t nStatListPtr, uint32_t nParam, int * pOutStatPairs, int32_t nParam2) {
-    int iVar1 = STATLIST_CopyStatPairsByStatIndex((D2StatStrc*)pOutStatPairs, nParam, nParam2, (D2StatListExStrc*)nStatListPtr);
+int32_t __stdcall STATSEX_CopyStatPairsFromStatList(D2StatListExStrc * nStatListPtr, uint32_t nParam, D2StatStrc * pOutStatPairs, int32_t nParam2) {
+    int iVar1 = STATLIST_CopyStatPairsByStatIndex(pOutStatPairs, nParam, nParam2, nStatListPtr);
     return iVar1;
 }
 

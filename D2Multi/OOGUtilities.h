@@ -136,12 +136,12 @@ uint32_t __fastcall OOGUTIL_CheckCharacterLevel(uint8_t * pszLevelChars);
 // display cache (stride 0x3b per entry, count=nGameListDifficultyFilter). Dedups on (u16)pGameInfo[+8]=gameid.
 // Copies: +8 gameid -> gwGameListCacheEntryPort; +0x14 -> gwOOGLobbyScreenState; +0x1c -> gszLanGameListEntryName;
 // +0x2c -> gszLanGameListEntryDescription. Called once per incoming MCP 0x05 game packet from JoinOrCreateGame.
-void __fastcall OOGMENU_AddGameToCache(int32_t pGameInfo);
+void __fastcall OOGMENU_AddGameToCache(struct D2McpGameInfoStrc * pGameInfo);
 void __stdcall OOGMENU_RefreshGameListDisplay();
 void __fastcall OOGUTIL_Unused1(char * szText, uint16_t nParam);
 void __stdcall OOGMENU_RequestGameInfo();
 // Displays game details in the lobby textbox. Shows game description, elapsed time (HH:MM:SS), level restrictions (single level or range), max players, and iterates through all players to display their names and levels with class-specific formatting (Amazon/Sorceress/Necromancer/Paladin/Barbarian/Druid/Assassin). All formatted strings are written to a 256-byte buffer before being added to the display.
-void __fastcall OOGMENU_DisplayGameDetails(int32_t pGameInfo);
+void __fastcall OOGMENU_DisplayGameDetails(struct D2McpGameInfoStrc * pGameInfo);
 void __stdcall UIMENU_DestroyLobbyAndJoinGameForms();
 // Loads the MAX_PLAYER registry value (key "Diablo II", default 4) into gUIGameListMaxPlayersEditBox. If the value is missing it saves the default. Only a value in 1..8 is printed into the edit box.
 // Provenance: asm 004431b0..0044321f; called at 0044642b right after OOGUTIL_LoadLevelRestrictionSetting.

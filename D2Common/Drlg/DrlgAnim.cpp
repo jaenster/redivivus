@@ -257,12 +257,12 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
                   nLibEntry = pTileEntryPtr[1];
                   if (nLibEntry) {
                     if (nLibEntry != 0xd) {
-                      pTileCreated = RoomTile::DRLGROOMTILE_CreateWallTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, aTileResults[nIndex], nLibEntry);
+                      pTileCreated = RoomTile::DRLGROOMTILE_CreateWallTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, (D2TileLibraryEntryStrc*)aTileResults[nIndex], nLibEntry);
                     } else {
-                      pTileCreated = RoomTile::DRLGROOMTILE_CreateShadowTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, aTileResults[nIndex]);
+                      pTileCreated = RoomTile::DRLGROOMTILE_CreateShadowTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, (D2TileLibraryEntryStrc*)aTileResults[nIndex]);
                     }
                   } else {
-                    pTileCreated = RoomTile::DRLGROOMTILE_CreateFloorTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, aTileResults[nIndex]);
+                    pTileCreated = RoomTile::DRLGROOMTILE_CreateFloorTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, (D2TileLibraryEntryStrc*)aTileResults[nIndex]);
                   }
 
                   pAnimTileGrid->ppTileData[nFrameIter] = pTileCreated;

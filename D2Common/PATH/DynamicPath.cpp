@@ -1158,7 +1158,7 @@ static int32_t PATH_CalculateMissilePath(D2DynamicPathStrc * pDynamicPath, int32
         return pDynamicPath->dwPathPoints;
       }
 
-      Drlg::Path::DRLGPATH_BuildRandomizedPathPoints((int32_t)pDynamicPath, (D2DynamicPathStrc*)(nParam + 0x20));
+      Drlg::Path::DRLGPATH_BuildRandomizedPathPoints(pDynamicPath, (D2SeedStrc*)(nParam + 0x20));
     } else {
       nPathPoints = PATH_BuildDirectPathToTarget(pDynamicPath);
       if (!nPathPoints) {

@@ -105,7 +105,7 @@ void __stdcall SetSkillId(struct D2StatListExStrc * pStatsEx, eD2Skills eSkill);
 eD2Skills __stdcall GetSkillId(struct D2StatListExStrc * pStatList);
 void __stdcall SetSkillLevel(struct D2StatListExStrc * pStatsEx, int32_t nSkillLevel);
 int __stdcall GetSkillLevel(struct D2StatListExStrc * pStatListEx);
-int32_t __stdcall STATSEX_CopyStatPairsFromStatList(int32_t nStatListPtr, uint32_t nParam, int * pOutStatPairs, int32_t nParam2);
+int32_t __stdcall STATSEX_CopyStatPairsFromStatList(struct D2StatListExStrc * nStatListPtr, uint32_t nParam, struct D2StatStrc * pOutStatPairs, int32_t nParam2);
 int32_t __stdcall STATLIST_GetItemStatBonusValues(struct D2UnitStrc * pItem, uint32_t nParam, struct D2StatStrc * pOutStatPairs, int32_t nParam2);
 // Calculates the combined value of a stat for a D2StatListExStrc, including all ItemStatCost formula operations (op types 1-13). Reads base value from CalcFullStatFromChildren, then applies complex stat formulas involving other stats, character class bonuses, and time-of-day modifiers.
 int32_t __fastcall STATLIST_CalcCombinedStatValue(struct D2StatListExStrc * pStatList, int32_t nStatShifted);

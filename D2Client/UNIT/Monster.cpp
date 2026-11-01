@@ -2370,7 +2370,7 @@ void __fastcall MonsterMessage(int32_t nParam, D2UnitStrc * pUnit, D2ServerMessa
             MONSTER_SpawnBloodParticles(pUnit, (D2MonStats2Txt*)0x1, 0);
           }
 
-          CUnit::CUNIT_SetUnitFlag3((int32_t)pUnit);
+          CUnit::CUNIT_SetUnitFlag3(pUnit);
           MONUNIQUE_DispatchModDeath(pUnit);
         }
       break;
@@ -2390,7 +2390,7 @@ void __fastcall MonsterMessage(int32_t nParam, D2UnitStrc * pUnit, D2ServerMessa
 
       pUnit->dwLastHitClass = pMessage->nSkillId;
       MONSTER_SpawnBloodParticles(pUnit, (D2MonStats2Txt*)0x1, 1);
-      CUnit::CUNIT_SetUnitFlag3((int32_t)pUnit);
+      CUnit::CUNIT_SetUnitFlag3(pUnit);
       UnitMode::UNITMODE_ShowElementalHitOverlay(pUnit, 0xd);
       UnitSnd::UNITSND_DispatchModeChangeSound(pUnit, 0xd, 1);
       MONUNIQUE_DispatchModDeath(pUnit);

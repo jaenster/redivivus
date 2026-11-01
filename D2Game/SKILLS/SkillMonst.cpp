@@ -126,7 +126,7 @@ BOOL __fastcall Skills_SrvDoFunc_083_MonsterMeleeAttack(::SGAMEDATA * pGame, D2U
     }
 
     UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
-    UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, (int*)pUnit, (int*)pTarget);
+    UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, pUnit, pTarget);
     BOOL bResult = SkillsServer::SKILLS_SrvStartSkill(pGame, pUnit, eSkill, nSkillLvl, 0);
     return bResult;
 }
@@ -824,7 +824,7 @@ BOOL __fastcall SKILLMONST_SrvDoFunc092_MeleeHitThenMissile(::SGAMEDATA * pGame,
     }
 
     UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pVictim, 0);
-    UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, (int*)pUnit, (int*)pVictim);
+    UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, pUnit, pVictim);
     eMissilesId nSrvMissle = (eMissilesId)pDVar1->srvmissile[1];
     if ((int)nSrvMissle < 0) {
       if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
@@ -2270,7 +2270,7 @@ BOOL __fastcall Skills_SrvDoFunc_109_MonsterFrenzyAttack(::SGAMEDATA * pGame, D2
       return 0;
     }
 
-    UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, (int*)pUnit, (int*)pTarget);
+    UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, pUnit, pTarget);
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }

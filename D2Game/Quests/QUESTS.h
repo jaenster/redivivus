@@ -199,7 +199,7 @@ uint32_t __stdcall CheckIntroductionFlagByInternalQuestId(::SGAMEDATA * pGame, e
 void __fastcall NET_D2GS_SERVER_Send_0x29_GAMEQUESTRECORD_Prepare(::SGAMEDATA * pGame, struct D2ClientStrc * pClient);
 // Server-side handler that determines whether an NPC wants to initiate a quest interaction with a player unit. Validates that pUnit is a player and that the target NPC's MonStats.interact flag is set. Iterates the game's quest list for the player's current act; for each quest calls fpActiveFilter to check eligibility against the player's quest record. On first match, sends packet 0x8A (NpcWantsInteract) to the client and returns 1. Triggers fatal error if called with bad state (null quest-set, bad function pointer, null player data, null quest record).
 // @sourcefile .\QUESTS\QUESTS.CPP
-uint32_t __fastcall QUEST_NpcWantsInteract(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nNpcClassId);
+uint32_t __fastcall QUEST_NpcWantsInteract(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * nNpcClassId);
 // Sets a quest record state in the game quest tracking system. Validates quest control pointer and updates the quest state via the quest record interface.
 void __fastcall QUEST_SetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuest, eD2QuestState eState);
 int __fastcall QUEST_GetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuestId, int32_t nUnused);

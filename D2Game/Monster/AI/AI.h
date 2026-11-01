@@ -267,7 +267,7 @@ void __fastcall MONSTERAI_CommandRunToUnitMinStep(::SGAMEDATA * pGame, struct D2
 // Commands a monster to walk toward a target unit, offset by nOffset tiles in the direction of approach. Resolves world positions for both pUnit and pTarget (handling static vs dynamic paths), computes the unit-step direction vector (nDeltaX, nDeltaY each -1/0/1), then calls StartMonsterMove in Walk mode to a destination of (targetX + nOffset*dX, targetY + nOffset*dY). If nOffset > 5, first applies combat/mon-stats via ApplyCombatAndMonStats. Returns the result of StartMonsterMove (non-zero on success).
 int32_t __fastcall WalkTowardsUnitOffset(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint8_t nOffset, int32_t bForce);
 // Tail-calls StartMonsterMove (already fixed to return int32_t) as its final statement, dropping the result.
-int32_t __fastcall MONSTERAI_CommandRunAwayFromUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int * pFleeTarget, uint8_t nFleeDistance, int32_t nParam);
+int32_t __fastcall MONSTERAI_CommandRunAwayFromUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pFleeTarget, uint8_t nFleeDistance, int32_t nParam);
 // Commands a monster to walk one step directly away from pFleeTarget. Reads both units' X/Y positions via path accessors, computes the flee direction sign in each axis, adds nFleeDistance in each axis to get a flee destination tile, sets the path step count to 1, then calls MONSTERAI_ExecuteLifecycleTransition with the Walk skill and the computed target coords to trigger the move animation and pathfinding.
 void __fastcall MONSTERAI_CommandWalkAwayFromUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int * pFleeTarget, uint8_t nFleeDistance);
 // Tail-calls MONSTERAI_ExecuteLifecycleTransition (already fixed to return int32_t) as its final statement, dropping the result.
@@ -311,7 +311,7 @@ void __fastcall AI_Fn1_FetishBlowgun(::SGAMEDATA * pGame, struct D2UnitStrc * pU
 void __fastcall AI_Fn1_ReanimatedHorde(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // ForEach callback that finds the closest eligible neutral monster for reanimate-type AI. Accepts pCandidate only if it is a living monster of the Reanimatable base ID (0x1EC), allied with pUnit, alignment 0, has no owner, and has dwArg0==-1 (not already targeted). Returns pCandidate pointer if it is nearer than *pBestDist, else 0.
 uint32_t __fastcall MONSTERAI_FindNeutralMonsterInRange(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCandidate, int * pBestDist);
-void __fastcall MONSTERAI_UpdateClosestTarget(struct D2UnitStrc * pUnit, int * pnParam);
+void __fastcall MONSTERAI_UpdateClosestTarget(struct D2UnitStrc * pUnit, struct D2UnitStrc * pnParam);
 void __fastcall AI_Fn1_SiegeTower(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 // AI Function1 handler for Siege Beast monster type. Handles retreat logic, skill casting based on MonStats2 difficulty thresholds, and catapult rider mounting behavior.
 void __fastcall AI_Fn1_SiegeBeast(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);

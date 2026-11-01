@@ -187,7 +187,7 @@ void __stdcall DRLGROOMTILE_WorldToTileScreenPos(int * pOutCoords, D2RoomExStrc 
 }
 
 // Allocates the next wall tile slot in pRoomEx's tile grid, links it into the *ppTileHead list, converts minimap coords to screen coords, sets colour/type/flags, then recursively creates a shadow tile (type 4) when nTileType==3 and propagates nGridFlags bits into that shadow tile's flags.
-D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateWallTileData(D2RoomExStrc * pRoomEx, D2DrlgTileDataStrc * * ppTileHead, int nPosX, int nPosY, uint32_t nGridFlags, int pTileLibEntry, int nTileType) {
+D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateWallTileData(D2RoomExStrc * pRoomEx, D2DrlgTileDataStrc * * ppTileHead, int nPosX, int nPosY, uint32_t nGridFlags, D2TileLibraryEntryStrc * pTileLibEntry, int nTileType) {
     uint32_t nLibFlags;
     D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
     D2DrlgTileDataStrc* pTileData = pTileGrid->sRoomTiles.pWallTiles + pTileGrid->nWalls;
@@ -205,7 +205,7 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateWallTileData(D2RoomExStrc * p
     pTileData->nPosY = nPosY - pRoomEx->sCoords.WorldPosition.y;
     Transform::CoordsMiniMapToScreen(&nScreenX, &nScreenY);
     pTileData->nScreenY = nScreenY + 0x28;
-    pTileData->pTileLibraryEntry = (D2TileLibraryEntryStrc*)pTileLibEntry;
+    pTileData->pTileLibraryEntry = pTileLibEntry;
     pTileData->nFlags = 0;
     pTileData->nTransitionFlags = 0;
     pTileData->nScreenX = nScreenX;
@@ -218,7 +218,7 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateWallTileData(D2RoomExStrc * p
       return pTileData;
     }
 
-    int nShadowTileLibEntry = DRLG_FindHTile(pRoomEx, 4, nGridFlags);
+    D2TileLibraryEntryStrc* nShadowTileLibEntry = (D2TileLibraryEntryStrc*)DRLG_FindHTile(pRoomEx, 4, nGridFlags);
     D2DrlgTileDataStrc* pShadowTile = DRLGROOMTILE_CreateWallTileData(pRoomEx, ppTileHead, nPosX, nPosY, nGridFlags, nShadowTileLibEntry, 4);
     pShadowTile->nFlags |= (nGridFlags >> 0x12 & 3) * 0x4000 + 0x4000;
     if ((char)nGridFlags < '\0') {
@@ -325,7 +325,7 @@ void __fastcall DRLGROOMTILE_FillTileData(D2RoomExStrc * pRoomEx, D2DrlgTileData
 }
 
 // Allocates from floor tile array, links into floor list, calls FillTileData.
-D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateFloorTileData(D2RoomExStrc * pRoomEx, D2DrlgTileDataStrc * * ppTileHead, int nPosX, int nPosY, uint32_t nGridFlags, int pTileLibEntry) {
+D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateFloorTileData(D2RoomExStrc * pRoomEx, D2DrlgTileDataStrc * * ppTileHead, int nPosX, int nPosY, uint32_t nGridFlags, D2TileLibraryEntryStrc * pTileLibEntry) {
     D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
     D2DrlgTileDataStrc* pTileData = pTileGrid->sRoomTiles.pFloorTiles + pTileGrid->nFloors;
     if (ppTileHead) {
@@ -336,12 +336,12 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateFloorTileData(D2RoomExStrc * 
     }
 
     pTileGrid->nFloors++;
-    DRLGROOMTILE_FillTileData(pRoomEx, pTileData, nPosX, nPosY, nGridFlags, pTileLibEntry);
+    DRLGROOMTILE_FillTileData(pRoomEx, pTileData, nPosX, nPosY, nGridFlags, (int)pTileLibEntry);
     return pTileData;
 }
 
 // Allocates the next shadow tile entry from the room's pRoofTiles array, links it into the ppTileHead list, increments the shadow count, converts world coords to room-relative and screen coords (with +0x28 Y bias), copies RGB=white, hardcodes nTileType=0xD, and maps nGridFlags bits to nFlags (flip/lighting/transition bits).
-D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateShadowTileData(D2RoomExStrc * pRoomEx, D2DrlgTileDataStrc * * ppTileHead, int nPosX, int nPosY, uint32_t nGridFlags, int pTileLibEntry) {
+D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateShadowTileData(D2RoomExStrc * pRoomEx, D2DrlgTileDataStrc * * ppTileHead, int nPosX, int nPosY, uint32_t nGridFlags, D2TileLibraryEntryStrc * pTileLibEntry) {
     D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
     D2DrlgTileDataStrc* pTileData = pTileGrid->sRoomTiles.pRoofTiles + pTileGrid->nShadows;
     if (ppTileHead) {
@@ -362,7 +362,7 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateShadowTileData(D2RoomExStrc *
     pTileData->nAlphaEnd = 0xff;
     pTileData->nCurrentAlpha = 0xff;
     pTileData->nScreenX = nScreenX;
-    pTileData->pTileLibraryEntry = (D2TileLibraryEntryStrc*)pTileLibEntry;
+    pTileData->pTileLibraryEntry = pTileLibEntry;
     pTileData->nTileType = 0xd;
     pTileData->nFlags = 0;
     pTileData->nTransitionFlags = 0;
@@ -396,7 +396,7 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateShadowTileData(D2RoomExStrc *
       pTileData->nFlags |= 0x2000;
     }
 
-    uint32_t nLibFlags = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount(pTileLibEntry);
+    uint32_t nLibFlags = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount((int32_t)pTileLibEntry);
     if (nLibFlags & 1) {
       pTileData->nFlags |= 4;
     }
@@ -540,8 +540,8 @@ static void __stdcall DRLGROOMTILE_SetupWarpTile(D2RoomExStrc * pRoomExStrc, D2D
         }
 
         nGridFlags = pDVar1->Tiles << 8 | nGridInfo;
-        nWarpDest = DRLG_FindHTile(pRoomExStrc, nTileType, nGridFlags);
-        pWallTile = DRLGROOMTILE_CreateWallTileData(pRoomExStrc, &pWarpCacheHead->pTileListClearedOnSelect, pTileData->nPosX + pRoomExStrc->sCoords.WorldPosition.x, pRoomExStrc->sCoords.WorldPosition.y + pTileData->nPosY, nGridFlags, nWarpDest, nTileType);
+        pTileLibEntry = (D2TileLibraryEntryStrc*)DRLG_FindHTile(pRoomExStrc, nTileType, nGridFlags);
+        pWallTile = DRLGROOMTILE_CreateWallTileData(pRoomExStrc, &pWarpCacheHead->pTileListClearedOnSelect, pTileData->nPosX + pRoomExStrc->sCoords.WorldPosition.x, pRoomExStrc->sCoords.WorldPosition.y + pTileData->nPosY, nGridFlags, pTileLibEntry, nTileType);
         if (!pWallTile) {
           return;
         }
@@ -1001,8 +1001,8 @@ static void __stdcall DRLGROOMTILE_ProcessTile(eD2GridCellFlags nFlags, D2RoomEx
     DRLGROOMTILE_FillTileData(pRoom, pActSub18, nX, nSizeMaybe, nGridFlags, nTileLibEntry);
     add_wall_and_shadow:
     if ((nFlags & CELLFLAGS_0x01) != CELLFLAGS_NONE) {
-      nTileLibEntry = DRLG_FindHTile(pRoom, nOtherFlags, nFlags);
-      pActSub18 = DRLGROOMTILE_CreateWallTileData(pRoom, nullptr, nX, nSizeMaybe, nFlags, nTileLibEntry, nOtherFlags);
+      pDVar1 = (D2TileLibraryEntryStrc*)DRLG_FindHTile(pRoom, nOtherFlags, nFlags);
+      pActSub18 = DRLGROOMTILE_CreateWallTileData(pRoom, nullptr, nX, nSizeMaybe, nFlags, pDVar1, nOtherFlags);
       if ((nOtherFlags == (CELLFLAGS_0x08 | CELLFLAGS_0x02 | CELLFLAGS_0x01) || nOtherFlags == (CELLFLAGS_0x08 | CELLFLAGS_0x02)) && pRoom->pLevel->eD2LevelId != 0x85) {
         DRLGROOMTILE_SetupWarpTile(pRoom, pActSub18, nFlags, nOtherFlags);
       }
@@ -1011,8 +1011,8 @@ static void __stdcall DRLGROOMTILE_ProcessTile(eD2GridCellFlags nFlags, D2RoomEx
       return;
     }
 
-    nTileLibEntry = DRLG_FindHTile(pRoom, 0xd, nFlags);
-    DRLGROOMTILE_CreateShadowTileData(pRoom, nullptr, nX, nSizeMaybe, nFlags, nTileLibEntry);
+    pDVar1 = (D2TileLibraryEntryStrc*)DRLG_FindHTile(pRoom, 0xd, nFlags);
+    DRLGROOMTILE_CreateShadowTileData(pRoom, nullptr, nX, nSizeMaybe, nFlags, pDVar1);
 }
 
 void __fastcall InitRoomTiles(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pGrid, D2DrlgGridStrc * pOtherGrid, int32_t nTileParam, int32_t nY, int32_t nSizeMaybe) {
