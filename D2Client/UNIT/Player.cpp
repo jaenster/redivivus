@@ -2061,8 +2061,8 @@ static BOOL INPUT_HandleRightClickWithPet(D2UnderMouseStrc * pUnderMouse) {
 }
 
 // Client input dispatcher for map clicks. Converts raw screen coordinates to perspective-view world coords, builds a D2UnderMouseStrc with the player and currently selected unit, sets run/walk and force-move flags from mouseEventFlags, then dispatches to the appropriate handler based on clickType (0=left-down, 1=left-hold, 2=left-up, 3=right-down, 4=right-hold, 5=right-up). Guards against re-entrant calls and ESC-menu-open state.
-int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint8_t mouseEventFlags) {
-    uint32_t uVar1;
+int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint16_t mouseEventFlags) {
+    uint32_t uVar2;
     int nXConverted = nX;
     BOOL bEscOpen = UI::ui::GetUIFlag(UI_ESCMENU);
     if (bEscOpen) {
@@ -2085,7 +2085,7 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint8_t mouse
       mouse.nY = Units::GetYPosFromDynamicPathUnit(mouse.pTarget);
     }
 
-    uint8_t byRawMouseFlags = mouseEventFlags;
+    uint16_t uVar1 = mouseEventFlags;
     if (mouseEventFlags & 8) {
       int nStamina;
       nStamina = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(mouse.pPlayer, UNITSTAT_stamina, 0);
@@ -2093,7 +2093,7 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint8_t mouse
         mouse.flags |= 0x40;
       }
     }
-    if (byRawMouseFlags & 4) {
+    if (uVar1 & 4) {
       mouse.flags |= 0x20;
     }
 
@@ -2114,8 +2114,8 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint8_t mouse
         }
       case 1:
         mouse.flags |= 9;
-      uVar1 = WalkToCoordOrUnit(&mouse);
-      return uVar1;
+      uVar2 = WalkToCoordOrUnit(&mouse);
+      return uVar2;
       case 2:
         GAME::Select::ClearSelectedUnit();
       mouse.flags |= 0x11;

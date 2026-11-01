@@ -356,7 +356,7 @@ int __fastcall UNITSND_GetHitSound(int32_t pSoundTable, uint32_t nAnimMode) {
 
 // Returns the address of pUnit's client-side pUnitSfxData list head (+0x78); halts (UnitSnd.cpp line 3116, ptUnit) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-void * * __stdcall UNITSND_GetSfxDataListHead(D2UnitStrc * pUnit) {
+static inline void * * __stdcall UNITSND_GetSfxDataListHead(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc2c);
       exit(-1);
@@ -367,21 +367,11 @@ void * * __stdcall UNITSND_GetSfxDataListHead(D2UnitStrc * pUnit) {
 }
 
 void __fastcall AllocUnitSfxData(D2UnitStrc * pUnit, int32_t nChannelHandle) {
-    if (!pUnit) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc2c);
-      exit(-1);
-    }
-
-    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc((void*)((uintptr_t)&pUnit->uSideData + 0x14), (void*)nChannelHandle);
+    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc((void*)UNITSND_GetSfxDataListHead(pUnit), (void*)nChannelHandle);
 }
 
 void __fastcall FreeSfxData(D2UnitStrc * pUnit, int32_t nParam) {
-    if (!pUnit) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc2c);
-      exit(-1);
-    }
-
-    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free((int**)&pUnit->uSideData.pClientSide.pUnitSfxData, nParam);
+    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free((int**)UNITSND_GetSfxDataListHead(pUnit), nParam);
 }
 
 int32_t __fastcall UNITSND_GetMissileSound(D2UnitStrc * pUnit, int32_t nParam2) {
@@ -431,12 +421,7 @@ int __fastcall UNITSND_GetMissileLoopSound(int32_t nParam) {
 
 void __fastcall IterateUnitSfxData(D2UnitStrc * pUnit, int32_t nParam) {
     int32_t nLine;
-    if (!pUnit) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc2c);
-      exit(-1);
-    }
-
-    int32_t* pSfxNode = (int32_t*)pUnit->uSideData.pClientSide.pUnitSfxData;
+    int32_t* pSfxNode = (int32_t*)*UNITSND_GetSfxDataListHead(pUnit);
     while (pSfxNode) {
       nLine = *pSfxNode;
       pSfxNode = (int32_t*)pSfxNode[1];
@@ -472,7 +457,7 @@ void __fastcall UNITSND_UpdatePositionalAudio(D2UnitStrc * pUnit) {
 
 // Returns pUnit's client-side bUnitSfx byte (+0x70); halts (UnitSnd.cpp line 3215, ptUnit) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-int __stdcall UNITSND_GetUnitSfxFlag(D2UnitStrc * pUnit) {
+static inline int __stdcall UNITSND_GetUnitSfxFlag(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc8f);
       exit(-1);
@@ -573,7 +558,7 @@ static void __stdcall SetSfxStepTicks(uint32_t dwParam, int32_t nParam) {
 
 // Returns the dword at pUnit's client-side +0x88 (bHasActiveSound, read as 4 bytes); halts (UnitSnd.cpp line 3325, ptUnit) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-BOOL __stdcall UNITSND_HasActiveSound(D2UnitStrc * pUnit) {
+static inline BOOL __stdcall UNITSND_HasActiveSound(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcfd);
       exit(-1);
@@ -913,12 +898,8 @@ void __fastcall UNITSND_StopAllSkillSounds(D2UnitStrc * pUnit) {
     if (!pMonSoundsLine) {
       return;
     }
-    if (!pUnit) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc2c);
-      exit(-1);
-    }
 
-    int32_t* pSfxNode = (int32_t*)pUnit->uSideData.pClientSide.pUnitSfxData;
+    int32_t* pSfxNode = (int32_t*)*UNITSND_GetSfxDataListHead(pUnit);
     while (pSfxNode) {
       nSfxChannelId = *pSfxNode;
       pSfxNode = (int32_t*)pSfxNode[1];
@@ -983,12 +964,8 @@ void __stdcall UNITSND_StopAllCombatSounds(D2UnitStrc * pUnit) {
     if (!pMonSoundsLine) {
       return;
     }
-    if (!pUnit) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc2c);
-      exit(-1);
-    }
 
-    int32_t* pSfxNode = (int32_t*)pUnit->uSideData.pClientSide.pUnitSfxData;
+    int32_t* pSfxNode = (int32_t*)*UNITSND_GetSfxDataListHead(pUnit);
     while (pSfxNode) {
       nSfxChannelId = *pSfxNode;
       pSfxNode = (int32_t*)pSfxNode[1];
@@ -1095,11 +1072,7 @@ void __fastcall UpdateUnitSfxOnModeChange(D2UnitStrc * pUnit) {
           }
         }
       }
-      if (!pUnit) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc8f);
-        exit(-1);
-      }
-      if (pUnit->uSideData.pClientSide.bUnitSfx && nUnitMode == pUnit->uSideData.pClientSide.nSfxMode) {
+      if (UNITSND_GetUnitSfxFlag(pUnit) && nUnitMode == pUnit->uSideData.pClientSide.nSfxMode) {
         return;
       }
 
@@ -1777,11 +1750,7 @@ void __fastcall MuteOrUnmuteUnitSounds(D2UnitStrc * pUnit, int32_t nMuteDelta) {
     DWORD DVar2;
     int nSoundTableIdx;
     int nUnitType = GetSndUnitType(pUnit);
-    if (!pUnit) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcfd);
-      exit(-1);
-    }
-    if (pUnit->uSideData.pClientSide.bHasActiveSound) {
+    if (UNITSND_HasActiveSound(pUnit)) {
       if (nMuteDelta > 0) {
         return;
       }

@@ -23,18 +23,12 @@ uint32_t __fastcall UNITSND_GetSkillStartSound(struct D2UnitStrc * pUnit, uint32
 // Maps a unit's animation/event flag word to a pair of sound ids. Resolves the unit's sound type; for monsters that are critters, returns no sound. The low nibble (nAnimFlags & 0xf) selects a base sound id into *pnSoundIdOut (0 if none); the high nibble (&0xf0) selects a secondary/param sound into *pnParam, with several cases branching on whether a base sound exists and whether the unit is a player/monster (gated by bExcludePlayerMonster). Both outputs default to 0. Halts via ErrorManager if pUnit is null.
 void __fastcall UNITSND_ResolveSoundFromFlags(struct D2UnitStrc * pUnit, uint32_t nAnimFlags, int32_t bExcludePlayerMonster, int * pnSoundIdOut, int * pnParam);
 int __fastcall UNITSND_GetHitSound(int32_t pSoundTable, uint32_t nAnimMode);
-// Returns the address of pUnit's client-side pUnitSfxData list head (+0x78); halts (UnitSnd.cpp line 3116, ptUnit) on NULL.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-void * * __stdcall UNITSND_GetSfxDataListHead(struct D2UnitStrc * pUnit);
 void __fastcall AllocUnitSfxData(struct D2UnitStrc * pUnit, int32_t nChannelHandle);
 void __fastcall FreeSfxData(struct D2UnitStrc * pUnit, int32_t nParam);
 int32_t __fastcall UNITSND_GetMissileSound(struct D2UnitStrc * pUnit, int32_t nParam2);
 int __fastcall UNITSND_GetMissileLoopSound(int32_t nParam);
 void __fastcall IterateUnitSfxData(struct D2UnitStrc * pUnit, int32_t nParam);
 void __fastcall UNITSND_UpdatePositionalAudio(struct D2UnitStrc * pUnit);
-// Returns pUnit's client-side bUnitSfx byte (+0x70); halts (UnitSnd.cpp line 3215, ptUnit) on NULL.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-int __stdcall UNITSND_GetUnitSfxFlag(struct D2UnitStrc * pUnit);
 void __stdcall UNITSND_Unused_Placeholder_3(uint8_t bParam, int32_t nParam);
 // Returns pUnit's client-side nSfxMode (+0x74); halts (UnitSnd.cpp line 3237) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
@@ -43,9 +37,6 @@ void __stdcall UNITSND_Unused_Placeholder_4(uint32_t dwParam, int32_t nParam);
 // Returns pUnit's client-side dwSfxStepTicks (+0x84, the field SetSfxStepTicks writes); halts (UnitSnd.cpp line 3303) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 uint32_t __stdcall UNITSND_GetSfxStepTicks(struct D2UnitStrc * pUnit);
-// Returns the dword at pUnit's client-side +0x88 (bHasActiveSound, read as 4 bytes); halts (UnitSnd.cpp line 3325, ptUnit) on NULL.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-BOOL __stdcall UNITSND_HasActiveSound(struct D2UnitStrc * pUnit);
 // Sets pUnit's client-side bHasActiveSound (+0x24 of the client side data, unit +0x88); halts (UnitSnd.cpp line 3336) on a NULL unit.
 // Provenance: asm 004caca0..004cacd0 (pUnit in EAX, value at [EBP+8], RET 4); unreferenced in 1.14d.
 void __stdcall SetHasActiveSound(struct D2UnitStrc * pUnit, BOOL bHasActiveSound);
@@ -74,6 +65,6 @@ void __stdcall SOUND_UpdateAmbientMusic();
 void __fastcall PlayUnitInitSound(struct D2UnitStrc * pUnit);
 // Dispatches the appropriate sound event when a unit changes animation mode. For players: plays mode-change, attack, or get-hit sounds keyed on mode and class (e.g. Druid kick at mode 0xF, Assassin at 0x10). For monsters: applies MonSounds CvtMo/CvtTgt remapping, then plays mode-change, attack, skill, or stop-combat sound. nMode==0 uses the unit's current mode.
 void __fastcall UNITSND_DispatchModeChangeSound(struct D2UnitStrc * pUnit, int32_t pnParam, int32_t nMode);
-// 18 internal functions (defined in .cpp)
+// 21 internal functions (defined in .cpp)
 
 } // namespace D2Client::UNIT::UnitSnd

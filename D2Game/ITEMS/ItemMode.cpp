@@ -6937,7 +6937,7 @@ BOOL __fastcall Transmorgify(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc
     D2ItemsTxt* pTmogItemTxt;
     pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pItem->nClassId);
     if (pItemTxt) {
-      if (!pItemTxt->bTransmogrify) {
+      if (pItemTxt->bTransmogrify == '\0') {
         return 0;
       }
 

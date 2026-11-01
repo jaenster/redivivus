@@ -38,9 +38,6 @@ void __fastcall AllocPlayerArena(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit)
 // @sourcefile .\GAME\Arena.cpp
 void __fastcall FreePlayerArena(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 eD2LevelId __fastcall GetTownLevelFromArenaCtrl(::SGAMEDATA * pGame);
-// pGame in EAX: returns pArenaCtrl->nArenaTxtRecord; halts (Arena.cpp line 108, ptArena) when there is no arena control.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-int __stdcall ARENA_GetArenaTxtRecord(::SGAMEDATA * pGame);
 // Adjusts an arena participant's score by the modifier indexed by nParam (0-6) from the arena's ArenaTxt record. Cases 0/1/3/4/6 add the flat column value; cases 2/5 add a percentage of the opposing unit's current score. Sets the score-dirty flag and links the unit to the update list. Halts with an internal error if pUnit2 is null, not a player, the game has no arena control, or nParam is out of range.
 void __stdcall ARENA_ApplyScoreModifier(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nParam, DWORD dwParam);
 // Server-side PvP/PK Arena scoring handler invoked when a unit dies. No-op unless the game has an active D2ArenaControlStrc. Reads each combatant's D2UnitDataPlayerArenaStrc and adjusts nScore from the ArenaTxt record for the relevant outcome: suicide (self-kill), player-kill / player-death (with flat dwPlayerKill/dwPlayerDeath plus a percentage of the opponent's score), and monster-kill / monster-death. On each adjustment sets bScoreDirty, OR's ARENAFLAG_ScoresDirty into the control flags, and calls ROOM_LinkUnitToUpdateList to schedule a score sync. Missing arena data on an expected player triggers ERROR_UnrecoverableInternalError_Halt with the source line.
@@ -70,6 +67,6 @@ uint32_t __fastcall ARENA_GetTemplate(::SGAMEDATA * pGame);
 // Returns bit 0x200 of pArenaCtrl->eArenaFlags (no enum name yet); halts (Arena.cpp line 39, ptArena) when there is no arena control.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __fastcall ARENA_IsFlag0x200Set(::SGAMEDATA * pGame);
-// 4 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace D2Game::GAME::Arena

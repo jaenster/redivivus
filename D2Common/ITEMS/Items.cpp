@@ -1869,8 +1869,8 @@ BOOL __stdcall TXT_Items_CheckTransmogrify(uint32_t nItemClassId) {
       exit(-1);
     }
 
-    return (uint32_t)pItemsTxt->bTransmogrify;
-    return (uint32_t)pItemsTxt->bTransmogrify;
+    return (uint32_t)(pItemsTxt->bTransmogrify != '\0');
+    return (uint32_t)(pItemsTxt->bTransmogrify != '\0');
 }
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).

@@ -75,7 +75,7 @@ struct __attribute__((packed)) D2QuestLogStrc {
     /* 0x111 */ D2QuestLogEntryStrc aQuestLogEntries[6];
     /* 0xF8D */ int aQuestLogIconFrame[6];
     /* 0xFA5 */ int aQuestLogIconLastTick[6];
-    /* 0xFBD */ uint32_t nQuestLogActiveAct_b;
+    /* 0xFBD */ int32_t nQuestLogActiveAct_b;
     /* 0xFC1 */ uint32_t bQuestLogScreenOpen; // read and written as a dword tick count (QUESTLOG_ToggleQuestScreen compares it against 250 ms)
     /* 0xFC5 */ uint8_t bQuestLogLevelUpCinematicPlayed;
     /* 0xFC6 */ uint8_t bQuestLogBossCinematicPlayed;

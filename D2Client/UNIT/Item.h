@@ -177,7 +177,7 @@ struct D2ItemsTxt {
     /* 0x136 */ bool bQntWarning;
     /* 0x137 */ bool bHasInv;
     /* 0x138 */ bool bGemSockets;
-    /* 0x139 */ bool bTransmogrify;
+    /* 0x139 */ uint8_t bTransmogrify;
     /* 0x13A */ uint8_t bTMogMin;
     /* 0x13B */ char bTMogMax;
     /* 0x13C */ uint8_t bHitClass;
