@@ -1404,8 +1404,11 @@ static void UNITSND_PlayFleeSound(D2UnitStrc * pUnit) {
       return;
     }
 
-    Sound::SOUND_PlaySound(pMonSoundsLine->Flee, pUnit, _Utils::RollRandomNumerUpToArgument(3) + 6, 0, 0);
-    uint32_t nFleeDelay = GAME::Game::gnRecordingIndex();
+    int32_t nSfxTick = 0;
+    nRecordingIdx = 0;
+    uint32_t nFleeDelay = _Utils::RollRandomNumerUpToArgument(3);
+    Sound::SOUND_PlaySound(pMonSoundsLine->Flee, pUnit, nFleeDelay + 6, nRecordingIdx, nSfxTick);
+    nFleeDelay = GAME::Game::gnRecordingIndex();
     SetSfxTicks(nFleeDelay, pUnit);
     gdwSoundChannelIndex = GAME::Game::gnRecordingIndex();
 }

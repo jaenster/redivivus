@@ -985,9 +985,11 @@ void __stdcall DRAW_Overlay_Weather() {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;
     int nClipLeft;
+    int32_t nPosX;
     int nYEnd;
     int nXStart;
     int32_t nLineOrCoord;
+    int32_t nSoundPosZ;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_Net();
     bool bVar2 = false;
     if (pPlayer) {
@@ -1019,7 +1021,10 @@ void __stdcall DRAW_Overlay_Weather() {
             nLineOrCoord = Seed::RollBetweenMinAndMax(pSeed, 0x19, 0x32);
             nClipLeft = Sound::SOUND_PlaySound(SOUND_ITEM_BOOTSCHAIN, nullptr, nLineOrCoord, 0, 0);
             if (nClipLeft) {
-              Sound::SOUND_PlayEnvironmentSound(nClipLeft, Seed::RollBetweenMinAndMax(pSeed, -200, 400), Seed::RollBetweenMinAndMax(pSeed, -200, 400), 0);
+              nSoundPosZ = 0;
+              nLineOrCoord = Seed::RollBetweenMinAndMax(pSeed, -200, 400);
+              nPosX = Seed::RollBetweenMinAndMax(pSeed, -200, 400);
+              Sound::SOUND_PlayEnvironmentSound(nClipLeft, nPosX, nLineOrCoord, nSoundPosZ);
             }
           } else {
             gnBlizzardSoundPlayed = 1;

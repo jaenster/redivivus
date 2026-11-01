@@ -236,7 +236,6 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
       return;
     }
 
-    int nByteOffset = 0;
     do {
       D2LevelsTxt* pDVar1;
       pDVar1 = sgtDataTable.pTxtLevels;
@@ -244,11 +243,11 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
       memset(pWVar2, 0, 0x50);
       memset((void*)&pDVar1[i].wszLevelWarp[0], 0, 0x50);
       nWideCharBufLen = 0x28;
-      pwszLevelWarpStr = D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)(pDVar1->LevelName + nByteOffset));
+      pwszLevelWarpStr = D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)&pDVar1[i].LevelName[0]);
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pWVar2, pwszLevelWarpStr, nWideCharBufLen);
       nWideCharBufLen = 0x28;
       pDVar1[i].wszLevelName[39] = 0;
-      pWVar2 = D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)(pDVar1->LevelWarp + nByteOffset));
+      pWVar2 = D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)&pDVar1[i].LevelWarp[0]);
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer((uint16_t*)&pDVar1[i].wszLevelWarp[0], pWVar2, nWideCharBufLen);
       pDVar1[i].wszLevelWarp[39] = 0;
       iLevelIdx = 0;
@@ -294,7 +293,6 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
         } while (iLevelIdx < sgtDataTable.nTxtLevelsSize);
       }
 
-      nByteOffset += 0x220;
       i++;
     } while (i < sgtDataTable.nTxtLevelsSize);
 }
@@ -670,7 +668,7 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t nPara
     if (nParam) {
       size_t nAllocSize;
       nAllocSize = sgptDataTable->nTxtLvlPrestSize * 0x18;
-      pTxtLvlTbls = (D2LvlTblsTxt*)D2_ALLOC_AT(nAllocSize, ".\\DATATBLS\\LvlTbls.cpp", 0x2a7);
+      pTxtLvlTbls = (D2DrlgFileStrc**)D2_ALLOC_AT(nAllocSize, ".\\DATATBLS\\LvlTbls.cpp", 0x2a7);
       memset(pTxtLvlTbls, 0, nAllocSize);
     }
 
@@ -697,7 +695,7 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t nPara
             } while (*pcVar1 != '\0');
 
             if ((uint32_t)((int)pFileScan - (int)(*szFile + 1)) > 1) {
-              Drlg::Preset::AllocDrlgFile((D2DrlgFileStrc**)(&pTxtLvlTbls->field_0x0 + (nRowByteOffset + nFileIdx) * 4), nullptr, *szFile);
+              Drlg::Preset::AllocDrlgFile(pTxtLvlTbls + nRowByteOffset + nFileIdx, nullptr, *szFile);
             }
           }
 
@@ -716,13 +714,13 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t nPara
 void __stdcall TXT_LvlTbls_Free() {
     int i;
     if (pTxtLvlTbls) {
-      D2LvlTblsTxt* pMemoryToFree;
+      D2DrlgFileStrc** pMemoryToFree;
       i = 0;
       pMemoryToFree = pTxtLvlTbls;
       if (sgptDataTable->nTxtLvlPrestSize * 6 > 0) {
         do {
-          if (*(int*)(&pMemoryToFree->field_0x0 + i * 4)) {
-            Drlg::Preset::DRLGPRESET_ReleaseDrlgFile((D2DrlgFileStrc**)(&pMemoryToFree->field_0x0 + i * 4));
+          if (pMemoryToFree[i]) {
+            Drlg::Preset::DRLGPRESET_ReleaseDrlgFile(pMemoryToFree + i);
             pMemoryToFree = pTxtLvlTbls;
           }
 
@@ -963,7 +961,6 @@ void __fastcall TXT_AllocTxt_lvlsub(D2PoolManagerStrc * pMemory, int32_t nParam,
 // @sourcefile .\DATATBLS\LvlTbls.cpp
 void __stdcall TXT_FreeTxt_LvlSub() {
     int i;
-    int nByteOffset;
     if (gpaDrlgLvlSubPresetFiles) {
       void* pMemoryToFree;
       i = 0;
@@ -985,11 +982,9 @@ void __stdcall TXT_FreeTxt_LvlSub() {
     if (sgpTxtLvlSub) {
       i = 0;
       if (nTxtLvlSubSize > 0) {
-        nByteOffset = 0;
         do {
-          Drlg::DRLGMAZE_FreeRoomPresetData((D2LvlSubTxt*)(sgpTxtLvlSub->File + nByteOffset - 4));
+          Drlg::DRLGMAZE_FreeRoomPresetData(&sgpTxtLvlSub[i]);
           i++;
-          nByteOffset += 0x15c;
         } while (i < nTxtLvlSubSize);
       }
 

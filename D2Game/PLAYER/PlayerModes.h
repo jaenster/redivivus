@@ -53,7 +53,7 @@ void __fastcall PLRMODES_CheckWeaponQuantityAndDurability(::SGAMEDATA * pGame, s
 // @sourcefile .\PLAYER\PlrModes.cpp
 void __fastcall PLRMODES_BreakZeroDurabilityWeapons(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 int32_t __fastcall PLRMODES_ModeCallback_AttackSkill(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nModeArg, int32_t nSeqFrame);
-uint8_t PLRMODES_GetHpPercent128(struct D2UnitStrc * pUnit);
+uint8_t __fastcall PLRMODES_GetHpPercent128(struct D2UnitStrc * pUnit);
 void __fastcall PLRMODES_RemoveExpiredStatLists(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 void __fastcall PLRMODES_PeriodicStatRegen(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 // Flushes all pending per-unit network state to a single client after a mode change. Sends ReassignPlayer if the unit is warping or is a remote player. If bSendItems is set, sends updated inventory items (0x9C packet) plus two equipped-item-recalc packets (0x47, 0x48). Dispatches the mode-change net message if DOUPDATE is flagged. Then drains the unit's packet queue, sends pending sound/hover-text/life-class/state/overlay packets, and fires attribute-update callbacks for velocity, attack-rate, level, strength, and dexterity stats that changed.

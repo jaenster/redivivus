@@ -2972,6 +2972,7 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
     D2DrlgActWarpsInfoStrc* pDrlgActWarpsInfoPrev;
     D2DrlgActWarpsInfoStrc* pWarpsInfoCurrent2;
     D2DrlgActWarpsInfoStrc* pWarpsInfoTmp;
+    int nDifficulty;
     int nSeedHi;
     int nNodeOffset;
     D2DrlgLevelPlacementStrc pLevelUnknown;
@@ -2981,7 +2982,6 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
     D2DrlgLevelDataEntry* pCurLevelDataList;
     eD2DrlgType eDrlgType;
     D2DrlgLevelDataPresetArea* pOuterCloisterLevelData;
-    uint8_t byDifficulty;
     int64_t lSeedProductB;
     eD2LevelId eLevelIdCurrent;
     int64_t lSeedProductA;
@@ -3008,10 +3008,10 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
       nCoordsOffset = 0;
       do {
         pLevelDefs = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(nLevelId);
-        byDifficulty = pDrlg->nDifficulty;
-        *(int*)((uintptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldSize.x + nCoordsOffset) = pLevelDefs->SizeX[byDifficulty];
+        nDifficulty = (int)pDrlg->nDifficulty;
+        *(int*)((uintptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldSize.x + nCoordsOffset) = pLevelDefs->SizeX[nDifficulty];
         nNodeEntryOffset = nNodeOffset * 0x10;
-        *(int*)((uintptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldSize.y + nCoordsOffset) = pLevelDefs->SizeY[byDifficulty];
+        *(int*)((uintptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldSize.y + nCoordsOffset) = pLevelDefs->SizeY[nDifficulty];
         nLevelId = pLevelData->aEntry[nNodeOffset + 1].neD2LevelId;
         nNodeOffset++;
         nCoordsOffset = nNodeEntryOffset + 0x10;

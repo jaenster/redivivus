@@ -109,7 +109,7 @@ uint32_t __stdcall GetSoundEnv() {
     return (uint32_t)pLevelsTxt->SoundEnv;
 }
 
-uint32_t __stdcall SOUNDHDR_GetGlobal0() {
+int __stdcall SOUNDHDR_GetGlobal0() {
     return gpSoundHdrGlobal;
 }
 
@@ -833,8 +833,8 @@ void __fastcall SOUNDHDR_ProcessAsyncLoads(int32_t dwTick) {
       nRowIndex = 1;
       nRowOffset = 0x8e;
       do {
-        pSoundRow = pTxtSounds[nRowIndex].Filename;
-        if (!pTxtSounds[nRowIndex].nLoadState && (*(int*)(pSoundRow + 0x8a) || pSoundRow[0x4c])) {
+        pSoundRow = pTxtSounds->Filename + nRowOffset;
+        if (!*(int*)((int)pTxtSounds->field_0x74 + nRowOffset + 0x12) && (*(int*)(pSoundRow + 0x8a) || pSoundRow[0x4c])) {
           if (!dwTick || gnSoundAsyncLoadCount < 0xf && (uint32_t)(dwTick - gnSoundEvictedAudioVolume) >= 0xfa) {
             SOUNDHDR_LoadSoundFile(nRowIndex, (uint32_t)!dwTick, 1);
             if (*(int*)(pSoundRow + 0x86) == 1) {

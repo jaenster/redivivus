@@ -434,7 +434,7 @@ void __fastcall DRLGROOMTILE_CompactTileDataArray(D2RoomExStrc * pRoomEx) {
         nTileOffset = 0;
         do {
           pReallocated = pTileGrid->sRoomTiles.pRoofTiles;
-          *(int*)&pReallocated[nRoofCount].pNext = (uintptr_t)&pReallocated[1].nScreenX + nTileOffset;
+          *(int*)((uintptr_t)&pReallocated->pNext + nTileOffset) = (uintptr_t)&pReallocated[1].nScreenX + nTileOffset;
           nRoofCount++;
           nTileOffset += 0x30;
         } while (nRoofCount < pTileGrid->nShadows - 1);

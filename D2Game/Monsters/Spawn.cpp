@@ -565,8 +565,6 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithCollisionObj(::SGAMEDATA * p
     BOOL _bObjColFlag;
     bool bRescueQuestDone;
     bool bObjColFlag;
-    int32_t nValidatedClassId;
-    void* pNullExtra;
     if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize)) {
       return nullptr;
     }
@@ -611,23 +609,16 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithCollisionObj(::SGAMEDATA * p
       return pMonster;
     }
     if (nClassId < sgptDataTable->nTxtMonStatsSize && nClassId == 0x1b0) {
-      bool bActive;
-      pNullExtra = 0;
-      nValidatedClassId = 0;
-      bActive = true;
-      UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x23b, D2Client::Units::GetXPosFromDynamicPathUnit(pMonster), D2Client::Units::GetYPosFromDynamicPathUnit(pMonster), pGame, pRoom, bActive, nValidatedClassId, pNullExtra);
+      UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x23b, D2Client::Units::GetXPosFromDynamicPathUnit(pMonster), D2Client::Units::GetYPosFromDynamicPathUnit(pMonster), pGame, pRoom, true, 0, 0);
       return pMonster;
     }
 
-    nValidatedClassId = D2Client::UNIT::Player::ValidateClassId(nClassId);
+    int32_t nValidatedClassId = D2Client::UNIT::Player::ValidateClassId(nClassId);
     if (nValidatedClassId != 0x1b1) {
       return pMonster;
     }
 
-    pNullExtra = 0;
-    int32_t nInitialMode = 0;
-    bool bActive2 = true;
-    UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x23c, D2Client::Units::GetXPosFromDynamicPathUnit(pMonster), D2Client::Units::GetYPosFromDynamicPathUnit(pMonster), pGame, pRoom, bActive2, nInitialMode, pNullExtra);
+    UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x23c, D2Client::Units::GetXPosFromDynamicPathUnit(pMonster), D2Client::Units::GetYPosFromDynamicPathUnit(pMonster), pGame, pRoom, true, 0, 0);
     return pMonster;
 }
 

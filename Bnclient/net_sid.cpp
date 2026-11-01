@@ -1617,7 +1617,7 @@ void __fastcall NET_SID_CLIENT_BigNumMultiplyAccumulate(int32_t nWords, uint32_t
       pSrcWord = srcPtr - 1;
       srcPtr--;
       nWords--;
-      product64 = _allmul(*pSrcWord, 0, multiplier, 0);
+      product64 = (int64_t)*pSrcWord * multiplier;
       carryIn = (uint32_t)(product64 + carryExpanded >> 0x20);
       pOutWord--;
       *pOutWord = (uint32_t)(product64 + carryExpanded);

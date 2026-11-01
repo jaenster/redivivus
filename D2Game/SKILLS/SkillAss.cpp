@@ -1574,7 +1574,7 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     nEnhDmgPctWork = pDamage->dwEnDmgPct;
     if ((int)nMinDmg > 0x100000) {
       if ((int)(nMinDmg & -16) < 0x640) {
-        nDivResult = _alldiv((uint32_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMinDmg), (uint32_t)((uint64_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMinDmg) >> 0x20), 100, 0);
+        nDivResult = (int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMinDmg / 100;
         nDivResult = (uint64_t)((uint64_t)nDivResult & 0xffffffff00000000ull | (uint64_t)(uint32_t)(int)nDivResult);
       } else {
         *(uint32_t*)(char*)&nDivResult = (int)nMinDmg / 100 * nEnhDmgPctWork;
@@ -1582,7 +1582,7 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     } else {
       if ((int)nEnhDmgPctWork > 0x10000) {
         if ((int)(nEnhDmgPctWork & -16) < 0x640) {
-          nDivResult = _alldiv((uint32_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMinDmg), (uint32_t)((uint64_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMinDmg) >> 0x20), 100, 0);
+          nDivResult = (int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMinDmg / 100;
           nDivResult = (uint64_t)((uint64_t)nDivResult & 0xffffffff00000000ull | (uint64_t)(uint32_t)(int)nDivResult);
         } else {
           *(uint32_t*)(char*)&nDivResult = (int)nEnhDmgPctWork / 100 * nMinDmg;
@@ -1593,7 +1593,7 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     }
     if ((int)nMaxDmg > 0x100000) {
       if ((int)(nMaxDmg & -16) < 0x640) {
-        lVar2 = _alldiv((uint32_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMaxDmg), (uint32_t)((uint64_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMaxDmg) >> 0x20), 100, 0);
+        lVar2 = (int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMaxDmg / 100;
         nEnhMaxDmg = (int)lVar2;
       } else {
         nEnhMaxDmg = (int)nMaxDmg / 100 * nEnhDmgPctWork;
@@ -1601,7 +1601,7 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     } else {
       if ((int)nEnhDmgPctWork > 0x10000) {
         if ((int)(nEnhDmgPctWork & -16) < 0x640) {
-          lVar2 = _alldiv((uint32_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMaxDmg), (uint32_t)((uint64_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMaxDmg) >> 0x20), 100, 0);
+          lVar2 = (int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMaxDmg / 100;
           nEnhMaxDmg = (int)lVar2;
         } else {
           nEnhMaxDmg = (int)nEnhDmgPctWork / 100 * nMaxDmg;
@@ -1621,7 +1621,7 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     nEnhMaxDmg = nMaxDmgKick * 0x100;
     if (nMinDmgKick > 0x100000) {
       if (nMinDmgKick < 0x640) {
-        lVar2 = _alldiv((uint32_t)((int64_t)(int)nEnhDmgPct * (int64_t)nMinDmgKick), (uint32_t)((uint64_t)((int64_t)(int)nEnhDmgPct * (int64_t)nMinDmgKick) >> 0x20), 100, 0);
+        lVar2 = (int64_t)(int)nEnhDmgPct * (int64_t)nMinDmgKick / 100;
         nEnhKickDmg = (int)lVar2;
       } else {
         nEnhKickDmg = nMinDmgKick / 100 * nEnhDmgPct;
@@ -1629,7 +1629,7 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     } else {
       if ((int)nEnhDmgPct > 0x10000) {
         if ((int)(nEnhDmgPct & -16) < 0x640) {
-          lVar2 = _alldiv((uint32_t)((int64_t)(int)nEnhDmgPct * (int64_t)nMinDmgKick), (uint32_t)((uint64_t)((int64_t)(int)nEnhDmgPct * (int64_t)nMinDmgKick) >> 0x20), 100, 0);
+          lVar2 = (int64_t)(int)nEnhDmgPct * (int64_t)nMinDmgKick / 100;
           nEnhKickDmg = (int)lVar2;
         } else {
           nEnhKickDmg = (int)nEnhDmgPct / 100 * nMinDmgKick;
@@ -1656,7 +1656,7 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
       }
     }
 
-    lVar2 = _alldiv((uint32_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)nEnhMaxDmg), (uint32_t)((uint64_t)((int64_t)(int)nEnhDmgPctWork * (int64_t)nEnhMaxDmg) >> 0x20), 100, 0);
+    lVar2 = (int64_t)(int)nEnhDmgPctWork * (int64_t)nEnhMaxDmg / 100;
     nEnhKickDmg = (int)lVar2;
     roll_and_apply_damage:
     nMinDmgKick = nMinDmgKick + nMinDmg + (int)nDivResult;
@@ -2106,8 +2106,7 @@ BOOL __fastcall Skills_SrvDoFunc_044_SummonBladeSentinel(::SGAMEDATA * pGame, D2
       return 0;
     }
 
-    uint16_t nLayer = 0;
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_level, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), nLayer);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_level, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), 0);
     UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit_00, D2Common::Units::UNITS_GetRoom(pUnit), D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), D2Client::Units::GetYPosFromDynamicPathUnit(pUnit), 0, 0);
     D2AiCmdArgumentsStrc local_2c = {0};
     local_2c.nCmdId = 0;
@@ -2768,9 +2767,7 @@ BOOL __fastcall Skills_SrvDoFunc_049_SummonShadowClone(::SGAMEDATA * pGame, D2Un
       return 0;
     }
 
-    uint16_t nLayer;
-    nLayer = 0;
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSummon, UNITSTAT_level, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), nLayer);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSummon, UNITSTAT_level, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), 0);
     SKILLASS_ApplyLevelScaledBuffs(pGame, (int32_t)pSkillTxtSaved, eSkill, nSkillLvl, pSummon);
     int32_t nLifetime;
     nLifetime = D2Client::SKILLS::GetSkillParam4(eSkill, nSkillLvl);

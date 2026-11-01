@@ -137,9 +137,11 @@ static void __fastcall MONSTER_EquipFromClassTable(D2UnitStrc * pUnit) {
 
 // Called when a server monster is created (from CreateMonster) to wire up quest behavior based on the monster's base class id (resolved through MonStats BaseId). Dispatches per boss/quest-monster: attaches the relevant quest record to the unit (QUEST_AttachToUnitByQuestId, e.g. Andariel->SistersToTheSlaughter, Radament->RadamentsLair, Summoner->TheSummoner, Diablo->TerrorsEnd, Baal->EveOfDestruction, Izual->TheFallenAngel, Hephasto->HellsForge, Nihlathak->BetrayalOfHaggorath, Anya-on-mount->RescueOnMountArreat) and/or applies fixed monster umods via InitUmods, sets unit flags (SUMMONER, NOTC), or special-cases (NM/Hell clone ids 0x2c0-0x2c5 get extra umods; act bosses get equip/umods; Q12 death dispatch by position). No-op for ordinary monsters.
 static void __fastcall MONSTER_OnCreateAttachQuests(D2UnknownCreateMonsterStrc * pQuestEventArg, D2UnitStrc * pMonster) {
-    int32_t nMonsterClassId;
+    int32_t nX;
     eD2QuestsInternal nQuestNoInternal;
     int32_t nRawClassId;
+    D2RoomStrc* pRoom;
+    pRoom = pQuestEventArg->pRoom;
     int nUmodId;
     nUmodId = pQuestEventArg->nClassId;
     ::SGAMEDATA* pGame;
@@ -208,8 +210,8 @@ static void __fastcall MONSTER_OnCreateAttachQuests(D2UnknownCreateMonsterStrc *
       case 0xaf:
         nUmodId = sgptDataTable->nTxtMonStatsSize > 0xaf ? 0xaf : -1;
       nRawClassId = D2Client::Units::GetYPosFromDynamicPathUnit(pMonster);
-      nMonsterClassId = D2Client::Units::GetXPosFromDynamicPathUnit(pMonster);
-      Quests::QUESTS::QUEST_DispatchMonsterDeathToQ12(nMonsterClassId, nRawClassId, nUmodId);
+      nX = D2Client::Units::GetXPosFromDynamicPathUnit(pMonster);
+      Quests::QUESTS::QUEST_DispatchMonsterDeathToQ12(pGame, pRoom, nX, nRawClassId, nUmodId);
       return;
       case 0xfa:
         Quests::QUESTS::QUEST_AttachToUnitByQuestId(pGame, pMonster, QUESTINT_TheSummoner);
@@ -880,10 +882,8 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
         nRngResult = nRadiusStep;
         nClassId = pMonsterSpawnData->nX;
         nWalkY = pMonsterSpawnData->nY;
-        lRngProduct = (uint64_t)pRoom->sSeed.nSeedLow * 0x6ac690c5;
-        nRngCarry1 = (uint32_t)((uint64_t)lRngProduct >> 0x20);
         nRingBottomY = nRadiusStep * 2;
-        sSeedTmp = (D2SeedStrc)(lRngProduct + (uint64_t)pRoom->sSeed.nSeedHigh);
+        sSeedTmp = D2_SEED_NEXT(pRoom->sSeed);
         pRoom->sSeed.nSeedHigh = sSeedTmp.nSeedHigh;
         pRoom->sSeed.nSeedLow = sSeedTmp.nSeedLow;
         bRngOdd = !(sSeedTmp.nSeedLow & 1);
@@ -897,9 +897,7 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
 
         nDeltaY = (uint32_t)bRngOdd;
         nDeltaX = (uint32_t)!bRngOdd;
-        lRngProduct = (uint64_t)pRoom->sSeed.nSeedLow * 0x6ac690c5;
-        nRngCarry2 = (uint32_t)((uint64_t)lRngProduct >> 0x20);
-        sSeedTmp = (D2SeedStrc)(lRngProduct + (uint64_t)pRoom->sSeed.nSeedHigh);
+        sSeedTmp = D2_SEED_NEXT(pRoom->sSeed);
         pRoom->sSeed.nSeedHigh = sSeedTmp.nSeedHigh;
         pRoom->sSeed.nSeedLow = sSeedTmp.nSeedLow;
         if (sSeedTmp.nSeedLow & 1) {

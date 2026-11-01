@@ -69,7 +69,6 @@ BOOL __stdcall HandleUpdateToExpansion(D2ControlMsg * pControlMsg) {
     uint32_t bUpgradeOk;
     int32_t nJoinResult;
     uint16_t* pwszMessage;
-    uint16_t* pwszFormat;
     uint16_t awszCharName[256];
     uint8_t aszCommandAnsi[256];
     D2CharSelStrc* pSelectedCharacter;
@@ -111,8 +110,7 @@ BOOL __stdcall HandleUpdateToExpansion(D2ControlMsg * pControlMsg) {
               Fog::File::CONTAINER_InitializeBuffer(awszCharName, 2, 0x100, MainMenus::STRING_ZeroOneWCHAR);
               D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszCharName, pSelectedCharacter->szCharname, 0x100);
               pwszMessage = awszCharName;
-              pwszFormat = D2Lang::StrTable::strtable::GetLocaleString(0x2b89);
-              D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, awszFormattedMsg, pwszFormat, pwszMessage);
+              D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, awszFormattedMsg, D2Lang::StrTable::strtable::GetLocaleString(0x2b89), pwszMessage);
               pwszMessage = awszFormattedMsg;
             }
 

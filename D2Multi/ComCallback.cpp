@@ -821,11 +821,13 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
     bool bVar1;
     bool bVar2;
     bool bVar3;
+    uint32_t nClassId;
+    uint32_t uVar4;
     uint8_t byTitleLevel;
+    uint8_t bVar5;
     D2ChannelUserStrc* pSortNode;
     D2ChannelUserStrc* pCurUser;
     uint32_t dwCompFlags;
-    uint32_t dwFlags;
     D2ChannelUserStrc* pScanNode;
     D2ChannelUserStrc* pNextScan;
     D2ChannelUserStrc* pPrevNode;
@@ -871,7 +873,7 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
     nUserIndex = 0;
     pCurUser = gpChannelUserListHead;
     do {
-      uint32_t nClassId;
+      uint32_t dwFlags;
       if (!pCurUser) {
         return;
       }
@@ -921,32 +923,32 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
           dwCompFlags &= gadwInvBitMasks[0xd];
         }
 
-        nClassId = pCurUser->nFlags >> 8 & 0x1f;
+        uVar4 = pCurUser->nFlags >> 8 & 0x1f;
         if (pCurUser->nFlags & 0x20) {
-          if (nClassId >= 0xf) {
-            byTitleLevel = 3;
+          if (uVar4 >= 0xf) {
+            bVar5 = 3;
             bInserted = true;
           } else {
-            if (nClassId < 10) {
-              bSignedGreaterOrEqual = (int32_t)nClassId >= 5;
-              byTitleLevel = bSignedGreaterOrEqual;
-              bInserted = (bool)byTitleLevel;
+            if (uVar4 < 10) {
+              bSignedGreaterOrEqual = (int32_t)uVar4 >= 5;
+              bVar5 = bSignedGreaterOrEqual;
+              bInserted = (bool)bVar5;
             } else {
-              byTitleLevel = 2;
+              bVar5 = 2;
               bInserted = false;
             }
           }
         } else {
-          if (nClassId >= 0xc) {
-            byTitleLevel = 3;
+          if (uVar4 >= 0xc) {
+            bVar5 = 3;
             bInserted = true;
           } else {
-            if (nClassId < 8) {
-              bSignedGreaterOrEqual = (int32_t)nClassId >= 4;
-              byTitleLevel = bSignedGreaterOrEqual;
-              bInserted = (bool)byTitleLevel;
+            if (uVar4 < 8) {
+              bSignedGreaterOrEqual = (int32_t)uVar4 >= 4;
+              bVar5 = bSignedGreaterOrEqual;
+              bInserted = (bool)bVar5;
             } else {
-              byTitleLevel = 2;
+              bVar5 = 2;
               bInserted = false;
             }
           }
@@ -956,7 +958,7 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
         } else {
           dwCompFlags &= gadwInvBitMasks[6];
         }
-        if (byTitleLevel & 2) {
+        if (bVar5 & 2) {
           dwCompFlags |= gadwBitMasks[7];
         } else {
           dwCompFlags &= gadwInvBitMasks[7];

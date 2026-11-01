@@ -538,13 +538,11 @@ void __fastcall TXT_AllocTxt_MagicAffixes(D2PoolManagerStrc * pMemory) {
       return;
     }
 
-    int nByteOffset = 0;
     do {
       uint32_t nStringId;
-      nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)(gsMagicAffixTable.pTable->name + nByteOffset), &pStringOut);
+      nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&gsMagicAffixTable.pTable[nIdx].name[0], &pStringOut);
       gsMagicAffixTable.pTable[nIdx].wNameStr = (short int)nStringId;
       nIdx++;
-      nByteOffset += 0x90;
     } while (nIdx < gsMagicAffixTable.nSize);
 }
 
@@ -959,7 +957,7 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
 
     nByteOffset = 0;
     do {
-      pCurSetItem = (D2SetItemsTxt*)(sgtDataTable.pTxtSetItems->index + nByteOffset - 2);
+      pCurSetItem = &sgtDataTable.pTxtSetItems[nIdx];
       pCurSetItem->nId = (short int)nIdx;
       Fog::Src::Excel::FOG_ParseStringField(sgtDataTable.pTxtSetItemsLink, pCurSetItem->index);
       pStringLookup = 0;
@@ -1031,19 +1029,17 @@ void __fastcall TXT_AllocTxt_qualityitems(D2PoolManagerStrc * pMemory) {
       return;
     }
 
-    int nByteOffset = 0;
     do {
-      if (nTxtQualityItemsSize.pTable->effect1[nByteOffset] != '\0') {
-        nTxtQualItemsBase = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)(nTxtQualityItemsSize.pTable->effect1 + nByteOffset), &pStringOut);
-        *(short int*)(nTxtQualityItemsSize.pTable->effect2 + nByteOffset + 0x20) = (short int)nTxtQualItemsBase;
+      if (nTxtQualityItemsSize.pTable[nIdx].effect1[0] != '\0') {
+        nTxtQualItemsBase = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&nTxtQualityItemsSize.pTable[nIdx].effect1[0], &pStringOut);
+        *(short int*)(nTxtQualityItemsSize.pTable[nIdx].effect2 + 0x20) = (short int)nTxtQualItemsBase;
       }
-      if (nTxtQualityItemsSize.pTable->effect2[nByteOffset] != '\0') {
-        nTxtQualItemsBase = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)(nTxtQualityItemsSize.pTable->effect2 + nByteOffset), &pStringOut);
-        *(short int*)(nTxtQualityItemsSize.pTable->effect2 + nByteOffset + 0x22) = (short int)nTxtQualItemsBase;
+      if (nTxtQualityItemsSize.pTable[nIdx].effect2[0] != '\0') {
+        nTxtQualItemsBase = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&nTxtQualityItemsSize.pTable[nIdx].effect2[0], &pStringOut);
+        *(short int*)(nTxtQualityItemsSize.pTable[nIdx].effect2 + 0x22) = (short int)nTxtQualItemsBase;
       }
 
       nIdx++;
-      nByteOffset += 0x70;
     } while (nIdx < nTxtQualityItemsSize.nSize);
 }
 
@@ -1839,7 +1835,6 @@ void __fastcall TXT_AllocTxt_itemtypes(D2PoolManagerStrc * pMemory) {
     bool bIsSubtype;
     uint32_t nCheckTypeId;
     int nTypeCount;
-    int nFieldOffset;
     uint8_t* pBitmap;
     D2BinFieldInputStrc aFieldDefs[36] = {
       {"code", FIELDTYPE_CODE4, 0, 0, &sgtDataTable.pTxtItemTypesLink},
@@ -1884,10 +1879,8 @@ void __fastcall TXT_AllocTxt_itemtypes(D2PoolManagerStrc * pMemory) {
     if (!sgtDataTable.bUseTxt && gpaMiscTxtTables) {
       nTypeCount = 0;
       if (sgtDataTable.nTxtItemTypesSize > 0) {
-        nFieldOffset = 0;
         do {
-          Fog::Src::Excel::FillUpTxtLinkSub0x08(sgtDataTable.pTxtItemTypesLink, *(char**)(sgtDataTable.pTxtItemTypes->code + nFieldOffset));
-          nFieldOffset += 0xe4;
+          Fog::Src::Excel::FillUpTxtLinkSub0x08(sgtDataTable.pTxtItemTypesLink, *(char**)&sgtDataTable.pTxtItemTypes[nTypeCount].code[0]);
           nTypeCount++;
         } while (nTypeCount < sgtDataTable.nTxtItemTypesSize);
       }

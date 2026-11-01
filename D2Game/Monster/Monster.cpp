@@ -459,8 +459,7 @@ void __fastcall MONSTER_CreateAndEquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUn
       return;
     }
 
-    uint16_t nLayer = 0;
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_durability, D2Common::Stats::StatsEx::GetTxtMaxDurability(pItemUnit), nLayer);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_durability, D2Common::Stats::StatsEx::GetTxtMaxDurability(pItemUnit), 0);
 }
 
 // Force-kills all living, non-boss, neutral-alignment monsters of class nAltMonClassId or nAltMonClassId2 in the specified level (or all rooms of the act if eLevel==LEVEL_None). For each match, sets the Death skill and executes the lifecycle transition via MONSTERAI_ExecuteLifecycleTransition.

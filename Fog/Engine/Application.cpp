@@ -779,30 +779,30 @@ void __stdcall MISC_GetValueFromD2Ini(D2IniConfigStrc * pD2IniData) {
     Storm::Source::SSTR::SStrPack(szIniPath, "D2.ini", 0x104);
     uint32_t nEntryOffset = 0;
     do {
-      cVar1 = D2IniConfigValues[0].szCmdLineArg[nEntryOffset + 0x1b];
-      pDestField = pD2IniData->bD2ExpMpqExistsOrLanugageCode + *(int*)(D2IniConfigValues[0].szCmdLineArg + nEntryOffset + 0x1e);
+      cVar1 = (char)D2IniConfigValues[nEntryOffset].nType;
+      pDestField = pD2IniData->bD2ExpMpqExistsOrLanugageCode + D2IniConfigValues[nEntryOffset].nOffset;
       switch (cVar1) {
         case '\0':
           {
-            /* LPCSTR lpFileName for GetPrivateProfileIntA */ /* INT nDefault for GetPrivateProfileIntA */ /* LPCSTR lpKeyName for GetPrivateProfileIntA */ /* LPCSTR lpAppName for GetPrivateProfileIntA */ dwIniValue = GetPrivateProfileIntA(D2IniConfigValues[0].szAppName + nEntryOffset, D2IniConfigValues[0].szKeyName + nEntryOffset, *(INT*)(D2IniConfigValues[0].szCmdLineArg + nEntryOffset + 0x22), szIniPath);
+            /* LPCSTR lpFileName for GetPrivateProfileIntA */ /* INT nDefault for GetPrivateProfileIntA */ /* LPCSTR lpKeyName for GetPrivateProfileIntA */ /* LPCSTR lpAppName for GetPrivateProfileIntA */ dwIniValue = GetPrivateProfileIntA(D2IniConfigValues[nEntryOffset].szAppName, D2IniConfigValues[nEntryOffset].szKeyName, D2IniConfigValues[nEntryOffset].nDefaultValue, szIniPath);
             *pDestField = dwIniValue != 0;
             break;
           }
         case '\x01':
           {
-            /* LPCSTR lpFileName for GetPrivateProfileIntA */ /* INT nDefault for GetPrivateProfileIntA */ /* LPCSTR lpKeyName for GetPrivateProfileIntA */ /* LPCSTR lpAppName for GetPrivateProfileIntA */ dwIniValue = GetPrivateProfileIntA(D2IniConfigValues[0].szAppName + nEntryOffset, D2IniConfigValues[0].szKeyName + nEntryOffset, *(INT*)(D2IniConfigValues[0].szCmdLineArg + nEntryOffset + 0x22), szIniPath);
+            /* LPCSTR lpFileName for GetPrivateProfileIntA */ /* INT nDefault for GetPrivateProfileIntA */ /* LPCSTR lpKeyName for GetPrivateProfileIntA */ /* LPCSTR lpAppName for GetPrivateProfileIntA */ dwIniValue = GetPrivateProfileIntA(D2IniConfigValues[nEntryOffset].szAppName, D2IniConfigValues[nEntryOffset].szKeyName, D2IniConfigValues[nEntryOffset].nDefaultValue, szIniPath);
             *(UINT*)pDestField = dwIniValue;
             break;
           }
         case '\x02':
           {
-            /* LPCSTR lpFileName for GetPrivateProfileStringA */ /* DWORD nSize for GetPrivateProfileStringA */ /* LPSTR lpReturnedString for GetPrivateProfileStringA */ /* LPCSTR lpDefault for GetPrivateProfileStringA */ /* LPCSTR lpKeyName for GetPrivateProfileStringA */ /* LPCSTR lpAppName for GetPrivateProfileStringA */ GetPrivateProfileStringA(D2IniConfigValues[0].szAppName + nEntryOffset, D2IniConfigValues[0].szKeyName + nEntryOffset, "", pDestField, 0x1b, szIniPath);
+            /* LPCSTR lpFileName for GetPrivateProfileStringA */ /* DWORD nSize for GetPrivateProfileStringA */ /* LPSTR lpReturnedString for GetPrivateProfileStringA */ /* LPCSTR lpDefault for GetPrivateProfileStringA */ /* LPCSTR lpKeyName for GetPrivateProfileStringA */ /* LPCSTR lpAppName for GetPrivateProfileStringA */ GetPrivateProfileStringA(D2IniConfigValues[nEntryOffset].szAppName, D2IniConfigValues[nEntryOffset].szKeyName, "", pDestField, 0x1b, szIniPath);
             break;
           }
       }
 
-      nEntryOffset += 0x5c;
-    } while (nEntryOffset < 0x14d8);
+      nEntryOffset++;
+    } while (nEntryOffset < 58);
 }
 
 int32_t __stdcall INI_FindConfigValueIndex(uint8_t * pbArgName) {

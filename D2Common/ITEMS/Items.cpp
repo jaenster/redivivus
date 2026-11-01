@@ -2486,8 +2486,7 @@ static int __stdcall ITEMS_DeserializeItemHeader(int32_t bIsOnGround, uint32_t n
     }
     if (nFileVersion > 0x5c) {
       pnItemSaveAdd = &__frame0.nSaveAdd;
-      dwReadValue = ITEM_GetItemsTxt_szCode(pItem);
-      pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(dwReadValue, pnItemSaveAdd);
+      pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(ITEM_GetItemsTxt_szCode(pItem), pnItemSaveAdd);
       if (!pItemsTxt) {
         return -1;
       }

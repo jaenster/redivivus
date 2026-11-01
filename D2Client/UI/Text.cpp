@@ -1656,11 +1656,9 @@ void __fastcall TEXT_ProcessChatMessage(MessageStrc * pMessage) {
     char cVar1;
     uint32_t nCheckResult;
     char* pszName;
-    uint16_t* pszLocaleStr;
     char* pbNameScan;
     int i;
     uint16_t* pszWideOut;
-    uint16_t* pWVar2;
     uint16_t wszMsgBuf[612];
     uint16_t wcWideStart[256];
     uint16_t wszFormatBuf[612];
@@ -1724,10 +1722,7 @@ void __fastcall TEXT_ProcessChatMessage(MessageStrc * pMessage) {
     if (byMsgType == 6) {
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszMsgBuf, pszName, 0x100);
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszShortName, pMessage->name, 0x10);
-      pWVar2 = wszMsgBuf;
-      pszWideOut = wszShortName;
-      pszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xe4a);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x264, wszFormatBuf, pszLocaleStr, pszWideOut, pWVar2);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x264, wszFormatBuf, D2Lang::StrTable::strtable::GetLocaleString(0xe4a), wszShortName, wszMsgBuf);
       ui::UI_RemoveColorCodesFromString(wszFormatBuf);
       TEXT_PrintGameString(wszFormatBuf, 2);
       return;
@@ -5714,8 +5709,7 @@ void __fastcall TEXT_ShowScrollingText(uint16_t nParam, int32_t nParam2, int32_t
     if (bNeedRegister) {
       gbTextEventHandlersRegistered = 1;
       gbTextNpcMenuActive = GetTickCount();
-      nPrevFont = 7;
-      _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUITextFlagInit, nPrevFont);
+      _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUITextFlagInit, 7);
     }
 
     eD2Sounds nSoundId = UI_GetDialogLineCount(nParam);

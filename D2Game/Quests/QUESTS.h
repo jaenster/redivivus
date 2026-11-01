@@ -203,7 +203,7 @@ uint32_t __fastcall QUEST_NpcWantsInteract(::SGAMEDATA * pGame, struct D2UnitStr
 // Sets a quest record state in the game quest tracking system. Validates quest control pointer and updates the quest state via the quest record interface.
 void __fastcall QUEST_SetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuest, eD2QuestState eState);
 int __fastcall QUEST_GetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuestId, int32_t nUnused);
-void __stdcall QUEST_DispatchMonsterDeathToQ12(int32_t nMonsterClassId, int32_t nBossType, int32_t nUnused);
+void __fastcall QUEST_DispatchMonsterDeathToQ12(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nMonsterClassId);
 // Finds the QUESTINT_SistersToTheSlaughter entry in pGame's quest list (pPrev chain) and returns Q06_GetQuestSpecificFlag for it; halts (line 2140) when there is none.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 uint32_t __fastcall QUEST_GetSistersToTheSlaughterSpecificFlag(::SGAMEDATA * pGame);

@@ -2097,6 +2097,7 @@ static uint32_t AUTOMAP_GetUnitColor(D2UnitStrc * pUnit, uint8_t * pbColorOut) {
 }
 
 void __stdcall AUTOMAP_DrawGamePassword() {
+    int32_t nTextWidth;
     int nY;
     uint16_t* pZeroFill;
     uint16_t wszPasswordLine[50];
@@ -2127,7 +2128,8 @@ void __stdcall AUTOMAP_DrawGamePassword() {
       bMultiLineCenter = 0;
       dwColor = 4;
       nY = AUTOMAP_TextHeightOffset;
-      D2Win::Src::D2WinFont::DRAW_text(wszPasswordLine, WindowSizeX - D2Win::Src::D2WinFont::DRAW_text0(wszPasswordLine) - 0x10, nY, dwColor, bMultiLineCenter);
+      nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszPasswordLine);
+      D2Win::Src::D2WinFont::DRAW_text(wszPasswordLine, WindowSizeX - nTextWidth - 0x10, nY, dwColor, bMultiLineCenter);
       AUTOMAP_TextHeightOffset += 0x10;
     }
 
@@ -2144,7 +2146,8 @@ void __stdcall AUTOMAP_DrawGamePassword() {
     bMultiLineCenter = 0;
     dwColor = 4;
     nY = AUTOMAP_TextHeightOffset;
-    D2Win::Src::D2WinFont::DRAW_text(wszPasswordLine, WindowSizeX - D2Win::Src::D2WinFont::DRAW_text0(wszPasswordLine) - 0x10, nY, dwColor, bMultiLineCenter);
+    nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszPasswordLine);
+    D2Win::Src::D2WinFont::DRAW_text(wszPasswordLine, WindowSizeX - nTextWidth - 0x10, nY, dwColor, bMultiLineCenter);
     AUTOMAP_TextHeightOffset += 0x10;
 }
 
@@ -2160,7 +2163,8 @@ void __stdcall AUTOMAP_DrawExpansionTag() {
     BOOL bMultiLineCenter = 0;
     int32_t dwColor = 4;
     nY = AUTOMAP_TextHeightOffset;
-    D2Win::Src::D2WinFont::DRAW_text(wText, WindowSizeX - D2Win::Src::D2WinFont::DRAW_text0(wText) - 0x10, nY, dwColor, bMultiLineCenter);
+    int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wText);
+    D2Win::Src::D2WinFont::DRAW_text(wText, WindowSizeX - nTextWidth - 0x10, nY, dwColor, bMultiLineCenter);
     AUTOMAP_TextHeightOffset += 0x10;
 }
 
@@ -2175,7 +2179,8 @@ void __stdcall AUTOMAP_DrawLevelName() {
     BOOL bMultiLineCenter = 0;
     int32_t dwColor = 4;
     int nY = AUTOMAP_TextHeightOffset;
-    D2Win::Src::D2WinFont::DRAW_text(wMessage, WindowSizeX - D2Win::Src::D2WinFont::DRAW_text0(wMessage) - 0x10, nY, dwColor, bMultiLineCenter);
+    int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wMessage);
+    D2Win::Src::D2WinFont::DRAW_text(wMessage, WindowSizeX - nTextWidth - 0x10, nY, dwColor, bMultiLineCenter);
     AUTOMAP_TextHeightOffset += 0x10;
 }
 
@@ -2209,7 +2214,8 @@ void __stdcall AUTOMAP_DrawServerIP() {
     BOOL bMultiLineCenter = 0;
     int32_t dwColor = 4;
     nY = AUTOMAP_TextHeightOffset;
-    D2Win::Src::D2WinFont::DRAW_text(wIpWide, WindowSizeX - D2Win::Src::D2WinFont::DRAW_text0(wIpWide) - 0x10, nY, dwColor, bMultiLineCenter);
+    nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wIpWide);
+    D2Win::Src::D2WinFont::DRAW_text(wIpWide, WindowSizeX - nTextWidth - 0x10, nY, dwColor, bMultiLineCenter);
     AUTOMAP_TextHeightOffset += 0x10;
 }
 
@@ -2217,7 +2223,6 @@ void __stdcall AUTOMAP_DrawDifficulty() {
     int nY;
     uint16_t nDiffStringId;
     uint16_t wText[300];
-    BOOL bMultiLineCenter;
     uint8_t eDifficulty = GAME::Game::GetDificulity();
     switch (eDifficulty) {
       case '\x01':
@@ -2249,14 +2254,14 @@ void __stdcall AUTOMAP_DrawDifficulty() {
       exit(-1);
     }
 
-    uint16_t* wFormat;
+    BOOL bMultiLineCenter;
     pZeroFill = D2Lang::StrTable::strtable::GetLocaleString(nDiffStringId);
-    wFormat = D2Lang::StrTable::strtable::GetLocaleString(0x1057);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(300, wText, wFormat, pZeroFill);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(300, wText, D2Lang::StrTable::strtable::GetLocaleString(0x1057), pZeroFill);
     bMultiLineCenter = 0;
     nFormatLen = 4;
     nY = AUTOMAP_TextHeightOffset;
-    D2Win::Src::D2WinFont::DRAW_text(wText, WindowSizeX - D2Win::Src::D2WinFont::DRAW_text0(wText) - 0x10, nY, nFormatLen, bMultiLineCenter);
+    nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wText);
+    D2Win::Src::D2WinFont::DRAW_text(wText, WindowSizeX - nTextWidth - 0x10, nY, nFormatLen, bMultiLineCenter);
     AUTOMAP_TextHeightOffset += 0x10;
     return;
 }
@@ -2669,7 +2674,8 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
         bHasInteract = 0;
         nTargetY = 4;
         nTemp += -0x12;
-        D2Win::Src::D2WinFont::DRAW_text(pUnitTypeOrName, xLocation - D2Win::Src::D2WinFont::DRAW_text0(pUnitTypeOrName) / 2, nTemp, nTargetY, bHasInteract);
+        nTargetX = D2Win::Src::D2WinFont::DRAW_text0(pUnitTypeOrName);
+        D2Win::Src::D2WinFont::DRAW_text(pUnitTypeOrName, xLocation - nTargetX / 2, nTemp, nTargetY, bHasInteract);
         D2Win::Src::D2WinFont::SetAndReturnLastFont(uUnitColor.ePlayerMode);
       }
       if (!AutoMapPartyNames) {

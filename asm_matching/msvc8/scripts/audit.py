@@ -5,12 +5,15 @@
 
 One row per mapped function, sorted by original address:
 
-  start end name tu method ref_insns our_insns byte_diffs similarity status notes
+  start end name tu method ref_insns our_insns byte_diffs similarity status notes ident_bytes operand_bytes
 
 `method` is the funcmap tier that paired the two (an 'align' row is a
 similarity guess, a 'string' row strong evidence). `similarity` is the
 difflib ratio of the two normalised instruction listings, the progress
-measure for a function that does not match yet. Status classes: see
+measure for a function that does not match yet. `ident_bytes` is how many
+of the original's bytes lie in instructions identical to an aligned one of
+ours, `operand_bytes` how many lie in an aligned instruction of the same
+mnemonic with other operands (compare.aligned_bytes). Status classes: see
 compare.py. A function whose body build.py quarantined (the compiler could not build it,
 and blanking it let the rest of its TU compile) is reported as QUARANTINE
 with the compiler's message. A summary goes to <out>.summary.
@@ -20,6 +23,7 @@ Never quote counts from this file in prose; they go stale. Read the file.
 import argparse
 import collections
 import os
+import struct
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -107,6 +111,54 @@ def sym_map(rows, librows=None):
 
 
 LIBMAP = os.path.join(ORACLE, 'evidence', 'libmap.tsv')
+HEADER = ('start\tend\tname\ttu\tmethod\tref_insns\tour_insns\tbyte_diffs\tsimilarity\tstatus\tnotes'
+          '\tident_bytes\toperand_bytes')
+ROW = '%08x\t%08x\t%s\t%s\t%s\t%d\t%d\t%d\t%.3f\t%s\t%s\t%d\t%d'
+
+# The kinds of byte the headline's denominator splits into, in this order:
+# key, what it is. Every original byte of the game is in exactly one.
+BYTE_KINDS = (
+    ('whole', 'functions that compile to the original bytes (MATCH)'),
+    ('ident', 'identical instructions in functions not yet whole'),
+    ('operand', 'same instruction, other registers or offsets'),
+    ('differ', 'instructions with no matching partner'),
+    ('noncode', 'switch tables and padding in functions not yet whole'),
+    ('uncompared', 'original functions with no counterpart compared'),
+)
+
+
+def byte_kinds(model, game, rows):
+    """Summary lines splitting the game's bytes (the headline's denominator)
+    into BYTE_KINDS, one line each, `  kind <key> <bytes> <percent>% <what>`.
+    In a function that does not match, an instruction of the original's with
+    no aligned partner is 'differ'; the bytes of its extent that are no
+    instruction (a switch table after the ret, padding between blocks) are
+    'noncode', compared by nothing. A MATCH counts its whole extent, as the
+    headline does."""
+    total = sum(model[s][0].end - s for s in game)
+    n = dict.fromkeys(k for k, _w in BYTE_KINDS)
+    n.update(whole=0, ident=0, operand=0, differ=0, noncode=0)
+    compared = 0
+    for r in rows:
+        size, status, ident, operand = r[1] - r[0], r[9], r[11], r[12]
+        if status in ('MISSING', 'QUARANTINE'):
+            continue
+        compared += size
+        if status == 'MATCH':
+            n['whole'] += size
+            continue
+        code = sum(i.size for p in compare.span_pieces(model, r[0], r[1]) for i in model[p][0].insns)
+        assert 0 <= ident + operand <= code <= size, (r[0], size, code, ident, operand)
+        n['ident'] += ident
+        n['operand'] += operand
+        n['differ'] += code - ident - operand
+        n['noncode'] += size - code
+    n['uncompared'] = total - compared
+    assert n['uncompared'] >= 0 and sum(n.values()) == total, (n, total)
+    out = ['byte kinds of the headline total: %d bytes' % total]
+    for k, what in BYTE_KINDS:
+        out.append('  kind %-10s %8d %6.2f%% %s' % (k, n[k], 100.0 * n[k] / max(1, total), what))
+    return out
 RUNTIME = os.path.join(ORACLE, 'evidence', 'runtime.tsv')
 
 
@@ -140,6 +192,44 @@ def runtime_starts(model, librows, path=RUNTIME):
     return out, (lo or 0, hi or 0)
 
 
+EH_MAGIC = (0x19930520, 0x19930521, 0x19930522)
+
+
+def eh_starts(ref, model):
+    """The original functions the compiler wrote for C++ exception handling:
+    each __ehhandler stub (`mov eax, offset FuncInfo; jmp __CxxFrameHandler3`,
+    FuncInfo starting with its magic) and each unwind funclet a FuncInfo's
+    unwind map names. VC8 puts both in .text$x, after the code, so the carve
+    makes them functions of their own; ours keeps them in .text$x of each
+    object, beside the function they serve, where nothing pairs them. They are
+    left out of the headline as the runtime is: compiler output with no source
+    of its own. A FuncInfo's catch handlers are left in: they are source."""
+    pe = ref.pe
+
+    def dwords(va, n):
+        try:
+            return struct.unpack('<%dI' % n, pe.read(va, 4 * n))
+        except Exception:
+            return None
+
+    stubs = {}
+    for s, (dec, _refs) in model.items():
+        for i, j in zip(dec.insns, dec.insns[1:]):
+            if i.bytes[0] == 0xb8 and len(i.bytes) == 5 and j.mnemonic == 'jmp':
+                fi = struct.unpack_from('<I', i.bytes, 1)[0]
+                head = dwords(fi, 5)
+                if head and head[0] in EH_MAGIC:
+                    stubs[s] = head
+                    break
+    out = set(stubs)
+    for _magic, states, unwind, _ntry, _try in stubs.values():
+        for k in range(min(states, 4096)):
+            entry = dwords(unwind + 8 * k, 2)
+            if entry and entry[1] in model:
+                out.add(entry[1])
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--funcmap', default=os.path.join(ORACLE, 'evidence', 'funcmap.tsv'))
@@ -168,13 +258,13 @@ def main():
     for s, e, name, tu, sym, method, _d in rows + librows:
         f = fns.get(tu + '|' + sym)
         if f is None or s not in model:
-            out.append((s, e, name, tu, method, 0, 0, 0, 0.0, 'MISSING', 'object not compiled'))
+            out.append((s, e, name, tu, method, 0, 0, 0, 0.0, 'MISSING', 'object not compiled', 0, 0))
             statuses['MISSING'] += 1
             continue
         q = quarantined.get((tu, name.rsplit('::', 1)[-1]))
         if q is not None:
             # Its body was blanked so that the rest of its TU compiles: nothing to judge.
-            out.append((s, e, name, tu, method, len(model[s][0].insns), 0, 0, 0.0, 'QUARANTINE', q))
+            out.append((s, e, name, tu, method, len(model[s][0].insns), 0, 0, 0.0, 'QUARANTINE', q, 0, 0))
             statuses['QUARANTINE'] += 1
             continue
         # A library pair may join carved pieces (libmap.py); a funcmap row's
@@ -186,8 +276,9 @@ def main():
         if v is None:
             r = compare.compare(compare.our_view(f, syms), compare.ref_view_span(s, e, model))
             v = memo.put(f, s, (r.ref_insns, r.our_insns, r.byte_diffs, r.similarity, r.status, r.ref_diffs,
-                                r.unverified, tuple(r.wiring)), extra)
-        ref_insns, our_insns, byte_diffs, similarity, status, ref_diffs, unverified, rwiring = v
+                                r.unverified, tuple(r.wiring), r.ident_bytes, r.operand_bytes), extra)
+        (ref_insns, our_insns, byte_diffs, similarity, status, ref_diffs, unverified, rwiring,
+         ident_bytes, operand_bytes) = v
         for sym, addr in rwiring:
             wiring[sym][addr] += 1
         notes = []
@@ -196,15 +287,15 @@ def main():
         if unverified:
             notes.append('%d refs unverified' % unverified)
         out.append((s, e, name, tu, method, ref_insns, our_insns, byte_diffs, similarity, status,
-                    '; '.join(notes)))
+                    '; '.join(notes), ident_bytes, operand_bytes))
         statuses[status if not status.startswith('OUR') else 'OUR+-N'] += 1
     memo.save()
     out.sort()
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     with open(args.out, 'w') as fh:
-        fh.write('start\tend\tname\ttu\tmethod\tref_insns\tour_insns\tbyte_diffs\tsimilarity\tstatus\tnotes\n')
+        fh.write(HEADER + '\n')
         for row in out:
-            fh.write('%08x\t%08x\t%s\t%s\t%s\t%d\t%d\t%d\t%.3f\t%s\t%s\n' % row)
+            fh.write(ROW % row + '\n')
     total_ref = len(model)
     ref_bytes = sum(model[s][0].end - s for s in model)
     match_bytes = sum(r[1] - r[0] for r in out if r[9] == 'MATCH')
@@ -223,17 +314,21 @@ def main():
     # Microsoft's, linked rather than reconstructed, so it is out of both the
     # matched and the total; the whole binary follows as the second figure.
     runtime, (rlo, rhi) = runtime_starts(model, librows)
-    game = [s for s in model if s not in runtime]
+    eh = eh_starts(ref, model) - runtime
+    game = [s for s in model if s not in runtime and s not in eh]
     game_bytes = sum(model[s][0].end - s for s in game)
-    game_out = [r for r in out if r[0] not in runtime]
+    game_out = [r for r in out if r[0] not in runtime and r[0] not in eh]
     game_match = [r for r in game_out if r[9] == 'MATCH']
     game_match_bytes = sum(r[1] - r[0] for r in game_match)
     lines[1:1] = ['Without the C runtime: %d of %d functions MATCH (%.2f%%), %d of %d bytes (%.2f%%)' % (
         len(game_match), len(game), 100.0 * len(game_match) / max(1, len(game)),
         game_match_bytes, game_bytes, 100.0 * game_match_bytes / max(1, game_bytes)),
         '  runtime left out: %d functions (%d bytes): libmap pairs, the library run %08x..%08x, import thunks, %s' % (
-        len(runtime), ref_bytes - game_bytes, rlo, rhi, os.path.basename(RUNTIME)),
+        len(runtime), sum(model[s][0].end - s for s in runtime), rlo, rhi, os.path.basename(RUNTIME)),
+        '  compiler EH code left out: %d functions (%d bytes): __ehhandler stubs and the unwind funclets '
+        'their FuncInfo names' % (len(eh), sum(model[s][0].end - s for s in eh)),
         'whole binary:']
+    lines[4:4] = byte_kinds(model, game, game_out)
     lines.append('matched code: %d bytes (%.2f%% of the original)' % (match_bytes, 100.0 * match_bytes / ref_bytes))
     libtus = {r[3] for r in librows}
     lib = [r for r in out if r[3] in libtus]

@@ -1089,8 +1089,8 @@ void __fastcall MONSTER_CorpseExplode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
 
     if ((int)nDamageAdjusted > 0x100000) {
       if ((int)(nDamageAdjusted & -16) < 0x640) {
-        nDivResult = _allmul(nDamageAdjusted, (int)nDamageAdjusted >> 0x1f, 0x3c, 0);
-        nDivResult = _alldiv((uint32_t)nDivResult, (uint32_t)((uint64_t)nDivResult >> 0x20), 100, 0);
+        nDivResult = (int64_t)(int)nDamageAdjusted * 0x3c;
+        nDivResult = nDivResult / 100;
         iVar5 = (int)nDivResult;
       } else {
         iVar5 = (int)nDamageAdjusted / 100 * 0x3c;
@@ -1900,12 +1900,7 @@ void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
       return;
     }
 
-    int32_t eCollisionFlag = 0x3c01;
-    int32_t eCollisionResult = 1;
-    int32_t iVar1 = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-    int32_t nX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    eCollisionFlags eCollision = D2Common::Collision::CheckCollision_BlockAll_Type(pRoom, nX, iVar1, eCollisionResult, eCollisionFlag);
+    eCollisionFlags eCollision = D2Common::Collision::CheckCollision_BlockAll_Type(D2Common::Units::UNITS_GetRoom(pUnit), D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), D2Client::Units::GetYPosFromDynamicPathUnit(pUnit), 1, 0x3c01);
     if (eCollision != COLBIT_NONE) {
       GAME::Event::SetEvent(pGame, pUnit, 7, pGame->dwGameFrame + 1 + pMonStatsTxt->aip[0][pGame->nDifficulty] * 10, 0, 0);
       return;
@@ -1921,7 +1916,7 @@ void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
       return;
     }
 
-    iVar1 = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
+    int32_t iVar1 = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
     if (iVar1) {
       return;
     }
@@ -2146,7 +2141,7 @@ void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       pMonStatsTxt = sgptDataTable->pTxtMonStats + nClassId;
     }
 
-    uint8_t nDifficulty = pGame->nDifficulty;
+    int nDifficulty = (int)pGame->nDifficulty;
     nClassId = (int)pMonStatsTxt->aip[0][nDifficulty];
     if (pGame->nGameType != SGAMETYPE_BNET_HOST || (bIsMultiplayerB = 0 , pGame->eGameType != GAMETYPE_SINGLEPLAYER)) {
       bIsMultiplayerB = 1;
@@ -2160,7 +2155,7 @@ void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     D2MonStatsInitStrc* pScaledStats = &sMonStats;
-    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonClassId, bIsMultiplayerB, (uint32_t)nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), 8, pScaledStats);
+    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonClassId, bIsMultiplayerB, nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), 8, pScaledStats);
     uint32_t nDmgRange = sMonStats.nA1MaxD - sMonStats.nA1MinD;
     if ((int)nDmgRange <= 0) {
       nDmgRange = 0;
@@ -2639,13 +2634,13 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
     int nUModIdx;
     uint32_t nBoneCount;
     int nGroupMin;
+    int nDifficulty;
     int* pModEntry;
     D2AiGeneralStrc* pMonsterAiGeneral;
     int nDiffUModCount;
     uint8_t abUsedUMods[256];
     bool bHasAuraEnchant;
     eD2QuestsInternal eQuestId;
-    uint16_t* puVar1;
     if (pGame->nDifficulty >= 3) {
       return nullptr;
     }
@@ -2671,6 +2666,7 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
 
     pGame->nBossFlagList[(int)nClassId >> 3] |= (uint8_t)gadwBitMasks[nClassId & 7];
     if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+      uint16_t* puVar1;
       puVar1 = &pUnit->pUnitData.pUnitDataMonster->eMonsterType;
       *puVar1 |= 2;
     }
@@ -2708,7 +2704,6 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
 
     nDiffUModCount = 0;
     if (pGame->nDifficulty > 0) {
-      uint8_t byDifficulty;
       do {
         nUModCount = MONUMOD_RollRandomModifier(pUnit, abUsedUMods, pGame);
         if (!nUModCount) {
@@ -2716,11 +2711,11 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
         }
 
         *pUModList = (uint8_t)nUModCount;
-        byDifficulty = pGame->nDifficulty;
+        nDifficulty = (int)pGame->nDifficulty;
         abUsedUMods[nUModCount] = '\x01';
         nDiffUModCount++;
         pUModList++;
-      } while (nDiffUModCount < (int)(uint32_t)byDifficulty);
+      } while (nDiffUModCount < nDifficulty);
     }
 
     nGroupMin = pSuperUniquesTxt->MinGrp;

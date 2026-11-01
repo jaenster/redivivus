@@ -279,7 +279,7 @@ uint32_t __stdcall BenchmarkCpuSpeed() {
     /* LARGE_INTEGER * lpFrequency for QueryPerformanceFrequency */ QueryPerformanceFrequency(&qpcFreq);
     nMhz = _allmul((uint32_t)(nMhz - nTscStart), (int)((uint64_t)(nMhz - nTscStart) >> 0x20), qpcFreq.u.LowPart, qpcFreq.u.HighPart);
     nMhz = _alldiv((uint32_t)nMhz, (uint32_t)((uint64_t)nMhz >> 0x20), qpcEnd.u.LowPart - *(uint32_t*)(char*)&qpcStart, qpcEnd.u.HighPart - *(uint32_t*)((char*)&qpcStart + 4) - (uint32_t)(qpcEnd.u.LowPart < qpcStart.u.LowPart));
-    nMhz = _alldiv((uint32_t)nMhz, (uint32_t)((uint64_t)nMhz >> 0x20), 1000000, 0);
+    nMhz = nMhz / 1000000;
     return (uint32_t)nMhz;
 }
 

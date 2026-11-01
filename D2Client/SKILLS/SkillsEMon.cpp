@@ -157,8 +157,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_FallingMissileWithZ(D2UnitStrc * pUnit, eD
     if (pTargetUnit) {
       nTmp = Units::GetYPosFromDynamicPathUnit(pTargetUnit);
       nY = (int16_t)nTmp;
-      nTmp = Units::GetXPosFromDynamicPathUnit(pTargetUnit);
-      D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, (int16_t)nTmp, nY);
+      D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, (int16_t)Units::GetXPosFromDynamicPathUnit(pTargetUnit), nY);
       UNIT::CUnit::FaceTarget(pUnit, 1);
     }
 

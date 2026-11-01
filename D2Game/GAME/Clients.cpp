@@ -1121,10 +1121,10 @@ void __fastcall SendPongByClientId(uint32_t nClientId, int32_t dwSendTick, int32
         dwNowTick = GetTickCount();
         nSamplesToAvg = pClient->tQServerExt.nHeartbeatSampleCount;
         if (nSamplesToAvg < 10) {
-          qwPingAccum = _allmul(nSamplesToAvg, 0, (uint32_t)pClient->tQServerExt.qwAveragePingTicks, *(int*)((uintptr_t)&pClient->tQServerExt.qwAveragePingTicks + 4));
+          qwPingAccum = (int64_t)nSamplesToAvg * (int64_t)pClient->tQServerExt.qwAveragePingTicks;
           qwPingAccum += (int)(dwNowTick - dwSendTick - dwClientTick);
           pClient->tQServerExt.nHeartbeatSampleCount = nSamplesToAvg + 1;
-          qwNewAvgPing = _alldiv((uint32_t)qwPingAccum, (uint32_t)((uint64_t)qwPingAccum >> 0x20), nSamplesToAvg + 1, 0);
+          qwNewAvgPing = qwPingAccum / (nSamplesToAvg + 1);
           pClient->tQServerExt.qwAveragePingTicks = qwNewAvgPing;
         }
 
@@ -1738,7 +1738,6 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
 
 // Main client join handler: validates expansion/hardcore compatibility, loads or creates player unit, sends handshake packet (0x0B), portal flags (0x5F), stats, items, hotkeys, selected skills (left/right), life/mana/stamina. Computes A5Q3 resist bonuses if expansion. Returns error code on validation failure (kicks client). State 1→loading character data.
 int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, ::SGAMEDATA * pGame, int32_t bLoadFromSave, D2RoomStrc * pRoom, uint32_t nX, uint32_t nY) {
-    int32_t bLoadError;
     eD2ArenaFlags eArenaFlags;
     eD2ArenaFlags eArenaFlagsCheck;
     uint32_t uPortalFlags;
@@ -1747,8 +1746,6 @@ int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, :
     int nHotkeyIdx;
     uint32_t dwHotkeyUnused;
     D2ClientHotKeyStrc* pHotKey;
-    int32_t nErrorCode;
-    int32_t bLoadErrorSave;
     D2UnitStrc* pPlayerUnit_lcl;
     char* szErrorName;
     uint16_t wCharFlags;
@@ -1758,7 +1755,7 @@ int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, :
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x23f);
       exit(-1);
     } else {
-      char* szCharNameLog;
+      int32_t bLoadError;
       if (!pClient) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x242);
         exit(-1);
@@ -1767,9 +1764,7 @@ int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, :
       pClient->fClientFlags |= 1;
       if (!pGame->bExpansion && pClient->nClass >= 5) {
         szErrorName = "nError";
-        nErrorCode = 0x18;
-        szCharNameLog = GetCharName(pClient);
-        Fog::Src::LogManager::LOGMANAGER_TraceToModuleLog("", "[PLAYER CREATE]  ClientAddPlayerToGame()  Error Creating:%s  Error:%d=%s", szCharNameLog, nErrorCode, szErrorName);
+        Fog::Src::LogManager::LOGMANAGER_TraceToModuleLog("", "[PLAYER CREATE]  ClientAddPlayerToGame()  Error Creating:%s  Error:%d=%s", GetCharName(pClient), 0x18, szErrorName);
         pClient->pPlayer = 0;
         return 0x18;
       }
@@ -1777,9 +1772,7 @@ int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, :
       bLoadError = PLAYER::PlayerSave::CLIENT_LoadOrCreatePlayerUnit(pGame, pClient, (D2ClientStrc*)pClient->szCharName, bLoadFromSave, &pPlayerUnitOut, (uint32_t)pRoom, nX, nY);
       if (bLoadError) {
         szErrorName = "nError";
-        bLoadErrorSave = bLoadError;
-        szCharNameLog = GetCharName(pClient);
-        Fog::Src::LogManager::LOGMANAGER_TraceToModuleLog("", "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:%d=%s", szCharNameLog, bLoadErrorSave, szErrorName);
+        Fog::Src::LogManager::LOGMANAGER_TraceToModuleLog("", "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:%d=%s", GetCharName(pClient), bLoadError, szErrorName);
         pClient->pPlayer = 0;
         return bLoadError;
       }

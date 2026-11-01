@@ -2187,7 +2187,6 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint32_t *
     D2UnitStrc* pMercUnit;
     uint32_t nCurrentExp;
     int nLevel;
-    uint16_t nLayer;
     D2PetDataStrc sPetData;
     int nMercLevel;
     int32_t nErrorLine;
@@ -2291,8 +2290,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint32_t *
 
           ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pMercUnit, 0, 0);
           ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pMercUnit, 0);
-          nLayer = 0;
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMercUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pMercUnit), nLayer);
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMercUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pMercUnit), 0);
           Monster::MonsterAI::SendMercPackets(pGame, pUnit, 1);
           *pnParam2 = (uint32_t*)((int)pnParam - (int)puVar2 + (int)puVar1);
           nErrorLine = 0;

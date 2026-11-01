@@ -1566,16 +1566,11 @@ void __stdcall ITEMMOD_ApplyEtherealBonus(D2UnitStrc * pUnit) {
     if (bIsWeapon) {
       nTempStat = Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_mindamage, 0);
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mindamage, nTempStat * 3 / 2, uVar1);
-      uVar1 = 0;
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxdamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_maxdamage, 0) * 3 / 2, uVar1);
-      uVar1 = 0;
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_mindamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_secondary_mindamage, 0) * 3 / 2, uVar1);
-      uVar1 = 0;
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, 0) * 3 / 2, uVar1);
-      uVar1 = 0;
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, 0) * 3 / 2, uVar1);
-      uVar1 = 0;
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, 0) * 3 / 2, uVar1);
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxdamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_maxdamage, 0) * 3 / 2, 0);
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_mindamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_secondary_mindamage, 0) * 3 / 2, 0);
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_secondary_maxdamage, 0) * 3 / 2, 0);
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, 0) * 3 / 2, 0);
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, 0) * 3 / 2, 0);
       return;
     }
 
@@ -2092,8 +2087,7 @@ uint32_t __fastcall ITEMPROP_AddEnhancedDamage(uint32_t dwParam1, D2UnitStrc * p
       }
 
       ppBaseUnit = &pUnit2;
-      nIsWeapon = Items::ITEM_GetItemsTxt_szCode(pUnit_00);
-      pBaseTxtLine = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nIsWeapon, (int*)ppBaseUnit);
+      pBaseTxtLine = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pUnit_00), (int*)ppBaseUnit);
       if (pBaseTxtLine) {
         nIsWeapon = Items::ITEMS_IsA(pUnit_00, ITEMTYPE_Weapon);
         if (nIsWeapon) {
@@ -2112,8 +2106,7 @@ uint32_t __fastcall ITEMPROP_AddEnhancedDamage(uint32_t dwParam1, D2UnitStrc * p
       }
 
       ppBaseUnit = &pUnit2;
-      nIsWeapon = Items::ITEM_GetItemsTxt_szCode(pUnit_00);
-      pBaseTxtLine = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nIsWeapon, (int*)ppBaseUnit);
+      pBaseTxtLine = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(Items::ITEM_GetItemsTxt_szCode(pUnit_00), (int*)ppBaseUnit);
       if (pBaseTxtLine) {
         nIsWeapon = Items::ITEMS_IsA(pUnit_00, ITEMTYPE_Weapon);
         if (nIsWeapon) {

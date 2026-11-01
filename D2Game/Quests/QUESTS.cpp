@@ -1076,17 +1076,17 @@ int __fastcall QUEST_GetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuestId
     return bQuestState;
 }
 
-void __stdcall QUEST_DispatchMonsterDeathToQ12(int32_t nMonsterClassId, int32_t nBossType, int32_t nUnused) {
-    if (!(nUnused >= 0 && nUnused < sgptDataTable->nTxtMonStatsSize)) {
+void __fastcall QUEST_DispatchMonsterDeathToQ12(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nMonsterClassId) {
+    if (!(nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
-    if (nUnused != 0xc9) {
-      if (nUnused == 0x14b) {
-        A2Q4::A2Q4_OnMonsterDeathClass331_NoOp(nMonsterClassId, nBossType);
+    if (nMonsterClassId != 0xc9) {
+      if (nMonsterClassId == 0x14b) {
+        A2Q4::A2Q4_OnMonsterDeathClass331_NoOp(nX, nY);
         return;
       }
     } else {
-      A2Q4::A2Q4_OnMonsterDeathClass201_NoOp(nMonsterClassId, nBossType);
+      A2Q4::A2Q4_OnMonsterDeathClass201_NoOp(nX, nY);
     }
 }
 
@@ -1852,10 +1852,7 @@ void __fastcall SetRewardAndFinishFlags(D2QuestDataStrc * pQuestData, D2QuestArg
 void __fastcall QUEST_SendQuestInfoToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    uint8_t nActionType = 0;
-    uint32_t nUnitGUID = 0;
-    uint8_t nUpdateType = '\x06';
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, nUpdateType, nUnitGUID, pBitBuffer, nActionType);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, '\x06', 0, pBitBuffer, 0);
 }
 
 void __fastcall QUEST_SetSuccessFinishStates(::SGAMEDATA * pGame, D2QuestGUIDStrc * pQuestGUID, eD2Quests eQuestId, int32_t nSoundId) {
@@ -1914,10 +1911,7 @@ BOOL __fastcall QUESTS_SendQuestInfoAndEventTrigger(::SGAMEDATA * pGame, D2UnitS
     D2GSPacketClt0x89 DStack_8 = d2_bits_as<D2GSPacketClt0x89>((uint16_t)((uint16_t)(uint8_t)pGame->pQuestControl->nEventId << 8 | (uint16_t)(uint8_t)0x89));
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    uint8_t nActionType = 0;
-    uint32_t nUnitGUID = 0;
-    uint8_t nUpdateType = '\x06';
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, nUpdateType, nUnitGUID, pBitBuffer, nActionType);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, '\x06', 0, pBitBuffer, 0);
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xd0e);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x89_QUESTEVENTTRIGGER(pClient, &DStack_8);
     return 0;
@@ -2413,10 +2407,7 @@ void __fastcall RefreshQuestDataForUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
     D2QuestDataStrc* pGameQuestData;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer2 = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    uint8_t nUpdateType = 0;
-    uint32_t nUnitGUID = 0;
-    uint8_t nUpdateType_00 = '\x06';
-    /* Send player quest states info to client */ GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, nUpdateType_00, nUnitGUID, pBitBuffer2, nUpdateType);
+    /* Send player quest states info to client */ GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, '\x06', 0, pBitBuffer2, 0);
     D2ClientStrc* pClientData = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0x49a);
     __frame0.byMsgId52 = 0x52;
     memset(__frame0.aQuestStateArray, 0, 0x29);
@@ -2518,12 +2509,9 @@ void __fastcall QUEST_OnPlayerJoinGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     int nExtendedIndex;
     void* pQuestInitEntry;
     D2QuestDataStrc* pQuestDataIter;
-    uint8_t nUpdateType;
     D2QuestArgStrc sQuestArgs;
     D2QuestJoinFrameSlotUnion uSavedGameOrPacket0x89;
     D2GSPacketSrv0x5E sPacket0x5E;
-    uint8_t byActionType;
-    uint32_t nUnitGUID;
     eD2Quests nQuestId_00;
     D2BitBufferStrc* pBitBuffer;
     QUESTCALLBACKFN pQVar3;
@@ -2585,10 +2573,7 @@ void __fastcall QUEST_OnPlayerJoinGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       GAME::SCmd::NET_D2GS_SERVER_Send_0x5E_QUESTPICKS(pClient, &sPacket0x5E);
       pPlayerData = D2Common::Units::GetPlayerData(pUnit);
       pQuestRecordPool = pPlayerData->pQuestRecord[pGame->nDifficulty];
-      byActionType = 0;
-      nUnitGUID = 0;
-      nUpdateType = '\x06';
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, nUpdateType, nUnitGUID, pQuestRecordPool, byActionType);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, '\x06', 0, pQuestRecordPool, 0);
       NET_D2GS_SERVER_Send_0x29_GAMEQUESTRECORD_Prepare(pGame, pClient);
       if (pGame->pQuestControl) {
         pQuestDataIter = pGame->pQuestControl->pQuestData;
@@ -2941,9 +2926,6 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
 void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t param_1, uint32_t nEventCode) {
     D2UnitStrc* pQuestItem;
     D2ClientStrc* pClient;
-    uint8_t nUpdateType;
-    uint8_t byActionType;
-    uint32_t nUnitGUID;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2UnitDataPlayerStrc* pPlayerData2 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData2->pQuestRecord[pGame->nDifficulty];
@@ -2986,10 +2968,7 @@ void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStr
         QUEST_GrantActTransitionReward(ACT_III, pGame, pUnit);
         pPlayerData2 = D2Common::Units::GetPlayerData(pUnit);
         pBitBuffer = pPlayerData2->pQuestRecord[pGame->nDifficulty];
-        byActionType = 0;
-        nUnitGUID = 0;
-        nUpdateType = '\x06';
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, nUpdateType, nUnitGUID, pBitBuffer, byActionType);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, '\x06', 0, pBitBuffer, 0);
         pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xb56);
         if (pPlayerData->dwTradeTick != 1) {
           pPlayerData->dwTradeTick = 1;

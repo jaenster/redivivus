@@ -289,7 +289,7 @@ void __fastcall KillConnection(int32_t nParam);
 //   0xFA: IP address query + increment connected count
 //   0xFB: Disconnect + decrement connected count
 //   0xFC: IP address query response
-void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(char * pBytes, int32_t iSize);
+void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(uint8_t * pBytes, int32_t iSize);
 // PACKET RECEIVE ENTRY: Server processes incoming client packets.
 // Called from game loop (SP) or QServer thread (MP).
 // Dispatches to 3 modes:

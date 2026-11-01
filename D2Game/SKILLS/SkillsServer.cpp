@@ -276,8 +276,7 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
       }
 
       pTargetUnit = pUnit2;
-      pGame = UNIT::SUnit::GetGamePointer(pUnit);
-      bInTown = UNIT::SUnit::SKILL_CanUnitTargetAlly(pGame, pUnit, pTargetUnit);
+      bInTown = UNIT::SUnit::SKILL_CanUnitTargetAlly(UNIT::SUnit::GetGamePointer(pUnit), pUnit, pTargetUnit);
       if (!bInTown) {
         return 0;
       }
@@ -301,8 +300,7 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
       }
 
       pTargetUnit = pUnit2;
-      pGame = UNIT::SUnit::GetGamePointer(pUnit);
-      nCheckResult = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pTargetUnit);
+      nCheckResult = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(UNIT::SUnit::GetGamePointer(pUnit), pUnit, pTargetUnit);
       if (!nCheckResult) {
         return 0;
       }
@@ -728,9 +726,7 @@ static void __stdcall SKILLS_UseChargedSkillCharge(::SGAMEDATA * pGame, D2SkillS
 
     uint32_t nStatValue = nMaxChargeCount * 0x100 + (__frame0.nRemainingCharges & 0xff);
     D2Common::Stats::StatsEx::STATLIST_SetStatValueInBaseArraySafe(__frame0.pChargedStatList, UNITSTAT_item_charged_skill, nStatValue, nParam, pWeaponUnit);
-    int32_t nStatId = 0xcc;
-    char bForceUpdate = '\x01';
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x3a5), pWeaponUnit, bForceUpdate, nStatId, nStatValue, (uint16_t)nParam);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x3a5), pWeaponUnit, '\x01', 0xcc, nStatValue, (uint16_t)nParam);
 }
 
 // Deducts mana cost for casting a skill, or converts it to life if the caster has STATE_blood_mana. For charged skills (owner GUID != -1) delegates to SKILLS_UseChargedSkillCharge. Computes mana cost from SkillsTxt (mana + lvlmana*(level-1)) shifted by manashift, enforces minmana floor. Returns 1 on successful deduction or charge use, 0 if insufficient mana or no mana entry, 1 if unit is not a player.
@@ -897,18 +893,12 @@ int32_t __fastcall BowDecreaseQuantity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_quantity, nValue, 0);
     ITEMS::Items::Drop::RefreshQuantity(pGame, pItem);
-    uint16_t wStatLayer = 0;
-    int32_t iVar1 = 0x46;
-    char bSendStat = '\x01';
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x546), pItem, bSendStat, iVar1, nValue, wStatLayer);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x546), pItem, '\x01', 0x46, nValue, 0);
     uint32_t nMaxDurability = D2Common::Stats::StatsEx::GetTxtMaxDurability(pItem);
     uint32_t nCurrentDurability = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_durability, 0);
     if (nCurrentDurability != nMaxDurability) {
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_durability, nMaxDurability, 0);
-      wStatLayer = 0;
-      iVar1 = 0x48;
-      bSendStat = '\x01';
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x54c), pItem, bSendStat, iVar1, nMaxDurability, wStatLayer);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x54c), pItem, '\x01', 0x48, nMaxDurability, 0);
     }
 
     PLAYER::PlayerModes::PLRMODES_CheckWeaponQuantityAndDurability(pGame, pUnit);
@@ -1066,8 +1056,7 @@ void __fastcall Transmorgify(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc
     uint16_t sUnkPacketArg = 0xffff;
     int32_t nStatIdPacket = 0;
     _bTransmorgified = 1;
-    uint8_t nItemSlot = 0xff;
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x6af), nullptr, nItemSlot, _bTransmorgified, nStatIdPacket, sUnkPacketArg);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x6af), nullptr, 0xff, _bTransmorgified, nStatIdPacket, sUnkPacketArg);
 }
 
 uint32_t __fastcall IsSkillBoundToClass(D2UnitStrc * pUnit, int32_t nSkillId) {
@@ -1473,8 +1462,7 @@ D2UnitStrc * __fastcall LinkPortal(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2U
       }
 
       eUnitType = UNIT_OBJECT;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, eUnitType, nUnitGUID);
+      D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nUnitGUID);
       UNIT::SUnit::FreeServerUnit(pGame, pUnit);
       return nullptr;
     }
@@ -4168,8 +4156,6 @@ void __fastcall Server_SelectSkill(D2UnitStrc * pUnit, int32_t leftOrRight, eD2S
 void __fastcall ClearSkills(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2SkillStrc* pSkill;
     int nSkillLevel;
-    uint8_t nBaseAmount;
-    uint8_t bRemove;
     int nSkillIndex = 0;
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
       return;
@@ -4187,9 +4173,7 @@ void __fastcall ClearSkills(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
           nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 0);
           nRefundedPoints += nSkillLevel;
           SkillsServer::SetSkill(pUnit, eSkill, 0, 1);
-          bRemove = 1;
-          nBaseAmount = 0;
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x10a1), pUnit, eSkill, nBaseAmount, bRemove);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x10a1), pUnit, eSkill, 0, 1);
         }
 
         nSkillIndex++;

@@ -72,7 +72,8 @@ def check_carve(functions):
 
 
 def judge(rows, pats, model, syms, quarantined):
-    """start -> (status, similarity, ref_insns, our_insns, byte_diffs, notes) for the selected TUs."""
+    """start -> (status, similarity, ref_insns, our_insns, byte_diffs, notes, end, name, tu, method,
+    ident_bytes, operand_bytes) for the selected TUs."""
     tus = sorted({r[3] for r in rows if any(p in r[3] for p in pats)})
     fns, by_name = {}, {}
     for tu in tus:
@@ -90,14 +91,15 @@ def judge(rows, pats, model, syms, quarantined):
             f = by_name[(tu, name)][0]       # its signature changed since the map: same function, other mangling
         q = quarantined.get((tu, name.rsplit('::', 1)[-1]))
         if f is None:
-            out[s] = ('MISSING', 0.0, 0, 0, 0, 'object not compiled', e, name, tu, method)
+            out[s] = ('MISSING', 0.0, 0, 0, 0, 'object not compiled', e, name, tu, method, 0, 0)
         elif q is not None:
-            out[s] = ('QUARANTINE', 0.0, len(model[s][0].insns), 0, 0, q, e, name, tu, method)
+            out[s] = ('QUARANTINE', 0.0, len(model[s][0].insns), 0, 0, q, e, name, tu, method, 0, 0)
         else:
             r = compare.compare(compare.our_view(f, syms), compare.ref_view(s, model[s]))
             notes = '; '.join(x for x in (('%d refs differ' % r.ref_diffs) if r.ref_diffs else '',
                                           ('%d refs unverified' % r.unverified) if r.unverified else '') if x)
-            out[s] = (r.status, r.similarity, r.ref_insns, r.our_insns, r.byte_diffs, notes, e, name, tu, method)
+            out[s] = (r.status, r.similarity, r.ref_insns, r.our_insns, r.byte_diffs, notes, e, name, tu, method,
+                      r.ident_bytes, r.operand_bytes)
     return out
 
 
@@ -153,8 +155,8 @@ def update_rows(state):
         p = line.split('\t')
         if len(p) > 9 and int(p[0], 16) in state:
             s = int(p[0], 16)
-            st, sim, ri, oi, bd, notes, e, name, tu, method = state[s]
-            line = '%08x\t%08x\t%s\t%s\t%s\t%d\t%d\t%d\t%.3f\t%s\t%s' % (s, e, name, tu, method, ri, oi, bd, sim, st, notes)
+            st, sim, ri, oi, bd, notes, e, name, tu, method, ident, operand = state[s]
+            line = audit.ROW % (s, e, name, tu, method, ri, oi, bd, sim, st, notes, ident, operand)
         out.append(line)
     open(AUDIT, 'w').write('\n'.join(out))
 

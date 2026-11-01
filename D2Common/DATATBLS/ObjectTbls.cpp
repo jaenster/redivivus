@@ -194,10 +194,9 @@ void __fastcall TXT_AllocTxt_objects(D2PoolManagerStrc * pMemory) {
       return;
     }
 
-    int nRowOffset = 0;
     do {
       char* pObjRow;
-      pObjRow = sgpTxtObjects->Name + nRowOffset;
+      pObjRow = sgpTxtObjects[nObjIdx].Name;
       memset(pObjRow + 0x40, 0, 0x80);
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer((uint16_t*)(pObjRow + 0x40), D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)pObjRow), 0x40);
       *(uint32_t*)(pObjRow + 0xd8) <<= 8;
@@ -208,7 +207,6 @@ void __fastcall TXT_AllocTxt_objects(D2PoolManagerStrc * pMemory) {
       *(uint32_t*)(pObjRow + 0xec) <<= 8;
       *(uint32_t*)(pObjRow + 0xf0) <<= 8;
       *(uint32_t*)(pObjRow + 0xf4) <<= 8;
-      nRowOffset += 0x1c0;
       nObjIdx++;
     } while (nObjIdx < nTxtObjectsSize);
 }

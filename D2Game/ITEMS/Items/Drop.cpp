@@ -845,11 +845,11 @@ void __stdcall ITEM_RollSocketCount(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2I
     byMaxSocks = D2Common::ITEMS::Items::ITEM_GetMaxSockCount(pUnit);
     uint32_t nMaxSockCount;
     nMaxSockCount = (uint32_t)byMaxSocks;
-    uint8_t nDifficulty;
-    nDifficulty = pGame->nDifficulty;
-    if (nDifficulty != '\0') {
-      if (nDifficulty != '\x01') {
-        if (nDifficulty == '\x02' && 5 < nMaxSockCount) {
+    int nDifficulty;
+    nDifficulty = (int)pGame->nDifficulty;
+    if (nDifficulty) {
+      if (nDifficulty != 1) {
+        if (nDifficulty == 2 && 5 < nMaxSockCount) {
           nMaxSockCount = 6;
           goto roll_sockets;
         }

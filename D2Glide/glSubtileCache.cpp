@@ -41,7 +41,7 @@ int __fastcall GLSUBTILE_Initialize(GlSubtileCacheStrc * pCache, int nVramStart,
     int nVramAddr = nVramStart;
     if (-1 < (int)(pCache->nMaxEntries - 1)) {
       do {
-        pNode = &pCache->pNodes[nNodeIndex].nIndex;
+        pNode = (int*)((uintptr_t)&pCache->pNodes->nIndex + nByteOffset);
         *pNode = nNodeIndex;
         if (nNodeIndex < (int)(pCache->nMaxEntries - 1)) {
           pNode[3] = (uintptr_t)&pCache->pNodes[1].nIndex + nByteOffset;

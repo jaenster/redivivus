@@ -818,7 +818,7 @@ ULONGLONG __stdcall SSTR_HashString64(uint8_t * pszText, uint8_t bCaseSensitive,
         nAccum64 = UVar1 + qwSeed;
         *(uint32_t*)((char*)&qwSeed + 4) = (int)(qwSeed >> 0x20);
         UVar1 = (uint64_t)((uint64_t)(uint32_t)(gaHashSeedTable[nChar >> 4].nHashHigh - gaHashSeedTable[nChar & 0xf].nHashHigh - (uint32_t)(gaHashSeedTable[nChar >> 4].dwHashLow < gaHashSeedTable[nChar & 0xf].dwHashLow) ^ (uint32_t)((uint64_t)nAccum64 >> 0x20)) << 32 | (uint64_t)(uint32_t)(gaHashSeedTable[nChar >> 4].dwHashLow - gaHashSeedTable[nChar & 0xf].dwHashLow ^ (uint32_t)nAccum64));
-        nAccum64 = _allmul((uint32_t)qwSeed, *(uint32_t*)((char*)&qwSeed + 4), 0x21, 0);
+        nAccum64 = (int64_t)qwSeed * 0x21;
         qwSeed = nAccum64 + (uint64_t)nChar + UVar1 + 3;
         nChar = (uint32_t)*pszText;
       }
@@ -835,7 +835,7 @@ ULONGLONG __stdcall SSTR_HashString64(uint8_t * pszText, uint8_t bCaseSensitive,
         nAccum64 = UVar1 + qwSeed;
         *(uint32_t*)((char*)&qwSeed + 4) = (int)(qwSeed >> 0x20);
         UVar1 = (uint64_t)((uint64_t)(uint32_t)(gaHashSeedTable[nChar >> 4].nHashHigh - gaHashSeedTable[nChar & 0xf].nHashHigh - (uint32_t)(gaHashSeedTable[nChar >> 4].dwHashLow < gaHashSeedTable[nChar & 0xf].dwHashLow) ^ (uint32_t)((uint64_t)nAccum64 >> 0x20)) << 32 | (uint64_t)(uint32_t)(gaHashSeedTable[nChar >> 4].dwHashLow - gaHashSeedTable[nChar & 0xf].dwHashLow ^ (uint32_t)nAccum64));
-        nAccum64 = _allmul((uint32_t)qwSeed, *(uint32_t*)((char*)&qwSeed + 4), 0x21, 0);
+        nAccum64 = (int64_t)qwSeed * 0x21;
         qwSeed = nAccum64 + (uint64_t)nChar + UVar1 + 3;
         nChar = (uint32_t)*pszText;
       }

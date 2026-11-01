@@ -204,13 +204,18 @@ descent, so switch tables and padding are never taken for code. Our side is the 
 each function is a COMDAT section (`/O2` implies `/Gy`) with exact relocations,
 decoded the same way; a switch table is found through the relocation on the
 jump's displacement, which in an object holds only the addend when VC8
-relocates against a `$LN` label.
+relocates against a `$LN` label. A branch whose rel32 carries a relocation
+leaves the function: in an object its field holds 0, which reads as a jump to
+the next instruction, and a tail jump followed by a switch table would
+otherwise decode the table as code.
 
 `scripts/compare.py` reduces both to the same view: per instruction, the bytes
 with every reference field zeroed, and per reference a token for what it
 names - a function by its original address, an import by name, a string by
-content, a switch table by its offset in the function, a global (ours: symbol
-+ addend, theirs: address). Base relocations make the masking exact rather
+content (from the referenced byte on: ours applies the addend, so a reference
+into a merged literal, `"Amazon"+4`, is `"on"` as the original's is), a switch
+table by its offset in the function, a global (ours: symbol + addend, theirs:
+address). Base relocations make the masking exact rather
 than guessed: at image base 0x400000 an address looks like any constant. A
 call of a function's own entry (recursion) is a reference like any other
 call: our object relocates it against our own symbol.
@@ -252,7 +257,27 @@ The audit summary's headline counts the game **without the C runtime**: it leave
 both the matched and the total every original function that is Microsoft's
 runtime - the libmap pairs, the run of library code they span, the linker's
 import thunks, and `evidence/runtime.tsv` (the functions Ghidra tags `runtime`,
-named there from this evidence). The whole-binary figures follow it.
+named there from this evidence). It leaves out the compiler's exception-handling
+code too: each `__ehhandler` stub (`mov eax, offset FuncInfo; jmp
+__CxxFrameHandler3`) and each unwind funclet a FuncInfo's unwind map names
+(`audit.eh_starts`). VC8 writes them into `.text$x`, after all the code, where
+the carve makes them functions of their own, while our objects keep them beside
+the function they serve; they have no source of their own. Catch handlers stay
+in. The whole-binary figures follow it.
+
+The summary's `byte kinds` block splits the headline's total into six kinds,
+one line each (`  kind <key> <bytes> <percent>% <meaning>`), summing to the total
+exactly (asserted): `whole` (MATCH functions), and for every other compared
+function `ident` (original bytes in instructions identical to the aligned one of
+ours, references judged as MATCH judges them), `operand` (aligned, same
+mnemonic, other registers or displacements), `differ` (instructions with no
+such partner) and `noncode` (switch tables and padding inside the extent);
+`uncompared` is the original functions no row compares. The alignment is the
+similarity's, on the neutral keys, with what it leaves unpaired aligned again on
+mnemonics (`compare.aligned_bytes`); `audit.tsv` carries the per-function
+`ident_bytes` and `operand_bytes` as its last two columns.
+`scripts/byte_match_svg.py` draws the block as `evidence/byte-match-light.svg`
+and `-dark.svg`, for a README's `<picture>`.
 
 The runtime is code we link, not code the tree holds, and it is measured like
 the rest. `scripts/libmap.py` (`oracle libmap`, run by `oracle all` after
@@ -473,6 +498,7 @@ map (`bracket`, `align`) and `tulayout.py` order our functions by source line
 | `scripts/coffobj.py`, `objfuncs.py`, `ours.py` | our objects |
 | `scripts/funcmap.py` | which original function is which |
 | `scripts/compare.py`, `audit.py`, `asmdiff.py` | the judgement |
+| `scripts/byte_match_svg.py` | the summary's byte kinds as a bar chart |
 | `scripts/check.py`, `snippet.py` | the inner loop: re-judge a TU, try a variant |
 | `scripts/diffgrams.py`, `classify.py`, `tulayout.py` | what differs, over all pairs |
 | `scripts/commit.py` | commit the branch's way (CLAUDE.md, "Commits"): tooling amended into the first commit, source changes as a new commit |

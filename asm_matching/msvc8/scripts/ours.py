@@ -9,7 +9,7 @@ import pickle
 
 import objfuncs
 
-DECODER = 3     # 2: switch tables found through the relocation on the displacement; 3: a same-section address modulo 2**32, another function's entry as fptr
+DECODER = 4     # 2: switch tables found through the relocation on the displacement; 3: a same-section address modulo 2**32, another function's entry as fptr; 4: a relocated branch leaves the function
 
 
 class OurFunc:

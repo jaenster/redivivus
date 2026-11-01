@@ -44,7 +44,7 @@ void __fastcall LRUCACHE_Init(D2LRUCacheStrc * pCache, D2PoolManagerStrc * pMemo
       uint32_t* pNodeFields;
       nEntryIndex = 0;
       do {
-        pNodeFields = (uint32_t*)&pCache->pNodeBuffer[nEntryIdx].pBuf;
+        pNodeFields = (uint32_t*)((uintptr_t)&pCache->pNodeBuffer->pBuf + nEntryIndex);
         if (nEntryIdx < pCache->nMaxCount - 1U) {
           pNodeFields[3] = (uint32_t)(uintptr_t)(pNodeFields + 5);
         }

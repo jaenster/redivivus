@@ -1405,7 +1405,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
 
 int32_t __stdcall DRLGLEVEL_FixDrlgLevelForLowerKurast(D2DrlgLevelStrc * pLevel) {
     D2DrlgLevelStrc* pSubLevel;
-    uint8_t byDifficulty;
+    int nDifficulty;
     int nSubSizeX;
     int nSubSizeY;
     D2DrlgStrc* pDrlgActMisc = pLevel->pDrlg;
@@ -1416,9 +1416,9 @@ int32_t __stdcall DRLGLEVEL_FixDrlgLevelForLowerKurast(D2DrlgLevelStrc * pLevel)
     do {
       D2LevelDefsTxt* pLevelDefs;
       pLevelDefs = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(eLevel);
-      byDifficulty = pDrlgActMisc->nDifficulty;
-      nSubSizeY = pLevelDefs->SizeY[byDifficulty];
-      nSubSizeX = pLevelDefs->SizeX[byDifficulty];
+      nDifficulty = (int)pDrlgActMisc->nDifficulty;
+      nSubSizeY = pLevelDefs->SizeY[nDifficulty];
+      nSubSizeX = pLevelDefs->SizeX[nDifficulty];
       nYOffset -= nSubSizeY;
       pSubLevel = GetLevelAndAlloc(pDrlgActMisc, eLevel);
       eLevel += LEVEL_RogueEncampment;

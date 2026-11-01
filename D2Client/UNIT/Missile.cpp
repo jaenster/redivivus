@@ -897,8 +897,8 @@ D2UnitStrc * __fastcall MakeMissile(D2SkillArgStrc * pSkillArg) {
     if (nVelocityRaw) {
       if ((int)nVelocityRaw > 0x100000) {
         if ((int)(nVelocityRaw & -16) < 0x640) {
-          ullVelDiv = _allmul(nVelocityRaw, (int)nVelocityRaw >> 0x1f, 0x4b, 0);
-          ullVelDiv = _alldiv((uint32_t)ullVelDiv, (uint32_t)((uint64_t)ullVelDiv >> 0x20), 100, 0);
+          ullVelDiv = (int64_t)(int)nVelocityRaw * 0x4b;
+          ullVelDiv = ullVelDiv / 100;
           nVelFinal = (uint32_t)ullVelDiv;
           nVelForPath = nVelFinal;
         } else {
@@ -6740,8 +6740,7 @@ void __fastcall MISSILE_CltDoFn15_FingerMageSpider(D2UnitStrc * pUnit) {
             nDeltaY = (int)((uint32_t)nDeltaY & 0xffff0000u | (uint32_t)(uint16_t)sVar1);
             nVelocity = Units::GetYPosFromDynamicPathUnit(pUnit);
             nDeltaY = (int)((uint32_t)nDeltaY & 0xffff0000u | (uint32_t)(uint16_t)((short int)nVelocity + (short int)nDeltaY));
-            nVelocity = Units::GetXPosFromDynamicPathUnit(pUnit);
-            D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, (short int)nVelocity + nStepSizeShort, (short int)nDeltaY);
+            D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, (short int)Units::GetXPosFromDynamicPathUnit(pUnit) + nStepSizeShort, (short int)nDeltaY);
             D2Common::PATH::DynamicPath::PATH_CalculatePath(pUnit->pPath.pDynamicPath, pUnit, 0);
           }
         }

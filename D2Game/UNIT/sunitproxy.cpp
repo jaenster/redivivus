@@ -477,7 +477,6 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
     int32_t nTradeItemIdx;
     D2DataTableTxtStrc* pDataTable;
     PD2GameNpcProxyQueue pNpcEntry;
-    int nMonStatsByteOffset;
     int iVar1;
     int nNpcControlTableSize;
     bool bFoundInControlTable;
@@ -512,12 +511,11 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
     nMonStatsIdx = 0;
     if (nMonStatsTotal > 0) {
       char* pMonStatsTxtEntry;
-      nMonStatsByteOffset = 0;
       pNpcEntry = &pNpcArray->pNpc[0].pProxyQueue;
       pDataTable = sgptDataTable;
       do {
         if (nMonStatsIdx >= 0 && nMonStatsIdx < pDataTable->nTxtMonStatsSize) {
-          pMonStatsTxtEntry = pDataTable->pTxtMonStats->Code + nMonStatsByteOffset - 0x10;
+          pMonStatsTxtEntry = (char*)&pDataTable->pTxtMonStats[nMonStatsIdx].Id;
           if (pMonStatsTxtEntry && (uint8_t)pMonStatsTxtEntry[0xd] & gadwBitMasks[1]) {
             ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->nMonStatsId = nMonStatsIdx;
             ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->bTrading = 0;
@@ -655,7 +653,6 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
           }
         }
 
-        nMonStatsByteOffset += 0x1a8;
         nMonStatsIdx++;
       } while (nMonStatsIdx < nMonStatsTotal);
     }

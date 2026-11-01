@@ -754,13 +754,12 @@ void __fastcall PLRSKILLS_StateRemFn07_Uninterruptable(D2UnitStrc * pUnit, eD2St
 
     D2Common::Skills::SKILL_SetParam2(pSkill, 0);
     D2Common::Skills::SKILL_SetParam3(pSkill, 0);
-    int32_t nYSaved = nY;
-    D2RoomStrc* pNestRoom = Player::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nX, nYSaved);
+    D2RoomStrc* pNestRoom = Player::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nX, nY);
     if (!pNestRoom) {
       return;
     }
 
-    nYSaved = nY;
+    int32_t nYSaved = nY;
     pNestRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     pNestRoom = Player::DRLGROOM_FindBetterNearbyRoom(pNestRoom, nX, nYSaved);
     D2Common::Collision::RemoveCollision_Type(pNestRoom, nX, nY, COLLISION_PATTERN_SMALL_UNIT_PRESENCE, 0x100);

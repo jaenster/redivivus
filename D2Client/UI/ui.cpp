@@ -1838,8 +1838,7 @@ void __fastcall UI_ShowGoldTransactionDialog(int32_t nTransactionType) {
             pPlayer = UNIT::Player::GetPlayerUnit_UI();
             nGoldInventory = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, eGoldStatType, nStatLayer);
             nGoldBank += nGoldInventory;
-            pwszPrompt = D2Lang::StrTable::strtable::GetLocaleString(wPromptLocaleId);
-            D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszPromptText, pwszPrompt, nGoldBank);
+            D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszPromptText, D2Lang::StrTable::strtable::GetLocaleString(wPromptLocaleId), nGoldBank);
             nTransactionType = (int32_t)pAllocCtx;
           } else {
             pwszPrompt = D2Lang::StrTable::strtable::GetLocaleString(wPromptLocaleId);
@@ -1931,18 +1930,14 @@ void __stdcall UI_DrawDialogBackground() {
 }
 
 void __fastcall UI_RegisterAutoMapEventHandlers(int32_t bRegister) {
-    int32_t nHandlerCount;
     if (bRegister) {
       if (GFX_bShowUIFlag.Automap) {
         _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gaUIFlagInitTable, 5);
         return;
       }
     } else {
-      HWND hWnd;
       if (GFX_bShowUIFlag.Automap) {
-        nHandlerCount = 5;
-        hWnd = D2gfx::D2GFX::GetHwnd();
-        _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, gaUIFlagInitTable, nHandlerCount);
+        _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gaUIFlagInitTable, 5);
       }
     }
 }
@@ -4623,7 +4618,7 @@ uint32_t __stdcall UI_IsMouseInRightColumn(int32_t nParam) {
 static int32_t UI_GetControlConfigTabIndex(int32_t nMouseX, int32_t nMouseY) {
     int nMatchedTabIndex = 0;
     uint32_t nTabByteOffset = 0;
-    while (nMouseX < *(int*)&g_UIConfigTabTable[nMatchedTabIndex].aBounds[0] || nMouseX > *(int*)&g_UIConfigTabTable[nMatchedTabIndex].aBounds[4] || nMouseY < *(int*)&g_UIConfigTabTable[nMatchedTabIndex].aBounds[8] || nMouseY > *(int*)&g_UIConfigTabTable[nMatchedTabIndex].aBounds[12]) {
+    while (nMouseX < *(int*)(g_UIConfigTabTable[0].aBounds + nTabByteOffset) || nMouseX > *(int*)(g_UIConfigTabTable[0].aBounds + nTabByteOffset + 4) || nMouseY < *(int*)(g_UIConfigTabTable[0].aBounds + nTabByteOffset + 8) || nMouseY > *(int*)(g_UIConfigTabTable[0].aBounds + nTabByteOffset + 0xc)) {
       nTabByteOffset += 0x1a;
       nMatchedTabIndex++;
       if (nTabByteOffset >= 0x4e) {
@@ -5252,15 +5247,15 @@ void __stdcall DRAW_ConfigControlsMenu() {
     nColByteOff = 0;
     do {
       if (nTmpX == gnUICtrlConfigActiveButton) {
-        nColor_lcl = g_UIConfigTabTable[nTmpX].nTabId;
+        nColor_lcl = *(int32_t*)(g_UIConfigTabTable[0].aBounds + (nColByteOff - 4));
       } else {
         nColor_lcl = 4;
       }
 
-      nTmpY = *(int*)&g_UIConfigTabTable[nTmpX].aBounds[0];
+      nTmpY = *(int*)(g_UIConfigTabTable[0].aBounds + nColByteOff);
       bBold = 0;
       nTmpWidth = (WindowSizeY - 0x1a4) / 2 + 0x15f;
-      pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(g_UIConfigTabTable[nTmpX].nLabelStringId);
+      pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)(g_UIConfigTabTable[0].aBounds + (nColByteOff - 10)));
       D2Win::Src::D2WinFont::DRAW_text(pwLocaleStr, nTmpY + 10, nTmpWidth, nColor_lcl, bBold);
       nColByteOff += 0x1a;
       nTmpX++;
@@ -6821,6 +6816,7 @@ static void __stdcall DRAW_UI_StatWindow_II(int32_t bUpperEnabled, int32_t bLowe
 }; D2_STATIC_GUARD(gaStatWindowRowLayout, "D2Client::UI::ui::DRAW_UI_StatWindow_II::gaStatWindowRowLayout");
 
     int nBtnIndex;
+    uint16_t* pClearPtr;
     uint16_t wszMonNameTooltip[128];
     for (nBtnIndex = 0; nBtnIndex < 0x80; nBtnIndex++) {
       wszMonNameTooltip[nBtnIndex] = L'\0';
@@ -6867,9 +6863,7 @@ static void __stdcall DRAW_UI_StatWindow_II(int32_t bUpperEnabled, int32_t bLowe
     int nX = gaStatWindowRowLayout[nBtnIndex * 6 + 2] + gnPanelOffsetX;
     BOOL bMultiLineCenter = 0;
     int nMonsterIdx = gaStatWindowRowLayout[nBtnIndex * 6 + 3] + gnPanelOffsetY - 0x1e0 + ScreenSizeY;
-    int32_t dwColor = 0;
-    uint16_t* pClearPtr = D2Lang::StrTable::strtable::GetLocaleString(0x103f);
-    D2Win::Src::D2WinFont::DRAW_text(pClearPtr, nX, nMonsterIdx, dwColor, bMultiLineCenter);
+    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x103f), nX, nMonsterIdx, 0, bMultiLineCenter);
     nMonsterIdx = GAME::Select::SELECT_GetConstant13_X();
     D2MonStatsTxt* pMonStatsTxt = nMonsterIdx >= 0 && nMonsterIdx < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonsterIdx : nullptr;
     if (!pMonStatsTxt) {

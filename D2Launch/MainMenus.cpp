@@ -645,15 +645,11 @@ void __stdcall UIMENU_DownloadingPatch() {
     }
 
     ::D2WinTextBox* pControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x114);
-    int nFrameCount = 0;
-    bool byTmp = false;
-    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x143a), 0, byTmp, nFrameCount);
+    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x143a), 0, false, 0);
     pControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x112);
-    nFrameCount = 0;
-    byTmp = false;
-    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x143b), 0, byTmp, nFrameCount);
+    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x143b), 0, false, 0);
     FORMS_CreateAnyFormFromListExEx(0x118);
-    nFrameCount = D2Win::Src::D2WinImage::D2WINIMAGE_StopAnimation((int*)gpCtlPatchProgressAnimImage);
+    int nFrameCount = D2Win::Src::D2WinImage::D2WINIMAGE_StopAnimation((int*)gpCtlPatchProgressAnimImage);
     D2Win::Src::D2WinImage::D2WINIMAGE_SetFrame(gpCtlPatchProgressAnimImage, nFrameCount * nProgressPercent / 100);
     sprintf(szPercentBuffer, "%d%%", nProgressPercent);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpPatchProgressTextBox, szPercentBuffer, 0);
@@ -778,9 +774,7 @@ void __stdcall UIMENU_MainScreenBeforeMenu() {
 
     D2Lang::UTF8_ConvertToWideChar(&__frame0.wszWideBuffer, __frame0.szUTF8Buffer, 0x200);
     D2Win::Src::D2WinTextBox::SetText(pTextControl, &__frame0.wszWideBuffer, 4, false, 0);
-    int32_t nSetTextParam3 = 0;
-    bool bySetTextParam = false;
-    D2Win::Src::D2WinTextBox::SetText(pTextControl, D2Lang::StrTable::strtable::GetLocaleString(0x13f1), 4, bySetTextParam, nSetTextParam3);
+    D2Win::Src::D2WinTextBox::SetText(pTextControl, D2Lang::StrTable::strtable::GetLocaleString(0x13f1), 4, false, 0);
     D2Win::Src::D2WinMain::D2WINMAIN_SetCursorVisible(0);
     nBufferSize = D2Sound::Src::D2SoundFast::SOUND_GetOptionsMusic();
     if (!nBufferSize) {
@@ -995,8 +989,6 @@ void __stdcall MAINMENU_DisableControlIfDataNonZero2(int32_t nParam) {
 
 // Shows BNet account creation UI. Clears gbPasswordChangeInProgress, creates form with username/password/confirmation fields. Entry point for new account flow from main menu.
 void __stdcall UIMENU_CreateBattleNetAccount() {
-    bool nSetTextArg2;
-    int nSetTextArg3;
     Launcher::UIMENU_MainMenuWithoutMenuButWithDiabloLogo();
     FORMS_CreateAnyFormFromListExEx(0x15);
     FORMS_CreateAnyFormFromListExEx(0x16);
@@ -1013,15 +1005,11 @@ void __stdcall UIMENU_CreateBattleNetAccount() {
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     if (!bIsExpansion) {
       pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x1f);
-      nSetTextArg3 = 0;
-      nSetTextArg2 = false;
-      D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1466), 0, nSetTextArg2, nSetTextArg3);
+      D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1466), 0, false, 0);
     }
 
     pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x20);
-    nSetTextArg3 = 0;
-    nSetTextArg2 = false;
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1467), 0, nSetTextArg2, nSetTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1467), 0, false, 0);
     gpBnetAccountEditBox = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x54);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpBnetAccountEditBox, MAINMENU_ValidateGameNameChar);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpBnetAccountEditBox, 0x10);
@@ -1150,9 +1138,7 @@ void __stdcall UIMENU_AreYouSureToCreateHardcoreCharacter() {
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(pControl, 1);
     ::D2WinTextBox* pControl2 = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xd0);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pControl2, 1);
-    int nSetTextArg3 = 0;
-    bool nSetTextArg2 = false;
-    D2Win::Src::D2WinTextBox::SetText(pControl2, D2Lang::StrTable::strtable::GetLocaleString(0x14b7), 0, nSetTextArg2, nSetTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pControl2, D2Lang::StrTable::strtable::GetLocaleString(0x14b7), 0, false, 0);
 }
 
 // Validates character name input as user types. First character must be a-z or A-Z (rejects '-' and '_' at start). If nTextLen is 0 (first char position), rejects non-alpha. Also rejects consecutive '-' or '_' characters by checking if previous character was the same special char. Returns 1 if valid, 0 if invalid.
@@ -1269,22 +1255,15 @@ BOOL __stdcall MAINMENU_OnPressToggleExpansionFlag(D2ControlMsg * pControlMsg) {
 }
 
 int __fastcall MAINMENU_SetClassDescriptionTooltip(int32_t bSetTooltip, int32_t nClassId, uint16_t wPrimaryStrId, uint16_t wSecondaryStrId) {
-    int32_t nSetTextArg3;
     int32_t nUnused;
-    bool nSetTextArg2;
     if (gnClassDescriptionTooltipState != -1) {
       return 1;
     }
     if (bSetTooltip) {
-      int nAlignment;
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCtlClassDescriptionTooltipPrimary);
-      nSetTextArg3 = 0;
-      nSetTextArg2 = false;
-      D2Win::Src::D2WinTextBox::SetText(gpCtlClassDescriptionTooltipPrimary, D2Lang::StrTable::strtable::GetLocaleString(wPrimaryStrId), 0, nSetTextArg2, nSetTextArg3);
+      D2Win::Src::D2WinTextBox::SetText(gpCtlClassDescriptionTooltipPrimary, D2Lang::StrTable::strtable::GetLocaleString(wPrimaryStrId), 0, false, 0);
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCtlClassDescriptionTooltipSecondary);
-      nAlignment = 0;
-      nSetTextArg2 = false;
-      D2Win::Src::D2WinTextBox::SetText(gpCtlClassDescriptionTooltipSecondary, D2Lang::StrTable::strtable::GetLocaleString(wSecondaryStrId), 0, nSetTextArg2, nAlignment);
+      D2Win::Src::D2WinTextBox::SetText(gpCtlClassDescriptionTooltipSecondary, D2Lang::StrTable::strtable::GetLocaleString(wSecondaryStrId), 0, false, 0);
       gnClassDescriptionTooltipClassId = nClassId;
       return 1;
     }
@@ -1820,10 +1799,8 @@ void __fastcall UIMENU_PleaseInsertExpansionCdWithNotWorkingCancelButton(int32_t
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(pForm, 1);
     ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xd9);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
+    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1430), 0, (bool)0, 0);
     int nTextPadC = 0;
-    uint8_t byCentered = 0;
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1430), 0, (bool)byCentered, nTextPadC);
-    nTextPadC = 0;
     bool bIndent = false;
     int32_t nTextPadB = 0;
     uint16_t wStrId = 0x5578;
@@ -2012,12 +1989,8 @@ void __stdcall UIMENU_PleaseInsertCinematicDiscWithCancelAndNotWorkingOkButtons(
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(pForm, 1);
     ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xd9);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
-    int nTextPadC = 0;
-    uint8_t byCentered = 0;
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1430), 0, (bool)byCentered, nTextPadC);
-    nTextPadC = 0;
-    bool bIndent = false;
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1432), 0, bIndent, nTextPadC);
+    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1430), 0, (bool)0, 0);
+    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1432), 0, false, 0);
 }
 
 bool fpRequiredUserAction() {
@@ -2291,9 +2264,7 @@ void __stdcall UIMENU_ChangePassword() {
     }
 
     pCheckboxCtl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(nFormId);
-    int nTextArg3 = 0;
-    bool byTextArg1 = false;
-    D2Win::Src::D2WinTextBox::SetText(pCheckboxCtl, D2Lang::StrTable::strtable::GetLocaleString(0x2b2b), 0, byTextArg1, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pCheckboxCtl, D2Lang::StrTable::strtable::GetLocaleString(0x2b2b), 0, false, 0);
     gpBnetAccountEditBox = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x59);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpBnetAccountEditBox, MAINMENU_ValidateGameNameChar);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpBnetAccountEditBox, 0x10);
@@ -2467,28 +2438,20 @@ void __stdcall UIMENU_PleaseReadAfterCreatingAccount() {
     FORMS_CreateAnyFormFromList(99);
     FORMS_CreateAnyFormFromList(100);
     ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0x5f);
-    int nTextArg3 = 0;
-    bool byTextArgB1 = false;
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x146b), 0, byTextArgB1, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x146b), 0, false, 0);
     pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0x60);
     int32_t nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(5);
     uint32_t nFontHeight = D2Win::Src::D2WinFont::D2WINFONT_GetCurrentFontHeight();
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
-    nTextArg3 = 0;
-    byTextArgB1 = false;
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x146c), 0, byTextArgB1, nTextArg3);
-    nTextArg3 = (int)((uint64_t)((int64_t)(int)nFontHeight * -0x66666667) >> 0x20);
+    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x146c), 0, false, 0);
+    int nTextArg3 = (int)((uint64_t)((int64_t)(int)nFontHeight * -0x66666667) >> 0x20);
     nTextArg3 = (nTextArg3 >> 2) - (nTextArg3 >> 0x1f);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLinePadding(pTextBox, nTextArg3, 0);
     pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0x61);
-    int nTextArgB3 = 0;
-    byTextArgB1 = false;
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x146d), 0, byTextArgB1, nTextArgB3);
+    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x146d), 0, false, 0);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLinePadding(pTextBox, nTextArg3, 0);
     pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0x62);
-    nTextArg3 = 0;
-    byTextArgB1 = false;
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x2b77), 0, byTextArgB1, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x2b77), 0, false, 0);
 }
 
 // Extended image loader for additional UI assets beyond IMAGE_LoadPredefinedImages. Loads character selection screens, button graphics, and expansion-specific UI elements. Uses the same wsprintfA path construction pattern with expansion detection for conditional asset loading.
@@ -3422,12 +3385,8 @@ BOOL fpInsertPlayCd() {
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(pForm, 1);
     ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xd9);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
-    int nTextPadC = 0;
-    uint8_t byTextPadB = 0;
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1430), 0, (bool)byTextPadB, nTextPadC);
-    nTextPadC = 0;
-    bool bIndent = false;
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1431), 0, bIndent, nTextPadC);
+    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1430), 0, (bool)0, 0);
+    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1431), 0, false, 0);
     gbCinematicsMenuShown = 0;
     ::fpInsertPlayCd = 0;
     fpLoadAllMediaMpqCallback = (int)D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles;
@@ -3724,7 +3683,6 @@ int __fastcall SelectedCharBnetSingleTcpIp(D2CharSelStrc * charName, eD2PlayerSt
     int32_t bEmailOk;
     uint16_t* pszLocaleMsg;
     int32_t bHasPeer;
-    uint16_t* pszFmt;
     uint16_t nErrStringId;
     uint16_t wszPopupMsg[256];
     uint16_t wszCharName[256];
@@ -3802,8 +3760,7 @@ int __fastcall SelectedCharBnetSingleTcpIp(D2CharSelStrc * charName, eD2PlayerSt
                     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszCharName, D2IniData_launcher->szNAME, 0x100);
                     D2MCPClient::McpConnect::FreeMCP();
                     pszLocaleMsg = wszCharName;
-                    pszFmt = D2Lang::StrTable::strtable::GetLocaleString(0x2b89);
-                    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszPopupMsg, pszFmt, pszLocaleMsg);
+                    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszPopupMsg, D2Lang::StrTable::strtable::GetLocaleString(0x2b89), pszLocaleMsg);
                     FORMS_DestroyList();
                     pSavedFontParams = gaPredefinedForms[0xe0].pTypeArg2;
                     gaPredefinedForms[0xe0].pTypeArg2 = gaMenuFormFontParamsFont1;
@@ -4537,7 +4494,6 @@ uint32_t __stdcall thunk_UIMENU_CreateHeroSinglePlayer(D2ControlMsg * pControlMs
 void __stdcall NET_MCP_CLIENT_HandleCharCreation() {
     uint16_t* wszMessage;
     uint16_t wErrorStringId;
-    uint16_t wszPopupText[256];
     uint16_t wszErrorSuffix[256];
     uint16_t wszCharNameForMsg[256];
     uint16_t wszErrorMsg[256];
@@ -4552,7 +4508,7 @@ void __stdcall NET_MCP_CLIENT_HandleCharCreation() {
 
     int32_t nJoinResult = D2MCPClient::McpConnect::GetD2GSJoinResult();
     if (!nJoinResult) {
-      uint16_t* wszFormat;
+      uint16_t wszPopupText[256];
       nJoinResult = D2MCPClient::McpConnect::HasPeerName();
       if (nJoinResult) {
         nJoinResult = D2MCPClient::McpConnect::HasPeerName();
@@ -4595,9 +4551,7 @@ void __stdcall NET_MCP_CLIENT_HandleCharCreation() {
             Fog::File::CONTAINER_InitializeBuffer(wszPopupText, 2, 0x100, STRING_ZeroOneWCHAR);
             Fog::File::CONTAINER_InitializeBuffer(wszCharNameForMsg, 2, 0x100, STRING_ZeroOneWCHAR);
             D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszCharNameForMsg, D2IniData_launcher->szNAME, 0x100);
-            wszMessage = wszCharNameForMsg;
-            wszFormat = D2Lang::StrTable::strtable::GetLocaleString(0x2b33);
-            D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszPopupText, wszFormat, wszMessage);
+            D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszPopupText, D2Lang::StrTable::strtable::GetLocaleString(0x2b33), wszCharNameForMsg);
             MAINMENU_ShowPopupDialog(wszPopupText, UIMENU_CreateHeroSinglePlayer, 1);
             return;
           }
@@ -4630,6 +4584,13 @@ void __stdcall NET_MCP_CLIENT_HandleCharCreation() {
         wszMessage = D2Lang::StrTable::strtable::GetLocaleString(0x145d);
       MAINMENU_ShowPopupDialog(wszMessage, UIMENU_CreateHeroSinglePlayer, 1);
       return;
+      case 71:
+        {
+          wErrorStringId = 0x145c;
+          wszMessage = D2Lang::StrTable::strtable::GetLocaleString(wErrorStringId);
+          MAINMENU_ShowPopupDialog(wszMessage, MAINMENU_CloseAndLaunchCharSelect, 1);
+          return;
+        }
     }
 
     wErrorStringId = 0x145c;
@@ -4949,7 +4910,6 @@ BOOL __stdcall MAINMENU_Unused16(D2ControlStrc * nParam) {
 void __stdcall MAINMENU_BnetConnectionProgress() {
     char szDots[256];
     int nConnectionState;
-    int nTextArg3;
     if (!gpCtlBnetProgressBar) {
       return;
     }
@@ -4983,10 +4943,7 @@ void __stdcall MAINMENU_BnetConnectionProgress() {
 
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCtlBnetProgressBar);
     if (gbBnetProgressActive >= 0) {
-      bool nTextArg2;
-      nTextArg3 = 0;
-      nTextArg2 = false;
-      D2Win::Src::D2WinTextBox::SetText(gpCtlBnetProgressBar, D2Lang::StrTable::strtable::GetLocaleString((uint16_t)gbBnetProgressActive), 0, nTextArg2, nTextArg3);
+      D2Win::Src::D2WinTextBox::SetText(gpCtlBnetProgressBar, D2Lang::StrTable::strtable::GetLocaleString((uint16_t)gbBnetProgressActive), 0, false, 0);
     }
 
     DWORD dwTickCount = GetTickCount();
@@ -5055,13 +5012,9 @@ void __stdcall UIMENU_EnterEmailAddress() {
     gbEmailAddressScreenReady = 0;
     Launcher::UIMENU_MainMenuWithoutMenuButWithDiabloLogo();
     ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x122);
-    int nTextArg3 = 0;
-    bool nTextArg2 = false;
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x2b55), 0, nTextArg2, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x2b55), 0, false, 0);
     pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x123);
-    nTextArg3 = 0;
-    nTextArg2 = false;
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x2b56), 0, nTextArg2, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x2b56), 0, false, 0);
     FORMS_CreateAnyFormFromListExEx(0x120);
     pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x124);
     uint16_t* wszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x2b57);
@@ -5122,13 +5075,9 @@ void __stdcall UIMENU_YouWereDisconnectedFromBattleNet() {
 
     Launcher::UIMENU_MainMenuWithoutMenuButWithDiabloLogo();
     ::D2WinTextBox* pControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(299);
-    int nTextArg3 = 0;
-    bool byTmp = false;
-    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b6a), 0, byTmp, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b6a), 0, false, 0);
     pControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x12e);
-    nTextArg3 = 0;
-    byTmp = false;
-    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b5f), 0, byTmp, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b5f), 0, false, 0);
     FORMS_CreateAnyFormFromListExEx(0x12f);
     pControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x130);
     pwszText = D2Lang::StrTable::strtable::GetLocaleString(0x1468);
@@ -5163,21 +5112,13 @@ void __stdcall UIMENU_YouWereDisconnectedFromBattleNet2() {
 
     Launcher::UIMENU_MainMenuWithoutMenuButWithDiabloLogo();
     ::D2WinTextBox* pControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x135);
-    int nTextArg3 = 0;
-    bool byTmp = false;
-    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b65), 0, byTmp, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b65), 0, false, 0);
     pControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x136);
-    nTextArg3 = 0;
-    byTmp = false;
-    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b66), 0, byTmp, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b66), 0, false, 0);
     pControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x137);
-    nTextArg3 = 0;
-    byTmp = false;
-    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b67), 0, byTmp, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b67), 0, false, 0);
     pControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x138);
-    nTextArg3 = 0;
-    byTmp = false;
-    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b68), 0, byTmp, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b68), 0, false, 0);
     FORMS_CreateAnyFormFromListExEx(0x139);
     FORMS_CreateAnyFormFromListExEx(0x13a);
     FORMS_CreateAnyFormFromListExEx(0x13b);
@@ -5246,13 +5187,9 @@ void __stdcall UIMENU_YouWereDisconnectedFromBattleNet3() {
 
     Launcher::UIMENU_MainMenuWithoutMenuButWithDiabloLogo();
     ::D2WinTextBox* pControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x13d);
-    int nTextArg3 = 0;
-    bool byTmp = false;
-    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b6c), 0, byTmp, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b6c), 0, false, 0);
     pControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x13e);
-    nTextArg3 = 0;
-    byTmp = false;
-    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b70), 0, byTmp, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x2b70), 0, false, 0);
     FORMS_CreateAnyFormFromListExEx(0x13f);
     pControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x140);
     pwszText = D2Lang::StrTable::strtable::GetLocaleString(0x1468);
@@ -5334,9 +5271,7 @@ void __stdcall UIMENU_ConnectinToBattleNetWitProgressDots() {
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(pBackgroundControl, 1);
     ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xe4);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
-    int nTextArg3 = 0;
-    bool nTextArg4 = false;
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1433), 0, nTextArg4, nTextArg3);
+    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1433), 0, false, 0);
     gpCtlBnetProgressBar = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xe5);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)gpCtlBnetProgressBar, 1);
     gbBnetConnectionTimerActive = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xe6);
@@ -5390,10 +5325,7 @@ BOOL __stdcall MAINMENU_Unused19(D2ControlMsg * pControlMsg) {
     nMsgBoxArg7 = 1;
     pAccountResult = 0;
     pfnOnPress1 = (OnPress)MAINMENU_DismissPopup;
-    nMsgBoxArg5 = 0;
-    nMsgBoxTitleId = 0x13ee;
-    pwszEmail1 = D2Lang::StrTable::strtable::GetLocaleString(0x2b5b);
-    MAINMENU_CreateMessageBox(nullptr, pwszEmail1, nMsgBoxTitleId, nMsgBoxArg5, pfnOnPress1, pAccountResult, nMsgBoxArg7, nMsgBoxArg8);
+    MAINMENU_CreateMessageBox(nullptr, D2Lang::StrTable::strtable::GetLocaleString(0x2b5b), 0x13ee, 0, pfnOnPress1, pAccountResult, nMsgBoxArg7, nMsgBoxArg8);
     return 1;
 }
 

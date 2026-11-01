@@ -19,7 +19,7 @@ namespace D2Client::Sound::SoundHdr {
 // Function declarations
 eD2LevelId __stdcall SOUND_GetCurrentLevelId();
 uint32_t __stdcall GetSoundEnv();
-uint32_t __stdcall SOUNDHDR_GetGlobal0();
+int __stdcall SOUNDHDR_GetGlobal0();
 int __stdcall SOUNDHDR_GetGlobal1();
 void * __stdcall SOUNDHDR_GetGlobal2();
 int __stdcall SOUNDHDR_GetGlobal3();

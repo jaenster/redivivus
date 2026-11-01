@@ -63,17 +63,26 @@ Copy `build/d2.exe` next to `Game.exe` in your Diablo II folder and run `d2.exe 
 [`asm_matching/`](asm_matching/README.md) compiles the tree with Visual C++ 2005 SP1 and
 compares the machine code of each function with 1.14d. It is a check on the decompilation:
 where the code comes out identical, the decompiled function was read correctly.
-At this commit, generated from version 1788 of the Ghidra database:
+At this commit, generated from version 1790 of the Ghidra database:
 
 |Measure|Identical machine code|
 |-|-|
-|Functions|5,818 of 14,759 (39.4%)|
-|Code|435,792 of 2,605,160 bytes (16.73%)|
+|Functions|5,823 of 14,642 (39.8%)|
+|Code|444,474 of 2,602,915 bytes (17.08%)|
 
 These leave out the C runtime that Visual C++ 2005 linked in statically (libcmt): the
-rebuild links a runtime instead of reconstructing it. Over the whole binary, runtime
-included: 6,373 of 15,711 functions (40.6%), 534,219 of
-2,748,975 bytes (19.43%).
+rebuild links a runtime instead of reconstructing it. Code the compiler generates for C++
+exceptions is left out as well. Over the whole binary, runtime
+included: 6,380 of 15,711 functions (40.6%), 543,179 of
+2,748,975 bytes (19.76%).
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">
+  <img alt="The original's code split by how closely the rebuild matches it" src="asm_matching/msvc8/evidence/byte-match-light.svg">
+</picture>
+
+[BYTE-MATCHING.md](BYTE-MATCHING.md) explains what is compared, the kinds of match, and why
+whole matching functions are a strict measure next to identical instructions.
 
 ## Contributing
 

@@ -752,6 +752,7 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t nParam
 }; D2_STATIC_GUARD(gMonLvl_U_UniqueMonsterLevelChance2, "D2Common::Monsters::MONSTERS::MONSTER_ApplyDifficultyScaling::gMonLvl_U_UniqueMonsterLevelChance2");
 
     uint32_t nDivisor;
+    int32_t nValue;
     int nPercent;
     uint16_t nLayer;
     if (!(!nParam && bParam && pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
@@ -777,7 +778,8 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t nParam
       }
 
       nLayer = 0;
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, (*(int (*)[5])(pScalingEntry - 2))[0], D2Client::Stats::D2ApplyPercent(nCurrentStatVal, nPercent, nDivisor), nLayer);
+      nValue = D2Client::Stats::D2ApplyPercent(nCurrentStatVal, nPercent, nDivisor);
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, (*(int (*)[5])(pScalingEntry - 2))[0], nValue, nLayer);
       pScalingEntry += 5;
       nEntriesLeft--;
     } while (nEntriesLeft);

@@ -1228,16 +1228,14 @@ uint32_t __fastcall DrawItemGfx(D2UnitStrc * pUnit, int32_t nHeight, int32_t nWi
       return 0;
     }
 
-    BOOL bEthereal = 0;
-    nDC6Height = D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block);
-    uint32_t uVar1 = GfxUtil::GFXUTIL_IsDC6BlockOnScreen(sGfxData.pDC6Block, nHeight, nDC6Height + nWidth, bEthereal);
+    uint32_t uVar1 = GfxUtil::GFXUTIL_IsDC6BlockOnScreen(sGfxData.pDC6Block, nHeight, D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block) + nWidth, 0);
     if (!uVar1) {
       return 0;
     }
 
     D2GamePalShiftGreenBloodStrc* pPalette = (D2GamePalShiftGreenBloodStrc*)D2Common::ITEMS::Items::GetItemColor(nullptr, pUnit, &byColorOut, 1);
     DRAWMODE eDrawMode = DRAW_SOLID;
-    bEthereal = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_ETHEREAL, 0xac2, ".\\ENGINE\\Gfx.cpp");
+    BOOL bEthereal = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_ETHEREAL, 0xac2, ".\\ENGINE\\Gfx.cpp");
     if (bEthereal) {
       eDrawMode = DRAW_TRANSPARENT;
     }

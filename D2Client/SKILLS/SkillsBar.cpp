@@ -115,10 +115,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_DoubleSwing_Sound(D2UnitStrc * pUnit, eD2Sk
       Sound::SOUND_PlaySound(nSoundId, pUnit, nHitSound, nTargetX, nTargetY);
       pConfirmedTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
       if (pConfirmedTarget && pUnit->pPath.pStaticPath) {
-        nTargetY = 0;
-        nHitSound = Units::GetYPosFromDynamicPathUnit(pConfirmedTarget);
-        nTargetX = Units::GetXPosFromDynamicPathUnit(pConfirmedTarget);
-        D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, nTargetX, nHitSound, nTargetY);
+        D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, Units::GetXPosFromDynamicPathUnit(pConfirmedTarget), Units::GetYPosFromDynamicPathUnit(pConfirmedTarget), 0);
         return 1;
       }
     } else {
@@ -720,7 +717,6 @@ static void __stdcall CLIENT_UpdateSkillMissilePosition(D2SkillStrc * pSkill, in
 
 // Teleport/leap landing fixup: removes stale collision at the target tile and resets the unit's dynamic-path collision type, pattern and path type.
 static void __stdcall PATH_ResetCollisionOnLanding(int32_t nParam1, int32_t nParam2, D2UnitStrc * pUnit) {
-    int32_t iVar1;
     eD2UnitType eUnitTypeLocal;
     int32_t nPathType;
     if (!pUnit) {
@@ -735,11 +731,8 @@ static void __stdcall PATH_ResetCollisionOnLanding(int32_t nParam1, int32_t nPar
       return;
     }
     if (eUnitTypeLocal == UNIT_MONSTER) {
-      eD2CollisionShapeType nUnitWidth;
       if (nParam2 && nParam1) {
-        iVar1 = 0x100;
-        nUnitWidth = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
-        D2Common::Collision::RemoveCollision_Type(pRoom2, nParam2, nParam1, nUnitWidth, iVar1);
+        D2Common::Collision::RemoveCollision_Type(pRoom2, nParam2, nParam1, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x100);
       }
 
       D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0x100);

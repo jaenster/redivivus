@@ -412,7 +412,6 @@ void __fastcall SERVER_ITEM_SendStackableUsagePackets(D2UnitStrc * pUnit, char *
     D2UnitStrc* pInvItem;
     BOOL bHasCursorFlag;
     eD2UnitType eUnitType;
-    uint8_t nItemSlot;
     uint16_t sQuantity;
     if (!(pUnit && pUnit->pInventory)) {
       return;
@@ -428,8 +427,7 @@ void __fastcall SERVER_ITEM_SendStackableUsagePackets(D2UnitStrc * pUnit, char *
         if (eUnitType == UNIT_PLAYER) {
           sQuantity = 0xffff;
           bHasCursorFlag = 1;
-          nItemSlot = 0xff;
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1da), pCarriedItem, nItemSlot, bHasCursorFlag, eUnitType, sQuantity);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1da), pCarriedItem, 0xff, bHasCursorFlag, eUnitType, sQuantity);
         }
       }
     }
@@ -1607,14 +1605,11 @@ BOOL __stdcall ITEMMODE_CheckAutoStack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     int nSrcQty;
     int nDstQty;
     uint32_t nMaxStack;
-    D2ClientStrc* pClient;
     D2RoomStrc* pRoom;
     eD2UnitType eUnitType;
     uint32_t nNewQty;
-    char bSendStatUpdate;
     int32_t iVar7;
     D2InventoryStrc* pInventory;
-    uint16_t wStatLayer;
     if (pGame) {
       D2UnitStrc* pDstBook;
       pInventory = pUnit->pInventory;
@@ -1635,12 +1630,7 @@ BOOL __stdcall ITEMMODE_CheckAutoStack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
             nNewQty = nDstQty + nSrcQty;
             if ((int)nNewQty > (int)nMaxStack) {
               D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pDstBook, UNITSTAT_quantity, nMaxStack, 0);
-              wStatLayer = 0;
-              iVar7 = 0x46;
-              bSendStatUpdate = '\x01';
-              nNewQty = nMaxStack;
-              pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x638);
-              GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pDstBook, bSendStatUpdate, iVar7, nNewQty, wStatLayer);
+              GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x638), pDstBook, '\x01', 0x46, nMaxStack, 0);
               nNewQty = nDstQty - nMaxStack + nSrcQty;
               if (!(-1 < (int)nNewQty)) {
                 Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x63a);
@@ -1648,11 +1638,7 @@ BOOL __stdcall ITEMMODE_CheckAutoStack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
               }
 
               D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit2, UNITSTAT_quantity, nNewQty, 0);
-              wStatLayer = 0;
-              iVar7 = 0x46;
-              bSendStatUpdate = '\x01';
-              pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x63d);
-              GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pUnit2, bSendStatUpdate, iVar7, nNewQty, wStatLayer);
+              GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x63d), pUnit2, '\x01', 0x46, nNewQty, 0);
               ITEMMODE_UpdateBookSkillQuantity(nMaxStack - nDstQty, pUnit, pDstBook);
               return 1;
             } else {
@@ -1662,10 +1648,7 @@ BOOL __stdcall ITEMMODE_CheckAutoStack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
               }
 
               D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pDstBook, UNITSTAT_quantity, nNewQty, 0);
-              wStatLayer = 0;
-              iVar7 = 0x46;
-              bSendStatUpdate = '\x01';
-              GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x648), pDstBook, bSendStatUpdate, iVar7, nNewQty, wStatLayer);
+              GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x648), pDstBook, '\x01', 0x46, nNewQty, 0);
               ITEMMODE_UpdateBookSkillQuantity(nSrcQty, pUnit, pDstBook);
               pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
               if (pRoom) {
@@ -2397,7 +2380,6 @@ BOOL __fastcall SpecialItemsBonuses(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
     eD2ItemTypes eItemType;
     int iVar2;
     eD2Skills eCastSkill;
-    uint32_t nNewQty;
     D2ClientStrc* pClient;
     D2SkillStrc* pSkill;
     D2SkillStrc* pCurRightSkill;
@@ -2405,10 +2387,8 @@ BOOL __fastcall SpecialItemsBonuses(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
     D2BitBufferStrc* pBitBuffer;
     BOOL bQuestState;
     int32_t nOwnerGUID;
-    char bSendUpdate;
     uint8_t byOwnerUnitType;
     eD2UnitType eUnitType;
-    uint16_t wStatLayer;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x105a);
       exit(-1);
@@ -2459,16 +2439,10 @@ BOOL __fastcall SpecialItemsBonuses(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
                 iVar2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0);
                 if (iVar2 > 0) {
                   D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pItem, UNITSTAT_quantity, -1, 0);
-                  wStatLayer = 0;
-                  nNewQty = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0);
-                  iVar1 = 0x46;
-                  bSendUpdate = '\x01';
-                  pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x10b2);
-                  GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItem, bSendUpdate, iVar1, nNewQty, wStatLayer);
+                  GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x10b2), pItem, '\x01', 0x46, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0), 0);
                   iVar2 = pItem->nUnitGUID;
                   byOwnerUnitType = (uint8_t)pItem->eUnitType;
-                  pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x10b3);
-                  GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(pClient, 0x7c, byOwnerUnitType, iVar2);
+                  GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x10b3), 0x7c, byOwnerUnitType, iVar2);
                   ITEMMODE_CastItemSkill(eCastSkill, pUnit);
                   return 1;
                 }
@@ -2573,10 +2547,6 @@ static void __stdcall ITEMMODE_MergeStackableItems(::SGAMEDATA * pGame, D2UnitSt
     D2ClientStrc* pClient;
     eD2ItemTypes eItemType;
     uint32_t nCombinedQty;
-    int32_t nStatIdQty;
-    char bSendStatUpdate;
-    int32_t nErrorLine;
-    uint16_t wStatLayer;
     BOOL bIsSocketable = D2Common::ITEMS::Items::IsItemSocketable(pUnit, pUnit1);
     if (!bIsSocketable) {
       return;
@@ -2602,12 +2572,7 @@ static void __stdcall ITEMMODE_MergeStackableItems(::SGAMEDATA * pGame, D2UnitSt
           nCombinedQty = nSrcQty + nDstQty;
           if ((int)nCombinedQty > (int)nMaxStack) {
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit1, UNITSTAT_quantity, nMaxStack, 0);
-            wStatLayer = 0;
-            nStatIdQty = 0x46;
-            bSendStatUpdate = '\x01';
-            nCombinedQty = nMaxStack;
-            pClient = UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\ITEMS\\ItemMode.cpp", 0x1155);
-            GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pUnit1, bSendStatUpdate, nStatIdQty, nCombinedQty, wStatLayer);
+            GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\ITEMS\\ItemMode.cpp", 0x1155), pUnit1, '\x01', 0x46, nMaxStack, 0);
             nMaxStack = nDstQty - nMaxStack + nSrcQty;
             if (!(-1 < (int)nMaxStack)) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1158);
@@ -2615,11 +2580,7 @@ static void __stdcall ITEMMODE_MergeStackableItems(::SGAMEDATA * pGame, D2UnitSt
             }
 
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_quantity, nMaxStack, 0);
-            wStatLayer = 0;
-            nErrorLine = 0x46;
-            bSendStatUpdate = '\x01';
-            pClient = UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\ITEMS\\ItemMode.cpp", 0x115b);
-            GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pUnit, bSendStatUpdate, nErrorLine, nMaxStack, wStatLayer);
+            GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\ITEMS\\ItemMode.cpp", 0x115b), pUnit, '\x01', 0x46, nMaxStack, 0);
             eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit);
             if (eItemType == ITEMTYPE_Book) {
               eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit1);
@@ -2638,11 +2599,7 @@ static void __stdcall ITEMMODE_MergeStackableItems(::SGAMEDATA * pGame, D2UnitSt
               nDstQty = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit1, UNITSTAT_durability, 0);
               if ((int)nMaxStack < nDstQty) {
                 D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit1, UNITSTAT_durability, nMaxStack, 0);
-                wStatLayer = 0;
-                nErrorLine = 0x48;
-                bSendStatUpdate = '\x01';
-                pClient = UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\ITEMS\\ItemMode.cpp", 0x1170);
-                GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pUnit1, bSendStatUpdate, nErrorLine, nMaxStack, wStatLayer);
+                GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\ITEMS\\ItemMode.cpp", 0x1170), pUnit1, '\x01', 0x48, nMaxStack, 0);
               }
             }
             if (!((int)nCombinedQty >= 0)) {
@@ -2651,10 +2608,7 @@ static void __stdcall ITEMMODE_MergeStackableItems(::SGAMEDATA * pGame, D2UnitSt
             }
 
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit1, UNITSTAT_quantity, nCombinedQty, 0);
-            wStatLayer = 0;
-            nErrorLine = 0x46;
-            bSendStatUpdate = '\x01';
-            GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\ITEMS\\ItemMode.cpp", 0x1179), pUnit1, bSendStatUpdate, nErrorLine, nCombinedQty, wStatLayer);
+            GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\ITEMS\\ItemMode.cpp", 0x1179), pUnit1, '\x01', 0x46, nCombinedQty, 0);
             eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit);
             if (eItemType == ITEMTYPE_Book) {
               eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit1);
@@ -3058,11 +3012,7 @@ BOOL __fastcall ITEM_InsertScrollIntoBook(::SGAMEDATA * pGame, D2UnitStrc * pUni
     int nScrollSuffix;
     BOOL BVar3;
     D2RoomStrc* pRoom;
-    D2ClientStrc* pClient;
-    char bSendStatUpdate;
-    int32_t nLine;
     D2InventoryStrc* pInventory;
-    uint16_t wStatLayer;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x144e);
       exit(-1);
@@ -3124,12 +3074,7 @@ BOOL __fastcall ITEM_InsertScrollIntoBook(::SGAMEDATA * pGame, D2UnitStrc * pUni
               }
 
               D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pBook, UNITSTAT_quantity, 1, 0);
-              wStatLayer = 0;
-              bIsScroll = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pBook, UNITSTAT_quantity, 0);
-              nLine = 0x46;
-              bSendStatUpdate = '\x01';
-              pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1494);
-              GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pBook, bSendStatUpdate, nLine, bIsScroll, wStatLayer);
+              GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1494), pBook, '\x01', 0x46, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pBook, UNITSTAT_quantity, 0), 0);
               ITEMMODE_UpdateBookSkillQuantity(1, pUnit, pBook);
               return 1;
             }
@@ -3160,10 +3105,6 @@ BOOL __fastcall ITEMMODE_CheckEquipRestrictions(::SGAMEDATA * pGame, D2UnitStrc 
     D2UnitStrc* pKey;
     uint32_t bIsKey;
     int nKeyQty;
-    D2ClientStrc* pClient;
-    char bSendStatUpdate;
-    int32_t nErrorLine;
-    uint16_t wStatLayer;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x15f3);
       exit(-1);
@@ -3196,12 +3137,7 @@ BOOL __fastcall ITEMMODE_CheckEquipRestrictions(::SGAMEDATA * pGame, D2UnitStrc 
       nKeyQty = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pKey, UNITSTAT_quantity, 0);
       if (nKeyQty != 1 && -1 < nKeyQty - 1) {
         D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pKey, UNITSTAT_quantity, -1, 0);
-        wStatLayer = 0;
-        bIsKey = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pKey, UNITSTAT_quantity, 0);
-        nErrorLine = 0x46;
-        bSendStatUpdate = '\x01';
-        pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1605);
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pKey, bSendStatUpdate, nErrorLine, bIsKey, wStatLayer);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1605), pKey, '\x01', 0x46, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pKey, UNITSTAT_quantity, 0), 0);
         return 1;
       }
 
@@ -3570,8 +3506,7 @@ D2UnitStrc * __fastcall ITEMMODE_HandleItemDurability(uint32_t dwParam, D2UnitSt
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pBookItem, UNITSTAT_quantity, nNewBookQty, 0);
     uint16_t wStatLayer = 0;
     eD2UnitStat eStatId = UNITSTAT_quantity;
-    bool bSendStatUpdate = true;
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1905), pBookItem, bSendStatUpdate, eStatId, nNewBookQty, wStatLayer);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1905), pBookItem, true, eStatId, nNewBookQty, wStatLayer);
     ITEMMODE_UpdateBookSkillQuantity(nScrollQty, pUnit, pBookItem);
     return pBookItem;
 }
@@ -3590,11 +3525,7 @@ void __fastcall ITEMMODE_SendItemUpdate(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     D2Common::INVENTORY::Inventory::UpsertToUpdateList(pInventory, pItem);
     D2Common::Units::RefreshInventory(pUnit, 1);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_durability, 0, 0);
-    uint16_t wStatLayer = 0;
-    uint32_t nNewDurability = 0;
-    int32_t nStatId = 0x48;
-    bool bUpdateFlag = true;
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x191e), pItem, bUpdateFlag, nStatId, nNewDurability, wStatLayer);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x191e), pItem, true, 0x48, 0, 0);
     D2Common::ITEM_ProcessSetItemEquip(pUnit, pItem, 1, 1);
     UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, UNITEVENTCALLBACK_PERIODICSTATS, pUnit);
 }
@@ -3602,7 +3533,6 @@ void __fastcall ITEMMODE_SendItemUpdate(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // Repairs/restores an item: sets ITEMFLAG_RESTORED and clears ITEMFLAG_BROKEN, recalculates equipped-item states, queues inventory refresh, restores durability to max (sending 0x3E stat packet to the owning client), re-applies set-item equip bonuses, and validates weapon skills.
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall ITEMMODE_ProcessItemFlags(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
-    eD2UnitStat eStatId;
     uint16_t wStatLayer;
     D2InventoryStrc* pInventory = 0;
     if (pUnit) {
@@ -3620,13 +3550,12 @@ void __fastcall ITEMMODE_ProcessItemFlags(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
     uint32_t nValue = D2Common::Stats::StatsEx::GetTxtMaxDurability(pItem);
     if ((int)nValue > 0) {
-      bool bUpdateFlag;
+      eD2UnitStat eStatId;
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_durability, nValue, 0);
       if (pUnit) {
         wStatLayer = 0;
         eStatId = UNITSTAT_durability;
-        bUpdateFlag = true;
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x193c), pItem, bUpdateFlag, eStatId, nValue, wStatLayer);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x193c), pItem, true, eStatId, nValue, wStatLayer);
       }
     }
 
@@ -3663,8 +3592,7 @@ void __fastcall ITEMMODE_SetItemFlags(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
       nOwnerGUID = pUnit->nUnitGUID;
     }
 
-    uint8_t nNewQuantity = '\0';
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1962), (uint8_t)byUnitType, nOwnerGUID, eSkill, nNewQuantity);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1962), (uint8_t)byUnitType, nOwnerGUID, eSkill, '\0');
 }
 
 // Iterates the unit's inventory; for each carried item whose eAnimMode equals Death (expired/consumed flag), calls ITEMMODE_SetItemFlags. Counts how many such expired items were in INVPAGE_INVENTORY and for each calls ITEMMODE_UpdateItemSkill to clean up associated skill entries.

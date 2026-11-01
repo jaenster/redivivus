@@ -959,14 +959,11 @@ static uint32_t PATH_BuildDirectPathToTarget(D2DynamicPathStrc * pDynamicPath) {
 void __stdcall PATH_AddUnitCollision(D2UnitStrc * pUnit) {
     D2DynamicPathStrc* pDynamicPath;
     int32_t iVar1;
-    uint32_t nVectorX;
     int32_t nPosY;
     int32_t nPosX;
-    D2RoomStrc* pRoom;
-    int32_t nUnitWidth;
     eD2UnitType eUnitType;
     if (pUnit) {
-      uint32_t nVectorY;
+      int32_t nUnitWidth;
       eUnitType = pUnit->eUnitType;
       if ((int)eUnitType >= 0) {
         if ((int)eUnitType <= 1) {
@@ -990,18 +987,12 @@ void __stdcall PATH_AddUnitCollision(D2UnitStrc * pUnit) {
           }
 
           nPosX = Units::GetCollisionType(pUnit);
-          pRoom = Units::UNITS_GetRoom(pUnit);
-          Collision::AddCollision_Type(pRoom, nPosY, iVar1, nUnitWidth, nPosX);
+          Collision::AddCollision_Type(Units::UNITS_GetRoom(pUnit), nPosY, iVar1, nUnitWidth, nPosX);
           return;
         }
         if (eUnitType == UNIT_OBJECT) {
           iVar1 = Units::GetCollisionType(pUnit);
-          nVectorY = Units::GetUnitSizeY(pUnit);
-          nVectorX = Units::GetUnitSizeX(pUnit);
-          nPosY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-          nPosX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-          pRoom = Units::UNITS_GetRoom(pUnit);
-          Collision::AddCollision_Vector(pRoom, nPosX, nPosY, nVectorX, nVectorY, iVar1);
+          Collision::AddCollision_Vector(Units::UNITS_GetRoom(pUnit), D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), D2Client::Units::GetYPosFromDynamicPathUnit(pUnit), Units::GetUnitSizeX(pUnit), Units::GetUnitSizeY(pUnit), iVar1);
           return;
         }
       }

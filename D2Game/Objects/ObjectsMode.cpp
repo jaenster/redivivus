@@ -997,10 +997,7 @@ void __fastcall OBJMODE_SpawnCompanionChests(::SGAMEDATA * pGame, D2UnitStrc * p
       return;
     }
 
-    void* pCreateArg = 0;
-    int32_t arg6 = 1;
-    uint8_t bShouldCreate = 1;
-    pNewChest = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xa0, nChestPosX, ptCoords.y, pGame, D2Common::Units::UNITS_GetRoom(pUnit), bShouldCreate, arg6, pCreateArg);
+    pNewChest = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xa0, nChestPosX, ptCoords.y, pGame, D2Common::Units::UNITS_GetRoom(pUnit), 1, 1, 0);
     UNIT::SUnit::SetSparklyChestFlag(pNewChest, true);
 }
 
@@ -2867,7 +2864,6 @@ BOOL __fastcall OBJOP_ActivatePortalObject(D2ObjectOperateFnArg * pOperation) {
     uint32_t nSpawnX;
     eCollisionFlags eCollisionFlag;
     BOOL bAllowNeighboorRooms;
-    int32_t nLine;
     D2UnitStrc* pVictim;
     if (!pOperation->pAttacker || pOperation->pAttacker->eUnitType != UNIT_PLAYER) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfb3);
@@ -2904,8 +2900,7 @@ BOOL __fastcall OBJOP_ActivatePortalObject(D2ObjectOperateFnArg * pOperation) {
         eCollisionFlag_00 = 0x1c09;
         ptDest.x = nSpawnX;
         ptDest.y = nSpawnY;
-        nLine = D2Common::Units::GetUnitSizeX(pOperation->pAttacker);
-        pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &ptDest, nLine, eCollisionFlag_00, bAllowNeighboorRooms);
+        pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &ptDest, D2Common::Units::GetUnitSizeX(pOperation->pAttacker), eCollisionFlag_00, bAllowNeighboorRooms);
         if (!pRoom) {
           return 0;
         }
@@ -4308,8 +4303,7 @@ BOOL __fastcall OBJOP_OpenTrapChestSkillTrigger(D2ObjectOperateFnArg * pOperatio
 
         nSkillParam = 0;
         eUnitType = UNIT_OBJECT;
-        nObjectMode = D2Common::Skills::SKILL_GetMode(pSkill);
-        PLAYER::PlayerModes::PLRMODES_StartModeID(pOperation->sArg.pGame, pOperation->pAttacker, pSkill, nObjectMode, eUnitType, nVictimGUID, nSkillParam);
+        PLAYER::PlayerModes::PLRMODES_StartModeID(pOperation->sArg.pGame, pOperation->pAttacker, pSkill, D2Common::Skills::SKILL_GetMode(pSkill), eUnitType, nVictimGUID, nSkillParam);
       }
     }
 

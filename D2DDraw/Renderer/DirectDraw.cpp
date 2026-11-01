@@ -1286,7 +1286,8 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int32_t nPosX, int3
 
     int32_t pBlendTable = 0;
     nWidth = nDrawLines;
-    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, gnDDrawSurfaceXMin, gnDDrawRenderWidth, gpRenderBackBufferBits, bSpriteLoaded, RENDERER_nWindowWidth, 0, (int32_t)RENDERER_DIRECTDRAW_GetPalettePointer(nDrawMode, (uint32_t*)&nDrawLines), nSkipLines, nWidth, pBlendTable);
+    uint8_t* pPalettePtr = RENDERER_DIRECTDRAW_GetPalettePointer(nDrawMode, (uint32_t*)&nDrawLines);
+    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, gnDDrawSurfaceXMin, gnDDrawRenderWidth, gpRenderBackBufferBits, bSpriteLoaded, RENDERER_nWindowWidth, 0, (int32_t)pPalettePtr, nSkipLines, nWidth, pBlendTable);
 }
 
 void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, void * pCropRect, int32_t nDrawMode) {
@@ -1314,7 +1315,10 @@ void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t n
       return;
     }
 
-    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, __frame0.nClipLeft, __frame0.nClipRight, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, 0, (int32_t)RENDERER_DIRECTDRAW_GetPalettePointer(nDrawMode, (uint32_t*)&pCropRect), __frame0.nSkipTop, __frame0.nDrawHeight, iVar1);
+    int32_t nSkipTopCopy = __frame0.nSkipTop;
+    int32_t nDrawHeightCopy = __frame0.nDrawHeight;
+    uint8_t* pPalettePtr = RENDERER_DIRECTDRAW_GetPalettePointer(nDrawMode, (uint32_t*)&pCropRect);
+    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, __frame0.nClipLeft, __frame0.nClipRight, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, 0, (int32_t)pPalettePtr, nSkipTopCopy, nDrawHeightCopy, iVar1);
 }
 
 void __fastcall DrawShadow(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY) {

@@ -2466,7 +2466,6 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
     uint8_t cDifficulty;
     D2UnitStrc* pNpcUnit;
     int nMenuEntryIdx;
-    uint16_t* pszFormatStr;
     BOOL bQuestState;
     uint16_t nOptionStringId;
     int iVar1;
@@ -2576,8 +2575,7 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
             }
 
             iVar1 = D2Client::Merc::nMercReviveCost;
-            pszFormatStr = D2Lang::StrTable::strtable::GetLocaleString(0x58a8);
-            D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x200, wszOptionText, pszFormatStr, pnOptionCallback, iVar1);
+            D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x200, wszOptionText, D2Lang::StrTable::strtable::GetLocaleString(0x58a8), pnOptionCallback, iVar1);
             add_cost_option:
             Dialog::AddStringData(Dialog::gpNpcInteractionDialog, wszOptionText, 0xf, 0, 0, 1, (fpDialogFunc)*ppCurCallback, bOptionEnabled);
           } else {
@@ -3226,16 +3224,21 @@ int __stdcall NPCMENU_ConfirmDialogCancelCallback() {
 // Halts if the talk dialog is already open. Sends no packet.
 // void __stdcall, two stack arguments (RET 8). Callers: NPCMENU_TalkOptionCallback and NPCMENU_RequestGamble, both with 3381 "talk".
 void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechIdx) {
+    uint16_t* pszDialogLine;
     D2UnitStrc* pPlayerUnit_lcl;
     D2UnitStrc* pSocketedItem;
     int nMsgLoopIdx;
     uint32_t nParam;
+    int32_t iVar1;
     POINT local_c;
     fpDialogFunc pcVar1;
     fpDialogFunc pcVar2;
     fpDialogFunc pcVar3;
     fpDialogFunc pfnDrawCallback;
     fpDialogFunc pcVar4;
+    uint32_t dwColorArg;
+    uint32_t dwEnabledArg;
+    uint32_t dwFontArg;
     int32_t nAddStringEnabled;
     int32_t nErrorLine;
     if (Dialog::gpNpcGossipDialog) {
@@ -3248,14 +3251,7 @@ void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechId
     NPCMENU_CalculateDialogPosition(&local_c);
     Dialog::gpNpcGossipDialog = Dialog::AllocDialogStrc(local_c.x, local_c.y, NPCMENU_MercDrawCallback1, NPCMENU_EmptyDrawCallback1, 0, 0, 1, 0, 0, 0, 1);
     Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcGossipDialog, 1);
-    int32_t iVar1 = 0;
-    fpDialogFunc dwCallbackArg = 0;
-    uint32_t dwEnabledArg = 1;
-    nErrorLine = 4;
-    uint32_t dwColorArg = 0;
-    uint32_t dwFontArg = 0x15;
-    uint16_t* pszDialogLine = D2Lang::StrTable::strtable::GetLocaleString(nTitleStringId);
-    Dialog::AddStringData(Dialog::gpNpcGossipDialog, pszDialogLine, dwFontArg, dwColorArg, nErrorLine, dwEnabledArg, dwCallbackArg, iVar1);
+    Dialog::AddStringData(Dialog::gpNpcGossipDialog, D2Lang::StrTable::strtable::GetLocaleString(nTitleStringId), 0x15, 0, 4, 1, 0, 0);
     D2GSPacketSrv0x27_TextStrc* pMsgLog = Text::TEXT_GetOverheadGlobalPointer();
     if (pMsgLog) {
       nErrorLine = D2Common::Text::TEXT_CountMessagesOfType2(pMsgLog);
@@ -3458,8 +3454,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     int nGoldOnBody = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, eStatId, nNameStringId);
     int32_t nTotalGold = nLoopCounter + nGoldOnBody;
-    uint16_t* pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xd24);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(300, wszGoldFmtBuf, pszDialogPtr, nTotalGold);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(300, wszGoldFmtBuf, D2Lang::StrTable::strtable::GetLocaleString(0xd24), nTotalGold);
     Dialog::AddStringData(Dialog::gpNpcMercListDialog, wszGoldFmtBuf, 0x15, 0, 4, 1, nullptr, 0);
     int32_t nMercSeed = 1;
     fpDialogFunc pfnCloseCallback = NPCMENU_MercListDrawCallback;
@@ -3467,7 +3462,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     int32_t nMercActRolled = 0;
     uint32_t dwColorArg = 0;
     uint32_t dwFontArg = 0x13b;
-    pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xd48);
+    uint16_t* pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xd48);
     Dialog::AddStringData(Dialog::gpNpcMercListDialog, pszDialogPtr, dwFontArg, dwColorArg, nMercActRolled, dwEnabledArg, pfnCloseCallback, nMercSeed);
     ::ListBoxWrapper* ppListBox = (::ListBoxWrapper*)Storm::SMem::SMemAlloc(0xc, "new", -1, 0);
     nEHState = 0;

@@ -313,13 +313,13 @@ void __fastcall Q04_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
     QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, iVar2);
     QUEST_SendQuestInfoToUnit(pQuestData->pGame, pQuestArgs->pPlayer);
-    uint8_t byDifficulty;
-    byDifficulty = pQuestArgs->pGame->nDifficulty;
+    int nDifficulty;
+    nDifficulty = (int)pQuestArgs->pGame->nDifficulty;
     iVar2 = 7;
     eD2ItemQuality eQuality;
     eQuality = QUALITY_MAGIC;
-    if (byDifficulty != 1) {
-      if (byDifficulty != 2) {
+    if (nDifficulty != 1) {
+      if (nDifficulty != 2) {
         goto give_ring_reward;
       }
 

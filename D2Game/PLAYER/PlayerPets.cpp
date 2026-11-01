@@ -962,12 +962,11 @@ void __fastcall PETS_ManagePetsByType(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
       return;
     }
 
-    int nTxtPetTypeStride = 0xe0;
     do {
       if (nPetTypeIdx >= 0 && nPetTypeIdx < nPetTypeSize) {
         ppPetListHead = &pPets->pPetList[nPetTypeIdx];
         if (ppPetListHead) {
-          pTxtPetTypeEntry = sgptDataTable->pTxtPetType->baseicon + nTxtPetTypeStride - 0xf;
+          pTxtPetTypeEntry = (char*)&sgptDataTable->pTxtPetType[nPetTypeIdx].petType;
           if (pTxtPetTypeEntry) {
             uVar1 = (uint32_t)(uint8_t)pTxtPetTypeEntry[4];
             if (gadwBitMasks[0] & uVar1) {
@@ -984,7 +983,6 @@ void __fastcall PETS_ManagePetsByType(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
       }
 
       nPetTypeSize = sgptDataTable->nTxtPetTypeSize;
-      nTxtPetTypeStride += 0xe0;
       nPetTypeIdx++;
     } while (nPetTypeIdx < nPetTypeSize);
 }
@@ -1048,13 +1046,12 @@ void __fastcall SendAllyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       return;
     }
 
-    int nTxtPetTypeStride = 0xe0;
     D2DataTableTxtStrc* pDataTable = sgptDataTable;
     do {
       if (nPetTypeIdx >= 0 && nPetTypeIdx < nPetTypeSize) {
         pPetListEntry = (D2PetStrc*)&pPets->pPetList[nPetTypeIdx].pPets;
         if (pPetListEntry) {
-          pTxtPetTypeEntry = pDataTable->pTxtPetType->baseicon + nTxtPetTypeStride - 0xf;
+          pTxtPetTypeEntry = (char*)&pDataTable->pTxtPetType[nPetTypeIdx].petType;
           if (pTxtPetTypeEntry && pTxtPetTypeEntry[4] & (uint8_t)gadwBitMasks[2]) {
             for (pPetNode = *(uint8_t**)pPetListEntry; pPetNode; pPetNode = *(uint8_t**)(pPetNode + 0x14)) {
               if (!(*pPetNode & 1)) {
@@ -1071,7 +1068,6 @@ void __fastcall SendAllyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       }
 
       nPetTypeSize = pDataTable->nTxtPetTypeSize;
-      nTxtPetTypeStride += 0xe0;
       nPetTypeIdx++;
     } while (nPetTypeIdx < nPetTypeSize);
 }
@@ -1108,7 +1104,7 @@ static void __stdcall PLAYERPETS_RemoveConflictingPetsByGroup(int32_t nParam, ::
     D2DataTableTxtStrc* pDataTable = sgptDataTable;
     do {
       if (nePetType != nParam && (int)nePetType >= 0 && (int)nePetType < nPetTypeSize) {
-        pTxtPetTypeBase = pDataTable->pTxtPetType->baseicon + nTxtPetTypeStride - 0xf;
+        pTxtPetTypeBase = (char*)&pDataTable->pTxtPetType[nTxtPetTypeStride].petType;
         if (pTxtPetTypeBase && *(short int*)(pTxtPetTypeBase + 8) == wGroup) {
           pConflictingPet = SERVER_GetUnitPetByTypeId(pGame, pUnit, nePetType, 1);
           pDataTable = sgptDataTable;
@@ -1145,7 +1141,7 @@ static void __stdcall PLAYERPETS_RemoveConflictingPetsByGroup(int32_t nParam, ::
       }
 
       nPetTypeSize = pDataTable->nTxtPetTypeSize;
-      nTxtPetTypeStride += 0xe0;
+      nTxtPetTypeStride++;
       nPetListStride++;
       nePetType += PETTYPE_single;
     } while ((int)nePetType < nPetTypeSize);

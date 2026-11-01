@@ -2812,13 +2812,9 @@ int __stdcall OOGUTIL_HandleGameCreation(D2ControlMsg * pControlMsg) {
 // Applies the state of gUIGameListLevelRestrictionCheckbox to the create-game dialog: checked makes gUILevelRestrictionEditBox and gUIGameListLevelRestrictionUp/DownButton visible and active and gUIGameListLevelRestrictionInactiveImage/InactiveArrowButton inactive, unchecked the reverse; re-sets string 0x148b on gUIGameListLevelRestrictionLabel and 0x148c ("Levels") on gUIGameListLevelRestrictionLevelsLabel (alignment 4 checked, 5 unchecked), then calls OOGUTIL_RefreshGameList.
 // Provenance: asm 004451c0..004452fb; the argument-less twin of OOGUTIL_OnPressLevelRestrictionCheckbox, called twice from OOGUTIL_LoadLevelRestrictionSetting.
 void __stdcall OOGUTIL_UpdateLevelRestrictionControls() {
-    uint16_t* pwszLabel;
-    bool bVar1;
-    int dwTextFlags;
     int32_t nTextAlign;
     BOOL bLevelRestrictionChecked = D2Win::Src::D2WinButton::D2WINBUTTON_IsPressed(gUIGameListLevelRestrictionCheckbox);
     if (bLevelRestrictionChecked) {
-      uint8_t byColor;
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gUIGameListLevelRestrictionInactiveImage, 0);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gUIGameListLevelRestrictionInactiveArrowButton, 0);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gUIGameListLevelRestrictionUpButton, 1);
@@ -2826,9 +2822,7 @@ void __stdcall OOGUTIL_UpdateLevelRestrictionControls() {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUILevelRestrictionEditBox->sControl, 1);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gUIGameListLevelRestrictionUpButton, 1);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUIGameListLevelRestrictionDownButton->sControl, 1);
-      dwTextFlags = 0;
-      byColor = 0;
-      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 4, (bool)byColor, dwTextFlags);
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 4, (bool)0, 0);
       nTextAlign = 4;
     } else {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gUIGameListLevelRestrictionInactiveImage, 1);
@@ -2838,17 +2832,13 @@ void __stdcall OOGUTIL_UpdateLevelRestrictionControls() {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUILevelRestrictionEditBox->sControl, 0);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gUIGameListLevelRestrictionUpButton, 0);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUIGameListLevelRestrictionDownButton->sControl, 0);
-      dwTextFlags = 0;
-      bVar1 = false;
-      nTextAlign = 5;
-      pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x148b);
-      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, pwszLabel, nTextAlign, bVar1, dwTextFlags);
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 5, false, 0);
       nTextAlign = 5;
     }
 
-    dwTextFlags = 0;
-    bVar1 = false;
-    pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x148c);
+    int dwTextFlags = 0;
+    bool bVar1 = false;
+    uint16_t* pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x148c);
     D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLevelsLabel, pwszLabel, nTextAlign, bVar1, dwTextFlags);
     OOGUTIL_RefreshGameList();
 }
@@ -2984,13 +2974,9 @@ BOOL __stdcall OOGUTIL_OnTimerRefreshWaitInLine(D2ControlMsg * pControlMsg) {
 // OnPress handler of the create-game level-restriction checkbox gUIGameListLevelRestrictionCheckbox (FORM_Button, toggle flag 0x2). Same body as OOGUTIL_UpdateLevelRestrictionControls: checked makes gUILevelRestrictionEditBox and gUIGameListLevelRestrictionUp/DownButton visible and active and gUIGameListLevelRestrictionInactiveImage/InactiveArrowButton inactive, unchecked the reverse; re-sets string 0x148b on gUIGameListLevelRestrictionLabel and 0x148c ("Levels") on gUIGameListLevelRestrictionLevelsLabel (alignment 4 checked, 5 unchecked), then calls OOGUTIL_RefreshGameList; returns 1.
 // Provenance: asm 00445550..00445691 (RET 4); fpOnPressCallback of form record 0070dcf0, created at 00446240 and stored in 00798c40.
 BOOL __stdcall OOGUTIL_OnPressLevelRestrictionCheckbox(D2ControlMsg * pControlMsg) {
-    uint16_t* pwszLocale;
-    bool bVar1;
-    int dwTextFlags;
     int32_t nTextAlign;
     BOOL bLevelRestrictionChecked = D2Win::Src::D2WinButton::D2WINBUTTON_IsPressed(gUIGameListLevelRestrictionCheckbox);
     if (bLevelRestrictionChecked) {
-      uint8_t byColor;
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gUIGameListLevelRestrictionInactiveImage, 0);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gUIGameListLevelRestrictionInactiveArrowButton, 0);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gUIGameListLevelRestrictionUpButton, 1);
@@ -2998,9 +2984,7 @@ BOOL __stdcall OOGUTIL_OnPressLevelRestrictionCheckbox(D2ControlMsg * pControlMs
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUILevelRestrictionEditBox->sControl, 1);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gUIGameListLevelRestrictionUpButton, 1);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUIGameListLevelRestrictionDownButton->sControl, 1);
-      dwTextFlags = 0;
-      byColor = 0;
-      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 4, (bool)byColor, dwTextFlags);
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 4, (bool)0, 0);
       nTextAlign = 4;
     } else {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gUIGameListLevelRestrictionInactiveImage, 1);
@@ -3010,17 +2994,13 @@ BOOL __stdcall OOGUTIL_OnPressLevelRestrictionCheckbox(D2ControlMsg * pControlMs
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUILevelRestrictionEditBox->sControl, 0);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gUIGameListLevelRestrictionUpButton, 0);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUIGameListLevelRestrictionDownButton->sControl, 0);
-      dwTextFlags = 0;
-      bVar1 = false;
-      nTextAlign = 5;
-      pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x148b);
-      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, pwszLocale, nTextAlign, bVar1, dwTextFlags);
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 5, false, 0);
       nTextAlign = 5;
     }
 
-    dwTextFlags = 0;
-    bVar1 = false;
-    pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x148c);
+    int dwTextFlags = 0;
+    bool bVar1 = false;
+    uint16_t* pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x148c);
     D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLevelsLabel, pwszLocale, nTextAlign, bVar1, dwTextFlags);
     OOGUTIL_RefreshGameList();
     return 1;
@@ -3465,10 +3445,6 @@ void __stdcall UIMENU_JoinGame() {
 // Provenance: asm 00445ff0; called from CHATDLG_DestroyFormsAndOpenCreateGameDialog, the OnPress of the lobby CREATE button (gaPredefinedForms_b[6], string 0x14c0).
 void __stdcall OOGUTIL_OpenCreateGameDialog() {
     uint16_t* pwszLocale;
-    bool bVar2;
-    uint8_t byTextAlignFlag;
-    uint8_t uVar2;
-    bool bDifficultySelected;
     int bRegReadOk = Launcher::isServerDown();
     if (bRegReadOk == -1) {
       pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x1413);
@@ -3520,7 +3496,6 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
     sprintf(gszOogMaxPlayersText, "%d", 4);
     bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
     if (bHasPeerName) {
-      uint8_t uVar1;
       gUIGameListMaxPlayersEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x4b);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gUIGameListMaxPlayersEditBox, gszOogMaxPlayersText);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gUIGameListMaxPlayersEditBox, 3);
@@ -3536,15 +3511,9 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gUILevelRestrictionEditBox, OOGUTILITIES_EditBoxInput_RefreshGameList_ForLevelRestriction);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUILevelRestrictionEditBox->sControl, 0);
       gUIGameListLevelRestrictionLabel = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x46);
-      bRegReadOk = 0;
-      byTextAlignFlag = 0;
-      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 5, (bool)byTextAlignFlag, bRegReadOk);
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 5, (bool)0, 0);
       gUIGameListLevelRestrictionLevelsLabel = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x47);
-      bRegReadOk = 0;
-      uVar1 = 0;
-      bHasPeerName = 5;
-      pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x148c);
-      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLevelsLabel, pwszLocale, bHasPeerName, (bool)uVar1, bRegReadOk);
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLevelsLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148c), 5, (bool)0, 0);
       gUIGameListMaxPlayersUpButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x56);
       gUIGameListMaxPlayersDownButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x57);
       gUIGameListLevelRestrictionUpButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x58);
@@ -3570,19 +3539,11 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_LinkTabOrder(gUIGameListGameNameEditBox, gUIGameListGamePasswordEditBox);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_LinkTabOrder(gUIGameListGamePasswordEditBox, gpOogGameNameEditControl);
       gUIGameListMaxPlayersLabel = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x45);
-      bRegReadOk = 0;
-      uVar2 = 0;
-      D2Win::Src::D2WinTextBox::SetText(gUIGameListMaxPlayersLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148a), 5, (bool)uVar2, bRegReadOk);
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListMaxPlayersLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148a), 5, (bool)0, 0);
       gUIGameListLevelRestrictionLabel = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x46);
-      bRegReadOk = 0;
-      bDifficultySelected = false;
-      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 5, bDifficultySelected, bRegReadOk);
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 5, false, 0);
       gUIGameListLevelRestrictionLevelsLabel = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x47);
-      bRegReadOk = 0;
-      bDifficultySelected = false;
-      bHasPeerName = 5;
-      pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x148c);
-      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLevelsLabel, pwszLocale, bHasPeerName, bDifficultySelected, bRegReadOk);
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLevelsLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148c), 5, false, 0);
       gUIGameListLevelRestrictionInactiveImage = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x4f);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gUIGameListLevelRestrictionInactiveImage, 1);
       gUIGameListLevelRestrictionInactiveArrowButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x5a);
@@ -3595,7 +3556,7 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gUIGameListMaxPlayersInactiveArrowButton, 0);
     }
 
-    bDifficultySelected = false;
+    bool bDifficultySelected = false;
     int32_t nRegValue = 0;
     bRegReadOk = Storm::Source::SReg::SRegLoadValue("Diablo II", "DIFF_LEVEL", 0, &nRegValue);
     if (!bRegReadOk) {
@@ -3609,11 +3570,7 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
     gUIGameListPlayerListText = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x54);
     eD2PlayerStatus ePlayerStatus = D2IniData_multiplayer->eCTEMP_eD2PlayerStatus;
     if (!(ePlayerStatus & PLAYERSTATUS_Expansion) && 7 < byActProgress || 9 < byActProgress) {
-      bRegReadOk = 0;
-      bVar2 = false;
-      bHasPeerName = 4;
-      pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x2720);
-      D2Win::Src::D2WinTextBox::SetText(gUIGameListActLabel, pwszLocale, bHasPeerName, bVar2, bRegReadOk);
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListActLabel, D2Lang::StrTable::strtable::GetLocaleString(0x2720), 4, false, 0);
       if (nRegValue == 2) {
         D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListDifficultyHellButton, 1);
         CreateGameDifflevel = 2;
@@ -3621,19 +3578,11 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
         bDifficultySelected = true;
       }
     } else {
-      bRegReadOk = 0;
-      bVar2 = false;
-      bHasPeerName = 5;
-      pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x2720);
-      D2Win::Src::D2WinTextBox::SetText(gUIGameListActLabel, pwszLocale, bHasPeerName, bVar2, bRegReadOk);
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListActLabel, D2Lang::StrTable::strtable::GetLocaleString(0x2720), 5, false, 0);
       ChatDlg::CHATDLG_SetControlParent(&gUIGameListDifficultyHellButton->sControl);
     }
     if (!(ePlayerStatus & PLAYERSTATUS_Expansion) && 3 < byActProgress || 4 < byActProgress) {
-      bRegReadOk = 0;
-      bVar2 = false;
-      bHasPeerName = 4;
-      pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x2721);
-      D2Win::Src::D2WinTextBox::SetText(gUIGameListPlayerListText, pwszLocale, bHasPeerName, bVar2, bRegReadOk);
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListPlayerListText, D2Lang::StrTable::strtable::GetLocaleString(0x2721), 4, false, 0);
       if (nRegValue == 1) {
         D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListDifficultyNightmareButton, 1);
         CreateGameDifflevel = 1;
@@ -3641,16 +3590,12 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
         bDifficultySelected = true;
       }
     } else {
-      bRegReadOk = 0;
-      bVar2 = false;
-      D2Win::Src::D2WinTextBox::SetText(gUIGameListPlayerListText, D2Lang::StrTable::strtable::GetLocaleString(0x2721), 5, bVar2, bRegReadOk);
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListPlayerListText, D2Lang::StrTable::strtable::GetLocaleString(0x2721), 5, false, 0);
       ChatDlg::CHATDLG_SetControlParent(&gUIGameListDifficultyNightmareButton->sControl);
     }
 
     gUIGameListStatusLabel = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x53);
-    bRegReadOk = 0;
-    bVar2 = false;
-    D2Win::Src::D2WinTextBox::SetText(gUIGameListStatusLabel, D2Lang::StrTable::strtable::GetLocaleString(0x2722), 4, bVar2, bRegReadOk);
+    D2Win::Src::D2WinTextBox::SetText(gUIGameListStatusLabel, D2Lang::StrTable::strtable::GetLocaleString(0x2722), 4, false, 0);
     gUIGameListDifficultyNormalButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x50);
     if (!bDifficultySelected) {
       D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListDifficultyNormalButton, 1);

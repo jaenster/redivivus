@@ -80,7 +80,6 @@ static void __stdcall ITEM_ApplySocketableAndEquipStats(int32_t bForceActive, D2
     D2ItemsTxt* pItemsTxt;
     D2GemsTxt* pGemsTxt;
     int32_t bDualWieldActive;
-    uint32_t nGemApplyTypeSlot;
     if (!pUnit) {
       return;
     }
@@ -111,9 +110,7 @@ static void __stdcall ITEM_ApplySocketableAndEquipStats(int32_t bForceActive, D2
           exit(-1);
         }
 
-        nGemApplyTypeSlot = 0;
-        bIsGemOrRune = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bGemApplyType(pUnit);
-        D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(5, pUnit, pUnit2, (D2MagicAffixTxt*)pGemsTxt, bIsGemOrRune, nGemApplyTypeSlot);
+        D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(5, pUnit, pUnit2, (D2MagicAffixTxt*)pGemsTxt, D2Common::ITEMS::Items::ITEM_GetItemsTxt_bGemApplyType(pUnit), 0);
       } else {
         D2Common::ITEM_ProcessSetItemEquip(pUnit, pUnit2, 0, 0);
       }
@@ -140,9 +137,7 @@ static void __stdcall ITEM_ApplySocketableAndEquipStats(int32_t bForceActive, D2
         exit(-1);
       }
 
-      nGemApplyTypeSlot = 0;
-      bIsGemOrRune = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bGemApplyType(pUnit);
-      D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(2, nullptr, pUnit2, (D2MagicAffixTxt*)pGemsTxt, bIsGemOrRune, nGemApplyTypeSlot);
+      D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(2, nullptr, pUnit2, (D2MagicAffixTxt*)pGemsTxt, D2Common::ITEMS::Items::ITEM_GetItemsTxt_bGemApplyType(pUnit), 0);
     }
 
     BOOL bDisabled = D2Common::ITEMS::Items::CheckItemFlag(pUnit2, ITEMFLAG_DISABLED, 0x48, ".\\UNIT\\Item.cpp");

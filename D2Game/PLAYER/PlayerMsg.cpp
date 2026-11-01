@@ -246,8 +246,7 @@ void __fastcall SendPlayerMoveOrObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
         nPos = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
         wPosY = (uint16_t)nPos;
-        nPos = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS(pClient, '\x10', '\0', dwUnitGUID, (uint8_t)gaPlayerModeNetMsgTable[nModeIndex].nObjModeByte, (uint8_t)eUnitType, dwTargetGUID, (uint16_t)nPos, wPosY);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS(pClient, '\x10', '\0', dwUnitGUID, (uint8_t)gaPlayerModeNetMsgTable[nModeIndex].nObjModeByte, (uint8_t)eUnitType, dwTargetGUID, (uint16_t)D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), wPosY);
         return;
       }
     }
@@ -693,7 +692,6 @@ eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(D2UnitStrc * pUnit, eD2
     BOOL bInRange;
     D2MonStatsTxt* pMonTxt;
     uint32_t nDistPlayer;
-    uint8_t byNpcInteractFlag;
     ::SGAMEDATA* pGameTmp = pGame;
     switch (eUnitType) {
       case UNIT_OBJECT:
@@ -792,8 +790,7 @@ eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(D2UnitStrc * pUnit, eD2
           }
 
           D2Common::PATH::DynamicPath::ZeroPathPointsSize(pUnit->pPath.pDynamicPath);
-          byNpcInteractFlag = 0;
-          Monster::MonsterAI::NPC_BeginInteractionFromUnit(pGameTmp, pUnit, pTargetUnit, UNIT::sunitproxy::GetMonsterAI(pTargetUnit), byNpcInteractFlag);
+          Monster::MonsterAI::NPC_BeginInteractionFromUnit(pGameTmp, pUnit, pTargetUnit, UNIT::sunitproxy::GetMonsterAI(pTargetUnit), 0);
           return SERVERSTATUS_OK;
         }
       }
@@ -1566,8 +1563,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x05_LeftSkillOnLocation(::SGAMEDATA * p
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    uint16_t nLayer = 0;
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, nLayer);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     uint32_t nTargetY = nSize & 0xffff;
     uint32_t nTargetX = (uint32_t)pPacket & 0xffff;
     pLeftSkill = D2Common::Units::GetLeftSkill(pUnit);
@@ -1590,8 +1586,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x06_LeftSkillOnEntity(::SGAMEDATA * pGa
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    uint16_t nLayer = 0;
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, nLayer);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     int32_t nPierceIdx = 1;
     D2GSPacketClt0x06_LeftSkillOnEntity* pRawUnitType = pPacket;
     uint32_t nTargetGUID = nSize;
@@ -1615,8 +1610,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x07_LeftSkillOnEntityEx(::SGAMEDATA * p
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    uint16_t nLayer = 0;
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, nLayer);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     int32_t nPierceIdx = 0;
     D2GSPacketClt0x07_LeftSkillOnEntityEx* eUnitTypeParsed = pPacket;
     uint32_t nTargetGUID = nSize;
@@ -1710,8 +1704,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0C_RightSkillOnLocation(::SGAMEDATA * 
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    uint16_t nLayer = 0;
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, nLayer);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     uint32_t nTargetY = nSize & 0xffff;
     uint32_t nTargetX = (uint32_t)pPacket & 0xffff;
     pRightSkill = D2Common::Units::GetRightSkill(pUnit);
@@ -1734,8 +1727,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0D_RightSkillOnEntity(::SGAMEDATA * pG
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    uint16_t nLayer = 0;
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, nLayer);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     int32_t nPierceIdx = 1;
     D2GSPacketClt0x0D_RightSkillOnEntity* eUnitTypeParsed = pPacket;
     uint32_t nTargetGUID = nSize;
@@ -1759,8 +1751,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0E_RightSkillOnEntityEx(::SGAMEDATA * 
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    uint16_t nLayer = 0;
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, nLayer);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     int32_t nPierceIdx = 0;
     D2GSPacketClt0x0E_RightSkillOnEntityEx* eUnitTypeParsed = pPacket;
     uint32_t nTargetGUID = nSize;

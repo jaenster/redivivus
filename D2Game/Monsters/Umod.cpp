@@ -76,7 +76,7 @@ static void UMOD_IncreaseMonsterHp(uint32_t nUmodConstant, D2UnitStrc * pUnit) {
     }
 
     int64_t nDivResult;
-    nDivResult = _alldiv((uint32_t)((int64_t)(int)nBaseHp * (int64_t)(int)nUmodConstant), (uint32_t)((uint64_t)((int64_t)(int)nBaseHp * (int64_t)(int)nUmodConstant) >> 0x20), 100, 0);
+    nDivResult = (int64_t)(int)nBaseHp * (int64_t)(int)nUmodConstant / 100;
     nHpBonus = (int)nDivResult;
     apply_hp_bonus:
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, nBaseHp + nHpBonus, 0);
@@ -284,8 +284,7 @@ void __fastcall MONUMOD_ApplyColdEnchant(D2UnitStrc * pUnit, int32_t nIndex, BOO
 
     nLvlDmgBase = pMonLvl->DM[nLvlDmgBase * 3 + bUnknown];
     int32_t nMaxDamConst = GetUmodConstant(bUnknown + 0x19);
-    int16_t nLayer = 0;
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmindam, GetUmodConstant(bUnknown + 0x16) * nLvlDmgBase / 100, nLayer);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmindam, GetUmodConstant(bUnknown + 0x16) * nLvlDmgBase / 100, 0);
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmaxdam, nMaxDamConst * nLvlDmgBase / 100, 0);
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldlength, 0x96, 0);
 }

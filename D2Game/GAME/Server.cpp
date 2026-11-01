@@ -433,7 +433,6 @@ void __fastcall NET_SendPong(uint32_t nClientID, int32_t nPingTime, int32_t nSeq
 void __fastcall BroadcastPlayerJoin(::SGAMEDATA * pGame, D2ClientStrc * pClient) {
     D2CorpseStrc* pRoomCorpse;
     uint32_t dwCorpseGUIDArg;
-    uint8_t bAssign;
     D2ClientStrc* pClientOther;
     D2UnitStrc* pUnitJoining = Clients::CLIENTS_GetControlUnit(pClient, 0);
     if (!pUnitJoining) {
@@ -453,8 +452,7 @@ void __fastcall BroadcastPlayerJoin(::SGAMEDATA * pGame, D2ClientStrc * pClient)
               for (pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(pUnit->pInventory); pRoomCorpse; pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse(pRoomCorpse)) {
                 dwCorpseGUIDArg = D2Common::INVENTORY::Inventory::ROOMCORPSE_GetGUID(pRoomCorpse);
                 if (dwCorpseGUIDArg != -1) {
-                  bAssign = 1;
-                  SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign(pClient, D2Client::UNIT::GetGUID(pUnit), dwCorpseGUIDArg, bAssign);
+                  SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign(pClient, D2Client::UNIT::GetGUID(pUnit), dwCorpseGUIDArg, 1);
                 }
               }
             }
@@ -890,7 +888,7 @@ void __fastcall KillConnection(int32_t nParam) {
 //   0xFA: IP address query + increment connected count
 //   0xFB: Disconnect + decrement connected count
 //   0xFC: IP address query response
-void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(char * pBytes, int32_t iSize) {
+void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(uint8_t * pBytes, int32_t iSize) {
     // Static local variables (originally global data)
     static LONG * lpAddend_00883d64; D2_STATIC_GUARD_BSS(lpAddend_00883d64, "D2Game::GAME::Server::NET_D2GS_SERVER_ProcessClientMessage_System::lpAddend_00883d64");
 
@@ -908,7 +906,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(char * pBytes, int32
       nClientId = *(int32_t*)pBytes;
       if (!false) {
         switch (pBytes[5]) {
-          case -6:
+          case 0xfa:
             D2Net::Game::Server::NET_QServer_FindIpAddressByClientIdForQServer(nClientId, szSendBuffer + 0x10, 0x10);
           /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_00883d64);
           nSize = 0x10;
@@ -916,14 +914,14 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(char * pBytes, int32
           szSendBuffer[0] = -6;
           D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x02', nClientId, pSendBuffer, nSize);
           break;
-          case -5:
+          case 0xfb:
             D2Net::Game::Server::NET_QServer_FindIpAddressByClientIdForQServer(nClientId, szSendBuffer + 0x10, 0x10);
           szSendBuffer[0] = -5;
           D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x02', nClientId, szSendBuffer, 0x10);
           D2Net::Game::Server::QSERVER_KillConnection(nClientId);
           /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&lpAddend_00883d64);
           return;
-          case -4:
+          case 0xfc:
             D2Net::Game::Server::NET_QServer_FindIpAddressByClientIdForQServer(nClientId, szSendBuffer + 0x10, 0x10);
           nSize = 0x10;
           pSendBuffer = szSendBuffer;
@@ -932,7 +930,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(char * pBytes, int32
           break;
           case '\x01':
 
-          case -3:
+          case 0xfd:
             if (BattleNetServerService->fpReserved2_systemMsg && BattleNetServerService->fpServerLogMessage) {
               BattleNetServerService->fpReserved2_systemMsg(&sSystemInfo);
               sPacketFF01.sHead.nPacketSubType = pBytes[5];
@@ -1029,7 +1027,7 @@ void NET_D2GS_SERVER_HandleAnyIncomingPacket() {
         break;
       }
 
-      NET_D2GS_SERVER_ProcessClientMessage_System(pBytes, nSizeMode2);
+      NET_D2GS_SERVER_ProcessClientMessage_System((uint8_t*)pBytes, nSizeMode2);
     }
 }
 
@@ -1181,6 +1179,9 @@ void __stdcall CheckClientTimeouts(::SGAMEDATA * pGame, int * pnParam) {
     // Static local variables (originally global data)
     static uint32_t gnClientTimeoutCheckInterval = 0x1; D2_STATIC_GUARD(gnClientTimeoutCheckInterval, "D2Game::GAME::Server::CheckClientTimeouts::gnClientTimeoutCheckInterval");
 
+    char* pCharName;
+    D2UnitStrc* pUnit;
+    BOOL bSaveUnknownFlag;
     uint32_t dwClientTimeout;
     D2ClientStrc* pClient;
     if (!gnClientTimeoutCheckInterval) {
@@ -1201,7 +1202,10 @@ void __stdcall CheckClientTimeouts(::SGAMEDATA * pGame, int * pnParam) {
       dwFileFlags = Clients::CLIENT_TestFileFlags(pClient, 4);
       dwClientTimeout = pClient->dwTimeOut;
       if (dwCurrentTick > dwClientTimeout && (dwFileFlags && dwCurrentTick - dwClientTimeout > 10000 && (uint32_t)pClient->tQServerExt.nHeartbeatSampleCount > 10 || dwCurrentTick - dwClientTimeout > 45000 || pClient->tQServerExt.nForceTimeoutDisconnect) && BattleNetServerService) {
-        PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, Clients::CLIENTS_GetControlUnit(pClient, 0), Clients::GetCharName(pClient), 0);
+        bSaveUnknownFlag = 0;
+        pCharName = Clients::GetCharName(pClient);
+        pUnit = Clients::CLIENTS_GetControlUnit(pClient, 0);
+        PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pUnit, pCharName, bSaveUnknownFlag);
         *pnParam = 1;
         SERVER_DisconnectClient(pGame, pClient, '\0');
       }

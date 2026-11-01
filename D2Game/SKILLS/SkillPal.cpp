@@ -985,9 +985,7 @@ BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pU
     if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
       sDamage.wResultFlags = 9;
     } else {
-      nAttackFrameIdx = 0;
-      nCombatType = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-      uVar1 = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pHitTarget, nCombatType, nAttackFrameIdx);
+      uVar1 = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pHitTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
       sDamage.wResultFlags = uVar1 | 8;
     }
 

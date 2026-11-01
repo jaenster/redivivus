@@ -160,11 +160,9 @@ void __stdcall UI_ToggleMiniPanel() {
     int _bRegistryRead;
     bool bRegistryRead;
     uint32_t bScrollActive;
-    HWND pHwnd;
     eD2UIvars eUI;
     int32_t nInteractGuid;
     int nMiniPanelRegVal;
-    int32_t nLine;
     _bRegistryRead = Storm::Source::SReg::SRegLoadValue("Diablo II", "Mini Panel", 1, &nMiniPanelRegVal);
     BOOL bWasMiniPanelOpen = GFX_bShowUIFlag.MiniPanel;
     if (_bRegistryRead && nMiniPanelRegVal) {
@@ -216,9 +214,7 @@ void __stdcall UI_ToggleMiniPanel() {
     }
     if (!bWasMiniPanelOpen) {
       if (GFX_bShowUIFlag.MiniPanel) {
-        nLine = 2;
-        pHwnd = D2gfx::D2GFX::GetHwnd();
-        _Message::MESSAGE_RegisterEventHandlerBatch(pHwnd, g_UIFlagInitDrawUnknown, nLine);
+        _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitDrawUnknown, 2);
         ui::GetMouseX();
         ui::GetMouseY();
         return;
@@ -496,7 +492,7 @@ void __stdcall FreeDraw() {
 // All 38 UI panels: inventory, stats, skills, menus, tooltips, automap, chat.
 // GFX_bShowUIFlag controls visibility. UI drawn in screen space (not world).
 // EDI is not an argument: never read; the callee DRAW_UI_NPC_INTERACTION does not take it either.
-void DRAW_UI(D2GameViewStrc * pGameView) {
+void __fastcall DRAW_UI(D2GameViewStrc * pGameView) {
     uint32_t eBorderType;
     int bIsActive;
     HWND pHwnd;

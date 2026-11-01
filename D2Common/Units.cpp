@@ -3820,8 +3820,8 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
         if ((int)nAnimRate <= 0x10000) {
           wAnimSpeed = (short int)((int)(nAnimRate * 0x100) / 1024);
         } else if ((int)(nAnimRate & -16) < 0x4000) {
-          qwAnimCalc = _allmul(nAnimRate, (int)nAnimRate >> 0x1f, 0x100, 0);
-          lVar2 = _alldiv((uint32_t)qwAnimCalc, (uint32_t)(qwAnimCalc >> 0x20), 0x400, 0);
+          qwAnimCalc = (int64_t)(int)nAnimRate * 0x100;
+          lVar2 = (int64_t)qwAnimCalc / 0x400;
           wAnimSpeed = (short int)lVar2;
         } else {
           wAnimSpeed = (short int)((int)nAnimRate / 1024 << 8);

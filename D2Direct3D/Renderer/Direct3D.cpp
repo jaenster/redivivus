@@ -5284,7 +5284,7 @@ int __fastcall RENDERER_D3D_InitializeTextureCachePool(D3DTextureCacheStrc * pCa
       BOOL bSurfaceCreated;
       nAvailableMemory = 0;
       do {
-        pCurrentNode = &pCache->pNodeBuffer[nNodeIndex].nIndex;
+        pCurrentNode = (int*)((uintptr_t)&pCache->pNodeBuffer->nIndex + nAvailableMemory);
         *pCurrentNode = nNodeIndex;
         if (nNodeIndex < pCache->nMaxNodes - 1) {
           pCurrentNode[6] = (uintptr_t)&pCache->pNodeBuffer[1].nIndex + nAvailableMemory;

@@ -562,7 +562,6 @@ BOOL __fastcall Skills_SrvDoFunc_072_FindItem(::SGAMEDATA * pGame, D2UnitStrc * 
 // Server do-func for Barbarian Double Throw (skill 74). Gets the active throwing weapon, reads its missile type, and spawns a missile via CreatingAMissile (or SKILLS_CreateMissileFromUnit for potion-type weapons). Applies to-hit (UNITSTAT_tohit) and damage-percent bonus (calc[0], UNITSTAT_damagepercent) stats to the created missile unit.
 BOOL __fastcall Skills_SrvDoFunc_074_DoubleThrow(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nValue;
-    int16_t nLayer;
     if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
@@ -590,8 +589,7 @@ BOOL __fastcall Skills_SrvDoFunc_074_DoubleThrow(::SGAMEDATA * pGame, D2UnitStrc
         return 1;
       }
 
-      nLayer = 0;
-      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pWeaponOrMissile, UNITSTAT_tohit, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), nLayer);
+      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pWeaponOrMissile, UNITSTAT_tohit, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
       nValue = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt[eSkill].calc[0], eSkill, nSkillLvl);
       D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pWeaponOrMissile, UNITSTAT_damagepercent, nValue, 0);
       return 1;
@@ -1668,7 +1666,6 @@ static void __stdcall SKILLBAR_CalculateChargePath(::SGAMEDATA * pGame, int32_t 
 static BOOL __stdcall SKILLBAR_ArriveAtChargeTarget(::SGAMEDATA * pGame, D2SkillStrc * pSkill, D2UnitStrc * pUnit) {
     int nUnitX;
     int32_t nCollisionWidth;
-    eD2Skills eCurrentSkill;
     uint32_t nDist;
     int nMonBaseId;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
@@ -1697,7 +1694,7 @@ static BOOL __stdcall SKILLBAR_ArriveAtChargeTarget(::SGAMEDATA * pGame, D2Skill
       nUnitX = 0;
     }
     if (nUnitX == nX) {
-      eD2CollisionShapeType eVar1;
+      eD2Skills eCurrentSkill;
       nCollisionWidth = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
       if (nCollisionWidth == nY) {
         if (!bIsNotMonster) {
@@ -1712,9 +1709,7 @@ static BOOL __stdcall SKILLBAR_ArriveAtChargeTarget(::SGAMEDATA * pGame, D2Skill
             pUnit->nFrameCount = (pUnit->nFrameCount & 0xffffff00U) - 0x100;
           }
         } else {
-          nCollisionWidth = 0x80;
-          eVar1 = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
-          D2Common::Collision::RemoveCollision_Type(pRoom, nX, nY, eVar1, nCollisionWidth);
+          D2Common::Collision::RemoveCollision_Type(pRoom, nX, nY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x80);
           D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0x80);
           D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, 0x1c09);
           D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 7);

@@ -508,8 +508,8 @@ void __fastcall Q20_PlayerCheckInAct3SetStep06(::SGAMEDATA * pGame, D2UnitStrc *
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q3.cpp
 void __fastcall Q20_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2UnitStrc* pPlayerData;
+    int nDifficulty;
     int32_t iVar1;
-    uint8_t nDifficulty;
     int* piQuestCounter;
     uint16_t nNPCNo = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     short int nNPCId = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
@@ -583,7 +583,7 @@ void __fastcall Q20_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
       /* SetQuestState Step0x08: post-orb reward branch taken (bolts/quiver granted)
                           */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08);
-      nDifficulty = pQuestArgs->pGame->nDifficulty;
+      nDifficulty = (int)pQuestArgs->pGame->nDifficulty;
       iVar1 = 0x15;
       switch (nDifficulty) {
         case 1:

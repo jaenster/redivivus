@@ -4038,7 +4038,6 @@ void __stdcall INV_DrawNpcButtonTooltip() {
     D2UnitStrc* pUnit;
     D2UnitStrc* pNpcUnit;
     D2BitBufferStrc* pQuestInfo;
-    uint16_t* pwFormatStr;
     int nTooltipX;
     uint16_t wszTooltipText[256];
     int nButtonAreaTop;
@@ -4078,8 +4077,7 @@ void __stdcall INV_DrawNpcButtonTooltip() {
         pQuestInfo = npcmenu::GetQuestInfo();
         bVar1 = GAME::Game::GetDificulity();
         nRepairAllCost = D2Common::ITEMS::Items::ITEMS_CalculateRepairAllCost(nullptr, pUnit, nNpcTypeId, (uint32_t)bVar1, pQuestInfo, pNullQuestFlags);
-        pwFormatStr = D2Lang::StrTable::strtable::GetLocaleString(0x276f);
-        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszTooltipText, pwFormatStr, nRepairAllCost);
+        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszTooltipText, D2Lang::StrTable::strtable::GetLocaleString(0x276f), nRepairAllCost);
         D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltipText, NPCButtonArray[nButtonIdx + CurrentNpcButtonSelection * 4] + gnPanelOffsetX, gnPanelOffsetY - 100 + ScreenSizeY, 0, 0);
         return;
       }
@@ -7469,14 +7467,11 @@ void __stdcall INV_ShowBookTooltip() {
 void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
     uint32_t nIsOfType;
     BOOL bFlagCheck;
-    uint16_t* pwSetMemberName;
-    uint16_t* pwSetMemberFmt;
     uint16_t* pwAppendResult;
     int nSetItemLoopIdx;
     int cParam;
     int32_t nReqAdjust;
     uint16_t* pwZeroCursor;
-    uint32_t uVar2;
     uint16_t wszStatBuffs[1024];
     uint16_t wszSetBonusList[512];
     uint16_t wszFinalTooltip[2048];
@@ -7785,10 +7780,7 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
 
         pOwnerUnit = GetSetItem((int)pSetItemsTxt->nId, pUnitInventory);
         if (pSetItemsTxt->stringId) {
-          uVar2 = 0;
-          pwSetMemberName = D2Lang::StrTable::strtable::GetLocaleString(pSetItemsTxt->stringId);
-          pwSetMemberFmt = D2Lang::StrTable::strtable::GetLocaleString(0x2769);
-          wsprintf(wszWorkBuf, pwSetMemberFmt, pwSetMemberName, uVar2);
+          wsprintf(wszWorkBuf, D2Lang::StrTable::strtable::GetLocaleString(0x2769), D2Lang::StrTable::strtable::GetLocaleString(pSetItemsTxt->stringId), 0);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszWorkBuf, pwSeparator);
         }
 

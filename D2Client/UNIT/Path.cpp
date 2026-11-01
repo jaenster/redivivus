@@ -209,8 +209,7 @@ void __fastcall PATH_MoveUnitToPoint(D2UnitStrc * pUnit, uint16_t nX, int32_t nY
       int16_t nSendY;
       nClickYSaved = Units::GetYPosFromDynamicPathUnit(pUnit);
       nSendY = (int16_t)nClickYSaved;
-      nClickYSaved = Units::GetXPosFromDynamicPathUnit(pUnit);
-      GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT(0x5f, (int16_t)nClickYSaved, nSendY);
+      GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT(0x5f, (int16_t)Units::GetXPosFromDynamicPathUnit(pUnit), nSendY);
       return;
     }
     if (pUnit->eUnitType == UNIT_PLAYER) {

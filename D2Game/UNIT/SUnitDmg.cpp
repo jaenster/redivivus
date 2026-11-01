@@ -1025,10 +1025,10 @@ void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Computes the effective resistance value for one damage type given a resist-table entry and a damage context. Reads the defender's raw resistance stat, subtracts pierce from the attacker if applicable, applies the difficulty resistance penalty for players (hardcoded -20/-50 for classic, or DifficultyLevels.txt ResistPenalty for LoD). Clamps the result to [-100, maxResist] where maxResist is 75 (or stat-extended up to 95) for players. Special case: physical resistance (damageresist) against a Sanctuary-wielding attacker vs. undead defender is forced to 0. Returns the final clamped resist value.
 static int32_t DAMAGE_CalculateResistance(D2ResistTableEntry * pEntry, D2DamageContext * pCtx) {
+    int nDifficulty;
     eD2States eUnbreakableState;
     BOOL nIsUndeadCheck;
     int32_t nClampedResist;
-    uint8_t nDifficulty;
     int32_t nResistTotal = 0;
     if (pEntry->eResistStat != ~UNITSTAT_strength) {
       nResistTotal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCtx->pDefender, pEntry->eResistStat, 0);
@@ -1044,7 +1044,7 @@ static int32_t DAMAGE_CalculateResistance(D2ResistTableEntry * pEntry, D2DamageC
       if (pCtx->pGame->bExpansion) {
         nResistTotal += pCtx->pDiffLevels->ResistPenalty;
       } else {
-        nDifficulty = pCtx->pGame->nDifficulty;
+        nDifficulty = (int)pCtx->pGame->nDifficulty;
         switch (nDifficulty) {
           case 1:
             {

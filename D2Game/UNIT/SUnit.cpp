@@ -1858,8 +1858,7 @@ BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
           }
         }
         if (!bFindFreeSpace) {
-          nCollisionMask = 0;
-          pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &ptTarget, D2Common::Units::GetUnitSizeX(pUnit), 0x1c09, nCollisionMask);
+          pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &ptTarget, D2Common::Units::GetUnitSizeX(pUnit), 0x1c09, 0);
         }
         if (!pRoom) {
           return 0;
@@ -1930,7 +1929,6 @@ void __fastcall TakeStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc *
     int bRelocOk;
     uint32_t nId;
     int nFinalX;
-    int32_t eCollisionFlag_00;
     D2SUnitStairs sD2SUnitStairs;
     eCollisionFlags eCollisionFlag;
     BOOL bAllowNeighboorRooms;
@@ -1967,10 +1965,7 @@ void __fastcall TakeStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc *
       exit(-1);
     }
 
-    bAllowNeighboorRooms = 1;
-    eCollisionFlag_00 = 0x1c09;
-    iVar1 = D2Common::Units::GetUnitSizeX(pUnit);
-    pFreeRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pDestRoom, (POINT*)&sD2SUnitStairs, iVar1, eCollisionFlag_00, bAllowNeighboorRooms);
+    pFreeRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pDestRoom, (POINT*)&sD2SUnitStairs, D2Common::Units::GetUnitSizeX(pUnit), 0x1c09, 1);
     if (!pFreeRoom) {
       return;
     }

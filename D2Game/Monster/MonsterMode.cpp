@@ -1010,8 +1010,8 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2MonsterKillStrc *
           nCEDamageScaled = D2Client::Stats::D2ApplyPercent(sMonStats.nMaxHP, pDifficultyLvl->MonsterCEDamagePercent, 100);
           if ((int)nCEDamageScaled > 0x100000) {
             if ((int)(nCEDamageScaled & -16) < 0x640) {
-              nMulResult = _allmul(nCEDamageScaled, (int)nCEDamageScaled >> 0x1f, 0x3c, 0);
-              nMulResult = _alldiv((uint32_t)nMulResult, (uint32_t)((uint64_t)nMulResult >> 0x20), 100, 0);
+              nMulResult = (int64_t)(int)nCEDamageScaled * 0x3c;
+              nMulResult = nMulResult / 100;
               nClassId = (int)nMulResult;
             } else {
               nClassId = (int)nCEDamageScaled / 100 * 0x3c;

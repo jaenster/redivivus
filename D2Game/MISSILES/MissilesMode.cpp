@@ -3772,9 +3772,7 @@ void __fastcall Missiles_SrvDmgFunc_RecalcElementalWithClear(::SGAMEDATA * pGame
     }
 
     uint32_t nCalcExpression = pMissilesTxt->DmgCalc1;
-    int32_t nElemDamage = -1;
-    int32_t nScaledDamage = -1;
-    uint32_t nCalcResult = D2Common::Units::Missile::MISSILE_EvalMissileCalc(pUnit, UNIT::SUnit::GetOwnerUnit(pGame, pUnit), nCalcExpression, nScaledDamage, nElemDamage);
+    uint32_t nCalcResult = D2Common::Units::Missile::MISSILE_EvalMissileCalc(pUnit, UNIT::SUnit::GetOwnerUnit(pGame, pUnit), nCalcExpression, -1, -1);
     if ((int)nCalcResult <= 0) {
       return;
     }
@@ -3782,12 +3780,12 @@ void __fastcall Missiles_SrvDmgFunc_RecalcElementalWithClear(::SGAMEDATA * pGame
       nCalcResult = 100;
     }
 
-    nScaledDamage = D2Client::Stats::D2ApplyPercent(pDamage->dwPhysDamage, nCalcResult, 100);
+    int32_t nScaledDamage = D2Client::Stats::D2ApplyPercent(pDamage->dwPhysDamage, nCalcResult, 100);
     if (nScaledDamage >= pDamage->dwPhysDamage) {
       nScaledDamage = pDamage->dwPhysDamage;
     }
 
-    nElemDamage = MISSILES_CalculateElementalDamage(pGame, pUnit, pTarget, pDamage);
+    int32_t nElemDamage = MISSILES_CalculateElementalDamage(pGame, pUnit, pTarget, pDamage);
     MISSILES_ClearDamageStruct(pGame, (int32_t)pUnit, pDamage);
     MISSILES_AddElementalDamageBonus(pGame, pUnit, pTarget, pDamage, nScaledDamage + nElemDamage);
 }
@@ -6564,7 +6562,6 @@ int __fastcall MISSILESMODE_SrvDoFn34_BaalTauntControl(::SGAMEDATA * pGame, D2Un
     int32_t nSeedHighOut;
     uint32_t nSeedHigh;
     eD2UnitType eUnitType;
-    int64_t lSeedProduct2;
     ::SGAMEDATA* pGameLocal;
     D2SeedStrc sSeedResult;
     if (!pUnit) {
@@ -6614,15 +6611,11 @@ int __fastcall MISSILESMODE_SrvDoFn34_BaalTauntControl(::SGAMEDATA * pGame, D2Un
       pSeed = &pUnit->sSeed;
       D2Common::Seed::InitSeed_Param_666(pSeed, nSubMissileCount);
       if (nSelectedIndex & nSelectedIndex - 1) {
-        lSeedProduct2 = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-        nSeedHigh = (uint32_t)((uint64_t)lSeedProduct2 >> 0x20);
-        sSeedResult = (D2SeedStrc)(lSeedProduct2 + (uint64_t)pUnit->sSeed.nSeedHigh);
+        sSeedResult = D2_SEED_NEXT(*pSeed);
         nSelectedIndex = sSeedResult.nSeedLow % nSelectedIndex;
         *pSeed = sSeedResult;
       } else {
-        lSeedProduct2 = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-        nSeedHighOut = (int32_t)((uint64_t)lSeedProduct2 >> 0x20);
-        sSeedResult = (D2SeedStrc)(lSeedProduct2 + (uint64_t)pUnit->sSeed.nSeedHigh);
+        sSeedResult = D2_SEED_NEXT(*pSeed);
         pSeed->nSeedHigh = sSeedResult.nSeedHigh;
         pSeed->nSeedLow = sSeedResult.nSeedLow;
         nSelectedIndex = nSelectedIndex - 1 & sSeedResult.nSeedLow;

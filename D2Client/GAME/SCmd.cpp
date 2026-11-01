@@ -702,8 +702,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x6D_UNITCHANGE_MONSTERNEUTRAL(D2UnitStr
     sMsg.nMaxDistance = 4;
     sMsg.nTargetX = 0;
     UNIT::Path::PATH_MoveUnitToPoint(pUnit, *(uint16_t*)(pBytes + 5), sMsg.nItemId, 0, 0, 0);
-    uint16_t nLayer = 0;
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, nLayer);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     UNIT::UnitMode::HandleMessage(7, pUnit, &sMsg, 1);
 }
 

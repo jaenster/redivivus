@@ -228,6 +228,8 @@ BOOL __fastcall SKILLMONST_SrvStFn44_MaggotUp(::SGAMEDATA * pGame, D2UnitStrc * 
     uint32_t nPosY;
     uint32_t nPosX;
     int32_t eCollisionFlag;
+    int32_t nNewPosX;
+    int32_t nNewPosY;
     eD2CollisionShapeType nType;
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -247,9 +249,7 @@ BOOL __fastcall SKILLMONST_SrvStFn44_MaggotUp(::SGAMEDATA * pGame, D2UnitStrc * 
       nPosX = 0;
     }
 
-    int32_t nNewPosX = 0;
-    int32_t nNewPosY = 0;
-    BOOL bRelocated = UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit, D2Common::Units::UNITS_GetRoom(pUnit), nPosX, nPosY, nNewPosY, nNewPosX);
+    BOOL bRelocated = UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit, D2Common::Units::UNITS_GetRoom(pUnit), nPosX, nPosY, 0, 0);
     if (!bRelocated) {
       return 0;
     }
@@ -579,7 +579,6 @@ BOOL __fastcall SKILLMONST_SrvStFn47_Jump(::SGAMEDATA * pGame, D2UnitStrc * pUni
 BOOL __fastcall Skills_SrvDoFunc_089_ChargeLeapAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nTargetGuid;
     D2UnitStrc* pTargetUnit;
-    uint32_t nSkillFlags;
     int32_t nMonBaseId;
     int32_t nLandX;
     int32_t nLandY;
@@ -598,16 +597,15 @@ BOOL __fastcall Skills_SrvDoFunc_089_ChargeLeapAttack(::SGAMEDATA * pGame, D2Uni
 
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
     if (pUnit->nActionFrame == 2) {
-      eD2UnitType eTargetType;
       pUnit->nActionFrame = 0;
       nTargetGuid = D2Common::Skills::SKILL_GetParam4(pSkill);
-      eTargetType = D2Common::Skills::SKILL_GetParam3(pSkill);
-      pTargetUnit = UNIT::SUnit::FindUnitFromTable(pGame, eTargetType, nTargetGuid);
+      pTargetUnit = UNIT::SUnit::FindUnitFromTable(pGame, D2Common::Skills::SKILL_GetParam3(pSkill), nTargetGuid);
       if (pTargetUnit) {
         UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTargetUnit, 0);
         return 1;
       }
     } else {
+      uint32_t nSkillFlags;
       nSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
       nMonBaseId = D2Common::Skills::SKILL_GetParam1(pSkill);
       nLandX = D2Common::Skills::SKILL_GetParam2(pSkill);

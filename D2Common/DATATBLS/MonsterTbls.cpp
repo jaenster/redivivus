@@ -102,12 +102,11 @@ void __stdcall MONSTERTBLS_AllocateTransformArrays(int32_t nMonStatsSize) {
       return;
     }
 
-    int nMonStatsStride = 0;
     do {
       D2AnimDataRecordStrc* pAnimData;
-      nBaseMonStatsId = (uint32_t)*(short int*)(sgtDataTable.pTxtMonStats->Code + nMonStatsStride - 0xe);
+      nBaseMonStatsId = (uint32_t)sgtDataTable.pTxtMonStats[nMonIdx].BaseId;
       if ((int)nBaseMonStatsId < 0 || (int)nBaseMonStatsId >= nMonStatsSize) {
-        *(short int*)(sgtDataTable.pTxtMonStats->Code + nMonStatsStride - 0xe) = (short int)nMonIdx;
+        sgtDataTable.pTxtMonStats[nMonIdx].BaseId = (short int)nMonIdx;
         nBaseMonStatsId = nMonIdx;
       }
 
@@ -140,7 +139,6 @@ void __stdcall MONSTERTBLS_AllocateTransformArrays(int32_t nMonStatsSize) {
 
       sgtDataTable.pTxtMonStats[nMonIdx].wRunAnimSpeed = (short int)nScaledFrames;
       nMonIdx++;
-      nMonStatsStride += 0x1a8;
     } while ((int)nMonIdx < nMonStatsSize);
 }
 
@@ -864,7 +862,7 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
           break;
         }
 
-        szItemTypeCode = pSgtDataTable->pTxtItemTypes->code + nItemTypeStride;
+        szItemTypeCode = pSgtDataTable->pTxtItemTypes[nItemTypeStride].code;
         if (!szItemTypeCode) {
           break;
         }
@@ -886,7 +884,7 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
                     pItemsTxt = ItemTbls::TXT_Items_GetLine(nItemClassIdx);
                     if (pItemsTxt && pItemsTxt->bQuest == '\0' && pItemsTxt->bSpawnable != '\0') {
                       bTypeMatch = ITEMS::Items::TXT_ItemTypes_CheckEquivalence(nItemClassIdx, nRecordId);
-                      if (bTypeMatch && (nItemTypeStride == 0x21d8 || (bIsMissilePotion = ITEMS::Items::TXT_ItemTypes_CheckEquivalence(nItemClassIdx, ITEMTYPE_MissilePotion) , !bIsMissilePotion)) && (int)(uint32_t)(uint8_t)pItemsTxt->nLevel > nLevelStep - 3 && (int)(uint32_t)(uint8_t)pItemsTxt->nLevel <= nLevelStep) {
+                      if (bTypeMatch && (nItemTypeStride == 38 || (bIsMissilePotion = ITEMS::Items::TXT_ItemTypes_CheckEquivalence(nItemClassIdx, ITEMTYPE_MissilePotion) , !bIsMissilePotion)) && (int)(uint32_t)(uint8_t)pItemsTxt->nLevel > nLevelStep - 3 && (int)(uint32_t)(uint8_t)pItemsTxt->nLevel <= nLevelStep) {
                         pItemTypesTxt = D2Game::ITEMS::Items::Drop::ItemTypes_GetLine((int)pItemsTxt->wType);
                         if (pItemTypesTxt) {
                           if ((uint8_t)pItemTypesTxt->rarity > 1) {
@@ -921,7 +919,7 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
 
         iVar1 = pSgtDataTable->nTxtItemTypesSize;
         nRecordId += ITEMTYPE_None2;
-        nItemTypeStride += 0xe4;
+        nItemTypeStride++;
       } while ((int)nRecordId < iVar1);
     }
 }
@@ -1577,20 +1575,19 @@ void __fastcall TXT_AllocTxt_hireling(D2PoolManagerStrc * pMemory) {
       return;
     }
 
-    int nHirelingStride = 0;
     do {
       uint32_t nStrId;
       pwStrLookup = 0;
-      nStrId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)(sgtDataTable.pTxtHireling->namefirst + nHirelingStride), &pwStrLookup);
-      *(short int*)(sgtDataTable.pTxtHireling->namelast + nHirelingStride + 0x21) = (short int)nStrId;
-      nStrId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)(sgtDataTable.pTxtHireling->namelast + nHirelingStride), &pwStrLookup);
-      *(short int*)(sgtDataTable.pTxtHireling->namelast + nHirelingStride + 0x23) = (short int)nStrId;
+      nStrId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&sgtDataTable.pTxtHireling[nCounter].namefirst[0], &pwStrLookup);
+      sgtDataTable.pTxtHireling[nCounter].nNameFirst = (short int)nStrId;
+      nStrId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&sgtDataTable.pTxtHireling[nCounter].namelast[0], &pwStrLookup);
+      sgtDataTable.pTxtHireling[nCounter].nNameLast = (short int)nStrId;
       if (bIsExpansion) {
-        if (!*(uint16_t*)(sgtDataTable.pTxtHireling->namelast + nHirelingStride + 0x21)) {
+        if (!sgtDataTable.pTxtHireling[nCounter].nNameFirst) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x816);
           exit(-1);
         }
-        if (*(uint16_t*)(sgtDataTable.pTxtHireling->namelast + nHirelingStride + 0x23) <= *(uint16_t*)(sgtDataTable.pTxtHireling->namelast + nHirelingStride + 0x21)) {
+        if (sgtDataTable.pTxtHireling[nCounter].nNameLast <= sgtDataTable.pTxtHireling[nCounter].nNameFirst) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x817);
           exit(-1);
         }
@@ -1609,7 +1606,6 @@ void __fastcall TXT_AllocTxt_hireling(D2PoolManagerStrc * pMemory) {
       }
 
       nCounter++;
-      nHirelingStride += 0x118;
     } while (nCounter < sgtDataTable.nTxtHirelingSize);
 }
 

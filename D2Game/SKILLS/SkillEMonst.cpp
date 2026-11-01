@@ -211,8 +211,7 @@ BOOL __fastcall Skills_SrvDoFunc_126_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc 
         if (pDynamicPath) {
           nCalcResult = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit_00);
           nY = (int16_t)nCalcResult;
-          nCalcResult = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit_00);
-          D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nCalcResult, nY);
+          D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)D2Client::Units::GetXPosFromDynamicPathUnit(pUnit_00), nY);
           D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pUnit_00);
         }
       }
@@ -847,8 +846,7 @@ void __fastcall SKILLEMONST_OnDeathSpawnExpire(D2UnitStrc * pUnit, eD2States eSt
       return;
     }
 
-    int16_t nSpawnY = 0;
-    Monster::Create::SpawnMonsterBase(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nSummonMonStatsId, eSpawnAnimMode, 1, nSpawnY);
+    Monster::Create::SpawnMonsterBase(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nSummonMonStatsId, eSpawnAnimMode, 1, 0);
 }
 
 BOOL __fastcall Skills_SrvDoFunc_133_SetDeathSpawnState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {

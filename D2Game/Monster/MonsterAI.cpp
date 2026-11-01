@@ -648,14 +648,10 @@ uint32_t __fastcall NpcStateIsntZero(D2UnitStrc * pUnit, int32_t nParam) {
 // Tears down a monster's D2MonsterAiSubStrc list. For each sub-AI node: sends 0x62 MakeUnitTargetable packet to the interacting client, optionally clears that client's interact-info (if bClientSide and the client was interacting with this monster), calls an optional fpFunction cleanup callback, then frees the node. Sets pMonsterAi->pAiSub to NULL when done.
 // @sourcefile .\MONSTER\MonsterAI.cpp
 void __fastcall ClearAISub(::SGAMEDATA * pGame, D2UnitStrc * pUnit, fpAiClear fpFunction, bool bClientSide) {
-    D2ClientStrc* pClient;
-    BOOL bHasInteractInfo;
     uint32_t nMonsterGUID2;
     uint32_t nUnitGUID;
     eD2UnitType eUnitType;
-    char byMonsterUnitType;
     D2MonsterAiSubStrc* pNext;
-    uint32_t uVar6;
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
     }
@@ -667,13 +663,9 @@ void __fastcall ClearAISub(::SGAMEDATA * pGame, D2UnitStrc * pUnit, fpAiClear fp
 
     D2MonsterAiSubStrc* pAiSub = pMonsterAi->pAiSub;
     while (pAiSub) {
-      int32_t nMonsterGUID;
+      BOOL bHasInteractInfo;
       pNext = pAiSub->pNext;
-      uVar6 = 0;
-      nMonsterGUID = D2Client::UNIT::GetGUID(pUnit);
-      byMonsterUnitType = '\x01';
-      pClient = UNIT::SUnit::SUNIT_GetClient(pAiSub->pUnit, ".\\MONSTER\\MonsterAI.cpp", 0x35c);
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP(pClient, 'b', byMonsterUnitType, nMonsterGUID, uVar6);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP(UNIT::SUnit::SUNIT_GetClient(pAiSub->pUnit, ".\\MONSTER\\MonsterAI.cpp", 0x35c), 'b', '\x01', D2Client::UNIT::GetGUID(pUnit), 0);
       if (!bClientSide || (bHasInteractInfo = UNIT::SUnit::GetInteractInfo(pAiSub->pUnit, &eUnitType, &nUnitGUID) , bHasInteractInfo && eUnitType == UNIT_MONSTER) && (nMonsterGUID2 = D2Client::UNIT::GetGUID(pUnit) , nUnitGUID == nMonsterGUID2)) {
         UNIT::SUnit::ClearInteractInfo(pAiSub->pUnit);
       }

@@ -931,9 +931,9 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, uint32_t nParam1, in
 
     uint8_t bVar2;
     bVar2 = GAME::Game::GetDificulity();
-    eD2DifficultyDWORD nDifficulty;
-    nDifficulty = (eD2DifficultyDWORD)bVar2;
-    if (DIFFICULTY_HELL < nDifficulty) {
+    int nDifficulty;
+    nDifficulty = (int)bVar2;
+    if (2 < (uint32_t)nDifficulty) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1f0);
       exit(-1);
     }
@@ -2030,9 +2030,7 @@ static void MONSTER_HandleBurrowTransition(D2UnitStrc * pUnit, int32_t nParam) {
     int32_t nPosX;
     eCollisionFlags eAddCollisionFlag;
     eD2UnitType eUnitType;
-    int32_t nRemoveCollisionFlags;
     if (nParam == 0xc) {
-      D2RoomStrc* pRoom;
       if (pUnit) {
         pUnit->eUnitFlags &= ~(UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE);
       }
@@ -2074,9 +2072,7 @@ static void MONSTER_HandleBurrowTransition(D2UnitStrc * pUnit, int32_t nParam) {
         nPosX = 0;
       }
 
-      nRemoveCollisionFlags = 0x100;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      D2Common::Collision::RemoveCollision(pRoom, nPosX, nPosY, nRemoveCollisionFlags);
+      D2Common::Collision::RemoveCollision(D2Common::Units::UNITS_GetRoom(pUnit), nPosX, nPosY, 0x100);
       D2Common::PATH::DynamicPath::SetUnitWidth(pUnit, 5);
       D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pUnit->pPath.pDynamicPath, 0);
       nPosY = Engine::Particle::PARTICLE_GetScreenZ(pUnit);

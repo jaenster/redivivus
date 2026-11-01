@@ -85,12 +85,11 @@ void __stdcall DrawPopupOk(int32_t nParam) {
 }
 
 void __stdcall LOADER_CheckForInsertedDiscs() {
+    uint16_t* wszInsertMsg;
     int32_t nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
-    int32_t nColor_lcl = 0;
-    uint16_t* wszInsertMsg = D2Lang::StrTable::strtable::GetLocaleString(5168);
-    UI::ui::UI_DrawTextCentered(ScreenSizeX / 2 - 132, 190 - gnPanelOffsetY, gnPanelOffsetX + 452, wszInsertMsg, nColor_lcl);
+    /* Please Insert the Diablo II */ UI::ui::UI_DrawTextCentered(ScreenSizeX / 2 - 132, 190 - gnPanelOffsetY, gnPanelOffsetX + 452, D2Lang::StrTable::strtable::GetLocaleString(5168), 0);
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    nColor_lcl = 0;
+    int32_t nColor_lcl = 0;
     if (bIsExpansion) {
       /* Expansion Disc */ wszInsertMsg = D2Lang::StrTable::strtable::GetLocaleString(21880);
     } else {

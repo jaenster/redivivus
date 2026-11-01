@@ -1481,6 +1481,7 @@ void __stdcall DRAW_UI_Quest() {
     uint8_t bInvDescDirty;
     D2BitBufferStrc* pQuestInfo;
     DWORD dwTickCount;
+    int32_t nTextWidth;
     D2TextLineStrc* pWordWrapList;
     uint16_t* pwszText;
     int nDrawX;
@@ -1492,6 +1493,7 @@ void __stdcall DRAW_UI_Quest() {
     int aTabXOffsets[6];
     char bDoneIterating;
     uint8_t byIconId;
+    int32_t dwTextColor;
     eD2Quests eQuest;
     eD2QuestState eQuestState;
     D2TextLineStrc* pNextWrappedLine;
@@ -1748,7 +1750,9 @@ void __stdcall DRAW_UI_Quest() {
                 pwszText = D2Lang::StrTable::strtable::GetLocaleString(nParam);
                 nDrawY = gQuestUIDescInitC - gnPanelOffsetY;
                 bFlag = 0;
-                D2Win::Src::D2WinFont::DRAW_text(pwszText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(pwszText) / 2 + 0xa0, nDrawY, 0, bFlag);
+                dwTextColor = 0;
+                nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(pwszText);
+                D2Win::Src::D2WinFont::DRAW_text(pwszText, gnPanelOffsetX - nTextWidth / 2 + 0xa0, nDrawY, dwTextColor, bFlag);
               }
               if (gQuestLog.bQuestLogButtonDown == '\0' && gQuestLog.aQuestLogEntries[nQuestSlot].wszDescription[0] != L'\0') {
                 pWordWrapList = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(gQuestLog.aQuestLogEntries[nQuestSlot].wszDescription, aTabXOffsets + 5, 0x10e);

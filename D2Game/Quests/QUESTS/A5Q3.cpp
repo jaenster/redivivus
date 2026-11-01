@@ -1369,10 +1369,7 @@ void __fastcall SpawnFrozenAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       return;
     }
 
-    void* pSpawnArg = 0;
-    int32_t nSpawnArg6 = 0;
-    bool bInitUnit = true;
-    D2UnitStrc* pFrozenAnya = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x22e, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), D2Client::Units::GetYPosFromDynamicPathUnit(pUnit), pGame, D2Common::Units::UNITS_GetRoom(pUnit), bInitUnit, nSpawnArg6, pSpawnArg);
+    D2UnitStrc* pFrozenAnya = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x22e, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), D2Client::Units::GetYPosFromDynamicPathUnit(pUnit), pGame, D2Common::Units::UNITS_GetRoom(pUnit), true, 0, 0);
     if (pFrozenAnya) {
       pFrozenAnya->eUnitFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
       pQuestSpecificData->bFrozenAnyaSpawning = '\x01';
