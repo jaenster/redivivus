@@ -383,7 +383,7 @@ void __fastcall SetSuperUniqueName(D2UnitStrc * pUnit, uint16_t * wszText) {
 }
 
 uint32_t __fastcall MONSTER_IsBossOrChampion(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -435,7 +435,7 @@ uint32_t __stdcall IsDemon(D2UnitStrc * pUnit) {
 }
 
 BOOL __stdcall MONSTER_IsMonsterUndead(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -463,7 +463,7 @@ uint32_t __stdcall UnitIsMarkedBoss(D2MonStatsTxt * pMonStatsTxt, D2UnitStrc * p
 
 // 2022.01.09 - dzik
 BOOL __stdcall CheckIfMonsterIsDead(D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_MONSTER) != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
     if (!(pUnit->eAnimMode.ePlayerMode == Death || pUnit->eAnimMode.ePlayerMode == Kick)) {
@@ -548,7 +548,7 @@ uint8_t __stdcall MONSTERS_GetMaxLightRadiusFromEquipment(D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemsTxt;
     int nClassId;
     D2UnitStrc* pUnitSaved = pUnit;
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return '\0';
     }
 
@@ -720,7 +720,7 @@ void __stdcall MONSTERS_GetUpgradeSkillsAndCount(D2UnitStrc * pUnit, uint32_t * 
 }
 
 uint32_t __stdcall MONSTER_GetMercType(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -755,7 +755,7 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t nParam
     int32_t nValue;
     int nPercent;
     uint16_t nLayer;
-    if (!(!nParam && bParam && pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if (!(!nParam && bParam && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return;
     }
 

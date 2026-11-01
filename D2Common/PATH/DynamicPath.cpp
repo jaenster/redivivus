@@ -106,7 +106,7 @@ int32_t __stdcall PATH_GetDynamicPathField(int32_t nMonStatsIdx) {
 int32_t __stdcall GetInteractSize(D2UnitStrc * pUnit, int32_t nSizeX) {
     if ((uint32_t)nSizeX <= 3) {
       int nBaseSize = gaUnitTypeInteractSizes[nSizeX];
-      if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+      if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
         return nBaseSize;
       }
 
@@ -1609,7 +1609,7 @@ void __stdcall PATH_RestoreMonsterCollision(D2UnitStrc * pUnit, int32_t nParam) 
     if (nParam) {
       return;
     }
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x542);
       exit(-1);
     }

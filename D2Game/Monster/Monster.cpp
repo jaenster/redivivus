@@ -300,7 +300,7 @@ void __fastcall MONSTER_InitLevelDifficultyScaling(::SGAMEDATA * pGame, D2Monste
     pMonsterLevelData->nMonsterSkillBonus = 0;
     pMonsterLevelData->nDifficulty = 0;
     pMonsterLevelData->nPlayerMultiplyer3 = 0;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
     }
 
@@ -353,7 +353,7 @@ void __fastcall MONSTER_RollComponentAppearance(int32_t nParam, D2UnitStrc * pUn
     uint32_t nSeedLow;
     uint32_t* pAppearanceEntry;
     D2UnitDataItemStrc* pItemData;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
     if (!nParam || *(uint8_t*)(nParam + 3) <= 0) {
@@ -427,7 +427,7 @@ void __fastcall MONSTER_CreateAndEquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUn
     bool bEquipSuccess;
     int32_t nItemClassId;
     int32_t nDurStatLayer;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
     if (!pUnit->pInventory) {
@@ -798,7 +798,7 @@ void __fastcall STRUCT_FillDataMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, 
 }
 
 void __fastcall MONSTER_TransformMonsterClass(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nMonStatId, DWORD nUpdateFlags) {
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
     if (!((int)nMonStatId >= 0 && (int)nMonStatId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nMonStatId && *((uint8_t*)&sgptDataTable->pTxtMonStats[nMonStatId] + 0xf) & (uint8_t)gadwBitMasks[1])) {

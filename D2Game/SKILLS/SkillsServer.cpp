@@ -801,7 +801,7 @@ void __fastcall SKILLS_DeductManaCost(D2UnitStrc * pUnit, int32_t nManaCost) {
 
 // Returns nonzero if the player has enough mana (or charges) to cast their current skill without consuming any. For charged skills checks pSkill->nCharges > 0. For srvdofunc 0x74 (leap/charge type) checks a special item stat flag. Otherwise computes the mana cost from SkillsTxt and compares against current UNITSTAT_mana. Non-player units always return 1.
 uint32_t __fastcall SKILL_CheckManaForCast(D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_PLAYER) != UNIT_PLAYER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_PLAYER) {
       return 1;
     }
 
@@ -1292,16 +1292,7 @@ BOOL __fastcall SKILLS_SrvStFn02_Kick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, e
 
 BOOL __fastcall SKILLS_SrvStFn03_Unsummon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (!pTarget) {
-      return 0;
-    }
-    if (pTarget->eUnitType != UNIT_MONSTER) {
-      return 0;
-    }
-    if (!pUnit) {
-      return 0;
-    }
-    if (pUnit->eUnitType != UNIT_PLAYER) {
+    if (!((pTarget ? pTarget->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
       return 0;
     }
 
@@ -4191,7 +4182,7 @@ void __thiscall SKILL_ApplyStunState(void * pThis, D2UnitStrc * pUnit, eD2States
     D2MonsterKillStrc local_28;
     ::SGAMEDATA* pGameSaved = (::SGAMEDATA*)pThis;
     eD2States eExistingStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-    if (!(eExistingStunState == STATE_none && pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if (!(eExistingStunState == STATE_none && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return;
     }
 
@@ -4236,7 +4227,7 @@ void __fastcall SKILL_StunExpireAndRestoreAi(D2UnitStrc * pUnit, eD2States eStat
     if (eUninterruptState != STATE_none) {
       return;
     }
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       D2AiGeneralStrc* pAiGeneral = !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
       Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, pAiGeneral, 0);
     }

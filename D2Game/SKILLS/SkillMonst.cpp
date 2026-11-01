@@ -1067,7 +1067,7 @@ static int SKILLMONST_TriggerModeChange(D2UnitStrc * pUnit, ::SGAMEDATA * pGame)
 
 void __fastcall SKILLASSN_GetShadowHealthBonus(D2SkillsTxt * pSkillsTxt, D2UnitStrc * pUnit) {
     D2MonStats2Txt* pMonStatsEx;
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       int nMonStats2Idx;
       nMonStats2Idx = pUnit->nClassId;
       if (!(nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsSize)) {
@@ -2207,11 +2207,7 @@ BOOL __fastcall Skills_SrvDoFunc_107_LeechMeleeMultiHit(::SGAMEDATA * pGame, D2U
 
 // Monster skill server do-func: devours a friendly non-mercenary minion that is in the Kick anim-mode to restore caster HP. Deletes the target monster from the room and frees its server unit, then adds a calc[0]% of the target's max HP to the caster's current HP (clamped to caster max HP).
 BOOL __fastcall Skills_SrvDoFunc_108_DevourMinionForHP(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nTargetMaxHp;
-    int nCurHp;
-    int nMaxHp;
     int nNewHpClamped;
-    eD2UnitType eUnitType;
     if ((int)eSkill < 0) {
       return 0;
     }
@@ -2225,40 +2221,41 @@ BOOL __fastcall Skills_SrvDoFunc_108_DevourMinionForHP(::SGAMEDATA * pGame, D2Un
     }
 
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (pTarget && pTarget->eUnitType == UNIT_MONSTER) {
-      uint32_t nMercOrPct;
-      nMercOrPct = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pTarget);
-      if (!nMercOrPct && pTarget->eAnimMode.ePlayerMode == Kick) {
-        nTargetMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pTarget);
-        nMaxHp = pTarget->nUnitGUID;
-        eUnitType = UNIT_MONSTER;
-        D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pTarget), eUnitType, nMaxHp);
-        UNIT::SUnit::FreeServerUnit(pGame, pTarget);
-        nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-        nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
-        if (nTargetMaxHp <= 0) {
-          return 1;
-        }
+    if ((pTarget ? pTarget->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+      return 0;
+    }
 
-        nTargetMaxHp = D2Client::Stats::D2ApplyPercent(nTargetMaxHp, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt[eSkill].calc[0], eSkill, nSkillLvl), 100);
-        nCurHp += nTargetMaxHp;
-        nNewHpClamped = nCurHp;
-        if (nCurHp <= 1) {
-          nNewHpClamped = 1;
-        }
-        if (nNewHpClamped < nMaxHp) {
-          nMaxHp = nCurHp;
-          if (nCurHp <= 1) {
-            nMaxHp = 1;
-          }
-        }
+    uint32_t nMercOrPct = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pTarget);
+    if (!(!nMercOrPct && pTarget->eAnimMode.ePlayerMode == Kick)) {
+      return 0;
+    }
 
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nMaxHp, 0);
-        return 1;
+    int32_t nTargetMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pTarget);
+    int nMaxHp = pTarget->nUnitGUID;
+    eD2UnitType eUnitType = UNIT_MONSTER;
+    D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pTarget), eUnitType, nMaxHp);
+    UNIT::SUnit::FreeServerUnit(pGame, pTarget);
+    int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
+    nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    if (nTargetMaxHp <= 0) {
+      return 1;
+    }
+
+    nTargetMaxHp = D2Client::Stats::D2ApplyPercent(nTargetMaxHp, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt[eSkill].calc[0], eSkill, nSkillLvl), 100);
+    nCurHp += nTargetMaxHp;
+    nNewHpClamped = nCurHp;
+    if (nCurHp <= 1) {
+      nNewHpClamped = 1;
+    }
+    if (nNewHpClamped < nMaxHp) {
+      nMaxHp = nCurHp;
+      if (nCurHp <= 1) {
+        nMaxHp = 1;
       }
     }
 
-    return 0;
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nMaxHp, 0);
+    return 1;
 }
 
 // Returns the first non-zero animation event value from the current frame onward in the caster's anim data, used to determine how many Holy Bolt targets to hit. Handles both sequenced (merc) and non-sequenced monsters. Returns 0 if no event found before the animation ends.

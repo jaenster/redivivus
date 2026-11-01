@@ -1896,7 +1896,7 @@ int32_t __stdcall ITEM_CheckItemsTxt_bTransmogrify(D2UnitStrc * pUnit) {
 // Returns 1 when the unit is an item whose quality is Magic or better (quality in [4,9]), 0 otherwise.
 // Returns a FULL 32-bit value: the only two paths are MOV EAX,0x1 at 0062a113 and XOR EAX,EAX at 0062a11c.
 int32_t __stdcall ITEM_CheckItemData_ItemQualityIsMagicOrBetter(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       eD2ItemQuality nItemQuality;
       nItemQuality = pUnit->pUnitData.pUnitDataItem->eQuality;
       if (3 < (int)nItemQuality && (int)nItemQuality <= 9) {
@@ -2056,7 +2056,7 @@ uint32_t __stdcall ITEMS_GetEquippedSetItemsMask(D2UnitStrc * pUnit, D2UnitStrc 
     D2UnitStrc* pCarriedItem;
     BOOL bItemNotDisabledOrBroken;
     D2SetItemsTxt* pCurSetItemsTxt;
-    if (!pUnit || !pItem || pItem->eUnitType != UNIT_ITEM || !pItem->pUnitData.pUnitDataMonster || pItem->pUnitData.pUnitDataMonster->pMonStatsTxt != (D2MonStatsTxt*)0x5) {
+    if (!pUnit || (pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM || !pItem->pUnitData.pUnitDataMonster || pItem->pUnitData.pUnitDataMonster->pMonStatsTxt != (D2MonStatsTxt*)0x5) {
       return 0;
     }
 
@@ -2105,7 +2105,7 @@ uint32_t __stdcall ITEMS_GetEquippedSetItemsMask(D2UnitStrc * pUnit, D2UnitStrc 
 }
 
 D2SetItemsTxt * __stdcall GetSetItemsLine(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataMonster && pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt == (D2MonStatsTxt*)QUALITY_SET)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataMonster && pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt == (D2MonStatsTxt*)QUALITY_SET)) {
       return nullptr;
     }
 
@@ -2143,7 +2143,7 @@ int32_t __stdcall PLAYER_GetUnidentifiedItemsCount(D2UnitStrc * pUnit) {
       if (!pCarriedItem || pCarriedItem->eUnitType != UNIT_ITEM || !pCarriedItem->pUnitData.pUnitDataMissile || (pCarriedItem->pUnitData.pUnitDataMissile->eOwnerType & ITEMFLAG_IDENTIFIED) == UNIT_PLAYER) {
         iVar1 = INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pCurItem);
         if (iVar1 == INVENTORY_GRID_TYPE_INVENTORY) {
-          if (pCarriedItem && pCarriedItem->eUnitType == UNIT_ITEM) {
+          if ((pCarriedItem ? pCarriedItem->eUnitType : UNIT_COUNT) == UNIT_ITEM) {
             if (pCarriedItem->pUnitData.pUnitDataItem && pCarriedItem->pUnitData.pUnitDataItem->ePage == INVPAGE_INVENTORY) {
               nCount++;
             } else {
@@ -2934,7 +2934,7 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
 }
 
 int32_t __stdcall ITEM_GetTxtSetItems_setIndex(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataMonster && pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt == (D2MonStatsTxt*)QUALITY_SET)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataMonster && pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt == (D2MonStatsTxt*)QUALITY_SET)) {
       return -1;
     }
 
@@ -3445,7 +3445,7 @@ uint8_t __stdcall ITEM_GetMaxSockCount(D2UnitStrc * pUnit) {
 void __stdcall ITEM_RollSocketCount(D2UnitStrc * pUnit, uint32_t nMaxSocksRandom) {
     eD2ItemQuality nQuality;
     D2UnitStrc* pUnit_00 = pUnit;
-    if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return;
     }
 
@@ -3530,7 +3530,7 @@ void __stdcall ITEM_RollSocketCount(D2UnitStrc * pUnit, uint32_t nMaxSocksRandom
 // Sets the socket count on an item, clamping to [1, min(6, itemArea, ITEM_GetMaxSockCount)]. Only acts on UNIT_ITEM with nonzero grid area (width*height). Sets ITEMFLAG_SOCKETED on item flags and writes UNITSTAT_item_numsockets via STATLIST_SetUnitStat.
 void __stdcall ITEM_SetSocketCount(D2UnitStrc * pUnit, uint32_t nSockCount) {
     D2UnitStrc* pUnit_00 = pUnit;
-    if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return;
     }
 
@@ -5617,10 +5617,7 @@ static BOOL ITEM_IsReplenishable(D2UnitStrc * pUnit) {
 // Returns 1 if the item unit can be repaired at an NPC. Checks: must be an identified, non-ethereal item whose ItemTypesTxt entry has the repair flag, is not replenishable, and has durability. Also passes if the item's charged skills are not fully charged.
 uint32_t __stdcall ITEM_CanBeRepaired(D2UnitStrc * pUnit) {
     D2UnitStrc* pItemUnit = pUnit;
-    if (!pUnit) {
-      return 0;
-    }
-    if (pUnit->eUnitType != UNIT_ITEM) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
 
@@ -5876,10 +5873,7 @@ BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCha
     if (pnLevel) {
       *pnLevel = 0;
     }
-    if (!pUnit) {
-      return 0;
-    }
-    if (pUnit->eUnitType != UNIT_ITEM) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
 
@@ -5977,7 +5971,7 @@ BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCha
 
 int32_t __stdcall ITEMS_CheckBodyLocationFit(D2UnitStrc * pItem, uint32_t eBodyLoc) {
     D2UnitStrc* pItemSaved = pItem;
-    if (!pItem || pItem->eUnitType != UNIT_ITEM) {
+    if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
 
@@ -6085,7 +6079,7 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
     int iVar7;
     int nQuestMultIter;
     int nAffixIter;
-    if (!pUnit || !pItem || pItem->eUnitType != UNIT_ITEM) {
+    if (!pUnit || (pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0x7fffffff;
     }
 

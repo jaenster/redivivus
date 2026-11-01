@@ -980,14 +980,16 @@ template<> void TSGrowableArray<CELLIST>::ReserveNoRound(uint32_t nCount) {
 }
 
 template<> TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNewChunk = (TSHashObjectChunk<::CELLIST, HASHKEY_NONE>*)Storm::SMem::SMemAlloc(nExtraBytes + 0x18, s___AV__TSHashObjectChunk_UCELLIST_00741fb4, -2, dwFlags | 8);
-    if (pNewChunk) {
-      pNewChunk->nArrayAlloc = 0;
-      pNewChunk->nArrayCount = 0;
-      pNewChunk->pArray = 0;
-      pNewChunk->nArrayChunk = 0;
-      pNewChunk->m_link.m_prevlink = 0;
-      pNewChunk->m_link.m_next = 0;
+    TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNewChunkNew = (TSHashObjectChunk<::CELLIST, HASHKEY_NONE>*)Storm::SMem::SMemAlloc(nExtraBytes + 0x18, s___AV__TSHashObjectChunk_UCELLIST_00741fb4, -2, dwFlags | 8);
+    TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNewChunk;
+    if (pNewChunkNew) {
+      pNewChunkNew->nArrayAlloc = 0;
+      pNewChunkNew->nArrayCount = 0;
+      pNewChunkNew->pArray = 0;
+      pNewChunkNew->nArrayChunk = 0;
+      pNewChunkNew->m_link.m_prevlink = 0;
+      pNewChunkNew->m_link.m_next = 0;
+      pNewChunk = pNewChunkNew;
     } else {
       pNewChunk = 0;
     }

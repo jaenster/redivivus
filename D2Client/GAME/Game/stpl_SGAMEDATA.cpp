@@ -553,12 +553,14 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::LinkNode(::SGAMEDATA * pN
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::SGAMEDATA* pChunk = (::SGAMEDATA*)Storm::SMem::SMemAlloc(nExtraBytes + 0x1df4, s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
-    if (pChunk) {
-      pChunk->m_linktoslot.m_prevlink = 0;
-      pChunk->m_linktoslot.m_next = 0;
-      pChunk->m_linktofull.m_prevlink = 0;
-      pChunk->m_linktofull.m_next = 0;
+    ::SGAMEDATA* pChunkNew = (::SGAMEDATA*)Storm::SMem::SMemAlloc(nExtraBytes + 0x1df4, s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
+    ::SGAMEDATA* pChunk;
+    if (pChunkNew) {
+      pChunkNew->m_linktoslot.m_prevlink = 0;
+      pChunkNew->m_linktoslot.m_next = 0;
+      pChunkNew->m_linktofull.m_prevlink = 0;
+      pChunkNew->m_linktofull.m_next = 0;
+      pChunk = pChunkNew;
     } else {
       pChunk = 0;
     }

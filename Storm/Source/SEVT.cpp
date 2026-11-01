@@ -696,10 +696,12 @@ void __fastcall LINKEDLIST_InsertHead(D2StormListHead * pList) {
 
 // Allocates a new linked list node via SMemAlloc with 12 bytes overhead plus data size. Initializes next/prev pointers to NULL. Optionally links the node into an existing list via LINKEDLIST_IsEmpty call.
 int * * __thiscall LINKEDLIST_AllocNode(int * * pListHead, int32_t pList, int32_t nDataSize, uint32_t dwAllocFlags) {
-    int** pNewNode = (int**)SMem::SMemAlloc(nDataSize + 0xc, s___AUBREAKCMD___007088d8, -2, dwAllocFlags | 8);
-    if (pNewNode) {
-      *pNewNode = 0;
-      pNewNode[1] = 0;
+    int** pNewNodeNew = (int**)SMem::SMemAlloc(nDataSize + 0xc, s___AUBREAKCMD___007088d8, -2, dwAllocFlags | 8);
+    int** pNewNode;
+    if (pNewNodeNew) {
+      *pNewNodeNew = 0;
+      pNewNodeNew[1] = 0;
+      pNewNode = pNewNodeNew;
     } else {
       pNewNode = 0;
     }

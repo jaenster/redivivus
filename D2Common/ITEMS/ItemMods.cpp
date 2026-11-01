@@ -144,7 +144,7 @@ int __stdcall ITEMMOD_FindChargedSkill(D2UnitStrc * pUnit, int32_t nParam1, int3
     if (ppStatList) {
       *ppStatList = 0;
     }
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_ITEM) != UNIT_ITEM) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
     if (nParam1 < 0 || nParam1 >= sgptDataTable->nTxtSkillsCount || nParam2 - 1U > 0x3e) {
@@ -198,7 +198,7 @@ BOOL __stdcall ITEMMOD_SetChargedSkillCharges(D2UnitStrc * pUnit, int32_t nSkill
     BOOL bSubFound;
     uint32_t nMaxCharges;
     uint32_t nNewCharges;
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_ITEM) != UNIT_ITEM) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
 
@@ -1923,7 +1923,7 @@ uint32_t __fastcall ITEMPROP_AddMinDamage(uint32_t dwParam1, D2UnitStrc * pUnit,
     if (!nParam1) {
       return 0;
     }
-    if ((pUnit2 ? pUnit2->eUnitType : ~UNIT_ITEM) != UNIT_ITEM) {
+    if ((pUnit2 ? pUnit2->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
     if (!pUnit || pUnit->eUnitType != UNIT_ITEM) {
@@ -1993,7 +1993,7 @@ uint32_t __fastcall ITEMPROP_AddMaxDamage(uint32_t dwParam1, D2UnitStrc * pUnit,
     if (!nParam1) {
       return 0;
     }
-    if ((pUnit2 ? pUnit2->eUnitType : ~UNIT_ITEM) != UNIT_ITEM) {
+    if ((pUnit2 ? pUnit2->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
     if (!pUnit || pUnit->eUnitType != UNIT_ITEM) {
@@ -2073,7 +2073,7 @@ uint32_t __fastcall ITEMPROP_AddEnhancedDamage(uint32_t dwParam1, D2UnitStrc * p
 
     int32_t iVar1 = nParam3;
     int32_t nStatIdSaved = nParam;
-    if (pUnit_00 && pUnit_00->eUnitType == UNIT_ITEM) {
+    if ((pUnit_00 ? pUnit_00->eUnitType : UNIT_COUNT) == UNIT_ITEM) {
       uint8_t byMaxDam;
       if (!pUnit || pUnit->eUnitType != UNIT_ITEM) {
         nIsWeapon = pUnit_00->nClassId;
@@ -2479,7 +2479,7 @@ uint32_t __fastcall ITEMPROP_AddStat_FixedOrRolledMaxDamageAware(uint32_t dwPara
 }
 
 uint32_t __fastcall ITEMPROP_SetIndestructible(uint32_t dwParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t nParam1, uint32_t dwParam2, int32_t nParam, uint32_t dwParam3, uint32_t dwParam4, int32_t nParam2, uint32_t nParam3, uint32_t dwParam5) {
-    if ((pUnit2 ? pUnit2->eUnitType : ~UNIT_ITEM) != UNIT_ITEM) {
+    if ((pUnit2 ? pUnit2->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
     if (!nParam1) {
@@ -3830,7 +3830,7 @@ void __fastcall ITEMMOD_ApplySetBonuses(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
 }; D2_STATIC_GUARD(gnPropertyBaseValueByCode, "D2Common::ITEMS::ItemMods::ITEMMOD_ApplySetBonuses::gnPropertyBaseValueByCode");
 
     int nMaxBonusCount;
-    if (!(nApplyFlags && pUnit2 && pUnit2->eUnitType == UNIT_ITEM)) {
+    if (!(nApplyFlags && (pUnit2 ? pUnit2->eUnitType : UNIT_COUNT) == UNIT_ITEM)) {
       return;
     }
 

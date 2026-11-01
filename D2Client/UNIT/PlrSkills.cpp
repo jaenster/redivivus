@@ -316,7 +316,7 @@ void __fastcall PLRSKILLS_StateRemFn02_SourceUnit(D2UnitStrc * pUnit, eD2States 
 }
 
 void __fastcall PLRSKILLS_StateSetFn05_ChangeClass(D2UnitStrc * pUnit, eD2States eState) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 
@@ -732,7 +732,7 @@ void __fastcall PLRSKILLS_StateSetFn10_Redeemed(D2UnitStrc * pUnit, eD2States eS
 
 // @sourcefile .\UNIT\PlrSkills.cpp
 void __fastcall PLRSKILLS_StateRemFn07_Uninterruptable(D2UnitStrc * pUnit, eD2States eState) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 

@@ -556,14 +556,16 @@ template<> void TSGrowableArray<SGAMEDATA>::ReserveNoRound(uint32_t nCount) {
 }
 
 template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunk = (TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>*)Storm::SMem::SMemAlloc(nExtraBytes + 0x18, s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, -2, dwFlags | 8);
-    if (pChunk) {
-      pChunk->nArrayAlloc = 0;
-      pChunk->nArrayCount = 0;
-      pChunk->pArray = 0;
-      pChunk->nArrayChunk = 0;
-      pChunk->m_link.m_prevlink = 0;
-      pChunk->m_link.m_next = 0;
+    TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunkNew = (TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>*)Storm::SMem::SMemAlloc(nExtraBytes + 0x18, s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, -2, dwFlags | 8);
+    TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunk;
+    if (pChunkNew) {
+      pChunkNew->nArrayAlloc = 0;
+      pChunkNew->nArrayCount = 0;
+      pChunkNew->pArray = 0;
+      pChunkNew->nArrayChunk = 0;
+      pChunkNew->m_link.m_prevlink = 0;
+      pChunkNew->m_link.m_next = 0;
+      pChunk = pChunkNew;
     } else {
       pChunk = 0;
     }

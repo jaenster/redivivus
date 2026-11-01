@@ -553,20 +553,21 @@ void __fastcall NPC_BeginInteractionFromUnit(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 static BOOL __stdcall UnitHasSwitchAiSet(D2UnitStrc * pMonster) {
-    if (pMonster && pMonster->eUnitType == UNIT_MONSTER) {
-      int32_t nClassId;
-      nClassId = pMonster->nClassId;
-      if (nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nClassId && (uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nClassId] + 0xe) & gadwBitMasks[0]) {
-        return 1;
-      }
+    if ((pMonster ? pMonster->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+      return 0;
     }
 
-    return 0;
+    int32_t nClassId = pMonster->nClassId;
+    if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nClassId && (uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nClassId] + 0xe) & gadwBitMasks[0])) {
+      return 0;
+    }
+
+    return 1;
 }
 
 // nParam arrives in EDX, survives the UnitHasSwitchAiSet call (that callee clobbers only EAX/ECX) and is stored to nAiRelated2.
 BOOL __fastcall AI_SetSwitchAiTargetParams(D2UnitStrc * pUnit, int32_t nParam, uint32_t nTargetGUID) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && nParam < 5)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && nParam < 5)) {
       return 0;
     }
 
@@ -585,7 +586,7 @@ BOOL __fastcall AI_SetSwitchAiTargetParams(D2UnitStrc * pUnit, int32_t nParam, u
 }
 
 D2UnitPlayerListStrc * __fastcall AI_GetSwitchAiParam1(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
       return pUnit->pUnitData.pUnitDataPlayer->pPlayerList;
     }
 
@@ -593,7 +594,7 @@ D2UnitPlayerListStrc * __fastcall AI_GetSwitchAiParam1(D2UnitStrc * pUnit) {
 }
 
 D2UnitDataPlayerArenaStrc * __fastcall AI_GetSwitchAiParam2(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
       return pUnit->pUnitData.pUnitDataPlayer->pArena;
     }
 
@@ -601,7 +602,7 @@ D2UnitDataPlayerArenaStrc * __fastcall AI_GetSwitchAiParam2(D2UnitStrc * pUnit) 
 }
 
 void __fastcall AI_ClearSwitchAiTargetParams(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 
@@ -615,13 +616,7 @@ void __fastcall AI_ClearSwitchAiTargetParams(D2UnitStrc * pUnit) {
 }
 
 uint32_t __fastcall NpcStateIsntZero(D2UnitStrc * pUnit, int32_t nParam) {
-    if (!pUnit) {
-      return 0;
-    }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
-      return 0;
-    }
-    if (!pUnit->pUnitData.pUnitDataMonster) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return 0;
     }
 
@@ -652,7 +647,7 @@ void __fastcall ClearAISub(::SGAMEDATA * pGame, D2UnitStrc * pUnit, fpAiClear fp
     uint32_t nUnitGUID;
     eD2UnitType eUnitType;
     D2MonsterAiSubStrc* pNext;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
     }
 

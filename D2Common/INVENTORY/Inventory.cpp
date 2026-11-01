@@ -80,7 +80,7 @@ static D2ItemInventoryNodeStrc * INVENTORY_GetItemInventoryNode(D2UnitStrc * pUn
 static void INVENTORY_UnlinkItemFromList(D2UnitStrc * * pItemListHead, D2UnitStrc * pItem) {
     D2UnitDataPlayerStrc* pDVar1;
     D2UnitDataItemStrc* pDataOther;
-    if (!(pItem && pItem->eUnitType == UNIT_ITEM)) {
+    if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return;
     }
 
@@ -167,7 +167,7 @@ static void __stdcall INVENTORY_RemoveItemFromGrid(D2UnitStrc * pItem, D2Invento
     D2UnitDataItemStrc* pNeighborItemData;
     uint8_t byGridWidth;
     D2UnitStrc** pNeighborUnit;
-    if (!(pItem && pItem->eUnitType == UNIT_ITEM)) {
+    if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return;
     }
 
@@ -231,7 +231,7 @@ static void __stdcall INVENTORY_RemoveItemFromGrid(D2UnitStrc * pItem, D2Invento
 
 // Removes an item unit from its owning D2InventoryStrc. Validates inventory signature (0x1020304), removes the item from its grid slot, clears the cursor-item pointer or unlinks it from the item list, zeroes the item's inventory/grid references, clears the owner's stat bonuses via STATLIST_RemoveFromOwnerAndRecalc, and clears dwPrimaryWeaponGUID if it matched. Returns 1 on success, 0 on any validation failure.
 BOOL __fastcall INVENTORY_RemoveItemFromInventory(D2UnitStrc * pItem) {
-    if (!pItem || pItem->eUnitType != UNIT_ITEM) {
+    if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
 
@@ -246,7 +246,7 @@ BOOL __fastcall INVENTORY_RemoveItemFromInventory(D2UnitStrc * pItem) {
     }
 
     D2InventoryStrc* pInventory = ppInventory->pInventory;
-    if ((pInventory ? pInventory->nSignatureMagic : 0) != 0x1020304) {
+    if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
       return 0;
     }
 
@@ -452,7 +452,7 @@ static D2InventoryGridInfoStrc * __stdcall ReinitializeInventoryGrid(D2Inventory
 void INVENTORY_AppendItemToList(D2UnitStrc * pItem, D2InventoryStrc * pInventoryStrc) {
     D2UnitDataItemStrc* pLastItemData;
     D2UnitDataItemStrc* pItemUnitData;
-    if (!(pItem && pItem->eUnitType == UNIT_ITEM)) {
+    if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return;
     }
 
@@ -486,7 +486,7 @@ void INVENTORY_AppendItemToList(D2UnitStrc * pItem, D2InventoryStrc * pInventory
 
 static void __stdcall INVENTORY_InsertItemInPageList(D2InventoryStrc * pInventory, D2UnitStrc * pItem, D2InventoryGridInfoStrc * pGridInfo) {
     D2UnitDataItemStrc* pLastUnitData;
-    if (!(pItem && pItem->eUnitType == UNIT_ITEM)) {
+    if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return;
     }
 
@@ -600,7 +600,7 @@ static BOOL __stdcall INVENTORY_PlaceItemInGrid(int32_t nnX, int32_t nnY, int32_
     }
 
     INVENTORY_RemoveItemFromInventory(pUnit);
-    if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM) {
       D2ItemInventoryNodeStrc* pDVar1;
       pDVar2 = pUnit->pUnitData.pUnitDataItem;
       if (pDVar2) {
@@ -676,7 +676,7 @@ BOOL __stdcall PutItemInInventory(D2InventoryStrc * pInventory, D2UnitStrc * pUn
     if (!pInventory->pOwner) {
       return 1;
     }
-    if (!pUnit || pUnit->eUnitType != UNIT_ITEM) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
     if (pInventory->pOwner->eUnitType != UNIT_ITEM) {
@@ -690,7 +690,7 @@ BOOL __stdcall PutItemInInventory(D2InventoryStrc * pInventory, D2UnitStrc * pUn
     }
 
     INVENTORY_RemoveItemFromInventory(pUnit);
-    if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM) {
       D2ItemInventoryNodeStrc* pDVar1;
       pDVar2 = pUnit->pUnitData.pUnitDataItem;
       if (pDVar2) {
@@ -1071,10 +1071,7 @@ int __stdcall INVENTORY_FindItemGridPosition(D2InventoryStrc * pInventory, D2Uni
     if (pInventory->nSignatureMagic != 0x1020304) {
       return 0;
     }
-    if (!pUnit) {
-      return 0;
-    }
-    if (pUnit->eUnitType != UNIT_ITEM) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
     if (!pUnit->pUnitData.pUnitDataPlayer) {
@@ -1887,7 +1884,7 @@ BOOL __stdcall INVENTORY_CanAutoBeltItem(D2InventoryStrc * pInventory, D2UnitStr
     if (pInventory->nSignatureMagic != 0x1020304) {
       return 0;
     }
-    if (!(pItem && pItem->eUnitType == UNIT_ITEM)) {
+    if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
 
@@ -1934,7 +1931,7 @@ BOOL __stdcall INVENTORY_FindBeltSlotForPotion(D2InventoryStrc * pInventory, D2U
     char byItemW;
     char byItemH;
     D2BeltsTxt sBeltsLine;
-    if (pInventory && pInventory->nSignatureMagic == 0x1020304 && pUnit && pUnit->eUnitType == UNIT_ITEM) {
+    if (pInventory && pInventory->nSignatureMagic == 0x1020304 && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM) {
       iVar1 = ITEMS::Items::ITEM_GetTxtItemTypes_beltable(pUnit);
       if (iVar1) {
         ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pUnit, &byItemW, &byItemH, ".\\INVENTORY\\Inventory.cpp", 0xb27);
@@ -2772,7 +2769,7 @@ void __fastcall INVENTORY_SetOrClearCursorItem(D2InventoryStrc * pInventory, D2U
 }
 
 void __stdcall INVENTORY_UpdatePrimaryWeapon(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
-    if (!(pInventory && pUnit && pUnit->eUnitType == UNIT_ITEM)) {
+    if (!(pInventory && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM)) {
       return;
     }
 
@@ -2808,7 +2805,7 @@ void __stdcall INVENTORY_UpdatePrimaryWeapon(D2InventoryStrc * pInventory, D2Uni
 
 void __stdcall INVENTORY_SwapPrimaryWeaponOnRemoval(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
     int32_t nGridOffset;
-    if (!(pInventory && pUnit && pUnit->eUnitType == UNIT_ITEM)) {
+    if (!(pInventory && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM)) {
       return;
     }
 
@@ -4668,10 +4665,7 @@ int32_t __stdcall INVENTORY_GetEquipActionForBodySlot(D2UnitStrc * pUnit, eD2Bod
 }
 
 D2UnitStrc * __stdcall INVENTORY_GetNextItem(D2UnitStrc * pUnit) {
-    if (!pUnit) {
-      return nullptr;
-    }
-    if (pUnit->eUnitType != UNIT_ITEM) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return nullptr;
     }
 
@@ -4705,10 +4699,7 @@ int32_t __stdcall ITEM_GetGUID(D2UnitStrc * pUnit) {
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
 int32_t __stdcall ITEM_GetItemData_eD2InventoryGridType(D2UnitStrc * pUnit) {
-    if (!pUnit) {
-      return 0;
-    }
-    if (pUnit->eUnitType != UNIT_ITEM) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
 
@@ -4721,7 +4712,7 @@ int32_t __stdcall ITEM_GetItemData_eD2InventoryGridType(D2UnitStrc * pUnit) {
 }
 
 D2UnitStrc * __stdcall INVENTORY_IsItemOwnedBy(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
-    if (pInventory && pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataPlayer) {
+    if (pInventory && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataPlayer) {
       D2UnknownStructure0x18** ppTradeCopyInventory;
       ppTradeCopyInventory = &pUnit->pUnitData.pUnitDataPlayer->pTradeCopyInventory;
       if (ppTradeCopyInventory) {

@@ -503,7 +503,7 @@ static D2UnitStrc * __stdcall SKILL_FindTargetInRange(D2SkillStrc * pSkill, D2Un
 }
 
 int __fastcall UnitIsOfTypeMonster(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_MONSTER) != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 

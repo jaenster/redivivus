@@ -536,7 +536,7 @@ void __fastcall MONUNIQUE_ApplyModifierEffects(D2UnitStrc * pUnit) {
 }; D2_STATIC_GUARD(gapMonUniqueModInitFuncs, "D2Client::UNIT::MonUnique::MONUNIQUE_ApplyModifierEffects::gapMonUniqueModInitFuncs");
 
     uint32_t bApply;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 

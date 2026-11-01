@@ -2003,7 +2003,7 @@ BOOL __fastcall Missiles_SrvHitFunc_ApplyTerrorToMonster(::SGAMEDATA * pGame, D2
     if (!pOwnerUnit) {
       return 1;
     }
-    if (!(pTarget && pTarget->eUnitType == UNIT_MONSTER)) {
+    if ((pTarget ? pTarget->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 

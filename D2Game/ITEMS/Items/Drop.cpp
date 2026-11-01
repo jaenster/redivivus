@@ -1316,10 +1316,7 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
     uint32_t nSeedLowBackup;
     D2UnitStrc* pItem;
     pItem = *ppItem;
-    if (!pItem) {
-      return 0;
-    }
-    if (pItem->eUnitType != UNIT_ITEM) {
+    if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
 

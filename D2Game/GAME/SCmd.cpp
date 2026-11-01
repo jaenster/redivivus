@@ -2343,7 +2343,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
     eD2UnitType eUnitType;
     BOOL BVar1;
     D2ClientStrc* pClientSaved = pClient;
-    if (!(!pUnit || pUnit->eUnitType != UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       int32_t nScratch;
       *(uint32_t*)((char*)&aPacket + 1) = pUnit->nUnitGUID;
       aPacket[0] = 0xac;

@@ -107,7 +107,7 @@ void __fastcall ITEM_UpdateSetItemStates(D2UnitStrc * pUnit, uint32_t nEquippedM
     int nBonusIdx;
     eD2States* pStateEntry;
     eD2States eState;
-    if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return;
     }
 
@@ -182,7 +182,7 @@ void __fastcall ITEM_ManageSetBonusStatList(D2UnitStrc * pUnit, D2UnitStrc * pUn
     D2StatListExStrc* pStatList;
     int nExistingSetId;
     eD2States eState;
-    if (!(nMode <= 1 && pUnit && pUnit2 && pUnit2->eUnitType == UNIT_ITEM)) {
+    if (!(nMode <= 1 && pUnit && (pUnit2 ? pUnit2->eUnitType : UNIT_COUNT) == UNIT_ITEM)) {
       return;
     }
 

@@ -195,10 +195,12 @@ void __fastcall ARCHIVE_ClearAndFreeHead(int32_t nList) {
 }
 
 int * * __thiscall ARCHIVE_AllocNode(int * * ppList, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags) {
-    int** ppNode = (int**)Storm::SMem::SMemAlloc(nSize + 0x130, s___AUTALLOCREC___00711480, -2, dwAllocFlags | 8);
-    if (ppNode) {
-      *ppNode = 0;
-      ppNode[1] = 0;
+    int** ppNodeNew = (int**)Storm::SMem::SMemAlloc(nSize + 0x130, s___AUTALLOCREC___00711480, -2, dwAllocFlags | 8);
+    int** ppNode;
+    if (ppNodeNew) {
+      *ppNodeNew = 0;
+      ppNodeNew[1] = 0;
+      ppNode = ppNodeNew;
     } else {
       ppNode = 0;
     }
@@ -297,10 +299,11 @@ void ARCHIVE_WriteMemoryCheckReport() {
     int nResult = Storm::SMem::SMemFindNextHeap(0, (int*)&pHeapEnum, &sHeapDetails);
     while (nResult) {
       int**** pNewRec;
-      pNewRec = (int****)Storm::SMem::SMemAlloc(0x130, s___AUTALLOCREC___00711480, -2, 8);
-      if (pNewRec) {
-        *pNewRec = 0;
-        pNewRec[1] = 0;
+      int**** pNewRecNew = (int****)Storm::SMem::SMemAlloc(0x130, s___AUTALLOCREC___00711480, -2, 8);
+      if (pNewRecNew) {
+        *pNewRecNew = 0;
+        pNewRecNew[1] = 0;
+        pNewRec = pNewRecNew;
       } else {
         pNewRec = 0;
       }

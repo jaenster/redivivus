@@ -193,10 +193,12 @@ template<> TSList<::TCELENTRY, TSGetLink<TCELENTRY>>* TSList<TCELENTRY, TSGetLin
 }
 
 template<> ::TCELENTRY * TSList<TCELENTRY, TSGetLink<TCELENTRY>>::NewNode(uint32_t nLinkType, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::TCELENTRY* pNewEntry = (::TCELENTRY*)Storm::SMem::SMemAlloc(nExtraBytes + 0x24, s___AUTCELENTRY___00741f14, -2, dwFlags | 8);
-    if (pNewEntry) {
-      pNewEntry->m_link.m_prevlink = 0;
-      pNewEntry->m_link.m_next = 0;
+    ::TCELENTRY* pNewEntryNew = (::TCELENTRY*)Storm::SMem::SMemAlloc(nExtraBytes + 0x24, s___AUTCELENTRY___00741f14, -2, dwFlags | 8);
+    ::TCELENTRY* pNewEntry;
+    if (pNewEntryNew) {
+      pNewEntryNew->m_link.m_prevlink = 0;
+      pNewEntryNew->m_link.m_next = 0;
+      pNewEntry = pNewEntryNew;
     } else {
       pNewEntry = 0;
     }

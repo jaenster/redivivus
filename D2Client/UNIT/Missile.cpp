@@ -512,7 +512,7 @@ static uint32_t __stdcall MISSILE_CanHitTarget(D2UnitStrc * pUnit, D2UnitStrc * 
 }
 
 int32_t __fastcall Missiles_SrvDoFuncData_02(D2UnitStrc * pUnit, D2MissileCltCollideCtxStrc * pCtx) {
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_MONSTER) != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 

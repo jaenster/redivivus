@@ -2169,7 +2169,7 @@ D2UnitStrc * __fastcall QUEST_SpawnSuperUniqueAtPoint(::SGAMEDATA * pGame, D2Uni
 }
 
 void __fastcall QUEST_DispatchPresetObjectLoad(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MapAIStrc * pMapAI) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_OBJECT)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_OBJECT) {
       return;
     }
 
@@ -2810,7 +2810,7 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
     D2QuestArgStrc pQuestCallback;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    if (!(pMonster && pMonster->eUnitType == UNIT_MONSTER)) {
+    if ((pMonster ? pMonster->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 

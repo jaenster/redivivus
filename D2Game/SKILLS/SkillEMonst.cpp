@@ -387,7 +387,7 @@ BOOL __fastcall Skills_SrvDoFunc_128_MonsterCreateMinion(::SGAMEDATA * pGame, D2
 
     ::SGAMEDATA* pGameLocal = pGame;
     D2UnitStrc* pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (!(pTargetUnit && pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if (!(pTargetUnit && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return 0;
     }
 
@@ -552,7 +552,7 @@ BOOL __fastcall Skills_SrvDoFunc_129_AttachOrDetachFromHost(::SGAMEDATA * pGame,
 }
 
 BOOL __fastcall SKILLEMONST_SrvStFn61_SelfResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_MONSTER) != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -1173,7 +1173,7 @@ BOOL __fastcall Skills_SrvDoFunc_139_FireOrthogonalMissile(::SGAMEDATA * pGame, 
 
 // SrvStFunc 63: monster-only skill that fires a missile at the target corpse. Checks the target lacks STATE_corpse_noselect, marks it with that state, creates a missile from srvmissilea using the owner as attacker and the corpse as the missile target, then sends a unit message packet to the caster.
 BOOL __fastcall SKILLEMONST_SrvStFn63_CorpseCycler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_MONSTER) != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 

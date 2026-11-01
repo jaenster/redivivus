@@ -1143,13 +1143,7 @@ uint32_t __fastcall OBJECT_CanTargetMonster(D2UnitStrc * pUnit, D2UnitStrc * pUn
     BOOL _bIsAlly;
     bool bIsAlly;
     bool bIsDead;
-    if (pUnit == pUnit2) {
-      return 0;
-    }
-    if (!pUnit) {
-      return 0;
-    }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
+    if (!(pUnit != pUnit2 && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return 0;
     }
 
@@ -3314,7 +3308,7 @@ void __fastcall OBJMODE_HandleObjectDeactivation(::SGAMEDATA * pGame, D2UnitStrc
 
 // NOTE: Register param types inferred (medium confidence): pGameStrc (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
 void __fastcall OBJMODE_OnWaypointFinish(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit) {
-    if (!pUnit || pUnit->nClassId != 0x151) {
+    if ((pUnit ? pUnit->nClassId : -1) != 0x151) {
       D2Common::Units::SetupUpdateFlag(pUnit, 0);
     } else {
       D2TimerArgStrc* pTimerArg;
@@ -3335,7 +3329,7 @@ void __fastcall OBJMODE_FinalizePortalLink(::SGAMEDATA * pGame, D2UnitStrc * pOw
     }
 
     D2UnitStrc* pBluePortal = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, dwBluePortalGUID);
-    if (!(pBluePortal && pBluePortal->nClassId == 0x3b)) {
+    if ((pBluePortal ? pBluePortal->nClassId : -1) != 0x3b) {
       return;
     }
 

@@ -622,7 +622,7 @@ BOOL __fastcall Skills_CltStFunc_SelectReviveMissileByMonsterSize(D2UnitStrc * p
     }
 
     D2UnitStrc* pCorpse = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
-    if (!(pCorpse && pCorpse->eUnitType == UNIT_MONSTER)) {
+    if ((pCorpse ? pCorpse->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 

@@ -964,7 +964,7 @@ BOOL __fastcall Skills_CltStFunc_SetParam1FromCltCalc(D2UnitStrc * pUnit, eD2Ski
 
 void __fastcall SKILLSMON_SetMonsterDeathFrame(int32_t nParam, D2UnitStrc * pUnit) {
     D2MonStats2Txt* pMonStats2Txt;
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       int nMonStatsEx;
       nMonStatsEx = pUnit->nClassId;
       if (!(nMonStatsEx >= 0 && nMonStatsEx < sgptDataTable->nTxtMonStatsSize)) {

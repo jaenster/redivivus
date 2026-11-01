@@ -742,7 +742,7 @@ eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(D2UnitStrc * pUnit, eD2
       break;
       case UNIT_ITEM:
         pTargetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_ITEM, uuid);
-      if (pTargetUnit && pTargetUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run) {
+      if ((pTargetUnit ? pTargetUnit->eAnimMode.ePlayerMode : Death) == eD2PlayerAnimMode_ns::Run) {
         nDist = D2Common::Collision::GetDistanceBetweenUnits(pUnit, pTargetUnit);
         if (nDist <= 0x32) {
           if (nDist <= 4 && (bInRange = D2Common::Units::TestCollisionBetweenInteractingUnits(pUnit, pTargetUnit, 0x804) , !bInRange)) {
@@ -4195,7 +4195,7 @@ static eD2ServerIncomingStatus __stdcall EquipOrUnequipMercItem(D2UnitStrc * pUn
     }
 
     D2UnitStrc* pEquippedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pUnit2->pInventory, eBodyLoc);
-    if (!(pEquippedItem && pEquippedItem->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral)) {
+    if ((pEquippedItem ? pEquippedItem->eAnimMode.ePlayerMode : Death) != eD2PlayerAnimMode_ns::Neutral) {
       return SERVERSTATUS_BAD_DATA;
     }
 
@@ -4585,7 +4585,7 @@ void __fastcall PLAYERMSG_BroadcastPlayerSlain(::SGAMEDATA * pGame, D2UnitStrc *
     D2Packet0x5aEventStructure packet0x5a;
     char szKillerNameTmp[16];
     int32_t nLine;
-    if ((pVictim ? pVictim->eUnitType : ~UNIT_PLAYER) != UNIT_PLAYER) {
+    if ((pVictim ? pVictim->eUnitType : UNIT_COUNT) != UNIT_PLAYER) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19b4);
       exit(-1);
     }

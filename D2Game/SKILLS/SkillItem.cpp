@@ -534,7 +534,7 @@ BOOL __fastcall SKILLITEM_TownPortalScrollSpell(::SGAMEDATA * pGame, D2UnitStrc 
     int nItemGUID;
     int32_t nPortalObjId;
     D2UnitStrc** ppNewPortal;
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_PLAYER) != UNIT_PLAYER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_PLAYER) {
       return 0;
     }
 
@@ -1284,7 +1284,7 @@ int32_t __fastcall SKILLITEM_DispatchItemSpell(::SGAMEDATA * pGame, D2UnitStrc *
     if (!pUnit || pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
       return 0;
     }
-    if (!pItem || pItem->eUnitType != UNIT_ITEM) {
+    if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
 
@@ -1608,7 +1608,7 @@ BOOL __fastcall ITEMEVENT_CrushingBlowChance(::SGAMEDATA * pGame, uint32_t nUnit
 BOOL __fastcall ITEMEVENT_ChanceToFear(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     uint32_t _bIsUndead;
     bool bIsUndead;
-    if (!(pUnit && pTarget && pTarget->eUnitType == UNIT_MONSTER)) {
+    if (!(pUnit && (pTarget ? pTarget->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return 0;
     }
 
@@ -1633,7 +1633,7 @@ BOOL __fastcall ITEMEVENT_ChanceToFear(::SGAMEDATA * pGame, uint32_t nUnitEvent,
 
 // Item hit-event handler for "Chance to cast Dim Vision on striking". Only applies to monster targets. Reads the item's proc chance stat, computes an effective % from attacker/target levels, rolls the unit seed; on success calls SKILLNEC_ApplyDimVision with a duration scaled by how much the roll was beaten. Halves effective % when param1==6 (ranged hit). Returns 1 if Dim Vision was applied.
 BOOL __fastcall ITEMEVENT_ChanceToDimVision(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
-    if (!pUnit || !pTarget || pTarget->eUnitType != UNIT_MONSTER) {
+    if (!pUnit || (pTarget ? pTarget->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -2216,7 +2216,7 @@ BOOL __fastcall ITEMEVENT_SetRestInPeace(::SGAMEDATA * pGame, uint32_t nUnitEven
 BOOL __fastcall SKILL_ReviveMonsterFromCorpse(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pAttacker, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t dwAlignPad = nUnitEvent;
     D2MonsterKillStrc sKillStrc;
-    if (!(pAttacker && pAttacker->eUnitType == UNIT_MONSTER)) {
+    if ((pAttacker ? pAttacker->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -2288,7 +2288,7 @@ BOOL __fastcall SKILL_ReviveMonsterFromCorpse(::SGAMEDATA * pGame, uint32_t nUni
 }
 
 BOOL __fastcall ITEMEVENT_ReviveMonster(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
-    if (!(pUnit && pTarget && pTarget->eUnitType == UNIT_MONSTER)) {
+    if (!(pUnit && (pTarget ? pTarget->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return 0;
     }
 

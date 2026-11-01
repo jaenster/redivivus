@@ -263,7 +263,7 @@ BOOL __fastcall Skills_SrvStFunc_20_IsGroundItemForIronGolem(::SGAMEDATA * pGame
 }
 
 BOOL CorpseConsumedCheck(D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_MONSTER) != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -771,7 +771,7 @@ BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2Unit
 }
 
 uint32_t __fastcall SKILLNEC_ValidateReviveTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpse) {
-    if ((pCorpse ? pCorpse->eUnitType : ~UNIT_MONSTER) != UNIT_MONSTER) {
+    if ((pCorpse ? pCorpse->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 

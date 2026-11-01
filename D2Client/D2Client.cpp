@@ -3937,7 +3937,7 @@ void __fastcall SKILLSSOR_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2S
 }
 
 int __fastcall SKILLSCLT_CheckSkillIsValid(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_MISSILE) != UNIT_MISSILE) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MISSILE) {
       return 0;
     }
 

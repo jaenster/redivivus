@@ -3167,7 +3167,7 @@ uint32_t __fastcall ITEMMODE_ResolveEquipConflict(D2UnitStrc * pUnit, D2UnitStrc
     bool bIsWeaponType;
     eD2ItemTypes eCompatibleType;
     int32_t nShootsOrQuiverCheck;
-    if (!pUnit || !pUnit2 || pUnit2->eUnitType != UNIT_ITEM) {
+    if (!pUnit || (pUnit2 ? pUnit2->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
     }
 

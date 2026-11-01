@@ -1562,7 +1562,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 uint32_t __thiscall DAMAGE_GetMonsterDrainEffectiveness(void * pThis, D2UnitStrc * pUnit) {
-    if ((pThis ? *(int*)pThis : 0) != 1) {
+    if (!pThis || *(int*)pThis != 1) {
       return 100;
     }
     if (!*(int**)((int)pThis + 0x14)) {
@@ -1608,7 +1608,7 @@ static void __stdcall DAMAGE_ApplyLifeAndManaLeech(::SGAMEDATA * pGame, D2UnitSt
     if (!pDmgStrc->dwLifeLeech && !pDmgStrc->dwManaLeech) {
       return;
     }
-    if (!pDefender || pDefender->eUnitType != UNIT_MONSTER) {
+    if ((pDefender ? pDefender->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       pDefender = (D2UnitStrc*)0x64;
     } else {
       if (!pDefender->pUnitData.pUnitDataMonster) {
@@ -2684,7 +2684,7 @@ uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(int32_t nParam, uint32_t * pnPar
 // Gives a monster defender the prevent-heal state when a player attacker has item_preventheal (stat 0x75): STATE 0x34 for 120000 frames on armorclass, through SKILLS_SetStateWithExpiryTime with no expire callback. Classes 0x2C0-0x2C5 are exempt. Register arguments: pDefender in ESI, pAttacker in EDI; nothing is returned.
 static void DAMAGE_CheckPreventHealAndSetState(D2UnitStrc * pDefender, D2UnitStrc * pAttacker) {
     D2StateExArgStrc sStateArg;
-    if (!(pAttacker && pAttacker->eUnitType == UNIT_PLAYER && pDefender && pDefender->eUnitType == UNIT_MONSTER)) {
+    if (!(pAttacker && pAttacker->eUnitType == UNIT_PLAYER && (pDefender ? pDefender->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return;
     }
 

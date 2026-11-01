@@ -3178,10 +3178,12 @@ void __fastcall SFILE_DestroyFileRecord(D2MPQFileStrc * pMPQFile) {
 }
 
 D2MPQFileStrc * * __thiscall SFILE_AllocFileRecord1(int * * ppArchive, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags) {
-    D2MPQFileStrc** ppFileRecord = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + 0x25c, sRTTI_ARCHIVEREC_AllocTag, -2, nFlags | 8);
-    if (ppFileRecord) {
-      *ppFileRecord = 0;
-      ppFileRecord[1] = 0;
+    D2MPQFileStrc** ppFileRecordNew = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + 0x25c, sRTTI_ARCHIVEREC_AllocTag, -2, nFlags | 8);
+    D2MPQFileStrc** ppFileRecord;
+    if (ppFileRecordNew) {
+      *ppFileRecordNew = 0;
+      ppFileRecordNew[1] = 0;
+      ppFileRecord = ppFileRecordNew;
     } else {
       ppFileRecord = 0;
     }
@@ -3214,15 +3216,17 @@ D2MPQFileStrc * __thiscall SFILE_AllocFileRecord(int * * ppArchive, int32_t nIns
     '\x00'
 }; D2_STATIC_GUARD(sRTTI_FILEREC_AllocTag, "Storm::Source::SFile::SFILE_AllocFileRecord::sRTTI_FILEREC_AllocTag");
 
-    D2MPQFileStrc* ppFileRecord = (D2MPQFileStrc*)SMem::SMemAlloc(nExtraSize + 0x158, sRTTI_FILEREC_AllocTag, -2, nFlags | 8);
-    if (ppFileRecord) {
-      ppFileRecord->pPrevLink = 0;
-      ppFileRecord->pNext = 0;
-      ppFileRecord->szFilePath = 0;
-      ppFileRecord->hFile = (HANDLE)-1;
-      ppFileRecord->pArchive = 0;
-      ppFileRecord->pSectorTable = 0;
-      ppFileRecord->pReadBuffer = 0;
+    D2MPQFileStrc* ppFileRecordNew = (D2MPQFileStrc*)SMem::SMemAlloc(nExtraSize + 0x158, sRTTI_FILEREC_AllocTag, -2, nFlags | 8);
+    D2MPQFileStrc* ppFileRecord;
+    if (ppFileRecordNew) {
+      ppFileRecordNew->pPrevLink = 0;
+      ppFileRecordNew->pNext = 0;
+      ppFileRecordNew->szFilePath = 0;
+      ppFileRecordNew->hFile = (HANDLE)-1;
+      ppFileRecordNew->pArchive = 0;
+      ppFileRecordNew->pSectorTable = 0;
+      ppFileRecordNew->pReadBuffer = 0;
+      ppFileRecord = ppFileRecordNew;
     } else {
       ppFileRecord = 0;
     }
@@ -3235,10 +3239,12 @@ D2MPQFileStrc * __thiscall SFILE_AllocFileRecord(int * * ppArchive, int32_t nIns
 }
 
 D2MPQFileStrc * * __thiscall SFILE_AllocFileRecord2(int * * ppArchive, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags) {
-    D2MPQFileStrc** ppFileRecord = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + 0xc, sRTTI_EVENTREC_AllocTag, -2, nFlags | 8);
-    if (ppFileRecord) {
-      *ppFileRecord = 0;
-      ppFileRecord[1] = 0;
+    D2MPQFileStrc** ppFileRecordNew = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + 0xc, sRTTI_EVENTREC_AllocTag, -2, nFlags | 8);
+    D2MPQFileStrc** ppFileRecord;
+    if (ppFileRecordNew) {
+      *ppFileRecordNew = 0;
+      ppFileRecordNew[1] = 0;
+      ppFileRecord = ppFileRecordNew;
     } else {
       ppFileRecord = 0;
     }
@@ -3540,10 +3546,12 @@ int __stdcall SFileOpenFileEx(D2ArchiveStrc * pArchive, char * szFileName, uint3
 }
 
 D2MPQFileStrc * * __thiscall SFILE_AllocFileRecord3(int * * ppArchive, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags) {
-    D2MPQFileStrc** pFileRecord = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + 0x44, sRTTI_REQUEST_AllocTag, -2, nFlags | 8);
-    if (pFileRecord) {
-      *pFileRecord = 0;
-      pFileRecord[1] = 0;
+    D2MPQFileStrc** pFileRecordNew = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + 0x44, sRTTI_REQUEST_AllocTag, -2, nFlags | 8);
+    D2MPQFileStrc** pFileRecord;
+    if (pFileRecordNew) {
+      *pFileRecordNew = 0;
+      pFileRecordNew[1] = 0;
+      pFileRecord = pFileRecordNew;
     } else {
       pFileRecord = 0;
     }
@@ -3583,10 +3591,12 @@ uint32_t __thiscall SFILE_RemoveAsyncRequestFromQueue(void * pListContext, int *
 }
 
 D2MPQFileStrc * * __thiscall SFILE_AllocFileRecord4(int * * ppArchive, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags) {
-    D2MPQFileStrc** pFileRecord = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + 0x50, sRTTI_AUDIOSTREAM_AllocTag, -2, nFlags | 8);
-    if (pFileRecord) {
-      *pFileRecord = 0;
-      pFileRecord[1] = 0;
+    D2MPQFileStrc** pFileRecordNew = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + 0x50, sRTTI_AUDIOSTREAM_AllocTag, -2, nFlags | 8);
+    D2MPQFileStrc** pFileRecord;
+    if (pFileRecordNew) {
+      *pFileRecordNew = 0;
+      pFileRecordNew[1] = 0;
+      pFileRecord = pFileRecordNew;
     } else {
       pFileRecord = 0;
     }

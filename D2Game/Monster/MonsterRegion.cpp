@@ -439,7 +439,7 @@ void __fastcall IncreaseMonsterSpawnCount(D2MonsterRegionStrc * * ppMonsterRegio
 }
 
 void __fastcall DecreaseMonsterSpawnCount(D2MonsterRegionStrc * * ppMonsterRegion, D2UnitStrc * pUnit, int32_t nPrevMode, int32_t nCurrMode) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 

@@ -295,7 +295,7 @@ void __stdcall PALSHIFT_InitPalShiftTable() {
 D2GamePalShiftRandTransformStrc * * __fastcall PALSHIFT_GetMonsterTransform(D2UnitStrc * pUnit) {
     BOOL nBloodFlag;
     D2MonStats2Txt* pMonStats2;
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return nullptr;
     }
 

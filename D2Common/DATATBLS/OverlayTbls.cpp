@@ -226,7 +226,7 @@ D2UnitStrc * __stdcall MONSTER_GetComponentOverlay(D2UnitStrc * pUnit, uint32_t 
 
     eD2LevelId eLevelId;
     int32_t nBaseClassId;
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return nullptr;
     }
     if (nComponentIdx >= 0x10) {

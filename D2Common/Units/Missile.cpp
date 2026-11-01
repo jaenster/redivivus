@@ -616,7 +616,7 @@ static int32_t CalculateMasteryBonus(D2UnitStrc * pUnit, eD2ElementalDamageTypeD
 void __stdcall SetDamageStats(D2UnitStrc * pUnit, D2UnitStrc * pMissile, D2MissileDamageDataStrc * pMissileDamageData, int32_t nLevel) {
     uint32_t dwMissileFlags;
     D2StatStrc awBonusLayers[128];
-    if (!(pMissile && pMissile->eUnitType == UNIT_MISSILE)) {
+    if ((pMissile ? pMissile->eUnitType : UNIT_COUNT) != UNIT_MISSILE) {
       return;
     }
     if (pMissile->pUnitData.pUnitDataMissile) {

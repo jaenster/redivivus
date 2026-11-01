@@ -282,7 +282,7 @@ void __stdcall PATH_GetScreenVelocity(D2UnitStrc * pUnit, int * pnParam1, int * 
 
 uint32_t PATH_CanMonsterPathInArea(D2UnitStrc * pUnit, uint16_t * pPathData) {
     uint16_t nMidY;
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_MONSTER) != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 1;
     }
 

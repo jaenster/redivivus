@@ -427,13 +427,15 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Destructor() {
 }
 
 template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::StringEntryNode* pNode = (::StringEntryNode*)Storm::SMem::SMemAlloc(nExtraBytes + 0x18, s___AUStringEntryNode___0074364c, -2, dwFlags | 8);
-    if (pNode) {
-      pNode->m_linktoslot.m_prevlink = 0;
-      pNode->m_linktoslot.m_next = 0;
-      pNode->m_linktofull.m_prevlink = 0;
-      pNode->m_linktofull.m_next = 0;
-      pNode->m_key.szString = 0;
+    ::StringEntryNode* pNodeNew = (::StringEntryNode*)Storm::SMem::SMemAlloc(nExtraBytes + 0x18, s___AUStringEntryNode___0074364c, -2, dwFlags | 8);
+    ::StringEntryNode* pNode;
+    if (pNodeNew) {
+      pNodeNew->m_linktoslot.m_prevlink = 0;
+      pNodeNew->m_linktoslot.m_next = 0;
+      pNodeNew->m_linktofull.m_prevlink = 0;
+      pNodeNew->m_linktofull.m_next = 0;
+      pNodeNew->m_key.szString = 0;
+      pNode = pNodeNew;
     } else {
       pNode = 0;
     }

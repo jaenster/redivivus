@@ -321,7 +321,7 @@ void __stdcall MONUNIQUE_DispatchModifierByIndex(D2UnitStrc * pUnit, D2UnitStrc 
 }; D2_STATIC_GUARD(gapMonUniqueModDispatchTable, "D2Client::UNIT::Monster::MONUNIQUE_DispatchModifierByIndex::gapMonUniqueModDispatchTable");
 
     uint32_t bIsChampion;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 
@@ -441,7 +441,7 @@ void __fastcall MONSTER_BuildUniqueName(D2UnitStrc * pUnit, uint16_t * wszText, 
     int32_t nWordWidth;
     int nTotalWideLen = 0;
     *wszText = L'\0';
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer)) {
       return;
     }
 
@@ -598,7 +598,7 @@ static void MONSTER_ResetToNeutralFacingTarget(D2UnitStrc * pUnit) {
 void __fastcall MONSTER_InitLightMap(D2UnitStrc * pUnit) {
     uint32_t uVar1;
     uint8_t cAlign;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 
@@ -830,7 +830,7 @@ uint32_t __fastcall MONSTER_CheckCatapultFiringPosition(D2UnitStrc * pUnit, D2Un
     int nDimY;
     int nDimX;
     uint32_t uStack_b;
-    if ((pUnit2 ? pUnit2->eUnitType : ~UNIT_MONSTER) != UNIT_MONSTER) {
+    if ((pUnit2 ? pUnit2->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -1294,7 +1294,7 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
 // Spawns a spread of missiles for Fetish monsters (BaseId 0x3f). Reads the difficulty-scaled count from MonStatsTxt TreasureClass, seeds an RNG from the unit GUID, and fires nMissileId missiles at alternating X/Y offsets (±5 tiles) around (nTargetX, nTargetY) via MakeMissile.
 void __stdcall MONSTER_SpawnFetishMissileSpread(D2UnitStrc * pUnit, eMissilesId nMissileId, int32_t nTargetX, int32_t nTargetY) {
     D2SeedStrc sSeed;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 
@@ -1338,7 +1338,7 @@ void __stdcall MONSTER_SpawnFetishMissileSpread(D2UnitStrc * pUnit, eMissilesId 
 // Fires a missile from a monster toward its confirmed target (or waypoint if no target). Resolves the missile ID via MONSTER_GetMissileForAnimEvent. Dispatches to MISSILE_CreateFromUnitWithOffset for panther pots, MONSTER_ExplodeOwnerMissile+SpawnRandomAttachedMissile for catapult charged balls, or MakeMissile for all others. Always calls MONSTER_SpawnFetishMissileSpread after.
 static void MONSTER_CastMissileAtTarget(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 
@@ -1591,7 +1591,7 @@ static void MONSTER_ProcessSkillAnimation(D2UnitStrc * pUnit) {
     eD2States eState;
     int nCurrentFrame;
     short int nSrvDoFunc;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 
@@ -1985,7 +1985,7 @@ static uint32_t MONSTER_IsModeMoveFlagSet(D2UnitStrc * pUnit, D2MonMsgAnimModeSt
 // Spawns death-effect missiles for a monster. Uber minions that are not frozen emit MISSILE_Suicidefireexplode + MISSILE_Suicidecorpseexplode. All other monsters emit a glacial spike missile (offset by MonStats2 Height into the missile table) plus MISSILE_Icebreaksmoke.
 static void MONSTER_SpawnDeathEffectMissiles(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 

@@ -1878,7 +1878,7 @@ uint32_t __stdcall SKILLS_IsCorpseValidForRevive(D2UnitStrc * pUnit) {
 }
 
 int __stdcall SKILLS_IsSelectableCorpse(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick)) {
       return 0;
     }
 
@@ -1915,7 +1915,7 @@ uint32_t __stdcall SKILL_CanReviveMonster(D2UnitStrc * pUnit) {
 }
 
 int __stdcall SKILLS_IsSelectableCorpse2(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick)) {
       return 0;
     }
 
@@ -1933,7 +1933,7 @@ int __stdcall SKILLS_IsSelectableCorpse2(D2UnitStrc * pUnit) {
 }
 
 int __stdcall SKILLS_IsSelectableCorpse3(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick)) {
       return 0;
     }
 
@@ -3658,7 +3658,7 @@ static uint32_t SKILLS_CheckItemChargesRemaining(D2UnitStrc * pUnit, D2SkillStrc
 }
 
 static uint32_t __stdcall SKILL_IsDelayExpired(D2SkillStrc * pSkill, D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_PLAYER) != UNIT_PLAYER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_PLAYER) {
       return 1;
     }
 

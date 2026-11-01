@@ -1324,10 +1324,12 @@ int * * __thiscall AllocateAndInsertMessageNode(int * * ppListHead, int32_t nIns
     pfnEHHandlerRoutine pfnSEHHandler = __GSHandlerCheck_EH_6c9e11;
     void* pPrevExceptionList = ExceptionList;
     ExceptionList = &pPrevExceptionList;
-    int** pNode = (int**)Storm::SMem::SMemAlloc(nPayloadSize + 0x24, s___AUMessage_LogManager___00708124, -2, dwAllocFlags | 8);
-    if (pNode) {
-      *pNode = 0;
-      pNode[1] = 0;
+    int** pNodeNew = (int**)Storm::SMem::SMemAlloc(nPayloadSize + 0x24, s___AUMessage_LogManager___00708124, -2, dwAllocFlags | 8);
+    int** pNode;
+    if (pNodeNew) {
+      *pNodeNew = 0;
+      pNodeNew[1] = 0;
+      pNode = pNodeNew;
     } else {
       pNode = 0;
     }
