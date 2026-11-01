@@ -5029,7 +5029,6 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
     eD2Skills eSkillId;
     D2UnitStrc** ppSwapSlotItem;
     eD2BodyLocDWORD* pSwapBodyLocIter;
-    D2WeaponSwapSlotStrc aSwapSlots[4];
     eD2Skills eRightSkillId;
     uint32_t nRightSkillOwner;
     eD2Skills eLeftSkillId;
@@ -5040,22 +5039,12 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
     int32_t nErrorLine;
     D2InventoryStrc* pInventory;
     uint16_t wSkillId;
-    aSwapSlots[0].eSourceBodyLoc = BODYLOC_R_ARM;
-    aSwapSlots[0].nPutItemParam = 4;
-    aSwapSlots[1].nPutItemParam = 4;
-    aSwapSlots[2].eTargetBodyLoc = BODYLOC_R_ARM;
-    aSwapSlots[0].pItem = 0;
-    aSwapSlots[0].eTargetBodyLoc = BODYLOC_SWAPPED_R_ARM;
-    aSwapSlots[1].eSourceBodyLoc = BODYLOC_L_ARM;
-    aSwapSlots[1].pItem = 0;
-    aSwapSlots[1].eTargetBodyLoc = BODYLOC_SWAPPED_L_ARM;
-    aSwapSlots[2].eSourceBodyLoc = BODYLOC_SWAPPED_R_ARM;
-    aSwapSlots[2].pItem = 0;
-    aSwapSlots[2].nPutItemParam = 3;
-    aSwapSlots[3].eSourceBodyLoc = BODYLOC_SWAPPED_L_ARM;
-    aSwapSlots[3].pItem = 0;
-    aSwapSlots[3].eTargetBodyLoc = BODYLOC_L_ARM;
-    aSwapSlots[3].nPutItemParam = 3;
+    D2WeaponSwapSlotStrc aSwapSlots[4] = {
+      {BODYLOC_R_ARM, 0, BODYLOC_SWAPPED_R_ARM, 4},
+      {BODYLOC_L_ARM, 0, BODYLOC_SWAPPED_L_ARM, 4},
+      {BODYLOC_SWAPPED_R_ARM, 0, BODYLOC_R_ARM, 3},
+      {BODYLOC_SWAPPED_L_ARM, 0, BODYLOC_L_ARM, 3}
+    };
     ::SGAMEDATA* pGameSaved;
     pGameSaved = pGame;
     if (!pGame) {

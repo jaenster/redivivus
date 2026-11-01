@@ -80,718 +80,151 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
     int nMonCount;
     short int* pMonEntry;
     int iLevelIdx;
-    D2BinFieldInputStrc levels[142];
     size_t nWideCharBufLen;
-    levels[0].szName = "Id";
-    levels[0].eType = FIELDTYPE_CHAR;
-    levels[0].nSize = 0;
-    levels[0].nOffset = 0;
-    levels[0].fpLinker = 0;
-    levels[1].szName = "Pal";
-    levels[1].eType = FIELDTYPE_CHAR;
-    levels[1].nSize = 0;
-    levels[1].nOffset = 2;
-    levels[1].fpLinker = 0;
-    levels[2].szName = "Act";
-    levels[2].eType = FIELDTYPE_CHAR;
-    levels[2].nSize = 0;
-    levels[2].nOffset = 3;
-    levels[2].fpLinker = 0;
-    levels[3].szName = "Teleport";
-    levels[3].eType = FIELDTYPE_CHAR;
-    levels[3].nSize = 0;
-    levels[3].nOffset = 4;
-    levels[3].fpLinker = 0;
-    levels[4].szName = "Rain";
-    levels[4].eType = FIELDTYPE_CHAR;
-    levels[4].nSize = 0;
-    levels[4].nOffset = 5;
-    levels[4].fpLinker = 0;
-    levels[5].szName = "Mud";
-    levels[5].eType = FIELDTYPE_CHAR;
-    levels[5].nSize = 0;
-    levels[5].nOffset = 6;
-    levels[5].fpLinker = 0;
-    levels[6].szName = "NoPer";
-    levels[6].eType = FIELDTYPE_CHAR;
-    levels[6].nSize = 0;
-    levels[6].nOffset = 7;
-    levels[6].fpLinker = 0;
-    levels[7].szName = "IsInside";
-    levels[7].eType = FIELDTYPE_CHAR;
-    levels[7].nSize = 0;
-    levels[7].nOffset = 8;
-    levels[7].fpLinker = 0;
-    levels[8].szName = "DrawEdges";
-    levels[8].eType = FIELDTYPE_CHAR;
-    levels[8].nSize = 0;
-    levels[8].nOffset = 9;
-    levels[8].fpLinker = 0;
-    levels[9].szName = "WarpDist";
-    levels[9].eType = FIELDTYPE_INT;
-    levels[9].nSize = 0;
-    levels[9].nOffset = 0xc;
-    levels[9].fpLinker = 0;
-    levels[10].szName = "MonLvl1";
-    levels[10].eType = FIELDTYPE_SHORT;
-    levels[10].nSize = 0;
-    levels[10].nOffset = 0x10;
-    levels[10].fpLinker = 0;
-    levels[0xb].szName = "MonLvl2";
-    levels[0xb].eType = FIELDTYPE_SHORT;
-    levels[0xb].nSize = 0;
-    levels[0xb].nOffset = 0x12;
-    levels[0xb].fpLinker = 0;
-    levels[0xc].szName = "MonLvl3";
-    levels[0xc].eType = FIELDTYPE_SHORT;
-    levels[0xc].nSize = 0;
-    levels[0xc].nOffset = 0x14;
-    levels[0xc].fpLinker = 0;
-    levels[0xd].szName = "MonLvl1Ex";
-    levels[0xd].eType = FIELDTYPE_SHORT;
-    levels[0xd].nSize = 0;
-    levels[0xd].nOffset = 0x16;
-    levels[0xd].fpLinker = 0;
-    levels[0xe].szName = "MonLvl2Ex";
-    levels[0xe].eType = FIELDTYPE_SHORT;
-    levels[0xe].nSize = 0;
-    levels[0xe].nOffset = 0x18;
-    levels[0xe].fpLinker = 0;
-    levels[0xf].szName = "MonLvl3Ex";
-    levels[0xf].eType = FIELDTYPE_SHORT;
-    levels[0xf].nSize = 0;
-    levels[0xf].nOffset = 0x1a;
-    levels[0xf].fpLinker = 0;
-    levels[0x10].szName = "MonDen";
-    levels[0x10].eType = FIELDTYPE_INT;
-    levels[0x10].nSize = 0;
-    levels[0x10].nOffset = 0x1c;
-    levels[0x10].fpLinker = 0;
-    levels[0x11].szName = "MonDen(N)";
-    levels[0x11].eType = FIELDTYPE_INT;
-    levels[0x11].nSize = 0;
-    levels[0x11].nOffset = 0x20;
-    levels[0x11].fpLinker = 0;
-    levels[0x12].szName = "MonDen(H)";
-    levels[0x12].eType = FIELDTYPE_INT;
-    levels[0x12].nSize = 0;
-    levels[0x12].nOffset = 0x24;
-    levels[0x12].fpLinker = 0;
-    levels[0x13].szName = "MonUMin";
-    levels[0x13].eType = FIELDTYPE_CHAR;
-    levels[0x13].nSize = 0;
-    levels[0x13].nOffset = 0x28;
-    levels[0x13].fpLinker = 0;
-    levels[0x14].szName = "MonUMax";
-    levels[0x14].eType = FIELDTYPE_CHAR;
-    levels[0x14].nSize = 0;
-    levels[0x14].nOffset = 0x2b;
-    levels[0x14].fpLinker = 0;
-    levels[0x15].szName = "MonUMin(N)";
-    levels[0x15].eType = FIELDTYPE_CHAR;
-    levels[0x15].nSize = 0;
-    levels[0x15].nOffset = 0x29;
-    levels[0x15].fpLinker = 0;
-    levels[0x16].szName = "MonUMax(N)";
-    levels[0x16].eType = FIELDTYPE_CHAR;
-    levels[0x16].nSize = 0;
-    levels[0x16].nOffset = 0x2c;
-    levels[0x16].fpLinker = 0;
-    levels[0x17].szName = "MonUMin(H)";
-    levels[0x17].eType = FIELDTYPE_CHAR;
-    levels[0x17].nSize = 0;
-    levels[0x17].nOffset = 0x2a;
-    levels[0x17].fpLinker = 0;
-    levels[0x18].szName = "MonUMax(H)";
-    levels[0x18].eType = FIELDTYPE_CHAR;
-    levels[0x18].nSize = 0;
-    levels[0x18].nOffset = 0x2d;
-    levels[0x18].fpLinker = 0;
-    levels[0x19].szName = "MonWndr";
-    levels[0x19].eType = FIELDTYPE_CHAR;
-    levels[0x19].nSize = 0;
-    levels[0x19].nOffset = 0x2e;
-    levels[0x19].fpLinker = 0;
-    levels[0x1a].szName = "MonSpcWalk";
-    levels[0x1a].eType = FIELDTYPE_CHAR;
-    levels[0x1a].nSize = 0;
-    levels[0x1a].nOffset = 0x2f;
-    levels[0x1a].fpLinker = 0;
-    levels[0x1b].szName = "ObjGrp0";
-    levels[0x1b].eType = FIELDTYPE_CHAR;
-    levels[0x1b].nSize = 0;
-    levels[0x1b].nOffset = 0xe5;
-    levels[0x1b].fpLinker = 0;
-    levels[0x1c].szName = "ObjGrp1";
-    levels[0x1c].eType = FIELDTYPE_CHAR;
-    levels[0x1c].nSize = 0;
-    levels[0x1c].nOffset = 0xe6;
-    levels[0x1c].fpLinker = 0;
-    levels[0x1d].szName = "ObjGrp2";
-    levels[0x1d].eType = FIELDTYPE_CHAR;
-    levels[0x1d].nSize = 0;
-    levels[0x1d].nOffset = 0xe7;
-    levels[0x1d].fpLinker = 0;
-    levels[0x1e].szName = "ObjGrp3";
-    levels[0x1e].eType = FIELDTYPE_CHAR;
-    levels[0x1e].nSize = 0;
-    levels[0x1e].nOffset = 0xe8;
-    levels[0x1e].fpLinker = 0;
-    levels[0x1f].szName = "ObjGrp4";
-    levels[0x1f].eType = FIELDTYPE_CHAR;
-    levels[0x1f].nSize = 0;
-    levels[0x1f].nOffset = 0xe9;
-    levels[0x1f].fpLinker = 0;
-    levels[0x20].szName = "ObjGrp5";
-    levels[0x20].eType = FIELDTYPE_CHAR;
-    levels[0x20].nSize = 0;
-    levels[0x20].nOffset = 0xea;
-    levels[0x20].fpLinker = 0;
-    levels[0x21].szName = "ObjGrp6";
-    levels[0x21].eType = FIELDTYPE_CHAR;
-    levels[0x21].nSize = 0;
-    levels[0x21].nOffset = 0xeb;
-    levels[0x21].fpLinker = 0;
-    levels[0x22].szName = "ObjGrp7";
-    levels[0x22].eType = FIELDTYPE_CHAR;
-    levels[0x22].nSize = 0;
-    levels[0x22].nOffset = 0xec;
-    levels[0x22].fpLinker = 0;
-    levels[0x23].szName = "ObjPrb0";
-    levels[0x23].eType = FIELDTYPE_CHAR;
-    levels[0x23].nSize = 0;
-    levels[0x23].nOffset = 0xed;
-    levels[0x23].fpLinker = 0;
-    levels[0x24].szName = "ObjPrb1";
-    levels[0x24].eType = FIELDTYPE_CHAR;
-    levels[0x24].nSize = 0;
-    levels[0x24].nOffset = 0xee;
-    levels[0x24].fpLinker = 0;
-    levels[0x25].szName = "ObjPrb2";
-    levels[0x25].eType = FIELDTYPE_CHAR;
-    levels[0x25].nSize = 0;
-    levels[0x25].nOffset = 0xef;
-    levels[0x25].fpLinker = 0;
-    levels[0x26].szName = "ObjPrb3";
-    levels[0x26].eType = FIELDTYPE_CHAR;
-    levels[0x26].nSize = 0;
-    levels[0x26].nOffset = 0xf0;
-    levels[0x26].fpLinker = 0;
-    levels[0x27].szName = "ObjPrb4";
-    levels[0x27].eType = FIELDTYPE_CHAR;
-    levels[0x27].nSize = 0;
-    levels[0x27].nOffset = 0xf1;
-    levels[0x27].fpLinker = 0;
-    levels[0x28].szName = "ObjPrb5";
-    levels[0x28].eType = FIELDTYPE_CHAR;
-    levels[0x28].nSize = 0;
-    levels[0x28].nOffset = 0xf2;
-    levels[0x28].fpLinker = 0;
-    levels[0x29].szName = "ObjPrb6";
-    levels[0x29].eType = FIELDTYPE_CHAR;
-    levels[0x29].nSize = 0;
-    levels[0x29].nOffset = 0xf3;
-    levels[0x29].fpLinker = 0;
-    levels[0x2a].szName = "ObjPrb7";
-    levels[0x2a].eType = FIELDTYPE_CHAR;
-    levels[0x2a].nSize = 0;
-    levels[0x2a].nOffset = 0xf4;
-    levels[0x2a].fpLinker = 0;
-    levels[0x2b].szName = "Quest";
-    levels[0x2b].eType = FIELDTYPE_CHAR;
-    levels[0x2b].nSize = 0;
-    levels[0x2b].nOffset = 0x30;
-    levels[0x2b].fpLinker = 0;
-    levels[0x2c].szName = "NumMon";
-    levels[0x2c].eType = FIELDTYPE_CHAR;
-    levels[0x2c].nSize = 0;
-    levels[0x2c].nOffset = 0x32;
-    levels[0x2c].fpLinker = 0;
-    levels[0x2d].szName = "mon1";
-    levels[0x2d].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x2d].nSize = 0;
-    levels[0x2d].nOffset = 0x36;
-    levels[0x2d].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x2e].szName = "mon2";
-    levels[0x2e].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x2e].nSize = 0;
-    levels[0x2e].nOffset = 0x38;
-    levels[0x2e].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x2f].szName = "mon3";
-    levels[0x2f].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x2f].nSize = 0;
-    levels[0x2f].nOffset = 0x3a;
-    levels[0x2f].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x30].szName = "mon4";
-    levels[0x30].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x30].nSize = 0;
-    levels[0x30].nOffset = 0x3c;
-    levels[0x30].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x31].szName = "mon5";
-    levels[0x31].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x31].nSize = 0;
-    levels[0x31].nOffset = 0x3e;
-    levels[0x31].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x32].szName = "mon6";
-    levels[0x32].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x32].nSize = 0;
-    levels[0x32].nOffset = 0x40;
-    levels[0x32].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x33].szName = "mon7";
-    levels[0x33].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x33].nSize = 0;
-    levels[0x33].nOffset = 0x42;
-    levels[0x33].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x34].szName = "mon8";
-    levels[0x34].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x34].nSize = 0;
-    levels[0x34].nOffset = 0x44;
-    levels[0x34].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x35].szName = "mon9";
-    levels[0x35].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x35].nSize = 0;
-    levels[0x35].nOffset = 0x46;
-    levels[0x35].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x36].szName = "mon10";
-    levels[0x36].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x36].nSize = 0;
-    levels[0x36].nOffset = 0x48;
-    levels[0x36].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x37].szName = "mon11";
-    levels[0x37].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x37].nSize = 0;
-    levels[0x37].nOffset = 0x4a;
-    levels[0x37].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x38].szName = "mon12";
-    levels[0x38].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x38].nSize = 0;
-    levels[0x38].nOffset = 0x4c;
-    levels[0x38].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x39].szName = "mon13";
-    levels[0x39].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x39].nSize = 0;
-    levels[0x39].nOffset = 0x4e;
-    levels[0x39].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x3a].szName = "mon14";
-    levels[0x3a].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x3a].nSize = 0;
-    levels[0x3a].nOffset = 0x50;
-    levels[0x3a].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x3b].szName = "mon15";
-    levels[0x3b].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x3b].nSize = 0;
-    levels[0x3b].nOffset = 0x52;
-    levels[0x3b].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x3c].szName = "mon16";
-    levels[0x3c].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x3c].nSize = 0;
-    levels[0x3c].nOffset = 0x54;
-    levels[0x3c].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x3d].szName = "mon17";
-    levels[0x3d].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x3d].nSize = 0;
-    levels[0x3d].nOffset = 0x56;
-    levels[0x3d].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x3e].szName = "mon18";
-    levels[0x3e].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x3e].nSize = 0;
-    levels[0x3e].nOffset = 0x58;
-    levels[0x3e].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x3f].szName = "mon19";
-    levels[0x3f].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x3f].nSize = 0;
-    levels[0x3f].nOffset = 0x5a;
-    levels[0x3f].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x40].szName = "mon20";
-    levels[0x40].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x40].nSize = 0;
-    levels[0x40].nOffset = 0x5c;
-    levels[0x40].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x41].szName = "mon21";
-    levels[0x41].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x41].nSize = 0;
-    levels[0x41].nOffset = 0x5e;
-    levels[0x41].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x42].szName = "mon22";
-    levels[0x42].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x42].nSize = 0;
-    levels[0x42].nOffset = 0x60;
-    levels[0x42].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x43].szName = "mon23";
-    levels[0x43].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x43].nSize = 0;
-    levels[0x43].nOffset = 0x62;
-    levels[0x43].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x44].szName = "mon24";
-    levels[0x44].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x44].nSize = 0;
-    levels[0x44].nOffset = 100;
-    levels[0x44].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x45].szName = "mon25";
-    levels[0x45].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x45].nSize = 0;
-    levels[0x45].nOffset = 0x66;
-    levels[0x45].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x46].szName = "rangedspawn";
-    levels[0x46].eType = FIELDTYPE_CHAR;
-    levels[0x46].nSize = 0;
-    levels[0x46].nOffset = 0x31;
-    levels[0x46].fpLinker = 0;
-    levels[0x47].szName = "nmon1";
-    levels[0x47].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x47].nSize = 0;
-    levels[0x47].nOffset = 0x68;
-    levels[0x47].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x48].szName = "nmon2";
-    levels[0x48].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x48].nSize = 0;
-    levels[0x48].nOffset = 0x6a;
-    levels[0x48].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x49].szName = "nmon3";
-    levels[0x49].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x49].nSize = 0;
-    levels[0x49].nOffset = 0x6c;
-    levels[0x49].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x4a].szName = "nmon4";
-    levels[0x4a].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x4a].nSize = 0;
-    levels[0x4a].nOffset = 0x6e;
-    levels[0x4a].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x4b].szName = "nmon5";
-    levels[0x4b].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x4b].nSize = 0;
-    levels[0x4b].nOffset = 0x70;
-    levels[0x4b].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x4c].szName = "nmon6";
-    levels[0x4c].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x4c].nSize = 0;
-    levels[0x4c].nOffset = 0x72;
-    levels[0x4c].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x4d].szName = "nmon7";
-    levels[0x4d].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x4d].nSize = 0;
-    levels[0x4d].nOffset = 0x74;
-    levels[0x4d].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x4e].szName = "nmon8";
-    levels[0x4e].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x4e].nSize = 0;
-    levels[0x4e].nOffset = 0x76;
-    levels[0x4e].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x4f].szName = "nmon9";
-    levels[0x4f].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x4f].nSize = 0;
-    levels[0x4f].nOffset = 0x78;
-    levels[0x4f].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x50].szName = "nmon10";
-    levels[0x50].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x50].nSize = 0;
-    levels[0x50].nOffset = 0x7a;
-    levels[0x50].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x51].szName = "nmon11";
-    levels[0x51].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x51].nSize = 0;
-    levels[0x51].nOffset = 0x7c;
-    levels[0x51].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x52].szName = "nmon12";
-    levels[0x52].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x52].nSize = 0;
-    levels[0x52].nOffset = 0x7e;
-    levels[0x52].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x53].szName = "nmon13";
-    levels[0x53].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x53].nSize = 0;
-    levels[0x53].nOffset = 0x80;
-    levels[0x53].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x54].szName = "nmon14";
-    levels[0x54].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x54].nSize = 0;
-    levels[0x54].nOffset = 0x82;
-    levels[0x54].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x55].szName = "nmon15";
-    levels[0x55].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x55].nSize = 0;
-    levels[0x55].nOffset = 0x84;
-    levels[0x55].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x56].szName = "nmon16";
-    levels[0x56].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x56].nSize = 0;
-    levels[0x56].nOffset = 0x86;
-    levels[0x56].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x57].szName = "nmon17";
-    levels[0x57].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x57].nSize = 0;
-    levels[0x57].nOffset = 0x88;
-    levels[0x57].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x58].szName = "nmon18";
-    levels[0x58].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x58].nSize = 0;
-    levels[0x58].nOffset = 0x8a;
-    levels[0x58].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x59].szName = "nmon19";
-    levels[0x59].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x59].nSize = 0;
-    levels[0x59].nOffset = 0x8c;
-    levels[0x59].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x5a].szName = "nmon20";
-    levels[0x5a].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x5a].nSize = 0;
-    levels[0x5a].nOffset = 0x8e;
-    levels[0x5a].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x5b].szName = "nmon21";
-    levels[0x5b].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x5b].nSize = 0;
-    levels[0x5b].nOffset = 0x90;
-    levels[0x5b].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x5c].szName = "nmon22";
-    levels[0x5c].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x5c].nSize = 0;
-    levels[0x5c].nOffset = 0x92;
-    levels[0x5c].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x5d].szName = "nmon23";
-    levels[0x5d].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x5d].nSize = 0;
-    levels[0x5d].nOffset = 0x94;
-    levels[0x5d].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x5e].szName = "nmon24";
-    levels[0x5e].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x5e].nSize = 0;
-    levels[0x5e].nOffset = 0x96;
-    levels[0x5e].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x5f].szName = "nmon25";
-    levels[0x5f].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x5f].nSize = 0;
-    levels[0x5f].nOffset = 0x98;
-    levels[0x5f].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x60].szName = "umon1";
-    levels[0x60].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x60].nSize = 0;
-    levels[0x60].nOffset = 0x9a;
-    levels[0x60].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x61].szName = "umon2";
-    levels[0x61].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x61].nSize = 0;
-    levels[0x61].nOffset = 0x9c;
-    levels[0x61].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x62].szName = "umon3";
-    levels[0x62].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x62].nSize = 0;
-    levels[0x62].nOffset = 0x9e;
-    levels[0x62].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[99].szName = "umon4";
-    levels[99].eType = FIELDTYPE_NAME_SHORT;
-    levels[99].nSize = 0;
-    levels[99].nOffset = 0xa0;
-    levels[99].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[100].szName = "umon5";
-    levels[100].eType = FIELDTYPE_NAME_SHORT;
-    levels[100].nSize = 0;
-    levels[100].nOffset = 0xa2;
-    levels[100].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x65].szName = "umon6";
-    levels[0x65].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x65].nSize = 0;
-    levels[0x65].nOffset = 0xa4;
-    levels[0x65].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x66].szName = "umon7";
-    levels[0x66].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x66].nSize = 0;
-    levels[0x66].nOffset = 0xa6;
-    levels[0x66].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x67].szName = "umon8";
-    levels[0x67].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x67].nSize = 0;
-    levels[0x67].nOffset = 0xa8;
-    levels[0x67].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x68].szName = "umon9";
-    levels[0x68].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x68].nSize = 0;
-    levels[0x68].nOffset = 0xaa;
-    levels[0x68].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x69].szName = "umon10";
-    levels[0x69].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x69].nSize = 0;
-    levels[0x69].nOffset = 0xac;
-    levels[0x69].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x6a].szName = "umon11";
-    levels[0x6a].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x6a].nSize = 0;
-    levels[0x6a].nOffset = 0xae;
-    levels[0x6a].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x6b].szName = "umon12";
-    levels[0x6b].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x6b].nSize = 0;
-    levels[0x6b].nOffset = 0xb0;
-    levels[0x6b].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x6c].szName = "umon13";
-    levels[0x6c].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x6c].nSize = 0;
-    levels[0x6c].nOffset = 0xb2;
-    levels[0x6c].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x6d].szName = "umon14";
-    levels[0x6d].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x6d].nSize = 0;
-    levels[0x6d].nOffset = 0xb4;
-    levels[0x6d].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x6e].szName = "umon15";
-    levels[0x6e].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x6e].nSize = 0;
-    levels[0x6e].nOffset = 0xb6;
-    levels[0x6e].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x6f].szName = "umon16";
-    levels[0x6f].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x6f].nSize = 0;
-    levels[0x6f].nOffset = 0xb8;
-    levels[0x6f].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x70].szName = "umon17";
-    levels[0x70].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x70].nSize = 0;
-    levels[0x70].nOffset = 0xba;
-    levels[0x70].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x71].szName = "umon18";
-    levels[0x71].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x71].nSize = 0;
-    levels[0x71].nOffset = 0xbc;
-    levels[0x71].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x72].szName = "umon19";
-    levels[0x72].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x72].nSize = 0;
-    levels[0x72].nOffset = 0xbe;
-    levels[0x72].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x73].szName = "umon20";
-    levels[0x73].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x73].nSize = 0;
-    levels[0x73].nOffset = 0xc0;
-    levels[0x73].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x74].szName = "umon21";
-    levels[0x74].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x74].nSize = 0;
-    levels[0x74].nOffset = 0xc2;
-    levels[0x74].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x75].szName = "umon22";
-    levels[0x75].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x75].nSize = 0;
-    levels[0x75].nOffset = 0xc4;
-    levels[0x75].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x76].szName = "umon23";
-    levels[0x76].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x76].nSize = 0;
-    levels[0x76].nOffset = 0xc6;
-    levels[0x76].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x77].szName = "umon24";
-    levels[0x77].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x77].nSize = 0;
-    levels[0x77].nOffset = 200;
-    levels[0x77].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x78].szName = "umon25";
-    levels[0x78].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x78].nSize = 0;
-    levels[0x78].nOffset = 0xca;
-    levels[0x78].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x79].szName = "cmon1";
-    levels[0x79].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x79].nSize = 0;
-    levels[0x79].nOffset = 0xcc;
-    levels[0x79].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x7a].szName = "cmon2";
-    levels[0x7a].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x7a].nSize = 0;
-    levels[0x7a].nOffset = 0xce;
-    levels[0x7a].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x7b].szName = "cmon3";
-    levels[0x7b].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x7b].nSize = 0;
-    levels[0x7b].nOffset = 0xd0;
-    levels[0x7b].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x7c].szName = "cmon4";
-    levels[0x7c].eType = FIELDTYPE_NAME_SHORT;
-    levels[0x7c].nSize = 0;
-    levels[0x7c].nOffset = 0xd2;
-    levels[0x7c].fpLinker = &sgtDataTable.pTxtMonStatsLink;
-    levels[0x7d].szName = "cpct1";
-    levels[0x7d].eType = FIELDTYPE_SHORT;
-    levels[0x7d].nSize = 0;
-    levels[0x7d].nOffset = 0xd4;
-    levels[0x7d].fpLinker = 0;
-    levels[0x7e].szName = "cpct2";
-    levels[0x7e].eType = FIELDTYPE_SHORT;
-    levels[0x7e].nSize = 0;
-    levels[0x7e].nOffset = 0xd6;
-    levels[0x7e].fpLinker = 0;
-    levels[0x7f].szName = "cpct3";
-    levels[0x7f].eType = FIELDTYPE_SHORT;
-    levels[0x7f].nSize = 0;
-    levels[0x81].nOffset = 0xdc;
-    levels[0x82].nOffset = 0xdc;
-    levels[0x83].nOffset = 0xdc;
-    levels[0x84].nOffset = 0xdc;
-    levels[0x80].eType = FIELDTYPE_SHORT;
-    levels[0x81].eType = FIELDTYPE_SHORT;
-    levels[0x82].eType = FIELDTYPE_SHORT;
-    levels[0x83].eType = FIELDTYPE_SHORT;
-    levels[0x84].eType = FIELDTYPE_SHORT;
-    levels[0x8a].nSize = 0x27;
-    levels[0x8b].nSize = 0x27;
-    levels[0x8c].nSize = 0x27;
-    levels[0x8a].eType = FIELDTYPE_ASCII;
-    levels[0x8b].eType = FIELDTYPE_ASCII;
-    levels[0x8c].eType = FIELDTYPE_ASCII;
-    levels[0x7f].nOffset = 0xd8;
-    levels[0x7f].fpLinker = 0;
-    levels[0x80].szName = "cpct4";
-    levels[0x80].nSize = 0;
-    levels[0x80].nOffset = 0xda;
-    levels[0x80].fpLinker = 0;
-    levels[0x81].szName = "camt1";
-    levels[0x81].nSize = 0;
-    levels[0x81].fpLinker = 0;
-    levels[0x82].szName = "camt2";
-    levels[0x82].nSize = 0;
-    levels[0x82].fpLinker = 0;
-    levels[0x83].szName = "camt3";
-    levels[0x83].nSize = 0;
-    levels[0x83].fpLinker = 0;
-    levels[0x84].szName = "camt4";
-    levels[0x84].nSize = 0;
-    levels[0x84].fpLinker = 0;
-    levels[0x85].szName = "Themes";
-    levels[0x85].eType = FIELDTYPE_INT;
-    levels[0x85].nSize = 0;
-    levels[0x85].nOffset = 0x210;
-    levels[0x85].fpLinker = 0;
-    levels[0x86].szName = "FloorFilter";
-    levels[0x86].eType = FIELDTYPE_INT;
-    levels[0x86].nSize = 0;
-    levels[0x86].nOffset = 0x214;
-    levels[0x86].fpLinker = 0;
-    levels[0x87].szName = "BlankScreen";
-    levels[0x87].eType = FIELDTYPE_INT;
-    levels[0x87].nSize = 0;
-    levels[0x87].nOffset = 0x218;
-    levels[0x87].fpLinker = 0;
-    levels[0x88].szName = "SoundEnv";
-    levels[0x88].eType = FIELDTYPE_CHAR;
-    levels[0x88].nSize = 0;
-    levels[0x88].nOffset = 0x21c;
-    levels[0x88].fpLinker = 0;
-    levels[0x89].szName = "Waypoint";
-    levels[0x89].eType = FIELDTYPE_CHAR;
-    levels[0x89].nSize = 0;
-    levels[0x89].nOffset = 0xe4;
-    levels[0x89].fpLinker = 0;
-    levels[0x8a].szName = "LevelName";
-    levels[0x8a].nOffset = 0xf5;
-    levels[0x8a].fpLinker = 0;
-    levels[0x8b].szName = "LevelWarp";
-    levels[0x8b].nOffset = 0x11d;
-    levels[0x8b].fpLinker = 0;
-    levels[0x8c].szName = "EntryFile";
-    levels[0x8c].nOffset = 0x145;
-    levels[0x8c].fpLinker = 0;
-    levels[0x8d].szName = "end";
-    levels[0x8d].eType = FIELDTYPE_END;
-    levels[0x8d].nSize = 0;
-    levels[0x8d].nOffset = 0;
-    levels[0x8d].fpLinker = 0;
+    D2BinFieldInputStrc levels[142] = {
+      {"Id", FIELDTYPE_CHAR, 0, 0, 0},
+      {"Pal", FIELDTYPE_CHAR, 0, 2, 0},
+      {"Act", FIELDTYPE_CHAR, 0, 3, 0},
+      {"Teleport", FIELDTYPE_CHAR, 0, 4, 0},
+      {"Rain", FIELDTYPE_CHAR, 0, 5, 0},
+      {"Mud", FIELDTYPE_CHAR, 0, 6, 0},
+      {"NoPer", FIELDTYPE_CHAR, 0, 7, 0},
+      {"IsInside", FIELDTYPE_CHAR, 0, 8, 0},
+      {"DrawEdges", FIELDTYPE_CHAR, 0, 9, 0},
+      {"WarpDist", FIELDTYPE_INT, 0, 0xc, 0},
+      {"MonLvl1", FIELDTYPE_SHORT, 0, 0x10, 0},
+      {"MonLvl2", FIELDTYPE_SHORT, 0, 0x12, 0},
+      {"MonLvl3", FIELDTYPE_SHORT, 0, 0x14, 0},
+      {"MonLvl1Ex", FIELDTYPE_SHORT, 0, 0x16, 0},
+      {"MonLvl2Ex", FIELDTYPE_SHORT, 0, 0x18, 0},
+      {"MonLvl3Ex", FIELDTYPE_SHORT, 0, 0x1a, 0},
+      {"MonDen", FIELDTYPE_INT, 0, 0x1c, 0},
+      {"MonDen(N)", FIELDTYPE_INT, 0, 0x20, 0},
+      {"MonDen(H)", FIELDTYPE_INT, 0, 0x24, 0},
+      {"MonUMin", FIELDTYPE_CHAR, 0, 0x28, 0},
+      {"MonUMax", FIELDTYPE_CHAR, 0, 0x2b, 0},
+      {"MonUMin(N)", FIELDTYPE_CHAR, 0, 0x29, 0},
+      {"MonUMax(N)", FIELDTYPE_CHAR, 0, 0x2c, 0},
+      {"MonUMin(H)", FIELDTYPE_CHAR, 0, 0x2a, 0},
+      {"MonUMax(H)", FIELDTYPE_CHAR, 0, 0x2d, 0},
+      {"MonWndr", FIELDTYPE_CHAR, 0, 0x2e, 0},
+      {"MonSpcWalk", FIELDTYPE_CHAR, 0, 0x2f, 0},
+      {"ObjGrp0", FIELDTYPE_CHAR, 0, 0xe5, 0},
+      {"ObjGrp1", FIELDTYPE_CHAR, 0, 0xe6, 0},
+      {"ObjGrp2", FIELDTYPE_CHAR, 0, 0xe7, 0},
+      {"ObjGrp3", FIELDTYPE_CHAR, 0, 0xe8, 0},
+      {"ObjGrp4", FIELDTYPE_CHAR, 0, 0xe9, 0},
+      {"ObjGrp5", FIELDTYPE_CHAR, 0, 0xea, 0},
+      {"ObjGrp6", FIELDTYPE_CHAR, 0, 0xeb, 0},
+      {"ObjGrp7", FIELDTYPE_CHAR, 0, 0xec, 0},
+      {"ObjPrb0", FIELDTYPE_CHAR, 0, 0xed, 0},
+      {"ObjPrb1", FIELDTYPE_CHAR, 0, 0xee, 0},
+      {"ObjPrb2", FIELDTYPE_CHAR, 0, 0xef, 0},
+      {"ObjPrb3", FIELDTYPE_CHAR, 0, 0xf0, 0},
+      {"ObjPrb4", FIELDTYPE_CHAR, 0, 0xf1, 0},
+      {"ObjPrb5", FIELDTYPE_CHAR, 0, 0xf2, 0},
+      {"ObjPrb6", FIELDTYPE_CHAR, 0, 0xf3, 0},
+      {"ObjPrb7", FIELDTYPE_CHAR, 0, 0xf4, 0},
+      {"Quest", FIELDTYPE_CHAR, 0, 0x30, 0},
+      {"NumMon", FIELDTYPE_CHAR, 0, 0x32, 0},
+      {"mon1", FIELDTYPE_NAME_SHORT, 0, 0x36, &sgtDataTable.pTxtMonStatsLink},
+      {"mon2", FIELDTYPE_NAME_SHORT, 0, 0x38, &sgtDataTable.pTxtMonStatsLink},
+      {"mon3", FIELDTYPE_NAME_SHORT, 0, 0x3a, &sgtDataTable.pTxtMonStatsLink},
+      {"mon4", FIELDTYPE_NAME_SHORT, 0, 0x3c, &sgtDataTable.pTxtMonStatsLink},
+      {"mon5", FIELDTYPE_NAME_SHORT, 0, 0x3e, &sgtDataTable.pTxtMonStatsLink},
+      {"mon6", FIELDTYPE_NAME_SHORT, 0, 0x40, &sgtDataTable.pTxtMonStatsLink},
+      {"mon7", FIELDTYPE_NAME_SHORT, 0, 0x42, &sgtDataTable.pTxtMonStatsLink},
+      {"mon8", FIELDTYPE_NAME_SHORT, 0, 0x44, &sgtDataTable.pTxtMonStatsLink},
+      {"mon9", FIELDTYPE_NAME_SHORT, 0, 0x46, &sgtDataTable.pTxtMonStatsLink},
+      {"mon10", FIELDTYPE_NAME_SHORT, 0, 0x48, &sgtDataTable.pTxtMonStatsLink},
+      {"mon11", FIELDTYPE_NAME_SHORT, 0, 0x4a, &sgtDataTable.pTxtMonStatsLink},
+      {"mon12", FIELDTYPE_NAME_SHORT, 0, 0x4c, &sgtDataTable.pTxtMonStatsLink},
+      {"mon13", FIELDTYPE_NAME_SHORT, 0, 0x4e, &sgtDataTable.pTxtMonStatsLink},
+      {"mon14", FIELDTYPE_NAME_SHORT, 0, 0x50, &sgtDataTable.pTxtMonStatsLink},
+      {"mon15", FIELDTYPE_NAME_SHORT, 0, 0x52, &sgtDataTable.pTxtMonStatsLink},
+      {"mon16", FIELDTYPE_NAME_SHORT, 0, 0x54, &sgtDataTable.pTxtMonStatsLink},
+      {"mon17", FIELDTYPE_NAME_SHORT, 0, 0x56, &sgtDataTable.pTxtMonStatsLink},
+      {"mon18", FIELDTYPE_NAME_SHORT, 0, 0x58, &sgtDataTable.pTxtMonStatsLink},
+      {"mon19", FIELDTYPE_NAME_SHORT, 0, 0x5a, &sgtDataTable.pTxtMonStatsLink},
+      {"mon20", FIELDTYPE_NAME_SHORT, 0, 0x5c, &sgtDataTable.pTxtMonStatsLink},
+      {"mon21", FIELDTYPE_NAME_SHORT, 0, 0x5e, &sgtDataTable.pTxtMonStatsLink},
+      {"mon22", FIELDTYPE_NAME_SHORT, 0, 0x60, &sgtDataTable.pTxtMonStatsLink},
+      {"mon23", FIELDTYPE_NAME_SHORT, 0, 0x62, &sgtDataTable.pTxtMonStatsLink},
+      {"mon24", FIELDTYPE_NAME_SHORT, 0, 100, &sgtDataTable.pTxtMonStatsLink},
+      {"mon25", FIELDTYPE_NAME_SHORT, 0, 0x66, &sgtDataTable.pTxtMonStatsLink},
+      {"rangedspawn", FIELDTYPE_CHAR, 0, 0x31, 0},
+      {"nmon1", FIELDTYPE_NAME_SHORT, 0, 0x68, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon2", FIELDTYPE_NAME_SHORT, 0, 0x6a, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon3", FIELDTYPE_NAME_SHORT, 0, 0x6c, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon4", FIELDTYPE_NAME_SHORT, 0, 0x6e, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon5", FIELDTYPE_NAME_SHORT, 0, 0x70, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon6", FIELDTYPE_NAME_SHORT, 0, 0x72, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon7", FIELDTYPE_NAME_SHORT, 0, 0x74, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon8", FIELDTYPE_NAME_SHORT, 0, 0x76, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon9", FIELDTYPE_NAME_SHORT, 0, 0x78, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon10", FIELDTYPE_NAME_SHORT, 0, 0x7a, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon11", FIELDTYPE_NAME_SHORT, 0, 0x7c, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon12", FIELDTYPE_NAME_SHORT, 0, 0x7e, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon13", FIELDTYPE_NAME_SHORT, 0, 0x80, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon14", FIELDTYPE_NAME_SHORT, 0, 0x82, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon15", FIELDTYPE_NAME_SHORT, 0, 0x84, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon16", FIELDTYPE_NAME_SHORT, 0, 0x86, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon17", FIELDTYPE_NAME_SHORT, 0, 0x88, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon18", FIELDTYPE_NAME_SHORT, 0, 0x8a, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon19", FIELDTYPE_NAME_SHORT, 0, 0x8c, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon20", FIELDTYPE_NAME_SHORT, 0, 0x8e, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon21", FIELDTYPE_NAME_SHORT, 0, 0x90, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon22", FIELDTYPE_NAME_SHORT, 0, 0x92, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon23", FIELDTYPE_NAME_SHORT, 0, 0x94, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon24", FIELDTYPE_NAME_SHORT, 0, 0x96, &sgtDataTable.pTxtMonStatsLink},
+      {"nmon25", FIELDTYPE_NAME_SHORT, 0, 0x98, &sgtDataTable.pTxtMonStatsLink},
+      {"umon1", FIELDTYPE_NAME_SHORT, 0, 0x9a, &sgtDataTable.pTxtMonStatsLink},
+      {"umon2", FIELDTYPE_NAME_SHORT, 0, 0x9c, &sgtDataTable.pTxtMonStatsLink},
+      {"umon3", FIELDTYPE_NAME_SHORT, 0, 0x9e, &sgtDataTable.pTxtMonStatsLink},
+      {"umon4", FIELDTYPE_NAME_SHORT, 0, 0xa0, &sgtDataTable.pTxtMonStatsLink},
+      {"umon5", FIELDTYPE_NAME_SHORT, 0, 0xa2, &sgtDataTable.pTxtMonStatsLink},
+      {"umon6", FIELDTYPE_NAME_SHORT, 0, 0xa4, &sgtDataTable.pTxtMonStatsLink},
+      {"umon7", FIELDTYPE_NAME_SHORT, 0, 0xa6, &sgtDataTable.pTxtMonStatsLink},
+      {"umon8", FIELDTYPE_NAME_SHORT, 0, 0xa8, &sgtDataTable.pTxtMonStatsLink},
+      {"umon9", FIELDTYPE_NAME_SHORT, 0, 0xaa, &sgtDataTable.pTxtMonStatsLink},
+      {"umon10", FIELDTYPE_NAME_SHORT, 0, 0xac, &sgtDataTable.pTxtMonStatsLink},
+      {"umon11", FIELDTYPE_NAME_SHORT, 0, 0xae, &sgtDataTable.pTxtMonStatsLink},
+      {"umon12", FIELDTYPE_NAME_SHORT, 0, 0xb0, &sgtDataTable.pTxtMonStatsLink},
+      {"umon13", FIELDTYPE_NAME_SHORT, 0, 0xb2, &sgtDataTable.pTxtMonStatsLink},
+      {"umon14", FIELDTYPE_NAME_SHORT, 0, 0xb4, &sgtDataTable.pTxtMonStatsLink},
+      {"umon15", FIELDTYPE_NAME_SHORT, 0, 0xb6, &sgtDataTable.pTxtMonStatsLink},
+      {"umon16", FIELDTYPE_NAME_SHORT, 0, 0xb8, &sgtDataTable.pTxtMonStatsLink},
+      {"umon17", FIELDTYPE_NAME_SHORT, 0, 0xba, &sgtDataTable.pTxtMonStatsLink},
+      {"umon18", FIELDTYPE_NAME_SHORT, 0, 0xbc, &sgtDataTable.pTxtMonStatsLink},
+      {"umon19", FIELDTYPE_NAME_SHORT, 0, 0xbe, &sgtDataTable.pTxtMonStatsLink},
+      {"umon20", FIELDTYPE_NAME_SHORT, 0, 0xc0, &sgtDataTable.pTxtMonStatsLink},
+      {"umon21", FIELDTYPE_NAME_SHORT, 0, 0xc2, &sgtDataTable.pTxtMonStatsLink},
+      {"umon22", FIELDTYPE_NAME_SHORT, 0, 0xc4, &sgtDataTable.pTxtMonStatsLink},
+      {"umon23", FIELDTYPE_NAME_SHORT, 0, 0xc6, &sgtDataTable.pTxtMonStatsLink},
+      {"umon24", FIELDTYPE_NAME_SHORT, 0, 200, &sgtDataTable.pTxtMonStatsLink},
+      {"umon25", FIELDTYPE_NAME_SHORT, 0, 0xca, &sgtDataTable.pTxtMonStatsLink},
+      {"cmon1", FIELDTYPE_NAME_SHORT, 0, 0xcc, &sgtDataTable.pTxtMonStatsLink},
+      {"cmon2", FIELDTYPE_NAME_SHORT, 0, 0xce, &sgtDataTable.pTxtMonStatsLink},
+      {"cmon3", FIELDTYPE_NAME_SHORT, 0, 0xd0, &sgtDataTable.pTxtMonStatsLink},
+      {"cmon4", FIELDTYPE_NAME_SHORT, 0, 0xd2, &sgtDataTable.pTxtMonStatsLink},
+      {"cpct1", FIELDTYPE_SHORT, 0, 0xd4, 0},
+      {"cpct2", FIELDTYPE_SHORT, 0, 0xd6, 0},
+      {"cpct3", FIELDTYPE_SHORT, 0, 0xd8, 0},
+      {"cpct4", FIELDTYPE_SHORT, 0, 0xda, 0},
+      {"camt1", FIELDTYPE_SHORT, 0, 0xdc, 0},
+      {"camt2", FIELDTYPE_SHORT, 0, 0xdc, 0},
+      {"camt3", FIELDTYPE_SHORT, 0, 0xdc, 0},
+      {"camt4", FIELDTYPE_SHORT, 0, 0xdc, 0},
+      {"Themes", FIELDTYPE_INT, 0, 0x210, 0},
+      {"FloorFilter", FIELDTYPE_INT, 0, 0x214, 0},
+      {"BlankScreen", FIELDTYPE_INT, 0, 0x218, 0},
+      {"SoundEnv", FIELDTYPE_CHAR, 0, 0x21c, 0},
+      {"Waypoint", FIELDTYPE_CHAR, 0, 0xe4, 0},
+      {"LevelName", FIELDTYPE_ASCII, 0x27, 0xf5, 0},
+      {"LevelWarp", FIELDTYPE_ASCII, 0x27, 0x11d, 0},
+      {"EntryFile", FIELDTYPE_ASCII, 0x27, 0x145, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtLevels = (D2LevelsTxt*)DataTbls::CompileTxt(pMemory, "levels", levels, &sgtDataTable.nTxtLevelsSize, 0x220);
     if (sgtDataTable.nTxtLevelsSize >= 0x400) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 199);
@@ -989,222 +422,51 @@ eD2LevelId * __fastcall GetPortalLevelArrayFromPortalFlags(uint32_t * pdwParam) 
 
 // Loads and compiles the leveldefs.txt data table. Builds a stack array of D2BinFieldInputStrc field descriptors mapping each leveldefs column (QuestFlag, Layer, SizeX/Y per difficulty, Offset, Depend, DrlgType, LevelType, SubType/Theme/Waypoint/Shrine, Vis0-7, Warp0-7, light RGB/Intensity, Portal, Position, SaveMonsters, LOSDraw) to its struct offset and field type, then calls CompileTxt to parse the file into sgtDataTable.pTxtLevelDefs. Finally calls LVLTBLS_BuildPortalLevelArray to derive the portal-level lookup. Allocates from the supplied D2PoolManagerStrc; one-time table init at startup.
 void __fastcall TXT_AllocTxt_leveldefs(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc leveldefs[43];
-    leveldefs[0].szName = "QuestFlag";
-    leveldefs[0].eType = FIELDTYPE_INT;
-    leveldefs[0].nSize = 0;
-    leveldefs[0].nOffset = 0;
-    leveldefs[0].fpLinker = 0;
-    leveldefs[1].szName = "QuestFlagEx";
-    leveldefs[1].eType = FIELDTYPE_INT;
-    leveldefs[1].nSize = 0;
-    leveldefs[1].nOffset = 4;
-    leveldefs[1].fpLinker = 0;
-    leveldefs[2].szName = "Layer";
-    leveldefs[2].eType = FIELDTYPE_INT;
-    leveldefs[2].nSize = 0;
-    leveldefs[2].nOffset = 8;
-    leveldefs[2].fpLinker = 0;
-    leveldefs[3].szName = "SizeX";
-    leveldefs[3].eType = FIELDTYPE_INT;
-    leveldefs[3].nSize = 0;
-    leveldefs[3].nOffset = 0xc;
-    leveldefs[3].fpLinker = 0;
-    leveldefs[4].szName = "SizeY";
-    leveldefs[4].eType = FIELDTYPE_INT;
-    leveldefs[4].nSize = 0;
-    leveldefs[4].nOffset = 0x18;
-    leveldefs[4].fpLinker = 0;
-    leveldefs[5].szName = "SizeX(N)";
-    leveldefs[5].eType = FIELDTYPE_INT;
-    leveldefs[5].nSize = 0;
-    leveldefs[5].nOffset = 0x10;
-    leveldefs[5].fpLinker = 0;
-    leveldefs[6].szName = "SizeY(N)";
-    leveldefs[6].eType = FIELDTYPE_INT;
-    leveldefs[6].nSize = 0;
-    leveldefs[6].nOffset = 0x1c;
-    leveldefs[6].fpLinker = 0;
-    leveldefs[7].szName = "SizeX(H)";
-    leveldefs[7].eType = FIELDTYPE_INT;
-    leveldefs[7].nSize = 0;
-    leveldefs[7].nOffset = 0x14;
-    leveldefs[7].fpLinker = 0;
-    leveldefs[8].szName = "SizeY(H)";
-    leveldefs[8].eType = FIELDTYPE_INT;
-    leveldefs[8].nSize = 0;
-    leveldefs[8].nOffset = 0x20;
-    leveldefs[8].fpLinker = 0;
-    leveldefs[9].szName = "OffsetX";
-    leveldefs[9].eType = FIELDTYPE_INT;
-    leveldefs[9].nSize = 0;
-    leveldefs[9].nOffset = 0x24;
-    leveldefs[9].fpLinker = 0;
-    leveldefs[10].szName = "OffsetY";
-    leveldefs[10].eType = FIELDTYPE_INT;
-    leveldefs[10].nSize = 0;
-    leveldefs[10].nOffset = 0x28;
-    leveldefs[10].fpLinker = 0;
-    leveldefs[0xb].szName = "Depend";
-    leveldefs[0xb].eType = FIELDTYPE_INT;
-    leveldefs[0xb].nSize = 0;
-    leveldefs[0xb].nOffset = 0x2c;
-    leveldefs[0xb].fpLinker = 0;
-    leveldefs[0xc].szName = "DrlgType";
-    leveldefs[0xc].eType = FIELDTYPE_INT;
-    leveldefs[0xc].nSize = 0;
-    leveldefs[0xc].nOffset = 0x30;
-    leveldefs[0xc].fpLinker = 0;
-    leveldefs[0xd].szName = "LevelType";
-    leveldefs[0xd].eType = FIELDTYPE_INT;
-    leveldefs[0xd].nSize = 0;
-    leveldefs[0xd].nOffset = 0x34;
-    leveldefs[0xd].fpLinker = 0;
-    leveldefs[0xe].szName = "SubType";
-    leveldefs[0xe].eType = FIELDTYPE_INT;
-    leveldefs[0xe].nSize = 0;
-    leveldefs[0xe].nOffset = 0x38;
-    leveldefs[0xe].fpLinker = 0;
-    leveldefs[0xf].szName = "SubTheme";
-    leveldefs[0xf].eType = FIELDTYPE_INT;
-    leveldefs[0xf].nSize = 0;
-    leveldefs[0xf].nOffset = 0x3c;
-    leveldefs[0xf].fpLinker = 0;
-    leveldefs[0x10].szName = "SubWaypoint";
-    leveldefs[0x10].eType = FIELDTYPE_INT;
-    leveldefs[0x10].nSize = 0;
-    leveldefs[0x10].nOffset = 0x40;
-    leveldefs[0x10].fpLinker = 0;
-    leveldefs[0x11].szName = "SubShrine";
-    leveldefs[0x11].eType = FIELDTYPE_INT;
-    leveldefs[0x11].nSize = 0;
-    leveldefs[0x11].nOffset = 0x44;
-    leveldefs[0x11].fpLinker = 0;
-    leveldefs[0x12].szName = "Vis0";
-    leveldefs[0x12].eType = FIELDTYPE_INT;
-    leveldefs[0x12].nSize = 0;
-    leveldefs[0x12].nOffset = 0x48;
-    leveldefs[0x12].fpLinker = 0;
-    leveldefs[0x13].szName = "Vis1";
-    leveldefs[0x13].eType = FIELDTYPE_INT;
-    leveldefs[0x13].nSize = 0;
-    leveldefs[0x13].nOffset = 0x4c;
-    leveldefs[0x13].fpLinker = 0;
-    leveldefs[0x14].szName = "Vis2";
-    leveldefs[0x14].eType = FIELDTYPE_INT;
-    leveldefs[0x14].nSize = 0;
-    leveldefs[0x14].nOffset = 0x50;
-    leveldefs[0x14].fpLinker = 0;
-    leveldefs[0x15].szName = "Vis3";
-    leveldefs[0x15].eType = FIELDTYPE_INT;
-    leveldefs[0x15].nSize = 0;
-    leveldefs[0x15].nOffset = 0x54;
-    leveldefs[0x15].fpLinker = 0;
-    leveldefs[0x16].szName = "Vis4";
-    leveldefs[0x16].eType = FIELDTYPE_INT;
-    leveldefs[0x16].nSize = 0;
-    leveldefs[0x16].nOffset = 0x58;
-    leveldefs[0x16].fpLinker = 0;
-    leveldefs[0x17].szName = "Vis5";
-    leveldefs[0x17].eType = FIELDTYPE_INT;
-    leveldefs[0x17].nSize = 0;
-    leveldefs[0x17].nOffset = 0x5c;
-    leveldefs[0x17].fpLinker = 0;
-    leveldefs[0x18].szName = "Vis6";
-    leveldefs[0x18].eType = FIELDTYPE_INT;
-    leveldefs[0x18].nSize = 0;
-    leveldefs[0x18].nOffset = 0x60;
-    leveldefs[0x18].fpLinker = 0;
-    leveldefs[0x19].szName = "Vis7";
-    leveldefs[0x19].eType = FIELDTYPE_INT;
-    leveldefs[0x19].nSize = 0;
-    leveldefs[0x19].nOffset = 100;
-    leveldefs[0x19].fpLinker = 0;
-    leveldefs[0x1a].szName = "Warp0";
-    leveldefs[0x1a].eType = FIELDTYPE_INT;
-    leveldefs[0x1a].nSize = 0;
-    leveldefs[0x1a].nOffset = 0x68;
-    leveldefs[0x1a].fpLinker = 0;
-    leveldefs[0x1b].szName = "Warp1";
-    leveldefs[0x1b].eType = FIELDTYPE_INT;
-    leveldefs[0x1b].nSize = 0;
-    leveldefs[0x1b].nOffset = 0x6c;
-    leveldefs[0x1b].fpLinker = 0;
-    leveldefs[0x1c].szName = "Warp2";
-    leveldefs[0x1c].eType = FIELDTYPE_INT;
-    leveldefs[0x1c].nSize = 0;
-    leveldefs[0x1c].nOffset = 0x70;
-    leveldefs[0x1c].fpLinker = 0;
-    leveldefs[0x1d].szName = "Warp3";
-    leveldefs[0x1d].eType = FIELDTYPE_INT;
-    leveldefs[0x1d].nSize = 0;
-    leveldefs[0x1d].nOffset = 0x74;
-    leveldefs[0x1d].fpLinker = 0;
-    leveldefs[0x1e].szName = "Warp4";
-    leveldefs[0x1e].eType = FIELDTYPE_INT;
-    leveldefs[0x1e].nSize = 0;
-    leveldefs[0x1e].nOffset = 0x78;
-    leveldefs[0x1e].fpLinker = 0;
-    leveldefs[0x1f].szName = "Warp5";
-    leveldefs[0x1f].eType = FIELDTYPE_INT;
-    leveldefs[0x1f].nSize = 0;
-    leveldefs[0x1f].fpLinker = 0;
-    leveldefs[0x20].nSize = 0;
-    leveldefs[0x20].fpLinker = 0;
-    leveldefs[0x21].nSize = 0;
-    leveldefs[0x21].fpLinker = 0;
-    leveldefs[0x22].nSize = 0;
-    leveldefs[0x22].fpLinker = 0;
-    leveldefs[0x23].nSize = 0;
-    leveldefs[0x23].fpLinker = 0;
-    leveldefs[0x24].nSize = 0;
-    leveldefs[0x24].fpLinker = 0;
-    leveldefs[0x25].nSize = 0;
-    leveldefs[0x25].fpLinker = 0;
-    leveldefs[0x26].nSize = 0;
-    leveldefs[0x26].fpLinker = 0;
-    leveldefs[0x27].nSize = 0;
-    leveldefs[0x27].fpLinker = 0;
-    leveldefs[0x28].nSize = 0;
-    leveldefs[0x28].fpLinker = 0;
-    leveldefs[0x29].nSize = 0;
-    leveldefs[0x29].fpLinker = 0;
-    leveldefs[0x2a].eType = FIELDTYPE_END;
-    leveldefs[0x2a].nSize = 0;
-    leveldefs[0x2a].nOffset = 0;
-    leveldefs[0x2a].fpLinker = 0;
-    leveldefs[0x1f].nOffset = 0x7c;
-    leveldefs[0x20].szName = "Warp6";
-    leveldefs[0x20].eType = FIELDTYPE_INT;
-    leveldefs[0x20].nOffset = 0x80;
-    leveldefs[0x21].szName = "Warp7";
-    leveldefs[0x21].eType = FIELDTYPE_INT;
-    leveldefs[0x21].nOffset = 0x84;
-    leveldefs[0x22].szName = "Intensity";
-    leveldefs[0x22].eType = FIELDTYPE_CHAR;
-    leveldefs[0x22].nOffset = 0x88;
-    leveldefs[0x23].szName = "Red";
-    leveldefs[0x23].eType = FIELDTYPE_CHAR;
-    leveldefs[0x23].nOffset = 0x89;
-    leveldefs[0x24].szName = "Green";
-    leveldefs[0x24].eType = FIELDTYPE_CHAR;
-    leveldefs[0x24].nOffset = 0x8a;
-    leveldefs[0x25].szName = "Blue";
-    leveldefs[0x25].eType = FIELDTYPE_CHAR;
-    leveldefs[0x25].nOffset = 0x8b;
-    leveldefs[0x26].szName = "Portal";
-    leveldefs[0x26].eType = FIELDTYPE_INT;
-    leveldefs[0x26].nOffset = 0x8c;
-    leveldefs[0x27].szName = "Position";
-    leveldefs[0x27].eType = FIELDTYPE_INT;
-    leveldefs[0x27].nOffset = 0x90;
-    leveldefs[0x28].szName = "SaveMonsters";
-    leveldefs[0x28].eType = FIELDTYPE_INT;
-    leveldefs[0x28].nOffset = 0x94;
-    leveldefs[0x29].szName = "LOSDraw";
-    leveldefs[0x29].eType = FIELDTYPE_INT;
-    leveldefs[0x29].nOffset = 0x98;
-    leveldefs[0x2a].szName = "end";
+    D2BinFieldInputStrc leveldefs[43] = {
+      {"QuestFlag", FIELDTYPE_INT, 0, 0, 0},
+      {"QuestFlagEx", FIELDTYPE_INT, 0, 4, 0},
+      {"Layer", FIELDTYPE_INT, 0, 8, 0},
+      {"SizeX", FIELDTYPE_INT, 0, 0xc, 0},
+      {"SizeY", FIELDTYPE_INT, 0, 0x18, 0},
+      {"SizeX(N)", FIELDTYPE_INT, 0, 0x10, 0},
+      {"SizeY(N)", FIELDTYPE_INT, 0, 0x1c, 0},
+      {"SizeX(H)", FIELDTYPE_INT, 0, 0x14, 0},
+      {"SizeY(H)", FIELDTYPE_INT, 0, 0x20, 0},
+      {"OffsetX", FIELDTYPE_INT, 0, 0x24, 0},
+      {"OffsetY", FIELDTYPE_INT, 0, 0x28, 0},
+      {"Depend", FIELDTYPE_INT, 0, 0x2c, 0},
+      {"DrlgType", FIELDTYPE_INT, 0, 0x30, 0},
+      {"LevelType", FIELDTYPE_INT, 0, 0x34, 0},
+      {"SubType", FIELDTYPE_INT, 0, 0x38, 0},
+      {"SubTheme", FIELDTYPE_INT, 0, 0x3c, 0},
+      {"SubWaypoint", FIELDTYPE_INT, 0, 0x40, 0},
+      {"SubShrine", FIELDTYPE_INT, 0, 0x44, 0},
+      {"Vis0", FIELDTYPE_INT, 0, 0x48, 0},
+      {"Vis1", FIELDTYPE_INT, 0, 0x4c, 0},
+      {"Vis2", FIELDTYPE_INT, 0, 0x50, 0},
+      {"Vis3", FIELDTYPE_INT, 0, 0x54, 0},
+      {"Vis4", FIELDTYPE_INT, 0, 0x58, 0},
+      {"Vis5", FIELDTYPE_INT, 0, 0x5c, 0},
+      {"Vis6", FIELDTYPE_INT, 0, 0x60, 0},
+      {"Vis7", FIELDTYPE_INT, 0, 100, 0},
+      {"Warp0", FIELDTYPE_INT, 0, 0x68, 0},
+      {"Warp1", FIELDTYPE_INT, 0, 0x6c, 0},
+      {"Warp2", FIELDTYPE_INT, 0, 0x70, 0},
+      {"Warp3", FIELDTYPE_INT, 0, 0x74, 0},
+      {"Warp4", FIELDTYPE_INT, 0, 0x78, 0},
+      {"Warp5", FIELDTYPE_INT, 0, 0x7c, 0},
+      {"Warp6", FIELDTYPE_INT, 0, 0x80, 0},
+      {"Warp7", FIELDTYPE_INT, 0, 0x84, 0},
+      {"Intensity", FIELDTYPE_CHAR, 0, 0x88, 0},
+      {"Red", FIELDTYPE_CHAR, 0, 0x89, 0},
+      {"Green", FIELDTYPE_CHAR, 0, 0x8a, 0},
+      {"Blue", FIELDTYPE_CHAR, 0, 0x8b, 0},
+      {"Portal", FIELDTYPE_INT, 0, 0x8c, 0},
+      {"Position", FIELDTYPE_INT, 0, 0x90, 0},
+      {"SaveMonsters", FIELDTYPE_INT, 0, 0x94, 0},
+      {"LOSDraw", FIELDTYPE_INT, 0, 0x98, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtLevelDefs = (D2LevelDefsTxt*)DataTbls::CompileTxt(pMemory, "leveldefs", leveldefs, nullptr, 0x9c);
     LVLTBLS_BuildPortalLevelArray(sgtDataTable.pTxtLevelDefs);
 }
@@ -1263,183 +525,44 @@ static void __fastcall LVLTBLS_FixPathSlashes(char * szText, char * szPathPrefix
 
 // Loads and compiles lvltypes.txt into the global pTxtLvlTypes / nTxtLvlTypesSize table. Builds a D2BinFieldInputStrc schema describing the row layout: 32 "File N" ASCII path fields (0x3b bytes each), plus Act (char) and Expansion (int), terminated by an END field; row stride 0x788. Calls CompileTxt to parse the txt via pMemory pool, then post-processes every row converting forward to back slashes in all 32 file-path strings via LVLTBLS_FixPathSlashes. Part of D2Common data-table init.
 void __fastcall TXT_AllocTxt_lvltypes(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc lvltypes[35];
     int nFileIdx;
-    lvltypes[0].szName = "File 1";
-    lvltypes[0].eType = FIELDTYPE_ASCII;
-    lvltypes[0].nSize = 0x3b;
-    lvltypes[0].nOffset = 0;
-    lvltypes[0].fpLinker = 0;
-    lvltypes[1].szName = "File 2";
-    lvltypes[1].eType = FIELDTYPE_ASCII;
-    lvltypes[1].nSize = 0x3b;
-    lvltypes[1].nOffset = 0x3c;
-    lvltypes[1].fpLinker = 0;
-    lvltypes[2].szName = "File 3";
-    lvltypes[2].eType = FIELDTYPE_ASCII;
-    lvltypes[2].nSize = 0x3b;
-    lvltypes[2].nOffset = 0x78;
-    lvltypes[2].fpLinker = 0;
-    lvltypes[3].szName = "File 4";
-    lvltypes[3].eType = FIELDTYPE_ASCII;
-    lvltypes[3].nSize = 0x3b;
-    lvltypes[3].nOffset = 0xb4;
-    lvltypes[3].fpLinker = 0;
-    lvltypes[4].szName = "File 5";
-    lvltypes[4].eType = FIELDTYPE_ASCII;
-    lvltypes[4].nSize = 0x3b;
-    lvltypes[4].nOffset = 0xf0;
-    lvltypes[4].fpLinker = 0;
-    lvltypes[5].szName = "File 6";
-    lvltypes[5].eType = FIELDTYPE_ASCII;
-    lvltypes[5].nSize = 0x3b;
-    lvltypes[5].nOffset = 300;
-    lvltypes[5].fpLinker = 0;
-    lvltypes[6].szName = "File 7";
-    lvltypes[6].eType = FIELDTYPE_ASCII;
-    lvltypes[6].nSize = 0x3b;
-    lvltypes[6].nOffset = 0x168;
-    lvltypes[6].fpLinker = 0;
-    lvltypes[7].szName = "File 8";
-    lvltypes[7].eType = FIELDTYPE_ASCII;
-    lvltypes[7].nSize = 0x3b;
-    lvltypes[7].nOffset = 0x1a4;
-    lvltypes[7].fpLinker = 0;
-    lvltypes[8].szName = "File 9";
-    lvltypes[8].eType = FIELDTYPE_ASCII;
-    lvltypes[8].nSize = 0x3b;
-    lvltypes[8].nOffset = 0x1e0;
-    lvltypes[8].fpLinker = 0;
-    lvltypes[9].szName = "File 10";
-    lvltypes[9].eType = FIELDTYPE_ASCII;
-    lvltypes[9].nSize = 0x3b;
-    lvltypes[9].nOffset = 0x21c;
-    lvltypes[9].fpLinker = 0;
-    lvltypes[10].szName = "File 11";
-    lvltypes[10].eType = FIELDTYPE_ASCII;
-    lvltypes[10].nSize = 0x3b;
-    lvltypes[10].nOffset = 600;
-    lvltypes[10].fpLinker = 0;
-    lvltypes[0xb].szName = "File 12";
-    lvltypes[0xb].eType = FIELDTYPE_ASCII;
-    lvltypes[0xb].nSize = 0x3b;
-    lvltypes[0xb].nOffset = 0x294;
-    lvltypes[0xb].fpLinker = 0;
-    lvltypes[0xc].szName = "File 13";
-    lvltypes[0xc].eType = FIELDTYPE_ASCII;
-    lvltypes[0xc].nSize = 0x3b;
-    lvltypes[0xc].nOffset = 0x2d0;
-    lvltypes[0xc].fpLinker = 0;
-    lvltypes[0xd].szName = "File 14";
-    lvltypes[0xd].eType = FIELDTYPE_ASCII;
-    lvltypes[0xd].nSize = 0x3b;
-    lvltypes[0xd].nOffset = 0x30c;
-    lvltypes[0xd].fpLinker = 0;
-    lvltypes[0xe].szName = "File 15";
-    lvltypes[0xe].eType = FIELDTYPE_ASCII;
-    lvltypes[0xe].nSize = 0x3b;
-    lvltypes[0xe].nOffset = 0x348;
-    lvltypes[0xe].fpLinker = 0;
-    lvltypes[0xf].szName = "File 16";
-    lvltypes[0xf].eType = FIELDTYPE_ASCII;
-    lvltypes[0xf].nSize = 0x3b;
-    lvltypes[0xf].nOffset = 900;
-    lvltypes[0xf].fpLinker = 0;
-    lvltypes[0x10].szName = "File 17";
-    lvltypes[0x10].eType = FIELDTYPE_ASCII;
-    lvltypes[0x10].nSize = 0x3b;
-    lvltypes[0x10].nOffset = 0x3c0;
-    lvltypes[0x10].fpLinker = 0;
-    lvltypes[0x11].szName = "File 18";
-    lvltypes[0x11].eType = FIELDTYPE_ASCII;
-    lvltypes[0x11].nSize = 0x3b;
-    lvltypes[0x11].nOffset = 0x3fc;
-    lvltypes[0x11].fpLinker = 0;
-    lvltypes[0x12].szName = "File 19";
-    lvltypes[0x12].eType = FIELDTYPE_ASCII;
-    lvltypes[0x12].nSize = 0x3b;
-    lvltypes[0x12].nOffset = 0x438;
-    lvltypes[0x12].fpLinker = 0;
-    lvltypes[0x13].szName = "File 20";
-    lvltypes[0x13].eType = FIELDTYPE_ASCII;
-    lvltypes[0x13].nSize = 0x3b;
-    lvltypes[0x13].nOffset = 0x474;
-    lvltypes[0x13].fpLinker = 0;
-    lvltypes[0x14].szName = "File 21";
-    lvltypes[0x14].eType = FIELDTYPE_ASCII;
-    lvltypes[0x14].nSize = 0x3b;
-    lvltypes[0x14].nOffset = 0x4b0;
-    lvltypes[0x14].fpLinker = 0;
-    lvltypes[0x15].szName = "File 22";
-    lvltypes[0x15].eType = FIELDTYPE_ASCII;
-    lvltypes[0x15].nSize = 0x3b;
-    lvltypes[0x15].nOffset = 0x4ec;
-    lvltypes[0x15].fpLinker = 0;
-    lvltypes[0x16].szName = "File 23";
-    lvltypes[0x16].eType = FIELDTYPE_ASCII;
-    lvltypes[0x16].nSize = 0x3b;
-    lvltypes[0x16].nOffset = 0x528;
-    lvltypes[0x16].fpLinker = 0;
-    lvltypes[0x17].szName = "File 24";
-    lvltypes[0x17].eType = FIELDTYPE_ASCII;
-    lvltypes[0x17].nSize = 0x3b;
-    lvltypes[0x17].nOffset = 0x564;
-    lvltypes[0x17].fpLinker = 0;
-    lvltypes[0x18].szName = "File 25";
-    lvltypes[0x18].eType = FIELDTYPE_ASCII;
-    lvltypes[0x18].nSize = 0x3b;
-    lvltypes[0x18].nOffset = 0x5a0;
-    lvltypes[0x18].fpLinker = 0;
-    lvltypes[0x19].szName = "File 26";
-    lvltypes[0x19].eType = FIELDTYPE_ASCII;
-    lvltypes[0x19].nSize = 0x3b;
-    lvltypes[0x19].nOffset = 0x5dc;
-    lvltypes[0x19].fpLinker = 0;
-    lvltypes[0x1a].szName = "File 27";
-    lvltypes[0x1a].eType = FIELDTYPE_ASCII;
-    lvltypes[0x1a].nSize = 0x3b;
-    lvltypes[0x1a].nOffset = 0x618;
-    lvltypes[0x1a].fpLinker = 0;
-    lvltypes[0x1b].szName = "File 28";
-    lvltypes[0x1b].eType = FIELDTYPE_ASCII;
-    lvltypes[0x1b].nSize = 0x3b;
-    lvltypes[0x1b].nOffset = 0x654;
-    lvltypes[0x1b].fpLinker = 0;
-    lvltypes[0x1c].szName = "File 29";
-    lvltypes[0x1c].eType = FIELDTYPE_ASCII;
-    lvltypes[0x1c].nSize = 0x3b;
-    lvltypes[0x1c].nOffset = 0x690;
-    lvltypes[0x1c].fpLinker = 0;
-    lvltypes[0x1d].szName = "File 30";
-    lvltypes[0x1d].eType = FIELDTYPE_ASCII;
-    lvltypes[0x1d].nSize = 0x3b;
-    lvltypes[0x1d].nOffset = 0x6cc;
-    lvltypes[0x1d].fpLinker = 0;
-    lvltypes[0x1e].szName = "File 31";
-    lvltypes[0x1e].eType = FIELDTYPE_ASCII;
-    lvltypes[0x1e].nSize = 0x3b;
-    lvltypes[0x1e].nOffset = 0x708;
-    lvltypes[0x1e].fpLinker = 0;
-    lvltypes[0x1f].szName = "File 32";
-    lvltypes[0x1f].eType = FIELDTYPE_ASCII;
-    lvltypes[0x1f].nSize = 0x3b;
-    lvltypes[0x1f].nOffset = 0x744;
-    lvltypes[0x1f].fpLinker = 0;
-    lvltypes[0x20].szName = "Act";
-    lvltypes[0x20].eType = FIELDTYPE_CHAR;
-    lvltypes[0x20].nSize = 0;
-    lvltypes[0x20].nOffset = 0x780;
-    lvltypes[0x20].fpLinker = 0;
-    lvltypes[0x21].szName = "Expansion";
-    lvltypes[0x21].eType = FIELDTYPE_INT;
-    lvltypes[0x21].nSize = 0;
-    lvltypes[0x21].nOffset = 0x784;
-    lvltypes[0x21].fpLinker = 0;
-    lvltypes[0x22].szName = "end";
-    lvltypes[0x22].eType = FIELDTYPE_END;
-    lvltypes[0x22].nSize = 0;
-    lvltypes[0x22].nOffset = 0;
-    lvltypes[0x22].fpLinker = 0;
+    D2BinFieldInputStrc lvltypes[35] = {
+      {"File 1", FIELDTYPE_ASCII, 0x3b, 0, 0},
+      {"File 2", FIELDTYPE_ASCII, 0x3b, 0x3c, 0},
+      {"File 3", FIELDTYPE_ASCII, 0x3b, 0x78, 0},
+      {"File 4", FIELDTYPE_ASCII, 0x3b, 0xb4, 0},
+      {"File 5", FIELDTYPE_ASCII, 0x3b, 0xf0, 0},
+      {"File 6", FIELDTYPE_ASCII, 0x3b, 300, 0},
+      {"File 7", FIELDTYPE_ASCII, 0x3b, 0x168, 0},
+      {"File 8", FIELDTYPE_ASCII, 0x3b, 0x1a4, 0},
+      {"File 9", FIELDTYPE_ASCII, 0x3b, 0x1e0, 0},
+      {"File 10", FIELDTYPE_ASCII, 0x3b, 0x21c, 0},
+      {"File 11", FIELDTYPE_ASCII, 0x3b, 600, 0},
+      {"File 12", FIELDTYPE_ASCII, 0x3b, 0x294, 0},
+      {"File 13", FIELDTYPE_ASCII, 0x3b, 0x2d0, 0},
+      {"File 14", FIELDTYPE_ASCII, 0x3b, 0x30c, 0},
+      {"File 15", FIELDTYPE_ASCII, 0x3b, 0x348, 0},
+      {"File 16", FIELDTYPE_ASCII, 0x3b, 900, 0},
+      {"File 17", FIELDTYPE_ASCII, 0x3b, 0x3c0, 0},
+      {"File 18", FIELDTYPE_ASCII, 0x3b, 0x3fc, 0},
+      {"File 19", FIELDTYPE_ASCII, 0x3b, 0x438, 0},
+      {"File 20", FIELDTYPE_ASCII, 0x3b, 0x474, 0},
+      {"File 21", FIELDTYPE_ASCII, 0x3b, 0x4b0, 0},
+      {"File 22", FIELDTYPE_ASCII, 0x3b, 0x4ec, 0},
+      {"File 23", FIELDTYPE_ASCII, 0x3b, 0x528, 0},
+      {"File 24", FIELDTYPE_ASCII, 0x3b, 0x564, 0},
+      {"File 25", FIELDTYPE_ASCII, 0x3b, 0x5a0, 0},
+      {"File 26", FIELDTYPE_ASCII, 0x3b, 0x5dc, 0},
+      {"File 27", FIELDTYPE_ASCII, 0x3b, 0x618, 0},
+      {"File 28", FIELDTYPE_ASCII, 0x3b, 0x654, 0},
+      {"File 29", FIELDTYPE_ASCII, 0x3b, 0x690, 0},
+      {"File 30", FIELDTYPE_ASCII, 0x3b, 0x6cc, 0},
+      {"File 31", FIELDTYPE_ASCII, 0x3b, 0x708, 0},
+      {"File 32", FIELDTYPE_ASCII, 0x3b, 0x744, 0},
+      {"Act", FIELDTYPE_CHAR, 0, 0x780, 0},
+      {"Expansion", FIELDTYPE_INT, 0, 0x784, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     pTxtLvlTypes = (D2LvlTypesTxt*)DataTbls::CompileTxt(pMemory, "lvltypes", lvltypes, &nTxtLvlTypesSize, 0x788);
     int nRowIdx = 0;
     D2LvlTypesTxt* pCurrentRow = pTxtLvlTypes;
@@ -1516,128 +639,33 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t nPara
     char* pcVar1;
     char (*pFileScan)[60];
     char (*szFile)[60];
-    D2BinFieldInputStrc lvlprest[24];
     uint32_t nFileIdx;
-    lvlprest[0].szName = "Def";
-    lvlprest[0].eType = FIELDTYPE_INT;
-    lvlprest[0].nSize = 0;
-    lvlprest[0].nOffset = 0;
-    lvlprest[0].fpLinker = 0;
-    lvlprest[1].szName = "LevelId";
-    lvlprest[1].eType = FIELDTYPE_INT;
-    lvlprest[1].nSize = 0;
-    lvlprest[1].nOffset = 4;
-    lvlprest[1].fpLinker = 0;
-    lvlprest[2].szName = "Populate";
-    lvlprest[2].eType = FIELDTYPE_INT;
-    lvlprest[2].nSize = 0;
-    lvlprest[2].nOffset = 8;
-    lvlprest[2].fpLinker = 0;
-    lvlprest[3].szName = "Logicals";
-    lvlprest[3].eType = FIELDTYPE_INT;
-    lvlprest[3].nSize = 0;
-    lvlprest[3].nOffset = 0xc;
-    lvlprest[3].fpLinker = 0;
-    lvlprest[4].szName = "Outdoors";
-    lvlprest[4].eType = FIELDTYPE_INT;
-    lvlprest[4].nSize = 0;
-    lvlprest[4].nOffset = 0x10;
-    lvlprest[4].fpLinker = 0;
-    lvlprest[5].szName = "Animate";
-    lvlprest[5].eType = FIELDTYPE_INT;
-    lvlprest[5].nSize = 0;
-    lvlprest[5].nOffset = 0x14;
-    lvlprest[5].fpLinker = 0;
-    lvlprest[6].szName = "KillEdge";
-    lvlprest[6].eType = FIELDTYPE_INT;
-    lvlprest[6].nSize = 0;
-    lvlprest[6].nOffset = 0x18;
-    lvlprest[6].fpLinker = 0;
-    lvlprest[7].szName = "FillBlanks";
-    lvlprest[7].eType = FIELDTYPE_INT;
-    lvlprest[7].nSize = 0;
-    lvlprest[7].nOffset = 0x1c;
-    lvlprest[7].fpLinker = 0;
-    lvlprest[8].szName = "SizeX";
-    lvlprest[8].eType = FIELDTYPE_INT;
-    lvlprest[8].nSize = 0;
-    lvlprest[8].nOffset = 0x28;
-    lvlprest[8].fpLinker = 0;
-    lvlprest[9].szName = "SizeY";
-    lvlprest[9].eType = FIELDTYPE_INT;
-    lvlprest[9].nSize = 0;
-    lvlprest[9].nOffset = 0x2c;
-    lvlprest[9].fpLinker = 0;
-    lvlprest[10].szName = "AutoMap";
-    lvlprest[10].eType = FIELDTYPE_INT;
-    lvlprest[10].nSize = 0;
-    lvlprest[10].nOffset = 0x30;
-    lvlprest[10].fpLinker = 0;
-    lvlprest[0xb].szName = "Scan";
-    lvlprest[0xb].eType = FIELDTYPE_INT;
-    lvlprest[0xb].nSize = 0;
-    lvlprest[0xb].nOffset = 0x34;
-    lvlprest[0xb].fpLinker = 0;
-    lvlprest[0xc].szName = "Pops";
-    lvlprest[0xc].eType = FIELDTYPE_INT;
-    lvlprest[0xc].nSize = 0;
-    lvlprest[0xc].nOffset = 0x38;
-    lvlprest[0xc].fpLinker = 0;
-    lvlprest[0xd].szName = "PopPad";
-    lvlprest[0xd].eType = FIELDTYPE_INT;
-    lvlprest[0xd].nSize = 0;
-    lvlprest[0xd].nOffset = 0x3c;
-    lvlprest[0xd].fpLinker = 0;
-    lvlprest[0xe].szName = "Files";
-    lvlprest[0xe].eType = FIELDTYPE_INT;
-    lvlprest[0xe].nSize = 0;
-    lvlprest[0xe].nOffset = 0x40;
-    lvlprest[0x15].eType = FIELDTYPE_INT;
-    lvlprest[0x16].eType = FIELDTYPE_INT;
-    lvlprest[0xe].fpLinker = 0;
-    lvlprest[0xf].szName = "File1";
-    lvlprest[0xf].eType = FIELDTYPE_ASCII;
-    lvlprest[0xf].nSize = 0x3b;
-    lvlprest[0xf].nOffset = 0x44;
-    lvlprest[0xf].fpLinker = 0;
-    lvlprest[0x10].szName = "File2";
-    lvlprest[0x10].eType = FIELDTYPE_ASCII;
-    lvlprest[0x10].nSize = 0x3b;
-    lvlprest[0x10].nOffset = 0x80;
-    lvlprest[0x10].fpLinker = 0;
-    lvlprest[0x11].szName = "File3";
-    lvlprest[0x11].eType = FIELDTYPE_ASCII;
-    lvlprest[0x11].nSize = 0x3b;
-    lvlprest[0x11].nOffset = 0xbc;
-    lvlprest[0x11].fpLinker = 0;
-    lvlprest[0x12].szName = "File4";
-    lvlprest[0x12].eType = FIELDTYPE_ASCII;
-    lvlprest[0x12].nSize = 0x3b;
-    lvlprest[0x12].nOffset = 0xf8;
-    lvlprest[0x12].fpLinker = 0;
-    lvlprest[0x13].szName = "File5";
-    lvlprest[0x13].eType = FIELDTYPE_ASCII;
-    lvlprest[0x13].nSize = 0x3b;
-    lvlprest[0x13].nOffset = 0x134;
-    lvlprest[0x13].fpLinker = 0;
-    lvlprest[0x14].szName = "File6";
-    lvlprest[0x14].eType = FIELDTYPE_ASCII;
-    lvlprest[0x14].nSize = 0x3b;
-    lvlprest[0x14].nOffset = 0x170;
-    lvlprest[0x14].fpLinker = 0;
-    lvlprest[0x15].szName = "Dt1Mask";
-    lvlprest[0x15].nSize = 0;
-    lvlprest[0x15].nOffset = 0x1ac;
-    lvlprest[0x15].fpLinker = 0;
-    lvlprest[0x16].szName = "Expansion";
-    lvlprest[0x16].nSize = 0;
-    lvlprest[0x16].nOffset = 0x20;
-    lvlprest[0x16].fpLinker = 0;
-    lvlprest[0x17].szName = "end";
-    lvlprest[0x17].eType = FIELDTYPE_END;
-    lvlprest[0x17].nSize = 0;
-    lvlprest[0x17].nOffset = 0;
-    lvlprest[0x17].fpLinker = 0;
+    D2BinFieldInputStrc lvlprest[24] = {
+      {"Def", FIELDTYPE_INT, 0, 0, 0},
+      {"LevelId", FIELDTYPE_INT, 0, 4, 0},
+      {"Populate", FIELDTYPE_INT, 0, 8, 0},
+      {"Logicals", FIELDTYPE_INT, 0, 0xc, 0},
+      {"Outdoors", FIELDTYPE_INT, 0, 0x10, 0},
+      {"Animate", FIELDTYPE_INT, 0, 0x14, 0},
+      {"KillEdge", FIELDTYPE_INT, 0, 0x18, 0},
+      {"FillBlanks", FIELDTYPE_INT, 0, 0x1c, 0},
+      {"SizeX", FIELDTYPE_INT, 0, 0x28, 0},
+      {"SizeY", FIELDTYPE_INT, 0, 0x2c, 0},
+      {"AutoMap", FIELDTYPE_INT, 0, 0x30, 0},
+      {"Scan", FIELDTYPE_INT, 0, 0x34, 0},
+      {"Pops", FIELDTYPE_INT, 0, 0x38, 0},
+      {"PopPad", FIELDTYPE_INT, 0, 0x3c, 0},
+      {"Files", FIELDTYPE_INT, 0, 0x40, 0},
+      {"File1", FIELDTYPE_ASCII, 0x3b, 0x44, 0},
+      {"File2", FIELDTYPE_ASCII, 0x3b, 0x80, 0},
+      {"File3", FIELDTYPE_ASCII, 0x3b, 0xbc, 0},
+      {"File4", FIELDTYPE_ASCII, 0x3b, 0xf8, 0},
+      {"File5", FIELDTYPE_ASCII, 0x3b, 0x134, 0},
+      {"File6", FIELDTYPE_ASCII, 0x3b, 0x170, 0},
+      {"Dt1Mask", FIELDTYPE_INT, 0, 0x1ac, 0},
+      {"Expansion", FIELDTYPE_INT, 0, 0x20, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtLvlPrest = (D2LvlPrestTxt*)DataTbls::CompileTxt(pMemory, "lvlprest", lvlprest, &sgtDataTable.nTxtLvlPrestSize, 0x1b0);
     if (nParam) {
       size_t nAllocSize;
@@ -1741,73 +769,22 @@ D2LvlPrestTxt * __fastcall TXT_LvlPrest_FindLineByLevelId(eD2LevelId eLevel) {
 
 // Parses and compiles the lvlwarp.txt data table into the global pTxtLvlWarp array. Defines 12 fields (Id, SelectX/Y, SelectDX/DY, ExitWalkX/Y, OffsetX/Y, LitVersion, Tiles, Direction) with their struct offsets, then calls CompileTxt to allocate and populate the binary record array from the text file.
 void __fastcall TXT_AllocTxt_lvlwarp(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc lvlwarp[13];
     int nTxtLvlWarpSize_lcl;
-    lvlwarp[0].eType = FIELDTYPE_INT;
-    lvlwarp[1].eType = FIELDTYPE_INT;
-    lvlwarp[2].eType = FIELDTYPE_INT;
-    lvlwarp[3].eType = FIELDTYPE_INT;
-    lvlwarp[4].eType = FIELDTYPE_INT;
-    lvlwarp[5].eType = FIELDTYPE_INT;
-    lvlwarp[6].eType = FIELDTYPE_INT;
-    lvlwarp[7].eType = FIELDTYPE_INT;
-    lvlwarp[8].eType = FIELDTYPE_INT;
-    lvlwarp[9].eType = FIELDTYPE_INT;
-    lvlwarp[10].eType = FIELDTYPE_INT;
-    lvlwarp[0].nSize = 0;
-    lvlwarp[0].nOffset = 0;
-    lvlwarp[0].fpLinker = 0;
-    lvlwarp[1].nSize = 0;
-    lvlwarp[1].fpLinker = 0;
-    lvlwarp[2].nSize = 0;
-    lvlwarp[2].fpLinker = 0;
-    lvlwarp[3].nSize = 0;
-    lvlwarp[3].fpLinker = 0;
-    lvlwarp[4].nSize = 0;
-    lvlwarp[4].fpLinker = 0;
-    lvlwarp[5].nSize = 0;
-    lvlwarp[5].fpLinker = 0;
-    lvlwarp[6].nSize = 0;
-    lvlwarp[6].fpLinker = 0;
-    lvlwarp[7].nSize = 0;
-    lvlwarp[7].fpLinker = 0;
-    lvlwarp[8].nSize = 0;
-    lvlwarp[8].fpLinker = 0;
-    lvlwarp[9].nSize = 0;
-    lvlwarp[9].fpLinker = 0;
-    lvlwarp[10].nSize = 0;
-    lvlwarp[10].fpLinker = 0;
-    lvlwarp[0xb].fpLinker = 0;
-    lvlwarp[0xc].eType = FIELDTYPE_END;
-    lvlwarp[0xc].nSize = 0;
-    lvlwarp[0xc].nOffset = 0;
-    lvlwarp[0xc].fpLinker = 0;
-    lvlwarp[0xb].eType = FIELDTYPE_ASCII;
-    lvlwarp[0xb].nSize = 1;
-    lvlwarp[0].szName = "Id";
-    lvlwarp[1].szName = "SelectX";
-    lvlwarp[1].nOffset = 4;
-    lvlwarp[2].szName = "SelectY";
-    lvlwarp[2].nOffset = 8;
-    lvlwarp[3].szName = "SelectDX";
-    lvlwarp[3].nOffset = 0xc;
-    lvlwarp[4].szName = "SelectDY";
-    lvlwarp[4].nOffset = 0x10;
-    lvlwarp[5].szName = "ExitWalkX";
-    lvlwarp[5].nOffset = 0x14;
-    lvlwarp[6].szName = "ExitWalkY";
-    lvlwarp[6].nOffset = 0x18;
-    lvlwarp[7].szName = "OffsetX";
-    lvlwarp[7].nOffset = 0x1c;
-    lvlwarp[8].szName = "OffsetY";
-    lvlwarp[8].nOffset = 0x20;
-    lvlwarp[9].szName = "LitVersion";
-    lvlwarp[9].nOffset = 0x24;
-    lvlwarp[10].szName = "Tiles";
-    lvlwarp[10].nOffset = 0x28;
-    lvlwarp[0xb].szName = "Direction";
-    lvlwarp[0xb].nOffset = 0x2c;
-    lvlwarp[0xc].szName = "end";
+    D2BinFieldInputStrc lvlwarp[13] = {
+      {"Id", FIELDTYPE_INT, 0, 0, 0},
+      {"SelectX", FIELDTYPE_INT, 0, 4, 0},
+      {"SelectY", FIELDTYPE_INT, 0, 8, 0},
+      {"SelectDX", FIELDTYPE_INT, 0, 0xc, 0},
+      {"SelectDY", FIELDTYPE_INT, 0, 0x10, 0},
+      {"ExitWalkX", FIELDTYPE_INT, 0, 0x14, 0},
+      {"ExitWalkY", FIELDTYPE_INT, 0, 0x18, 0},
+      {"OffsetX", FIELDTYPE_INT, 0, 0x1c, 0},
+      {"OffsetY", FIELDTYPE_INT, 0, 0x20, 0},
+      {"LitVersion", FIELDTYPE_INT, 0, 0x24, 0},
+      {"Tiles", FIELDTYPE_INT, 0, 0x28, 0},
+      {"Direction", FIELDTYPE_ASCII, 1, 0x2c, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     pTxtLvlWarp = (D2LvlWarpTxt*)DataTbls::CompileTxt(pMemory, "lvlwarp", lvlwarp, &nTxtLvlWarpSize_lcl, 0x30);
     nTxtLvlWarpSize = nTxtLvlWarpSize_lcl;
 }
@@ -1844,47 +821,16 @@ D2LvlWarpTxt * __fastcall TXT_LvlWarp_Setup(int32_t nWarpId, uint8_t nDirection)
 
 // Compiles lvlmaze.txt into the global sgpTxtLvlMaze table. Defines 7 integer fields (Level, Rooms, Rooms(N), Rooms(H), SizeX, SizeY, Merge) plus an END sentinel, then calls CompileTxt to parse and store the maze generation parameters for each level.
 void __fastcall TXT_AllocTxt_lvlmaze(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc lvlmaze[8];
-    lvlmaze[0].nSize = 0;
-    lvlmaze[0].nOffset = 0;
-    lvlmaze[0].fpLinker = 0;
-    lvlmaze[1].nSize = 0;
-    lvlmaze[1].fpLinker = 0;
-    lvlmaze[2].nSize = 0;
-    lvlmaze[2].fpLinker = 0;
-    lvlmaze[3].nSize = 0;
-    lvlmaze[3].fpLinker = 0;
-    lvlmaze[4].nSize = 0;
-    lvlmaze[4].fpLinker = 0;
-    lvlmaze[5].nSize = 0;
-    lvlmaze[5].fpLinker = 0;
-    lvlmaze[6].nSize = 0;
-    lvlmaze[6].fpLinker = 0;
-    lvlmaze[7].eType = FIELDTYPE_END;
-    lvlmaze[7].nSize = 0;
-    lvlmaze[7].nOffset = 0;
-    lvlmaze[7].fpLinker = 0;
-    lvlmaze[0].szName = "Level";
-    lvlmaze[0].eType = FIELDTYPE_INT;
-    lvlmaze[1].szName = "Rooms";
-    lvlmaze[1].eType = FIELDTYPE_INT;
-    lvlmaze[1].nOffset = 4;
-    lvlmaze[2].szName = "Rooms(N)";
-    lvlmaze[2].eType = FIELDTYPE_INT;
-    lvlmaze[2].nOffset = 8;
-    lvlmaze[3].szName = "Rooms(H)";
-    lvlmaze[3].eType = FIELDTYPE_INT;
-    lvlmaze[3].nOffset = 0xc;
-    lvlmaze[4].szName = "SizeX";
-    lvlmaze[4].eType = FIELDTYPE_INT;
-    lvlmaze[4].nOffset = 0x10;
-    lvlmaze[5].szName = "SizeY";
-    lvlmaze[5].eType = FIELDTYPE_INT;
-    lvlmaze[5].nOffset = 0x14;
-    lvlmaze[6].szName = "Merge";
-    lvlmaze[6].eType = FIELDTYPE_INT;
-    lvlmaze[6].nOffset = 0x18;
-    lvlmaze[7].szName = "end";
+    D2BinFieldInputStrc lvlmaze[8] = {
+      {"Level", FIELDTYPE_INT, 0, 0, 0},
+      {"Rooms", FIELDTYPE_INT, 0, 4, 0},
+      {"Rooms(N)", FIELDTYPE_INT, 0, 8, 0},
+      {"Rooms(H)", FIELDTYPE_INT, 0, 0xc, 0},
+      {"SizeX", FIELDTYPE_INT, 0, 0x10, 0},
+      {"SizeY", FIELDTYPE_INT, 0, 0x14, 0},
+      {"Merge", FIELDTYPE_INT, 0, 0x18, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgpTxtLvlMaze = (D2LvlMazeTxt*)DataTbls::CompileTxt(pMemory, "lvlmaze", lvlmaze, &nTxtLvlMazeSize, 0x1c);
 }
 
@@ -1920,123 +866,32 @@ D2LvlMazeTxt * __fastcall TXT_LvlMaze_FindLineByLevelId(int32_t nLevelId) {
 // Loads and compiles the lvlsub.txt data table into sgpTxtLvlSub via CompileTxt, defining the column layout (Type, File, CheckAll, BordType, GridSize, Dt1Mask, and Prob/Trials/Max for sub-types 0-4, plus Expansion). Builds gpnLvlSubTypeToIndex, a Type->first-row-index lookup sized to the max Type id. When DRLG preset files are needed (nParam or bGametypeIsOBNetHost set), allocates gpaDrlgLvlSubPresetFiles and preloads each row's preset .ds1 file via AllocDrlgFile (fixing path slashes, skipping expansion-only rows in classic), halting on load failure. Called once during data-table init; no return value.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
 void __fastcall TXT_AllocTxt_lvlsub(D2PoolManagerStrc * pMemory, int32_t nParam, BOOL bGametypeIsOBNetHost) {
-    D2BinFieldInputStrc lvlsub[23];
     int nPrevSubType;
-    lvlsub[0].szName = "Type";
-    lvlsub[0].eType = FIELDTYPE_INT;
-    lvlsub[0].nSize = 0;
-    lvlsub[0].nOffset = 0;
-    lvlsub[0].fpLinker = 0;
-    lvlsub[1].szName = "File";
-    lvlsub[1].eType = FIELDTYPE_ASCII;
-    lvlsub[1].nSize = 0x3b;
-    lvlsub[1].nOffset = 4;
-    lvlsub[1].fpLinker = 0;
-    lvlsub[2].szName = "CheckAll";
-    lvlsub[2].eType = FIELDTYPE_INT;
-    lvlsub[2].nSize = 0;
-    lvlsub[2].nOffset = 0x40;
-    lvlsub[2].fpLinker = 0;
-    lvlsub[3].szName = "BordType";
-    lvlsub[3].eType = FIELDTYPE_INT;
-    lvlsub[3].nSize = 0;
-    lvlsub[3].nOffset = 0x44;
-    lvlsub[3].fpLinker = 0;
-    lvlsub[4].szName = "GridSize";
-    lvlsub[4].eType = FIELDTYPE_INT;
-    lvlsub[4].nSize = 0;
-    lvlsub[4].nOffset = 0x4c;
-    lvlsub[4].fpLinker = 0;
-    lvlsub[5].szName = "Dt1Mask";
-    lvlsub[5].eType = FIELDTYPE_INT;
-    lvlsub[5].nSize = 0;
-    lvlsub[5].nOffset = 0x48;
-    lvlsub[5].fpLinker = 0;
-    lvlsub[6].szName = "Prob0";
-    lvlsub[6].eType = FIELDTYPE_INT;
-    lvlsub[6].nSize = 0;
-    lvlsub[6].nOffset = 0x11c;
-    lvlsub[6].fpLinker = 0;
-    lvlsub[7].szName = "Trials0";
-    lvlsub[7].eType = FIELDTYPE_INT;
-    lvlsub[7].nSize = 0;
-    lvlsub[7].nOffset = 0x130;
-    lvlsub[7].fpLinker = 0;
-    lvlsub[8].szName = "Max0";
-    lvlsub[8].eType = FIELDTYPE_INT;
-    lvlsub[8].nSize = 0;
-    lvlsub[8].nOffset = 0x144;
-    lvlsub[8].fpLinker = 0;
-    lvlsub[9].szName = "Prob1";
-    lvlsub[9].eType = FIELDTYPE_INT;
-    lvlsub[9].nSize = 0;
-    lvlsub[9].nOffset = 0x120;
-    lvlsub[9].fpLinker = 0;
-    lvlsub[10].szName = "Trials1";
-    lvlsub[10].eType = FIELDTYPE_INT;
-    lvlsub[10].nSize = 0;
-    lvlsub[10].nOffset = 0x134;
-    lvlsub[10].fpLinker = 0;
-    lvlsub[0xb].szName = "Max1";
-    lvlsub[0xb].eType = FIELDTYPE_INT;
-    lvlsub[0xb].nSize = 0;
-    lvlsub[0xb].nOffset = 0x148;
-    lvlsub[0xb].fpLinker = 0;
-    lvlsub[0xc].szName = "Prob2";
-    lvlsub[0xc].eType = FIELDTYPE_INT;
-    lvlsub[0xc].nSize = 0;
-    lvlsub[0xc].nOffset = 0x124;
-    lvlsub[0xc].fpLinker = 0;
-    lvlsub[0xd].szName = "Trials2";
-    lvlsub[0xd].eType = FIELDTYPE_INT;
-    lvlsub[0xd].nSize = 0;
-    lvlsub[0xd].nOffset = 0x138;
-    lvlsub[0xd].fpLinker = 0;
-    lvlsub[0xe].szName = "Max2";
-    lvlsub[0xe].eType = FIELDTYPE_INT;
-    lvlsub[0xe].nSize = 0;
-    lvlsub[0xe].nOffset = 0x14c;
-    lvlsub[0xe].fpLinker = 0;
-    lvlsub[0xf].eType = FIELDTYPE_INT;
-    lvlsub[0x10].eType = FIELDTYPE_INT;
-    lvlsub[0x11].eType = FIELDTYPE_INT;
-    lvlsub[0x12].eType = FIELDTYPE_INT;
-    lvlsub[0x13].eType = FIELDTYPE_INT;
-    lvlsub[0x14].eType = FIELDTYPE_INT;
-    lvlsub[0x15].eType = FIELDTYPE_INT;
-    lvlsub[0xf].szName = "Prob3";
-    lvlsub[0xf].nSize = 0;
-    lvlsub[0xf].nOffset = 0x128;
-    lvlsub[0xf].fpLinker = 0;
-    lvlsub[0x10].szName = "Trials3";
-    lvlsub[0x10].nSize = 0;
-    lvlsub[0x10].nOffset = 0x13c;
-    lvlsub[0x10].fpLinker = 0;
-    lvlsub[0x11].szName = "Max3";
-    lvlsub[0x11].nSize = 0;
-    lvlsub[0x11].nOffset = 0x150;
-    lvlsub[0x11].fpLinker = 0;
-    lvlsub[0x12].szName = "Prob4";
-    lvlsub[0x12].nSize = 0;
-    lvlsub[0x12].nOffset = 300;
-    lvlsub[0x12].fpLinker = 0;
-    lvlsub[0x13].szName = "Trials4";
-    lvlsub[0x13].nSize = 0;
-    lvlsub[0x13].nOffset = 0x140;
-    lvlsub[0x13].fpLinker = 0;
-    lvlsub[0x14].szName = "Max4";
-    lvlsub[0x14].nSize = 0;
-    lvlsub[0x14].nOffset = 0x154;
-    lvlsub[0x14].fpLinker = 0;
-    lvlsub[0x15].szName = "Expansion";
-    lvlsub[0x15].nSize = 0;
-    lvlsub[0x15].nOffset = 0x158;
-    lvlsub[0x15].fpLinker = 0;
-    lvlsub[0x16].szName = "end";
-    lvlsub[0x16].eType = FIELDTYPE_END;
-    lvlsub[0x16].nSize = 0;
-    lvlsub[0x16].nOffset = 0;
-    lvlsub[0x16].fpLinker = 0;
+    D2BinFieldInputStrc lvlsub[23] = {
+      {"Type", FIELDTYPE_INT, 0, 0, 0},
+      {"File", FIELDTYPE_ASCII, 0x3b, 4, 0},
+      {"CheckAll", FIELDTYPE_INT, 0, 0x40, 0},
+      {"BordType", FIELDTYPE_INT, 0, 0x44, 0},
+      {"GridSize", FIELDTYPE_INT, 0, 0x4c, 0},
+      {"Dt1Mask", FIELDTYPE_INT, 0, 0x48, 0},
+      {"Prob0", FIELDTYPE_INT, 0, 0x11c, 0},
+      {"Trials0", FIELDTYPE_INT, 0, 0x130, 0},
+      {"Max0", FIELDTYPE_INT, 0, 0x144, 0},
+      {"Prob1", FIELDTYPE_INT, 0, 0x120, 0},
+      {"Trials1", FIELDTYPE_INT, 0, 0x134, 0},
+      {"Max1", FIELDTYPE_INT, 0, 0x148, 0},
+      {"Prob2", FIELDTYPE_INT, 0, 0x124, 0},
+      {"Trials2", FIELDTYPE_INT, 0, 0x138, 0},
+      {"Max2", FIELDTYPE_INT, 0, 0x14c, 0},
+      {"Prob3", FIELDTYPE_INT, 0, 0x128, 0},
+      {"Trials3", FIELDTYPE_INT, 0, 0x13c, 0},
+      {"Max3", FIELDTYPE_INT, 0, 0x150, 0},
+      {"Prob4", FIELDTYPE_INT, 0, 300, 0},
+      {"Trials4", FIELDTYPE_INT, 0, 0x140, 0},
+      {"Max4", FIELDTYPE_INT, 0, 0x154, 0},
+      {"Expansion", FIELDTYPE_INT, 0, 0x158, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     int nMaxTypeId = 0;
     sgpTxtLvlSub = (D2LvlSubTxt*)DataTbls::CompileTxt(pMemory, "lvlsub", lvlsub, &nTxtLvlSubSize, 0x15c);
     D2LvlSubTxt* pLvlSubTxt = sgpTxtLvlSub;
@@ -2940,62 +1795,23 @@ void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
     int* pCelField;
     D2AutoMapLvlTbls* pNext;
     uint8_t* pbTxtRow;
-    D2BinFieldInputStrc automap[10];
     int nTxtAutomapSize;
     int nSameTypeStart;
     int nIndex;
     Seed::SEED_InitDefault(psDataTableSeed);
     Seed::InitSeed_Param_666(psDataTableSeed, 0);
-    automap[0].eType = FIELDTYPE_ASCII;
-    automap[1].eType = FIELDTYPE_ASCII;
-    automap[2].eType = FIELDTYPE_CHAR;
-    automap[3].eType = FIELDTYPE_CHAR;
-    automap[4].eType = FIELDTYPE_CHAR;
-    automap[5].eType = FIELDTYPE_INT;
-    automap[6].eType = FIELDTYPE_INT;
-    automap[7].eType = FIELDTYPE_INT;
-    automap[8].eType = FIELDTYPE_INT;
-    automap[0].szName = "LevelName";
-    automap[0].nSize = 0xf;
-    automap[0].nOffset = 0;
-    automap[0].fpLinker = 0;
-    automap[1].szName = "TileName";
-    automap[1].nSize = 7;
-    automap[1].nOffset = 0x10;
-    automap[1].fpLinker = 0;
-    automap[2].szName = "Style";
-    automap[2].nSize = 0;
-    automap[2].nOffset = 0x18;
-    automap[2].fpLinker = 0;
-    automap[3].szName = "StartSequence";
-    automap[3].nSize = 0;
-    automap[3].nOffset = 0x19;
-    automap[3].fpLinker = 0;
-    automap[4].szName = "EndSequence";
-    automap[4].nSize = 0;
-    automap[4].nOffset = 0x1a;
-    automap[4].fpLinker = 0;
-    automap[5].szName = "Cel1";
-    automap[5].nSize = 0;
-    automap[5].nOffset = 0x1c;
-    automap[5].fpLinker = 0;
-    automap[6].szName = "Cel2";
-    automap[6].nSize = 0;
-    automap[6].nOffset = 0x20;
-    automap[6].fpLinker = 0;
-    automap[7].szName = "Cel3";
-    automap[7].nSize = 0;
-    automap[7].nOffset = 0x24;
-    automap[7].fpLinker = 0;
-    automap[8].szName = "Cel4";
-    automap[8].nSize = 0;
-    automap[8].nOffset = 0x28;
-    automap[8].fpLinker = 0;
-    automap[9].szName = "end";
-    automap[9].eType = FIELDTYPE_END;
-    automap[9].nSize = 0;
-    automap[9].nOffset = 0;
-    automap[9].fpLinker = 0;
+    D2BinFieldInputStrc automap[10] = {
+      {"LevelName", FIELDTYPE_ASCII, 0xf, 0, 0},
+      {"TileName", FIELDTYPE_ASCII, 7, 0x10, 0},
+      {"Style", FIELDTYPE_CHAR, 0, 0x18, 0},
+      {"StartSequence", FIELDTYPE_CHAR, 0, 0x19, 0},
+      {"EndSequence", FIELDTYPE_CHAR, 0, 0x1a, 0},
+      {"Cel1", FIELDTYPE_INT, 0, 0x1c, 0},
+      {"Cel2", FIELDTYPE_INT, 0, 0x20, 0},
+      {"Cel3", FIELDTYPE_INT, 0, 0x24, 0},
+      {"Cel4", FIELDTYPE_INT, 0, 0x28, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     D2AutomapTxt* pTxtAutomap = (D2AutomapTxt*)DataTbls::CompileTxt(pMemory, "automap", automap, &nTxtAutomapSize, 0x2c);
     D2AutoMapLvlTbls* pAutoMapLvlTbls_lcl = (D2AutoMapLvlTbls*)D2_ALLOC_POOL_AT(nullptr, nTxtAutomapSize << 5, ".\\DATATBLS\\LvlTbls.cpp", 0x4f7);
     memset(pAutoMapLvlTbls_lcl, 0, nTxtAutomapSize << 5);

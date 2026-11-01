@@ -200,249 +200,63 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
     uint8_t* pSoundRow;
     int nEnvRemaining;
     char szPath[260];
-    D2BinFieldInputStrc soundenviron[23];
-    D2BinFieldInputStrc sounds[24];
     uint32_t nGroupSize;
     uint32_t nFileSize;
     int32_t nLine;
     int nSong;
     uint32_t* pFileSize;
     char* szSourceFile;
-    sounds[8].eType = FIELDTYPE_SHORT;
-    sounds[9].eType = FIELDTYPE_SHORT;
-    sounds[0].szName = "Filename";
-    sounds[0].eType = FIELDTYPE_ASCII;
-    sounds[0].nSize = 0x3b;
-    sounds[0].nOffset = 0;
-    sounds[0].fpLinker = 0;
-    sounds[1].szName = "Volume";
-    sounds[1].eType = FIELDTYPE_CHAR;
-    sounds[1].nSize = 0;
-    sounds[1].nOffset = 0x3c;
-    sounds[1].fpLinker = 0;
-    sounds[2].szName = "Group Size";
-    sounds[2].eType = FIELDTYPE_CHAR;
-    sounds[2].nSize = 0;
-    sounds[2].nOffset = 0x3d;
-    sounds[2].fpLinker = 0;
-    sounds[3].szName = "Loop";
-    sounds[3].eType = FIELDTYPE_CHAR;
-    sounds[3].nSize = 0;
-    sounds[3].nOffset = 0x3e;
-    sounds[3].fpLinker = 0;
-    sounds[4].szName = "Fade In";
-    sounds[4].eType = FIELDTYPE_CHAR;
-    sounds[4].nSize = 0;
-    sounds[4].nOffset = 0x3f;
-    sounds[4].fpLinker = 0;
-    sounds[5].szName = "Fade Out";
-    sounds[5].eType = FIELDTYPE_CHAR;
-    sounds[5].nSize = 0;
-    sounds[5].nOffset = 0x40;
-    sounds[5].fpLinker = 0;
-    sounds[6].szName = "Defer Inst";
-    sounds[6].eType = FIELDTYPE_CHAR;
-    sounds[6].nSize = 0;
-    sounds[6].nOffset = 0x41;
-    sounds[6].fpLinker = 0;
-    sounds[7].szName = "Stop Inst";
-    sounds[7].eType = FIELDTYPE_CHAR;
-    sounds[7].nSize = 0;
-    sounds[7].nOffset = 0x42;
-    sounds[7].fpLinker = 0;
-    sounds[8].szName = "Duration";
-    sounds[8].nSize = 0;
-    sounds[8].nOffset = 0x43;
-    sounds[8].fpLinker = 0;
-    sounds[9].szName = "Compound";
-    sounds[9].nSize = 0;
-    sounds[9].nOffset = 0x45;
-    sounds[9].fpLinker = 0;
-    sounds[10].szName = "Falloff";
-    sounds[10].eType = FIELDTYPE_INT;
-    sounds[10].nSize = 0;
-    sounds[10].nOffset = 0x47;
-    sounds[10].fpLinker = 0;
-    sounds[0xb].szName = "Reverb";
-    sounds[0xb].eType = FIELDTYPE_CHAR;
-    sounds[0xb].nSize = 0;
-    sounds[0xb].nOffset = 0x4b;
-    sounds[0xb].fpLinker = 0;
-    sounds[0xc].szName = "Cache";
-    sounds[0xc].eType = FIELDTYPE_CHAR;
-    sounds[0xc].nSize = 0;
-    sounds[0xc].nOffset = 0x4c;
-    sounds[0xc].fpLinker = 0;
-    sounds[0xd].szName = "Async Only";
-    sounds[0xd].eType = FIELDTYPE_CHAR;
-    sounds[0xd].nSize = 0;
-    sounds[0xd].nOffset = 0x4d;
-    sounds[0xd].fpLinker = 0;
-    sounds[0xe].szName = "Priority";
-    sounds[0xe].eType = FIELDTYPE_CHAR;
-    sounds[0xe].nSize = 0;
-    sounds[0xe].nOffset = 0x4e;
-    sounds[0xe].fpLinker = 0;
-    sounds[0xf].szName = "Stream";
-    sounds[0xf].eType = FIELDTYPE_CHAR;
-    sounds[0xf].nSize = 0;
-    sounds[0xf].nOffset = 0x4f;
-    sounds[0xf].fpLinker = 0;
-    sounds[0x10].szName = "Stereo";
-    sounds[0x10].eType = FIELDTYPE_CHAR;
-    sounds[0x10].nSize = 0;
-    sounds[0x10].nOffset = 0x50;
-    sounds[0x10].fpLinker = 0;
-    sounds[0x11].szName = "Tracking";
-    sounds[0x11].eType = FIELDTYPE_CHAR;
-    sounds[0x11].nSize = 0;
-    sounds[0x11].nOffset = 0x51;
-    sounds[0x11].fpLinker = 0;
-    sounds[0x12].szName = "Solo";
-    sounds[0x12].eType = FIELDTYPE_CHAR;
-    sounds[0x12].nSize = 0;
-    sounds[0x12].nOffset = 0x52;
-    sounds[0x12].fpLinker = 0;
-    sounds[0x13].szName = "Music Vol";
-    sounds[0x13].eType = FIELDTYPE_CHAR;
-    sounds[0x13].nSize = 0;
-    sounds[0x13].nOffset = 0x53;
-    sounds[0x13].fpLinker = 0;
-    sounds[0x14].szName = "Block 1";
-    sounds[0x14].eType = FIELDTYPE_INT;
-    sounds[0x14].nSize = 0;
-    sounds[0x14].nOffset = 0x54;
-    sounds[0x14].fpLinker = 0;
-    sounds[0x15].szName = "Block 2";
-    sounds[0x15].eType = FIELDTYPE_INT;
-    sounds[0x15].nSize = 0;
-    sounds[0x15].nOffset = 0x58;
-    sounds[0x15].fpLinker = 0;
-    sounds[0x16].szName = "Block 3";
-    sounds[0x16].eType = FIELDTYPE_INT;
-    sounds[0x16].nSize = 0;
-    sounds[0x16].nOffset = 0x5c;
-    sounds[0x16].fpLinker = 0;
-    sounds[0x17].szName = "end";
-    sounds[0x17].eType = FIELDTYPE_END;
-    sounds[0x17].nSize = 0;
-    sounds[0x17].nOffset = 0;
-    sounds[0x17].fpLinker = 0;
-    soundenviron[0].szName = "Song";
-    soundenviron[0].eType = FIELDTYPE_INT;
-    soundenviron[0].nSize = 0;
-    soundenviron[0].nOffset = 0;
-    soundenviron[0].fpLinker = 0;
-    soundenviron[1].szName = "Day Ambience";
-    soundenviron[1].eType = FIELDTYPE_INT;
-    soundenviron[1].nSize = 0;
-    soundenviron[1].nOffset = 4;
-    soundenviron[1].fpLinker = 0;
-    soundenviron[2].szName = "Night Ambience";
-    soundenviron[2].eType = FIELDTYPE_INT;
-    soundenviron[2].nSize = 0;
-    soundenviron[2].nOffset = 8;
-    soundenviron[2].fpLinker = 0;
-    soundenviron[3].szName = "Day Event";
-    soundenviron[3].eType = FIELDTYPE_INT;
-    soundenviron[3].nSize = 0;
-    soundenviron[3].nOffset = 0xc;
-    soundenviron[3].fpLinker = 0;
-    soundenviron[4].szName = "Night Event";
-    soundenviron[4].eType = FIELDTYPE_INT;
-    soundenviron[4].nSize = 0;
-    soundenviron[4].nOffset = 0x10;
-    soundenviron[4].fpLinker = 0;
-    soundenviron[5].szName = "Event Delay";
-    soundenviron[5].eType = FIELDTYPE_INT;
-    soundenviron[5].nSize = 0;
-    soundenviron[5].nOffset = 0x14;
-    soundenviron[5].fpLinker = 0;
-    soundenviron[6].szName = "Indoors";
-    soundenviron[6].eType = FIELDTYPE_CHAR;
-    soundenviron[6].nSize = 0;
-    soundenviron[6].nOffset = 0x18;
-    soundenviron[6].fpLinker = 0;
-    soundenviron[7].szName = "Material 1";
-    soundenviron[7].eType = FIELDTYPE_INT;
-    soundenviron[7].nSize = 0;
-    soundenviron[7].nOffset = 0x1c;
-    soundenviron[7].fpLinker = 0;
-    soundenviron[8].szName = "Material 2";
-    soundenviron[8].eType = FIELDTYPE_INT;
-    soundenviron[8].nSize = 0;
-    soundenviron[8].nOffset = 0x20;
-    soundenviron[8].fpLinker = 0;
-    soundenviron[9].szName = "EAX Environ";
-    soundenviron[9].eType = FIELDTYPE_INT;
-    soundenviron[9].nSize = 0;
-    soundenviron[9].nOffset = 0x24;
-    soundenviron[9].fpLinker = 0;
-    soundenviron[10].szName = "EAX Env Size";
-    soundenviron[10].eType = FIELDTYPE_INT;
-    soundenviron[10].nSize = 0;
-    soundenviron[10].nOffset = 0x28;
-    soundenviron[10].fpLinker = 0;
-    soundenviron[0xb].szName = "EAX Env Diff";
-    soundenviron[0xb].eType = FIELDTYPE_INT;
-    soundenviron[0xb].nSize = 0;
-    soundenviron[0xb].nOffset = 0x2c;
-    soundenviron[0xb].fpLinker = 0;
-    soundenviron[0xc].szName = "EAX Room Vol";
-    soundenviron[0xc].eType = FIELDTYPE_INT;
-    soundenviron[0xc].nSize = 0;
-    soundenviron[0xc].nOffset = 0x30;
-    soundenviron[0xc].fpLinker = 0;
-    soundenviron[0xd].szName = "EAX Room HF";
-    soundenviron[0xd].eType = FIELDTYPE_INT;
-    soundenviron[0xd].nSize = 0;
-    soundenviron[0xd].nOffset = 0x34;
-    soundenviron[0xd].fpLinker = 0;
-    soundenviron[0xe].szName = "EAX Decay Time";
-    soundenviron[0xe].eType = FIELDTYPE_INT;
-    soundenviron[0xe].nSize = 0;
-    soundenviron[0xe].nOffset = 0x38;
-    soundenviron[0xe].fpLinker = 0;
-    soundenviron[0xf].szName = "EAX Decay HF";
-    soundenviron[0xf].eType = FIELDTYPE_INT;
-    soundenviron[0xf].nSize = 0;
-    soundenviron[0xf].nOffset = 0x3c;
-    soundenviron[0xf].fpLinker = 0;
-    soundenviron[0x10].szName = "EAX Reflect";
-    soundenviron[0x10].eType = FIELDTYPE_INT;
-    soundenviron[0x10].nSize = 0;
-    soundenviron[0x10].nOffset = 0x40;
-    soundenviron[0x10].fpLinker = 0;
-    soundenviron[0x11].szName = "EAX Reflect Delay";
-    soundenviron[0x11].eType = FIELDTYPE_INT;
-    soundenviron[0x11].nSize = 0;
-    soundenviron[0x11].nOffset = 0x44;
-    soundenviron[0x11].fpLinker = 0;
-    soundenviron[0x12].szName = "EAX Reverb";
-    soundenviron[0x12].eType = FIELDTYPE_INT;
-    soundenviron[0x12].nSize = 0;
-    soundenviron[0x12].nOffset = 0x48;
-    soundenviron[0x12].fpLinker = 0;
-    soundenviron[0x13].szName = "EAX Rev Delay";
-    soundenviron[0x13].eType = FIELDTYPE_INT;
-    soundenviron[0x13].nSize = 0;
-    soundenviron[0x13].nOffset = 0x4c;
-    soundenviron[0x13].fpLinker = 0;
-    soundenviron[0x14].szName = "EAX Room Roll";
-    soundenviron[0x14].eType = FIELDTYPE_INT;
-    soundenviron[0x14].nSize = 0;
-    soundenviron[0x14].nOffset = 0x50;
-    soundenviron[0x14].fpLinker = 0;
-    soundenviron[0x15].szName = "EAX Air Absorb";
-    soundenviron[0x15].eType = FIELDTYPE_INT;
-    soundenviron[0x15].nSize = 0;
-    soundenviron[0x15].nOffset = 0x54;
-    soundenviron[0x15].fpLinker = 0;
-    soundenviron[0x16].szName = "end";
-    soundenviron[0x16].eType = FIELDTYPE_END;
-    soundenviron[0x16].nSize = 0;
-    soundenviron[0x16].nOffset = 0;
-    soundenviron[0x16].fpLinker = 0;
+    D2BinFieldInputStrc sounds[24] = {
+      {"Filename", FIELDTYPE_ASCII, 0x3b, 0, 0},
+      {"Volume", FIELDTYPE_CHAR, 0, 0x3c, 0},
+      {"Group Size", FIELDTYPE_CHAR, 0, 0x3d, 0},
+      {"Loop", FIELDTYPE_CHAR, 0, 0x3e, 0},
+      {"Fade In", FIELDTYPE_CHAR, 0, 0x3f, 0},
+      {"Fade Out", FIELDTYPE_CHAR, 0, 0x40, 0},
+      {"Defer Inst", FIELDTYPE_CHAR, 0, 0x41, 0},
+      {"Stop Inst", FIELDTYPE_CHAR, 0, 0x42, 0},
+      {"Duration", FIELDTYPE_SHORT, 0, 0x43, 0},
+      {"Compound", FIELDTYPE_SHORT, 0, 0x45, 0},
+      {"Falloff", FIELDTYPE_INT, 0, 0x47, 0},
+      {"Reverb", FIELDTYPE_CHAR, 0, 0x4b, 0},
+      {"Cache", FIELDTYPE_CHAR, 0, 0x4c, 0},
+      {"Async Only", FIELDTYPE_CHAR, 0, 0x4d, 0},
+      {"Priority", FIELDTYPE_CHAR, 0, 0x4e, 0},
+      {"Stream", FIELDTYPE_CHAR, 0, 0x4f, 0},
+      {"Stereo", FIELDTYPE_CHAR, 0, 0x50, 0},
+      {"Tracking", FIELDTYPE_CHAR, 0, 0x51, 0},
+      {"Solo", FIELDTYPE_CHAR, 0, 0x52, 0},
+      {"Music Vol", FIELDTYPE_CHAR, 0, 0x53, 0},
+      {"Block 1", FIELDTYPE_INT, 0, 0x54, 0},
+      {"Block 2", FIELDTYPE_INT, 0, 0x58, 0},
+      {"Block 3", FIELDTYPE_INT, 0, 0x5c, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
+    D2BinFieldInputStrc soundenviron[23] = {
+      {"Song", FIELDTYPE_INT, 0, 0, 0},
+      {"Day Ambience", FIELDTYPE_INT, 0, 4, 0},
+      {"Night Ambience", FIELDTYPE_INT, 0, 8, 0},
+      {"Day Event", FIELDTYPE_INT, 0, 0xc, 0},
+      {"Night Event", FIELDTYPE_INT, 0, 0x10, 0},
+      {"Event Delay", FIELDTYPE_INT, 0, 0x14, 0},
+      {"Indoors", FIELDTYPE_CHAR, 0, 0x18, 0},
+      {"Material 1", FIELDTYPE_INT, 0, 0x1c, 0},
+      {"Material 2", FIELDTYPE_INT, 0, 0x20, 0},
+      {"EAX Environ", FIELDTYPE_INT, 0, 0x24, 0},
+      {"EAX Env Size", FIELDTYPE_INT, 0, 0x28, 0},
+      {"EAX Env Diff", FIELDTYPE_INT, 0, 0x2c, 0},
+      {"EAX Room Vol", FIELDTYPE_INT, 0, 0x30, 0},
+      {"EAX Room HF", FIELDTYPE_INT, 0, 0x34, 0},
+      {"EAX Decay Time", FIELDTYPE_INT, 0, 0x38, 0},
+      {"EAX Decay HF", FIELDTYPE_INT, 0, 0x3c, 0},
+      {"EAX Reflect", FIELDTYPE_INT, 0, 0x40, 0},
+      {"EAX Reflect Delay", FIELDTYPE_INT, 0, 0x44, 0},
+      {"EAX Reverb", FIELDTYPE_INT, 0, 0x48, 0},
+      {"EAX Rev Delay", FIELDTYPE_INT, 0, 0x4c, 0},
+      {"EAX Room Roll", FIELDTYPE_INT, 0, 0x50, 0},
+      {"EAX Air Absorb", FIELDTYPE_INT, 0, 0x54, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     if (pTxtSounds) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfc);
       exit(-1);

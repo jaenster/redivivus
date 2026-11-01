@@ -1499,68 +1499,21 @@ void __fastcall D2COMP_AllocTxt_Items(D2PoolManagerStrc * pMemory) {
     static D2TxtLinkStrc * pD2CompItemsLinker; D2_STATIC_GUARD_BSS(pD2CompItemsLinker, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::pD2CompItemsLinker");
 
     int j;
-    D2BinFieldInputStrc pBinItems[12];
     int nItemIdx = 0;
-    pBinItems[4].eType = FIELDTYPE_CHAR;
-    pBinItems[5].eType = FIELDTYPE_CHAR;
-    pBinItems[6].eType = FIELDTYPE_CHAR;
-    pBinItems[10].eType = FIELDTYPE_CHAR;
-    pBinItems[0].szName = "version";
-    pBinItems[0].eType = FIELDTYPE_SHORT;
-    pBinItems[0].nSize = 0;
-    pBinItems[0].nOffset = 0xf6;
-    pBinItems[0].fpLinker = 0;
-    pBinItems[1].szName = "type";
-    pBinItems[1].eType = FIELDTYPE_CODE_SHORT;
-    pBinItems[1].nSize = 0;
-    pBinItems[1].nOffset = 0x11e;
-    pBinItems[1].fpLinker = &gnItemTypesCacheHandle;
-    pBinItems[2].szName = "code";
-    pBinItems[2].eType = FIELDTYPE_RAW4;
-    pBinItems[2].nSize = 0;
-    pBinItems[2].nOffset = 0x80;
-    pBinItems[2].fpLinker = 0;
-    pBinItems[3].szName = "alternategfx";
-    pBinItems[3].eType = FIELDTYPE_RAW4;
-    pBinItems[3].nSize = 0;
-    pBinItems[3].nOffset = 0x90;
-    pBinItems[3].fpLinker = 0;
-    pBinItems[4].szName = "spawnable";
-    pBinItems[4].nSize = 0;
-    pBinItems[4].nOffset = 0x133;
-    pBinItems[4].fpLinker = 0;
-    pBinItems[5].szName = "level";
-    pBinItems[5].nSize = 0;
-    pBinItems[5].nOffset = 0xfd;
-    pBinItems[5].fpLinker = 0;
-    pBinItems[6].szName = "component";
-    pBinItems[6].nSize = 0;
-    pBinItems[6].nOffset = 0x115;
-    pBinItems[6].fpLinker = 0;
-    pBinItems[7].szName = "wclass";
-    pBinItems[7].eType = FIELDTYPE_RAW4;
-    pBinItems[7].nSize = 0;
-    pBinItems[7].nOffset = 0xc0;
-    pBinItems[7].fpLinker = 0;
-    pBinItems[8].szName = "2handedwclass";
-    pBinItems[8].eType = FIELDTYPE_RAW4;
-    pBinItems[8].nSize = 0;
-    pBinItems[8].nOffset = 0xc4;
-    pBinItems[8].fpLinker = 0;
-    pBinItems[9].szName = "1or2handed";
-    pBinItems[9].eType = FIELDTYPE_BYTE;
-    pBinItems[9].nSize = 0;
-    pBinItems[9].nOffset = 0x13d;
-    pBinItems[9].fpLinker = 0;
-    pBinItems[10].szName = "Transform";
-    pBinItems[10].nSize = 0;
-    pBinItems[10].nOffset = 0x141;
-    pBinItems[10].fpLinker = 0;
-    pBinItems[0xb].szName = "end";
-    pBinItems[0xb].eType = FIELDTYPE_END;
-    pBinItems[0xb].nSize = 0;
-    pBinItems[0xb].nOffset = 0;
-    pBinItems[0xb].fpLinker = 0;
+    D2BinFieldInputStrc pBinItems[12] = {
+      {"version", FIELDTYPE_SHORT, 0, 0xf6, 0},
+      {"type", FIELDTYPE_CODE_SHORT, 0, 0x11e, &gnItemTypesCacheHandle},
+      {"code", FIELDTYPE_RAW4, 0, 0x80, 0},
+      {"alternategfx", FIELDTYPE_RAW4, 0, 0x90, 0},
+      {"spawnable", FIELDTYPE_CHAR, 0, 0x133, 0},
+      {"level", FIELDTYPE_CHAR, 0, 0xfd, 0},
+      {"component", FIELDTYPE_CHAR, 0, 0x115, 0},
+      {"wclass", FIELDTYPE_RAW4, 0, 0xc0, 0},
+      {"2handedwclass", FIELDTYPE_RAW4, 0, 0xc4, 0},
+      {"1or2handed", FIELDTYPE_BYTE, 0, 0x13d, 0},
+      {"Transform", FIELDTYPE_CHAR, 0, 0x141, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     D2ItemsTxt* pWeapons = (D2ItemsTxt*)LoadTxt(pMemory, "weapons", pBinItems, &nD2CompWeaponsSize, 0x1a8);
     D2ItemsTxt* pArmor = (D2ItemsTxt*)LoadTxt(pMemory, "armor", pBinItems, &nD2CompArmorSize, 0x1a8);
     D2ItemsTxt* pMisc = (D2ItemsTxt*)LoadTxt(pMemory, "misc", pBinItems, &nD2CompMiscSize, 0x1a8);
@@ -1609,27 +1562,12 @@ void __fastcall D2COMP_AllocTxt_Items(D2PoolManagerStrc * pMemory) {
 }
 
 void __fastcall D2COMP_LoadItemTypesTxt(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc aBinFields[4];
-    aBinFields[0].szName = "code";
-    aBinFields[0].eType = FIELDTYPE_CODE4;
-    aBinFields[0].nSize = 0;
-    aBinFields[0].nOffset = 0;
-    aBinFields[0].fpLinker = &gnItemTypesCacheHandle;
-    aBinFields[1].szName = "equiv1";
-    aBinFields[1].eType = FIELDTYPE_CODE_SHORT;
-    aBinFields[1].nSize = 0;
-    aBinFields[1].nOffset = 4;
-    aBinFields[1].fpLinker = &gnItemTypesCacheHandle;
-    aBinFields[2].szName = "equiv2";
-    aBinFields[2].eType = FIELDTYPE_CODE_SHORT;
-    aBinFields[2].nSize = 0;
-    aBinFields[2].nOffset = 6;
-    aBinFields[2].fpLinker = &gnItemTypesCacheHandle;
-    aBinFields[3].szName = "end";
-    aBinFields[3].eType = FIELDTYPE_END;
-    aBinFields[3].nSize = 0;
-    aBinFields[3].nOffset = 0;
-    aBinFields[3].fpLinker = 0;
+    D2BinFieldInputStrc aBinFields[4] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &gnItemTypesCacheHandle},
+      {"equiv1", FIELDTYPE_CODE_SHORT, 0, 4, &gnItemTypesCacheHandle},
+      {"equiv2", FIELDTYPE_CODE_SHORT, 0, 6, &gnItemTypesCacheHandle},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     gnItemTypesCacheHandle = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\Src\\D2Comp.cpp", 0xa97);
     gpItemTypesTxt = LoadTxt(pMemory, "itemtypes", aBinFields, &gnD2CompCompressionBufferSize, 0xe4);
 }
@@ -2755,8 +2693,6 @@ void __stdcall D2COMP_AllocTxt_EverythingItems() {
     uint32_t uVar1;
     uint32_t nCodeMapIdx;
     int iVar2;
-    D2BinFieldInputStrc aItemTypesFieldDefs[24];
-    D2BinFieldInputStrc aHitClassFieldDefs[2];
     int nItemCode;
     int nEquipTableOffset;
     int nItemOffset;
@@ -2769,126 +2705,32 @@ void __stdcall D2COMP_AllocTxt_EverythingItems() {
 
     gbD2CompItemsAllocated = 1;
     memset(gaCompCharacterCompositeItems, 0, 0xbf4);
-    aItemTypesFieldDefs[0].szName = "code";
-    aItemTypesFieldDefs[0].eType = FIELDTYPE_CODE4;
-    aItemTypesFieldDefs[0].nSize = 0;
-    aItemTypesFieldDefs[0].nOffset = 0;
-    aItemTypesFieldDefs[0].fpLinker = &gnItemTypesCacheHandle;
-    aItemTypesFieldDefs[1].szName = "equiv1";
-    aItemTypesFieldDefs[1].eType = FIELDTYPE_CODE_SHORT;
-    aItemTypesFieldDefs[1].nSize = 0;
-    aItemTypesFieldDefs[1].nOffset = 4;
-    aItemTypesFieldDefs[1].fpLinker = &gnItemTypesCacheHandle;
-    aItemTypesFieldDefs[2].szName = "equiv2";
-    aItemTypesFieldDefs[2].eType = FIELDTYPE_CODE_SHORT;
-    aItemTypesFieldDefs[2].nSize = 0;
-    aItemTypesFieldDefs[2].nOffset = 6;
-    aItemTypesFieldDefs[2].fpLinker = &gnItemTypesCacheHandle;
-    aItemTypesFieldDefs[3].szName = "repair";
-    aItemTypesFieldDefs[3].eType = FIELDTYPE_CHAR;
-    aItemTypesFieldDefs[3].nSize = 0;
-    aItemTypesFieldDefs[3].nOffset = 8;
-    aItemTypesFieldDefs[3].fpLinker = 0;
-    aItemTypesFieldDefs[4].szName = "body";
-    aItemTypesFieldDefs[4].eType = FIELDTYPE_CHAR;
-    aItemTypesFieldDefs[4].nSize = 0;
-    aItemTypesFieldDefs[4].nOffset = 9;
-    aItemTypesFieldDefs[4].fpLinker = 0;
-    aItemTypesFieldDefs[5].szName = "shoots";
-    aItemTypesFieldDefs[5].eType = FIELDTYPE_CODE_SHORT;
-    aItemTypesFieldDefs[5].nSize = 0;
-    aItemTypesFieldDefs[5].nOffset = 0xc;
-    aItemTypesFieldDefs[5].fpLinker = &gnItemTypesCacheHandle;
-    aItemTypesFieldDefs[6].szName = "quiver";
-    aItemTypesFieldDefs[6].eType = FIELDTYPE_CODE_SHORT;
-    aItemTypesFieldDefs[6].nSize = 0;
-    aItemTypesFieldDefs[6].nOffset = 0xe;
-    aItemTypesFieldDefs[6].fpLinker = &gnItemTypesCacheHandle;
-    aItemTypesFieldDefs[7].szName = "throwable";
-    aItemTypesFieldDefs[7].eType = FIELDTYPE_CHAR;
-    aItemTypesFieldDefs[7].nSize = 0;
-    aItemTypesFieldDefs[7].nOffset = 0x10;
-    aItemTypesFieldDefs[7].fpLinker = 0;
-    aItemTypesFieldDefs[8].szName = "reload";
-    aItemTypesFieldDefs[8].eType = FIELDTYPE_CHAR;
-    aItemTypesFieldDefs[8].nSize = 0;
-    aItemTypesFieldDefs[8].nOffset = 0x11;
-    aItemTypesFieldDefs[8].fpLinker = 0;
-    aItemTypesFieldDefs[9].szName = "reequip";
-    aItemTypesFieldDefs[9].eType = FIELDTYPE_CHAR;
-    aItemTypesFieldDefs[9].nSize = 0;
-    aItemTypesFieldDefs[9].nOffset = 0x12;
-    aItemTypesFieldDefs[9].fpLinker = 0;
-    aItemTypesFieldDefs[10].szName = "autostack";
-    aItemTypesFieldDefs[10].eType = FIELDTYPE_CHAR;
-    aItemTypesFieldDefs[10].nSize = 0;
-    aItemTypesFieldDefs[10].nOffset = 0x13;
-    aItemTypesFieldDefs[10].fpLinker = 0;
-    aItemTypesFieldDefs[0xb].szName = "magic";
-    aItemTypesFieldDefs[0xb].eType = FIELDTYPE_CHAR;
-    aItemTypesFieldDefs[0xb].nSize = 0;
-    aItemTypesFieldDefs[0xb].nOffset = 0x14;
-    aItemTypesFieldDefs[0xb].fpLinker = 0;
-    aItemTypesFieldDefs[0xc].szName = "normal";
-    aItemTypesFieldDefs[0xc].eType = FIELDTYPE_CHAR;
-    aItemTypesFieldDefs[0xc].nSize = 0;
-    aItemTypesFieldDefs[0xc].nOffset = 0x16;
-    aItemTypesFieldDefs[0xc].fpLinker = 0;
-    aItemTypesFieldDefs[0xd].szName = "charm";
-    aItemTypesFieldDefs[0xd].eType = FIELDTYPE_CHAR;
-    aItemTypesFieldDefs[0xd].nSize = 0;
-    aItemTypesFieldDefs[0xd].nOffset = 0x17;
-    aItemTypesFieldDefs[0x12].eType = FIELDTYPE_ASCII;
-    aItemTypesFieldDefs[0x13].eType = FIELDTYPE_ASCII;
-    aItemTypesFieldDefs[0x14].eType = FIELDTYPE_ASCII;
-    aItemTypesFieldDefs[0x15].eType = FIELDTYPE_ASCII;
-    aItemTypesFieldDefs[0x16].eType = FIELDTYPE_ASCII;
-    aItemTypesFieldDefs[0xd].fpLinker = 0;
-    aItemTypesFieldDefs[0xe].szName = "gem";
-    aItemTypesFieldDefs[0xe].eType = FIELDTYPE_CHAR;
-    aItemTypesFieldDefs[0xe].nSize = 0;
-    aItemTypesFieldDefs[0xe].nOffset = 0x18;
-    aItemTypesFieldDefs[0xe].fpLinker = 0;
-    aItemTypesFieldDefs[0xf].szName = "beltable";
-    aItemTypesFieldDefs[0xf].eType = FIELDTYPE_CHAR;
-    aItemTypesFieldDefs[0xf].nSize = 0;
-    aItemTypesFieldDefs[0xf].nOffset = 0x19;
-    aItemTypesFieldDefs[0xf].fpLinker = 0;
-    aItemTypesFieldDefs[0x10].szName = "costformula";
-    aItemTypesFieldDefs[0x10].eType = FIELDTYPE_CHAR;
-    aItemTypesFieldDefs[0x10].nSize = 0;
-    aItemTypesFieldDefs[0x10].nOffset = 0x20;
-    aItemTypesFieldDefs[0x10].fpLinker = 0;
-    aItemTypesFieldDefs[0x11].szName = "varinvgfx";
-    aItemTypesFieldDefs[0x11].eType = FIELDTYPE_CHAR;
-    aItemTypesFieldDefs[0x11].nSize = 0;
-    aItemTypesFieldDefs[0x11].nOffset = 0x23;
-    aItemTypesFieldDefs[0x11].fpLinker = 0;
-    aItemTypesFieldDefs[0x12].szName = "invgfx1";
-    aItemTypesFieldDefs[0x12].nSize = 0x1f;
-    aItemTypesFieldDefs[0x12].nOffset = 0x24;
-    aItemTypesFieldDefs[0x12].fpLinker = 0;
-    aItemTypesFieldDefs[0x13].szName = "invgfx2";
-    aItemTypesFieldDefs[0x13].nSize = 0x1f;
-    aItemTypesFieldDefs[0x13].nOffset = 0x44;
-    aItemTypesFieldDefs[0x13].fpLinker = 0;
-    aItemTypesFieldDefs[0x14].szName = "invgfx3";
-    aItemTypesFieldDefs[0x14].nSize = 0x1f;
-    aItemTypesFieldDefs[0x14].nOffset = 100;
-    aItemTypesFieldDefs[0x14].fpLinker = 0;
-    aItemTypesFieldDefs[0x15].szName = "invgfx4";
-    aItemTypesFieldDefs[0x15].nSize = 0x1f;
-    aItemTypesFieldDefs[0x15].nOffset = 0x84;
-    aItemTypesFieldDefs[0x15].fpLinker = 0;
-    aItemTypesFieldDefs[0x16].szName = "invgfx5";
-    aItemTypesFieldDefs[0x16].nSize = 0x1f;
-    aItemTypesFieldDefs[0x16].nOffset = 0xa4;
-    aItemTypesFieldDefs[0x16].fpLinker = 0;
-    aItemTypesFieldDefs[0x17].szName = "end";
-    aItemTypesFieldDefs[0x17].eType = FIELDTYPE_END;
-    aItemTypesFieldDefs[0x17].nSize = 0;
-    aItemTypesFieldDefs[0x17].nOffset = 0;
-    aItemTypesFieldDefs[0x17].fpLinker = 0;
+    D2BinFieldInputStrc aItemTypesFieldDefs[24] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &gnItemTypesCacheHandle},
+      {"equiv1", FIELDTYPE_CODE_SHORT, 0, 4, &gnItemTypesCacheHandle},
+      {"equiv2", FIELDTYPE_CODE_SHORT, 0, 6, &gnItemTypesCacheHandle},
+      {"repair", FIELDTYPE_CHAR, 0, 8, 0},
+      {"body", FIELDTYPE_CHAR, 0, 9, 0},
+      {"shoots", FIELDTYPE_CODE_SHORT, 0, 0xc, &gnItemTypesCacheHandle},
+      {"quiver", FIELDTYPE_CODE_SHORT, 0, 0xe, &gnItemTypesCacheHandle},
+      {"throwable", FIELDTYPE_CHAR, 0, 0x10, 0},
+      {"reload", FIELDTYPE_CHAR, 0, 0x11, 0},
+      {"reequip", FIELDTYPE_CHAR, 0, 0x12, 0},
+      {"autostack", FIELDTYPE_CHAR, 0, 0x13, 0},
+      {"magic", FIELDTYPE_CHAR, 0, 0x14, 0},
+      {"normal", FIELDTYPE_CHAR, 0, 0x16, 0},
+      {"charm", FIELDTYPE_CHAR, 0, 0x17, 0},
+      {"gem", FIELDTYPE_CHAR, 0, 0x18, 0},
+      {"beltable", FIELDTYPE_CHAR, 0, 0x19, 0},
+      {"costformula", FIELDTYPE_CHAR, 0, 0x20, 0},
+      {"varinvgfx", FIELDTYPE_CHAR, 0, 0x23, 0},
+      {"invgfx1", FIELDTYPE_ASCII, 0x1f, 0x24, 0},
+      {"invgfx2", FIELDTYPE_ASCII, 0x1f, 0x44, 0},
+      {"invgfx3", FIELDTYPE_ASCII, 0x1f, 100, 0},
+      {"invgfx4", FIELDTYPE_ASCII, 0x1f, 0x84, 0},
+      {"invgfx5", FIELDTYPE_ASCII, 0x1f, 0xa4, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     gnItemTypesCacheHandle = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\Src\\D2Comp.cpp", 0xacb);
     int32_t nLineCount;
     nLineCount = 0xe4;
@@ -2901,16 +2743,10 @@ void __stdcall D2COMP_AllocTxt_EverythingItems() {
     D2PoolManagerStrc* pArchive;
     pArchive = D2WinArchive::ReturnZero();
     gpItemTypesTxt = LoadTxt(pArchive, szTxtName, pBitFieldExcel, pSize, nLineCount);
-    aHitClassFieldDefs[0].szName = "code";
-    aHitClassFieldDefs[0].eType = FIELDTYPE_CODE4;
-    aHitClassFieldDefs[0].nSize = 0;
-    aHitClassFieldDefs[0].nOffset = 0;
-    aHitClassFieldDefs[0].fpLinker = &gnHitClassTxtLinkHandle;
-    aHitClassFieldDefs[1].szName = "end";
-    aHitClassFieldDefs[1].eType = FIELDTYPE_END;
-    aHitClassFieldDefs[1].nSize = 0;
-    aHitClassFieldDefs[1].nOffset = 0;
-    aHitClassFieldDefs[1].fpLinker = 0;
+    D2BinFieldInputStrc aHitClassFieldDefs[2] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &gnHitClassTxtLinkHandle},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     gnHitClassTxtLinkHandle = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\Src\\D2Comp.cpp", 0xad7);
     nLineCount = 4;
     pSize = 0;

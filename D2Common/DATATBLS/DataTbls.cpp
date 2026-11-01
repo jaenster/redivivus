@@ -753,217 +753,105 @@ void __fastcall TXT_CharStats_DefineWideStringClass(D2CharStatsTxt * pTxtCharSta
 // One-time startup loader for the many small single-column code/name lookup tables in DataTbls. Always compiles compcode. If sgtDataTable.bUseTxt is set, also creates a TxtLink struct and compiles each of: playerclass, bodylocs, storepage, elemtypes, hitclass, colors, hiredesc, monmode, plrmode, monai, monplace, skillcalc, misscalc, skills, events. Each is a CODE4 or NAME_I_WORD keyed table whose compiled pointer + link are stored into the corresponding sgtDataTable.pTxt*/pTxt*Link/nTxt*Size globals. Allocates from pMemory. Pure init side-effects, no return.
 // @sourcefile .\DATATBLS\DataTbls.cpp
 static void TXT_AllocTxt_VariousSmallTables(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc events[2];
-    D2BinFieldInputStrc colors[2];
-    D2BinFieldInputStrc skills[2];
-    D2BinFieldInputStrc bodylocs[2];
-    D2BinFieldInputStrc misscalc[2];
-    D2BinFieldInputStrc elemtypes[2];
-    D2BinFieldInputStrc skillcalc[2];
-    D2BinFieldInputStrc compcode[2];
-    D2BinFieldInputStrc monplace[2];
-    D2BinFieldInputStrc hitclass[2];
-    D2BinFieldInputStrc monai[2];
-    D2BinFieldInputStrc storepage[2];
-    D2BinFieldInputStrc plrmode[2];
-    D2BinFieldInputStrc playerclass[2];
-    D2BinFieldInputStrc monmode[2];
-    D2BinFieldInputStrc hiredesc[2];
     int nLinesCount;
-    compcode[0].szName = "code";
-    compcode[0].eType = FIELDTYPE_CODE4;
-    compcode[0].nSize = 0;
-    compcode[0].nOffset = 0;
-    compcode[0].fpLinker = &sgtDataTable.pTxtCompCodeLink;
-    compcode[1].szName = "end";
-    compcode[1].eType = FIELDTYPE_END;
-    compcode[1].nSize = 0;
-    compcode[1].nOffset = 0;
-    compcode[1].fpLinker = 0;
+    D2BinFieldInputStrc compcode[2] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &sgtDataTable.pTxtCompCodeLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtCompCodeLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x73);
     sgtDataTable.pTxtCompCode = (D2CompCodeTxt*)CompileTxt(pMemory, "compcode", compcode, &sgtDataTable.nTxtCompCodeSize, 4);
     if (!sgtDataTable.bUseTxt) {
       return;
     }
 
-    playerclass[0].szName = "code";
-    playerclass[0].eType = FIELDTYPE_CODE4;
-    playerclass[0].nSize = 0;
-    playerclass[0].nOffset = 0;
-    playerclass[0].fpLinker = &sgtDataTable.pTxtPlayerClassLink;
-    playerclass[1].szName = "end";
-    playerclass[1].eType = FIELDTYPE_END;
-    playerclass[1].nSize = 0;
-    playerclass[1].nOffset = 0;
-    playerclass[1].fpLinker = 0;
+    D2BinFieldInputStrc playerclass[2] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &sgtDataTable.pTxtPlayerClassLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtPlayerClassLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x84);
     sgtDataTable.pTxtPlayerClass = (D2PlayerClassTxt*)CompileTxt(pMemory, "playerclass", playerclass, &nLinesCount, 4);
-    bodylocs[0].szName = "code";
-    bodylocs[0].eType = FIELDTYPE_CODE4;
-    bodylocs[0].nSize = 0;
-    bodylocs[0].nOffset = 0;
-    bodylocs[0].fpLinker = &sgtDataTable.pTxtBodyLocsLink;
-    bodylocs[1].szName = "end";
-    bodylocs[1].eType = FIELDTYPE_END;
-    bodylocs[1].nSize = 0;
-    bodylocs[1].nOffset = 0;
-    bodylocs[1].fpLinker = 0;
+    D2BinFieldInputStrc bodylocs[2] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &sgtDataTable.pTxtBodyLocsLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtBodyLocsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x90);
     sgtDataTable.pTxtBodyLocs = (D2BodyLocsTxt*)CompileTxt(pMemory, "bodylocs", bodylocs, &nLinesCount, 4);
-    storepage[0].szName = "code";
-    storepage[0].eType = FIELDTYPE_CODE4;
-    storepage[0].nSize = 0;
-    storepage[0].nOffset = 0;
-    storepage[0].fpLinker = &sgtDataTable.pTxtStorePageLink;
-    storepage[1].szName = "end";
-    storepage[1].eType = FIELDTYPE_END;
-    storepage[1].nSize = 0;
-    storepage[1].nOffset = 0;
-    storepage[1].fpLinker = 0;
+    D2BinFieldInputStrc storepage[2] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &sgtDataTable.pTxtStorePageLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtStorePageLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x9c);
     sgtDataTable.pTxtStorePage = (D2StorePageTxt*)CompileTxt(pMemory, "storepage", storepage, &nLinesCount, 4);
-    elemtypes[0].szName = "code";
-    elemtypes[0].eType = FIELDTYPE_CODE4;
-    elemtypes[0].nSize = 0;
-    elemtypes[0].nOffset = 0;
-    elemtypes[0].fpLinker = &sgtDataTable.pTxtElemTypesLink;
-    elemtypes[1].szName = "end";
-    elemtypes[1].eType = FIELDTYPE_END;
-    elemtypes[1].nSize = 0;
-    elemtypes[1].nOffset = 0;
-    elemtypes[1].fpLinker = 0;
+    D2BinFieldInputStrc elemtypes[2] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &sgtDataTable.pTxtElemTypesLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtElemTypesLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0xa8);
     sgtDataTable.pTxtElemTypes = (D2ElemTypesTxt*)CompileTxt(pMemory, "elemtypes", elemtypes, &nLinesCount, 4);
-    hitclass[0].szName = "code";
-    hitclass[0].eType = FIELDTYPE_CODE4;
-    hitclass[0].nSize = 0;
-    hitclass[0].nOffset = 0;
-    hitclass[0].fpLinker = &sgtDataTable.pTxtHitClassLink;
-    hitclass[1].szName = "end";
-    hitclass[1].eType = FIELDTYPE_END;
-    hitclass[1].nSize = 0;
-    hitclass[1].nOffset = 0;
-    hitclass[1].fpLinker = 0;
+    D2BinFieldInputStrc hitclass[2] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &sgtDataTable.pTxtHitClassLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtHitClassLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0xb8);
     sgtDataTable.pTxtHitClass = (D2HitClassTxt*)CompileTxt(pMemory, "hitclass", hitclass, &nLinesCount, 4);
-    colors[0].szName = "code";
-    colors[0].eType = FIELDTYPE_CODE4;
-    colors[0].nSize = 0;
-    colors[0].nOffset = 0;
-    colors[0].fpLinker = &sgtDataTable.pTxtColorsLink;
-    colors[1].szName = "end";
-    colors[1].eType = FIELDTYPE_END;
-    colors[1].nSize = 0;
-    colors[1].nOffset = 0;
-    colors[1].fpLinker = 0;
+    D2BinFieldInputStrc colors[2] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &sgtDataTable.pTxtColorsLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtColorsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0xc4);
     sgtDataTable.pTxtColors = (D2ColorsTxt*)CompileTxt(pMemory, "colors", colors, &nLinesCount, 4);
-    hiredesc[0].szName = "code";
-    hiredesc[0].eType = FIELDTYPE_CODE4;
-    hiredesc[0].nSize = 0;
-    hiredesc[0].nOffset = 0;
-    hiredesc[0].fpLinker = &sgtDataTable.pTxtHireDescLink;
-    hiredesc[1].szName = "end";
-    hiredesc[1].eType = FIELDTYPE_END;
-    hiredesc[1].nSize = 0;
-    hiredesc[1].nOffset = 0;
-    hiredesc[1].fpLinker = 0;
+    D2BinFieldInputStrc hiredesc[2] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &sgtDataTable.pTxtHireDescLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtHireDescLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0xd0);
     sgtDataTable.pTxtHireDesc = (D2HireDescTxt*)CompileTxt(pMemory, "hiredesc", hiredesc, &nLinesCount, 4);
-    monmode[0].szName = "code";
-    monmode[0].eType = FIELDTYPE_CODE4;
-    monmode[0].nSize = 0;
-    monmode[0].nOffset = 0;
-    monmode[0].fpLinker = &sgtDataTable.pTxtMonModeLink;
-    monmode[1].szName = "end";
-    monmode[1].eType = FIELDTYPE_END;
-    monmode[1].nSize = 0;
-    monmode[1].nOffset = 0;
-    monmode[1].fpLinker = 0;
+    D2BinFieldInputStrc monmode[2] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &sgtDataTable.pTxtMonModeLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtMonModeLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0xdc);
     sgtDataTable.pTxtMonMode = (D2MonModeTxtSmall*)CompileTxt(pMemory, "monmode", monmode, &nLinesCount, 4);
-    plrmode[0].szName = "code";
-    plrmode[0].eType = FIELDTYPE_CODE4;
-    plrmode[0].nSize = 0;
-    plrmode[0].nOffset = 0;
-    plrmode[0].fpLinker = &sgtDataTable.pTxtPlrModeLink;
-    plrmode[1].szName = "end";
-    plrmode[1].eType = FIELDTYPE_END;
-    plrmode[1].nSize = 0;
-    plrmode[1].nOffset = 0;
-    plrmode[1].fpLinker = 0;
+    D2BinFieldInputStrc plrmode[2] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &sgtDataTable.pTxtPlrModeLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtPlrModeLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0xe8);
     sgtDataTable.pTxtPlrMode = (D2PlrModeTxt*)CompileTxt(pMemory, "plrmode", plrmode, &nLinesCount, 4);
-    monai[0].szName = "AI";
-    monai[0].eType = FIELDTYPE_NAME_I_WORD;
-    monai[0].nSize = 0;
-    monai[0].nOffset = 0;
-    monai[0].fpLinker = &sgtDataTable.pTxtMonAiLink;
-    monai[1].szName = "end";
-    monai[1].eType = FIELDTYPE_END;
-    monai[1].nSize = 0;
-    monai[1].nOffset = 0;
-    monai[1].fpLinker = 0;
+    D2BinFieldInputStrc monai[2] = {
+      {"AI", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtMonAiLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtMonAiLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0xf4);
     sgtDataTable.pTxtMonAi = (D2MonAiTxt*)CompileTxt(pMemory, "monai", monai, &sgtDataTable.nTxtMonAiSize, 2);
-    monplace[0].szName = "code";
-    monplace[0].eType = FIELDTYPE_NAME_I_WORD;
-    monplace[0].nSize = 0;
-    monplace[0].nOffset = 0;
-    monplace[0].fpLinker = &sgtDataTable.pTxtMonPlaceLink;
-    monplace[1].szName = "end";
-    monplace[1].eType = FIELDTYPE_END;
-    monplace[1].nSize = 0;
-    monplace[1].nOffset = 0;
-    monplace[1].fpLinker = 0;
+    D2BinFieldInputStrc monplace[2] = {
+      {"code", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtMonPlaceLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtMonPlaceLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x100);
     sgtDataTable.pTxtMonPlace = (D2MonPlaceTxt*)CompileTxt(pMemory, "monplace", monplace, &sgtDataTable.nTxtMonPlaceSize, 2);
-    skillcalc[0].szName = "code";
-    skillcalc[0].eType = FIELDTYPE_CODE4;
-    skillcalc[0].nSize = 0;
-    skillcalc[0].nOffset = 0;
-    skillcalc[0].fpLinker = &sgtDataTable.pTxtSkillCalcLink;
-    skillcalc[1].szName = "end";
-    skillcalc[1].eType = FIELDTYPE_END;
-    skillcalc[1].nSize = 0;
-    skillcalc[1].nOffset = 0;
-    skillcalc[1].fpLinker = 0;
+    D2BinFieldInputStrc skillcalc[2] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &sgtDataTable.pTxtSkillCalcLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtSkillCalcLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x10c);
     sgtDataTable.pTxtSkillCalc = (D2SkillCalcTxt*)CompileTxt(pMemory, "skillcalc", skillcalc, &nLinesCount, 4);
-    misscalc[0].szName = "code";
-    misscalc[0].eType = FIELDTYPE_CODE4;
-    misscalc[0].nSize = 0;
-    misscalc[0].nOffset = 0;
-    misscalc[0].fpLinker = &sgtDataTable.pTxtMissCalcLink;
-    misscalc[1].szName = "end";
-    misscalc[1].eType = FIELDTYPE_END;
-    misscalc[1].nSize = 0;
-    misscalc[1].nOffset = 0;
-    misscalc[1].fpLinker = 0;
+    D2BinFieldInputStrc misscalc[2] = {
+      {"code", FIELDTYPE_CODE4, 0, 0, &sgtDataTable.pTxtMissCalcLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtMissCalcLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x118);
     sgtDataTable.pTxtMissCalc = (D2MissCalcTxt*)CompileTxt(pMemory, "misscalc", misscalc, &nLinesCount, 4);
-    skills[0].szName = "skill";
-    skills[0].eType = FIELDTYPE_NAME_I_WORD;
-    skills[0].nSize = 0;
-    skills[0].nOffset = 0;
-    skills[0].fpLinker = &sgtDataTable.pTxtSkillsHeaderLink;
-    skills[1].szName = "end";
-    skills[1].eType = FIELDTYPE_END;
-    skills[1].nSize = 0;
-    skills[1].nOffset = 0;
-    skills[1].fpLinker = 0;
+    D2BinFieldInputStrc skills[2] = {
+      {"skill", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtSkillsHeaderLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtSkillsHeaderLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x123);
     sgtDataTable.pTxtSkillsHeader = (D2SkillsHeaderTxt*)CompileTxt(pMemory, "skills", skills, &nLinesCount, 2);
-    events[0].szName = "event";
-    events[0].eType = FIELDTYPE_NAME_I_WORD;
-    events[0].nSize = 0;
-    events[0].nOffset = 0;
-    events[0].fpLinker = &sgtDataTable.pTxtEventsLink;
-    events[1].szName = "end";
-    events[1].eType = FIELDTYPE_END;
-    events[1].nSize = 0;
-    events[1].nOffset = 0;
-    events[1].fpLinker = 0;
+    D2BinFieldInputStrc events[2] = {
+      {"event", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtEventsLink},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtEventsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x12f);
     sgtDataTable.pTxtEvents = (D2EventsTxt*)CompileTxt(pMemory, "events", events, &nLinesCount, 2);
 }
@@ -1203,419 +1091,97 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
 // Builds the D2BinFieldInputStrc schema for charstats.txt (per-class base stats and starting gear) and compiles it via DataTbls::CompileTxt into sgtDataTable.pTxtCharStats. Schema covers base str/dex/vit/int/stamina/hpadd, per-level and per-attribute growth (Life/Mana/StaminaPerLevel, LifePerVitality, ManaPerMagic, etc.), block/to-hit/walk-run velocity, StrAllSkills/SkillTab/ClassOnly string keys (FIELDTYPE_KEY_WORD via DATATBLS_LookupStringId), 10 class skills (linked to pTxtSkillsLink), 10 starting item body-loc slots (linked to pTxtBodyLocsLink) plus item/count columns. Record stride 0xc4. Then calls TXT_CharStats_DefineWideStringClass to register the class-name wide strings.
 void __stdcall TXT_AllocTxt_charstats(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc charstats[72];
-    charstats[0].szName = "class";
-    charstats[0].eType = FIELDTYPE_ASCII;
-    charstats[0].nSize = 0xf;
-    charstats[0].nOffset = 0x20;
-    charstats[0].fpLinker = 0;
-    charstats[1].szName = "str";
-    charstats[1].eType = FIELDTYPE_CHAR;
-    charstats[1].nSize = 0;
-    charstats[1].nOffset = 0x30;
-    charstats[1].fpLinker = 0;
-    charstats[2].szName = "dex";
-    charstats[2].eType = FIELDTYPE_CHAR;
-    charstats[2].nSize = 0;
-    charstats[2].nOffset = 0x31;
-    charstats[2].fpLinker = 0;
-    charstats[3].szName = "vit";
-    charstats[3].eType = FIELDTYPE_CHAR;
-    charstats[3].nSize = 0;
-    charstats[3].nOffset = 0x33;
-    charstats[3].fpLinker = 0;
-    charstats[4].szName = "int";
-    charstats[4].eType = FIELDTYPE_CHAR;
-    charstats[4].nSize = 0;
-    charstats[4].nOffset = 0x32;
-    charstats[4].fpLinker = 0;
-    charstats[5].szName = "stamina";
-    charstats[5].eType = FIELDTYPE_CHAR;
-    charstats[5].nSize = 0;
-    charstats[5].nOffset = 0x34;
-    charstats[5].fpLinker = 0;
-    charstats[6].szName = "hpadd";
-    charstats[6].eType = FIELDTYPE_CHAR;
-    charstats[6].nSize = 0;
-    charstats[6].nOffset = 0x35;
-    charstats[6].fpLinker = 0;
-    charstats[7].szName = "PercentStr";
-    charstats[7].eType = FIELDTYPE_CHAR;
-    charstats[7].nSize = 0;
-    charstats[7].nOffset = 0x36;
-    charstats[7].fpLinker = 0;
-    charstats[8].szName = "PercentDex";
-    charstats[8].eType = FIELDTYPE_CHAR;
-    charstats[8].nSize = 0;
-    charstats[8].nOffset = 0x38;
-    charstats[8].fpLinker = 0;
-    charstats[9].szName = "PercentVit";
-    charstats[9].eType = FIELDTYPE_CHAR;
-    charstats[9].nSize = 0;
-    charstats[9].nOffset = 0x39;
-    charstats[9].fpLinker = 0;
-    charstats[10].szName = "PercentInt";
-    charstats[10].eType = FIELDTYPE_CHAR;
-    charstats[10].nSize = 0;
-    charstats[10].nOffset = 0x37;
-    charstats[10].fpLinker = 0;
-    charstats[0xb].szName = "ManaRegen";
-    charstats[0xb].eType = FIELDTYPE_CHAR;
-    charstats[0xb].nSize = 0;
-    charstats[0xb].nOffset = 0x3a;
-    charstats[0xb].fpLinker = 0;
-    charstats[0xc].szName = "ToHitFactor";
-    charstats[0xc].eType = FIELDTYPE_INT;
-    charstats[0xc].nSize = 0;
-    charstats[0xc].nOffset = 0x3c;
-    charstats[0xc].fpLinker = 0;
-    charstats[0xd].szName = "WalkVelocity";
-    charstats[0xd].eType = FIELDTYPE_CHAR;
-    charstats[0xd].nSize = 0;
-    charstats[0xd].nOffset = 0x40;
-    charstats[0xd].fpLinker = 0;
-    charstats[0xe].szName = "RunVelocity";
-    charstats[0xe].eType = FIELDTYPE_CHAR;
-    charstats[0xe].nSize = 0;
-    charstats[0xe].nOffset = 0x41;
-    charstats[0xe].fpLinker = 0;
-    charstats[0xf].szName = "RunDrain";
-    charstats[0xf].eType = FIELDTYPE_CHAR;
-    charstats[0x18].eType = FIELDTYPE_KEY_WORD;
-    charstats[0x18].fpLinker = (void*)DATATBLS_LookupStringId;
-    charstats[0x19].eType = FIELDTYPE_KEY_WORD;
-    charstats[0x19].fpLinker = (void*)DATATBLS_LookupStringId;
-    charstats[0x1a].eType = FIELDTYPE_KEY_WORD;
-    charstats[0x1a].fpLinker = (void*)DATATBLS_LookupStringId;
-    charstats[0x1b].eType = FIELDTYPE_KEY_WORD;
-    charstats[0x1b].fpLinker = (void*)DATATBLS_LookupStringId;
-    charstats[0x1c].eType = FIELDTYPE_KEY_WORD;
-    charstats[0x1c].fpLinker = (void*)DATATBLS_LookupStringId;
-    charstats[0xf].nSize = 0;
-    charstats[0xf].nOffset = 0x42;
-    charstats[0xf].fpLinker = 0;
-    charstats[0x10].szName = "LifePerLevel";
-    charstats[0x10].eType = FIELDTYPE_CHAR;
-    charstats[0x10].nSize = 0;
-    charstats[0x10].nOffset = 0x43;
-    charstats[0x10].fpLinker = 0;
-    charstats[0x11].szName = "StaminaPerLevel";
-    charstats[0x11].eType = FIELDTYPE_CHAR;
-    charstats[0x11].nSize = 0;
-    charstats[0x11].nOffset = 0x44;
-    charstats[0x11].fpLinker = 0;
-    charstats[0x12].szName = "ManaPerLevel";
-    charstats[0x12].eType = FIELDTYPE_CHAR;
-    charstats[0x12].nSize = 0;
-    charstats[0x12].nOffset = 0x45;
-    charstats[0x12].fpLinker = 0;
-    charstats[0x13].szName = "LifePerVitality";
-    charstats[0x13].eType = FIELDTYPE_CHAR;
-    charstats[0x13].nSize = 0;
-    charstats[0x13].nOffset = 0x46;
-    charstats[0x13].fpLinker = 0;
-    charstats[0x14].szName = "StaminaPerVitality";
-    charstats[0x14].eType = FIELDTYPE_CHAR;
-    charstats[0x14].nSize = 0;
-    charstats[0x14].nOffset = 0x47;
-    charstats[0x14].fpLinker = 0;
-    charstats[0x15].szName = "ManaPerMagic";
-    charstats[0x15].eType = FIELDTYPE_CHAR;
-    charstats[0x15].nSize = 0;
-    charstats[0x15].nOffset = 0x48;
-    charstats[0x15].fpLinker = 0;
-    charstats[0x16].szName = "BlockFactor";
-    charstats[0x16].eType = FIELDTYPE_CHAR;
-    charstats[0x16].nSize = 0;
-    charstats[0x16].nOffset = 0x49;
-    charstats[0x16].fpLinker = 0;
-    charstats[0x17].szName = "basewclass";
-    charstats[0x17].eType = FIELDTYPE_RAW4;
-    charstats[0x17].nSize = 0;
-    charstats[0x17].nOffset = 0x4c;
-    charstats[0x17].fpLinker = 0;
-    charstats[0x18].szName = "StrAllSkills";
-    charstats[0x18].nSize = 0;
-    charstats[0x18].nOffset = 0x52;
-    charstats[0x19].szName = "StrSkillTab1";
-    charstats[0x19].nSize = 0;
-    charstats[0x19].nOffset = 0x54;
-    charstats[0x1a].szName = "StrSkillTab2";
-    charstats[0x1a].nSize = 0;
-    charstats[0x1a].nOffset = 0x56;
-    charstats[0x1b].szName = "StrSkillTab3";
-    charstats[0x1b].nSize = 0;
-    charstats[0x1b].nOffset = 0x58;
-    charstats[0x1c].szName = "StrClassOnly";
-    charstats[0x1c].nSize = 0;
-    charstats[0x1c].nOffset = 0x5a;
-    charstats[0x1d].szName = "StartSkill";
-    charstats[0x1d].eType = FIELDTYPE_NAME_SHORT;
-    charstats[0x1d].nSize = 0;
-    charstats[0x1d].nOffset = 0xac;
-    charstats[0x1d].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    charstats[0x1e].szName = "Skill 1";
-    charstats[0x1e].eType = FIELDTYPE_NAME_SHORT;
-    charstats[0x1e].nSize = 0;
-    charstats[0x1e].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    charstats[0x1f].eType = FIELDTYPE_NAME_SHORT;
-    charstats[0x1f].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    charstats[0x20].eType = FIELDTYPE_NAME_SHORT;
-    charstats[0x20].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    charstats[0x21].eType = FIELDTYPE_NAME_SHORT;
-    charstats[0x21].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    charstats[0x22].eType = FIELDTYPE_NAME_SHORT;
-    charstats[0x22].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    charstats[0x23].eType = FIELDTYPE_NAME_SHORT;
-    charstats[0x23].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    charstats[0x24].eType = FIELDTYPE_NAME_SHORT;
-    charstats[0x24].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    charstats[0x25].eType = FIELDTYPE_NAME_SHORT;
-    charstats[0x25].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    charstats[0x26].eType = FIELDTYPE_NAME_SHORT;
-    charstats[0x26].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    charstats[0x27].eType = FIELDTYPE_NAME_SHORT;
-    charstats[0x27].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    charstats[0x1e].nOffset = 0xae;
-    charstats[0x1f].szName = "Skill 2";
-    charstats[0x1f].nSize = 0;
-    charstats[0x1f].nOffset = 0xb0;
-    charstats[0x20].szName = "Skill 3";
-    charstats[0x20].nSize = 0;
-    charstats[0x20].nOffset = 0xb2;
-    charstats[0x21].szName = "Skill 4";
-    charstats[0x21].nSize = 0;
-    charstats[0x21].nOffset = 0xb4;
-    charstats[0x22].szName = "Skill 5";
-    charstats[0x22].nSize = 0;
-    charstats[0x22].nOffset = 0xb6;
-    charstats[0x23].szName = "Skill 6";
-    charstats[0x23].nSize = 0;
-    charstats[0x23].nOffset = 0xb8;
-    charstats[0x24].szName = "Skill 7";
-    charstats[0x24].nSize = 0;
-    charstats[0x24].nOffset = 0xba;
-    charstats[0x25].szName = "Skill 8";
-    charstats[0x25].nSize = 0;
-    charstats[0x25].nOffset = 0xbc;
-    charstats[0x26].szName = "Skill 9";
-    charstats[0x26].nSize = 0;
-    charstats[0x26].nOffset = 0xbe;
-    charstats[0x27].szName = "Skill 10";
-    charstats[0x27].nSize = 0;
-    charstats[0x27].nOffset = 0xc0;
-    charstats[0x28].szName = "StatPerLevel";
-    charstats[0x28].eType = FIELDTYPE_CHAR;
-    charstats[0x28].nSize = 0;
-    charstats[0x28].nOffset = 0x50;
-    charstats[0x28].fpLinker = 0;
-    charstats[0x29].szName = "item1loc";
-    charstats[0x29].eType = FIELDTYPE_CODE_CHAR;
-    charstats[0x29].nSize = 0;
-    charstats[0x29].nOffset = 0x60;
-    charstats[0x29].fpLinker = &sgtDataTable.pTxtBodyLocsLink;
-    charstats[0x2a].szName = "item2loc";
-    charstats[0x2a].eType = FIELDTYPE_CODE_CHAR;
-    charstats[0x2a].nSize = 0;
-    charstats[0x2a].nOffset = 0x68;
-    charstats[0x2a].fpLinker = &sgtDataTable.pTxtBodyLocsLink;
-    charstats[0x2b].szName = "item3loc";
-    charstats[0x2b].eType = FIELDTYPE_CODE_CHAR;
-    charstats[0x2b].nSize = 0;
-    charstats[0x2b].nOffset = 0x70;
-    charstats[0x2b].fpLinker = &sgtDataTable.pTxtBodyLocsLink;
-    charstats[0x2c].szName = "item4loc";
-    charstats[0x2c].eType = FIELDTYPE_CODE_CHAR;
-    charstats[0x2c].nSize = 0;
-    charstats[0x2c].nOffset = 0x78;
-    charstats[0x2c].fpLinker = &sgtDataTable.pTxtBodyLocsLink;
-    charstats[0x2d].szName = "item5loc";
-    charstats[0x2d].eType = FIELDTYPE_CODE_CHAR;
-    charstats[0x2d].nSize = 0;
-    charstats[0x2d].nOffset = 0x80;
-    charstats[0x2d].fpLinker = &sgtDataTable.pTxtBodyLocsLink;
-    charstats[0x2e].szName = "item6loc";
-    charstats[0x2e].eType = FIELDTYPE_CODE_CHAR;
-    charstats[0x2e].nSize = 0;
-    charstats[0x2e].nOffset = 0x88;
-    charstats[0x2e].fpLinker = &sgtDataTable.pTxtBodyLocsLink;
-    charstats[0x2f].szName = "item7loc";
-    charstats[0x2f].eType = FIELDTYPE_CODE_CHAR;
-    charstats[0x2f].nSize = 0;
-    charstats[0x2f].nOffset = 0x90;
-    charstats[0x2f].fpLinker = &sgtDataTable.pTxtBodyLocsLink;
-    charstats[0x30].szName = "item8loc";
-    charstats[0x30].eType = FIELDTYPE_CODE_CHAR;
-    charstats[0x30].nSize = 0;
-    charstats[0x30].nOffset = 0x98;
-    charstats[0x30].fpLinker = &sgtDataTable.pTxtBodyLocsLink;
-    charstats[0x31].szName = "item9loc";
-    charstats[0x31].eType = FIELDTYPE_CODE_CHAR;
-    charstats[0x31].nSize = 0;
-    charstats[0x31].nOffset = 0xa0;
-    charstats[0x31].fpLinker = &sgtDataTable.pTxtBodyLocsLink;
-    charstats[0x32].szName = "item10loc";
-    charstats[0x32].eType = FIELDTYPE_CODE_CHAR;
-    charstats[0x32].nSize = 0;
-    charstats[0x32].nOffset = 0xa8;
-    charstats[0x32].fpLinker = &sgtDataTable.pTxtBodyLocsLink;
-    charstats[0x33].szName = "item1";
-    charstats[0x33].eType = FIELDTYPE_RAW4;
-    charstats[0x33].nSize = 0;
-    charstats[0x33].nOffset = 0x5c;
-    charstats[0x33].fpLinker = 0;
-    charstats[0x34].szName = "item1count";
-    charstats[0x34].eType = FIELDTYPE_CHAR;
-    charstats[0x34].nSize = 0;
-    charstats[0x34].nOffset = 0x61;
-    charstats[0x34].fpLinker = 0;
-    charstats[0x35].szName = "item2";
-    charstats[0x35].eType = FIELDTYPE_RAW4;
-    charstats[0x35].nSize = 0;
-    charstats[0x35].nOffset = 100;
-    charstats[0x35].fpLinker = 0;
-    charstats[0x36].szName = "item2count";
-    charstats[0x36].eType = FIELDTYPE_CHAR;
-    charstats[0x36].nSize = 0;
-    charstats[0x36].nOffset = 0x69;
-    charstats[0x36].fpLinker = 0;
-    charstats[0x37].szName = "item3";
-    charstats[0x37].eType = FIELDTYPE_RAW4;
-    charstats[0x37].nSize = 0;
-    charstats[0x37].nOffset = 0x6c;
-    charstats[0x37].fpLinker = 0;
-    charstats[0x38].szName = "item3count";
-    charstats[0x38].eType = FIELDTYPE_CHAR;
-    charstats[0x38].nSize = 0;
-    charstats[0x38].nOffset = 0x71;
-    charstats[0x38].fpLinker = 0;
-    charstats[0x39].szName = "item4";
-    charstats[0x39].eType = FIELDTYPE_RAW4;
-    charstats[0x39].nSize = 0;
-    charstats[0x39].nOffset = 0x74;
-    charstats[0x39].fpLinker = 0;
-    charstats[0x3a].szName = "item4count";
-    charstats[0x3a].eType = FIELDTYPE_CHAR;
-    charstats[0x3a].nSize = 0;
-    charstats[0x3a].nOffset = 0x79;
-    charstats[0x3a].fpLinker = 0;
-    charstats[0x3b].szName = "item5";
-    charstats[0x3b].eType = FIELDTYPE_RAW4;
-    charstats[0x3b].nSize = 0;
-    charstats[0x3b].nOffset = 0x7c;
-    charstats[0x3b].fpLinker = 0;
-    charstats[0x3c].szName = "item5count";
-    charstats[0x3c].eType = FIELDTYPE_CHAR;
-    charstats[0x3c].nSize = 0;
-    charstats[0x3c].nOffset = 0x81;
-    charstats[0x3c].fpLinker = 0;
-    charstats[0x3d].szName = "item6";
-    charstats[0x3d].eType = FIELDTYPE_RAW4;
-    charstats[0x3d].nSize = 0;
-    charstats[0x3d].nOffset = 0x84;
-    charstats[0x3d].fpLinker = 0;
-    charstats[0x3e].szName = "item6count";
-    charstats[0x3e].eType = FIELDTYPE_CHAR;
-    charstats[0x3e].nSize = 0;
-    charstats[0x40].eType = FIELDTYPE_CHAR;
-    charstats[0x42].eType = FIELDTYPE_CHAR;
-    charstats[0x44].eType = FIELDTYPE_CHAR;
-    charstats[0x46].eType = FIELDTYPE_CHAR;
-    charstats[0x3e].nOffset = 0x89;
-    charstats[0x3e].fpLinker = 0;
-    charstats[0x3f].szName = "item7";
-    charstats[0x3f].eType = FIELDTYPE_RAW4;
-    charstats[0x3f].nSize = 0;
-    charstats[0x3f].nOffset = 0x8c;
-    charstats[0x3f].fpLinker = 0;
-    charstats[0x40].szName = "item7count";
-    charstats[0x40].nSize = 0;
-    charstats[0x40].nOffset = 0x91;
-    charstats[0x40].fpLinker = 0;
-    charstats[0x41].szName = "item8";
-    charstats[0x41].eType = FIELDTYPE_RAW4;
-    charstats[0x41].nSize = 0;
-    charstats[0x41].nOffset = 0x94;
-    charstats[0x41].fpLinker = 0;
-    charstats[0x42].szName = "item8count";
-    charstats[0x42].nSize = 0;
-    charstats[0x42].nOffset = 0x99;
-    charstats[0x42].fpLinker = 0;
-    charstats[0x43].szName = "item9";
-    charstats[0x43].eType = FIELDTYPE_RAW4;
-    charstats[0x43].nSize = 0;
-    charstats[0x43].nOffset = 0x9c;
-    charstats[0x43].fpLinker = 0;
-    charstats[0x44].szName = "item9count";
-    charstats[0x44].nSize = 0;
-    charstats[0x44].nOffset = 0xa1;
-    charstats[0x44].fpLinker = 0;
-    charstats[0x45].szName = "item10";
-    charstats[0x45].eType = FIELDTYPE_RAW4;
-    charstats[0x45].nSize = 0;
-    charstats[0x45].nOffset = 0xa4;
-    charstats[0x45].fpLinker = 0;
-    charstats[0x46].szName = "item10count";
-    charstats[0x46].nSize = 0;
-    charstats[0x46].nOffset = 0xa9;
-    charstats[0x46].fpLinker = 0;
-    charstats[0x47].szName = "end";
-    charstats[0x47].eType = FIELDTYPE_END;
-    charstats[0x47].nSize = 0;
-    charstats[0x47].nOffset = 0;
-    charstats[0x47].fpLinker = 0;
+    D2BinFieldInputStrc charstats[72] = {
+      {"class", FIELDTYPE_ASCII, 0xf, 0x20, 0},
+      {"str", FIELDTYPE_CHAR, 0, 0x30, 0},
+      {"dex", FIELDTYPE_CHAR, 0, 0x31, 0},
+      {"vit", FIELDTYPE_CHAR, 0, 0x33, 0},
+      {"int", FIELDTYPE_CHAR, 0, 0x32, 0},
+      {"stamina", FIELDTYPE_CHAR, 0, 0x34, 0},
+      {"hpadd", FIELDTYPE_CHAR, 0, 0x35, 0},
+      {"PercentStr", FIELDTYPE_CHAR, 0, 0x36, 0},
+      {"PercentDex", FIELDTYPE_CHAR, 0, 0x38, 0},
+      {"PercentVit", FIELDTYPE_CHAR, 0, 0x39, 0},
+      {"PercentInt", FIELDTYPE_CHAR, 0, 0x37, 0},
+      {"ManaRegen", FIELDTYPE_CHAR, 0, 0x3a, 0},
+      {"ToHitFactor", FIELDTYPE_INT, 0, 0x3c, 0},
+      {"WalkVelocity", FIELDTYPE_CHAR, 0, 0x40, 0},
+      {"RunVelocity", FIELDTYPE_CHAR, 0, 0x41, 0},
+      {"RunDrain", FIELDTYPE_CHAR, 0, 0x42, 0},
+      {"LifePerLevel", FIELDTYPE_CHAR, 0, 0x43, 0},
+      {"StaminaPerLevel", FIELDTYPE_CHAR, 0, 0x44, 0},
+      {"ManaPerLevel", FIELDTYPE_CHAR, 0, 0x45, 0},
+      {"LifePerVitality", FIELDTYPE_CHAR, 0, 0x46, 0},
+      {"StaminaPerVitality", FIELDTYPE_CHAR, 0, 0x47, 0},
+      {"ManaPerMagic", FIELDTYPE_CHAR, 0, 0x48, 0},
+      {"BlockFactor", FIELDTYPE_CHAR, 0, 0x49, 0},
+      {"basewclass", FIELDTYPE_RAW4, 0, 0x4c, 0},
+      {"StrAllSkills", FIELDTYPE_KEY_WORD, 0, 0x52, (void*)DATATBLS_LookupStringId},
+      {"StrSkillTab1", FIELDTYPE_KEY_WORD, 0, 0x54, (void*)DATATBLS_LookupStringId},
+      {"StrSkillTab2", FIELDTYPE_KEY_WORD, 0, 0x56, (void*)DATATBLS_LookupStringId},
+      {"StrSkillTab3", FIELDTYPE_KEY_WORD, 0, 0x58, (void*)DATATBLS_LookupStringId},
+      {"StrClassOnly", FIELDTYPE_KEY_WORD, 0, 0x5a, (void*)DATATBLS_LookupStringId},
+      {"StartSkill", FIELDTYPE_NAME_SHORT, 0, 0xac, &sgtDataTable.pTxtSkillsLink},
+      {"Skill 1", FIELDTYPE_NAME_SHORT, 0, 0xae, &sgtDataTable.pTxtSkillsLink},
+      {"Skill 2", FIELDTYPE_NAME_SHORT, 0, 0xb0, &sgtDataTable.pTxtSkillsLink},
+      {"Skill 3", FIELDTYPE_NAME_SHORT, 0, 0xb2, &sgtDataTable.pTxtSkillsLink},
+      {"Skill 4", FIELDTYPE_NAME_SHORT, 0, 0xb4, &sgtDataTable.pTxtSkillsLink},
+      {"Skill 5", FIELDTYPE_NAME_SHORT, 0, 0xb6, &sgtDataTable.pTxtSkillsLink},
+      {"Skill 6", FIELDTYPE_NAME_SHORT, 0, 0xb8, &sgtDataTable.pTxtSkillsLink},
+      {"Skill 7", FIELDTYPE_NAME_SHORT, 0, 0xba, &sgtDataTable.pTxtSkillsLink},
+      {"Skill 8", FIELDTYPE_NAME_SHORT, 0, 0xbc, &sgtDataTable.pTxtSkillsLink},
+      {"Skill 9", FIELDTYPE_NAME_SHORT, 0, 0xbe, &sgtDataTable.pTxtSkillsLink},
+      {"Skill 10", FIELDTYPE_NAME_SHORT, 0, 0xc0, &sgtDataTable.pTxtSkillsLink},
+      {"StatPerLevel", FIELDTYPE_CHAR, 0, 0x50, 0},
+      {"item1loc", FIELDTYPE_CODE_CHAR, 0, 0x60, &sgtDataTable.pTxtBodyLocsLink},
+      {"item2loc", FIELDTYPE_CODE_CHAR, 0, 0x68, &sgtDataTable.pTxtBodyLocsLink},
+      {"item3loc", FIELDTYPE_CODE_CHAR, 0, 0x70, &sgtDataTable.pTxtBodyLocsLink},
+      {"item4loc", FIELDTYPE_CODE_CHAR, 0, 0x78, &sgtDataTable.pTxtBodyLocsLink},
+      {"item5loc", FIELDTYPE_CODE_CHAR, 0, 0x80, &sgtDataTable.pTxtBodyLocsLink},
+      {"item6loc", FIELDTYPE_CODE_CHAR, 0, 0x88, &sgtDataTable.pTxtBodyLocsLink},
+      {"item7loc", FIELDTYPE_CODE_CHAR, 0, 0x90, &sgtDataTable.pTxtBodyLocsLink},
+      {"item8loc", FIELDTYPE_CODE_CHAR, 0, 0x98, &sgtDataTable.pTxtBodyLocsLink},
+      {"item9loc", FIELDTYPE_CODE_CHAR, 0, 0xa0, &sgtDataTable.pTxtBodyLocsLink},
+      {"item10loc", FIELDTYPE_CODE_CHAR, 0, 0xa8, &sgtDataTable.pTxtBodyLocsLink},
+      {"item1", FIELDTYPE_RAW4, 0, 0x5c, 0},
+      {"item1count", FIELDTYPE_CHAR, 0, 0x61, 0},
+      {"item2", FIELDTYPE_RAW4, 0, 100, 0},
+      {"item2count", FIELDTYPE_CHAR, 0, 0x69, 0},
+      {"item3", FIELDTYPE_RAW4, 0, 0x6c, 0},
+      {"item3count", FIELDTYPE_CHAR, 0, 0x71, 0},
+      {"item4", FIELDTYPE_RAW4, 0, 0x74, 0},
+      {"item4count", FIELDTYPE_CHAR, 0, 0x79, 0},
+      {"item5", FIELDTYPE_RAW4, 0, 0x7c, 0},
+      {"item5count", FIELDTYPE_CHAR, 0, 0x81, 0},
+      {"item6", FIELDTYPE_RAW4, 0, 0x84, 0},
+      {"item6count", FIELDTYPE_CHAR, 0, 0x89, 0},
+      {"item7", FIELDTYPE_RAW4, 0, 0x8c, 0},
+      {"item7count", FIELDTYPE_CHAR, 0, 0x91, 0},
+      {"item8", FIELDTYPE_RAW4, 0, 0x94, 0},
+      {"item8count", FIELDTYPE_CHAR, 0, 0x99, 0},
+      {"item9", FIELDTYPE_RAW4, 0, 0x9c, 0},
+      {"item9count", FIELDTYPE_CHAR, 0, 0xa1, 0},
+      {"item10", FIELDTYPE_RAW4, 0, 0xa4, 0},
+      {"item10count", FIELDTYPE_CHAR, 0, 0xa9, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtCharStats = (D2CharStatsTxt*)CompileTxt(pMemory, "charstats", charstats, &sgtDataTable.nTxtCharStatsSize, 0xc4);
     TXT_CharStats_DefineWideStringClass(sgtDataTable.pTxtCharStats, sgtDataTable.nTxtCharStatsSize, 0xc4, 0x20, 0, 0x10);
 }
 
 // Defines and compiles the experience.txt binary field descriptor table. Registers 8 INT fields (one per player class: Amazon through Assassin) plus an ExpRatio field at consecutive 4-byte offsets, then calls CompileTxt to parse experience.txt into sgtDataTable.pTxtExperience using the provided memory pool.
 void __stdcall TXT_AllocTxt_experience(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc experience[9];
-    experience[0].nSize = 0;
-    experience[0].nOffset = 0;
-    experience[0].fpLinker = 0;
-    experience[1].nSize = 0;
-    experience[1].fpLinker = 0;
-    experience[2].nSize = 0;
-    experience[2].fpLinker = 0;
-    experience[3].nSize = 0;
-    experience[3].fpLinker = 0;
-    experience[4].nSize = 0;
-    experience[4].fpLinker = 0;
-    experience[5].nSize = 0;
-    experience[5].fpLinker = 0;
-    experience[6].nSize = 0;
-    experience[6].fpLinker = 0;
-    experience[7].nSize = 0;
-    experience[7].fpLinker = 0;
-    experience[8].eType = FIELDTYPE_END;
-    experience[8].nSize = 0;
-    experience[8].nOffset = 0;
-    experience[8].fpLinker = 0;
-    experience[0].eType = FIELDTYPE_INT;
-    experience[1].eType = FIELDTYPE_INT;
-    experience[2].eType = FIELDTYPE_INT;
-    experience[3].eType = FIELDTYPE_INT;
-    experience[4].eType = FIELDTYPE_INT;
-    experience[5].eType = FIELDTYPE_INT;
-    experience[6].eType = FIELDTYPE_INT;
-    experience[7].eType = FIELDTYPE_INT;
-    experience[0].szName = "Amazon";
-    experience[1].szName = "Sorceress";
-    experience[1].nOffset = 4;
-    experience[2].szName = "Necromancer";
-    experience[2].nOffset = 8;
-    experience[3].szName = "Paladin";
-    experience[3].nOffset = 0xc;
-    experience[4].szName = "Barbarian";
-    experience[4].nOffset = 0x10;
-    experience[5].szName = "Druid";
-    experience[5].nOffset = 0x14;
-    experience[6].szName = "Assassin";
-    experience[6].nOffset = 0x18;
-    experience[7].szName = "ExpRatio";
-    experience[7].nOffset = 0x1c;
-    experience[8].szName = "end";
+    D2BinFieldInputStrc experience[9] = {
+      {"Amazon", FIELDTYPE_INT, 0, 0, 0},
+      {"Sorceress", FIELDTYPE_INT, 0, 4, 0},
+      {"Necromancer", FIELDTYPE_INT, 0, 8, 0},
+      {"Paladin", FIELDTYPE_INT, 0, 0xc, 0},
+      {"Barbarian", FIELDTYPE_INT, 0, 0x10, 0},
+      {"Druid", FIELDTYPE_INT, 0, 0x14, 0},
+      {"Assassin", FIELDTYPE_INT, 0, 0x18, 0},
+      {"ExpRatio", FIELDTYPE_INT, 0, 0x1c, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtExperience = (D2ExperienceTxt*)CompileTxt(pMemory, "experience", experience, nullptr, 0x20);
 }
 
@@ -1671,10 +1237,6 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
     D2SkillsTxt* local_EAX_15292;
     int iVar2;
     int nCounter;
-    D2BinFieldInputStrc skills[239];
-    D2BinFieldInputStrc pskilldesc[114];
-    D2BinFieldInputStrc monstats[2];
-    D2BinFieldInputStrc skilldesc[2];
     int nMonStatsSize;
     D2SkillsTxt* nSkillId;
     char nPetType;
@@ -1685,1771 +1247,363 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
     __frame0.pMonStatsLink = 0;
     __frame0.pSkillDescLink = 0;
     void* pMonStatsTable = 0;
-    pskilldesc[0].szName = "skilldesc";
-    pskilldesc[0].eType = FIELDTYPE_NAME_I_WORD;
-    pskilldesc[0].nSize = 0;
-    pskilldesc[0].nOffset = 0;
-    pskilldesc[0].fpLinker = &sgtDataTable.pTxtSkillDescLink;
-    pskilldesc[1].szName = "skillpage";
-    pskilldesc[1].eType = FIELDTYPE_CHAR;
-    pskilldesc[1].nSize = 0;
-    pskilldesc[1].nOffset = 2;
-    pskilldesc[1].fpLinker = 0;
-    pskilldesc[2].szName = "skillrow";
-    pskilldesc[2].eType = FIELDTYPE_CHAR;
-    pskilldesc[2].nSize = 0;
-    pskilldesc[2].nOffset = 3;
-    pskilldesc[2].fpLinker = 0;
-    pskilldesc[3].szName = "skillcolumn";
-    pskilldesc[3].eType = FIELDTYPE_CHAR;
-    pskilldesc[3].nSize = 0;
-    pskilldesc[3].nOffset = 4;
-    pskilldesc[3].fpLinker = 0;
-    pskilldesc[4].szName = "ListRow";
-    pskilldesc[4].eType = FIELDTYPE_CHAR;
-    pskilldesc[4].nSize = 0;
-    pskilldesc[4].nOffset = 5;
-    pskilldesc[4].fpLinker = 0;
-    pskilldesc[5].szName = "ListPool";
-    pskilldesc[5].eType = FIELDTYPE_CHAR;
-    pskilldesc[5].nSize = 0;
-    pskilldesc[5].nOffset = 6;
-    pskilldesc[5].fpLinker = 0;
-    pskilldesc[6].szName = "iconcel";
-    pskilldesc[6].eType = FIELDTYPE_CHAR;
-    pskilldesc[6].nSize = 0;
-    pskilldesc[6].nOffset = 7;
-    pskilldesc[6].fpLinker = 0;
-    pskilldesc[7].szName = "str name";
-    pskilldesc[7].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[7].nSize = 0;
-    pskilldesc[7].nOffset = 8;
-    pskilldesc[7].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[8].szName = "str short";
-    pskilldesc[8].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[8].nSize = 0;
-    pskilldesc[8].nOffset = 10;
-    pskilldesc[8].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[9].szName = "str long";
-    pskilldesc[9].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[9].nSize = 0;
-    pskilldesc[9].nOffset = 0xc;
-    pskilldesc[9].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[10].szName = "str alt";
-    pskilldesc[10].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[10].nSize = 0;
-    pskilldesc[10].nOffset = 0xe;
-    pskilldesc[10].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0xb].szName = "str mana";
-    pskilldesc[0xb].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0xb].nSize = 0;
-    pskilldesc[0xb].nOffset = 0x10;
-    pskilldesc[0xb].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0xc].szName = "descdam";
-    pskilldesc[0xc].eType = FIELDTYPE_SHORT;
-    pskilldesc[0xc].nSize = 0;
-    pskilldesc[0xc].nOffset = 0x12;
-    pskilldesc[0xc].fpLinker = 0;
-    pskilldesc[0xd].szName = "descatt";
-    pskilldesc[0xd].eType = FIELDTYPE_SHORT;
-    pskilldesc[0xd].nSize = 0;
-    pskilldesc[0xd].nOffset = 0x14;
-    pskilldesc[0xd].fpLinker = 0;
-    pskilldesc[0xe].szName = "ddam calc1";
-    pskilldesc[0xe].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0xe].nSize = 0;
-    pskilldesc[0xe].nOffset = 0x18;
-    pskilldesc[0xe].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0xf].szName = "ddam calc2";
-    pskilldesc[0xf].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0xf].nSize = 0;
-    pskilldesc[0xf].nOffset = 0x1c;
-    pskilldesc[0xf].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x10].szName = "p1dmelem";
-    pskilldesc[0x10].eType = FIELDTYPE_CODE_CHAR;
-    pskilldesc[0x10].nSize = 0;
-    pskilldesc[0x10].nOffset = 0x20;
-    pskilldesc[0x10].fpLinker = &sgtDataTable.pTxtElemTypesLink;
-    pskilldesc[0x11].szName = "p1dmmin";
-    pskilldesc[0x11].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x11].nSize = 0;
-    pskilldesc[0x11].nOffset = 0x24;
-    pskilldesc[0x11].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x12].szName = "p1dmmax";
-    pskilldesc[0x12].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x12].nSize = 0;
-    pskilldesc[0x12].nOffset = 0x30;
-    pskilldesc[0x12].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x13].szName = "p2dmelem";
-    pskilldesc[0x13].eType = FIELDTYPE_CODE_CHAR;
-    pskilldesc[0x13].nSize = 0;
-    pskilldesc[0x13].nOffset = 0x21;
-    pskilldesc[0x13].fpLinker = &sgtDataTable.pTxtElemTypesLink;
-    pskilldesc[0x14].szName = "p2dmmin";
-    pskilldesc[0x14].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x14].nSize = 0;
-    pskilldesc[0x14].nOffset = 0x28;
-    pskilldesc[0x14].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x15].szName = "p2dmmax";
-    pskilldesc[0x15].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x15].nSize = 0;
-    pskilldesc[0x15].nOffset = 0x34;
-    pskilldesc[0x15].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x16].szName = "p3dmelem";
-    pskilldesc[0x16].eType = FIELDTYPE_CODE_CHAR;
-    pskilldesc[0x16].nSize = 0;
-    pskilldesc[0x16].nOffset = 0x22;
-    pskilldesc[0x16].fpLinker = &sgtDataTable.pTxtElemTypesLink;
-    pskilldesc[0x17].szName = "p3dmmin";
-    pskilldesc[0x17].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x17].nSize = 0;
-    pskilldesc[0x17].nOffset = 0x2c;
-    pskilldesc[0x17].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x18].szName = "p3dmmax";
-    pskilldesc[0x18].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x18].nSize = 0;
-    pskilldesc[0x18].nOffset = 0x38;
-    pskilldesc[0x18].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x19].szName = "descmissile1";
-    pskilldesc[0x19].eType = FIELDTYPE_NAME_SHORT;
-    pskilldesc[0x19].nSize = 0;
-    pskilldesc[0x19].nOffset = 0x3c;
-    pskilldesc[0x19].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    pskilldesc[0x1a].szName = "descmissile2";
-    pskilldesc[0x1a].eType = FIELDTYPE_NAME_SHORT;
-    pskilldesc[0x1a].nSize = 0;
-    pskilldesc[0x1a].nOffset = 0x3e;
-    pskilldesc[0x1a].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    pskilldesc[0x1b].szName = "descmissile3";
-    pskilldesc[0x1b].eType = FIELDTYPE_NAME_SHORT;
-    pskilldesc[0x1b].nSize = 0;
-    pskilldesc[0x1b].nOffset = 0x40;
-    pskilldesc[0x1b].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    pskilldesc[0x1c].szName = "descline1";
-    pskilldesc[0x1c].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x1c].nSize = 0;
-    pskilldesc[0x1c].nOffset = 0x42;
-    pskilldesc[0x1c].fpLinker = 0;
-    pskilldesc[0x1d].szName = "desctexta1";
-    pskilldesc[0x1d].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x1d].nSize = 0;
-    pskilldesc[0x1d].nOffset = 0x54;
-    pskilldesc[0x1d].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x1e].szName = "desctextb1";
-    pskilldesc[0x1e].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x1e].nSize = 0;
-    pskilldesc[0x1e].nOffset = 0x76;
-    pskilldesc[0x1e].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x1f].szName = "desccalca1";
-    pskilldesc[0x1f].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x1f].nSize = 0;
-    pskilldesc[0x1f].nOffset = 0x98;
-    pskilldesc[0x1f].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x20].szName = "desccalcb1";
-    pskilldesc[0x20].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x20].nSize = 0;
-    pskilldesc[0x20].nOffset = 0xdc;
-    pskilldesc[0x20].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x21].szName = "descline2";
-    pskilldesc[0x21].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x21].nSize = 0;
-    pskilldesc[0x21].nOffset = 0x43;
-    pskilldesc[0x21].fpLinker = 0;
-    pskilldesc[0x22].szName = "desctexta2";
-    pskilldesc[0x22].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x22].nSize = 0;
-    pskilldesc[0x22].nOffset = 0x56;
-    pskilldesc[0x22].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x23].szName = "desctextb2";
-    pskilldesc[0x23].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x23].nSize = 0;
-    pskilldesc[0x23].nOffset = 0x78;
-    pskilldesc[0x23].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x24].szName = "desccalca2";
-    pskilldesc[0x24].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x24].nSize = 0;
-    pskilldesc[0x24].nOffset = 0x9c;
-    pskilldesc[0x24].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x25].szName = "desccalcb2";
-    pskilldesc[0x25].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x25].nSize = 0;
-    pskilldesc[0x25].nOffset = 0xe0;
-    pskilldesc[0x25].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x26].szName = "descline3";
-    pskilldesc[0x26].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x26].nSize = 0;
-    pskilldesc[0x26].nOffset = 0x44;
-    pskilldesc[0x26].fpLinker = 0;
-    pskilldesc[0x27].szName = "desctexta3";
-    pskilldesc[0x27].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x27].nSize = 0;
-    pskilldesc[0x27].nOffset = 0x58;
-    pskilldesc[0x27].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x28].szName = "desctextb3";
-    pskilldesc[0x28].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x28].nSize = 0;
-    pskilldesc[0x28].nOffset = 0x7a;
-    pskilldesc[0x28].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x29].szName = "desccalca3";
-    pskilldesc[0x29].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x29].nSize = 0;
-    pskilldesc[0x29].nOffset = 0xa0;
-    pskilldesc[0x29].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x2a].szName = "desccalcb3";
-    pskilldesc[0x2a].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x2a].nSize = 0;
-    pskilldesc[0x2a].nOffset = 0xe4;
-    pskilldesc[0x2a].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x2b].szName = "descline4";
-    pskilldesc[0x2b].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x2b].nSize = 0;
-    pskilldesc[0x2b].nOffset = 0x45;
-    pskilldesc[0x2b].fpLinker = 0;
-    pskilldesc[0x2c].szName = "desctexta4";
-    pskilldesc[0x2c].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x2c].nSize = 0;
-    pskilldesc[0x2c].nOffset = 0x5a;
-    pskilldesc[0x2c].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x2d].szName = "desctextb4";
-    pskilldesc[0x2d].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x2d].nSize = 0;
-    pskilldesc[0x2d].nOffset = 0x7c;
-    pskilldesc[0x2d].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x2e].szName = "desccalca4";
-    pskilldesc[0x2e].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x2e].nSize = 0;
-    pskilldesc[0x2e].nOffset = 0xa4;
-    pskilldesc[0x2e].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x2f].szName = "desccalcb4";
-    pskilldesc[0x2f].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x2f].nSize = 0;
-    pskilldesc[0x2f].nOffset = 0xe8;
-    pskilldesc[0x2f].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x30].szName = "descline5";
-    pskilldesc[0x30].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x30].nSize = 0;
-    pskilldesc[0x30].nOffset = 0x46;
-    pskilldesc[0x30].fpLinker = 0;
-    pskilldesc[0x31].szName = "desctexta5";
-    pskilldesc[0x31].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x31].nSize = 0;
-    pskilldesc[0x31].nOffset = 0x5c;
-    pskilldesc[0x31].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x32].szName = "desctextb5";
-    pskilldesc[0x32].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x32].nSize = 0;
-    pskilldesc[0x32].nOffset = 0x7e;
-    pskilldesc[0x32].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x33].szName = "desccalca5";
-    pskilldesc[0x33].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x33].nSize = 0;
-    pskilldesc[0x33].nOffset = 0xa8;
-    pskilldesc[0x33].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x34].szName = "desccalcb5";
-    pskilldesc[0x34].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x34].nSize = 0;
-    pskilldesc[0x34].nOffset = 0xec;
-    pskilldesc[0x34].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x35].szName = "descline6";
-    pskilldesc[0x35].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x35].nSize = 0;
-    pskilldesc[0x35].nOffset = 0x47;
-    pskilldesc[0x35].fpLinker = 0;
-    pskilldesc[0x36].szName = "desctexta6";
-    pskilldesc[0x36].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x36].nSize = 0;
-    pskilldesc[0x36].nOffset = 0x5e;
-    pskilldesc[0x36].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x37].szName = "desctextb6";
-    pskilldesc[0x37].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x37].nSize = 0;
-    pskilldesc[0x37].nOffset = 0x80;
-    pskilldesc[0x37].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x38].szName = "desccalca6";
-    pskilldesc[0x38].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x38].nSize = 0;
-    pskilldesc[0x38].nOffset = 0xac;
-    pskilldesc[0x38].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x39].szName = "desccalcb6";
-    pskilldesc[0x39].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x39].nSize = 0;
-    pskilldesc[0x39].nOffset = 0xf0;
-    pskilldesc[0x39].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x3a].szName = "dsc2line1";
-    pskilldesc[0x3a].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x3a].nSize = 0;
-    pskilldesc[0x3a].nOffset = 0x48;
-    pskilldesc[0x3a].fpLinker = 0;
-    pskilldesc[0x3b].szName = "dsc2texta1";
-    pskilldesc[0x3b].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x3b].nSize = 0;
-    pskilldesc[0x3b].nOffset = 0x60;
-    pskilldesc[0x3b].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x3c].szName = "dsc2textb1";
-    pskilldesc[0x3c].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x3c].nSize = 0;
-    pskilldesc[0x3c].nOffset = 0x82;
-    pskilldesc[0x3c].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x3d].szName = "dsc2calca1";
-    pskilldesc[0x3d].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x3d].nSize = 0;
-    pskilldesc[0x3d].nOffset = 0xb0;
-    pskilldesc[0x3d].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x3e].szName = "dsc2calcb1";
-    pskilldesc[0x3e].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x3e].nSize = 0;
-    pskilldesc[0x3e].nOffset = 0xf4;
-    pskilldesc[0x3e].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x3f].szName = "dsc2line2";
-    pskilldesc[0x3f].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x3f].nSize = 0;
-    pskilldesc[0x3f].nOffset = 0x49;
-    pskilldesc[0x3f].fpLinker = 0;
-    pskilldesc[0x40].szName = "dsc2texta2";
-    pskilldesc[0x40].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x40].nSize = 0;
-    pskilldesc[0x40].nOffset = 0x62;
-    pskilldesc[0x40].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x41].szName = "dsc2textb2";
-    pskilldesc[0x41].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x41].nSize = 0;
-    pskilldesc[0x41].nOffset = 0x84;
-    pskilldesc[0x41].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x42].szName = "dsc2calca2";
-    pskilldesc[0x42].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x42].nSize = 0;
-    pskilldesc[0x42].nOffset = 0xb4;
-    pskilldesc[0x42].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x43].szName = "dsc2calcb2";
-    pskilldesc[0x43].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x43].nSize = 0;
-    pskilldesc[0x43].nOffset = 0xf8;
-    pskilldesc[0x43].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x44].szName = "dsc2line3";
-    pskilldesc[0x44].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x44].nSize = 0;
-    pskilldesc[0x44].nOffset = 0x4a;
-    pskilldesc[0x44].fpLinker = 0;
-    pskilldesc[0x45].szName = "dsc2texta3";
-    pskilldesc[0x45].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x45].nSize = 0;
-    pskilldesc[0x45].nOffset = 100;
-    pskilldesc[0x45].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x46].szName = "dsc2textb3";
-    pskilldesc[0x46].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x46].nSize = 0;
-    pskilldesc[0x46].nOffset = 0x86;
-    pskilldesc[0x46].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x47].szName = "dsc2calca3";
-    pskilldesc[0x47].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x47].nSize = 0;
-    pskilldesc[0x47].nOffset = 0xb8;
-    pskilldesc[0x47].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x48].szName = "dsc2calcb3";
-    pskilldesc[0x48].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x48].nSize = 0;
-    pskilldesc[0x48].nOffset = 0xfc;
-    pskilldesc[0x48].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x49].szName = "dsc2line4";
-    pskilldesc[0x49].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x49].nSize = 0;
-    pskilldesc[0x49].nOffset = 0x4b;
-    pskilldesc[0x49].fpLinker = 0;
-    pskilldesc[0x4a].szName = "dsc2texta4";
-    pskilldesc[0x4a].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x4a].nSize = 0;
-    pskilldesc[0x4a].nOffset = 0x66;
-    pskilldesc[0x4a].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x4b].szName = "dsc2textb4";
-    pskilldesc[0x4b].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x4b].nSize = 0;
-    pskilldesc[0x4b].nOffset = 0x88;
-    pskilldesc[0x4b].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x4c].szName = "dsc2calca4";
-    pskilldesc[0x4c].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x4c].nSize = 0;
-    pskilldesc[0x4c].nOffset = 0xbc;
-    pskilldesc[0x4c].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x4d].szName = "dsc2calcb4";
-    pskilldesc[0x4d].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x4d].nSize = 0;
-    pskilldesc[0x4d].nOffset = 0x100;
-    pskilldesc[0x4d].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x4e].szName = "dsc3line1";
-    pskilldesc[0x4e].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x4e].nSize = 0;
-    pskilldesc[0x4e].nOffset = 0x4c;
-    pskilldesc[0x4e].fpLinker = 0;
-    pskilldesc[0x4f].szName = "dsc3texta1";
-    pskilldesc[0x4f].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x4f].nSize = 0;
-    pskilldesc[0x4f].nOffset = 0x68;
-    pskilldesc[0x4f].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x50].szName = "dsc3textb1";
-    pskilldesc[0x50].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x50].nSize = 0;
-    pskilldesc[0x50].nOffset = 0x8a;
-    pskilldesc[0x50].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x51].szName = "dsc3calca1";
-    pskilldesc[0x51].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x51].nSize = 0;
-    pskilldesc[0x51].nOffset = 0xc0;
-    pskilldesc[0x51].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x52].szName = "dsc3calcb1";
-    pskilldesc[0x52].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x52].nSize = 0;
-    pskilldesc[0x52].nOffset = 0x104;
-    pskilldesc[0x52].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x53].szName = "dsc3line2";
-    pskilldesc[0x53].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x53].nSize = 0;
-    pskilldesc[0x53].nOffset = 0x4d;
-    pskilldesc[0x53].fpLinker = 0;
-    pskilldesc[0x54].szName = "dsc3texta2";
-    pskilldesc[0x54].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x54].nSize = 0;
-    pskilldesc[0x54].nOffset = 0x6a;
-    pskilldesc[0x54].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x55].szName = "dsc3textb2";
-    pskilldesc[0x55].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x55].nSize = 0;
-    pskilldesc[0x55].nOffset = 0x8c;
-    pskilldesc[0x55].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x56].szName = "dsc3calca2";
-    pskilldesc[0x56].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x56].nSize = 0;
-    pskilldesc[0x56].nOffset = 0xc4;
-    pskilldesc[0x56].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x57].szName = "dsc3calcb2";
-    pskilldesc[0x57].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x57].nSize = 0;
-    pskilldesc[0x57].nOffset = 0x108;
-    pskilldesc[0x57].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x58].szName = "dsc3line3";
-    pskilldesc[0x58].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x58].nSize = 0;
-    pskilldesc[0x58].nOffset = 0x4e;
-    pskilldesc[0x58].fpLinker = 0;
-    pskilldesc[0x59].szName = "dsc3texta3";
-    pskilldesc[0x59].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x59].nSize = 0;
-    pskilldesc[0x59].nOffset = 0x6c;
-    pskilldesc[0x59].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x5a].szName = "dsc3textb3";
-    pskilldesc[0x5a].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x5a].nSize = 0;
-    pskilldesc[0x5a].nOffset = 0x8e;
-    pskilldesc[0x5a].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x5b].szName = "dsc3calca3";
-    pskilldesc[0x5b].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x5b].nSize = 0;
-    pskilldesc[0x5b].nOffset = 200;
-    pskilldesc[0x5b].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x5c].szName = "dsc3calcb3";
-    pskilldesc[0x5c].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x5c].nSize = 0;
-    pskilldesc[0x5c].nOffset = 0x10c;
-    pskilldesc[0x5c].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x5d].szName = "dsc3line4";
-    pskilldesc[0x5d].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x5d].nSize = 0;
-    pskilldesc[0x5d].nOffset = 0x4f;
-    pskilldesc[0x5d].fpLinker = 0;
-    pskilldesc[0x5e].szName = "dsc3texta4";
-    pskilldesc[0x5e].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x5e].nSize = 0;
-    pskilldesc[0x5e].nOffset = 0x6e;
-    pskilldesc[0x5e].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x5f].szName = "dsc3textb4";
-    pskilldesc[0x5f].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x5f].nSize = 0;
-    pskilldesc[0x5f].nOffset = 0x90;
-    pskilldesc[0x5f].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x60].szName = "dsc3calca4";
-    pskilldesc[0x60].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x60].nSize = 0;
-    pskilldesc[0x60].nOffset = 0xcc;
-    pskilldesc[0x60].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x61].szName = "dsc3calcb4";
-    pskilldesc[0x61].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x61].nSize = 0;
-    pskilldesc[0x61].nOffset = 0x110;
-    pskilldesc[0x61].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x62].szName = "dsc3line5";
-    pskilldesc[0x62].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x62].nSize = 0;
-    pskilldesc[0x62].nOffset = 0x50;
-    pskilldesc[0x62].fpLinker = 0;
-    pskilldesc[99].szName = "dsc3texta5";
-    pskilldesc[99].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[99].nSize = 0;
-    pskilldesc[99].nOffset = 0x70;
-    pskilldesc[99].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[100].szName = "dsc3textb5";
-    pskilldesc[100].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[100].nSize = 0;
-    pskilldesc[100].nOffset = 0x92;
-    pskilldesc[100].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x65].szName = "dsc3calca5";
-    pskilldesc[0x65].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x65].nSize = 0;
-    pskilldesc[0x65].nOffset = 0xd0;
-    pskilldesc[0x65].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x66].szName = "dsc3calcb5";
-    pskilldesc[0x66].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x66].nSize = 0;
-    pskilldesc[0x66].nOffset = 0x114;
-    pskilldesc[0x66].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x67].szName = "dsc3line6";
-    pskilldesc[0x67].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x67].nSize = 0;
-    pskilldesc[0x67].nOffset = 0x51;
-    pskilldesc[0x67].fpLinker = 0;
-    pskilldesc[0x68].szName = "dsc3texta6";
-    pskilldesc[0x68].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x68].nSize = 0;
-    pskilldesc[0x68].nOffset = 0x72;
-    pskilldesc[0x68].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x69].szName = "dsc3textb6";
-    pskilldesc[0x69].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x69].nSize = 0;
-    pskilldesc[0x69].nOffset = 0x94;
-    pskilldesc[0x69].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x6a].szName = "dsc3calca6";
-    pskilldesc[0x6a].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x6a].nSize = 0;
-    pskilldesc[0x6a].nOffset = 0xd4;
-    pskilldesc[0x6a].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x6b].szName = "dsc3calcb6";
-    pskilldesc[0x6b].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x6b].nSize = 0;
-    pskilldesc[0x6b].nOffset = 0x118;
-    pskilldesc[0x6b].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x6c].szName = "dsc3line7";
-    pskilldesc[0x6c].eType = FIELDTYPE_CHAR;
-    pskilldesc[0x6c].nSize = 0;
-    pskilldesc[0x6c].nOffset = 0x52;
-    pskilldesc[0x6c].fpLinker = 0;
-    pskilldesc[0x6d].szName = "dsc3texta7";
-    pskilldesc[0x6d].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x6d].nSize = 0;
-    pskilldesc[0x6d].nOffset = 0x74;
-    pskilldesc[0x6d].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x6e].eType = FIELDTYPE_KEY_WORD;
-    pskilldesc[0x6f].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    pskilldesc[0x70].fpLinker = (void*)DATATBLS_CompileSkillDescCode;
-    skills[2].fpLinker = &__frame0.pSkillDescLink;
-    skills[3].eType = FIELDTYPE_SHORT;
-    skills[4].eType = FIELDTYPE_SHORT;
-    skills[5].eType = FIELDTYPE_SHORT;
-    skills[6].eType = FIELDTYPE_SHORT;
-    skills[7].eType = FIELDTYPE_SHORT;
-    pskilldesc[0x6e].szName = "dsc3textb7";
-    pskilldesc[0x6e].nSize = 0;
-    pskilldesc[0x6e].nOffset = 0x96;
-    pskilldesc[0x6e].fpLinker = (void*)DATATBLS_LookupStringId;
-    pskilldesc[0x6f].szName = "dsc3calca7";
-    pskilldesc[0x6f].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x6f].nSize = 0;
-    pskilldesc[0x6f].nOffset = 0xd8;
-    pskilldesc[0x70].szName = "dsc3calcb7";
-    pskilldesc[0x70].eType = FIELDTYPE_LINKER_INT;
-    pskilldesc[0x70].nSize = 0;
-    pskilldesc[0x70].nOffset = 0x11c;
-    pskilldesc[0x71].szName = "end";
-    pskilldesc[0x71].eType = FIELDTYPE_END;
-    pskilldesc[0x71].nSize = 0;
-    pskilldesc[0x71].nOffset = 0;
-    pskilldesc[0x71].fpLinker = 0;
-    skills[0].szName = "skill";
-    skills[0].eType = FIELDTYPE_NAME_I_WORD;
-    skills[0].nSize = 0;
-    skills[0].nOffset = 0;
-    skills[0].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    skills[1].szName = "charclass";
-    skills[1].eType = FIELDTYPE_CODE_CHAR;
-    skills[1].nSize = 0;
-    skills[1].nOffset = 0xc;
-    skills[1].fpLinker = &sgtDataTable.pTxtPlayerClassLink;
-    skills[2].szName = "skilldesc";
-    skills[2].eType = FIELDTYPE_NAME_SHORT;
-    skills[2].nSize = 0;
-    skills[2].nOffset = 0x194;
-    skills[3].szName = "srvstfunc";
-    skills[3].nSize = 0;
-    skills[3].nOffset = 0x2c;
-    skills[3].fpLinker = 0;
-    skills[4].szName = "srvdofunc";
-    skills[4].nSize = 0;
-    skills[4].nOffset = 0x2e;
-    skills[4].fpLinker = 0;
-    skills[5].szName = "srvprgfunc1";
-    skills[5].nSize = 0;
-    skills[5].nOffset = 0x30;
-    skills[5].fpLinker = 0;
-    skills[6].szName = "srvprgfunc2";
-    skills[6].nSize = 0;
-    skills[6].nOffset = 0x32;
-    skills[6].fpLinker = 0;
-    skills[7].szName = "srvprgfunc3";
-    skills[7].nSize = 0;
-    skills[7].nOffset = 0x34;
-    skills[7].fpLinker = 0;
-    skills[8].szName = "prgcalc1";
-    skills[8].eType = FIELDTYPE_LINKER_INT;
-    skills[8].nSize = 0;
-    skills[8].nOffset = 0x38;
-    skills[8].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[9].szName = "prgcalc2";
-    skills[9].eType = FIELDTYPE_LINKER_INT;
-    skills[9].nSize = 0;
-    skills[9].nOffset = 0x3c;
-    skills[9].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[10].szName = "prgcalc3";
-    skills[10].eType = FIELDTYPE_LINKER_INT;
-    skills[10].nSize = 0;
-    skills[10].nOffset = 0x40;
-    skills[10].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0xb].szName = "prgdam";
-    skills[0xb].eType = FIELDTYPE_CHAR;
-    skills[0xb].nSize = 0;
-    skills[0xb].nOffset = 0x44;
-    skills[0xb].fpLinker = 0;
-    skills[0xc].szName = "srvmissile";
-    skills[0xc].eType = FIELDTYPE_NAME_SHORT;
-    skills[0xc].nSize = 0;
-    skills[0xc].nOffset = 0x46;
-    skills[0xc].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    skills[0xd].szName = "srvmissilea";
-    skills[0xd].eType = FIELDTYPE_NAME_SHORT;
-    skills[0xd].nSize = 0;
-    skills[0xd].nOffset = 0x48;
-    skills[0xd].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    skills[0xe].szName = "srvmissileb";
-    skills[0xe].eType = FIELDTYPE_NAME_SHORT;
-    skills[0xe].nSize = 0;
-    skills[0xe].nOffset = 0x4a;
-    skills[0xe].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    skills[0xf].szName = "srvmissilec";
-    skills[0xf].eType = FIELDTYPE_NAME_SHORT;
-    skills[0xf].nSize = 0;
-    skills[0xf].nOffset = 0x4c;
-    skills[0xf].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    skills[0x10].szName = "srvoverlay";
-    skills[0x10].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x10].nSize = 0;
-    skills[0x10].nOffset = 0x4e;
-    skills[0x10].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    skills[0x11].szName = "lob";
-    skills[0x11].eType = FIELDTYPE_BIT;
-    skills[0x11].nSize = 1;
-    skills[0x11].nOffset = 4;
-    skills[0x11].fpLinker = 0;
-    skills[0x12].szName = "decquant";
-    skills[0x12].eType = FIELDTYPE_BIT;
-    skills[0x12].nSize = 0;
-    skills[0x12].nOffset = 4;
-    skills[0x12].fpLinker = 0;
-    skills[0x13].szName = "immediate";
-    skills[0x13].eType = FIELDTYPE_BIT;
-    skills[0x13].nSize = 0xf;
-    skills[0x13].nOffset = 4;
-    skills[0x13].fpLinker = 0;
-    skills[0x14].szName = "aurafilter";
-    skills[0x14].eType = FIELDTYPE_INT;
-    skills[0x14].nSize = 0;
-    skills[0x14].nOffset = 0x50;
-    skills[0x14].fpLinker = 0;
-    skills[0x15].szName = "aurastate";
-    skills[0x15].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x15].nSize = 0;
-    skills[0x15].nOffset = 0x80;
-    skills[0x15].fpLinker = &sgtDataTable.pTxtStatesLink;
-    skills[0x16].szName = "auratargetstate";
-    skills[0x16].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x16].nSize = 0;
-    skills[0x16].nOffset = 0x82;
-    skills[0x16].fpLinker = &sgtDataTable.pTxtStatesLink;
-    skills[0x17].szName = "auralencalc";
-    skills[0x17].eType = FIELDTYPE_LINKER_INT;
-    skills[0x17].nSize = 0;
-    skills[0x17].nOffset = 0x60;
-    skills[0x17].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x18].szName = "aurarangecalc";
-    skills[0x18].eType = FIELDTYPE_LINKER_INT;
-    skills[0x18].nSize = 0;
-    skills[0x18].nOffset = 100;
-    skills[0x18].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x19].szName = "aurastat1";
-    skills[0x19].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x19].nSize = 0;
-    skills[0x19].nOffset = 0x54;
-    skills[0x19].fpLinker = &sgtDataTable.pTxtItemStatCostLink;
-    skills[0x1a].szName = "aurastatcalc1";
-    skills[0x1a].eType = FIELDTYPE_LINKER_INT;
-    skills[0x1a].nSize = 0;
-    skills[0x1a].nOffset = 0x68;
-    skills[0x1a].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x1b].szName = "aurastat2";
-    skills[0x1b].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x1b].nSize = 0;
-    skills[0x1b].nOffset = 0x56;
-    skills[0x1b].fpLinker = &sgtDataTable.pTxtItemStatCostLink;
-    skills[0x1c].szName = "aurastatcalc2";
-    skills[0x1c].eType = FIELDTYPE_LINKER_INT;
-    skills[0x1c].nSize = 0;
-    skills[0x1c].nOffset = 0x6c;
-    skills[0x1c].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x1d].szName = "aurastat3";
-    skills[0x1d].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x1d].nSize = 0;
-    skills[0x1d].nOffset = 0x58;
-    skills[0x1d].fpLinker = &sgtDataTable.pTxtItemStatCostLink;
-    skills[0x1e].szName = "aurastatcalc3";
-    skills[0x1e].eType = FIELDTYPE_LINKER_INT;
-    skills[0x1e].nSize = 0;
-    skills[0x1e].nOffset = 0x70;
-    skills[0x1e].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x1f].szName = "aurastat4";
-    skills[0x1f].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x1f].nSize = 0;
-    skills[0x1f].nOffset = 0x5a;
-    skills[0x1f].fpLinker = &sgtDataTable.pTxtItemStatCostLink;
-    skills[0x20].szName = "aurastatcalc4";
-    skills[0x20].eType = FIELDTYPE_LINKER_INT;
-    skills[0x20].nSize = 0;
-    skills[0x20].nOffset = 0x74;
-    skills[0x20].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x21].szName = "aurastat5";
-    skills[0x21].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x21].nSize = 0;
-    skills[0x21].nOffset = 0x5c;
-    skills[0x21].fpLinker = &sgtDataTable.pTxtItemStatCostLink;
-    skills[0x22].szName = "aurastatcalc5";
-    skills[0x22].eType = FIELDTYPE_LINKER_INT;
-    skills[0x22].nSize = 0;
-    skills[0x22].nOffset = 0x78;
-    skills[0x22].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x23].szName = "aurastat6";
-    skills[0x23].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x23].nSize = 0;
-    skills[0x23].nOffset = 0x5e;
-    skills[0x23].fpLinker = &sgtDataTable.pTxtItemStatCostLink;
-    skills[0x24].szName = "aurastatcalc6";
-    skills[0x24].eType = FIELDTYPE_LINKER_INT;
-    skills[0x24].nSize = 0;
-    skills[0x24].nOffset = 0x7c;
-    skills[0x24].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x25].szName = "auraevent1";
-    skills[0x25].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x25].nSize = 0;
-    skills[0x25].nOffset = 0x84;
-    skills[0x25].fpLinker = &sgtDataTable.pTxtEventsLink;
-    skills[0x26].szName = "auraeventfunc1";
-    skills[0x26].eType = FIELDTYPE_SHORT;
-    skills[0x26].nSize = 0;
-    skills[0x26].nOffset = 0x8a;
-    skills[0x26].fpLinker = 0;
-    skills[0x27].szName = "auraevent2";
-    skills[0x27].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x27].nSize = 0;
-    skills[0x27].nOffset = 0x86;
-    skills[0x27].fpLinker = &sgtDataTable.pTxtEventsLink;
-    skills[0x28].szName = "auraeventfunc2";
-    skills[0x28].eType = FIELDTYPE_SHORT;
-    skills[0x28].nSize = 0;
-    skills[0x28].nOffset = 0x8c;
-    skills[0x28].fpLinker = 0;
-    skills[0x29].szName = "auraevent3";
-    skills[0x29].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x29].nSize = 0;
-    skills[0x29].nOffset = 0x88;
-    skills[0x29].fpLinker = &sgtDataTable.pTxtEventsLink;
-    skills[0x2a].szName = "auraeventfunc3";
-    skills[0x2a].eType = FIELDTYPE_SHORT;
-    skills[0x2a].nSize = 0;
-    skills[0x2a].nOffset = 0x8e;
-    skills[0x2a].fpLinker = 0;
-    skills[0x2b].szName = "auratgtevent";
-    skills[0x2b].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x2b].nSize = 0;
-    skills[0x2b].nOffset = 0x90;
-    skills[0x30].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x32].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x34].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x36].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x38].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x2b].fpLinker = &sgtDataTable.pTxtEventsLink;
-    skills[0x2c].szName = "auratgteventfunc";
-    skills[0x2c].eType = FIELDTYPE_SHORT;
-    skills[0x2c].nSize = 0;
-    skills[0x2c].nOffset = 0x92;
-    skills[0x2c].fpLinker = 0;
-    skills[0x2d].szName = "passivestate";
-    skills[0x2d].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x2d].nSize = 0;
-    skills[0x2d].nOffset = 0x94;
-    skills[0x2d].fpLinker = &sgtDataTable.pTxtStatesLink;
-    skills[0x2e].szName = "passiveitype";
-    skills[0x2e].eType = FIELDTYPE_CODE_SHORT;
-    skills[0x2e].nSize = 0;
-    skills[0x2e].nOffset = 0x96;
-    skills[0x2e].fpLinker = &sgtDataTable.pTxtItemTypesLink;
-    skills[0x2f].szName = "passivestat1";
-    skills[0x2f].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x2f].nSize = 0;
-    skills[0x2f].nOffset = 0x98;
-    skills[0x2f].fpLinker = &sgtDataTable.pTxtItemStatCostLink;
-    skills[0x30].szName = "passivecalc1";
-    skills[0x30].eType = FIELDTYPE_LINKER_INT;
-    skills[0x30].nSize = 0;
-    skills[0x30].nOffset = 0xa4;
-    skills[0x31].szName = "passivestat2";
-    skills[0x31].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x31].nSize = 0;
-    skills[0x31].nOffset = 0x9a;
-    skills[0x31].fpLinker = &sgtDataTable.pTxtItemStatCostLink;
-    skills[0x32].szName = "passivecalc2";
-    skills[0x32].eType = FIELDTYPE_LINKER_INT;
-    skills[0x32].nSize = 0;
-    skills[0x32].nOffset = 0xa8;
-    skills[0x33].szName = "passivestat3";
-    skills[0x33].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x33].nSize = 0;
-    skills[0x33].nOffset = 0x9c;
-    skills[0x33].fpLinker = &sgtDataTable.pTxtItemStatCostLink;
-    skills[0x34].szName = "passivecalc3";
-    skills[0x34].eType = FIELDTYPE_LINKER_INT;
-    skills[0x34].nSize = 0;
-    skills[0x34].nOffset = 0xac;
-    skills[0x35].szName = "passivestat4";
-    skills[0x35].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x35].nSize = 0;
-    skills[0x35].nOffset = 0x9e;
-    skills[0x35].fpLinker = &sgtDataTable.pTxtItemStatCostLink;
-    skills[0x36].szName = "passivecalc4";
-    skills[0x36].eType = FIELDTYPE_LINKER_INT;
-    skills[0x36].nSize = 0;
-    skills[0x36].nOffset = 0xb0;
-    skills[0x37].szName = "passivestat5";
-    skills[0x37].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x37].nSize = 0;
-    skills[0x37].nOffset = 0xa0;
-    skills[0x37].fpLinker = &sgtDataTable.pTxtItemStatCostLink;
-    skills[0x38].szName = "passivecalc5";
-    skills[0x38].eType = FIELDTYPE_LINKER_INT;
-    skills[0x38].nSize = 0;
-    skills[0x38].nOffset = 0xb4;
-    skills[0x39].szName = "passiveevent";
-    skills[0x39].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x39].nSize = 0;
-    skills[0x39].nOffset = 0xb8;
-    skills[0x39].fpLinker = &sgtDataTable.pTxtEventsLink;
-    skills[0x3a].szName = "passiveeventfunc";
-    skills[0x3a].eType = FIELDTYPE_SHORT;
-    skills[0x3a].nSize = 0;
-    skills[0x3a].nOffset = 0xba;
-    skills[0x3a].fpLinker = 0;
-    skills[0x3b].szName = "summon";
-    skills[0x3b].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x3b].nSize = 0;
-    skills[0x3b].nOffset = 0xbc;
-    skills[0x3b].fpLinker = &__frame0.pMonStatsLink;
-    skills[0x3c].szName = "pettype";
-    skills[0x3c].eType = FIELDTYPE_NAME_CHAR;
-    skills[0x3c].nSize = 0;
-    skills[0x3c].nOffset = 0xbe;
-    skills[0x3c].fpLinker = &sgtDataTable.pTxtPetTypeLink;
-    skills[0x3d].szName = "summode";
-    skills[0x3d].eType = FIELDTYPE_CODE_CHAR;
-    skills[0x3d].nSize = 0;
-    skills[0x3d].nOffset = 0xbf;
-    skills[0x3d].fpLinker = &sgtDataTable.pTxtMonModeLink;
-    skills[0x3e].szName = "petmax";
-    skills[0x3e].eType = FIELDTYPE_LINKER_INT;
-    skills[0x3e].nSize = 0;
-    skills[0x3e].nOffset = 0xc0;
-    skills[0x3e].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x3f].szName = "sumskill1";
-    skills[0x3f].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x3f].nSize = 0;
-    skills[0x3f].nOffset = 0xc4;
-    skills[0x3f].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    skills[0x40].szName = "sumsk1calc";
-    skills[0x40].eType = FIELDTYPE_LINKER_INT;
-    skills[0x40].nSize = 0;
-    skills[0x40].nOffset = 0xd0;
-    skills[0x40].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x41].szName = "sumskill2";
-    skills[0x41].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x41].nSize = 0;
-    skills[0x41].nOffset = 0xc6;
-    skills[0x41].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    skills[0x42].szName = "sumsk2calc";
-    skills[0x42].eType = FIELDTYPE_LINKER_INT;
-    skills[0x42].nSize = 0;
-    skills[0x42].nOffset = 0xd4;
-    skills[0x42].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x43].szName = "sumskill3";
-    skills[0x43].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x43].nSize = 0;
-    skills[0x43].nOffset = 200;
-    skills[0x43].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    skills[0x44].szName = "sumsk3calc";
-    skills[0x44].eType = FIELDTYPE_LINKER_INT;
-    skills[0x44].nSize = 0;
-    skills[0x44].nOffset = 0xd8;
-    skills[0x44].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x45].szName = "sumskill4";
-    skills[0x45].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x45].nSize = 0;
-    skills[0x45].nOffset = 0xca;
-    skills[0x45].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    skills[0x46].szName = "sumsk4calc";
-    skills[0x46].eType = FIELDTYPE_LINKER_INT;
-    skills[0x46].nSize = 0;
-    skills[0x46].nOffset = 0xdc;
-    skills[0x46].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x47].szName = "sumskill5";
-    skills[0x47].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x47].nSize = 0;
-    skills[0x47].nOffset = 0xcc;
-    skills[0x47].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    skills[0x48].szName = "sumsk5calc";
-    skills[0x48].eType = FIELDTYPE_LINKER_INT;
-    skills[0x48].nSize = 0;
-    skills[0x48].nOffset = 0xe0;
-    skills[0x48].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x49].szName = "sumumod";
-    skills[0x49].eType = FIELDTYPE_SHORT;
-    skills[0x49].nSize = 0;
-    skills[0x49].nOffset = 0xe4;
-    skills[0x49].fpLinker = 0;
-    skills[0x4a].szName = "sumoverlay";
-    skills[0x4a].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x4a].nSize = 0;
-    skills[0x4a].nOffset = 0xe6;
-    skills[0x4a].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    skills[0x4b].szName = "cltmissile";
-    skills[0x4b].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x4b].nSize = 0;
-    skills[0x4b].nOffset = 0xe8;
-    skills[0x4b].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    skills[0x4c].szName = "cltmissilea";
-    skills[0x4c].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x4c].nSize = 0;
-    skills[0x4c].nOffset = 0xea;
-    skills[0x4c].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    skills[0x4d].szName = "cltmissileb";
-    skills[0x4d].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x4d].nSize = 0;
-    skills[0x4d].nOffset = 0xec;
-    skills[0x4d].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    skills[0x4e].szName = "cltmissilec";
-    skills[0x4e].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x4e].nSize = 0;
-    skills[0x4e].nOffset = 0xee;
-    skills[0x4e].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    skills[0x4f].szName = "cltmissiled";
-    skills[0x4f].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x4f].nSize = 0;
-    skills[0x4f].nOffset = 0xf0;
-    skills[0x4f].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    skills[0x50].szName = "cltstfunc";
-    skills[0x50].eType = FIELDTYPE_SHORT;
-    skills[0x50].nSize = 0;
-    skills[0x50].nOffset = 0xf2;
-    skills[0x50].fpLinker = 0;
-    skills[0x51].szName = "cltdofunc";
-    skills[0x51].eType = FIELDTYPE_SHORT;
-    skills[0x51].nSize = 0;
-    skills[0x51].nOffset = 0xf4;
-    skills[0x51].fpLinker = 0;
-    skills[0x52].szName = "cltprgfunc1";
-    skills[0x52].eType = FIELDTYPE_SHORT;
-    skills[0x52].nSize = 0;
-    skills[0x52].nOffset = 0xf6;
-    skills[0x52].fpLinker = 0;
-    skills[0x53].szName = "cltprgfunc2";
-    skills[0x53].eType = FIELDTYPE_SHORT;
-    skills[0x53].nSize = 0;
-    skills[0x53].nOffset = 0xf8;
-    skills[0x53].fpLinker = 0;
-    skills[0x54].szName = "cltprgfunc3";
-    skills[0x54].eType = FIELDTYPE_SHORT;
-    skills[0x54].nSize = 0;
-    skills[0x54].nOffset = 0xfa;
-    skills[0x54].fpLinker = 0;
-    skills[0x55].szName = "stsuccessonly";
-    skills[0x55].eType = FIELDTYPE_BIT;
-    skills[0x55].nSize = 0xc;
-    skills[0x55].nOffset = 4;
-    skills[0x55].fpLinker = 0;
-    skills[0x56].szName = "stsound";
-    skills[0x56].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x56].nSize = 0;
-    skills[0x56].nOffset = 0xfc;
-    skills[0x56].fpLinker = &sgtDataTable.pTxtSoundsLink;
-    skills[0x57].szName = "stsoundclass";
-    skills[0x57].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x57].nSize = 0;
-    skills[0x57].nOffset = 0xfe;
-    skills[0x57].fpLinker = &sgtDataTable.pTxtSoundsLink;
-    skills[0x58].szName = "stsounddelay";
-    skills[0x58].eType = FIELDTYPE_BIT;
-    skills[0x58].nSize = 0xd;
-    skills[0x58].nOffset = 4;
-    skills[0x58].fpLinker = 0;
-    skills[0x59].szName = "weaponsnd";
-    skills[0x59].eType = FIELDTYPE_BIT;
-    skills[0x59].nSize = 0xe;
-    skills[0x59].nOffset = 4;
-    skills[0x59].fpLinker = 0;
-    skills[0x5a].szName = "dosound";
-    skills[0x5a].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x5a].nSize = 0;
-    skills[0x5a].nOffset = 0x100;
-    skills[0x5a].fpLinker = &sgtDataTable.pTxtSoundsLink;
-    skills[0x5b].szName = "dosound a";
-    skills[0x5b].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x5b].nSize = 0;
-    skills[0x5b].nOffset = 0x102;
-    skills[0x5b].fpLinker = &sgtDataTable.pTxtSoundsLink;
-    skills[100].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x65].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x66].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x68].fpLinker = &sgtDataTable.pTxtPlrModeLink;
-    skills[0x69].fpLinker = &sgtDataTable.pTxtPlrModeLink;
-    skills[0x5c].szName = "dosound b";
-    skills[0x5c].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x5c].nSize = 0;
-    skills[0x5c].nOffset = 0x104;
-    skills[0x5c].fpLinker = &sgtDataTable.pTxtSoundsLink;
-    skills[0x5d].szName = "tgtsound";
-    skills[0x5d].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x5d].nSize = 0;
-    skills[0x5d].nOffset = 0x10a;
-    skills[0x5d].fpLinker = &sgtDataTable.pTxtSoundsLink;
-    skills[0x5e].szName = "tgtoverlay";
-    skills[0x5e].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x5e].nSize = 0;
-    skills[0x5e].nOffset = 0x108;
-    skills[0x5e].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    skills[0x5f].szName = "castoverlay";
-    skills[0x5f].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x5f].nSize = 0;
-    skills[0x5f].nOffset = 0x106;
-    skills[0x5f].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    skills[0x60].szName = "cltoverlaya";
-    skills[0x60].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x60].nSize = 0;
-    skills[0x60].nOffset = 0x110;
-    skills[0x60].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    skills[0x61].szName = "cltoverlayb";
-    skills[0x61].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x61].nSize = 0;
-    skills[0x61].nOffset = 0x112;
-    skills[0x61].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    skills[0x62].szName = "prgsound";
-    skills[0x62].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x62].nSize = 0;
-    skills[0x62].nOffset = 0x10e;
-    skills[0x62].fpLinker = &sgtDataTable.pTxtSoundsLink;
-    skills[99].szName = "prgoverlay";
-    skills[99].eType = FIELDTYPE_NAME_SHORT;
-    skills[99].nSize = 0;
-    skills[99].nOffset = 0x10c;
-    skills[99].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    skills[100].szName = "cltcalc1";
-    skills[100].eType = FIELDTYPE_LINKER_INT;
-    skills[100].nSize = 0;
-    skills[100].nOffset = 0x114;
-    skills[0x65].szName = "cltcalc2";
-    skills[0x65].eType = FIELDTYPE_LINKER_INT;
-    skills[0x65].nSize = 0;
-    skills[0x65].nOffset = 0x118;
-    skills[0x66].szName = "cltcalc3";
-    skills[0x66].eType = FIELDTYPE_LINKER_INT;
-    skills[0x66].nSize = 0;
-    skills[0x66].nOffset = 0x11c;
-    skills[0x67].szName = "warp";
-    skills[0x67].eType = FIELDTYPE_BIT;
-    skills[0x67].nSize = 0x26;
-    skills[0x67].nOffset = 4;
-    skills[0x67].fpLinker = 0;
-    skills[0x68].szName = "anim";
-    skills[0x68].eType = FIELDTYPE_CODE_CHAR;
-    skills[0x68].nSize = 0;
-    skills[0x68].nOffset = 0x10;
-    skills[0x69].szName = "seqtrans";
-    skills[0x69].eType = FIELDTYPE_CODE_CHAR;
-    skills[0x69].nSize = 0;
-    skills[0x69].nOffset = 0x12;
-    skills[0x6a].szName = "monanim";
-    skills[0x6a].eType = FIELDTYPE_CODE_CHAR;
-    skills[0x6a].nSize = 0;
-    skills[0x6a].nOffset = 0x11;
-    skills[0x6a].fpLinker = &sgtDataTable.pTxtMonModeLink;
-    skills[0x6b].szName = "seqnum";
-    skills[0x6b].eType = FIELDTYPE_CHAR;
-    skills[0x6b].nSize = 0;
-    skills[0x6b].nOffset = 0x13;
-    skills[0x6d].eType = FIELDTYPE_CODE_CHAR;
-    skills[0x6d].fpLinker = &__frame0.pSkillsLink;
-    skills[0x6f].eType = FIELDTYPE_CODE_SHORT;
-    skills[0x70].eType = FIELDTYPE_CODE_SHORT;
-    skills[0x6b].fpLinker = 0;
-    skills[0x6c].szName = "seqinput";
-    skills[0x6c].eType = FIELDTYPE_CHAR;
-    skills[0x6c].nSize = 0;
-    skills[0x6c].nOffset = 0x16;
-    skills[0x6c].fpLinker = 0;
-    skills[0x6d].szName = "range";
-    skills[0x6d].nSize = 0;
-    skills[0x6d].nOffset = 0x14;
-    skills[0x6e].szName = "weapsel";
-    skills[0x6e].eType = FIELDTYPE_CHAR;
-    skills[0x6e].nSize = 0;
-    skills[0x6e].nOffset = 0x168;
-    skills[0x6e].fpLinker = 0;
-    skills[0x6f].szName = "itypea1";
-    skills[0x6f].nSize = 0;
-    skills[0x6f].nOffset = 0x18;
-    skills[0x6f].fpLinker = &sgtDataTable.pTxtItemTypesLink;
-    skills[0x70].szName = "itypea2";
-    skills[0x70].nSize = 0;
-    skills[0x70].nOffset = 0x1a;
-    skills[0x70].fpLinker = &sgtDataTable.pTxtItemTypesLink;
-    skills[0x71].szName = "itypea3";
-    skills[0x71].eType = FIELDTYPE_CODE_SHORT;
-    skills[0x71].nSize = 0;
-    skills[0x71].nOffset = 0x1c;
-    skills[0x71].fpLinker = &sgtDataTable.pTxtItemTypesLink;
-    skills[0x72].szName = "etypea1";
-    skills[0x72].eType = FIELDTYPE_CODE_SHORT;
-    skills[0x72].nSize = 0;
-    skills[0x72].nOffset = 0x24;
-    skills[0x72].fpLinker = &sgtDataTable.pTxtItemTypesLink;
-    skills[0x73].szName = "etypea2";
-    skills[0x73].eType = FIELDTYPE_CODE_SHORT;
-    skills[0x73].nSize = 0;
-    skills[0x73].nOffset = 0x26;
-    skills[0x73].fpLinker = &sgtDataTable.pTxtItemTypesLink;
-    skills[0x74].szName = "itypeb1";
-    skills[0x74].eType = FIELDTYPE_CODE_SHORT;
-    skills[0x74].nSize = 0;
-    skills[0x74].nOffset = 0x1e;
-    skills[0x74].fpLinker = &sgtDataTable.pTxtItemTypesLink;
-    skills[0x75].szName = "itypeb2";
-    skills[0x75].eType = FIELDTYPE_CODE_SHORT;
-    skills[0x75].nSize = 0;
-    skills[0x75].nOffset = 0x20;
-    skills[0x75].fpLinker = &sgtDataTable.pTxtItemTypesLink;
-    skills[0x76].szName = "itypeb3";
-    skills[0x76].eType = FIELDTYPE_CODE_SHORT;
-    skills[0x76].nSize = 0;
-    skills[0x76].nOffset = 0x22;
-    skills[0x76].fpLinker = &sgtDataTable.pTxtItemTypesLink;
-    skills[0x77].szName = "etypeb1";
-    skills[0x77].eType = FIELDTYPE_CODE_SHORT;
-    skills[0x77].nSize = 0;
-    skills[0x77].nOffset = 0x28;
-    skills[0x77].fpLinker = &sgtDataTable.pTxtItemTypesLink;
-    skills[0x78].szName = "etypeb2";
-    skills[0x78].eType = FIELDTYPE_CODE_SHORT;
-    skills[0x78].nSize = 0;
-    skills[0x78].nOffset = 0x2a;
-    skills[0x78].fpLinker = &sgtDataTable.pTxtItemTypesLink;
-    skills[0x79].szName = "maxlvl";
-    skills[0x79].eType = FIELDTYPE_SHORT;
-    skills[0x79].nSize = 0;
-    skills[0x79].nOffset = 300;
-    skills[0x79].fpLinker = 0;
-    skills[0x7a].szName = "progressive";
-    skills[0x7a].eType = FIELDTYPE_BIT;
-    skills[0x7a].nSize = 2;
-    skills[0x7a].nOffset = 4;
-    skills[0x7a].fpLinker = 0;
-    skills[0x7b].szName = "finishing";
-    skills[0x7b].eType = FIELDTYPE_BIT;
-    skills[0x7b].nSize = 3;
-    skills[0x7b].nOffset = 4;
-    skills[0x7b].fpLinker = 0;
-    skills[0x7c].szName = "prgstack";
-    skills[0x7c].eType = FIELDTYPE_BIT;
-    skills[0x7c].nSize = 7;
-    skills[0x7c].nOffset = 4;
-    skills[0x7c].fpLinker = 0;
-    skills[0x7d].szName = "InTown";
-    skills[0x7d].eType = FIELDTYPE_BIT;
-    skills[0x7d].nSize = 8;
-    skills[0x7d].nOffset = 4;
-    skills[0x7d].fpLinker = 0;
-    skills[0x7e].szName = "ResultFlags";
-    skills[0x7e].eType = FIELDTYPE_SHORT;
-    skills[0x7e].nSize = 0;
-    skills[0x7e].nOffset = 0x12e;
-    skills[0x7e].fpLinker = 0;
-    skills[0x7f].szName = "HitFlags";
-    skills[0x7f].eType = FIELDTYPE_UINT;
-    skills[0x7f].nSize = 0;
-    skills[0x7f].nOffset = 0x130;
-    skills[0x7f].fpLinker = 0;
-    skills[0x80].szName = "HitClass";
-    skills[0x80].eType = FIELDTYPE_UINT;
-    skills[0x80].nSize = 0;
-    skills[0x80].nOffset = 0x134;
-    skills[0x80].fpLinker = 0;
-    skills[0x81].szName = "Kick";
-    skills[0x81].eType = FIELDTYPE_BIT;
-    skills[0x81].nSize = 9;
-    skills[0x81].nOffset = 4;
-    skills[0x81].fpLinker = 0;
-    skills[0x82].szName = "passive";
-    skills[0x82].eType = FIELDTYPE_BIT;
-    skills[0x82].nSize = 4;
-    skills[0x82].nOffset = 4;
-    skills[0x82].fpLinker = 0;
-    skills[0x83].szName = "aura";
-    skills[0x83].eType = FIELDTYPE_BIT;
-    skills[0x83].nSize = 5;
-    skills[0x83].nOffset = 4;
-    skills[0x83].fpLinker = 0;
-    skills[0x84].szName = "periodic";
-    skills[0x84].eType = FIELDTYPE_BIT;
-    skills[0x84].nSize = 6;
-    skills[0x84].nOffset = 4;
-    skills[0x84].fpLinker = 0;
-    skills[0x85].szName = "perdelay";
-    skills[0x85].eType = FIELDTYPE_LINKER_INT;
-    skills[0x85].nSize = 0;
-    skills[0x85].nOffset = 0x128;
-    skills[0x85].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0x86].szName = "general";
-    skills[0x86].eType = FIELDTYPE_BIT;
-    skills[0x86].nSize = 0x23;
-    skills[0x86].nOffset = 4;
-    skills[0x86].fpLinker = 0;
-    skills[0x87].szName = "scroll";
-    skills[0x87].eType = FIELDTYPE_BIT;
-    skills[0x87].nSize = 0x24;
-    skills[0x87].nOffset = 4;
-    skills[0x87].fpLinker = 0;
-    skills[0x88].szName = "ItemEffect";
-    skills[0x88].eType = FIELDTYPE_SHORT;
-    skills[0x88].nSize = 0;
-    skills[0x88].nOffset = 0x16a;
-    skills[0x88].fpLinker = 0;
-    skills[0x89].szName = "ItemCltEffect";
-    skills[0x89].eType = FIELDTYPE_SHORT;
-    skills[0x89].nSize = 0;
-    skills[0x89].nOffset = 0x16c;
-    skills[0x89].fpLinker = 0;
-    skills[0x8a].szName = "ItemTgtDo";
-    skills[0x8a].eType = FIELDTYPE_BIT;
-    skills[0x8a].nSize = 0x1d;
-    skills[0x8a].nOffset = 4;
-    skills[0x8a].fpLinker = 0;
-    skills[0x8b].szName = "ItemCheckStart";
-    skills[0x8b].eType = FIELDTYPE_BIT;
-    skills[0x8b].nSize = 0x21;
-    skills[0x8b].nOffset = 4;
-    skills[0x8b].fpLinker = 0;
-    skills[0x8c].szName = "ItemCltCheckStart";
-    skills[0x8c].eType = FIELDTYPE_BIT;
-    skills[0x8c].nSize = 0x22;
-    skills[0x8c].nOffset = 4;
-    skills[0x8c].fpLinker = 0;
-    skills[0x8d].szName = "ItemTarget";
-    skills[0x8d].eType = FIELDTYPE_CHAR;
-    skills[0x8d].nSize = 0;
-    skills[0x8d].nOffset = 0x120;
-    skills[0x8d].fpLinker = 0;
-    skills[0x8e].szName = "ItemCastSound";
-    skills[0x8e].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x8e].nSize = 0;
-    skills[0x8e].nOffset = 0x122;
-    skills[0x8e].fpLinker = &sgtDataTable.pTxtSoundsLink;
-    skills[0x8f].szName = "ItemCastOverlay";
-    skills[0x8f].eType = FIELDTYPE_NAME_SHORT;
-    skills[0x8f].nSize = 0;
-    skills[0x8f].nOffset = 0x124;
-    skills[0x8f].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    skills[0x90].szName = "InGame";
-    skills[0x90].eType = FIELDTYPE_BIT;
-    skills[0x90].nSize = 10;
-    skills[0x90].nOffset = 4;
-    skills[0x90].fpLinker = 0;
-    skills[0x91].szName = "lineofsight";
-    skills[0x91].eType = FIELDTYPE_CHAR;
-    skills[0x91].nSize = 0;
-    skills[0x91].nOffset = 399;
-    skills[0x91].fpLinker = 0;
-    skills[0x92].szName = "attackrank";
-    skills[0x92].eType = FIELDTYPE_CHAR;
-    skills[0x92].nSize = 0;
-    skills[0x92].nOffset = 0x18e;
-    skills[0x92].fpLinker = 0;
-    skills[0x93].szName = "noammo";
-    skills[0x93].eType = FIELDTYPE_BIT;
-    skills[0x93].nSize = 0x10;
-    skills[0x93].nOffset = 4;
-    skills[0x93].fpLinker = 0;
-    skills[0x94].szName = "enhanceable";
-    skills[0x94].eType = FIELDTYPE_BIT;
-    skills[0x94].nSize = 0x11;
-    skills[0x94].nOffset = 4;
-    skills[0x94].fpLinker = 0;
-    skills[0x95].szName = "durability";
-    skills[0x95].eType = FIELDTYPE_BIT;
-    skills[0x95].nSize = 0x12;
-    skills[0x95].nOffset = 4;
-    skills[0x95].fpLinker = 0;
-    skills[0x96].szName = "UseAttackRate";
-    skills[0x96].eType = FIELDTYPE_BIT;
-    skills[0x96].nSize = 0x13;
-    skills[0x96].nOffset = 4;
-    skills[0x96].fpLinker = 0;
-    skills[0x97].szName = "SelectProc";
-    skills[0x97].eType = FIELDTYPE_CHAR;
-    skills[0x97].nSize = 0;
-    skills[0x97].nOffset = 0x15;
-    skills[0x97].fpLinker = 0;
-    skills[0x98].szName = "TargetableOnly";
-    skills[0x98].eType = FIELDTYPE_BIT;
-    skills[0x98].nSize = 0x14;
-    skills[0x98].nOffset = 4;
-    skills[0x98].fpLinker = 0;
-    skills[0x99].szName = "SearchEnemyXY";
-    skills[0x99].eType = FIELDTYPE_BIT;
-    skills[0x99].nSize = 0x15;
-    skills[0x99].nOffset = 4;
-    skills[0x99].fpLinker = 0;
-    skills[0x9a].szName = "SearchEnemyNear";
-    skills[0x9a].eType = FIELDTYPE_BIT;
-    skills[0x9a].nSize = 0x16;
-    skills[0x9a].nOffset = 4;
-    skills[0x9a].fpLinker = 0;
-    skills[0x9b].szName = "SearchOpenXY";
-    skills[0x9b].eType = FIELDTYPE_BIT;
-    skills[0x9b].nSize = 0x17;
-    skills[0x9b].nOffset = 4;
-    skills[0x9b].fpLinker = 0;
-    skills[0x9c].szName = "TargetCorpse";
-    skills[0x9c].eType = FIELDTYPE_BIT;
-    skills[0x9c].nSize = 0x18;
-    skills[0x9c].nOffset = 4;
-    skills[0x9c].fpLinker = 0;
-    skills[0x9d].szName = "TargetPet";
-    skills[0x9d].eType = FIELDTYPE_BIT;
-    skills[0x9d].nSize = 0x19;
-    skills[0x9d].nOffset = 4;
-    skills[0x9d].fpLinker = 0;
-    skills[0x9e].szName = "TargetAlly";
-    skills[0x9e].eType = FIELDTYPE_BIT;
-    skills[0x9e].nSize = 0x1a;
-    skills[0x9e].nOffset = 4;
-    skills[0x9e].fpLinker = 0;
-    skills[0x9f].szName = "TargetItem";
-    skills[0x9f].eType = FIELDTYPE_BIT;
-    skills[0x9f].nSize = 0x1b;
-    skills[0x9f].nOffset = 4;
-    skills[0x9f].fpLinker = 0;
-    skills[0xa0].szName = "AttackNoMana";
-    skills[0xa0].eType = FIELDTYPE_BIT;
-    skills[0xa0].nSize = 0x1c;
-    skills[0xa0].nOffset = 4;
-    skills[0xa0].fpLinker = 0;
-    skills[0xa1].szName = "leftskill";
-    skills[0xa1].eType = FIELDTYPE_BIT;
-    skills[0xa1].nSize = 0x1e;
-    skills[0xa1].nOffset = 4;
-    skills[0xa1].fpLinker = 0;
-    skills[0xa2].szName = "interrupt";
-    skills[0xa2].eType = FIELDTYPE_BIT;
-    skills[0xa2].nSize = 0x1f;
-    skills[0xa2].nOffset = 4;
-    skills[0xa2].fpLinker = 0;
-    skills[0xa3].szName = "TgtPlaceCheck";
-    skills[0xa3].eType = FIELDTYPE_BIT;
-    skills[0xa3].nSize = 0x20;
-    skills[0xa3].nOffset = 4;
-    skills[0xa3].fpLinker = 0;
-    skills[0xa4].szName = "repeat";
-    skills[0xa4].eType = FIELDTYPE_BIT;
-    skills[0xa4].nSize = 0xb;
-    skills[0xa4].nOffset = 4;
-    skills[0xa4].fpLinker = 0;
-    skills[0xa5].szName = "skpoints";
-    skills[0xa5].eType = FIELDTYPE_LINKER_INT;
-    skills[0xa5].nSize = 0;
-    skills[0xa5].nOffset = 0x170;
-    skills[0xa5].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0xa6].szName = "reqlevel";
-    skills[0xa6].eType = FIELDTYPE_SHORT;
-    skills[0xa6].nSize = 0;
-    skills[0xa6].nOffset = 0x174;
-    skills[0xa6].fpLinker = 0;
-    skills[0xa7].szName = "reqstr";
-    skills[0xa7].eType = FIELDTYPE_SHORT;
-    skills[0xa7].nSize = 0;
-    skills[0xa7].nOffset = 0x176;
-    skills[0xa7].fpLinker = 0;
-    skills[0xa8].szName = "reqdex";
-    skills[0xa8].eType = FIELDTYPE_SHORT;
-    skills[0xa8].nSize = 0;
-    skills[0xa8].nOffset = 0x178;
-    skills[0xa8].fpLinker = 0;
-    skills[0xa9].szName = "reqint";
-    skills[0xa9].eType = FIELDTYPE_SHORT;
-    skills[0xa9].nSize = 0;
-    skills[0xa9].nOffset = 0x17a;
-    skills[0xa9].fpLinker = 0;
-    skills[0xaa].szName = "reqvit";
-    skills[0xaa].eType = FIELDTYPE_SHORT;
-    skills[0xaa].nSize = 0;
-    skills[0xaa].nOffset = 0x17c;
-    skills[0xaa].fpLinker = 0;
-    skills[0xab].szName = "reqskill1";
-    skills[0xab].eType = FIELDTYPE_NAME_SHORT;
-    skills[0xab].nSize = 0;
-    skills[0xab].nOffset = 0x17e;
-    skills[0xab].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    skills[0xaf].eType = FIELDTYPE_BIT;
-    skills[0xac].szName = "reqskill2";
-    skills[0xac].eType = FIELDTYPE_NAME_SHORT;
-    skills[0xac].nSize = 0;
-    skills[0xac].nOffset = 0x180;
-    skills[0xac].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    skills[0xad].szName = "reqskill3";
-    skills[0xad].eType = FIELDTYPE_NAME_SHORT;
-    skills[0xad].nSize = 0;
-    skills[0xad].nOffset = 0x182;
-    skills[0xad].fpLinker = &sgtDataTable.pTxtSkillsLink;
-    skills[0xae].szName = "delay";
-    skills[0xae].eType = FIELDTYPE_LINKER_INT;
-    skills[0xae].nSize = 0;
-    skills[0xae].nOffset = 400;
-    skills[0xae].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0xaf].szName = "usemanaondo";
-    skills[0xaf].nSize = 0x25;
-    skills[0xaf].nOffset = 4;
-    skills[0xaf].fpLinker = 0;
-    skills[0xb0].szName = "startmana";
-    skills[0xb0].eType = FIELDTYPE_SHORT;
-    skills[0xb0].nSize = 0;
-    skills[0xb0].nOffset = 0x184;
-    skills[0xb0].fpLinker = 0;
-    skills[0xb1].szName = "minmana";
-    skills[0xb1].eType = FIELDTYPE_SHORT;
-    skills[0xb1].nSize = 0;
-    skills[0xb1].nOffset = 0x186;
-    skills[0xb1].fpLinker = 0;
-    skills[0xb2].szName = "manashift";
-    skills[0xb2].eType = FIELDTYPE_SHORT;
-    skills[0xb2].nSize = 0;
-    skills[0xb2].nOffset = 0x188;
-    skills[0xb2].fpLinker = 0;
-    skills[0xb3].szName = "mana";
-    skills[0xb3].eType = FIELDTYPE_SHORT;
-    skills[0xb3].nSize = 0;
-    skills[0xb3].nOffset = 0x18a;
-    skills[0xb3].fpLinker = 0;
-    skills[0xb4].szName = "lvlmana";
-    skills[0xb4].eType = FIELDTYPE_SHORT;
-    skills[0xb4].nSize = 0;
-    skills[0xb4].nOffset = 0x18c;
-    skills[0xb4].fpLinker = 0;
-    skills[0xb5].szName = "Param1";
-    skills[0xb5].eType = FIELDTYPE_INT;
-    skills[0xb5].nSize = 0;
-    skills[0xb5].nOffset = 0x148;
-    skills[0xb5].fpLinker = 0;
-    skills[0xb6].szName = "Param2";
-    skills[0xb6].eType = FIELDTYPE_INT;
-    skills[0xb6].nSize = 0;
-    skills[0xb6].nOffset = 0x14c;
-    skills[0xb6].fpLinker = 0;
-    skills[0xb7].szName = "Param3";
-    skills[0xb7].eType = FIELDTYPE_INT;
-    skills[0xb7].nSize = 0;
-    skills[0xb7].nOffset = 0x150;
-    skills[0xb7].fpLinker = 0;
-    skills[0xb8].szName = "Param4";
-    skills[0xb8].eType = FIELDTYPE_INT;
-    skills[0xb8].nSize = 0;
-    skills[0xb8].nOffset = 0x154;
-    skills[0xb8].fpLinker = 0;
-    skills[0xb9].szName = "Param5";
-    skills[0xb9].eType = FIELDTYPE_INT;
-    skills[0xb9].nSize = 0;
-    skills[0xb9].nOffset = 0x158;
-    skills[0xb9].fpLinker = 0;
-    skills[0xba].szName = "Param6";
-    skills[0xba].eType = FIELDTYPE_INT;
-    skills[0xba].nSize = 0;
-    skills[0xba].nOffset = 0x15c;
-    skills[0xba].fpLinker = 0;
-    skills[0xbb].szName = "Param7";
-    skills[0xbb].eType = FIELDTYPE_INT;
-    skills[0xbb].nSize = 0;
-    skills[0xbb].nOffset = 0x160;
-    skills[0xbb].fpLinker = 0;
-    skills[0xbc].szName = "Param8";
-    skills[0xbc].eType = FIELDTYPE_INT;
-    skills[0xbc].nSize = 0;
-    skills[0xbc].nOffset = 0x164;
-    skills[0xbc].fpLinker = 0;
-    skills[0xbd].szName = "calc1";
-    skills[0xbd].eType = FIELDTYPE_LINKER_INT;
-    skills[0xbd].nSize = 0;
-    skills[0xbd].nOffset = 0x138;
-    skills[0xbd].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0xbe].szName = "calc2";
-    skills[0xbe].eType = FIELDTYPE_LINKER_INT;
-    skills[0xbe].nSize = 0;
-    skills[0xbe].nOffset = 0x13c;
-    skills[0xbe].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0xbf].szName = "calc3";
-    skills[0xbf].eType = FIELDTYPE_LINKER_INT;
-    skills[0xbf].nSize = 0;
-    skills[0xbf].nOffset = 0x140;
-    skills[0xbf].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0xc0].szName = "calc4";
-    skills[0xc0].eType = FIELDTYPE_LINKER_INT;
-    skills[0xc0].nSize = 0;
-    skills[0xc0].nOffset = 0x144;
-    skills[0xc0].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0xc1].szName = "ToHit";
-    skills[0xc1].eType = FIELDTYPE_INT;
-    skills[0xc1].nSize = 0;
-    skills[0xc1].nOffset = 0x198;
-    skills[0xc1].fpLinker = 0;
-    skills[0xc2].szName = "LevToHit";
-    skills[0xc2].eType = FIELDTYPE_INT;
-    skills[0xc2].nSize = 0;
-    skills[0xc2].nOffset = 0x19c;
-    skills[0xc2].fpLinker = 0;
-    skills[0xc3].szName = "ToHitCalc";
-    skills[0xc3].eType = FIELDTYPE_LINKER_INT;
-    skills[0xc3].nSize = 0;
-    skills[0xc3].nOffset = 0x1a0;
-    skills[0xc3].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0xc4].szName = "HitShift";
-    skills[0xc4].eType = FIELDTYPE_CHAR;
-    skills[0xc4].nSize = 0;
-    skills[0xc4].nOffset = 0x1a4;
-    skills[0xc4].fpLinker = 0;
-    skills[0xc5].szName = "SrcDam";
-    skills[0xc5].eType = FIELDTYPE_CHAR;
-    skills[0xc5].nSize = 0;
-    skills[0xc5].nOffset = 0x1a5;
-    skills[0xc5].fpLinker = 0;
-    skills[0xc6].szName = "MinDam";
-    skills[0xc6].eType = FIELDTYPE_INT;
-    skills[0xc6].nSize = 0;
-    skills[0xc6].nOffset = 0x1a8;
-    skills[0xc6].fpLinker = 0;
-    skills[199].szName = "MinLevDam1";
-    skills[199].eType = FIELDTYPE_INT;
-    skills[199].nSize = 0;
-    skills[199].nOffset = 0x1b0;
-    skills[199].fpLinker = 0;
-    skills[200].szName = "MinLevDam2";
-    skills[200].eType = FIELDTYPE_INT;
-    skills[200].nSize = 0;
-    skills[200].nOffset = 0x1b4;
-    skills[200].fpLinker = 0;
-    skills[0xc9].szName = "MinLevDam3";
-    skills[0xc9].eType = FIELDTYPE_INT;
-    skills[0xc9].nSize = 0;
-    skills[0xc9].nOffset = 0x1b8;
-    skills[0xc9].fpLinker = 0;
-    skills[0xca].szName = "MinLevDam4";
-    skills[0xca].eType = FIELDTYPE_INT;
-    skills[0xca].nSize = 0;
-    skills[0xca].nOffset = 0x1bc;
-    skills[0xca].fpLinker = 0;
-    skills[0xcb].szName = "MinLevDam5";
-    skills[0xcb].eType = FIELDTYPE_INT;
-    skills[0xcb].nSize = 0;
-    skills[0xcb].nOffset = 0x1c0;
-    skills[0xcb].fpLinker = 0;
-    skills[0xcc].szName = "MaxDam";
-    skills[0xcc].eType = FIELDTYPE_INT;
-    skills[0xcc].nSize = 0;
-    skills[0xcc].nOffset = 0x1ac;
-    skills[0xcc].fpLinker = 0;
-    skills[0xcd].szName = "MaxLevDam1";
-    skills[0xcd].eType = FIELDTYPE_INT;
-    skills[0xcd].nSize = 0;
-    skills[0xcd].nOffset = 0x1c4;
-    skills[0xcd].fpLinker = 0;
-    skills[0xce].szName = "MaxLevDam2";
-    skills[0xce].eType = FIELDTYPE_INT;
-    skills[0xce].nSize = 0;
-    skills[0xce].nOffset = 0x1c8;
-    skills[0xce].fpLinker = 0;
-    skills[0xcf].szName = "MaxLevDam3";
-    skills[0xcf].eType = FIELDTYPE_INT;
-    skills[0xcf].nSize = 0;
-    skills[0xcf].nOffset = 0x1cc;
-    skills[0xcf].fpLinker = 0;
-    skills[0xd0].szName = "MaxLevDam4";
-    skills[0xd0].eType = FIELDTYPE_INT;
-    skills[0xd0].nSize = 0;
-    skills[0xd0].nOffset = 0x1d0;
-    skills[0xd0].fpLinker = 0;
-    skills[0xd1].szName = "MaxLevDam5";
-    skills[0xd1].eType = FIELDTYPE_INT;
-    skills[0xd1].nSize = 0;
-    skills[0xd1].nOffset = 0x1d4;
-    skills[0xd1].fpLinker = 0;
-    skills[0xd2].szName = "DmgSymPerCalc";
-    skills[0xd2].eType = FIELDTYPE_LINKER_INT;
-    skills[0xd2].nSize = 0;
-    skills[0xd2].nOffset = 0x1d8;
-    skills[0xd2].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0xd3].szName = "EType";
-    skills[0xd3].eType = FIELDTYPE_CODE_CHAR;
-    skills[0xd3].nSize = 0;
-    skills[0xd3].nOffset = 0x1dc;
-    skills[0xd3].fpLinker = &sgtDataTable.pTxtElemTypesLink;
-    skills[0xd4].szName = "EMin";
-    skills[0xd4].eType = FIELDTYPE_INT;
-    skills[0xd4].nSize = 0;
-    skills[0xd4].nOffset = 0x1e0;
-    skills[0xd4].fpLinker = 0;
-    skills[0xd5].szName = "EMinLev1";
-    skills[0xd5].eType = FIELDTYPE_INT;
-    skills[0xd5].nSize = 0;
-    skills[0xd5].nOffset = 0x1e8;
-    skills[0xd5].fpLinker = 0;
-    skills[0xd6].szName = "EMinLev2";
-    skills[0xd6].eType = FIELDTYPE_INT;
-    skills[0xd6].nSize = 0;
-    skills[0xd6].nOffset = 0x1ec;
-    skills[0xd6].fpLinker = 0;
-    skills[0xd7].szName = "EMinLev3";
-    skills[0xd7].eType = FIELDTYPE_INT;
-    skills[0xd7].nSize = 0;
-    skills[0xd7].nOffset = 0x1f0;
-    skills[0xd7].fpLinker = 0;
-    skills[0xd8].szName = "EMinLev4";
-    skills[0xd8].eType = FIELDTYPE_INT;
-    skills[0xd8].nSize = 0;
-    skills[0xd8].nOffset = 500;
-    skills[0xd8].fpLinker = 0;
-    skills[0xd9].szName = "EMinLev5";
-    skills[0xd9].eType = FIELDTYPE_INT;
-    skills[0xd9].nSize = 0;
-    skills[0xd9].nOffset = 0x1f8;
-    skills[0xd9].fpLinker = 0;
-    skills[0xda].szName = "EMax";
-    skills[0xda].eType = FIELDTYPE_INT;
-    skills[0xda].nSize = 0;
-    skills[0xda].nOffset = 0x1e4;
-    skills[0xda].fpLinker = 0;
-    skills[0xdb].szName = "EMaxLev1";
-    skills[0xdb].eType = FIELDTYPE_INT;
-    skills[0xdb].nSize = 0;
-    skills[0xdb].nOffset = 0x1fc;
-    skills[0xdb].fpLinker = 0;
-    skills[0xdc].szName = "EMaxLev2";
-    skills[0xe0].eType = FIELDTYPE_LINKER_INT;
-    skills[0xe5].eType = FIELDTYPE_LINKER_INT;
-    skills[0xdc].eType = FIELDTYPE_INT;
-    skills[0xdc].nSize = 0;
-    skills[0xdc].nOffset = 0x200;
-    skills[0xdc].fpLinker = 0;
-    skills[0xdd].szName = "EMaxLev3";
-    skills[0xdd].eType = FIELDTYPE_INT;
-    skills[0xdd].nSize = 0;
-    skills[0xdd].nOffset = 0x204;
-    skills[0xdd].fpLinker = 0;
-    skills[0xde].szName = "EMaxLev4";
-    skills[0xde].eType = FIELDTYPE_INT;
-    skills[0xde].nSize = 0;
-    skills[0xde].nOffset = 0x208;
-    skills[0xde].fpLinker = 0;
-    skills[0xdf].szName = "EMaxLev5";
-    skills[0xdf].eType = FIELDTYPE_INT;
-    skills[0xdf].nSize = 0;
-    skills[0xdf].nOffset = 0x20c;
-    skills[0xdf].fpLinker = 0;
-    skills[0xe0].szName = "EDmgSymPerCalc";
-    skills[0xe0].nSize = 0;
-    skills[0xe0].nOffset = 0x210;
-    skills[0xe0].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0xe1].szName = "ELen";
-    skills[0xe1].eType = FIELDTYPE_INT;
-    skills[0xe1].nSize = 0;
-    skills[0xe1].nOffset = 0x214;
-    skills[0xe1].fpLinker = 0;
-    skills[0xe2].szName = "ELevLen1";
-    skills[0xe2].eType = FIELDTYPE_INT;
-    skills[0xe2].nSize = 0;
-    skills[0xe2].nOffset = 0x218;
-    skills[0xe2].fpLinker = 0;
-    skills[0xe3].szName = "ELevLen2";
-    skills[0xe3].eType = FIELDTYPE_INT;
-    skills[0xe3].nSize = 0;
-    skills[0xe3].nOffset = 0x21c;
-    skills[0xe3].fpLinker = 0;
-    skills[0xe4].szName = "ELevLen3";
-    skills[0xe4].eType = FIELDTYPE_INT;
-    skills[0xe4].nSize = 0;
-    skills[0xe4].nOffset = 0x220;
-    skills[0xe4].fpLinker = 0;
-    skills[0xe5].szName = "ELenSymPerCalc";
-    skills[0xe5].nSize = 0;
-    skills[0xe5].nOffset = 0x224;
-    skills[0xe5].fpLinker = (void*)DATATBLS_CompileSkillCode;
-    skills[0xe6].szName = "restrict";
-    skills[0xe6].eType = FIELDTYPE_CHAR;
-    skills[0xe6].nSize = 0;
-    skills[0xe6].nOffset = 0x228;
-    skills[0xe6].fpLinker = 0;
-    skills[0xe7].szName = "state1";
-    skills[0xe7].eType = FIELDTYPE_NAME_SHORT;
-    skills[0xe7].nSize = 0;
-    skills[0xe7].nOffset = 0x22a;
-    skills[0xe7].fpLinker = &sgtDataTable.pTxtStatesLink;
-    skills[0xe8].szName = "state2";
-    skills[0xe8].eType = FIELDTYPE_NAME_SHORT;
-    skills[0xe8].nSize = 0;
-    skills[0xe8].nOffset = 0x22c;
-    skills[0xe8].fpLinker = &sgtDataTable.pTxtStatesLink;
-    skills[0xe9].szName = "state3";
-    skills[0xe9].eType = FIELDTYPE_NAME_SHORT;
-    skills[0xe9].nSize = 0;
-    skills[0xe9].nOffset = 0x22e;
-    skills[0xe9].fpLinker = &sgtDataTable.pTxtStatesLink;
-    skills[0xea].szName = "aitype";
-    skills[0xea].eType = FIELDTYPE_CHAR;
-    skills[0xea].nSize = 0;
-    skills[0xea].nOffset = 0x230;
-    skills[0xea].fpLinker = 0;
-    skills[0xeb].szName = "aibonus";
-    skills[0xeb].eType = FIELDTYPE_SHORT;
-    skills[0xeb].nSize = 0;
-    skills[0xeb].nOffset = 0x232;
-    skills[0xeb].fpLinker = 0;
-    skills[0xec].szName = "cost mult";
-    skills[0xec].eType = FIELDTYPE_INT;
-    skills[0xec].nSize = 0;
-    skills[0xec].nOffset = 0x234;
-    skills[0xec].fpLinker = 0;
-    skills[0xed].szName = "cost add";
-    skills[0xed].eType = FIELDTYPE_INT;
-    skills[0xed].nSize = 0;
-    skills[0xed].nOffset = 0x238;
-    skills[0xed].fpLinker = 0;
-    skills[0xee].szName = "end";
-    skills[0xee].eType = FIELDTYPE_END;
-    skills[0xee].nSize = 0;
-    skills[0xee].nOffset = 0;
-    skills[0xee].fpLinker = 0;
+    D2BinFieldInputStrc pskilldesc[114] = {
+      {"skilldesc", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtSkillDescLink},
+      {"skillpage", FIELDTYPE_CHAR, 0, 2, 0},
+      {"skillrow", FIELDTYPE_CHAR, 0, 3, 0},
+      {"skillcolumn", FIELDTYPE_CHAR, 0, 4, 0},
+      {"ListRow", FIELDTYPE_CHAR, 0, 5, 0},
+      {"ListPool", FIELDTYPE_CHAR, 0, 6, 0},
+      {"iconcel", FIELDTYPE_CHAR, 0, 7, 0},
+      {"str name", FIELDTYPE_KEY_WORD, 0, 8, (void*)DATATBLS_LookupStringId},
+      {"str short", FIELDTYPE_KEY_WORD, 0, 10, (void*)DATATBLS_LookupStringId},
+      {"str long", FIELDTYPE_KEY_WORD, 0, 0xc, (void*)DATATBLS_LookupStringId},
+      {"str alt", FIELDTYPE_KEY_WORD, 0, 0xe, (void*)DATATBLS_LookupStringId},
+      {"str mana", FIELDTYPE_KEY_WORD, 0, 0x10, (void*)DATATBLS_LookupStringId},
+      {"descdam", FIELDTYPE_SHORT, 0, 0x12, 0},
+      {"descatt", FIELDTYPE_SHORT, 0, 0x14, 0},
+      {"ddam calc1", FIELDTYPE_LINKER_INT, 0, 0x18, (void*)DATATBLS_CompileSkillDescCode},
+      {"ddam calc2", FIELDTYPE_LINKER_INT, 0, 0x1c, (void*)DATATBLS_CompileSkillDescCode},
+      {"p1dmelem", FIELDTYPE_CODE_CHAR, 0, 0x20, &sgtDataTable.pTxtElemTypesLink},
+      {"p1dmmin", FIELDTYPE_LINKER_INT, 0, 0x24, (void*)DATATBLS_CompileSkillDescCode},
+      {"p1dmmax", FIELDTYPE_LINKER_INT, 0, 0x30, (void*)DATATBLS_CompileSkillDescCode},
+      {"p2dmelem", FIELDTYPE_CODE_CHAR, 0, 0x21, &sgtDataTable.pTxtElemTypesLink},
+      {"p2dmmin", FIELDTYPE_LINKER_INT, 0, 0x28, (void*)DATATBLS_CompileSkillDescCode},
+      {"p2dmmax", FIELDTYPE_LINKER_INT, 0, 0x34, (void*)DATATBLS_CompileSkillDescCode},
+      {"p3dmelem", FIELDTYPE_CODE_CHAR, 0, 0x22, &sgtDataTable.pTxtElemTypesLink},
+      {"p3dmmin", FIELDTYPE_LINKER_INT, 0, 0x2c, (void*)DATATBLS_CompileSkillDescCode},
+      {"p3dmmax", FIELDTYPE_LINKER_INT, 0, 0x38, (void*)DATATBLS_CompileSkillDescCode},
+      {"descmissile1", FIELDTYPE_NAME_SHORT, 0, 0x3c, &sgtDataTable.pTxtMissilesLink},
+      {"descmissile2", FIELDTYPE_NAME_SHORT, 0, 0x3e, &sgtDataTable.pTxtMissilesLink},
+      {"descmissile3", FIELDTYPE_NAME_SHORT, 0, 0x40, &sgtDataTable.pTxtMissilesLink},
+      {"descline1", FIELDTYPE_CHAR, 0, 0x42, 0},
+      {"desctexta1", FIELDTYPE_KEY_WORD, 0, 0x54, (void*)DATATBLS_LookupStringId},
+      {"desctextb1", FIELDTYPE_KEY_WORD, 0, 0x76, (void*)DATATBLS_LookupStringId},
+      {"desccalca1", FIELDTYPE_LINKER_INT, 0, 0x98, (void*)DATATBLS_CompileSkillDescCode},
+      {"desccalcb1", FIELDTYPE_LINKER_INT, 0, 0xdc, (void*)DATATBLS_CompileSkillDescCode},
+      {"descline2", FIELDTYPE_CHAR, 0, 0x43, 0},
+      {"desctexta2", FIELDTYPE_KEY_WORD, 0, 0x56, (void*)DATATBLS_LookupStringId},
+      {"desctextb2", FIELDTYPE_KEY_WORD, 0, 0x78, (void*)DATATBLS_LookupStringId},
+      {"desccalca2", FIELDTYPE_LINKER_INT, 0, 0x9c, (void*)DATATBLS_CompileSkillDescCode},
+      {"desccalcb2", FIELDTYPE_LINKER_INT, 0, 0xe0, (void*)DATATBLS_CompileSkillDescCode},
+      {"descline3", FIELDTYPE_CHAR, 0, 0x44, 0},
+      {"desctexta3", FIELDTYPE_KEY_WORD, 0, 0x58, (void*)DATATBLS_LookupStringId},
+      {"desctextb3", FIELDTYPE_KEY_WORD, 0, 0x7a, (void*)DATATBLS_LookupStringId},
+      {"desccalca3", FIELDTYPE_LINKER_INT, 0, 0xa0, (void*)DATATBLS_CompileSkillDescCode},
+      {"desccalcb3", FIELDTYPE_LINKER_INT, 0, 0xe4, (void*)DATATBLS_CompileSkillDescCode},
+      {"descline4", FIELDTYPE_CHAR, 0, 0x45, 0},
+      {"desctexta4", FIELDTYPE_KEY_WORD, 0, 0x5a, (void*)DATATBLS_LookupStringId},
+      {"desctextb4", FIELDTYPE_KEY_WORD, 0, 0x7c, (void*)DATATBLS_LookupStringId},
+      {"desccalca4", FIELDTYPE_LINKER_INT, 0, 0xa4, (void*)DATATBLS_CompileSkillDescCode},
+      {"desccalcb4", FIELDTYPE_LINKER_INT, 0, 0xe8, (void*)DATATBLS_CompileSkillDescCode},
+      {"descline5", FIELDTYPE_CHAR, 0, 0x46, 0},
+      {"desctexta5", FIELDTYPE_KEY_WORD, 0, 0x5c, (void*)DATATBLS_LookupStringId},
+      {"desctextb5", FIELDTYPE_KEY_WORD, 0, 0x7e, (void*)DATATBLS_LookupStringId},
+      {"desccalca5", FIELDTYPE_LINKER_INT, 0, 0xa8, (void*)DATATBLS_CompileSkillDescCode},
+      {"desccalcb5", FIELDTYPE_LINKER_INT, 0, 0xec, (void*)DATATBLS_CompileSkillDescCode},
+      {"descline6", FIELDTYPE_CHAR, 0, 0x47, 0},
+      {"desctexta6", FIELDTYPE_KEY_WORD, 0, 0x5e, (void*)DATATBLS_LookupStringId},
+      {"desctextb6", FIELDTYPE_KEY_WORD, 0, 0x80, (void*)DATATBLS_LookupStringId},
+      {"desccalca6", FIELDTYPE_LINKER_INT, 0, 0xac, (void*)DATATBLS_CompileSkillDescCode},
+      {"desccalcb6", FIELDTYPE_LINKER_INT, 0, 0xf0, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc2line1", FIELDTYPE_CHAR, 0, 0x48, 0},
+      {"dsc2texta1", FIELDTYPE_KEY_WORD, 0, 0x60, (void*)DATATBLS_LookupStringId},
+      {"dsc2textb1", FIELDTYPE_KEY_WORD, 0, 0x82, (void*)DATATBLS_LookupStringId},
+      {"dsc2calca1", FIELDTYPE_LINKER_INT, 0, 0xb0, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc2calcb1", FIELDTYPE_LINKER_INT, 0, 0xf4, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc2line2", FIELDTYPE_CHAR, 0, 0x49, 0},
+      {"dsc2texta2", FIELDTYPE_KEY_WORD, 0, 0x62, (void*)DATATBLS_LookupStringId},
+      {"dsc2textb2", FIELDTYPE_KEY_WORD, 0, 0x84, (void*)DATATBLS_LookupStringId},
+      {"dsc2calca2", FIELDTYPE_LINKER_INT, 0, 0xb4, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc2calcb2", FIELDTYPE_LINKER_INT, 0, 0xf8, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc2line3", FIELDTYPE_CHAR, 0, 0x4a, 0},
+      {"dsc2texta3", FIELDTYPE_KEY_WORD, 0, 100, (void*)DATATBLS_LookupStringId},
+      {"dsc2textb3", FIELDTYPE_KEY_WORD, 0, 0x86, (void*)DATATBLS_LookupStringId},
+      {"dsc2calca3", FIELDTYPE_LINKER_INT, 0, 0xb8, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc2calcb3", FIELDTYPE_LINKER_INT, 0, 0xfc, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc2line4", FIELDTYPE_CHAR, 0, 0x4b, 0},
+      {"dsc2texta4", FIELDTYPE_KEY_WORD, 0, 0x66, (void*)DATATBLS_LookupStringId},
+      {"dsc2textb4", FIELDTYPE_KEY_WORD, 0, 0x88, (void*)DATATBLS_LookupStringId},
+      {"dsc2calca4", FIELDTYPE_LINKER_INT, 0, 0xbc, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc2calcb4", FIELDTYPE_LINKER_INT, 0, 0x100, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3line1", FIELDTYPE_CHAR, 0, 0x4c, 0},
+      {"dsc3texta1", FIELDTYPE_KEY_WORD, 0, 0x68, (void*)DATATBLS_LookupStringId},
+      {"dsc3textb1", FIELDTYPE_KEY_WORD, 0, 0x8a, (void*)DATATBLS_LookupStringId},
+      {"dsc3calca1", FIELDTYPE_LINKER_INT, 0, 0xc0, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3calcb1", FIELDTYPE_LINKER_INT, 0, 0x104, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3line2", FIELDTYPE_CHAR, 0, 0x4d, 0},
+      {"dsc3texta2", FIELDTYPE_KEY_WORD, 0, 0x6a, (void*)DATATBLS_LookupStringId},
+      {"dsc3textb2", FIELDTYPE_KEY_WORD, 0, 0x8c, (void*)DATATBLS_LookupStringId},
+      {"dsc3calca2", FIELDTYPE_LINKER_INT, 0, 0xc4, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3calcb2", FIELDTYPE_LINKER_INT, 0, 0x108, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3line3", FIELDTYPE_CHAR, 0, 0x4e, 0},
+      {"dsc3texta3", FIELDTYPE_KEY_WORD, 0, 0x6c, (void*)DATATBLS_LookupStringId},
+      {"dsc3textb3", FIELDTYPE_KEY_WORD, 0, 0x8e, (void*)DATATBLS_LookupStringId},
+      {"dsc3calca3", FIELDTYPE_LINKER_INT, 0, 200, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3calcb3", FIELDTYPE_LINKER_INT, 0, 0x10c, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3line4", FIELDTYPE_CHAR, 0, 0x4f, 0},
+      {"dsc3texta4", FIELDTYPE_KEY_WORD, 0, 0x6e, (void*)DATATBLS_LookupStringId},
+      {"dsc3textb4", FIELDTYPE_KEY_WORD, 0, 0x90, (void*)DATATBLS_LookupStringId},
+      {"dsc3calca4", FIELDTYPE_LINKER_INT, 0, 0xcc, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3calcb4", FIELDTYPE_LINKER_INT, 0, 0x110, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3line5", FIELDTYPE_CHAR, 0, 0x50, 0},
+      {"dsc3texta5", FIELDTYPE_KEY_WORD, 0, 0x70, (void*)DATATBLS_LookupStringId},
+      {"dsc3textb5", FIELDTYPE_KEY_WORD, 0, 0x92, (void*)DATATBLS_LookupStringId},
+      {"dsc3calca5", FIELDTYPE_LINKER_INT, 0, 0xd0, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3calcb5", FIELDTYPE_LINKER_INT, 0, 0x114, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3line6", FIELDTYPE_CHAR, 0, 0x51, 0},
+      {"dsc3texta6", FIELDTYPE_KEY_WORD, 0, 0x72, (void*)DATATBLS_LookupStringId},
+      {"dsc3textb6", FIELDTYPE_KEY_WORD, 0, 0x94, (void*)DATATBLS_LookupStringId},
+      {"dsc3calca6", FIELDTYPE_LINKER_INT, 0, 0xd4, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3calcb6", FIELDTYPE_LINKER_INT, 0, 0x118, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3line7", FIELDTYPE_CHAR, 0, 0x52, 0},
+      {"dsc3texta7", FIELDTYPE_KEY_WORD, 0, 0x74, (void*)DATATBLS_LookupStringId},
+      {"dsc3textb7", FIELDTYPE_KEY_WORD, 0, 0x96, (void*)DATATBLS_LookupStringId},
+      {"dsc3calca7", FIELDTYPE_LINKER_INT, 0, 0xd8, (void*)DATATBLS_CompileSkillDescCode},
+      {"dsc3calcb7", FIELDTYPE_LINKER_INT, 0, 0x11c, (void*)DATATBLS_CompileSkillDescCode},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
+    D2BinFieldInputStrc skills[239] = {
+      {"skill", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtSkillsLink},
+      {"charclass", FIELDTYPE_CODE_CHAR, 0, 0xc, &sgtDataTable.pTxtPlayerClassLink},
+      {"skilldesc", FIELDTYPE_NAME_SHORT, 0, 0x194, &__frame0.pSkillDescLink},
+      {"srvstfunc", FIELDTYPE_SHORT, 0, 0x2c, 0},
+      {"srvdofunc", FIELDTYPE_SHORT, 0, 0x2e, 0},
+      {"srvprgfunc1", FIELDTYPE_SHORT, 0, 0x30, 0},
+      {"srvprgfunc2", FIELDTYPE_SHORT, 0, 0x32, 0},
+      {"srvprgfunc3", FIELDTYPE_SHORT, 0, 0x34, 0},
+      {"prgcalc1", FIELDTYPE_LINKER_INT, 0, 0x38, (void*)DATATBLS_CompileSkillCode},
+      {"prgcalc2", FIELDTYPE_LINKER_INT, 0, 0x3c, (void*)DATATBLS_CompileSkillCode},
+      {"prgcalc3", FIELDTYPE_LINKER_INT, 0, 0x40, (void*)DATATBLS_CompileSkillCode},
+      {"prgdam", FIELDTYPE_CHAR, 0, 0x44, 0},
+      {"srvmissile", FIELDTYPE_NAME_SHORT, 0, 0x46, &sgtDataTable.pTxtMissilesLink},
+      {"srvmissilea", FIELDTYPE_NAME_SHORT, 0, 0x48, &sgtDataTable.pTxtMissilesLink},
+      {"srvmissileb", FIELDTYPE_NAME_SHORT, 0, 0x4a, &sgtDataTable.pTxtMissilesLink},
+      {"srvmissilec", FIELDTYPE_NAME_SHORT, 0, 0x4c, &sgtDataTable.pTxtMissilesLink},
+      {"srvoverlay", FIELDTYPE_NAME_SHORT, 0, 0x4e, &sgtDataTable.pTxtOverlayLink},
+      {"lob", FIELDTYPE_BIT, 1, 4, 0},
+      {"decquant", FIELDTYPE_BIT, 0, 4, 0},
+      {"immediate", FIELDTYPE_BIT, 0xf, 4, 0},
+      {"aurafilter", FIELDTYPE_INT, 0, 0x50, 0},
+      {"aurastate", FIELDTYPE_NAME_SHORT, 0, 0x80, &sgtDataTable.pTxtStatesLink},
+      {"auratargetstate", FIELDTYPE_NAME_SHORT, 0, 0x82, &sgtDataTable.pTxtStatesLink},
+      {"auralencalc", FIELDTYPE_LINKER_INT, 0, 0x60, (void*)DATATBLS_CompileSkillCode},
+      {"aurarangecalc", FIELDTYPE_LINKER_INT, 0, 100, (void*)DATATBLS_CompileSkillCode},
+      {"aurastat1", FIELDTYPE_NAME_SHORT, 0, 0x54, &sgtDataTable.pTxtItemStatCostLink},
+      {"aurastatcalc1", FIELDTYPE_LINKER_INT, 0, 0x68, (void*)DATATBLS_CompileSkillCode},
+      {"aurastat2", FIELDTYPE_NAME_SHORT, 0, 0x56, &sgtDataTable.pTxtItemStatCostLink},
+      {"aurastatcalc2", FIELDTYPE_LINKER_INT, 0, 0x6c, (void*)DATATBLS_CompileSkillCode},
+      {"aurastat3", FIELDTYPE_NAME_SHORT, 0, 0x58, &sgtDataTable.pTxtItemStatCostLink},
+      {"aurastatcalc3", FIELDTYPE_LINKER_INT, 0, 0x70, (void*)DATATBLS_CompileSkillCode},
+      {"aurastat4", FIELDTYPE_NAME_SHORT, 0, 0x5a, &sgtDataTable.pTxtItemStatCostLink},
+      {"aurastatcalc4", FIELDTYPE_LINKER_INT, 0, 0x74, (void*)DATATBLS_CompileSkillCode},
+      {"aurastat5", FIELDTYPE_NAME_SHORT, 0, 0x5c, &sgtDataTable.pTxtItemStatCostLink},
+      {"aurastatcalc5", FIELDTYPE_LINKER_INT, 0, 0x78, (void*)DATATBLS_CompileSkillCode},
+      {"aurastat6", FIELDTYPE_NAME_SHORT, 0, 0x5e, &sgtDataTable.pTxtItemStatCostLink},
+      {"aurastatcalc6", FIELDTYPE_LINKER_INT, 0, 0x7c, (void*)DATATBLS_CompileSkillCode},
+      {"auraevent1", FIELDTYPE_NAME_SHORT, 0, 0x84, &sgtDataTable.pTxtEventsLink},
+      {"auraeventfunc1", FIELDTYPE_SHORT, 0, 0x8a, 0},
+      {"auraevent2", FIELDTYPE_NAME_SHORT, 0, 0x86, &sgtDataTable.pTxtEventsLink},
+      {"auraeventfunc2", FIELDTYPE_SHORT, 0, 0x8c, 0},
+      {"auraevent3", FIELDTYPE_NAME_SHORT, 0, 0x88, &sgtDataTable.pTxtEventsLink},
+      {"auraeventfunc3", FIELDTYPE_SHORT, 0, 0x8e, 0},
+      {"auratgtevent", FIELDTYPE_NAME_SHORT, 0, 0x90, &sgtDataTable.pTxtEventsLink},
+      {"auratgteventfunc", FIELDTYPE_SHORT, 0, 0x92, 0},
+      {"passivestate", FIELDTYPE_NAME_SHORT, 0, 0x94, &sgtDataTable.pTxtStatesLink},
+      {"passiveitype", FIELDTYPE_CODE_SHORT, 0, 0x96, &sgtDataTable.pTxtItemTypesLink},
+      {"passivestat1", FIELDTYPE_NAME_SHORT, 0, 0x98, &sgtDataTable.pTxtItemStatCostLink},
+      {"passivecalc1", FIELDTYPE_LINKER_INT, 0, 0xa4, (void*)DATATBLS_CompileSkillCode},
+      {"passivestat2", FIELDTYPE_NAME_SHORT, 0, 0x9a, &sgtDataTable.pTxtItemStatCostLink},
+      {"passivecalc2", FIELDTYPE_LINKER_INT, 0, 0xa8, (void*)DATATBLS_CompileSkillCode},
+      {"passivestat3", FIELDTYPE_NAME_SHORT, 0, 0x9c, &sgtDataTable.pTxtItemStatCostLink},
+      {"passivecalc3", FIELDTYPE_LINKER_INT, 0, 0xac, (void*)DATATBLS_CompileSkillCode},
+      {"passivestat4", FIELDTYPE_NAME_SHORT, 0, 0x9e, &sgtDataTable.pTxtItemStatCostLink},
+      {"passivecalc4", FIELDTYPE_LINKER_INT, 0, 0xb0, (void*)DATATBLS_CompileSkillCode},
+      {"passivestat5", FIELDTYPE_NAME_SHORT, 0, 0xa0, &sgtDataTable.pTxtItemStatCostLink},
+      {"passivecalc5", FIELDTYPE_LINKER_INT, 0, 0xb4, (void*)DATATBLS_CompileSkillCode},
+      {"passiveevent", FIELDTYPE_NAME_SHORT, 0, 0xb8, &sgtDataTable.pTxtEventsLink},
+      {"passiveeventfunc", FIELDTYPE_SHORT, 0, 0xba, 0},
+      {"summon", FIELDTYPE_NAME_SHORT, 0, 0xbc, &__frame0.pMonStatsLink},
+      {"pettype", FIELDTYPE_NAME_CHAR, 0, 0xbe, &sgtDataTable.pTxtPetTypeLink},
+      {"summode", FIELDTYPE_CODE_CHAR, 0, 0xbf, &sgtDataTable.pTxtMonModeLink},
+      {"petmax", FIELDTYPE_LINKER_INT, 0, 0xc0, (void*)DATATBLS_CompileSkillCode},
+      {"sumskill1", FIELDTYPE_NAME_SHORT, 0, 0xc4, &sgtDataTable.pTxtSkillsLink},
+      {"sumsk1calc", FIELDTYPE_LINKER_INT, 0, 0xd0, (void*)DATATBLS_CompileSkillCode},
+      {"sumskill2", FIELDTYPE_NAME_SHORT, 0, 0xc6, &sgtDataTable.pTxtSkillsLink},
+      {"sumsk2calc", FIELDTYPE_LINKER_INT, 0, 0xd4, (void*)DATATBLS_CompileSkillCode},
+      {"sumskill3", FIELDTYPE_NAME_SHORT, 0, 200, &sgtDataTable.pTxtSkillsLink},
+      {"sumsk3calc", FIELDTYPE_LINKER_INT, 0, 0xd8, (void*)DATATBLS_CompileSkillCode},
+      {"sumskill4", FIELDTYPE_NAME_SHORT, 0, 0xca, &sgtDataTable.pTxtSkillsLink},
+      {"sumsk4calc", FIELDTYPE_LINKER_INT, 0, 0xdc, (void*)DATATBLS_CompileSkillCode},
+      {"sumskill5", FIELDTYPE_NAME_SHORT, 0, 0xcc, &sgtDataTable.pTxtSkillsLink},
+      {"sumsk5calc", FIELDTYPE_LINKER_INT, 0, 0xe0, (void*)DATATBLS_CompileSkillCode},
+      {"sumumod", FIELDTYPE_SHORT, 0, 0xe4, 0},
+      {"sumoverlay", FIELDTYPE_NAME_SHORT, 0, 0xe6, &sgtDataTable.pTxtOverlayLink},
+      {"cltmissile", FIELDTYPE_NAME_SHORT, 0, 0xe8, &sgtDataTable.pTxtMissilesLink},
+      {"cltmissilea", FIELDTYPE_NAME_SHORT, 0, 0xea, &sgtDataTable.pTxtMissilesLink},
+      {"cltmissileb", FIELDTYPE_NAME_SHORT, 0, 0xec, &sgtDataTable.pTxtMissilesLink},
+      {"cltmissilec", FIELDTYPE_NAME_SHORT, 0, 0xee, &sgtDataTable.pTxtMissilesLink},
+      {"cltmissiled", FIELDTYPE_NAME_SHORT, 0, 0xf0, &sgtDataTable.pTxtMissilesLink},
+      {"cltstfunc", FIELDTYPE_SHORT, 0, 0xf2, 0},
+      {"cltdofunc", FIELDTYPE_SHORT, 0, 0xf4, 0},
+      {"cltprgfunc1", FIELDTYPE_SHORT, 0, 0xf6, 0},
+      {"cltprgfunc2", FIELDTYPE_SHORT, 0, 0xf8, 0},
+      {"cltprgfunc3", FIELDTYPE_SHORT, 0, 0xfa, 0},
+      {"stsuccessonly", FIELDTYPE_BIT, 0xc, 4, 0},
+      {"stsound", FIELDTYPE_NAME_SHORT, 0, 0xfc, &sgtDataTable.pTxtSoundsLink},
+      {"stsoundclass", FIELDTYPE_NAME_SHORT, 0, 0xfe, &sgtDataTable.pTxtSoundsLink},
+      {"stsounddelay", FIELDTYPE_BIT, 0xd, 4, 0},
+      {"weaponsnd", FIELDTYPE_BIT, 0xe, 4, 0},
+      {"dosound", FIELDTYPE_NAME_SHORT, 0, 0x100, &sgtDataTable.pTxtSoundsLink},
+      {"dosound a", FIELDTYPE_NAME_SHORT, 0, 0x102, &sgtDataTable.pTxtSoundsLink},
+      {"dosound b", FIELDTYPE_NAME_SHORT, 0, 0x104, &sgtDataTable.pTxtSoundsLink},
+      {"tgtsound", FIELDTYPE_NAME_SHORT, 0, 0x10a, &sgtDataTable.pTxtSoundsLink},
+      {"tgtoverlay", FIELDTYPE_NAME_SHORT, 0, 0x108, &sgtDataTable.pTxtOverlayLink},
+      {"castoverlay", FIELDTYPE_NAME_SHORT, 0, 0x106, &sgtDataTable.pTxtOverlayLink},
+      {"cltoverlaya", FIELDTYPE_NAME_SHORT, 0, 0x110, &sgtDataTable.pTxtOverlayLink},
+      {"cltoverlayb", FIELDTYPE_NAME_SHORT, 0, 0x112, &sgtDataTable.pTxtOverlayLink},
+      {"prgsound", FIELDTYPE_NAME_SHORT, 0, 0x10e, &sgtDataTable.pTxtSoundsLink},
+      {"prgoverlay", FIELDTYPE_NAME_SHORT, 0, 0x10c, &sgtDataTable.pTxtOverlayLink},
+      {"cltcalc1", FIELDTYPE_LINKER_INT, 0, 0x114, (void*)DATATBLS_CompileSkillCode},
+      {"cltcalc2", FIELDTYPE_LINKER_INT, 0, 0x118, (void*)DATATBLS_CompileSkillCode},
+      {"cltcalc3", FIELDTYPE_LINKER_INT, 0, 0x11c, (void*)DATATBLS_CompileSkillCode},
+      {"warp", FIELDTYPE_BIT, 0x26, 4, 0},
+      {"anim", FIELDTYPE_CODE_CHAR, 0, 0x10, &sgtDataTable.pTxtPlrModeLink},
+      {"seqtrans", FIELDTYPE_CODE_CHAR, 0, 0x12, &sgtDataTable.pTxtPlrModeLink},
+      {"monanim", FIELDTYPE_CODE_CHAR, 0, 0x11, &sgtDataTable.pTxtMonModeLink},
+      {"seqnum", FIELDTYPE_CHAR, 0, 0x13, 0},
+      {"seqinput", FIELDTYPE_CHAR, 0, 0x16, 0},
+      {"range", FIELDTYPE_CODE_CHAR, 0, 0x14, &__frame0.pSkillsLink},
+      {"weapsel", FIELDTYPE_CHAR, 0, 0x168, 0},
+      {"itypea1", FIELDTYPE_CODE_SHORT, 0, 0x18, &sgtDataTable.pTxtItemTypesLink},
+      {"itypea2", FIELDTYPE_CODE_SHORT, 0, 0x1a, &sgtDataTable.pTxtItemTypesLink},
+      {"itypea3", FIELDTYPE_CODE_SHORT, 0, 0x1c, &sgtDataTable.pTxtItemTypesLink},
+      {"etypea1", FIELDTYPE_CODE_SHORT, 0, 0x24, &sgtDataTable.pTxtItemTypesLink},
+      {"etypea2", FIELDTYPE_CODE_SHORT, 0, 0x26, &sgtDataTable.pTxtItemTypesLink},
+      {"itypeb1", FIELDTYPE_CODE_SHORT, 0, 0x1e, &sgtDataTable.pTxtItemTypesLink},
+      {"itypeb2", FIELDTYPE_CODE_SHORT, 0, 0x20, &sgtDataTable.pTxtItemTypesLink},
+      {"itypeb3", FIELDTYPE_CODE_SHORT, 0, 0x22, &sgtDataTable.pTxtItemTypesLink},
+      {"etypeb1", FIELDTYPE_CODE_SHORT, 0, 0x28, &sgtDataTable.pTxtItemTypesLink},
+      {"etypeb2", FIELDTYPE_CODE_SHORT, 0, 0x2a, &sgtDataTable.pTxtItemTypesLink},
+      {"maxlvl", FIELDTYPE_SHORT, 0, 300, 0},
+      {"progressive", FIELDTYPE_BIT, 2, 4, 0},
+      {"finishing", FIELDTYPE_BIT, 3, 4, 0},
+      {"prgstack", FIELDTYPE_BIT, 7, 4, 0},
+      {"InTown", FIELDTYPE_BIT, 8, 4, 0},
+      {"ResultFlags", FIELDTYPE_SHORT, 0, 0x12e, 0},
+      {"HitFlags", FIELDTYPE_UINT, 0, 0x130, 0},
+      {"HitClass", FIELDTYPE_UINT, 0, 0x134, 0},
+      {"Kick", FIELDTYPE_BIT, 9, 4, 0},
+      {"passive", FIELDTYPE_BIT, 4, 4, 0},
+      {"aura", FIELDTYPE_BIT, 5, 4, 0},
+      {"periodic", FIELDTYPE_BIT, 6, 4, 0},
+      {"perdelay", FIELDTYPE_LINKER_INT, 0, 0x128, (void*)DATATBLS_CompileSkillCode},
+      {"general", FIELDTYPE_BIT, 0x23, 4, 0},
+      {"scroll", FIELDTYPE_BIT, 0x24, 4, 0},
+      {"ItemEffect", FIELDTYPE_SHORT, 0, 0x16a, 0},
+      {"ItemCltEffect", FIELDTYPE_SHORT, 0, 0x16c, 0},
+      {"ItemTgtDo", FIELDTYPE_BIT, 0x1d, 4, 0},
+      {"ItemCheckStart", FIELDTYPE_BIT, 0x21, 4, 0},
+      {"ItemCltCheckStart", FIELDTYPE_BIT, 0x22, 4, 0},
+      {"ItemTarget", FIELDTYPE_CHAR, 0, 0x120, 0},
+      {"ItemCastSound", FIELDTYPE_NAME_SHORT, 0, 0x122, &sgtDataTable.pTxtSoundsLink},
+      {"ItemCastOverlay", FIELDTYPE_NAME_SHORT, 0, 0x124, &sgtDataTable.pTxtOverlayLink},
+      {"InGame", FIELDTYPE_BIT, 10, 4, 0},
+      {"lineofsight", FIELDTYPE_CHAR, 0, 399, 0},
+      {"attackrank", FIELDTYPE_CHAR, 0, 0x18e, 0},
+      {"noammo", FIELDTYPE_BIT, 0x10, 4, 0},
+      {"enhanceable", FIELDTYPE_BIT, 0x11, 4, 0},
+      {"durability", FIELDTYPE_BIT, 0x12, 4, 0},
+      {"UseAttackRate", FIELDTYPE_BIT, 0x13, 4, 0},
+      {"SelectProc", FIELDTYPE_CHAR, 0, 0x15, 0},
+      {"TargetableOnly", FIELDTYPE_BIT, 0x14, 4, 0},
+      {"SearchEnemyXY", FIELDTYPE_BIT, 0x15, 4, 0},
+      {"SearchEnemyNear", FIELDTYPE_BIT, 0x16, 4, 0},
+      {"SearchOpenXY", FIELDTYPE_BIT, 0x17, 4, 0},
+      {"TargetCorpse", FIELDTYPE_BIT, 0x18, 4, 0},
+      {"TargetPet", FIELDTYPE_BIT, 0x19, 4, 0},
+      {"TargetAlly", FIELDTYPE_BIT, 0x1a, 4, 0},
+      {"TargetItem", FIELDTYPE_BIT, 0x1b, 4, 0},
+      {"AttackNoMana", FIELDTYPE_BIT, 0x1c, 4, 0},
+      {"leftskill", FIELDTYPE_BIT, 0x1e, 4, 0},
+      {"interrupt", FIELDTYPE_BIT, 0x1f, 4, 0},
+      {"TgtPlaceCheck", FIELDTYPE_BIT, 0x20, 4, 0},
+      {"repeat", FIELDTYPE_BIT, 0xb, 4, 0},
+      {"skpoints", FIELDTYPE_LINKER_INT, 0, 0x170, (void*)DATATBLS_CompileSkillCode},
+      {"reqlevel", FIELDTYPE_SHORT, 0, 0x174, 0},
+      {"reqstr", FIELDTYPE_SHORT, 0, 0x176, 0},
+      {"reqdex", FIELDTYPE_SHORT, 0, 0x178, 0},
+      {"reqint", FIELDTYPE_SHORT, 0, 0x17a, 0},
+      {"reqvit", FIELDTYPE_SHORT, 0, 0x17c, 0},
+      {"reqskill1", FIELDTYPE_NAME_SHORT, 0, 0x17e, &sgtDataTable.pTxtSkillsLink},
+      {"reqskill2", FIELDTYPE_NAME_SHORT, 0, 0x180, &sgtDataTable.pTxtSkillsLink},
+      {"reqskill3", FIELDTYPE_NAME_SHORT, 0, 0x182, &sgtDataTable.pTxtSkillsLink},
+      {"delay", FIELDTYPE_LINKER_INT, 0, 400, (void*)DATATBLS_CompileSkillCode},
+      {"usemanaondo", FIELDTYPE_BIT, 0x25, 4, 0},
+      {"startmana", FIELDTYPE_SHORT, 0, 0x184, 0},
+      {"minmana", FIELDTYPE_SHORT, 0, 0x186, 0},
+      {"manashift", FIELDTYPE_SHORT, 0, 0x188, 0},
+      {"mana", FIELDTYPE_SHORT, 0, 0x18a, 0},
+      {"lvlmana", FIELDTYPE_SHORT, 0, 0x18c, 0},
+      {"Param1", FIELDTYPE_INT, 0, 0x148, 0},
+      {"Param2", FIELDTYPE_INT, 0, 0x14c, 0},
+      {"Param3", FIELDTYPE_INT, 0, 0x150, 0},
+      {"Param4", FIELDTYPE_INT, 0, 0x154, 0},
+      {"Param5", FIELDTYPE_INT, 0, 0x158, 0},
+      {"Param6", FIELDTYPE_INT, 0, 0x15c, 0},
+      {"Param7", FIELDTYPE_INT, 0, 0x160, 0},
+      {"Param8", FIELDTYPE_INT, 0, 0x164, 0},
+      {"calc1", FIELDTYPE_LINKER_INT, 0, 0x138, (void*)DATATBLS_CompileSkillCode},
+      {"calc2", FIELDTYPE_LINKER_INT, 0, 0x13c, (void*)DATATBLS_CompileSkillCode},
+      {"calc3", FIELDTYPE_LINKER_INT, 0, 0x140, (void*)DATATBLS_CompileSkillCode},
+      {"calc4", FIELDTYPE_LINKER_INT, 0, 0x144, (void*)DATATBLS_CompileSkillCode},
+      {"ToHit", FIELDTYPE_INT, 0, 0x198, 0},
+      {"LevToHit", FIELDTYPE_INT, 0, 0x19c, 0},
+      {"ToHitCalc", FIELDTYPE_LINKER_INT, 0, 0x1a0, (void*)DATATBLS_CompileSkillCode},
+      {"HitShift", FIELDTYPE_CHAR, 0, 0x1a4, 0},
+      {"SrcDam", FIELDTYPE_CHAR, 0, 0x1a5, 0},
+      {"MinDam", FIELDTYPE_INT, 0, 0x1a8, 0},
+      {"MinLevDam1", FIELDTYPE_INT, 0, 0x1b0, 0},
+      {"MinLevDam2", FIELDTYPE_INT, 0, 0x1b4, 0},
+      {"MinLevDam3", FIELDTYPE_INT, 0, 0x1b8, 0},
+      {"MinLevDam4", FIELDTYPE_INT, 0, 0x1bc, 0},
+      {"MinLevDam5", FIELDTYPE_INT, 0, 0x1c0, 0},
+      {"MaxDam", FIELDTYPE_INT, 0, 0x1ac, 0},
+      {"MaxLevDam1", FIELDTYPE_INT, 0, 0x1c4, 0},
+      {"MaxLevDam2", FIELDTYPE_INT, 0, 0x1c8, 0},
+      {"MaxLevDam3", FIELDTYPE_INT, 0, 0x1cc, 0},
+      {"MaxLevDam4", FIELDTYPE_INT, 0, 0x1d0, 0},
+      {"MaxLevDam5", FIELDTYPE_INT, 0, 0x1d4, 0},
+      {"DmgSymPerCalc", FIELDTYPE_LINKER_INT, 0, 0x1d8, (void*)DATATBLS_CompileSkillCode},
+      {"EType", FIELDTYPE_CODE_CHAR, 0, 0x1dc, &sgtDataTable.pTxtElemTypesLink},
+      {"EMin", FIELDTYPE_INT, 0, 0x1e0, 0},
+      {"EMinLev1", FIELDTYPE_INT, 0, 0x1e8, 0},
+      {"EMinLev2", FIELDTYPE_INT, 0, 0x1ec, 0},
+      {"EMinLev3", FIELDTYPE_INT, 0, 0x1f0, 0},
+      {"EMinLev4", FIELDTYPE_INT, 0, 500, 0},
+      {"EMinLev5", FIELDTYPE_INT, 0, 0x1f8, 0},
+      {"EMax", FIELDTYPE_INT, 0, 0x1e4, 0},
+      {"EMaxLev1", FIELDTYPE_INT, 0, 0x1fc, 0},
+      {"EMaxLev2", FIELDTYPE_INT, 0, 0x200, 0},
+      {"EMaxLev3", FIELDTYPE_INT, 0, 0x204, 0},
+      {"EMaxLev4", FIELDTYPE_INT, 0, 0x208, 0},
+      {"EMaxLev5", FIELDTYPE_INT, 0, 0x20c, 0},
+      {"EDmgSymPerCalc", FIELDTYPE_LINKER_INT, 0, 0x210, (void*)DATATBLS_CompileSkillCode},
+      {"ELen", FIELDTYPE_INT, 0, 0x214, 0},
+      {"ELevLen1", FIELDTYPE_INT, 0, 0x218, 0},
+      {"ELevLen2", FIELDTYPE_INT, 0, 0x21c, 0},
+      {"ELevLen3", FIELDTYPE_INT, 0, 0x220, 0},
+      {"ELenSymPerCalc", FIELDTYPE_LINKER_INT, 0, 0x224, (void*)DATATBLS_CompileSkillCode},
+      {"restrict", FIELDTYPE_CHAR, 0, 0x228, 0},
+      {"state1", FIELDTYPE_NAME_SHORT, 0, 0x22a, &sgtDataTable.pTxtStatesLink},
+      {"state2", FIELDTYPE_NAME_SHORT, 0, 0x22c, &sgtDataTable.pTxtStatesLink},
+      {"state3", FIELDTYPE_NAME_SHORT, 0, 0x22e, &sgtDataTable.pTxtStatesLink},
+      {"aitype", FIELDTYPE_CHAR, 0, 0x230, 0},
+      {"aibonus", FIELDTYPE_SHORT, 0, 0x232, 0},
+      {"cost mult", FIELDTYPE_INT, 0, 0x234, 0},
+      {"cost add", FIELDTYPE_INT, 0, 0x238, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     if (sgtDataTable.bUseTxt) {
       __frame0.pSkillsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x51f);
       Fog::Src::Excel::FillUpTxtLinkSub0x08(__frame0.pSkillsLink, (char*)0x656e6f6e);
@@ -3457,28 +1611,16 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
       Fog::Src::Excel::FillUpTxtLinkSub0x08(__frame0.pSkillsLink, (char*)0x20676e72);
       Fog::Src::Excel::FillUpTxtLinkSub0x08(__frame0.pSkillsLink, (char*)0x68746f62);
       Fog::Src::Excel::FillUpTxtLinkSub0x08(__frame0.pSkillsLink, (char*)0x20636f6c);
-      monstats[0].fpLinker = &__frame0.pMonStatsLink;
-      monstats[0].szName = "Id";
-      monstats[0].eType = FIELDTYPE_NAME_I_WORD;
-      monstats[0].nSize = 0;
-      monstats[0].nOffset = 0;
-      monstats[1].szName = "end";
-      monstats[1].eType = FIELDTYPE_END;
-      monstats[1].nSize = 0;
-      monstats[1].nOffset = 0;
-      monstats[1].fpLinker = 0;
+      D2BinFieldInputStrc monstats[2] = {
+        {"Id", FIELDTYPE_NAME_I_WORD, 0, 0, &__frame0.pMonStatsLink},
+        {"end", FIELDTYPE_END, 0, 0, 0}
+      };
       __frame0.pMonStatsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x52c);
       pMonStatsTable = CompileTxt(pMemory, "monstats", monstats, &nMonStatsSize, 2);
-      skilldesc[0].fpLinker = &__frame0.pSkillDescLink;
-      skilldesc[0].szName = "skilldesc";
-      skilldesc[0].eType = FIELDTYPE_NAME_I_WORD;
-      skilldesc[0].nSize = 0;
-      skilldesc[0].nOffset = 0;
-      skilldesc[1].szName = "end";
-      skilldesc[1].eType = FIELDTYPE_END;
-      skilldesc[1].nSize = 0;
-      skilldesc[1].nOffset = 0;
-      skilldesc[1].fpLinker = 0;
+      D2BinFieldInputStrc skilldesc[2] = {
+        {"skilldesc", FIELDTYPE_NAME_I_WORD, 0, 0, &__frame0.pSkillDescLink},
+        {"end", FIELDTYPE_END, 0, 0, 0}
+      };
       __frame0.pSkillDescLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x535);
       pTxtTable = CompileTxt(pMemory, "skilldesc", skilldesc, &nMonStatsSize, 2);
     } else {
@@ -3679,122 +1821,31 @@ void __stdcall DATATBLS_FreeSkillsTxtTables() {
 
 // Loads and parses difficultylevels.txt into sgtDataTable.pTxtDifficultyLevels. Builds the D2BinFieldInputStrc field-binding schema (ResistPenalty, DeathExpPenalty, Uber/UltraCodeOdds, Life/ManaStealDivisor, Monster*Divisor, *DamageBonus/Percent, StaticFieldMin, Gamble* odds, etc., each mapped to its struct offset) and calls CompileTxt (record stride 0x58) to allocate the parsed rows from the pMemory pool. Asserts exactly 3 rows (Normal/Nightmare/Hell), halting with Fog error 0x61f otherwise. Called once during data-table init.
 void __stdcall TXT_AllocTxt_difficultylevels(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc difficultylevels[23];
-    difficultylevels[0].szName = "ResistPenalty";
-    difficultylevels[0].eType = FIELDTYPE_INT;
-    difficultylevels[0].nSize = 0;
-    difficultylevels[0].nOffset = 0;
-    difficultylevels[0].fpLinker = 0;
-    difficultylevels[1].szName = "DeathExpPenalty";
-    difficultylevels[1].eType = FIELDTYPE_INT;
-    difficultylevels[1].nSize = 0;
-    difficultylevels[1].nOffset = 4;
-    difficultylevels[1].fpLinker = 0;
-    difficultylevels[2].szName = "UberCodeOddsNormal";
-    difficultylevels[2].eType = FIELDTYPE_INT;
-    difficultylevels[2].nSize = 0;
-    difficultylevels[2].nOffset = 8;
-    difficultylevels[2].fpLinker = 0;
-    difficultylevels[3].szName = "UberCodeOddsGood";
-    difficultylevels[3].eType = FIELDTYPE_INT;
-    difficultylevels[3].nSize = 0;
-    difficultylevels[3].nOffset = 0xc;
-    difficultylevels[3].fpLinker = 0;
-    difficultylevels[4].szName = "UltraCodeOddsNormal";
-    difficultylevels[4].eType = FIELDTYPE_INT;
-    difficultylevels[4].nSize = 0;
-    difficultylevels[4].nOffset = 0x20;
-    difficultylevels[4].fpLinker = 0;
-    difficultylevels[5].szName = "UltraCodeOddsGood";
-    difficultylevels[5].eType = FIELDTYPE_INT;
-    difficultylevels[5].nSize = 0;
-    difficultylevels[5].nOffset = 0x24;
-    difficultylevels[5].fpLinker = 0;
-    difficultylevels[6].szName = "LifeStealDivisor";
-    difficultylevels[6].eType = FIELDTYPE_INT;
-    difficultylevels[6].nSize = 0;
-    difficultylevels[6].nOffset = 0x28;
-    difficultylevels[6].fpLinker = 0;
-    difficultylevels[7].szName = "ManaStealDivisor";
-    difficultylevels[7].eType = FIELDTYPE_INT;
-    difficultylevels[7].nSize = 0;
-    difficultylevels[7].nOffset = 0x2c;
-    difficultylevels[7].fpLinker = 0;
-    difficultylevels[8].szName = "MonsterSkillBonus";
-    difficultylevels[8].eType = FIELDTYPE_INT;
-    difficultylevels[8].nSize = 0;
-    difficultylevels[8].nOffset = 0x10;
-    difficultylevels[8].fpLinker = 0;
-    difficultylevels[9].szName = "MonsterFreezeDivisor";
-    difficultylevels[9].eType = FIELDTYPE_INT;
-    difficultylevels[9].nSize = 0;
-    difficultylevels[9].nOffset = 0x14;
-    difficultylevels[9].fpLinker = 0;
-    difficultylevels[10].szName = "MonsterColdDivisor";
-    difficultylevels[10].eType = FIELDTYPE_INT;
-    difficultylevels[10].nSize = 0;
-    difficultylevels[10].nOffset = 0x18;
-    difficultylevels[10].fpLinker = 0;
-    difficultylevels[0xb].szName = "AiCurseDivisor";
-    difficultylevels[0xb].eType = FIELDTYPE_INT;
-    difficultylevels[0xb].nSize = 0;
-    difficultylevels[0xb].nOffset = 0x1c;
-    difficultylevels[0xb].fpLinker = 0;
-    difficultylevels[0xc].szName = "UniqueDamageBonus";
-    difficultylevels[0xc].eType = FIELDTYPE_INT;
-    difficultylevels[0xc].nSize = 0;
-    difficultylevels[0xc].nOffset = 0x30;
-    difficultylevels[0xc].fpLinker = 0;
-    difficultylevels[0xd].szName = "ChampionDamageBonus";
-    difficultylevels[0xd].eType = FIELDTYPE_INT;
-    difficultylevels[0xd].nSize = 0;
-    difficultylevels[0xd].nOffset = 0x34;
-    difficultylevels[0xd].fpLinker = 0;
-    difficultylevels[0xe].szName = "HireableBossDamagePercent";
-    difficultylevels[0xe].eType = FIELDTYPE_INT;
-    difficultylevels[0xe].nSize = 0;
-    difficultylevels[0xe].nOffset = 0x38;
-    difficultylevels[0xe].fpLinker = 0;
-    difficultylevels[0xf].szName = "MonsterCEDamagePercent";
-    difficultylevels[0xf].eType = FIELDTYPE_INT;
-    difficultylevels[0xf].nSize = 0;
-    difficultylevels[0xf].nOffset = 0x3c;
-    difficultylevels[0xf].fpLinker = 0;
-    difficultylevels[0x10].nSize = 0;
-    difficultylevels[0x10].fpLinker = 0;
-    difficultylevels[0x11].nSize = 0;
-    difficultylevels[0x11].fpLinker = 0;
-    difficultylevels[0x12].nSize = 0;
-    difficultylevels[0x12].fpLinker = 0;
-    difficultylevels[0x13].nSize = 0;
-    difficultylevels[0x13].fpLinker = 0;
-    difficultylevels[0x14].nSize = 0;
-    difficultylevels[0x14].fpLinker = 0;
-    difficultylevels[0x15].nSize = 0;
-    difficultylevels[0x15].fpLinker = 0;
-    difficultylevels[0x16].eType = FIELDTYPE_END;
-    difficultylevels[0x16].nSize = 0;
-    difficultylevels[0x16].nOffset = 0;
-    difficultylevels[0x16].fpLinker = 0;
-    difficultylevels[0x10].eType = FIELDTYPE_INT;
-    difficultylevels[0x11].eType = FIELDTYPE_INT;
-    difficultylevels[0x12].eType = FIELDTYPE_INT;
-    difficultylevels[0x13].eType = FIELDTYPE_INT;
-    difficultylevels[0x14].eType = FIELDTYPE_INT;
-    difficultylevels[0x15].eType = FIELDTYPE_INT;
-    difficultylevels[0x10].szName = "StaticFieldMin";
-    difficultylevels[0x10].nOffset = 0x40;
-    difficultylevels[0x11].szName = "GambleRare";
-    difficultylevels[0x11].nOffset = 0x44;
-    difficultylevels[0x12].szName = "GambleSet";
-    difficultylevels[0x12].nOffset = 0x48;
-    difficultylevels[0x13].szName = "GambleUnique";
-    difficultylevels[0x13].nOffset = 0x4c;
-    difficultylevels[0x14].szName = "GambleUber";
-    difficultylevels[0x14].nOffset = 0x50;
-    difficultylevels[0x15].szName = "GambleUltra";
-    difficultylevels[0x15].nOffset = 0x54;
-    difficultylevels[0x16].szName = "end";
+    D2BinFieldInputStrc difficultylevels[23] = {
+      {"ResistPenalty", FIELDTYPE_INT, 0, 0, 0},
+      {"DeathExpPenalty", FIELDTYPE_INT, 0, 4, 0},
+      {"UberCodeOddsNormal", FIELDTYPE_INT, 0, 8, 0},
+      {"UberCodeOddsGood", FIELDTYPE_INT, 0, 0xc, 0},
+      {"UltraCodeOddsNormal", FIELDTYPE_INT, 0, 0x20, 0},
+      {"UltraCodeOddsGood", FIELDTYPE_INT, 0, 0x24, 0},
+      {"LifeStealDivisor", FIELDTYPE_INT, 0, 0x28, 0},
+      {"ManaStealDivisor", FIELDTYPE_INT, 0, 0x2c, 0},
+      {"MonsterSkillBonus", FIELDTYPE_INT, 0, 0x10, 0},
+      {"MonsterFreezeDivisor", FIELDTYPE_INT, 0, 0x14, 0},
+      {"MonsterColdDivisor", FIELDTYPE_INT, 0, 0x18, 0},
+      {"AiCurseDivisor", FIELDTYPE_INT, 0, 0x1c, 0},
+      {"UniqueDamageBonus", FIELDTYPE_INT, 0, 0x30, 0},
+      {"ChampionDamageBonus", FIELDTYPE_INT, 0, 0x34, 0},
+      {"HireableBossDamagePercent", FIELDTYPE_INT, 0, 0x38, 0},
+      {"MonsterCEDamagePercent", FIELDTYPE_INT, 0, 0x3c, 0},
+      {"StaticFieldMin", FIELDTYPE_INT, 0, 0x40, 0},
+      {"GambleRare", FIELDTYPE_INT, 0, 0x44, 0},
+      {"GambleSet", FIELDTYPE_INT, 0, 0x48, 0},
+      {"GambleUnique", FIELDTYPE_INT, 0, 0x4c, 0},
+      {"GambleUber", FIELDTYPE_INT, 0, 0x50, 0},
+      {"GambleUltra", FIELDTYPE_INT, 0, 0x54, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtDifficultyLevels = (D2DifficultyLevelsTxt*)CompileTxt(pMemory, "difficultylevels", difficultylevels, &sgtDataTable.nTxtDifficultyLevelsSize, 0x58);
     if (sgtDataTable.nTxtDifficultyLevelsSize == 3) {
       return;
@@ -3808,358 +1859,79 @@ void __stdcall TXT_AllocTxt_difficultylevels(D2PoolManagerStrc * pMemory) {
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __fastcall TXT_AllocTxt_states(D2PoolManagerStrc * pMemory) {
     D2StatesDataTbls* pStateDataEntry;
-    D2BinFieldInputStrc states[70];
     uint32_t nStateIdx = 0;
-    states[0].szName = "state";
-    states[0].eType = FIELDTYPE_NAME_I_WORD;
-    states[0].nSize = 0;
-    states[0].nOffset = 0;
-    states[0].fpLinker = &sgtDataTable.pTxtStatesLink;
-    states[1].szName = "group";
-    states[1].eType = FIELDTYPE_SHORT;
-    states[1].nSize = 0;
-    states[1].nOffset = 0x1e;
-    states[1].fpLinker = 0;
-    states[2].szName = "nosend";
-    states[2].eType = FIELDTYPE_BIT;
-    states[2].nSize = 0;
-    states[2].nOffset = 0x10;
-    states[2].fpLinker = 0;
-    states[3].szName = "hide";
-    states[3].eType = FIELDTYPE_BIT;
-    states[3].nSize = 2;
-    states[3].nOffset = 0x10;
-    states[3].fpLinker = 0;
-    states[4].szName = "transform";
-    states[4].eType = FIELDTYPE_BIT;
-    states[4].nSize = 3;
-    states[4].nOffset = 0x10;
-    states[4].fpLinker = 0;
-    states[5].szName = "aura";
-    states[5].eType = FIELDTYPE_BIT;
-    states[5].nSize = 1;
-    states[5].nOffset = 0x10;
-    states[5].fpLinker = 0;
-    states[6].szName = "pgsv";
-    states[6].eType = FIELDTYPE_BIT;
-    states[6].nSize = 4;
-    states[6].nOffset = 0x10;
-    states[6].fpLinker = 0;
-    states[7].szName = "active";
-    states[7].eType = FIELDTYPE_BIT;
-    states[7].nSize = 5;
-    states[7].nOffset = 0x10;
-    states[7].fpLinker = 0;
-    states[8].szName = "remhit";
-    states[8].eType = FIELDTYPE_BIT;
-    states[8].nSize = 6;
-    states[8].nOffset = 0x10;
-    states[8].fpLinker = 0;
-    states[9].szName = "damblue";
-    states[9].eType = FIELDTYPE_BIT;
-    states[9].nSize = 7;
-    states[9].nOffset = 0x10;
-    states[9].fpLinker = 0;
-    states[10].szName = "damred";
-    states[10].eType = FIELDTYPE_BIT;
-    states[10].nSize = 8;
-    states[10].nOffset = 0x10;
-    states[10].fpLinker = 0;
-    states[0xb].szName = "attblue";
-    states[0xb].eType = FIELDTYPE_BIT;
-    states[0xb].nSize = 9;
-    states[0xb].nOffset = 0x10;
-    states[0xb].fpLinker = 0;
-    states[0xc].szName = "attred";
-    states[0xc].eType = FIELDTYPE_BIT;
-    states[0xc].nSize = 10;
-    states[0xc].nOffset = 0x10;
-    states[0xc].fpLinker = 0;
-    states[0xd].szName = "curse";
-    states[0xd].eType = FIELDTYPE_BIT;
-    states[0xd].nSize = 0xb;
-    states[0xd].nOffset = 0x10;
-    states[0xd].fpLinker = 0;
-    states[0xe].szName = "curable";
-    states[0x15].nSize = 0x11;
-    states[0xe].eType = FIELDTYPE_BIT;
-    states[0xe].nSize = 0xc;
-    states[0xe].nOffset = 0x10;
-    states[0xe].fpLinker = 0;
-    states[0xf].szName = "plrstaydeath";
-    states[0xf].eType = FIELDTYPE_BIT;
-    states[0xf].nSize = 0xd;
-    states[0xf].nOffset = 0x10;
-    states[0xf].fpLinker = 0;
-    states[0x10].szName = "monstaydeath";
-    states[0x10].eType = FIELDTYPE_BIT;
-    states[0x10].nSize = 0xe;
-    states[0x10].nOffset = 0x10;
-    states[0x10].fpLinker = 0;
-    states[0x11].szName = "bossstaydeath";
-    states[0x11].eType = FIELDTYPE_BIT;
-    states[0x11].nSize = 0xf;
-    states[0x11].nOffset = 0x10;
-    states[0x11].fpLinker = 0;
-    states[0x12].szName = "disguise";
-    states[0x12].eType = FIELDTYPE_BIT;
-    states[0x12].nSize = 0x10;
-    states[0x12].nOffset = 0x10;
-    states[0x12].fpLinker = 0;
-    states[0x13].szName = "bossinv";
-    states[0x13].eType = FIELDTYPE_BIT;
-    states[0x13].nSize = 0x25;
-    states[0x13].nOffset = 0x10;
-    states[0x13].fpLinker = 0;
-    states[0x14].szName = "meleeonly";
-    states[0x14].eType = FIELDTYPE_BIT;
-    states[0x14].nSize = 0x26;
-    states[0x14].nOffset = 0x10;
-    states[0x14].fpLinker = 0;
-    states[0x15].szName = "restrict";
-    states[0x15].eType = FIELDTYPE_BIT;
-    states[0x15].nOffset = 0x10;
-    states[0x15].fpLinker = 0;
-    states[0x16].szName = "blue";
-    states[0x16].eType = FIELDTYPE_BIT;
-    states[0x16].nSize = 0x12;
-    states[0x16].nOffset = 0x10;
-    states[0x16].fpLinker = 0;
-    states[0x17].szName = "armblue";
-    states[0x17].eType = FIELDTYPE_BIT;
-    states[0x17].nSize = 0x13;
-    states[0x17].nOffset = 0x10;
-    states[0x17].fpLinker = 0;
-    states[0x18].szName = "rfblue";
-    states[0x18].eType = FIELDTYPE_BIT;
-    states[0x18].nSize = 0x14;
-    states[0x18].nOffset = 0x10;
-    states[0x18].fpLinker = 0;
-    states[0x19].szName = "rcblue";
-    states[0x19].eType = FIELDTYPE_BIT;
-    states[0x19].nSize = 0x15;
-    states[0x19].nOffset = 0x10;
-    states[0x19].fpLinker = 0;
-    states[0x1a].szName = "rlblue";
-    states[0x1a].eType = FIELDTYPE_BIT;
-    states[0x1a].nSize = 0x16;
-    states[0x1a].nOffset = 0x10;
-    states[0x1a].fpLinker = 0;
-    states[0x1b].szName = "rpblue";
-    states[0x1b].eType = FIELDTYPE_BIT;
-    states[0x1b].nSize = 0x17;
-    states[0x1b].nOffset = 0x10;
-    states[0x1b].fpLinker = 0;
-    states[0x1c].szName = "stambarblue";
-    states[0x1c].eType = FIELDTYPE_BIT;
-    states[0x1c].nSize = 0x18;
-    states[0x1c].nOffset = 0x10;
-    states[0x1c].fpLinker = 0;
-    states[0x1d].szName = "armred";
-    states[0x1d].eType = FIELDTYPE_BIT;
-    states[0x1d].nSize = 0x19;
-    states[0x1d].nOffset = 0x10;
-    states[0x1d].fpLinker = 0;
-    states[0x1e].szName = "rfred";
-    states[0x1e].eType = FIELDTYPE_BIT;
-    states[0x1e].nSize = 0x1a;
-    states[0x1e].nOffset = 0x10;
-    states[0x1e].fpLinker = 0;
-    states[0x1f].szName = "rcred";
-    states[0x1f].eType = FIELDTYPE_BIT;
-    states[0x1f].nSize = 0x1b;
-    states[0x1f].nOffset = 0x10;
-    states[0x1f].fpLinker = 0;
-    states[0x20].szName = "rlred";
-    states[0x20].eType = FIELDTYPE_BIT;
-    states[0x20].nSize = 0x1c;
-    states[0x20].nOffset = 0x10;
-    states[0x20].fpLinker = 0;
-    states[0x21].szName = "rpred";
-    states[0x21].eType = FIELDTYPE_BIT;
-    states[0x21].nSize = 0x1d;
-    states[0x21].nOffset = 0x10;
-    states[0x21].fpLinker = 0;
-    states[0x22].szName = "exp";
-    states[0x22].eType = FIELDTYPE_BIT;
-    states[0x22].nSize = 0x1e;
-    states[0x22].nOffset = 0x10;
-    states[0x22].fpLinker = 0;
-    states[0x23].szName = "shatter";
-    states[0x23].eType = FIELDTYPE_BIT;
-    states[0x23].nSize = 0x1f;
-    states[0x23].nOffset = 0x10;
-    states[0x23].fpLinker = 0;
-    states[0x24].szName = "life";
-    states[0x24].eType = FIELDTYPE_BIT;
-    states[0x24].nSize = 0x20;
-    states[0x24].nOffset = 0x10;
-    states[0x24].fpLinker = 0;
-    states[0x25].szName = "udead";
-    states[0x25].eType = FIELDTYPE_BIT;
-    states[0x25].nSize = 0x21;
-    states[0x25].nOffset = 0x10;
-    states[0x25].fpLinker = 0;
-    states[0x26].szName = "green";
-    states[0x26].eType = FIELDTYPE_BIT;
-    states[0x26].nSize = 0x22;
-    states[0x26].nOffset = 0x10;
-    states[0x26].fpLinker = 0;
-    states[0x27].szName = "nooverlays";
-    states[0x27].eType = FIELDTYPE_BIT;
-    states[0x27].nSize = 0x23;
-    states[0x27].nOffset = 0x10;
-    states[0x27].fpLinker = 0;
-    states[0x28].szName = "notondead";
-    states[0x28].eType = FIELDTYPE_BIT;
-    states[0x28].nSize = 0x27;
-    states[0x28].nOffset = 0x10;
-    states[0x28].fpLinker = 0;
-    states[0x29].szName = "noclear";
-    states[0x29].eType = FIELDTYPE_BIT;
-    states[0x29].nSize = 0x24;
-    states[0x29].nOffset = 0x10;
-    states[0x29].fpLinker = 0;
-    states[0x2a].szName = "overlay1";
-    states[0x2a].eType = FIELDTYPE_NAME_SHORT;
-    states[0x2a].nSize = 0;
-    states[0x2a].nOffset = 2;
-    states[0x2a].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    states[0x2b].szName = "overlay2";
-    states[0x2b].eType = FIELDTYPE_NAME_SHORT;
-    states[0x2b].nSize = 0;
-    states[0x2b].nOffset = 4;
-    states[0x2b].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    states[0x2c].szName = "overlay3";
-    states[0x2c].eType = FIELDTYPE_NAME_SHORT;
-    states[0x2c].nSize = 0;
-    states[0x2c].nOffset = 6;
-    states[0x2c].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    states[0x2d].szName = "overlay4";
-    states[0x2d].eType = FIELDTYPE_NAME_SHORT;
-    states[0x2d].nSize = 0;
-    states[0x2d].nOffset = 8;
-    states[0x2d].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    states[0x2e].szName = "pgsvoverlay";
-    states[0x2e].eType = FIELDTYPE_NAME_SHORT;
-    states[0x32].nOffset = 0x1a;
-    states[0x2e].nSize = 0;
-    states[0x2e].nOffset = 0xe;
-    states[0x2e].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    states[0x2f].szName = "castoverlay";
-    states[0x2f].eType = FIELDTYPE_NAME_SHORT;
-    states[0x2f].nSize = 0;
-    states[0x2f].nOffset = 10;
-    states[0x2f].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    states[0x30].szName = "removerlay";
-    states[0x30].eType = FIELDTYPE_NAME_SHORT;
-    states[0x30].nSize = 0;
-    states[0x30].nOffset = 0xc;
-    states[0x30].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    states[0x31].szName = "stat";
-    states[0x31].eType = FIELDTYPE_NAME_SHORT;
-    states[0x31].nSize = 0;
-    states[0x31].nOffset = 0x18;
-    states[0x31].fpLinker = &sgtDataTable.pTxtItemStatCostLink;
-    states[0x32].szName = "setfunc";
-    states[0x32].eType = FIELDTYPE_SHORT;
-    states[0x32].nSize = 0;
-    states[0x32].fpLinker = 0;
-    states[0x33].szName = "remfunc";
-    states[0x33].eType = FIELDTYPE_SHORT;
-    states[0x33].nSize = 0;
-    states[0x33].nOffset = 0x1c;
-    states[0x33].fpLinker = 0;
-    states[0x34].szName = "missile";
-    states[0x34].eType = FIELDTYPE_NAME_SHORT;
-    states[0x34].nSize = 0;
-    states[0x34].nOffset = 0x3a;
-    states[0x34].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    states[0x35].szName = "skill";
-    states[0x35].eType = FIELDTYPE_NAME_SHORT;
-    states[0x35].nSize = 0;
-    states[0x35].nOffset = 0x38;
-    states[0x35].fpLinker = &sgtDataTable.pTxtSkillsHeaderLink;
-    states[0x36].szName = "colorpri";
-    states[0x36].eType = FIELDTYPE_CHAR;
-    states[0x36].nSize = 0;
-    states[0x36].nOffset = 0x20;
-    states[0x36].fpLinker = 0;
-    states[0x37].szName = "colorshift";
-    states[0x37].eType = FIELDTYPE_CHAR;
-    states[0x37].nSize = 0;
-    states[0x37].nOffset = 0x21;
-    states[0x37].fpLinker = 0;
-    states[0x38].szName = "light-r";
-    states[0x38].eType = FIELDTYPE_CHAR;
-    states[0x38].nSize = 0;
-    states[0x38].nOffset = 0x22;
-    states[0x38].fpLinker = 0;
-    states[0x39].szName = "light-g";
-    states[0x39].eType = FIELDTYPE_CHAR;
-    states[0x39].nSize = 0;
-    states[0x39].nOffset = 0x23;
-    states[0x39].fpLinker = 0;
-    states[0x3a].szName = "light-b";
-    states[0x3a].eType = FIELDTYPE_CHAR;
-    states[0x3a].nSize = 0;
-    states[0x3a].nOffset = 0x24;
-    states[0x3a].fpLinker = 0;
-    states[0x3b].szName = "onsound";
-    states[0x3b].eType = FIELDTYPE_NAME_SHORT;
-    states[0x3b].nSize = 0;
-    states[0x3b].nOffset = 0x26;
-    states[0x3b].fpLinker = &sgtDataTable.pTxtSoundsLink;
-    states[0x3c].szName = "offsound";
-    states[0x3c].eType = FIELDTYPE_NAME_SHORT;
-    states[0x3c].nSize = 0;
-    states[0x3c].nOffset = 0x28;
-    states[0x3c].fpLinker = &sgtDataTable.pTxtSoundsLink;
-    states[0x3d].szName = "itemtype";
-    states[0x3d].eType = FIELDTYPE_CODE_SHORT;
-    states[0x3d].nSize = 0;
-    states[0x3d].nOffset = 0x2a;
-    states[0x3d].fpLinker = &sgtDataTable.pTxtItemTypesLink;
-    states[0x3e].szName = "itemtrans";
-    states[0x3e].eType = FIELDTYPE_CODE_CHAR;
-    states[0x3e].nSize = 0;
-    states[0x3e].nOffset = 0x2c;
-    states[0x3e].fpLinker = &sgtDataTable.pTxtColorsLink;
-    states[0x3f].szName = "gfxtype";
-    states[0x3f].eType = FIELDTYPE_CHAR;
-    states[0x3f].nSize = 0;
-    states[0x3f].nOffset = 0x2d;
-    states[0x3f].fpLinker = 0;
-    states[0x40].szName = "gfxclass";
-    states[0x40].eType = FIELDTYPE_SHORT;
-    states[0x40].nSize = 0;
-    states[0x40].nOffset = 0x2e;
-    states[0x40].fpLinker = 0;
-    states[0x41].szName = "cltevent";
-    states[0x41].eType = FIELDTYPE_NAME_SHORT;
-    states[0x41].nSize = 0;
-    states[0x41].nOffset = 0x30;
-    states[0x41].fpLinker = &sgtDataTable.pTxtEventsLink;
-    states[0x42].szName = "clteventfunc";
-    states[0x42].eType = FIELDTYPE_SHORT;
-    states[0x42].nSize = 0;
-    states[0x42].nOffset = 0x32;
-    states[0x42].fpLinker = 0;
-    states[0x43].szName = "cltactivefunc";
-    states[0x43].eType = FIELDTYPE_SHORT;
-    states[0x43].nSize = 0;
-    states[0x43].nOffset = 0x34;
-    states[0x43].fpLinker = 0;
-    states[0x44].szName = "srvactivefunc";
-    states[0x44].eType = FIELDTYPE_SHORT;
-    states[0x44].nSize = 0;
-    states[0x44].nOffset = 0x36;
-    states[0x44].fpLinker = 0;
-    states[0x45].szName = "end";
-    states[0x45].eType = FIELDTYPE_END;
-    states[0x45].nSize = 0;
-    states[0x45].nOffset = 0;
-    states[0x45].fpLinker = 0;
+    D2BinFieldInputStrc states[70] = {
+      {"state", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtStatesLink},
+      {"group", FIELDTYPE_SHORT, 0, 0x1e, 0},
+      {"nosend", FIELDTYPE_BIT, 0, 0x10, 0},
+      {"hide", FIELDTYPE_BIT, 2, 0x10, 0},
+      {"transform", FIELDTYPE_BIT, 3, 0x10, 0},
+      {"aura", FIELDTYPE_BIT, 1, 0x10, 0},
+      {"pgsv", FIELDTYPE_BIT, 4, 0x10, 0},
+      {"active", FIELDTYPE_BIT, 5, 0x10, 0},
+      {"remhit", FIELDTYPE_BIT, 6, 0x10, 0},
+      {"damblue", FIELDTYPE_BIT, 7, 0x10, 0},
+      {"damred", FIELDTYPE_BIT, 8, 0x10, 0},
+      {"attblue", FIELDTYPE_BIT, 9, 0x10, 0},
+      {"attred", FIELDTYPE_BIT, 10, 0x10, 0},
+      {"curse", FIELDTYPE_BIT, 0xb, 0x10, 0},
+      {"curable", FIELDTYPE_BIT, 0xc, 0x10, 0},
+      {"plrstaydeath", FIELDTYPE_BIT, 0xd, 0x10, 0},
+      {"monstaydeath", FIELDTYPE_BIT, 0xe, 0x10, 0},
+      {"bossstaydeath", FIELDTYPE_BIT, 0xf, 0x10, 0},
+      {"disguise", FIELDTYPE_BIT, 0x10, 0x10, 0},
+      {"bossinv", FIELDTYPE_BIT, 0x25, 0x10, 0},
+      {"meleeonly", FIELDTYPE_BIT, 0x26, 0x10, 0},
+      {"restrict", FIELDTYPE_BIT, 0x11, 0x10, 0},
+      {"blue", FIELDTYPE_BIT, 0x12, 0x10, 0},
+      {"armblue", FIELDTYPE_BIT, 0x13, 0x10, 0},
+      {"rfblue", FIELDTYPE_BIT, 0x14, 0x10, 0},
+      {"rcblue", FIELDTYPE_BIT, 0x15, 0x10, 0},
+      {"rlblue", FIELDTYPE_BIT, 0x16, 0x10, 0},
+      {"rpblue", FIELDTYPE_BIT, 0x17, 0x10, 0},
+      {"stambarblue", FIELDTYPE_BIT, 0x18, 0x10, 0},
+      {"armred", FIELDTYPE_BIT, 0x19, 0x10, 0},
+      {"rfred", FIELDTYPE_BIT, 0x1a, 0x10, 0},
+      {"rcred", FIELDTYPE_BIT, 0x1b, 0x10, 0},
+      {"rlred", FIELDTYPE_BIT, 0x1c, 0x10, 0},
+      {"rpred", FIELDTYPE_BIT, 0x1d, 0x10, 0},
+      {"exp", FIELDTYPE_BIT, 0x1e, 0x10, 0},
+      {"shatter", FIELDTYPE_BIT, 0x1f, 0x10, 0},
+      {"life", FIELDTYPE_BIT, 0x20, 0x10, 0},
+      {"udead", FIELDTYPE_BIT, 0x21, 0x10, 0},
+      {"green", FIELDTYPE_BIT, 0x22, 0x10, 0},
+      {"nooverlays", FIELDTYPE_BIT, 0x23, 0x10, 0},
+      {"notondead", FIELDTYPE_BIT, 0x27, 0x10, 0},
+      {"noclear", FIELDTYPE_BIT, 0x24, 0x10, 0},
+      {"overlay1", FIELDTYPE_NAME_SHORT, 0, 2, &sgtDataTable.pTxtOverlayLink},
+      {"overlay2", FIELDTYPE_NAME_SHORT, 0, 4, &sgtDataTable.pTxtOverlayLink},
+      {"overlay3", FIELDTYPE_NAME_SHORT, 0, 6, &sgtDataTable.pTxtOverlayLink},
+      {"overlay4", FIELDTYPE_NAME_SHORT, 0, 8, &sgtDataTable.pTxtOverlayLink},
+      {"pgsvoverlay", FIELDTYPE_NAME_SHORT, 0, 0xe, &sgtDataTable.pTxtOverlayLink},
+      {"castoverlay", FIELDTYPE_NAME_SHORT, 0, 10, &sgtDataTable.pTxtOverlayLink},
+      {"removerlay", FIELDTYPE_NAME_SHORT, 0, 0xc, &sgtDataTable.pTxtOverlayLink},
+      {"stat", FIELDTYPE_NAME_SHORT, 0, 0x18, &sgtDataTable.pTxtItemStatCostLink},
+      {"setfunc", FIELDTYPE_SHORT, 0, 0x1a, 0},
+      {"remfunc", FIELDTYPE_SHORT, 0, 0x1c, 0},
+      {"missile", FIELDTYPE_NAME_SHORT, 0, 0x3a, &sgtDataTable.pTxtMissilesLink},
+      {"skill", FIELDTYPE_NAME_SHORT, 0, 0x38, &sgtDataTable.pTxtSkillsHeaderLink},
+      {"colorpri", FIELDTYPE_CHAR, 0, 0x20, 0},
+      {"colorshift", FIELDTYPE_CHAR, 0, 0x21, 0},
+      {"light-r", FIELDTYPE_CHAR, 0, 0x22, 0},
+      {"light-g", FIELDTYPE_CHAR, 0, 0x23, 0},
+      {"light-b", FIELDTYPE_CHAR, 0, 0x24, 0},
+      {"onsound", FIELDTYPE_NAME_SHORT, 0, 0x26, &sgtDataTable.pTxtSoundsLink},
+      {"offsound", FIELDTYPE_NAME_SHORT, 0, 0x28, &sgtDataTable.pTxtSoundsLink},
+      {"itemtype", FIELDTYPE_CODE_SHORT, 0, 0x2a, &sgtDataTable.pTxtItemTypesLink},
+      {"itemtrans", FIELDTYPE_CODE_CHAR, 0, 0x2c, &sgtDataTable.pTxtColorsLink},
+      {"gfxtype", FIELDTYPE_CHAR, 0, 0x2d, 0},
+      {"gfxclass", FIELDTYPE_SHORT, 0, 0x2e, 0},
+      {"cltevent", FIELDTYPE_NAME_SHORT, 0, 0x30, &sgtDataTable.pTxtEventsLink},
+      {"clteventfunc", FIELDTYPE_SHORT, 0, 0x32, 0},
+      {"cltactivefunc", FIELDTYPE_SHORT, 0, 0x34, 0},
+      {"srvactivefunc", FIELDTYPE_SHORT, 0, 0x36, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtStatesLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x6c7);
     sgtDataTable.pTxtStates = (D2StatesTxt*)CompileTxt(pMemory, "states", states, &sgtDataTable.nTxtStatesSize, 0x3c);
     if (sgtDataTable.nTxtStatesSize >= 0x100) {
@@ -4232,112 +2004,29 @@ void __stdcall DATATBLS_FreeStatesTxtTables() {
 // DataTbls init: builds the column descriptor list for pettype.txt and compiles it into the global pet-type table. Fills a local D2BinFieldInputStrc array describing each column (pet type id, group, basemax, the warp/range/partysend/unsummon/automap/drawhp bitflags, icontype, baseicon, mclass1-4/micon1-4, name keyword) with offsets/types into D2PetTypeTxt, creates the TxtLink, then calls CompileTxt to load the file. Stores result and row count in sgtDataTable.pTxtPetType / nTxtPetTypeSize. Halts if more than 255 rows; clamps size to 0x100. Called once during table loading.
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __fastcall TXT_AllocTxt_pettype(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc aFieldDefs[21];
-    aFieldDefs[3].nOffset = 4;
-    aFieldDefs[4].nOffset = 4;
-    aFieldDefs[5].nOffset = 4;
-    aFieldDefs[6].nOffset = 4;
-    aFieldDefs[7].nSize = 4;
-    aFieldDefs[7].nOffset = 4;
-    aFieldDefs[8].nOffset = 4;
-    aFieldDefs[9].eType = FIELDTYPE_CHAR;
-    aFieldDefs[0].szName = "pet type";
-    aFieldDefs[0].eType = FIELDTYPE_NAME_I_INT;
-    aFieldDefs[0].nSize = 0;
-    aFieldDefs[0].nOffset = 0;
-    aFieldDefs[0].fpLinker = &sgtDataTable.pTxtPetTypeLink;
-    aFieldDefs[1].szName = "group";
-    aFieldDefs[1].eType = FIELDTYPE_SHORT;
-    aFieldDefs[1].nSize = 0;
-    aFieldDefs[1].nOffset = 8;
-    aFieldDefs[1].fpLinker = 0;
-    aFieldDefs[2].szName = "basemax";
-    aFieldDefs[2].eType = FIELDTYPE_SHORT;
-    aFieldDefs[2].nSize = 0;
-    aFieldDefs[2].nOffset = 10;
-    aFieldDefs[2].fpLinker = 0;
-    aFieldDefs[3].szName = "warp";
-    aFieldDefs[3].eType = FIELDTYPE_BIT;
-    aFieldDefs[3].nSize = 0;
-    aFieldDefs[3].fpLinker = 0;
-    aFieldDefs[4].szName = "range";
-    aFieldDefs[4].eType = FIELDTYPE_BIT;
-    aFieldDefs[4].nSize = 1;
-    aFieldDefs[4].fpLinker = 0;
-    aFieldDefs[5].szName = "partysend";
-    aFieldDefs[5].eType = FIELDTYPE_BIT;
-    aFieldDefs[5].nSize = 2;
-    aFieldDefs[5].fpLinker = 0;
-    aFieldDefs[6].szName = "unsummon";
-    aFieldDefs[6].eType = FIELDTYPE_BIT;
-    aFieldDefs[6].nSize = 3;
-    aFieldDefs[6].fpLinker = 0;
-    aFieldDefs[7].szName = "automap";
-    aFieldDefs[7].eType = FIELDTYPE_BIT;
-    aFieldDefs[7].fpLinker = 0;
-    aFieldDefs[8].szName = "drawhp";
-    aFieldDefs[8].eType = FIELDTYPE_BIT;
-    aFieldDefs[8].nSize = 5;
-    aFieldDefs[8].fpLinker = 0;
-    aFieldDefs[9].szName = "icontype";
-    aFieldDefs[9].nSize = 0;
-    aFieldDefs[9].nOffset = 0xe;
-    aFieldDefs[9].fpLinker = 0;
-    aFieldDefs[10].szName = "baseicon";
-    aFieldDefs[10].eType = FIELDTYPE_ASCII;
-    aFieldDefs[10].nSize = 0x20;
-    aFieldDefs[10].nOffset = 0xf;
-    aFieldDefs[10].fpLinker = 0;
-    aFieldDefs[0xb].szName = "mclass1";
-    aFieldDefs[0xb].eType = FIELDTYPE_SHORT;
-    aFieldDefs[0xb].nSize = 0;
-    aFieldDefs[0xb].nOffset = 0xb2;
-    aFieldDefs[0xb].fpLinker = 0;
-    aFieldDefs[0xc].szName = "micon1";
-    aFieldDefs[0xc].eType = FIELDTYPE_ASCII;
-    aFieldDefs[0xc].nSize = 0x20;
-    aFieldDefs[0xc].nOffset = 0x2f;
-    aFieldDefs[0xc].fpLinker = 0;
-    aFieldDefs[0xd].szName = "mclass2";
-    aFieldDefs[0xd].eType = FIELDTYPE_SHORT;
-    aFieldDefs[0xd].nSize = 0;
-    aFieldDefs[0xd].nOffset = 0xb4;
-    aFieldDefs[0xd].fpLinker = 0;
-    aFieldDefs[0xe].szName = "micon2";
-    aFieldDefs[0xe].eType = FIELDTYPE_ASCII;
-    aFieldDefs[0xe].nSize = 0x20;
-    aFieldDefs[0xe].nOffset = 0x4f;
-    aFieldDefs[0xe].fpLinker = 0;
-    aFieldDefs[0xf].szName = "mclass3";
-    aFieldDefs[0xf].eType = FIELDTYPE_SHORT;
-    aFieldDefs[0xf].nSize = 0;
-    aFieldDefs[0xf].nOffset = 0xb6;
-    aFieldDefs[0xf].fpLinker = 0;
-    aFieldDefs[0x10].szName = "micon3";
-    aFieldDefs[0x10].eType = FIELDTYPE_ASCII;
-    aFieldDefs[0x10].nSize = 0x20;
-    aFieldDefs[0x10].nOffset = 0x6f;
-    aFieldDefs[0x10].fpLinker = 0;
-    aFieldDefs[0x11].szName = "mclass4";
-    aFieldDefs[0x11].eType = FIELDTYPE_SHORT;
-    aFieldDefs[0x11].nSize = 0;
-    aFieldDefs[0x11].nOffset = 0xb8;
-    aFieldDefs[0x11].fpLinker = 0;
-    aFieldDefs[0x12].szName = "micon4";
-    aFieldDefs[0x12].eType = FIELDTYPE_ASCII;
-    aFieldDefs[0x12].nSize = 0x20;
-    aFieldDefs[0x12].nOffset = 0x8f;
-    aFieldDefs[0x12].fpLinker = 0;
-    aFieldDefs[0x13].szName = "name";
-    aFieldDefs[0x13].eType = FIELDTYPE_KEY_WORD;
-    aFieldDefs[0x13].nSize = 0;
-    aFieldDefs[0x13].nOffset = 0xc;
-    aFieldDefs[0x13].fpLinker = (void*)DATATBLS_LookupStringId;
-    aFieldDefs[0x14].szName = "end";
-    aFieldDefs[0x14].eType = FIELDTYPE_END;
-    aFieldDefs[0x14].nSize = 0;
-    aFieldDefs[0x14].nOffset = 0;
-    aFieldDefs[0x14].fpLinker = 0;
+    D2BinFieldInputStrc aFieldDefs[21] = {
+      {"pet type", FIELDTYPE_NAME_I_INT, 0, 0, &sgtDataTable.pTxtPetTypeLink},
+      {"group", FIELDTYPE_SHORT, 0, 8, 0},
+      {"basemax", FIELDTYPE_SHORT, 0, 10, 0},
+      {"warp", FIELDTYPE_BIT, 0, 4, 0},
+      {"range", FIELDTYPE_BIT, 1, 4, 0},
+      {"partysend", FIELDTYPE_BIT, 2, 4, 0},
+      {"unsummon", FIELDTYPE_BIT, 3, 4, 0},
+      {"automap", FIELDTYPE_BIT, 4, 4, 0},
+      {"drawhp", FIELDTYPE_BIT, 5, 4, 0},
+      {"icontype", FIELDTYPE_CHAR, 0, 0xe, 0},
+      {"baseicon", FIELDTYPE_ASCII, 0x20, 0xf, 0},
+      {"mclass1", FIELDTYPE_SHORT, 0, 0xb2, 0},
+      {"micon1", FIELDTYPE_ASCII, 0x20, 0x2f, 0},
+      {"mclass2", FIELDTYPE_SHORT, 0, 0xb4, 0},
+      {"micon2", FIELDTYPE_ASCII, 0x20, 0x4f, 0},
+      {"mclass3", FIELDTYPE_SHORT, 0, 0xb6, 0},
+      {"micon3", FIELDTYPE_ASCII, 0x20, 0x6f, 0},
+      {"mclass4", FIELDTYPE_SHORT, 0, 0xb8, 0},
+      {"micon4", FIELDTYPE_ASCII, 0x20, 0x8f, 0},
+      {"name", FIELDTYPE_KEY_WORD, 0, 0xc, (void*)DATATBLS_LookupStringId},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtPetTypeLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x729);
     sgtDataTable.pTxtPetType = (D2PetTypeTxt*)CompileTxt(pMemory, "pettype", aFieldDefs, &sgtDataTable.nTxtPetTypeSize, 0xe0);
     if (sgtDataTable.nTxtPetTypeSize >= 0x100) {

@@ -29,24 +29,13 @@ namespace D2Common::DATATBLS::TokTbls {
 // Loads and merges plrtype.txt and plrmode.txt token tables into a single contiguous server allocation. Compiles both tables (fields: name/ASCII, token/RAW4) via CompileTxt, concatenates them, frees the intermediate bins, and stores the combined pointer in pTxtPlrTypeMode1/2/3 with total count in nTxtPlrTypeModeSize.
 // @sourcefile .\DATATBLS\TokTbls.cpp
 void __fastcall TXT_AllocTxt_plrmode_plrtype(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc plr[3];
     int nTxtPlrModeSize;
     int nTxtPlrTypeSize;
-    plr[0].szName = "name";
-    plr[0].eType = FIELDTYPE_ASCII;
-    plr[0].nSize = 0x1f;
-    plr[0].nOffset = 0;
-    plr[0].fpLinker = 0;
-    plr[1].szName = "token";
-    plr[1].eType = FIELDTYPE_RAW4;
-    plr[1].nSize = 0;
-    plr[1].nOffset = 0x20;
-    plr[1].fpLinker = 0;
-    plr[2].szName = "end";
-    plr[2].eType = FIELDTYPE_END;
-    plr[2].nSize = 0;
-    plr[2].nOffset = 0;
-    plr[2].fpLinker = 0;
+    D2BinFieldInputStrc plr[3] = {
+      {"name", FIELDTYPE_ASCII, 0x1f, 0, 0},
+      {"token", FIELDTYPE_RAW4, 0, 0x20, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     D2PlrTypeModeTxt* pTxtPlrType = (D2PlrTypeModeTxt*)DataTbls::CompileTxt(pMemory, "plrtype", plr, &nTxtPlrTypeSize, 0x34);
     D2PlrTypeModeTxt* pTxtPlrMode = (D2PlrTypeModeTxt*)DataTbls::CompileTxt(pMemory, "plrmode", plr, &nTxtPlrModeSize, 0x34);
     uint32_t nTotalSize = nTxtPlrModeSize + nTxtPlrTypeSize;
@@ -68,103 +57,28 @@ void __fastcall TXT_AllocTxt_plrmode_plrtype(D2PoolManagerStrc * pMemory) {
 
 // Defines the field schema for the monmode.txt data table and compiles it. Builds a D2BinFieldInputStrc array (name, token, and the per-mode direction-count bytes DT/NU/WL/GH/A1/A2/BL/SC/S1-S4/DD/KB/SQ/RN_Dir) describing each monster animation mode, then calls CompileTxt to load and pack the rows into a struct of stride 0x34. Stores the result and row count into the global pTxtMonMode1/2/3 and nTxtMonModeSize.
 void __fastcall TXT_AllocTxt_monmode(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc monmode[19];
     uint32_t nMonModeSize;
-    monmode[0].szName = "name";
-    monmode[0].eType = FIELDTYPE_ASCII;
-    monmode[0].nSize = 0x1f;
-    monmode[0].nOffset = 0;
-    monmode[0].fpLinker = 0;
-    monmode[1].szName = "token";
-    monmode[1].eType = FIELDTYPE_RAW4;
-    monmode[1].nSize = 0;
-    monmode[1].nOffset = 0x20;
-    monmode[1].fpLinker = 0;
-    monmode[2].szName = "DT_Dir";
-    monmode[2].eType = FIELDTYPE_BYTE;
-    monmode[2].nSize = 0;
-    monmode[2].nOffset = 0x24;
-    monmode[2].fpLinker = 0;
-    monmode[3].szName = "NU_Dir";
-    monmode[3].eType = FIELDTYPE_BYTE;
-    monmode[3].nSize = 0;
-    monmode[3].nOffset = 0x25;
-    monmode[3].fpLinker = 0;
-    monmode[4].szName = "WL_Dir";
-    monmode[4].eType = FIELDTYPE_BYTE;
-    monmode[4].nSize = 0;
-    monmode[4].nOffset = 0x26;
-    monmode[4].fpLinker = 0;
-    monmode[5].szName = "GH_Dir";
-    monmode[5].eType = FIELDTYPE_BYTE;
-    monmode[5].nSize = 0;
-    monmode[5].nOffset = 0x27;
-    monmode[5].fpLinker = 0;
-    monmode[6].szName = "A1_Dir";
-    monmode[6].eType = FIELDTYPE_BYTE;
-    monmode[6].nSize = 0;
-    monmode[6].nOffset = 0x28;
-    monmode[6].fpLinker = 0;
-    monmode[7].szName = "A2_Dir";
-    monmode[7].eType = FIELDTYPE_BYTE;
-    monmode[7].nSize = 0;
-    monmode[7].nOffset = 0x29;
-    monmode[7].fpLinker = 0;
-    monmode[8].szName = "BL_Dir";
-    monmode[8].eType = FIELDTYPE_BYTE;
-    monmode[8].nSize = 0;
-    monmode[8].nOffset = 0x2a;
-    monmode[8].fpLinker = 0;
-    monmode[9].szName = "SC_Dir";
-    monmode[9].eType = FIELDTYPE_BYTE;
-    monmode[9].nSize = 0;
-    monmode[9].nOffset = 0x2b;
-    monmode[9].fpLinker = 0;
-    monmode[10].szName = "S1_Dir";
-    monmode[10].eType = FIELDTYPE_BYTE;
-    monmode[10].nSize = 0;
-    monmode[10].nOffset = 0x2c;
-    monmode[10].fpLinker = 0;
-    monmode[0xb].szName = "S2_Dir";
-    monmode[0xb].eType = FIELDTYPE_BYTE;
-    monmode[0xb].nSize = 0;
-    monmode[0xb].nOffset = 0x2d;
-    monmode[0xb].fpLinker = 0;
-    monmode[0xc].szName = "S3_Dir";
-    monmode[0xc].eType = FIELDTYPE_BYTE;
-    monmode[0xc].nSize = 0;
-    monmode[0xc].nOffset = 0x2e;
-    monmode[0xc].fpLinker = 0;
-    monmode[0xd].szName = "S4_Dir";
-    monmode[0xd].eType = FIELDTYPE_BYTE;
-    monmode[0xd].nSize = 0;
-    monmode[0xd].nOffset = 0x2f;
-    monmode[0xd].fpLinker = 0;
-    monmode[0xe].szName = "DD_Dir";
-    monmode[0xe].eType = FIELDTYPE_BYTE;
-    monmode[0xe].nSize = 0;
-    monmode[0xe].nOffset = 0x30;
-    monmode[0xe].fpLinker = 0;
-    monmode[0xf].szName = "KB_Dir";
-    monmode[0xf].eType = FIELDTYPE_BYTE;
-    monmode[0xf].nSize = 0;
-    monmode[0xf].nOffset = 0x31;
-    monmode[0xf].fpLinker = 0;
-    monmode[0x10].nSize = 0;
-    monmode[0x10].fpLinker = 0;
-    monmode[0x11].nSize = 0;
-    monmode[0x11].fpLinker = 0;
-    monmode[0x12].eType = FIELDTYPE_END;
-    monmode[0x12].nSize = 0;
-    monmode[0x12].nOffset = 0;
-    monmode[0x12].fpLinker = 0;
-    monmode[0x10].eType = FIELDTYPE_BYTE;
-    monmode[0x11].eType = FIELDTYPE_BYTE;
-    monmode[0x10].szName = "SQ_Dir";
-    monmode[0x10].nOffset = 0x32;
-    monmode[0x11].szName = "RN_Dir";
-    monmode[0x11].nOffset = 0x33;
-    monmode[0x12].szName = "end";
+    D2BinFieldInputStrc monmode[19] = {
+      {"name", FIELDTYPE_ASCII, 0x1f, 0, 0},
+      {"token", FIELDTYPE_RAW4, 0, 0x20, 0},
+      {"DT_Dir", FIELDTYPE_BYTE, 0, 0x24, 0},
+      {"NU_Dir", FIELDTYPE_BYTE, 0, 0x25, 0},
+      {"WL_Dir", FIELDTYPE_BYTE, 0, 0x26, 0},
+      {"GH_Dir", FIELDTYPE_BYTE, 0, 0x27, 0},
+      {"A1_Dir", FIELDTYPE_BYTE, 0, 0x28, 0},
+      {"A2_Dir", FIELDTYPE_BYTE, 0, 0x29, 0},
+      {"BL_Dir", FIELDTYPE_BYTE, 0, 0x2a, 0},
+      {"SC_Dir", FIELDTYPE_BYTE, 0, 0x2b, 0},
+      {"S1_Dir", FIELDTYPE_BYTE, 0, 0x2c, 0},
+      {"S2_Dir", FIELDTYPE_BYTE, 0, 0x2d, 0},
+      {"S3_Dir", FIELDTYPE_BYTE, 0, 0x2e, 0},
+      {"S4_Dir", FIELDTYPE_BYTE, 0, 0x2f, 0},
+      {"DD_Dir", FIELDTYPE_BYTE, 0, 0x30, 0},
+      {"KB_Dir", FIELDTYPE_BYTE, 0, 0x31, 0},
+      {"SQ_Dir", FIELDTYPE_BYTE, 0, 0x32, 0},
+      {"RN_Dir", FIELDTYPE_BYTE, 0, 0x33, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     pTxtMonMode1 = (D2MonModeTxt*)DataTbls::CompileTxt(pMemory, "monmode", monmode, (int*)&nMonModeSize, 0x34);
     nTxtMonModeSize = nMonModeSize;
     pTxtMonMode2 = pTxtMonMode1;
@@ -174,24 +88,13 @@ void __fastcall TXT_AllocTxt_monmode(D2PoolManagerStrc * pMemory) {
 // Loads and merges objtype.txt and objmode.txt token tables into a single contiguous server allocation. Mirrors TXT_AllocTxt_plrmode_plrtype but for object tokens; stores combined pointer in pTxtObjTypeMode with count in nTxtObjTypeModeSize.
 // @sourcefile .\DATATBLS\TokTbls.cpp
 void __fastcall TXT_AllocTxt_objtype_objmode(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc obj[3];
     int nObjModeSize;
     int nObjTypeSize;
-    obj[0].szName = "name";
-    obj[0].eType = FIELDTYPE_ASCII;
-    obj[0].nSize = 0x1f;
-    obj[0].nOffset = 0;
-    obj[0].fpLinker = 0;
-    obj[1].szName = "token";
-    obj[1].eType = FIELDTYPE_RAW4;
-    obj[1].nSize = 0;
-    obj[1].nOffset = 0x20;
-    obj[1].fpLinker = 0;
-    obj[2].szName = "end";
-    obj[2].eType = FIELDTYPE_END;
-    obj[2].nSize = 0;
-    obj[2].nOffset = 0;
-    obj[2].fpLinker = 0;
+    D2BinFieldInputStrc obj[3] = {
+      {"name", FIELDTYPE_ASCII, 0x1f, 0, 0},
+      {"token", FIELDTYPE_RAW4, 0, 0x20, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     D2ObjTypeTxt* pTxtObjType_lcl = (D2ObjTypeTxt*)DataTbls::CompileTxt(pMemory, "objtype", obj, &nObjTypeSize, 0x34);
     D2ObjModeTxt* pTxtObjMode_lcl = (D2ObjModeTxt*)DataTbls::CompileTxt(pMemory, "objmode", obj, &nObjModeSize, 0x34);
     uint32_t nTotalSize = nObjModeSize + nObjTypeSize;
@@ -212,42 +115,20 @@ void __fastcall TXT_AllocTxt_objtype_objmode(D2PoolManagerStrc * pMemory) {
 }
 
 void __fastcall TXT_AllocTxt_composit(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc composit[3];
-    composit[0].nOffset = 0;
-    composit[0].fpLinker = 0;
-    composit[1].nSize = 0;
-    composit[1].fpLinker = 0;
-    composit[2].eType = FIELDTYPE_END;
-    composit[2].nSize = 0;
-    composit[2].nOffset = 0;
-    composit[2].fpLinker = 0;
-    composit[0].szName = "name";
-    composit[0].eType = FIELDTYPE_ASCII;
-    composit[0].nSize = 0x1f;
-    composit[1].szName = "token";
-    composit[1].eType = FIELDTYPE_RAW4;
-    composit[1].nOffset = 0x20;
-    composit[2].szName = "end";
+    D2BinFieldInputStrc composit[3] = {
+      {"name", FIELDTYPE_ASCII, 0x1f, 0, 0},
+      {"token", FIELDTYPE_RAW4, 0, 0x20, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     pTxtComposit = (D2CompositTxt*)DataTbls::CompileTxt(pMemory, "composit", composit, nullptr, 0x34);
 }
 
 void __fastcall TXT_AllocTxt_armtype(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc armtype[3];
-    armtype[0].nOffset = 0;
-    armtype[0].fpLinker = 0;
-    armtype[1].nSize = 0;
-    armtype[1].fpLinker = 0;
-    armtype[2].eType = FIELDTYPE_END;
-    armtype[2].nSize = 0;
-    armtype[2].nOffset = 0;
-    armtype[2].fpLinker = 0;
-    armtype[0].szName = "name";
-    armtype[0].eType = FIELDTYPE_ASCII;
-    armtype[0].nSize = 0x1f;
-    armtype[1].szName = "token";
-    armtype[1].eType = FIELDTYPE_RAW4;
-    armtype[1].nOffset = 0x20;
-    armtype[2].szName = "end";
+    D2BinFieldInputStrc armtype[3] = {
+      {"name", FIELDTYPE_ASCII, 0x1f, 0, 0},
+      {"token", FIELDTYPE_RAW4, 0, 0x20, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     pTxtArmType = (D2ArmTypeTxt*)DataTbls::CompileTxt(pMemory, "armtype", armtype, nullptr, 0x34);
 }
 
@@ -410,372 +291,81 @@ D2ArmTypeTxt * __stdcall TxtGetArmTypeLine(int32_t nId) {
 
 // Builds the D2BinFieldInputStrc schema describing inventory.txt (the equipment/inventory grid layout panel) and compiles it via DataTbls::CompileTxt into the pTxtInventory table. Fields map per body-location screen rectangles (invLeft/Right/Top/Bottom, gridX/Y, gridBox W/H, and per-slot rArm/torso/lArm/head/neck/rHand/lHand/belt/feet/gloves left/right/top/bottom/width/height). Asserts the produced record count is exactly 0x20 (else fatal Fog error). Called once during table init; allocates from the passed D2PoolManagerStrc.
 void __fastcall TXT_AllocTxt_inventory(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc inventory[73];
-    inventory[0].szName = "invLeft";
-    inventory[0].eType = FIELDTYPE_INT;
-    inventory[0].nSize = 0;
-    inventory[0].nOffset = 0;
-    inventory[0].fpLinker = 0;
-    inventory[1].szName = "invRight";
-    inventory[1].eType = FIELDTYPE_INT;
-    inventory[1].nSize = 0;
-    inventory[1].nOffset = 4;
-    inventory[1].fpLinker = 0;
-    inventory[2].szName = "invTop";
-    inventory[2].eType = FIELDTYPE_INT;
-    inventory[2].nSize = 0;
-    inventory[2].nOffset = 8;
-    inventory[2].fpLinker = 0;
-    inventory[3].szName = "invBottom";
-    inventory[3].eType = FIELDTYPE_INT;
-    inventory[3].nSize = 0;
-    inventory[3].nOffset = 0xc;
-    inventory[3].fpLinker = 0;
-    inventory[4].szName = "gridX";
-    inventory[4].eType = FIELDTYPE_CHAR;
-    inventory[4].nSize = 0;
-    inventory[4].nOffset = 0x10;
-    inventory[4].fpLinker = 0;
-    inventory[5].szName = "gridY";
-    inventory[5].eType = FIELDTYPE_CHAR;
-    inventory[5].nSize = 0;
-    inventory[5].nOffset = 0x11;
-    inventory[5].fpLinker = 0;
-    inventory[6].szName = "gridLeft";
-    inventory[6].eType = FIELDTYPE_INT;
-    inventory[6].nSize = 0;
-    inventory[6].nOffset = 0x14;
-    inventory[6].fpLinker = 0;
-    inventory[7].szName = "gridRight";
-    inventory[7].eType = FIELDTYPE_INT;
-    inventory[7].nSize = 0;
-    inventory[7].nOffset = 0x18;
-    inventory[7].fpLinker = 0;
-    inventory[8].szName = "gridTop";
-    inventory[8].eType = FIELDTYPE_INT;
-    inventory[8].nSize = 0;
-    inventory[8].nOffset = 0x1c;
-    inventory[8].fpLinker = 0;
-    inventory[9].szName = "gridBottom";
-    inventory[9].eType = FIELDTYPE_INT;
-    inventory[9].nSize = 0;
-    inventory[9].nOffset = 0x20;
-    inventory[9].fpLinker = 0;
-    inventory[10].szName = "gridBoxWidth";
-    inventory[10].eType = FIELDTYPE_CHAR;
-    inventory[10].nSize = 0;
-    inventory[10].nOffset = 0x24;
-    inventory[10].fpLinker = 0;
-    inventory[0xb].szName = "gridBoxHeight";
-    inventory[0xb].eType = FIELDTYPE_CHAR;
-    inventory[0xb].nSize = 0;
-    inventory[0xb].nOffset = 0x25;
-    inventory[0xb].fpLinker = 0;
-    inventory[0xc].szName = "rArmLeft";
-    inventory[0xc].eType = FIELDTYPE_INT;
-    inventory[0xc].nSize = 0;
-    inventory[0xc].nOffset = 0x28;
-    inventory[0xc].fpLinker = 0;
-    inventory[0xd].szName = "rArmRight";
-    inventory[0xd].eType = FIELDTYPE_INT;
-    inventory[0xd].nSize = 0;
-    inventory[0xd].nOffset = 0x2c;
-    inventory[0xd].fpLinker = 0;
-    inventory[0xe].szName = "rArmTop";
-    inventory[0xe].eType = FIELDTYPE_INT;
-    inventory[0xe].nSize = 0;
-    inventory[0xe].nOffset = 0x30;
-    inventory[0xe].fpLinker = 0;
-    inventory[0xf].szName = "rArmBottom";
-    inventory[0xf].eType = FIELDTYPE_INT;
-    inventory[0xf].nSize = 0;
-    inventory[0xf].nOffset = 0x34;
-    inventory[0xf].fpLinker = 0;
-    inventory[0x10].szName = "rArmWidth";
-    inventory[0x10].eType = FIELDTYPE_CHAR;
-    inventory[0x10].nSize = 0;
-    inventory[0x10].nOffset = 0x38;
-    inventory[0x10].fpLinker = 0;
-    inventory[0x11].szName = "rArmHeight";
-    inventory[0x11].eType = FIELDTYPE_CHAR;
-    inventory[0x11].nSize = 0;
-    inventory[0x11].nOffset = 0x39;
-    inventory[0x11].fpLinker = 0;
-    inventory[0x12].szName = "torsoLeft";
-    inventory[0x12].eType = FIELDTYPE_INT;
-    inventory[0x12].nSize = 0;
-    inventory[0x12].nOffset = 0x3c;
-    inventory[0x12].fpLinker = 0;
-    inventory[0x13].szName = "torsoRight";
-    inventory[0x13].eType = FIELDTYPE_INT;
-    inventory[0x13].nSize = 0;
-    inventory[0x13].nOffset = 0x40;
-    inventory[0x13].fpLinker = 0;
-    inventory[0x14].szName = "torsoTop";
-    inventory[0x14].eType = FIELDTYPE_INT;
-    inventory[0x14].nSize = 0;
-    inventory[0x14].nOffset = 0x44;
-    inventory[0x14].fpLinker = 0;
-    inventory[0x15].szName = "torsoBottom";
-    inventory[0x15].eType = FIELDTYPE_INT;
-    inventory[0x15].nSize = 0;
-    inventory[0x15].nOffset = 0x48;
-    inventory[0x15].fpLinker = 0;
-    inventory[0x16].szName = "torsoWidth";
-    inventory[0x16].eType = FIELDTYPE_CHAR;
-    inventory[0x16].nSize = 0;
-    inventory[0x16].nOffset = 0x4c;
-    inventory[0x16].fpLinker = 0;
-    inventory[0x17].szName = "torsoHeight";
-    inventory[0x17].eType = FIELDTYPE_CHAR;
-    inventory[0x17].nSize = 0;
-    inventory[0x17].nOffset = 0x4d;
-    inventory[0x17].fpLinker = 0;
-    inventory[0x18].szName = "lArmLeft";
-    inventory[0x18].eType = FIELDTYPE_INT;
-    inventory[0x18].nSize = 0;
-    inventory[0x18].nOffset = 0x50;
-    inventory[0x18].fpLinker = 0;
-    inventory[0x19].szName = "lArmRight";
-    inventory[0x19].eType = FIELDTYPE_INT;
-    inventory[0x19].nSize = 0;
-    inventory[0x19].nOffset = 0x54;
-    inventory[0x19].fpLinker = 0;
-    inventory[0x1a].szName = "lArmTop";
-    inventory[0x1a].eType = FIELDTYPE_INT;
-    inventory[0x1a].nSize = 0;
-    inventory[0x1a].nOffset = 0x58;
-    inventory[0x1a].fpLinker = 0;
-    inventory[0x1b].szName = "lArmBottom";
-    inventory[0x1b].eType = FIELDTYPE_INT;
-    inventory[0x1b].nSize = 0;
-    inventory[0x1b].nOffset = 0x5c;
-    inventory[0x1b].fpLinker = 0;
-    inventory[0x1c].szName = "lArmWidth";
-    inventory[0x1c].eType = FIELDTYPE_CHAR;
-    inventory[0x1c].nSize = 0;
-    inventory[0x1c].nOffset = 0x60;
-    inventory[0x1c].fpLinker = 0;
-    inventory[0x1d].szName = "lArmHeight";
-    inventory[0x1d].eType = FIELDTYPE_CHAR;
-    inventory[0x1d].nSize = 0;
-    inventory[0x1d].nOffset = 0x61;
-    inventory[0x1d].fpLinker = 0;
-    inventory[0x1e].szName = "headLeft";
-    inventory[0x1e].eType = FIELDTYPE_INT;
-    inventory[0x1e].nSize = 0;
-    inventory[0x1e].nOffset = 100;
-    inventory[0x1e].fpLinker = 0;
-    inventory[0x1f].szName = "headRight";
-    inventory[0x1f].eType = FIELDTYPE_INT;
-    inventory[0x1f].nSize = 0;
-    inventory[0x1f].nOffset = 0x68;
-    inventory[0x1f].fpLinker = 0;
-    inventory[0x20].szName = "headTop";
-    inventory[0x20].eType = FIELDTYPE_INT;
-    inventory[0x20].nSize = 0;
-    inventory[0x20].nOffset = 0x6c;
-    inventory[0x20].fpLinker = 0;
-    inventory[0x21].szName = "headBottom";
-    inventory[0x21].eType = FIELDTYPE_INT;
-    inventory[0x21].nSize = 0;
-    inventory[0x21].nOffset = 0x70;
-    inventory[0x21].fpLinker = 0;
-    inventory[0x22].szName = "headWidth";
-    inventory[0x22].eType = FIELDTYPE_CHAR;
-    inventory[0x22].nSize = 0;
-    inventory[0x22].nOffset = 0x74;
-    inventory[0x22].fpLinker = 0;
-    inventory[0x23].szName = "headHeight";
-    inventory[0x23].eType = FIELDTYPE_CHAR;
-    inventory[0x23].nSize = 0;
-    inventory[0x23].nOffset = 0x75;
-    inventory[0x23].fpLinker = 0;
-    inventory[0x24].szName = "neckLeft";
-    inventory[0x24].eType = FIELDTYPE_INT;
-    inventory[0x24].nSize = 0;
-    inventory[0x24].nOffset = 0x78;
-    inventory[0x24].fpLinker = 0;
-    inventory[0x25].szName = "neckRight";
-    inventory[0x25].eType = FIELDTYPE_INT;
-    inventory[0x25].nSize = 0;
-    inventory[0x25].nOffset = 0x7c;
-    inventory[0x25].fpLinker = 0;
-    inventory[0x26].szName = "neckTop";
-    inventory[0x26].eType = FIELDTYPE_INT;
-    inventory[0x26].nSize = 0;
-    inventory[0x26].nOffset = 0x80;
-    inventory[0x26].fpLinker = 0;
-    inventory[0x27].szName = "neckBottom";
-    inventory[0x27].eType = FIELDTYPE_INT;
-    inventory[0x27].nSize = 0;
-    inventory[0x27].nOffset = 0x84;
-    inventory[0x27].fpLinker = 0;
-    inventory[0x28].szName = "neckWidth";
-    inventory[0x28].eType = FIELDTYPE_CHAR;
-    inventory[0x28].nSize = 0;
-    inventory[0x28].nOffset = 0x88;
-    inventory[0x28].fpLinker = 0;
-    inventory[0x29].szName = "neckHeight";
-    inventory[0x29].eType = FIELDTYPE_CHAR;
-    inventory[0x29].nSize = 0;
-    inventory[0x29].nOffset = 0x89;
-    inventory[0x29].fpLinker = 0;
-    inventory[0x2a].szName = "rHandLeft";
-    inventory[0x2a].eType = FIELDTYPE_INT;
-    inventory[0x2a].nSize = 0;
-    inventory[0x2a].nOffset = 0x8c;
-    inventory[0x2a].fpLinker = 0;
-    inventory[0x2b].szName = "rHandRight";
-    inventory[0x2b].eType = FIELDTYPE_INT;
-    inventory[0x2b].nSize = 0;
-    inventory[0x2b].nOffset = 0x90;
-    inventory[0x2b].fpLinker = 0;
-    inventory[0x2c].szName = "rHandTop";
-    inventory[0x2c].eType = FIELDTYPE_INT;
-    inventory[0x2c].nSize = 0;
-    inventory[0x2c].nOffset = 0x94;
-    inventory[0x2c].fpLinker = 0;
-    inventory[0x2d].szName = "rHandBottom";
-    inventory[0x2d].eType = FIELDTYPE_INT;
-    inventory[0x2d].nSize = 0;
-    inventory[0x2d].nOffset = 0x98;
-    inventory[0x2d].fpLinker = 0;
-    inventory[0x2e].szName = "rHandWidth";
-    inventory[0x2e].eType = FIELDTYPE_CHAR;
-    inventory[0x2e].nSize = 0;
-    inventory[0x2e].nOffset = 0x9c;
-    inventory[0x2e].fpLinker = 0;
-    inventory[0x2f].szName = "rHandHeight";
-    inventory[0x2f].eType = FIELDTYPE_CHAR;
-    inventory[0x2f].nSize = 0;
-    inventory[0x2f].nOffset = 0x9d;
-    inventory[0x2f].fpLinker = 0;
-    inventory[0x30].szName = "lHandLeft";
-    inventory[0x30].eType = FIELDTYPE_INT;
-    inventory[0x30].nSize = 0;
-    inventory[0x30].nOffset = 0xa0;
-    inventory[0x30].fpLinker = 0;
-    inventory[0x31].szName = "lHandRight";
-    inventory[0x31].eType = FIELDTYPE_INT;
-    inventory[0x31].nSize = 0;
-    inventory[0x31].nOffset = 0xa4;
-    inventory[0x31].fpLinker = 0;
-    inventory[0x32].szName = "lHandTop";
-    inventory[0x32].eType = FIELDTYPE_INT;
-    inventory[0x32].nSize = 0;
-    inventory[0x32].nOffset = 0xa8;
-    inventory[0x32].fpLinker = 0;
-    inventory[0x33].szName = "lHandBottom";
-    inventory[0x33].eType = FIELDTYPE_INT;
-    inventory[0x33].nSize = 0;
-    inventory[0x33].nOffset = 0xac;
-    inventory[0x33].fpLinker = 0;
-    inventory[0x34].szName = "lHandWidth";
-    inventory[0x34].eType = FIELDTYPE_CHAR;
-    inventory[0x34].nSize = 0;
-    inventory[0x34].nOffset = 0xb0;
-    inventory[0x34].fpLinker = 0;
-    inventory[0x35].szName = "lHandHeight";
-    inventory[0x35].eType = FIELDTYPE_CHAR;
-    inventory[0x35].nSize = 0;
-    inventory[0x35].nOffset = 0xb1;
-    inventory[0x35].fpLinker = 0;
-    inventory[0x36].szName = "beltLeft";
-    inventory[0x36].eType = FIELDTYPE_INT;
-    inventory[0x36].nSize = 0;
-    inventory[0x36].nOffset = 0xb4;
-    inventory[0x36].fpLinker = 0;
-    inventory[0x37].szName = "beltRight";
-    inventory[0x37].eType = FIELDTYPE_INT;
-    inventory[0x37].nSize = 0;
-    inventory[0x37].nOffset = 0xb8;
-    inventory[0x37].fpLinker = 0;
-    inventory[0x38].szName = "beltTop";
-    inventory[0x38].eType = FIELDTYPE_INT;
-    inventory[0x38].nSize = 0;
-    inventory[0x38].nOffset = 0xbc;
-    inventory[0x38].fpLinker = 0;
-    inventory[0x39].szName = "beltBottom";
-    inventory[0x39].eType = FIELDTYPE_INT;
-    inventory[0x39].nSize = 0;
-    inventory[0x39].nOffset = 0xc0;
-    inventory[0x39].fpLinker = 0;
-    inventory[0x3a].szName = "beltWidth";
-    inventory[0x3a].eType = FIELDTYPE_CHAR;
-    inventory[0x3a].nSize = 0;
-    inventory[0x3a].nOffset = 0xc4;
-    inventory[0x3a].fpLinker = 0;
-    inventory[0x3b].szName = "beltHeight";
-    inventory[0x3b].eType = FIELDTYPE_CHAR;
-    inventory[0x3b].nSize = 0;
-    inventory[0x3b].nOffset = 0xc5;
-    inventory[0x3b].fpLinker = 0;
-    inventory[0x3c].szName = "feetLeft";
-    inventory[0x3c].eType = FIELDTYPE_INT;
-    inventory[0x3c].nSize = 0;
-    inventory[0x3c].nOffset = 200;
-    inventory[0x3c].fpLinker = 0;
-    inventory[0x3d].szName = "feetRight";
-    inventory[0x3d].eType = FIELDTYPE_INT;
-    inventory[0x3d].nSize = 0;
-    inventory[0x3d].nOffset = 0xcc;
-    inventory[0x3d].fpLinker = 0;
-    inventory[0x3e].szName = "feetTop";
-    inventory[0x3e].eType = FIELDTYPE_INT;
-    inventory[0x3e].nSize = 0;
-    inventory[0x3e].nOffset = 0xd0;
-    inventory[0x3e].fpLinker = 0;
-    inventory[0x3f].szName = "feetBottom";
-    inventory[0x3f].eType = FIELDTYPE_INT;
-    inventory[0x3f].nSize = 0;
-    inventory[0x3f].nOffset = 0xd4;
-    inventory[0x3f].fpLinker = 0;
-    inventory[0x40].nSize = 0;
-    inventory[0x40].fpLinker = 0;
-    inventory[0x41].nSize = 0;
-    inventory[0x41].fpLinker = 0;
-    inventory[0x42].nSize = 0;
-    inventory[0x42].fpLinker = 0;
-    inventory[0x43].nSize = 0;
-    inventory[0x43].fpLinker = 0;
-    inventory[0x44].nSize = 0;
-    inventory[0x44].fpLinker = 0;
-    inventory[0x45].nSize = 0;
-    inventory[0x45].fpLinker = 0;
-    inventory[0x46].nSize = 0;
-    inventory[0x46].fpLinker = 0;
-    inventory[0x47].nSize = 0;
-    inventory[0x47].fpLinker = 0;
-    inventory[0x48].eType = FIELDTYPE_END;
-    inventory[0x48].nSize = 0;
-    inventory[0x48].nOffset = 0;
-    inventory[0x48].fpLinker = 0;
-    inventory[0x40].szName = "feetWidth";
-    inventory[0x40].eType = FIELDTYPE_CHAR;
-    inventory[0x40].nOffset = 0xd8;
-    inventory[0x41].szName = "feetHeight";
-    inventory[0x41].eType = FIELDTYPE_CHAR;
-    inventory[0x41].nOffset = 0xd9;
-    inventory[0x42].szName = "glovesLeft";
-    inventory[0x42].eType = FIELDTYPE_INT;
-    inventory[0x42].nOffset = 0xdc;
-    inventory[0x43].szName = "glovesRight";
-    inventory[0x43].eType = FIELDTYPE_INT;
-    inventory[0x43].nOffset = 0xe0;
-    inventory[0x44].szName = "glovesTop";
-    inventory[0x44].eType = FIELDTYPE_INT;
-    inventory[0x44].nOffset = 0xe4;
-    inventory[0x45].szName = "glovesBottom";
-    inventory[0x45].eType = FIELDTYPE_INT;
-    inventory[0x45].nOffset = 0xe8;
-    inventory[0x46].szName = "glovesWidth";
-    inventory[0x46].eType = FIELDTYPE_CHAR;
-    inventory[0x46].nOffset = 0xec;
-    inventory[0x47].szName = "glovesHeight";
-    inventory[0x47].eType = FIELDTYPE_CHAR;
-    inventory[0x47].nOffset = 0xed;
-    inventory[0x48].szName = "end";
+    D2BinFieldInputStrc inventory[73] = {
+      {"invLeft", FIELDTYPE_INT, 0, 0, 0},
+      {"invRight", FIELDTYPE_INT, 0, 4, 0},
+      {"invTop", FIELDTYPE_INT, 0, 8, 0},
+      {"invBottom", FIELDTYPE_INT, 0, 0xc, 0},
+      {"gridX", FIELDTYPE_CHAR, 0, 0x10, 0},
+      {"gridY", FIELDTYPE_CHAR, 0, 0x11, 0},
+      {"gridLeft", FIELDTYPE_INT, 0, 0x14, 0},
+      {"gridRight", FIELDTYPE_INT, 0, 0x18, 0},
+      {"gridTop", FIELDTYPE_INT, 0, 0x1c, 0},
+      {"gridBottom", FIELDTYPE_INT, 0, 0x20, 0},
+      {"gridBoxWidth", FIELDTYPE_CHAR, 0, 0x24, 0},
+      {"gridBoxHeight", FIELDTYPE_CHAR, 0, 0x25, 0},
+      {"rArmLeft", FIELDTYPE_INT, 0, 0x28, 0},
+      {"rArmRight", FIELDTYPE_INT, 0, 0x2c, 0},
+      {"rArmTop", FIELDTYPE_INT, 0, 0x30, 0},
+      {"rArmBottom", FIELDTYPE_INT, 0, 0x34, 0},
+      {"rArmWidth", FIELDTYPE_CHAR, 0, 0x38, 0},
+      {"rArmHeight", FIELDTYPE_CHAR, 0, 0x39, 0},
+      {"torsoLeft", FIELDTYPE_INT, 0, 0x3c, 0},
+      {"torsoRight", FIELDTYPE_INT, 0, 0x40, 0},
+      {"torsoTop", FIELDTYPE_INT, 0, 0x44, 0},
+      {"torsoBottom", FIELDTYPE_INT, 0, 0x48, 0},
+      {"torsoWidth", FIELDTYPE_CHAR, 0, 0x4c, 0},
+      {"torsoHeight", FIELDTYPE_CHAR, 0, 0x4d, 0},
+      {"lArmLeft", FIELDTYPE_INT, 0, 0x50, 0},
+      {"lArmRight", FIELDTYPE_INT, 0, 0x54, 0},
+      {"lArmTop", FIELDTYPE_INT, 0, 0x58, 0},
+      {"lArmBottom", FIELDTYPE_INT, 0, 0x5c, 0},
+      {"lArmWidth", FIELDTYPE_CHAR, 0, 0x60, 0},
+      {"lArmHeight", FIELDTYPE_CHAR, 0, 0x61, 0},
+      {"headLeft", FIELDTYPE_INT, 0, 100, 0},
+      {"headRight", FIELDTYPE_INT, 0, 0x68, 0},
+      {"headTop", FIELDTYPE_INT, 0, 0x6c, 0},
+      {"headBottom", FIELDTYPE_INT, 0, 0x70, 0},
+      {"headWidth", FIELDTYPE_CHAR, 0, 0x74, 0},
+      {"headHeight", FIELDTYPE_CHAR, 0, 0x75, 0},
+      {"neckLeft", FIELDTYPE_INT, 0, 0x78, 0},
+      {"neckRight", FIELDTYPE_INT, 0, 0x7c, 0},
+      {"neckTop", FIELDTYPE_INT, 0, 0x80, 0},
+      {"neckBottom", FIELDTYPE_INT, 0, 0x84, 0},
+      {"neckWidth", FIELDTYPE_CHAR, 0, 0x88, 0},
+      {"neckHeight", FIELDTYPE_CHAR, 0, 0x89, 0},
+      {"rHandLeft", FIELDTYPE_INT, 0, 0x8c, 0},
+      {"rHandRight", FIELDTYPE_INT, 0, 0x90, 0},
+      {"rHandTop", FIELDTYPE_INT, 0, 0x94, 0},
+      {"rHandBottom", FIELDTYPE_INT, 0, 0x98, 0},
+      {"rHandWidth", FIELDTYPE_CHAR, 0, 0x9c, 0},
+      {"rHandHeight", FIELDTYPE_CHAR, 0, 0x9d, 0},
+      {"lHandLeft", FIELDTYPE_INT, 0, 0xa0, 0},
+      {"lHandRight", FIELDTYPE_INT, 0, 0xa4, 0},
+      {"lHandTop", FIELDTYPE_INT, 0, 0xa8, 0},
+      {"lHandBottom", FIELDTYPE_INT, 0, 0xac, 0},
+      {"lHandWidth", FIELDTYPE_CHAR, 0, 0xb0, 0},
+      {"lHandHeight", FIELDTYPE_CHAR, 0, 0xb1, 0},
+      {"beltLeft", FIELDTYPE_INT, 0, 0xb4, 0},
+      {"beltRight", FIELDTYPE_INT, 0, 0xb8, 0},
+      {"beltTop", FIELDTYPE_INT, 0, 0xbc, 0},
+      {"beltBottom", FIELDTYPE_INT, 0, 0xc0, 0},
+      {"beltWidth", FIELDTYPE_CHAR, 0, 0xc4, 0},
+      {"beltHeight", FIELDTYPE_CHAR, 0, 0xc5, 0},
+      {"feetLeft", FIELDTYPE_INT, 0, 200, 0},
+      {"feetRight", FIELDTYPE_INT, 0, 0xcc, 0},
+      {"feetTop", FIELDTYPE_INT, 0, 0xd0, 0},
+      {"feetBottom", FIELDTYPE_INT, 0, 0xd4, 0},
+      {"feetWidth", FIELDTYPE_CHAR, 0, 0xd8, 0},
+      {"feetHeight", FIELDTYPE_CHAR, 0, 0xd9, 0},
+      {"glovesLeft", FIELDTYPE_INT, 0, 0xdc, 0},
+      {"glovesRight", FIELDTYPE_INT, 0, 0xe0, 0},
+      {"glovesTop", FIELDTYPE_INT, 0, 0xe4, 0},
+      {"glovesBottom", FIELDTYPE_INT, 0, 0xe8, 0},
+      {"glovesWidth", FIELDTYPE_CHAR, 0, 0xec, 0},
+      {"glovesHeight", FIELDTYPE_CHAR, 0, 0xed, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     pTxtInventory = (D2InventoryTxt*)DataTbls::CompileTxt(pMemory, "inventory", inventory, &nTxtInventorySize, 0xf0);
     if (nTxtInventorySize == 0x20) {
       return;

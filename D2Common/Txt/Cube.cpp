@@ -706,529 +706,114 @@ void __fastcall DATATBLS_LinkerItemStatCost(char * pszStatName, int32_t * pnStat
 void __fastcall CUBE_LoadCubeMainTable(D2PoolManagerStrc * pMemory) {
     BOOL _bFileExists;
     bool bFileExists;
-    D2BinFieldInputStrc cubemain[104];
     void* pFileData;
     char szFilePath[260];
-    cubemain[0].szName = "enabled";
-    cubemain[0].eType = FIELDTYPE_CHAR;
-    cubemain[0].nSize = 0;
-    cubemain[0].nOffset = 0;
-    cubemain[0].fpLinker = 0;
-    cubemain[1].szName = "ladder";
-    cubemain[1].eType = FIELDTYPE_CHAR;
-    cubemain[1].nSize = 0;
-    cubemain[1].nOffset = 1;
-    cubemain[1].fpLinker = 0;
-    cubemain[2].szName = "min diff";
-    cubemain[2].eType = FIELDTYPE_CHAR;
-    cubemain[2].nSize = 0;
-    cubemain[2].nOffset = 2;
-    cubemain[2].fpLinker = 0;
-    cubemain[3].szName = "op";
-    cubemain[3].eType = FIELDTYPE_CHAR;
-    cubemain[3].nSize = 0;
-    cubemain[3].nOffset = 4;
-    cubemain[3].fpLinker = 0;
-    cubemain[4].szName = "param";
-    cubemain[4].eType = FIELDTYPE_INT;
-    cubemain[4].nSize = 0;
-    cubemain[4].nOffset = 8;
-    cubemain[4].fpLinker = (void*)DATATBLS_LinkerItemStatCost;
-    cubemain[5].szName = "value";
-    cubemain[5].eType = FIELDTYPE_INT;
-    cubemain[5].nSize = 0;
-    cubemain[5].nOffset = 0xc;
-    cubemain[5].fpLinker = 0;
-    cubemain[6].szName = "class";
-    cubemain[6].eType = FIELDTYPE_CODE_CHAR;
-    cubemain[6].nSize = 0;
-    cubemain[6].nOffset = 3;
-    cubemain[6].fpLinker = &sgtDataTable.pTxtPlayerClassLink;
-    cubemain[7].szName = "numinputs";
-    cubemain[7].eType = FIELDTYPE_CHAR;
-    cubemain[7].nSize = 0;
-    cubemain[7].nOffset = 0x10;
-    cubemain[7].fpLinker = 0;
-    cubemain[8].szName = "version";
-    cubemain[8].eType = FIELDTYPE_SHORT;
-    cubemain[8].nSize = 0;
-    cubemain[8].nOffset = 0x12;
-    cubemain[8].fpLinker = 0;
-    cubemain[9].szName = "input 1";
-    cubemain[9].eType = FIELDTYPE_LINKER_BIT;
-    cubemain[9].nSize = 0;
-    cubemain[9].nOffset = 0;
-    cubemain[9].fpLinker = (void*)CUBE_ParseInputItemField;
-    cubemain[10].szName = "input 2";
-    cubemain[10].eType = FIELDTYPE_LINKER_BIT;
-    cubemain[10].nSize = 0;
-    cubemain[10].nOffset = 1;
-    cubemain[10].fpLinker = (void*)CUBE_ParseInputItemField;
-    cubemain[0xb].szName = "input 3";
-    cubemain[0xb].eType = FIELDTYPE_LINKER_BIT;
-    cubemain[0xb].nSize = 0;
-    cubemain[0xb].nOffset = 2;
-    cubemain[0xb].fpLinker = (void*)CUBE_ParseInputItemField;
-    cubemain[0xc].szName = "input 4";
-    cubemain[0xc].eType = FIELDTYPE_LINKER_BIT;
-    cubemain[0xc].nSize = 0;
-    cubemain[0xc].nOffset = 3;
-    cubemain[0xc].fpLinker = (void*)CUBE_ParseInputItemField;
-    cubemain[0xd].szName = "input 5";
-    cubemain[0xd].eType = FIELDTYPE_LINKER_BIT;
-    cubemain[0xd].nSize = 0;
-    cubemain[0xd].nOffset = 4;
-    cubemain[0xd].fpLinker = (void*)CUBE_ParseInputItemField;
-    cubemain[0xe].szName = "input 6";
-    cubemain[0xe].fpLinker = (void*)CUBE_ParseInputItemField;
-    cubemain[0xf].fpLinker = (void*)CUBE_ParseInputItemField;
-    cubemain[0xe].eType = FIELDTYPE_LINKER_BIT;
-    cubemain[0xe].nSize = 0;
-    cubemain[0xe].nOffset = 5;
-    cubemain[0xf].szName = "input 7";
-    cubemain[0xf].eType = FIELDTYPE_LINKER_BIT;
-    cubemain[0xf].nSize = 0;
-    cubemain[0xf].nOffset = 6;
-    cubemain[0x10].szName = "output";
-    cubemain[0x10].eType = FIELDTYPE_LINKER_BIT;
-    cubemain[0x10].nSize = 0;
-    cubemain[0x10].nOffset = 0;
-    cubemain[0x10].fpLinker = (void*)CUBE_ParseOutputItemField;
-    cubemain[0x11].szName = "lvl";
-    cubemain[0x11].eType = FIELDTYPE_CHAR;
-    cubemain[0x11].nSize = 0;
-    cubemain[0x11].nOffset = 0x55;
-    cubemain[0x11].fpLinker = 0;
-    cubemain[0x12].szName = "plvl";
-    cubemain[0x12].eType = FIELDTYPE_CHAR;
-    cubemain[0x12].nSize = 0;
-    cubemain[0x12].nOffset = 0x56;
-    cubemain[0x12].fpLinker = 0;
-    cubemain[0x13].szName = "ilvl";
-    cubemain[0x13].eType = FIELDTYPE_CHAR;
-    cubemain[0x13].nSize = 0;
-    cubemain[0x13].nOffset = 0x57;
-    cubemain[0x13].fpLinker = 0;
-    cubemain[0x14].szName = "mod 1";
-    cubemain[0x14].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x14].nSize = 0;
-    cubemain[0x14].nOffset = 100;
-    cubemain[0x14].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x15].szName = "mod 1 chance";
-    cubemain[0x15].eType = FIELDTYPE_CHAR;
-    cubemain[0x15].nSize = 0;
-    cubemain[0x15].nOffset = 0x6e;
-    cubemain[0x15].fpLinker = 0;
-    cubemain[0x16].szName = "mod 1 param";
-    cubemain[0x16].eType = FIELDTYPE_SHORT;
-    cubemain[0x16].nSize = 0;
-    cubemain[0x16].nOffset = 0x68;
-    cubemain[0x16].fpLinker = 0;
-    cubemain[0x17].szName = "mod 1 min";
-    cubemain[0x17].eType = FIELDTYPE_SHORT;
-    cubemain[0x17].nSize = 0;
-    cubemain[0x17].nOffset = 0x6a;
-    cubemain[0x17].fpLinker = 0;
-    cubemain[0x18].szName = "mod 1 max";
-    cubemain[0x18].eType = FIELDTYPE_SHORT;
-    cubemain[0x18].nSize = 0;
-    cubemain[0x18].nOffset = 0x6c;
-    cubemain[0x18].fpLinker = 0;
-    cubemain[0x19].szName = "mod 2";
-    cubemain[0x19].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x19].nSize = 0;
-    cubemain[0x19].nOffset = 0x70;
-    cubemain[0x19].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x1a].szName = "mod 2 chance";
-    cubemain[0x1a].eType = FIELDTYPE_CHAR;
-    cubemain[0x1a].nSize = 0;
-    cubemain[0x1a].nOffset = 0x7a;
-    cubemain[0x1a].fpLinker = 0;
-    cubemain[0x1b].szName = "mod 2 param";
-    cubemain[0x1b].eType = FIELDTYPE_SHORT;
-    cubemain[0x1b].nSize = 0;
-    cubemain[0x1b].nOffset = 0x74;
-    cubemain[0x1b].fpLinker = 0;
-    cubemain[0x1c].szName = "mod 2 min";
-    cubemain[0x1c].eType = FIELDTYPE_SHORT;
-    cubemain[0x1c].nSize = 0;
-    cubemain[0x1c].nOffset = 0x76;
-    cubemain[0x1c].fpLinker = 0;
-    cubemain[0x1d].szName = "mod 2 max";
-    cubemain[0x1d].eType = FIELDTYPE_SHORT;
-    cubemain[0x1d].nSize = 0;
-    cubemain[0x1d].nOffset = 0x78;
-    cubemain[0x1d].fpLinker = 0;
-    cubemain[0x1e].szName = "mod 3";
-    cubemain[0x1e].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x1e].nSize = 0;
-    cubemain[0x1e].nOffset = 0x7c;
-    cubemain[0x1e].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x1f].szName = "mod 3 chance";
-    cubemain[0x1f].eType = FIELDTYPE_CHAR;
-    cubemain[0x1f].nSize = 0;
-    cubemain[0x1f].nOffset = 0x86;
-    cubemain[0x1f].fpLinker = 0;
-    cubemain[0x20].szName = "mod 3 param";
-    cubemain[0x20].eType = FIELDTYPE_SHORT;
-    cubemain[0x20].nSize = 0;
-    cubemain[0x20].nOffset = 0x80;
-    cubemain[0x20].fpLinker = 0;
-    cubemain[0x21].szName = "mod 3 min";
-    cubemain[0x21].eType = FIELDTYPE_SHORT;
-    cubemain[0x21].nSize = 0;
-    cubemain[0x21].nOffset = 0x82;
-    cubemain[0x21].fpLinker = 0;
-    cubemain[0x22].szName = "mod 3 max";
-    cubemain[0x22].eType = FIELDTYPE_SHORT;
-    cubemain[0x22].nSize = 0;
-    cubemain[0x22].nOffset = 0x84;
-    cubemain[0x22].fpLinker = 0;
-    cubemain[0x23].szName = "mod 4";
-    cubemain[0x23].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x23].nSize = 0;
-    cubemain[0x23].nOffset = 0x88;
-    cubemain[0x23].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x24].szName = "mod 4 chance";
-    cubemain[0x24].eType = FIELDTYPE_CHAR;
-    cubemain[0x24].nSize = 0;
-    cubemain[0x24].nOffset = 0x92;
-    cubemain[0x24].fpLinker = 0;
-    cubemain[0x25].szName = "mod 4 param";
-    cubemain[0x25].eType = FIELDTYPE_SHORT;
-    cubemain[0x25].nSize = 0;
-    cubemain[0x25].nOffset = 0x8c;
-    cubemain[0x25].fpLinker = 0;
-    cubemain[0x26].szName = "mod 4 min";
-    cubemain[0x26].eType = FIELDTYPE_SHORT;
-    cubemain[0x26].nSize = 0;
-    cubemain[0x26].nOffset = 0x8e;
-    cubemain[0x26].fpLinker = 0;
-    cubemain[0x27].szName = "mod 4 max";
-    cubemain[0x27].eType = FIELDTYPE_SHORT;
-    cubemain[0x27].nSize = 0;
-    cubemain[0x27].nOffset = 0x90;
-    cubemain[0x27].fpLinker = 0;
-    cubemain[0x28].szName = "mod 5";
-    cubemain[0x28].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x28].nSize = 0;
-    cubemain[0x28].nOffset = 0x94;
-    cubemain[0x28].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x29].szName = "mod 5 chance";
-    cubemain[0x29].eType = FIELDTYPE_CHAR;
-    cubemain[0x29].nSize = 0;
-    cubemain[0x29].nOffset = 0x9e;
-    cubemain[0x29].fpLinker = 0;
-    cubemain[0x2a].szName = "mod 5 param";
-    cubemain[0x2a].eType = FIELDTYPE_SHORT;
-    cubemain[0x2a].nSize = 0;
-    cubemain[0x2a].nOffset = 0x98;
-    cubemain[0x2a].fpLinker = 0;
-    cubemain[0x2b].szName = "mod 5 min";
-    cubemain[0x2b].eType = FIELDTYPE_SHORT;
-    cubemain[0x2b].nSize = 0;
-    cubemain[0x2b].nOffset = 0x9a;
-    cubemain[0x2b].fpLinker = 0;
-    cubemain[0x2c].szName = "mod 5 max";
-    cubemain[0x2c].eType = FIELDTYPE_SHORT;
-    cubemain[0x2c].nSize = 0;
-    cubemain[0x2c].nOffset = 0x9c;
-    cubemain[0x2c].fpLinker = 0;
-    cubemain[0x2d].szName = "output b";
-    cubemain[0x2d].eType = FIELDTYPE_LINKER_BIT;
-    cubemain[0x2d].nSize = 0;
-    cubemain[0x2d].nOffset = 1;
-    cubemain[0x2d].fpLinker = (void*)CUBE_ParseOutputItemField;
-    cubemain[0x2e].szName = "b lvl";
-    cubemain[0x2e].eType = FIELDTYPE_CHAR;
-    cubemain[0x2e].nSize = 0;
-    cubemain[0x2e].nOffset = 0xa9;
-    cubemain[0x2e].fpLinker = 0;
-    cubemain[0x2f].szName = "b plvl";
-    cubemain[0x2f].eType = FIELDTYPE_CHAR;
-    cubemain[0x2f].nSize = 0;
-    cubemain[0x2f].nOffset = 0xaa;
-    cubemain[0x2f].fpLinker = 0;
-    cubemain[0x30].szName = "b ilvl";
-    cubemain[0x30].eType = FIELDTYPE_CHAR;
-    cubemain[0x30].nSize = 0;
-    cubemain[0x30].nOffset = 0xab;
-    cubemain[0x30].fpLinker = 0;
-    cubemain[0x31].szName = "b mod 1";
-    cubemain[0x31].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x31].nSize = 0;
-    cubemain[0x31].nOffset = 0xb8;
-    cubemain[0x31].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x32].szName = "b mod 1 chance";
-    cubemain[0x32].eType = FIELDTYPE_CHAR;
-    cubemain[0x32].nSize = 0;
-    cubemain[0x32].nOffset = 0xc2;
-    cubemain[0x32].fpLinker = 0;
-    cubemain[0x33].szName = "b mod 1 param";
-    cubemain[0x33].eType = FIELDTYPE_SHORT;
-    cubemain[0x33].nSize = 0;
-    cubemain[0x33].nOffset = 0xbc;
-    cubemain[0x33].fpLinker = 0;
-    cubemain[0x34].szName = "b mod 1 min";
-    cubemain[0x34].eType = FIELDTYPE_SHORT;
-    cubemain[0x34].nSize = 0;
-    cubemain[0x34].nOffset = 0xbe;
-    cubemain[0x34].fpLinker = 0;
-    cubemain[0x35].szName = "b mod 1 max";
-    cubemain[0x35].eType = FIELDTYPE_SHORT;
-    cubemain[0x35].nSize = 0;
-    cubemain[0x35].nOffset = 0xc0;
-    cubemain[0x35].fpLinker = 0;
-    cubemain[0x36].szName = "b mod 2";
-    cubemain[0x36].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x36].nSize = 0;
-    cubemain[0x36].nOffset = 0xc4;
-    cubemain[0x36].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x37].szName = "b mod 2 chance";
-    cubemain[0x37].eType = FIELDTYPE_CHAR;
-    cubemain[0x37].nSize = 0;
-    cubemain[0x37].nOffset = 0xce;
-    cubemain[0x37].fpLinker = 0;
-    cubemain[0x38].szName = "b mod 2 param";
-    cubemain[0x38].eType = FIELDTYPE_SHORT;
-    cubemain[0x38].nSize = 0;
-    cubemain[0x38].nOffset = 200;
-    cubemain[0x38].fpLinker = 0;
-    cubemain[0x39].szName = "b mod 2 min";
-    cubemain[0x39].eType = FIELDTYPE_SHORT;
-    cubemain[0x39].nSize = 0;
-    cubemain[0x39].nOffset = 0xca;
-    cubemain[0x39].fpLinker = 0;
-    cubemain[0x3a].szName = "b mod 2 max";
-    cubemain[0x3a].eType = FIELDTYPE_SHORT;
-    cubemain[0x3a].nSize = 0;
-    cubemain[0x3a].nOffset = 0xcc;
-    cubemain[0x3a].fpLinker = 0;
-    cubemain[0x3b].szName = "b mod 3";
-    cubemain[0x3b].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x3b].nSize = 0;
-    cubemain[0x3b].nOffset = 0xd0;
-    cubemain[0x3b].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x3c].szName = "b mod 3 chance";
-    cubemain[0x3c].eType = FIELDTYPE_CHAR;
-    cubemain[0x3c].nSize = 0;
-    cubemain[0x3c].nOffset = 0xda;
-    cubemain[0x3c].fpLinker = 0;
-    cubemain[0x3d].szName = "b mod 3 param";
-    cubemain[0x3d].eType = FIELDTYPE_SHORT;
-    cubemain[0x3d].nSize = 0;
-    cubemain[0x3d].nOffset = 0xd4;
-    cubemain[0x3d].fpLinker = 0;
-    cubemain[0x3e].szName = "b mod 3 min";
-    cubemain[0x3e].eType = FIELDTYPE_SHORT;
-    cubemain[0x3e].nSize = 0;
-    cubemain[0x3e].nOffset = 0xd6;
-    cubemain[0x3e].fpLinker = 0;
-    cubemain[0x3f].szName = "b mod 3 max";
-    cubemain[0x3f].eType = FIELDTYPE_SHORT;
-    cubemain[0x3f].nSize = 0;
-    cubemain[0x3f].nOffset = 0xd8;
-    cubemain[0x3f].fpLinker = 0;
-    cubemain[0x40].szName = "b mod 4";
-    cubemain[0x40].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x40].nSize = 0;
-    cubemain[0x40].nOffset = 0xdc;
-    cubemain[0x40].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x41].szName = "b mod 4 chance";
-    cubemain[0x41].eType = FIELDTYPE_CHAR;
-    cubemain[0x41].nSize = 0;
-    cubemain[0x41].nOffset = 0xe6;
-    cubemain[0x41].fpLinker = 0;
-    cubemain[0x42].szName = "b mod 4 param";
-    cubemain[0x42].eType = FIELDTYPE_SHORT;
-    cubemain[0x42].nSize = 0;
-    cubemain[0x42].nOffset = 0xe0;
-    cubemain[0x42].fpLinker = 0;
-    cubemain[0x43].szName = "b mod 4 min";
-    cubemain[0x43].eType = FIELDTYPE_SHORT;
-    cubemain[0x43].nSize = 0;
-    cubemain[0x43].nOffset = 0xe2;
-    cubemain[0x43].fpLinker = 0;
-    cubemain[0x44].szName = "b mod 4 max";
-    cubemain[0x44].eType = FIELDTYPE_SHORT;
-    cubemain[0x44].nSize = 0;
-    cubemain[0x44].nOffset = 0xe4;
-    cubemain[0x44].fpLinker = 0;
-    cubemain[0x45].szName = "b mod 5";
-    cubemain[0x45].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x45].nSize = 0;
-    cubemain[0x45].nOffset = 0xe8;
-    cubemain[0x45].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x46].szName = "b mod 5 chance";
-    cubemain[0x46].eType = FIELDTYPE_CHAR;
-    cubemain[0x46].nSize = 0;
-    cubemain[0x46].nOffset = 0xf2;
-    cubemain[0x46].fpLinker = 0;
-    cubemain[0x47].szName = "b mod 5 param";
-    cubemain[0x47].eType = FIELDTYPE_SHORT;
-    cubemain[0x47].nSize = 0;
-    cubemain[0x47].nOffset = 0xec;
-    cubemain[0x47].fpLinker = 0;
-    cubemain[0x48].szName = "b mod 5 min";
-    cubemain[0x48].eType = FIELDTYPE_SHORT;
-    cubemain[0x48].nSize = 0;
-    cubemain[0x48].nOffset = 0xee;
-    cubemain[0x48].fpLinker = 0;
-    cubemain[0x49].szName = "b mod 5 max";
-    cubemain[0x49].eType = FIELDTYPE_SHORT;
-    cubemain[0x49].nSize = 0;
-    cubemain[0x49].nOffset = 0xf0;
-    cubemain[0x49].fpLinker = 0;
-    cubemain[0x4a].szName = "output c";
-    cubemain[0x4a].eType = FIELDTYPE_LINKER_BIT;
-    cubemain[0x4a].nSize = 0;
-    cubemain[0x4a].nOffset = 2;
-    cubemain[0x4a].fpLinker = (void*)CUBE_ParseOutputItemField;
-    cubemain[0x4b].szName = "c lvl";
-    cubemain[0x4b].eType = FIELDTYPE_CHAR;
-    cubemain[0x4b].nSize = 0;
-    cubemain[0x4b].nOffset = 0xfd;
-    cubemain[0x4b].fpLinker = 0;
-    cubemain[0x4c].szName = "c plvl";
-    cubemain[0x4c].eType = FIELDTYPE_CHAR;
-    cubemain[0x4c].nSize = 0;
-    cubemain[0x4c].nOffset = 0xfe;
-    cubemain[0x4c].fpLinker = 0;
-    cubemain[0x4d].szName = "c ilvl";
-    cubemain[0x4d].eType = FIELDTYPE_CHAR;
-    cubemain[0x4d].nSize = 0;
-    cubemain[0x4d].nOffset = 0xff;
-    cubemain[0x4d].fpLinker = 0;
-    cubemain[0x4e].szName = "c mod 1";
-    cubemain[0x4e].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x4e].nSize = 0;
-    cubemain[0x4e].nOffset = 0x10c;
-    cubemain[0x4e].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x4f].szName = "c mod 1 chance";
-    cubemain[0x4f].eType = FIELDTYPE_CHAR;
-    cubemain[0x4f].nSize = 0;
-    cubemain[0x4f].nOffset = 0x116;
-    cubemain[0x4f].fpLinker = 0;
-    cubemain[0x50].szName = "c mod 1 param";
-    cubemain[0x50].eType = FIELDTYPE_SHORT;
-    cubemain[0x50].nSize = 0;
-    cubemain[0x50].nOffset = 0x110;
-    cubemain[0x50].fpLinker = 0;
-    cubemain[0x51].szName = "c mod 1 min";
-    cubemain[0x51].eType = FIELDTYPE_SHORT;
-    cubemain[0x51].nSize = 0;
-    cubemain[0x51].nOffset = 0x112;
-    cubemain[0x51].fpLinker = 0;
-    cubemain[0x52].szName = "c mod 1 max";
-    cubemain[0x52].eType = FIELDTYPE_SHORT;
-    cubemain[0x52].nSize = 0;
-    cubemain[0x52].nOffset = 0x114;
-    cubemain[0x52].fpLinker = 0;
-    cubemain[0x53].szName = "c mod 2";
-    cubemain[0x53].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x53].nSize = 0;
-    cubemain[0x53].nOffset = 0x118;
-    cubemain[0x53].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x54].szName = "c mod 2 chance";
-    cubemain[0x54].eType = FIELDTYPE_CHAR;
-    cubemain[0x54].nSize = 0;
-    cubemain[0x54].nOffset = 0x122;
-    cubemain[0x54].fpLinker = 0;
-    cubemain[0x55].szName = "c mod 2 param";
-    cubemain[0x55].eType = FIELDTYPE_SHORT;
-    cubemain[0x55].nSize = 0;
-    cubemain[0x55].nOffset = 0x11c;
-    cubemain[0x55].fpLinker = 0;
-    cubemain[0x56].szName = "c mod 2 min";
-    cubemain[0x56].eType = FIELDTYPE_SHORT;
-    cubemain[0x56].nSize = 0;
-    cubemain[0x56].nOffset = 0x11e;
-    cubemain[0x56].fpLinker = 0;
-    cubemain[0x57].szName = "c mod 2 max";
-    cubemain[0x57].eType = FIELDTYPE_SHORT;
-    cubemain[0x57].nSize = 0;
-    cubemain[0x57].nOffset = 0x120;
-    cubemain[0x57].fpLinker = 0;
-    cubemain[0x58].szName = "c mod 3";
-    cubemain[0x58].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x58].nSize = 0;
-    cubemain[0x58].nOffset = 0x124;
-    cubemain[0x58].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x59].szName = "c mod 3 chance";
-    cubemain[0x59].eType = FIELDTYPE_CHAR;
-    cubemain[0x59].nSize = 0;
-    cubemain[0x59].nOffset = 0x12e;
-    cubemain[0x59].fpLinker = 0;
-    cubemain[0x5a].szName = "c mod 3 param";
-    cubemain[0x5a].eType = FIELDTYPE_SHORT;
-    cubemain[0x5a].nSize = 0;
-    cubemain[0x5a].nOffset = 0x128;
-    cubemain[0x5a].fpLinker = 0;
-    cubemain[0x5b].szName = "c mod 3 min";
-    cubemain[0x5b].eType = FIELDTYPE_SHORT;
-    cubemain[0x5b].nSize = 0;
-    cubemain[0x5b].nOffset = 0x12a;
-    cubemain[0x5b].fpLinker = 0;
-    cubemain[0x5c].szName = "c mod 3 max";
-    cubemain[0x5c].eType = FIELDTYPE_SHORT;
-    cubemain[0x5c].nSize = 0;
-    cubemain[0x5c].nOffset = 300;
-    cubemain[0x5c].fpLinker = 0;
-    cubemain[0x5d].szName = "c mod 4";
-    cubemain[0x5d].eType = FIELDTYPE_NAME_INT;
-    cubemain[0x5d].nSize = 0;
-    cubemain[0x5d].nOffset = 0x130;
-    cubemain[0x5d].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[0x5e].szName = "c mod 4 chance";
-    cubemain[0x5e].eType = FIELDTYPE_CHAR;
-    cubemain[0x5e].nSize = 0;
-    cubemain[0x5e].nOffset = 0x13a;
-    cubemain[0x5e].fpLinker = 0;
-    cubemain[0x5f].nSize = 0;
-    cubemain[0x5f].fpLinker = 0;
-    cubemain[0x60].nSize = 0;
-    cubemain[0x60].fpLinker = 0;
-    cubemain[0x61].nSize = 0;
-    cubemain[0x61].fpLinker = 0;
-    cubemain[0x62].nSize = 0;
-    cubemain[99].nSize = 0;
-    cubemain[99].fpLinker = 0;
-    cubemain[100].nSize = 0;
-    cubemain[100].fpLinker = 0;
-    cubemain[0x65].nSize = 0;
-    cubemain[0x65].fpLinker = 0;
-    cubemain[0x66].nSize = 0;
-    cubemain[0x66].fpLinker = 0;
-    cubemain[0x67].eType = FIELDTYPE_END;
-    cubemain[0x67].nSize = 0;
-    cubemain[0x67].nOffset = 0;
-    cubemain[0x67].fpLinker = 0;
-    cubemain[0x62].eType = FIELDTYPE_NAME_INT;
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ cubemain[0x5f].szName = "c mod 4 param";
-    cubemain[0x5f].eType = FIELDTYPE_SHORT;
-    cubemain[0x5f].nOffset = 0x134;
-    cubemain[0x60].szName = "c mod 4 min";
-    cubemain[0x60].eType = FIELDTYPE_SHORT;
-    cubemain[0x60].nOffset = 0x136;
-    cubemain[0x61].szName = "c mod 4 max";
-    cubemain[0x61].eType = FIELDTYPE_SHORT;
-    cubemain[0x61].nOffset = 0x138;
-    cubemain[0x62].szName = "c mod 5";
-    cubemain[0x62].nOffset = 0x13c;
-    cubemain[0x62].fpLinker = &sgtDataTable.pTxtPropertiesLink;
-    cubemain[99].szName = "c mod 5 chance";
-    cubemain[99].eType = FIELDTYPE_CHAR;
-    cubemain[99].nOffset = 0x146;
-    cubemain[100].szName = "c mod 5 param";
-    cubemain[100].eType = FIELDTYPE_SHORT;
-    cubemain[100].nOffset = 0x140;
-    cubemain[0x65].szName = "c mod 5 min";
-    cubemain[0x65].eType = FIELDTYPE_SHORT;
-    cubemain[0x65].nOffset = 0x142;
-    cubemain[0x66].szName = "c mod 5 max";
-    cubemain[0x66].eType = FIELDTYPE_SHORT;
-    cubemain[0x66].nOffset = 0x144;
-    cubemain[0x67].szName = "end";
+    D2BinFieldInputStrc cubemain[104] = {
+      {"enabled", FIELDTYPE_CHAR, 0, 0, 0},
+      {"ladder", FIELDTYPE_CHAR, 0, 1, 0},
+      {"min diff", FIELDTYPE_CHAR, 0, 2, 0},
+      {"op", FIELDTYPE_CHAR, 0, 4, 0},
+      {"param", FIELDTYPE_INT, 0, 8, (void*)DATATBLS_LinkerItemStatCost},
+      {"value", FIELDTYPE_INT, 0, 0xc, 0},
+      {"class", FIELDTYPE_CODE_CHAR, 0, 3, &sgtDataTable.pTxtPlayerClassLink},
+      {"numinputs", FIELDTYPE_CHAR, 0, 0x10, 0},
+      {"version", FIELDTYPE_SHORT, 0, 0x12, 0},
+      {"input 1", FIELDTYPE_LINKER_BIT, 0, 0, (void*)CUBE_ParseInputItemField},
+      {"input 2", FIELDTYPE_LINKER_BIT, 0, 1, (void*)CUBE_ParseInputItemField},
+      {"input 3", FIELDTYPE_LINKER_BIT, 0, 2, (void*)CUBE_ParseInputItemField},
+      {"input 4", FIELDTYPE_LINKER_BIT, 0, 3, (void*)CUBE_ParseInputItemField},
+      {"input 5", FIELDTYPE_LINKER_BIT, 0, 4, (void*)CUBE_ParseInputItemField},
+      {"input 6", FIELDTYPE_LINKER_BIT, 0, 5, (void*)CUBE_ParseInputItemField},
+      {"input 7", FIELDTYPE_LINKER_BIT, 0, 6, (void*)CUBE_ParseInputItemField},
+      {"output", FIELDTYPE_LINKER_BIT, 0, 0, (void*)CUBE_ParseOutputItemField},
+      {"lvl", FIELDTYPE_CHAR, 0, 0x55, 0},
+      {"plvl", FIELDTYPE_CHAR, 0, 0x56, 0},
+      {"ilvl", FIELDTYPE_CHAR, 0, 0x57, 0},
+      {"mod 1", FIELDTYPE_NAME_INT, 0, 100, &sgtDataTable.pTxtPropertiesLink},
+      {"mod 1 chance", FIELDTYPE_CHAR, 0, 0x6e, 0},
+      {"mod 1 param", FIELDTYPE_SHORT, 0, 0x68, 0},
+      {"mod 1 min", FIELDTYPE_SHORT, 0, 0x6a, 0},
+      {"mod 1 max", FIELDTYPE_SHORT, 0, 0x6c, 0},
+      {"mod 2", FIELDTYPE_NAME_INT, 0, 0x70, &sgtDataTable.pTxtPropertiesLink},
+      {"mod 2 chance", FIELDTYPE_CHAR, 0, 0x7a, 0},
+      {"mod 2 param", FIELDTYPE_SHORT, 0, 0x74, 0},
+      {"mod 2 min", FIELDTYPE_SHORT, 0, 0x76, 0},
+      {"mod 2 max", FIELDTYPE_SHORT, 0, 0x78, 0},
+      {"mod 3", FIELDTYPE_NAME_INT, 0, 0x7c, &sgtDataTable.pTxtPropertiesLink},
+      {"mod 3 chance", FIELDTYPE_CHAR, 0, 0x86, 0},
+      {"mod 3 param", FIELDTYPE_SHORT, 0, 0x80, 0},
+      {"mod 3 min", FIELDTYPE_SHORT, 0, 0x82, 0},
+      {"mod 3 max", FIELDTYPE_SHORT, 0, 0x84, 0},
+      {"mod 4", FIELDTYPE_NAME_INT, 0, 0x88, &sgtDataTable.pTxtPropertiesLink},
+      {"mod 4 chance", FIELDTYPE_CHAR, 0, 0x92, 0},
+      {"mod 4 param", FIELDTYPE_SHORT, 0, 0x8c, 0},
+      {"mod 4 min", FIELDTYPE_SHORT, 0, 0x8e, 0},
+      {"mod 4 max", FIELDTYPE_SHORT, 0, 0x90, 0},
+      {"mod 5", FIELDTYPE_NAME_INT, 0, 0x94, &sgtDataTable.pTxtPropertiesLink},
+      {"mod 5 chance", FIELDTYPE_CHAR, 0, 0x9e, 0},
+      {"mod 5 param", FIELDTYPE_SHORT, 0, 0x98, 0},
+      {"mod 5 min", FIELDTYPE_SHORT, 0, 0x9a, 0},
+      {"mod 5 max", FIELDTYPE_SHORT, 0, 0x9c, 0},
+      {"output b", FIELDTYPE_LINKER_BIT, 0, 1, (void*)CUBE_ParseOutputItemField},
+      {"b lvl", FIELDTYPE_CHAR, 0, 0xa9, 0},
+      {"b plvl", FIELDTYPE_CHAR, 0, 0xaa, 0},
+      {"b ilvl", FIELDTYPE_CHAR, 0, 0xab, 0},
+      {"b mod 1", FIELDTYPE_NAME_INT, 0, 0xb8, &sgtDataTable.pTxtPropertiesLink},
+      {"b mod 1 chance", FIELDTYPE_CHAR, 0, 0xc2, 0},
+      {"b mod 1 param", FIELDTYPE_SHORT, 0, 0xbc, 0},
+      {"b mod 1 min", FIELDTYPE_SHORT, 0, 0xbe, 0},
+      {"b mod 1 max", FIELDTYPE_SHORT, 0, 0xc0, 0},
+      {"b mod 2", FIELDTYPE_NAME_INT, 0, 0xc4, &sgtDataTable.pTxtPropertiesLink},
+      {"b mod 2 chance", FIELDTYPE_CHAR, 0, 0xce, 0},
+      {"b mod 2 param", FIELDTYPE_SHORT, 0, 200, 0},
+      {"b mod 2 min", FIELDTYPE_SHORT, 0, 0xca, 0},
+      {"b mod 2 max", FIELDTYPE_SHORT, 0, 0xcc, 0},
+      {"b mod 3", FIELDTYPE_NAME_INT, 0, 0xd0, &sgtDataTable.pTxtPropertiesLink},
+      {"b mod 3 chance", FIELDTYPE_CHAR, 0, 0xda, 0},
+      {"b mod 3 param", FIELDTYPE_SHORT, 0, 0xd4, 0},
+      {"b mod 3 min", FIELDTYPE_SHORT, 0, 0xd6, 0},
+      {"b mod 3 max", FIELDTYPE_SHORT, 0, 0xd8, 0},
+      {"b mod 4", FIELDTYPE_NAME_INT, 0, 0xdc, &sgtDataTable.pTxtPropertiesLink},
+      {"b mod 4 chance", FIELDTYPE_CHAR, 0, 0xe6, 0},
+      {"b mod 4 param", FIELDTYPE_SHORT, 0, 0xe0, 0},
+      {"b mod 4 min", FIELDTYPE_SHORT, 0, 0xe2, 0},
+      {"b mod 4 max", FIELDTYPE_SHORT, 0, 0xe4, 0},
+      {"b mod 5", FIELDTYPE_NAME_INT, 0, 0xe8, &sgtDataTable.pTxtPropertiesLink},
+      {"b mod 5 chance", FIELDTYPE_CHAR, 0, 0xf2, 0},
+      {"b mod 5 param", FIELDTYPE_SHORT, 0, 0xec, 0},
+      {"b mod 5 min", FIELDTYPE_SHORT, 0, 0xee, 0},
+      {"b mod 5 max", FIELDTYPE_SHORT, 0, 0xf0, 0},
+      {"output c", FIELDTYPE_LINKER_BIT, 0, 2, (void*)CUBE_ParseOutputItemField},
+      {"c lvl", FIELDTYPE_CHAR, 0, 0xfd, 0},
+      {"c plvl", FIELDTYPE_CHAR, 0, 0xfe, 0},
+      {"c ilvl", FIELDTYPE_CHAR, 0, 0xff, 0},
+      {"c mod 1", FIELDTYPE_NAME_INT, 0, 0x10c, &sgtDataTable.pTxtPropertiesLink},
+      {"c mod 1 chance", FIELDTYPE_CHAR, 0, 0x116, 0},
+      {"c mod 1 param", FIELDTYPE_SHORT, 0, 0x110, 0},
+      {"c mod 1 min", FIELDTYPE_SHORT, 0, 0x112, 0},
+      {"c mod 1 max", FIELDTYPE_SHORT, 0, 0x114, 0},
+      {"c mod 2", FIELDTYPE_NAME_INT, 0, 0x118, &sgtDataTable.pTxtPropertiesLink},
+      {"c mod 2 chance", FIELDTYPE_CHAR, 0, 0x122, 0},
+      {"c mod 2 param", FIELDTYPE_SHORT, 0, 0x11c, 0},
+      {"c mod 2 min", FIELDTYPE_SHORT, 0, 0x11e, 0},
+      {"c mod 2 max", FIELDTYPE_SHORT, 0, 0x120, 0},
+      {"c mod 3", FIELDTYPE_NAME_INT, 0, 0x124, &sgtDataTable.pTxtPropertiesLink},
+      {"c mod 3 chance", FIELDTYPE_CHAR, 0, 0x12e, 0},
+      {"c mod 3 param", FIELDTYPE_SHORT, 0, 0x128, 0},
+      {"c mod 3 min", FIELDTYPE_SHORT, 0, 0x12a, 0},
+      {"c mod 3 max", FIELDTYPE_SHORT, 0, 300, 0},
+      {"c mod 4", FIELDTYPE_NAME_INT, 0, 0x130, &sgtDataTable.pTxtPropertiesLink},
+      {"c mod 4 chance", FIELDTYPE_CHAR, 0, 0x13a, 0},
+      {"c mod 4 param", FIELDTYPE_SHORT, 0, 0x134, 0},
+      {"c mod 4 min", FIELDTYPE_SHORT, 0, 0x136, 0},
+      {"c mod 4 max", FIELDTYPE_SHORT, 0, 0x138, 0},
+      {"c mod 5", FIELDTYPE_NAME_INT, 0, 0x13c, &sgtDataTable.pTxtPropertiesLink},
+      {"c mod 5 chance", FIELDTYPE_CHAR, 0, 0x146, 0},
+      {"c mod 5 param", FIELDTYPE_SHORT, 0, 0x140, 0},
+      {"c mod 5 min", FIELDTYPE_SHORT, 0, 0x142, 0},
+      {"c mod 5 max", FIELDTYPE_SHORT, 0, 0x144, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     wsprintfA(szFilePath, "%s\\%s", "DATA\\GLOBAL\\EXCEL", "cubeserver.bin");
     _bFileExists = DATATBLS::DataTbls::CheckIfFileExists(pMemory, szFilePath, (D2MPQFileStrc**)&pFileData, 1);
     if (_bFileExists) {

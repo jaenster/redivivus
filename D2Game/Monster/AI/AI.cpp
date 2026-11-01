@@ -17835,7 +17835,6 @@ void __fastcall AITHINK_Fn1_WillOWisp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     int nFrameOffset;
     int aiStackY_2f8[38];
     uint32_t nFindFuncAddr;
-    POINT aWispPattern[56];
     D2UnitFindArgStrc sUnitFindArg;
     D2UnitFindDataStrc sUnitFindData;
     eD2UnitType eUnitType;
@@ -17849,118 +17848,64 @@ void __fastcall AITHINK_Fn1_WillOWisp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pMonsterAiGeneral;
     pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
-    aWispPattern[0].x = -10;
-    aWispPattern[0].y = -3;
-    aWispPattern[1].x = 1;
-    aWispPattern[1].y = -5;
-    aWispPattern[2].x = 6;
-    aWispPattern[2].y = 0;
-    aWispPattern[3].x = 4;
-    aWispPattern[3].y = 10;
-    aWispPattern[4].x = -9;
-    aWispPattern[4].y = -2;
-    aWispPattern[5].x = -6;
-    aWispPattern[5].y = -0xb;
-    aWispPattern[6].x = -2;
-    aWispPattern[6].y = -5;
-    aWispPattern[7].x = 6;
-    aWispPattern[7].y = 1;
-    aWispPattern[8].x = 0;
-    aWispPattern[8].y = 0xd;
-    aWispPattern[9].x = -0xc;
-    aWispPattern[9].y = 0;
-    aWispPattern[10].x = 7;
-    aWispPattern[10].y = 5;
-    aWispPattern[0xb].x = -3;
-    aWispPattern[0xb].y = -0xb;
-    aWispPattern[0xc].x = -0xf;
-    aWispPattern[0xc].y = -3;
-    aWispPattern[0xd].x = -6;
-    aWispPattern[0xd].y = -3;
-    aWispPattern[0xe].x = -4;
-    aWispPattern[0xe].y = -5;
-    aWispPattern[0xf].x = -6;
-    aWispPattern[0xf].y = -0xd;
-    aWispPattern[0x10].x = -0xc;
-    aWispPattern[0x10].y = -2;
-    aWispPattern[0x11].x = -6;
-    aWispPattern[0x11].y = 2;
-    aWispPattern[0x12].x = -5;
-    aWispPattern[0x12].y = 5;
-    aWispPattern[0x13].x = 1;
-    aWispPattern[0x13].y = 0xb;
-    aWispPattern[0x14].x = -0xd;
-    aWispPattern[0x14].y = -6;
-    aWispPattern[0x15].x = -8;
-    aWispPattern[0x15].y = -0xb;
-    aWispPattern[0x16].x = -7;
-    aWispPattern[0x16].y = 0;
-    aWispPattern[0x17].x = 1;
-    aWispPattern[0x17].y = 8;
-    aWispPattern[0x18].x = -5;
-    aWispPattern[0x18].y = -8;
-    aWispPattern[0x19].x = -8;
-    aWispPattern[0x19].y = 1;
-    aWispPattern[0x1a].x = 1;
-    aWispPattern[0x1a].y = -6;
-    aWispPattern[0x1b].x = 6;
-    aWispPattern[0x1b].y = 9;
-    aWispPattern[0x1c].x = 1;
-    aWispPattern[0x1c].y = -5;
-    aWispPattern[0x1d].x = 6;
-    aWispPattern[0x1d].y = 0;
-    aWispPattern[0x1e].x = 4;
-    aWispPattern[0x1e].y = 10;
-    aWispPattern[0x1f].x = -10;
-    aWispPattern[0x1f].y = -3;
-    aWispPattern[0x20].x = 1;
-    aWispPattern[0x2a].x = -6;
-    aWispPattern[0x31].y = -6;
-    aWispPattern[0x32].y = -6;
-    aWispPattern[0x33].y = -6;
-    aWispPattern[0x35].y = -6;
-    aWispPattern[0x37].x = 0;
-    aWispPattern[0x37].y = 0;
-    aWispPattern[0x20].y = 8;
-    aWispPattern[0x21].x = -9;
-    aWispPattern[0x21].y = -2;
-    aWispPattern[0x22].x = -5;
-    aWispPattern[0x22].y = 4;
-    aWispPattern[0x23].x = 1;
-    aWispPattern[0x23].y = 8;
-    aWispPattern[0x24].x = -0xc;
-    aWispPattern[0x24].y = 0;
-    aWispPattern[0x25].x = 7;
-    aWispPattern[0x25].y = 5;
-    aWispPattern[0x26].x = -3;
-    aWispPattern[0x26].y = -0xb;
-    aWispPattern[0x27].x = 0xb;
-    aWispPattern[0x27].y = -2;
-    aWispPattern[0x28].x = 7;
-    aWispPattern[0x28].y = 9;
-    aWispPattern[0x29].x = -0xf;
-    aWispPattern[0x29].y = -3;
-    aWispPattern[0x2a].y = -0xd;
-    aWispPattern[0x2b].x = 9;
-    aWispPattern[0x2b].y = 7;
-    aWispPattern[0x2c].x = -5;
-    aWispPattern[0x2c].y = -7;
-    aWispPattern[0x2d].x = -5;
-    aWispPattern[0x2d].y = -7;
-    aWispPattern[0x2e].x = 9;
-    aWispPattern[0x2e].y = 0;
-    aWispPattern[0x2f].x = -0xc;
-    aWispPattern[0x2f].y = -2;
-    aWispPattern[0x30].x = -8;
-    aWispPattern[0x30].y = -0xb;
-    aWispPattern[0x31].x = -2;
-    aWispPattern[0x32].x = -2;
-    aWispPattern[0x33].x = -0xd;
-    aWispPattern[0x34].x = -8;
-    aWispPattern[0x34].y = 1;
-    aWispPattern[0x35].x = 1;
-    aWispPattern[0x36].x = 6;
-    aWispPattern[0x36].y = 9;
+    POINT aWispPattern[56] = {
+      {-10, -3},
+      {1, -5},
+      {6, 0},
+      {4, 10},
+      {-9, -2},
+      {-6, -0xb},
+      {-2, -5},
+      {6, 1},
+      {0, 0xd},
+      {-0xc, 0},
+      {7, 5},
+      {-3, -0xb},
+      {-0xf, -3},
+      {-6, -3},
+      {-4, -5},
+      {-6, -0xd},
+      {-0xc, -2},
+      {-6, 2},
+      {-5, 5},
+      {1, 0xb},
+      {-0xd, -6},
+      {-8, -0xb},
+      {-7, 0},
+      {1, 8},
+      {-5, -8},
+      {-8, 1},
+      {1, -6},
+      {6, 9},
+      {1, -5},
+      {6, 0},
+      {4, 10},
+      {-10, -3},
+      {1, 8},
+      {-9, -2},
+      {-5, 4},
+      {1, 8},
+      {-0xc, 0},
+      {7, 5},
+      {-3, -0xb},
+      {0xb, -2},
+      {7, 9},
+      {-0xf, -3},
+      {-6, -0xd},
+      {9, 7},
+      {-5, -7},
+      {-5, -7},
+      {9, 0},
+      {-0xc, -2},
+      {-8, -0xb},
+      {-2, -6},
+      {-2, -6},
+      {-0xd, -6},
+      {-8, 1},
+      {1, -6},
+      {6, 9},
+      {0, 0}
+    };
     sUnitFindData.pUnitsArray = (D2UnitFindsStrc*)-5;
     sUnitFindData.pRoom = (D2RoomStrc*)-5;
     sUnitFindData.fpUnitTest = (UNITFINDTEST)0x3;

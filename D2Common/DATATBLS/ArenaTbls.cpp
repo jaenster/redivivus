@@ -25,47 +25,16 @@ namespace D2Common::DATATBLS::ArenaTbls {
 
 // Defines the binary field layout for arena.txt (Suicide, PlayerKill, PlayerKillPercent, MonsterKill, PlayerDeath, PlayerDeathPercent, MonsterDeath — all INT) and calls CompileTxt to parse and store the result into sgpTxtArena. In: pMemory pool.
 void __fastcall TXT_LoadArenaTxt(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc arena[8];
-    arena[0].nSize = 0;
-    arena[0].nOffset = 0;
-    arena[0].fpLinker = 0;
-    arena[1].nSize = 0;
-    arena[1].fpLinker = 0;
-    arena[2].nSize = 0;
-    arena[2].fpLinker = 0;
-    arena[3].nSize = 0;
-    arena[3].fpLinker = 0;
-    arena[4].nSize = 0;
-    arena[4].fpLinker = 0;
-    arena[5].nSize = 0;
-    arena[5].fpLinker = 0;
-    arena[6].nSize = 0;
-    arena[6].fpLinker = 0;
-    arena[7].eType = FIELDTYPE_END;
-    arena[7].nSize = 0;
-    arena[7].nOffset = 0;
-    arena[7].fpLinker = 0;
-    arena[0].szName = "Suicide";
-    arena[0].eType = FIELDTYPE_INT;
-    arena[1].szName = "PlayerKill";
-    arena[1].eType = FIELDTYPE_INT;
-    arena[1].nOffset = 4;
-    arena[2].szName = "PlayerKillPercent";
-    arena[2].eType = FIELDTYPE_INT;
-    arena[2].nOffset = 8;
-    arena[3].szName = "MonsterKill";
-    arena[3].eType = FIELDTYPE_INT;
-    arena[3].nOffset = 0xc;
-    arena[4].szName = "PlayerDeath";
-    arena[4].eType = FIELDTYPE_INT;
-    arena[4].nOffset = 0x10;
-    arena[5].szName = "PlayerDeathPercent";
-    arena[5].eType = FIELDTYPE_INT;
-    arena[5].nOffset = 0x14;
-    arena[6].szName = "MonsterDeath";
-    arena[6].eType = FIELDTYPE_INT;
-    arena[6].nOffset = 0x18;
-    arena[7].szName = "end";
+    D2BinFieldInputStrc arena[8] = {
+      {"Suicide", FIELDTYPE_INT, 0, 0, 0},
+      {"PlayerKill", FIELDTYPE_INT, 0, 4, 0},
+      {"PlayerKillPercent", FIELDTYPE_INT, 0, 8, 0},
+      {"MonsterKill", FIELDTYPE_INT, 0, 0xc, 0},
+      {"PlayerDeath", FIELDTYPE_INT, 0, 0x10, 0},
+      {"PlayerDeathPercent", FIELDTYPE_INT, 0, 0x14, 0},
+      {"MonsterDeath", FIELDTYPE_INT, 0, 0x18, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgpTxtArena = (D2ArenaTxt*)DataTbls::CompileTxt(pMemory, "arena", arena, nullptr, 0x1c);
 }
 
@@ -111,402 +80,87 @@ static void __stdcall TXT_BuildCharTemplateLevelIndex(D2CharTemplateTxt * pCharT
 
 // Arena preset-fighter roster loader (= beta D2Common ARENA_LoadCharTemplatesTxt, DATATBLS\Arena.cpp). LIVE in 1.14d: called by TXT_InitTxtFiles at game init, compiles chartemplate.txt into the level-indexed ArenaCharTemplate[] (0xF8-byte records: Name, class->index, level, str/int/Hitpoints/Mana/ManaRegenBonus/Velocity/AttackRate/OtherRate, RightSkill, Skill1-9+SkillLevel1-9, item1-15 (code/loc/count)). Retail ships no chartemplate.txt so it loads 0 rows. Provide the data file to populate the arena roster for arena mode; spawn via the GetCharTemplateRecord(level,n) accessors. Arena GAMEPLAY (rounds/combat) was the part actually cut.
 void __fastcall TXT_LoadCharTemplateTxt(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc chartemplate[79];
-    chartemplate[1].fpLinker = &sgptDataTable->pTxtPlayerClassLink;
-    chartemplate[0].szName = "Name";
-    chartemplate[0].eType = FIELDTYPE_ASCII;
-    chartemplate[0].nSize = 0x1d;
-    chartemplate[0].nOffset = 0;
-    chartemplate[0].fpLinker = 0;
-    chartemplate[1].szName = "class";
-    chartemplate[1].eType = FIELDTYPE_CODE_CHAR;
-    chartemplate[1].nSize = 0;
-    chartemplate[1].nOffset = 0x1e;
-    chartemplate[2].szName = "act";
-    chartemplate[2].eType = FIELDTYPE_CHAR;
-    chartemplate[2].nSize = 0;
-    chartemplate[2].nOffset = 0x20;
-    chartemplate[2].fpLinker = 0;
-    chartemplate[3].szName = "level";
-    chartemplate[3].eType = FIELDTYPE_CHAR;
-    chartemplate[3].nSize = 0;
-    chartemplate[3].nOffset = 0x1f;
-    chartemplate[3].fpLinker = 0;
-    chartemplate[4].szName = "str";
-    chartemplate[4].eType = FIELDTYPE_CHAR;
-    chartemplate[4].nSize = 0;
-    chartemplate[4].nOffset = 0x21;
-    chartemplate[4].fpLinker = 0;
-    chartemplate[5].szName = "dex";
-    chartemplate[5].eType = FIELDTYPE_CHAR;
-    chartemplate[5].nSize = 0;
-    chartemplate[5].nOffset = 0x22;
-    chartemplate[5].fpLinker = 0;
-    chartemplate[6].szName = "vit";
-    chartemplate[6].eType = FIELDTYPE_CHAR;
-    chartemplate[6].nSize = 0;
-    chartemplate[6].nOffset = 0x24;
-    chartemplate[6].fpLinker = 0;
-    chartemplate[7].szName = "int";
-    chartemplate[7].eType = FIELDTYPE_CHAR;
-    chartemplate[7].nSize = 0;
-    chartemplate[7].nOffset = 0x23;
-    chartemplate[7].fpLinker = 0;
-    chartemplate[8].szName = "Hitpoints";
-    chartemplate[8].eType = FIELDTYPE_CHAR;
-    chartemplate[8].nSize = 0;
-    chartemplate[8].nOffset = 0x26;
-    chartemplate[8].fpLinker = 0;
-    chartemplate[9].szName = "Mana";
-    chartemplate[9].eType = FIELDTYPE_CHAR;
-    chartemplate[9].nSize = 0;
-    chartemplate[9].nOffset = 0x25;
-    chartemplate[9].fpLinker = 0;
-    chartemplate[10].szName = "ManaRegenBonus";
-    chartemplate[10].eType = FIELDTYPE_CHAR;
-    chartemplate[10].nSize = 0;
-    chartemplate[10].nOffset = 0x27;
-    chartemplate[10].fpLinker = 0;
-    chartemplate[0xb].szName = "Velocity";
-    chartemplate[0xb].eType = FIELDTYPE_CHAR;
-    chartemplate[0xb].nSize = 0;
-    chartemplate[0xb].nOffset = 0x28;
-    chartemplate[0xb].fpLinker = 0;
-    chartemplate[0xc].szName = "AttackRate";
-    chartemplate[0xc].eType = FIELDTYPE_CHAR;
-    chartemplate[0xc].nSize = 0;
-    chartemplate[0xc].nOffset = 0x29;
-    chartemplate[0xc].fpLinker = 0;
-    chartemplate[0xd].szName = "OtherRate";
-    chartemplate[0xd].eType = FIELDTYPE_CHAR;
-    chartemplate[0xd].nSize = 0;
-    chartemplate[0xd].nOffset = 0x2a;
-    chartemplate[0xd].fpLinker = 0;
-    chartemplate[0xe].szName = "RightSkill";
-    chartemplate[0xe].eType = FIELDTYPE_INT;
-    chartemplate[0xe].nSize = 0;
-    chartemplate[0xe].nOffset = 0x2c;
-    chartemplate[0xe].fpLinker = 0;
-    chartemplate[0xf].szName = "Skill1";
-    chartemplate[0xf].eType = FIELDTYPE_INT;
-    chartemplate[0xf].nSize = 0;
-    chartemplate[0xf].nOffset = 0x30;
-    chartemplate[0xf].fpLinker = 0;
-    chartemplate[0x10].szName = "SkillLevel1";
-    chartemplate[0x10].eType = FIELDTYPE_INT;
-    chartemplate[0x10].nSize = 0;
-    chartemplate[0x10].nOffset = 0x54;
-    chartemplate[0x10].fpLinker = 0;
-    chartemplate[0x11].szName = "Skill2";
-    chartemplate[0x11].eType = FIELDTYPE_INT;
-    chartemplate[0x11].nSize = 0;
-    chartemplate[0x11].nOffset = 0x34;
-    chartemplate[0x11].fpLinker = 0;
-    chartemplate[0x12].szName = "SkillLevel2";
-    chartemplate[0x12].eType = FIELDTYPE_INT;
-    chartemplate[0x12].nSize = 0;
-    chartemplate[0x12].nOffset = 0x58;
-    chartemplate[0x12].fpLinker = 0;
-    chartemplate[0x13].szName = "Skill3";
-    chartemplate[0x13].eType = FIELDTYPE_INT;
-    chartemplate[0x13].nSize = 0;
-    chartemplate[0x13].nOffset = 0x38;
-    chartemplate[0x13].fpLinker = 0;
-    chartemplate[0x14].szName = "SkillLevel3";
-    chartemplate[0x14].eType = FIELDTYPE_INT;
-    chartemplate[0x14].nSize = 0;
-    chartemplate[0x14].nOffset = 0x5c;
-    chartemplate[0x14].fpLinker = 0;
-    chartemplate[0x15].szName = "Skill4";
-    chartemplate[0x15].eType = FIELDTYPE_INT;
-    chartemplate[0x15].nSize = 0;
-    chartemplate[0x15].nOffset = 0x3c;
-    chartemplate[0x15].fpLinker = 0;
-    chartemplate[0x16].szName = "SkillLevel4";
-    chartemplate[0x16].eType = FIELDTYPE_INT;
-    chartemplate[0x16].nSize = 0;
-    chartemplate[0x16].nOffset = 0x60;
-    chartemplate[0x16].fpLinker = 0;
-    chartemplate[0x17].szName = "Skill5";
-    chartemplate[0x17].eType = FIELDTYPE_INT;
-    chartemplate[0x17].nSize = 0;
-    chartemplate[0x17].nOffset = 0x40;
-    chartemplate[0x17].fpLinker = 0;
-    chartemplate[0x18].szName = "SkillLevel5";
-    chartemplate[0x18].eType = FIELDTYPE_INT;
-    chartemplate[0x18].nSize = 0;
-    chartemplate[0x18].nOffset = 100;
-    chartemplate[0x18].fpLinker = 0;
-    chartemplate[0x19].szName = "Skill6";
-    chartemplate[0x19].eType = FIELDTYPE_INT;
-    chartemplate[0x19].nSize = 0;
-    chartemplate[0x19].nOffset = 0x44;
-    chartemplate[0x19].fpLinker = 0;
-    chartemplate[0x1a].szName = "SkillLevel6";
-    chartemplate[0x1a].eType = FIELDTYPE_INT;
-    chartemplate[0x1a].nSize = 0;
-    chartemplate[0x1a].nOffset = 0x68;
-    chartemplate[0x1a].fpLinker = 0;
-    chartemplate[0x1b].szName = "Skill7";
-    chartemplate[0x1b].eType = FIELDTYPE_INT;
-    chartemplate[0x1b].nSize = 0;
-    chartemplate[0x1b].nOffset = 0x48;
-    chartemplate[0x1b].fpLinker = 0;
-    chartemplate[0x1c].szName = "SkillLevel7";
-    chartemplate[0x1c].eType = FIELDTYPE_INT;
-    chartemplate[0x1c].nSize = 0;
-    chartemplate[0x1c].nOffset = 0x6c;
-    chartemplate[0x1c].fpLinker = 0;
-    chartemplate[0x1d].szName = "Skill8";
-    chartemplate[0x1d].eType = FIELDTYPE_INT;
-    chartemplate[0x1d].nSize = 0;
-    chartemplate[0x1d].nOffset = 0x4c;
-    chartemplate[0x1d].fpLinker = 0;
-    chartemplate[0x1e].szName = "SkillLevel8";
-    chartemplate[0x1e].eType = FIELDTYPE_INT;
-    chartemplate[0x1e].nSize = 0;
-    chartemplate[0x1e].nOffset = 0x70;
-    chartemplate[0x1e].fpLinker = 0;
-    chartemplate[0x1f].eType = FIELDTYPE_INT;
-    chartemplate[0x20].eType = FIELDTYPE_INT;
-    chartemplate[0x1f].szName = "Skill9";
-    chartemplate[0x1f].nSize = 0;
-    chartemplate[0x1f].nOffset = 0x50;
-    chartemplate[0x1f].fpLinker = 0;
-    chartemplate[0x20].szName = "SkillLevel9";
-    chartemplate[0x20].nSize = 0;
-    chartemplate[0x20].nOffset = 0x74;
-    chartemplate[0x20].fpLinker = 0;
-    chartemplate[0x21].szName = "item1";
-    chartemplate[0x21].eType = FIELDTYPE_RAW4;
-    chartemplate[0x21].nSize = 0;
-    chartemplate[0x21].nOffset = 0x78;
-    chartemplate[0x21].fpLinker = 0;
-    chartemplate[0x22].szName = "item1loc";
-    chartemplate[0x22].eType = FIELDTYPE_CHAR;
-    chartemplate[0x22].nSize = 0;
-    chartemplate[0x22].nOffset = 0x7c;
-    chartemplate[0x22].fpLinker = 0;
-    chartemplate[0x23].szName = "item1count";
-    chartemplate[0x23].eType = FIELDTYPE_CHAR;
-    chartemplate[0x23].nSize = 0;
-    chartemplate[0x23].nOffset = 0x7d;
-    chartemplate[0x23].fpLinker = 0;
-    chartemplate[0x24].szName = "item2";
-    chartemplate[0x24].eType = FIELDTYPE_RAW4;
-    chartemplate[0x24].nSize = 0;
-    chartemplate[0x24].nOffset = 0x80;
-    chartemplate[0x24].fpLinker = 0;
-    chartemplate[0x25].szName = "item2loc";
-    chartemplate[0x25].eType = FIELDTYPE_CHAR;
-    chartemplate[0x25].nSize = 0;
-    chartemplate[0x25].nOffset = 0x84;
-    chartemplate[0x25].fpLinker = 0;
-    chartemplate[0x26].szName = "item2count";
-    chartemplate[0x26].eType = FIELDTYPE_CHAR;
-    chartemplate[0x26].nSize = 0;
-    chartemplate[0x26].nOffset = 0x85;
-    chartemplate[0x26].fpLinker = 0;
-    chartemplate[0x27].szName = "item3";
-    chartemplate[0x27].eType = FIELDTYPE_RAW4;
-    chartemplate[0x27].nSize = 0;
-    chartemplate[0x27].nOffset = 0x88;
-    chartemplate[0x27].fpLinker = 0;
-    chartemplate[0x28].szName = "item3loc";
-    chartemplate[0x28].eType = FIELDTYPE_CHAR;
-    chartemplate[0x28].nSize = 0;
-    chartemplate[0x28].nOffset = 0x8c;
-    chartemplate[0x28].fpLinker = 0;
-    chartemplate[0x29].szName = "item3count";
-    chartemplate[0x29].eType = FIELDTYPE_CHAR;
-    chartemplate[0x29].nSize = 0;
-    chartemplate[0x29].nOffset = 0x8d;
-    chartemplate[0x29].fpLinker = 0;
-    chartemplate[0x2a].szName = "item4";
-    chartemplate[0x2a].eType = FIELDTYPE_RAW4;
-    chartemplate[0x2a].nSize = 0;
-    chartemplate[0x2a].nOffset = 0x90;
-    chartemplate[0x2a].fpLinker = 0;
-    chartemplate[0x2b].szName = "item4loc";
-    chartemplate[0x2b].eType = FIELDTYPE_CHAR;
-    chartemplate[0x2b].nSize = 0;
-    chartemplate[0x2b].nOffset = 0x94;
-    chartemplate[0x2b].fpLinker = 0;
-    chartemplate[0x2c].szName = "item4count";
-    chartemplate[0x2c].eType = FIELDTYPE_CHAR;
-    chartemplate[0x2c].nSize = 0;
-    chartemplate[0x2c].nOffset = 0x95;
-    chartemplate[0x2c].fpLinker = 0;
-    chartemplate[0x2d].szName = "item5";
-    chartemplate[0x2d].eType = FIELDTYPE_RAW4;
-    chartemplate[0x2d].nSize = 0;
-    chartemplate[0x2d].nOffset = 0x98;
-    chartemplate[0x2d].fpLinker = 0;
-    chartemplate[0x2e].szName = "item5loc";
-    chartemplate[0x2e].eType = FIELDTYPE_CHAR;
-    chartemplate[0x2e].nSize = 0;
-    chartemplate[0x2e].nOffset = 0x9c;
-    chartemplate[0x2e].fpLinker = 0;
-    chartemplate[0x2f].szName = "item5count";
-    chartemplate[0x2f].eType = FIELDTYPE_CHAR;
-    chartemplate[0x2f].nSize = 0;
-    chartemplate[0x2f].nOffset = 0x9d;
-    chartemplate[0x2f].fpLinker = 0;
-    chartemplate[0x30].szName = "item6";
-    chartemplate[0x30].eType = FIELDTYPE_RAW4;
-    chartemplate[0x30].nSize = 0;
-    chartemplate[0x30].nOffset = 0xa0;
-    chartemplate[0x30].fpLinker = 0;
-    chartemplate[0x31].szName = "item6loc";
-    chartemplate[0x31].eType = FIELDTYPE_CHAR;
-    chartemplate[0x31].nSize = 0;
-    chartemplate[0x31].nOffset = 0xa4;
-    chartemplate[0x31].fpLinker = 0;
-    chartemplate[0x32].szName = "item6count";
-    chartemplate[0x32].eType = FIELDTYPE_CHAR;
-    chartemplate[0x32].nSize = 0;
-    chartemplate[0x32].nOffset = 0xa5;
-    chartemplate[0x32].fpLinker = 0;
-    chartemplate[0x33].szName = "item7";
-    chartemplate[0x33].eType = FIELDTYPE_RAW4;
-    chartemplate[0x33].nSize = 0;
-    chartemplate[0x33].nOffset = 0xa8;
-    chartemplate[0x33].fpLinker = 0;
-    chartemplate[0x34].szName = "item7loc";
-    chartemplate[0x34].eType = FIELDTYPE_CHAR;
-    chartemplate[0x34].nSize = 0;
-    chartemplate[0x34].nOffset = 0xac;
-    chartemplate[0x34].fpLinker = 0;
-    chartemplate[0x35].szName = "item7count";
-    chartemplate[0x35].eType = FIELDTYPE_CHAR;
-    chartemplate[0x35].nSize = 0;
-    chartemplate[0x35].nOffset = 0xad;
-    chartemplate[0x35].fpLinker = 0;
-    chartemplate[0x36].szName = "item8";
-    chartemplate[0x36].eType = FIELDTYPE_RAW4;
-    chartemplate[0x36].nSize = 0;
-    chartemplate[0x36].nOffset = 0xb0;
-    chartemplate[0x36].fpLinker = 0;
-    chartemplate[0x37].szName = "item8loc";
-    chartemplate[0x37].eType = FIELDTYPE_CHAR;
-    chartemplate[0x37].nSize = 0;
-    chartemplate[0x37].nOffset = 0xb4;
-    chartemplate[0x37].fpLinker = 0;
-    chartemplate[0x38].szName = "item8count";
-    chartemplate[0x38].eType = FIELDTYPE_CHAR;
-    chartemplate[0x38].nSize = 0;
-    chartemplate[0x38].nOffset = 0xb5;
-    chartemplate[0x38].fpLinker = 0;
-    chartemplate[0x39].szName = "item9";
-    chartemplate[0x39].eType = FIELDTYPE_RAW4;
-    chartemplate[0x39].nSize = 0;
-    chartemplate[0x39].nOffset = 0xb8;
-    chartemplate[0x39].fpLinker = 0;
-    chartemplate[0x3a].szName = "item9loc";
-    chartemplate[0x3a].eType = FIELDTYPE_CHAR;
-    chartemplate[0x3a].nSize = 0;
-    chartemplate[0x3a].nOffset = 0xbc;
-    chartemplate[0x3a].fpLinker = 0;
-    chartemplate[0x3b].szName = "item9count";
-    chartemplate[0x3b].eType = FIELDTYPE_CHAR;
-    chartemplate[0x3b].nSize = 0;
-    chartemplate[0x3b].nOffset = 0xbd;
-    chartemplate[0x3b].fpLinker = 0;
-    chartemplate[0x3c].szName = "item10";
-    chartemplate[0x3c].eType = FIELDTYPE_RAW4;
-    chartemplate[0x3c].nSize = 0;
-    chartemplate[0x3c].nOffset = 0xc0;
-    chartemplate[0x3c].fpLinker = 0;
-    chartemplate[0x3d].szName = "item10loc";
-    chartemplate[0x3d].eType = FIELDTYPE_CHAR;
-    chartemplate[0x3d].nSize = 0;
-    chartemplate[0x3d].nOffset = 0xc4;
-    chartemplate[0x3d].fpLinker = 0;
-    chartemplate[0x3e].szName = "item10count";
-    chartemplate[0x3e].eType = FIELDTYPE_CHAR;
-    chartemplate[0x3e].nSize = 0;
-    chartemplate[0x3e].nOffset = 0xc5;
-    chartemplate[0x3e].fpLinker = 0;
-    chartemplate[0x3f].szName = "item11";
-    chartemplate[0x3f].eType = FIELDTYPE_RAW4;
-    chartemplate[0x3f].nSize = 0;
-    chartemplate[0x3f].nOffset = 200;
-    chartemplate[0x3f].fpLinker = 0;
-    chartemplate[0x40].szName = "item11loc";
-    chartemplate[0x40].eType = FIELDTYPE_CHAR;
-    chartemplate[0x40].nSize = 0;
-    chartemplate[0x40].nOffset = 0xcc;
-    chartemplate[0x40].fpLinker = 0;
-    chartemplate[0x41].szName = "item11count";
-    chartemplate[0x41].eType = FIELDTYPE_CHAR;
-    chartemplate[0x41].nSize = 0;
-    chartemplate[0x41].nOffset = 0xcd;
-    chartemplate[0x41].fpLinker = 0;
-    chartemplate[0x42].szName = "item12";
-    chartemplate[0x42].eType = FIELDTYPE_RAW4;
-    chartemplate[0x42].nSize = 0;
-    chartemplate[0x42].nOffset = 0xd0;
-    chartemplate[0x42].fpLinker = 0;
-    chartemplate[0x43].szName = "item12loc";
-    chartemplate[0x43].eType = FIELDTYPE_CHAR;
-    chartemplate[0x43].nSize = 0;
-    chartemplate[0x43].nOffset = 0xd4;
-    chartemplate[0x43].fpLinker = 0;
-    chartemplate[0x44].szName = "item12count";
-    chartemplate[0x44].eType = FIELDTYPE_CHAR;
-    chartemplate[0x44].nSize = 0;
-    chartemplate[0x44].nOffset = 0xd5;
-    chartemplate[0x44].fpLinker = 0;
-    chartemplate[0x45].szName = "item13";
-    chartemplate[0x45].eType = FIELDTYPE_RAW4;
-    chartemplate[0x45].nSize = 0;
-    chartemplate[0x45].nOffset = 0xd8;
-    chartemplate[0x45].fpLinker = 0;
-    chartemplate[0x46].szName = "item13loc";
-    chartemplate[0x46].eType = FIELDTYPE_CHAR;
-    chartemplate[0x46].nSize = 0;
-    chartemplate[0x46].nOffset = 0xdc;
-    chartemplate[0x46].fpLinker = 0;
-    chartemplate[0x47].szName = "item13count";
-    chartemplate[0x47].eType = FIELDTYPE_CHAR;
-    chartemplate[0x47].nSize = 0;
-    chartemplate[0x47].nOffset = 0xdd;
-    chartemplate[0x47].fpLinker = 0;
-    chartemplate[0x48].szName = "item14";
-    chartemplate[0x48].eType = FIELDTYPE_RAW4;
-    chartemplate[0x48].nSize = 0;
-    chartemplate[0x48].nOffset = 0xe0;
-    chartemplate[0x48].fpLinker = 0;
-    chartemplate[0x49].szName = "item14loc";
-    chartemplate[0x49].eType = FIELDTYPE_CHAR;
-    chartemplate[0x49].nSize = 0;
-    chartemplate[0x49].nOffset = 0xe4;
-    chartemplate[0x49].fpLinker = 0;
-    chartemplate[0x4a].szName = "item14count";
-    chartemplate[0x4a].eType = FIELDTYPE_CHAR;
-    chartemplate[0x4a].nSize = 0;
-    chartemplate[0x4a].nOffset = 0xe5;
-    chartemplate[0x4a].fpLinker = 0;
-    chartemplate[0x4b].szName = "item15";
-    chartemplate[0x4b].eType = FIELDTYPE_RAW4;
-    chartemplate[0x4b].nSize = 0;
-    chartemplate[0x4b].nOffset = 0xe8;
-    chartemplate[0x4b].fpLinker = 0;
-    chartemplate[0x4c].szName = "item15loc";
-    chartemplate[0x4c].eType = FIELDTYPE_CHAR;
-    chartemplate[0x4c].nSize = 0;
-    chartemplate[0x4c].nOffset = 0xec;
-    chartemplate[0x4c].fpLinker = 0;
-    chartemplate[0x4d].szName = "item15count";
-    chartemplate[0x4d].eType = FIELDTYPE_CHAR;
-    chartemplate[0x4d].nSize = 0;
-    chartemplate[0x4d].nOffset = 0xed;
-    chartemplate[0x4d].fpLinker = 0;
-    chartemplate[0x4e].szName = "end";
-    chartemplate[0x4e].eType = FIELDTYPE_END;
-    chartemplate[0x4e].nSize = 0;
-    chartemplate[0x4e].nOffset = 0;
-    chartemplate[0x4e].fpLinker = 0;
+    D2BinFieldInputStrc chartemplate[79] = {
+      {"Name", FIELDTYPE_ASCII, 0x1d, 0, 0},
+      {"class", FIELDTYPE_CODE_CHAR, 0, 0x1e, &sgptDataTable->pTxtPlayerClassLink},
+      {"act", FIELDTYPE_CHAR, 0, 0x20, 0},
+      {"level", FIELDTYPE_CHAR, 0, 0x1f, 0},
+      {"str", FIELDTYPE_CHAR, 0, 0x21, 0},
+      {"dex", FIELDTYPE_CHAR, 0, 0x22, 0},
+      {"vit", FIELDTYPE_CHAR, 0, 0x24, 0},
+      {"int", FIELDTYPE_CHAR, 0, 0x23, 0},
+      {"Hitpoints", FIELDTYPE_CHAR, 0, 0x26, 0},
+      {"Mana", FIELDTYPE_CHAR, 0, 0x25, 0},
+      {"ManaRegenBonus", FIELDTYPE_CHAR, 0, 0x27, 0},
+      {"Velocity", FIELDTYPE_CHAR, 0, 0x28, 0},
+      {"AttackRate", FIELDTYPE_CHAR, 0, 0x29, 0},
+      {"OtherRate", FIELDTYPE_CHAR, 0, 0x2a, 0},
+      {"RightSkill", FIELDTYPE_INT, 0, 0x2c, 0},
+      {"Skill1", FIELDTYPE_INT, 0, 0x30, 0},
+      {"SkillLevel1", FIELDTYPE_INT, 0, 0x54, 0},
+      {"Skill2", FIELDTYPE_INT, 0, 0x34, 0},
+      {"SkillLevel2", FIELDTYPE_INT, 0, 0x58, 0},
+      {"Skill3", FIELDTYPE_INT, 0, 0x38, 0},
+      {"SkillLevel3", FIELDTYPE_INT, 0, 0x5c, 0},
+      {"Skill4", FIELDTYPE_INT, 0, 0x3c, 0},
+      {"SkillLevel4", FIELDTYPE_INT, 0, 0x60, 0},
+      {"Skill5", FIELDTYPE_INT, 0, 0x40, 0},
+      {"SkillLevel5", FIELDTYPE_INT, 0, 100, 0},
+      {"Skill6", FIELDTYPE_INT, 0, 0x44, 0},
+      {"SkillLevel6", FIELDTYPE_INT, 0, 0x68, 0},
+      {"Skill7", FIELDTYPE_INT, 0, 0x48, 0},
+      {"SkillLevel7", FIELDTYPE_INT, 0, 0x6c, 0},
+      {"Skill8", FIELDTYPE_INT, 0, 0x4c, 0},
+      {"SkillLevel8", FIELDTYPE_INT, 0, 0x70, 0},
+      {"Skill9", FIELDTYPE_INT, 0, 0x50, 0},
+      {"SkillLevel9", FIELDTYPE_INT, 0, 0x74, 0},
+      {"item1", FIELDTYPE_RAW4, 0, 0x78, 0},
+      {"item1loc", FIELDTYPE_CHAR, 0, 0x7c, 0},
+      {"item1count", FIELDTYPE_CHAR, 0, 0x7d, 0},
+      {"item2", FIELDTYPE_RAW4, 0, 0x80, 0},
+      {"item2loc", FIELDTYPE_CHAR, 0, 0x84, 0},
+      {"item2count", FIELDTYPE_CHAR, 0, 0x85, 0},
+      {"item3", FIELDTYPE_RAW4, 0, 0x88, 0},
+      {"item3loc", FIELDTYPE_CHAR, 0, 0x8c, 0},
+      {"item3count", FIELDTYPE_CHAR, 0, 0x8d, 0},
+      {"item4", FIELDTYPE_RAW4, 0, 0x90, 0},
+      {"item4loc", FIELDTYPE_CHAR, 0, 0x94, 0},
+      {"item4count", FIELDTYPE_CHAR, 0, 0x95, 0},
+      {"item5", FIELDTYPE_RAW4, 0, 0x98, 0},
+      {"item5loc", FIELDTYPE_CHAR, 0, 0x9c, 0},
+      {"item5count", FIELDTYPE_CHAR, 0, 0x9d, 0},
+      {"item6", FIELDTYPE_RAW4, 0, 0xa0, 0},
+      {"item6loc", FIELDTYPE_CHAR, 0, 0xa4, 0},
+      {"item6count", FIELDTYPE_CHAR, 0, 0xa5, 0},
+      {"item7", FIELDTYPE_RAW4, 0, 0xa8, 0},
+      {"item7loc", FIELDTYPE_CHAR, 0, 0xac, 0},
+      {"item7count", FIELDTYPE_CHAR, 0, 0xad, 0},
+      {"item8", FIELDTYPE_RAW4, 0, 0xb0, 0},
+      {"item8loc", FIELDTYPE_CHAR, 0, 0xb4, 0},
+      {"item8count", FIELDTYPE_CHAR, 0, 0xb5, 0},
+      {"item9", FIELDTYPE_RAW4, 0, 0xb8, 0},
+      {"item9loc", FIELDTYPE_CHAR, 0, 0xbc, 0},
+      {"item9count", FIELDTYPE_CHAR, 0, 0xbd, 0},
+      {"item10", FIELDTYPE_RAW4, 0, 0xc0, 0},
+      {"item10loc", FIELDTYPE_CHAR, 0, 0xc4, 0},
+      {"item10count", FIELDTYPE_CHAR, 0, 0xc5, 0},
+      {"item11", FIELDTYPE_RAW4, 0, 200, 0},
+      {"item11loc", FIELDTYPE_CHAR, 0, 0xcc, 0},
+      {"item11count", FIELDTYPE_CHAR, 0, 0xcd, 0},
+      {"item12", FIELDTYPE_RAW4, 0, 0xd0, 0},
+      {"item12loc", FIELDTYPE_CHAR, 0, 0xd4, 0},
+      {"item12count", FIELDTYPE_CHAR, 0, 0xd5, 0},
+      {"item13", FIELDTYPE_RAW4, 0, 0xd8, 0},
+      {"item13loc", FIELDTYPE_CHAR, 0, 0xdc, 0},
+      {"item13count", FIELDTYPE_CHAR, 0, 0xdd, 0},
+      {"item14", FIELDTYPE_RAW4, 0, 0xe0, 0},
+      {"item14loc", FIELDTYPE_CHAR, 0, 0xe4, 0},
+      {"item14count", FIELDTYPE_CHAR, 0, 0xe5, 0},
+      {"item15", FIELDTYPE_RAW4, 0, 0xe8, 0},
+      {"item15loc", FIELDTYPE_CHAR, 0, 0xec, 0},
+      {"item15count", FIELDTYPE_CHAR, 0, 0xed, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgpTxtCharTemplate = (D2CharTemplateTxt*)DataTbls::CompileTxt(pMemory, "chartemplate", chartemplate, &nTxtCharTemplateSize, 0xf0);
     TXT_BuildCharTemplateLevelIndex(sgpTxtCharTemplate, nTxtCharTemplateSize);
 }

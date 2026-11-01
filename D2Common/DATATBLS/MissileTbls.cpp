@@ -247,742 +247,155 @@ void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc* pFieldDesc;
     uint8_t byCollideType;
     D2MissilesTxt* pMissileTxt;
-    D2BinFieldInputStrc missiles[147];
-    missiles[0].szName = "Missile";
-    missiles[0].eType = FIELDTYPE_NAME_I_WORD;
-    missiles[0].nSize = 0;
-    missiles[0].nOffset = 0;
-    missiles[0].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[1].szName = "LastCollide";
-    missiles[1].eType = FIELDTYPE_BIT;
-    missiles[1].nSize = 0;
-    missiles[1].nOffset = 4;
-    missiles[1].fpLinker = 0;
-    missiles[2].szName = "Explosion";
-    missiles[2].eType = FIELDTYPE_BIT;
-    missiles[2].nSize = 1;
-    missiles[2].nOffset = 4;
-    missiles[2].fpLinker = 0;
-    missiles[3].szName = "Pierce";
-    missiles[3].eType = FIELDTYPE_BIT;
-    missiles[3].nSize = 2;
-    missiles[3].nOffset = 4;
-    missiles[3].fpLinker = 0;
-    missiles[4].szName = "CanSlow";
-    missiles[4].eType = FIELDTYPE_BIT;
-    missiles[4].nSize = 3;
-    missiles[4].nOffset = 4;
-    missiles[4].fpLinker = 0;
-    missiles[5].szName = "CanDestroy";
-    missiles[5].eType = FIELDTYPE_BIT;
-    missiles[5].nSize = 4;
-    missiles[5].nOffset = 4;
-    missiles[5].fpLinker = 0;
-    missiles[6].szName = "NoMultiShot";
-    missiles[6].eType = FIELDTYPE_BIT;
-    missiles[6].nSize = 0xc;
-    missiles[6].nOffset = 4;
-    missiles[6].fpLinker = 0;
-    missiles[7].szName = "NoUniqueMod";
-    missiles[7].eType = FIELDTYPE_BIT;
-    missiles[7].nSize = 0xd;
-    missiles[7].nOffset = 4;
-    missiles[7].fpLinker = 0;
-    missiles[8].szName = "ClientSend";
-    missiles[8].eType = FIELDTYPE_BIT;
-    missiles[8].nSize = 5;
-    missiles[8].nOffset = 4;
-    missiles[8].fpLinker = 0;
-    missiles[9].szName = "GetHit";
-    missiles[9].eType = FIELDTYPE_BIT;
-    missiles[9].nSize = 6;
-    missiles[9].nOffset = 4;
-    missiles[9].fpLinker = 0;
-    missiles[10].szName = "SoftHit";
-    missiles[10].eType = FIELDTYPE_BIT;
-    missiles[10].nSize = 7;
-    missiles[10].nOffset = 4;
-    missiles[10].fpLinker = 0;
-    missiles[0xb].szName = "ApplyMastery";
-    missiles[0xb].eType = FIELDTYPE_BIT;
-    missiles[0xb].nSize = 8;
-    missiles[0xb].nOffset = 4;
-    missiles[0xb].fpLinker = 0;
-    missiles[0xc].szName = "ReturnFire";
-    missiles[0xc].eType = FIELDTYPE_BIT;
-    missiles[0xc].nSize = 9;
-    missiles[0xc].nOffset = 4;
-    missiles[0xc].fpLinker = 0;
-    missiles[0xd].szName = "Town";
-    missiles[0xd].eType = FIELDTYPE_BIT;
-    missiles[0xd].nSize = 10;
-    missiles[0xd].nOffset = 4;
-    missiles[0xd].fpLinker = 0;
-    missiles[0xe].szName = "SrcTown";
-    missiles[0xf].eType = FIELDTYPE_SHORT;
-    missiles[0x10].eType = FIELDTYPE_SHORT;
-    missiles[0x11].eType = FIELDTYPE_SHORT;
-    missiles[0x12].eType = FIELDTYPE_SHORT;
-    missiles[0x13].eType = FIELDTYPE_SHORT;
-    missiles[0xe].eType = FIELDTYPE_BIT;
-    missiles[0xe].nSize = 0xb;
-    missiles[0xe].nOffset = 4;
-    missiles[0xe].fpLinker = 0;
-    missiles[0xf].szName = "pCltDoFunc";
-    missiles[0xf].nSize = 0;
-    missiles[0xf].nOffset = 8;
-    missiles[0xf].fpLinker = 0;
-    missiles[0x10].szName = "pCltHitFunc";
-    missiles[0x10].nSize = 0;
-    missiles[0x10].nOffset = 10;
-    missiles[0x10].fpLinker = 0;
-    missiles[0x11].szName = "pSrvDoFunc";
-    missiles[0x11].nSize = 0;
-    missiles[0x11].nOffset = 0xc;
-    missiles[0x11].fpLinker = 0;
-    missiles[0x12].szName = "pSrvHitFunc";
-    missiles[0x12].nSize = 0;
-    missiles[0x12].nOffset = 0xe;
-    missiles[0x12].fpLinker = 0;
-    missiles[0x13].szName = "pSrvDmgFunc";
-    missiles[0x13].nSize = 0;
-    missiles[0x13].nOffset = 0x10;
-    missiles[0x13].fpLinker = 0;
-    missiles[0x14].szName = "Param1";
-    missiles[0x14].eType = FIELDTYPE_INT;
-    missiles[0x14].nSize = 0;
-    missiles[0x14].nOffset = 0x38;
-    missiles[0x14].fpLinker = 0;
-    missiles[0x15].szName = "Param2";
-    missiles[0x15].eType = FIELDTYPE_INT;
-    missiles[0x15].nSize = 0;
-    missiles[0x15].nOffset = 0x3c;
-    missiles[0x15].fpLinker = 0;
-    missiles[0x16].szName = "Param3";
-    missiles[0x16].eType = FIELDTYPE_INT;
-    missiles[0x16].nSize = 0;
-    missiles[0x16].nOffset = 0x40;
-    missiles[0x16].fpLinker = 0;
-    missiles[0x17].szName = "Param4";
-    missiles[0x17].eType = FIELDTYPE_INT;
-    missiles[0x17].nSize = 0;
-    missiles[0x17].nOffset = 0x44;
-    missiles[0x17].fpLinker = 0;
-    missiles[0x18].szName = "Param5";
-    missiles[0x18].eType = FIELDTYPE_INT;
-    missiles[0x18].nSize = 0;
-    missiles[0x18].nOffset = 0x48;
-    missiles[0x18].fpLinker = 0;
-    missiles[0x19].szName = "SrvCalc1";
-    missiles[0x19].eType = FIELDTYPE_LINKER_INT;
-    missiles[0x19].nSize = 0;
-    missiles[0x19].nOffset = 0x80;
-    missiles[0x19].fpLinker = (void*)MissileCalcLinker;
-    missiles[0x1a].szName = "CltParam1";
-    missiles[0x1a].eType = FIELDTYPE_INT;
-    missiles[0x1a].nSize = 0;
-    missiles[0x1a].nOffset = 0x58;
-    missiles[0x1a].fpLinker = 0;
-    missiles[0x1b].szName = "CltParam2";
-    missiles[0x1b].eType = FIELDTYPE_INT;
-    missiles[0x1b].nSize = 0;
-    missiles[0x1b].nOffset = 0x5c;
-    missiles[0x1b].fpLinker = 0;
-    missiles[0x1c].szName = "CltParam3";
-    missiles[0x1c].eType = FIELDTYPE_INT;
-    missiles[0x1c].nSize = 0;
-    missiles[0x1c].nOffset = 0x60;
-    missiles[0x1c].fpLinker = 0;
-    missiles[0x1d].szName = "CltParam4";
-    missiles[0x1d].eType = FIELDTYPE_INT;
-    missiles[0x1d].nSize = 0;
-    missiles[0x1d].nOffset = 100;
-    missiles[0x1d].fpLinker = 0;
-    missiles[0x1e].szName = "CltParam5";
-    missiles[0x1f].fpLinker = (void*)MissileCalcLinker;
-    missiles[0x23].fpLinker = (void*)MissileCalcLinker;
-    missiles[0x27].fpLinker = (void*)MissileCalcLinker;
-    missiles[0x2a].fpLinker = (void*)MissileCalcLinker;
-    missiles[0x1e].eType = FIELDTYPE_INT;
-    missiles[0x1e].nSize = 0;
-    missiles[0x1e].nOffset = 0x68;
-    missiles[0x1e].fpLinker = 0;
-    missiles[0x1f].szName = "CltCalc1";
-    missiles[0x1f].eType = FIELDTYPE_LINKER_INT;
-    missiles[0x1f].nSize = 0;
-    missiles[0x1f].nOffset = 0x84;
-    missiles[0x20].szName = "sHitPar1";
-    missiles[0x20].eType = FIELDTYPE_INT;
-    missiles[0x20].nSize = 0;
-    missiles[0x20].nOffset = 0x4c;
-    missiles[0x20].fpLinker = 0;
-    missiles[0x21].szName = "sHitPar2";
-    missiles[0x21].eType = FIELDTYPE_INT;
-    missiles[0x21].nSize = 0;
-    missiles[0x21].nOffset = 0x50;
-    missiles[0x21].fpLinker = 0;
-    missiles[0x22].szName = "sHitPar3";
-    missiles[0x22].eType = FIELDTYPE_INT;
-    missiles[0x22].nSize = 0;
-    missiles[0x22].nOffset = 0x54;
-    missiles[0x22].fpLinker = 0;
-    missiles[0x23].szName = "SHitCalc1";
-    missiles[0x23].eType = FIELDTYPE_LINKER_INT;
-    missiles[0x23].nSize = 0;
-    missiles[0x23].nOffset = 0x88;
-    missiles[0x24].szName = "cHitPar1";
-    missiles[0x24].eType = FIELDTYPE_INT;
-    missiles[0x24].nSize = 0;
-    missiles[0x24].nOffset = 0x6c;
-    missiles[0x24].fpLinker = 0;
-    missiles[0x25].szName = "cHitPar2";
-    missiles[0x25].eType = FIELDTYPE_INT;
-    missiles[0x25].nSize = 0;
-    missiles[0x25].nOffset = 0x70;
-    missiles[0x25].fpLinker = 0;
-    missiles[0x26].szName = "cHitPar3";
-    missiles[0x26].eType = FIELDTYPE_INT;
-    missiles[0x26].nSize = 0;
-    missiles[0x26].nOffset = 0x74;
-    missiles[0x26].fpLinker = 0;
-    missiles[0x27].szName = "CHitCalc1";
-    missiles[0x27].eType = FIELDTYPE_LINKER_INT;
-    missiles[0x27].nSize = 0;
-    missiles[0x27].nOffset = 0x8c;
-    missiles[0x28].szName = "dParam1";
-    missiles[0x28].eType = FIELDTYPE_INT;
-    missiles[0x28].nSize = 0;
-    missiles[0x28].nOffset = 0x78;
-    missiles[0x28].fpLinker = 0;
-    missiles[0x29].szName = "dParam2";
-    missiles[0x29].eType = FIELDTYPE_INT;
-    missiles[0x29].nSize = 0;
-    missiles[0x29].nOffset = 0x7c;
-    missiles[0x29].fpLinker = 0;
-    missiles[0x2a].szName = "DmgCalc1";
-    missiles[0x2a].eType = FIELDTYPE_LINKER_INT;
-    missiles[0x2a].nSize = 0;
-    missiles[0x2a].nOffset = 0x90;
-    missiles[0x2b].szName = "TravelSound";
-    missiles[0x2b].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x2b].nSize = 0;
-    missiles[0x2b].nOffset = 0x12;
-    missiles[0x2b].fpLinker = &sgtDataTable.pTxtSoundsLink;
-    missiles[0x2c].szName = "HitSound";
-    missiles[0x2c].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x2c].nSize = 0;
-    missiles[0x2c].nOffset = 0x14;
-    missiles[0x2c].fpLinker = &sgtDataTable.pTxtSoundsLink;
-    missiles[0x2d].szName = "ProgSound";
-    missiles[0x2d].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x2d].nSize = 0;
-    missiles[0x2d].nOffset = 0x34;
-    missiles[0x2d].fpLinker = &sgtDataTable.pTxtSoundsLink;
-    missiles[0x2e].szName = "ProgOverlay";
-    missiles[0x2f].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x30].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x31].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x32].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x33].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x34].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x35].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x36].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x37].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x38].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x39].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x3a].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x3b].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x3c].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x3d].fpLinker = &sgtDataTable.pTxtMissilesLink;
-    missiles[0x2e].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x2e].nSize = 0;
-    missiles[0x2e].nOffset = 0x36;
-    missiles[0x2e].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    missiles[0x2f].szName = "ExplosionMissile";
-    missiles[0x2f].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x2f].nSize = 0;
-    missiles[0x2f].nOffset = 0x16;
-    missiles[0x30].szName = "SubMissile1";
-    missiles[0x30].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x30].nSize = 0;
-    missiles[0x30].nOffset = 0x18;
-    missiles[0x31].szName = "SubMissile2";
-    missiles[0x31].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x31].nSize = 0;
-    missiles[0x31].nOffset = 0x1a;
-    missiles[0x32].szName = "SubMissile3";
-    missiles[0x32].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x32].nSize = 0;
-    missiles[0x32].nOffset = 0x1c;
-    missiles[0x33].szName = "HitSubMissile1";
-    missiles[0x33].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x33].nSize = 0;
-    missiles[0x33].nOffset = 0x24;
-    missiles[0x34].szName = "HitSubMissile2";
-    missiles[0x34].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x34].nSize = 0;
-    missiles[0x34].nOffset = 0x26;
-    missiles[0x35].szName = "HitSubMissile3";
-    missiles[0x35].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x35].nSize = 0;
-    missiles[0x35].nOffset = 0x28;
-    missiles[0x36].szName = "HitSubMissile4";
-    missiles[0x36].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x36].nSize = 0;
-    missiles[0x36].nOffset = 0x2a;
-    missiles[0x37].szName = "CltSubMissile1";
-    missiles[0x37].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x37].nSize = 0;
-    missiles[0x37].nOffset = 0x1e;
-    missiles[0x38].szName = "CltSubMissile2";
-    missiles[0x38].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x38].nSize = 0;
-    missiles[0x38].nOffset = 0x20;
-    missiles[0x39].szName = "CltSubMissile3";
-    missiles[0x39].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x39].nSize = 0;
-    missiles[0x39].nOffset = 0x22;
-    missiles[0x3a].szName = "CltHitSubMissile1";
-    missiles[0x3a].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x3a].nSize = 0;
-    missiles[0x3a].nOffset = 0x2c;
-    missiles[0x3b].szName = "CltHitSubMissile2";
-    missiles[0x3b].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x3b].nSize = 0;
-    missiles[0x3b].nOffset = 0x2e;
-    missiles[0x3c].szName = "CltHitSubMissile3";
-    missiles[0x3c].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x3c].nSize = 0;
-    missiles[0x3c].nOffset = 0x30;
-    missiles[0x3d].szName = "CltHitSubMissile4";
-    missiles[0x3d].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x3d].nSize = 0;
-    missiles[0x3d].nOffset = 0x32;
-    missiles[0x3e].szName = "ResultFlags";
-    missiles[0x3e].eType = FIELDTYPE_SHORT;
-    missiles[0x3e].nSize = 0;
-    missiles[0x3e].nOffset = 0xac;
-    missiles[0x3e].fpLinker = 0;
-    missiles[0x3f].szName = "HitFlags";
-    missiles[0x3f].eType = FIELDTYPE_UINT;
-    missiles[0x3f].nSize = 0;
-    missiles[0x3f].nOffset = 0xa8;
-    missiles[0x3f].fpLinker = 0;
-    missiles[0x40].szName = "HitClass";
-    missiles[0x40].eType = FIELDTYPE_CHAR;
-    missiles[0x40].nSize = 0;
-    missiles[0x40].nOffset = 0x94;
-    missiles[0x40].fpLinker = 0;
-    missiles[0x41].szName = "Range";
-    missiles[0x41].eType = FIELDTYPE_SHORT;
-    missiles[0x41].nSize = 0;
-    missiles[0x41].nOffset = 0x96;
-    missiles[0x41].fpLinker = 0;
-    missiles[0x42].szName = "LevRange";
-    missiles[0x42].eType = FIELDTYPE_SHORT;
-    missiles[0x42].nSize = 0;
-    missiles[0x42].nOffset = 0x98;
-    missiles[0x42].fpLinker = 0;
-    missiles[0x43].szName = "KnockBack";
-    missiles[0x43].eType = FIELDTYPE_CHAR;
-    missiles[0x43].nSize = 0;
-    missiles[0x43].nOffset = 0xae;
-    missiles[0x43].fpLinker = 0;
-    missiles[0x44].szName = "animrate";
-    missiles[0x44].eType = FIELDTYPE_SHORT;
-    missiles[0x44].nSize = 0;
-    missiles[0x44].nOffset = 0xa0;
-    missiles[0x44].fpLinker = 0;
-    missiles[0x45].szName = "xoffset";
-    missiles[0x45].eType = FIELDTYPE_SHORT;
-    missiles[0x45].nSize = 0;
-    missiles[0x45].nOffset = 0xa2;
-    missiles[0x45].fpLinker = 0;
-    missiles[0x46].szName = "yoffset";
-    missiles[0x46].eType = FIELDTYPE_SHORT;
-    missiles[0x46].nSize = 0;
-    missiles[0x46].nOffset = 0xa4;
-    missiles[0x46].fpLinker = 0;
-    missiles[0x47].szName = "zoffset";
-    missiles[0x47].eType = FIELDTYPE_SHORT;
-    missiles[0x47].nSize = 0;
-    missiles[0x47].nOffset = 0xa6;
-    missiles[0x47].fpLinker = 0;
-    missiles[0x48].szName = "MissileSkill";
-    missiles[0x48].eType = FIELDTYPE_BIT;
-    missiles[0x48].nSize = 0xf;
-    missiles[0x48].nOffset = 4;
-    missiles[0x48].fpLinker = 0;
-    missiles[0x49].szName = "Skill";
-    missiles[0x49].eType = FIELDTYPE_NAME_SHORT;
-    missiles[0x49].nSize = 0;
-    missiles[0x49].nOffset = 0x194;
-    missiles[0x49].fpLinker = &sgtDataTable.pTxtSkillsHeaderLink;
-    missiles[0x4a].szName = "MinDamage";
-    missiles[0x4a].eType = FIELDTYPE_INT;
-    missiles[0x4a].nSize = 0;
-    missiles[0x4a].nOffset = 0xb0;
-    missiles[0x4a].fpLinker = 0;
-    missiles[0x4b].szName = "MinLevDam1";
-    missiles[0x4b].eType = FIELDTYPE_INT;
-    missiles[0x4b].nSize = 0;
-    missiles[0x4b].nOffset = 0xb8;
-    missiles[0x4b].fpLinker = 0;
-    missiles[0x4c].szName = "MinLevDam2";
-    missiles[0x4c].eType = FIELDTYPE_INT;
-    missiles[0x4c].nSize = 0;
-    missiles[0x4c].nOffset = 0xbc;
-    missiles[0x4c].fpLinker = 0;
-    missiles[0x4d].szName = "MinLevDam3";
-    missiles[0x4d].eType = FIELDTYPE_INT;
-    missiles[0x4d].nSize = 0;
-    missiles[0x4d].nOffset = 0xc0;
-    missiles[0x4d].fpLinker = 0;
-    missiles[0x4e].szName = "MinLevDam4";
-    missiles[0x4e].eType = FIELDTYPE_INT;
-    missiles[0x4e].nSize = 0;
-    missiles[0x4e].nOffset = 0xc4;
-    missiles[0x4e].fpLinker = 0;
-    missiles[0x4f].szName = "MinLevDam5";
-    missiles[0x4f].eType = FIELDTYPE_INT;
-    missiles[0x4f].nSize = 0;
-    missiles[0x4f].nOffset = 200;
-    missiles[0x4f].fpLinker = 0;
-    missiles[0x50].szName = "MaxDamage";
-    missiles[0x50].eType = FIELDTYPE_INT;
-    missiles[0x50].nSize = 0;
-    missiles[0x50].nOffset = 0xb4;
-    missiles[0x50].fpLinker = 0;
-    missiles[0x51].szName = "MaxLevDam1";
-    missiles[0x51].eType = FIELDTYPE_INT;
-    missiles[0x51].nSize = 0;
-    missiles[0x51].nOffset = 0xcc;
-    missiles[0x51].fpLinker = 0;
-    missiles[0x52].szName = "MaxLevDam2";
-    missiles[0x52].eType = FIELDTYPE_INT;
-    missiles[0x52].nSize = 0;
-    missiles[0x52].nOffset = 0xd0;
-    missiles[0x52].fpLinker = 0;
-    missiles[0x53].szName = "MaxLevDam3";
-    missiles[0x53].eType = FIELDTYPE_INT;
-    missiles[0x53].nSize = 0;
-    missiles[0x53].nOffset = 0xd4;
-    missiles[0x53].fpLinker = 0;
-    missiles[0x54].szName = "MaxLevDam4";
-    missiles[0x54].eType = FIELDTYPE_INT;
-    missiles[0x54].nSize = 0;
-    missiles[0x54].nOffset = 0xd8;
-    missiles[0x54].fpLinker = 0;
-    missiles[0x55].szName = "MaxLevDam5";
-    missiles[0x55].eType = FIELDTYPE_INT;
-    missiles[0x55].nSize = 0;
-    missiles[0x55].nOffset = 0xdc;
-    missiles[0x55].fpLinker = 0;
-    missiles[0x56].szName = "DmgSymPerCalc";
-    missiles[0x56].eType = FIELDTYPE_LINKER_INT;
-    missiles[0x56].nSize = 0;
-    missiles[0x56].nOffset = 0xe0;
-    missiles[0x56].fpLinker = (void*)MissileCalcLinker;
-    missiles[0x57].szName = "EType";
-    missiles[0x57].eType = FIELDTYPE_CODE_CHAR;
-    missiles[0x57].nSize = 0;
-    missiles[0x57].nOffset = 0xe4;
-    missiles[0x57].fpLinker = &sgtDataTable.pTxtElemTypesLink;
-    missiles[0x58].szName = "EMin";
-    missiles[0x58].eType = FIELDTYPE_INT;
-    missiles[0x58].nSize = 0;
-    missiles[0x58].nOffset = 0xe8;
-    missiles[0x58].fpLinker = 0;
-    missiles[0x59].szName = "MinELev1";
-    missiles[0x59].eType = FIELDTYPE_INT;
-    missiles[0x59].nSize = 0;
-    missiles[0x59].nOffset = 0xf0;
-    missiles[0x59].fpLinker = 0;
-    missiles[0x5a].szName = "MinELev2";
-    missiles[0x5a].eType = FIELDTYPE_INT;
-    missiles[0x5a].nSize = 0;
-    missiles[0x5a].nOffset = 0xf4;
-    missiles[0x5a].fpLinker = 0;
-    missiles[0x5b].szName = "MinELev3";
-    missiles[0x5b].eType = FIELDTYPE_INT;
-    missiles[0x5b].nSize = 0;
-    missiles[0x5b].nOffset = 0xf8;
-    missiles[0x5b].fpLinker = 0;
-    missiles[0x5c].szName = "MinELev4";
-    missiles[0x5c].eType = FIELDTYPE_INT;
-    missiles[0x5c].nSize = 0;
-    missiles[0x5c].nOffset = 0xfc;
-    missiles[0x5c].fpLinker = 0;
-    missiles[0x5d].szName = "MinELev5";
-    missiles[0x5d].eType = FIELDTYPE_INT;
-    missiles[0x5d].nSize = 0;
-    missiles[0x5d].nOffset = 0x100;
-    missiles[0x5d].fpLinker = 0;
-    missiles[0x5e].szName = "EMax";
-    missiles[0x5e].eType = FIELDTYPE_INT;
-    missiles[0x5e].nSize = 0;
-    missiles[0x5e].nOffset = 0xec;
-    missiles[0x5e].fpLinker = 0;
-    missiles[0x5f].szName = "MaxELev1";
-    missiles[0x5f].eType = FIELDTYPE_INT;
-    missiles[0x5f].nSize = 0;
-    missiles[0x5f].nOffset = 0x104;
-    missiles[0x5f].fpLinker = 0;
-    missiles[0x60].szName = "MaxELev2";
-    missiles[0x60].eType = FIELDTYPE_INT;
-    missiles[0x60].nSize = 0;
-    missiles[0x60].nOffset = 0x108;
-    missiles[0x60].fpLinker = 0;
-    missiles[0x61].szName = "MaxELev3";
-    missiles[0x61].eType = FIELDTYPE_INT;
-    missiles[0x61].nSize = 0;
-    missiles[0x61].nOffset = 0x10c;
-    missiles[0x61].fpLinker = 0;
-    missiles[0x62].szName = "MaxELev4";
-    missiles[0x62].eType = FIELDTYPE_INT;
-    missiles[0x62].nSize = 0;
-    missiles[0x62].nOffset = 0x110;
-    missiles[0x62].fpLinker = 0;
-    missiles[99].szName = "MaxELev5";
-    missiles[99].eType = FIELDTYPE_INT;
-    missiles[99].nSize = 0;
-    missiles[99].nOffset = 0x114;
-    missiles[99].fpLinker = 0;
-    missiles[100].szName = "EDmgSymPerCalc";
-    missiles[100].eType = FIELDTYPE_LINKER_INT;
-    missiles[100].nSize = 0;
-    missiles[100].nOffset = 0x118;
-    missiles[100].fpLinker = (void*)MissileCalcLinker;
-    missiles[0x65].szName = "ELen";
-    missiles[0x65].eType = FIELDTYPE_INT;
-    missiles[0x65].nSize = 0;
-    missiles[0x65].nOffset = 0x11c;
-    missiles[0x65].fpLinker = 0;
-    missiles[0x66].szName = "ELevLen1";
-    missiles[0x66].eType = FIELDTYPE_INT;
-    missiles[0x66].nSize = 0;
-    missiles[0x66].nOffset = 0x120;
-    missiles[0x66].fpLinker = 0;
-    missiles[0x67].szName = "ELevLen2";
-    missiles[0x67].eType = FIELDTYPE_INT;
-    missiles[0x67].nSize = 0;
-    missiles[0x67].nOffset = 0x124;
-    missiles[0x67].fpLinker = 0;
-    missiles[0x68].szName = "ELevLen3";
-    missiles[0x68].eType = FIELDTYPE_INT;
-    missiles[0x68].nSize = 0;
-    missiles[0x68].nOffset = 0x128;
-    missiles[0x68].fpLinker = 0;
-    missiles[0x69].szName = "CltSrcTown";
-    missiles[0x69].eType = FIELDTYPE_CHAR;
-    missiles[0x69].nSize = 0;
-    missiles[0x69].nOffset = 300;
-    missiles[0x69].fpLinker = 0;
-    missiles[0x6a].szName = "SrcDamage";
-    missiles[0x6a].eType = FIELDTYPE_CHAR;
-    missiles[0x6a].nSize = 0;
-    missiles[0x6a].nOffset = 0x12d;
-    missiles[0x6a].fpLinker = 0;
-    missiles[0x6b].szName = "SrcMissDmg";
-    missiles[0x6b].eType = FIELDTYPE_CHAR;
-    missiles[0x6b].nSize = 0;
-    missiles[0x6b].nOffset = 0x12e;
-    missiles[0x6b].fpLinker = 0;
-    missiles[0x6c].szName = "Half2HSrc";
-    missiles[0x6c].eType = FIELDTYPE_BIT;
-    missiles[0x6c].nSize = 0xe;
-    missiles[0x6c].nOffset = 4;
-    missiles[0x6c].fpLinker = 0;
-    missiles[0x6d].szName = "Vel";
-    missiles[0x6d].eType = FIELDTYPE_CHAR;
-    missiles[0x6d].nSize = 0;
-    missiles[0x6d].nOffset = 0x9a;
-    missiles[0x6d].fpLinker = 0;
-    missiles[0x6e].szName = "VelLev";
-    missiles[0x6e].eType = FIELDTYPE_CHAR;
-    missiles[0x6e].nSize = 0;
-    missiles[0x6e].nOffset = 0x9b;
-    missiles[0x6e].fpLinker = 0;
-    missiles[0x6f].szName = "MaxVel";
-    missiles[0x6f].eType = FIELDTYPE_CHAR;
-    missiles[0x6f].nSize = 0;
-    missiles[0x6f].nOffset = 0x9c;
-    missiles[0x6f].fpLinker = 0;
-    missiles[0x70].szName = "Accel";
-    missiles[0x70].eType = FIELDTYPE_SHORT;
-    missiles[0x70].nSize = 0;
-    missiles[0x70].nOffset = 0x9e;
-    missiles[0x70].fpLinker = 0;
-    missiles[0x71].szName = "Holy";
-    missiles[0x71].eType = FIELDTYPE_CHAR;
-    missiles[0x71].nSize = 0;
-    missiles[0x71].nOffset = 0x12f;
-    missiles[0x71].fpLinker = 0;
-    missiles[0x72].szName = "Light";
-    missiles[0x72].eType = FIELDTYPE_CHAR;
-    missiles[0x72].nSize = 0;
-    missiles[0x72].nOffset = 0x130;
-    missiles[0x72].fpLinker = 0;
-    missiles[0x73].szName = "Flicker";
-    missiles[0x73].eType = FIELDTYPE_CHAR;
-    missiles[0x73].nSize = 0;
-    missiles[0x73].nOffset = 0x131;
-    missiles[0x73].fpLinker = 0;
-    missiles[0x74].szName = "Red";
-    missiles[0x74].eType = FIELDTYPE_CHAR;
-    missiles[0x74].nSize = 0;
-    missiles[0x74].nOffset = 0x132;
-    missiles[0x74].fpLinker = 0;
-    missiles[0x75].szName = "Green";
-    missiles[0x75].eType = FIELDTYPE_CHAR;
-    missiles[0x75].nSize = 0;
-    missiles[0x75].nOffset = 0x133;
-    missiles[0x75].fpLinker = 0;
-    missiles[0x76].szName = "Blue";
-    missiles[0x76].eType = FIELDTYPE_CHAR;
-    missiles[0x76].nSize = 0;
-    missiles[0x76].nOffset = 0x134;
-    missiles[0x76].fpLinker = 0;
-    missiles[0x77].szName = "InitSteps";
-    missiles[0x77].eType = FIELDTYPE_CHAR;
-    missiles[0x77].nSize = 0;
-    missiles[0x77].nOffset = 0x135;
-    missiles[0x77].fpLinker = 0;
-    missiles[0x78].szName = "Activate";
-    missiles[0x78].eType = FIELDTYPE_CHAR;
-    missiles[0x78].nSize = 0;
-    missiles[0x78].nOffset = 0x136;
-    missiles[0x78].fpLinker = 0;
-    missiles[0x79].szName = "LoopAnim";
-    missiles[0x79].eType = FIELDTYPE_CHAR;
-    missiles[0x79].nSize = 0;
-    missiles[0x79].nOffset = 0x137;
-    missiles[0x79].fpLinker = 0;
-    missiles[0x7a].szName = "CelFile";
-    missiles[0x7a].eType = FIELDTYPE_ASCII;
-    missiles[0x7a].nSize = 0x40;
-    missiles[0x7a].nOffset = 0x138;
-    missiles[0x7a].fpLinker = 0;
-    missiles[0x7b].szName = "AnimLen";
-    missiles[0x7b].eType = FIELDTYPE_CHAR;
-    missiles[0x7b].nSize = 0;
-    missiles[0x7b].nOffset = 0x178;
-    missiles[0x7b].fpLinker = 0;
-    missiles[0x7c].szName = "RandStart";
-    missiles[0x7c].eType = FIELDTYPE_INT;
-    missiles[0x7c].nSize = 0;
-    missiles[0x7c].nOffset = 0x17c;
-    missiles[0x7c].fpLinker = 0;
-    missiles[0x7d].szName = "SubLoop";
-    missiles[0x7d].eType = FIELDTYPE_CHAR;
-    missiles[0x7d].nSize = 0;
-    missiles[0x7d].nOffset = 0x180;
-    missiles[0x7d].fpLinker = 0;
-    missiles[0x7e].szName = "SubStart";
-    missiles[0x7e].eType = FIELDTYPE_CHAR;
-    missiles[0x7e].nSize = 0;
-    missiles[0x7e].nOffset = 0x181;
-    missiles[0x7e].fpLinker = 0;
-    missiles[0x7f].szName = "SubStop";
-    missiles[0x7f].eType = FIELDTYPE_CHAR;
-    missiles[0x7f].nSize = 0;
-    missiles[0x7f].nOffset = 0x182;
-    missiles[0x7f].fpLinker = 0;
-    missiles[0x80].szName = "CollideType";
-    missiles[0x80].eType = FIELDTYPE_CHAR;
-    missiles[0x80].nSize = 0;
-    missiles[0x80].nOffset = 0x183;
-    missiles[0x80].fpLinker = 0;
-    missiles[0x81].szName = "CollideKill";
-    missiles[0x81].eType = FIELDTYPE_CHAR;
-    missiles[0x81].nSize = 0;
-    missiles[0x81].nOffset = 0x186;
-    missiles[0x81].fpLinker = 0;
-    missiles[0x82].szName = "CollideFriend";
-    missiles[0x82].eType = FIELDTYPE_CHAR;
-    missiles[0x82].nSize = 0;
-    missiles[0x82].nOffset = 0x187;
-    missiles[0x82].fpLinker = 0;
-    missiles[0x83].szName = "Collision";
-    missiles[0x83].eType = FIELDTYPE_CHAR;
-    missiles[0x83].nSize = 0;
-    missiles[0x83].nOffset = 0x184;
-    missiles[0x83].fpLinker = 0;
-    missiles[0x84].szName = "ClientCol";
-    missiles[0x84].eType = FIELDTYPE_CHAR;
-    missiles[0x84].nSize = 0;
-    missiles[0x84].nOffset = 0x185;
-    missiles[0x84].fpLinker = 0;
-    missiles[0x85].szName = "NextHit";
-    missiles[0x85].eType = FIELDTYPE_CHAR;
-    missiles[0x85].nSize = 0;
-    missiles[0x85].nOffset = 0x188;
-    missiles[0x85].fpLinker = 0;
-    missiles[0x86].szName = "NextDelay";
-    missiles[0x86].eType = FIELDTYPE_CHAR;
-    missiles[0x86].nSize = 0;
-    missiles[0x86].nOffset = 0x189;
-    missiles[0x86].fpLinker = 0;
-    missiles[0x87].szName = "Size";
-    missiles[0x87].eType = FIELDTYPE_CHAR;
-    missiles[0x87].nSize = 0;
-    missiles[0x87].nOffset = 0x18a;
-    missiles[0x87].fpLinker = 0;
-    missiles[0x88].szName = "ToHit";
-    missiles[0x88].eType = FIELDTYPE_CHAR;
-    missiles[0x88].nSize = 0;
-    missiles[0x88].nOffset = 0x18b;
-    missiles[0x88].fpLinker = 0;
-    missiles[0x89].szName = "AlwaysExplode";
-    missiles[0x89].eType = FIELDTYPE_CHAR;
-    missiles[0x89].nSize = 0;
-    missiles[0x89].nOffset = 0x18c;
-    missiles[0x89].fpLinker = 0;
-    missiles[0x8a].szName = "Trans";
-    missiles[0x8a].eType = FIELDTYPE_CHAR;
-    missiles[0x8a].nSize = 0;
-    missiles[0x8a].nOffset = 0x18d;
-    missiles[0x8a].fpLinker = 0;
-    missiles[0x8b].szName = "Qty";
-    missiles[0x8b].eType = FIELDTYPE_CHAR;
-    missiles[0x8b].nSize = 0;
-    missiles[0x8b].nOffset = 0x18e;
-    missiles[0x8b].fpLinker = 0;
-    missiles[0x8c].szName = "SpecialSetup";
-    missiles[0x8c].eType = FIELDTYPE_INT;
-    missiles[0x8c].nSize = 0;
-    missiles[0x8c].nOffset = 400;
-    missiles[0x8c].fpLinker = 0;
-    missiles[0x8d].szName = "HitShift";
-    missiles[0x8d].eType = FIELDTYPE_CHAR;
-    missiles[0x8d].nSize = 0;
-    missiles[0x8d].nOffset = 0x196;
-    missiles[0x8d].fpLinker = 0;
-    missiles[0x8e].szName = "NumDirections";
-    missiles[0x8e].eType = FIELDTYPE_CHAR;
-    missiles[0x8e].nSize = 0;
-    missiles[0x8e].nOffset = 0x1a0;
-    missiles[0x8e].fpLinker = 0;
-    missiles[0x8f].szName = "AnimSpeed";
-    missiles[0x8f].eType = FIELDTYPE_CHAR;
-    missiles[0x8f].nSize = 0;
-    missiles[0x8f].nOffset = 0x1a1;
-    missiles[0x8f].fpLinker = 0;
-    missiles[0x90].szName = "LocalBlood";
-    missiles[0x90].eType = FIELDTYPE_CHAR;
-    missiles[0x90].nSize = 0;
-    missiles[0x90].nOffset = 0x1a2;
-    missiles[0x90].fpLinker = 0;
-    missiles[0x91].szName = "DamageRate";
-    missiles[0x91].eType = FIELDTYPE_INT;
-    missiles[0x91].nSize = 0;
-    missiles[0x91].nOffset = 0x19c;
-    missiles[0x91].fpLinker = 0;
-    missiles[0x92].szName = "end";
-    missiles[0x92].eType = FIELDTYPE_END;
-    missiles[0x92].nSize = 0;
-    missiles[0x92].nOffset = 0;
-    missiles[0x92].fpLinker = 0;
+    D2BinFieldInputStrc missiles[147] = {
+      {"Missile", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtMissilesLink},
+      {"LastCollide", FIELDTYPE_BIT, 0, 4, 0},
+      {"Explosion", FIELDTYPE_BIT, 1, 4, 0},
+      {"Pierce", FIELDTYPE_BIT, 2, 4, 0},
+      {"CanSlow", FIELDTYPE_BIT, 3, 4, 0},
+      {"CanDestroy", FIELDTYPE_BIT, 4, 4, 0},
+      {"NoMultiShot", FIELDTYPE_BIT, 0xc, 4, 0},
+      {"NoUniqueMod", FIELDTYPE_BIT, 0xd, 4, 0},
+      {"ClientSend", FIELDTYPE_BIT, 5, 4, 0},
+      {"GetHit", FIELDTYPE_BIT, 6, 4, 0},
+      {"SoftHit", FIELDTYPE_BIT, 7, 4, 0},
+      {"ApplyMastery", FIELDTYPE_BIT, 8, 4, 0},
+      {"ReturnFire", FIELDTYPE_BIT, 9, 4, 0},
+      {"Town", FIELDTYPE_BIT, 10, 4, 0},
+      {"SrcTown", FIELDTYPE_BIT, 0xb, 4, 0},
+      {"pCltDoFunc", FIELDTYPE_SHORT, 0, 8, 0},
+      {"pCltHitFunc", FIELDTYPE_SHORT, 0, 10, 0},
+      {"pSrvDoFunc", FIELDTYPE_SHORT, 0, 0xc, 0},
+      {"pSrvHitFunc", FIELDTYPE_SHORT, 0, 0xe, 0},
+      {"pSrvDmgFunc", FIELDTYPE_SHORT, 0, 0x10, 0},
+      {"Param1", FIELDTYPE_INT, 0, 0x38, 0},
+      {"Param2", FIELDTYPE_INT, 0, 0x3c, 0},
+      {"Param3", FIELDTYPE_INT, 0, 0x40, 0},
+      {"Param4", FIELDTYPE_INT, 0, 0x44, 0},
+      {"Param5", FIELDTYPE_INT, 0, 0x48, 0},
+      {"SrvCalc1", FIELDTYPE_LINKER_INT, 0, 0x80, (void*)MissileCalcLinker},
+      {"CltParam1", FIELDTYPE_INT, 0, 0x58, 0},
+      {"CltParam2", FIELDTYPE_INT, 0, 0x5c, 0},
+      {"CltParam3", FIELDTYPE_INT, 0, 0x60, 0},
+      {"CltParam4", FIELDTYPE_INT, 0, 100, 0},
+      {"CltParam5", FIELDTYPE_INT, 0, 0x68, 0},
+      {"CltCalc1", FIELDTYPE_LINKER_INT, 0, 0x84, (void*)MissileCalcLinker},
+      {"sHitPar1", FIELDTYPE_INT, 0, 0x4c, 0},
+      {"sHitPar2", FIELDTYPE_INT, 0, 0x50, 0},
+      {"sHitPar3", FIELDTYPE_INT, 0, 0x54, 0},
+      {"SHitCalc1", FIELDTYPE_LINKER_INT, 0, 0x88, (void*)MissileCalcLinker},
+      {"cHitPar1", FIELDTYPE_INT, 0, 0x6c, 0},
+      {"cHitPar2", FIELDTYPE_INT, 0, 0x70, 0},
+      {"cHitPar3", FIELDTYPE_INT, 0, 0x74, 0},
+      {"CHitCalc1", FIELDTYPE_LINKER_INT, 0, 0x8c, (void*)MissileCalcLinker},
+      {"dParam1", FIELDTYPE_INT, 0, 0x78, 0},
+      {"dParam2", FIELDTYPE_INT, 0, 0x7c, 0},
+      {"DmgCalc1", FIELDTYPE_LINKER_INT, 0, 0x90, (void*)MissileCalcLinker},
+      {"TravelSound", FIELDTYPE_NAME_SHORT, 0, 0x12, &sgtDataTable.pTxtSoundsLink},
+      {"HitSound", FIELDTYPE_NAME_SHORT, 0, 0x14, &sgtDataTable.pTxtSoundsLink},
+      {"ProgSound", FIELDTYPE_NAME_SHORT, 0, 0x34, &sgtDataTable.pTxtSoundsLink},
+      {"ProgOverlay", FIELDTYPE_NAME_SHORT, 0, 0x36, &sgtDataTable.pTxtOverlayLink},
+      {"ExplosionMissile", FIELDTYPE_NAME_SHORT, 0, 0x16, &sgtDataTable.pTxtMissilesLink},
+      {"SubMissile1", FIELDTYPE_NAME_SHORT, 0, 0x18, &sgtDataTable.pTxtMissilesLink},
+      {"SubMissile2", FIELDTYPE_NAME_SHORT, 0, 0x1a, &sgtDataTable.pTxtMissilesLink},
+      {"SubMissile3", FIELDTYPE_NAME_SHORT, 0, 0x1c, &sgtDataTable.pTxtMissilesLink},
+      {"HitSubMissile1", FIELDTYPE_NAME_SHORT, 0, 0x24, &sgtDataTable.pTxtMissilesLink},
+      {"HitSubMissile2", FIELDTYPE_NAME_SHORT, 0, 0x26, &sgtDataTable.pTxtMissilesLink},
+      {"HitSubMissile3", FIELDTYPE_NAME_SHORT, 0, 0x28, &sgtDataTable.pTxtMissilesLink},
+      {"HitSubMissile4", FIELDTYPE_NAME_SHORT, 0, 0x2a, &sgtDataTable.pTxtMissilesLink},
+      {"CltSubMissile1", FIELDTYPE_NAME_SHORT, 0, 0x1e, &sgtDataTable.pTxtMissilesLink},
+      {"CltSubMissile2", FIELDTYPE_NAME_SHORT, 0, 0x20, &sgtDataTable.pTxtMissilesLink},
+      {"CltSubMissile3", FIELDTYPE_NAME_SHORT, 0, 0x22, &sgtDataTable.pTxtMissilesLink},
+      {"CltHitSubMissile1", FIELDTYPE_NAME_SHORT, 0, 0x2c, &sgtDataTable.pTxtMissilesLink},
+      {"CltHitSubMissile2", FIELDTYPE_NAME_SHORT, 0, 0x2e, &sgtDataTable.pTxtMissilesLink},
+      {"CltHitSubMissile3", FIELDTYPE_NAME_SHORT, 0, 0x30, &sgtDataTable.pTxtMissilesLink},
+      {"CltHitSubMissile4", FIELDTYPE_NAME_SHORT, 0, 0x32, &sgtDataTable.pTxtMissilesLink},
+      {"ResultFlags", FIELDTYPE_SHORT, 0, 0xac, 0},
+      {"HitFlags", FIELDTYPE_UINT, 0, 0xa8, 0},
+      {"HitClass", FIELDTYPE_CHAR, 0, 0x94, 0},
+      {"Range", FIELDTYPE_SHORT, 0, 0x96, 0},
+      {"LevRange", FIELDTYPE_SHORT, 0, 0x98, 0},
+      {"KnockBack", FIELDTYPE_CHAR, 0, 0xae, 0},
+      {"animrate", FIELDTYPE_SHORT, 0, 0xa0, 0},
+      {"xoffset", FIELDTYPE_SHORT, 0, 0xa2, 0},
+      {"yoffset", FIELDTYPE_SHORT, 0, 0xa4, 0},
+      {"zoffset", FIELDTYPE_SHORT, 0, 0xa6, 0},
+      {"MissileSkill", FIELDTYPE_BIT, 0xf, 4, 0},
+      {"Skill", FIELDTYPE_NAME_SHORT, 0, 0x194, &sgtDataTable.pTxtSkillsHeaderLink},
+      {"MinDamage", FIELDTYPE_INT, 0, 0xb0, 0},
+      {"MinLevDam1", FIELDTYPE_INT, 0, 0xb8, 0},
+      {"MinLevDam2", FIELDTYPE_INT, 0, 0xbc, 0},
+      {"MinLevDam3", FIELDTYPE_INT, 0, 0xc0, 0},
+      {"MinLevDam4", FIELDTYPE_INT, 0, 0xc4, 0},
+      {"MinLevDam5", FIELDTYPE_INT, 0, 200, 0},
+      {"MaxDamage", FIELDTYPE_INT, 0, 0xb4, 0},
+      {"MaxLevDam1", FIELDTYPE_INT, 0, 0xcc, 0},
+      {"MaxLevDam2", FIELDTYPE_INT, 0, 0xd0, 0},
+      {"MaxLevDam3", FIELDTYPE_INT, 0, 0xd4, 0},
+      {"MaxLevDam4", FIELDTYPE_INT, 0, 0xd8, 0},
+      {"MaxLevDam5", FIELDTYPE_INT, 0, 0xdc, 0},
+      {"DmgSymPerCalc", FIELDTYPE_LINKER_INT, 0, 0xe0, (void*)MissileCalcLinker},
+      {"EType", FIELDTYPE_CODE_CHAR, 0, 0xe4, &sgtDataTable.pTxtElemTypesLink},
+      {"EMin", FIELDTYPE_INT, 0, 0xe8, 0},
+      {"MinELev1", FIELDTYPE_INT, 0, 0xf0, 0},
+      {"MinELev2", FIELDTYPE_INT, 0, 0xf4, 0},
+      {"MinELev3", FIELDTYPE_INT, 0, 0xf8, 0},
+      {"MinELev4", FIELDTYPE_INT, 0, 0xfc, 0},
+      {"MinELev5", FIELDTYPE_INT, 0, 0x100, 0},
+      {"EMax", FIELDTYPE_INT, 0, 0xec, 0},
+      {"MaxELev1", FIELDTYPE_INT, 0, 0x104, 0},
+      {"MaxELev2", FIELDTYPE_INT, 0, 0x108, 0},
+      {"MaxELev3", FIELDTYPE_INT, 0, 0x10c, 0},
+      {"MaxELev4", FIELDTYPE_INT, 0, 0x110, 0},
+      {"MaxELev5", FIELDTYPE_INT, 0, 0x114, 0},
+      {"EDmgSymPerCalc", FIELDTYPE_LINKER_INT, 0, 0x118, (void*)MissileCalcLinker},
+      {"ELen", FIELDTYPE_INT, 0, 0x11c, 0},
+      {"ELevLen1", FIELDTYPE_INT, 0, 0x120, 0},
+      {"ELevLen2", FIELDTYPE_INT, 0, 0x124, 0},
+      {"ELevLen3", FIELDTYPE_INT, 0, 0x128, 0},
+      {"CltSrcTown", FIELDTYPE_CHAR, 0, 300, 0},
+      {"SrcDamage", FIELDTYPE_CHAR, 0, 0x12d, 0},
+      {"SrcMissDmg", FIELDTYPE_CHAR, 0, 0x12e, 0},
+      {"Half2HSrc", FIELDTYPE_BIT, 0xe, 4, 0},
+      {"Vel", FIELDTYPE_CHAR, 0, 0x9a, 0},
+      {"VelLev", FIELDTYPE_CHAR, 0, 0x9b, 0},
+      {"MaxVel", FIELDTYPE_CHAR, 0, 0x9c, 0},
+      {"Accel", FIELDTYPE_SHORT, 0, 0x9e, 0},
+      {"Holy", FIELDTYPE_CHAR, 0, 0x12f, 0},
+      {"Light", FIELDTYPE_CHAR, 0, 0x130, 0},
+      {"Flicker", FIELDTYPE_CHAR, 0, 0x131, 0},
+      {"Red", FIELDTYPE_CHAR, 0, 0x132, 0},
+      {"Green", FIELDTYPE_CHAR, 0, 0x133, 0},
+      {"Blue", FIELDTYPE_CHAR, 0, 0x134, 0},
+      {"InitSteps", FIELDTYPE_CHAR, 0, 0x135, 0},
+      {"Activate", FIELDTYPE_CHAR, 0, 0x136, 0},
+      {"LoopAnim", FIELDTYPE_CHAR, 0, 0x137, 0},
+      {"CelFile", FIELDTYPE_ASCII, 0x40, 0x138, 0},
+      {"AnimLen", FIELDTYPE_CHAR, 0, 0x178, 0},
+      {"RandStart", FIELDTYPE_INT, 0, 0x17c, 0},
+      {"SubLoop", FIELDTYPE_CHAR, 0, 0x180, 0},
+      {"SubStart", FIELDTYPE_CHAR, 0, 0x181, 0},
+      {"SubStop", FIELDTYPE_CHAR, 0, 0x182, 0},
+      {"CollideType", FIELDTYPE_CHAR, 0, 0x183, 0},
+      {"CollideKill", FIELDTYPE_CHAR, 0, 0x186, 0},
+      {"CollideFriend", FIELDTYPE_CHAR, 0, 0x187, 0},
+      {"Collision", FIELDTYPE_CHAR, 0, 0x184, 0},
+      {"ClientCol", FIELDTYPE_CHAR, 0, 0x185, 0},
+      {"NextHit", FIELDTYPE_CHAR, 0, 0x188, 0},
+      {"NextDelay", FIELDTYPE_CHAR, 0, 0x189, 0},
+      {"Size", FIELDTYPE_CHAR, 0, 0x18a, 0},
+      {"ToHit", FIELDTYPE_CHAR, 0, 0x18b, 0},
+      {"AlwaysExplode", FIELDTYPE_CHAR, 0, 0x18c, 0},
+      {"Trans", FIELDTYPE_CHAR, 0, 0x18d, 0},
+      {"Qty", FIELDTYPE_CHAR, 0, 0x18e, 0},
+      {"SpecialSetup", FIELDTYPE_INT, 0, 400, 0},
+      {"HitShift", FIELDTYPE_CHAR, 0, 0x196, 0},
+      {"NumDirections", FIELDTYPE_CHAR, 0, 0x1a0, 0},
+      {"AnimSpeed", FIELDTYPE_CHAR, 0, 0x1a1, 0},
+      {"LocalBlood", FIELDTYPE_CHAR, 0, 0x1a2, 0},
+      {"DamageRate", FIELDTYPE_INT, 0, 0x19c, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtMissilesLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\MissileTbls.cpp", 0x189);
     sgtDataTable.pTxtMissiles = (D2MissilesTxt*)DataTbls::CompileTxt(pMemory, "missiles", missiles, &sgtDataTable.nTxtMissilesSize, 0x1a4);
     int iMissileIdx = 0;

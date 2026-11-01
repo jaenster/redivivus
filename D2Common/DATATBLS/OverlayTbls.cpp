@@ -38,137 +38,34 @@ namespace D2Common::DATATBLS::OverlayTbls {
 
 // Compiles Overlay.txt into the in-memory overlay table during data-table init. Declares the column schema (overlay name, filename, version, Frames, PreDraw, 1ofN, Dir, animrate, Beta, X/Yoffset, height/range/light fields, Trans, RGB color, NumDirections, LocalBlood) with field types and struct offsets, creates the overlay TxtLink lookup (STRUCT_CreateTxtLinkStrc) into sgtDataTable.pTxtOverlayLink, then calls DataTbls::CompileTxt (record size 0x84) storing the result in sgtDataTable.pTxtOverlay / nTxtOverlaySize. Allocates from pMemory. (Several column-name string literals decompile as raw global addresses; they are the in-binary .rdata column names.)
 void __fastcall TXT_AllocTxt_overlay(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc aFieldDefs[26];
-    aFieldDefs[0].szName = "overlay";
-    aFieldDefs[0].eType = FIELDTYPE_NAME_I_WORD;
-    aFieldDefs[0].nSize = 0;
-    aFieldDefs[0].nOffset = 0;
-    aFieldDefs[0].fpLinker = &sgtDataTable.pTxtOverlayLink;
-    aFieldDefs[1].szName = "Filename";
-    aFieldDefs[1].eType = FIELDTYPE_ASCII;
-    aFieldDefs[1].nSize = 0x40;
-    aFieldDefs[1].nOffset = 2;
-    aFieldDefs[1].fpLinker = 0;
-    aFieldDefs[2].szName = "version";
-    aFieldDefs[2].eType = FIELDTYPE_SHORT;
-    aFieldDefs[2].nSize = 0;
-    aFieldDefs[2].nOffset = 0x42;
-    aFieldDefs[2].fpLinker = 0;
-    aFieldDefs[3].szName = "Frames";
-    aFieldDefs[3].eType = FIELDTYPE_INT;
-    aFieldDefs[3].nSize = 0;
-    aFieldDefs[3].nOffset = 0x44;
-    aFieldDefs[3].fpLinker = 0;
-    aFieldDefs[4].szName = "PreDraw";
-    aFieldDefs[4].eType = FIELDTYPE_CHAR;
-    aFieldDefs[4].nSize = 0;
-    aFieldDefs[4].nOffset = 0x48;
-    aFieldDefs[4].fpLinker = 0;
-    aFieldDefs[5].szName = "1ofN";
-    aFieldDefs[5].eType = FIELDTYPE_INT;
-    aFieldDefs[5].nSize = 0;
-    aFieldDefs[5].nOffset = 0x4c;
-    aFieldDefs[5].fpLinker = 0;
-    aFieldDefs[6].szName = "Dir";
-    aFieldDefs[6].eType = FIELDTYPE_CHAR;
-    aFieldDefs[6].nSize = 0;
-    aFieldDefs[6].nOffset = 0x50;
-    aFieldDefs[6].fpLinker = 0;
-    aFieldDefs[7].szName = "Open";
-    aFieldDefs[7].eType = FIELDTYPE_CHAR;
-    aFieldDefs[7].nSize = 0;
-    aFieldDefs[7].nOffset = 0x51;
-    aFieldDefs[7].fpLinker = 0;
-    aFieldDefs[8].szName = "Beta";
-    aFieldDefs[8].eType = FIELDTYPE_CHAR;
-    aFieldDefs[8].nSize = 0;
-    aFieldDefs[8].nOffset = 0x52;
-    aFieldDefs[8].fpLinker = 0;
-    aFieldDefs[9].szName = "Xoffset";
-    aFieldDefs[9].eType = FIELDTYPE_INT;
-    aFieldDefs[9].nSize = 0;
-    aFieldDefs[9].nOffset = 0x54;
-    aFieldDefs[9].fpLinker = 0;
-    aFieldDefs[10].szName = "Yoffset";
-    aFieldDefs[10].eType = FIELDTYPE_INT;
-    aFieldDefs[10].nSize = 0;
-    aFieldDefs[10].nOffset = 0x58;
-    aFieldDefs[10].fpLinker = 0;
-    aFieldDefs[0xb].szName = "Height1";
-    aFieldDefs[0xb].eType = FIELDTYPE_INT;
-    aFieldDefs[0xb].nSize = 0;
-    aFieldDefs[0xb].nOffset = 0x5c;
-    aFieldDefs[0xb].fpLinker = 0;
-    aFieldDefs[0xc].szName = "Height2";
-    aFieldDefs[0xc].eType = FIELDTYPE_INT;
-    aFieldDefs[0xc].nSize = 0;
-    aFieldDefs[0xc].nOffset = 0x60;
-    aFieldDefs[0xc].fpLinker = 0;
-    aFieldDefs[0xd].szName = "Height3";
-    aFieldDefs[0xd].eType = FIELDTYPE_INT;
-    aFieldDefs[0xd].nSize = 0;
-    aFieldDefs[0xd].nOffset = 100;
-    aFieldDefs[0xd].fpLinker = 0;
-    aFieldDefs[0xe].szName = "Height4";
-    aFieldDefs[0xe].eType = FIELDTYPE_INT;
-    aFieldDefs[0xe].nSize = 0;
-    aFieldDefs[0xe].nOffset = 0x68;
-    aFieldDefs[0xe].fpLinker = 0;
-    aFieldDefs[0xf].szName = "AnimRate";
-    aFieldDefs[0xf].eType = FIELDTYPE_INT;
-    aFieldDefs[0xf].nSize = 0;
-    aFieldDefs[0xf].nOffset = 0x6c;
-    aFieldDefs[0xf].fpLinker = 0;
-    aFieldDefs[0x10].szName = "LoopWaitTime";
-    aFieldDefs[0x10].eType = FIELDTYPE_INT;
-    aFieldDefs[0x10].nSize = 0;
-    aFieldDefs[0x10].nOffset = 0x78;
-    aFieldDefs[0x10].fpLinker = 0;
-    aFieldDefs[0x11].szName = "Trans";
-    aFieldDefs[0x11].eType = FIELDTYPE_CHAR;
-    aFieldDefs[0x11].nSize = 0;
-    aFieldDefs[0x11].nOffset = 0x7c;
-    aFieldDefs[0x11].fpLinker = 0;
-    aFieldDefs[0x12].szName = "InitRadius";
-    aFieldDefs[0x12].eType = FIELDTYPE_INT;
-    aFieldDefs[0x12].nSize = 0;
-    aFieldDefs[0x12].nOffset = 0x70;
-    aFieldDefs[0x12].fpLinker = 0;
-    aFieldDefs[0x13].szName = "Radius";
-    aFieldDefs[0x13].eType = FIELDTYPE_INT;
-    aFieldDefs[0x13].nSize = 0;
-    aFieldDefs[0x13].nOffset = 0x74;
-    aFieldDefs[0x13].fpLinker = 0;
-    aFieldDefs[0x14].szName = "Red";
-    aFieldDefs[0x14].eType = FIELDTYPE_CHAR;
-    aFieldDefs[0x14].nSize = 0;
-    aFieldDefs[0x14].nOffset = 0x7d;
-    aFieldDefs[0x14].fpLinker = 0;
-    aFieldDefs[0x15].szName = "Green";
-    aFieldDefs[0x15].eType = FIELDTYPE_CHAR;
-    aFieldDefs[0x15].nSize = 0;
-    aFieldDefs[0x15].nOffset = 0x7e;
-    aFieldDefs[0x15].fpLinker = 0;
-    aFieldDefs[0x16].szName = "Blue";
-    aFieldDefs[0x16].eType = FIELDTYPE_CHAR;
-    aFieldDefs[0x16].nSize = 0;
-    aFieldDefs[0x16].nOffset = 0x7f;
-    aFieldDefs[0x16].fpLinker = 0;
-    aFieldDefs[0x17].szName = "NumDirections";
-    aFieldDefs[0x17].eType = FIELDTYPE_CHAR;
-    aFieldDefs[0x17].nSize = 0;
-    aFieldDefs[0x17].nOffset = 0x80;
-    aFieldDefs[0x17].fpLinker = 0;
-    aFieldDefs[0x18].szName = "LocalBlood";
-    aFieldDefs[0x18].eType = FIELDTYPE_CHAR;
-    aFieldDefs[0x18].nSize = 0;
-    aFieldDefs[0x18].nOffset = 0x81;
-    aFieldDefs[0x18].fpLinker = 0;
-    aFieldDefs[0x19].szName = "end";
-    aFieldDefs[0x19].eType = FIELDTYPE_END;
-    aFieldDefs[0x19].nSize = 0;
-    aFieldDefs[0x19].nOffset = 0;
-    aFieldDefs[0x19].fpLinker = 0;
+    D2BinFieldInputStrc aFieldDefs[26] = {
+      {"overlay", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtOverlayLink},
+      {"Filename", FIELDTYPE_ASCII, 0x40, 2, 0},
+      {"version", FIELDTYPE_SHORT, 0, 0x42, 0},
+      {"Frames", FIELDTYPE_INT, 0, 0x44, 0},
+      {"PreDraw", FIELDTYPE_CHAR, 0, 0x48, 0},
+      {"1ofN", FIELDTYPE_INT, 0, 0x4c, 0},
+      {"Dir", FIELDTYPE_CHAR, 0, 0x50, 0},
+      {"Open", FIELDTYPE_CHAR, 0, 0x51, 0},
+      {"Beta", FIELDTYPE_CHAR, 0, 0x52, 0},
+      {"Xoffset", FIELDTYPE_INT, 0, 0x54, 0},
+      {"Yoffset", FIELDTYPE_INT, 0, 0x58, 0},
+      {"Height1", FIELDTYPE_INT, 0, 0x5c, 0},
+      {"Height2", FIELDTYPE_INT, 0, 0x60, 0},
+      {"Height3", FIELDTYPE_INT, 0, 100, 0},
+      {"Height4", FIELDTYPE_INT, 0, 0x68, 0},
+      {"AnimRate", FIELDTYPE_INT, 0, 0x6c, 0},
+      {"LoopWaitTime", FIELDTYPE_INT, 0, 0x78, 0},
+      {"Trans", FIELDTYPE_CHAR, 0, 0x7c, 0},
+      {"InitRadius", FIELDTYPE_INT, 0, 0x70, 0},
+      {"Radius", FIELDTYPE_INT, 0, 0x74, 0},
+      {"Red", FIELDTYPE_CHAR, 0, 0x7d, 0},
+      {"Green", FIELDTYPE_CHAR, 0, 0x7e, 0},
+      {"Blue", FIELDTYPE_CHAR, 0, 0x7f, 0},
+      {"NumDirections", FIELDTYPE_CHAR, 0, 0x80, 0},
+      {"LocalBlood", FIELDTYPE_CHAR, 0, 0x81, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     sgtDataTable.pTxtOverlayLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\OverlayTbls.cpp", 0x38);
     sgtDataTable.pTxtOverlay = (D2OverlayTxt*)DataTbls::CompileTxt(pMemory, "overlay", aFieldDefs, &sgtDataTable.nTxtOverlaySize, 0x84);
 }
