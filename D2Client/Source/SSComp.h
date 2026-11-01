@@ -13,8 +13,8 @@ namespace D2Client::Source::SSComp {
 // Function declarations
 // Adler-32 checksum for DEFLATE algorithm. Combines two 16-bit checksums: sum of uncompressed bytes mod 65521 and sum-of-sums mod 65521. Optimized with 16-byte blocks for speed.
 uint32_t __fastcall ZLIB_Adler32(uint32_t nAdler, uint8_t * pbData, uint32_t nLen);
-uint32_t __fastcall ZLIB_Adler32Combine32(uint32_t nParam3, uint32_t nParam2, uint32_t nParam1);
-uint32_t __fastcall ZLIB_Adler32Combine64(uint32_t nParam3, uint32_t nParam4, uint32_t nParam1, uint32_t nParam2);
+uint32_t __fastcall ZLIB_Adler32Combine32(uint32_t nAdler1, uint32_t nAdler2, uint32_t nLen2);
+uint32_t __fastcall ZLIB_Adler32Combine64(uint32_t nAdler1, uint32_t nAdler2, uint32_t nLen2Lo, uint32_t nLen2Hi);
 // Fast-path inflate decompression main loop. Processes compressed data using precomputed Huffman tables with 15-bit lookahead for literal/distance pairs. Copies match data with optimized 3-byte blocking pattern.
 void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos);
 // Build Huffman decoding table from bit lengths. Generates lookup tables for inflate decompression. Uses intermediate code arrays and calculates bit-level offsets for dynamic Huffman tree construction.

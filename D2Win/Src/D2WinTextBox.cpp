@@ -1130,7 +1130,7 @@ int __fastcall D2WINTEXTBOX_GetScrollbarMaxValue(::D2WinTextBox * pTextBox) {
     }
 }
 
-void __fastcall D2WINTEXTBOX_SetScrollbarMaxRange(::D2WinTextBox * pnParam, uint32_t nParam) {
+void __fastcall D2WINTEXTBOX_SetScrollbarMaxRange(::D2WinTextBox * pnParam, uint32_t nMaxValue) {
     if (!pnParam) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x582);
       exit(-1);
@@ -1140,7 +1140,7 @@ void __fastcall D2WINTEXTBOX_SetScrollbarMaxRange(::D2WinTextBox * pnParam, uint
         exit(-1);
       }
 
-      D2WinScrollbar::D2WINSCROLLBAR_SetMaxValue(pnParam->pScrollbar, nParam);
+      D2WinScrollbar::D2WINSCROLLBAR_SetMaxValue(pnParam->pScrollbar, nMaxValue);
       return;
     }
 }
@@ -1161,7 +1161,7 @@ int __fastcall D2WINTEXTBOX_RefreshScrollbar(::D2WinTextBox * pnParam) {
     }
 }
 
-void __fastcall D2WINTEXTBOX_SetScrollbarPosition(::D2WinTextBox * pnParam, int32_t nParam) {
+void __fastcall D2WINTEXTBOX_SetScrollbarPosition(::D2WinTextBox * pnParam, int32_t nPosition) {
     if (!pnParam) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x596);
       exit(-1);
@@ -1171,7 +1171,7 @@ void __fastcall D2WINTEXTBOX_SetScrollbarPosition(::D2WinTextBox * pnParam, int3
         exit(-1);
       }
 
-      D2WinScrollbar::D2WINSCROLLBAR_SetPosition(pnParam->pScrollbar, nParam);
+      D2WinScrollbar::D2WINSCROLLBAR_SetPosition(pnParam->pScrollbar, nPosition);
       return;
     }
 }
@@ -1208,7 +1208,7 @@ void __fastcall D2WINTEXTBOX_SetScrollbarCallbackB(::D2WinTextBox * pTextBox, fp
     }
 }
 
-void __fastcall D2WINTEXTBOX_SetScrollbarStyle(::D2WinTextBox * pnParam, int32_t nParam) {
+void __fastcall D2WINTEXTBOX_SetScrollbarStyle(::D2WinTextBox * pnParam, int32_t nStyle) {
     if (!pnParam) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5b4);
       exit(-1);
@@ -1218,7 +1218,7 @@ void __fastcall D2WINTEXTBOX_SetScrollbarStyle(::D2WinTextBox * pnParam, int32_t
         exit(-1);
       }
 
-      D2WinScrollbar::D2WINSCROLLBAR_SetStyle(pnParam->pScrollbar, nParam);
+      D2WinScrollbar::D2WINSCROLLBAR_SetStyle(pnParam->pScrollbar, nStyle);
       return;
     }
 }
@@ -1541,8 +1541,8 @@ void __fastcall D2WINTEXTBOX_SetLineCellTextA(::D2WinTextBox * pnParam, char * s
     D2WINTEXTBOX_SetLineCellTextW(pnParam, wszWorkBuf, nRowIndex, nColIndex);
 }
 
-void __fastcall D2WINTEXTBOX_SetLineCellTextWDirect(::D2WinTextBox * pnParam, uint16_t * wszText, int32_t nParam1, int32_t nParam2) {
-    D2WINTEXTBOX_SetLineCellTextW(pnParam, wszText, nParam1, nParam2);
+void __fastcall D2WINTEXTBOX_SetLineCellTextWDirect(::D2WinTextBox * pnParam, uint16_t * wszText, int32_t nRow, int32_t nCol) {
+    D2WINTEXTBOX_SetLineCellTextW(pnParam, wszText, nRow, nCol);
 }
 
 // @sourcefile .\Src\D2WinTextBox.cpp

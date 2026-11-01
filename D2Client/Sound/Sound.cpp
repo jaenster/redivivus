@@ -1222,9 +1222,9 @@ void __fastcall SOUND_StopUnitSoundByIndex(int32_t nParam, D2UnitStrc * pUnit, i
     SOUND_StopUnitSound((int32_t)nChanDataPtr);
 }
 
-void __fastcall SOUND_StopById(int32_t nParam) {
+void __fastcall SOUND_StopById(int32_t nChannelHandle) {
     D2SoundChannelStrc* nChanDataPtr;
-    if (!nParam) {
+    if (!nChannelHandle) {
       return;
     }
 
@@ -1236,7 +1236,7 @@ void __fastcall SOUND_StopById(int32_t nParam) {
     while (true) {
       D2SoundChannelNodeStrc** pNextChanNode;
       nChanDataPtr = pChannel->pChannel;
-      if (nChanDataPtr->nChannelHandle == nParam) {
+      if (nChanDataPtr->nChannelHandle == nChannelHandle) {
         break;
       }
 

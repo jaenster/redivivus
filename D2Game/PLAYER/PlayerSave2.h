@@ -68,7 +68,7 @@ void __fastcall PLRSAVE_SetSkillIfNonZero(uint32_t dwParam, struct D2UnitStrc * 
 // Deserialises hard skill allocations (magic 0x6669) from the save buffer and applies them to the unit via SetSkill for each non-zero entry. After loading, sends the 0x94 skills-list packet to the client and recomputes all passive and pet bonuses. Returns 0x13 on header mismatch or missing client.
 // @sourcefile .\PLAYER\PlrSave2.cpp
 int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwParam, uint32_t bParam);
-int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppItemList, int32_t nItemMode, uint32_t nParam, uint32_t dwParam, int * pnParam);
+int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppItemList, int32_t nItemMode, uint32_t nFormat, uint32_t dwParam, int * pnParam);
 // Deserializes the player's saved corpse(s) from the .d2s save stream during game/character load. ppCorpseList points at the current read cursor; validates the 'JM' (0x4D4A) corpse block header and a count <2 (at most one corpse). For each corpse: creates a UNIT_PLAYER unit of the loading player's class, clears CANBEATTACKED, binds the owning client, copies the char name, seeds it from the game seed, sets STATE_playerbody, links its inventory owner GUID to the player, then loads the corpse's items via PLRSAVE_LoadItemsFromBuffer. Registers an inventory notification and sends the 0x8E corpse-assign packet. Advances *ppCorpseList past the consumed bytes. Returns 0 on success or 0x15 on error; on error writes a granular error code (0x65-0x6A or the item-load error) into *pnParam when non-null.
 // @sourcefile .\PLAYER\PlrSave2.cpp
 int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppCorpseList, struct D2UnitStrc * pOwnerUnit, uint32_t nParam, int * pnParam);
@@ -81,7 +81,7 @@ int __fastcall LoadMerc2(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struc
 BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppGolemItem, uint8_t * * ppReadPos, int32_t nEndOffset, uint32_t nVersion);
 // Restores an Iron Golem from save (expansion-only, magic 0x666b). Reads the sacrificed item from the buffer via CreateItemIronGolemItem, equips it as the current skill, marks the golem for update, and registers its GUID on the client. If the golem byte is 0 (no golem), skips creation silently. Returns 0x17 on failure.
 // @sourcefile .\PLAYER\PlrSave2.cpp
-int __fastcall LoadGolem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, short * * ppReadPos, struct D2UnitStrc * pEndBuf, uint32_t nParam);
+int __fastcall LoadGolem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, short * * ppReadPos, struct D2UnitStrc * pEndBuf, uint32_t nVersion);
 // Body continues at 0056af31, the JNZ target of 0056af28 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'GetHotkeyItemOwner'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'GetHotkeyItemOwner':
 int32_t __fastcall HOTKEY_GetAssignedItemGUID(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nHotkeyIndex);

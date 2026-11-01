@@ -17,7 +17,7 @@ namespace D2Client::UNIT::Path {
 // Function declarations
 void __fastcall ConfirmTarget(struct D2UnitStrc * pUnit);
 void __fastcall thunk_PATH_SnapPositionToTile(struct D2UnitStrc * pUnit);
-uint32_t __fastcall PATH_SetTargetAndCalculate(struct D2UnitStrc * pUnit, int16_t nParam, int16_t nTargetY);
+uint32_t __fastcall PATH_SetTargetAndCalculate(struct D2UnitStrc * pUnit, int16_t nTargetX, int16_t nTargetY);
 // Client-side: requests a unit to move toward a clicked subtile (nX,nY low words), with eMoveType selecting an arrival threshold (1=walk:10, 2=run:0, else ping-scaled for the local player, or per-monster-anim for others). Records the click coords on the unit. Suppresses the move if already within the threshold or (for eMoveType 0) the previous target is closer than the click and the endpoints are on-screen. Otherwise finds the destination room (nearby or by subtile) and either: for the local player sends move packet 0x5f with current X/Y; for other players warps and continues the move; else updates the dynamic path collision flags. No return.
 void __fastcall PATH_MoveUnitToPoint(struct D2UnitStrc * pUnit, uint16_t nX, int32_t nY, uint32_t eMoveType, int32_t nPrevTargetX, int32_t nPrevTargetY);
 uint32_t __fastcall PATH_SetTargetUnitAndCalculate(struct D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nTargetUnitId);

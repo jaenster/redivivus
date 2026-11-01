@@ -782,7 +782,7 @@ BOOL __fastcall SKILLDRUID_SrvStFn57_Rabies(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Applies a timed aura state buff (auratargetstate from skills.txt) to pUnit2 on behalf of pUnit. Allocates a new stat list expiring at game frame + nParam1, sets the state, attaches it with DefaultExpireFunction, schedules a game event for expiry, and fills stats via D2SetAurastatsFromSkills. Skips if the unit already has the state. Used by Druid aura skills (Oak Sage, Heart of Wolverine, Spirit of Barbs).
-BOOL __stdcall SKILLDRUID_ApplyTimedAuraBuff(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nParam1, eD2Skills eSkill, int32_t nParam2) {
+BOOL __stdcall SKILLDRUID_ApplyTimedAuraBuff(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nDuration, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nUnitGUID;
     eD2UnitType eUnitType;
     if ((int)eSkill < 0) {
@@ -802,7 +802,7 @@ BOOL __stdcall SKILLDRUID_ApplyTimedAuraBuff(::SGAMEDATA * pGame, D2UnitStrc * p
       return 0;
     }
 
-    int32_t nExpireFrame = pGame->dwGameFrame + nParam1;
+    int32_t nExpireFrame = pGame->dwGameFrame + nDuration;
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit2, (int)nTargetStateId);
     if (pStatList) {
       return 0;
@@ -826,7 +826,7 @@ BOOL __stdcall SKILLDRUID_ApplyTimedAuraBuff(::SGAMEDATA * pGame, D2UnitStrc * p
     D2Common::DATATBLS::ItemStats::SetState(pUnit2, (int)pSkillTxt->auratargetstate, 1);
     D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatList, nExpireFrame);
     GAME::Event::SetEvent(pGame, pUnit2, 0xc, nExpireFrame, 0, 0);
-    D2SetAurastatsFromSkills(pUnit, pStatList, pSkillTxt, eSkill, nParam2);
+    D2SetAurastatsFromSkills(pUnit, pStatList, pSkillTxt, eSkill, nSkillLvl);
     return 1;
 }
 
@@ -891,19 +891,19 @@ static void __stdcall SKILLDRUID_CreateAuraMissile(::SGAMEDATA * pGame, D2UnitSt
     D2Common::Units::Missile::SetTargetY(pMissile, pUnit->nUnitGUID);
 }
 
-void __fastcall SKILLDRUID_ApplyAuraWithMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, int32_t nDuration, eD2Skills eSkill, int32_t nParam) {
+void __fastcall SKILLDRUID_ApplyAuraWithMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, int32_t nDuration, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL _bApplied;
     bool bApplied;
-    if (nParam <= 0) {
+    if (nSkillLvl <= 0) {
       return;
     }
 
-    _bApplied = SKILLDRUID_ApplyTimedAuraBuff(pGame, pUnit, pTargetUnit, nDuration, eSkill, nParam);
+    _bApplied = SKILLDRUID_ApplyTimedAuraBuff(pGame, pUnit, pTargetUnit, nDuration, eSkill, nSkillLvl);
     if (!_bApplied) {
       return;
     }
 
-    SKILLDRUID_CreateAuraMissile(pGame, pUnit, pTargetUnit, nDuration, nParam, eSkill);
+    SKILLDRUID_CreateAuraMissile(pGame, pUnit, pTargetUnit, nDuration, nSkillLvl, eSkill);
 }
 
 BOOL __fastcall SKILLDRUID_SrvStFn58_FireClaws(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {

@@ -368,8 +368,8 @@ void __fastcall UI_StoreGlobalTooltipText(uint16_t * wszText, int32_t nScreenX, 
     gnTooltipHpBarValue = nHpBarValue;
 }
 
-void __fastcall UI_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nParam1, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5) {
-    D2Win::Src::D2WinFont::D2WINFONT_SetTooltipAttributesWithCustomField(wszText, nParam1, nParam2, nParam3, nParam4, nParam5);
+void __fastcall UI_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nFontId, int32_t nX, int32_t nY, int32_t nAlignment, int32_t nCustomField) {
+    D2Win::Src::D2WinFont::D2WINFONT_SetTooltipAttributesWithCustomField(wszText, nFontId, nX, nY, nAlignment, nCustomField);
 }
 
 void __fastcall UI_StoreGlobalUIText(uint16_t * wszText, DWORD dwTextColor) {
@@ -4358,14 +4358,14 @@ int64_t __stdcall UI_GetControlConfigRowCount() {
     return (uint64_t)((uint64_t)(uint32_t)nScrollExtra << 32 | (uint64_t)(uint32_t)nRows);
 }
 
-void __fastcall UI_ScrollConfigListVertical(int32_t nParam) {
+void __fastcall UI_ScrollConfigListVertical(int32_t nSteps) {
     int nNewOffset;
-    if (nParam < -1) {
-      if (nParam >= 0) {
+    if (nSteps < -1) {
+      if (nSteps >= 0) {
         return;
       }
 
-      nNewOffset = -nParam;
+      nNewOffset = -nSteps;
       do {
         UI_ScrollConfigListVertical(-1);
         nNewOffset--;
@@ -4373,15 +4373,15 @@ void __fastcall UI_ScrollConfigListVertical(int32_t nParam) {
 
       return;
     }
-    if (nParam > 1) {
-      if (nParam <= 0) {
+    if (nSteps > 1) {
+      if (nSteps <= 0) {
         return;
       }
 
       do {
         UI_ScrollConfigListVertical(1);
-        nParam--;
-      } while (nParam);
+        nSteps--;
+      } while (nSteps);
 
       return;
     }
@@ -4389,7 +4389,7 @@ void __fastcall UI_ScrollConfigListVertical(int32_t nParam) {
     int64_t lRowCount = UI_GetControlConfigRowCount();
     int iVar1 = (int)lRowCount;
     nNewOffset = gnUICtrlConfigScrollOffset;
-    if (nParam < 0) {
+    if (nSteps < 0) {
       if (gnUICtrlConfigScrollOffset > 0) {
         nNewOffset = gnUICtrlConfigScrollOffset - 1;
       }
@@ -4398,7 +4398,7 @@ void __fastcall UI_ScrollConfigListVertical(int32_t nParam) {
         return;
       }
     } else {
-      if (nParam < 1) {
+      if (nSteps < 1) {
         gnUICtrlConfigScrollPosition = (gnUICtrlConfigScrollMaxLines * -0xc + 0xf6) * gnUICtrlConfigScrollOffset / iVar1 + 0x2f + (WindowSizeY - 0x1a4) / 2;
         return;
       }
@@ -4415,20 +4415,20 @@ void __fastcall UI_ScrollConfigListVertical(int32_t nParam) {
     gnUICtrlConfigScrollPosition = (gnUICtrlConfigScrollMaxLines * -0xc + 0xf6) * gnUICtrlConfigScrollOffset / iVar1 + 0x2f + (WindowSizeY - 0x1a4) / 2;
 }
 
-void __fastcall UI_ScrollConfigListHorizontal(int32_t nParam) {
+void __fastcall UI_ScrollConfigListHorizontal(int32_t nSteps) {
     int nNewSelectedRow;
     int64_t lRowCount;
     int nCount;
     nCount = gnUICtrlConfigTotalRows;
-    if (!nParam) {
+    if (!nSteps) {
       return;
     }
-    if (nParam < -1) {
-      if (nParam >= 0) {
+    if (nSteps < -1) {
+      if (nSteps >= 0) {
         return;
       }
 
-      nCount = -nParam;
+      nCount = -nSteps;
       do {
         UI_ScrollConfigListHorizontal(-1);
         nCount--;
@@ -4436,19 +4436,19 @@ void __fastcall UI_ScrollConfigListHorizontal(int32_t nParam) {
 
       return;
     }
-    if (nParam > 1) {
-      if (nParam <= 0) {
+    if (nSteps > 1) {
+      if (nSteps <= 0) {
         return;
       }
 
       do {
         UI_ScrollConfigListHorizontal(1);
-        nParam--;
-      } while (nParam);
+        nSteps--;
+      } while (nSteps);
 
       return;
     }
-    if (nParam < 0) {
+    if (nSteps < 0) {
       nNewSelectedRow = g_ControlConfigUIState;
       if (g_ControlConfigUIState > 0) {
         nNewSelectedRow = g_ControlConfigUIState - 1;
@@ -4456,7 +4456,7 @@ void __fastcall UI_ScrollConfigListHorizontal(int32_t nParam) {
       if (nNewSelectedRow < 0) {
         goto scroll_to_selection;
       }
-    } else if (nParam < 1 || g_ControlConfigUIState >= gnUICtrlConfigTotalRows || (nNewSelectedRow = g_ControlConfigUIState + 1 , nNewSelectedRow >= gnUICtrlConfigTotalRows)) {
+    } else if (nSteps < 1 || g_ControlConfigUIState >= gnUICtrlConfigTotalRows || (nNewSelectedRow = g_ControlConfigUIState + 1 , nNewSelectedRow >= gnUICtrlConfigTotalRows)) {
       goto scroll_to_selection;
     }
 
@@ -6214,14 +6214,14 @@ void __stdcall Draw_UI_NewStatPoints() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar2 - 0x46, ScreenSizeY - 0x6d, -1, DRAW_SOLID, nullptr);
 }
 
-void __fastcall UI_DrawTextCentered(int32_t nPositionXStart, int32_t nParam1, int32_t nPositionXEnd, uint16_t * wszMessage, int32_t nParam2) {
+void __fastcall UI_DrawTextCentered(int32_t nPositionXStart, int32_t nPositionY, int32_t nPositionXEnd, uint16_t * wszMessage, int32_t dwColor) {
     int nRegionWidth = nPositionXEnd - nPositionXStart + 1;
     int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszMessage);
     if (nTextWidth < nRegionWidth) {
       nPositionXStart += nRegionWidth - nTextWidth >> 1;
     }
 
-    D2Win::Src::D2WinFont::DRAW_text(wszMessage, nPositionXStart, nParam1, nParam2, 0);
+    D2Win::Src::D2WinFont::DRAW_text(wszMessage, nPositionXStart, nPositionY, dwColor, 0);
 }
 
 static int32_t UI_GetStatDescriptionStringId(int32_t nUnit) {

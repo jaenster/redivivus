@@ -297,7 +297,7 @@ void __stdcall TEXT_DrawCashDisplay() {
           }
         }
 
-        pszTooltipStr = D2Lang::StrTable::strtable::GetLocaleString(nParam);
+        pszTooltipStr = D2Lang::StrTable::strtable::GetLocaleString(nStringIndex);
         pMemoryToFree = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(pszTooltipStr, &nWrappedWidth, 300);
         if (pMemoryToFree) {
           nTabIdx = 0x1e;

@@ -3687,18 +3687,18 @@ void __fastcall SendNpcMessageOrHoverText(::SGAMEDATA * pGame, D2UnitStrc * pNpc
     }
 }
 
-void __fastcall MONSTERAI_CommandMoveToPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY, int32_t nParam) {
+void __fastcall MONSTERAI_CommandMoveToPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY, int32_t nUnitMode) {
     D2MonsterKillStrc local_24;
-    MonsterMode::SetCurrentSkill(pUnit, nParam, &local_24);
+    MonsterMode::SetCurrentSkill(pUnit, nUnitMode, &local_24);
     D2Common::PATH::DynamicPath::SetStepNum(pUnit->pPath.pDynamicPath, 1);
     local_24.nTargetX = nTargetX;
     local_24.nTargetY = nTargetY;
     MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &local_24, 1);
 }
 
-void __fastcall MONSTERAI_CommandSkillInPlace(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY, int32_t nParam) {
+void __fastcall MONSTERAI_CommandSkillInPlace(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY, int32_t nUnitMode) {
     D2MonsterKillStrc local_24;
-    MonsterMode::SetCurrentSkill(pUnit, nParam, &local_24);
+    MonsterMode::SetCurrentSkill(pUnit, nUnitMode, &local_24);
     D2Common::PATH::DynamicPath::SetStepNum(pUnit->pPath.pDynamicPath, 0);
     local_24.nTargetX = nTargetX;
     local_24.nTargetY = nTargetY;
@@ -3808,8 +3808,8 @@ int __fastcall MoveAndCastSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitS
 }
 
 // Thin wrapper: tail-calls MoveAndCastSkill (already fixed to return int) with a fixed distance mode and drops the result as a bare statement.
-int __fastcall CastSkillWithDistanceOffset(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, int nParam4, int nParam5) {
-    int nCastResult = MoveAndCastSkill(pGame, pUnit, pTarget, 2, nParam4, nParam5);
+int __fastcall CastSkillWithDistanceOffset(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, int nXOffset, int nYOffset) {
+    int nCastResult = MoveAndCastSkill(pGame, pUnit, pTarget, 2, nXOffset, nYOffset);
     return nCastResult;
 }
 
@@ -13679,9 +13679,9 @@ void __fastcall AITHINK_Fn0_Raven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // Tail-calls MONSTERAI_ExecuteLifecycleTransition (already fixed to return int32_t) as its final statement, dropping the result.
-int32_t __fastcall MONSTERAI_CommandWalkToUnitWithCombat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pWalkTarget, uint8_t bySkillMode, int32_t nParam) {
+int32_t __fastcall MONSTERAI_CommandWalkToUnitWithCombat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pWalkTarget, uint8_t bySkillMode, int32_t nPathType) {
     D2MonsterKillStrc killCtx;
-    ApplyCombatAndMonStats(pUnit, nParam, 0, bySkillMode);
+    ApplyCombatAndMonStats(pUnit, nPathType, 0, bySkillMode);
     MonsterMode::SetCurrentSkill(pUnit, Walk, &killCtx);
     D2Common::PATH::DynamicPath::SetStepNum(pUnit->pPath.pDynamicPath, 1);
     killCtx.pAttacker = pWalkTarget;

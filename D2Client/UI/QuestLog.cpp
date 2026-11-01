@@ -673,7 +673,7 @@ static int32_t QUESTLOG_HitTestOpenButton(int32_t nParam1, int32_t nParam2) {
     return (uint32_t)dwHitResult << 8;
 }
 
-int __stdcall CloseQuestLogWeird(DWORD dwParam) {
+int __stdcall CloseQuestLogWeird(DWORD bAdjustMouse) {
     if (gQuestLog.bQuestLogOpen == 2) {
       gQuestLog.bQuestLogOpen = 0;
       gQuestLog.bQuestLogWindowOpen = 0;
@@ -681,7 +681,7 @@ int __stdcall CloseQuestLogWeird(DWORD dwParam) {
     }
 
     FreeQuestImages();
-    ui::SetUIFlag(UI_QUESTSCREEN, UI_RESET, dwParam);
+    ui::SetUIFlag(UI_QUESTSCREEN, UI_RESET, bAdjustMouse);
     return 1;
 }
 
@@ -794,14 +794,14 @@ void __stdcall QUESTLOG_OnCloseClick(D2UIMouseMsgStrc * pMsg) {
     gQuestLog.bQuestLogScreenOpen = GetTickCount();
 }
 
-void __fastcall QUESTLOG_HandleSpecialPacket(int32_t nParam) {
-    if (*(short int*)(nParam + 1) != 1) {
+void __fastcall QUESTLOG_HandleSpecialPacket(D2GSPacketSrv0x50 * pPacket) {
+    if (pPacket->nMessageType != 1) {
       return;
     }
 
-    gQuestLog.MonstersleftInDenOfEvil = (int)*(uint16_t*)(nParam + 3);
-    gQuestLog.nQuestLogSpecialState = (int32_t)*(uint16_t*)(nParam + 5);
-    gQuestLog.pQuestLogData = (uint32_t)*(uint16_t*)(nParam + 7);
+    gQuestLog.MonstersleftInDenOfEvil = (int)pPacket->aPayload[0];
+    gQuestLog.nQuestLogSpecialState = (int32_t)pPacket->aPayload[1];
+    gQuestLog.pQuestLogData = (uint32_t)pPacket->aPayload[2];
 }
 
 void __stdcall QUESTLOG_CloseAndFreeImages() {
@@ -1719,9 +1719,9 @@ void __stdcall DRAW_UI_Quest() {
         do {
           if (*pQuestEntry == gQuestLog.nQuestLogActiveAct) {
             if (nActIndex != -1 && gQuestLog.aQuestLogEntries[nActIndex].bVisible != '\0') {
-              nParam = gQuestLog.aQuestLogEntries[nActIndex].wTitleStringId;
-              if (nParam != 0xe8c) {
-                pwszText = D2Lang::StrTable::strtable::GetLocaleString(nParam);
+              nStringIndex = gQuestLog.aQuestLogEntries[nActIndex].wTitleStringId;
+              if (nStringIndex != 0xe8c) {
+                pwszText = D2Lang::StrTable::strtable::GetLocaleString(nStringIndex);
                 nQuestSlot = gQuestUIDescInitC - gnPanelOffsetY;
                 D2Win::Src::D2WinFont::DRAW_text(pwszText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(pwszText) / 2 + 0xa0, nQuestSlot, 0, 0);
               }

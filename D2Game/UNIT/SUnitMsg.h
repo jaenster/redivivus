@@ -164,7 +164,7 @@ void __fastcall UnitQueuePacket0x9E(struct D2UnitStrc * pUnit, uint16_t eUnitSta
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall UnitQueuePacket0xA1(struct D2UnitStrc * pUnit, uint16_t nParam, int32_t nOldValue, int32_t nNewValue);
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0xAB(struct D2UnitStrc * pUnit, uint8_t bParam);
+void __fastcall UnitQueuePacket0xAB(struct D2UnitStrc * pUnit, uint8_t nHpPercent128);
 // Allocates one 0x28-byte D2SUnitMsgStrc from pUnit->pMemory with packet id 0xA3 (unit message) and enqueues it on pUnit's message list (pMsgFirst/pMsgLast, +0xEC/+0xF0). First block carries wArg1/wArg2/byParam and the source unit's type+GUID; second block carries dwParam1/dwParam2 and the target unit (pTarget) type+GUID, or GUID -1 when pTarget is NULL. Marks pUnit dirty via ROOM_LinkUnitToUpdateList.
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall SERVER_SendUnitMessagePacket(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint16_t wArg1, uint16_t wArg2, uint32_t dwParam1, uint32_t dwParam2, uint8_t byParam);

@@ -6152,7 +6152,7 @@ void __stdcall SKILLDESC_DescLine29_FormatMonster(uint16_t * wszText, D2SkillsTx
     }
 
     D2Lang::UTF8_ConvertToWideChar(wszFormattedW, szFormattedA, 0x20);
-    uint16_t* pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(nParam);
+    uint16_t* pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(nStringIndex);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszFormattedW);
     pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
@@ -6654,7 +6654,7 @@ static int __stdcall SKILLDESC_DescLineE_PerLevelBonus(int32_t nSkillId, D2UnitS
     }
 
     D2Lang::UTF8_ConvertToWideChar(wszDamageRange, szDamageRange, 0x20);
-    uint16_t* pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(nParam);
+    uint16_t* pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(nStringIndex);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLocale);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszDamageRange);
     pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);

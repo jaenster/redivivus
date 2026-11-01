@@ -262,13 +262,13 @@ void __fastcall NET_SendPacketWithFlags(char * szText, uint16_t nParam, int32_t 
     Fog::Src::SendPacketToClient(pQServer, szText, (uint32_t)nParam, nFlags);
 }
 
-uint32_t __fastcall NET_SendPacketToClient(char * szText, uint16_t nParam) {
-    if (nParam > 0x204) {
+uint32_t __fastcall NET_SendPacketToClient(char * szText, uint16_t nSize) {
+    if (nSize > 0x204) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x217);
       exit(-1);
     }
 
-    int nSendResult = Fog::Src::SendPacketToClient(pQServer, szText, (uint32_t)nParam, 0);
+    int nSendResult = Fog::Src::SendPacketToClient(pQServer, szText, (uint32_t)nSize, 0);
     return (uint32_t)(nSendResult != 0);
 }
 

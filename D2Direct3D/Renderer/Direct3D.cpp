@@ -2470,7 +2470,7 @@ BOOL __fastcall ResizeWindow(HWND hWnd, BOOL bForceResize) {
     return 1;
 }
 
-BOOL __fastcall RENDERER_D3D_CreateSurfaceWithTexture(IDirectDrawSurface7 * * pdwParam, void * * dwParam, DWORD nWidth, DWORD nHeight) {
+BOOL __fastcall RENDERER_D3D_CreateSurfaceWithTexture(IDirectDrawSurface7 * * pdwParam, void * * ppTexture, DWORD nWidth, DWORD nHeight) {
     int iLoop;
     DDSURFACEDESC2 ddsdSize;
     ddsdSize.dwSize = 0x7c;
@@ -2493,7 +2493,7 @@ BOOL __fastcall RENDERER_D3D_CreateSurfaceWithTexture(IDirectDrawSurface7 * * pd
       return 0;
     }
 
-    dwHResult = (*pdwParam)->lpVtbl->QueryInterface(*pdwParam, (GUID*)&gIID_IDirect3DSurface, dwParam);
+    dwHResult = (*pdwParam)->lpVtbl->QueryInterface(*pdwParam, (GUID*)&gIID_IDirect3DSurface, ppTexture);
     if (dwHResult) {
       RENDERER_DIRECT3D_ErrorLog("Failed to get texture interface for device surface", dwHResult);
       (*pdwParam)->lpVtbl->Release(*pdwParam);

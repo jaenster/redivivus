@@ -15,7 +15,7 @@ namespace D2Lang::Unicode::UNISYS {
 
 // Function declarations
 uint32_t __fastcall STRING_CompareWideStrings(uint16_t * wszText1, uint16_t * wszText2);
-int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * nParam1, uint16_t * nParam2, int32_t nMaxChars);
+int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * wszFirst, uint16_t * wszSecond, int32_t nMaxChars);
 int32_t __fastcall UNICODE_CompareWideStringsNoCase(uint16_t * pwszText1, uint16_t * pwszText2);
 uint32_t __fastcall UNICODE_CompareWideStringsNNoCase(uint16_t * pwszText1, uint16_t * pwszText2, int32_t nMaxChars);
 short * __thiscall UNICODE_FindWideChar(void * pThis, int16_t wCharToFind);
@@ -45,7 +45,7 @@ int UNICODE_CompareKamapEntry(LPCVOID pParam1, LPCVOID pParam2);
 // set and read - UNICODE_CompareKamapEntry compares the word at +2.
 uint32_t UNICODE_BinarySearchKamap(uint16_t wChar);
 uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t * pbParam, int32_t nSize);
-uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t * nParam, int32_t nSize);
+uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t * wszSource, int32_t nSize);
 int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nParam);
 int32_t __fastcall UNICODE_GetWideCharCount(char * szText, int32_t szSourceFile);
 // 3 internal functions (defined in .cpp)

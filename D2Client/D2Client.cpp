@@ -1498,7 +1498,7 @@ void __fastcall NET_D2GS_CLIENT_Handle0x50_QuestSpecial(D2GSPacketSrv0x50 * pPac
         UI::npcmenu::Merc::NPCMENU_SetSelectedMercIndex(pPacket->aPayload[0]);
       return;
       case 1:
-        UI::QuestLog::QUESTLOG_HandleSpecialPacket((int32_t)pPacket);
+        UI::QuestLog::QUESTLOG_HandleSpecialPacket(pPacket);
       return;
       case 3:
 

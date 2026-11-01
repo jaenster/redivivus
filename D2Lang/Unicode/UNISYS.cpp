@@ -39,15 +39,15 @@ uint32_t __fastcall STRING_CompareWideStrings(uint16_t * wszText1, uint16_t * ws
     return (uint32_t)((uint16_t)*wszText1 > (uint16_t)*wszText2);
 }
 
-int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * nParam1, uint16_t * nParam2, int32_t nMaxChars) {
-    uint16_t wChar1 = *nParam1;
+int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * wszFirst, uint16_t * wszSecond, int32_t nMaxChars) {
+    uint16_t wChar1 = *wszFirst;
     while (true) {
       uint16_t wChar2;
       if (!wChar1) {
         break;
       }
 
-      wChar2 = *nParam2;
+      wChar2 = *wszSecond;
       if (!wChar2) {
         break;
       }
@@ -55,13 +55,13 @@ int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * nParam1, uint16_t * nP
         break;
       }
 
-      nParam1++;
-      nParam2++;
+      wszFirst++;
+      wszSecond++;
       if (wChar1 != wChar2) {
         return (wChar1 < wChar2 ? -2 : 0) + 1;
       }
 
-      wChar1 = *nParam1;
+      wChar1 = *wszFirst;
       nMaxChars--;
     }
 
@@ -1243,14 +1243,14 @@ uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t
     return wszText;
 }
 
-uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t * nParam, int32_t nSize) {
+uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t * wszSource, int32_t nSize) {
     uint16_t* pFoundEntry;
     int32_t nIsControl;
     uint16_t awSearchKey[2];
     uint16_t wChar;
     if (!gpUnicodeKamapToCodeTable) {
       char* pFallbackResult;
-      pFallbackResult = UNICODE_WideToMultiByte((char*)pParam, nParam, nSize);
+      pFallbackResult = UNICODE_WideToMultiByte((char*)pParam, wszSource, nSize);
       return (uint8_t*)pFallbackResult;
     }
 
@@ -1258,7 +1258,7 @@ uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t *
     i = 0;
     if (nSize > 0) {
       do {
-        wChar = *nParam;
+        wChar = *wszSource;
         if (!wChar) {
           goto terminate_output;
         }
@@ -1282,10 +1282,10 @@ uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t *
           }
         }
 
-        nParam++;
+        wszSource++;
       } while (i < nSize);
     }
-    if (*nParam) {
+    if (*wszSource) {
       return pParam;
     }
 

@@ -759,13 +759,13 @@ uint8_t __fastcall GFXUTIL_GetGfxInfoComponent(D2UnitStrc * pUnit, int32_t nPara
     return pGfxInfo->nComponentFlags[nParam * 2];
 }
 
-void __fastcall GFXUTIL_SetGfxInfoComponent(D2UnitStrc * pUnit, int32_t nParam, uint8_t byComponentVal) {
+void __fastcall GFXUTIL_SetGfxInfoComponent(D2UnitStrc * pUnit, int32_t nComponentIndex, uint8_t byComponentVal) {
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {
       return;
     }
 
-    pGfxInfo->nComponentFlags[nParam * 2] = byComponentVal;
+    pGfxInfo->nComponentFlags[nComponentIndex * 2] = byComponentVal;
 }
 
 // @sourcefile .\ENGINE\GfxUtil.cpp

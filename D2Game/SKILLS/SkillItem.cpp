@@ -752,8 +752,8 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
       return bApplied;
     }
 
-    UNIT::SUnitMsg::UnitQueuePacket0xAB(pUnit, bParam);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, (uint32_t)bParam, 0);
+    UNIT::SUnitMsg::UnitQueuePacket0xAB(pUnit, nHpPercent128);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, (uint32_t)nHpPercent128, 0);
     return bApplied;
 }
 
@@ -891,8 +891,8 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
       return bApplied;
     }
 
-    UNIT::SUnitMsg::UnitQueuePacket0xAB(pUnit, bParam);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, (uint32_t)bParam, 0);
+    UNIT::SUnitMsg::UnitQueuePacket0xAB(pUnit, nHpPercent128);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, (uint32_t)nHpPercent128, 0);
     return bApplied;
 }
 
@@ -1013,9 +1013,9 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
       return bApplied;
     }
 
-    uint8_t bParam = PLAYER::PlayerModes::PLRMODES_GetHpPercent128(pUnit);
-    UNIT::SUnitMsg::UnitQueuePacket0xAB(pUnit, bParam);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, (uint32_t)bParam, 0);
+    uint8_t nHpPercent128 = PLAYER::PlayerModes::PLRMODES_GetHpPercent128(pUnit);
+    UNIT::SUnitMsg::UnitQueuePacket0xAB(pUnit, nHpPercent128);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, (uint32_t)nHpPercent128, 0);
     return bApplied;
 }
 

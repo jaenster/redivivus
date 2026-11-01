@@ -88,7 +88,7 @@ struct D2RoomStrc * __stdcall FindRoomByTileCoordinates(struct D2DrlgActStrc * p
 struct D2RoomStrc * __stdcall GetAdjacentRoomByCoordinates(struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 void __stdcall CallRoomCallback(struct D2RoomStrc * pRoom, ROOMCALLBACKFN pfnRoomCallback, void * pArgs);
 // NOTE: Callee-saved register params inferred (medium confidence): param_ebx (EBX): DWORD
-int32_t * __stdcall DRLGROOM_GetMinimapRect(uint32_t nLine, struct D2RoomStrc * dwParam2, int32_t * dwParam3);
+int32_t * __stdcall DRLGROOM_GetMinimapRect(uint32_t nLine, struct D2RoomStrc * pRoom, int32_t * pRect);
 void __stdcall GetSubtileRect(struct D2RoomStrc * pRoom, RECT * pRect);
 void __stdcall GetRGB_IntensityFromRoom(struct D2RoomStrc * pRoom, char * nIntensity, char * nRed, char * nGreen, char * nBlue);
 struct D2RoomStrc * __stdcall FindRoomBySubtileCoordinates(struct D2DrlgActStrc * pDrlgAct, int32_t nX, int32_t nY);

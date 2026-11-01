@@ -1219,11 +1219,11 @@ D2UnitStrc * __fastcall PLAYER_GetActiveWeaponForSkill(D2UnitStrc * pUnit) {
 }
 
 // Recalculates active stat-list flags for dual-wield weapon slots on pUnit. If nParam is non-zero, deactivates stat lists for currently equipped and primary weapons (cleanup pass). Then, if the unit can dual-wield, activates the correct weapon's stat list based on the active-weapon-for-skill selection: primary-only, swap-only, or the dual-wield split. Uses STATLIST_SetItemStatActive(1=active, 0=inactive).
-void __fastcall EQUIPMENT_RecalcDualWieldWeaponStats(D2UnitStrc * pUnit, int32_t nParam) {
+void __fastcall EQUIPMENT_RecalcDualWieldWeaponStats(D2UnitStrc * pUnit, int32_t bResetWeaponStats) {
     D2UnitStrc* pEquippedWeapon;
     D2UnitStrc* pPrimaryWeapon;
     D2UnitStrc* pOwner;
-    if (nParam) {
+    if (bResetWeaponStats) {
       pEquippedWeapon = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pUnit->pInventory);
       if (pEquippedWeapon) {
         pPrimaryWeapon = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pEquippedWeapon, nullptr);
@@ -1283,8 +1283,8 @@ void __fastcall EQUIPMENT_RecalcDualWieldWeaponStats(D2UnitStrc * pUnit, int32_t
     }
 }
 
-void __fastcall WEAPON_ApplyEquippedWeaponStats(D2UnitStrc * pUnit, int32_t nParam) {
-    if (!nParam) {
+void __fastcall WEAPON_ApplyEquippedWeaponStats(D2UnitStrc * pUnit, int32_t bResetWeaponStats) {
+    if (!bResetWeaponStats) {
       return;
     }
 

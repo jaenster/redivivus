@@ -1302,11 +1302,11 @@ void __fastcall SetAlignment(D2UnitStrc * pUnit, uint8_t nAlignment, int32_t nOl
 }
 
 // Applies or removes STATE_uninterruptable on pUnit (nParam=1 to set, 0 to clear). When clearing: if STATE_death_delay is active, it removes that state and immediately kills the unit (via SERVER_KillMonster if no killer, or SERVER_GetHitCalculation with the KILL result flag if a killer exists). Additionally triggers AITHINK for monster units to resume AI after the uninterruptable window closes.
-void __fastcall SetUninterruptableState(D2UnitStrc * pUnit, int32_t nParam) {
+void __fastcall SetUninterruptableState(D2UnitStrc * pUnit, int32_t bSet) {
     eD2States eDeathDelayState;
     D2UnitStrc* pKillerUnit;
     D2DamageStrc sDamage;
-    D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_uninterruptable, nParam);
+    D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_uninterruptable, bSet);
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa29);
       exit(-1);
@@ -1316,7 +1316,7 @@ void __fastcall SetUninterruptableState(D2UnitStrc * pUnit, int32_t nParam) {
     if (!pGame) {
       return;
     }
-    if (!nParam) {
+    if (!bSet) {
       eDeathDelayState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_death_delay);
       if (eDeathDelayState != STATE_none) {
         D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_death_delay, 0);

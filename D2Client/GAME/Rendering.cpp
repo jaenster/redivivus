@@ -16,8 +16,8 @@
 
 namespace D2Client::GAME::Rendering {
 
-void __fastcall SetupGamma(DWORD dwParam) {
-    D2gfx::D2GFX::D2GFX_SetGamma(dwParam);
+void __fastcall SetupGamma(DWORD dwGamma) {
+    D2gfx::D2GFX::D2GFX_SetGamma(dwGamma);
 }
 
 void __stdcall SetCurrentEngineToOne() {

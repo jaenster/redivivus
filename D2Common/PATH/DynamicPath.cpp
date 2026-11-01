@@ -1019,7 +1019,7 @@ void __stdcall PATH_AddUnitCollision(D2UnitStrc * pUnit) {
 }
 
 // Removes a unit's collision footprint from its room's collision grid, choosing the removal method by unit type. For players (Dead anim) and monsters (Kick/Death anim), and any unit when forced via nParam, it removes using the dynamic path's target coords + nUnitWidth (RemoveCollision_Type). For objects it removes a size-X box at the unit's position (RemoveCollision_Width). For other unit types it removes a full sizeX-by-sizeY rectangle (RemoveCollision_Vector). Objects/monsters that have no collision and aren't forced (nParam==0) return 0 without acting. Position is read from the static path (objects/types 4-5) or dynamic path Get X/YPos. Returns 1 if collision was removed, 0 if skipped. Called before moving a unit so its old footprint is cleared.
-BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
+BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t bForce) {
     BOOL _bHasCollision;
     D2DynamicPathStrc* pDynamicPath;
     bool bHasCollision;
@@ -1061,7 +1061,7 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
       case UNIT_OBJECT:
         {
           _bHasCollision = Units::HasCollision(pUnit);
-          if (!_bHasCollision && !nParam) {
+          if (!_bHasCollision && !bForce) {
             return 0;
           }
 
@@ -1113,7 +1113,7 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
         }
     }
 
-    if (!nParam) {
+    if (!bForce) {
       return 0;
     }
 
@@ -1556,13 +1556,13 @@ void __stdcall AllocDynamicPath(D2PoolManagerStrc * pMemory, D2RoomStrc * pRoom,
     pDynamicPath->nFlags |= 0x10;
 }
 
-void __stdcall PATH_SetDirectionToTarget(D2DynamicPathStrc * pDynamicPath, int32_t nTargetX, int32_t nTargetY, int32_t nParam) {
+void __stdcall PATH_SetDirectionToTarget(D2DynamicPathStrc * pDynamicPath, int32_t nTargetX, int32_t nTargetY, int32_t bImmediate) {
     if (!pDynamicPath) {
       return;
     }
 
     uint32_t nDirection = Path::PATH_CalculateDistance(pDynamicPath->Coords.tFixed.x, pDynamicPath->Coords.tFixed.y, nTargetX * 0x10000 + 0x8000, nTargetY * 0x10000 + 0x8000);
-    if (nParam) {
+    if (bImmediate) {
       uint8_t nDirectionByte;
       nDirectionByte = (uint8_t)nDirection & 0x3f;
       pDynamicPath->nDirection = nDirectionByte;

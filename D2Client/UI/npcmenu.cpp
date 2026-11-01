@@ -1891,7 +1891,7 @@ void __fastcall NPCMENU_OnItemEquip(int32_t nParam) {
     NPCMENU_HandleTransactionComplete();
 }
 
-void __fastcall NPCMENU_CloseNpcInteraction(int32_t nParam) {
+void __fastcall NPCMENU_CloseNpcInteraction(int32_t nNpcGUID) {
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     if (pPlayer) {
       pPlayer = UNIT::Player::GetPlayerUnit_UI();
@@ -1903,7 +1903,7 @@ void __fastcall NPCMENU_CloseNpcInteraction(int32_t nParam) {
       }
     }
 
-    pPlayer = UNIT::Player::UNITS_FindClientSideUnit(nParam, UNIT_MONSTER);
+    pPlayer = UNIT::Player::UNITS_FindClientSideUnit(nNpcGUID, UNIT_MONSTER);
     if (pPlayer) {
       Merc::MERC_ClearHireInventory(pPlayer);
     }
@@ -1913,12 +1913,12 @@ void __fastcall NPCMENU_CloseNpcInteraction(int32_t nParam) {
 
     gnNpcMenuNpcSoundIndex = 0;
     gnNpcMenuNpcClassId = 0;
-    pPlayer = UNIT::Player::UNITS_FindClientSideUnit(nParam, UNIT_MONSTER);
+    pPlayer = UNIT::Player::UNITS_FindClientSideUnit(nNpcGUID, UNIT_MONSTER);
     if (pPlayer) {
       pPlayer->eUnitFlags |= UNITFLAG_TARGETABLE;
     }
 
-    GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x30, 1, nParam);
+    GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x30, 1, nNpcGUID);
     Text::TEXT_CloseNpcDialog();
     _Interaction::bInteractingWithNpc = 0;
     ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
@@ -1934,9 +1934,9 @@ void __fastcall NPCMENU_CloseNpcInteraction(int32_t nParam) {
     UNIT::UnitMode::UNITMODE_SetAnimMode(pPlayer, eD2PlayerAnimMode_ns::Neutral);
 }
 
-void __fastcall NPCMENU_CloseScrollAndInteraction(int32_t nParam) {
-    NPCMENU_CloseNpcInteraction(nParam);
-    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(nParam, UNIT_MONSTER);
+void __fastcall NPCMENU_CloseScrollAndInteraction(int32_t nNpcGUID) {
+    NPCMENU_CloseNpcInteraction(nNpcGUID);
+    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(nNpcGUID, UNIT_MONSTER);
     if (!pNpcUnit) {
       return;
     }
@@ -4003,7 +4003,7 @@ void __stdcall NPCMENU_RefreshMenuDialog() {
     NPCMENU_OpenInteractionDialog();
 }
 
-int __fastcall NPCMENU_OnScrollComplete(void * dwParam, int32_t nParam, int32_t nScrollState) {
+int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nParam, int32_t nScrollState) {
     int32_t nMenuIndex;
     bool bIsInteractableSideNpc;
     gnNpcMenuTradeActionGold = NPCMENU_FindNextUnhandledMessage(gnNpcMenuRepairCostGold);
@@ -4080,7 +4080,7 @@ int __fastcall NPCMENU_OnScrollComplete(void * dwParam, int32_t nParam, int32_t 
     }
 
     gnNpcMenuActiveMode = 0;
-    Text::TEXT_SetScrollCompleteCallback(nullptr, dwParam);
+    Text::TEXT_SetScrollCompleteCallback(nullptr, pUserParam);
     gnNpcMenuRepairCostGold = 0xffff;
     NPCMENU_ShowMainMenuDialog();
     return 0;

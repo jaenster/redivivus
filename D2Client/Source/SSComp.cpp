@@ -160,13 +160,13 @@ static uint32_t __stdcall ZLIB_Adler32Combine(uint32_t nAdler1, uint32_t nLen2Lo
     return nSum2 << 0x10 | nSum1Mod;
 }
 
-uint32_t __fastcall ZLIB_Adler32Combine32(uint32_t nParam3, uint32_t nParam2, uint32_t nParam1) {
-    uint32_t uVar1 = ZLIB_Adler32Combine(nParam3, nParam1, (int)nParam1 >> 0x1f, nParam2);
+uint32_t __fastcall ZLIB_Adler32Combine32(uint32_t nAdler1, uint32_t nAdler2, uint32_t nLen2) {
+    uint32_t uVar1 = ZLIB_Adler32Combine(nAdler1, nLen2, (int)nLen2 >> 0x1f, nAdler2);
     return uVar1;
 }
 
-uint32_t __fastcall ZLIB_Adler32Combine64(uint32_t nParam3, uint32_t nParam4, uint32_t nParam1, uint32_t nParam2) {
-    uint32_t uVar1 = ZLIB_Adler32Combine(nParam3, nParam1, nParam2, nParam4);
+uint32_t __fastcall ZLIB_Adler32Combine64(uint32_t nAdler1, uint32_t nAdler2, uint32_t nLen2Lo, uint32_t nLen2Hi) {
+    uint32_t uVar1 = ZLIB_Adler32Combine(nAdler1, nLen2Lo, nLen2Hi, nAdler2);
     return uVar1;
 }
 

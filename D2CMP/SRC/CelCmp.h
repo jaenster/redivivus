@@ -44,7 +44,7 @@ void __stdcall CELCMP_ApplyPaletteToAllFrames(struct DC6 * pDCC, uint8_t * pPale
 uint32_t __stdcall CELCMP_SerializeCelFileToMemory(uint32_t * pDCCSrc, uint32_t * ppDCCDest, size_t * pSizeOut);
 void __stdcall CELCMP_FixupPointersAndPrepare(struct DC6 * pDC6, struct DC6 * * ppDC6Out, char * szFile, int32_t nLine, int32_t nExpectedFormat, char * szName);
 void __stdcall CELCMP_FreeCelFileMemory(void * pCelFile);
-void __stdcall CELCMP_InvokeFormatSpecificCleanup(int32_t nParam, BYTE * dwParam);
+void __stdcall CELCMP_InvokeFormatSpecificCleanup(int32_t nParam, BYTE * pPaletteRemap);
 void __stdcall CELCMP_DrawCelFrame(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nDstHeight, uint32_t nDstPitch, BYTE * pRenderArg1, BYTE * pRenderArg2, BYTE * pPalette);
 uint32_t __stdcall CELCMP_CopyCelDataToBuffer(int * pDC6, int32_t nDirection, int32_t nFrame, void * pDstBuffer);
 void __stdcall CELCMP_DrawCelFrameFromGfxData(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nViewportHeight, uint32_t nDstPitch, int32_t pLookupTable1, int32_t pBlendTable, int32_t nClipTop, int32_t nClipBottom, int32_t pLookupTable2);

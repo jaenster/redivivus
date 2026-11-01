@@ -236,9 +236,9 @@ int32_t __fastcall UTF8_GetStringLength(char * szUtf8, int32_t nMaxBytes) {
     return nCharCount;
 }
 
-void __fastcall UTF8_EncodeCodePoint(uint16_t * nParam) {
+void __fastcall UTF8_EncodeCodePoint(uint16_t * pCodePoint) {
     uint8_t abUtf8Buf[8];
-    EncodeUTF8CodePoint(*nParam, abUtf8Buf);
+    EncodeUTF8CodePoint(*pCodePoint, abUtf8Buf);
 }
 
 uint16_t * __fastcall UTF8_ConvertToWideChar(uint16_t * wszText, char * szText, int32_t nMaxWideChars) {

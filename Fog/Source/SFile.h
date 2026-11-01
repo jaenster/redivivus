@@ -38,7 +38,7 @@ struct D2SFileSignatureKeyStrc {
 namespace Fog::Source::SFile {
 
 // Function declarations
-void __fastcall SFILE_InitializeFileSystem(BOOL bResult, uint32_t dwParam);
+void __fastcall SFILE_InitializeFileSystem(BOOL bResult, uint32_t bSeekOptimization);
 int32_t __fastcall ARCHIVE_OpenD2FileWrap(char * szFilename, struct D2MPQFileStrc * * ppFile);
 void __fastcall ERRORMANAGER_FCloseFile(struct D2MPQFileStrc * pMPQFile);
 // NOTE: Register params: pFileHandle (ECX): D2MPQFileStrc *, pOutputBuffer (EDX): void *
@@ -47,7 +47,7 @@ int __fastcall ERRORMANAGER_FReadFile(struct D2MPQFileStrc * pFileHandle, void *
 DWORD __fastcall ERRORMANAGER_FGetFileSize(struct D2MPQFileStrc * pFileHandle, LPDWORD pdwFileSize);
 // @wasnamed SFILE_SeekFileWrapper
 // @basis internal. NOT an exported Storm symbol. Renamed only to follow its callee: a __fastcall thunk whose entire body forwards to SFileSetFilePointer (004165a0) and discards the result.
-DWORD __fastcall SFILE_SetFilePointerThunk(struct D2MPQFileStrc * pFileHandle, int32_t nOffset, int * pnParam, uint32_t nParam);
+DWORD __fastcall SFILE_SetFilePointerThunk(struct D2MPQFileStrc * pFileHandle, int32_t nOffset, int * pnParam, uint32_t dwMoveMethod);
 HANDLE __fastcall thunk_CreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
 void __fastcall thunk_DeleteFileA(LPCSTR szText);
 // @wasnamed CloseHandle - a function named after the Win32 API it calls, so the body read as infinite

@@ -138,8 +138,8 @@ static BOOL __stdcall WARDEN_VerifyModuleSignature(size_t nKeySize, char * szMod
 }
 
 // @sourcefile .\WARDEN\WardenClient.cpp
-void __fastcall WARDEN_CbAllocModuleStruct(uint32_t nParam) {
-    Storm::SMem::SMemAlloc(nParam, ".\\WARDEN\\WardenClient.cpp", 0x10d, 0);
+void __fastcall WARDEN_CbAllocModuleStruct(uint32_t nSize) {
+    Storm::Source::SMem::SMemAlloc(nSize, ".\\WARDEN\\WardenClient.cpp", 0x10d, 0);
 }
 
 // @sourcefile .\WARDEN\WardenClient.cpp
@@ -753,14 +753,14 @@ static BOOL __stdcall WARDEN_ResolveAndLoadModule(void * pRc4Key, uint8_t * pMod
     return bCacheReadSuccess;
 }
 
-uint32_t __stdcall WARDEN_DownloadModule(char * dwParam1, void * dwParam2, uint32_t pModuleRequest) {
+uint32_t __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t pModuleRequest) {
     _FILETIME fileTime;
     if (!sgpUnknownSequence) {
       return 0;
     }
 
     /* LPFILETIME lpSystemTimeAsFileTime for GetSystemTimeAsFileTime */ GetSystemTimeAsFileTime(&fileTime);
-    BOOL bResult = sgpUnknownSequence->pfnCacheWriteData(dwParam1, dwParam2, pModuleRequest, (int*)&fileTime, -1, -1);
+    BOOL bResult = sgpUnknownSequence->pfnCacheWriteData(szKey, pData, pModuleRequest, (int*)&fileTime, -1, -1);
     return bResult;
 }
 

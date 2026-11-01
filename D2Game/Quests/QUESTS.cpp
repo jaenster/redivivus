@@ -1172,7 +1172,7 @@ void __fastcall Objects_InitFn20(D2ObjectInitFnArg * pInitArg) {
       D2QuestDataStrc* pQuestData;
       for (pQuestData = pQuestCtrl->pQuestData; pQuestData; pQuestData = pQuestData->pPrev) {
         if (pQuestData->nQuestNoInternal == QUESTINT_TheTaintedSun) {
-          A2Q3::Q11_OnViperAmuletInit(pQuestData, (D2UnitStrc**)pInitArg);
+          A2Q3::Q11_OnViperAmuletInit(pQuestData, pInitArg);
           return;
         }
       }
@@ -1212,7 +1212,7 @@ void __fastcall Objects_InitFn07(D2ObjectInitFnArg * pInitArg) {
       D2QuestDataStrc* pQuestData;
       for (pQuestData = pQuestCtrl->pQuestData; pQuestData; pQuestData = pQuestData->pPrev) {
         if (pQuestData->nQuestNoInternal == QUESTINT_TheSearchForCain) {
-          A1Q4::Q04_InitializeCainGibbetObject((int32_t)pQuestData, (D2UnitStrc**)pInitArg);
+          A1Q4::Q04_InitializeCainGibbetObject((int32_t)pQuestData, pInitArg);
           return;
         }
       }

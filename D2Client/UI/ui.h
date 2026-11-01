@@ -74,7 +74,7 @@ uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, char cParam
 uint16_t * __fastcall UI_RemoveColorCodesFromString(uint16_t * wszText);
 uint16_t * __fastcall UI_WrapStringWithColorCodes(uint16_t * wszText, char cStartColor, char cEndColor);
 void __fastcall UI_StoreGlobalTooltipText(uint16_t * wszText, int32_t nScreenX, int32_t nScreenY, int32_t nHpBarValue);
-void __fastcall UI_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nParam1, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5);
+void __fastcall UI_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nFontId, int32_t nX, int32_t nY, int32_t nAlignment, int32_t nCustomField);
 void __fastcall UI_StoreGlobalUIText(uint16_t * wszText, DWORD dwTextColor);
 BOOL __fastcall UI_GetUniqueMonsterName(struct D2UnitStrc * pUnit, uint16_t nNameMode);
 int32_t __fastcall UI_GetMonsterHpBarValue(struct D2UnitStrc * pUnit);
@@ -167,8 +167,8 @@ void __stdcall UI_ToggleBeltRows();
 void __stdcall UI_ReadLineFromShortArray(short * pnDest, int32_t nMaxChars, short * * ppnShort);
 void __stdcall UI_InitializeStatDescriptionPointers();
 int64_t __stdcall UI_GetControlConfigRowCount();
-void __fastcall UI_ScrollConfigListVertical(int32_t nParam);
-void __fastcall UI_ScrollConfigListHorizontal(int32_t nParam);
+void __fastcall UI_ScrollConfigListVertical(int32_t nSteps);
+void __fastcall UI_ScrollConfigListHorizontal(int32_t nSteps);
 uint32_t __stdcall UI_IsMouseInRightColumn(int32_t nParam);
 // Returns TRUE when (nMouseX, nMouseY) is over one of the control-config tabs: UI_GetControlConfigTabIndex(nMouseX@ESI, nMouseY@EDX) != 3 (SETNZ at 004a4a0a).
 // Was code outside any function; no direct reference reaches it in 1.14d.
@@ -224,7 +224,7 @@ void __stdcall DRAW_UI_NewStatPoints_II();
 bool __stdcall UI_GetNewSkillPointsForClass(int32_t nCharClass);
 void __stdcall UI_DrawLevelUpButtonRight();
 void __stdcall Draw_UI_NewStatPoints();
-void __fastcall UI_DrawTextCentered(int32_t nPositionXStart, int32_t nParam1, int32_t nPositionXEnd, uint16_t * wszMessage, int32_t nParam2);
+void __fastcall UI_DrawTextCentered(int32_t nPositionXStart, int32_t nPositionY, int32_t nPositionXEnd, uint16_t * wszMessage, int32_t dwColor);
 // Body continues at 004a7354, the JNZ target of 004a734a - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'UI_FormatStatTooltip'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'UI_FormatStatTooltip':
 int32_t __stdcall UI_GetStatValueForDisplay(int32_t nUnit);

@@ -2505,7 +2505,7 @@ BOOL __fastcall SKILLASS_SrvStFn26_BladeFury(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // Equips items onto a summoned monster unit (pUnit must be UNIT_MONSTER) from a monster-equipment table keyed by the monster class id (SKILLBAR_GetVelocityAndSpreadForMissile returns the table base). Walks the matching equip rows, and for each one with a valid body-loc range uses the summoner's RNG seed to pick a random equip slot. If that grid slot is empty it resolves an item code (a literal 4-char code, or for the "    " placeholder copies the corresponding item code from the owner unit's inventory at nParam1) and calls MONSTER_CreateAndEquipItem to spawn and equip it. __fastcall, no return. NOTE: many accesses go through raw offsets on the equip-table row (pUnit->unk0x19, +0x60 owner inventory) — the equip-table row type is unmodeled.
-void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * nParam1, D2UnitStrc * pUnit, uint32_t param_1, int32_t nParam2, int32_t nParam3, int32_t nParam4) {
+void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pUnit, uint32_t param_1, int32_t nParam2, int32_t nParam3, int32_t nParam4) {
     D2MonEquipTxt* pDVar1;
     uint8_t bVar2;
     short int sVar3;
@@ -2571,12 +2571,12 @@ void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * nPar
           }
 
           pItemCodeOrPool = pEquipTableRow->item[nRandEquipSlot];
-          if (pItemCodeOrPool == 0x20202020 && nParam1) {
-            if (!nParam1->pInventory) {
+          if (pItemCodeOrPool == 0x20202020 && pOwner) {
+            if (!pOwner->pInventory) {
               continue;
             }
 
-            pExistingItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(nParam1->pInventory, (int)(char)bVar2);
+            pExistingItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pOwner->pInventory, (int)(char)bVar2);
             if (!pExistingItem) {
               continue;
             }

@@ -1154,7 +1154,7 @@ void __fastcall PlayCutScene(char * szFile, int nResolutionMode, void * fpFrame)
 BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue);
 BOOL EndScene1();
 BOOL __fastcall ResizeWindow(HWND hWnd, BOOL bForceResize);
-BOOL __fastcall RENDERER_D3D_CreateSurfaceWithTexture(struct IDirectDrawSurface7 * * pdwParam, void * * dwParam, DWORD nWidth, DWORD nHeight);
+BOOL __fastcall RENDERER_D3D_CreateSurfaceWithTexture(struct IDirectDrawSurface7 * * pdwParam, void * * ppTexture, DWORD nWidth, DWORD nHeight);
 // @wasnamed Release - one name on two different functions.
 // @evidence Body is one instruction: JMP 0x006b5550 (e9 bb fb ff ff). A thunk sharing its target's name inside the same namespace - the emitter cannot disambiguate them.
 BOOL thunk_Release();

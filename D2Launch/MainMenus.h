@@ -115,7 +115,7 @@ void __stdcall IMAGE_FreePredefinedImages();
 int __fastcall D2GFX_SetPaletteForDraw(char * szPaletteDat, char * szPalettePl2);
 struct D2ControlStrc * __fastcall FORMS_CreateAnyFormFromList(int32_t nFormIndex);
 void __stdcall FORMS_DestroyList();
-struct D2ControlStrc * __fastcall FORMS_CreateAnyFormFromListExEx(int32_t nParam);
+struct D2ControlStrc * __fastcall FORMS_CreateAnyFormFromListExEx(int32_t nFormIndex);
 void __stdcall FORMS_DestroyLists();
 void __fastcall STRING_ZeroOneWCHAR(void * pBuffer);
 void __fastcall MAINMENU_CreateMessageBox(uint16_t * wszText1, uint16_t * wszText2, int32_t nButton1LabelId, int32_t nButton2LabelId, OnPress pfnOnPress1, OnPress pfnOnPress2, int32_t nParam1, int32_t nParam2);
@@ -304,7 +304,7 @@ BOOL __stdcall MAINMENU_OnPressReturnToMainMenu(struct D2ControlMsg * pControlMs
 BOOL __stdcall UIMENU_AndOneMorePleaseWait(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENUS_OnPressReturnToMainMenu_ForCreditsAndMainMenuAgain(struct D2ControlMsg * pControlMsg);
 // Password change confirmation handler. Reads text inputs, compares new password fields, validates length (2-20 chars). Checks gbPasswordChangeInProgress state, calls launcher EnterEmailMessagePumper on success.
-BOOL __stdcall MAINMENU_HandlePasswordChange(struct D2ControlStrc * nParam);
+BOOL __stdcall MAINMENU_HandlePasswordChange(struct D2ControlStrc * pControl);
 void __fastcall UIMENU_AnotherSmallPopupWithContentAndSomeKindofTypeSelection(uint16_t * wszContent, pfnUIMenuInstance pfnMenuInstance, int32_t bTwoButtons);
 BOOL __stdcall MAINMENU_OnPressCancelTermsOfServiceDownload(struct D2ControlMsg * pControlMsg);
 void __stdcall PlaysBlizzardNorthCutScene();
@@ -319,7 +319,7 @@ BOOL __stdcall MAINMENU_Unused12(struct D2ControlMsg * pMsg);
 uint32_t __stdcall thunk_UIMENU_CreateHeroSinglePlayer(struct D2ControlMsg * pControlMsg);
 void __stdcall NET_MCP_CLIENT_HandleCharCreation();
 // BNet login submit handler. Reads account/password from gbPasswordChangeInProgress-related inputs, calls launcher authentication. On success, transitions to char select or creates hero.
-BOOL __stdcall MAINMENU_Unused13(struct D2ControlStrc * nParam);
+BOOL __stdcall MAINMENU_Unused13(struct D2ControlStrc * pControl);
 BOOL __stdcall MAINMENU_OnPressReturnToMainMenuAgain(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_Unused14(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressDestroyListAndReturnToMainMenuAgain(struct D2ControlMsg * pControlMsg);
@@ -327,7 +327,7 @@ BOOL __stdcall MAINMENU_OnPressCommitNewCharacterAndStartGame(struct D2ControlMs
 BOOL __stdcall MAINMENU_OnPressCreateHeroSinglePlayer(struct D2ControlMsg * pControlMsg);
 void __stdcall UIMENU_ConfirmCreateCharacter();
 // BNet account creation handler. Validates username/password from gbPasswordChangeInProgress inputs (2-15 chars, matching confirmation), shows please-read dialog on success or error popup on validation failure.
-BOOL __stdcall MAINMENU_Unused15(struct D2ControlStrc * nParam);
+BOOL __stdcall MAINMENU_Unused15(struct D2ControlStrc * pControl);
 BOOL __stdcall MAINMENU_Unused16(struct D2ControlStrc * nParam);
 void __stdcall MAINMENU_BnetConnectionProgress();
 BOOL __stdcall MAINMENU_OnPressConfirmSkipEmailPopup(struct D2ControlMsg * pControlMsg);

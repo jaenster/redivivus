@@ -68,11 +68,11 @@ int __stdcall SMsgPopRegisterState(char * szText) {
 }
 
 // @blizzard SMsgPushRegisterState (SMSG.CPP)
-uint32_t __stdcall SMsgPushRegisterState(uint32_t nParam) {
-    Source::SEVT::SEvtPushState(0x534d5348, nParam);
-    Source::SEVT::SEvtPushState(0x534d5349, nParam);
-    Source::SEVT::SEvtPushState(0x534d534a, nParam);
-    Source::SEVT::SEvtPushState(0x534d5347, nParam);
+uint32_t __stdcall SMsgPushRegisterState(uint32_t nSubId) {
+    Source::SEVT::SEvtPushState(0x534d5348, nSubId);
+    Source::SEVT::SEvtPushState(0x534d5349, nSubId);
+    Source::SEVT::SEvtPushState(0x534d534a, nSubId);
+    Source::SEVT::SEvtPushState(0x534d5347, nSubId);
     return 1;
 }
 
@@ -520,15 +520,15 @@ void __stdcall SMsgUnregisterMessage(uint32_t hWnd, char * szText1, char * szTex
     SMSG_InternalUnregister(0x534d5347, szText1, szText2, (HWND)hWnd);
 }
 
-LRESULT __stdcall WndProcC(HWND hWnd, uint32_t nParam1, uint32_t nParam2, LPARAM lParam) {
+LRESULT __stdcall WndProcC(HWND hWnd, uint32_t nMsg, uint32_t nWParam, LPARAM lParam) {
     BOOL bHandled = 0;
     int32_t lOutResult = 0;
-    BOOL bDispatched = SMsgDispatchMessage(hWnd, nParam1, nParam2, lParam, &bHandled, (LRESULT*)&lOutResult);
+    BOOL bDispatched = SMsgDispatchMessage(hWnd, nMsg, nWParam, lParam, &bHandled, (LRESULT*)&lOutResult);
     if (bDispatched && bHandled) {
       return lOutResult;
     }
 
-    int32_t lResult = DefWindowProcA(hWnd, nParam1, nParam2, lParam);
+    int32_t lResult = DefWindowProcA(hWnd, nMsg, nWParam, lParam);
     return lResult;
 }
 

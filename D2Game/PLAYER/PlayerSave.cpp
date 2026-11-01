@@ -2021,7 +2021,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart7_part1(uint8_t * nParam1, uint3
     return nItemLoadResult;
 }
 
-int32_t __fastcall _oldSaveGameLoadingPart7(::SGAMEDATA * pGame, D2UnitStrc * pUnit, short * param_1, uint32_t param_2, uint32_t nParam, uint32_t * pbParam) {
+int32_t __fastcall _oldSaveGameLoadingPart7(::SGAMEDATA * pGame, D2UnitStrc * pUnit, short * param_1, uint32_t param_2, uint32_t nSize, uint32_t * pbParam) {
     uint32_t pBytesPerCorpse;
     *pbParam = 0;
     if (param_2 - 0x47 <= 0x19) {
@@ -2031,9 +2031,9 @@ int32_t __fastcall _oldSaveGameLoadingPart7(::SGAMEDATA * pGame, D2UnitStrc * pU
 
       uint16_t nCorpseCount = param_1[1];
       uint8_t* pCorpseData = (uint8_t*)(param_1 + 2);
-      int nRemainingBytes = nParam - 4;
+      int nRemainingBytes = nSize - 4;
       param_1 = (short int*)0x4;
-      nParam = 0;
+      nSize = 0;
       D2UnitStrc* pCurrentUnit = pUnit;
       if (nCorpseCount > 0) {
         int32_t nCorpseResult;
@@ -2046,8 +2046,8 @@ int32_t __fastcall _oldSaveGameLoadingPart7(::SGAMEDATA * pGame, D2UnitStrc * pU
           param_1 = (short int*)((int)param_1 + pBytesPerCorpse);
           pCorpseData += pBytesPerCorpse;
           nRemainingBytes -= pBytesPerCorpse;
-          nParam++;
-        } while (nParam < nCorpseCount);
+          nSize++;
+        } while (nSize < nCorpseCount);
       }
 
       *pbParam = (uint32_t)param_1;

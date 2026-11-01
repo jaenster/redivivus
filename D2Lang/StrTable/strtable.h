@@ -38,7 +38,7 @@ BOOL __stdcall ARCHIVE_LoadMPQFiles();
 // @sourcefile .\StrTable\strtable.cpp
 void __fastcall STRTABLE_FreeMemory(void * pParam);
 uint32_t __stdcall STRTABLE_HashString(char * szText, uint32_t nBucketCount);
-uint16_t * __fastcall GetLocaleString(uint16_t nParam);
+uint16_t * __fastcall GetLocaleString(uint16_t nStringIndex);
 // @sourcefile .\StrTable\strtable.cpp
 uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbParam);
 uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbParam, uint16_t * * ppwszText);

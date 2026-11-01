@@ -3252,7 +3252,7 @@ D2SkillStrc * __stdcall AllocSkill(D2UnitStrc * pUnit, eD2Skills eSkill) {
     return pNewSkill;
 }
 
-void __stdcall AddSkill(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nParam, char * szFile, int32_t nLine) {
+void __stdcall AddSkill(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t bRemoveAtZero, char * szFile, int32_t nLine) {
     D2SkillStrc* pSkill;
     if (nSkillLevel) {
       pSkill = GetSkillByIdAndOwner(pUnit, eSkill, -1);
@@ -3263,7 +3263,7 @@ void __stdcall AddSkill(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLeve
       SKILLS_UpdatePassiveSkillStats(pUnit, eSkill);
       return;
     }
-    if (!nParam) {
+    if (!bRemoveAtZero) {
       D2SkillStrc* pZeroedSkill;
       pZeroedSkill = GetSkillByIdAndOwner(pUnit, eSkill, -1);
       if (!pZeroedSkill) {
@@ -3401,8 +3401,8 @@ void __stdcall SKILLS_AddOrRemoveItemSkill(D2UnitStrc * pUnit, int32_t nOwnerGUI
     pUnit->nClassId = (int)pNewSkill;
 }
 
-void __stdcall thunk_SKILLS_AddOrRemoveItemSkill(D2UnitStrc * pUnit, int32_t nParam1, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5) {
-    SKILLS_AddOrRemoveItemSkill(pUnit, nParam1, nParam2, nParam3, nParam4, nParam5);
+void __stdcall thunk_SKILLS_AddOrRemoveItemSkill(D2UnitStrc * pUnit, int32_t nOwnerGUID, int32_t eSkill, int32_t nLevel, int32_t nCharges, int32_t bRemove) {
+    SKILLS_AddOrRemoveItemSkill(pUnit, nOwnerGUID, eSkill, nLevel, nCharges, bRemove);
 }
 
 // Returns nonzero if pUnit has sufficient mana (or HP under Blood Mana state) to cast pSkillStrc. Computes effective skill level, applies lvlmana+mana formula with manashift, checks STATE_blood_mana; special-cases charged skills (nCharges) and Berserk (stat cost flag 0x200 bit 3). Returns 0 or 1.

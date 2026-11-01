@@ -622,7 +622,7 @@ namespace D2Game::PLAYER::PlayerMsg {
 // Function declarations
 struct D2WaypointStrc * __fastcall GetWaypointsForCurrentDifficulty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall UpgradeLifeAndHitClass(struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient);
-void __fastcall SendReassignPlayer(struct D2UnitStrc * pUnitStrc, struct D2ClientStrc * pClient, uint8_t bParam);
+void __fastcall SendReassignPlayer(struct D2UnitStrc * pUnitStrc, struct D2ClientStrc * pClient, uint8_t bWarpFade);
 // Broadcasts the player's current skill cast to nearby clients. If the skill has a valid target unit visible to the client, sends packet 0x4C (target-entity cast). Otherwise sends packet 0x4D (XY cast) using the caster's SP1 path coordinates. Skips if the skill has flag bit 2 set and the caster is the client's own player unit.
 // @sourcefile .\PLAYER\PlrMsg.cpp
 void __fastcall SendUnitCast0x4d(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient, ::SGAMEDATA * pGameParam);
@@ -643,10 +643,10 @@ uint32_t __fastcall PLAYER_AreInDifferentActs(struct D2UnitStrc * pUnit, struct 
 // Server-side interact/pickup dispatcher: given a source player pUnit, a target eUnitType and its uuid, resolves the target via FindUnitFromTable and acts based on type and distance. PLAYER: pickup corpse if dead+not-trading else open trade (or walk if >8). MONSTER: trigger NPC AI think/interact if interact+npc, begin NPC interaction when close, else walk. OBJECT: validate range/LOS then Interact(mode 2) or walk. ITEM: SERVER_PickToCursor/SERVER_PickToInventory (per bSetting) when adjacent and unobstructed, else walk. WARP: TakeStairs when adjacent. Beyond ~0x33 tiles it bails. Returns eD2ServerIncomingStatus (OK / BAD_PARAMS / BAD_TARGET).
 eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(struct D2UnitStrc * pUnit, eD2UnitType eUnitType, uint32_t uuid, BOOL bSetting, ::SGAMEDATA * pGame);
 int32_t __stdcall PLAYERMSG_GetMessagePriority(uint32_t nParam);
-eD2ServerIncomingStatus __thiscall SERVER_IsItemOnCursor(void * pThis, struct D2UnitStrc * pUnit, uint32_t dwParam);
+eD2ServerIncomingStatus __thiscall SERVER_IsItemOnCursor(void * pThis, struct D2UnitStrc * pUnit, uint32_t dwItemGUID);
 eD2ServerIncomingStatus __thiscall IsPlayerTheOwner(void * pThis, struct D2UnitStrc * pOwner, uint32_t nItemGid);
 eD2ServerIncomingStatus __thiscall ItemBelongsToUnit(void * pThis, struct D2UnitStrc * pOwner, uint32_t nItemGid);
-uint8_t __stdcall MONSTER_SetAlignmentCallback(int32_t nParam1, int32_t nParam2);
+uint8_t __stdcall MONSTER_SetAlignmentCallback(struct D2UnitStrc * pUnit, int32_t nGridOffset);
 eD2ServerIncomingStatus __thiscall ItemBelongsToInventoryOf(void * pThis, struct D2UnitStrc * pPlayer, uint32_t nItemGid);
 int32_t __stdcall MONSTER_FindNearbyAllyUnit(::SGAMEDATA * pGame, int32_t bCheckRange, struct D2UnitStrc * * ppUnit, struct D2UnitStrc * pUnit, DWORD nUnitId);
 // C->S Packet 0x01 - Walk to XY (5 bytes)

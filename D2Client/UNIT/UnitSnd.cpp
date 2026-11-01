@@ -370,8 +370,8 @@ void __fastcall AllocUnitSfxData(D2UnitStrc * pUnit, int32_t nChannelHandle) {
     D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc((void*)UNITSND_GetSfxDataListHead(pUnit), (void*)nChannelHandle);
 }
 
-void __fastcall FreeSfxData(D2UnitStrc * pUnit, int32_t nParam) {
-    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free((int**)UNITSND_GetSfxDataListHead(pUnit), nParam);
+void __fastcall FreeSfxData(D2UnitStrc * pUnit, int32_t nSearchValue) {
+    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free((int**)UNITSND_GetSfxDataListHead(pUnit), nSearchValue);
 }
 
 int32_t __fastcall UNITSND_GetMissileSound(D2UnitStrc * pUnit, int32_t nParam2) {
@@ -421,13 +421,13 @@ int __fastcall UNITSND_GetMissileLoopSound(D2UnitStrc * pUnit) {
     return 0;
 }
 
-void __fastcall IterateUnitSfxData(D2UnitStrc * pUnit, int32_t nParam) {
+void __fastcall IterateUnitSfxData(D2UnitStrc * pUnit, int32_t bForceStop) {
     int32_t nLine;
     int32_t* pSfxNode = (int32_t*)*UNITSND_GetSfxDataListHead(pUnit);
     while (pSfxNode) {
       nLine = *pSfxNode;
       pSfxNode = (int32_t*)pSfxNode[1];
-      Sound::SOUND_StopUnitSoundByIndex(nLine, pUnit, nParam);
+      Sound::SOUND_StopUnitSoundByIndex(nLine, pUnit, bForceStop);
     }
 }
 

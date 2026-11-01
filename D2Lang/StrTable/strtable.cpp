@@ -115,15 +115,15 @@ uint32_t __stdcall STRTABLE_HashString(char * szText, uint32_t nBucketCount) {
     return nHash % nBucketCount;
 }
 
-uint16_t * __fastcall GetLocaleString(uint16_t nParam) {
+uint16_t * __fastcall GetLocaleString(uint16_t nStringIndex) {
     uint16_t* pResult;
     uint16_t wParamHigh;
-    DWORD dwRawIndex = (uint32_t)(uint32_t)(uint16_t)nParam;
-    if (nParam >= 20000) {
+    DWORD dwRawIndex = (uint32_t)(uint32_t)(uint16_t)nStringIndex;
+    if (nStringIndex >= 20000) {
       if (!gpStringTableExpansion) {
         dwRawIndex = 0x2b46;
       } else {
-        pResult = STRTABLE_GetStringByIndex(gpStringTableExpansion, gpStringIndexExpansion, nParam + 0xb1e0, dwRawIndex);
+        pResult = STRTABLE_GetStringByIndex(gpStringTableExpansion, gpStringIndexExpansion, nStringIndex + 0xb1e0, dwRawIndex);
         if (pResult) {
           return pResult;
         }

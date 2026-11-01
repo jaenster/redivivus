@@ -1936,7 +1936,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x8A(char * pBytes) {
     D2SCmdPayload_u32_u16 sPayload;
     sPayload.dwData0 = *(uint32_t*)pBytes;
     sPayload.wData4 = *(uint16_t*)(pBytes + 4);
-    UI::npcmenu::Merc::NPCMENU_HandleMercListPacket((uintptr_t)&sPayload);
+    UI::npcmenu::Merc::NPCMENU_HandleMercListPacket((D2GSPacketSrv0x8A*)&sPayload);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x8B_PLAYERBUTTON(D2GSPacketSrv0x8B * pBytes) {

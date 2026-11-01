@@ -93,7 +93,7 @@ BOOL __fastcall SKILLS_ApplyAreaDamage(::SGAMEDATA * pGame, struct D2UnitStrc * 
 // @sourcefile .\SKILLS\Skills.cpp
 struct D2UnitStrc * __fastcall SKILLS_ApplyAreaHitAtUnit(::SGAMEDATA * nGame, struct D2UnitStrc * pUnit, int32_t nRange, fpAreaHitUnitFilter nSkillLevel);
 // @sourcefile .\SKILLS\Skills.cpp
-eD2MissileHitFlags __fastcall SKILLS_ApplyAreaHitAtPos(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nX, int32_t nY, int32_t nParam2, uint32_t nCollisionFlags);
+eD2MissileHitFlags __fastcall SKILLS_ApplyAreaHitAtPos(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nX, int32_t nY, int32_t nRadius, uint32_t nCollisionFlags);
 // Returns the unit in the radius whose GUID is the smallest above nAfterGUID, else the lowest GUID at or below it (cycles targets); *pnUnitCount = units visited. Asm 0056bd49..0056bd7e.
 // @sourcefile .\SKILLS\Skills.cpp
 struct D2UnitStrc * __fastcall SKILLS_FindNextUnitInAreaByGUID(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nX, int32_t nY, int32_t nRadius, uint32_t nCollisionFlags, uint32_t nAfterGUID, int * pnUnitCount);
@@ -134,7 +134,7 @@ BOOL __fastcall SKILLS_SrvStFn65_Throw(::SGAMEDATA * pGame, struct D2UnitStrc * 
 BOOL __fastcall SKILLS_SrvStFn02_Kick(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall SKILLS_SrvStFn03_Unsummon(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvDoFunc_004_RemovePetBySkillParam(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-int32_t __fastcall SKILLS_CalcPerDelayInterval(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2SkillsTxt * pSkillData, eD2Skills eSkill, int32_t nParam2);
+int32_t __fastcall SKILLS_CalcPerDelayInterval(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2SkillsTxt * pSkillData, eD2Skills eSkill, int32_t nSkillLvl);
 void __fastcall SKILLS_SetPeriodicSkillTimer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t bReset);
 void __fastcall SKILLS_SetPeriodicStatOrSkillTimer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nStatId, eD2Skills eSkill, int32_t nParam1, int32_t nParam2);
 // Server-side: spawns and links a Town Portal object for pUnit. Finds a free spawn coordinate in eSrcLevel, checks for the special Duriel portal, creates an OBJECT unit of pUnit's class, stores the source level ID in the portal's char name buffer, sets portal flags, and bidirectionally links owner/portal via StoreOwner and LinkPortalCoords. Frees the placeholder pUnit on spawn failure. Returns the new portal unit or NULL on error.
@@ -179,7 +179,7 @@ void __fastcall SKILLS_AddRandomSkillDamage(struct D2UnitStrc * pUnit, int32_t *
 uint32_t __fastcall SKILLS_GetWeaponClassBitfield(struct D2UnitStrc * pUnit);
 void __fastcall SKILLS_SetupAnimTimerPercent(struct D2UnitStrc * pUnit, int32_t nPercent);
 BOOL __fastcall SKILLS_ForceAttackTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
-BOOL __fastcall D2CheckCorpseConsumed(struct D2UnitStrc * pUnit, int32_t nParam);
+BOOL __fastcall D2CheckCorpseConsumed(struct D2UnitStrc * pUnit, int32_t eState);
 int32_t __fastcall SKILLS_UnitFindTestCallback(struct D2UnitStrc * pUnit, struct D2UnitFindArgStrc * pSkillParam);
 struct D2UnitStrc * __fastcall SKILLS_FindNearbyCorpse(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nUnused, int32_t nMaxCorpses);
 uint32_t __fastcall SKILLS_CheckMissileCollision(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nMissileId);

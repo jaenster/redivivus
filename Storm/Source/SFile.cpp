@@ -1173,7 +1173,7 @@ int __stdcall SFileGetFileName(D2MPQFileStrc * pFile, char * szText, int32_t nBu
 // @wasnamed SFILE_GetArchiveListFile
 // Copies an open file's name into the caller's buffer, preferring the alternate name at +0x10c.
 // @oracle-note 2026-08-28 pass 4. NOT SFileGetFileName - that is 00416230, settled because D2's PowerPC binary imports SFileGetFileName by name and 00416230 is the only file-name getter 1.14d D2 code calls (D2FILE_GetFileSize / SeekFile / ReadFile). This one has zero callers and returns the +0x10c alias when set, falling back to +8; it is the internal variant. Storm's 337-name export table has exactly one file-name getter, so this is not an export. Left descriptively named.
-int __stdcall SFILE_CopyFileRecordNameOrAlias(D2MPQFileStrc * pArchive, void * pParam, int32_t nParam) {
+int __stdcall SFILE_CopyFileRecordNameOrAlias(D2MPQFileStrc * pArchive, void * pParam, int32_t nBufferOutputLength) {
     char* szBufferInput;
     void* pParamSaved = pParam;
     if (pParam) {
@@ -1190,7 +1190,7 @@ int __stdcall SFILE_CopyFileRecordNameOrAlias(D2MPQFileStrc * pArchive, void * p
         szBufferInput = (char*)((int)pParam + 8);
       }
 
-      SSTR::SStrCopy((char*)pParamSaved, szBufferInput, nParam);
+      SSTR::SStrCopy((char*)pParamSaved, szBufferInput, nBufferOutputLength);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
       return 1;
     }
@@ -1340,7 +1340,7 @@ void __stdcall SFileSetDataChunkSize(uint32_t nParam) {
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileSetFilePointer". There is no "SFileSeekFile" on the 337-name list.
 // @wasnamed SFILE_SeekFile
 // @basis behaviour-confirmed. Win32 SetFilePointer semantics exactly: (hFile, LONG lDistanceToMove, PLONG lpDistanceToMoveHigh, DWORD dwMoveMethod), returning the new position or 0xFFFFFFFF on failure, and rejecting a non-zero high dword with ERROR_INVALID_PARAMETER. Method 0/1/2 = FILE_BEGIN/FILE_CURRENT/FILE_END, applied to the MPQ file record's logical position field, and delegated straight to the Win32 SetFilePointer when the record wraps a plain OS handle (field 0x44 != -1). Also invalidates the record's cached sector on every move.
-DWORD __stdcall SFileSetFilePointer(D2MPQFileStrc * pMPQFile, int32_t nParam, int * pnParam, DWORD dwParam) {
+DWORD __stdcall SFileSetFilePointer(D2MPQFileStrc * pMPQFile, int32_t nDistanceToMove, int * pnParam, DWORD dwMoveMethod) {
     DWORD dwResult;
     if (pnParam && *pnParam) {
       SErr::SErrSetLastError(0x57);
@@ -1357,21 +1357,21 @@ DWORD __stdcall SFileSetFilePointer(D2MPQFileStrc * pMPQFile, int32_t nParam, in
     if (pnParam[0x44] != -1) {
       int* pMPQFileSaved = pnParam;
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
-      /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ dwResult = SetFilePointer((HANDLE)pMPQFileSaved[0x44], nParam, (PLONG)0x0, dwParam);
+      /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ dwResult = SetFilePointer((HANDLE)pMPQFileSaved[0x44], nDistanceToMove, (PLONG)0x0, dwMoveMethod);
       return dwResult;
     }
-    if (!dwParam) {
+    if (!dwMoveMethod) {
       seek_absolute:
-      pnParam[0x48] = nParam;
+      pnParam[0x48] = nDistanceToMove;
     } else {
-      switch (dwParam) {
+      switch (dwMoveMethod) {
         case 1:
           {
-            if (!(nParam >= 0 || (uint32_t)pnParam[0x48] >= (uint32_t)-nParam)) {
+            if (!(nDistanceToMove >= 0 || (uint32_t)pnParam[0x48] >= (uint32_t)-nDistanceToMove)) {
               break;
             }
 
-            pnParam[0x48] += nParam;
+            pnParam[0x48] += nDistanceToMove;
             goto finish_seek;
           }
         default:
@@ -1380,8 +1380,8 @@ DWORD __stdcall SFileSetFilePointer(D2MPQFileStrc * pMPQFile, int32_t nParam, in
           }
         case 2:
           {
-            if (nParam >= 0 || *(uint32_t*)(pnParam[0x46] + 8) >= (uint32_t)-nParam) {
-              nParam = *(int*)(pnParam[0x46] + 8) + nParam;
+            if (nDistanceToMove >= 0 || *(uint32_t*)(pnParam[0x46] + 8) >= (uint32_t)-nDistanceToMove) {
+              nDistanceToMove = *(int*)(pnParam[0x46] + 8) + nDistanceToMove;
               goto seek_absolute;
             }
 

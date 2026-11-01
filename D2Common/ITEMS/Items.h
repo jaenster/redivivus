@@ -151,7 +151,7 @@ int16_t __stdcall GetRarePrefix(struct D2UnitStrc * pUnit);
 void __stdcall SetRarePrefix(struct D2UnitStrc * pUnit, int16_t wRarePrefix);
 int16_t __stdcall GetRareSuffix(struct D2UnitStrc * pUnit);
 void __stdcall SetRareSuffix(struct D2UnitStrc * pUnit, int16_t wRareSuffix);
-BOOL __stdcall CheckItemFlag(struct D2UnitStrc * pUnit, eD2ItemFlag neD2ItemFlag, int32_t nParam, char * szText);
+BOOL __stdcall CheckItemFlag(struct D2UnitStrc * pUnit, eD2ItemFlag neD2ItemFlag, int32_t nLine, char * szText);
 void __stdcall ITEM_EditItemData_eItemFlag(struct D2UnitStrc * pUnit, eD2ItemFlag eItemFlag, BOOL bSet);
 eD2ItemFlag __stdcall ITEM_GetItemData_eD2ItemFlag(struct D2UnitStrc * pUnit);
 uint32_t __stdcall ITEM_CheckItemData_eD2ItemCmd(struct D2UnitStrc * pUnit, eD2ItemCmd eItemCmd);

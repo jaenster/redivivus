@@ -185,7 +185,7 @@ static void __stdcall STATES_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nPara
       return;
     }
 
-    int32_t nOverlayCount = D2Common::DATATBLS::OverlayTbls::OVERLAYTBLS_Get1ofN(nParam);
+    int32_t nOverlayCount = D2Common::DATATBLS::OverlayTbls::OVERLAYTBLS_Get1ofN(nOverlayId);
     int i = 0;
     if (nOverlayCount <= 0) {
       return;

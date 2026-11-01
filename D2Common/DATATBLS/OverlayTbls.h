@@ -24,7 +24,7 @@ int32_t __stdcall OVERLAYTBLS_GetXOffset(int32_t nParam);
 int32_t __stdcall OVERLAYTBLS_GetYOffset(int32_t nParam);
 uint32_t __stdcall OVERLAYTBLS_GetTrans(int32_t nParam);
 uint32_t __stdcall OVERLAYTBLS_GetLightRadiusAndRGB(int32_t nOverlayId, int * pnInitRadius, int * pnRadius, char * pbyRed, char * pbyGreen, char * pbyBlue);
-int32_t __stdcall OVERLAYTBLS_Get1ofN(int32_t nParam);
+int32_t __stdcall OVERLAYTBLS_Get1ofN(int32_t nOverlayId);
 uint32_t __stdcall OVERLAYTBLS_GetDir(int32_t nParam);
 // 2022.01.09 - dzik
 uint32_t __stdcall GetComponentsData(struct D2UnitStrc * pUnit, uint32_t nIndex);

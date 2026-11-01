@@ -65,7 +65,7 @@ void __fastcall FreeEventList(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNIT\CUnitEvent.cpp
-D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(D2UnitStrc * pUnit, D2UnitStrc * dwParam1, uint32_t dwEventData1, uint32_t dwEventData2, fnCUnitEventCallback pfnCallback, int dwParam3, int dwParam4) {
+D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(D2UnitStrc * pUnit, D2UnitStrc * pEventUnit, uint32_t dwEventData1, uint32_t dwEventData2, fnCUnitEventCallback pfnCallback, int dwParam3, int dwParam4) {
     if (!pUnit) {
       return nullptr;
     }
@@ -78,7 +78,7 @@ D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(D2UnitStrc * pUnit, D2UnitStrc * 
     pNewEvent->dwEventData1 = dwEventData1;
     pNewEvent->dwEventData2 = dwEventData2;
     pNewEvent->pfnCallback = pfnCallback;
-    pNewEvent->pUnit = dwParam1;
+    pNewEvent->pUnit = pEventUnit;
     pNewEvent->pPrev = pUnit->uSideData.pClientSide.pCUnitEventList;
     pNewEvent->nEventType = dwParam3;
     pNewEvent->nEventState = dwParam4;

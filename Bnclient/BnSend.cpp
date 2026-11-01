@@ -1101,15 +1101,15 @@ D2BNetGatewayAccessStr * __stdcall BnetLoadAndReturn() {
     return &ActualRealmInfo;
 }
 
-void __fastcall GetBnetIp(char * szText, int32_t nParam) {
+void __fastcall GetBnetIp(char * szText, int32_t nBufferOutputLength) {
     char szRegistryBuf[256];
     *szText = '\0';
     BNGatewayAccess::Load(&ActualRealmInfo);
-    int32_t bHasRegistryOverride = nParam;
+    int32_t bHasRegistryOverride = nBufferOutputLength;
     Storm::Source::SSTR::SStrCopy(szText, BNGatewayAccess::DNS(&ActualRealmInfo, ActualRealmInfo.nCurGatewayIdx), bHasRegistryOverride);
     bHasRegistryOverride = Storm::Source::SReg::SRegLoadString("Diablo II", "BNETIP", 0, szRegistryBuf, 0x100);
     if (bHasRegistryOverride) {
-      Storm::Source::SSTR::SStrCopy(szText, szRegistryBuf, nParam);
+      Storm::Source::SSTR::SStrCopy(szText, szRegistryBuf, nBufferOutputLength);
     }
 }
 

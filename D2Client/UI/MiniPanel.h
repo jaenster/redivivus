@@ -17,7 +17,7 @@ namespace D2Client::UI::MiniPanel {
 void __stdcall SetGlobalAlwaysRun();
 void __stdcall UpdateGlobalAlwaysRun();
 void MINIPANEL_DrawBackground(int32_t nPanelSection);
-void __stdcall MINIPANEL_DrawButton(int32_t nParam1, int32_t nParam2, int32_t nParam3);
+void __stdcall MINIPANEL_DrawButton(int32_t nFrameNumber, int32_t nPositionX, int32_t nPositionY);
 void __stdcall MINIPANEL_DrawAllButtons(int32_t bVisible);
 BOOL __stdcall IsLeftScreenOpen();
 BOOL __stdcall IsRightScreenOpen();

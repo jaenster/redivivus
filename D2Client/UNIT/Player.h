@@ -108,7 +108,7 @@ void __fastcall CLIENT_WarpPlayerAndContinueMove(struct D2UnitStrc * pUnit, stru
 // Per-frame client-side state machine driving a player unit's current animation mode. Uses gaPlayerInitStats[playerMode] flag columns to decide behavior: steps the path and plays footstep sounds for moving modes, advances/handles the skill cast step (setting skill flags and re-issuing the current skill) for action modes, and advances or clamps the animation frame per the mode's loop/freeze attribute. On animation completion it transitions the mode: KnockBack restores position/velocity and reverts to GetHit; players with a queued skill set a pending-interact flag; otherwise it clears the current skill, frees the light map, and reverts to Neutral/TownNeutral. Also reloads the COF when needed, handles room-change updates, interpolates facing direction, cancels run/walk, applies active damage-state skill effects, and resolves player collision.
 // @blizzard UnitProcessPlayerModeSimulation
 void __fastcall PLAYER_ProcessPlayerModeSimulation(struct D2UnitStrc * pUnit);
-uint32_t __fastcall CheckFlagWithMask(struct D2UnitStrc * pUnit, uint32_t nParam);
+uint32_t __fastcall CheckFlagWithMask(struct D2UnitStrc * pUnit, uint32_t dwMask);
 struct D2RoomStrc * __fastcall DRLGROOM_FindBetterNearbyRoom(struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 int __fastcall PLAYER_GetMonsterOwnerId(struct D2UnitStrc * pnParam);
 int32_t __fastcall TXT_MonStats_GetBaseId_NoChecks(int32_t nMonsterId);
@@ -123,7 +123,7 @@ struct D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(struct D2UnitStrc * pUnit);
 // Inserts pUnit into the appropriate global unit hash table (server-side or client-side, selected by UNITFLAG bit 0x21). Computes bucket from nUnitGUID &amp; 0x7f and inserts in ascending GUID order. Halts (ERROR_UnrecoverableInternalError_Halt) if the unit already exists in the table. Returns 1 on successful insert, 0 if the unit was already present (duplicate path).
 uint32_t InsertIntoHashTable(struct D2UnitStrc * pUnit);
 void CLIENT_SendIdlePlayerMessage(struct D2UnitStrc * pUnit);
-void __stdcall PLAYER_PlaceUnitInRoom(int32_t nParam1, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit, int32_t nParam2);
+void __stdcall PLAYER_PlaceUnitInRoom(int32_t nX, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit, int32_t nY);
 void __fastcall CLIENT_UpdateMonsterAllegiance(struct D2UnitStrc * pUnit, char byOldAllegiance, char byNewAllegiance);
 void __stdcall CLIENT_ClearServerAndClientUnitLists();
 void __stdcall CUNIT_IterateHashTableWithCallback(struct D2UnitStrc * * UnitHashTable, fnUnitIterCallback pParam);

@@ -1604,7 +1604,7 @@ static void __stdcall INV_FormatQuantityText(int32_t pQualityRecord, uint16_t * 
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorPrefix);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszNumBuffer);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorSuffix);
-    pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)(pQualityRecord + 0xf4));
+    pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pQualityRecord->wNameStr);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwLocaleStr);
 }
 
@@ -2922,8 +2922,8 @@ static BOOL INV_IsMouseOverGoldButton(int32_t nX, int32_t nY) {
     return 0;
 }
 
-BOOL __fastcall INV_IsMouseOverCloseButton(int32_t nParam1, int32_t nParam2) {
-    if (nParam1 >= ScreenSizeX - gnPanelOffsetX - 0x12e && nParam1 <= ScreenSizeX - gnPanelOffsetX - 0x10e && nParam2 >= gnPanelOffsetY - 0x60 + ScreenSizeY && nParam2 <= gnPanelOffsetY - 0x40 + ScreenSizeY) {
+BOOL __fastcall INV_IsMouseOverCloseButton(int32_t nMouseX, int32_t nMouseY) {
+    if (nMouseX >= ScreenSizeX - gnPanelOffsetX - 0x12e && nMouseX <= ScreenSizeX - gnPanelOffsetX - 0x10e && nMouseY >= gnPanelOffsetY - 0x60 + ScreenSizeY && nMouseY <= gnPanelOffsetY - 0x40 + ScreenSizeY) {
       return 1;
     }
 

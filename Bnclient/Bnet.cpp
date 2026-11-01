@@ -11,30 +11,30 @@
 
 namespace Bnclient::Bnet {
 
-int BNET_LogIndent(int32_t nIndentAction, int32_t nParam2) {
+int BNET_LogIndent(int32_t nIndentAction, int32_t nDelta) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00881860);
     if (nIndentAction == 1) {
       if (!(gbBnetLogInitialized & 1)) {
         gbBnetLogInitialized |= 1;
-        Storm::Source::SSComp::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
+        Storm::Source::SLog::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
         atexit(StaticFini_gnBnetLogFileHandle);
       }
 
-      Storm::Source::SSComp::SLogClose(gnBnetLogFileHandle);
+      Storm::Source::SLog::SLogClose(gnBnetLogFileHandle);
       if (!(gbBnetLogInitialized & 1)) {
         gbBnetLogInitialized |= 1;
-        Storm::Source::SSComp::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
+        Storm::Source::SLog::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
         atexit(StaticFini_gnBnetLogFileHandle);
       }
 
-      Storm::Source::SSComp::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
+      Storm::Source::SLog::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00881860);
       return 1;
     }
     if (nIndentAction == 2) {
       uint32_t* pFilestream;
       pFilestream = (uint32_t*)BNCLIENT_GetBnetLogFilestream();
-      Storm::Source::SSComp::SLogSetIndent(*pFilestream, nParam2);
+      Storm::Source::SLog::SLogSetIndent(*pFilestream, nDelta);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00881860);

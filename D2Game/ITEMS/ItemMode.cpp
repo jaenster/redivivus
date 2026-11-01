@@ -703,8 +703,8 @@ static void __stdcall ITEMMODE_AddStatsList(D2UnitStrc * pUnit, D2UnitStrc * pUn
     D2Common::Units::UpdateAnimSpeed(pUnit_00, ".\\ITEMS\\ItemMode.cpp", 0x2cf);
 }
 
-void __fastcall ITEMMODE_AddStatsList_ForMercSwap(uint32_t dwParam, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nParam) {
-    ITEMMODE_AddStatsList(pUnit, pUnit2, nParam);
+void __fastcall ITEMMODE_AddStatsList_ForMercSwap(uint32_t dwParam, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nApply) {
+    ITEMMODE_AddStatsList(pUnit, pUnit2, nApply);
 }
 
 static void ITEMMODE_GetEquippedWeapons(D2UnitStrc * * ppUnit1, D2UnitStrc * * ppUnit2, int32_t nParam) {
@@ -4439,8 +4439,8 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
                     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItemInInv, ITEMFLAG_RELOAD, 1);
                   }
 
-                  BVar1 = D2Common::ITEMS::Items::CheckItemFlag(pItemInInv, ITEMFLAG_DISABLED, 0x8ee, ".\\ITEMS\\ItemMode.cpp");
-                  if (BVar1) {
+                  pGridSlot = D2Common::ITEMS::Items::CheckItemFlag(pItemInInv, ITEMFLAG_DISABLED, 0x8ee, ".\\ITEMS\\ItemMode.cpp");
+                  if (pGridSlot) {
                     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItemInInv, ITEMFLAG_DISABLED, 0);
                   }
 
@@ -6663,8 +6663,8 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
                   D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pCubeItem, ITEMFLAG_RELOAD, 1);
                 }
 
-                BVar1 = D2Common::ITEMS::Items::CheckItemFlag(pCubeItem, ITEMFLAG_DISABLED, 0x8ee, ".\\ITEMS\\ItemMode.cpp");
-                if (BVar1) {
+                pGridPos = D2Common::ITEMS::Items::CheckItemFlag(pCubeItem, ITEMFLAG_DISABLED, 0x8ee, ".\\ITEMS\\ItemMode.cpp");
+                if (pGridPos) {
                   D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pCubeItem, ITEMFLAG_DISABLED, 0);
                 }
 

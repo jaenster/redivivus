@@ -1877,20 +1877,20 @@ void __fastcall Objects_InitFn13(D2ObjectInitFnArg * pInitArg) {
 // A1Q4 — Q04_InitializeCainGibbetObject: anim-init helper for the Cain cage/gibbet
 // object. Sets the active flag (0x48), captures the target unit GUID (or -1), and
 // pushes the cage's update flag. No quest-state transition.
-void __fastcall Q04_InitializeCainGibbetObject(int32_t nParam1, D2UnitStrc * * nParam2) {
+void __fastcall Q04_InitializeCainGibbetObject(int32_t nParam1, D2ObjectInitFnArg * pInitArg) {
     if (!nParam1) {
       return;
     }
 
     int nQuestSpecific = *(int*)(nParam1 + 0x18);
-    D2Common::Units::SetupUpdateFlag(nParam2[1], *(int32_t*)(nQuestSpecific + 0x54));
+    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, *(int32_t*)(nQuestSpecific + 0x54));
     *(uint8_t*)(nQuestSpecific + 0x48) = 1;
-    if (!nParam2[1]) {
+    if (!pInitArg->pObject) {
       *(uint32_t*)(nQuestSpecific + 0x34) = -1;
       return;
     }
 
-    *(int*)(nQuestSpecific + 0x34) = nParam2[1]->nUnitGUID;
+    *(int*)(nQuestSpecific + 0x34) = pInitArg->pObject->nUnitGUID;
 }
 
 // A1Q4 — Q04_RemovePlayerFromList (per-player iterate callback): removes a player

@@ -126,7 +126,7 @@ uint32_t __fastcall SKILL_CheckMissileCollisionAtTarget(struct D2UnitStrc * pUni
 int32_t __fastcall GetMeleeRangePlusFour(struct D2UnitStrc * pUnit);
 // @sourcefile .\SKILLS\Skills.cpp
 void __fastcall SKILLS_CltAllocStatListForSkill(struct D2UnitStrc * pUnit, int32_t nAttackRate);
-struct D2CUnitEventStrc * __fastcall AttachClientStateHandler(struct D2UnitStrc * pUnit, struct D2UnitStrc * nParam1, int32_t nMsgParam1, int32_t nMsgParam2, uint32_t nHandlerIdx, int32_t nParam2, int32_t nParam3);
+struct D2CUnitEventStrc * __fastcall AttachClientStateHandler(struct D2UnitStrc * pUnit, struct D2UnitStrc * pEventUnit, int32_t nMsgParam1, int32_t nMsgParam2, uint32_t nHandlerIdx, int32_t nParam2, int32_t nParam3);
 // 4 internal functions (defined in .cpp)
 
 } // namespace D2Client::SKILLS::Skills

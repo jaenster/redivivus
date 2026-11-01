@@ -145,8 +145,8 @@ uint32_t __stdcall OVERLAYTBLS_GetLightRadiusAndRGB(int32_t nOverlayId, int * pn
     return 1;
 }
 
-int32_t __stdcall OVERLAYTBLS_Get1ofN(int32_t nParam) {
-    D2OverlayTxt* pOverlayTxt = nParam >= 0 && nParam < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nParam : nullptr;
+int32_t __stdcall OVERLAYTBLS_Get1ofN(int32_t nOverlayId) {
+    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
     if (!pOverlayTxt) {
       return 0;
     }

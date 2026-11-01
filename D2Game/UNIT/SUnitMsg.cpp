@@ -877,7 +877,7 @@ void __fastcall UnitQueuePacket0xA1(D2UnitStrc * pUnit, uint16_t nParam, int32_t
 }
 
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0xAB(D2UnitStrc * pUnit, uint8_t bParam) {
+void __fastcall UnitQueuePacket0xAB(D2UnitStrc * pUnit, uint8_t nHpPercent128) {
     int32_t nUnitGUID;
     D2PoolManagerStrc* pAllocPool = 0;
     if (pUnit) {
@@ -907,7 +907,7 @@ void __fastcall UnitQueuePacket0xAB(D2UnitStrc * pUnit, uint8_t bParam) {
     }
 
     pMsg->uArgs.sAB.nUnitGUID = nUnitGUID;
-    pMsg->uArgs.sAB.field_0x8 = bParam;
+    pMsg->uArgs.sAB.field_0x8 = nHpPercent128;
     if (!pUnit->pMsgFirst) {
       pUnit->pMsgFirst = pMsg;
     }

@@ -98,8 +98,8 @@ DWORD __fastcall PLAYER_CountPlayersWithFilter2(::SGAMEDATA * pGame, struct D2Un
 // Returns the weapon unit the player should use when casting the current skill, respecting dual-wield and weapon-switch rules. For non-dual-wield classes returns the equipped primary weapon. For dual-wield capable classes dispatches on SkillsTxt.weapsel: 2=off-hand preference with main-hand fallback if no valid off-hand, 3=switch-state dependent (reads nSeqFrame weapon-switch bit), 4=no weapon (returns null), default/1=primary then off-hand fallback. Returns the equipped default if the resolved weapon is broken or disabled.
 struct D2UnitStrc * __fastcall PLAYER_GetActiveWeaponForSkill(struct D2UnitStrc * pUnit);
 // Recalculates active stat-list flags for dual-wield weapon slots on pUnit. If nParam is non-zero, deactivates stat lists for currently equipped and primary weapons (cleanup pass). Then, if the unit can dual-wield, activates the correct weapon's stat list based on the active-weapon-for-skill selection: primary-only, swap-only, or the dual-wield split. Uses STATLIST_SetItemStatActive(1=active, 0=inactive).
-void __fastcall EQUIPMENT_RecalcDualWieldWeaponStats(struct D2UnitStrc * pUnit, int32_t nParam);
-void __fastcall WEAPON_ApplyEquippedWeaponStats(struct D2UnitStrc * pUnit, int32_t nParam);
+void __fastcall EQUIPMENT_RecalcDualWieldWeaponStats(struct D2UnitStrc * pUnit, int32_t bResetWeaponStats);
+void __fastcall WEAPON_ApplyEquippedWeaponStats(struct D2UnitStrc * pUnit, int32_t bResetWeaponStats);
 // 6 internal functions (defined in .cpp)
 
 } // namespace D2Game::PLAYER::Player

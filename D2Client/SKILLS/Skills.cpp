@@ -2315,13 +2315,13 @@ void __fastcall SKILLS_CltAllocStatListForSkill(D2UnitStrc * pUnit, int32_t nAtt
     D2Common::Units::UpdateAnimSpeed(pUnit, ".\\SKILLS\\Skills.cpp", 0x9e5);
 }
 
-D2CUnitEventStrc * __fastcall AttachClientStateHandler(D2UnitStrc * pUnit, D2UnitStrc * nParam1, int32_t nMsgParam1, int32_t nMsgParam2, uint32_t nHandlerIdx, int32_t nParam2, int32_t nParam3) {
+D2CUnitEventStrc * __fastcall AttachClientStateHandler(D2UnitStrc * pUnit, D2UnitStrc * pEventUnit, int32_t nMsgParam1, int32_t nMsgParam2, uint32_t nHandlerIdx, int32_t nParam2, int32_t nParam3) {
     // Static local variables (originally global data)
     static fnCUnitEventCallback STATESCLTEVENTFUNC[2] = { nullptr, (fnCUnitEventCallback)&D2Client::SKILLS::SkillsSor::SKILLSSOR_StateCltEventFn01_ChillingArmor }; D2_STATIC_GUARD(STATESCLTEVENTFUNC, "D2Client::SKILLS::Skills::AttachClientStateHandler::STATESCLTEVENTFUNC");
 
     if (nHandlerIdx <= 1 && STATESCLTEVENTFUNC[nHandlerIdx]) {
       D2CUnitEventStrc* pCUnitEvent;
-      pCUnitEvent = UNIT::CUnitEvent::CUNITEVENT_Alloc(pUnit, nParam1, nMsgParam1, nMsgParam2, STATESCLTEVENTFUNC[nHandlerIdx], nParam2, nParam3);
+      pCUnitEvent = UNIT::CUnitEvent::CUNITEVENT_Alloc(pUnit, pEventUnit, nMsgParam1, nMsgParam2, STATESCLTEVENTFUNC[nHandlerIdx], nParam2, nParam3);
       return pCUnitEvent;
     }
 

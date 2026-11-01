@@ -339,7 +339,7 @@ int __stdcall SFileGetFileName(struct D2MPQFileStrc * pFile, char * szText, int3
 // @wasnamed SFILE_GetArchiveListFile
 // Copies an open file's name into the caller's buffer, preferring the alternate name at +0x10c.
 // @oracle-note 2026-08-28 pass 4. NOT SFileGetFileName - that is 00416230, settled because D2's PowerPC binary imports SFileGetFileName by name and 00416230 is the only file-name getter 1.14d D2 code calls (D2FILE_GetFileSize / SeekFile / ReadFile). This one has zero callers and returns the +0x10c alias when set, falling back to +8; it is the internal variant. Storm's 337-name export table has exactly one file-name getter, so this is not an export. Left descriptively named.
-int __stdcall SFILE_CopyFileRecordNameOrAlias(struct D2MPQFileStrc * pArchive, void * pParam, int32_t nParam);
+int __stdcall SFILE_CopyFileRecordNameOrAlias(struct D2MPQFileStrc * pArchive, void * pParam, int32_t nBufferOutputLength);
 // @oracle PPC Mac Storm 1.10b export table: SFileGetFileArchive
 // @oracle-basis CONTRADICTION. The old name promised an archive NAME; the function copies no string at
 // all. It validates a FILE handle and, when the record's field at +0x110 equals -1 (the marker for
@@ -377,7 +377,7 @@ void __stdcall SFileSetDataChunkSize(uint32_t nParam);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileSetFilePointer". There is no "SFileSeekFile" on the 337-name list.
 // @wasnamed SFILE_SeekFile
 // @basis behaviour-confirmed. Win32 SetFilePointer semantics exactly: (hFile, LONG lDistanceToMove, PLONG lpDistanceToMoveHigh, DWORD dwMoveMethod), returning the new position or 0xFFFFFFFF on failure, and rejecting a non-zero high dword with ERROR_INVALID_PARAMETER. Method 0/1/2 = FILE_BEGIN/FILE_CURRENT/FILE_END, applied to the MPQ file record's logical position field, and delegated straight to the Win32 SetFilePointer when the record wraps a plain OS handle (field 0x44 != -1). Also invalidates the record's cached sector on every move.
-DWORD __stdcall SFileSetFilePointer(struct D2MPQFileStrc * pMPQFile, int32_t nParam, int * pnParam, DWORD dwParam);
+DWORD __stdcall SFileSetFilePointer(struct D2MPQFileStrc * pMPQFile, int32_t nDistanceToMove, int * pnParam, DWORD dwMoveMethod);
 BOOL __stdcall SFileSetIoErrorMode(int32_t nErrorMode, pfnSFileReadError pfnErrorHandler);
 void __stdcall SFileSetLocale(uint16_t nLocale);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileSetPlatform"

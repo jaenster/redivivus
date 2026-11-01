@@ -3847,8 +3847,8 @@ void __stdcall SBigMulMod(BigData * pResult, BigData * pBigA, BigData * pBigB, B
 // @renamed-from SBIG_PowerModWrapper (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigPow -> 10099500, single bl .Pow__FR9BigBufferRC9BigBufferUiR8BigStack. 1.14d: 3-arg forwarder onto BigBuffer_Pow 00424640, a square-and-multiply over a SCALAR unsigned exponent with no modulus argument - so it cannot be PowMod.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
-void __stdcall SBigPow(BigData * pResult, BigData * pBigBase, uint32_t nParam) {
-    BigBuffer_Pow(&pResult->sPrimary, &pBigBase->sPrimary, nParam, &pResult->sStack);
+void __stdcall SBigPow(BigData * pResult, BigData * pBigBase, uint32_t nExponent) {
+    BigBuffer_Pow(&pResult->sPrimary, &pBigBase->sPrimary, nExponent, &pResult->sStack);
 }
 
 // @renamed-from SBIG_MontgomeryMulWrapper2 (2026-08-28, Storm PowerPC oracle pass 4)

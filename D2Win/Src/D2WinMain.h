@@ -127,7 +127,7 @@ int32_t __stdcall D2WIN_FindClosestControlToMouse(struct D2ControlStrc * pContro
 void __stdcall INPUT_FormMouseWheel(struct D2UIMouseMsgStrc * pMsg);
 // Sets gbCursorVisible cursor visibility flag
 void __stdcall D2WINMAIN_SetCursorVisible(BOOL bVisible);
-void __stdcall SetUnsetFlag0x08(struct D2ControlStrc * pControl, int32_t nParam);
+void __stdcall SetUnsetFlag0x08(struct D2ControlStrc * pControl, int32_t bSet);
 // Sets pFormFourth global to the specified control
 void __stdcall D2WINMAIN_SetFormFourth(struct D2ControlStrc * pControl);
 // Returns gnWinMainState global value

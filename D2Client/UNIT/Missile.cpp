@@ -4605,7 +4605,7 @@ int32_t __fastcall MISSILE_CltHitFn37_RadamentHandOfGod(D2UnitStrc * pUnit, D2Un
         DStack_70.nUnitX = nParam;
         pUnit_00 = Missile::MakeMissile(&DStack_70);
         if (pUnit_00) {
-          SKILLS::SkillsMon::SKILLSMON_SetMissilePathLinear(pUnit_00, nParam);
+          SKILLS::SkillsMon::SKILLSMON_SetMissilePathLinear(pUnit_00, nSeedOffset);
         }
       }
 

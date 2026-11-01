@@ -1062,8 +1062,8 @@ void __stdcall D2WINMAIN_SetCursorVisible(BOOL bVisible) {
     gbCursorVisible = bVisible;
 }
 
-void __stdcall SetUnsetFlag0x08(D2ControlStrc * pControl, int32_t nParam) {
-    if (nParam) {
+void __stdcall SetUnsetFlag0x08(D2ControlStrc * pControl, int32_t bSet) {
+    if (bSet) {
       pControl->dwState |= gadwBitMasks[3];
       return;
     }

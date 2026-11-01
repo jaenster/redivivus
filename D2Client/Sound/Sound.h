@@ -267,7 +267,7 @@ uint32_t __fastcall SOUND_FindChannelForSound(int32_t nSoundId);
 void __fastcall SOUND_StopChannelGracefully(int32_t nSoundId, int32_t nFadeTarget, int32_t nFadeDelay, uint32_t nFadeDuration);
 void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime);
 void __fastcall SOUND_StopUnitSoundByIndex(int32_t nParam, struct D2UnitStrc * pUnit, int32_t bForceStop);
-void __fastcall SOUND_StopById(int32_t nParam);
+void __fastcall SOUND_StopById(int32_t nChannelHandle);
 void __fastcall SOUND_FadeOutMusic(int32_t nParam);
 void __stdcall SOUND_StopMusic();
 void __fastcall SOUND_SetLeftVolume(int32_t nParam1, int32_t nParam2);

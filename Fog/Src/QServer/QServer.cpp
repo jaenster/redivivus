@@ -1717,11 +1717,11 @@ void __stdcall DisconnectAndBanIp(D2QServerStrc * pQServer, uint32_t nIpAddress,
 
 // @wasnamed CloseRemoteConnection - one name on two different functions.
 // @evidence __stdcall shim whose whole body forwards its four arguments to 006c0420.
-void __stdcall thunk_CloseRemoteConnection(D2QServerStrc * pQServer, int nParam1, char * szText, int nParam2) {
-    CloseRemoteConnection(pQServer, nParam1, szText, nParam2);
+void __stdcall thunk_CloseRemoteConnection(D2QServerStrc * pQServer, int nClientId, char * szText, int nLine) {
+    CloseRemoteConnection(pQServer, nClientId, szText, nLine);
 }
 
-void __stdcall QSDisconnectIP(D2QServerStrc * pQServer, in_addr addr, char * szText, int nParam) {
+void __stdcall QSDisconnectIP(D2QServerStrc * pQServer, in_addr addr, char * szText, int nLine) {
     char* szIpStr;
     D2QServerClientConnectionStrc* pFoundClient;
     uint32_t nHashMask = pQServer->nClientHashMask;
@@ -1730,14 +1730,14 @@ void __stdcall QSDisconnectIP(D2QServerStrc * pQServer, in_addr addr, char * szT
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQServer->csTokenHash);
     if (pFoundClient) {
-      CloseRemoteConnection(pQServer, pFoundClient->nClientToken, szText, nParam);
+      CloseRemoteConnection(pQServer, pFoundClient->nClientToken, szText, nLine);
     } else {
       /* in_addr in for inet_ntoa */ szIpStr = inet_ntoa(addr);
       LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  Client %s is already closed", szIpStr);
     }
 
     /* in_addr in for inet_ntoa */ szIpStr = inet_ntoa(addr);
-    LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  IP:%s  QSDisconnectIP() from FILE:%s  LINE:%d", szIpStr, szText, nParam);
+    LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  IP:%s  QSDisconnectIP() from FILE:%s  LINE:%d", szIpStr, szText, nLine);
 }
 
 // pQServerStrc arrives in EDI; the other three arguments are on the stack (RET 0xc).

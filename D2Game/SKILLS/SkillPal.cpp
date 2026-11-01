@@ -274,7 +274,7 @@ void __fastcall SKILLPAL_OnAuraExpire(D2UnitStrc * pUnit, eD2States eState, int3
 }
 
 // Paladin skill helper: reduces the remaining duration of active poison and curse states on pUnit by nParam percent (via D2ApplyPercent). Iterates all states flagged as curse states (pAllStatesDataTblFlag0x0B) and adjusts each statlist timeout; reschedules the expiry event for each shortened state. Returns non-zero if at least one state was shortened.
-BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nParam) {
+BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nPercent) {
     D2StatListExStrc* pStatList;
     int32_t nGameFrame2;
     uint32_t bIsCurseState;
@@ -291,7 +291,7 @@ BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2Unit
       if (pStatList) {
         nGameFrame = pGame->dwGameFrame;
         nPoisonExpire = D2Common::Stats::StatsEx::STATLIST_GetFullListPtr(pStatList);
-        nGameFrame2 = D2Client::Stats::D2ApplyPercent(nPoisonExpire - nGameFrame, nParam, 100);
+        nGameFrame2 = D2Client::Stats::D2ApplyPercent(nPoisonExpire - nGameFrame, nPercent, 100);
         nNewPoisonExpire = nGameFrame2 + nGameFrame;
         D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatList, nNewPoisonExpire);
         GAME::Event::SetEvent(pGame, pUnit, 0xc, nNewPoisonExpire, 0, 0);
@@ -314,7 +314,7 @@ BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2Unit
           if (bIsCurseState) {
             nGameFrame = pGame->dwGameFrame;
             nCurseExpire = D2Common::Stats::StatsEx::STATLIST_GetFullListPtr(pStatList);
-            nGameFrame2 = D2Client::Stats::D2ApplyPercent(nCurseExpire - nGameFrame, nParam, 100);
+            nGameFrame2 = D2Client::Stats::D2ApplyPercent(nCurseExpire - nGameFrame, nPercent, 100);
             nNewCurseExpire = nGameFrame2 + nGameFrame;
             D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatList, nNewCurseExpire);
             GAME::Event::SetEvent(pGame, pUnit, 0xc, nNewCurseExpire, 0, 0);

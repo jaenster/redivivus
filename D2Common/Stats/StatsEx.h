@@ -48,17 +48,17 @@ void __stdcall SetState(struct D2StatListExStrc * pStatsEx, eD2States eState);
 eD2States __stdcall GetState(struct D2StatListExStrc * pStatList);
 void __stdcall SetTimeout_WithFlag(struct D2StatListExStrc * pStatList, int32_t nTimeout);
 int __stdcall STATLIST_GetFullListFromStatList(struct D2StatListExStrc * pStatList);
-int32_t __stdcall STATLIST_GetStatFromBaseArray(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint16_t nParam);
-int32_t __stdcall SERVER_GetUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint16_t nParam);
-int32_t __stdcall STATLIST_GetMinimalStatValueShifted(struct D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, uint16_t nParam);
+int32_t __stdcall STATLIST_GetStatFromBaseArray(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint16_t nLayer);
+int32_t __stdcall SERVER_GetUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint16_t nLayer);
+int32_t __stdcall STATLIST_GetMinimalStatValueShifted(struct D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, uint16_t nLayer);
 // Returns unsigned stat value for the given stat ID and layer from the unit's D2StatListExStrc. Uses ItemStatCost.txt minimum/shifted calculation.
 // @blizzard StatsGetCurrentStat
 int __stdcall STATSEX_GetCurrentStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint16_t nLayer);
-int32_t __stdcall thunk_STATLIST_GetStatFromBaseArray(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nParam);
-int32_t __stdcall thunk_STATLIST_GetMinimalStatValueShifted(struct D2StatListExStrc * pStatListEx, eD2UnitStat eUnitStat, uint32_t nParam);
-int32_t __stdcall ITEM_GetMinimalStatValueShifted(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nParam);
-int __stdcall STATLIST_GetStatBonusFromList(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nParam);
-int32_t __stdcall STATLIST_GetStatBonusFromLists(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nParam);
+int32_t __stdcall thunk_STATLIST_GetStatFromBaseArray(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nLayer);
+int32_t __stdcall thunk_STATLIST_GetMinimalStatValueShifted(struct D2StatListExStrc * pStatListEx, eD2UnitStat eUnitStat, uint32_t nLayer);
+int32_t __stdcall ITEM_GetMinimalStatValueShifted(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nLayer);
+int __stdcall STATLIST_GetStatBonusFromList(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nLayer);
+int32_t __stdcall STATLIST_GetStatBonusFromLists(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nLayer);
 int32_t __stdcall STATLIST_CalcStatWithPercentBonus(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, eD2UnitStat eStat, int32_t nParam);
 int32_t __stdcall UNITS_CalcUnitStatWithPercentBonus(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, eD2UnitStat ePercentStat, int32_t nValue);
 int32_t __stdcall STATLIST_GetStatValueByIndex(struct D2StatListExStrc * pStatList, int32_t nIndex);
@@ -88,7 +88,7 @@ int32_t __stdcall STATLIST_GetUnitGfxFlags(struct D2UnitStrc * pUnit);
 int32_t __stdcall STATLIST_CopyStatsToBuffer(struct D2UnitStrc * pUnit, struct D2StatStrc * pStatBuf, int32_t nParam);
 int32_t __stdcall CopyStatsToBuffer(struct D2StatListExStrc * pStatListEx, struct D2StatStrc * pOutput, int32_t nOutputSize);
 void __stdcall STATLIST_SetExpireFunction(struct D2StatListExStrc * pStatsEx, PFN_StatExpireCallback pParam);
-int __stdcall STATLIST_GetBaseStatValue(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nParam);
+int __stdcall STATLIST_GetBaseStatValue(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nLayer);
 int32_t __stdcall GetTxtMaxHp(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetTxtMaxMana(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetTxtMaxStamina(struct D2UnitStrc * pUnit);
@@ -100,7 +100,7 @@ int32_t __stdcall GetTxtThrowMinDamage(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetTxtArmorClass(struct D2UnitStrc * pUnit);
 int32_t __stdcall STATLIST_GetStatForDamageCalc(struct D2UnitStrc * pUnit2, struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat);
 int __stdcall STATLIST_GetFullListPtr(struct D2StatListExStrc * pStatList);
-void __stdcall STATSEX_SetStatListTimeout(struct D2StatListExStrc * pStatList, int32_t nParam);
+void __stdcall STATSEX_SetStatListTimeout(struct D2StatListExStrc * pStatList, int32_t nTimeout);
 void __stdcall SetSkillId(struct D2StatListExStrc * pStatsEx, eD2Skills eSkill);
 eD2Skills __stdcall GetSkillId(struct D2StatListExStrc * pStatList);
 void __stdcall SetSkillLevel(struct D2StatListExStrc * pStatsEx, int32_t nSkillLevel);
@@ -121,18 +121,18 @@ void __stdcall FreeStatList(struct D2StatListStrc * pStatList);
 void __stdcall STATLIST_FreeStatListMemory(struct D2UnitStrc * pUnit);
 struct D2StatListExStrc * __stdcall AllocStatListEx(struct D2UnitStrc * pUnit, uint32_t dwFlags, fpStatListExChangeCb pfnStatChangeCb, ::SGAMEDATA * pGame);
 // Attaches child stat list pStatsEx to pOp45Owner's main D2StatListExStrc, then propagates the child's stats into the parent. Detaches/recalcs first and guards against link cycles. If the child has flag 0x2000 (INACTIVE) it is linked into the parent's pInactiveHead chain and returns; otherwise it is linked into the pActiveHead chain. For state stat lists with op4/op5-dependent stats it pre-applies their complex formulas (STATLIST_ApplyComplexStatFormula). Then it walks the child's effective/base stat array and calls STATLIST_PropagateStatChange for each into the parent: when nParam==0 it sets the 0x40000000 (NOCALCBONUS) flag and SKIPS stats flagged damagerelated; when nParam!=0 it clears that flag and propagates every stat. No return; mutates both lists and the unit's aggregate stats.
-void __stdcall STATLIST_AttachStatListToUnit(struct D2UnitStrc * pOp45Owner, struct D2StatListExStrc * pStatsEx, int32_t nParam);
+void __stdcall STATLIST_AttachStatListToUnit(struct D2UnitStrc * pOp45Owner, struct D2StatListExStrc * pStatsEx, int32_t bActive);
 // Adds nValue to stat (eUnitStat, nSubIndex) in pStatsEx's base array. Inserts the stat entry if absent; removes it if the result is zero. Propagates the delta up the parent chain via STATLIST_PropagateStatChange. Tracks the stat in the changed-stat list for player-owned root stat lists.
 void __stdcall STATLIST_AddStatValue(struct D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nSubIndex);
 // Sets a stat to an absolute value in a D2StatListExStrc's base-stat array. Packs (eUnitStat, low subindex) into a single key, binary-searches the sorted stat array, and either updates an existing entry or inserts a new one. If nParam==0, removes the entry entirely. Computes the delta and propagates it via STATLIST_PropagateStatChange. For player-owned stat lists with the dirty flag set, records the changed stat via STATLIST_TrackChangedStat for client sync. Returns 1 if the value changed, 0 if already equal or list is null.
-BOOL __stdcall STATLIST_SetStatValue(struct D2StatListExStrc * pStatEx, eD2UnitStat eUnitStat, int32_t nParam, uint16_t low);
-BOOL __stdcall D2AddStatToStatsListEx(struct D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nParam);
+BOOL __stdcall STATLIST_SetStatValue(struct D2StatListExStrc * pStatEx, eD2UnitStat eUnitStat, int32_t nValue, uint16_t low);
+BOOL __stdcall D2AddStatToStatsListEx(struct D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer);
 // Sets a stat value in the unit's base stat array by binary search on the packed (statId<<16|layer) key. Inserts a new entry if missing and value != 0; removes entry if value == 0; propagates the delta to all dependent stat lists via STATLIST_PropagateStatChange. Also enqueues a change notification for player-owned stat lists (flag 0x80000000). Returns 1 on change, 0 on no-op.
 void __stdcall STATLIST_SetStatValueInBaseArray(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer, struct D2UnitStrc * pUnit);
 void __stdcall STATLIST_SetStatValueInBaseArraySafe(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer, struct D2UnitStrc * pUnit);
-void __stdcall thunk_STATLIST_SetStatValue(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nParam, uint32_t nParam2);
+void __stdcall thunk_STATLIST_SetStatValue(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer);
 void __stdcall STATLIST_SetUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nLayer);
-void __stdcall thunk_STATLIST_AddStatValue(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nParam, uint16_t nParam2);
+void __stdcall thunk_STATLIST_AddStatValue(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nSubIndex);
 void __stdcall STATLIST_AddUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue, int16_t nLayer);
 void __stdcall STATLIST_MarkUnitStatsChanged(struct D2UnitStrc * pUnit);
 // Iteratively removes all stats from pStatList whose value is non-zero (treating them as child-list references). For each iteration, binary-searches the base stat array for the first stat entry, removes it via STATLIST_RemoveStatFromArray, propagates the negated value through STATLIST_PropagateStatChange, and if the owner is a player notifies the stat tracking system. Loops until no stats remain. No-op on NULL input.
@@ -148,11 +148,11 @@ void __stdcall UpdateResourceStats(struct D2UnitStrc * pUnit);
 void __stdcall ItemUpdateStatsAfterSocketing(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 void __stdcall STATLIST_RemoveAndRecalc(struct D2UnitStrc * pUnit, struct D2StatListExStrc * pStatListEx);
 void __stdcall STATLIST_RemoveFromOwnerAndRecalc(struct D2UnitStrc * pOwner, struct D2UnitStrc * pUnit);
-void __stdcall STATLIST_SetStatValueSimple(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nParam, int32_t nLayer);
+void __stdcall STATLIST_SetStatValueSimple(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, int32_t nLayer);
 int32_t __stdcall UNITS_CalcCombinedStatValue(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat);
 // Activates an item's stat contributions on pUnit. If the item's StatsEx is attached to pUnit and currently inactive (NOCALCBONUS flag set), clears the flag and propagates all damage-related stats upward. Otherwise delegates to STATLIST_SetItemStatActive. Returns 1 on success, 0 if already active or not attached.
 void __stdcall STATLIST_ActivateItemStats(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
-void __stdcall STATLIST_SetItemStatActive(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, int32_t nParam);
+void __stdcall STATLIST_SetItemStatActive(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, int32_t bActive);
 void __stdcall STATLIST_ToggleStateDisabled(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
 // Deactivates an item's stat contributions on pUnit. If the item's StatsEx is attached to pUnit and currently active (NOCALCBONUS flag clear), sets the flag and propagates all damage-related stats with negated deltas to remove their effect. Otherwise delegates to STATLIST_SetItemStatActive(0). Returns 1 on success, 0 if already inactive or not attached.
 void __stdcall STATLIST_DeactivateItemStats(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);

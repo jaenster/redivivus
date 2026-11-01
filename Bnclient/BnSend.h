@@ -205,7 +205,7 @@ BOOL __stdcall D2CheckExpansionGame();
 DWORD __stdcall GetDnsResults(void * lpThreadParam);
 void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, int nDnsThreadParam2);
 struct D2BNetGatewayAccessStr * __stdcall BnetLoadAndReturn();
-void __fastcall GetBnetIp(char * szText, int32_t nParam);
+void __fastcall GetBnetIp(char * szText, int32_t nBufferOutputLength);
 // Returns current Battle.net connection state into output parameter. Validates param is non-null.
 void __fastcall BNSEND_GetConnectionState(uint32_t * pdwOutState);
 int __fastcall BNCLIENT_SendLogonRequest(char * szUsername, char * szPassword);

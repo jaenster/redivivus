@@ -113,7 +113,7 @@ int32_t __stdcall INV_GetGoldButtonY();
 BOOL INV_IsInteractiveMode();
 BOOL __stdcall INV_IsInteractiveModeEx();
 int __stdcall INV_CheckActionThrottle();
-BOOL __fastcall INV_IsMouseOverCloseButton(int32_t nParam1, int32_t nParam2);
+BOOL __fastcall INV_IsMouseOverCloseButton(int32_t nMouseX, int32_t nMouseY);
 void __stdcall INV_HandleInventoryRightClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INV_HandleMouseMove(struct D2UIMouseMsgStrc * pMsg);
 int32_t __stdcall ClickItemRight(struct D2UnitStrc * pItem, struct D2InventoryStrc * pGridCoords, int32_t nPage, struct D2UnitStrc * pPlayer, struct D2InventoryStrc * pInventory);

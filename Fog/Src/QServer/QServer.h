@@ -472,8 +472,8 @@ void __stdcall BanClient(struct D2QServerStrc * pQServer, int nClientId, char * 
 void __stdcall DisconnectAndBanIp(struct D2QServerStrc * pQServer, uint32_t nIpAddress, char * szFile, int nLine);
 // @wasnamed CloseRemoteConnection - one name on two different functions.
 // @evidence __stdcall shim whose whole body forwards its four arguments to 006c0420.
-void __stdcall thunk_CloseRemoteConnection(struct D2QServerStrc * pQServer, int nParam1, char * szText, int nParam2);
-void __stdcall QSDisconnectIP(struct D2QServerStrc * pQServer, in_addr addr, char * szText, int nParam);
+void __stdcall thunk_CloseRemoteConnection(struct D2QServerStrc * pQServer, int nClientId, char * szText, int nLine);
+void __stdcall QSDisconnectIP(struct D2QServerStrc * pQServer, in_addr addr, char * szText, int nLine);
 // @sourcefile .\Src\QServer\QServer.cpp
 int __fastcall CheckIfPlayerIsBannedByAddress(struct D2QServerStrc * pQServer, in_addr * pAddr, char * szFile, int32_t nLine);
 // @sourcefile .\Src\QServer\QServer.cpp

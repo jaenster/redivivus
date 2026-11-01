@@ -68,7 +68,7 @@ void __stdcall TILEPROJECT_FreeSlot(int32_t nParam1, int32_t nParam2) {
     *(uint32_t*)(nParam1 + nSlotIndex * 4) = 0;
 }
 
-uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int32_t nParam2, int32_t nParam3, int32_t nParam4, int * pnFoundTiles, uint32_t nParam) {
+uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int32_t nTileType, int32_t nTileSubType, int32_t nParam4, int * pnFoundTiles, uint32_t nParam) {
     int32_t nTotalFound;
     if (!ppProjects) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d);
@@ -83,7 +83,7 @@ uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int
         break;
       }
 
-      nTotalFound = SRC::FindTiles::FINDTILE_Lookup((int**)ppProjects[iProjectIdx], (int32_t)(pnFoundTiles + nFoundInProjectAccum), nRemaining, nParam2, nParam3, nParam4);
+      nTotalFound = SRC::FindTiles::FINDTILE_Lookup((int**)ppProjects[iProjectIdx], (int32_t)(pnFoundTiles + nFoundInProjectAccum), nRemaining, nTileType, nTileSubType, nParam4);
       nRemaining -= nTotalFound;
       nFoundInProjectAccum += nTotalFound;
       if (!nRemaining) {

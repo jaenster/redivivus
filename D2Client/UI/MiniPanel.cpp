@@ -93,12 +93,12 @@ void MINIPANEL_DrawBackground(int32_t nPanelSection) {
     }
 }
 
-void __stdcall MINIPANEL_DrawButton(int32_t nParam1, int32_t nParam2, int32_t nParam3) {
+void __stdcall MINIPANEL_DrawButton(int32_t nFrameNumber, int32_t nPositionX, int32_t nPositionY) {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = gpMiniPanelButtonsDC6;
-    sGfxData.nFrameNumber = nParam1;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nParam2, nParam3, -1, DRAW_SOLID, nullptr);
+    sGfxData.nFrameNumber = nFrameNumber;
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nPositionY, -1, DRAW_SOLID, nullptr);
 }
 
 static void MINIPANEL_CalculateButtonPositions(int32_t bIsExpansion) {

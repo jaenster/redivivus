@@ -53,8 +53,8 @@ BOOL __fastcall Skills_SrvDoFunc_120_FeralRage(::SGAMEDATA * pGame, struct D2Uni
 // @sourcefile .\SKILLS\SkillDruid.cpp
 BOOL __fastcall SKILLDRUID_SrvStFn57_Rabies(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Applies a timed aura state buff (auratargetstate from skills.txt) to pUnit2 on behalf of pUnit. Allocates a new stat list expiring at game frame + nParam1, sets the state, attaches it with DefaultExpireFunction, schedules a game event for expiry, and fills stats via D2SetAurastatsFromSkills. Skips if the unit already has the state. Used by Druid aura skills (Oak Sage, Heart of Wolverine, Spirit of Barbs).
-BOOL __stdcall SKILLDRUID_ApplyTimedAuraBuff(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nParam1, eD2Skills eSkill, int32_t nParam2);
-void __fastcall SKILLDRUID_ApplyAuraWithMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit, int32_t nDuration, eD2Skills eSkill, int32_t nParam);
+BOOL __stdcall SKILLDRUID_ApplyTimedAuraBuff(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nDuration, eD2Skills eSkill, int32_t nSkillLvl);
+void __fastcall SKILLDRUID_ApplyAuraWithMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit, int32_t nDuration, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall SKILLDRUID_SrvStFn58_FireClaws(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Server DoFunc for Druid skill 122 (Maul, Werebear). Sets UNITFLAG_SKSRVDOFUNC, performs a standard to-hit/damage check via SKILLS_CalcToHitAndApply. On hit: applies HitFlags, ResultFlags, HitClass from txt, calculates offensive damage, then adds a percent bonus to physical damage (calc[0]), life leech (calc[1]), and mana leech (calc[2]) bonuses before final damage application and combat queue processing.
 BOOL __fastcall Skills_SrvDoFunc_122_Hunger(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

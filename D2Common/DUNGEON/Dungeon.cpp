@@ -483,25 +483,25 @@ void __stdcall CallRoomCallback(D2RoomStrc * pRoom, ROOMCALLBACKFN pfnRoomCallba
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): param_ebx (EBX): DWORD
-int32_t * __stdcall DRLGROOM_GetMinimapRect(uint32_t nLine, D2RoomStrc * dwParam2, int32_t * dwParam3) {
-    int* pParam3;
-    int32_t* pX = dwParam3;
-    D2RoomStrc* pTopLeft = dwParam2;
-    if (dwParam2) {
+int32_t * __stdcall DRLGROOM_GetMinimapRect(uint32_t nLine, D2RoomStrc * pRoom, int32_t * pRect) {
+    int* pRect2;
+    int32_t* pX = pRect;
+    D2RoomStrc* pTopLeft = pRoom;
+    if (pRoom) {
       int32_t* pY;
-      pY = dwParam3 + 1;
-      Drlg::Transform::SizeMiniMapToScreen(dwParam2->sCoords.sTileRect.left, dwParam2->sCoords.sTileRect.top, (int32_t*)&dwParam2, pY);
-      Drlg::Transform::SizeMiniMapToScreen(pTopLeft->sCoords.sTileRect.left, pTopLeft->sCoords.sTileRect.top + pTopLeft->sCoords.sTileRect.bottom, pX, (int32_t*)&dwParam2);
-      pParam3 = pX + 2;
-      Drlg::Transform::SizeMiniMapToScreen(pTopLeft->sCoords.sTileRect.right + pTopLeft->sCoords.sTileRect.left, pTopLeft->sCoords.sTileRect.top, (int32_t*)pParam3, (int32_t*)&dwParam2);
-      Drlg::Transform::SizeMiniMapToScreen(pTopLeft->sCoords.sTileRect.right + pTopLeft->sCoords.sTileRect.left, pTopLeft->sCoords.sTileRect.top + pTopLeft->sCoords.sTileRect.bottom, (int32_t*)&dwParam2, pX + 3);
+      pY = pRect + 1;
+      Drlg::Transform::SizeMiniMapToScreen(pRoom->sCoords.sTileRect.left, pRoom->sCoords.sTileRect.top, (int32_t*)&pRoom, pY);
+      Drlg::Transform::SizeMiniMapToScreen(pTopLeft->sCoords.sTileRect.left, pTopLeft->sCoords.sTileRect.top + pTopLeft->sCoords.sTileRect.bottom, pX, (int32_t*)&pRoom);
+      pRect2 = pX + 2;
+      Drlg::Transform::SizeMiniMapToScreen(pTopLeft->sCoords.sTileRect.right + pTopLeft->sCoords.sTileRect.left, pTopLeft->sCoords.sTileRect.top, (int32_t*)pRect2, (int32_t*)&pRoom);
+      Drlg::Transform::SizeMiniMapToScreen(pTopLeft->sCoords.sTileRect.right + pTopLeft->sCoords.sTileRect.left, pTopLeft->sCoords.sTileRect.top + pTopLeft->sCoords.sTileRect.bottom, (int32_t*)&pRoom, pX + 3);
       if (*pY <= pX[3]) {
-        if (!(*pX <= *(int32_t*)pParam3)) {
+        if (!(*pX <= *(int32_t*)pRect2)) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1db);
           exit(-1);
         }
 
-        return (int32_t*)pParam3;
+        return (int32_t*)pRect2;
       } else {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1da);
         exit(-1);

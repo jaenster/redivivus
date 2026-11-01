@@ -67,7 +67,7 @@ void __stdcall Q11_EndTaintedSun(int pQuestData, ::SGAMEDATA * pGame);
 // GUID, and if the intro is done and stateFlag<2 kicks off Q11_BeginTaintedSun (darkening); sets pending vs
 // darkened flags by its result and advances stateFlag to 3. If no prior stateFlag, broadcasts display state 2
 // (via QUEST_SetStateAndBroadcast). Finally flags the unit for client update.
-void __fastcall Q11_OnViperAmuletInit(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * * nParam);
+void __fastcall Q11_OnViperAmuletInit(struct D2QuestDataStrc * pQuestData, struct D2ObjectInitFnArg * pInitArg);
 // A2Q3 - fpSequenceFilter (Q11_SequenceFilter): chains to the next quest in the sequence. When this quest's
 // stateFlag==5 (finished) or intro not done, looks up the sequence-linked quest data and invokes its own
 // fpSequenceFilter (asserting the fn ptr is valid first). No quest-record access.

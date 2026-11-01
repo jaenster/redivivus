@@ -19,7 +19,7 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetLivingAndOutOfTown(struct D2UnitStrc
 BOOL __fastcall Skills_CltDoFunc_Ass_Melee_TargetValidate(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltStFunc_SetParam1FromCalc(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltDoFunc_Ass_Blade_DecrementCharge(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-int32_t __fastcall SKILLSASS_GetCltMissileByAuraLevel(struct D2UnitStrc * pUnit, int32_t nParam);
+int32_t __fastcall SKILLSASS_GetCltMissileByAuraLevel(struct D2UnitStrc * pUnit, int32_t nSkillId);
 // Assassin skill helper: returns the appropriate progressive-calc value (prgcalc[0..2]) for a charge-up/aura skill based on the current aura level stored in the active state's aurastat[0]. If the skill is not an aura (flags bit 2 clear) or the state is absent, falls back to prgcalc[0].
 uint32_t __fastcall SKILLSASS_GetPrgCalcByAuraLevel(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileRandom(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

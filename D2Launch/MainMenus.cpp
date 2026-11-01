@@ -436,13 +436,13 @@ void __stdcall FORMS_DestroyList() {
     FORMS_nListCount = 0;
 }
 
-D2ControlStrc * __fastcall FORMS_CreateAnyFormFromListExEx(int32_t nParam) {
+D2ControlStrc * __fastcall FORMS_CreateAnyFormFromListExEx(int32_t nFormIndex) {
     if (FORMS_nListExExCount >= 0x40) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x627);
       exit(-1);
     }
 
-    D2ControlStrc* pForm = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms + nParam);
+    D2ControlStrc* pForm = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms + nFormIndex);
     FORMS_pListExEx[FORMS_nListExExCount] = pForm;
     FORMS_nListExExCount++;
     return pForm;
@@ -1741,7 +1741,7 @@ BOOL __stdcall MAINMENU_InitCreditsScreen(D2ControlMsg * pControlMsg) {
       nParam = 0x31;
     }
 
-    gpMainMenuCreditsLineTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(nParam);
+    gpMainMenuCreditsLineTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(nFormIndex);
     gpMainMenuCreditTimerControl = FORMS_CreateAnyFormFromListExEx(0x2e);
     D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)gpMainMenuCreditTimerControl);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_Destroy((int*)gpMainMenuCreditTimerControl);
@@ -3949,10 +3949,10 @@ BOOL __stdcall MAINMENUS_OnPressReturnToMainMenu_ForCreditsAndMainMenuAgain(D2Co
 }
 
 // Password change confirmation handler. Reads text inputs, compares new password fields, validates length (2-20 chars). Checks gbPasswordChangeInProgress state, calls launcher EnterEmailMessagePumper on success.
-BOOL __stdcall MAINMENU_HandlePasswordChange(D2ControlStrc * nParam) {
+BOOL __stdcall MAINMENU_HandlePasswordChange(D2ControlStrc * pControl) {
     int iVar1;
     uint16_t wErrorStringId;
-    if (!nParam) {
+    if (!pControl) {
       UIMENU_YouWereDisconnectedFromBattleNet2();
       return 1;
     }
@@ -3986,7 +3986,7 @@ BOOL __stdcall MAINMENU_HandlePasswordChange(D2ControlStrc * nParam) {
                 return 1;
               }
             } else {
-              Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Last BNet", 0, D2IniData_launcher->szLastBnetAccount);
+              Storm::Source::SReg::SRegSaveString("Diablo II", "Last BNet", 0, D2IniData_launcher->szLastBnetAccount);
               FORMS_DestroyList();
               MAINMENU_CloseAndLaunchCharSelect();
             }
@@ -4546,8 +4546,8 @@ void __stdcall NET_MCP_CLIENT_HandleCharCreation() {
 }
 
 // BNet login submit handler. Reads account/password from gbPasswordChangeInProgress-related inputs, calls launcher authentication. On success, transitions to char select or creates hero.
-BOOL __stdcall MAINMENU_Unused13(D2ControlStrc * nParam) {
-    if (!nParam) {
+BOOL __stdcall MAINMENU_Unused13(D2ControlStrc * pControl) {
+    if (!pControl) {
       UIMENU_MainMenu();
       return 1;
     }
@@ -4560,7 +4560,7 @@ BOOL __stdcall MAINMENU_Unused13(D2ControlStrc * nParam) {
     MAINMENU_SaveAccountAndPasswordToINI(&gpBnetAccountEditBox->sControl, &gpBnetPasswordEditBox->sControl);
     int nAuthResult = Launcher::EnterEmailMessagePumper(D2IniData_launcher, 0, 0);
     if (nAuthResult) {
-      Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Last BNet", 0, D2IniData_launcher->szLastBnetAccount);
+      Storm::Source::SReg::SRegSaveString("Diablo II", "Last BNet", 0, D2IniData_launcher->szLastBnetAccount);
       if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
         D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects();
         FORMS_DestroyLists();
@@ -4777,9 +4777,9 @@ void __stdcall UIMENU_ConfirmCreateCharacter() {
 }
 
 // BNet account creation handler. Validates username/password from gbPasswordChangeInProgress inputs (2-15 chars, matching confirmation), shows please-read dialog on success or error popup on validation failure.
-BOOL __stdcall MAINMENU_Unused15(D2ControlStrc * nParam) {
+BOOL __stdcall MAINMENU_Unused15(D2ControlStrc * pControl) {
     uint16_t wErrorStringId;
-    if (!nParam) {
+    if (!pControl) {
       UIMENU_MainMenuAgain();
       return 1;
     }

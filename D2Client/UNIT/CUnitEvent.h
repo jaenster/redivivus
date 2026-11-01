@@ -35,7 +35,7 @@ struct D2PoolManagerStrc * __fastcall GetMemPool(struct D2UnitStrc * pUnit);
 // @sourcefile .\UNIT\CUnitEvent.cpp
 void __fastcall FreeEventList(struct D2UnitStrc * pUnit);
 // @sourcefile .\UNIT\CUnitEvent.cpp
-struct D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(struct D2UnitStrc * pUnit, struct D2UnitStrc * dwParam1, uint32_t dwEventData1, uint32_t dwEventData2, fnCUnitEventCallback pfnCallback, int dwParam3, int dwParam4);
+struct D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(struct D2UnitStrc * pUnit, struct D2UnitStrc * pEventUnit, uint32_t dwEventData1, uint32_t dwEventData2, fnCUnitEventCallback pfnCallback, int dwParam3, int dwParam4);
 // @sourcefile .\UNIT\CUnitEvent.cpp
 void __fastcall CUNITEVENT_RemoveByTypeAndState(struct D2UnitStrc * pUnit, int32_t nEventType, int32_t nEventState);
 

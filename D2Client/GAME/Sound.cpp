@@ -668,7 +668,7 @@ D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelS
     if (!pSoundTxt->Stream) {
       D2Sound::Src::D2SoundSmp::SOUNDSMP_SetFrequency((int32_t)ppChannel->pSoundSmp, (uint32_t)pSoundTxt->Loop);
       if (pSoundTxt->nBlockCount == 1) {
-        D2Sound::Src::D2SoundSmp::SOUNDSMP_SetMinDistance(ppChannel->pSoundSmp, pSoundTxt->Block[0] * 2);
+        D2Sound::Src::D2SoundSmp::SOUNDSMP_SetMinDistance(pPlayingChannel->pSoundSmp, pSoundTxt->Block[0] * 2);
       }
 
       BVar1 = D2Sound::Src::D2SoundSmp::SOUNDSMP_LoadWavDataIntoBuffer(ppChannel->pSoundSmp, (int*)pSoundTxt->pSoundDataBuffer, pSoundTxt->nSoundDataBytes);
