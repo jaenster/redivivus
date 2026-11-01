@@ -68,12 +68,12 @@ D2AnimDataStrc * __fastcall TXT_AllocTxt_AnimTbls(D2PoolManagerStrc * pMemory) {
 // and server memory (record struct itself).
 // Source: .\\DATATBLS\\AnimTbls.cpp
 // @sourcefile .\DATATBLS\AnimTbls.cpp
-void __fastcall ANIMDATA_FreeAnimDataRecord(void * * pParam) {
+void __fastcall ANIMDATA_FreeAnimDataRecord(D2AnimDataStrc * pParam) {
     if (!pParam) {
       return;
     }
 
-    D2_FREE_AT(*pParam, ".\\DATATBLS\\AnimTbls.cpp", 0xbe);
+    D2_FREE_AT(pParam->pRecords, ".\\DATATBLS\\AnimTbls.cpp", 0xbe);
     D2_FREE_POOL_AT(nullptr, pParam, ".\\DATATBLS\\AnimTbls.cpp", 0xbf);
 }
 
@@ -189,8 +189,8 @@ void __stdcall ANIMDATA_SetAnimSpeedForUnit(D2UnitStrc * pUnit, int32_t nParam) 
 // record by name. The trigger frame is the first non-zero byte in the
 // per-frame event array (up to 0x90 bytes). Returns 1 on success, 0 on
 // fallback to default record.
-BOOL __stdcall ANIMDATA_GetFramesSpeedAndTrigger(int * pszName, uint32_t * pnFrameCount, int * pnAnimSpeed, uint32_t * pnTriggerFrame) {
-    int* pRecord = ANIMDATA_GetRecordByNameHash((LPSTR)pszName);
+BOOL __stdcall ANIMDATA_GetFramesSpeedAndTrigger(char * pszName, uint32_t * pnFrameCount, int * pnAnimSpeed, uint32_t * pnTriggerFrame) {
+    int* pRecord = ANIMDATA_GetRecordByNameHash(pszName);
     if (pRecord) {
       *pnFrameCount = pRecord[2];
       *pnAnimSpeed = pRecord[3];

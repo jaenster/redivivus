@@ -107,7 +107,7 @@ struct WardenClient {
 namespace D2Client::Warden {
 
 // Function declarations
-void __thiscall WARDEN_RC4Decrypt(struct D2RC4StateStrc * pState, int32_t pData, uint32_t nLen);
+void __thiscall WARDEN_RC4Decrypt(struct D2RC4StateStrc * pState, uint8_t * pData, uint32_t nLen);
 uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nDataLen, uint32_t nTotalLen, int32_t pBuffer, int * pnSigOffset);
 // @sourcefile .\WARDEN\WardenClient.cpp
 void __fastcall WARDEN_CbAllocModuleStruct(uint32_t nParam);

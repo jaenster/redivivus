@@ -446,7 +446,7 @@ static eD2Skills ITEMMODE_GetItemSkillId(D2UnitStrc * pUnit) {
 
     *(uint16_t*)(char*)&nSuffixId = D2Common::ITEMS::Items::GetMagicSuffix(pUnit, 0);
     nSuffixId = (uint32_t)(uint16_t)nSuffixId;
-    void* pBookLine = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine(nSuffixId);
+    D2BooksTxt* pBookLine = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine(nSuffixId);
     if (!pBookLine) {
       return ~SKILL_Attack;
     }
@@ -2291,8 +2291,8 @@ static eD2Skills ITEMMODE_GetItemCastSkill(D2UnitStrc * pUnit) {
     }
 
     uVar1 = D2Common::ITEMS::Items::GetMagicSuffix(pUnit, 0);
-    pvVar2 = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar1);
-    if (!pvVar2) {
+    D2BooksTxt* pDVar2 = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar1);
+    if (!pDVar2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfab);
       exit(-1);
     }
@@ -3904,11 +3904,8 @@ static BOOL __stdcall ITEMMODE_PlaceItemInInventoryPage(::SGAMEDATA * pGame, int
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x749);
         exit(-1);
       } else {
-        bActiveCharmResult = 0;
-        dwZero = 0;
-        iVar1 = D2Common::Units::GetInventoryPage(pUnit, (eInventoryPage)nInvPage, pGame->bExpansion);
-        pGridSlotResult = D2Common::INVENTORY::Inventory::INVENTORY_AutoPlaceItemInGrid(pInventory, pUnit2, iVar1, dwZero, bActiveCharmResult, szSourceFile, dwParam2);
-        if (pGridSlotResult) {
+        bPutResult = D2Common::INVENTORY::Inventory::INVENTORY_AutoPlaceItemInGrid(pInventory, pUnit2, D2Common::Units::GetInventoryPage(pUnit, (eInventoryPage)nInvPage, pGame->bExpansion), 0, 0, szSourceFile, dwParam2);
+        if (bPutResult) {
           if (bRemoveFromRoom) {
             pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
             if (pRoom) {
@@ -4798,8 +4795,8 @@ BOOL __fastcall ITEMMODE_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pU
 
         D2Common::INVENTORY::Inventory::NullSub_2Arg(pInventory, nSwapBodyLoc);
         ITEMMODE_UnequipItemStats(pGame, pInvVerifiedItem, pUnit, 0, 1);
-        pGridSlot = D2Common::INVENTORY::Inventory::INVENTORY_AutoPlaceItemInGrid(pInventory, pInvVerifiedItem, pOppositeArmItem, 0, 0, ".\\ITEMS\\ItemMode.cpp", 0xd86);
-        if (pGridSlot) {
+        nPutResult = D2Common::INVENTORY::Inventory::INVENTORY_AutoPlaceItemInGrid(pInventory, pInvVerifiedItem, pOppositeArmItem, 0, 0, ".\\ITEMS\\ItemMode.cpp", 0xd86);
+        if (nPutResult) {
           nPutResult = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pInvVerifiedItem, 1);
           if (!nPutResult) {
             *pOutToken = 1;
@@ -6641,7 +6638,7 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
               }
             }
 
-            pGridPos = D2Common::INVENTORY::Inventory::INVENTORY_AutoPlaceItemInGrid(pPlayerInventory, pCubeItem, iVar2, 0, nSrcPage, ".\\ITEMS\\ItemMode.cpp", 0x817);
+            pGridPos = D2Common::INVENTORY::Inventory::INVENTORY_AutoPlaceItemInGrid(pPlayerInventory, pCubeItem, iVar1, 0, nSrcPage, ".\\ITEMS\\ItemMode.cpp", 0x817);
             if (pGridPos) {
               BVar1 = D2Common::INVENTORY::Inventory::PutItemInInventory(pPlayerInventory, pCubeItem, 1);
               if (BVar1) {

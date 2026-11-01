@@ -5177,7 +5177,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       uint32_t bFileLoaded;
       nVersion = 0;
       nFileSize = 0;
-      bFileLoaded = Storm::Source::SFile::SFileLoadFileEx(nullptr, (uint32_t*)szSmacker, (void**)&nVersion, &nFileSize, 0, 3, 0);
+      bFileLoaded = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &nFileSize, 0, 3, 0);
       if (bFileLoaded && nVersion) {
         nPixelCol = Storm::Source::SBMP::SBmpDecodeImage(2, (void*)nVersion, nFileSize, aPaletteRGBA, &aPixelData, 0x6db0, &nImgWidth, &nImgBpp, &nImgHeight);
         Storm::SMem::SMemFree((void*)nVersion, ".\\Src\\d3dSmack.cpp", 0xda, 0);

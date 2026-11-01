@@ -1420,7 +1420,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       memset(gnSmackerGlideYOffset.pFrameBuffer, 0, 0x6db0);
       nVersion = 0;
       nFileSize = 0;
-      uVar2 = Storm::Source::SFile::SFileLoadFileEx(nullptr, (uint32_t*)szSmacker, (void**)&nVersion, &nFileSize, 0, 3, 0);
+      uVar2 = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &nFileSize, 0, 3, 0);
       if (uVar2 && nVersion) {
         iVar3 = Storm::Source::SBMP::SBmpDecodeImage(2, (void*)nVersion, nFileSize, aPaletteBuf, (uint8_t*)gnSmackerGlideYOffset.pFrameBuffer, 0x6db0, &nImgWidth, &nImgHeight, &nImgBitDepth);
         Storm::SMem::SMemFree((void*)nVersion, ".\\Src\\gdiSmack.cpp", 0x78, 0);

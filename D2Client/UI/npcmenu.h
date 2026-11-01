@@ -111,7 +111,7 @@ void __fastcall SubmitItem(DWORD dwItemId);
 void __fastcall NPCMENU_ValidateNpcForShop(struct D2UnitStrc * pUnit);
 void __stdcall NPCMENU_Initialize();
 void __stdcall NPCMENU_Cleanup();
-void __fastcall NPCMENU_SetTransactionMode(int32_t pMsg);
+void __fastcall NPCMENU_SetTransactionMode(struct D2GSPacketSrv0x50 * pMsg);
 void __fastcall QuestHandeling(char * szText);
 void __stdcall thunk_SetInventoryNeedsRefresh();
 void __stdcall NPCMENU_ExecuteShopTransaction(int32_t nParam, uint8_t bParam);

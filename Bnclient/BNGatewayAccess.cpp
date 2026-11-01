@@ -61,7 +61,7 @@ void __stdcall SaveAndUnload(D2BNetGatewayAccessStr * pGatewayAccess) {
         exit(-1);
       }
 
-      Storm::Source::SReg::SRegSaveData((uint32_t*)"Configuration", szSourceFileName, 0x82, pbGatewayData, dwGatewayDataSize);
+      Storm::Source::SReg::SRegSaveData("Configuration", szSourceFileName, 0x82, pbGatewayData, dwGatewayDataSize);
     }
     if (pGatewayAccess->pGatewayData) {
       Storm::SMem::SMemFree(pGatewayAccess->pGatewayData, ".\\BNetGW.cpp", 0xc6, 0);
@@ -475,7 +475,7 @@ void __stdcall Load(D2BNetGatewayAccessStr * pGatewayAccess) {
         Bnet::BnetLog_WriteLine("Obsolete gateway list (%d) - autodeleting", pGatewayAccess_00->nFormatVersion);
         pGatewayAccess_00->bDirty = 0;
         SaveAndUnload(pGatewayAccess_00);
-        Storm::Source::SReg::SRegDeleteValue((uint32_t*)"Configuration", "Diablo II Battle.net gateways", 2);
+        Storm::Source::SReg::SRegDeleteValue("Configuration", "Diablo II Battle.net gateways", 2);
       }
       if (pGatewayAccess_00->pGatewayData) {
         goto parse_gateway_list;

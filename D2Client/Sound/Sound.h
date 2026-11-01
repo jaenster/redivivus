@@ -239,7 +239,7 @@ void SOUND_LocalizeSoundPath(char * szFormat, uint32_t * pszOutPath, char * pTmp
 float __stdcall SOUND_CalculateAngle1(float fParam1, float fParam2);
 float __stdcall SOUND_CalculateAngle2(float fParam1, float fParam2);
 float __stdcall SOUND_CalculatePanning(float fParam1, float fParam2, float fParam3);
-int * __stdcall SOUND_GetChannelArray();
+struct D2SoundChannelStrc * __stdcall SOUND_GetChannelArray();
 // pSoundInst in ESI: when +0x30 is 1, calls SOUND_StopAndDetach on the channel at +0x2c; then halts (SoundInst.cpp line 147, !ptInst->hChannel) if the channel is still set.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void __stdcall SOUNDINST_StopChannel(int * pSoundInst);
@@ -247,7 +247,7 @@ uint32_t __fastcall SOUND_GetSoundId(int32_t nChannelHandle);
 int __fastcall SOUND_GetSoundByIndex(int32_t nChannelHandle);
 int __fastcall SOUND_StopSound(int32_t nSoundId);
 int32_t __fastcall SOUND_IsChannelPlaying(int32_t nSoundGroup);
-int32_t __stdcall SOUND_SetChannelProperties(int32_t nSoundGroup, int32_t pListKey, int32_t nExcludeChannel);
+struct D2SoundChannelStrc * __stdcall SOUND_SetChannelProperties(int32_t nSoundGroup, int32_t pListKey, struct D2SoundChannelStrc * nExcludeChannel);
 int32_t __thiscall SOUND_CalculateDistance(int32_t pThis, int32_t nExcludeChannel);
 float __thiscall SOUND_CalculateUnitDistance(int32_t pThis, struct D2UnitStrc * pUnit);
 void __fastcall SOUND_PlayEnvironmentSound(int32_t nSoundId, int32_t nPosX, int32_t nPosY, int32_t nPosZ);
@@ -262,7 +262,7 @@ int __fastcall SOUND_StopChannelById(int32_t nSoundId);
 void __stdcall SOUND_PauseAll();
 void __stdcall SOUND_ResumeAll();
 uint32_t __fastcall SOUND_GetCurrentMusic(int32_t nSoundId);
-BOOL __fastcall SOUND_IsChannelAvailable(uint32_t pChanA, uint32_t pChanB, int32_t nParam1, int32_t nParam2);
+BOOL __fastcall SOUND_IsChannelAvailable(struct D2SoundChannelStrc * pChanA, struct D2SoundChannelStrc * pChanB, int32_t nParam1, int32_t nParam2);
 uint32_t __fastcall SOUND_FindChannelForSound(int32_t nSoundId);
 void __fastcall SOUND_StopChannelGracefully(int32_t nSoundId, int32_t nFadeTarget, int32_t nFadeDelay, uint32_t nFadeDuration);
 void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime);

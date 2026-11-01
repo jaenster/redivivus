@@ -502,7 +502,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill
     D2Common::Skills::SKILL_SetParam2(pSkill, pNextTarget->eUnitType);
     D2Common::Skills::SKILL_SetParam3(pSkill, pNextTarget->nUnitGUID);
     nShotsLeft = GetTxtSkillParam5(eCurrentSkill);
-    Skills::SKILLS_ApplyDamageReduction((int32_t)pUnit, nShotsLeft);
+    Skills::SKILLS_ApplyDamageReduction(pUnit, nShotsLeft);
     return 1;
 }
 
@@ -552,7 +552,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Impale(D2UnitStrc * pUnit, eD2Skills eSkill
     D2Common::Skills::SKILL_SetParam3(pSkill, pNextTarget->nUnitGUID);
     eD2Skills eCurrentSkill = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\SkillsAma.cpp", 0x250);
     nShotsLeft = GetSkilParam1(eCurrentSkill);
-    Skills::SKILLS_ApplyDamageReduction((int32_t)pUnit, nShotsLeft);
+    Skills::SKILLS_ApplyDamageReduction(pUnit, nShotsLeft);
     uint32_t nHitSound = D2Common::Units::GetHitClassForPlayerOrMonster(pUnit);
     Sound::SOUND_PlaySound(UNIT::UnitSnd::UNITSND_GetSkillCastSound(pUnit, nHitSound), pUnit, 0, 0, 0);
     return 1;

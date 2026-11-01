@@ -924,7 +924,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
         pState->next = pState->codes;
         pState->lencode = pState->codes;
         pState->lenbits = 7;
-        nRet = D2Client::Source::SSComp::ZLIB_InflateTable(0, (int32_t)pState->lens, 0x13, (int*)&pState->next, &pState->lenbits, pState->work);
+        nRet = D2Client::Source::SSComp::ZLIB_InflateTable(0, pState->lens, 0x13, (inflate_code**)&pState->next, &pState->lenbits, pState->work);
         if (!nRet) {
           pState->have = 0;
           pState->mode = 0x12;
@@ -1062,13 +1062,13 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
             pState->next = pState->codes;
             pState->lencode = pState->codes;
             pState->lenbits = 9;
-            nRet = D2Client::Source::SSComp::ZLIB_InflateTable(1, (int32_t)pState->lens, pState->nlen, (int*)&pState->next, &pState->lenbits, pState->work);
+            nRet = D2Client::Source::SSComp::ZLIB_InflateTable(1, pState->lens, pState->nlen, (inflate_code**)&pState->next, &pState->lenbits, pState->work);
             if (nRet) {
               pInflateStream->msg = "invalid literal/lengths set";
             } else {
               pState->distcode = pState->next;
               pState->distbits = 6;
-              nRet = D2Client::Source::SSComp::ZLIB_InflateTable(2, (int32_t)(pState->lens + pState->nlen), pState->ndist, (int*)&pState->next, &pState->distbits, pState->work);
+              nRet = D2Client::Source::SSComp::ZLIB_InflateTable(2, pState->lens + pState->nlen, pState->ndist, (inflate_code**)&pState->next, &pState->distbits, pState->work);
               if (!nRet) {
                 pState->mode = 0x13;
                 if (nFlush != 6) {

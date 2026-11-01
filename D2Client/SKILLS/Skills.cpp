@@ -2029,8 +2029,8 @@ uint32_t __fastcall SKILL_GetWeaponClassMask(D2UnitStrc * pUnit) {
     return nWeaponClass != 7 ? 0 : 0x1f;
 }
 
-void __fastcall SKILLS_ApplyDamageReduction(int32_t pUnit, int32_t nReductionPercent) {
-    *(int*)(pUnit + 0x44) = (100 - nReductionPercent) * (*(int*)(pUnit + 0x44) >> 8) / 100 * 0x100;
+void __fastcall SKILLS_ApplyDamageReduction(D2UnitStrc * pUnit, int32_t nReductionPercent) {
+    pUnit->nGfxCurrentFrame = (100 - nReductionPercent) * (pUnit->nGfxCurrentFrame >> 8) / 100 * 0x100;
 }
 
 // Spawns nCount missiles at random positions within nRadius of the casting unit. Seeds the unit's RNG from its current map coordinates, then for each spawn picks a random (X,Y) offset within the diameter, rejects positions within 3 distance units of the caster, and calls MISSILE_CreateFromUnitWithOffset with the given missile ID array, skill, and skill level. Returns 1 on success, 0 if coordinates could not be retrieved.

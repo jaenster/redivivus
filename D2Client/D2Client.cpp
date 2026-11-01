@@ -1308,7 +1308,7 @@ void __fastcall MONUNIQUE_DispatchDeathEffect(D2UnitStrc * pUnit, int32_t nUMod,
           break;
           case 0xf3:
             if (pUnit->eAnimMode.ePlayerMode == Death) {
-              Source::ClientEngine::CLIENT_StoreUnitGuidForQuestTracking((int32_t)pUnit);
+              Source::ClientEngine::CLIENT_StoreUnitGuidForQuestTracking(pUnit);
               return;
             }
         }
@@ -1503,12 +1503,12 @@ void __fastcall NET_D2GS_CLIENT_Handle0x50_QuestSpecial(D2GSPacketSrv0x50 * pPac
       case 3:
 
       case 6:
-        UI::npcmenu::NPCMENU_SetTransactionMode((int32_t)pPacket);
+        UI::npcmenu::NPCMENU_SetTransactionMode(pPacket);
       return;
       case 4:
 
       case 0xd:
-        UI::Text::TEXT_HandleScrollLinePacket(&pPacket->nPacketId);
+        UI::Text::TEXT_HandleScrollLinePacket(pPacket);
       return;
       case 0x17:
         GAME::Msg::NET_D2GS_CLIENT_Send_0x69();

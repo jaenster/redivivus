@@ -76,7 +76,7 @@ uint8_t * __fastcall GFXUTIL_GetItemColorForBodyLoc(struct D2UnitStrc * pUnit, i
 uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(struct D2UnitStrc * pUnit, uint32_t nParam);
 int32_t __fastcall DC6_AssignParams(struct D2GfxDataStrc * pGfxData, struct D2UnitStrc * pUnit, struct DC6 * pDC6, int32_t nDirection, int32_t nFrameNumber, int * pnOutItemClassId, uint8_t nComponentType, struct D2UnitStrc * pEquipContext);
 int32_t __fastcall GFXUTIL_InitAndBuildMonsterCofParams(struct D2GfxDataStrc * pGfxData, int32_t nDirection, int32_t nFrameNumber, uint8_t nComponentType, int32_t nAnimMode, int32_t nWeaponClass, void * pCofFile, short * pComponentTable, struct D2MonStatsTxt * pMonStatsTxt, int32_t nComponentRow);
-int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(struct D2UnitStrc * pUnit, uint8_t * pbParam, int32_t pLayerArray, int * pOutMaxY, int32_t nPaletteShift, uint32_t nParam);
+int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(struct D2UnitStrc * pUnit, uint8_t * pbParam, uint8_t * pLayerArray, int * pOutMaxY, int32_t nPaletteShift, uint32_t nParam);
 int32_t __fastcall GFXUTIL_GetOverlayFrameDelay(struct D2UnitStrc * pUnit, int32_t pOverlayEntry);
 void __fastcall GFXUTIL_GetOverlayDimensions(struct D2UnitStrc * pUnit, int nPaletteShift, uint32_t nAnimMode, uint32_t * pOutWidth, uint32_t * pdwParam);
 uint32_t __fastcall GFXUTIL_IsUnitSpriteOnScreen(struct D2UnitStrc * pUnit, int32_t nParam, int32_t nWorldY);

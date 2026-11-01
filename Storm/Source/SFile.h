@@ -511,7 +511,7 @@ int __stdcall SFileReadFileEx2(struct D2MPQFileStrc * pFileHandle, void * pOutpu
 // @basis behaviour-confirmed as part of a three-way arity lock. The 8-parameter worker (archive, filename, buffer, bytes, extrabytes, flags, callback, readflags) that both shorter members forward into: open, size, allocate size+extrabytes, read, close. SFileLoadFileEx2 is the only 8-parameter Load in the real API, and the extra 8th slot is precisely the readflags the 7-parameter caller pins to 0.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx 0041b680
 // @sourcefile .\SOURCE\SFILE.CPP
-uint32_t __stdcall SFileLoadFileEx2(struct D2ArchiveStrc * pArchive, uint32_t * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx, int nReadFlags);
+uint32_t __stdcall SFileLoadFileEx2(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx, int nReadFlags);
 // @blizzard SFileReadFile (SFILE.CPP)
 int __stdcall SFileReadFile(struct D2MPQFileStrc * pMPQFile, void * pOutputBuffer, uint32_t nBytesToRead, uint32_t * pnSize, int32_t pAsyncReadCtx);
 // Simplified wrapper for SFILE_ReadFile that passes 0 for the completion callback parameter and param6 as the async flags. Used when caller doesn't need completion notification.
@@ -531,7 +531,7 @@ uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * 
 // @wasnamed SFILE_LoadFileToMemory2
 // @basis behaviour-confirmed as part of a three-way arity lock. 7 parameters, positionally identical to SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback); the body forwards them unchanged to the 8-parameter worker with readflags = 0, which is exactly what distinguishes Ex from Ex2.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx2 0041af60
-uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, uint32_t * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx);
+uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard s_OpenArchive (SFILE.CPP, Storm 1.10b PPC)
 int __fastcall SFILE_s_OpenArchive(struct D2ArchiveStrc * ppArchive, uint32_t nFlags, int32_t bAllowEmpty, struct D2ArchiveStrc * * ppArchiveOut);

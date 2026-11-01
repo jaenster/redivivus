@@ -364,32 +364,32 @@ void * __fastcall POOL_AllocOverflowBlock(D2PoolManagerStrc * pMemory, int32_t n
     return pNode + 4;
 }
 
-void __fastcall FreeTrackedAllocation(int32_t nManager, int32_t nUserPtr, char * szFile, int32_t nLine) {
-    void* pAllocBase = (void*)(nUserPtr - 4);
+void __fastcall FreeTrackedAllocation(D2PoolManagerStrc * nManager, void * nUserPtr, char * szFile, int32_t nLine) {
+    void* pAllocBase = (void*)((int)nUserPtr - 4);
     void* pPrev = 0;
-    EnterCriticalSection((LPCRITICAL_SECTION)(nManager + 4));
-    uint32_t* pNext = *(uint32_t**)(nManager + 0x7ac + (int)pAllocBase % 0x3ff * 4);
+    EnterCriticalSection(&nManager->pSync);
+    uint8_t* pNext = nManager->pOverflow[(int)pAllocBase % 0x3ff];
     do {
-      uint32_t* pCurrent;
+      uint8_t* pCurrent;
       pCurrent = pNext;
       if (!pCurrent) {
-        LeaveCriticalSection((LPCRITICAL_SECTION)(nManager + 4));
+        LeaveCriticalSection(&nManager->pSync);
         free(pAllocBase);
         return;
       }
-      if (pCurrent == (unsigned int*)pAllocBase) {
+      if (pCurrent == (unsigned char*)pAllocBase) {
         if (!pPrev) {
-          *(uint32_t*)(nManager + 0x7ac + (int)pAllocBase % 0x3ff * 4) = *pCurrent;
+          nManager->pOverflow[(int)pAllocBase % 0x3ff] = *(uint8_t**)pCurrent;
         } else {
-          *(uint32_t*)pPrev = *pCurrent;
+          *(uint32_t*)pPrev = *(uint32_t*)pCurrent;
         }
 
-        LeaveCriticalSection((LPCRITICAL_SECTION)(nManager + 4));
+        LeaveCriticalSection(&nManager->pSync);
         free(pAllocBase);
         return;
       }
 
-      pNext = (uint32_t*)*pCurrent;
+      pNext = *(uint8_t**)pCurrent;
       pPrev = (void*)pCurrent;
     } while (true);
 }
@@ -505,7 +505,7 @@ void __fastcall Free(D2PoolManagerStrc * pMemory, void * * pStruct, char * szFil
         pPool = pBlock->pPool;
         nSlotIndex = ((int)pUserPtr - (int)pBlock->pCommit) / (int)pPool->nBlockSize;
         if ((int)nSlotIndex >= (int)pPool->nBlocks) {
-          FreeTrackedAllocation((int32_t)pManager, (int32_t)pUserPtr, szFile, Line0);
+          FreeTrackedAllocation(pManager, pUserPtr, szFile, Line0);
           return;
         }
 
@@ -522,7 +522,7 @@ void __fastcall Free(D2PoolManagerStrc * pMemory, void * * pStruct, char * szFil
       }
     }
 
-    FreeTrackedAllocation((int32_t)pManager, (int32_t)*pStruct, szFile, Line0);
+    FreeTrackedAllocation(pManager, *pStruct, szFile, Line0);
 }
 
 void InitializeMemoryManagers(D2PoolManagerStrc * pMemory) {

@@ -204,7 +204,7 @@ int __fastcall SFILE_GetInstallPath(LPSTR lpFilename, DWORD nSize) {
       pszSlashOrEnd[1] = '\0';
     }
 
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "InstallPath", 0, lpFilename);
+    Storm::Source::SReg::SRegSaveString("Diablo II", "InstallPath", 0, lpFilename);
     ensure_trailing_backslash:
     if (!nSize) {
       return 0;
@@ -400,7 +400,7 @@ void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize) {
                   szNewSavePath[uVar1 + 1] = '\0';
                 }
 
-                Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "%s%s.d2s", 1, szNewSavePath);
+                Storm::Source::SReg::SRegSaveString("Diablo II", "%s%s.d2s", 1, szNewSavePath);
                 pcLen = szNewSavePath;
               }
 
@@ -424,7 +424,7 @@ void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize) {
         }
       }
 
-      Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "%s%s.d2s", 1, pBuffer);
+      Storm::Source::SReg::SRegSaveString("Diablo II", "%s%s.d2s", 1, pBuffer);
     } else if (*pBuffer == '\0') {
       goto use_default_save_path;
     }
@@ -633,7 +633,7 @@ void __stdcall LOGFILE_StoreGameStartupInfo() {
 }
 
 // JMP thunk
-void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(FILE * szSuffix) {
+void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix) {
     ::Fog::Src::LogManager::FILETOOLS_SetLogFilePathWithoutDateAndExtension2(szSuffix);
 }
 

@@ -79,7 +79,7 @@ int32_t __fastcall SFILE_JulianDayNumber(int32_t nYear, int32_t nMonth, int32_t 
 void __fastcall SFILE_GregorianCalendarFromJulian(int32_t nJulianDay, int * pYear, int * pMonth, int * pDay);
 void __fastcall SFILE_DeleteOldLogFiles(char * szLogPrefix);
 void __stdcall LOGFILE_StoreGameStartupInfo();
-void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(FILE * szSuffix);
+void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix);
 // 1 internal function (defined in .cpp)
 
 } // namespace Fog::Source::SFile

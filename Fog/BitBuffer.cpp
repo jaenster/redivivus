@@ -345,16 +345,16 @@ void __stdcall BitBufferEndCurrentByte(D2BitBufferStrc * pBitBuffer) {
     *pBitBuffer->pBuffer = 0;
 }
 
-void __stdcall BITBUFFER_WriteDwordPair(D2BitBufferStrc * pBitBuffer, int32_t nValue, int32_t nSize) {
-    WriteValueToBitBuffer(pBitBuffer, *(int32_t*)(nValue + nSize * 8), *(int32_t*)(nValue + 4 + nSize * 8));
+void __stdcall BITBUFFER_WriteDwordPair(D2BitBufferStrc * pBitBuffer, int32_t * nValue, int32_t nSize) {
+    WriteValueToBitBuffer(pBitBuffer, nValue[nSize * 2], nValue[nSize * 2 + 1]);
 }
 
-int32_t __stdcall BITBUFFER_ReadHuffmanValue(D2BitBufferStrc * pBitBuffer, int32_t pHuffmanTree) {
+int32_t __stdcall BITBUFFER_ReadHuffmanValue(D2BitBufferStrc * pBitBuffer, int32_t * pHuffmanTree) {
     uint32_t nBit;
-    int nNodeIndex;
+    size_t nBitsAtPos;
     int nNodeBase = 0;
     while (true) {
-      size_t nBitsAtPos;
+      int iVar1;
       nBitsAtPos = pBitBuffer->nBitsAtPos;
       nBit = (gadwBitMasks[nBitsAtPos] & (uint32_t)*pBitBuffer->pBuffer) >> ((uint8_t)nBitsAtPos & 0x1f);
       pBitBuffer->nBitsAtPos = nBitsAtPos + 1;
@@ -364,15 +364,15 @@ int32_t __stdcall BITBUFFER_ReadHuffmanValue(D2BitBufferStrc * pBitBuffer, int32
         pBitBuffer->nBitsAtPos = 0;
       }
 
-      nNodeIndex = nBit + nNodeBase;
-      if (*(int*)(pHuffmanTree + nNodeIndex * 4) >= 0) {
+      iVar1 = nBit + nNodeBase;
+      if (pHuffmanTree[iVar1] >= 0) {
         break;
       }
 
-      nNodeBase = nNodeIndex * 2 + 2;
+      nNodeBase = iVar1 * 2 + 2;
     }
 
-    return *(int32_t*)(pHuffmanTree + (nBit + nNodeBase) * 4);
+    return pHuffmanTree[nBit + nNodeBase];
 }
 
 } // namespace Fog::BitBuffer

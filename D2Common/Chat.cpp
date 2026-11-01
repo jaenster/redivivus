@@ -82,12 +82,12 @@ void __stdcall TEXT_CopyHoverMessageString(D2HoverTextStrc * pHover, int32_t nPa
     } while (cChar != '\0');
 }
 
-int32_t __stdcall HOVERTEXT_GetTextLineList(D2HoverTextStrc * pHover) {
-    return (int32_t)pHover->pTextLineList;
+void * __stdcall HOVERTEXT_GetTextLineList(D2HoverTextStrc * pHover) {
+    return pHover->pTextLineList;
 }
 
-void __stdcall HOVERTEXT_SetTextLineList(D2HoverTextStrc * pHoverText, int32_t pTextLineList) {
-    pHoverText->pTextLineList = (void*)pTextLineList;
+void __stdcall HOVERTEXT_SetTextLineList(D2HoverTextStrc * pHoverText, void * pTextLineList) {
+    pHoverText->pTextLineList = pTextLineList;
 }
 
 uint8_t __stdcall GetLanguageCode(D2HoverTextStrc * pHoverText) {

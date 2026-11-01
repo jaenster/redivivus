@@ -690,7 +690,7 @@ eD2UnitType __stdcall GetTargetTypeFromDynamicUnit(D2UnitStrc * pUnit) {
     }
 }
 
-int * __stdcall GetTargetGUIDFromDynamicUnit(D2UnitStrc * pUnit) {
+int32_t __stdcall GetTargetGUIDFromDynamicUnit(D2UnitStrc * pUnit) {
     eD2UnitType eOwnUnitType;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x8ca);
@@ -704,7 +704,7 @@ int * __stdcall GetTargetGUIDFromDynamicUnit(D2UnitStrc * pUnit) {
       }
 
       PATH::DynamicPath::GetTargetTypeAndGUID(pUnit->pPath.pDynamicPath, &eUnitType, (int*)&pUnit);
-      return (int*)pUnit;
+      return (int32_t)pUnit;
     }
 }
 
@@ -968,7 +968,7 @@ static int32_t __stdcall UpdateSequenceMode(D2UnitStrc * pUnit, uint32_t nSeqMod
     uint8_t byActionFrame[4];
     uint32_t nStartFrame;
     uint32_t nPrevSeqMode = pUnit->nSeqMode;
-    Merc::ANIM_GetSequenceFrameInfo((uint8_t*)pUnit->pAnimSeq, pUnit->nSeqFrame, nSeqMode, &nSeqMode, &nStartFrame, &nFrameCount, (uint32_t*)byActionFrame);
+    Merc::ANIM_GetSequenceFrameInfo((D2MonSeqTxt*)pUnit->pAnimSeq, pUnit->nSeqFrame, nSeqMode, &nSeqMode, &nStartFrame, &nFrameCount, (uint32_t*)byActionFrame);
     pUnit->nGfxCurrentFrame = nStartFrame << 8;
     pUnit->nSeqMode = nSeqMode;
     pUnit->nActionFrame = byActionFrame[0];
@@ -1380,7 +1380,7 @@ int32_t __stdcall GetEventFrameInfo(D2UnitStrc * pUnit, int32_t nFrame) {
     }
 
     D2MonSeqTxt* pSeqTxt = Merc::MERC_GetSequenceTxt(pUnit);
-    Merc::ANIM_GetSequenceFrameInfo((uint8_t*)pSeqTxt, nLine << 8, nLine << 8, &nSeqCurrentFrame, &nSeqFrameCount, (uint32_t*)&nFrame, (uint32_t*)&pUnit);
+    Merc::ANIM_GetSequenceFrameInfo(pSeqTxt, nLine << 8, nLine << 8, &nSeqCurrentFrame, &nSeqFrameCount, (uint32_t*)&nFrame, (uint32_t*)&pUnit);
     return (int32_t)pUnit;
 }
 

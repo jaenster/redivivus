@@ -398,12 +398,12 @@ int32_t __stdcall DRLGROOM_GetRoomShape(D2RoomStrc * pRoom, int32_t nMode) {
     return (nTop != nTopPlusHeight) + 3;
 }
 
-int32_t __stdcall FindRoomByTileCoordinates(D2DrlgActStrc * pDrlgAct, int32_t nX, int32_t nY) {
+D2RoomStrc * __stdcall FindRoomByTileCoordinates(D2DrlgActStrc * pDrlgAct, int32_t nX, int32_t nY) {
     D2RoomStrc* pCurRoom = pDrlgAct->pRoom;
     while (true) {
       int nRoomEdge;
       if (!pCurRoom) {
-        return 0;
+        return nullptr;
       }
 
       nRoomEdge = pCurRoom->sCoords.sTileRect.left;
@@ -417,10 +417,10 @@ int32_t __stdcall FindRoomByTileCoordinates(D2DrlgActStrc * pDrlgAct, int32_t nX
       pCurRoom = pCurRoom->pDrlgRoomNext;
     }
 
-    return (int32_t)pCurRoom;
+    return pCurRoom;
 }
 
-int32_t __stdcall GetAdjacentRoomByCoordinates(D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
+D2RoomStrc * __stdcall GetAdjacentRoomByCoordinates(D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
     D2RoomStrc* pAdjacentRoom;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1af);
@@ -429,7 +429,7 @@ int32_t __stdcall GetAdjacentRoomByCoordinates(D2RoomStrc * pRoom, int32_t nX, i
 
     uint32_t nRoomIdx = 0;
     if (pRoom->nRoomListCount <= 0) {
-      return 0;
+      return nullptr;
     }
 
     do {
@@ -442,13 +442,13 @@ int32_t __stdcall GetAdjacentRoomByCoordinates(D2RoomStrc * pRoom, int32_t nX, i
 
       bInsideRoom = AreTileCoordinatesInsideRoom(pAdjacentRoom, nX, nY);
       if (bInsideRoom) {
-        return (int32_t)pAdjacentRoom;
+        return pAdjacentRoom;
       }
 
       nRoomIdx++;
     } while (nRoomIdx < pRoom->nRoomListCount);
 
-    return 0;
+    return nullptr;
 }
 
 void __stdcall CallRoomCallback(D2RoomStrc * pRoom, ROOMCALLBACKFN pfnRoomCallback, void * pArgs) {

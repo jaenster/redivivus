@@ -127,7 +127,7 @@ void __stdcall INPUT_HandleScrollToEnd(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandleSysCommand(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandlePassthrough(struct D2UIMouseMsgStrc * pMsg);
 // Handle mouse button event: clear selection/UI, update run key, and normalize queued click state.
-void __stdcall HandleMouseButtonEvent(int32_t pMouseEvent);
+void __stdcall HandleMouseButtonEvent(struct D2UIMouseMsgStrc * pMouseEvent);
 void __stdcall GAMEDATA_CheckAutomapCenterOnLoad();
 void __stdcall NET_D2GS_CLIENT_HandleAllNonVariableSizePackets();
 // Client-side world tick: init room, missiles, and DenOfEvil lighting for current act.

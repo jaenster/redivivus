@@ -18,7 +18,7 @@ uint32_t __fastcall ZLIB_Adler32Combine64(uint32_t nParam3, uint32_t nParam4, ui
 // Fast-path inflate decompression main loop. Processes compressed data using precomputed Huffman tables with 15-bit lookahead for literal/distance pairs. Copies match data with optimized 3-byte blocking pattern.
 void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos);
 // Build Huffman decoding table from bit lengths. Generates lookup tables for inflate decompression. Uses intermediate code arrays and calculates bit-level offsets for dynamic Huffman tree construction.
-int __fastcall ZLIB_InflateTable(int32_t nTableType, int32_t pBitLengths, uint32_t nNumCodes, int * ppOutTable, uint32_t * pMaxBits, uint16_t * aOutCodes);
+int __fastcall ZLIB_InflateTable(int32_t nTableType, uint16_t * pBitLengths, uint32_t nNumCodes, inflate_code * * ppOutTable, uint32_t * pMaxBits, uint16_t * aOutCodes);
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Client::Source::SSComp

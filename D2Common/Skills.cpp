@@ -372,15 +372,15 @@ D2LightMapStrc * __stdcall SwapLightMap(D2UnitStrc * pUnit, D2LightMapStrc * pLi
     return pOldLight;
 }
 
-uint32_t __stdcall SKILLS_GetUnitField0xa8_0x14(D2UnitStrc * pUnit) {
+D2LightMapStrc * __stdcall SKILLS_GetUnitField0xa8_0x14(D2UnitStrc * pUnit) {
     if (!pUnit) {
-      return 0;
+      return nullptr;
     }
     if (!pUnit->pSkillsList) {
-      return 0;
+      return nullptr;
     }
 
-    return (uint32_t)(uintptr_t)pUnit->pSkillsList->pLight;
+    return pUnit->pSkillsList->pLight;
 }
 
 // Frees the entire skill list on a unit. Iterates through pFirstSkill linked list, freeing each D2SkillStrc, then frees the D2SkillListStrc itself. Sets pUnit->pSkillsList to NULL. Called by FreeUnit.

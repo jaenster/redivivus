@@ -30,7 +30,7 @@ void __stdcall WAYPOINT_PopulateList();
 void __stdcall DRAW_UI_Waypoint();
 void __stdcall INPUT_WaypointTravel(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall WAYPOINT_SendOpenPacket();
-void __fastcall WAYPOINT_Init(int32_t pPacket);
+void __fastcall WAYPOINT_Init(uint8_t * pPacket);
 void __stdcall INPUT_WaypointMouseUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_WaypointMouseDown(struct D2UIMouseMsgStrc * pMsg);
 // 3 internal functions (defined in .cpp)

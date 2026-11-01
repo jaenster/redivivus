@@ -217,7 +217,7 @@ template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Ptr
     pfnEHHandlerRoutine pExHandler = D2Common::Chat::__GSHandlerCheck_EH_6ca2b8;
     void* pExSave = ExceptionList;
     ExceptionList = &pExSave;
-    char* pszDupKey = (char*)Storm::Source::SSTR::SStrDup(szKey);
+    char* pszDupKey = Storm::Source::SSTR::SStrDup(szKey);
     ::HASHKEY_STRI* ppszSearchKey = (::HASHKEY_STRI*)&szKey;
     nExState = 0;
     szKey = pszDupKey;
@@ -899,8 +899,8 @@ template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::New
       Storm::SMem::SMemFree(pObject, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e9, 0);
     }
 
-    uint32_t* pDupStr = Storm::Source::SSTR::SStrDup(pKey->szString);
-    pEntry->m_key.szString = (char*)pDupStr;
+    pDupStr = Storm::Source::SSTR::SStrDup(pKey->szString);
+    pEntry->m_key.szString = pDupStr;
     return pEntry;
 }
 
@@ -910,7 +910,7 @@ template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::New
     pfnEHHandlerRoutine pExceptionLabel = D2Common::Chat::__GSHandlerCheck_EH_6ca418;
     void* pPrevExceptionList = ExceptionList;
     ExceptionList = &pPrevExceptionList;
-    uint32_t* pObject = Storm::Source::SSTR::SStrDup(szKey);
+    char* pObject = Storm::Source::SSTR::SStrDup(szKey);
     ::HASHKEY_STRI* pKey = (::HASHKEY_STRI*)&szKey;
     nSehState = 0;
     szKey = (char*)pObject;

@@ -61,7 +61,7 @@ void __stdcall CloseStaleLogFileHandles();
 void __fastcall DeleteOldLogFile(int32_t pRefFileTime, char * szFileName);
 void __fastcall CloseLogFileByName(uint8_t * szFileName);
 uint32_t __thiscall ComputeAbsoluteFromRelative(int * pNode, int * pBase);
-void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(FILE * szSuffix);
+void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix);
 long __fastcall GetLogFileSize(uint8_t * szFileName);
 // @sourcefile .\Src\LogManager.cpp
 char * __fastcall ReadLogFileRange(uint8_t * szFileName, int32_t nStartOffset, int32_t nEndOffset);
@@ -86,7 +86,7 @@ void * __thiscall DestroyListNodeAndFree(void * pThis, uint8_t bFreeMemory);
 void __fastcall DestroyAllListNodes(void * pListHead);
 int * * __thiscall AllocateAndInsertMessageNode(int * * ppListHead, int32_t nInsertMode, int32_t nPayloadSize, uint32_t dwAllocFlags);
 void __stdcall StopLogWriterThread();
-void EnqueueLogMessage(char * szText1, char * szText2, void * pData, void * nDataLen, void * pCategory, BOOL bSkipData, int32_t nVerbose);
+void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDataLen, void * pCategory, BOOL bSkipData, int32_t nVerbose);
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall LOGMANAGER_LogWriterThreadProc(void * lpThreadParam);
 void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int32_t bAppendNewline, char * szFormat, va_list vaArgs);

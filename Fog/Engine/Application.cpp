@@ -1281,7 +1281,7 @@ void __fastcall PreInitApplication(int32_t argc, char * * argv) {
     D2TRACE("PreInitApplication enter");
     Storm::Source::SSTR::SStrPrintf(szVersionString, 0x104, "v%d.%02d", 1, 0xe);
     D2TRACE("SetLogFilePath");
-    Source::SFile::FILETOOLS_SetLogFilePathWithoutDateAndExtension2((FILE*)"D2");
+    Source::SFile::FILETOOLS_SetLogFilePathWithoutDateAndExtension2("D2");
     D2TRACE("ERRORMANAGER_InitErrorManager");
     Src::ErrorManager::ERRORMANAGER_InitErrorManager("Diablo II", szVersionString, 1);
     HANDLE hDiabloOkEvent = OpenEventA(2, 1, "DIABLO_II_OK");

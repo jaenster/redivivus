@@ -138,7 +138,7 @@ BOOL __fastcall Skills_CltDoFunc_Ass_Blade_DecrementCharge(D2UnitStrc * pUnit, e
     }
 
     D2Common::Skills::SKILL_SetParam1(pSkill, nChargeCount - 1);
-    Skills::SKILLS_ApplyDamageReduction((int32_t)pUnit, 100);
+    Skills::SKILLS_ApplyDamageReduction(pUnit, 100);
     return 1;
 }
 

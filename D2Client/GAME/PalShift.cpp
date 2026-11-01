@@ -346,13 +346,13 @@ D2GamePalShiftRandTransformStrc * * __fastcall PALSHIFT_GetMonsterTransform(D2Un
     return (D2GamePalShiftRandTransformStrc**)(nPalShiftIndex * 0x100 + 4 + pPalShiftEntryPtr);
 }
 
-int32_t __fastcall PALSHIFT_GenerateShiftDuration(int32_t pUnitSeedBase, uint32_t nSeedInput) {
+int32_t __fastcall PALSHIFT_GenerateShiftDuration(D2UnitStrc * pUnitSeedBase, uint32_t nSeedInput) {
     if (!pUnitSeedBase) {
       return 9;
     }
 
-    D2SeedStrc* pSeed = (D2SeedStrc*)(pUnitSeedBase + 0x20);
-    D2Common::Seed::InitSeed_Param_666(pSeed, (nSeedInput & 0xffff) + *(int*)(pUnitSeedBase + 4));
+    D2SeedStrc* pSeed = &pUnitSeedBase->sSeed;
+    D2Common::Seed::InitSeed_Param_666(pSeed, (nSeedInput & 0xffff) + pUnitSeedBase->nClassId);
     D2SeedStrc qwRandState = D2_SEED_NEXT(*pSeed);
     *pSeed = qwRandState;
     return qwRandState.nSeedLow % 0x1e + 9;

@@ -2257,16 +2257,15 @@ static void DRLGPATH_PropagateNodeCosts(D2DrlgPathNodeStrc * pStartNode, int32_t
 }
 
 // Allocates a new path node from the pre-allocated node pool (max 200 nodes). Returns NULL if the pool is exhausted. Each node is 0x38 bytes and is zero-initialized.
-void * __fastcall DRLGPATH_AllocPathNode(int32_t nPathCtx) {
-    int nPoolCount = *(int*)(nPathCtx + 0x2fc4);
-    if (nPoolCount == 200) {
+D2DrlgPathNodeStrc * __fastcall DRLGPATH_AllocPathNode(D2DrlgPathSearchCtxStrc * nPathCtx) {
+    int iVar1 = nPathCtx->nPoolCount;
+    if (iVar1 == 200) {
       return nullptr;
     }
 
-    void* pNewNode = (void*)(nPathCtx + 0x404 + nPoolCount * 0x38);
-    *(int*)(nPathCtx + 0x2fc4) = nPoolCount + 1;
-    memset(pNewNode, 0, 0x38);
-    return pNewNode;
+    nPathCtx->nPoolCount = iVar1 + 1;
+    memset(nPathCtx->aNodePool + iVar1, 0, 0x38);
+    return nPathCtx->aNodePool + iVar1;
 }
 
 // Attempts to expand a neighbor node in the A* search. Checks if the node exists in open or closed lists, creates new nodes as needed, and updates costs if a better path is found. Links the node as a child of the parent (up to 8 children).
@@ -2333,7 +2332,7 @@ static BOOL __stdcall DRLGPATH_TryExpandNeighborNode(int32_t nOpenList, uint32_t
           return 1;
         }
       } else {
-        pNewNode = (D2DrlgPathNodeStrc*)DRLGPATH_AllocPathNode(nOpenList);
+        pNewNode = DRLGPATH_AllocPathNode((D2DrlgPathSearchCtxStrc*)nOpenList);
         if (!pNewNode) {
           return 0;
         }

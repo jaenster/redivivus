@@ -164,7 +164,7 @@ void __fastcall fpDrawWallTile(uint8_t * pTileData, int32_t nScreenX, int32_t nS
           return;
         }
 
-        D2GFX::D2GFX_DrawGroundTileWithPerspective(nScreenX, nScreenY, pTileData, (int32_t)pDst, nLightShifted, nDeltaX1, nLightY << 5, nDeltaY1, 0x20, 8);
+        D2GFX::D2GFX_DrawGroundTileWithPerspective(nScreenX, nScreenY, pTileData, pDst, nLightShifted, nDeltaX1, nLightY << 5, nDeltaY1, 0x20, 8);
         return;
       }
     } else {
@@ -417,9 +417,9 @@ void __fastcall fpDrawRoofTile(uint8_t * pTileData, int32_t nScreenX, int32_t nS
     } while (nRowIdx < 0x20);
 }
 
-void __fastcall D2GFXHELPER_DrawGroundTileWithLight(D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, int32_t pDstBase, uint32_t nLightVal) {
+void __fastcall D2GFXHELPER_DrawGroundTileWithLight(D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, uint8_t * pDstBase, uint32_t nLightVal) {
     uint8_t* pbSrcEnd;
-    int nDstBase;
+    uint8_t* nDstBase;
     uint8_t* pDst;
     uint32_t nStartRow;
     int nRowXOffset;
@@ -434,7 +434,7 @@ void __fastcall D2GFXHELPER_DrawGroundTileWithLight(D2GroundSubTileStrc * pSubTi
         nClipRows = 0xf;
       }
 
-      nDstBase = gRenderBufferPitch * nStartRow + pDstBase;
+      nDstBase = pDstBase + gRenderBufferPitch * nStartRow;
       for (; (int)nStartRow < nClipRows; nStartRow++) {
         nRowXOffset = -(gaGroundTileRowOffsets[nStartRow] + nScreenX);
         nClipLeft = gnTileClipLeft + nRowXOffset;
@@ -446,7 +446,7 @@ void __fastcall D2GFXHELPER_DrawGroundTileWithLight(D2GroundSubTileStrc * pSubTi
         }
         if ((int)(nClipRight - nClipLeft) > 0) {
           pbSrcEnd = pSubTile->pPixelData + nClipLeft + gaGroundTileSrcPointers[nStartRow];
-          pDst = (uint8_t*)(nDstBase + gaGroundTileRowOffsets[nStartRow] + nClipLeft);
+          pDst = nDstBase + nClipLeft + gaGroundTileRowOffsets[nStartRow];
           pbSrcRunEnd = pbSrcEnd + (nClipRight - nClipLeft);
           for (; pbSrcEnd < pbSrcRunEnd; pbSrcEnd++) {
             *pDst = gaPaletteColorLUT[nLightVal >> 3 & 0x1f][*pbSrcEnd];
@@ -460,10 +460,10 @@ void __fastcall D2GFXHELPER_DrawGroundTileWithLight(D2GroundSubTileStrc * pSubTi
       return;
     }
 
-    D2GFX::D2GFX_DrawGroundTileBasic(nScreenX, nScreenY, pSubTile->pPixelData, (uint8_t*)pDstBase, gaPaletteColorLUT[nLightVal >> 3 & 0x1f], 0xf);
+    D2GFX::D2GFX_DrawGroundTileBasic(nScreenX, nScreenY, pSubTile->pPixelData, pDstBase, gaPaletteColorLUT[nLightVal >> 3 & 0x1f], 0xf);
 }
 
-void __fastcall D2GFXHELPER_DrawGroundTileWithPerspectiveLight(D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, int32_t pDstBase, int * pLightCorners) {
+void __fastcall D2GFXHELPER_DrawGroundTileWithPerspectiveLight(D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, uint8_t * pDstBase, int * pLightCorners) {
     uint8_t* pbSrc;
     uint8_t* pDst;
     uint32_t nClipRight;
@@ -485,7 +485,7 @@ void __fastcall D2GFXHELPER_DrawGroundTileWithPerspectiveLight(D2GroundSubTileSt
       nDstBase = 0xf;
     }
 
-    int nDstRow = gRenderBufferPitch * nStartRow + pDstBase;
+    uint8_t* nDstRow = pDstBase + gRenderBufferPitch * nStartRow;
     for (; (int)nStartRow < nDstBase; nStartRow++) {
       int iVar1;
       iVar1 = gaGroundTileRowOffsets[nStartRow];
@@ -500,7 +500,7 @@ void __fastcall D2GFXHELPER_DrawGroundTileWithPerspectiveLight(D2GroundSubTileSt
       if ((int)(nClipRight - nClipLeft) > 0) {
         pbSrc = pSubTile->pPixelData + nClipLeft + gaGroundTileSrcPointers[nStartRow];
         pbSrcEnd = pbSrc + (nClipRight - nClipLeft);
-        pDst = (uint8_t*)(iVar1 + nDstRow + nClipLeft);
+        pDst = nDstRow + nClipLeft + iVar1;
         for (; pbSrc < pbSrcEnd; pbSrc++) {
           *pDst = gaPaletteColorLUT[*pbLineBuf][*pbSrc];
           pDst++;

@@ -487,7 +487,7 @@ void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int
     }
 
     D2SeedStrc* pSeed = &pPlayer->sSeed;
-    uint32_t nSlot = Fog::Src::DataArrays::FOG_GetMissileField((D2MissilesTxt*)pEnvironmentSplashes);
+    uint32_t nSlot = Fog::Src::DataArrays::FOG_GetMissileField(pEnvironmentSplashes);
     if (nSlot == -1) {
       return;
     }
@@ -539,7 +539,7 @@ void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int
     }
 
     D2SeedStrc* pSeed = &pPlayer->sSeed;
-    uint32_t nSlot = Fog::Src::DataArrays::FOG_GetMissileField((D2MissilesTxt*)pEnvironmentBubbles);
+    uint32_t nSlot = Fog::Src::DataArrays::FOG_GetMissileField(pEnvironmentBubbles);
     if (nSlot == -1) {
       return;
     }
@@ -630,7 +630,7 @@ static void __stdcall WEATHER_GetLightingTint(uint8_t * pOutAlpha, int nIntensit
 static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
     bool bIsBlizzard;
     D2WeatherParticleStrc* pParticleSlot;
-    uint32_t nSlot = Fog::Src::DataArrays::FOG_GetMissileField((D2MissilesTxt*)pEnvironmentParticles);
+    uint32_t nSlot = Fog::Src::DataArrays::FOG_GetMissileField(pEnvironmentParticles);
     if (nSlot == -1) {
       return;
     }

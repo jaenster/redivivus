@@ -112,7 +112,7 @@ void __fastcall SKILLS_SetMissileDirectionCallback(struct D2UnitStrc * pUnit, in
 void __fastcall SKILLS_CreateMissileScatter(struct D2UnitStrc * pUnit, struct D2SkillArgStrc * pSkillArg, int32_t nRadius, int32_t nCount);
 BOOL __fastcall CLIENT_HandleUnitMessage0x16(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 uint32_t __fastcall SKILL_GetWeaponClassMask(struct D2UnitStrc * pUnit);
-void __fastcall SKILLS_ApplyDamageReduction(int32_t pUnit, int32_t nReductionPercent);
+void __fastcall SKILLS_ApplyDamageReduction(struct D2UnitStrc * pUnit, int32_t nReductionPercent);
 // Spawns nCount missiles at random positions within nRadius of the casting unit. Seeds the unit's RNG from its current map coordinates, then for each spawn picks a random (X,Y) offset within the diameter, rejects positions within 3 distance units of the caster, and calls MISSILE_CreateFromUnitWithOffset with the given missile ID array, skill, and skill level. Returns 1 on success, 0 if coordinates could not be retrieved.
 uint32_t __fastcall SKILL_SpawnRandomMissilesInArea(struct D2UnitStrc * pUnit, uint8_t * pMissileId, int32_t nCount, int32_t nRadius, eD2Skills eSkill, int32_t nSkillLevel);
 // Client-side skill expiry handler called when a skill animation completes. If the unit's current skill is not STATE_skill_move and has no loop flag (bit 1), looks up the skill's srvdofunc: 0x43 stops and clears the uninterruptable skill (Paladin Holy Shield etc.), 0x4C stops and clears sound (Barbarian), 0x4D/0x4E handles teleport landing. No-ops for all other srvdofunc values.

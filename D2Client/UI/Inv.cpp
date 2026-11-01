@@ -9281,7 +9281,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
           nItemType = GAME::Game::CLIENT_CheckExpansion();
           pTargetItem = pUnit;
           nTxCost = D2Common::Units::GetInventoryPage(pUnit, '\x03', nItemType);
-          nCallResult = D2Common::INVENTORY::Inventory::INVENTORY_FindItemGridPosition(pInvWork, pCursorItem_lcl, nTxCost, (int**)&y, (int*)&pInventory, 3);
+          nCallResult = D2Common::INVENTORY::Inventory::INVENTORY_FindItemGridPosition(pInvWork, pCursorItem_lcl, nTxCost, (int*)&y, (int*)&pInventory, 3);
           if (nCallResult) {
             if (!targetItem) {
               nTxCost = -1;

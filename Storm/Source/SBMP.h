@@ -104,7 +104,7 @@ namespace Storm::Source::SBMP {
 // @blizzard EncodePcx256File (SBMP.CPP)
 int __fastcall SBMP_EncodePcx256File(int nWidth, int nHeight, HANDLE hFile, int nPalettePtr, void * pPixels);
 // @blizzard CompressGifImage (SBMP.CPP)
-int __fastcall SBMP_CompressGifImage(int nSrcLen, uint8_t * pSrcPixels, int pDstBuf);
+int __fastcall SBMP_CompressGifImage(int nSrcLen, uint8_t * pSrcPixels, uint8_t * pDstBuf);
 // Decodes an image already held in memory. With nFormat 0 it sniffs the first two bytes via SBMP_DetectFormat, then dispatches to SBMP_LoadBMPFromMemory / SBMP_LoadGIFFromMemory / SBMP_LoadFromMemory (TGA).
 // @oracle SBmpDecodeImage
 // @oracle-source Storm export vector SBmpDecodeImage @100cbc64 -> code 10004d00 = the traceback-named function .SBmpDecodeImage, in Mac PPC 1.10b Storm
@@ -116,7 +116,7 @@ int __stdcall SBmpDecodeImage(int nFormat, void * pData, uint32_t nDataSize, voi
 // @oracle-source Storm export vector SBmpLoadImage @100cbc6c -> code 10004ae0 = the traceback-named function .SBmpLoadImage, in Mac PPC 1.10b Storm
 // @rename-basis Behaviour plus a cross-architecture body match. .SBmpLoadImage @10004ae0 reads r3..r9, i.e. exactly seven arguments, and this is the only SBmp entry point that takes a filename and writes into a caller-supplied bounded buffer. Discriminated from SBmpAllocLoadImage 006c6e70 (allocates the destination) and from SBmpDecodeImage 006c6a80 (takes a memory buffer plus length and an explicit format selector).
 // @former-name SBMP_LoadImageFromFile
-uint32_t __stdcall SBmpLoadImage(int * pszPath, void * pPalette, void * pPixels, int nFlags, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnBpp);
+uint32_t __stdcall SBmpLoadImage(char * pszPath, void * pPalette, void * pPixels, int nFlags, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnBpp);
 // Writes an image to a file, choosing the encoder from the filename extension (.pcx, .gif, .tga, else BMP). Validates the arguments, derives dwStride from width and bpp when it is 0, CreateFileA, dispatches to SBMP_WritePCX / SBMP_WriteGIF / SBMP_WriteTGA / SBMP_WriteBMP, closes.
 // @oracle SBmpSaveImageEx
 // @oracle-source PEF traceback-table function name .SBmpSaveImageEx @100047c0 in Mac PPC 1.10b Storm. Internal (deliberately NOT in the 337-name export table), but a first-party compiler-emitted symbol.
@@ -129,14 +129,14 @@ void __stdcall SBmpSaveImageEx(LPCSTR szText, int nPalette, uint8_t * pbPixels, 
 // @rename-basis Behaviour plus a cross-architecture body match. 10004ee0 reads r3..r10, i.e. exactly eight arguments, and its first act is to test r5 (the third argument) for NULL - the same ppBuffer NULL check that opens this function before SetLastError(0x57). This is the only SBmp entry that allocates the destination rather than being handed one, and the only one taking an allocator callback.
 // @former-name SBMP_LoadImageAllocated
 // @sourcefile .\SOURCE\SBMP.CPP
-uint32_t __stdcall SBmpAllocLoadImage(char * szText, void * pPalette, uint32_t * ppOutputBuf, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnBpp, uint32_t nBppOverride, pfnSBmpAllocCallback pfnAlloc);
+uint32_t __stdcall SBmpAllocLoadImage(char * szText, void * pPalette, void * * ppOutputBuf, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnBpp, uint32_t nBppOverride, pfnSBmpAllocCallback pfnAlloc);
 // The public six-argument save entry point. Forwards to SBmpSaveImageEx 006c6cb0 with a stride of 0, which makes the Ex compute the stride from width and bpp.
 // @oracle SBmpSaveImage
 // @oracle-source Storm export vector SBmpSaveImage @100cbc74 -> code 10004a90 in Mac PPC 1.10b Storm
 // @rename-basis Decisive, positive, cross-architecture. The PPC export vector for SBmpSaveImage does NOT point at the big extension-dispatching writer .SBmpSaveImageEx @100047c0; it points at 10004a90, an 80-byte function whose entire body is "li r9, 0x0; bl .SBmpSaveImageEx" - pass the six incoming argument registers straight through and supply 0 as the seventh. This function is that wrapper, instruction for instruction. Which of the pair is exported was the one thing that could not be settled from the Windows side (both are unreferenced in Game.exe); the PPC export table settles it by publishing an address.
 // @former-name SBMP_SaveImageSimple
 // @namespace-fix moved Global -> Storm::Source::SBMP
-void __stdcall SBmpSaveImage(LPCSTR szText, int nParam1, uint8_t * pbParam, void * pParam, int nParam2, int nParam3);
+void __stdcall SBmpSaveImage(LPCSTR szText, int nParam1, uint8_t * pbParam, int32_t pParam, int nParam2, int nParam3);
 // 21 internal functions (defined in .cpp)
 
 } // namespace Storm::Source::SBMP

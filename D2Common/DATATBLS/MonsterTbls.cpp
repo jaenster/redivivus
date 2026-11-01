@@ -1353,16 +1353,16 @@ void __stdcall thunk_UnloadBin_MonStats() {
     DataTbls::UnloadBin(pMonItemPercentTxt);
 }
 
-int32_t __stdcall TC_GetTreasureClassArrayEntry(int32_t nTCArrayIdx) {
+D2MonItemPercentTxt * __stdcall TC_GetTreasureClassArrayEntry(int32_t nTCArrayIdx) {
     int32_t nLine;
     if (!(nTCArrayIdx < (int)gnTreasureClassArraySize && nTCArrayIdx != -1)) {
-      return 0;
+      return nullptr;
     }
     if (!pMonItemPercentTxt) {
       nLine = 0x6dc;
     } else {
       if (pMonItemPercentTxt + nTCArrayIdx) {
-        return (int32_t)(pMonItemPercentTxt + nTCArrayIdx);
+        return pMonItemPercentTxt + nTCArrayIdx;
       }
 
       nLine = 0x6dd;
@@ -1370,7 +1370,7 @@ int32_t __stdcall TC_GetTreasureClassArrayEntry(int32_t nTCArrayIdx) {
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
     exit(-1);
-    return 0;
+    return nullptr;
 }
 
 // Defines and compiles the MonUMod.txt field schema into the global data table. Sets up 16 D2BinFieldInputStrc entries (uniquemod, version, enabled, xfer, champion, fpick, exclude1/2, cpick/upick per difficulty, constants), calls CompileTxt to parse the file, allocates the MonUMod link table, and caps nTxtMonUmodSize at 256.

@@ -221,7 +221,7 @@ short * __stdcall DRLGPATH_FindNodeInOpenList(int32_t nOpenListBase, uint32_t nP
 // Searches the closed list hash table (offset 0x200 from the open list) for a node matching the given packed position. Returns the node if found, NULL otherwise.
 short * __stdcall DRLGPATH_FindNodeInClosedList(int32_t nOpenListBase, uint32_t nPackedPos);
 // Allocates a new path node from the pre-allocated node pool (max 200 nodes). Returns NULL if the pool is exhausted. Each node is 0x38 bytes and is zero-initialized.
-void * __fastcall DRLGPATH_AllocPathNode(int32_t nPathCtx);
+struct D2DrlgPathNodeStrc * __fastcall DRLGPATH_AllocPathNode(struct D2DrlgPathSearchCtxStrc * nPathCtx);
 // Fallback A* used when the greedy directional search does not reach the destination and the squared distance is under 0x145. The whole search state is ONE 0x32EC-byte frame object whose base is handed to every helper, which then reach the rest by byte offset: DRLGPATH_AllocPathNode takes the pool count at base+0x2FC4 and node n at base+0x404+n*0x38; DRLGPATH_InsertNodeSorted and PopBestNodeFromOpenList use the closed buckets at base+0x200 and the sorted head at base+0x400; DRLGPATH_PropagateNodeCosts uses the queue at base+0x2FC8 and its count at base+0x32E8. Split into separate locals the helpers wrote nodes over unrelated stack and read the list head out of garbage, which faulted on every player move long enough to need the A* fallback and on NPC paths.
 int32_t __fastcall PATH_FindPathAStarLocalPool(struct D2PathTypeArg * pPathTypeArg);
 // Computes the squared Euclidean distance between two packed (X|Y) coordinates. Returns dx*dx + dy*dy. No callers found - likely referenced via function pointer table or dead code.

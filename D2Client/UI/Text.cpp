@@ -1600,7 +1600,7 @@ void __fastcall TEXT_FreeHoverText(D2HoverTextStrc * pHover) {
     if (pMemoryToFree) {
       TEXT_FreeTextLineList((D2TextLineStrc*)*pMemoryToFree);
       D2_FREE_AT(pMemoryToFree, ".\\UI\\text.cpp", 0x68e);
-      D2Common::Chat::HOVERTEXT_SetTextLineList(pHover, 0);
+      D2Common::Chat::HOVERTEXT_SetTextLineList(pHover, nullptr);
     }
 
     D2Common::Chat::Free(nullptr, pHover);
@@ -4186,14 +4186,14 @@ void __stdcall TEXT_DrawQuestScrollUI() {
     TEXT_DrawQuestScrollAnimation(0);
 }
 
-void __fastcall TEXT_HandleScrollLinePacket(uint8_t * pPacket) {
-    if (*(short int*)(pPacket + 1) != 4) {
+void __fastcall TEXT_HandleScrollLinePacket(D2GSPacketSrv0x50 * pPacket) {
+    if (pPacket->nMessageType != 4) {
       return;
     }
 
-    *(uint32_t*)(char*)&gnQuestScrollLine = *(uint32_t*)(pPacket + 3);
-    *(uint32_t*)((char*)&gnQuestScrollLine + 4) = *(uint32_t*)(pPacket + 7);
-    *(uint32_t*)((char*)&gnQuestScrollLine + 8) = *(uint32_t*)(pPacket + 0xb);
+    *(uint32_t*)(char*)&gnQuestScrollLine = *(uint32_t*)pPacket->aPayload;
+    *(uint32_t*)((char*)&gnQuestScrollLine + 4) = *(uint32_t*)(pPacket->aPayload + 2);
+    *(uint32_t*)((char*)&gnQuestScrollLine + 8) = *(uint32_t*)(pPacket->aPayload + 4);
     gpQuestScrollUI = 0;
 }
 

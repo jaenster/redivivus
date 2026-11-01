@@ -799,13 +799,13 @@ void __fastcall CLIENT_BossDeath_Izual(D2UnitStrc * pUnit) {
     UNIT::Missile::MakeMissile(&sSkillArg);
 }
 
-void __fastcall CLIENT_StoreUnitGuidForQuestTracking(int32_t pUnit) {
+void __fastcall CLIENT_StoreUnitGuidForQuestTracking(D2UnitStrc * pUnit) {
     if (!pUnit) {
       gnQuestMonsterUnitId = -1;
       return;
     }
 
-    gnQuestMonsterUnitId = *(uint32_t*)(pUnit + 0xc);
+    gnQuestMonsterUnitId = pUnit->nUnitGUID;
 }
 
 void __stdcall CLIENT_BossDeath_Baal() {

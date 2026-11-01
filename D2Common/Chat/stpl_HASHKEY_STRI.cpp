@@ -27,7 +27,7 @@
       Storm::SMem::SMemFree(this->szString, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e9, 0);
     }
 
-    uint32_t* pDupStr = Storm::Source::SSTR::SStrDup(pSource->szString);
-    this->szString = (char*)pDupStr;
+    char* pDupStr = Storm::Source::SSTR::SStrDup(pSource->szString);
+    this->szString = pDupStr;
     return this;
 }

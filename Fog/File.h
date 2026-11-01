@@ -102,8 +102,8 @@ void __fastcall CRASH_EnumerateThreads(fnCrashOutputLine pOutputCallback, ::Repo
 // walks as ExceptionRecord -> ExceptionCode.
 LONG __stdcall ERRORMANAGER_UnhandledExceptionFilter(struct _EXCEPTION_POINTERS * pExceptionPointers);
 void __fastcall CRASH_SetExceptionHandler(pfnFogExceptionFilter pfnFilter, void * pContext, uint32_t nUnused);
-uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, char * nDestSize, char * szSrcPath);
-uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, char * nDestSize);
+uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDestSize, char * szSrcPath);
+uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, uint32_t nDestSize);
 bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(char * szPath);
 char * __stdcall STRING_AppendStringToString(char * szDest, int32_t nDestSize, char * szSrc);
 int STRING_FormatVarArgs(char * szFormat, char * szDest, int32_t nDestSize, ...);

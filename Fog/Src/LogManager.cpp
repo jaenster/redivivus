@@ -909,10 +909,10 @@ uint32_t __thiscall ComputeAbsoluteFromRelative(int * pNode, int * pBase) {
     return nOffset + (int)pBase;
 }
 
-void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(FILE * szSuffix) {
+void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix) {
     char szLogsFolder[260];
     FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(szLogsFolder, 0x104);
-    Storm::Source::SSTR::SStrPrintf(gszLogFilePath, 0x104, "%s%s", szLogsFolder, (char*)szSuffix);
+    Storm::Source::SSTR::SStrPrintf(gszLogFilePath, 0x104, "%s%s", szLogsFolder, szSuffix);
 }
 
 long __fastcall GetLogFileSize(uint8_t * szFileName) {
@@ -1358,14 +1358,14 @@ void __stdcall StopLogWriterThread() {
     LeaveCriticalSection(&gLogMessageQueueCS);
 }
 
-void EnqueueLogMessage(char * szText1, char * szText2, void * pData, void * nDataLen, void * pCategory, BOOL bSkipData, int32_t nVerbose) {
+void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDataLen, void * pCategory, BOOL bSkipData, int32_t nVerbose) {
     int* pPrevLink;
     if (!(!gLogWriterThreadStopFlag && gLogManagerInitialized)) {
       return;
     }
     if (!bSkipData) {
       BOOL bIsBadPtr;
-      /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pData, (UINT_PTR)nDataLen);
+      /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pData, nDataLen);
       if (bIsBadPtr) {
         bSkipData = 1;
       }
@@ -1375,7 +1375,7 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, void * nDat
     uint32_t pWrite = Storm::Source::SSTR::SStrLen(szText2);
     int nPayloadSize = nLen1 + 0x16 + pWrite;
     if (!bSkipData) {
-      nPayloadSize += (int)nDataLen;
+      nPayloadSize += nDataLen;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
@@ -1387,14 +1387,14 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, void * nDat
     GetLocalTime((LPSYSTEMTIME)(pNode + 5));
     nLen1 = Storm::Source::SSTR::SStrCopy((char*)(pNode + 9), szText1, 0x7fffffff);
     char* pcVar1 = (char*)(nLen1 + 1 + (int)(pNode + 9));
-    *(void**)(pcVar1 + 4) = (void*)nDataLen;
+    *(size_t*)(pcVar1 + 4) = nDataLen;
     *(void**)pcVar1 = (void*)pData;
     *(void**)(pcVar1 + 8) = (void*)pCategory;
     *(BOOL*)(pcVar1 + 0xc) = bSkipData;
     *(uint32_t*)(pcVar1 + 0x10) = (uint32_t)!nVerbose;
     nLen1 = Storm::Source::SSTR::SStrCopy(pcVar1 + 0x14, szText2, 0x7fffffff);
     if (!bSkipData) {
-      memcpy(pcVar1 + nLen1 + 0x15, pData, (size_t)nDataLen);
+      memcpy(pcVar1 + nLen1 + 0x15, pData, nDataLen);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);

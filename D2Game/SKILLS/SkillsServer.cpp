@@ -569,7 +569,7 @@ BOOL __fastcall SKILLS_ApplyAreaDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
-D2UnitStrc * __fastcall SKILLS_ApplyAreaHitAtUnit(int32_t nGame, D2UnitStrc * pUnit, int32_t nRange, fpAreaHitUnitFilter nSkillLevel) {
+D2UnitStrc * __fastcall SKILLS_ApplyAreaHitAtUnit(::SGAMEDATA * nGame, D2UnitStrc * pUnit, int32_t nRange, fpAreaHitUnitFilter nSkillLevel) {
     D2AreaHitNearestCtx sNearestCtx;
     eD2UnitType eUnitType = pUnit->eUnitType;
     sNearestCtx.pNearest = 0;
@@ -592,7 +592,7 @@ D2UnitStrc * __fastcall SKILLS_ApplyAreaHitAtUnit(int32_t nGame, D2UnitStrc * pU
     }
 
     sNearestCtx.pfnFilter = nSkillLevel;
-    SKILLS_ApplyAreaEffect((::SGAMEDATA*)nGame, pUnit, 0, 0, nRange, 0x8783, SKILLS_AreaEffect_FindNearestUnit, &sNearestCtx, 0, ".\\SKILLS\\Skills.cpp", 0x2b8);
+    SKILLS_ApplyAreaEffect(nGame, pUnit, 0, 0, nRange, 0x8783, SKILLS_AreaEffect_FindNearestUnit, &sNearestCtx, 0, ".\\SKILLS\\Skills.cpp", 0x2b8);
     return sNearestCtx.pNearest;
 }
 
@@ -835,9 +835,9 @@ uint32_t __fastcall SKILL_CheckManaForCast(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
-D2UnitFindDataStrc * __fastcall SKILLS_FindUnitsInRange(int32_t nParam1, D2UnitStrc * pUnit, int32_t nRange, int32_t nX, int32_t nY) {
+D2UnitFindDataStrc * __fastcall SKILLS_FindUnitsInRange(::SGAMEDATA * nParam1, D2UnitStrc * pUnit, int32_t nRange, int32_t nX, int32_t nY) {
     D2UnitFindArgStrc sUnitFindArg;
-    D2UnitFindDataStrc* pUnitFindData = D2_NEW_POOL_AT(*(D2PoolManagerStrc**)(nParam1 + 0x1c), D2UnitFindDataStrc, ".\\SKILLS\\Skills.cpp", 1099);
+    D2UnitFindDataStrc* pUnitFindData = D2_NEW_POOL_AT(nParam1->pMemoryPool, D2UnitFindDataStrc, ".\\SKILLS\\Skills.cpp", 1099);
     memset(&sUnitFindArg, 0, 0x38);
     sUnitFindArg.nFlags = 1411;
     sUnitFindArg.pAttacker = pUnit;
@@ -845,15 +845,15 @@ D2UnitFindDataStrc * __fastcall SKILLS_FindUnitsInRange(int32_t nParam1, D2UnitS
     sUnitFindArg.nY = nY;
     sUnitFindArg.nDistance = nRange;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    D2Common::Units::UnitFinds::InitializeUnitFindData(*(D2PoolManagerStrc**)(nParam1 + 0x1c), pUnitFindData, pRoom, nX, nY, nRange, nullptr, &sUnitFindArg);
+    D2Common::Units::UnitFinds::InitializeUnitFindData(nParam1->pMemoryPool, pUnitFindData, pRoom, nX, nY, nRange, nullptr, &sUnitFindArg);
     D2Common::Units::UnitFinds::UNITFINDS_FindCullRange(pUnitFindData);
     return pUnitFindData;
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
-void __fastcall SKILLS_FreeUnitFindData(int32_t nGame, D2UnitFindDataStrc * pUnitFindData) {
+void __fastcall SKILLS_FreeUnitFindData(::SGAMEDATA * nGame, D2UnitFindDataStrc * pUnitFindData) {
     D2Common::Units::UnitFinds::FreeUnitFindData(pUnitFindData);
-    D2_FREE_POOL_AT(*(D2PoolManagerStrc**)(nGame + 0x1c), pUnitFindData, ".\\SKILLS\\Skills.cpp", 0x465);
+    D2_FREE_POOL_AT(nGame->pMemoryPool, pUnitFindData, ".\\SKILLS\\Skills.cpp", 0x465);
 }
 
 BOOL __fastcall SKILLS_SetSrvDoFuncAndAttackTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused) {
@@ -2268,8 +2268,8 @@ void __fastcall SKILLS_UpdatePassivesAndPets(D2UnitStrc * pUnit) {
     PLAYER::PlayerPets::PETS_RecalculateAllPetLimits(pGame, pUnit);
 }
 
-D2PoolManagerStrc * __fastcall SKILLS_AllocSkillAndUpdatePassives(D2UnitStrc * pUnit, eD2Skills eSkill) {
-    D2PoolManagerStrc* pNewSkill = (D2PoolManagerStrc*)D2Common::Skills::AllocSkill(pUnit, eSkill);
+D2SkillStrc * __fastcall SKILLS_AllocSkillAndUpdatePassives(D2UnitStrc * pUnit, eD2Skills eSkill) {
+    D2SkillStrc* pNewSkill = D2Common::Skills::AllocSkill(pUnit, eSkill);
     D2Common::Skills::SKILLS_UpdateAllPassiveSkills(pUnit);
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
       return pNewSkill;
@@ -2642,25 +2642,22 @@ uint16_t __fastcall SKILLS_CalcToHitAndApply(::SGAMEDATA * pGame, D2UnitStrc * p
     return pDamage->wResultFlags;
 }
 
-uint32_t __fastcall SKILLS_CalcMissileToHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2UnitStrc * pUnit, uint32_t nParam1, int32_t nParam12, uint32_t nParam2, int32_t nParam22) {
-    uint32_t nToHit;
-    uint16_t extraout_var;
+uint16_t __fastcall SKILLS_CalcMissileToHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2UnitStrc * pUnit, uint32_t nParam1, int32_t nParam12, uint32_t nParam2, int32_t nParam22) {
+    uint16_t uVar1 = (uint16_t)nParam1;
     if (!(nParam1 & 1)) {
-      uint16_t uVar1;
-      uVar1 = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit2, pUnit, nParam12, nParam22);
-      nToHit = (uint32_t)(uint32_t)(uint16_t)uVar1;
-      *(uint16_t*)(nParam2 + 4) = uVar1;
-      if (!(uVar1 & 1)) {
-        return (uint32_t)((uint32_t)(uint16_t)(short int)(nToHit >> 0x10) << 16 | (uint32_t)(uint16_t)*(uint16_t*)(nParam2 + 4));
+      uint16_t uVar2;
+      uVar2 = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit2, pUnit, nParam12, nParam22);
+      *(uint16_t*)(nParam2 + 4) = uVar2;
+      if (!(uVar2 & 1)) {
+        return *(uint16_t*)(nParam2 + 4);
       }
 
-      nToHit |= nParam1;
-      *(short int*)(nParam2 + 4) = (short int)nToHit;
-      return (uint32_t)((uint32_t)(uint16_t)(short int)(nToHit >> 0x10) << 16 | (uint32_t)(uint16_t)*(uint16_t*)(nParam2 + 4));
+      *(uint16_t*)(nParam2 + 4) = uVar2 | uVar1;
+      return *(uint16_t*)(nParam2 + 4);
     }
 
-    *(short int*)(nParam2 + 4) = (short int)nParam1;
-    return (uint32_t)((uint32_t)(uint16_t)(short int)(nParam2 >> 0x10) << 16 | (uint32_t)(uint16_t)(short int)nParam1);
+    *(uint16_t*)(nParam2 + 4) = uVar1;
+    return uVar1;
 }
 
 // Creates and queues a SUnitEvent for an aura skill proc on pUnit. Validates nItemEventFuncId is within the ITEMSTATCOST_ITEMEVENTFUNC table (max 0x32) and the entry is non-null, then calls SUNITEVENT_Alloc with the resolved function pointer. Returns the new event, or null on failure.

@@ -70,39 +70,39 @@ void __fastcall FOG_InitDataArray(D2DataArrayStrc * pDataArray) {
     }
 }
 
-uint32_t __fastcall FOG_GetMissileField(D2MissilesTxt * pMissilesTxt) {
+uint32_t __fastcall FOG_GetMissileField(D2DataArrayStrc * pMissilesTxt) {
     uint32_t nMissileSlot = -1;
-    if (!pMissilesTxt->MaxELev2) {
+    if (!pMissilesTxt->bInitialized) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x87);
       exit(-1);
     }
 
-    size_t nSlotStride = pMissilesTxt->MaxELev1;
-    int nSlotIndex = pMissilesTxt->MaxELev3;
-    uint16_t* pSlotEntry = (uint16_t*)(nSlotStride * nSlotIndex + pMissilesTxt->ELen);
-    if (nSlotIndex >= pMissilesTxt->MinELev5) {
+    size_t nSlotStride = pMissilesTxt->nObjectSize;
+    int nSlotIndex = pMissilesTxt->nNextFreeIndex;
+    uint16_t* pSlotEntry = (uint16_t*)(nSlotStride * nSlotIndex + (int)pMissilesTxt->pData);
+    if (nSlotIndex >= pMissilesTxt->numObjects) {
       return nMissileSlot;
     }
 
     while (*pSlotEntry) {
       nSlotIndex++;
       pSlotEntry = (uint16_t*)((int)pSlotEntry + nSlotStride);
-      if (nSlotIndex >= pMissilesTxt->MinELev5) {
+      if (nSlotIndex >= pMissilesTxt->numObjects) {
         return nMissileSlot;
       }
     }
 
     memset(pSlotEntry, 0, nSlotStride);
-    *pSlotEntry = (uint16_t)pMissilesTxt->EDmgSymPerCalc;
-    *(short int*)&pMissilesTxt->EDmgSymPerCalc = (short int)pMissilesTxt->EDmgSymPerCalc + 1;
-    if (!(short int)pMissilesTxt->EDmgSymPerCalc) {
-      *(uint16_t*)&pMissilesTxt->EDmgSymPerCalc = 0x8000;
+    *pSlotEntry = pMissilesTxt->nMagic;
+    pMissilesTxt->nMagic++;
+    if (!pMissilesTxt->nMagic) {
+      pMissilesTxt->nMagic = -0x8000;
     }
 
-    pMissilesTxt->MaxELev5++;
-    pMissilesTxt->MaxELev3 = nSlotIndex + 1;
-    if (pMissilesTxt->MaxELev4 < nSlotIndex) {
-      pMissilesTxt->MaxELev4 = nSlotIndex;
+    pMissilesTxt->nUsedCount++;
+    pMissilesTxt->nNextFreeIndex = nSlotIndex + 1;
+    if (pMissilesTxt->nHighestUsedIndex < nSlotIndex) {
+      pMissilesTxt->nHighestUsedIndex = nSlotIndex;
     }
 
     nMissileSlot = (uint32_t)*pSlotEntry | nSlotIndex << 0x10;

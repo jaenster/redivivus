@@ -60,7 +60,7 @@ void __stdcall ResetRoom(struct D2UnitStrc * pUnit);
 struct D2RoomStrc * __stdcall UNITS_GetRoom(struct D2UnitStrc * pUnit);
 void __stdcall SetTargetUnitForDynamicUnit(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 eD2UnitType __stdcall GetTargetTypeFromDynamicUnit(struct D2UnitStrc * pUnit);
-int * __stdcall GetTargetGUIDFromDynamicUnit(struct D2UnitStrc * pUnit);
+int32_t __stdcall GetTargetGUIDFromDynamicUnit(struct D2UnitStrc * pUnit);
 void __stdcall SetTargetUnitForPlayerOrMonster(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 void __stdcall SetAnimSpeedForMonster(struct D2UnitStrc * pUnit);
 void __stdcall GetRunAndWalkVelocityForPlayer(int32_t nUnused, int32_t ePlayerClassId, int * pWalkVelocity, int * pRunVelocity);

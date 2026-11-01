@@ -628,7 +628,7 @@ void __stdcall WAYPOINT_SendOpenPacket() {
     D2Client::Waypoint::bNeedAllocation = true;
 }
 
-void __fastcall WAYPOINT_Init(int32_t pPacket) {
+void __fastcall WAYPOINT_Init(uint8_t * pPacket) {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;
     DWORD dwUiResult;
@@ -657,7 +657,7 @@ void __fastcall WAYPOINT_Init(int32_t pPacket) {
     apply_waypoint_packet:
     WAYPOINT_PopulateList();
     D2Client::Waypoint::nWaypointSignature = *(int32_t*)(pPacket + 1);
-    D2Common::Waypoints::CopyWaypointBits(D2Client::Waypoint::pWaypoint, (uint8_t*)(pPacket + 5));
+    D2Common::Waypoints::CopyWaypointBits(D2Client::Waypoint::pWaypoint, pPacket + 5);
     D2Client::Waypoint::bNeedAllocation = false;
     WAYPOINT_PopulateList();
 }

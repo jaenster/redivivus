@@ -3480,24 +3480,24 @@ static int32_t UI_GetCursorMaxFrames(int32_t nCursorIndex) {
     return CursorData[nCursorIndex].nMaxFrames << 8;
 }
 
-void __stdcall UI_HandleCursorMouseDown(int32_t pMsg) {
+void __stdcall UI_HandleCursorMouseDown(D2UIMouseMsgStrc * pMsg) {
     gnCursorInitialized = 0;
-    if (*(int*)(pMsg + 8) == 2) {
+    if (pMsg->nWParam == 2) {
       D2gfx::D2GFX::UpdateOSCursorVisibilty(0);
     }
 
-    *(uint32_t*)(pMsg + 0x1c) = 0;
-    *(uint32_t*)(pMsg + 0x18) = 0;
+    pMsg->dwResult = 0;
+    pMsg->bHandled = 0;
 }
 
-void __stdcall UI_HandleCursorMouseMove(uint8_t * pMsgEvent) {
-    MouseX = (int)*(uint16_t*)(pMsgEvent + 0xc);
-    MouseY = (int)*(uint16_t*)(pMsgEvent + 0xe);
+void __stdcall UI_HandleCursorMouseMove(D2UIMouseMsgStrc * pMsgEvent) {
+    MouseX = (int)pMsgEvent->uLParam.sMousePos.nMouseX;
+    MouseY = (int)pMsgEvent->uLParam.sMousePos.nMouseY;
     gnCursorAnimStartTick = GetTickCount();
     if (ItemTypeOnHand != 5) {
       int nKeyPressCount;
       nKeyPressCount = CursorData[Cursor::nCursorDataIndex].bKeyPressSwitch;
-      *(uint32_t*)(pMsgEvent + 0x18) = 0;
+      pMsgEvent->bHandled = 0;
       if (nKeyPressCount) {
         ItemTypeOnHand = 5;
         Cursor::nCursorDataIndex = 4;
@@ -3505,7 +3505,7 @@ void __stdcall UI_HandleCursorMouseMove(uint8_t * pMsgEvent) {
         return;
       }
     } else {
-      *(uint32_t*)(pMsgEvent + 0x18) = 0;
+      pMsgEvent->bHandled = 0;
     }
 }
 
@@ -5775,7 +5775,7 @@ void __stdcall INPUT_StatScreenButtonDown(D2UIMouseMsgStrc * pMsg) {
     if (bOnButton) {
       gbUIStatButtonHovered = 1;
       Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
-      UI_HandleCursorMouseMove((uint8_t*)pMsg);
+      UI_HandleCursorMouseMove(pMsg);
       if (eBorderType != 2 || (bOnButton = npcmenu::NPCMENU_IsNpcMenuStateActive() , !bOnButton)) {
         pMsg->bHandled = 1;
         pMsg->dwResult = 0;
@@ -5807,7 +5807,7 @@ void __stdcall INPUT_SkillTreeButtonDown(D2UIMouseMsgStrc * pMsg) {
     if (bOnButton) {
       gbUISkillButtonHovered = 1;
       Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
-      UI_HandleCursorMouseMove((uint8_t*)pMsg);
+      UI_HandleCursorMouseMove(pMsg);
       if (eBorderType != 1 || (bOnButton = npcmenu::NPCMENU_IsNpcMenuStateActive() , !bOnButton)) {
         pMsg->bHandled = 1;
         pMsg->dwResult = 0;
@@ -6567,7 +6567,7 @@ void __stdcall INPUT_StatScreenMouseDown(D2UIMouseMsgStrc * pMsg) {
           nBtnY = ScreenSizeY + pBtnEntry[1] + gnPanelOffsetY;
           if (nMouseY > nBtnY - 0x1f6 && nMouseY < nBtnY - 0x1e0 && nMouseX > (int)(*pBtnEntry + gnPanelOffsetX) && nMouseX < (int)(*pBtnEntry + gnPanelOffsetX + 0x28)) {
             gaStatScreenButtons[(int)pMsg].bHitTest = 1;
-            UI_HandleCursorMouseMove((uint8_t*)pBtnIdx);
+            UI_HandleCursorMouseMove(pBtnIdx);
             pBtnIdx->bHandled = 1;
             pBtnIdx->dwResult = 0;
             Sound::SOUND_PlaySound(SOUND_CURSOR_POINT_DROP, nullptr, 0, 0, 0);
@@ -7897,16 +7897,16 @@ void __stdcall INPUT_GambleRepairClick(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
-void __fastcall UI_HandleHoradricCubePacket(int32_t pPacket) {
+void __fastcall UI_HandleHoradricCubePacket(uint8_t * pPacket) {
     D2UnitStrc* pPlayerUnit_lcl;
     eD2Sounds nSoundId;
-    switch (*(uint8_t*)(pPacket + 5)) {
-      case 0:
+    switch (pPacket[5]) {
+      case '\0':
         gnNpcShopActiveTab = *(uint32_t*)(pPacket + 1);
       nHoradricCubeUIState = 0;
       UI_ShowHoradricCubeTransmuteDialog();
       return;
-      case 4:
+      case '\x04':
         gnPlayerCashDisplay = 2;
       if (Dialog::gpHoradricCubeDialog) {
         Dialog::FreeDialogStrc(Dialog::gpHoradricCubeDialog);
@@ -7914,21 +7914,21 @@ void __fastcall UI_HandleHoradricCubePacket(int32_t pPacket) {
       }
 
       return;
-      case 5:
+      case '\x05':
         pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
       D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pPlayerUnit_lcl->pInventory, nullptr);
       nSoundId = SOUND_CURSOR_POINT_DROP;
-      if (*(char*)(pPacket + 6) == '\0') {
+      if (pPacket[6] == '\0') {
         nSoundId = SOUND_CURSOR_ERROR;
       }
 
       Sound::SOUND_PlaySound(nSoundId, nullptr, 0, 0, 0);
-      case 1:
+      case '\x01':
         UseItem::UI_CloseHoradricCubeWindow();
       return;
-      case 6:
+      case '\x06':
 
-      case 7:
+      case '\a':
         UseItem::UI_CloseHoradricCubeWindow();
       npcmenu::NPCMENU_CloseCubeUI();
       return;

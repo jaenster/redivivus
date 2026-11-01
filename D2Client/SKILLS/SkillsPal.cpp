@@ -463,7 +463,7 @@ BOOL __fastcall Skills_CltStFunc_SetupHolyChargeMovement(D2UnitStrc * pUnit, eD2
       }
 
       nSoundId = (eD2Sounds)nSndId;
-    } else if (pUnit->eUnitType != UNIT_MONSTER || (nSoundId = SKILLSCLT_CalcChargeSkillDuration((int32_t)pUnit, eSkill) , (int)nSoundId <= 0)) {
+    } else if (pUnit->eUnitType != UNIT_MONSTER || (nSoundId = SKILLSCLT_CalcChargeSkillDuration(pUnit, eSkill) , (int)nSoundId <= 0)) {
       goto setup_charge;
     }
 

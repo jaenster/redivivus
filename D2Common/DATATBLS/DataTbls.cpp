@@ -2126,7 +2126,7 @@ void __stdcall FreeTables() {
       Fog::Memory::FreeServerMemory(nullptr, pMemoryToFree_01, ".\\DATATBLS\\DataTbls.cpp", nLineNum, 0);
     }
 
-    AnimTbls::ANIMDATA_FreeAnimDataRecord((void**)&sgtDataTable.pAnimTbls->pRecords);
+    AnimTbls::ANIMDATA_FreeAnimDataRecord(sgtDataTable.pAnimTbls);
     MonsterTbls::MONSTERTBLS_FreeMonUModTxt();
     LvlTbls::LVLTBLS_FreeLevelsTxt();
     LvlTbls::LVLTBLS_FreeLevelDefsTxt();

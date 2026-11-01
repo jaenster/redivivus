@@ -216,7 +216,7 @@ int32_t __stdcall GetCounter2(D2UnitStrc * pUnit) {
 }
 
 // 2022.01.09 - dzik
-void __stdcall ANIM_GetSequenceFrameInfo(uint8_t * pSeqData, int32_t nStartFrame, int32_t nEndFrame, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3, uint32_t * pnParam4) {
+void __stdcall ANIM_GetSequenceFrameInfo(D2MonSeqTxt * pSeqData, int32_t nStartFrame, int32_t nEndFrame, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3, uint32_t * pnParam4) {
     if (!pSeqData) {
       *pnParam1 = 0;
       *pnParam2 = 0;
@@ -226,11 +226,11 @@ void __stdcall ANIM_GetSequenceFrameInfo(uint8_t * pSeqData, int32_t nStartFrame
     }
 
     int nStartSeqIdx = nStartFrame >> 8;
-    *pnParam1 = (uint32_t)pSeqData[nStartSeqIdx * 6 + 2];
-    *pnParam2 = (uint32_t)pSeqData[nStartSeqIdx * 6 + 3];
-    *pnParam3 = (uint32_t)pSeqData[nStartSeqIdx * 6 + 4];
+    *pnParam1 = (uint32_t)pSeqData[nStartSeqIdx].mode;
+    *pnParam2 = (uint32_t)pSeqData[nStartSeqIdx].frame;
+    *pnParam3 = (uint32_t)pSeqData[nStartSeqIdx].dir;
     if (nStartFrame == nEndFrame) {
-      *pnParam4 = (uint32_t)pSeqData[nStartSeqIdx * 6 + 5];
+      *pnParam4 = (uint32_t)pSeqData[nStartSeqIdx].event;
       return;
     }
 
@@ -240,7 +240,7 @@ void __stdcall ANIM_GetSequenceFrameInfo(uint8_t * pSeqData, int32_t nStartFrame
       return;
     }
 
-    uint8_t* pFrameFlags = pSeqData + nEndSeqIdx * 6 + 5;
+    uint8_t* pFrameFlags = &pSeqData[nEndSeqIdx].event;
     nStartSeqIdx = nStartSeqIdx - nEndSeqIdx + 1;
     do {
       if (*pFrameFlags) {
@@ -253,13 +253,13 @@ void __stdcall ANIM_GetSequenceFrameInfo(uint8_t * pSeqData, int32_t nStartFrame
 }
 
 // 2022.01.09 - dzik
-void __stdcall ANIM_GetEventFrame(int32_t pSeqData, int32_t nFrameIdx, uint32_t * pnParam) {
+void __stdcall ANIM_GetEventFrame(D2MonSeqTxt * pSeqData, int32_t nFrameIdx, uint32_t * pnParam) {
     if (!pSeqData) {
       *pnParam = 0;
       return;
     }
 
-    *pnParam = (uint32_t)*(uint8_t*)(pSeqData + 5 + (nFrameIdx >> 8) * 6);
+    *pnParam = (uint32_t)pSeqData[nFrameIdx >> 8].event;
 }
 
 // Deterministically rolls a hireling's combat stats from a seed. Inputs: nSeed (per-merc rng seed), pMercStats (in/out; nMercClass 0-3 selects merc type: Rogue/DesertMerc/IronWolf/Barbarian), nDifficulty (0-2). Seeds a D2SeedStrc and runs five RANDOM_RandomNumberSelector rolls indexing the merc data tables (secondary/tertiary/quaternary/quinary) to populate attack rating, defense, damage/armor bonuses, state(s) (nStateA for class<3 else nStateB), and quinary ability/secondary (sets nAbilityActiveFlag for ability ids 9-11). Finally applies the per-difficulty modifier table. Returns 1 on success, 0 if seed/ptr null, difficulty>=3, or merc class>=4.

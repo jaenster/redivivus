@@ -793,8 +793,8 @@ void __fastcall UNITS_SetupAnimTimerEvents(::SGAMEDATA * pGame, D2UnitStrc * pUn
       nFrameIndex = nAnimSpeedAccum >> 8;
       nNextEventFrame++;
       for (; iVar1 <= nFrameIndex && iVar1 < 0x90; iVar1++) {
-        if (pUnit->pAnimSeq) {
-          D2Common::Merc::ANIM_GetEventFrame((int32_t)pUnit->pAnimSeq, iVar1 << 8, &nEventType);
+        if ((D2MonSeqTxt*)pUnit->pAnimSeq) {
+          D2Common::Merc::ANIM_GetEventFrame((D2MonSeqTxt*)pUnit->pAnimSeq, iVar1 << 8, &nEventType);
         } else {
           nEventType = (uint32_t)pAnimData->pFrameFlags[iVar1];
         }
@@ -859,8 +859,8 @@ void __fastcall UNITS_SetupAnimTimerEventsFromPercent(::SGAMEDATA * pGame, D2Uni
       nFrameOffset += nAnimSpeed;
       nAnimSpeedAccum += nAnimSpeed;
       for (; pCurEventFrame = nNextEventFrame , nFrameIdx <= nFrameOffset >> 8; nFrameIdx++) {
-        if (pUnit->pAnimSeq) {
-          D2Common::Merc::ANIM_GetEventFrame((int32_t)pUnit->pAnimSeq, nFrameIdx << 8, &nEventType);
+        if ((D2MonSeqTxt*)pUnit->pAnimSeq) {
+          D2Common::Merc::ANIM_GetEventFrame((D2MonSeqTxt*)pUnit->pAnimSeq, nFrameIdx << 8, &nEventType);
         } else {
           nEventType = (uint32_t)pAnimData->pFrameFlags[nFrameIdx];
         }
@@ -918,8 +918,8 @@ void __fastcall UNITS_SetupAnimTimerEventsWithDelay(::SGAMEDATA * pGame, D2UnitS
       nAnimSpeedAccum += nAnimSpeed;
       nFrameIndexShifted = nFrameOffsetAccum >> 8;
       for (; pCurEventFrame = nNextEventFrame , nFrameIdx <= nFrameIndexShifted; nFrameIdx++) {
-        if (pUnit->pAnimSeq) {
-          D2Common::Merc::ANIM_GetEventFrame((int32_t)pUnit->pAnimSeq, nFrameIdx << 8, &nEventType);
+        if ((D2MonSeqTxt*)pUnit->pAnimSeq) {
+          D2Common::Merc::ANIM_GetEventFrame((D2MonSeqTxt*)pUnit->pAnimSeq, nFrameIdx << 8, &nEventType);
         } else {
           nEventType = (uint32_t)pAnimData->pFrameFlags[nFrameIdx];
         }
@@ -971,8 +971,8 @@ void __fastcall UNITS_SetupAnimTimerEventsFromFrame(::SGAMEDATA * pGame, D2UnitS
       nAnimSpeedAccum += nAnimSpeed;
       nFrameIndexShifted = nFrameOffsetAccum >> 8;
       for (; pCurEventFrame = nNextEventFrame , nFrameIdx <= nFrameIndexShifted; nFrameIdx++) {
-        if (pUnit->pAnimSeq) {
-          D2Common::Merc::ANIM_GetEventFrame((int32_t)pUnit->pAnimSeq, nFrameIdx << 8, &nEventType);
+        if ((D2MonSeqTxt*)pUnit->pAnimSeq) {
+          D2Common::Merc::ANIM_GetEventFrame((D2MonSeqTxt*)pUnit->pAnimSeq, nFrameIdx << 8, &nEventType);
         } else {
           nEventType = (uint32_t)pAnimData->pFrameFlags[nFrameIdx];
         }

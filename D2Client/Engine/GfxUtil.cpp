@@ -1037,7 +1037,7 @@ uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(D2UnitStrc * pUnit, uint
       __frame0.nScreenY = nBais - nWorldOffset;
     }
 
-    D2GfxInfoUnkStrc* pGfxInfo = Gfx::GFX_IsUnitOnScreen(pUnit, __frame0.nScreenX, __frame0.nScreenY, 0, 0);
+    D2GfxInfoUnkStrc* pGfxInfo = (D2GfxInfoUnkStrc*)Gfx::GFX_IsUnitOnScreen(pUnit, __frame0.nScreenX, __frame0.nScreenY, 0, 0);
     if (!pGfxInfo) {
       return 0;
     }
@@ -1395,7 +1395,7 @@ int32_t __fastcall GFXUTIL_InitAndBuildMonsterCofParams(D2GfxDataStrc * pGfxData
     return BVar1;
 }
 
-int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(D2UnitStrc * pUnit, uint8_t * pbParam, int32_t pLayerArray, int * pOutMaxY, int32_t nPaletteShift, uint32_t nParam) {
+int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(D2UnitStrc * pUnit, uint8_t * pbParam, uint8_t * pLayerArray, int * pOutMaxY, int32_t nPaletteShift, uint32_t nParam) {
     int nSpriteLoaded;
     int32_t nOffsetY;
     int32_t nDrawWorldOffsetY;
@@ -1414,7 +1414,7 @@ int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(D2UnitStrc * pUnit, uint8_t * pbP
     do {
       int nBuilt;
       iVar1 = nLayerIdx;
-      byLayerIdCheck = *(uint8_t*)(nLayerIdx + pLayerArray);
+      byLayerIdCheck = pLayerArray[nLayerIdx];
       if (0xf < byLayerIdCheck) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x59d);
         exit(-1);
@@ -1503,7 +1503,7 @@ uint32_t __fastcall GFXUTIL_IsUnitSpriteOnScreen(D2UnitStrc * pUnit, int32_t nPa
     int nScreenX = nParam - nWorldOffsetX;
     int32_t nWorldOffsetY = UI::Path::DRAW_GetWorldOffsetY();
     int nOriginY = nWorldY - nWorldOffsetY;
-    D2GfxInfoUnkStrc* pGfxInfo = Gfx::GFX_IsUnitOnScreen(pUnit, nParam - nWorldOffsetX, nOriginY, 0, 0);
+    BOOL pGfxInfo = Gfx::GFX_IsUnitOnScreen(pUnit, nParam - nWorldOffsetX, nOriginY, 0, 0);
     if (!pGfxInfo) {
       return 0;
     }

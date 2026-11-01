@@ -119,7 +119,7 @@ float __stdcall SOUND_CalculatePanning(float fParam1, float fParam2, float fPara
     return fParam3;
 }
 
-int * __stdcall SOUND_GetChannelArray() {
+D2SoundChannelStrc * __stdcall SOUND_GetChannelArray() {
     // Static local variables (originally global data)
     static D2SoundChannelStrc gaSoundChannelPool[200] = {}; D2_STATIC_GUARD(gaSoundChannelPool, "D2Client::Sound::SOUND_GetChannelArray::gaSoundChannelPool");
 
@@ -131,7 +131,7 @@ int * __stdcall SOUND_GetChannelArray() {
         D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&gpActiveSoundChannelsHead, pChannel);
         pChannel->nChannelHandle = gpSoundChannelsArray + 1;
         gpSoundChannelsArray++;
-        return (int*)pChannel;
+        return pChannel;
       }
 
       pChannel++;
@@ -256,7 +256,7 @@ int32_t __fastcall SOUND_IsChannelPlaying(int32_t nSoundGroup) {
     return nCount;
 }
 
-int32_t __stdcall SOUND_SetChannelProperties(int32_t nSoundGroup, int32_t pListKey, int32_t nExcludeChannel) {
+D2SoundChannelStrc * __stdcall SOUND_SetChannelProperties(int32_t nSoundGroup, int32_t pListKey, D2SoundChannelStrc * nExcludeChannel) {
     D2SoundChannelNodeStrc* pDVar1;
     BOOL bInList;
     D2SoundChannelStrc* nChannelData;
@@ -265,12 +265,12 @@ int32_t __stdcall SOUND_SetChannelProperties(int32_t nSoundGroup, int32_t pListK
       D2SoundsTxt* pSoundsTxt;
       nChannelData = pDVar1->pChannel;
       pSoundsTxt = SoundHdr::TXT_sounds_GetLineBySoundId(nChannelData->nSoundId);
-      if (pSoundsTxt->nGroupStartIndex == nSoundGroup && nChannelData != (D2SoundChannelStrc*)nExcludeChannel && nChannelData->nPlayMode == 1 && (!pListKey || (bInList = D2Sound::D2SoundUntil::SOUNDUTIL_FindInLinkedList(nChannelData->pGlobal3Ref, pListKey) , bInList != 0)) && (!nBestChannel || nChannelData->nScheduledTime < nBestChannel->nScheduledTime)) {
+      if (pSoundsTxt->nGroupStartIndex == nSoundGroup && nChannelData != nExcludeChannel && nChannelData->nPlayMode == 1 && (!pListKey || (bInList = D2Sound::D2SoundUntil::SOUNDUTIL_FindInLinkedList(nChannelData->pGlobal3Ref, pListKey) , bInList != 0)) && (!nBestChannel || nChannelData->nScheduledTime < nBestChannel->nScheduledTime)) {
         nBestChannel = nChannelData;
       }
     }
 
-    return (int32_t)nBestChannel;
+    return nBestChannel;
 }
 
 // Returns the first active sound channel other than pExcludeChannel that is in streaming play mode (nPlayMode 1), has nSoundId in 0xb76..0x1230 and, when nListKey is non-zero, holds nListKey in its list; NULL if there is none.
@@ -438,7 +438,7 @@ int __fastcall SOUND_PlaySound(eD2Sounds nSoundId, D2UnitStrc * pUnit, int32_t n
       }
     }
 
-    pChannel = (D2SoundChannelStrc*)SOUND_GetChannelArray();
+    pChannel = SOUND_GetChannelArray();
     if (!pChannel) {
       return 0;
     }
@@ -639,18 +639,18 @@ uint32_t __fastcall SOUND_GetCurrentMusic(int32_t nSoundId) {
     return 0;
 }
 
-BOOL __fastcall SOUND_IsChannelAvailable(uint32_t pChanA, uint32_t pChanB, int32_t nParam1, int32_t nParam2) {
-    if (*(uint8_t*)(pChanA + 0x3c) > *(uint8_t*)(pChanB + 0x3c)) {
+BOOL __fastcall SOUND_IsChannelAvailable(D2SoundChannelStrc * pChanA, D2SoundChannelStrc * pChanB, int32_t nParam1, int32_t nParam2) {
+    if (pChanA->nPriorityByte > pChanB->nPriorityByte) {
       return 1;
     }
-    if (*(uint8_t*)(pChanA + 0x3c) < *(uint8_t*)(pChanB + 0x3c)) {
+    if (pChanA->nPriorityByte < pChanB->nPriorityByte) {
       return 0;
     }
     if (nParam1) {
-      if (*(float*)(pChanA + 0x18) < *(float*)(pChanB + 0x18)) {
+      if (pChanA->fPanResult < pChanB->fPanResult) {
         return 1;
       }
-      if (*(float*)(pChanB + 0x18) < *(float*)(pChanA + 0x18)) {
+      if (pChanB->fPanResult < pChanA->fPanResult) {
         return 0;
       }
     }
@@ -658,8 +658,8 @@ BOOL __fastcall SOUND_IsChannelAvailable(uint32_t pChanA, uint32_t pChanB, int32
       return (uint32_t)(pChanB < pChanA);
     }
 
-    uint32_t nStartTick1 = *(uint32_t*)(pChanA + 0x34);
-    uint32_t nStartTick2 = *(uint32_t*)(pChanB + 0x34);
+    uint32_t nStartTick1 = pChanA->nScheduledTime;
+    uint32_t nStartTick2 = pChanB->nScheduledTime;
     if (nStartTick1 >= nStartTick2 && nStartTick1 != nStartTick2) {
       return 1;
     }
@@ -1028,7 +1028,7 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
               __frame0.fClosestDist.nValue = 1;
             }
             if (__frame0.pSoundsTxtLocal->Defer_Inst || __frame0.pSoundsTxtLocal->Stop_Inst) {
-              pTrackedUnit = (D2SoundChannelStrc*)SOUND_SetChannelProperties(__frame0.pSoundsTxtLocal->nGroupStartIndex, nStreamListKey, (int32_t)pChanEntry);
+              pTrackedUnit = SOUND_SetChannelProperties(__frame0.pSoundsTxtLocal->nGroupStartIndex, nStreamListKey, pChanEntry);
             }
             if (nStreamListKey && pChanEntry->nSoundId >= 0xb76 && pChanEntry->nSoundId <= 0x1230) {
               pTrackedUnit = SOUND_FindActiveStreamChannel(pChanEntry, nStreamListKey);

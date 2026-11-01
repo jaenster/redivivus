@@ -883,7 +883,7 @@ void __stdcall NPCMENU_Cleanup() {
     Dialog::gpNpcActionConfirmDialog = 0;
 }
 
-void __fastcall NPCMENU_SetTransactionMode(int32_t pMsg) {
+void __fastcall NPCMENU_SetTransactionMode(D2GSPacketSrv0x50 * pMsg) {
     // Static local variables (originally global data)
     static BOOL gbNpcMenuTransactionMode1; D2_STATIC_GUARD_BSS(gbNpcMenuTransactionMode1, "D2Client::UI::npcmenu::NPCMENU_SetTransactionMode::gbNpcMenuTransactionMode1");
     static short gbNpcMenuTransactionMode2; D2_STATIC_GUARD_BSS(gbNpcMenuTransactionMode2, "D2Client::UI::npcmenu::NPCMENU_SetTransactionMode::gbNpcMenuTransactionMode2");
@@ -892,7 +892,7 @@ void __fastcall NPCMENU_SetTransactionMode(int32_t pMsg) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfc6);
       exit(-1);
     }
-    if (!(*(short int*)(pMsg + 1) == 3 && _Interaction::bInteractingWithNpc)) {
+    if (!(pMsg->nMessageType == 3 && _Interaction::bInteractingWithNpc)) {
       return;
     }
 
@@ -902,7 +902,7 @@ void __fastcall NPCMENU_SetTransactionMode(int32_t pMsg) {
     }
 
     gbNpcMenuTransactionMode1 = 1;
-    gbNpcMenuTransactionMode2 = *(short int*)(pMsg + 1);
+    gbNpcMenuTransactionMode2 = pMsg->nMessageType;
 }
 
 void __fastcall QuestHandeling(char * szText) {

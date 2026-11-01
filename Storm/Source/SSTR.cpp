@@ -561,7 +561,7 @@ uint32_t __stdcall SStrToUnsigned(char * szText) {
 // the token was quoted. Five parameters and there is no other tokenizer in the module.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_ExtractQuotedToken
-void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, char * nMaxLen, char * szDelimiters, uint32_t * pbWasQuoted) {
+void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, uint32_t nMaxLen, char * szDelimiters, uint32_t * pbWasQuoted) {
     char* pWritePos;
     uint32_t dwArgMask;
     char* pWriteSaved;
@@ -603,7 +603,7 @@ void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, char * nMaxL
     pRead++;
     read_token:
     cCur = *pRead;
-    char* nWritten = 0;
+    uint32_t nWritten = 0;
     if (cCur != '\0') {
       char* pReadCur;
       pWriteSaved = szTokenOut;
@@ -621,7 +621,7 @@ void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, char * nMaxL
               break;
             }
           }
-          if (pWritePos + (1 - (int)szTokenOut) < nMaxLen) {
+          if ((uintptr_t)(pWritePos + (1 - (int)szTokenOut)) < nMaxLen) {
             nWritten++;
             *pWritePos = cCur;
             pWritePos++;
@@ -650,7 +650,7 @@ void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, char * nMaxL
       } while (cCur != '\0');
     }
     if (nWritten < nMaxLen) {
-      nWritten[(int)szTokenOut] = '\0';
+      szTokenOut[nWritten] = '\0';
     }
 
     *ppszCursor = pRead;
@@ -1065,14 +1065,14 @@ void __stdcall SSTR_InitPow10Table() {
 // the new buffer. The allocation site's own __FILE__ literal is what proves this module is SSTR.CPP.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_Strdup
-uint32_t * __stdcall SStrDup(char * szText) {
+char * __stdcall SStrDup(char * szText) {
     if (!szText) {
       SErr::SErrSetLastError(0x57);
       return nullptr;
     }
 
     uint32_t nLen = SStrLen(szText);
-    uint32_t* pCopy = (uint32_t*)SMem::SMemAlloc(nLen + 1, ".\\SOURCE\\SSTR.CPP", 0x1f2, 0);
+    char* pCopy = (char*)SMem::SMemAlloc(nLen + 1, ".\\SOURCE\\SSTR.CPP", 0x1f2, 0);
     SSystem::SMemCopy(pCopy, szText, nLen + 1);
     return pCopy;
 }
@@ -2102,12 +2102,12 @@ static void __fastcall UTF8_AdvanceToCharBoundary(int pszBase, int nPosition, in
 }
 
 // ECX is not an argument: neither this body nor UTF8_AdvanceToCharBoundary reads it.
-void __stdcall UTF8_StepBackOneChar(int str_base, int position) {
+void __stdcall UTF8_StepBackOneChar(uint8_t * str_base, int position) {
     UTF8_AdvanceToCharBoundary(str_base, position, -1);
 }
 
 // ECX is not an argument: neither this body nor UTF8_AdvanceToCharBoundary reads it.
-void __stdcall UTF8_StepForwardOneChar(int str_base, int position) {
+void __stdcall UTF8_StepForwardOneChar(uint8_t * str_base, int position) {
     UTF8_AdvanceToCharBoundary(str_base, position + 1, 1);
 }
 

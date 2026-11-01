@@ -1657,7 +1657,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x58(char * pBytes) {
     sPayload.dwData0 = *(uint32_t*)pBytes;
     sPayload.wData4 = *(uint16_t*)(pBytes + 4);
     sPayload.nData6 = pBytes[6];
-    UI::ui::UI_HandleHoradricCubePacket((uintptr_t)&sPayload);
+    UI::ui::UI_HandleHoradricCubePacket((uint8_t*)&sPayload);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x59_NEWPLAYERUNIT(char * pBytes) {
@@ -1739,7 +1739,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x60_SETWARPDEST(char * pBytes) {
       exit(-1);
     }
 
-    UNIT::Object::WAYPOINT_HandleActivation((uintptr_t)&sPayload);
+    UNIT::Object::WAYPOINT_HandleActivation((uint8_t*)&sPayload);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x61(char * pBytes) {
@@ -1755,7 +1755,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x63(char * pBytes) {
     sPayload.aData[3] = *(uint32_t*)(pBytes + 0xc);
     sPayload.aData[4] = *(uint32_t*)(pBytes + 0x10);
     sPayload.nData14 = pBytes[0x14];
-    UI::Waypoint::WAYPOINT_Init((uintptr_t)&sPayload);
+    UI::Waypoint::WAYPOINT_Init((uint8_t*)&sPayload);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x65_SCORE_UPDATE(int32_t nParam) {

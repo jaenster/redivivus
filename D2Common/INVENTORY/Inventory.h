@@ -123,11 +123,11 @@ struct D2UnitStrc * __stdcall INVENTORY_GetLastItem(struct D2InventoryStrc * pIn
 uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint32_t nGridCol, int32_t nY, int32_t nX, uint8_t byItemHeight, int32_t pGridInfo);
 // Finds a valid grid position in pInventory for pUnit (must be UNIT_ITEM) on the inventory page eInvPage. Queries the item's width/height via ITEM_GetItemsTxt_nWidthAndHeight, retrieves or creates the grid via ReinitializeInventoryGrid, then dispatches to INVENTORY_FindPlacementSlot, INVENTORY_FindGridPositionByOwner, INVENTORY_FindGridPositionByOwner2, or INVENTORY_FindGridPositionByOwner3 depending on item/inventory size class. Returns 0 on any validation failure.
 // @sourcefile .\INVENTORY\Inventory.cpp
-int __stdcall INVENTORY_FindItemGridPosition(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t eInvPage, int * * ppnOutX, int * pnOutY, uint8_t bParam);
+int __stdcall INVENTORY_FindItemGridPosition(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t eInvPage, int * ppnOutX, int * pnOutY, uint8_t bParam);
 // @wasnamed INVENTORY_PlaceItemInGrid - one name on two different functions.
 // @evidence Calls INVENTORY_FindItemGridPosition first, then 0063afd0 with
 // the found x/y. The explicit-position placement is 0063afd0.
-int * __stdcall INVENTORY_AutoPlaceItemInGrid(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t eInvPage, int32_t nGridX, uint32_t nParam2, char * szFile, int32_t nLine);
+BOOL __stdcall INVENTORY_AutoPlaceItemInGrid(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t eInvPage, int32_t nGridX, uint32_t nParam2, char * szFile, int32_t nLine);
 // Checks whether an item (pUnit) can be placed at grid position (nGridX, nGridY) on page eInvPage in pInventory without colliding with existing items. Reads item dimensions via ITEM_GetItemsTxt_nWidthAndHeight, reinitializes the grid layout, then walks the item's footprint cells. Writes collision count to *pnParam; returns 1 if all cells are clear, 0 if any cell is occupied or inputs are invalid.
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall INVENTORY_CheckGridCollisions(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, struct D2UnitStrc * * ppCollidedItemOut, int * pnParam, uint32_t nParam);
@@ -217,8 +217,8 @@ int32_t __stdcall INVENTORY_GetCorpseCount(struct D2InventoryStrc * pInventory);
 // Returns pCorpse->pNext (+0xc).
 struct D2CorpseStrc * __stdcall INVENTORY_GetNextCorpse(struct D2CorpseStrc * pCorpse);
 int32_t __stdcall ROOMCORPSE_GetGUID(struct D2CorpseStrc * pCorpse);
-int32_t __stdcall CORPSE_GetMercClassId(int32_t nParam);
-struct D2RoomStrc * * __stdcall CORPSE_GetData(struct D2RoomStrc * pRoom);
+int32_t __stdcall CORPSE_GetMercClassId(struct D2CorpseStrc * nParam);
+struct D2RoomStrc * * __stdcall CORPSE_GetData(struct D2CorpseStrc * pRoom);
 // One-time initializer (guarded by gbItemTypeTableInitialized) that builds gaItemTypeBaseIdTable and gwItemTypeEquivByIndex — a compact lookup table mapping item base-type IDs to their item-type equivalence index. Iterates all Items.txt rows, filters out non-equippable types (no weapons/armor/shields/helms/circlets), deduplicates by base-type ID, and assigns slots by weapon/armor category match. Also seeds gaItemTypeStringBuffer literals ("lit", "med", "hvy") and gnItemTypeAltGfxSentinel=0xFF.
 void __stdcall INVENTORY_InitializeItemTypeTable();
 uint8_t __stdcall INVENTORY_CalculateSwapActionCode(int32_t nParam1, int32_t nParam2);

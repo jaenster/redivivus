@@ -1219,7 +1219,7 @@ D2BooksTableStrc * __stdcall TXT_Books_GetTableInfo() {
 }
 
 // Returns book table line for given index (32 bytes/entry). Used for scroll/book skill ID lookup.
-void * __stdcall TXT_Books_GetLine(int32_t nIndex) {
+D2BooksTxt * __stdcall TXT_Books_GetLine(int32_t nIndex) {
     int32_t nLine;
     if (!(nIndex < gsBooksTable.nSize && nIndex != -1)) {
       return nullptr;
@@ -2067,9 +2067,9 @@ void __stdcall ITEMTBLS_CopyRunewordRecord(int32_t nRunewordId, char * pSourceRe
     }
 }
 
-int32_t __stdcall ITEMTBLS_GetRunewordTxtRecord(int32_t nRunewordId) {
+D2RunesTxt * __stdcall ITEMTBLS_GetRunewordTxtRecord(int32_t nRunewordId) {
     if (nRunewordId > 0 && nRunewordId < nTxtRunesSize.nSize) {
-      return (int32_t)(nTxtRunesSize.pTable + nRunewordId);
+      return nTxtRunesSize.pTable + nRunewordId;
     }
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x972);

@@ -735,8 +735,8 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
               D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pSlotItem, INVPAGE_INVENTORY);
               pItemUnit = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pSavedGame, pItemUnit, pUnit, 1);
               if (nBodyLocIndex == -1) {
-                iVar5 = D2Common::Units::GetInventoryPage(pUnit_00, '\0', pSavedGame->bExpansion);
-                pGridSlot = D2Common::INVENTORY::Inventory::INVENTORY_AutoPlaceItemInGrid(pCorpseInventory, pItemUnit, iVar5, 0, 0, ".\\PLAYER\\PlrModes.cpp", 0x349);
+                iVar4 = D2Common::Units::GetInventoryPage(pUnit_00, '\0', pSavedGame->bExpansion);
+                pGridSlot = D2Common::INVENTORY::Inventory::INVENTORY_AutoPlaceItemInGrid(pCorpseInventory, pItemUnit, iVar4, 0, 0, ".\\PLAYER\\PlrModes.cpp", 0x349);
                 if (pGridSlot) {
                   BVar2 = D2Common::INVENTORY::Inventory::PutItemInInventory(pCorpseInventory, pItemUnit, 1);
                   if (BVar2) {

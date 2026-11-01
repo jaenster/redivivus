@@ -401,7 +401,7 @@ void __fastcall CRASH_SetExceptionHandler(pfnFogExceptionFilter pfnFilter, void 
     }
 }
 
-uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, char * nDestSize, char * szSrcPath) {
+uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDestSize, char * szSrcPath) {
     char* pSep = strrchr(szSrcPath, 0x2f);
     char* pLastSep = 0;
     if (pSep) {
@@ -420,8 +420,8 @@ uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, char * nDestSize, c
     if (!pLastSep) {
       *szDest = '\0';
     } else {
-      szDest = STRING_CopyStringBounded((int32_t)nDestSize, szDest, szSrcPath);
-      if (szDest >= nDestSize) {
+      szDest = STRING_CopyStringBounded(nDestSize, szDest, szSrcPath);
+      if ((uintptr_t)szDest >= nDestSize) {
         return (uint32_t)szDest & -256;
       }
     }
@@ -429,7 +429,7 @@ uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, char * nDestSize, c
     return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)szDest >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
 }
 
-uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, char * nDestSize) {
+uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, uint32_t nDestSize) {
     char* pSep;
     pSep = strrchr(szSrcPath, 0x2f);
     char* pLastSep;
@@ -451,32 +451,33 @@ uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, ch
       szSrcPath = pLastSep + 1;
     }
 
-    pSep = szSrcPath;
-    pLastSep = nDestSize;
+    pLastSep = szSrcPath;
+    uint32_t uVar1;
+    uVar1 = nDestSize;
     if (nDestSize) {
       char cCurChar;
       do {
-        pLastSep--;
-        if (!pLastSep) {
+        uVar1--;
+        if (!uVar1) {
           goto truncate;
         }
 
-        cCurChar = *pSep;
+        cCurChar = *pLastSep;
         *szDest = cCurChar;
         szDest++;
-        pSep++;
+        pLastSep++;
       } while (cCurChar != '\0');
 
-      if (pLastSep) {
-        return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(pSep + (-1 - (int)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)(pSep + (-1 - (int)szSrcPath) < nDestSize));
+      if (uVar1) {
+        return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(pLastSep + (-1 - (int)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (int)szSrcPath)) < nDestSize));
       }
 
       truncate:
       *szDest = '\0';
     }
 
-    pSep = pSep + strlen(pSep) + 1;
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(pSep + (-1 - (int)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)(pSep + (-1 - (int)szSrcPath) < nDestSize));
+    pLastSep = pLastSep + strlen(pLastSep) + 1;
+    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(pLastSep + (-1 - (int)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (int)szSrcPath)) < nDestSize));
 }
 
 bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(char * szPath) {

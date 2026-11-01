@@ -2940,8 +2940,8 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
       if (uVar3) {
         eVar9 = 1;
         uVar2 = D2Common::ITEMS::Items::GetMagicSuffix(pDVar5, 0);
-        iVar4 = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar2);
-        eSkill = *(eD2Skills*)((int)iVar4 + 8);
+        pBooksTxt = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar2);
+        eSkill = pBooksTxt->scrollskill;
         SUNITNPC_ApplyScrollSkill(pPlayer, eSkill, eVar9);
       } else {
         uVar3 = D2Common::ITEMS::Items::ITEMS_IsA(pDVar5, ITEMTYPE_Book);
@@ -2949,8 +2949,8 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
           eVar9 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pDVar5, UNITSTAT_quantity, 0);
           if (eVar9 >= 0) {
             uVar2 = D2Common::ITEMS::Items::GetMagicSuffix(pDVar5, 0);
-            iVar4 = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar2);
-            eSkill = *(eD2Skills*)((int)iVar4 + 0xc);
+            pBooksTxt = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar2);
+            eSkill = pBooksTxt->bookskill;
             SUNITNPC_ApplyScrollSkill(pPlayer, eSkill, eVar9);
           }
         }

@@ -399,12 +399,12 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_ReportVersion(char * pBytes, size_t nSiz
       BnSend::NET_SID_CLIENT_Send_0x5D_ReportCrash();
     }
 
-    Storm::Source::SReg::SRegSaveData((uint32_t*)"Patch", "Patches", 0x82, (uint8_t*)"", 1);
+    Storm::Source::SReg::SRegSaveData("Patch", "Patches", 0x82, (uint8_t*)"", 1);
     if (dwVersionResult == 1) {
       FILETIME ftDownloadTime;
       pszPatchURL = (uint8_t*)(pBytes + 4);
       BnSend::BNSEND_SendRawBytes(pszPatchURL, nSize - 4);
-      Storm::Source::SReg::SRegSaveData((uint32_t*)"Patch", "Patches", 0x82, pszPatchURL, nSize - 4);
+      Storm::Source::SReg::SRegSaveData("Patch", "Patches", 0x82, pszPatchURL, nSize - 4);
       ftDownloadTime.dwLowDateTime = 0;
       ftDownloadTime.dwHighDateTime = 0;
       BnDownload::BNDOWNLOAD_InitiateFileDownload((D2BnetDownloadStateStrc*)0x80000002, 2, 0, 0, &ftDownloadTime, (char*)pszPatchURL, nullptr);
@@ -486,7 +486,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_CDKey3(char * pBytes, size_t nSize) {
 // BATTLE.NET SID_SERVERLIST (0x04) HANDLER
 // Receives comma-separated list of Battle.net server addresses from the server. Saves the server list string (starting at offset +4, skipping 4-byte header) to the Windows registry under Configuration\Server List key for persistent storage and future connection attempts.
 BOOL __fastcall NET_SID_CLIENT_Incoming_ServerList(char * pBytes, size_t nSize) {
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Configuration", "Server List", 2, pBytes + 4);
+    Storm::Source::SReg::SRegSaveString("Configuration", "Server List", 2, pBytes + 4);
     return 1;
 }
 
@@ -675,7 +675,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
 
       gszCDKeyInUseByUsername[0] = '\0';
       g_SIDPacketResponseFlags[0x42] = 0;
-      Storm::Source::SReg::SRegSaveData((uint32_t*)"Patch", "Patches", 0x82, (uint8_t*)"", 1);
+      Storm::Source::SReg::SRegSaveData("Patch", "Patches", 0x82, (uint8_t*)"", 1);
       if (dwResultCode <= 0x200) {
         if (dwResultCode != 0x200) {
           if (dwResultCode <= 0x101) {
@@ -699,7 +699,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
                   nPatchNameLen = Storm::Source::SSTR::SStrCopy(szPatchFilename, (char*)szAdditionalInfo.dwHighDateTime, 0xfe);
                   szPatchFilename[nPatchNameLen + 1] = '\0';
                   BnSend::BNSEND_SendRawBytes(szPatchFilename, nPatchNameLen + 2);
-                  Storm::Source::SReg::SRegSaveData((uint32_t*)"Patch", "Patches", 0x82, (uint8_t*)szPatchFilename, nPatchNameLen + 2);
+                  Storm::Source::SReg::SRegSaveData("Patch", "Patches", 0x82, (uint8_t*)szPatchFilename, nPatchNameLen + 2);
                   szAdditionalInfo.dwLowDateTime = 0;
                   szAdditionalInfo.dwHighDateTime = 0;
                   BnDownload::BNDOWNLOAD_InitiateFileDownload((D2BnetDownloadStateStrc*)0x80000002, 2, 0, 0, &szAdditionalInfo, szPatchFilename, nullptr);

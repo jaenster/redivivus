@@ -429,7 +429,7 @@ BOOL __fastcall Skills_SrvDoFunc_071_IronMaiden_GenericCurse(::SGAMEDATA * pGame
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     D2UnitStrc* pTargetUnit = pTarget;
     if (!pTarget || (nAuraStatIdx = SKILL_CheckCorpseCanBeConsumed(pGame2, pTarget) , !nAuraStatIdx) || (_bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame2, pUnit, pTarget) , !_bCanAttack)) {
-      pTarget = SkillsServer::SKILLS_ApplyAreaHitAtUnit((int32_t)pGame2, pUnit, 0x14, SKILL_CheckCorpseCanBeConsumed);
+      pTarget = SkillsServer::SKILLS_ApplyAreaHitAtUnit(pGame2, pUnit, 0x14, SKILL_CheckCorpseCanBeConsumed);
       pTargetUnit = pTarget;
     }
     if (!pTarget) {

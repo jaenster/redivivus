@@ -1061,7 +1061,7 @@ static BOOL __stdcall INVENTORY_FindGridPositionByOwner3(uint8_t byItemWidth, ui
 
 // Finds a valid grid position in pInventory for pUnit (must be UNIT_ITEM) on the inventory page eInvPage. Queries the item's width/height via ITEM_GetItemsTxt_nWidthAndHeight, retrieves or creates the grid via ReinitializeInventoryGrid, then dispatches to INVENTORY_FindPlacementSlot, INVENTORY_FindGridPositionByOwner, INVENTORY_FindGridPositionByOwner2, or INVENTORY_FindGridPositionByOwner3 depending on item/inventory size class. Returns 0 on any validation failure.
 // @sourcefile .\INVENTORY\Inventory.cpp
-int __stdcall INVENTORY_FindItemGridPosition(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t eInvPage, int * * ppnOutX, int * pnOutY, uint8_t bParam) {
+int __stdcall INVENTORY_FindItemGridPosition(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t eInvPage, int * ppnOutX, int * pnOutY, uint8_t bParam) {
     BOOL nResultSlot;
     D2GridScreenCoordinates local_1c;
     D2InventoryStrc* pInventorySaved = pInventory;
@@ -1095,46 +1095,46 @@ int __stdcall INVENTORY_FindItemGridPosition(D2InventoryStrc * pInventory, D2Uni
       return 0;
     }
     if (*(uint8_t*)((char*)&pUnit + 3) == 1) {
-      nResultSlot = INVENTORY_FindPlacementSlot(1, *(uint8_t*)((char*)&pInventory + 3), pInventorySaved, pnOutY, ppnOutX, (int32_t)pGridInfoLocal);
+      nResultSlot = INVENTORY_FindPlacementSlot(1, *(uint8_t*)((char*)&pInventory + 3), pInventorySaved, pnOutY, (int**)ppnOutX, pGridInfoLocal);
       return nResultSlot;
     }
     if (*(uint8_t*)((char*)&pUnit + 3) == 3) {
       if (*(uint8_t*)((char*)&pInventory + 3) <= 2) {
-        nResultSlot = INVENTORY_FindGridPositionByOwner(3, *(uint8_t*)((char*)&pInventory + 3), pInventorySaved, pnOutY, ppnOutX, (int32_t)pGridInfoLocal);
+        nResultSlot = INVENTORY_FindGridPositionByOwner(3, *(uint8_t*)((char*)&pInventory + 3), pInventorySaved, pnOutY, (int**)ppnOutX, pGridInfoLocal);
         return nResultSlot;
       }
     } else if (*(uint8_t*)((char*)&pUnit + 3) == 2 && *(uint8_t*)((char*)&pInventory + 3) == 2) {
-      nResultSlot = INVENTORY_FindGridPositionByOwner2(2, 2, (int32_t)pInventorySaved, pnOutY, ppnOutX, (int32_t)pGridInfoLocal);
+      nResultSlot = INVENTORY_FindGridPositionByOwner2(2, 2, pInventorySaved, pnOutY, (int**)ppnOutX, pGridInfoLocal);
       return nResultSlot;
     }
 
-    nResultSlot = INVENTORY_FindGridPositionByOwner3(*(uint8_t*)((char*)&pUnit + 3), *(uint8_t*)((char*)&pInventory + 3), (int32_t)pInventorySaved, ppnOutX, pnOutY, (int32_t)pGridInfoLocal);
+    nResultSlot = INVENTORY_FindGridPositionByOwner3(*(uint8_t*)((char*)&pUnit + 3), *(uint8_t*)((char*)&pInventory + 3), pInventorySaved, (int**)ppnOutX, pnOutY, pGridInfoLocal);
     return nResultSlot;
 }
 
 // @wasnamed INVENTORY_PlaceItemInGrid - one name on two different functions.
 // @evidence Calls INVENTORY_FindItemGridPosition first, then 0063afd0 with
 // the found x/y. The explicit-position placement is 0063afd0.
-int * __stdcall INVENTORY_AutoPlaceItemInGrid(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t eInvPage, int32_t nGridX, uint32_t nParam2, char * szFile, int32_t nLine) {
-    int* pResult;
+BOOL __stdcall INVENTORY_AutoPlaceItemInGrid(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t eInvPage, int32_t nGridX, uint32_t nParam2, char * szFile, int32_t nLine) {
+    BOOL pResult;
     uint32_t nPageByte = nParam2;
     int32_t nPageParam = eInvPage;
     D2UnitStrc* pUnitSaved = pUnit;
     if (!pInventory) {
-      return nullptr;
+      return 0;
     }
     if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
       int bFound;
-      bFound = INVENTORY_FindItemGridPosition(pInventory, pUnit, eInvPage, (int**)&nParam2, (int*)&pUnit, (uint8_t)nParam2);
+      bFound = INVENTORY_FindItemGridPosition(pInventory, pUnit, eInvPage, (int*)&nParam2, (int*)&pUnit, (uint8_t)nParam2);
       if (!bFound) {
-        return nullptr;
+        return 0;
       }
 
-      pResult = (int*)INVENTORY_PlaceItemInGrid(nParam2, (int32_t)pUnit, (nPageByte & 0xff) + 2, nPageParam, pUnitSaved, pInventory);
+      pResult = INVENTORY_PlaceItemInGrid(nParam2, (int32_t)pUnit, (nPageByte & 0xff) + 2, nPageParam, pUnitSaved, pInventory);
       return pResult;
     }
 
-    return nullptr;
+    return 0;
 }
 
 // Checks whether an item (pUnit) can be placed at grid position (nGridX, nGridY) on page eInvPage in pInventory without colliding with existing items. Reads item dimensions via ITEM_GetItemsTxt_nWidthAndHeight, reinitializes the grid layout, then walks the item's footprint cells. Writes collision count to *pnParam; returns 1 if all cells are clear, 0 if any cell is occupied or inputs are invalid.
@@ -2211,7 +2211,7 @@ uint32_t __stdcall INVENTORY_CanMoveEquippedToPage(D2InventoryStrc * pInventory,
     D2InventoryGridInfoStrc* pEquippedGrid = ReinitializeInventoryGrid(pInventory, &gsInventoryBodyLocGridSize, 0);
     if (pEquippedGrid && pEquippedGrid->pGridCells[nSlot] && pPlayer) {
       int bCanFitOnPage;
-      bCanFitOnPage = INVENTORY_FindItemGridPosition(pInventoryCopy, pEquippedGrid->pGridCells[nSlot], ePage, (int**)&nParam, (int*)&pInventory, 0);
+      bCanFitOnPage = INVENTORY_FindItemGridPosition(pInventoryCopy, pEquippedGrid->pGridCells[nSlot], ePage, (int*)&nParam, (int*)&pInventory, 0);
       return (uint32_t)(bCanFitOnPage != 0);
     }
 
@@ -3065,20 +3065,20 @@ int32_t __stdcall ROOMCORPSE_GetGUID(D2CorpseStrc * pCorpse) {
     return pCorpse->nUnitGUID;
 }
 
-int32_t __stdcall CORPSE_GetMercClassId(int32_t nParam) {
+int32_t __stdcall CORPSE_GetMercClassId(D2CorpseStrc * nParam) {
     if (!nParam) {
       return 0;
     }
 
-    return *(int32_t*)(nParam + 8);
+    return nParam->dwFlags;
 }
 
-D2RoomStrc * * __stdcall CORPSE_GetData(D2RoomStrc * pRoom) {
+D2RoomStrc * * __stdcall CORPSE_GetData(D2CorpseStrc * pRoom) {
     if (!pRoom) {
       return nullptr;
     }
 
-    return pRoom->ppRoomList;
+    return (D2RoomStrc**)pRoom->eUnitType;
 }
 
 static void ITEM_GetBodyComponents(D2UnitStrc * pUnit, uint8_t * pbParam) {

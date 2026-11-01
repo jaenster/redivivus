@@ -1317,12 +1317,12 @@ uint32_t __fastcall SKILLSCLT_ValidateSkillAndMissile(D2UnitStrc * pUnit, int32_
 }
 
 // Returns the sound duration (in frames) for a monster's charge-skill animation. Looks up the monster unit's MonStats entry, finds the matching skill slot among Skill1..Skill8, and reads the corresponding Skill[N] duration from MonSoundsTxt. Returns 0 if the monster, stats row, or sounds row are invalid; clamps negative durations to 0 via bitmask.
-uint32_t __fastcall SKILLSCLT_CalcChargeSkillDuration(int32_t pMonUnit, int32_t nSkillId) {
+uint32_t __fastcall SKILLSCLT_CalcChargeSkillDuration(D2UnitStrc * pMonUnit, int32_t nSkillId) {
     if (!pMonUnit) {
       return 0;
     }
 
-    int nSkillSlot = *(int*)(pMonUnit + 4);
+    int nSkillSlot = pMonUnit->nClassId;
     if (!(nSkillSlot >= 0 && nSkillSlot < sgptDataTable->nTxtMonStatsSize)) {
       return 0;
     }

@@ -697,7 +697,7 @@ BOOL __stdcall MAINMENU_ReadBattleNetRegistry() {
     }
 
     sprintf(szBuffer, "%d.%d.%d.%d", 0xd8, 0x94, 0xf6, 0x22);
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Aux Battle.net", 0, szBuffer);
+    Storm::Source::SReg::SRegSaveString("Diablo II", "Aux Battle.net", 0, szBuffer);
     return 0;
 }
 
@@ -1857,7 +1857,7 @@ BOOL __stdcall MAINMENU_ShowCinematicsMenu(D2ControlMsg * pControlMsg) {
     } else {
       byCineLevel = 1;
       sprintf(szRegVersion, "%d.%d.%d.%d", 0xd8, 0x94, 0xf6, 0x22);
-      Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Aux Battle.net", 0, szRegVersion);
+      Storm::Source::SReg::SRegSaveString("Diablo II", "Aux Battle.net", 0, szRegVersion);
     }
 
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
@@ -2845,7 +2845,7 @@ void __stdcall MAINMENU_PlayExpansionIntro() {
 
     nVerD |= 0x80;
     sprintf(szRegValue, "%d.%d.%d.%ld", 0xd8, 0x94, 0xf6, nVerD);
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Aux Battle.net", 0, szRegValue);
+    Storm::Source::SReg::SRegSaveString("Diablo II", "Aux Battle.net", 0, szRegValue);
 }
 
 void __stdcall MAINMENU_PlayD2Intro() {
@@ -3547,7 +3547,7 @@ BOOL __stdcall StorePreferedRealmAgain(D2ControlMsg * pControlMsg) {
       char* pszRealmName;
       Bnclient::BNGatewayAccess::SetCurGateway((int32_t)pGatewayAccess, nSelectedLine + 1);
       pszRealmName = Bnclient::BNGatewayAccess::Realm(pGatewayAccess, nSelectedLine + 1);
-      Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Preferred Realm", 0, pszRealmName);
+      Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, pszRealmName);
     }
 
     FORMS_DestroyLists();
@@ -3582,7 +3582,7 @@ BOOL __stdcall UIMENU_ConnectToServerCallback(D2ControlStrc * pUnusedArg) {
 
     strncpy(gszLastTcpIpAddress, acStack_414, 0xff);
     gszLastTcpIpAddress[0xff] = '\0';
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "LastTcpIp", 0, gszLastTcpIpAddress);
+    Storm::Source::SReg::SRegSaveString("Diablo II", "LastTcpIp", 0, gszLastTcpIpAddress);
     int nParsed = sscanf(acStack_414, "%d.%d.%d.%d", &nOctet1, &nOctet2, &nOctet3, &nOctet4);
     if (nParsed != 4) {
       pszResolvedIp = Fog::Src::Safesock::inet_nameToIp(acStack_414);
@@ -4595,7 +4595,7 @@ BOOL __stdcall MAINMENU_Unused14(D2ControlMsg * pControlMsg) {
       }
     } else {
       BOOL BVar2;
-      Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Last BNet", 0, D2IniData_launcher->szLastBnetAccount);
+      Storm::Source::SReg::SRegSaveString("Diablo II", "Last BNet", 0, D2IniData_launcher->szLastBnetAccount);
       BVar2 = SAVEFILE_FindAllSaveFiles();
       if (BVar2) {
         D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects();

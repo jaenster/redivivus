@@ -1680,9 +1680,9 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
     pRoom = (D2RoomStrc*)D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(pUnit->pInventory);
     while (pRoom) {
       dwCorpseGUID = D2Common::INVENTORY::Inventory::ROOMCORPSE_GetGUID((D2CorpseStrc*)pRoom);
-      pCorpsePlayerData = D2Common::INVENTORY::Inventory::CORPSE_GetData(pRoom);
+      pCorpsePlayerData = D2Common::INVENTORY::Inventory::CORPSE_GetData((D2CorpseStrc*)pRoom);
       if (!pCorpsePlayerData) {
-        nErrorLine = D2Common::INVENTORY::Inventory::CORPSE_GetMercClassId((int32_t)pRoom);
+        nErrorLine = D2Common::INVENTORY::Inventory::CORPSE_GetMercClassId((D2CorpseStrc*)pRoom);
         pRoom = (D2RoomStrc*)D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse((D2CorpseStrc*)pRoom);
         D2Common::INVENTORY::Inventory::INVENTORY_RemoveCorpse(pUnit->pInventory, dwCorpseGUID, 0);
         if (dwCorpseGUID && (uint16_t)nErrorLine) {

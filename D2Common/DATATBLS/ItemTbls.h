@@ -102,7 +102,7 @@ void __stdcall thunk_UnloadBin_LvlWarp();
 // ITEMMOD_GetScrollBookIndex reads both members off the returned pointer: 005c256f MOV EAX,[ESI] is the count it returns when nothing matches, 005c2575 MOV EDX,[ESI+0x4] with a TEST is the null-check on the table base, and 005c2584 ADD EDX,0x1c reaches the first row's code field. With only nSize named the emitter produced two independent globals whose order the linker chooses, so [1] was whatever it placed next.
 struct D2BooksTableStrc * __stdcall TXT_Books_GetTableInfo();
 // Returns book table line for given index (32 bytes/entry). Used for scroll/book skill ID lookup.
-void * __stdcall TXT_Books_GetLine(int32_t nIndex);
+struct D2BooksTxt * __stdcall TXT_Books_GetLine(int32_t nIndex);
 void __fastcall TXT_AllocTxt_lowqualityitems(struct D2PoolManagerStrc * pMemory);
 void __stdcall thunk_UnloadBin_LvlPrest();
 // Returns pointer to nTxtLowQualityItemsSize global. Used for crude/damaged quality item lookup.
@@ -145,7 +145,7 @@ void __stdcall ITEMTBLS_FreeRunes();
 struct D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize();
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __stdcall ITEMTBLS_CopyRunewordRecord(int32_t nRunewordId, char * pSourceRecord);
-int32_t __stdcall ITEMTBLS_GetRunewordTxtRecord(int32_t nRunewordId);
+struct D2RunesTxt * __stdcall ITEMTBLS_GetRunewordTxtRecord(int32_t nRunewordId);
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Common::DATATBLS::ItemTbls

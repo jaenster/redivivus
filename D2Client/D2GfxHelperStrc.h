@@ -30,8 +30,8 @@ void __fastcall DRAW_DrawWallTileWithLighting(int32_t nTileDataPtr, int32_t nScr
 void __fastcall fpDrawWallTile(uint8_t * pTileData, int32_t nScreenX, int32_t nScreenY, uint8_t * pCoords);
 void __fastcall fpDrawBlendedVisTile(uint8_t * pTileData, int32_t nScreenX, int32_t nScreenY, int32_t nLightVal);
 void __fastcall fpDrawRoofTile(uint8_t * pTileData, int32_t nScreenX, int32_t nScreenY, int * pCoords, int32_t nLightVal);
-void __fastcall D2GFXHELPER_DrawGroundTileWithLight(struct D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, int32_t pDstBase, uint32_t nLightVal);
-void __fastcall D2GFXHELPER_DrawGroundTileWithPerspectiveLight(struct D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, int32_t pDstBase, int * pLightCorners);
+void __fastcall D2GFXHELPER_DrawGroundTileWithLight(struct D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, uint8_t * pDstBase, uint32_t nLightVal);
+void __fastcall D2GFXHELPER_DrawGroundTileWithPerspectiveLight(struct D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, uint8_t * pDstBase, int * pLightCorners);
 void __fastcall fpFillYBufferTable(void * ppvBits, int32_t nWidth, int32_t nHeight, int32_t a4);
 
 } // namespace D2Client

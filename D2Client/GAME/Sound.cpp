@@ -55,23 +55,23 @@ BOOL __stdcall SOUND_IsInitialized_ForNpcSpeechItem() {
     return ::D2Client::GAME::Sound::SOUND_IsInitializedDup();
 }
 
-void __fastcall SOUND_ParseStreamWavHeader(int32_t pSoundStream) {
+void __fastcall SOUND_ParseStreamWavHeader(D2SoundsTxt * pSoundStream) {
     WAVEFORMATEX sWaveFormat;
-    if (*(int*)(pSoundStream + 0x86) != 2) {
+    if (pSoundStream->nLoadState != 2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d);
       exit(-1);
     }
 
-    uint32_t nBufSize = *(uint32_t*)(pSoundStream + 0x70);
-    int* pWavData = D2Sound::Src::D2SoundSmp::SOUNDSMP_ParseWavHeader(*(int**)(pSoundStream + 0x6c), &nBufSize, &sWaveFormat);
+    uint32_t nBufSize = pSoundStream->nSoundDataBytes;
+    int* pWavData = D2Sound::Src::D2SoundSmp::SOUNDSMP_ParseWavHeader((int*)pSoundStream->pSoundDataBuffer, &nBufSize, &sWaveFormat);
     if (pWavData && sWaveFormat.wBitsPerSample == 0x10 && sWaveFormat.nSamplesPerSec == 0x5622) {
-      *(int**)(pSoundStream + 0x74) = (int*)pWavData;
-      *(bool*)(pSoundStream + 0x50) = sWaveFormat.nChannels == 2;
-      *(uint32_t*)(pSoundStream + 0x78) = nBufSize;
+      pSoundStream->field_0x74[0] = (int32_t)pWavData;
+      pSoundStream->Stereo = sWaveFormat.nChannels == 2;
+      pSoundStream->field_0x74[1] = nBufSize;
       return;
     }
 
-    *(uint8_t*)(pSoundStream + 0x81) = 1;
+    pSoundStream->bFileNotFound = 1;
 }
 
 // Sets the EAX reverb environment for the current room if the active sound mixer supports 3D audio and the requested environment ID differs from the current one. Reads all EAX parameters (room volume, HF, decay, reflections, reverb, size, diffusion, air absorption, room rolloff) from the SoundEnvironTxt record for nEnvId, scales integer fields by /1000 to floats, and calls SOUND_ApplyEAXEnvironment. Updates gnCurrentEaxEnvironmentId.
@@ -355,7 +355,7 @@ static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(uint32_t 
     do {
       if (pChannelEntry[-1] == (D2SoundChannelStrc*)pnParam && *pChannelEntry) {
         if (pBestChannel) {
-          BVar1 = D2Client::Sound::SOUND_IsChannelAvailable((uint32_t)pBestChannel->pActiveSound, (uint32_t)*pChannelEntry, 1, 1);
+          BVar1 = D2Client::Sound::SOUND_IsChannelAvailable(pBestChannel->pActiveSound, *pChannelEntry, 1, 1);
           if (!BVar1) {
             goto next_channel;
           }
@@ -371,7 +371,7 @@ static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(uint32_t 
           return nullptr;
         }
 
-        BVar1 = D2Client::Sound::SOUND_IsChannelAvailable(nParam, (uint32_t)pBestChannel->pActiveSound, 0, 0);
+        BVar1 = D2Client::Sound::SOUND_IsChannelAvailable(nParam, pBestChannel->pActiveSound, 0, 0);
         if (!BVar1) {
           return nullptr;
         }

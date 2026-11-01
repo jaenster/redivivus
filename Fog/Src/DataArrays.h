@@ -20,7 +20,7 @@ struct D2DataArrayStrc * __fastcall FOG_CreateDataArray(char * pszName, int numO
 // @sourcefile .\Src\DataArrays.cpp
 void __fastcall FreeWeatherPointer(void * pParam);
 void __fastcall FOG_InitDataArray(struct D2DataArrayStrc * pDataArray);
-uint32_t __fastcall FOG_GetMissileField(struct D2MissilesTxt * pMissilesTxt);
+uint32_t __fastcall FOG_GetMissileField(struct D2DataArrayStrc * pMissilesTxt);
 // Returns the entry of pDataArray addressed by nHandle (high word = slot index, low word = the entry's 16-bit id; low word 0 matches any), or NULL for handle -1, an empty slot or an id mismatch. Halts (lines 219/222) on an index outside numObjects or an uninitialised array.
 // Provenance: asm 006bcc10..006bcc83 (+0x100 numObjects, +0x108 bInitialized, pData + index * nObjectSize); the argument is a D2DataArrayStrc.
 short * __fastcall FOG_GetDataArrayEntry(struct D2DataArrayStrc * pDataArray, int nHandle);

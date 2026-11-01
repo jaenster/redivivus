@@ -4860,11 +4860,11 @@ int __stdcall SFileReadFileEx2(D2MPQFileStrc * pFileHandle, void * pOutputBuffer
 // @basis behaviour-confirmed as part of a three-way arity lock. The 8-parameter worker (archive, filename, buffer, bytes, extrabytes, flags, callback, readflags) that both shorter members forward into: open, size, allocate size+extrabytes, read, close. SFileLoadFileEx2 is the only 8-parameter Load in the real API, and the extra 8th slot is precisely the readflags the 7-parameter caller pins to 0.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx 0041b680
 // @sourcefile .\SOURCE\SFILE.CPP
-uint32_t __stdcall SFileLoadFileEx2(D2ArchiveStrc * pArchive, uint32_t * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx, int nReadFlags) {
+uint32_t __stdcall SFileLoadFileEx2(D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx, int nReadFlags) {
     void* pAllocBuffer;
     int nOpenFileResult;
     size_t nPadBytes;
-    uint32_t* pFileName = pFileHandle;
+    char* pFileName = pFileHandle;
     if (ppOutBuffer) {
       DWORD nFileSize;
       *ppOutBuffer = 0;
@@ -4874,7 +4874,7 @@ uint32_t __stdcall SFileLoadFileEx2(D2ArchiveStrc * pArchive, uint32_t * pFileHa
         }
 
         pFileHandle = 0;
-        nOpenFileResult = SFileOpenFileEx(pArchive, (char*)pFileName, nSearchScope, (void**)&pFileHandle);
+        nOpenFileResult = SFileOpenFileEx(pArchive, pFileName, nSearchScope, (void**)&pFileHandle);
         if (nOpenFileResult) {
           nFileSize = SFileGetFileSize((D2MPQFileStrc*)pFileHandle, (LPDWORD)0x0);
           nPadBytes = nExtraPadBytes;
@@ -5195,7 +5195,7 @@ BOOL __stdcall SFileDdaBeginEx(D2MPQFileStrc * hFile, uint32_t dwBufferBytes, ui
 uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nSize, int32_t nReadCtx) {
     int nReadFlags = 0;
     uint32_t nOpenFlags = SFILE_GetOpenFlags();
-    nOpenFlags = SFileLoadFileEx2(nullptr, (uint32_t*)pArchive, ppOutBuffer, pdwOutSize, nSize, nOpenFlags, nReadCtx, nReadFlags);
+    nOpenFlags = SFileLoadFileEx2(nullptr, pArchive, ppOutBuffer, pdwOutSize, nSize, nOpenFlags, nReadCtx, nReadFlags);
     return nOpenFlags;
 }
 
@@ -5203,7 +5203,7 @@ uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * 
 // @wasnamed SFILE_LoadFileToMemory2
 // @basis behaviour-confirmed as part of a three-way arity lock. 7 parameters, positionally identical to SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback); the body forwards them unchanged to the 8-parameter worker with readflags = 0, which is exactly what distinguishes Ex from Ex2.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx2 0041af60
-uint32_t __stdcall SFileLoadFileEx(D2ArchiveStrc * pArchive, uint32_t * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx) {
+uint32_t __stdcall SFileLoadFileEx(D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx) {
     uint32_t nResult = SFileLoadFileEx2(pArchive, pFileHandle, ppOutBuffer, pdwOutSize, nExtraPadBytes, nSearchScope, nReadCtx, 0);
     return nResult;
 }

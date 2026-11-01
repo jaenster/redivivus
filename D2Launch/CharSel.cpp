@@ -1788,7 +1788,7 @@ BOOL __stdcall CHARSEL_InitRealmSelection() {
 
           pBNetGateway = (D2BNetGatewayAccessStr*)gpBNetCallbacks->pfnBnetLoadAndReturn();
           Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, Bnclient::BNGatewayAccess::Realm(pBNetGateway, pBNetGateway->nCurGatewayIdx), 0x7fffffff);
-          Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
+          Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
           nTextLine = CHARSEL_FindRealmByName(PreferredClosedRealm);
           if (nTextLine) {
             return 1;
@@ -1802,7 +1802,7 @@ BOOL __stdcall CHARSEL_InitRealmSelection() {
           }
 
           Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, pszRealmName, 0x7fffffff);
-          Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
+          Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
           return 1;
         }
 
@@ -2008,7 +2008,7 @@ void __stdcall UIMENU_ChangeHavingMultipleRealmsAsia123() {
 
 BOOL __stdcall ChangeClosedRealmChoice(D2ControlMsg * pControlMsg) {
     Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, PreferedClosedRealm2, 0x7fffffff);
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
+    Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
     if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
       MainMenus::FORMS_DestroyList();
       CHARSEL_ResetCharListUI();
@@ -2438,7 +2438,7 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
 
       pGatewayAccess = (D2BNetGatewayAccessStr*)gpBNetCallbacks->pfnBnetLoadAndReturn();
       Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, Bnclient::BNGatewayAccess::Realm(pGatewayAccess, pGatewayAccess->nCurGatewayIdx), 0x7fffffff);
-      Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
+      Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
       nFoundRealmIndex = CHARSEL_FindRealmByName(PreferredClosedRealm);
       if (!nFoundRealmIndex) {
         nSlotIndex = MainMenus::MAINMENU_GetRealmCount();
@@ -2449,7 +2449,7 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
         }
 
         Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, szRealmName, 0x7fffffff);
-        Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
+        Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
       }
     } else {
       gnCharSelScreenSlotCount = 5;

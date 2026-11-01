@@ -1913,7 +1913,7 @@ static void MONSTER_PreloadSequenceAnimations(D2UnitStrc * pUnit) {
 
     do {
       uD2UnitMode nAnimMode;
-      D2Common::Merc::ANIM_GetSequenceFrameInfo((uint8_t*)pSeqTxt, i << 8, i << 8, &nAnimMode.ePlayerMode, &nFrameSpeed, &nFrameEnd, &nFrameStart);
+      D2Common::Merc::ANIM_GetSequenceFrameInfo(pSeqTxt, i << 8, i << 8, &nAnimMode.ePlayerMode, &nFrameSpeed, &nFrameEnd, &nFrameStart);
       pUnit->eAnimMode = nAnimMode;
       Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
       i++;

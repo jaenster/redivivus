@@ -1050,9 +1050,9 @@ void __fastcall DumpThreadContext(HANDLE hHandle) {
     /* LPCONTEXT lpContext for GetThreadContext */ /* HANDLE hThread for GetThreadContext */ sContext.ContextFlags = 0x10007;
     GetThreadContext(hHandle, &sContext);
     Src::LogManager::LogWithCategoryVarArgs("", "Stack bytes:\n");
-    Src::LogManager::EnqueueLogMessage("ERR", "", (void*)sContext.Esp, (void*)0x1000, nullptr, 1, 0);
+    Src::LogManager::EnqueueLogMessage("ERR", "", (void*)sContext.Esp, 0x1000, nullptr, 1, 0);
     Src::LogManager::LogWithCategoryVarArgs("", "Code bytes:\n");
-    Src::LogManager::EnqueueLogMessage("ERR", "", (void*)sContext.Eip, (void*)0x20, nullptr, 1, 0);
+    Src::LogManager::EnqueueLogMessage("ERR", "", (void*)sContext.Eip, 0x20, nullptr, 1, 0);
 }
 
 static BOOL __stdcall GetSourceLineWithRetry(HANDLE hProcess, DWORD nAddress, void * pdwDisplacement, void * pLine) {

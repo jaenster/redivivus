@@ -7316,7 +7316,7 @@ void __fastcall GFX_GetUnitSpriteOffset(struct D2UnitStrc * pUnit, int byCompone
 // @sourcefile .\ENGINE\Gfx.cpp
 BOOL __fastcall GFX_IsUnitInsideBounds(struct D2UnitStrc * pUnit, int32_t nOriginX, int32_t nOriginY, int32_t nTestX, int32_t nTestY);
 // @sourcefile .\ENGINE\Gfx.cpp
-struct D2GfxInfoUnkStrc * __fastcall GFX_IsUnitOnScreen(struct D2UnitStrc * pUnit, int32_t nOriginX, int32_t nOriginY, uint32_t nUnused, int32_t bCenterAdjust);
+BOOL __fastcall GFX_IsUnitOnScreen(struct D2UnitStrc * pUnit, int32_t nOriginX, int32_t nOriginY, uint32_t nUnused, int32_t bCenterAdjust);
 // Registers: nAct (ECX) is passed by the caller but not read.
 void __fastcall GFX_UpdateGfxThrottled(int32_t nAct);
 // @sourcefile .\ENGINE\Gfx.cpp
@@ -7332,7 +7332,7 @@ BOOL __fastcall GFX_DrawUnitColoredShape(struct D2UnitStrc * pUnit);
 // @sourcefile .\ENGINE\Gfx.cpp
 BOOL __fastcall GFX_DrawUnitSelectionShape(struct D2UnitStrc * pUnit);
 // @sourcefile .\ENGINE\Gfx.cpp
-struct D2GfxInfoUnkStrc * __fastcall DRAW_WORLD_Unit_1(struct D2UnitStrc * pUnit, uint32_t nGamma, uint32_t bIsSelected, DRAWMODE nScreenY, struct D2GamePalShiftGreenBloodStrc * pPalShift, int32_t bDrawStates);
+BOOL __fastcall DRAW_WORLD_Unit_1(struct D2UnitStrc * pUnit, uint32_t nGamma, uint32_t bIsSelected, DRAWMODE nScreenY, struct D2GamePalShiftGreenBloodStrc * pPalShift, int32_t bDrawStates);
 // 24 internal functions (defined in .cpp)
 
 } // namespace D2Client::Engine::Gfx

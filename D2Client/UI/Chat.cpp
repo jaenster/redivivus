@@ -775,7 +775,7 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
             return 1;
           }
 
-          Storm::Source::SSTR::SStrTokenize(&pszCursor, szToken, (char*)0x100, " ", nullptr);
+          Storm::Source::SSTR::SStrTokenize(&pszCursor, szToken, 0x100, " ", nullptr);
           pScan = pszCursor;
           pScan = pScan + strlen(pScan) + 1;
           if (pScan == pszCursor + 1) {

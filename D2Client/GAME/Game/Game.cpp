@@ -471,15 +471,15 @@ void __stdcall INPUT_HandlePassthrough(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Handle mouse button event: clear selection/UI, update run key, and normalize queued click state.
-void __stdcall HandleMouseButtonEvent(int32_t pMouseEvent) {
+void __stdcall HandleMouseButtonEvent(D2UIMouseMsgStrc * pMouseEvent) {
     SHORT keyState;
-    gnLastMouseButtonEventType = *(uint32_t*)(pMouseEvent + 8);
-    if (*(int*)(pMouseEvent + 8)) {
+    gnLastMouseButtonEventType = pMouseEvent->nWParam;
+    if (pMouseEvent->nWParam) {
       UI::ui::SetUIFlag(UI_HOLDALT, UI_RESET, 0);
       gClickModifierDown = 0;
       Select::ClearSelectedUnit();
       D2Win::Src::D2WinPalette::D2WINPALETTE_SetPaletteIndex(0);
-      *(uint32_t*)(pMouseEvent + 0x18) = 0;
+      pMouseEvent->bHandled = 0;
       return;
     }
 
@@ -503,7 +503,7 @@ void __stdcall HandleMouseButtonEvent(int32_t pMouseEvent) {
       Select::SetCanBeSelectedToFalse();
     }
 
-    *(uint32_t*)(pMouseEvent + 0x18) = 0;
+    pMouseEvent->bHandled = 0;
 }
 
 void __stdcall GAMEDATA_CheckAutomapCenterOnLoad() {

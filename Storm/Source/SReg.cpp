@@ -195,13 +195,13 @@ static int __stdcall SREG_InternalSaveEntry(char * pszSubKey, LPCSTR szValueName
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegDeleteValue(uint32_t * pszSubKey, LPCSTR szValueName, uint8_t byFlags) {
-    if ((char)*pszSubKey == '\0' || !pszSubKey || !szValueName || *szValueName == '\0') {
+int32_t __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, uint8_t byFlags) {
+    if (*pszSubKey == '\0' || !pszSubKey || !szValueName || *szValueName == '\0') {
       SErr::SErrSetLastError(0x57);
       return 0;
     }
 
-    int nResult = SREG_DeleteValueInternal(byFlags, (char*)pszSubKey, szValueName);
+    int nResult = SREG_DeleteValueInternal(byFlags, pszSubKey, szValueName);
     return nResult;
 }
 
@@ -314,8 +314,8 @@ int __stdcall SRegLoadValue(char * pTree, char * pKey, uint8_t byFlags, int32_t 
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegSaveData(uint32_t * pszSubKey, LPCSTR szValueName, uint32_t nFlags, BYTE * pbData, DWORD dwDataLen) {
-    if ((char)*pszSubKey == '\0' || !pszSubKey || !szValueName || *szValueName == '\0') {
+int32_t __stdcall SRegSaveData(char * pszSubKey, LPCSTR szValueName, uint32_t nFlags, BYTE * pbData, DWORD dwDataLen) {
+    if (*pszSubKey == '\0' || !pszSubKey || !szValueName || *szValueName == '\0') {
       SErr::SErrSetLastError(0x57);
       return 0;
     }
@@ -323,7 +323,7 @@ int32_t __stdcall SRegSaveData(uint32_t * pszSubKey, LPCSTR szValueName, uint32_
       pbData = (uint8_t*)"";
     }
 
-    int nResult = SREG_InternalSaveEntry((char*)pszSubKey, szValueName, (nFlags & 0x80 | 0x60) >> 5, pbData, dwDataLen, (uint8_t)nFlags);
+    int nResult = SREG_InternalSaveEntry(pszSubKey, szValueName, (nFlags & 0x80 | 0x60) >> 5, pbData, dwDataLen, (uint8_t)nFlags);
     return nResult;
 }
 
@@ -333,14 +333,14 @@ int32_t __stdcall SRegSaveData(uint32_t * pszSubKey, LPCSTR szValueName, uint32_
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegSaveString(uint32_t * pszSubKey, LPCSTR szValueName, int32_t nFlags, char * pszValue) {
-    if ((char)*pszSubKey == '\0' || !pszSubKey || !szValueName || *szValueName == '\0' || !pszValue) {
+int32_t __stdcall SRegSaveString(char * pszSubKey, LPCSTR szValueName, int32_t nFlags, char * pszValue) {
+    if (*pszSubKey == '\0' || !pszSubKey || !szValueName || *szValueName == '\0' || !pszValue) {
       SErr::SErrSetLastError(0x57);
       return 0;
     }
 
     uint32_t pStrEnd = SSTR::SStrLen(pszValue);
-    int nResult = SREG_InternalSaveEntry((char*)pszSubKey, szValueName, 1, (uint8_t*)pszValue, pStrEnd + 1, (uint8_t)nFlags);
+    int nResult = SREG_InternalSaveEntry(pszSubKey, szValueName, 1, (uint8_t*)pszValue, pStrEnd + 1, (uint8_t)nFlags);
     return nResult;
 }
 

@@ -602,7 +602,7 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
     pbArchivePath = szRegistryPath;
     __frame0.pVerifySigOut = lpFileName;
     sprintf(pbArchivePath, "%s\\Game.exe", szModulePath);
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Patch", "Launcher", 2, pbArchivePath);
+    Storm::Source::SReg::SRegSaveString("Patch", "Launcher", 2, pbArchivePath);
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     if (bIsExpansion) {
       bArchiveOpened = sprintf(pbArchivePath, "%s\\%s;", szModulePath, "d2exp.mpq");
@@ -610,9 +610,9 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
     }
 
     sprintf(pbArchivePath, "%s\\%s;%s\\%s", szModulePath, "d2data.mpq", szModulePath, "d2sfx.mpq");
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Patch", "SrcData", 2, szRegistryPath);
+    Storm::Source::SReg::SRegSaveString("Patch", "SrcData", 2, szRegistryPath);
     sprintf(szRegistryPath, "%s\\%s", szModulePath, "patch_d2.mpq");
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Patch", "DstData", 2, szRegistryPath);
+    Storm::Source::SReg::SRegSaveString("Patch", "DstData", 2, szRegistryPath);
     if (szSourceFileName == cArchiveListBuf) {
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szSourceFileName, "%s\\bnupdate.exe", szModulePath);
       uVar1 = Storm::Source::SSTR::SStrLen(szSourceFileName);
@@ -1236,7 +1236,7 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pbParam, size_t nSi
     Storm::Source::SSystem::SMemCopy(&gbBnetFtpFileTransferActive, pbParam, nSize);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnNetworkSendState = 0;
     LeaveCriticalSection(&lpCriticalSection_00881f64);
-    Storm::Source::SReg::SRegSaveData((uint32_t*)"Patch", "Patches", 0x82, pbParam, nSize + 1);
+    Storm::Source::SReg::SRegSaveData("Patch", "Patches", 0x82, pbParam, nSize + 1);
     ftZero.dwLowDateTime = 0;
     ftZero.dwHighDateTime = 0;
     if (!(pbParam && *pbParam != '\0')) {

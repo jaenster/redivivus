@@ -1069,9 +1069,9 @@ static void __stdcall SBMP_CompressGifByte(D2GifLzwEncoderStrc * pState, int pDs
 }
 
 // @blizzard CompressGifImage (SBMP.CPP)
-int __fastcall SBMP_CompressGifImage(int nSrcLen, uint8_t * pSrcPixels, int pDstBuf) {
+int __fastcall SBMP_CompressGifImage(int nSrcLen, uint8_t * pSrcPixels, uint8_t * pDstBuf) {
     D2GifLzwEncoderStrc sEncoder;
-    int nDstOffset = pDstBuf;
+    uint8_t* nDstOffset = pDstBuf;
     SSystem::SMemZero(&sEncoder, 0x134);
     sEncoder.nCodeSize = 9;
     sEncoder.nInitCodeSize = 9;
@@ -1084,7 +1084,7 @@ int __fastcall SBMP_CompressGifImage(int nSrcLen, uint8_t * pSrcPixels, int pDst
     sEncoder.pCodeTable = SMem::SMemAlloc(0x4e2c, ".\\SOURCE\\SBMP.CPP", 0x389, 8);
     SBMP_Output(sEncoder.nClearCode, &nDstOffset, &sEncoder);
     for (; nSrcLen; nSrcLen--) {
-      SBMP_CompressGifByte(&sEncoder, (uintptr_t)&nDstOffset, (uint32_t)*pSrcPixels);
+      SBMP_CompressGifByte(&sEncoder, &nDstOffset, (uint32_t)*pSrcPixels);
       pSrcPixels++;
     }
 
@@ -1101,7 +1101,7 @@ int __fastcall SBMP_CompressGifImage(int nSrcLen, uint8_t * pSrcPixels, int pDst
     SBMP_FlushPacket(&sEncoder, &nDstOffset);
     SMem::SMemFree(sEncoder.pHashTable, ".\\SOURCE\\SBMP.CPP", 0x3a4, 0);
     SMem::SMemFree(sEncoder.pCodeTable, ".\\SOURCE\\SBMP.CPP", 0x3a5, 0);
-    int iVar1 = nDstOffset - pDstBuf;
+    int iVar1 = (int)nDstOffset - (int)pDstBuf;
     return iVar1;
 }
 
@@ -1148,10 +1148,10 @@ static int __thiscall SBMP_EncodeGif256File(int width, void * hFile, int palette
     abGifHeader[9] = 8;
     *(uint16_t*)((char*)&abGifHeader + 4) = (short int)width;
     WriteFile(hFile, (LPCVOID)abGifHeader, 10, (LPDWORD)&pCompressedBuf, (LPOVERLAPPED)0x0);
-    pCompressedBuf = SMem::SMemAlloc(width * iVar1 * 2, ".\\SOURCE\\SBMP.CPP", 1000, 0);
-    DWORD nNumberOfBytesToWrite = SBMP_CompressGifImage(width * iVar1, pPixelsCopy, (int)pCompressedBuf);
-    void* pFreeThis = pCompressedBuf;
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, pCompressedBuf, nNumberOfBytesToWrite, &dwBytesWritten, (LPOVERLAPPED)0x0);
+    pCompressedBuf = (uint8_t*)SMem::SMemAlloc(width * iVar1 * 2, ".\\SOURCE\\SBMP.CPP", 1000, 0);
+    DWORD nNumberOfBytesToWrite = SBMP_CompressGifImage(width * iVar1, pPixelsCopy, pCompressedBuf);
+    uint8_t* pFreeThis = pCompressedBuf;
+    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)pCompressedBuf, nNumberOfBytesToWrite, &dwBytesWritten, (LPOVERLAPPED)0x0);
     SMem::SMemFree(pFreeThis, ".\\SOURCE\\SBMP.CPP", 0x3ee, 0);
     /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ bySentinel = 0;
     WriteFile(hFile, (LPCVOID)&bySentinel, 1, (LPDWORD)&pPixelsCopy, (LPOVERLAPPED)0x0);
@@ -1323,7 +1323,7 @@ int __stdcall SBmpDecodeImage(int nFormat, void * pData, uint32_t nDataSize, voi
 // @oracle-source Storm export vector SBmpLoadImage @100cbc6c -> code 10004ae0 = the traceback-named function .SBmpLoadImage, in Mac PPC 1.10b Storm
 // @rename-basis Behaviour plus a cross-architecture body match. .SBmpLoadImage @10004ae0 reads r3..r9, i.e. exactly seven arguments, and this is the only SBmp entry point that takes a filename and writes into a caller-supplied bounded buffer. Discriminated from SBmpAllocLoadImage 006c6e70 (allocates the destination) and from SBmpDecodeImage 006c6a80 (takes a memory buffer plus length and an explicit format selector).
 // @former-name SBMP_LoadImageFromFile
-uint32_t __stdcall SBmpLoadImage(int * pszPath, void * pPalette, void * pPixels, int nFlags, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnBpp) {
+uint32_t __stdcall SBmpLoadImage(char * pszPath, void * pPalette, void * pPixels, int nFlags, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnBpp) {
     int nDetectedFormat;
     uint32_t uValidMask;
     int nFormat;
@@ -1342,11 +1342,11 @@ uint32_t __stdcall SBmpLoadImage(int * pszPath, void * pPalette, void * pPixels,
     } else {
       uValidMask = -1;
     }
-    if (!((char)*pszPath != '\0' && pszPath ? uValidMask : 0)) {
+    if (!(*pszPath != '\0' && pszPath ? uValidMask : 0)) {
       SErr::SErrSetLastError(0x57);
     } else {
       int32_t iOpenResult;
-      iOpenResult = SFile::SFileOpenFile((char*)pszPath, (D2MPQFileStrc**)&pszPath);
+      iOpenResult = SFile::SFileOpenFile(pszPath, (D2MPQFileStrc**)&pszPath);
       if (iOpenResult) {
         nFormat = 0;
         nDetectedFormat = SFile::SFileReadFile((D2MPQFileStrc*)pszPath, &nFlags, 2, nullptr, 0);
@@ -1364,7 +1364,7 @@ uint32_t __stdcall SBmpLoadImage(int * pszPath, void * pPalette, void * pPixels,
             }
           case 2:
             {
-              iReadResult = SBMP_DecodePcxFile((D2MPQFileStrc*)pszPath, (uint8_t*)pPixels, (int*)pnHeight, (int)pPalette, iReadResult, pnWidth, (int*)pnBpp);
+              iReadResult = SBMP_DecodePcxFile((D2MPQFileStrc*)pszPath, (uint8_t*)pPixels, (int*)pnHeight, (uint8_t*)pPalette, iReadResult, pnWidth, (int*)pnBpp);
               SFile::SFileCloseFile((D2MPQFileStrc*)pszPath);
               return iReadResult;
             }
@@ -1447,7 +1447,7 @@ void __stdcall SBmpSaveImageEx(LPCSTR szText, int nPalette, uint8_t * pbPixels, 
 // @rename-basis Behaviour plus a cross-architecture body match. 10004ee0 reads r3..r10, i.e. exactly eight arguments, and its first act is to test r5 (the third argument) for NULL - the same ppBuffer NULL check that opens this function before SetLastError(0x57). This is the only SBmp entry that allocates the destination rather than being handed one, and the only one taking an allocator callback.
 // @former-name SBMP_LoadImageAllocated
 // @sourcefile .\SOURCE\SBMP.CPP
-uint32_t __stdcall SBmpAllocLoadImage(char * szText, void * pPalette, uint32_t * ppOutputBuf, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnBpp, uint32_t nBppOverride, pfnSBmpAllocCallback pfnAlloc) {
+uint32_t __stdcall SBmpAllocLoadImage(char * szText, void * pPalette, void * * ppOutputBuf, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnBpp, uint32_t nBppOverride, pfnSBmpAllocCallback pfnAlloc) {
     DWORD nSize;
     void* pOutputBuffer;
     int iProbeResult;
@@ -1493,12 +1493,12 @@ uint32_t __stdcall SBmpAllocLoadImage(char * szText, void * pPalette, uint32_t *
           nSize_00 = iProbeResult / 8;
           if (pfnAlloc) {
             pvAllocResult = (*pfnAlloc)(nSize_00);
-            *ppOutputBuf = (uint32_t)(uintptr_t)pvAllocResult;
+            *ppOutputBuf = pvAllocResult;
           } else {
             pvAllocResult = SMem::SMemAlloc(nSize_00, szText, -4, 0);
-            *ppOutputBuf = (uint32_t)(uintptr_t)pvAllocResult;
+            *ppOutputBuf = pvAllocResult;
           }
-          if ((uint8_t*)*ppOutputBuf) {
+          if (*ppOutputBuf) {
             SBmpDecodeImage(0, pOutputBuffer, nSize, pPalette, (uint8_t*)*ppOutputBuf, nSize_00, nullptr, nullptr, nullptr);
             if (pnWidth) {
               *pnWidth = nWidth;
@@ -1529,8 +1529,8 @@ uint32_t __stdcall SBmpAllocLoadImage(char * szText, void * pPalette, uint32_t *
 // @rename-basis Decisive, positive, cross-architecture. The PPC export vector for SBmpSaveImage does NOT point at the big extension-dispatching writer .SBmpSaveImageEx @100047c0; it points at 10004a90, an 80-byte function whose entire body is "li r9, 0x0; bl .SBmpSaveImageEx" - pass the six incoming argument registers straight through and supply 0 as the seventh. This function is that wrapper, instruction for instruction. Which of the pair is exported was the one thing that could not be settled from the Windows side (both are unreferenced in Game.exe); the PPC export table settles it by publishing an address.
 // @former-name SBMP_SaveImageSimple
 // @namespace-fix moved Global -> Storm::Source::SBMP
-void __stdcall SBmpSaveImage(LPCSTR szText, int nParam1, uint8_t * pbParam, void * pParam, int nParam2, int nParam3) {
-    SBmpSaveImageEx(szText, nParam1, pbParam, (int32_t)pParam, nParam2, nParam3, 0);
+void __stdcall SBmpSaveImage(LPCSTR szText, int nParam1, uint8_t * pbParam, int32_t pParam, int nParam2, int nParam3) {
+    SBmpSaveImageEx(szText, nParam1, pbParam, pParam, nParam2, nParam3, 0);
 }
 
 } // namespace Storm::Source::SBMP

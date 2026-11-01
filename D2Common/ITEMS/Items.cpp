@@ -2282,7 +2282,7 @@ int __stdcall ITEM_CalcWeaponAttackSpeed(D2UnitStrc * pUnit, D2UnitStrc * pItem)
         nTrigger = 0;
         __frame0.nWClass = ITEM_GetItemsTxt_dwWClass(pItem);
         COMPOSIT::Composit::COMPOSIT_BuildCofPath(pUnit, pUnit->nClassId, 7, pUnit->eUnitType, pUnit->pInventory, __frame0.szCofPath, &__frame0.nWClass, 0, 0);
-        nAttackSpeedResult = DATATBLS::AnimTbls::ANIMDATA_GetFramesSpeedAndTrigger((int*)__frame0.szCofPath, &__frame0.nFrames, &__frame0.nAnimSpeed, &nTrigger);
+        nAttackSpeedResult = DATATBLS::AnimTbls::ANIMDATA_GetFramesSpeedAndTrigger(__frame0.szCofPath, &__frame0.nFrames, &__frame0.nAnimSpeed, &nTrigger);
         if (!nAttackSpeedResult) {
           return 0x2d;
         }
@@ -3373,8 +3373,8 @@ int __stdcall ITEM_GetSpellIcon(D2UnitStrc * pUnit) {
         nBookTxtIdx = 0;
       }
 
-      nBooksTxtLine = DATATBLS::ItemTbls::TXT_Books_GetLine(nBookTxtIdx);
-      if (!nBooksTxtLine) {
+      pDVar1 = DATATBLS::ItemTbls::TXT_Books_GetLine(nBookTxtIdx);
+      if (!pDVar1) {
         return -1;
       }
 

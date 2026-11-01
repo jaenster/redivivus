@@ -1211,7 +1211,7 @@ bool __fastcall OBJECT_ExecuteClientFunction(D2UnitStrc * pUnit) {
     return true;
 }
 
-void __fastcall WAYPOINT_HandleActivation(int32_t pMessage) {
+void __fastcall WAYPOINT_HandleActivation(uint8_t * pMessage) {
     D2UnitStrc* pUnit;
     if (!pMessage) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x556);
@@ -1223,12 +1223,12 @@ void __fastcall WAYPOINT_HandleActivation(int32_t pMessage) {
         return;
       }
       if (pUnit->nClassId == 0x3b || pUnit->nClassId == 0x3c) {
-        pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = *(char*)(pMessage + 2);
+        pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = pMessage[2];
         byPortalFlags = D2Common::Units::GetObjectPortalFlags(pUnit);
-        if (*(uint8_t*)(pMessage + 1) & 2) {
+        if (pMessage[1] & 2) {
           byPortalFlags |= 2;
         }
-        if (*(uint8_t*)(pMessage + 1) & 1) {
+        if (pMessage[1] & 1) {
           byPortalFlags |= 1;
         }
 

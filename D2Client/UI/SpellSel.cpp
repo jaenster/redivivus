@@ -1738,7 +1738,7 @@ void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
               if ((int)nClickX > nTmpResult && (int)nClickX < nTmpResult + 0x30 && !gaSpellSelSkillTreeState[nPrevActiveTab]) {
                 gaSpellSelSkillTreeState[nPrevActiveTab] = 1;
                 gbSpellSelSkillTreeNodeHovered[nPrevActiveTab] = 3;
-                ui::UI_HandleCursorMouseMove((uint8_t*)pMsg);
+                ui::UI_HandleCursorMouseMove(pMsg);
                 pMsg->bHandled = 1;
                 pMsg->dwResult = 0;
                 Sound::SOUND_PlaySound(SOUND_CURSOR_POINT_DROP, nullptr, 0, 0, 0);

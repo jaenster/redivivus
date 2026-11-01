@@ -109,9 +109,9 @@ BOOL __fastcall fpDrawGroundTile(int32_t nTileBlockPtr, int32_t nScreenX, int32_
           }
           if (nScreenY_00 < gnTileInnerClipZMin || nScreenY_00 >= gnTileClipZMax || nScreenX_00 < gnTileViewportXOffset || nScreenX_00 >= gnTileInnerClipXMax) {
             if (bFlatShaded) {
-              D2Client::D2GFXHELPER_DrawGroundTileWithLight(pSubTile, nScreenX_00, nScreenY_00, (int32_t)pDst_00, nSubTileIdx);
+              D2Client::D2GFXHELPER_DrawGroundTileWithLight(pSubTile, nScreenX_00, nScreenY_00, pDst_00, nSubTileIdx);
             } else {
-              D2Client::D2GFXHELPER_DrawGroundTileWithPerspectiveLight(pSubTile, nScreenX_00, nScreenY_00, (int32_t)pDst_00, aLightCorners);
+              D2Client::D2GFXHELPER_DrawGroundTileWithPerspectiveLight(pSubTile, nScreenX_00, nScreenY_00, pDst_00, aLightCorners);
             }
           } else if (bFlatShaded) {
             D2GFXHELPER_DrawGroundTileDispatch1(pSubTile, pDst_00, (uint8_t)nSubTileIdx);

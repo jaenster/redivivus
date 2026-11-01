@@ -45,7 +45,7 @@ void __fastcall CLIENT_BossDeath_Radament(struct D2UnitStrc * pBossUnit);
 void __fastcall CLIENT_BossDeath_SandMaggotQueen(struct D2UnitStrc * pBossUnit);
 void __fastcall CLIENT_BossDeath_Duriel(struct D2UnitStrc * pBossUnit);
 void __fastcall CLIENT_BossDeath_Izual(struct D2UnitStrc * pUnit);
-void __fastcall CLIENT_StoreUnitGuidForQuestTracking(int32_t pUnit);
+void __fastcall CLIENT_StoreUnitGuidForQuestTracking(struct D2UnitStrc * pUnit);
 void __stdcall CLIENT_BossDeath_Baal();
 int __stdcall CLIENT_GetDenOfEvilLightIntensity(uint8_t * pRed, uint8_t * pGreen, uint8_t * pBlue);
 int __fastcall ROOM_GetLevelLightColor(struct D2RoomStrc * pRoom, char * pRed, char * pGreen, char * pBlue);

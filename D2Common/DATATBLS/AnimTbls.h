@@ -24,7 +24,7 @@ struct D2AnimDataStrc * __fastcall TXT_AllocTxt_AnimTbls(struct D2PoolManagerStr
 // and server memory (record struct itself).
 // Source: .\\DATATBLS\\AnimTbls.cpp
 // @sourcefile .\DATATBLS\AnimTbls.cpp
-void __fastcall ANIMDATA_FreeAnimDataRecord(void * * pParam);
+void __fastcall ANIMDATA_FreeAnimDataRecord(struct D2AnimDataStrc * pParam);
 // pdwName1 in EDI, pdwName2 in ESI: TRUE when both 8-byte names match as two dwords. Halts (AnimTbls.cpp lines 217/218, StringLength((LPCTSTR)pdwName2) <= 8) on a name longer than 8.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __stdcall ANIMDATA_CompareNames(uint32_t * pdwName1, uint32_t * pdwName2);
@@ -39,7 +39,7 @@ void __stdcall ANIMDATA_SetAnimSpeedForUnit(struct D2UnitStrc * pUnit, int32_t n
 // record by name. The trigger frame is the first non-zero byte in the
 // per-frame event array (up to 0x90 bytes). Returns 1 on success, 0 on
 // fallback to default record.
-BOOL __stdcall ANIMDATA_GetFramesSpeedAndTrigger(int * pszName, uint32_t * pnFrameCount, int * pnAnimSpeed, uint32_t * pnTriggerFrame);
+BOOL __stdcall ANIMDATA_GetFramesSpeedAndTrigger(char * pszName, uint32_t * pnFrameCount, int * pnAnimSpeed, uint32_t * pnTriggerFrame);
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Common::DATATBLS::AnimTbls

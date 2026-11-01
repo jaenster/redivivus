@@ -1034,7 +1034,7 @@ BOOL __fastcall SCMD_ProcessString(uint32_t * ppszCursor, int * pCmdCtx, uint32_
     while (cCursorChar != '\0') {
       pszPos = (char*)*ppszCursor;
       nTokenLen = 0;
-      SSTR::SStrTokenize(&pszPos, szTokenBuf, (char*)0x100, " ,;\"\t\n\r\x1a", (uint32_t*)&nTokenLen);
+      SSTR::SStrTokenize(&pszPos, szTokenBuf, 0x100, " ,;\"\t\n\r\x1a", (uint32_t*)&nTokenLen);
       if (szTokenBuf[0] != '\0') {
         bDispatchResult = SCMD_ProcessToken(pCmdList, szTokenBuf, pCmdCtx, nTokenLen, pfnUnknownCallback, pfnErrorCallback);
         if (!bDispatchResult) {
@@ -1077,7 +1077,7 @@ int __stdcall SCmdProcess(char * szCommandLine, int bSkipFirstToken, pfnSCmdUnkn
       SErr::SErrSetLastError(0x57);
     } else {
       if (bSkipFirstToken) {
-        SSTR::SStrTokenize(&pszCursor, nullptr, nullptr, " ,;\"\t\n\r\x1a", nullptr);
+        SSTR::SStrTokenize(&pszCursor, nullptr, 0, " ,;\"\t\n\r\x1a", nullptr);
       }
 
       SSystem::SMemZero(cmdCtx, 0x18);

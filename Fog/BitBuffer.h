@@ -30,7 +30,7 @@ int32_t __stdcall Read(struct D2BitBufferStrc * pBitBuffer, int32_t nSize);
 uint32_t __stdcall ReadUnsigned(struct D2BitBufferStrc * pBitBuffer, int32_t nSize);
 int32_t __stdcall ReadSigned(struct D2BitBufferStrc * pBitBuffer, int32_t nSize);
 void __stdcall BitBufferEndCurrentByte(struct D2BitBufferStrc * pBitBuffer);
-void __stdcall BITBUFFER_WriteDwordPair(struct D2BitBufferStrc * pBitBuffer, int32_t nValue, int32_t nSize);
-int32_t __stdcall BITBUFFER_ReadHuffmanValue(struct D2BitBufferStrc * pBitBuffer, int32_t pHuffmanTree);
+void __stdcall BITBUFFER_WriteDwordPair(struct D2BitBufferStrc * pBitBuffer, int32_t * nValue, int32_t nSize);
+int32_t __stdcall BITBUFFER_ReadHuffmanValue(struct D2BitBufferStrc * pBitBuffer, int32_t * pHuffmanTree);
 
 } // namespace Fog::BitBuffer

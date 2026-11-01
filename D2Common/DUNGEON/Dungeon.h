@@ -84,8 +84,8 @@ uint32_t __stdcall DoRoomsTouchOrOverlap(struct D2RoomStrc * pRoom, struct D2Roo
 BOOL __stdcall AreTileCoordinatesInsideRoom(struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 // Determines the shape/orientation of a room based on its tile coordinates. Returns 0 (invalid), 1 (zero width), 2 (mirrored width), 3 (zero height), or 4 (normal).
 int32_t __stdcall DRLGROOM_GetRoomShape(struct D2RoomStrc * pRoom, int32_t nMode);
-int32_t __stdcall FindRoomByTileCoordinates(struct D2DrlgActStrc * pDrlgAct, int32_t nX, int32_t nY);
-int32_t __stdcall GetAdjacentRoomByCoordinates(struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
+struct D2RoomStrc * __stdcall FindRoomByTileCoordinates(struct D2DrlgActStrc * pDrlgAct, int32_t nX, int32_t nY);
+struct D2RoomStrc * __stdcall GetAdjacentRoomByCoordinates(struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 void __stdcall CallRoomCallback(struct D2RoomStrc * pRoom, ROOMCALLBACKFN pfnRoomCallback, void * pArgs);
 // NOTE: Callee-saved register params inferred (medium confidence): param_ebx (EBX): DWORD
 int32_t * __stdcall DRLGROOM_GetMinimapRect(uint32_t nLine, struct D2RoomStrc * dwParam2, int32_t * dwParam3);

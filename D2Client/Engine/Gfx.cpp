@@ -2494,7 +2494,7 @@ BOOL __fastcall GFX_IsUnitInsideBounds(D2UnitStrc * pUnit, int32_t nOriginX, int
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
-D2GfxInfoUnkStrc * __fastcall GFX_IsUnitOnScreen(D2UnitStrc * pUnit, int32_t nOriginX, int32_t nOriginY, uint32_t nUnused, int32_t bCenterAdjust) {
+BOOL __fastcall GFX_IsUnitOnScreen(D2UnitStrc * pUnit, int32_t nOriginX, int32_t nOriginY, uint32_t nUnused, int32_t bCenterAdjust) {
     BOOL pCofIdentity;
     D2UnitStrc* pOwnerUnit;
     D2InventoryStrc* pInventoryUsed;
@@ -2519,23 +2519,23 @@ D2GfxInfoUnkStrc * __fastcall GFX_IsUnitOnScreen(D2UnitStrc * pUnit, int32_t nOr
     int nWeaponClassOrFlag = pSeqMode;
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {
-      return nullptr;
+      return 0;
     }
 
     pGfxInfoUnk = pGfxInfo->pGfxInfoUnk;
     if (!pGfxInfoUnk) {
-      return nullptr;
+      return 0;
     }
 
     while (pGfxInfoUnk->nAnimMode != nWeaponClassOrFlag) {
       pGfxInfoUnk = pGfxInfoUnk->pNext;
       if (!pGfxInfoUnk) {
-        return nullptr;
+        return 0;
       }
     }
 
     if (!(void*)pGfxInfoUnk->pCofDataArray[5]) {
-      return nullptr;
+      return 0;
     }
 
     void* pvVar1 = GfxUtil::GFXUTIL_Identity((void*)pGfxInfoUnk->pCofDataArray[5]);
@@ -2549,10 +2549,10 @@ D2GfxInfoUnkStrc * __fastcall GFX_IsUnitOnScreen(D2UnitStrc * pUnit, int32_t nOr
       nWeaponClassOrFlag -= (*(int*)((int)pvVar1 + 0x14) - *(int*)((int)pvVar1 + 0x10)) / 2;
     }
     if (!(nWeaponClassOrFlag < ScreenSizeX - 1 && -1 < *(int*)((int)pvVar1 + 0xc) + nOriginXAdj && -1 < *(int*)((int)pvVar1 + 0x14) + nOriginY)) {
-      return nullptr;
+      return 0;
     }
 
-    return (D2GfxInfoUnkStrc*)(uint32_t)(*(int*)((int)pvVar1 + 0x10) + nOriginY < ScreenSizeY - 1);
+    return (uint32_t)(*(int*)((int)pvVar1 + 0x10) + nOriginY < ScreenSizeY - 1);
 }
 
 // Registers: nAct (ECX) is passed by the caller but not read.
@@ -3333,7 +3333,7 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
       }
 
       aFrameMetrics[1] = 0;
-      nTmp = GfxUtil::GFXUTIL_CalcMaxSpriteHeight(pUnit, pCofIdentity, (int32_t)pCofData, aFrameMetrics + 1, nDirection, nFrameMetricX);
+      nTmp = GfxUtil::GFXUTIL_CalcMaxSpriteHeight(pUnit, pCofIdentity, pCofData, aFrameMetrics + 1, nDirection, nFrameMetricX);
       if (nTmp > 0) {
         nLayerIdx = 0;
         if (*pZHalfOffset > 0) {
@@ -3594,7 +3594,7 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
     }
 
     nMaxSpriteHeight = 0;
-    nCoord = GfxUtil::GFXUTIL_CalcMaxSpriteHeight(pUnit, pCofIdentity, (int32_t)pCofData, &nMaxSpriteHeight, nDirection, nFrameMetricX);
+    nCoord = GfxUtil::GFXUTIL_CalcMaxSpriteHeight(pUnit, pCofIdentity, pCofData, &nMaxSpriteHeight, nDirection, nFrameMetricX);
     if (nCoord > 0) {
       nLayerIdx = 0;
       if (*pCofIdentityBase <= 0) {
@@ -3623,7 +3623,7 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
-D2GfxInfoUnkStrc * __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t bIsSelected, DRAWMODE nScreenY, D2GamePalShiftGreenBloodStrc * pPalShift, int32_t bDrawStates) {
+BOOL __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t bIsSelected, DRAWMODE nScreenY, D2GamePalShiftGreenBloodStrc * pPalShift, int32_t bDrawStates) {
     uint8_t byDirection;
     D2GfxInfoUnkStrc* pGfxResult;
     D2UnitStrc* pPlayerUnit_lcl;
@@ -3647,7 +3647,7 @@ D2GfxInfoUnkStrc * __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGa
     uint32_t bPerspective;
     bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     if (pUnit && pUnit->eUnitType == UNIT_WARP) {
-      return nullptr;
+      return 0;
     }
 
     uint32_t nGfxTimerOrBorder;
@@ -3687,7 +3687,7 @@ D2GfxInfoUnkStrc * __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGa
         exit(-1);
       }
       if (!pObjectsTxt->Draw) {
-        return nullptr;
+        return 0;
       }
 
       nXoffset = pObjectsTxt->Xoffset;
@@ -3699,7 +3699,7 @@ D2GfxInfoUnkStrc * __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGa
     nPaletteOrFlag = GfxUtil::GFXUTIL_IsValidUnitType(pUnit);
     if (nPaletteOrFlag) {
       pGfxResult = GFX_DrawUnitComponents(bIsSelected, nGammaCopy, (int32_t)pPalShift, bDrawStates, nDrawY, pUnit);
-      return pGfxResult;
+      return (BOOL)(uintptr_t)pGfxResult;
     }
 
     byDirection = D2Common::Units::GetDirection(pUnit);
@@ -3732,12 +3732,12 @@ D2GfxInfoUnkStrc * __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGa
     memset(&sGfxData, 0, 0x48);
     nCallResult = GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, nDirOrGoldTier, nFrame, &nFrameOut, '\x01', (D2UnitStrc*)-1);
     if (!nCallResult) {
-      return nullptr;
+      return 0;
     }
 
     nPaletteOrFlag = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
     if (!nPaletteOrFlag) {
-      return nullptr;
+      return 0;
     }
 
     nCallResult = UI::Path::DRAW_GetWorldOffsetX();
@@ -3804,7 +3804,7 @@ D2GfxInfoUnkStrc * __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGa
       }
 
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nCallResult, nDrawY, nGammaCopy, eDrawMode, pActPalShift);
-      return (D2GfxInfoUnkStrc*)0x1;
+      return 1;
     }
 
     nScreenY = DRAW_SOLID;
@@ -3817,11 +3817,11 @@ D2GfxInfoUnkStrc * __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGa
 
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nCallResult, nDrawY, nGammaCopy, nScreenY, pActPalShift);
     if (!bDrawStates) {
-      return (D2GfxInfoUnkStrc*)0x1;
+      return 1;
     }
 
     DRAW_UNIT_States(pUnit, nGammaCopy, 0, -1, -1, 0);
-    return (D2GfxInfoUnkStrc*)0x1;
+    return 1;
 }
 
 } // namespace D2Client::Engine::Gfx

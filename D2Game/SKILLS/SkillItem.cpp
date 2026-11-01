@@ -1375,8 +1375,8 @@ BOOL __fastcall Skills_SrvDoFunc_113_UseScrollOrBook(::SGAMEDATA * pGame, D2Unit
       uVar4 = D2Common::ITEMS::Items::ITEMS_IsA(pUnit_00, ITEMTYPE_Book);
       if (uVar4) {
         uVar2 = D2Common::ITEMS::Items::GetMagicSuffix(pUnit_00, 0);
-        pvVar5 = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar2);
-        if (pvVar5 && *(eD2Skills*)((int)pvVar5 + 0xc) == eVar1) {
+        pDVar5 = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar2);
+        if (pDVar5 && pDVar5->bookskill == eVar1) {
           iVar6 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit_00, UNITSTAT_quantity, 0);
           if (iVar6 > 0) {
             LAB_005bf43c:
@@ -1421,8 +1421,8 @@ BOOL __fastcall Skills_SrvDoFunc_113_UseScrollOrBook(::SGAMEDATA * pGame, D2Unit
         uVar4 = D2Common::ITEMS::Items::ITEMS_IsA(pUnit_00, ITEMTYPE_Scroll);
         if (uVar4) {
           uVar2 = D2Common::ITEMS::Items::GetMagicSuffix(pUnit_00, 0);
-          pvVar5 = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar2);
-          if (pvVar5 && *(eD2Skills*)((int)pvVar5 + 8) == eVar1) {
+          pDVar5 = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar2);
+          if (pDVar5 && pDVar5->scrollskill == eVar1) {
             goto LAB_005bf43c;
           }
         }

@@ -27,7 +27,7 @@ typedef D2WardenModuleObjectStrc * (__fastcall *pfnWardenCreateInterface)(::Ward
 
 namespace D2Client::Warden {
 
-void __thiscall WARDEN_RC4Decrypt(D2RC4StateStrc * pState, int32_t pData, uint32_t nLen) {
+void __thiscall WARDEN_RC4Decrypt(D2RC4StateStrc * pState, uint8_t * pData, uint32_t nLen) {
     uint32_t nNextByteIndex;
     uint8_t byIndexJ;
     uint8_t bySwapTmp;
@@ -46,7 +46,7 @@ void __thiscall WARDEN_RC4Decrypt(D2RC4StateStrc * pState, int32_t pData, uint32
       pState->sbox[byIndexI] = pState->sbox[byIndexJ];
       pState->sbox[byIndexJ] = bySwapTmp;
       nNextByteIndex = nByteIndex + 1;
-      *(uint8_t*)(nByteIndex + pData) ^= pState->sbox[(uint8_t)(pState->sbox[pState->nIndexJ] + pState->sbox[pState->nIndexI])];
+      pData[nByteIndex] ^= pState->sbox[(uint8_t)(pState->sbox[pState->nIndexJ] + pState->sbox[pState->nIndexI])];
       nByteIndex = nNextByteIndex;
     } while (nNextByteIndex < nLen);
 }
@@ -463,8 +463,8 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
     }
 
     WARDEN_RC4Init(&rc4State, (uint8_t*)pRc4Key, 0x10);
-    WARDEN_RC4Decrypt(&rc4State, (int32_t)pDecrypted, nSize);
-    BOOL BVar1 = WARDEN_VerifyModuleSignature(0x100, szModuleName, (int32_t)pDecrypted, gabWardenModuleRsaModulus, &gdwWardenModuleRsaExponent, 4, 0, nSize);
+    WARDEN_RC4Decrypt(&rc4State, (uint8_t*)pDecrypted, nSize);
+    BOOL BVar1 = WARDEN_VerifyModuleSignature(0x100, szModuleName, (uint8_t*)pDecrypted, gabWardenModuleRsaModulus, &gdwWardenModuleRsaExponent, 4, 0, nSize);
     if (!BVar1) {
       Storm::SMem::SMemFree(pDecrypted, ".\\WARDEN\\WardenClient.cpp", 0x17c, 0);
       return 0;

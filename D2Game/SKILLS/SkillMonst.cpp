@@ -2181,7 +2181,7 @@ uint32_t __fastcall SKILLPAL_GetHolyBoltTargetCount(D2UnitStrc * pUnit) {
       if (nFrameIdx < nTotalSeqFrames >> 8) {
         nCurFrameShifted <<= 8;
         do {
-          D2Common::Merc::ANIM_GetEventFrame((int32_t)pUnit->pAnimSeq, nCurFrameShifted, &nEventFrame);
+          D2Common::Merc::ANIM_GetEventFrame((D2MonSeqTxt*)pUnit->pAnimSeq, nCurFrameShifted, &nEventFrame);
           if (nEventFrame) {
             return nEventFrame;
           }
@@ -2598,7 +2598,7 @@ BOOL __fastcall Skills_SrvDoFunc_111_ApplyFetishAura(::SGAMEDATA * pGame, D2Unit
       pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
     }
 
-    D2UnitFindDataStrc* pFindData = SkillsServer::SKILLS_FindUnitsInRange((int32_t)pGame, pUnit, pSkillsTxt->Param[3] + nSkillLvl * 2, nTargetY, nTargetX);
+    D2UnitFindDataStrc* pFindData = SkillsServer::SKILLS_FindUnitsInRange(pGame, pUnit, pSkillsTxt->Param[3] + nSkillLvl * 2, nTargetY, nTargetX);
     int nUnitIdx = 0;
     if (pFindData->nCountedUnits > 0) {
       uint32_t bCanAttack;
@@ -2620,7 +2620,7 @@ BOOL __fastcall Skills_SrvDoFunc_111_ApplyFetishAura(::SGAMEDATA * pGame, D2Unit
       } while (nUnitIdx < pFindData->nCountedUnits);
     }
 
-    SkillsServer::SKILLS_FreeUnitFindData((int32_t)pGame, pFindData);
+    SkillsServer::SKILLS_FreeUnitFindData(pGame, pFindData);
     return 1;
 }
 

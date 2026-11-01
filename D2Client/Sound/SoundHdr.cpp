@@ -784,7 +784,7 @@ void __fastcall SOUNDHDR_LoadSoundFile(int32_t nSoundId, int32_t bForceSync, int
           gnSoundBufferBytesLoaded += nLoadStateOrBytes;
           SOUNDHDR_UpdateLRUTimestamp(nSoundId);
           pSound->nLoadState = 2;
-          GAME::Sound::SOUND_ParseStreamWavHeader((int32_t)pSound);
+          GAME::Sound::SOUND_ParseStreamWavHeader(pSound);
           return;
         }
       }
@@ -944,7 +944,7 @@ void __fastcall SOUNDHDR_UpdateRegistryVersion(int32_t nSoundHeaderIndex) {
     }
 
     sprintf(szVersionString, "%d.%d.%d.%d", 0xd8, 0x94, 0xf6, dwVersionBuild);
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Aux Battle.net", 0, szVersionString);
+    Storm::Source::SReg::SRegSaveString("Diablo II", "Aux Battle.net", 0, szVersionString);
 }
 
 } // namespace D2Client::Sound::SoundHdr

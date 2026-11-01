@@ -1100,7 +1100,7 @@ void __fastcall OOGUTIL_HandleChatCommands(char * szText) {
           nCmdMatch = ChatDlg::someStrCompare(szText, "/homechannel ");
           if (!nCmdMatch || (nCmdMatch = ChatDlg::someStrCompare(szText, "/defaultchannel ") , !nCmdMatch) || (nCmdMatch = ChatDlg::someStrCompare(szText, "/home ") , !nCmdMatch)) {
             ChatDlg::CHATDLG_ParseCommandArgument(0x20, szText, szChannelName);
-            Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Default Channel", 0, szChannelName);
+            Storm::Source::SReg::SRegSaveString("Diablo II", "Default Channel", 0, szChannelName);
             return;
           }
 
@@ -1974,10 +1974,10 @@ int __stdcall OOGUTIL_ProcessGameListEntry(D2ControlStrc * dwParam) {
       return 0;
     }
 
-    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(aPassword[0].szGameName, (uint16_t*)pwszLocaleStr, 0x100);
-    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(aGameName[0].szGameName, (uint16_t*)pwszGameName, 0x100);
-    Fog::SMem::SMEM_TitleCaseString(aPassword);
-    Fog::SMem::SMEM_TitleCaseString(aGameName);
+    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte((char*)aPassword, (uint16_t*)pwszLocaleStr, 0x100);
+    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(aGameName, (uint16_t*)pwszGameName, 0x100);
+    Fog::Src::String::FogString::SMEM_TitleCaseString((char*)aPassword);
+    Fog::Src::String::FogString::SMEM_TitleCaseString(aGameName);
     int32_t bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
     if (bHasPeerName) {
       ChatDlg::OOGMENU_JoinGame(0, aPassword[0].szGameName, aGameName[0].szGameName, nullptr);
@@ -3070,8 +3070,8 @@ BOOL __stdcall NET_MCP_CLIENT_PrepareGameCreatePacket(D2ControlStrc * pControl) 
       D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(sGameCreatePacket.szGamePassword, (uint16_t*)pwszPassword, 0x10);
       D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(sGameCreatePacket.szGameDescription, (uint16_t*)pwszDescription, 0x20);
       sGameCreatePacket.nGameFlags = 0;
-      Fog::SMem::SMEM_TitleCaseString(&sGameCreatePacket);
-      Fog::SMem::SMEM_TitleCaseString((mcp0x03data*)sGameCreatePacket.szGamePassword);
+      Fog::Src::String::FogString::SMEM_TitleCaseString(sGameCreatePacket.szGameName);
+      Fog::Src::String::FogString::SMEM_TitleCaseString(sGameCreatePacket.szGamePassword);
       pPacketScan = &sGameCreatePacket;
       sGameCreatePacket.nGameFlags = sGameCreatePacket.nGameFlags & 0b11111111111111111000111111111111U | CreateGameDifflevel << 0xc;
       do {

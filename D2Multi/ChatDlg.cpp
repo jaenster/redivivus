@@ -1107,7 +1107,7 @@ void __stdcall CHATDLG_ParseCommandArgument(int32_t nMaxLen, char * szSource, ch
 }
 
 void __stdcall SafeDefaultChannel(char * pszChannel) {
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Default Channel", 0, pszChannel);
+    Storm::Source::SReg::SRegSaveString("Diablo II", "Default Channel", 0, pszChannel);
 }
 
 void __stdcall CHATDLG_DestroyAllForms() {

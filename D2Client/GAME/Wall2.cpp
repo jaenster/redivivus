@@ -336,15 +336,15 @@ void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nParam, uint32_t nD
           bInViewBounds = (int)pMissileTxt->xoffset + nDrawLayer;
         }
 
-        pGfxResult = Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nParam, bInViewBounds, nDrawY, nullptr, 1);
-        if (pGfxResult && pUnit) {
+        bOrder = Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nParam, bInViewBounds, nDrawY, nullptr, 1);
+        if (bOrder && pUnit) {
           pUnit->eUnitFlags |= UNITFLAG_AUTOMAP;
         }
       } else {
         nPrecisionX = UNIT::Monster::IsMonsterGhostly(pUnit);
         UNIT::PlrSkills::PLRSKILLS_DrawChargeTrailIfPrimary(pUnit, nParam);
-        pGfxResult = Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nParam, nDrawLayer, nDrawX, (D2GamePalShiftGreenBloodStrc*)(uint32_t)(nPrecisionX != 0), 1);
-        if (pGfxResult && pUnit) {
+        bOrder = Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nParam, nDrawLayer, nDrawX, (D2GamePalShiftGreenBloodStrc*)(uint32_t)(nPrecisionX != 0), 1);
+        if (bOrder && pUnit) {
           pUnit->eUnitFlags |= UNITFLAG_AUTOMAP;
         }
 
@@ -352,8 +352,8 @@ void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nParam, uint32_t nD
       }
     } else {
       UNIT::PlrSkills::PLRSKILLS_CheckSkillWhipAndLeap(pUnit, nParam);
-      pGfxResult = Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nParam, nDrawLayer, nDrawX, nullptr, 1);
-      if (pGfxResult && pUnit) {
+      bOrder = Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nParam, nDrawLayer, nDrawX, nullptr, 1);
+      if (bOrder && pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_AUTOMAP;
       }
 
