@@ -167,7 +167,8 @@ jobs:
           # Misses in parallel. /Z7 keeps debug info in the object, so units
           # share no PDB and need no lock.
           $results = $todo | ForEach-Object -ThrottleLimit ([Environment]::ProcessorCount) -Parallel {
-            $out = & cl.exe "@$using:root\cl.rsp" /showIncludes "/Fo$($_.Obj)" $_.Full 2>&1 | ForEach-Object { "$_" }
+            $rspPath = $using:root + '\cl.rsp'
+            $out = & cl.exe "@$rspPath" /showIncludes "/Fo$($_.Obj)" $_.Full 2>&1 | ForEach-Object { "$_" }
             $code = $LASTEXITCODE
             $includes = @(); $log = @()
             foreach ($line in $out) {
