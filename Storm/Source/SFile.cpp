@@ -1367,7 +1367,7 @@ DWORD __stdcall SFileSetFilePointer(D2MPQFileStrc * pMPQFile, int32_t nParam, in
       switch (dwParam) {
         case 1:
           {
-            if (-1 < nParam || (uint32_t)pnParam[0x48] >= (uint32_t)-nParam) {
+            if (nParam >= 0 || (uint32_t)pnParam[0x48] >= (uint32_t)-nParam) {
               pnParam[0x48] += nParam;
               goto finish_seek;
             }
@@ -1380,7 +1380,7 @@ DWORD __stdcall SFileSetFilePointer(D2MPQFileStrc * pMPQFile, int32_t nParam, in
           }
         case 2:
           {
-            if (-1 < nParam || *(uint32_t*)(pnParam[0x46] + 8) >= (uint32_t)-nParam) {
+            if (nParam >= 0 || *(uint32_t*)(pnParam[0x46] + 8) >= (uint32_t)-nParam) {
               nParam = *(int*)(pnParam[0x46] + 8) + nParam;
               goto seek_absolute;
             }
@@ -4034,7 +4034,7 @@ BOOL __stdcall SFileDdaDestroy() {
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gbSFileAsyncIOShutdown = 1;
     LeaveCriticalSection(&lpCriticalSection_00779068);
     while (ghAsyncIOThread) {
-      /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ if (!gpCurrentAsyncIORequest && gSFileAsyncReqQueue.pNext < 1) {
+      /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ if (!gpCurrentAsyncIORequest && gSFileAsyncReqQueue.pNext <= 0) {
         break;
       }
 
@@ -4046,12 +4046,12 @@ BOOL __stdcall SFileDdaDestroy() {
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     D2StormAudioStreamRec* pCurrentRequest = (D2StormAudioStreamRec*)gSFileStreamRecordList.pNext;
-    if (0 < gSFileStreamRecordList.pNext) {
+    if (gSFileStreamRecordList.pNext > 0) {
       uint32_t* puVar1;
       do {
         pListPrev = pCurrentRequest->pNext;
         pListNext = pCurrentRequest->pPrevLink;
-        pNextRequest = (D2StormAudioStreamRec*)((int)pListPrev < 1 ? 0 : (uint32_t)pListPrev);
+        pNextRequest = (D2StormAudioStreamRec*)((int)pListPrev <= 0 ? 0 : (uint32_t)pListPrev);
         if (pListNext) {
           if ((int)pListPrev < 0) {
             pPrevLink = (int*)~(uint32_t)pListPrev;
@@ -4168,7 +4168,7 @@ int __stdcall SFileDestroy() {
 
     while (true) {
       pListHead = gSFileAsyncReqQueue.pNext;
-      if (0 >= gSFileAsyncReqQueue.pNext) {
+      if (gSFileAsyncReqQueue.pNext <= 0) {
         break;
       }
 
@@ -4178,7 +4178,7 @@ int __stdcall SFileDestroy() {
 
     while (true) {
       pListHead = gSFileStreamRecordList.pNext;
-      if (0 >= gSFileStreamRecordList.pNext) {
+      if (gSFileStreamRecordList.pNext <= 0) {
         break;
       }
 
@@ -4189,7 +4189,7 @@ int __stdcall SFileDestroy() {
 
     while (true) {
       pListHead = gSFileOpenFileList.pNext;
-      if (0 >= gSFileOpenFileList.pNext) {
+      if (gSFileOpenFileList.pNext <= 0) {
         break;
       }
 
@@ -4200,7 +4200,7 @@ int __stdcall SFileDestroy() {
 
     while (true) {
       pListHead = gMpqArchiveList.pNext;
-      if (0 >= gMpqArchiveList.pNext) {
+      if (gMpqArchiveList.pNext <= 0) {
         break;
       }
 
@@ -4582,7 +4582,7 @@ BOOL __stdcall SFileDdaEnd(D2MPQFileStrc * hFile) {
     pCurrentRequest = (D2StormAudioStreamRec*)gSFileStreamRecordList.pNext;
     if (gSFileStreamRecordList.pNext > 0) {
       do {
-        pNextRequest = (D2StormAudioStreamRec*)((int)pCurrentRequest->pNext < 1 ? 0 : (uint32_t)pCurrentRequest->pNext);
+        pNextRequest = (D2StormAudioStreamRec*)((int)pCurrentRequest->pNext <= 0 ? 0 : (uint32_t)pCurrentRequest->pNext);
         if (pCurrentRequest->pMpqFile == hFile) {
           if (gpCurrentAsyncIORequest && gpCurrentAsyncIORequest->pStream && gpCurrentAsyncIORequest->pStream == pCurrentRequest->pStream) {
             gpCurrentAsyncIORequest->pStream = 0;

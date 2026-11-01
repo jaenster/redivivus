@@ -1312,7 +1312,7 @@ int __fastcall D2WINTEXTBOX_GetScrollbarStyle(::D2WinTextBox * pTextBox) {
       D2WinScrollbar::D2WINSCROLLBAR_SetLinkedTextBox(pScrollbar, pNew);
       nScrollPageSize = D2WINTEXTBOX_GetVisibleLineCount(pNew);
       nScrollPageSize--;
-      if (nScrollPageSize < 1) {
+      if (nScrollPageSize <= 0) {
         nScrollPageSize = 1;
       }
 

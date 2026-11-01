@@ -969,7 +969,7 @@ void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor) {
     }
 
     pNewMsg->nLineCount = (uint16_t)nLineCount;
-    if (0 < (int)nWrapCount) {
+    if ((int)nWrapCount > 0) {
       do {
         if (nLineIdx < (int)(uint32_t)pNewMsg->nLineCount) {
           pNewMsg->apwszLines[nLineIdx] = pNewMessage->wszLine;

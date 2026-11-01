@@ -1116,7 +1116,7 @@ BOOL __stdcall CHARSEL_UpdateSelectedCharDisplay() {
 
     int nSlotIndex;
     nSlotIndex = D2Client::CharScreen::nSelectedCharIndex - g_nCharSelNavigationIndex;
-    if (D2Client::CharScreen::TotalCurrentChars < 1 || D2Client::CharScreen::nSelectedCharIndex <= gnCharSelLoadMoreEntryIndex || D2Client::CharScreen::nSelectedCharIndex == gnCharSelLoadingEntryIndex) {
+    if (D2Client::CharScreen::TotalCurrentChars <= 0 || D2Client::CharScreen::nSelectedCharIndex <= gnCharSelLoadMoreEntryIndex || D2Client::CharScreen::nSelectedCharIndex == gnCharSelLoadingEntryIndex) {
       bControlState = 0;
     } else {
       bControlState = 1;
@@ -2391,7 +2391,7 @@ void __stdcall CHARSEL_InitCharSelScreen() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCharSelExitButton, 0);
     CHARSEL_LoadCharList(PreferredClosedRealm);
     uint32_t nExtraChars = D2Client::CharScreen::TotalCurrentChars - gnCharSelScreenSlotCount;
-    if (0 < (int)nExtraChars) {
+    if ((int)nExtraChars > 0) {
       uint32_t nOddRemainder;
       nOddRemainder = nExtraChars & 0x80000001;
       if ((int)nOddRemainder < 0) {

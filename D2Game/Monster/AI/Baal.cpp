@@ -499,7 +499,7 @@ static int32_t __stdcall AI_BAAL_CloneChooseAction(::SGAMEDATA * pGame, D2UnitSt
     } while (nBaseWeight);
 
     uint32_t nRandRoll = 0;
-    if (0 < (int)nTotalWeight) {
+    if ((int)nTotalWeight > 0) {
       uint64_t nSeedHigh;
       nRandRoll = pUnit2->sSeed.nSeedLow;
       nSeedHigh = (uint64_t)pUnit2->sSeed.nSeedHigh;
@@ -596,7 +596,7 @@ static int32_t __stdcall AI_BAAL_ThroneRoomChooseAction(::SGAMEDATA * pGame, D2U
     } while (nBaseWeight);
 
     uint32_t nRandRoll = 0;
-    if (0 < (int)nTotalWeight) {
+    if ((int)nTotalWeight > 0) {
       uint32_t dwSeedMulHi;
       nRandRoll = pUnit2->sSeed.nSeedLow;
       if (nTotalWeight & nTotalWeight - 1) {

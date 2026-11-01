@@ -677,11 +677,11 @@ void __stdcall TILECMP_FreeTileCache(D2TileLibraryHeaderStrc * pTileLibrary, int
       }
 
       iTileSet = 0;
-      if (0 < pTileLibrary->nTiles) {
+      if (pTileLibrary->nTiles > 0) {
         do {
           iNode = 0;
           pDVar2 = pTileLibrary->pTiles;
-          if (0 < pDVar2[iTileSet].nSubTiles) {
+          if (pDVar2[iTileSet].nSubTiles > 0) {
             nUnused = 0;
             do {
               nNodeBase = (int)pDVar2[iTileSet].pSubTiles + nUnused;
@@ -879,7 +879,7 @@ void __stdcall TILECMP_FixupPointersInPlace(int * pTileCmpHdr, int * * ppTileCmp
 
       pTileSetData = pTileCmpHdr + pTileCmpHdr[0x43] * 0x18 + 0x45;
       iTileSet = 0;
-      if (0 < pTileCmpHdr[0x43]) {
+      if (pTileCmpHdr[0x43] > 0) {
         szText = 0;
         do {
           nStrCopyOffset = pTileCmpHdr[0x44];
@@ -1054,7 +1054,7 @@ void __stdcall TILECMP_ProcessAllTilePixels(int32_t pTileCmpHdr, void * pNodeByt
       }
 
       iTileSet = 0;
-      if (0 >= *(int*)(pTileCmpHdr + 0x10c)) {
+      if (*(int*)(pTileCmpHdr + 0x10c) <= 0) {
         return;
       }
 
@@ -1062,7 +1062,7 @@ void __stdcall TILECMP_ProcessAllTilePixels(int32_t pTileCmpHdr, void * pNodeByt
       do {
         iNode = 0;
         nTileSetBase = *(int*)(pTileCmpHdr + 0x110) + nTileSetByteOffset;
-        if (0 < *(int*)(nTileSetBase + 0x50)) {
+        if (*(int*)(nTileSetBase + 0x50) > 0) {
           nNodeByteIter = 0x0;
           do {
             TILECMP_ApplyFunctionToPixels(*(uint8_t**)(nNodeByteIter + *(int*)(nTileSetBase + 0x54) + 0x10), (uint32_t)*(uint16_t*)(nNodeByteIter + *(int*)(nTileSetBase + 0x54) + 10), (pfnTilecmpPixelCallback)pPixelCallback);
@@ -1182,7 +1182,7 @@ void __stdcall TILECMP_DeepCopyWithRecompression(uint32_t * pSrcTileCmpHdr, uint
 
         memset(nErrAddress, 0, nTileSetCount * 0x60);
         iTileSet = 0;
-        if (0 < (int)pSrcTileCmpHdr[0x43]) {
+        if ((int)pSrcTileCmpHdr[0x43] > 0) {
           nTileSetByteOffset = 0;
           do {
             pDstTileSet = (uint32_t*)(pDstHeader[0x44] + nTileSetByteOffset);
@@ -1213,7 +1213,7 @@ void __stdcall TILECMP_DeepCopyWithRecompression(uint32_t * pSrcTileCmpHdr, uint
 
               memset(nErrAddress, 0, nAllocSize);
               iNode = 0;
-              if (0 < (int)pCopyWordSrc[0x14]) {
+              if ((int)pCopyWordSrc[0x14] > 0) {
                 do {
                   TILECMP_CompressSubTile((uint32_t*)(pCopyWordSrc[0x15] + nCopyWords), (uint32_t*)(pDstTileSet[0x15] + nCopyWords), (pfnRGBToPaletteIndex)pPaletteContext, pCopyWordSrc[9]);
                   iNode++;

@@ -854,7 +854,7 @@ void __stdcall WEATHER_DrawParticles() {
 
     D2WeatherParticleStrc* pParticleData = (D2WeatherParticleStrc*)pEnvironmentParticles->pData;
     int nIndex = 0;
-    if (-1 >= pEnvironmentParticles->nHighestUsedIndex) {
+    if (pEnvironmentParticles->nHighestUsedIndex < 0) {
       return;
     }
 

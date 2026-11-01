@@ -58,7 +58,7 @@ void __fastcall BuildJungle(D2DrlgLevelStrc * pLevel) {
     }
 
     int nYCell = 0;
-    if (0 >= nLevelHeightCells) {
+    if (nLevelHeightCells <= 0) {
       return;
     }
 

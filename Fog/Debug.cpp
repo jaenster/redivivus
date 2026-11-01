@@ -1250,7 +1250,7 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
       if (nModuleCount < 0x101) {
         Src::LogManager::LOGMANAGER_TraceToModuleLog("", "\nEnumerate modules...");
         iVar1 = 0;
-        if (0 < (int)nModuleCount) {
+        if ((int)nModuleCount > 0) {
           do {
             bCallOk = (*pFVar1)(hProcessLocal2, ahModules[iVar1], &sModuleInfo, 0xc);
             if (!bCallOk) {

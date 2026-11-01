@@ -1427,7 +1427,7 @@ void __fastcall MISSILE_SpawnRandomScatter(D2UnitStrc * pUnit, uint32_t nSpawnIn
     } else {
       nCenterY = 0;
     }
-    if (0 >= nCount) {
+    if (nCount <= 0) {
       return;
     }
 
@@ -2560,12 +2560,12 @@ int32_t __fastcall MISSILE_CltHitFn14_IceShatter(D2UnitStrc * pUnit, D2UnitStrc 
     } else {
       nPosY = 0;
     }
-    if (-1 < pMissileTxt->CltHitSubMissile1) {
+    if (pMissileTxt->CltHitSubMissile1 >= 0) {
       nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
       eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
       MakeMissileAtXY(pUnit, (int)pMissileTxt->CltHitSubMissile1, 0, 0, eSkill, nSkillLevel);
     }
-    if (-1 >= pMissileTxt->CltHitSubMissile2) {
+    if (pMissileTxt->CltHitSubMissile2 < 0) {
       return 1;
     }
 
@@ -2740,7 +2740,7 @@ int32_t __fastcall MISSILE_CltHitFn18_MeteorCenter(D2UnitStrc * pUnit, D2UnitStr
 
     eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
     int32_t nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-    if (!(-1 < (int)eSkill && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill)) {
+    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill)) {
       return 1;
     }
 
@@ -6707,7 +6707,7 @@ void __fastcall MISSILE_CltDoFn15_FingerMageSpider(D2UnitStrc * pUnit) {
       }
       if (pTarget) {
         nVelocity = D2Common::Units::Missile::GetCurrentFrame(pUnit);
-        if (!(nVelocity % nDeltaY) && 0 < nCollisionDist) {
+        if (!(nVelocity % nDeltaY) && nCollisionDist > 0) {
           nVelocity = D2Common::Collision::GetCollisionDistance(pUnit, pTarget);
           if (nVelocity < pMissileTxt->CltParam4) {
             nVelocity = Units::GetXPosFromDynamicPathUnit(pUnit);
@@ -6753,7 +6753,7 @@ void __fastcall MISSILE_CltDoFn15_FingerMageSpider(D2UnitStrc * pUnit) {
         }
 
         nVelocity = D2Common::Units::Missile::GetCurrentFrame(pUnit);
-        if (!(nVelocity % nClassId) && 0 < nCollisionDist) {
+        if (!(nVelocity % nClassId) && nCollisionDist > 0) {
           memset(&sSkillArg, 0, 0x5c);
           sSkillArg.nFlags = 5;
           sSkillArg.nX = Units::GetXPosFromDynamicPathUnit(pUnit);

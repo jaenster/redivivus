@@ -1192,7 +1192,7 @@ int32_t __stdcall D2COMP_TruncateStringToFitWidth(uint16_t * wszText, int32_t nM
     pCharScan = pCharScan + strlen(pCharScan) + 1;
     int bTruncatedFlag = 0;
     int nFitCount = nCharIndex;
-    if (0 < (int)pCharScan - (int)(szMultiByte + 1)) {
+    if ((int)pCharScan - (int)(szMultiByte + 1) > 0) {
       do {
         nFitCount = nCharIndex + 1;
         nPixelWidth = D2WinFont::D2WINFONT_GetStringPixelWidth(wszText, nFitCount);
@@ -1533,7 +1533,7 @@ void __fastcall D2COMP_AllocTxt_Items(D2PoolManagerStrc * pMemory) {
     pD2CompItemsShortStructure = (short*)D2_ALLOC_POOL_AT(nullptr, nD2CompItemsSize * 2, ".\\Src\\D2Comp.cpp", 0xa4b);
     memset(pD2CompItemsShortStructure, 0, nD2CompItemsSize * 2);
     int i = 0;
-    if (0 < nD2CompItemsSize) {
+    if (nD2CompItemsSize > 0) {
       short int* psItemVersion;
       j = 0;
       psItemVersion = (short int*)((int)pD2CompItems + 0xf6);
@@ -1549,7 +1549,7 @@ void __fastcall D2COMP_AllocTxt_Items(D2PoolManagerStrc * pMemory) {
     }
 
     pD2CompItemsLinker = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\Src\\D2Comp.cpp", 0xa56);
-    if (0 >= nD2CompItemsSize) {
+    if (nD2CompItemsSize <= 0) {
       return;
     }
 
@@ -2790,7 +2790,7 @@ void __stdcall D2COMP_AllocTxt_EverythingItems() {
         }
 
         nDupCheckIdx = 0;
-        if (0 < nSlotIdx) {
+        if (nSlotIdx > 0) {
           do {
             if (gaCompCharacterCompositeItems[nDupCheckIdx].nItemCode == nItemCode) {
               goto next_item;

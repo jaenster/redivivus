@@ -56,7 +56,7 @@ void __fastcall FOG_InitDataArray(D2DataArrayStrc * pDataArray) {
       pDataArray->nUsedCount = 0;
       pDataArray->nNextFreeIndex = 0;
       pDataArray->nMagic = -0x8000;
-      if (0 >= pDataArray->numObjects) {
+      if (pDataArray->numObjects <= 0) {
         return;
       }
 

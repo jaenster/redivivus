@@ -232,7 +232,7 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
     }
 
     int i = 0;
-    if (0 >= sgtDataTable.nTxtLevelsSize) {
+    if (sgtDataTable.nTxtLevelsSize <= 0) {
       return;
     }
 
@@ -252,7 +252,7 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer((uint16_t*)&pDVar1[i].wszLevelWarp[0], pWVar2, nWideCharBufLen);
       pDVar1[i].wszLevelWarp[39] = 0;
       iLevelIdx = 0;
-      /* Count mon, nmon, umon entries */ if (0 < sgtDataTable.nTxtLevelsSize) {
+      /* Count mon, nmon, umon entries */ if (sgtDataTable.nTxtLevelsSize > 0) {
         do {
           nMonCount = 0;
           pMonEntry = pDVar1[i].mon;
@@ -566,7 +566,7 @@ void __fastcall TXT_AllocTxt_lvltypes(D2PoolManagerStrc * pMemory) {
     pTxtLvlTypes = (D2LvlTypesTxt*)DataTbls::CompileTxt(pMemory, "lvltypes", lvltypes, &nTxtLvlTypesSize, 0x788);
     int nRowIdx = 0;
     D2LvlTypesTxt* pCurrentRow = pTxtLvlTypes;
-    if (0 >= nTxtLvlTypesSize) {
+    if (nTxtLvlTypesSize <= 0) {
       return;
     }
 
@@ -677,7 +677,7 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t nPara
     D2LvlPrestTxt* pLvlPrestTxt = sgtDataTable.pTxtLvlPrest;
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     int nRowCount = 0;
-    if (0 >= sgptDataTable->nTxtLvlPrestSize) {
+    if (sgptDataTable->nTxtLvlPrestSize <= 0) {
       return;
     }
 
@@ -897,7 +897,7 @@ void __fastcall TXT_AllocTxt_lvlsub(D2PoolManagerStrc * pMemory, int32_t nParam,
     D2LvlSubTxt* pLvlSubTxt = sgpTxtLvlSub;
     int i = nTxtLvlSubSize;
     int nRowCount = nTxtLvlSubSize;
-    if (0 < nTxtLvlSubSize) {
+    if (nTxtLvlSubSize > 0) {
       size_t nAllocSize;
       do {
         if (pLvlSubTxt->Type > nMaxTypeId) {
@@ -914,7 +914,7 @@ void __fastcall TXT_AllocTxt_lvlsub(D2PoolManagerStrc * pMemory, int32_t nParam,
         memset(gpnLvlSubTypeToIndex, 0, nAllocSize);
         i = 0;
         nRowCount = nTxtLvlSubSize;
-        if (0 < nTxtLvlSubSize) {
+        if (nTxtLvlSubSize > 0) {
           nMaxTypeId = 0;
           pLvlSubTxt = sgpTxtLvlSub;
           do {
@@ -939,7 +939,7 @@ void __fastcall TXT_AllocTxt_lvlsub(D2PoolManagerStrc * pMemory, int32_t nParam,
     pLvlSubTxt = sgpTxtLvlSub;
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     i = 0;
-    if (0 >= nTxtLvlSubSize) {
+    if (nTxtLvlSubSize <= 0) {
       return;
     }
 
@@ -1039,7 +1039,7 @@ void __stdcall TXT_LoadExpansionLvlTbls() {
     memset(pExpLvlTblsRow, 0, nAllocSize);
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     int i = 0;
-    if (0 >= nTxtLvlTypesSize) {
+    if (nTxtLvlTypesSize <= 0) {
       return;
     }
 
@@ -1816,7 +1816,7 @@ void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
     D2AutoMapLvlTbls* pAutoMapLvlTbls_lcl = (D2AutoMapLvlTbls*)D2_ALLOC_POOL_AT(nullptr, nTxtAutomapSize << 5, ".\\DATATBLS\\LvlTbls.cpp", 0x4f7);
     memset(pAutoMapLvlTbls_lcl, 0, nTxtAutomapSize << 5);
     int nTxtRow = 0;
-    if (0 < nTxtAutomapSize) {
+    if (nTxtAutomapSize > 0) {
       int nValidCelCount;
       pMiddlePointer = &pAutoMapLvlTbls_lcl->nIndex;
       pbTxtRow = &pTxtAutomap->Style;
@@ -1867,7 +1867,7 @@ void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
     } while ((int)pMiddlePointer < (intptr_t)&gpaAutoMapRelated + 292);
 
     int nAutoMapRow = 0;
-    if (0 < nTxtAutomapSize) {
+    if (nTxtAutomapSize > 0) {
       do {
         nIndex = pAutoMapLvlTbls_lcl[nAutoMapRow].nLevelType;
         pNext = pAutoMapLvlTbls_lcl + nAutoMapRow;

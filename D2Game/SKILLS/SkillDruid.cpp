@@ -1436,7 +1436,7 @@ BOOL __fastcall SKILLDRUID_ApplyAccumulatedStateDamage(::SGAMEDATA * pGame, D2Un
 
     int nTotalToHit = 0;
     uint8_t bySrcDam = 0x80;
-    if (0 < (short int)sgptDataTable->nAllStatesDataTblFlag0x10Size) {
+    if ((short int)sgptDataTable->nAllStatesDataTblFlag0x10Size > 0) {
       eD2States eStateType;
       do {
         eState = (eD2States)sgptDataTable->pAllStatesDataTblFlag0x10[nStateIdx].nStateId;

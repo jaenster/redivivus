@@ -399,7 +399,7 @@ void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtMissilesLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\MissileTbls.cpp", 0x189);
     sgtDataTable.pTxtMissiles = (D2MissilesTxt*)DataTbls::CompileTxt(pMemory, "missiles", missiles, &sgtDataTable.nTxtMissilesSize, 0x1a4);
     int iMissileIdx = 0;
-    if (0 < sgtDataTable.nTxtMissilesSize) {
+    if (sgtDataTable.nTxtMissilesSize > 0) {
       int iFieldIdx;
       sgptDataTable_lcl = sgptDataTable;
       do {

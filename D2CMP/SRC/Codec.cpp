@@ -329,7 +329,7 @@ static void __stdcall CODEC_DecodeFramePixels(uint8_t * * pbParam, int32_t nPara
 
       if (!nCodeWidth) {
         byFillValue = **pbParam;
-        if (0 < pnParam[4]) {
+        if (pnParam[4] > 0) {
           iRow = 0;
           do {
             memset(pOutRow, (uint32_t)byFillValue, pnParam[3]);
@@ -1152,7 +1152,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pnParam, D2PoolManagerStr
         local_328.pCurWord += (int)(local_318 + ((int)local_318 >> 0x1f & 0x1f)) >> 5;
         uVar10 = (uint32_t)local_318 & 0x1f;
         iVar6 = 0;
-        if (0 < __frame0.nRemapByteCount) {
+        if (__frame0.nRemapByteCount > 0) {
           do {
             __frame0.pRemapOutputBuf[iVar6] = aInversePaletteLUT[__frame0.pRemapOutputBuf[iVar6]];
             iVar6++;

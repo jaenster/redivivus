@@ -3914,7 +3914,7 @@ void __fastcall ITEMMODE_HandleCursorItem(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
     int32_t iVar1 = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pItem, 0xcc, aStatBonusData, 0x40);
     int nChargedStatIdx = 0;
-    if (0 >= iVar1) {
+    if (iVar1 <= 0) {
       return;
     }
 

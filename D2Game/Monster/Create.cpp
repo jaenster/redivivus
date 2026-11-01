@@ -1181,7 +1181,7 @@ BOOL __fastcall SpawnMinions_AtXY(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32
 
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     int nOwnerGUID = pUnit->nUnitGUID;
-    if (0 >= nMinionCount) {
+    if (nMinionCount <= 0) {
       return bAnySpawned;
     }
 
@@ -1233,7 +1233,7 @@ BOOL __fastcall SpawnMonsterAtUnitOffset(::SGAMEDATA * pGame, D2RoomStrc * pRoom
     nSpawnEntryCount = *pParam;
     int nParam2;
     nParam2 = 0x0;
-    if (0 >= nSpawnEntryCount) {
+    if (nSpawnEntryCount <= 0) {
       return nResult;
     }
 

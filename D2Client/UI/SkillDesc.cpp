@@ -140,7 +140,7 @@ void __fastcall SKILLDESC_FormatItemStatLine(int32_t pUnit, uint16_t * wszText, 
       memset(wszStatValueStr, 0, 10 * sizeof(wszStatValueStr[0]));
       Storm::Source::SSTR::SStrPrintf(szTempBuf, 10, "%i", nStatValue);
       D2Lang::UTF8_ConvertToWideChar(wszStatValueStr, szTempBuf, 9);
-      if (nStatValue >= 1) {
+      if (nStatValue > 0) {
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wString1, pInitDst);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wString1, wszStatValueStr);
       } else {
@@ -1650,7 +1650,7 @@ static short * __stdcall SKILLDESC_BuildStatDescription(eD2UnitStat eUnitStat, u
         if (!apnStatValues[0x22]) {
           return nullptr;
         }
-      if ((int)apnStatValues[0x21] < 1) {
+      if ((int)apnStatValues[0x21] <= 0) {
         apnStatValues[0x21] = (short int*)0x1;
       }
 
@@ -1816,7 +1816,7 @@ static void __stdcall SKILLDESC_BuildChargeSkillDesc(D2UnitStrc * pUnit, uint16_
         }
 
         wszSkillName = 0;
-        if (nStatValue >= 1) {
+        if (nStatValue > 0) {
           wDescStrId = *(uint16_t*)(pnStatData + 2);
           wszSkillName = D2Lang::StrTable::strtable::GetLocaleString(wDescStrId);
         } else {
@@ -1833,7 +1833,7 @@ static void __stdcall SKILLDESC_BuildChargeSkillDesc(D2UnitStrc * pUnit, uint16_
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x141);
             exit(-1);
           }
-          if (nStatValue >= 1) {
+          if (nStatValue > 0) {
             D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszValueFormatted, wszPlus);
             D2Lang::Unicode::UNISYS::AppendToBuffer(wszValueFormatted, wszValueStr);
           } else {
@@ -2581,7 +2581,7 @@ int32_t __stdcall SKILLDESC_GetAuraBonusDamage() {
 
     int nTotalDmg = 0;
     int nStateIdx = 0;
-    if (0 >= (short int)sgptDataTable->nAllStatesDataTblFlag0x04Size) {
+    if ((short int)sgptDataTable->nAllStatesDataTblFlag0x04Size <= 0) {
       return nTotalDmg;
     }
 
@@ -6356,7 +6356,7 @@ int __stdcall SKILLDESC_HasAnyClassSkill(D2UnitStrc * pUnit) {
     }
 
     int nSkillCount = sgptDataTable->nTxtSkillsCount;
-    if (0 >= nSkillCount) {
+    if (nSkillCount <= 0) {
       return 0;
     }
 

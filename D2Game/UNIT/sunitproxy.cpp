@@ -510,7 +510,7 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
     nNpcCount = 0;
     int nMonStatsIdx;
     nMonStatsIdx = 0;
-    if (0 < nMonStatsTotal) {
+    if (nMonStatsTotal > 0) {
       char* pMonStatsTxtEntry;
       nMonStatsByteOffset = 0;
       pNpcEntry = &pNpcArray->pNpc[0].pProxyQueue;

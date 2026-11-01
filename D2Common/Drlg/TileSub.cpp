@@ -42,7 +42,7 @@ void __fastcall InitializeDrlgFile(D2PoolManagerStrc * pMemory, D2LvlSubTxt * pL
     }
 
     int iStack_10 = 0;
-    if (0 < pDrlgFile->nWallLayers) {
+    if (pDrlgFile->nWallLayers > 0) {
       pDStack_8 = pLvlSubTxtRecord->pTileTypeGrid;
       nWallLayerIdx = 0x1c;
       do {

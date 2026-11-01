@@ -315,7 +315,7 @@ static void __stdcall MONSTERMODE_OnDeath(uint8_t nDirection, ::SGAMEDATA * pGam
     if (pUnit) {
       int nSuperUniqueId;
       nSuperUniqueId = pUnit->nClassId;
-      if (-1 < nSuperUniqueId && nSuperUniqueId < sgptDataTable->nTxtMonStatsSize) {
+      if (nSuperUniqueId >= 0 && nSuperUniqueId < sgptDataTable->nTxtMonStatsSize) {
         pMonStats = sgptDataTable->pTxtMonStats + nSuperUniqueId;
       }
     }

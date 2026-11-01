@@ -336,7 +336,7 @@ void __stdcall LIGHTMAP_InitFromPlayerAndRooms(uint32_t bForceBlack) {
       nIntensity = 0;
       ROOM_GetAmbientLightColor(pRoom, &nIntensity, &nRed, &nGreen, (char*)((uintptr_t)&bForceBlack + 3), 1);
       LIGHTMAP_FillGridRect(0, (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)*(uint8_t*)((char*)&bForceBlack + 3) << 8 | (uint16_t)(uint8_t)nGreen) << 8 | (uint32_t)(uint8_t)nRed) & 0xffffffu) << 8 | nIntensity, 0, 0x2f, 0x2f);
-      if (0 < nNumRooms) {
+      if (nNumRooms > 0) {
         do {
           if (ppRoomList[nRoomIndex] != pRoom) {
             ROOM_GetAmbientLightColor(ppRoomList[nRoomIndex], &nIntensity, &nRed, &nGreen, (char*)((uintptr_t)&bForceBlack + 3), 1);

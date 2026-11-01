@@ -462,7 +462,7 @@ void __stdcall FORMS_DestroyLists() {
     gbMainMenuStateTransition = 0;
     gbMainMenuFormsDestroyInProgress = 0;
     FORMS_nListExExCount = 0;
-    if (0 < FORMS_nListCount) {
+    if (FORMS_nListCount > 0) {
       ppForm = FORMS_pList;
       do {
         D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(ppForm);
@@ -3937,7 +3937,7 @@ BOOL __stdcall UIMENU_AndOneMorePleaseWait(D2ControlMsg * pControlMsg) {
     wszWaitText = D2Lang::StrTable::strtable::GetLocaleString(0x141d);
     int nFormIdx;
     nFormIdx = 0;
-    if (0 < FORMS_nListCount) {
+    if (FORMS_nListCount > 0) {
       ppForm = FORMS_pList;
       do {
         D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(ppForm);

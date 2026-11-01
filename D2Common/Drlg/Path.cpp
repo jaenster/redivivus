@@ -2695,7 +2695,7 @@ int32_t __stdcall DRLGPATH_BuildBresenhamPointList(uint32_t nSrcPacked, uint32_t
       nCurX = nSrcPacked & 0xffff;
       nCurY = (uint32_t)*(uint16_t*)((char*)&nSrcPacked + 2);
       if (!nDeltaY) {
-        *pnInitDir = (uint32_t)((int)nDstPacked < 1) * 2 + 1;
+        *pnInitDir = (uint32_t)((int)nDstPacked <= 0) * 2 + 1;
         if (nDeltaX <= nMaxStepsM1) {
           do {
             nCurX += nDstPacked;
@@ -2709,7 +2709,7 @@ int32_t __stdcall DRLGPATH_BuildBresenhamPointList(uint32_t nSrcPacked, uint32_t
           return nPointCount;
         }
       } else if (!(nDeltaX < (int)nDeltaY)) {
-        *pnInitDir = (uint32_t)((int)nDstPacked < 1) * 2 + 1;
+        *pnInitDir = (uint32_t)((int)nDstPacked <= 0) * 2 + 1;
         if (nDeltaX <= nMaxStepsM1) {
           nSrcPacked = 0;
           nMaxSteps = nDeltaX;
@@ -2731,7 +2731,7 @@ int32_t __stdcall DRLGPATH_BuildBresenhamPointList(uint32_t nSrcPacked, uint32_t
           return nPointCount;
         }
       } else {
-        *pnInitDir = nStepY < 1 ? 0 : 0x2;
+        *pnInitDir = nStepY <= 0 ? 0 : 0x2;
         if ((int)nDeltaY <= nMaxStepsM1) {
           nMaxSteps = 0;
           nSrcPacked = nDeltaY;
@@ -2990,7 +2990,7 @@ int32_t __fastcall DRLGPATH_FindPathDualScan(uint32_t * pPathGrid, int32_t nGrid
       if (!pDVar5->nDone) {
         BVar3 = DRLGPATH_TryStepWithFallbackDirections((D2PathTypeArg*)pPathGrid, &pDVar5->nDir);
         if (BVar3) {
-          if (pDVar5->nWaypointCount >= 1) {
+          if (pDVar5->nWaypointCount > 0) {
             switch (nEndY) {
               case 0:
                 wCurX = pDVar5->sCurPos.nY;
@@ -3012,7 +3012,7 @@ int32_t __fastcall DRLGPATH_FindPathDualScan(uint32_t * pPathGrid, int32_t nGrid
                 goto record_step;
             }
 
-            if (0 < iVar4) {
+            if (iVar4 > 0) {
               iVar4 = iVar4 - 1 + *pStartX;
               if (iVar4 < *pStartY && pDVar5->sCurPos.nX == *(uint16_t*)(nGridSize + iVar4 * 4) && pDVar5->sCurPos.nY == *(uint16_t*)(nGridSize + 2 + iVar4 * 4)) {
                 if (pDVar5->nWaypointCount >= nEndX) {

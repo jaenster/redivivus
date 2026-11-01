@@ -331,7 +331,7 @@ void __fastcall SKILL_DrawChargeTrail(D2UnitStrc * pUnit, uint32_t nParticleType
         return;
       }
     } else {
-      if (-1 < nScreenVelY) {
+      if (nScreenVelY >= 0) {
         return;
       }
     }

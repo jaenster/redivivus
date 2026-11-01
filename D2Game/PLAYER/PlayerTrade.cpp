@@ -1112,7 +1112,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           sItemGenContext.eQuality = eItemFlags;
           pDVar2 = ITEMS::Items::Drop::ITEM_CreateItemInstance(pGameLocal, &sItemGenContext, 0);
           apDStack_c8[nOutputSlotIndex] = pDVar2;
-          if (-1 < (int)local_ac) {
+          if ((int)local_ac >= 0) {
             pGameTmp->fUniqueSpawn[(int)local_ac >> 5] &= gadwInvBitMasks[local_ac & 0x1f];
           }
         }

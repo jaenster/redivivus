@@ -4264,7 +4264,7 @@ void __stdcall INVENTORY_InitializeItemTypeTable() {
     nTableCount = 4;
     int nItemIndex;
     nItemIndex = 0;
-    if (0 < pItemsTxtSize->nSize) {
+    if (pItemsTxtSize->nSize > 0) {
       D2ItemsTxt* pDVar1;
       do {
         pDVar1 = pItemsTxtSize->pItems;

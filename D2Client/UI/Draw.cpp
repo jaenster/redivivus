@@ -304,7 +304,7 @@ void __stdcall InitializeUI() {
       bScrollActive = Text::TEXT_IsScrollingTextActive();
       if (!bScrollActive) {
         eUI = UI_GAME;
-        if (0 < gnUIFlagCount) {
+        if (gnUIFlagCount > 0) {
           do {
             if ((&GFX_bShowUIFlag.Game)[eUI] == 1) {
               switch (gUIFlagDismissModeTable[eUI]->anDismissMode[0]) {
@@ -357,7 +357,7 @@ void __stdcall InitializeUI() {
         bScrollActive = Text::TEXT_IsScrollingTextActive();
         if (!bScrollActive) {
           eUI = UI_GAME;
-          if (0 < gnUIFlagCount) {
+          if (gnUIFlagCount > 0) {
             do {
               if ((&GFX_bShowUIFlag.Game)[eUI] == 1) {
                 switch (gUIFlagDismissModeTable[eUI]->anDismissMode[0x22]) {
@@ -641,7 +641,7 @@ void DRAW_UI(D2GameViewStrc * pGameView) {
         eBorderType = Text::TEXT_IsScrollingTextActive();
         if (!eBorderType) {
           eUIIndex = UI_GAME;
-          if (0 < gnUIFlagCount) {
+          if (gnUIFlagCount > 0) {
             do {
               if ((&GFX_bShowUIFlag.Game)[eUIIndex] == 1) {
                 switch (gUIFlagDismissModeTable[eUIIndex]->anDismissMode[0x21]) {

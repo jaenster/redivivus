@@ -303,7 +303,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
       /* int flags for recv */ /* int len for recv */ if (bCompressedMode) {
         /* char * buf for recv */ /* SOCKET s for recv */ pbRecvResult = (uint8_t*)recv(CLIENT_SocketToServer, (char*)(aCompressedBuf + (int)pCompressedRead), 0x5b4, 0);
-        if (0 < (int)pbRecvResult) {
+        if ((int)pbRecvResult > 0) {
           pCompressedRead += (int)pbRecvResult;
           while (true) {
             pCompressedEnd = pCompressedRead;
@@ -339,7 +339,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
         }
       } else {
         /* char * buf for recv */ /* SOCKET s for recv */ pbRecvResult = (uint8_t*)recv(CLIENT_SocketToServer, pD2PacketsClientBuffer->pBytes + pD2PacketsClientBuffer->nCount, 0x5b4, 0);
-        if (0 < (int)pbRecvResult) {
+        if ((int)pbRecvResult > 0) {
           pD2PacketsClientBuffer->nCount = (int)(pbRecvResult + pD2PacketsClientBuffer->nCount);
           bCompressedMode = NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues();
         }

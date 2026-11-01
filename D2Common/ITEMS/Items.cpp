@@ -6031,7 +6031,7 @@ static void __stdcall ITEMS_CalcStaffModsPriceModifier(int * pBuy, int * pSell, 
     uint32_t nRepairDeltaAccum = 0;
     int32_t iVar1 = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pItem, 0x6b, aSkillBonusBuf, 0x40);
     int i = 0;
-    if (0 < iVar1) {
+    if (iVar1 > 0) {
       D2SkillsTxt* pSkillTxt;
       do {
         if ((int)(uint32_t)(uint16_t)aSkillBonusBuf[i].wSubIndex < sgptDataTable->nTxtSkillsCount) {

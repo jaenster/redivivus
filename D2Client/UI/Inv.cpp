@@ -1690,7 +1690,7 @@ static void __stdcall INV_FormatReqStrText(D2ItemsTxt * pItemsTxt, int32_t nReqA
     uint16_t* pwColorPrefix = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     int nReqStr = (uint32_t)(uint16_t)pItemsTxt->nReqStr + nReqAdjust;
-    if (nReqStr < 1) {
+    if (nReqStr <= 0) {
       *wszText = L'\0';
       return;
     }
@@ -1712,7 +1712,7 @@ static void __stdcall INV_FormatReqDexText(D2ItemsTxt * pItemsTxt, int32_t nReqA
     uint16_t* pwColorPrefix = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     int nReqDex = (uint32_t)(uint16_t)pItemsTxt->wReqDex + nReqAdjust;
-    if (nReqDex < 1) {
+    if (nReqDex <= 0) {
       *wszText = L'\0';
       return;
     }
@@ -2616,7 +2616,7 @@ static void __stdcall INV_FormatRunewordName(uint16_t * wszText, int32_t pItem) 
       bIsRune = D2Common::ITEMS::Items::ITEMS_IsA(pCarriedItem, ITEMTYPE_Rune);
       if (bIsRune) {
         pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pCarriedItem->nClassId);
-        if (0 < pItemsTxt->dwGemOffset) {
+        if (pItemsTxt->dwGemOffset > 0) {
           pGemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Gems_GetLine(pItemsTxt->dwGemOffset);
           if (pGemsTxt) {
             if (!bHeaderWritten) {
@@ -3989,7 +3989,7 @@ void __stdcall DRAW_UI_Inventory_DrawShop() {
 
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
     int nI = 0;
-    if (0 < gaNpcShopButtonTable[0]) {
+    if (gaNpcShopButtonTable[0] > 0) {
       do {
         sGfxData.nFrameNumber = (uint32_t)gaNpcShopButtons[nI].wCurrentSelection + gaNpcShopButtons[nI].nDrawCallback;
         /* Draws the buttons of a npc */ D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, NPCButtonArray[nI + CurrentNpcButtonSelection * 4] - 1 + gnPanelOffsetX, gnPanelOffsetY - 0x3f + ScreenSizeY, -1, DRAW_SOLID, nullptr);
@@ -3999,7 +3999,7 @@ void __stdcall DRAW_UI_Inventory_DrawShop() {
 
     int32_t nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
     int nTabIdx = 0;
-    if (0 < AmountOfNPCTabs) {
+    if (AmountOfNPCTabs > 0) {
       uint16_t* pwTabText;
       /* Draws the NPC tabs */ nTabX = 0;
       pTabState = &gaNpcShopTabs[0].nHasItems;
@@ -4212,7 +4212,7 @@ void __stdcall INV_HandleShopLeftClick(D2UIMouseMsgStrc * pMsg) {
     }
     if (gShopTradeUIState == 1) {
       int iVar1;
-      if (nMouseX < pNpcInventoryScreenCoordinates.nLeft || nMouseX > pNpcInventoryScreenCoordinates.nRight || nMouseY < gnPanelOffsetY - 0x6d + ScreenSizeY || nMouseY > pNpcInventoryScreenCoordinates.nBottom || (nButtonCount = 0 , gaNpcShopButtonTable[0] < 1)) {
+      if (nMouseX < pNpcInventoryScreenCoordinates.nLeft || nMouseX > pNpcInventoryScreenCoordinates.nRight || nMouseY < gnPanelOffsetY - 0x6d + ScreenSizeY || nMouseY > pNpcInventoryScreenCoordinates.nBottom || (nButtonCount = 0 , gaNpcShopButtonTable[0] <= 0)) {
         release_buttons:
         BVar2 = INV_CanReturnToShop();
         if (BVar2) {
@@ -4220,7 +4220,7 @@ void __stdcall INV_HandleShopLeftClick(D2UIMouseMsgStrc * pMsg) {
           pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory);
           ui::ITEM_SetItemOnHand(pUnit);
         }
-        if (0 < gaNpcShopButtonTable[0]) {
+        if (gaNpcShopButtonTable[0] > 0) {
           ppDVar4 = &gaNpcShopButtons[0].nDrawCallback;
           nButtonCount = gaNpcShopButtonTable[0];
           do {
@@ -7775,7 +7775,7 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
     }
 
     nSetItemLoopIdx = 0;
-    if (0 < pSetsTxt->nTxtSetItemsCount) {
+    if (pSetsTxt->nTxtSetItemsCount > 0) {
       ppSetItemsTxtEntry = pSetsTxt->pTxtSetItems;
       do {
         pSetItemsTxt = *ppSetItemsTxtEntry;

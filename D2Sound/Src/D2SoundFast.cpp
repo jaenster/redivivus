@@ -139,7 +139,7 @@ int __stdcall SOUND_PlayNextAmbientSound() {
     nAmbientCount = gaAmbientSoundFlags;
     do {
       iVar8 = 0;
-      if (0 < nAmbientCount) {
+      if (nAmbientCount > 0) {
         do {
           pAmbientEntry = Sound::SOUND_GetAmbientSoundEntry(iVar8);
           if (!pAmbientEntry[1]) {

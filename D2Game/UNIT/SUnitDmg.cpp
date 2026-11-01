@@ -1268,13 +1268,13 @@ static void DAMAGE_ProcessFreezeAndPoisonImmunity(D2DamageContext * pCtx) {
         }
       }
     }
-    if (0 < pCtx->pDamage->dwPoisLength) {
+    if (pCtx->pDamage->dwPoisLength > 0) {
       eStateResult = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCtx->pDefender, STATE_shrine_resist_poison);
       if (eStateResult != STATE_none) {
         pCtx->pDamage->dwPoisLength = 0;
       }
     }
-    if (0 >= pCtx->pDamage->dwBurnLen) {
+    if (pCtx->pDamage->dwBurnLen <= 0) {
       return;
     }
 
@@ -2163,7 +2163,7 @@ static uint32_t DAMAGE_GetElementalDamageTypeFlags(uint32_t nParam, int32_t nPar
 
         break;
       }
-      if (0 < *(int*)(nParam2 + gaDamageTypeStatOffsets[uDmgTypeIdx * 2])) {
+      if (*(int*)(nParam2 + gaDamageTypeStatOffsets[uDmgTypeIdx * 2]) > 0) {
         uDmgTypeFlags = gaDamageTypeStatOffsets[uDmgTypeIdx * 2 + 1];
         if (uDmgTypeFlags) {
           break;
@@ -2961,7 +2961,7 @@ static int32_t DAMAGE_GetSkillDamageBonus(D2UnitStrc * pUnit) {
 
     int32_t iVar1 = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0x15c, aStatEntries, 0x20);
     int32_t nBestBonus = 0;
-    if (0 >= iVar1) {
+    if (iVar1 <= 0) {
       return nBestBonus;
     }
 

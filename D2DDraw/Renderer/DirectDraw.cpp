@@ -1980,7 +1980,7 @@ BOOL __fastcall DrawShadowTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, in
     }
 
     int nSubtileIndex = 0;
-    if (0 < pTile->nSubTiles) {
+    if (pTile->nSubTiles > 0) {
       int nSubtileX;
       do {
         nSubtileX = pTile->pSubTiles[nSubtileIndex].nOffsetX + nPosX;
@@ -2027,7 +2027,7 @@ BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX,
     }
 
     nScreenPanels = 0;
-    if (0 >= pTile->nSubTiles) {
+    if (pTile->nSubTiles <= 0) {
       return BVar2;
     }
 
@@ -2075,7 +2075,7 @@ BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, int3
     }
 
     nScreenPanels = 0;
-    if (0 < pTile->nSubTiles) {
+    if (pTile->nSubTiles > 0) {
       int nLightIndex;
       do {
         a3 = pTile->pSubTiles[nScreenPanels].nOffsetY + nPosY;

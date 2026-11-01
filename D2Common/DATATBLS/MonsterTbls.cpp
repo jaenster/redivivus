@@ -1200,7 +1200,7 @@ void __stdcall TXT_AllocTxt_TreasureClassEx(D2PoolManagerStrc * pMemory) {
     };
     D2TreasureClassExTxt* pTxtTreasureClassEx = (D2TreasureClassExTxt*)DataTbls::CompileTxt(pMemory, "treasureclassex", treasureclassex, &nTxtTreasureClassExSize, 0x2e0);
     int nIndex = 0;
-    if (0 < nTxtTreasureClassExSize) {
+    if (nTxtTreasureClassExSize > 0) {
       D2ParsedTreasureClassStrc* pParsedTCTmp;
       /* This here should be new variable... As it is now it is complete mess... */ pMemory = (D2PoolManagerStrc*)&pTxtTreasureClassEx->group;
       pSubSubPointer = (D2TreasureClassExSubSubTxt*)&pTxtTreasureClassEx->rare;
@@ -1451,7 +1451,7 @@ void __fastcall TXT_AllocTxt_superuniques(D2PoolManagerStrc * pMemory) {
       pHcEntryInit += 2;
     }
 
-    if (0 < sgtDataTable.nTxtSuperUniquesSize) {
+    if (sgtDataTable.nTxtSuperUniquesSize > 0) {
       uint32_t nHardcodedIdx;
       nIdx = 0;
       do {
@@ -1573,7 +1573,7 @@ void __fastcall TXT_AllocTxt_hireling(D2PoolManagerStrc * pMemory) {
 
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     int nCounter = 0;
-    if (0 >= sgtDataTable.nTxtHirelingSize) {
+    if (sgtDataTable.nTxtHirelingSize <= 0) {
       return;
     }
 
@@ -2206,7 +2206,7 @@ void __fastcall TXT_AllocTxt_montype(D2PoolManagerStrc * pMemory) {
     memset(sgtDataTable.pTxtMonTypeUnknown, 0, nBitMatrixBytes);
     int nRowTypeIdx = 0;
     int nMonTypeTotal = sgtDataTable.nTxtMonTypeSize;
-    if (0 >= sgtDataTable.nTxtMonTypeSize) {
+    if (sgtDataTable.nTxtMonTypeSize <= 0) {
       return;
     }
 
@@ -2215,7 +2215,7 @@ void __fastcall TXT_AllocTxt_montype(D2PoolManagerStrc * pMemory) {
       pBitArray = (uint8_t*)sgtDataTable.pTxtMonTypeUnknown;
       nTypeIdx = nRowTypeIdx * sgtDataTable.nMonTypeEquivRowDwords;
       nBitIdx = 0;
-      if (0 < nMonTypeTotal) {
+      if (nMonTypeTotal > 0) {
         do {
           bIsSubType = MONSTERTBLS_GetMonSeqFrameCount(nRowTypeIdx, nBitIdx);
           if (bIsSubType) {
@@ -2432,7 +2432,7 @@ void __fastcall TXT_AllocTxt_monpreset(D2PoolManagerStrc * pMemory) {
     int nPresetIdxInAct = 0;
     sgtDataTable.pTxtMonPresetPlace = (D2MonPresetTxtPlace*)pTxtMonPreset;
     sgtDataTable.pTxtMonPresetPerAct[0] = pTxtMonPreset;
-    if (0 < nMonPresetSize) {
+    if (nMonPresetSize > 0) {
       int nActFill;
       nRemaining = nMonPresetSize;
       do {
@@ -2543,7 +2543,7 @@ void __fastcall TXT_AllocTxt_monseq(D2PoolManagerStrc * pMemory) {
     };
     sgtDataTable.pTxtMonSeqLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\MonsterTbls.cpp", 0xcc3);
     sgtDataTable.pTxtMonSeq = (D2MonSeqTxt*)DataTbls::CompileTxt(pMemory, "monseq", monseq, &sgtDataTable.nTxtMonSeqSize, 6);
-    if (0 >= sgtDataTable.nTxtMonSeqSize) {
+    if (sgtDataTable.nTxtMonSeqSize <= 0) {
       return;
     }
 
@@ -2551,7 +2551,7 @@ void __fastcall TXT_AllocTxt_monseq(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pMonSeqMonsterTbls = (D2MonSeqMonsterTbls*)D2_ALLOC_POOL_AT(nullptr, sgtDataTable.nMonSeqMonsterTblsSize * 0xc, ".\\DATATBLS\\MonsterTbls.cpp", 0xccc);
     memset(sgtDataTable.pMonSeqMonsterTbls, 0, sgtDataTable.nMonSeqMonsterTblsSize * 0xc);
     int i = 0;
-    if (0 >= sgtDataTable.nTxtMonSeqSize) {
+    if (sgtDataTable.nTxtMonSeqSize <= 0) {
       return;
     }
 
@@ -2626,7 +2626,7 @@ void __fastcall TXT_AllocTxt_MonEquip(D2PoolManagerStrc * pMemory) {
     {
       int nMonStatCount;
       nMonStatCount = 0;
-      if (0 < sgptDataTable->nTxtMonStatsSize) {
+      if (sgptDataTable->nTxtMonStatsSize > 0) {
         nMonStatIdx = 0;
         do {
           pMonStatsCode = sgtDataTable.pTxtMonStats->Code;
@@ -2638,13 +2638,13 @@ void __fastcall TXT_AllocTxt_MonEquip(D2PoolManagerStrc * pMemory) {
       }
 
       nEquipRow = 0;
-      if (0 >= sgtDataTable.nTxtMonEquipSize) {
+      if (sgtDataTable.nTxtMonEquipSize <= 0) {
         return;
       }
 
       do {
         pMonStatEntry = &sgtDataTable.pTxtMonEquip[nEquipRow].monster;
-        if (-1 < *pMonStatEntry) {
+        if (*pMonStatEntry >= 0) {
           nMonStatCount = (int)*pMonStatEntry;
           if (nMonStatCount < sgptDataTable->nTxtMonStatsSize) {
             if (sgtDataTable.pTxtMonStats[nMonStatCount].nMonEquipId < 0) {
@@ -2655,7 +2655,7 @@ void __fastcall TXT_AllocTxt_MonEquip(D2PoolManagerStrc * pMemory) {
             puVar4 = (uint32_t*)(pMonStatEntry + 4);
             nSlotLoop = 3;
             do {
-              if ((char)*pLocSlot < '\x01' || (char)*pLocSlot >= 11 || *puVar4 != 0x20202020 && (nErrCode = Fog::Src::Excel::GetClassIdFromName(sgptDataTable->sTxtItemsLink, *puVar4, 1) , nErrCode < 0)) {
+              if ((char)*pLocSlot <= 0 || (char)*pLocSlot >= 11 || *puVar4 != 0x20202020 && (nErrCode = Fog::Src::Excel::GetClassIdFromName(sgptDataTable->sTxtItemsLink, *puVar4, 1) , nErrCode < 0)) {
                 *(char*)pLocSlot = '\0';
               }
 

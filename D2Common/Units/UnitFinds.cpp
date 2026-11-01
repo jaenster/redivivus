@@ -232,7 +232,7 @@ D2UnitStrc * __stdcall GetNearestTestedUnit(D2UnitStrc * pUnit, int32_t nX, int3
       }
 
       nRoomIdx = 0;
-      if (0 >= nRoomCount) {
+      if (nRoomCount <= 0) {
         return pBestUnit;
       }
 

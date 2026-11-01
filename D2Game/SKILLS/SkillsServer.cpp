@@ -654,7 +654,7 @@ void __fastcall SKILLS_UpdatePetMax(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
 
     int nMaxPetCount = 0;
     int nSkillIdx = 0;
-    if (0 < pPetTypeTxt->nSkillIndexCounter) {
+    if (pPetTypeTxt->nSkillIndexCounter > 0) {
       D2SkillsTxt* pPetSkillTxt;
       nSkillId = (int32_t)pPetTypeTxt->nSkillId;
       do {

@@ -1368,7 +1368,7 @@ static uint32_t UI_HandleKeyInputAndDismiss(int32_t nKeyAction, int32_t nUIFlagT
     if (bTextScrolling && nUIFlagToCheck != 10 && nUIFlagToCheck != 0x13 && nUIFlagToCheck != 0x11 && nUIFlagToCheck != 6 && nUIFlagToCheck != 7) {
       return 0;
     }
-    if (0 >= gnUIFlagCount) {
+    if (gnUIFlagCount <= 0) {
       return 1;
     }
 
@@ -2679,7 +2679,7 @@ void __stdcall DRAW_Overlay_EnteringAreaX() {
         D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbrev, 0);
         sprintf(szDC6Path, "%s\\UI\\%s\\%s\\%s", "DATA\\LOCAL", szLangAbbrev, szActDir, pLevelTxt->EntryFile);
         nQuestIdx = 0;
-        if (0 < gnQuestAreaIntroCount) {
+        if (gnQuestAreaIntroCount > 0) {
           pnQuestEntry = &gnQuestAreaIntroLevelId_0[0].nQuestId;
           do {
             if (eRoomLevel == ((D2QuestAreaIntroStrc*)(pnQuestEntry - 1))->nLevelId) {
@@ -6340,7 +6340,7 @@ static int32_t UI_GetStatDescriptionStringId(int32_t nUnit) {
 
     int32_t iVar1 = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues((D2UnitStrc*)nUnit, 0x15c, aBonusStringIds, 0x20);
     int nBestStringId = 0;
-    if (0 >= iVar1) {
+    if (iVar1 <= 0) {
       return nBestStringId;
     }
 

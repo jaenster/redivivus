@@ -672,7 +672,7 @@ static void CreateObjectPresetsForMap(D2DrlgMapStrc * pMapStrc, D2PoolManagerStr
     mapCoords.nPosY = pMapStrc->nRealOffsetY;
     if (pMapStrc->pTxtLevelPrest->Def != 0x1b) {
       uint32_t cellFlags;
-      if (0 < mapCoords.nWidth) {
+      if (mapCoords.nWidth > 0) {
         do {
           cellFlags = DrlgGrid::GetGridFlags(&floorGrid, xIndex, 0);
           if (((uint8_t)(cellFlags >> 0x14) & 0x3f) == 2 && (char)(cellFlags >> 8) == '\x18') {
@@ -1382,7 +1382,7 @@ void __fastcall UpdatePops(D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY, BOOL 
     }
 
     nNearIdx = 0;
-    if (0 >= pRoomEx->nDrlgRoomsExNearCount) {
+    if (pRoomEx->nDrlgRoomsExNearCount <= 0) {
       return;
     }
 
@@ -1775,7 +1775,7 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
       fileCoords.nHeight = pDrlgFile->nHeight + 1;
       nWallLayerIndex = 0;
       pFile = pDrlgFile;
-      if (0 < pDrlgFile->nWallLayers) {
+      if (pDrlgFile->nWallLayers > 0) {
         pLayerEntry = pDrlgFile->pWallLayer;
         do {
           pLayerPtr = pLayerEntry;

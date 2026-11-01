@@ -124,7 +124,7 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
 
         iVar2 = pQServerStrc->pfnPacketHandler(pQServerStrc->pHandlerContext);
         if (!iVar2) {
-          if (0 < pQServerStrc->nSizeFieldOffset) {
+          if (pQServerStrc->nSizeFieldOffset > 0) {
             pParam = pvVar4;
             wMsgSize = wPacketSize;
           }

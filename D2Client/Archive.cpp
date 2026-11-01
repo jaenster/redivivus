@@ -348,7 +348,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
         do {
           ppInsertAfter = ppWalk;
           ppWalk = (int****)ppInsertAfter[1];
-          if ((int)ppWalk < 1) {
+          if ((int)ppWalk <= 0) {
             break;
           }
         } while ((uintptr_t)ppWalk[0x4b] > sHeapDetails.dwUnknown124);
@@ -369,7 +369,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
     int nHeapCount = 0;
     ARCHIVE_WriteFormattedText(hFileTmp, "      SIZE|    BLOCKS|  RESERVED| COMMITTED|       MAX|   REGIONS|FILENAME:LINE\n");
     hFileTmp = hFile;
-    for (pRec = (int)__frame0.pListPrev < 1 ? 0 : (uint32_t)__frame0.pListPrev; hFile = hFileTmp , 0 < (int)pRec; pRec = *(uint32_t*)(pRec + 4)) {
+    for (pRec = (int)__frame0.pListPrev <= 0 ? 0 : (uint32_t)__frame0.pListPrev; hFile = hFileTmp , 0 < (int)pRec; pRec = *(uint32_t*)(pRec + 4)) {
       ARCHIVE_WriteFormattedText(hFileTmp, "%10d|%10d|%10d|%10d|%10d|%10d|%s:%d\n", *(uint32_t*)(pRec + 300), *(uint32_t*)(pRec + 0x128), *(uint32_t*)(pRec + 0x120), *(uint32_t*)(pRec + 0x11c), *(uint32_t*)(pRec + 0x124), *(uint32_t*)(pRec + 0x118), pRec + 0x10, *(uint32_t*)(pRec + 0x114));
       nTotalMax += *(int*)(pRec + 0x120);
       nTotalBytes += *(int*)(pRec + 300);

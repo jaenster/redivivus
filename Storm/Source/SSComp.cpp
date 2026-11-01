@@ -3688,14 +3688,14 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
         pSortedNext->nWeight = nOffset;
         if (nOffset < nMaxWeight) {
           nLinkOff = pEncoder->pWeightedListHead;
-          if ((int)nLinkOff >= 1) {
+          if ((int)nLinkOff > 0) {
             do {
               if (nLinkOff->nWeight >= nOffset) {
                 break;
               }
 
               nLinkOff = nLinkOff->nPrevOffset;
-              if ((int)nLinkOff < 1) {
+              if ((int)nLinkOff <= 0) {
                 goto no_heavier_node;
               }
             } while (nLinkOff);
@@ -3847,14 +3847,14 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
       nOffset = pNewNode->nWeight;
       if (nOffset < nMaxWeight) {
         pSortedNext = nLinkOff->nPrevOffset;
-        if ((int)pSortedNext >= 1) {
+        if ((int)pSortedNext > 0) {
           do {
             if (pSortedNext->nWeight >= nOffset) {
               break;
             }
 
             pSortedNext = pSortedNext->nPrevOffset;
-            if ((int)pSortedNext < 1) {
+            if ((int)pSortedNext <= 0) {
               goto no_heavier_node_for_parent;
             }
           } while (pSortedNext);
@@ -3891,7 +3891,7 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
 
       nMaxWeight = nOffset;
       pSortedNext = nLinkOff->nPrevOffset;
-      if ((int)pSortedNext < 1) {
+      if ((int)pSortedNext <= 0) {
         pEncoder->nRootWeight = 1;
         return;
       }

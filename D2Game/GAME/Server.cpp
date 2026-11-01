@@ -2512,7 +2512,7 @@ int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32
     }
 
     int nSearchIdx = 0;
-    if (0 < nCount) {
+    if (nCount > 0) {
       D2UnitStrc* pUnit;
       nOutBufOffsetFromClassIds = (int)pOutBuffer - (int)pClassIds;
       do {

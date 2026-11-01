@@ -86,7 +86,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::Clear() {
     while (true) {
       int* pLink;
       pObject = (void*)this->m_terminator.m_next;
-      if (0 >= (int)pObject) {
+      if ((int)pObject <= 0) {
         break;
       }
 

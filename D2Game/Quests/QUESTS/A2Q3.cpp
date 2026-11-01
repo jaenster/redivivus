@@ -691,7 +691,7 @@ BOOL __fastcall OBJOP_A2Q3_ActivateHoradricStaffAltar(D2ObjectOperateFnArg * pOp
         pGame3 = (::SGAMEDATA*)D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
         pOperation->sArg.pVictim->dwDropItemCode = 0x20706976;
         nDroppedItemCount = 0;
-        if (0 < pDVar1->nViperAmuletDropCount) {
+        if (pDVar1->nViperAmuletDropCount > 0) {
           do {
             pPlayerData = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_PlayerBodyPart, (int32_t*)&pGame3, nullptr, -1, 0);
             if (pPlayerData) {

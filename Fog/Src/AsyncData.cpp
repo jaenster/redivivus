@@ -351,7 +351,7 @@ void __fastcall ASYNCDATA_DeferPriorityUpdates(BOOL bDefer) {
       gnAsyncDataPriorityDeferDepth++;
       return;
     }
-    if (!(0 < gnAsyncDataPriorityDeferDepth)) {
+    if (!(gnAsyncDataPriorityDeferDepth > 0)) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x211);
       exit(-1);
     }

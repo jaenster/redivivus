@@ -2518,7 +2518,7 @@ BOOL __fastcall SKILLASS_SrvStFn26_BladeFury(::SGAMEDATA * pGame, D2UnitStrc * p
 
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_inferno);
     if (!pStatList) {
-      if (0 < pSkillTxt->startmana) {
+      if (pSkillTxt->startmana > 0) {
         int32_t nCurMana;
         nCurMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
         if (nCurMana < pSkillTxt->startmana * 0x100) {

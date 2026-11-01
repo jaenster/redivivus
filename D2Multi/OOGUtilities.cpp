@@ -1366,7 +1366,7 @@ void __stdcall OOGMENU_RefreshGameListDisplay() {
 
     int32_t bHasPeer = D2MCPClient::McpConnect::HasPeerName();
     memcpy(gbLanGameListEntryNamePadding, gbLanGameListEntryNamePadding2, nGameListDifficultyFilter * 0x3b);
-    if (0 < gnFilteredGameListCount) {
+    if (gnFilteredGameListCount > 0) {
       pwEntryPort = &gbLanGameListEntryNamePadding[0].wDisplayedCount;
       do {
         D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOOGGameListTextBox, (char*)(pwEntryPort - 0x18));

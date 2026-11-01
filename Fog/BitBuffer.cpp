@@ -285,7 +285,7 @@ int32_t __stdcall Read(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
 
     nSize = 0;
     pBitBuffer = 0;
-    if (nBitsRemaining >= 1) {
+    if (nBitsRemaining > 0) {
       do {
         uint8_t byCurrent;
         nBitsThisStep = 8 - pBuf->nBitsAtPos;

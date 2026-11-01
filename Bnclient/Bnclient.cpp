@@ -188,7 +188,7 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
                 /* DWORD cchNameString for CertGetNameStringW */ /* LPWSTR pszNameString for CertGetNameStringW */ /* void * pvTypePara for CertGetNameStringW */ /* DWORD dwFlags for CertGetNameStringW */ /* DWORD dwType for CertGetNameStringW */ /* PCCERT_CONTEXT pCertContext for CertGetNameStringW */ nNameLen = CertGetNameStringW(pCertContext, 3, 0, (void*)"2.5.4.10", (LPWSTR)nWideCharLen, (DWORD)pWideStr);
                 /* LPBOOL lpUsedDefaultChar for WideCharToMultiByte */ /* LPCSTR lpDefaultChar for WideCharToMultiByte */ /* int cbMultiByte for WideCharToMultiByte */ /* LPSTR lpMultiByteStr for WideCharToMultiByte */ /* int cchWideChar for WideCharToMultiByte */ /* LPCWSTR lpWideCharStr for WideCharToMultiByte */ /* DWORD dwFlags for WideCharToMultiByte */ /* UINT CodePage for WideCharToMultiByte */ if (nNameLen) {
                   nAnsiLen = WideCharToMultiByte(0xfde9, 0, (LPCWSTR)nWideCharLen, -1, (LPSTR)0x0, 0, (LPCSTR)0x0, (LPBOOL)0x0);
-                  if (0 < nAnsiLen) {
+                  if (nAnsiLen > 0) {
                     /* LPBOOL lpUsedDefaultChar for WideCharToMultiByte */ /* LPCSTR lpDefaultChar for WideCharToMultiByte */ /* int cbMultiByte for WideCharToMultiByte */ /* LPSTR lpMultiByteStr for WideCharToMultiByte */ /* int cchWideChar for WideCharToMultiByte */ /* LPCWSTR lpWideCharStr for WideCharToMultiByte */ /* DWORD dwFlags for WideCharToMultiByte */ /* UINT CodePage for WideCharToMultiByte */ WideCharToMultiByte(0xfde9, 0, (LPCWSTR)nWideCharLen, -1, szOrgOut, nOrgMaxLen, (LPCSTR)0x0, (LPBOOL)0x0);
                     bGotOrg = true;
                   }

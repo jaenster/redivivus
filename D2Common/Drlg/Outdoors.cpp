@@ -1426,7 +1426,7 @@ static void DRLGOUTDOOR_CreateOutdoorRoomExGrid(D2DrlgLevelStrc * pLevel) {
     int worldY = pLevel->sCoordinatesAndSize.WorldPosition.y;
     int gridY = 0;
     D2DrlgLevelDataWildernessLevel* pOutdoorsDataStable = pOutdoorsData;
-    if (0 >= pOutdoorsData->nGridCoordsHeight) {
+    if (pOutdoorsData->nGridCoordsHeight <= 0) {
       return;
     }
 

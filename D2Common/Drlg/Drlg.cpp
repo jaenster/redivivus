@@ -4027,7 +4027,7 @@ void __stdcall DRLGOUTROOM_ComputeExitTargetPositions(D2DrlgLevelStrc * pLevel) 
               nExitCount = pDVar1->nGridCoordsWidth / 2;
               __frame0.nSumY = pDVar1->nGridCoordsHeight / 2;
             } else {
-              if (0 < nExitCount) {
+              if (nExitCount > 0) {
                 pExitPt4Iter = &pDVar1->aExitPoints1[0].nWorldY;
                 do {
                   nSumX += ((D2DrlgExitPointStrc*)(pExitPt4Iter - 1))->nWorldX - pLevel->sCoordinatesAndSize.WorldPosition.x;

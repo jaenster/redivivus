@@ -2540,7 +2540,7 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
     }
 
     nMenuEntryIdx = 0;
-    if (0 < NPC::D2NpcMenuOptionsCount) {
+    if (NPC::D2NpcMenuOptionsCount > 0) {
       do {
         if (NPC::D2NpcMenuOptions[nMenuEntryIdx].nNpcId == pNpcUnit->nClassId) {
           if (nMenuEntryIdx < 0) {
@@ -4017,7 +4017,7 @@ void __stdcall NPCMENU_HandleMenuSelection(int32_t nParam, D2UnitStrc * pUnit) {
     }
 
     nSpeechLoopIdx = 0;
-    if (0 < D2NPCSpeechCount) {
+    if (D2NPCSpeechCount > 0) {
       D2NPCSpeechStrc* pSpeechStrc;
       pSpeechStrc = D2NPCSpeech;
       do {

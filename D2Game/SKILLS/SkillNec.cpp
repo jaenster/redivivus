@@ -1630,7 +1630,7 @@ BOOL __fastcall Skills_SrvDoFunc_056_SummonGolem(::SGAMEDATA * pGame, D2UnitStrc
     } else {
       pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
     }
-    if (!(eSkill != SKILL_Attack && -1 < pSkillsTxt->summon && (int)pSkillsTxt->summon < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(eSkill != SKILL_Attack && pSkillsTxt->summon >= 0 && (int)pSkillsTxt->summon < sgptDataTable->nTxtMonStatsSize)) {
       return 0;
     }
 

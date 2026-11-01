@@ -369,7 +369,7 @@ static void __stdcall D2WINFONT_DrawWideString(uint16_t * wszText, int32_t nX, i
     sGfxData.pDC6 = *gppDC6FontCache;
     sGfxData.nDirection = 0;
     int iVar1 = 0;
-    if (0 >= nTotalStrLen) {
+    if (nTotalStrLen <= 0) {
       return;
     }
 

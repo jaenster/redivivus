@@ -1661,14 +1661,14 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pSkillsPerClassCounter->Druid = 0;
     sgtDataTable.pSkillsPerClassCounter->Assassin = 0;
     nCounter = 0;
-    if (0 < sgtDataTable.nTxtSkillsCount) {
+    if (sgtDataTable.nTxtSkillsCount > 0) {
       do {
         pDVar1 = sgtDataTable.pTxtSkills;
         nPetType = sgtDataTable.pTxtSkills[nCounter].charclass;
-        if (-1 < nPetType && nPetType < 7) {
+        if (nPetType >= 0 && nPetType < 7) {
           (&sgtDataTable.pSkillsPerClassCounter->Amazon)[nPetType]++;
         }
-        if (-1 < pDVar1[nCounter].passivestate) {
+        if (pDVar1[nCounter].passivestate >= 0) {
           sgtDataTable.nPassiveSkillsCount++;
         }
 
@@ -1677,7 +1677,7 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
     }
 
     sgtDataTable.nSkillCountMaxPerClass = 0;
-    if (0 < sgtDataTable.pSkillsPerClassCounter->Amazon) {
+    if (sgtDataTable.pSkillsPerClassCounter->Amazon > 0) {
       sgtDataTable.nSkillCountMaxPerClass = sgtDataTable.pSkillsPerClassCounter->Amazon;
     }
     if (sgtDataTable.pSkillsPerClassCounter->Sorceress > sgtDataTable.nSkillCountMaxPerClass) {
@@ -1712,16 +1712,16 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
     memset(sgtDataTable.pPassiveSkillsPerClassStrc, 0, sgtDataTable.nPassiveSkillsCount * 2);
     nCounter = 0;
     sgtDataTable.nPassiveSkillsCount = 0;
-    if (0 < sgtDataTable.nTxtSkillsCount) {
+    if (sgtDataTable.nTxtSkillsCount > 0) {
       pMemory2 = 0;
       do {
         pSrvPrgFunc = sgtDataTable.pTxtSkills->srvprgfunc;
         nPetType = *(char*)((uintptr_t)&((D2PoolManagerStrc*)pMemory2)->pPools[0].pSync.DebugInfo + (int)(pSrvPrgFunc - 0x22));
-        if (-1 < nPetType && nPetType < '\a') {
+        if (nPetType >= 0 && nPetType < '\a') {
           sgtDataTable.pSkillsPerClassStrc[nPetType * sgtDataTable.nSkillCountMaxPerClass + (&sgtDataTable.pSkillsPerClassCounter->Amazon)[nPetType]] = (int16_t)nCounter;
           (&sgtDataTable.pSkillsPerClassCounter->Amazon)[*(char*)((uintptr_t)&((D2PoolManagerStrc*)pMemory2)->pPools[0].pSync.DebugInfo + (int)(pSrvPrgFunc - 0x22))]++;
         }
-        if (-1 < *(short int*)((uintptr_t)&((D2PoolManagerStrc*)pMemory2)->pPools[0].pSync.DebugInfo + (int)(pSrvPrgFunc + 0x22))) {
+        if (*(short int*)((uintptr_t)&((D2PoolManagerStrc*)pMemory2)->pPools[0].pSync.DebugInfo + (int)(pSrvPrgFunc + 0x22)) >= 0) {
           sgtDataTable.pPassiveSkillsPerClassStrc[sgtDataTable.nPassiveSkillsCount].nSkillId = (int16_t)nCounter;
           sgtDataTable.nPassiveSkillsCount++;
         }
@@ -1732,14 +1732,14 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
     }
 
     nCounter = 0;
-    if (0 >= sgtDataTable.nTxtSkillsCount) {
+    if (sgtDataTable.nTxtSkillsCount <= 0) {
       return;
     }
 
     do {
       pSkillTxt = sgtDataTable.pTxtPetType;
       nPetType = sgtDataTable.pTxtSkills[nCounter].pettype;
-      if (-1 < nPetType) {
+      if (nPetType >= 0) {
         iVar2 = (int)nPetType;
         if (iVar2 < sgtDataTable.nTxtPetTypeSize && sgtDataTable.pTxtPetType[iVar2].nSkillIndexCounter < 0xf) {
           sgtDataTable.pTxtPetType[iVar2].nSkillId[sgtDataTable.pTxtPetType[iVar2].nSkillIndexCounter] = (short int)nCounter;
@@ -2034,7 +2034,7 @@ void __fastcall TXT_AllocTxt_pettype(D2PoolManagerStrc * pMemory) {
       exit(-1);
     }
 
-    /* Why it adjust size ? */ sgtDataTable.nTxtPetTypeSize = sgtDataTable.nTxtPetTypeSize < 1 ? 0 : sgtDataTable.nTxtPetTypeSize;
+    /* Why it adjust size ? */ sgtDataTable.nTxtPetTypeSize = sgtDataTable.nTxtPetTypeSize <= 0 ? 0 : sgtDataTable.nTxtPetTypeSize;
     if (sgtDataTable.nTxtPetTypeSize < 0x100) {
       return;
     }

@@ -3750,7 +3750,7 @@ void __stdcall SKILLS_SetSkillLevelBonus(D2UnitStrc * pUnit, eD2Skills eSkill, i
     pFoundSkill = GetSkillByIdAndOwner(pUnit, eSkill, -1);
     if (!pFoundSkill) {
       D2SkillStrc* pVerifySkill;
-      if (nLevelBonus < 1) {
+      if (nLevelBonus <= 0) {
         return;
       }
 
@@ -3795,7 +3795,7 @@ void __stdcall SKILL_AdjustSkillLevelBonus(D2UnitStrc * pUnit, eD2Skills eSkill,
     pFoundSkill = 0;
     ensure_skill:
     if (!pFoundSkill) {
-      if (nDelta < 1) {
+      if (nDelta <= 0) {
         return;
       }
 

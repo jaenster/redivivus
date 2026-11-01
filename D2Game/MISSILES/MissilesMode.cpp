@@ -422,7 +422,7 @@ void __fastcall MISSILESMODE_SetElementalDamageField(int32_t nMissileUnit, int32
       return;
       case ELEMENTAL_COLD:
         pDamageStruct->dwColdDmg = nParam2;
-      if (nParam2 < 1) {
+      if (nParam2 <= 0) {
         pDamageStruct->dwColdLength = 0;
         return;
       }
@@ -430,7 +430,7 @@ void __fastcall MISSILESMODE_SetElementalDamageField(int32_t nMissileUnit, int32
       break;
       case ELEMENTAL_POISON:
         pDamageStruct->dwPoisDamage = nParam2;
-      if (nParam2 < 1) {
+      if (nParam2 <= 0) {
         pDamageStruct->dwPoisLength = 0;
         return;
       }
@@ -450,7 +450,7 @@ void __fastcall MISSILESMODE_SetElementalDamageField(int32_t nMissileUnit, int32
       return;
       case ELEMENTAL_BURNING:
         pDamageStruct->dwBurnDmg = nParam2;
-      if (nParam2 < 1) {
+      if (nParam2 <= 0) {
         pDamageStruct->dwBurnLen = 0;
         return;
       }
@@ -458,7 +458,7 @@ void __fastcall MISSILESMODE_SetElementalDamageField(int32_t nMissileUnit, int32
       break;
       case ELEMENTAL_FREEZE:
         pDamageStruct->dwColdDmg = nParam2;
-      if (nParam2 < 1) {
+      if (nParam2 <= 0) {
         pDamageStruct->dwFrzLength = 0;
       }
     }

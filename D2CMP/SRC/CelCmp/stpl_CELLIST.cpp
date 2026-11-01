@@ -109,7 +109,7 @@ template<> void TSExplicitList<CELLIST, -572662307>::Clear() {
     while (true) {
       int nNext;
       pObject = (void*)this->m_terminator.m_next;
-      if (0 >= (int)pObject) {
+      if ((int)pObject <= 0) {
         break;
       }
 

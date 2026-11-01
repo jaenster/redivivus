@@ -898,7 +898,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitS
     PlayerSave2::MakeSaveFile(pGame, pUnit, __frame0.saveTempBuffer, &nSaveFileSize, 0x2000, nAccountFlags, nUnused2);
     int nSaveFileBytes;
     nSaveFileBytes = nSaveFileSize;
-    if (nSaveFileSize < 1) {
+    if (nSaveFileSize <= 0) {
       return 0;
     }
 
@@ -951,7 +951,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitS
         }
 
         nCompareByteIdx = 0;
-        if (0 < (int)nExistingSize) {
+        if ((int)nExistingSize > 0) {
           do {
             if ((__frame0.saveTempBuffer + nCompareByteIdx)[(int)pSaveBuffer - (int)__frame0.saveTempBuffer] != __frame0.saveTempBuffer[nCompareByteIdx]) {
               bSaveUnchanged = false;

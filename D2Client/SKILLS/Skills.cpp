@@ -1307,7 +1307,7 @@ uint32_t __fastcall SKILL_ExecuteClientDoFunc(D2UnitStrc * pUnit, eD2Skills eSki
     eSkillId = eSkill;
     D2UnitStrc* pUnitSaved;
     pUnitSaved = pUnit;
-    if (0 < pSkillTxt->cltmissile[0]) {
+    if (pSkillTxt->cltmissile[0] > 0) {
       int32_t nUnitOffsetX;
       nTargetCoordX = 0;
       nTargetCoordY = 0;
@@ -1977,7 +1977,7 @@ void __fastcall SKILLS_CreateMissileScatter(D2UnitStrc * pUnit, D2SkillArgStrc *
       if ((int)nQuadrantTmp < 0) {
         nQuadrantTmp = (nQuadrantTmp - 1 | -4) + 1;
       }
-      if (0 < (int)nRandRange) {
+      if ((int)nRandRange > 0) {
         nRandOffsetX = pUnit->sSeed.nSeedLow;
         if (nRandRange & nRandRange - 1) {
           lVar1 = (uint64_t)nRandOffsetX * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;

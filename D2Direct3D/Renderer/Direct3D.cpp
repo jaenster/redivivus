@@ -4134,7 +4134,7 @@ int32_t __fastcall RENDERER_D3D_BuildShadowTileVertices(D2TileLibraryEntryStrc *
     }
 
     nScreenSplitIndex = 0;
-    if (0 >= pTileLibraryEntryStrc->nSubTiles) {
+    if (pTileLibraryEntryStrc->nSubTiles <= 0) {
       return _bRendered;
     }
 
@@ -4364,7 +4364,7 @@ static BOOL __stdcall RENDERER_D3D_RenderWallTileWithPerspective(int nScreenPane
     uint32_t nTileType = pTile->nDirection;
     if (nTileType <= 9) {
       int nTileIndex = 0;
-      if (0 >= pTile->nSubTiles) {
+      if (pTile->nSubTiles <= 0) {
         return nMidZ;
       }
 

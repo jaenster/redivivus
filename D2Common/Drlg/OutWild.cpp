@@ -301,7 +301,7 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
           }
 
           nX = 0;
-          if (0 < pWildData->nGridCoordsWidth) {
+          if (pWildData->nGridCoordsWidth > 0) {
             do {
               if (bColumnEmpty) {
                 break;
@@ -316,7 +316,7 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
         } while (nSpawnResult < pWildData->nGridCoordsHeight);
       } else {
         nX = 0;
-        if (pWildData->nGridCoordsHeight < 1) {
+        if (pWildData->nGridCoordsHeight <= 0) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x194);
           exit(-1);
         }

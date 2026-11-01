@@ -190,7 +190,7 @@ void __fastcall TXT_AllocTxt_objects(D2PoolManagerStrc * pMemory) {
     };
     sgpTxtObjects = (D2ObjectsTxt*)DataTbls::CompileTxt(pMemory, "objects", objects, &nTxtObjectsSize, 0x1c0);
     int nObjIdx = 0;
-    if (0 >= nTxtObjectsSize) {
+    if (nTxtObjectsSize <= 0) {
       return;
     }
 

@@ -943,7 +943,7 @@ void __fastcall DIALOG_DrawBackground(D2DialogStrc * pDialog) {
       nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
       nYAccum = 0;
       nStringIdx = 0;
-      if (0 < pDialog->nSubCounter) {
+      if (pDialog->nSubCounter > 0) {
         piStringData = &pDialog->aStringData[0].nFont;
         do {
           nFont = piStringData[1];

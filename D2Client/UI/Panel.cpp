@@ -897,7 +897,7 @@ void __stdcall PANEL_DrawExperienceBar() {
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTooltip, pwszStr);
     pwszStr = ui::AppendAsWideChar(wszItemName, 0);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, pwszStr);
-    if (!(-1 < gnBeltTooltipX && -1 < gnBeltTooltipY)) {
+    if (!(gnBeltTooltipX >= 0 && gnBeltTooltipY >= 0)) {
       return;
     }
 

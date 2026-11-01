@@ -9133,7 +9133,7 @@ bool __fastcall _PlayerNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     BOOL bHasAiSub = MonsterAI::HasAiSub(pMonsterAi);
     ::SGAMEDATA* pGameCopy = pGameLocal;
     D2AiGeneralStrc* nAiBase = pAiParam->pMonsterAiGeneral;
-    if (!bHasAiSub && !bPlayerInSubAi && nAiBase->dwArg0 < 1) {
+    if (!bHasAiSub && !bPlayerInSubAi && nAiBase->dwArg0 <= 0) {
       bool bVar1;
       if (!pPlayer) {
         return false;
@@ -10859,7 +10859,7 @@ int32_t __fastcall AI_Diablo_DecideAction(D2AiGeneralStrc * pDiabloAiCtx, D2Unit
     } while (i);
 
     uint32_t nRandResult = 0;
-    if (0 < (int)nTotalWeightSum) {
+    if ((int)nTotalWeightSum > 0) {
       nRandResult = pDiabloUnit->sSeed.nSeedLow;
       if (nTotalWeightSum & nTotalWeightSum - 1) {
         sNextSeed = D2_SEED_NEXT(pDiabloUnit->sSeed);
@@ -12859,7 +12859,7 @@ BOOL __fastcall MONSTERAI_HasConflictingStateInGroup(D2UnitStrc * pUnit, eD2Stat
           eState_00 = STATE_none;
           bFound = 0;
           pDataTable = sgptDataTable;
-          if (0 >= nTxtStatesSize) {
+          if (nTxtStatesSize <= 0) {
             return bFound;
           }
 

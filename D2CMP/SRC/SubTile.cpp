@@ -463,7 +463,7 @@ void __fastcall CELCMP_CompressAllFramesWithColorKey(int32_t pSrcCelFile, int32_
       }
 
       iFrame = 0;
-      if (0 >= *(int*)(pSrcCelFile + 0x50)) {
+      if (*(int*)(pSrcCelFile + 0x50) <= 0) {
         return;
       }
 

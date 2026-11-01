@@ -2452,7 +2452,7 @@ BOOL __fastcall RENDERER_GLIDE_DrawShadowTileSimple(D2TileLibraryEntryStrc * pTi
     }
 
     nSubtileIdx = 0;
-    if (0 >= pTile->nSubTiles) {
+    if (pTile->nSubTiles <= 0) {
       return _bDrawn;
     }
 
@@ -2608,7 +2608,7 @@ BOOL __thiscall RENDERER_GLIDE_DrawWallTileSimple(int32_t nScreenPanels, D2TileL
     }
 
     int nSubtileIdx = 0;
-    if (0 < pTile->nSubTiles) {
+    if (pTile->nSubTiles > 0) {
       int nSubtileX;
       do {
         psSubtile = &pTile->pSubTiles[nSubtileIdx].nOffsetX;
@@ -2673,7 +2673,7 @@ static int32_t __stdcall RENDERER_GLIDE_DrawWallTilePerspective(int32_t nScreenP
     uint32_t dwTileType = pTile->nDirection;
     if (dwTileType <= 9) {
       int nSubtileCount = 0;
-      if (0 >= pTile->nSubTiles) {
+      if (pTile->nSubTiles <= 0) {
         return nZMid;
       }
 

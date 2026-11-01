@@ -616,7 +616,7 @@ static int32_t ITEM_GetItemDropSound(uint32_t * pnParam, D2UnitStrc * pUnit) {
     }
 
     D2ItemsTxt* pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
-    if (pItemsTxt && 0 < pItemsTxt->wDropSound) {
+    if (pItemsTxt && pItemsTxt->wDropSound > 0) {
       if (pnParam && (uint8_t)pItemsTxt->bDropSfxFrame > 0) {
         *pnParam = (uint32_t)(uint8_t)pItemsTxt->bDropSfxFrame;
       }
@@ -674,7 +674,7 @@ static int32_t ITEM_GetItemUseSound(D2UnitStrc * pUnit) {
     }
 
     D2ItemsTxt* pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
-    if (pItemsTxt && 0 < pItemsTxt->wDropSound) {
+    if (pItemsTxt && pItemsTxt->wDropSound > 0) {
       nSoundId = (int32_t)pItemsTxt->wUseSound;
     }
 

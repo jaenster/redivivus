@@ -199,7 +199,7 @@ int32_t __fastcall ITEMDROP_RollExceptionalItemClass(::SGAMEDATA * pGame, D2Seed
 
     int nLoopIdx;
     nLoopIdx = 0;
-    if (0 < nItemCount) {
+    if (nItemCount > 0) {
       D2SeedStrc seedNext;
       do {
         _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeedLocal, nMonsterLevel, eLevel, pItemTxt, nTCFilter);
@@ -264,7 +264,7 @@ int32_t __fastcall ITEMDROP_RollNormalItemClass(::SGAMEDATA * pGame, D2SeedStrc 
 
     int nLoopIdx;
     nLoopIdx = 0;
-    if (0 < nItemCount) {
+    if (nItemCount > 0) {
       D2SeedStrc seedNext;
       do {
         _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeedLocal, nLevelFilter, nMonsterLevel, pItemTxt, nTCFilter);
@@ -331,7 +331,7 @@ int32_t __fastcall ITEMDROP_RollEliteItemClass(::SGAMEDATA * pGame, D2SeedStrc *
 
     int nLoopIdx;
     nLoopIdx = 0;
-    if (0 < nItemCount) {
+    if (nItemCount > 0) {
       D2SeedStrc seedNext;
       do {
         if (bIsMonsterDrop || pItemTxt->wType != 0x28) {
@@ -773,7 +773,7 @@ static int __stdcall ITEM_RollForcedMagicAffix(D2ItemGenContextStrc * pItemGenCt
       wMagicPrefix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(pUnit, 1, 1, 1, 1, pItemGenCtx->nForcePrefix);
       D2Common::ITEMS::Items::SetMagixPrefix(pUnit, wMagicPrefix, 0);
     } else {
-      if (pItemGenCtx->nForceSuffix < 1) {
+      if (pItemGenCtx->nForceSuffix <= 0) {
         wForcedPrefix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(pUnit, 1, 0, 1, 1, pItemGenCtx->nForceSuffix);
         D2Common::ITEMS::Items::SetMagixPrefix(pUnit, wForcedPrefix, 0);
         if (!wForcedPrefix) {
@@ -3730,7 +3730,7 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
     *pUnitIndex = 0;
     if (!pUnitTable) {
-      if (nItemsCountToGenerate < 1) {
+      if (nItemsCountToGenerate <= 0) {
         nItemsCountToGenerate = 6;
       }
     } else if (!nItemsCountToGenerate) {

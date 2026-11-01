@@ -487,7 +487,7 @@ BOOL __stdcall SCmdRegisterArgument(uint32_t dwFlags, uint32_t dwId, char * szTe
     } else {
       nNextOffset = -1;
     }
-    if (!bValidArgType && nTextLen < 1) {
+    if (!bValidArgType && nTextLen <= 0) {
       nCmdScope = 0;
     } else {
       nCmdScope = -1;
@@ -909,7 +909,7 @@ uint32_t __stdcall SCmdDestroy() {
         pListHead = &gStormCmdListHeadBackslash;
       }
 
-      for (pNode = pListHead->pNext; 0 < pNode; pNode = *(int*)(pNode + 4)) {
+      for (pNode = pListHead->pNext; pNode > 0; pNode = *(int*)(pNode + 4)) {
         if ((*(uint32_t*)(pNode + 8) & 0x30000) == 0x20000 && *(void**)(pNode + 0x3c)) {
           SMem::SMemFree(*(void**)(pNode + 0x3c), ".\\SOURCE\\SCMD.CPP", 0x212, 0);
           *(uint32_t*)(pNode + 0x3c) = 0;

@@ -1788,7 +1788,7 @@ void __fastcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomE
           }
         } while (true);
       }
-    } else if (0 < pRoomEx->nDrlgRoomsExNearCount) {
+    } else if (pRoomEx->nDrlgRoomsExNearCount > 0) {
       uVar2 = (uint32_t)nRecursion;
       do {
         pDVar1 = pRoomEx->ppDrlgRoomsExNear[nNearIndex];

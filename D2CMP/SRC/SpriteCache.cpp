@@ -961,7 +961,7 @@ void __fastcall GFX_AllocSpriteCache(D2GfxMemoryStrc * pGfxMemory, D2PoolManager
       if (nSlotIndex - 2 < 0x13ff) {
         pCacheSlot[5] = (uint32_t)(uintptr_t)(pCacheSlot + 7);
       }
-      if (0 < nSlotIndex - 2) {
+      if (nSlotIndex - 2 > 0) {
         pCacheSlot[6] = (int)(pGfxMemory->pSpriteCache->aEntries - 3) + nOffset;
       }
 
@@ -972,7 +972,7 @@ void __fastcall GFX_AllocSpriteCache(D2GfxMemoryStrc * pGfxMemory, D2PoolManager
       if (nSlotIndex - 1 < 0x13ff) {
         *(int*)((int)pCurSpriteCache->aEntries + nOffset - 8) = (uintptr_t)&pCurSpriteCache->aEntries[0].pData + nOffset;
       }
-      if (0 < nSlotIndex - 1) {
+      if (nSlotIndex - 1 > 0) {
         *(int*)((int)pCurSpriteCache->aEntries + nOffset - 4) = (int)(pGfxMemory->pSpriteCache->aEntries - 2) + nOffset;
       }
 
@@ -983,7 +983,7 @@ void __fastcall GFX_AllocSpriteCache(D2GfxMemoryStrc * pGfxMemory, D2PoolManager
       if (nSlotIndex < 0x13ff) {
         *(int*)((uintptr_t)&pCurSpriteCache->aEntries[0].pNext + nOffset) = (uintptr_t)&pCurSpriteCache->aEntries[1].pData + nOffset;
       }
-      if (0 < nSlotIndex) {
+      if (nSlotIndex > 0) {
         *(int*)((uintptr_t)&pCurSpriteCache->aEntries[0].pPrev + nOffset) = (int)(pGfxMemory->pSpriteCache->aEntries - 1) + nOffset;
       }
 
@@ -1005,7 +1005,7 @@ void __fastcall GFX_AllocSpriteCache(D2GfxMemoryStrc * pGfxMemory, D2PoolManager
       if (nSlotIndex + 2 < 0x13ff) {
         *(int*)((uintptr_t)&pCurSpriteCache->aEntries[2].pNext + nOffset) = (uintptr_t)&pCurSpriteCache->aEntries[3].pData + nOffset;
       }
-      if (0 < nSlotIndex + 2) {
+      if (nSlotIndex + 2 > 0) {
         *(int*)((uintptr_t)&pCurSpriteCache->aEntries[2].pPrev + nOffset) = (uintptr_t)&pGfxMemory->pSpriteCache->aEntries[1].pData + nOffset;
       }
 

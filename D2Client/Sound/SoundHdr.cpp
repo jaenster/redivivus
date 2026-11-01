@@ -332,10 +332,10 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
     pEnvironRow = pTxtSoundEnviron;
     gpSoundHdrGlobal = nTxtSoundsSize;
     nEnvRemaining = nTxtSoundEnvironSize;
-    if (0 < nTxtSoundEnvironSize) {
+    if (nTxtSoundEnvironSize > 0) {
       do {
         nSong = pEnvironRow->Song;
-        if (0 < nSong) {
+        if (nSong > 0) {
           if (nSong < gpSoundHdrGlobal) {
             gpSoundHdrGlobal = nSong;
           }

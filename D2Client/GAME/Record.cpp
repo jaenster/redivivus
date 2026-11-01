@@ -156,7 +156,7 @@ void __stdcall LoadGameRecordFromFile() {
     }
 
     int nBlockIndex = 0;
-    if (0 < lpBuffer_007a2768.nBlockCount) {
+    if (lpBuffer_007a2768.nBlockCount > 0) {
       D2GameRecordStrc* pBlock;
       do {
         if (nBlockIndex) {

@@ -230,7 +230,7 @@ void __stdcall TEXT_DrawCashDisplay() {
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x69, 0x10e, -1, DRAW_SOLID, nullptr);
       sGfxData.pDC6 = ui::GetBuySellBtnDC6();
       nTabIdx = 0;
-      if (0 < nCashDisplayItemCount) {
+      if (nCashDisplayItemCount > 0) {
         pTabEntry = (uint32_t*)&gaNpcCashTabs[0].nBaseCelFrame;
         do {
           sGfxData.nFrameNumber = (uint32_t)((char)pTabEntry[1] != '\0') + *pTabEntry;
@@ -246,7 +246,7 @@ void __stdcall TEXT_DrawCashDisplay() {
       nMouseY = nTabIdx;
       if (nMouseX < 0x140 && nTabIdx < ScreenSizeY - 0x30) {
         nTabIdx2 = 0;
-        if (0 < nCashDisplayItemCount) {
+        if (nCashDisplayItemCount > 0) {
           do {
             if (nMouseX >= gaNpcCashTabs[nTabIdx2].nHitBoxX1 && nMouseX <= gaNpcCashTabs[nTabIdx2].nHitBoxX2 && nTabIdx >= gaNpcCashTabs[nTabIdx2].nHitBoxY1 && nTabIdx <= gaNpcCashTabs[nTabIdx2].nHitBoxY2) {
               nStringId = gaNpcCashTabs[nTabIdx2].nTooltipStringId;
