@@ -713,12 +713,12 @@ bool __fastcall Q06_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
         /* If target is Akara */ if (nTargetClassId == 0x94) {
           /* If character GUID is in specific data buffer at offset 132 (0x84): active,
                          otherwise inactive */ BVar1 = QUESTGUID_SearchForValueInIntArray32(&pQuestGUID->sQuestGUIDAkara, iValue);
-          return BVar1 != 0;
+          return BVar1;
         }
         /* If target is Kashya */ if (nTargetClassId == 0x96) {
           /* If character GUID is in specific data buffer at offset 268 (0x108): active,
                          otherwise inactive */ BVar1 = QUESTGUID_SearchForValueInIntArray32(&pQuestGUID->sQuestGUIDKashya, iValue);
-          return BVar1 != 0;
+          return BVar1;
         }
       }
     }

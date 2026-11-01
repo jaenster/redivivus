@@ -49,7 +49,7 @@ void __fastcall LOADER_SetConnectionLostFlag(BOOL bConnectionLost);
 // both references (00460568, 00460608) only register the address with MOV ECX,0x460490 / CALL
 // 00451bb0 - neither loads ESI. Here the funcdef was right and the implementation was the outlier.
 uint32_t __stdcall fpGameLoopFunction(uint32_t dwUnused);
-bool fpRequiredUserAction();
+BOOL fpRequiredUserAction();
 // Sets draw function mode, registers event handlers, runs game loop with custom fpGameLoopFunction, then cleans up
 uint32_t __fastcall ENGINE_RunDrawModeGameLoop(int32_t nDrawMode);
 // Alternate draw mode game loop with different event handler table and loop function

@@ -975,7 +975,6 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     int32_t nKhalimsWillDropCount;
     int32_t nDropLoop;
     D2QuestDataA3Q2Strc* pQuestSpecificDataA3Q2;
-    int32_t* pnKhalimsWillCount;
     QUEST_DebugPrint(pQuestData->pGame, "killed boss for quest", "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", 0x391);
     D2UnitStrc* pTargetUnit = pQuestArgs->pTarget;
     D2QuestDataA3Q5Strc* pDVar1 = pQuestData->pQuestSpecificData.pA3Q5;
@@ -1005,8 +1004,7 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
             pQuestDataKhalimsWill = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_KhalimsWill);
             if (pQuestDataKhalimsWill) {
               pQuestSpecificDataA3Q2 = pQuestDataKhalimsWill->pQuestSpecificData.pA3Q2;
-              pnKhalimsWillCount = &pQuestSpecificDataA3Q2->nKhalimsWillCount;
-              *pnKhalimsWillCount += nKhalimsWillDropCount;
+              pQuestSpecificDataA3Q2->nKhalimsWillCount += nKhalimsWillDropCount;
               pQuestSpecificDataA3Q2->bOrbCountUpdated = true;
             }
           }

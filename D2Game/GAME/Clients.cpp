@@ -507,7 +507,6 @@ static void __stdcall CLIENT_PopulateVisibilityPacketBuffer(D2UnitProximityNodeS
     pClient->nPacketBuffer.nCount = 0;
     D2UnitProximityNodeStrc* ppnSlotCursor = pNodes;
     do {
-      uint32_t* puVar1;
       byUnitType = '\x06';
       if (ppnSlotCursor->pUnit) {
         byUnitType = (uint8_t)ppnSlotCursor->pUnit->eUnitType;
@@ -545,8 +544,7 @@ static void __stdcall CLIENT_PopulateVisibilityPacketBuffer(D2UnitProximityNodeS
       }
 
       *(uint16_t*)(pClient->nPad1AE + pClient->nPacketBuffer.nCount * 9 + 0x25) = nUnitTypeRaw;
-      puVar1 = &pClient->nPacketBuffer.nCount;
-      (*puVar1)++;
+      pClient->nPacketBuffer.nCount++;
       ppnSlotCursor = pNodes + ppnSlotCursor->nNext;
     } while (ppnSlotCursor->nNext);
 }
@@ -1100,7 +1098,6 @@ void __fastcall SendPongByClientId(uint32_t nClientId, int32_t dwSendTick, int32
     bool bCarry;
     uint64_t qwNewAvgPing;
     int64_t qwPingAccum;
-    int* pnSampleCount;
     ::SGAMEDATA* pGame = Server::NET_SERVER_FindGameByClientId(nClientId);
     if (!pGame) {
       if (!gQServerClientTablesInitialized) {
@@ -1129,8 +1126,7 @@ void __fastcall SendPongByClientId(uint32_t nClientId, int32_t dwSendTick, int32
         }
 
         SCmd::NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(pClient);
-        pnSampleCount = &pClient->tQServerExt.nHeartbeatSampleCount;
-        (*pnSampleCount)++;
+        pClient->tQServerExt.nHeartbeatSampleCount++;
         pClient->dwTimeOut = dwNowTick;
       }
 
@@ -1151,8 +1147,7 @@ void __fastcall SendPongByClientId(uint32_t nClientId, int32_t dwSendTick, int32
 
       dwNowTick = GetTickCount();
       pClient->tQServerExt.dwPingSamples[pClient->tQServerExt.nHeartbeatSampleCount & 0xf] = dwNowTick - dwSendTick - dwClientTick;
-      pnSampleCount = &pClient->tQServerExt.nHeartbeatSampleCount;
-      (*pnSampleCount)++;
+      pClient->tQServerExt.nHeartbeatSampleCount++;
       nSamplesToAvg = pClient->tQServerExt.nHeartbeatSampleCount;
       nSampleCount = 0;
       dwPingAccumHi = 0;
@@ -1492,12 +1487,12 @@ int32_t __fastcall GetExperience(D2ClientStrc * pClient) {
     return pClient->nExp;
 }
 
-bool __fastcall HasWeaponSwapped(D2ClientStrc * pClient) {
+BYTE __fastcall HasWeaponSwapped(D2ClientStrc * pClient) {
     return pClient->bWeaponSwap;
 }
 
 void __fastcall SetWeaponSwap(D2ClientStrc * pClient, uint8_t bWeaponSwapped) {
-    pClient->bWeaponSwap = (bool)bWeaponSwapped;
+    pClient->bWeaponSwap = bWeaponSwapped;
 }
 
 void __fastcall SERVER_PutPacketInQueueList(D2ClientStrc * pClient, D2PacketListStrc * pPacketList) {
@@ -1673,8 +1668,7 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
       }
 
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
-      eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pClient, eLevelId, (uint16_t)sRoomCoords.sTileRect.left, (uint16_t)sRoomCoords.sTileRect.top);
+      SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)sRoomCoords.sTileRect.left, (uint16_t)sRoomCoords.sTileRect.top);
     } else {
       pDrlgActSpawn = pDrlgAct;
       pGame = pSpawnXY;

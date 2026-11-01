@@ -878,9 +878,7 @@ void __fastcall PlayUnitFootstepSound(D2UnitStrc * pUnit) {
 
     play_footstep:
     nRunCheck = 0;
-    iVar2 = 0;
-    nSoundChannelNext = 0;
-    nAnimSpeed = Sound::SOUND_PlaySound(UNITSND_GetFootstepSound(pUnit, nSoundChannelPrev), pUnit, nSoundChannelNext, iVar2, nRunCheck);
+    nAnimSpeed = Sound::SOUND_PlaySound(UNITSND_GetFootstepSound(pUnit, nSoundChannelPrev), pUnit, 0, 0, nRunCheck);
     if (nAnimSpeed) {
       nFrameCount = 0xff;
       pLocalPlayer = Player::GetPlayerUnit_UI();
@@ -1404,11 +1402,8 @@ static void UNITSND_PlayFleeSound(D2UnitStrc * pUnit) {
       return;
     }
 
-    int32_t nSfxTick = 0;
-    nRecordingIdx = 0;
-    uint32_t nFleeDelay = _Utils::RollRandomNumerUpToArgument(3);
-    Sound::SOUND_PlaySound(pMonSoundsLine->Flee, pUnit, nFleeDelay + 6, nRecordingIdx, nSfxTick);
-    nFleeDelay = GAME::Game::gnRecordingIndex();
+    Sound::SOUND_PlaySound(pMonSoundsLine->Flee, pUnit, _Utils::RollRandomNumerUpToArgument(3) + 6, 0, 0);
+    uint32_t nFleeDelay = GAME::Game::gnRecordingIndex();
     SetSfxTicks(nFleeDelay, pUnit);
     gdwSoundChannelIndex = GAME::Game::gnRecordingIndex();
 }
@@ -1765,10 +1760,7 @@ void __fastcall UNITSND_PlaySoundForMercenary(int32_t nUnitGUID, uint8_t eUnitTy
       return;
       case 0x5b:
         nDelay = 0;
-      bStopChannels = 0;
-      nReserved = 0;
-      pMercUnit = Player::GetPlayerUnit_UI();
-      Sound::SOUND_PlaySound(SOUND_CURSOR_DURABILITY_BREAK, pMercUnit, nReserved, bStopChannels, nDelay);
+      Sound::SOUND_PlaySound(SOUND_CURSOR_DURABILITY_BREAK, Player::GetPlayerUnit_UI(), 0, 0, nDelay);
       return;
     }
 

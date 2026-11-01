@@ -76,7 +76,6 @@ void __fastcall D2WINLIST_AddListItem(::D2WinList * pList, uint16_t * wszText, f
     int pTextWidth;
     int32_t nLine;
     D2WinListEntry* nNextNode;
-    int* pItemCount;
     D2WinListEntry* pTailEntry;
     if (pList->sControl.neD2FormType != FORM_List) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa1);
@@ -127,8 +126,7 @@ void __fastcall D2WINLIST_AddListItem(::D2WinList * pList, uint16_t * wszText, f
       pList->sEntriesControl.pFirstEntry = pNewEntry;
     }
 
-    pItemCount = &pList->sEntriesControl.nItemCount;
-    (*pItemCount)++;
+    pList->sEntriesControl.nItemCount++;
     D2WinFont::SetAndReturnLastFont(1);
     if (!bSelect) {
       return;
@@ -236,7 +234,6 @@ BOOL __fastcall Draw(::D2WinList * pList) {
     int nPosX;
     int nSizeX;
     int nSkipCount;
-    int* ppDrawFrame;
     if (pList->sControl.neD2FormType != FORM_List) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x119);
       exit(-1);
@@ -287,8 +284,7 @@ BOOL __fastcall Draw(::D2WinList * pList) {
         pCurrentEntry = pCurrentEntry->pNext;
       }
 
-      ppDrawFrame = &pList->sEntriesControl.nCursorFrame;
-      (*ppDrawFrame)++;
+      pList->sEntriesControl.nCursorFrame++;
       if (pList->sEntriesControl.nCursorFrame >= 8) {
         pList->sEntriesControl.nCursorFrame = 0;
       }
@@ -358,7 +354,6 @@ BOOL __stdcall ListCheck(D2ControlMsg * pList) {
 }
 
 BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
-    int* piVar1;
     int iVar3;
     D2WinListEntry* pDVar4;
     fpListEntryCallback pfVar5;
@@ -408,8 +403,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
           pList->sEntriesControl.pSelectedEntry = pCurrentEntry;
           pList->sEntriesControl.nSelectedIndex = 0;
           for (; pDVar6 != pCurrentEntry; pDVar6 = pDVar6->pNext) {
-            piVar1 = &pList->sEntriesControl.nSelectedIndex;
-            (*piVar1)++;
+            pList->sEntriesControl.nSelectedIndex++;
           }
 
           nKeyCode = pList->sEntriesControl.nSelectedIndex;
@@ -422,8 +416,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
 
           nKeyCode -= iVar3;
           while (nKeyCode > pList->sEntriesControl.nMaxVisibleIndex) {
-            piVar1 = &pList->sEntriesControl.nTopIndex;
-            (*piVar1)++;
+            pList->sEntriesControl.nTopIndex++;
             nKeyCode--;
           }
 
@@ -441,8 +434,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
           pList->sEntriesControl.pSelectedEntry = pDVar6;
           pList->sEntriesControl.nSelectedIndex = 0;
           for (; pPrevEntry != pDVar6; pPrevEntry = pPrevEntry->pNext) {
-            piVar1 = &pList->sEntriesControl.nSelectedIndex;
-            (*piVar1)++;
+            pList->sEntriesControl.nSelectedIndex++;
           }
 
           nKeyCode = pList->sEntriesControl.nSelectedIndex;
@@ -455,8 +447,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
 
           nKeyCode -= iVar3;
           while (nKeyCode > pList->sEntriesControl.nMaxVisibleIndex) {
-            piVar1 = &pList->sEntriesControl.nTopIndex;
-            (*piVar1)++;
+            pList->sEntriesControl.nTopIndex++;
             nKeyCode--;
           }
 

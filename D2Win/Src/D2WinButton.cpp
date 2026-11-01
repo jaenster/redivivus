@@ -543,8 +543,7 @@ BOOL __stdcall D2WINBUTTON_HandleHotkey(D2ControlMsg * pControlMsg) {
     ::D2WinButton* pNewButton = D2_NEW_AT(::D2WinButton, ".\\Src\\D2WinButton.cpp", 0x24);
     memset(pNewButton, 0, 0x274);
     pNewButton->sControl.neD2FormType = FORM_Button;
-    int* pDwState = &pNewButton->sControl.dwState;
-    *pDwState |= gadwBitMasks[0];
+    pNewButton->sControl.dwState |= gadwBitMasks[0];
     uVar1 = pNewButton->sControl.dwState | gadwBitMasks[2];
     pNewButton->sControl.pDC6 = pDC6;
     pNewButton->sControl.dwState = uVar1;

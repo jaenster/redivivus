@@ -335,8 +335,7 @@ int32_t __stdcall fAPPMODE_client_ReturnAppMode(HMODULE hModule, D2IniConfigStrc
 
     D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation((char*)&D2IniData, 0);
     uint32_t bIsOBNetHost = (uint32_t)(pIniData->nGAMETYPE == GAMETYPE_OBNET_HOST);
-    int32_t dwErrorLine = 0;
-    D2Common::DATATBLS::DataTbls::TXT_InitTxtFiles(D2Win::Src::D2WinArchive::ReturnZero(), dwErrorLine, bIsOBNetHost);
+    D2Common::DATATBLS::DataTbls::TXT_InitTxtFiles(D2Win::Src::D2WinArchive::ReturnZero(), 0, bIsOBNetHost);
     gdwAppMode = APPMODE_SAVE;
     gbQuitGame = 1;
     do {

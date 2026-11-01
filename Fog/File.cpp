@@ -33,7 +33,7 @@ static char * STRING_CopyStringBounded(int32_t nDestSize, char * szDest, char * 
 void __stdcall CONTAINER_InitializeBuffer(void * pBuffer, int32_t nTypeSize, int32_t nBufferSize, CONTAINER_TypeInitialValue fpInitValueCallback) {
     while (true) {
       nBufferSize--;
-      if (-1 >= nBufferSize) {
+      if (nBufferSize < 0) {
         break;
       }
 
@@ -55,7 +55,7 @@ void __fastcall CRASH_DumpThreadContext(DWORD dwThreadId, void * pContext, fnCra
       memset(pFrameBufCursor + 3, 0, 4 * sizeof(pFrameBufCursor[0]));
       pFrameBufCursor += 9;
       nFrameCountClamped--;
-    } while (-1 < nFrameCountClamped);
+    } while (nFrameCountClamped >= 0);
 
     int32_t nFrameCount = Engine::Application::DEBUG_UnwindStackFrames((CONTEXT*)pContext, dwThreadId, aFrames, nMaxFrames);
     if (nFrameCount <= 0) {

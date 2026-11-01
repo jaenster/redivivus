@@ -290,7 +290,6 @@ static BOOL __stdcall SKILL_ValidateTeleportDestination(D2UnitStrc * pUnit, int3
     int nTriesLeft;
     int32_t nUnitY;
     int32_t nUnitX;
-    BOOL bAllowNeighborRooms;
     LONG nCandidateX;
     LONG nCandidateY;
     int nClampedDestY;
@@ -364,10 +363,7 @@ static BOOL __stdcall SKILL_ValidateTeleportDestination(D2UnitStrc * pUnit, int3
       nCandidateX = ptCandidatePos.y;
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       pRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, ptCandidatePos.x, nCandidateX);
-      bAllowNeighborRooms = 1;
-      nDistToDestination = 0x1c09;
-      nRangeCalc = D2Common::Units::GetUnitSizeX(pUnit);
-      pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &ptCandidatePos, nRangeCalc, nDistToDestination, bAllowNeighborRooms);
+      pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &ptCandidatePos, D2Common::Units::GetUnitSizeX(pUnit), 0x1c09, 1);
       nCandidateY = ptCandidatePos.y;
       nCandidateX = ptCandidatePos.x;
       if (pRoom) {
@@ -524,8 +520,7 @@ BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Sk
         nCalcTmp = nDestY;
         pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
         pRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nDestX, nCalcTmp);
-        nCalcTmp = 0x80;
-        D2Common::Collision::AddCollision_Type(pRoom, nDestX, nDestY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), nCalcTmp);
+        D2Common::Collision::AddCollision_Type(pRoom, nDestX, nDestY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x80);
         D2Common::Skills::SKILL_SetParam1(pSkill, nDestX);
         D2Common::Skills::SKILL_SetParam2(pSkill, nDestY);
         if (bUnitIsMonster) {
@@ -761,7 +756,6 @@ static void __stdcall PATH_ResetCollisionOnLanding(int32_t nParam1, int32_t nPar
 static BOOL __stdcall CLIENT_PlaySkillSound(D2SkillStrc * pSkill, int32_t nParam, D2DynamicPathStrc * pDynamicPath) {
     uint32_t nDistToTarget;
     int nAnimMode;
-    int32_t nTargetXOrSeqFrame;
     int32_t nParam1;
     nParam1 = D2Common::Skills::SKILL_GetParam1(pSkill);
     int32_t nParam2;
@@ -788,7 +782,6 @@ static BOOL __stdcall CLIENT_PlaySkillSound(D2SkillStrc * pSkill, int32_t nParam
       }
     }
     if (!nPosZ) {
-      int32_t nNewSequence;
       on_landed:
       PATH_ResetCollisionOnLanding(nParam2, nParam1, (D2UnitStrc*)pDynamicPath);
       Engine::Particle::SetPosVectorShifted((D2UnitStrc*)pDynamicPath, 0, 0, 0);
@@ -796,10 +789,7 @@ static BOOL __stdcall CLIENT_PlaySkillSound(D2SkillStrc * pSkill, int32_t nParam
         Engine::Gfx::GFX_AddOverlayToUnit((D2UnitStrc*)pDynamicPath, OVERLAY_dust, 2, 0, 0, 0, 0, 0);
       }
 
-      nTargetXOrSeqFrame = 0;
-      nNewSequence = 0;
-      nPosZ = 0;
-      Sound::SOUND_PlaySound(UNIT::UnitSnd::UNITSND_GetFootstepSound((D2UnitStrc*)pDynamicPath, 1), (D2UnitStrc*)pDynamicPath, nPosZ, nNewSequence, nTargetXOrSeqFrame);
+      Sound::SOUND_PlaySound(UNIT::UnitSnd::UNITSND_GetFootstepSound((D2UnitStrc*)pDynamicPath, 1), (D2UnitStrc*)pDynamicPath, 0, 0, 0);
       if (!bNotInAnimation) {
         if (nAnimMode == 0x4e) {
           CLIENT_UpdateSkillMissilePosition(pSkill, nParam1, nParam2, pDynamicPath);
@@ -1080,7 +1070,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2DynamicPathStrc * 
       }
     }
     if (!(nSkillFlags & 2)) {
-      if (-1 >= (char)nSkillFlags) {
+      if ((char)nSkillFlags < 0) {
         SKILL_SetupLeapPath((D2UnitStrc*)pUnit, pSkill);
         SKILL_CreateLeapArcParticle((D2UnitStrc*)pUnit, pSkill);
         return 1;

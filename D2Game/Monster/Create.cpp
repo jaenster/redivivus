@@ -137,7 +137,6 @@ static void __fastcall MONSTER_EquipFromClassTable(D2UnitStrc * pUnit) {
 
 // Called when a server monster is created (from CreateMonster) to wire up quest behavior based on the monster's base class id (resolved through MonStats BaseId). Dispatches per boss/quest-monster: attaches the relevant quest record to the unit (QUEST_AttachToUnitByQuestId, e.g. Andariel->SistersToTheSlaughter, Radament->RadamentsLair, Summoner->TheSummoner, Diablo->TerrorsEnd, Baal->EveOfDestruction, Izual->TheFallenAngel, Hephasto->HellsForge, Nihlathak->BetrayalOfHaggorath, Anya-on-mount->RescueOnMountArreat) and/or applies fixed monster umods via InitUmods, sets unit flags (SUMMONER, NOTC), or special-cases (NM/Hell clone ids 0x2c0-0x2c5 get extra umods; act bosses get equip/umods; Q12 death dispatch by position). No-op for ordinary monsters.
 static void __fastcall MONSTER_OnCreateAttachQuests(D2UnknownCreateMonsterStrc * pQuestEventArg, D2UnitStrc * pMonster) {
-    int32_t nX;
     eD2QuestsInternal nQuestNoInternal;
     int32_t nRawClassId;
     D2RoomStrc* pRoom;
@@ -209,9 +208,7 @@ static void __fastcall MONSTER_OnCreateAttachQuests(D2UnknownCreateMonsterStrc *
       return;
       case 0xaf:
         nUmodId = sgptDataTable->nTxtMonStatsSize > 0xaf ? 0xaf : -1;
-      nRawClassId = D2Client::Units::GetYPosFromDynamicPathUnit(pMonster);
-      nX = D2Client::Units::GetXPosFromDynamicPathUnit(pMonster);
-      Quests::QUESTS::QUEST_DispatchMonsterDeathToQ12(pGame, pRoom, nX, nRawClassId, nUmodId);
+      Quests::QUESTS::QUEST_DispatchMonsterDeathToQ12(pGame, pRoom, D2Client::Units::GetXPosFromDynamicPathUnit(pMonster), D2Client::Units::GetYPosFromDynamicPathUnit(pMonster), nUmodId);
       return;
       case 0xfa:
         Quests::QUESTS::QUEST_AttachToUnitByQuestId(pGame, pMonster, QUESTINT_TheSummoner);
@@ -734,8 +731,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
         bMinionIsLeader = 0;
         nTmp = 0;
         eUnitType = UNIT_MONSTER;
-        nMinionClassId = D2Client::UNIT::GetGUID(pUnit);
-        Ai::AiGeneral::AssignMinionOwner(pGameInst, pSpawnedMinion, nMinionClassId, eUnitType, nTmp, bMinionIsLeader);
+        Ai::AiGeneral::AssignMinionOwner(pGameInst, pSpawnedMinion, D2Client::UNIT::GetGUID(pUnit), eUnitType, nTmp, bMinionIsLeader);
         Ai::AiGeneral::AddMinionToList(pGameInst, pUnit, pSpawnedMinion);
       }
 
@@ -1216,7 +1212,6 @@ BOOL __fastcall SpawnMonsterAtUnitOffset(::SGAMEDATA * pGame, D2RoomStrc * pRoom
     BOOL bSetBossOwner;
     int nBossSpawnX;
     int nBossSpawnY;
-    int32_t nGUID;
     int* pCurrentEntry;
     pCurrentEntry = pParam;
     int32_t nResult;
@@ -1262,8 +1257,7 @@ BOOL __fastcall SpawnMonsterAtUnitOffset(::SGAMEDATA * pGame, D2RoomStrc * pRoom
           case 5:
             if (pUnit && (pSpawnedMonster = SpawnMonsterAtRoomPos(pGame, pWorkingRoom, *pNextSpawnEntry + nOffsetX, pCurrentEntry[4] + nOffsetY, nClassId, eMode, -1, 0) , pSpawnedMonster != 0)) {
               bSetBossOwner = 0;
-              nGUID = 0;
-              Ai::AiGeneral::AssignMinionOwner(pGame, pSpawnedMonster, D2Client::UNIT::GetGUID(pUnit), D2Client::Units::GetType(pUnit), nGUID, bSetBossOwner);
+              Ai::AiGeneral::AssignMinionOwner(pGame, pSpawnedMonster, D2Client::UNIT::GetGUID(pUnit), D2Client::Units::GetType(pUnit), 0, bSetBossOwner);
               nResult = 1;
             }
           break;

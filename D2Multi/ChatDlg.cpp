@@ -459,7 +459,7 @@ BOOL __stdcall CHATDLG_FindSubstringMatch(int32_t nTargetHash, int32_t nWordLen,
     int nStrLen = Storm::Source::SSTR::SStrLen(szText);
     int nStart = 0;
     int nMaxStart = nStrLen - nWordLen;
-    if (-1 >= nMaxStart) {
+    if (nMaxStart < 0) {
       return 0;
     }
 

@@ -405,7 +405,6 @@ BOOL __fastcall Q09_CheckRadamentKillAndReward(::SGAMEDATA * pGame, D2UnitStrc *
 // A2Q1: Book-of-Skill drop accounting + completion sound. Run per-player after Radament's death. If quest is in Step0x05 (reward earned, book not yet consumed) AND the player does NOT currently hold the Book of Skill quest item (code 0x20737361 = 'ass '), increments the pending book-drop counter (A2Q1 nBookOfSkillDropCount, via the A1Q1-aliased GUID slot) so the death handler drops a (re)book. Separately, if the quest is JustCompleted (0xd), plays the quest-complete sound event 0x32 on the player.
 BOOL __fastcall Q09_CheckBookOfSkillAndSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pBookItem;
-    int32_t* pnBookDropCount;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     BOOL BVar3 = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_RadamentsLair, QUESTSTATE_Step0x05);
     if (BVar3) {
@@ -414,8 +413,7 @@ BOOL __fastcall Q09_CheckBookOfSkillAndSound(::SGAMEDATA * pGame, D2UnitStrc * p
       if (pQuestData) {
         pBookItem = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20737361);
         if (!pBookItem) {
-          pnBookDropCount = &pQuestData->pQuestSpecificData.pA2Q1->nBookOfSkillDropCount;
-          (*pnBookDropCount)++;
+          pQuestData->pQuestSpecificData.pA2Q1->nBookOfSkillDropCount++;
         }
       }
     }

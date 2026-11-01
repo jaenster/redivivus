@@ -453,8 +453,8 @@ void __fastcall SAFESOCK_DisableNonBlocking(D2NetDataStrc * pNetData) {
     ioctlsocket(hSocket, -0x7ffb9982, &nIoctlArg);
 }
 
-D2NetDataStrc * __fastcall Create_Flag0(char * szText1, u_short nParam, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szText2) {
-    D2NetDataStrc* pNetData = Create(szText1, nParam, pThreadProc, pThreadParam, szText2, 0);
+D2NetDataStrc * __fastcall Create_Flag0(char * szText1, int nParam, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szText2) {
+    D2NetDataStrc* pNetData = Create(szText1, (u_short)nParam, pThreadProc, pThreadParam, szText2, 0);
     return pNetData;
 }
 

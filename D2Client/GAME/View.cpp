@@ -409,12 +409,9 @@ void __fastcall SetViewRectangleSize(D2GameViewStrc * pGameView, int32_t xLeft, 
     tagRECT* lprc = &pGameView->rcExtendedView;
     /* LPRECT lprc for SetRect */ SetRect(lprc, -0x50, -0x50, ScreenSizeX + 0x50, ScreenSizeY - 0x2f);
     if (_bPerspective) {
-      LONG* pCoord;
-      pCoord = &pGameView->rcExtendedView.top;
-      *pCoord += -0x1e;
+      pGameView->rcExtendedView.top += -0x1e;
       lprc->left += -0x2d;
-      pCoord = &pGameView->rcExtendedView.right;
-      *pCoord += 0x1e;
+      pGameView->rcExtendedView.right += 0x1e;
     }
 
     pGameView->nFlags |= 1;

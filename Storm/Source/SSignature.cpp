@@ -70,7 +70,7 @@ uint32_t __fastcall SSignatureVerifyStream_GetSignatureLength(D2SsigContextStrc 
 // Was SSIG_UpdateHash. Storm export (PPC vector 100cdfd4 -> 100a3af0). Basis: callee set {Sha1::Append, BlockMoveData} == 1.14d {Sha1_Append, SSYSTEM_Memmove, STORM_Memcpy}; PPC reads r3,r4,r5 = 3 args == 3 params here.
 void __fastcall SSignatureVerifyStream_ProvideData(D2SsigContextStrc * pContext, uint8_t * pData, size_t nDataLen) {
     uint32_t nRemaining = nDataLen - pContext->nBufferSize;
-    if (-1 < (int)nRemaining) {
+    if ((int)nRemaining >= 0) {
       if (pContext->nBytesBuffered > 0) {
         Sha1_Append(&pContext->sSha1, pContext->pDataBuffer, pContext->nBytesBuffered);
       }

@@ -482,7 +482,6 @@ void __fastcall DRLGLEVEL_AdjustRoomCoordinates(D2DrlgLevelStrc * pLevel) {
     int nMaxY;
     int nMinX;
     int nMaxX;
-    LONG* pWorldY;
     if (!pLevel) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e3);
       exit(-1);
@@ -505,8 +504,7 @@ void __fastcall DRLGLEVEL_AdjustRoomCoordinates(D2DrlgLevelStrc * pLevel) {
 
           do {
             pRoomEx->sCoords.WorldPosition.x += pLevel->sCoordinatesAndSize.WorldPosition.x - nMinX;
-            pWorldY = &pRoomEx->sCoords.WorldPosition.y;
-            *pWorldY += pLevel->sCoordinatesAndSize.WorldPosition.y - nMinY;
+            pRoomEx->sCoords.WorldPosition.y += pLevel->sCoordinatesAndSize.WorldPosition.y - nMinY;
             pRoomEx = pRoomEx->pRoomExNext;
           } while (pRoomEx);
 
@@ -1291,7 +1289,6 @@ int __fastcall DRLG_FindHTile(D2RoomExStrc * pRoomEx, int nTileType, uint32_t nG
 
 void __fastcall FreeRoomEx(D2RoomExStrc * pRoomEx, BOOL bServerSide) {
     D2DrlgRoomExRoomTileNodeStrc* pAnimTileGrid;
-    int* pnRoomDataFreeGen;
     D2DrlgStrc* pDrlg = pRoomEx->pLevel->pDrlg;
     if (!bServerSide && pRoomEx->pRoom) {
       DUNGEON::Dungeon::DRLGROOM_RemoveRoomFromAct(pDrlg->pAct, pRoomEx->pRoom);
@@ -1304,8 +1301,7 @@ void __fastcall FreeRoomEx(D2RoomExStrc * pRoomEx, BOOL bServerSide) {
     }
 
     pRoomEx->eRoomExFlags ^= 0x100000;
-    pnRoomDataFreeGen = &pDrlg->nRoomDataFreeGeneration;
-    (*pnRoomDataFreeGen)++;
+    pDrlg->nRoomDataFreeGeneration++;
     RoomTile::DRLGROOMTILE_FreeRoomTilesAll(pRoomEx);
     switch (pRoomEx->nPresetType) {
       case 1:

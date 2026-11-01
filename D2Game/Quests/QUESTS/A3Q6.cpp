@@ -223,8 +223,7 @@ BOOL __fastcall Q23_PlayerCheckDuranceLevel3Complete(::SGAMEDATA * pGame, D2Unit
     }
 
     Q23_SetGuardianQuestComplete(pGame, pUnit, pBitBuffer);
-    int32_t* piParticipantCount = &pGuardianQuestData->pQuestSpecificData.pA3Q6->nPlayerCount;
-    (*piParticipantCount)++;
+    pGuardianQuestData->pQuestSpecificData.pA3Q6->nPlayerCount++;
     return 0;
 }
 
@@ -558,8 +557,7 @@ void __fastcall Q23_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * p
       return;
     }
 
-    int32_t* pnParticipantCount = &pGuardianQuestData->pQuestSpecificData.pA3Q6->nPlayerCount;
-    (*pnParticipantCount)++;
+    pGuardianQuestData->pQuestSpecificData.pA3Q6->nPlayerCount++;
 }
 
 // [The Guardian (Q23)] Per-player iterator: if THIS player just completed (JustCompleted set), find

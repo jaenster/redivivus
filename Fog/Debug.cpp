@@ -481,7 +481,7 @@ bool __stdcall EnumerateLoadedModules(uint32_t pfnModuleCallback, uint32_t pUser
       bEnumOk = (*pEnumerateLoadedModules64)(ghCurrentProcessHandle, (void*)pfnModuleCallback, (void*)pUserContext);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
       ExceptionList = pPrevExceptionFrame;
-      return bEnumOk != 0;
+      return bEnumOk;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
@@ -678,7 +678,7 @@ bool __stdcall WalkStackFrame(HANDLE hThread, uint32_t pStackFrame, uint32_t pCo
       bWalkOk = (*pStackWalk64)(0x14c, ghCurrentProcessHandle, hThread, (void*)pStackFrame, (void*)pContextRecord, nullptr, (void*)pSymFunctionTableAccess64, (void*)pSymGetModuleBase64, nullptr);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
       ExceptionList = pSehFrame;
-      return bWalkOk != 0;
+      return bWalkOk;
     }
 
     error:
@@ -1030,7 +1030,7 @@ static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable) {
       pEntryBase++;
       pEntryCursor += 0x114;
       nRemaining--;
-    } while (-1 < nRemaining);
+    } while (nRemaining >= 0);
 }
 
 int __stdcall DEBUG_UnloadStackCrawlDbgHelp() {

@@ -213,7 +213,6 @@ void __fastcall Q04_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     int32_t nNpcClassId;
     int32_t nLine;
     int32_t nPlayerGUID;
-    int* pRewardRetryCounter;
     short int nNpcClassIdRaw;
     nNpcClassIdRaw = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
     ::SGAMEDATA* pGame;
@@ -288,8 +287,7 @@ void __fastcall Q04_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         return;
       }
 
-      pRewardRetryCounter = &pA1Q4Data->sSub.nRewardRetryCount;
-      (*pRewardRetryCounter)--;
+      pA1Q4Data->sSub.nRewardRetryCount--;
       return;
     }
     if (nMessageIndex != 0x76) {
@@ -382,7 +380,6 @@ void __fastcall Q04_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     int32_t nPlayerGUID;
     int32_t nTargetClassId;
     uint8_t byStateFlag;
-    int* pParticipantCountField;
     D2UnitStrc* pScrollItem = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20736b62);
     if (!pQuestArgs->pTarget) {
       nTargetClassId = -1;
@@ -401,8 +398,7 @@ void __fastcall Q04_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       pDecipheredScrollItem = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20646b62);
       if (pDecipheredScrollItem) {
         QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20646b62);
-        pParticipantCountField = &pA1Q4Data->sSub.nRewardRetryCount;
-        (*pParticipantCountField)--;
+        pA1Q4Data->sSub.nRewardRetryCount--;
       }
     }
 
@@ -771,9 +767,7 @@ void __fastcall Q04_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQue
     D2QuestDataA1Q4Strc* pA1Q1Data = pQuestData->pQuestSpecificData.pA1Q4;
     uint32_t nItemCode = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pQuestArgs->pTarget);
     if (nItemCode == 0x20646b62 || nItemCode == 0x20736b62) {
-      int* pnScrollCount;
-      pnScrollCount = &pA1Q1Data->sSub.nRewardRetryCount;
-      (*pnScrollCount)--;
+      pA1Q1Data->sSub.nRewardRetryCount--;
     }
     if (!(!pA1Q1Data->sSub.nRewardRetryCount && pQuestData->nStateFlag <= 5 && pA1Q1Data->sSub.field_0x37 != 1 && pA1Q1Data->sSub.bTreeObjectSaved == '\x01')) {
       return;
@@ -1524,8 +1518,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateHoradricMalusSmith(D2ObjectOperateFnArg * pOp
     if (!ptStonePos.x) {
       pNumRooms = &__frame0.pExistingPortal;
       pppRoomList = &__frame0.ppRoomList;
-      pUnitPlayerData = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
-      D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pUnitPlayerData, pppRoomList, (int*)pNumRooms);
+      D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), pppRoomList, (int*)pNumRooms);
       pRoomListEnd = 0;
       pMissileRoom = __frame0.pExistingPortal;
       if (__frame0.pExistingPortal) {
@@ -1601,8 +1594,6 @@ BOOL __fastcall OBJOP_A1Q4_UseScrollOfInifuss(D2ObjectOperateFnArg * pOperation)
       D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
       return 0;
     }
-
-    int* piVar1;
     if (pQuestData->nStateFlag >= 6) {
       return 0;
     }
@@ -1641,8 +1632,7 @@ BOOL __fastcall OBJOP_A1Q4_UseScrollOfInifuss(D2ObjectOperateFnArg * pOperation)
           QUEST_SetStateAndBroadcast(pQuestData, 2, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q04_NotifyQuestStateToPlayer, true);
           pDVar2->sSub.field_0x33 = 1;
           pDVar2->sSub.nScrollItemGUID = pScrollItem->nUnitGUID;
-          piVar1 = &pDVar2->sSub.nRewardRetryCount;
-          (*piVar1)++;
+          pDVar2->sSub.nRewardRetryCount++;
           pDVar2->sSub.nStonesUnitGUID = 1;
           pDVar2->sSub.field_0x60 = 1;
           D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
@@ -2132,10 +2122,8 @@ BOOL __fastcall Q04_SpawnCainCage(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2RoomStrc* pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, pDVar2->ptCainPos.x, nY);
     if (!pSpawnRoom) {
-      LONG* pLVar1;
       pDVar2->ptCainPos.x += 3;
-      pLVar1 = &pDVar2->ptCainPos.y;
-      *pLVar1 += 3;
+      pDVar2->ptCainPos.y += 3;
       return 1;
     }
 
@@ -2290,8 +2278,7 @@ void __fastcall Q04_DropShieldRewards(D2QuestDataStrc * pQuestData, D2UnitStrc *
       return;
     }
 
-    int32_t* pShieldsRemaining = &pQuestSpecificData->sSub.nShieldsRemaining;
-    (*pShieldsRemaining)--;
+    pQuestSpecificData->sSub.nShieldsRemaining--;
     if (pQuestSpecificData->sSub.nShieldsRemaining <= 0) {
       return;
     }
@@ -2484,7 +2471,6 @@ void __fastcall Q04_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 void __fastcall Q04_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataStrc* pCainQuestData2;
     D2UnitStrc* pScrollBkd;
-    int* pScrollCount;
     ::SGAMEDATA* pGame;
     pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData;
@@ -2553,12 +2539,10 @@ void __fastcall Q04_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
     pScrollBkd = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20646b62);
     D2UnitStrc* pScrollBks = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20736b62);
     if (pScrollBkd) {
-      pScrollCount = &pA1Q1Sub->sSub.nRewardRetryCount;
-      (*pScrollCount)++;
+      pA1Q1Sub->sSub.nRewardRetryCount++;
     }
     if (pScrollBks) {
-      pScrollCount = &pA1Q1Sub->sSub.nRewardRetryCount;
-      (*pScrollCount)++;
+      pA1Q1Sub->sSub.nRewardRetryCount++;
     }
     if (pScrollBkd) {
       pQuestData->nStateFlag = 5;

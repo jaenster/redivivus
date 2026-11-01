@@ -654,7 +654,7 @@ void __fastcall PLAYER_PlaceCorpse(::SGAMEDATA * pGame, D2RoomStrc * pRoom, DWOR
       return;
     }
 
-    D2Common::PATH::Path::PATH_GetCollisionTypeAt((uint32_t*)pUnit->pPath.pStaticPath, pUnit, pRoom, (uint16_t)pPoint->x, (uint16_t)pPoint->y);
+    D2Common::PATH::Path::PATH_GetCollisionTypeAt((uint32_t*)pUnit->pPath.pStaticPath, pUnit, pRoom, pPoint->x, pPoint->y);
     pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
     D2Common::Units::SetupUpdateFlag(pUnit, 0x11);
     pUnit->eUnitFlags &= ~UNITFLAG_ISVALIDTARGET;

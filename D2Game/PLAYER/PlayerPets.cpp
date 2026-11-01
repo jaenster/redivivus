@@ -172,8 +172,7 @@ static void __stdcall PETS_FreeOrKillPetList(D2UnitStrc * pUnit, D2PetListStrc *
           UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)Send0x7aSummonLog, &sPetArgs);
           nPetUnitGUID = pPetUnit->nUnitGUID;
           ePetUnitType = UNIT_MONSTER;
-          pPetRoom = D2Common::Units::UNITS_GetRoom(pPetUnit);
-          D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pPetRoom, ePetUnitType, nPetUnitGUID);
+          D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pPetUnit), ePetUnitType, nPetUnitGUID);
           if (!nParam2) {
             UNIT::SUnit::FreeServerUnit(pGame, pPetUnit);
             pPetList->nPets2--;
@@ -321,7 +320,7 @@ static void __stdcall KillingPets(uint32_t nTargetGUID, D2PetListStrc * pPetList
     D2_FREE_POOL_AT(pGame->pMemoryPool, pMemoryToFree, ".\\PLAYER\\PlayerPets.cpp", 0x25c);
     int* pnPetCount = &pPetList->nPets2;
     (*pnPetCount)--;
-    if (-1 < *pnPetCount) {
+    if (*pnPetCount >= 0) {
       return;
     }
 
@@ -546,7 +545,7 @@ static void __stdcall PETS_TeleportToRoom(D2UnitStrc * pUnit, ::SGAMEDATA * pGam
 
     pPrevRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pPrevRoom);
-    bool eNewAct = (bool)D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    uint8_t eNewAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
     pUnit->nAct = eNewAct;
     pUnit->pDrlgAct = pGame->pAct[eNewAct];
     D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);

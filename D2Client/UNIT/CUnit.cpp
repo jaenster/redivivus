@@ -1121,7 +1121,6 @@ void __fastcall CLIENT_SyncPathFromServer(D2DynamicPathStrc * pDynamicPath) {
     BOOL bIsInTown;
     D2SkillStrc* pSkill;
     D2SkillStrc* pUnitSkill;
-    uint32_t nSkillFlagsLocal;
     eD2UnitType eUnitType;
     eD2PlayerAnimMode eNewMode;
     if (eD2GSGameType_007a0610 != GAMETYPE_SINGLEPLAYER) {
@@ -1152,17 +1151,17 @@ void __fastcall CLIENT_SyncPathFromServer(D2DynamicPathStrc * pDynamicPath) {
       return;
     }
 
-    uint16_t nPosX;
-    nPosX = pLocalPath->Coords.tSubtile.nPosX;
-    uint16_t nPosY;
-    nPosY = pLocalPath->Coords.tSubtile.nPosY;
-    if ((uint32_t)nPosX != (uint32_t)(uint16_t)pCurPath->Coords.tSubtile.nPosX || (uint32_t)nPosY != (uint32_t)(uint16_t)pCurPath->Coords.tSubtile.nPosY) {
-      pBetterRoom = Player::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint32_t)nPosX, (uint32_t)nPosY);
+    uint32_t nX;
+    nX = (uint32_t)(uint16_t)pLocalPath->Coords.tSubtile.nPosX;
+    uint32_t nSkillFlagsLocal;
+    nSkillFlagsLocal = (uint32_t)(uint16_t)pLocalPath->Coords.tSubtile.nPosY;
+    if (nX != (uint16_t)pCurPath->Coords.tSubtile.nPosX || nSkillFlagsLocal != (uint16_t)pCurPath->Coords.tSubtile.nPosY) {
+      pBetterRoom = Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nSkillFlagsLocal);
       if (!pBetterRoom) {
         return;
       }
 
-      D2Common::PATH::Path::PATH_GetCollisionTypeAt((uint32_t*)pCurPath, (D2UnitStrc*)pDynamicPath, pRoom, nPosX, nPosY);
+      D2Common::PATH::Path::PATH_GetCollisionTypeAt((uint32_t*)pCurPath, (D2UnitStrc*)pDynamicPath, pRoom, nX, nSkillFlagsLocal);
     }
 
     pCurPath->Coords.tFixed.x = pLocalPath->Coords.tFixed.x;
@@ -1474,7 +1473,7 @@ void __fastcall CLIENT_TeleportUnitToPosition(D2UnitStrc * pUnit, int32_t nX, in
         ptFreePos.y = nY;
         nLine = D2Common::Units::GetUnitSizeX(pUnit);
         D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &ptFreePos, nLine, 0x1c09, 1);
-        nLine = D2Common::PATH::Path::PATH_GetCollisionTypeAt((uint32_t*)pDynamicPathCast, pUnit, pRoom, (uint16_t)ptFreePos.x, (uint16_t)ptFreePos.y);
+        nLine = D2Common::PATH::Path::PATH_GetCollisionTypeAt((uint32_t*)pDynamicPathCast, pUnit, pRoom, ptFreePos.x, ptFreePos.y);
         if (!nLine) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a9);
           exit(-1);

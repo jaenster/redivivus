@@ -135,7 +135,7 @@ D2FontGlyphStrc * __fastcall D2WINFONT_LookupGlyphEntry(uint16_t wCharCode) {
     int nIterations = 0;
     int nLo = 0;
     int nHi = gaFontCache[gnLastUsedFontId].pFontTableHeader->nGlyphCount - 1;
-    if (-1 >= nHi) {
+    if (nHi < 0) {
       return gaFontCache[gnLastUsedFontId].pGlyphs + 0x1f;
     }
 

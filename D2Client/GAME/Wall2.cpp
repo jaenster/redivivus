@@ -1261,7 +1261,6 @@ void __fastcall WALL2_BuildSceneDrawList(D2GameViewStrc * pGameView, uint32_t nT
 
     int yTop;
     D2UnitStrc* pUnit;
-    D2RoomStrc* pRoom;
     int xLeft;
     int nViewWidth;
     uint32_t nGridRowIdx;
@@ -1367,8 +1366,7 @@ void __fastcall WALL2_BuildSceneDrawList(D2GameViewStrc * pGameView, uint32_t nT
         nPlayerY = 0;
       }
 
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      gnPlayerTileGridIndex = D2Common::DUNGEON::Dungeon::GetGridIndex(pRoom, nPlayerY, nPlayerX);
+      gnPlayerTileGridIndex = D2Common::DUNGEON::Dungeon::GetGridIndex(D2Common::Units::UNITS_GetRoom(pUnit), nPlayerY, nPlayerX);
       D2Common::DUNGEON::Dungeon::CallRoomCallback(pGameViewLocal.pRoom, (ROOMCALLBACKFN)WALL2_CollectRoomTilesAndUnits, &pGameViewLocal);
       return;
     }

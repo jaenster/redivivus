@@ -141,6 +141,7 @@ void __stdcall InitializeiInventoryPages() {
     static int gnInventoryPage; D2_STATIC_GUARD_BSS(gnInventoryPage, "D2Client::UI::Inv::InitializeiInventoryPages::gnInventoryPage");
 
     eInventoryPage eNpcInvPage;
+    D2UnitStrc* pNpc;
     int32_t nInteractedNpcGUID;
     if (nScreenMode == gnInventoryPage) {
       if (bInventoryScreenCoordinatesInitialized) {
@@ -154,12 +155,8 @@ void __stdcall InitializeiInventoryPages() {
 
     BOOL bIsExpansion;
     bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-    uint8_t nInvPage;
-    nInvPage = '\0';
-    D2UnitStrc* pNpc;
-    pNpc = UNIT::Player::GetPlayerUnit_UI();
     int32_t iVar1;
-    iVar1 = D2Common::Units::GetInventoryPage(pNpc, nInvPage, bIsExpansion);
+    iVar1 = D2Common::Units::GetInventoryPage(UNIT::Player::GetPlayerUnit_UI(), '\0', bIsExpansion);
     D2Common::DATATBLS::TokTbls::GetInvDimensions(iVar1, nScreenMode, &pInventoryScreenCoordinates);
     D2Common::DATATBLS::TokTbls::GetGridDimensions(iVar1, nScreenMode, &pInventoryGridScreenCoordinated);
     D2Common::DATATBLS::TokTbls::GetBodyDimensions(iVar1, nScreenMode, gaPlayerBodySlotScreenCoords + 4, BODY_rArm);
@@ -1247,13 +1244,10 @@ static uint32_t __fastcall ITEM_CanTheseBeSocketed(D2UnitStrc * pUnit, D2UnitStr
 
 static void INV_DrawBodySlotCursorHighlight(D2InventoryStrc * pInventory) {
     int nResult;
-    D2UnitStrc* pPlayerUnit_lcl;
+    BOOL BVar1;
     uint32_t bCanSocket;
     char nItemWidth;
     char nItemHeight;
-    int* pnOut1;
-    int* pnOut2;
-    int* pnOut3;
     if (g_nCurrentInventoryPage == 1) {
       nResult = ui::GetMouseX();
       if (nResult < ScreenSizeX / 2) {
@@ -1285,17 +1279,12 @@ static void INV_DrawBodySlotCursorHighlight(D2InventoryStrc * pInventory) {
     int32_t bHighlightValid;
     bHighlightValid = D2Common::ITEMS::Items::ITEMS_CheckBodyLocationFit(pUnit, gnInvBodySlotUnderCursor);
     if (bHighlightValid) {
-      BOOL BVar1;
-      pnOut3 = 0;
-      pnOut2 = 0;
-      pnOut1 = 0;
-      bHighlightValid = 0;
-      pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-      BVar1 = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pUnit, pPlayerUnit_lcl, bHighlightValid, pnOut1, pnOut2, pnOut3);
+      BVar1 = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pUnit, UNIT::Player::GetPlayerUnit_UI(), 0, 0, 0, 0);
       if (!BVar1) {
         goto try_socket_fit;
       }
     } else {
+      D2UnitStrc* pPlayerUnit_lcl;
       try_socket_fit:
       pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, gnInvBodySlotUnderCursor);
       bCanSocket = ITEM_CanTheseBeSocketed(pUnit, pPlayerUnit_lcl);
@@ -2555,8 +2544,7 @@ static void __stdcall INV_FormatItemSpellDescText(uint32_t nValue, D2ItemsTxt * 
       case 4:
         pnQuantity = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pPlayer, nValue, pItemsTxt->dwCalc1);
       Fog::File::CONTAINER_InitializeBuffer(aWStack_42c, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-      pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wSpellDescStr);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x200, aWStack_42c, pwszLabel, pnQuantity);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x200, aWStack_42c, D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wSpellDescStr), pnQuantity);
       pwszLabel = aWStack_42c;
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwszLabel);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwszNewline);
@@ -3892,8 +3880,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nParam) {
           nColorFlag = 0;
           iTmp = 0;
           nTooltipXPos = gnPanelOffsetX + 0x35;
-          pwString = D2Lang::StrTable::strtable::GetLocaleString(0x101c);
-          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(pwString, nTooltipXPos, iVar1, iTmp, nColorFlag);
+          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x101c), nTooltipXPos, iVar1, iTmp, nColorFlag);
         }
       } else {
         bIsExpansionGfx = INV_IsMouseInRect(0x14, 0x12, gnPanelOffsetY - 0xf2 + ScreenSizeY, gnPanelOffsetX + 0x49);
@@ -3930,8 +3917,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nParam) {
         bIsExpansionGfx = 0;
         iTmp = 0;
         nTextY = gnPanelOffsetX + 0x15;
-        pwString = D2Lang::StrTable::strtable::GetLocaleString(0xcf3);
-        D2Win::Src::D2WinFont::DRAW_text(pwString, nTextY, nCoinY, iTmp, bIsExpansionGfx);
+        D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xcf3), nTextY, nCoinY, iTmp, bIsExpansionGfx);
         D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
         return;
       }
@@ -4187,8 +4173,6 @@ void __stdcall INV_HandleShopLeftClick(D2UIMouseMsgStrc * pMsg) {
     int32_t* ppDVar4;
     int nButtonCount;
     PD2NpcShopButtonAction pButton;
-    int32_t dwMouseX;
-    int32_t dwMouseY;
     DWORD dwArg6;
     DWORD dwArg7;
     DWORD dwMode;
@@ -4273,10 +4257,7 @@ void __stdcall INV_HandleShopLeftClick(D2UIMouseMsgStrc * pMsg) {
                 dwMode = 0;
                 dwSell = 1;
                 gbInvGambleMode = 1;
-                dwMouseX = nMouseX;
-                dwMouseY = nMouseY;
-                pUnit = UNIT::Player::GetPlayerUnit_UI();
-                npcmenu::ShopAction(pUnit, nullptr, dwSell, dwMouseX, dwMouseY, dwMode, dwArg6, dwArg7);
+                npcmenu::ShopAction(UNIT::Player::GetPlayerUnit_UI(), nullptr, dwSell, nMouseX, nMouseY, dwMode, dwArg6, dwArg7);
                 gbInvGambleMode = 0;
               } else {
                 ui::UI_SetCursorToSpecialIcon(((D2NpcShopButtonStrc*)((char*)pButton - 0xa))->nIconId, 0);
@@ -6065,10 +6046,7 @@ static void INV_DrawHirelingStats(D2UnitStrc * pUnit) {
         iStatCheck = iYCoord + 1;
       }
       if (!*(int*)((int)gaHirelingStatRows + iDamageValue)) {
-        bResult = 0;
-        eStatId = nColorCode;
-        iServerStat = D2Win::Src::D2WinFont::DRAW_text0(wszStatText);
-        D2Win::Src::D2WinFont::DRAW_text(wszStatText, iLeftX - iServerStat, iStatCheck, eStatId, bResult);
+        D2Win::Src::D2WinFont::DRAW_text(wszStatText, iLeftX - D2Win::Src::D2WinFont::DRAW_text0(wszStatText), iStatCheck, nColorCode, 0);
       } else if (!*(int*)((int)gaHirelingStatRows + iDamageValue + 4)) {
         D2Win::Src::D2WinFont::DRAW_text(wszStatText, iRightX, iStatCheck, nColorCode, 0);
       } else {
@@ -6435,8 +6413,6 @@ void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
     uint32_t nSlotBottom;
     uint32_t nSlotLeft;
     uint32_t nSlotTop;
-    int32_t nSoundParam1;
-    int32_t nSoundParam2;
     int32_t nMercGuid;
     nMercGuid = 0;
     D2UnitStrc* pPlayerUnit_lcl;
@@ -6492,10 +6468,7 @@ void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
                     nMercGuid = INV_CanHirelingEquipItem(pEquippedItem, pPlayerUnit_lcl, (bool*)&iCanEquip);
                     if (nMercGuid) {
                       UNIT::ITEM_RemoveClientSide(pPlayerUnit_lcl);
-                      nSoundParam2 = 0;
-                      nSoundParam1 = 0;
-                      nMercGuid = 0;
-                      Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pPlayerUnit_lcl), nullptr, nMercGuid, nSoundParam1, nSoundParam2);
+                      Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pPlayerUnit_lcl), nullptr, 0, 0, 0);
                       GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('a', 0);
                       goto consume_click;
                     }
@@ -6831,7 +6804,6 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
     uint16_t* pwFmtStr;
     char* pAffixNameTail;
     uint8_t* pbVar3;
-    uint16_t* wszFormat;
     int iScratch;
     uint32_t nCopyLen;
     uint16_t* pwOutCursor;
@@ -7016,11 +6988,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
               pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszBaseName);
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(pwOutBuffer, pwLocaleStr);
             } else {
-              uVar6 = 0;
-              pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
-              pwFmtStr = D2Lang::StrTable::strtable::GetLocaleString(0x6c0);
-              pwFormatStr = D2Lang::StrTable::strtable::GetLocaleString(0x6b3);
-              wsprintf(pwOutBuffer, pwFormatStr, pwFmtStr, pwLocaleStr, uVar6);
+              wsprintf(pwOutBuffer, D2Lang::StrTable::strtable::GetLocaleString(0x6b3), D2Lang::StrTable::strtable::GetLocaleString(0x6c0), D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr), 0);
             }
 
             break;
@@ -7124,12 +7092,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
             exit(-1);
           }
 
-          uVar6 = 0;
-          pwLocaleStr = wszSuffix;
-          pwFormatStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
-          pwFmtStr = wszPrefix;
-          wszFormat = D2Lang::StrTable::strtable::GetLocaleString(0x6b2);
-          wsprintf(pwOutBuffer, wszFormat, pwFmtStr, pwFormatStr, pwLocaleStr, uVar6);
+          wsprintf(pwOutBuffer, D2Lang::StrTable::strtable::GetLocaleString(0x6b2), wszPrefix, D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr), wszSuffix, 0);
           break;
           case 5:
             iScratch = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
@@ -7153,10 +7116,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
               if (!bFlagCheck) {
                 __frame0.wszPossessive[0] = L'\0';
                 Fog::File::CONTAINER_InitializeBuffer(__frame0.wszPossessive + 1, 2, 99, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-                uVar6 = 0;
-                pwLocaleStr = wszNameScratch;
-                pwFmtStr = D2Lang::StrTable::strtable::GetLocaleString(0x2769);
-                wsprintf(__frame0.wszPossessive, pwFmtStr, pwLocaleStr, uVar6);
+                wsprintf(__frame0.wszPossessive, D2Lang::StrTable::strtable::GetLocaleString(0x2769), wszNameScratch, 0);
                 pwLocaleStr = __frame0.wszPossessive;
               } else {
                 pwLocaleStr = wszBaseName;
@@ -7248,11 +7208,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszLargeWorkBuf, pwSeparator);
           __frame0.wszRareName = L'\0';
           Fog::File::CONTAINER_InitializeBuffer(__frame0.wszRareNameBuf, 2, 199, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-          uVar6 = 0;
-          pwLocaleStr = wszSuffix;
-          pwFmtStr = wszPrefix;
-          pwFormatStr = D2Lang::StrTable::strtable::GetLocaleString(0x6b6);
-          wsprintf(&__frame0.wszRareName, pwFormatStr, pwFmtStr, pwLocaleStr, uVar6);
+          wsprintf(&__frame0.wszRareName, D2Lang::StrTable::strtable::GetLocaleString(0x6b6), wszPrefix, wszSuffix, 0);
           Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
           bFlagCheck = INV_FormatPlayerNameWithBase(wszScratch, &__frame0.wszRareName, pUnit);
           pwLocaleStr = wszScratch;
@@ -8100,8 +8056,7 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
           nBound = gnPanelOffsetY - 0x62 + ScreenSizeY;
           nTmpResult = 0;
           nTmp = gnPanelOffsetX + 0x11f;
-          /* Close */ pwTmp = D2Lang::StrTable::strtable::GetLocaleString(0x1030);
-          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(pwTmp, nTmp, nBound, nTmpResult, nTooltipFlag);
+          /* Close */ D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1030), nTmp, nBound, nTmpResult, nTooltipFlag);
         }
       }
 
@@ -8116,8 +8071,7 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
           nTooltipFlag = 1;
           nTmp = gnPanelOffsetY - 99 + ScreenSizeY;
           nTmpResult = 0;
-          pwTmp = D2Lang::StrTable::strtable::GetLocaleString(0x1030);
-          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(pwTmp, nBound - 0x11f, nTmp, nTmpResult, nTooltipFlag);
+          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1030), nBound - 0x11f, nTmp, nTmpResult, nTooltipFlag);
         }
 
         nMouseY = ScreenSizeX - gnPanelOffsetX;
@@ -8148,8 +8102,7 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
             nTooltipFlag = 1;
             nTmpResult = 0;
             nTmp = gnPanelOffsetY - 0x59 + ScreenSizeY;
-            pwTmp = D2Lang::StrTable::strtable::GetLocaleString(wStringId);
-            D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(pwTmp, nBound - 0xde, nTmp, nTmpResult, nTooltipFlag);
+            D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(wStringId), nBound - 0xde, nTmp, nTmpResult, nTooltipFlag);
           }
         }
 
@@ -8758,8 +8711,7 @@ void __stdcall DRAW_UI_Inventory() {
         pSlotItem = UNIT::Player::GetPlayerUnit_UI();
         bIsPlayerDead = D2Common::Units::GetStashGoldLimit(pSlotItem);
         Fog::File::CONTAINER_InitializeBuffer(wszStashGoldText, 2, 100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-        pwszText = D2Lang::StrTable::strtable::GetLocaleString(0xfd3);
-        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszStashGoldText, pwszText, bIsPlayerDead);
+        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszStashGoldText, D2Lang::StrTable::strtable::GetLocaleString(0xfd3), bIsPlayerDead);
         bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
         bIsTwoHandedEquipped = gnPanelOffsetY - 0x19f;
         if (!bIsExpansion) {
@@ -8783,9 +8735,7 @@ void __stdcall DRAW_UI_Inventory() {
 
         pPalette = 0;
         eDrawMode = DRAW_SOLID;
-        nDrawColor = -1;
-        nDrawY = INV_GetGoldButtonY();
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nDrawTextWidth, nDrawY, nDrawColor, eDrawMode, pPalette);
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nDrawTextWidth, INV_GetGoldButtonY(), -1, eDrawMode, pPalette);
         DRAW_UI_INVENTORY_Gold(0);
         bIsTwoHandedEquipped = ui::GetMouseX();
         nTradeNameWidth = ui::GetMouseY();
@@ -9068,9 +9018,7 @@ void __stdcall DRAW_UI_Inventory() {
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszGoldText, szGoldCount, 0xf);
       bIsExpansion = 0;
       bIsTwoHandedEquipped = 0x1b - gnPanelOffsetY;
-      nDrawY = 0;
-      nDrawTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszGoldText);
-      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - nDrawTextWidth + 0x124, bIsTwoHandedEquipped, nDrawY, bIsExpansion);
+      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, bIsTwoHandedEquipped, 0, bIsExpansion);
       bIsExpansion = 0;
       bIsTwoHandedEquipped = 0xf2 - gnPanelOffsetY;
       nDrawY = 0;
@@ -9084,9 +9032,7 @@ void __stdcall DRAW_UI_Inventory() {
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszGoldText, szGoldCount, 0xf);
       bIsExpansion = 0;
       bIsTwoHandedEquipped = 0xf2 - gnPanelOffsetY;
-      nDrawY = 0;
-      nDrawTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszGoldText);
-      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - nDrawTextWidth + 0x124, bIsTwoHandedEquipped, nDrawY, bIsExpansion);
+      D2Win::Src::D2WinFont::DRAW_text(wszGoldText, gnPanelOffsetX - D2Win::Src::D2WinFont::DRAW_text0(wszGoldText) + 0x124, bIsTwoHandedEquipped, 0, bIsExpansion);
     }
 
     byPrevInvPage = CurrentInventoryPage;
@@ -9131,14 +9077,12 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
     int32_t nTxCost;
     D2ItemsTxt* pItemsTxt;
     uint32_t nCheckResult;
-    eD2Sounds eSoundId;
     uint32_t uVar4;
     bool bIsOwnUnit;
     uint32_t nCollisionCount;
     int nGridX;
     int nGridY;
     int32_t nSoundParam2;
-    int32_t nSuffixCursor;
     D2InventoryStrc* pInvWork;
     pInvWork = pInventory;
     uint8_t cPage;
@@ -9444,11 +9388,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
 
               /* 28 [DWORD item to socket id] [DWORD socketable item id] */ GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x28, pCursorItem_lcl->nUnitGUID, nTxCost);
               UNIT::ITEM_RemoveClientSide(pCursorItem_lcl);
-              nSoundParam2 = 0;
-              nSuffixCursor = 0;
-              nTxCost = 0;
-              eSoundId = UNIT::SOUND_GetIdFromUnit(targetItem);
-              Sound::SOUND_PlaySound(eSoundId, nullptr, nTxCost, nSuffixCursor, nSoundParam2);
+              Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(targetItem), nullptr, 0, 0, 0);
               nGridCellY = 0;
               bReturnValue = 1;
             }
@@ -9478,11 +9418,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
 
                   /* Scroll to book */ GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x29, pCursorItem_lcl->nUnitGUID, nTxCost);
                   UNIT::ITEM_RemoveClientSide(pCursorItem_lcl);
-                  nSoundParam2 = 0;
-                  nSuffixCursor = 0;
-                  nTxCost = 0;
-                  eSoundId = UNIT::SOUND_GetIdFromUnit(targetItem);
-                  Sound::SOUND_PlaySound(eSoundId, nullptr, nTxCost, nSuffixCursor, nSoundParam2);
+                  Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(targetItem), nullptr, 0, 0, 0);
                   nGridCellY = 0;
                   bReturnValue = 1;
                   pInvWork = pInventory;
@@ -9530,22 +9466,16 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
     UNIT::ITEM_RemoveClientSide(pCursorItem_lcl);
     play_item_sound:
     nSoundParam2 = 0;
-    nSuffixCursor = 0;
-    nTxCost = 0;
-    eSoundId = UNIT::SOUND_GetIdFromUnit(pCursorItem_lcl);
-    Sound::SOUND_PlaySound(eSoundId, nullptr, nTxCost, nSuffixCursor, nSoundParam2);
+    Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pCursorItem_lcl), nullptr, 0, 0, nSoundParam2);
     return 1;
 }
 
 uint32_t __fastcall EQUIP_ItemRight(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint32_t nBodySlot) {
     BOOL BVar1;
     eD2PlayerClassIDDWORD eVar2;
-    eD2Sounds eSoundId;
     uint8_t nPacketId;
     eD2PlayerClassIDDWORD eVar3;
     int nItemGuid;
-    int32_t nSoundParam1;
-    int32_t nSoundParam2;
     uint32_t bReturnValue;
     bReturnValue = 0;
     D2UnitStrc* pItem;
@@ -9648,11 +9578,7 @@ uint32_t __fastcall EQUIP_ItemRight(D2UnitStrc * pUnit, D2InventoryStrc * pInven
             GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x1b, nResult, 4);
             UNIT::ITEM_RemoveClientSide(pLeftArmItem);
             UNIT::ITEM_RemoveClientSide(pItem);
-            nSoundParam2 = 0;
-            nSoundParam1 = 0;
-            nEquipAction = 0;
-            eSoundId = UNIT::SOUND_GetIdFromUnit(pItem);
-            Sound::SOUND_PlaySound(eSoundId, nullptr, nEquipAction, nSoundParam1, nSoundParam2);
+            Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pItem), nullptr, 0, 0, 0);
             DrawShopRelated = 1;
             return 1;
           }
@@ -9784,11 +9710,7 @@ uint32_t __fastcall EQUIP_ItemRight(D2UnitStrc * pUnit, D2InventoryStrc * pInven
       send_equip_packet:
       GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(nPacketId, nItemGuid, nResult);
       UNIT::ITEM_RemoveClientSide(pItem);
-      nSoundParam2 = 0;
-      nSoundParam1 = 0;
-      nEquipAction = 0;
-      eSoundId = UNIT::SOUND_GetIdFromUnit(pItem);
-      Sound::SOUND_PlaySound(eSoundId, nullptr, nEquipAction, nSoundParam1, nSoundParam2);
+      Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pItem), nullptr, 0, 0, 0);
       bReturnValue = 1;
       break;
     }
@@ -9800,12 +9722,9 @@ uint32_t __fastcall EQUIP_ItemRight(D2UnitStrc * pUnit, D2InventoryStrc * pInven
 uint32_t __fastcall EQUIP_ItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint32_t nBodySlot) {
     BOOL BVar1;
     eD2PlayerClassIDDWORD eVar2;
-    eD2Sounds eSoundId;
     uint8_t nPacketId;
     eD2PlayerClassIDDWORD eVar3;
     int nItemGuid;
-    int32_t nSoundParam1;
-    int32_t nSoundParam2;
     uint32_t bReturnValue;
     bReturnValue = 0;
     D2UnitStrc* pItem;
@@ -9908,11 +9827,7 @@ uint32_t __fastcall EQUIP_ItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInvent
             GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x1b, nResult, 5);
             UNIT::ITEM_RemoveClientSide(pRightArmItem);
             UNIT::ITEM_RemoveClientSide(pItem);
-            nSoundParam2 = 0;
-            nSoundParam1 = 0;
-            nEquipAction = 0;
-            eSoundId = UNIT::SOUND_GetIdFromUnit(pItem);
-            Sound::SOUND_PlaySound(eSoundId, nullptr, nEquipAction, nSoundParam1, nSoundParam2);
+            Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pItem), nullptr, 0, 0, 0);
             DrawShopRelated = 1;
             return 1;
           }
@@ -10044,11 +9959,7 @@ uint32_t __fastcall EQUIP_ItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInvent
       send_equip_packet:
       GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(nPacketId, nItemGuid, nResult);
       UNIT::ITEM_RemoveClientSide(pItem);
-      nSoundParam2 = 0;
-      nSoundParam1 = 0;
-      nEquipAction = 0;
-      eSoundId = UNIT::SOUND_GetIdFromUnit(pItem);
-      Sound::SOUND_PlaySound(eSoundId, nullptr, nEquipAction, nSoundParam1, nSoundParam2);
+      Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pItem), nullptr, 0, 0, 0);
       bReturnValue = 1;
       break;
     }
@@ -10060,10 +9971,7 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
     int32_t nEquipAction;
     eD2PlayerClassIDDWORD eVar1;
     BOOL bInteractiveMode;
-    eD2Sounds eSoundId;
     eD2PlayerClassIDDWORD eVar2;
-    int32_t nSoundParam;
-    int32_t nSoundParam2;
     uint32_t bReturnValue = 0;
     D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
     int iVar3 = ui::GetItemType();
@@ -10136,11 +10044,7 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
 
               GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x1a, iVar3, (uint16_t)bodyLocation);
               UNIT::ITEM_RemoveClientSide(pItem);
-              nSoundParam2 = 0;
-              nSoundParam = 0;
-              nEquipAction = 0;
-              eSoundId = UNIT::SOUND_GetIdFromUnit(pItem);
-              Sound::SOUND_PlaySound(eSoundId, nullptr, nEquipAction, nSoundParam, nSoundParam2);
+              Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pItem), nullptr, 0, 0, 0);
               DrawShopRelated = 1;
               return 1;
             }
@@ -10184,11 +10088,7 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
 
               GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x1d, iVar3, (uint16_t)bodyLocation);
               UNIT::ITEM_RemoveClientSide(pItem);
-              nSoundParam2 = 0;
-              nSoundParam = 0;
-              nEquipAction = 0;
-              eSoundId = UNIT::SOUND_GetIdFromUnit(pItem);
-              Sound::SOUND_PlaySound(eSoundId, nullptr, nEquipAction, nSoundParam, nSoundParam2);
+              Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pItem), nullptr, 0, 0, 0);
               bReturnValue = 1;
             }
           }
@@ -10842,8 +10742,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
           nBufferSize = 0x40;
           pwszCostBuf = wszCostText;
           pnButtonXOffsets = &__frame0.nNpcTopY;
-          pCursorItem_lcl = ui::GetCursorItem();
-          bHasNpcGuid = npcmenu::NPCMENU_CalculateItemTransactionCost(pCursorItem_lcl, 1, pnButtonXOffsets, pwszCostBuf, nBufferSize);
+          bHasNpcGuid = npcmenu::NPCMENU_CalculateItemTransactionCost(ui::GetCursorItem(), 1, pnButtonXOffsets, pwszCostBuf, nBufferSize);
           if (!bHasNpcGuid) {
             return;
           }

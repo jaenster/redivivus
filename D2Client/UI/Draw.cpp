@@ -230,12 +230,10 @@ void __stdcall UI_ToggleMiniPanel() {
 void __stdcall InitializeUI() {
     D2UnitStrc* pPlayer;
     int bIsActive;
-    HWND pHwnd;
     BOOL bResult2;
     eD2UIvars eUI;
     char szPath[260];
     int32_t nInteractGuid;
-    int32_t nLine;
     Panel::LoadPanelImages();
     MiniPanel::MINIPANEL_Init();
     Text::TEXT_InitTextDisplaySettings();
@@ -333,9 +331,7 @@ void __stdcall InitializeUI() {
           GFX_bShowUIFlag.Game = 1;
         }
         if (GFX_bShowUIFlag.Game) {
-          nLine = 4;
-          pHwnd = D2gfx::D2GFX::GetHwnd();
-          _Message::MESSAGE_RegisterEventHandlerBatch(pHwnd, g_UIFlagInitDrawMouseDown, nLine);
+          _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitDrawMouseDown, 4);
         }
 
         ui::GetMouseX();
@@ -382,14 +378,10 @@ void __stdcall InitializeUI() {
           }
           if (!bResult) {
             if (GFX_bShowUIFlag.HelpScreenRedButton) {
-              nLine = 2;
-              pHwnd = D2gfx::D2GFX::GetHwnd();
-              _Message::MESSAGE_RegisterEventHandlerBatch(pHwnd, gsUIDrawFlagInit1, nLine);
+              _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDrawFlagInit1, 2);
             }
           } else if (!GFX_bShowUIFlag.HelpScreenRedButton) {
-            nLine = 2;
-            pHwnd = D2gfx::D2GFX::GetHwnd();
-            _Message::MESSAGE_UnregisterEventHandlerBatch(pHwnd, gsUIDrawFlagInit1, nLine);
+            _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDrawFlagInit1, 2);
           }
 
           ui::GetMouseX();
@@ -495,10 +487,8 @@ void __stdcall FreeDraw() {
 void __fastcall DRAW_UI(D2GameViewStrc * pGameView) {
     uint32_t eBorderType;
     int bIsActive;
-    HWND pHwnd;
     eD2GSGameType eGameType;
     eD2UIvars eUIIndex;
-    int32_t iVar1;
     int32_t nInteractGuid;
     BOOL bWasHelpOpen;
     if (GFX_bShowUIFlag.StatusArea) {
@@ -670,15 +660,11 @@ void __fastcall DRAW_UI(D2GameViewStrc * pGameView) {
         }
         if (!bWasHelpOpen) {
           if (GFX_bShowUIFlag.HelpMenu) {
-            iVar1 = 5;
-            pHwnd = D2gfx::D2GFX::GetHwnd();
-            _Message::MESSAGE_RegisterEventHandlerBatch(pHwnd, gsUIDrawFlagInit0, iVar1);
+            _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDrawFlagInit0, 5);
           }
         } else if (!GFX_bShowUIFlag.HelpMenu) {
           Help::HELP_HideMiniPanel();
-          iVar1 = 5;
-          pHwnd = D2gfx::D2GFX::GetHwnd();
-          _Message::MESSAGE_UnregisterEventHandlerBatch(pHwnd, gsUIDrawFlagInit0, iVar1);
+          _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDrawFlagInit0, 5);
         }
 
         ui::GetMouseX();

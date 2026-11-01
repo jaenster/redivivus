@@ -1395,7 +1395,6 @@ BOOL __stdcall NPCMENU_ConfirmTransactionCallback() {
 
 void __stdcall NPCMENU_ShowTransactionConfirmDialog() {
     uint16_t* pszDialogStr;
-    uint16_t* pWVar1;
     uint16_t nStrId;
     uint16_t aItemNameBuf[192];
     uint16_t aCostBuf[10];
@@ -1439,24 +1438,12 @@ void __stdcall NPCMENU_ShowTransactionConfirmDialog() {
     switch (gnNpcMenuTransactionType) {
       case 1:
         dwDialogArg1 = 0;
-      nStringCallbackId = 0;
-      bStringEnabled = 1;
-      dwDialogArg0 = 4;
-      nStringColor = 0;
-      nStringFontSize = 0x15;
-      pWVar1 = D2Lang::StrTable::strtable::GetLocaleString(0xd14);
-      Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, pWVar1, nStringFontSize, nStringColor, dwDialogArg0, bStringEnabled, nStringCallbackId, dwDialogArg1);
+      Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd14), 0x15, 0, 4, 1, 0, dwDialogArg1);
       dwDialogArg0 = 0;
       break;
       case 2:
         dwDialogArg1 = 0;
-      nStringCallbackId = 0;
-      bStringEnabled = 1;
-      dwDialogArg0 = 4;
-      nStringColor = 0;
-      nStringFontSize = 0x15;
-      pWVar1 = D2Lang::StrTable::strtable::GetLocaleString(0xd13);
-      Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, pWVar1, nStringFontSize, nStringColor, dwDialogArg0, bStringEnabled, nStringCallbackId, dwDialogArg1);
+      Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd13), 0x15, 0, 4, 1, 0, dwDialogArg1);
       dwDialogArg0 = 1;
       break;
       case 3:
@@ -1472,8 +1459,7 @@ void __stdcall NPCMENU_ShowTransactionConfirmDialog() {
       nStringColor = 0;
       nStringFontSize = 0x15;
       dwDialogArg0 = 1;
-      pWVar1 = D2Lang::StrTable::strtable::GetLocaleString(nStrId);
-      Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, pWVar1, nStringFontSize, nStringColor, dwDialogArg1, bStringEnabled, nStringCallbackId, dwDialogArg4);
+      Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, D2Lang::StrTable::strtable::GetLocaleString(nStrId), nStringFontSize, nStringColor, dwDialogArg1, bStringEnabled, nStringCallbackId, dwDialogArg4);
       break;
       case 5:
         dwDialogArg1 = 0;
@@ -1516,12 +1502,7 @@ void __stdcall NPCMENU_ShowTransactionConfirmDialog() {
     dwDialogArg1 = 0;
     fpDialogFunc nParam2;
     nParam2 = (fpDialogFunc)NPCMENU_ConfirmTransactionCallback;
-    bStringEnabled = 1;
-    dwDialogArg0 = 4;
-    nStringColor = 0;
-    nStringFontSize = 0xf;
-    pWVar1 = D2Lang::StrTable::strtable::GetLocaleString(0xd12);
-    Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, pWVar1, nStringFontSize, nStringColor, dwDialogArg0, bStringEnabled, nParam2, dwDialogArg1);
+    Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd12), 0xf, 0, 4, 1, nParam2, dwDialogArg1);
     dwDialogArg1 = 0;
     bStringEnabled = 1;
     dwDialogArg0 = 4;
@@ -1533,20 +1514,10 @@ void __stdcall NPCMENU_ShowTransactionConfirmDialog() {
     Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, pszDialogStr, nStringFontSize, nStringColor, dwDialogArg0, bStringEnabled, pfnStringCallback, dwDialogArg1);
     dwDialogArg1 = 1;
     fpDialogFunc pcVar1 = (fpDialogFunc)NPCMENU_ConfirmTransactionCallback;
-    bStringEnabled = 1;
-    dwDialogArg0 = 0;
-    nStringColor = 0;
-    nStringFontSize = 0xf;
-    pWVar1 = D2Lang::StrTable::strtable::GetLocaleString(0xd10);
-    Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, pWVar1, nStringFontSize, nStringColor, dwDialogArg0, bStringEnabled, pcVar1, dwDialogArg1);
+    Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd10), 0xf, 0, 0, 1, pcVar1, dwDialogArg1);
     dwDialogArg1 = 1;
     fpDialogFunc pcVar2 = NPCMENU_ConfirmTransactionReturn;
-    bStringEnabled = 1;
-    dwDialogArg0 = 0;
-    nStringColor = 0;
-    nStringFontSize = 0xf;
-    pWVar1 = D2Lang::StrTable::strtable::GetLocaleString(0xd11);
-    Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, pWVar1, nStringFontSize, nStringColor, dwDialogArg0, bStringEnabled, pcVar2, dwDialogArg1);
+    Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd11), 0xf, 0, 0, 1, pcVar2, dwDialogArg1);
 }
 
 BOOL __fastcall GetInteractedUnitGuid(int * pNpcGUID) {
@@ -2482,8 +2453,6 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
     D2NpcMenuOptionFunc* ppCurCallback;
     fpDialogFunc nParam2;
     bool bCainQuestInProgress;
-    uint32_t bCloseEnabled;
-    uint32_t dwColorArg;
     uint32_t dwFontArg;
     eD2UnitStat eUnitStat;
     int32_t nCloseOptionEnabled;
@@ -2582,8 +2551,7 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
             if (nOptionStringId == 0xd09) {
               nOptionStringId = 0;
               eUnitStat = UNITSTAT_hitpoints;
-              pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
-              iVar1 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pNpcUnit, eUnitStat, nOptionStringId);
+              iVar1 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, nOptionStringId);
               pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
               nCloseOptionEnabled = D2Common::Stats::StatsEx::GetTxtMaxHp(pNpcUnit);
               if (iVar1 < nCloseOptionEnabled) {
@@ -2659,12 +2627,7 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
 
       nParam3 = 1;
       nParam2 = NPCMENU_GambleDrawCallback;
-      bCloseEnabled = 1;
-      nCloseOptionEnabled = 0;
-      dwColorArg = 0;
-      dwFontArg = 0xf;
-      pnOptionCallback = D2Lang::StrTable::strtable::GetLocaleString(0x102e);
-      Dialog::AddStringData(Dialog::gpNpcInteractionDialog, pnOptionCallback, dwFontArg, dwColorArg, nCloseOptionEnabled, bCloseEnabled, nParam2, nParam3);
+      Dialog::AddStringData(Dialog::gpNpcInteractionDialog, D2Lang::StrTable::strtable::GetLocaleString(0x102e), 0xf, 0, 0, 1, nParam2, nParam3);
     }
 }
 
@@ -2750,9 +2713,6 @@ void __stdcall NPCMENU_ShowMainMenuDialog() {
 
 void __stdcall NPCMENU_OpenInteraction(D2UnitStrc * pUnit) {
     D2UnitStrc* pPlayerUnit_lcl;
-    int32_t nVolume;
-    int32_t nSoundLoopCount;
-    int32_t nSoundLoopFlag;
     GAME::Game::UI_ResetInputState();
     if (!pUnit) {
       close_interaction:
@@ -2809,11 +2769,7 @@ void __stdcall NPCMENU_OpenInteraction(D2UnitStrc * pUnit) {
     eD2Sounds nSoundId = GAME::Sound::SOUND_SelectNpcGreetingSound(pPlayerUnit_lcl, 1);
     if (nSoundId != SOUND_NONE) {
       UNIT::UnitSnd::UNITSND_StopAllSkillSounds(pUnit);
-      nSoundLoopCount = 0;
-      nVolume = 1;
-      nSoundLoopFlag = 0;
-      pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-      Sound::SOUND_PlaySound(nSoundId, pPlayerUnit_lcl, nSoundLoopFlag, nVolume, nSoundLoopCount);
+      Sound::SOUND_PlaySound(nSoundId, UNIT::Player::GetPlayerUnit_UI(), 0, 1, 0);
     }
 
     D2NPCSpeech[nSpeechEntryIdx].bGreeting = '\0';
@@ -3224,11 +3180,9 @@ int __stdcall NPCMENU_ConfirmDialogCancelCallback() {
 // Halts if the talk dialog is already open. Sends no packet.
 // void __stdcall, two stack arguments (RET 8). Callers: NPCMENU_TalkOptionCallback and NPCMENU_RequestGamble, both with 3381 "talk".
 void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechIdx) {
-    uint16_t* pszDialogLine;
     D2UnitStrc* pPlayerUnit_lcl;
     D2UnitStrc* pSocketedItem;
     int nMsgLoopIdx;
-    uint32_t nParam;
     int32_t iVar1;
     POINT local_c;
     fpDialogFunc pcVar1;
@@ -3236,8 +3190,6 @@ void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechId
     fpDialogFunc pcVar3;
     fpDialogFunc pfnDrawCallback;
     fpDialogFunc pcVar4;
-    uint32_t dwColorArg;
-    uint32_t dwEnabledArg;
     uint32_t dwFontArg;
     int32_t nAddStringEnabled;
     int32_t nErrorLine;
@@ -3264,36 +3216,21 @@ void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechId
 
       nAddStringEnabled = 1;
       pcVar1 = (fpDialogFunc)NPCMENU_ShowCurrentGossipCallback;
-      dwEnabledArg = 1;
-      iVar1 = 0;
-      dwColorArg = 0;
-      dwFontArg = 0xf;
-      pszDialogLine = D2Lang::StrTable::strtable::GetLocaleString(0xd43);
-      Dialog::AddStringData(Dialog::gpNpcGossipDialog, pszDialogLine, dwFontArg, dwColorArg, iVar1, dwEnabledArg, pcVar1, nAddStringEnabled);
+      Dialog::AddStringData(Dialog::gpNpcGossipDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd43), 0xf, 0, 0, 1, pcVar1, nAddStringEnabled);
       nMsgLoopIdx = 0;
       if (nErrorLine > 0) {
         do {
           dwFontArg = D2Common::Text::TEXT_GetMessageByIndex(pMsgLog, nMsgLoopIdx);
           nAddStringEnabled = 1;
           pcVar2 = NPCMENU_ShowSelectedDialogOption;
-          nParam = 1;
-          iVar1 = 0;
-          dwEnabledArg = 0;
-          dwColorArg = 0xf;
-          pszDialogLine = Text::TEXT_LookupSoundStringIndex((uint16_t)dwFontArg);
-          Dialog::AddStringData(Dialog::gpNpcGossipDialog, pszDialogLine, dwColorArg, dwEnabledArg, iVar1, nParam, pcVar2, nAddStringEnabled);
+          Dialog::AddStringData(Dialog::gpNpcGossipDialog, Text::TEXT_LookupSoundStringIndex((uint16_t)dwFontArg), 0xf, 0, 0, 1, pcVar2, nAddStringEnabled);
           nMsgLoopIdx++;
         } while (nMsgLoopIdx < nErrorLine);
       }
       if (_Interaction::nCurrentInteractedNpcClassId == 0xc9) {
         iVar1 = 1;
         pcVar3 = NPCMENU_ShowGossipDialog;
-        dwEnabledArg = 1;
-        nErrorLine = 0;
-        dwColorArg = 0;
-        dwFontArg = 0xf;
-        pszDialogLine = D2Lang::StrTable::strtable::GetLocaleString(0xd40);
-        Dialog::AddStringData(Dialog::gpNpcGossipDialog, pszDialogLine, dwFontArg, dwColorArg, nErrorLine, dwEnabledArg, pcVar3, iVar1);
+        Dialog::AddStringData(Dialog::gpNpcGossipDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd40), 0xf, 0, 0, 1, pcVar3, iVar1);
       }
       if (_Interaction::nCurrentInteractedNpcClassId == 0x109 || _Interaction::nCurrentInteractedNpcClassId == 0xf4 || _Interaction::nCurrentInteractedNpcClassId == 0xf5 || _Interaction::nCurrentInteractedNpcClassId == 0x208 || _Interaction::nCurrentInteractedNpcClassId == 0xf6) {
         pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
@@ -3305,12 +3242,7 @@ void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechId
               if (dwFontArg == 0x20786f62) {
                 iVar1 = 1;
                 pcVar4 = NPCMENU_ShowIntroduceDialog;
-                dwEnabledArg = 1;
-                nErrorLine = 0;
-                dwColorArg = 0;
-                dwFontArg = 0xf;
-                pszDialogLine = D2Lang::StrTable::strtable::GetLocaleString(0x8b7);
-                Dialog::AddStringData(Dialog::gpNpcGossipDialog, pszDialogLine, dwFontArg, dwColorArg, nErrorLine, dwEnabledArg, pcVar4, iVar1);
+                Dialog::AddStringData(Dialog::gpNpcGossipDialog, D2Lang::StrTable::strtable::GetLocaleString(0x8b7), 0xf, 0, 0, 1, pcVar4, iVar1);
                 break;
               }
             }
@@ -3320,12 +3252,12 @@ void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechId
     }
 
     iVar1 = 1;
-    dwEnabledArg = 1;
+    uint32_t dwEnabledArg = 1;
     nErrorLine = 0;
-    dwColorArg = 0;
+    uint32_t dwColorArg = 0;
     dwFontArg = 0xf;
     fpDialogFunc nParam2_00 = NPCMENU_MercDrawCallback1;
-    pszDialogLine = D2Lang::StrTable::strtable::GetLocaleString(0xd48);
+    uint16_t* pszDialogLine = D2Lang::StrTable::strtable::GetLocaleString(0xd48);
     Dialog::AddStringData(Dialog::gpNpcGossipDialog, pszDialogLine, dwFontArg, dwColorArg, nErrorLine, dwEnabledArg, nParam2_00, iVar1);
 }
 
@@ -3388,9 +3320,11 @@ int __stdcall NPCMENU_MercListDrawCallback() {
 
 int __stdcall NPCMENU_BuildMercHireMenu() {
     uint8_t bVar1;
+    D2UnitStrc* pPlayerUnit_lcl;
     BOOL bIsExpansion;
     uint32_t nDifficulty;
     int nLoopCounter;
+    uint16_t* pszDialogPtr;
     uint32_t uVar3;
     uint16_t wszGoldFmtBuf[300];
     uint16_t wszMercDesc2[150];
@@ -3413,6 +3347,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     int32_t nDialogX;
     int32_t nDialogY;
     size_t nLabelMaxLen;
+    int32_t nMercActRolled;
     int32_t nMercTypeDescIdx;
     D2HirelingHireData* pHireData;
     ListBoxWrapperVtable* pListBoxVtbl;
@@ -3451,19 +3386,13 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     nLoopCounter = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eStatId, nNameStringId);
     nNameStringId = 0;
     eStatId = UNITSTAT_gold;
-    D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    int nGoldOnBody = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, eStatId, nNameStringId);
+    int nGoldOnBody = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eStatId, nNameStringId);
     int32_t nTotalGold = nLoopCounter + nGoldOnBody;
     D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(300, wszGoldFmtBuf, D2Lang::StrTable::strtable::GetLocaleString(0xd24), nTotalGold);
     Dialog::AddStringData(Dialog::gpNpcMercListDialog, wszGoldFmtBuf, 0x15, 0, 4, 1, nullptr, 0);
     int32_t nMercSeed = 1;
     fpDialogFunc pfnCloseCallback = NPCMENU_MercListDrawCallback;
-    uint32_t dwEnabledArg = 1;
-    int32_t nMercActRolled = 0;
-    uint32_t dwColorArg = 0;
-    uint32_t dwFontArg = 0x13b;
-    uint16_t* pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xd48);
-    Dialog::AddStringData(Dialog::gpNpcMercListDialog, pszDialogPtr, dwFontArg, dwColorArg, nMercActRolled, dwEnabledArg, pfnCloseCallback, nMercSeed);
+    Dialog::AddStringData(Dialog::gpNpcMercListDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd48), 0x13b, 0, 0, 1, pfnCloseCallback, nMercSeed);
     ::ListBoxWrapper* ppListBox = (::ListBoxWrapper*)Storm::SMem::SMemAlloc(0xc, "new", -1, 0);
     nEHState = 0;
     if (ppListBox) {
@@ -3487,8 +3416,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
       pMercForHire = &D2Client::Merc::D2MercForHire[nMercLoopIdx];
       if (D2Client::Merc::D2MercForHire[nMercLoopIdx].bActive) {
         nNameStringId = D2Client::Merc::D2MercForHire[nMercLoopIdx].nNameStringId;
-        bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-        nMercAct = D2Common::Merc::GetMercAct(bIsExpansion, 0, nNameStringId);
+        nMercAct = D2Common::Merc::GetMercAct(GAME::Game::CLIENT_CheckExpansion(), 0, nNameStringId);
         bVar1 = GAME::Game::GetDificulity();
         nMercActRolled = pMercForHire->nSeed;
         nDifficulty = (uint32_t)bVar1;
@@ -3537,8 +3465,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
         }
 
         memset(wNumCharBuf, 0, 10 * sizeof(wNumCharBuf[0]));
-        pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xd28);
-        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLabelBuf, pszDialogPtr, nLabelMaxLen);
+        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLabelBuf, D2Lang::StrTable::strtable::GetLocaleString(0xd28), nLabelMaxLen);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, wszLabelBuf);
         pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, pszDialogPtr);
@@ -3551,9 +3478,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, pszDialogPtr);
         pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, pszDialogPtr);
-        nLabelMaxLen = 0x14;
-        pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xd26);
-        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLabelBuf, pszDialogPtr, nLabelMaxLen);
+        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLabelBuf, D2Lang::StrTable::strtable::GetLocaleString(0xd26), 0x14);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, wszLabelBuf);
         pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, pszDialogPtr);
@@ -3566,9 +3491,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, pszDialogPtr);
         pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, pszDialogPtr);
-        nLabelMaxLen = 0x14;
-        pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xd27);
-        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLabelBuf, pszDialogPtr, nLabelMaxLen);
+        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLabelBuf, D2Lang::StrTable::strtable::GetLocaleString(0xd27), 0x14);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, wszLabelBuf);
         pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, pszDialogPtr);
@@ -3581,9 +3504,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, pszDialogPtr);
         pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, pszDialogPtr);
-        nLabelMaxLen = 0x14;
-        pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xd29);
-        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLabelBuf, pszDialogPtr, nLabelMaxLen);
+        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLabelBuf, D2Lang::StrTable::strtable::GetLocaleString(0xd29), 0x14);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, wszLabelBuf);
         pszDialogPtr = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc, pszDialogPtr);
@@ -3601,8 +3522,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
           Fog::File::CONTAINER_InitializeBuffer(wszMercTypeBuf, 2, 0x96, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
           uVar3 = 0;
           memcpy(wszFmtCode, L"a0:%0", 0xc);
-          pszDialogPtr = D2Common::Merc::GetMercTypeString(nMercTypeDescIdx);
-          Inv::wsprintf(wszMercTypeBuf, wszFmtCode, pszDialogPtr, uVar3);
+          Inv::wsprintf(wszMercTypeBuf, wszFmtCode, D2Common::Merc::GetMercTypeString(nMercTypeDescIdx), uVar3);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc2, wszMercTypeBuf);
         }
 
@@ -3969,8 +3889,7 @@ void __stdcall NPCMENU_HandleMenuSelection(int32_t nParam, D2UnitStrc * pUnit) {
         } else {
           wStatLayer = 0;
           eStat = UNITSTAT_level;
-          pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
-          nSpeechLoopIdx = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pNpcUnit, eStat, wStatLayer);
+          nSpeechLoopIdx = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eStat, wStatLayer);
           if (nSpeechLoopIdx >= 8) {
             NPCMENU_EnableKashyaHireOption();
           }

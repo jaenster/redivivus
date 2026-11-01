@@ -548,8 +548,7 @@ BOOL __fastcall Q11_OnStaffViperPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       return 0;
     }
 
-    int32_t* pnQuestItemCount = &pPlayerData->pQuestSpecificData.pA2Q3->nViperAmuletDropCount;
-    (*pnQuestItemCount)++;
+    pPlayerData->pQuestSpecificData.pA2Q3->nViperAmuletDropCount++;
     return 0;
 }
 

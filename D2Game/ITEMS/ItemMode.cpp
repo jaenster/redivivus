@@ -412,7 +412,6 @@ void __fastcall SERVER_ITEM_SendStackableUsagePackets(D2UnitStrc * pUnit, char *
     D2UnitStrc* pInvItem;
     BOOL bHasCursorFlag;
     eD2UnitType eUnitType;
-    uint16_t sQuantity;
     if (!(pUnit && pUnit->pInventory)) {
       return;
     }
@@ -425,9 +424,7 @@ void __fastcall SERVER_ITEM_SendStackableUsagePackets(D2UnitStrc * pUnit, char *
         D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pCarriedItem, ITEMFLAG_CURSOR, 0);
         eUnitType = D2Client::Units::GetType(pUnit);
         if (eUnitType == UNIT_PLAYER) {
-          sQuantity = 0xffff;
-          bHasCursorFlag = 1;
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1da), pCarriedItem, 0xff, bHasCursorFlag, eUnitType, sQuantity);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1da), pCarriedItem, 0xff, 1, eUnitType, 0xffff);
         }
       }
     }
@@ -1261,8 +1258,7 @@ BOOL __fastcall SERVER_CheckIfPickable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       if (nCheckResult == 0x2034336a) {
         eQuestState = QUESTSTATE_Completed;
         eQuest = QUEST_TheGoldenBird;
-        pQuestBits = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-        bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBits, eQuest, eQuestState);
+        bQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuest, eQuestState);
         if (bQuestState) {
           return 0;
         }
@@ -1273,8 +1269,7 @@ BOOL __fastcall SERVER_CheckIfPickable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         if (nCheckResult == 0x20333367) {
           eQuestState = QUESTSTATE_Step0x07;
           eQuest = QUEST_BladeOfTheOldReligion;
-          pQuestBits = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-          bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBits, eQuest, eQuestState);
+          bQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuest, eQuestState);
           if (bQuestState) {
             return 0;
           }
@@ -1288,8 +1283,7 @@ BOOL __fastcall SERVER_CheckIfPickable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
           eQuestState = QUESTSTATE_Step0x08;
           eQuest = QUEST_PrisonOfIce;
-          pQuestBits = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-          bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBits, eQuest, eQuestState);
+          bQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuest, eQuestState);
           if (!bQuestState) {
             return 0;
           }
@@ -1322,15 +1316,13 @@ BOOL __fastcall SERVER_CheckIfPickable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     if (eQuest == QUEST_RadamentsLair) {
       eQuestState = QUESTSTATE_Completed;
       eQuest = QUEST_TheHoradricStaff;
-      pQuestBits = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-      bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBits, eQuest, eQuestState);
+      bQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuest, eQuestState);
       if (bQuestState && pItemsTxt->dwCode != 0x20786f62) {
         return 0;
       }
     } else if (eQuest == QUEST_TheSearchForCain) {
       eQuestState = QUESTSTATE_Completed;
-      pQuestBits = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-      bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBits, eQuest, eQuestState);
+      bQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuest, eQuestState);
       if (bQuestState && pItemsTxt->dwCode != 0x2067656c) {
         return 0;
       }
@@ -1460,13 +1452,10 @@ static BOOL __stdcall ITEMMODE_AutoStackItem(::SGAMEDATA * pGame, D2UnitStrc * p
     BOOL bCanStack;
     int nDstQty;
     int nMaxStack;
-    D2ClientStrc* pClient;
     eD2ItemTypes eItemType;
     uint32_t nSrcDura;
     D2RoomStrc* pRoom;
     eD2UnitType eUnitType;
-    char cUpdateFlag;
-    uint16_t wStatLayerIdx;
     D2InventoryStrc* pInventory = pUnit->pInventory;
     D2UnitStrc* pDstStackItem = 0;
     int nStackAttempts = 0;
@@ -1500,7 +1489,7 @@ static BOOL __stdcall ITEMMODE_AutoStackItem(::SGAMEDATA * pGame, D2UnitStrc * p
         nMaxStack = D2Common::ITEMS::Items::ITEM_GetMaxStack(pDstStackItem);
         if (nSrcQty + nDstQty <= nMaxStack) {
           bAutostack = nSrcQty + nDstQty;
-          if (!(-1 < (int)bAutostack)) {
+          if (!((int)bAutostack >= 0)) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d7);
             exit(-1);
           }
@@ -1511,21 +1500,13 @@ static BOOL __stdcall ITEMMODE_AutoStackItem(::SGAMEDATA * pGame, D2UnitStrc * p
             nSrcQty = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pDstStackItem, UNITSTAT_durability, 0);
             if ((int)nSrcDura < nSrcQty) {
               D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pDstStackItem, UNITSTAT_durability, nSrcDura, 0);
-              wStatLayerIdx = 0;
-              bIsQuiver = 0x48;
-              cUpdateFlag = '\x01';
-              pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x5e4);
-              GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pDstStackItem, cUpdateFlag, bIsQuiver, nSrcDura, wStatLayerIdx);
+              GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x5e4), pDstStackItem, '\x01', 0x48, nSrcDura, 0);
             }
           }
 
           D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pDstStackItem, UNITSTAT_quantity, bAutostack, 0);
           D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit2, UNITSTAT_quantity, 0, 0);
-          wStatLayerIdx = 0;
-          bIsQuiver = 0x46;
-          cUpdateFlag = '\x01';
-          pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x5ed);
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pDstStackItem, cUpdateFlag, bIsQuiver, bAutostack, wStatLayerIdx);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x5ed), pDstStackItem, '\x01', 0x46, bAutostack, 0);
           eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit2);
           if (eItemType == ITEMTYPE_Book) {
             eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pDstStackItem);
@@ -1564,12 +1545,7 @@ static BOOL __stdcall ITEMMODE_AutoStackItem(::SGAMEDATA * pGame, D2UnitStrc * p
         }
 
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pDstStackItem, UNITSTAT_quantity, bAutostack, 0);
-        wStatLayerIdx = 0;
-        bIsQuiver = 0x46;
-        cUpdateFlag = '\x01';
-        nSrcDura = bAutostack;
-        pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x5ca);
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pDstStackItem, cUpdateFlag, bIsQuiver, nSrcDura, wStatLayerIdx);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x5ca), pDstStackItem, '\x01', 0x46, bAutostack, 0);
         nDstQty = nSrcQty - bAutostack + nDstQty;
         if (nDstQty < 0) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5cc);
@@ -1632,7 +1608,7 @@ BOOL __stdcall ITEMMODE_CheckAutoStack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
               D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pDstBook, UNITSTAT_quantity, nMaxStack, 0);
               GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x638), pDstBook, '\x01', 0x46, nMaxStack, 0);
               nNewQty = nDstQty - nMaxStack + nSrcQty;
-              if (!(-1 < (int)nNewQty)) {
+              if (!((int)nNewQty >= 0)) {
                 Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x63a);
                 exit(-1);
               }
@@ -2574,7 +2550,7 @@ static void __stdcall ITEMMODE_MergeStackableItems(::SGAMEDATA * pGame, D2UnitSt
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit1, UNITSTAT_quantity, nMaxStack, 0);
             GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\ITEMS\\ItemMode.cpp", 0x1155), pUnit1, '\x01', 0x46, nMaxStack, 0);
             nMaxStack = nDstQty - nMaxStack + nSrcQty;
-            if (!(-1 < (int)nMaxStack)) {
+            if (!((int)nMaxStack >= 0)) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1158);
               exit(-1);
             }
@@ -4375,7 +4351,6 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2BeltsTxt beltRecord;
     uint8_t bSparseDrop;
     eD2UnitType eUnitType;
-    int32_t nBeltTxtIdx;
     int32_t nErrorLine;
     D2BeltsTxt* pBeltTxtRecord;
     POINT* pDropSpotOut;
@@ -4392,9 +4367,7 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
     if (pBeltItem) {
       pBeltTxtRecord = &beltRecord;
-      nBeltTxtIdx = 0;
-      nErrorLine = D2Common::Units::GetBeltType(pBeltItem);
-      D2Common::DATATBLS::BeltsTbls::GetBeltsLine(nErrorLine, nBeltTxtIdx, pBeltTxtRecord);
+      D2Common::DATATBLS::BeltsTbls::GetBeltsLine(D2Common::Units::GetBeltType(pBeltItem), 0, pBeltTxtRecord);
       nBeltSlotIdx = 0;
     } else {
       D2Common::DATATBLS::BeltsTbls::GetBeltsLine(2, 0, &beltRecord);
@@ -4947,7 +4920,7 @@ BOOL __fastcall ITEMMODE_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pU
 // @sourcefile .\ITEMS\ItemMode.cpp
 BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, bool * pbSwapDone) {
     bool bIsDisabled;
-    bool bCurrentSwapState;
+    uint8_t bCurrentSwapState;
     D2UnitStrc* pCurItem;
     int32_t nPutResult;
     BOOL nPutItemResult;
@@ -5107,7 +5080,7 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
       }
 
       bCurrentSwapState = GAME::Clients::HasWeaponSwapped(pClient);
-      GAME::Clients::SetWeaponSwap(pClient, !bCurrentSwapState);
+      GAME::Clients::SetWeaponSwap(pClient, bCurrentSwapState == '\0');
       pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0xe98);
       GAME::SCmd::NET_D2GS_SERVER_Send_0x97_WeaponSwitch(pClient);
       if (!pLeftSkill || (nErrorLine = D2Common::Skills::SKILLS_CanUseSkill(pUnit, pLeftSkill) , nErrorLine == 2) || nErrorLine == 7) {
@@ -5320,12 +5293,10 @@ BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     bool bIsScrollType;
     eD2ItemTypes eItemType;
     int iVar1;
-    D2ClientStrc* pClient;
+    int nSkillResult;
     eD2Skills eSkillId;
     char bIsEquipped;
     uint16_t nStatLayerOrCount;
-    bool bUpdateStat;
-    uint16_t wZero;
     uint8_t byUnitType;
     int32_t nLine;
     if (!pGame) {
@@ -5410,11 +5381,7 @@ BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         }
 
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pScrollItem, UNITSTAT_quantity, _bIsScrollType, 0);
-        wZero = 0;
-        nLine = 0x46;
-        bUpdateStat = true;
-        pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1019);
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pScrollItem, bUpdateStat, nLine, _bIsScrollType, wZero);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1019), pScrollItem, true, 0x46, _bIsScrollType, 0);
         return 0;
       }
 
@@ -5423,14 +5390,12 @@ BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
     eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pScrollItem);
     if (eItemType == ITEMTYPE_Book) {
-      int nSkillResult;
       nSkillResult = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pScrollItem, UNITSTAT_quantity, 0);
       if (nSkillResult <= 0) {
         SERVER_ITEM_SendStackableUsagePackets(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1023);
         iVar1 = pScrollItem->nUnitGUID;
         byUnitType = (uint8_t)pScrollItem->eUnitType;
-        pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1024);
-        GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(pClient, 0x7c, byUnitType, iVar1);
+        GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1024), 0x7c, byUnitType, iVar1);
         return 0;
       }
     }
@@ -5448,11 +5413,11 @@ BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       } else {
         iVar1 = pScrollItem->nUnitGUID;
         byUnitType = (uint8_t)pScrollItem->eUnitType;
-        pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1032);
-        GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(pClient, 0x7c, byUnitType, iVar1);
+        GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1032), 0x7c, byUnitType, iVar1);
         nLine = 0x1034;
       }
     } else {
+      D2ClientStrc* pClient;
       if (eScrollAnimMode != Container) {
         goto reject_bad_scroll;
       }
@@ -5473,8 +5438,7 @@ BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
           ITEMMODE_CastItemSkill(eSkillId, pUnit);
           iVar1 = pScrollItem->nUnitGUID;
           byUnitType = (uint8_t)pScrollItem->eUnitType;
-          pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x104a);
-          GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(pClient, 0x7c, byUnitType, iVar1);
+          GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x104a), 0x7c, byUnitType, iVar1);
         }
       } else {
         eSkillId = ITEMMODE_GetItemCastSkill(pScrollItem);

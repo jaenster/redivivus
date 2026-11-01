@@ -1726,10 +1726,8 @@ BOOL __stdcall PATH_GetCollisionMaskAt(D2DynamicPathStrc * pDynamicPath, D2UnitS
     return 1;
 }
 
-int32_t __stdcall PATH_GetCollisionTypeAt(uint32_t * pDynamicPath, D2UnitStrc * dwUnused, D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY) {
-    uint32_t _wPosX;
-    _wPosX = (uint32_t)((uint32_t)(uint16_t)wPosY << 16 | (uint32_t)(uint16_t)wPosX);
-    PATH_MoveObjectToPosition(pRoom, _wPosX, pDynamicPath);
+int32_t __stdcall PATH_GetCollisionTypeAt(uint32_t * pDynamicPath, D2UnitStrc * dwUnused, D2RoomStrc * pRoom, int wPosX, int wPosY) {
+    PATH_MoveObjectToPosition(pRoom, (uint32_t)((uint32_t)(uint16_t)wPosY << 16 | (uint32_t)(uint16_t)(short int)wPosX), pDynamicPath);
     pDynamicPath[10] = 0;
     return 1;
 }

@@ -7312,7 +7312,7 @@ void __fastcall GFX_AddOverlayToUnit(struct D2UnitStrc * pUnit, eOverlayId eOver
 // @sourcefile .\ENGINE\Gfx.cpp
 void __fastcall GFX_LoadUnitModeCof(struct D2UnitStrc * pUnit, int32_t nUnused);
 // @sourcefile .\ENGINE\Gfx.cpp
-void __fastcall GFX_GetUnitSpriteOffset(struct D2UnitStrc * pUnit, uint8_t byComponent, int32_t * pOffsetX, int32_t * pOffsetY);
+void __fastcall GFX_GetUnitSpriteOffset(struct D2UnitStrc * pUnit, int byComponent, int32_t * pOffsetX, int32_t * pOffsetY);
 // @sourcefile .\ENGINE\Gfx.cpp
 BOOL __fastcall GFX_IsUnitInsideBounds(struct D2UnitStrc * pUnit, int32_t nOriginX, int32_t nOriginY, int32_t nTestX, int32_t nTestY);
 // @sourcefile .\ENGINE\Gfx.cpp

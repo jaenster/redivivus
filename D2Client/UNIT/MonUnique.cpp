@@ -164,8 +164,6 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
 }; D2_STATIC_GUARD(gaChampionModifierTitles, "D2Client::UNIT::MonUnique::DefineSuperMonster::gaChampionModifierTitles");
 
     D2SuperUniquesTxt* pSuperUniqueTxt;
-    uint16_t* pWVar2;
-    uint16_t* pFmtStr;
     uint16_t* wszFormat;
     uint16_t wNameId;
     int nClassId;
@@ -173,7 +171,6 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
     int nChampTitleIdx;
     int iVar3;
     D2MonStatsTxt* pMonStatsTxt;
-    uint32_t uVar4;
     uint16_t wszName[300];
     char szSpace[8];
     D2UnitDataMonsterStrc* pMonData;
@@ -249,11 +246,7 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
         pMonStatsTxt = sgptDataTable->pTxtMonStats + iVar3;
       }
 
-      uVar4 = 0;
-      pLocaleName = D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr);
-      pWVar2 = D2Lang::StrTable::strtable::GetLocaleString((uint16_t)gaChampionModifierTitles[nChampTitleIdx * 2 + 1]);
-      pFmtStr = D2Lang::StrTable::strtable::GetLocaleString(0x2b40);
-      UI::Inv::wsprintf(wszName, pFmtStr, pWVar2, pLocaleName, uVar4);
+      UI::Inv::wsprintf(wszName, D2Lang::StrTable::strtable::GetLocaleString(0x2b40), D2Lang::StrTable::strtable::GetLocaleString((uint16_t)gaChampionModifierTitles[nChampTitleIdx * 2 + 1]), D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr), 0);
       D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, wszName);
       return;
     }
@@ -319,10 +312,10 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
       }
     }
 
-    uVar4 = 0;
+    uint32_t uVar4 = 0;
     pLocaleName = D2Common::DATATBLS::MonsterTbls::MONSTER_GetRandomUniqueSuffix(pUnit);
-    pWVar2 = D2Common::DATATBLS::MonsterTbls::MONSTER_GetRandomUniquePrefix(pUnit);
-    pFmtStr = D2Lang::StrTable::strtable::GetLocaleString(0x6b9);
+    uint16_t* pWVar2 = D2Common::DATATBLS::MonsterTbls::MONSTER_GetRandomUniquePrefix(pUnit);
+    uint16_t* pFmtStr = D2Lang::StrTable::strtable::GetLocaleString(0x6b9);
     UI::Inv::wsprintf(wszName, pFmtStr, pWVar2, pLocaleName, uVar4);
     uint32_t nRandPct = Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
     if ((int)nRandPct < 0x32) {

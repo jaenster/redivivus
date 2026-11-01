@@ -135,8 +135,7 @@ BOOL __stdcall Key(D2ControlMsg * pTimer) {
     ::D2WinTimer* pTimer = D2_NEW_AT(::D2WinTimer, ".\\Src\\D2WinTimer.cpp", 0x1c);
     memset(pTimer, 0, 0x48);
     pTimer->sControl.neD2FormType = FORM_Timer;
-    int* pDwState = &pTimer->sControl.dwState;
-    *pDwState |= gadwBitMasks[0];
+    pTimer->sControl.dwState |= gadwBitMasks[0];
     pTimer->sControl.dwState |= gadwBitMasks[2];
     pTimer->nTimeoutInSeconds = nTimeoutInSeconds;
     dwCreationTick = GetTickCount();

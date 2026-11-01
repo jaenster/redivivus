@@ -97,35 +97,35 @@ void __fastcall SendMercPackets(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, int32
     }
 
     uint32_t nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMerc, UNITSTAT_level, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_level, nStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0xc, nStatVal);
     nStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_strength, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_strength, nStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0, nStatVal);
     nStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_dexterity, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_dexterity, nStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 2, nStatVal);
     nStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_maxhp, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_maxhp, nStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 7, nStatVal);
     nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMerc, UNITSTAT_hitpoints, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_hitpoints, nStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 6, nStatVal);
     nStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_armorclass, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_armorclass, nStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x1f, nStatVal);
     nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMerc, UNITSTAT_experience, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_experience, nStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0xd, nStatVal);
     nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMerc, UNITSTAT_nextexp, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_nextexp, nStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x1e, nStatVal);
     int32_t nStatTmp = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_secondary_mindamage, 0);
     int32_t nSecondaryStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_mindamage, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_mindamage, nStatTmp + nSecondaryStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x15, nStatTmp + nSecondaryStatVal);
     nStatTmp = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_secondary_maxdamage, 0);
     nSecondaryStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_maxdamage, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_maxdamage, nStatTmp + nSecondaryStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x16, nStatTmp + nSecondaryStatVal);
     nStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_fireresist, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_fireresist, nStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x27, nStatVal);
     nStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_lightresist, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_lightresist, nStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x29, nStatVal);
     nStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_coldresist, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_coldresist, nStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x2b, nStatVal);
     nStatVal = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_poisonresist, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_poisonresist, nStatVal);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0x2d, nStatVal);
 }
 
 // Recomputes a hireling/mercenary's stats for a target level. Resolves the player's merc pet (PETTYPE_hireable) if pMerc is null; if nLevel==0 uses merc level+1. Sets UNITSTAT_level, looks up the hireling.txt row for the merc type/level, and derives nextexp/experience, str/dex (min 10), maxhp/hitpoints (min 0x2800), armorclass, secondary min/max damage, tohit, the four resistances, and hpregen by interpolating the txt base + per-level columns over (level - row.level). Finally grants up to 6 innate skills (clamped 1..0x20) gated by reqlevel/skill mode. Asserts pGame/pPlayer non-null and pPlayer is UNIT_PLAYER (halts otherwise).

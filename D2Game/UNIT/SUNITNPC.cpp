@@ -549,7 +549,6 @@ void __fastcall SUNITNPC_FillNpcStore(::SGAMEDATA * pGame, D2UnitStrc * pPlayer,
     D2ItemsTxt* pItemTxtTmp;
     void* pvVar1;
     int nTradeListOffset;
-    uint16_t nLayer;
     int nTradeItemClassId;
     int32_t nNpcIndex;
     uint32_t nItemClassId;
@@ -647,9 +646,7 @@ void __fastcall SUNITNPC_FillNpcStore(::SGAMEDATA * pGame, D2UnitStrc * pPlayer,
       if (pGeneratedItem) {
         pItemTxtTmp = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(*(uint32_t*)((int)pTradeState->pTradeList2 + nTradeIdx * 4), &nTradeItemClassId);
         if (pItemTxtTmp->dwCode == 0x20767163 || pItemTxtTmp->dwCode == 0x20767161) {
-          nLayer = 0;
-          nTradeListOffset = D2Common::ITEMS::Items::ITEM_GetMaxStack(pGeneratedItem);
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pGeneratedItem, UNITSTAT_quantity, nTradeListOffset, nLayer);
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pGeneratedItem, UNITSTAT_quantity, D2Common::ITEMS::Items::ITEM_GetMaxStack(pGeneratedItem), 0);
         }
       } else {
         nFailCount++;
@@ -936,7 +933,6 @@ void __fastcall NPC_ProcessMercHire(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
     uint32_t nNameId;
     D2MercForHire* pHireSlot;
     D2MonsterAiStrc* pNpcMonsterAi;
-    int32_t nGold;
     D2ClientStrc* pClientSend;
     uint32_t bFirstInteraction;
     D2UnitStrc* pClient;
@@ -948,9 +944,7 @@ void __fastcall NPC_ProcessMercHire(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
     uint32_t nNameFirst;
     int32_t nClassId;
     int32_t nNcpClassId;
-    uint8_t bTransactionCode;
     int32_t nUnitGUID;
-    uint8_t nTradeType;
     int32_t nLineNum;
     int32_t nPlayerLevel;
     nPlayerLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
@@ -1046,19 +1040,14 @@ void __fastcall NPC_ProcessMercHire(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
                 pNpcMonsterAi = sunitproxy::GetMonsterAI(pNPC);
                 nLineNum = D2Game::Monster::MonsterAI::CountMonstersByAi(pNpcMonsterAi);
                 bFirstInteraction = (uint32_t)(nLineNum <= 1);
-                pClientSend = SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x6c5);
-                SendMercForHireList(pGame, pClientSend, pNPC, bFirstInteraction);
+                SendMercForHireList(pGame, SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x6c5), pNPC, bFirstInteraction);
                 if (!pClient) {
                   nPlayerGold = -1;
                 } else {
                   nPlayerGold = pClient->nUnitGUID;
                 }
 
-                nTradeType = 0;
-                nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-                bTransactionCode = 5;
-                pClientSend = SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x6c6);
-                GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(pClientSend, 0x2a, bTransactionCode, nGold, nPlayerGold, nTradeType);
+                GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x6c6), 0x2a, 5, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0), nPlayerGold, 0);
                 ResetNpcHireListIfEmpty(pGame, nNcpClassId, nGameNpcPtr);
                 return;
               }
@@ -1307,16 +1296,12 @@ BOOL __fastcall SUNITNPC_BuyItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2Un
     D2UnitStrc* pCursorItem;
     BOOL bCanAfford;
     D2BitBufferStrc* pBitBuffer;
-    uint32_t nStatValue;
-    int nGold;
     D2ClientStrc* pClient;
-    char cVar9;
     uint8_t nErrorCode;
     int32_t nErrorLine;
     int32_t nLine;
     uint8_t nResultCode;
     uint32_t uVar10;
-    uint16_t uVar12;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7da);
       exit(-1);
@@ -1451,12 +1436,7 @@ BOOL __fastcall SUNITNPC_BuyItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2Un
                   SUNITNPC_DeductGoldForPurchase(pGame, pBoughtItem, pClonedItem, (int32_t)pPlayer, (uint32_t)nBuyMode);
                   uVar10 = __frame0.pScrollSocketItem;
                   D2Common::Stats::StatsEx::STATLIST_AddUnitStat((D2UnitStrc*)__frame0.pScrollSocketItem, UNITSTAT_quantity, nNpcId, 0);
-                  uVar12 = 0;
-                  nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat((D2UnitStrc*)uVar10, UNITSTAT_quantity, 0);
-                  nErrorLine = 0x46;
-                  cVar9 = '\x01';
-                  pClient = SUnit::SUNIT_GetClient(pPlayer, ".\\UNIT\\SUNITNPC.CPP", 0x8a6);
-                  GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, (D2UnitStrc*)uVar10, cVar9, nErrorLine, nStatValue, uVar12);
+                  GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(SUnit::SUNIT_GetClient(pPlayer, ".\\UNIT\\SUNITNPC.CPP", 0x8a6), (D2UnitStrc*)uVar10, '\x01', 0x46, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat((D2UnitStrc*)uVar10, UNITSTAT_quantity, 0), 0);
                   nErrorLine = *(int32_t*)(uVar10 + 0xc);
                   nResultCode = 5;
                   nGoldValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_gold, 0);
@@ -1579,11 +1559,7 @@ BOOL __fastcall SUNITNPC_BuyItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2Un
           SUNITNPC_DeductGoldForPurchase(pGame, pBoughtItem, __frame0.pNpcUnit, (int32_t)pPlayer, (uint32_t)nBuyMode);
           D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pClonedItem, ITEMFLAG_BOUGHT, 1);
           nGoldValue = pClonedItem->nUnitGUID;
-          nResultCode = 4;
-          nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_gold, 0);
-          nErrorCode = 0;
-          pClient = SUnit::SUNIT_GetClient(pPlayer, ".\\UNIT\\SUNITNPC.CPP", 0x932);
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(pClient, 0x2a, nErrorCode, nGold, nGoldValue, nResultCode);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pPlayer, ".\\UNIT\\SUNITNPC.CPP", 0x932), 0x2a, 0, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_gold, 0), nGoldValue, 4);
           __frame0.nTotalGold = 1;
           pClonedItem = __frame0.pNpcUnit;
         } while (true);
@@ -1682,17 +1658,14 @@ void __fastcall NPC_ValidateAndProcessMercHire(::SGAMEDATA * pGame, D2UnitStrc *
 void __fastcall SUNITNPC_ProcessGamble(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nNpcGUID, DWORD nItemGUID, uint32_t dwParam, uint32_t nParam) {
     int nCurDurability;
     BOOL bCanAfford;
-    D2BitBufferStrc* pQuestBitBuffer;
     int nChargedSkillResult;
     int32_t nCost;
     uint32_t nCostPerDurPoint;
     uint32_t nNewDurability;
     D2ClientStrc* pClient;
     uint8_t* pfnCallback;
-    char bSendStat;
     uint8_t bSuccess;
     int32_t nErrorLine;
-    uint16_t nPartialRepairCostPerDur;
     uint8_t nTransactionResult;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9bc);
@@ -1744,8 +1717,7 @@ void __fastcall SUNITNPC_ProcessGamble(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
         nCost = pNpcUnit->nClassId;
         pfnCallback = (uint8_t*)SUNITNPC_ReturnZero;
-        pQuestBitBuffer = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-        D2Common::ITEMS::Items::ITEMS_CalculateRepairAllCost(pGame, pUnit, nCost, (uint32_t)pGame->nDifficulty, pQuestBitBuffer, (pfnItemTransactionCb)pfnCallback);
+        D2Common::ITEMS::Items::ITEMS_CalculateRepairAllCost(pGame, pUnit, nCost, (uint32_t)pGame->nDifficulty, Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), (pfnItemTransactionCb)pfnCallback);
         bSuccess = 1;
         nErrorLine = -1;
         nCurDurability = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
@@ -1762,11 +1734,7 @@ void __fastcall SUNITNPC_ProcessGamble(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     if (!pItemUnit) {
       reject_bad_item:
       bSuccess = 0;
-      nCost = -1;
-      nCurDurability = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-      nTransactionResult = 9;
-      pClient = SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x9f0);
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(pClient, 0x2a, nTransactionResult, nCurDurability, nCost, bSuccess);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x9f0), 0x2a, 9, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0), -1, bSuccess);
       return;
     }
 
@@ -1824,8 +1792,7 @@ void __fastcall SUNITNPC_ProcessGamble(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
     nChargedSkillResult = pNpcUnit->nClassId;
     nCost = 3;
-    pQuestBitBuffer = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-    nCost = D2Common::ITEMS::Items::CalculateTransactionCost_Thunk(pUnit, pItemUnit, (uint32_t)pGame->nDifficulty, pQuestBitBuffer, nChargedSkillResult, nCost);
+    nCost = D2Common::ITEMS::Items::CalculateTransactionCost_Thunk(pUnit, pItemUnit, (uint32_t)pGame->nDifficulty, Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), nChargedSkillResult, nCost);
     bCanAfford = CheckIfPlayerCanAffordCost(pGame, pUnit, nCost);
     if (!bCanAfford) {
       nItemGUID = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
@@ -1845,11 +1812,7 @@ void __fastcall SUNITNPC_ProcessGamble(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
                 }
 
                 D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_durability, nCanRepair, 0);
-                nPartialRepairCostPerDur = 0;
-                nCost = 0x48;
-                bSendStat = '\x01';
-                pClient = SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0xa4a);
-                GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItemUnit, bSendStat, nCost, nCanRepair, nPartialRepairCostPerDur);
+                GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0xa4a), pItemUnit, '\x01', 0x48, nCanRepair, 0);
                 bSuccess = 1;
                 nErrorLine = -1;
                 nCurDurability = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
@@ -2783,15 +2746,12 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
     int eVar9;
     D2LowQualityItemsTxt* pLowQualityName;
     eD2Skills eSkill;
-    int32_t iVar5;
     int nNpcDataIdx;
     int32_t nClonedItemGUID;
     uint8_t bVar13;
     uint8_t bVar16;
     int32_t iVar14;
-    int32_t iVar15;
     int32_t iVar17;
-    D2InventoryStrc* pInventory;
     uint32_t* pnMode;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4ae);
@@ -2931,22 +2891,12 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
         } else {
           D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedItem, ePage);
           nClonedItemGUID = pClonedItem->nUnitGUID;
-          pInventory = 0;
-          iVar15 = 1;
-          iVar5 = 1;
-          iVar17 = D2Client::Units::GetYPosFromDynamicPathUnit(pClonedItem);
-          iVar14 = D2Client::Units::GetXPosFromDynamicPathUnit(pClonedItem);
-          eVar9 = ITEMS::ItemMode::SERVER_ItemToInventory(".\\UNIT\\SUNITNPC.CPP", 0x558, pGame, pDVar5, nClonedItemGUID, iVar14, iVar17, iVar5, iVar15, pInventory);
+          eVar9 = ITEMS::ItemMode::SERVER_ItemToInventory(".\\UNIT\\SUNITNPC.CPP", 0x558, pGame, pDVar5, nClonedItemGUID, D2Client::Units::GetXPosFromDynamicPathUnit(pClonedItem), D2Client::Units::GetYPosFromDynamicPathUnit(pClonedItem), 1, 1, 0);
           if (!eVar9) {
             if ((char)bCanRepurchase == '\x01') {
               D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedItem, INVPAGE_MERC);
               nClonedItemGUID = pClonedItem->nUnitGUID;
-              pInventory = 0;
-              iVar15 = 1;
-              iVar5 = 1;
-              iVar17 = D2Client::Units::GetYPosFromDynamicPathUnit(pClonedItem);
-              iVar14 = D2Client::Units::GetXPosFromDynamicPathUnit(pClonedItem);
-              eVar9 = ITEMS::ItemMode::SERVER_ItemToInventory(".\\UNIT\\SUNITNPC.CPP", 0x55e, pGame, pDVar5, nClonedItemGUID, iVar14, iVar17, iVar5, iVar15, pInventory);
+              eVar9 = ITEMS::ItemMode::SERVER_ItemToInventory(".\\UNIT\\SUNITNPC.CPP", 0x55e, pGame, pDVar5, nClonedItemGUID, D2Client::Units::GetXPosFromDynamicPathUnit(pClonedItem), D2Client::Units::GetYPosFromDynamicPathUnit(pClonedItem), 1, 1, 0);
               if (eVar9) {
                 SUNITNPC_SetItemForNpc(pDVar5, pClonedItem, pGame, 1, 1);
                 iVar17 = D2Common::Stats::StatsEx::GetTxtMaxDurability(pClonedItem);
@@ -3029,8 +2979,7 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
         }
       } else {
         pnMode = (uint32_t*)&nMode;
-        iVar17 = 1;
-        bHasItemFlag = ITEMS::ItemMode::EquipItem(pGame, pPlayer, D2Common::ITEMS::Items::GetBodyLocation(pItemSaved), iVar17, pnMode);
+        bHasItemFlag = ITEMS::ItemMode::EquipItem(pGame, pPlayer, D2Common::ITEMS::Items::GetBodyLocation(pItemSaved), 1, pnMode);
         if (!bHasItemFlag) {
           if (!pClonedItem) {
             return SERVERSTATUS_BAD_TARGET;
@@ -3043,11 +2992,7 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
     }
 
     ITEMS::Items::Drop::ITEM_GiveGoldOrDrop(pGame, pPlayer, (int32_t)pInteractedNpc);
-    bVar16 = 3;
-    eVar9 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_gold, 0);
-    bVar13 = 1;
-    pClient = SUnit::SUNIT_GetClient(pPlayer, ".\\UNIT\\SUNITNPC.CPP", 0x5bd);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(pClient, 0x2a, bVar13, eVar9, nItemGUID, bVar16);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pPlayer, ".\\UNIT\\SUNITNPC.CPP", 0x5bd), 0x2a, 1, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_gold, 0), nItemGUID, 3);
     return SERVERSTATUS_OK;
 }
 
@@ -3074,9 +3019,7 @@ void __fastcall SUNITNPC_ProcessSellConfirmation(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     D2Common::Units::SetupUpdateFlag(pMerc, 1);
-    uint16_t nLayer = 0;
-    int32_t nPosY = D2Common::Stats::StatsEx::GetTxtMaxHp(pMerc);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_hitpoints, nPosY, nLayer);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pMerc), 0);
     PLAYER::PlayerPets::PETS_ResummonPetByUnit(pGame, pUnit, pMerc);
     GAME::Targets::CreateUnitNode(pGame, pMerc, nullptr, pUnit->nNodeTableIndex);
     D2Common::DATATBLS::ItemStats::SetState(pMerc, STATE_freeze, 0);
@@ -3116,8 +3059,6 @@ void __fastcall SUNITNPC_HandleSellAction(::SGAMEDATA * pGame, D2UnitStrc * pUni
     BOOL bCanAfford;
     D2ClientStrc* pClient;
     bool bIsTrader;
-    uint16_t nLayer;
-    uint32_t nReviveCostResponse;
     int32_t nLine;
     int nMercGUID;
     uint8_t nResult;
@@ -3175,13 +3116,9 @@ void __fastcall SUNITNPC_HandleSellAction(::SGAMEDATA * pGame, D2UnitStrc * pUni
       } else {
         pNpcOrMerc->eUnitFlags &= ~UNITFLAG_ISDEAD;
         D2Common::Units::SetupUpdateFlag(pNpcOrMerc, 1);
-        nLayer = 0;
-        nLine = D2Common::Stats::StatsEx::GetTxtMaxHp(pNpcOrMerc);
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNpcOrMerc, UNITSTAT_hitpoints, nLine, nLayer);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNpcOrMerc, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pNpcOrMerc), 0);
         SUNITNPC_ProcessSellConfirmation(pGame, pUnit, pNpcOrMerc);
-        nReviveCostResponse = 0;
-        pClient = SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x99d);
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x9B_MercReviveCost(pClient, 0xffff, nReviveCostResponse);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x9B_MercReviveCost(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x99d), 0xffff, 0);
         nMercGUID = pNpcOrMerc->nUnitGUID;
         nTradeType = 0;
         nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
@@ -3214,7 +3151,6 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
     D2MonsterAiStrc* pMonsterAI;
     int32_t nMercCount;
     D2UnitStrc* pItem;
-    D2BitBufferStrc* pQuestBuf;
     BOOL bQuestState;
     uint32_t nSockOrEtherFlag;
     char* pSrcName;
@@ -3224,7 +3160,6 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
     int bHasItemInInventory;
     D2UnitStrc* pItemToPersonalize;
     D2UnitDataPlayerStrc* pCustomName;
-    D2WaypointStrc* pWaypoints;
     uint32_t nNpcClassId;
     char* pDstName;
     POINT ptUnitPos;
@@ -3321,8 +3256,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
       pMonsterAI = sunitproxy::GetMonsterAI(pClonedItem);
       nMercCount = D2Game::Monster::MonsterAI::CountMonstersByAi(pMonsterAI);
       nNpcClassId = (uint32_t)(nMercCount <= 1);
-      bSingleAiMonster = SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0xb50);
-      SendMercForHireList(pGame, bSingleAiMonster, pClonedItem, nNpcClassId);
+      SendMercForHireList(pGame, SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0xb50), pClonedItem, nNpcClassId);
       return 0;
     }
 
@@ -3339,8 +3273,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
       pItem = SUnit::FindUnitFromTable(pGame, UNIT_ITEM, nGuid);
       eQuestState = QUESTSTATE_RewardAwaits;
       eQuestId = QUEST_ToolsOfTheTrade;
-      pQuestBuf = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-      bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBuf, eQuestId, eQuestState);
+      bQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuestId, eQuestState);
       if (bQuestState) {
         if (!pItem) {
           return 0;
@@ -3423,16 +3356,13 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
       if (pGame->nDifficulty == 2) {
         eQuestState = QUESTSTATE_Completed;
         eQuestId = QUEST_DenOfEvil;
-        pQuestBuf = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-        eQuestState = D2Common::QuestRecord::GetQuestState(pQuestBuf, eQuestId, eQuestState);
+        eQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuestId, eQuestState);
         if (eQuestState == QUESTSTATE_RewardAwaits) {
           eQuestId = QUEST_Respec;
-          pQuestBuf = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-          eQuestState = D2Common::QuestRecord::GetQuestState(pQuestBuf, eQuestId, eQuestState);
+          eQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuestId, eQuestState);
           if (eQuestState == QUESTSTATE_Completed) {
             eQuestId = QUEST_Respec;
-            pQuestBuf = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-            bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBuf, eQuestId, eQuestState);
+            bQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuestId, eQuestState);
             if (!bQuestState) {
               Quests::QUESTS::A1Q1::RESPEC_GrantRespecReward(pGame, pUnit);
             }
@@ -3442,8 +3372,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
 
       eQuestState = QUESTSTATE_RewardAwaits;
       eQuestId = QUEST_Respec;
-      pQuestBuf = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-      bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBuf, eQuestId, eQuestState);
+      bQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuestId, eQuestState);
       if (bQuestState) {
         SKILLS::SkillsServer::ClearSkills(pGame, pUnit);
         SUnitMsg::ClearStats(pGame, pUnit);
@@ -3460,15 +3389,13 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
           eQuestId = QUEST_SistersToTheSlaughter;
           __frame0.pClient = bSingleAiMonster;
           __frame0.byGuidHigh = bySavedGuidHigh;
-          pQuestBuf = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-          bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBuf, eQuestId, eQuestState);
+          bQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuestId, eQuestState);
           if (bQuestState) {
             PLAYER::PlayerMsg::LoadAreaOrSpawnPortal(pGame, pUnit, LEVEL_LutGholein, 0);
             Quests::QUESTS::QUEST_ProcessActTransition(pGame, pUnit, pClonedItem, 0x28, 1);
             bQuestState = D2Common::Waypoints::FindWaypointIdByLevelId(LEVEL_LutGholein, awWaypointId);
             if (bQuestState) {
-              pWaypoints = PLAYER::PlayerMsg::GetWaypointsForCurrentDifficulty(pGame, pUnit);
-              D2Common::Waypoints::EnableWaypoint(pWaypoints, awWaypointId[0]);
+              D2Common::Waypoints::EnableWaypoint(PLAYER::PlayerMsg::GetWaypointsForCurrentDifficulty(pGame, pUnit), awWaypointId[0]);
             }
           }
 
@@ -3482,15 +3409,13 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
             __frame0.byGuidHigh = bySavedGuidHigh;
             if (pQState == QUESTSTATE_Completed) {
               eQuestId = QUEST_TheSevenTombs;
-              pQuestBuf = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-              bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBuf, eQuestId, pQState);
+              bQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuestId, pQState);
               if (bQuestState) {
                 PLAYER::PlayerMsg::LoadAreaOrSpawnPortal(pGame, pUnit, LEVEL_KurastDocktown, 0);
                 Quests::QUESTS::QUEST_ProcessActTransition(pGame, pUnit, pClonedItem, 0x4b, 0x28);
                 bQuestState = D2Common::Waypoints::FindWaypointIdByLevelId(LEVEL_KurastDocktown, awWaypointId);
                 if (bQuestState) {
-                  pWaypoints = PLAYER::PlayerMsg::GetWaypointsForCurrentDifficulty(pGame, pUnit);
-                  D2Common::Waypoints::EnableWaypoint(pWaypoints, awWaypointId[0]);
+                  D2Common::Waypoints::EnableWaypoint(PLAYER::PlayerMsg::GetWaypointsForCurrentDifficulty(pGame, pUnit), awWaypointId[0]);
                 }
               }
             }
@@ -3511,15 +3436,13 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
               __frame0.byGuidHigh = bySavedGuidHigh;
               if (pQState == QUESTSTATE_Completed && pGame->bExpansion) {
                 eQuestId = QUEST_TerrorsEnd;
-                pQuestBuf = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-                bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBuf, eQuestId, pQState);
+                bQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuestId, pQState);
                 if (bQuestState) {
                   PLAYER::PlayerMsg::LoadAreaOrSpawnPortal(pGame, pUnit, LEVEL_Harrogath, 0);
                   Quests::QUESTS::QUEST_ProcessActTransition(pGame, pUnit, pClonedItem, 0x6d, 0x67);
                   bQuestState = D2Common::Waypoints::FindWaypointIdByLevelId(LEVEL_Harrogath, awWaypointId);
                   if (bQuestState) {
-                    pWaypoints = PLAYER::PlayerMsg::GetWaypointsForCurrentDifficulty(pGame, pUnit);
-                    D2Common::Waypoints::EnableWaypoint(pWaypoints, awWaypointId[0]);
+                    D2Common::Waypoints::EnableWaypoint(PLAYER::PlayerMsg::GetWaypointsForCurrentDifficulty(pGame, pUnit), awWaypointId[0]);
                   }
                 }
               }
@@ -3557,8 +3480,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
       eQuestState = QUESTSTATE_RewardAwaits;
       eQuestId = QUEST_BetrayalOfHaggorath;
       sUseMenuPkt.y = (LONG)pItemToPersonalize;
-      pQuestBuf = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-      bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBuf, eQuestId, eQuestState);
+      bQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuestId, eQuestState);
       if (bQuestState) {
         if (!sUseMenuPkt.y) {
           return 0;
@@ -3626,8 +3548,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
     sUseMenuPkt.y = (LONG)SUnit::FindUnitFromTable(pGame, UNIT_ITEM, nGuid);
     eQuestState = QUESTSTATE_RewardAwaits;
     eQuestId = QUEST_SiegeOnHaggorath;
-    pQuestBuf = Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit);
-    bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBuf, eQuestId, eQuestState);
+    bQuestState = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBuffer(pGame, pUnit), eQuestId, eQuestState);
     if (!bQuestState) {
       goto reject_ineligible_item;
     }

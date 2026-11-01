@@ -132,7 +132,7 @@ BOOL __fastcall Skills_CltStFunc_MonInitAndSpawnCltMissile(D2UnitStrc * pUnit, e
       return 0;
     }
 
-    nCollisionType = D2Common::PATH::Path::PATH_GetCollisionTypeAt((uint32_t*)pUnit->pPath.pStaticPath, pUnit, pRoom, (uint16_t)ptSpawnPos.x, (uint16_t)ptSpawnPos.y);
+    nCollisionType = D2Common::PATH::Path::PATH_GetCollisionTypeAt((uint32_t*)pUnit->pPath.pStaticPath, pUnit, pRoom, ptSpawnPos.x, ptSpawnPos.y);
     if (!nCollisionType) {
       return 0;
     }

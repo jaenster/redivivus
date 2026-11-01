@@ -1028,11 +1028,7 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
     int32_t nPosY;
     int32_t nPosX;
     int32_t nCollisionType;
-    int32_t nUnitSizeX;
-    uint32_t nVectorY;
-    uint32_t nVectorX;
     eD2PlayerAnimMode eAnimMode;
-    D2RoomStrc* pRoom1;
     bool bIsDeadOrKick;
     eD2UnitType eUnitType;
     eUnitType = UNIT_COUNT;
@@ -1090,10 +1086,7 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
           }
 
           nCollisionType = Units::GetCollisionType(pUnit);
-          nVectorY = Units::GetUnitSizeY(pUnit);
-          nVectorX = Units::GetUnitSizeX(pUnit);
-          pRoom1 = Units::UNITS_GetRoom(pUnit);
-          Collision::RemoveCollision_Vector(pRoom1, nPosX, nPosY, nVectorX, nVectorY, nCollisionType);
+          Collision::RemoveCollision_Vector(Units::UNITS_GetRoom(pUnit), nPosX, nPosY, Units::GetUnitSizeX(pUnit), Units::GetUnitSizeY(pUnit), nCollisionType);
           return 1;
         }
       default:
@@ -1117,9 +1110,7 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
           }
 
           nCollisionType = Units::GetCollisionType(pUnit);
-          nUnitSizeX = Units::GetUnitSizeX(pUnit);
-          pRoom1 = Units::UNITS_GetRoom(pUnit);
-          Collision::RemoveCollision_Width(pRoom1, nPosX, nPosY, nUnitSizeX, nCollisionType);
+          Collision::RemoveCollision_Width(Units::UNITS_GetRoom(pUnit), nPosX, nPosY, Units::GetUnitSizeX(pUnit), nCollisionType);
           return 1;
         }
     }
@@ -1150,8 +1141,7 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
     }
 
     nCollisionType = Units::GetCollisionType(pUnit);
-    pRoom1 = Units::UNITS_GetRoom(pUnit);
-    Collision::RemoveCollision_Type(pRoom1, nPosX, nPosY, nUnitWidth, nCollisionType);
+    Collision::RemoveCollision_Type(Units::UNITS_GetRoom(pUnit), nPosX, nPosY, nUnitWidth, nCollisionType);
     return 1;
 }
 

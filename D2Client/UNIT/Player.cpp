@@ -527,10 +527,8 @@ static void CLIENT_ResolvePlayerCollision(D2UnitStrc * pUnit) {
     eD2PlayerAnimMode eAnimMode;
     D2RoomStrc* pRoom;
     int32_t nUnitWidth;
-    int32_t eCollisionFlag;
     int32_t iVar1;
     POINT sTilePos;
-    BOOL bAllowNeighboorRooms;
     eD2UnitType eUnitType;
     if (!pUnit) {
       eAnimMode = Death;
@@ -566,10 +564,7 @@ static void CLIENT_ResolvePlayerCollision(D2UnitStrc * pUnit) {
               nUnitWidth = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
               eCollideResult = D2Common::Collision::CheckCollision_BlockAll_Type(pRoom, sTilePos.x, sTilePos.y, nUnitWidth, iVar1);
               if (eCollideResult != COLLIDE_NONE) {
-                bAllowNeighboorRooms = 1;
-                eCollisionFlag = 0xc01;
-                iVar1 = D2Common::Units::GetUnitSizeX(pUnit);
-                D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &sTilePos, iVar1, eCollisionFlag, bAllowNeighboorRooms);
+                D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &sTilePos, D2Common::Units::GetUnitSizeX(pUnit), 0xc01, 1);
                 CUnit::CLIENT_TeleportUnitToPosition(pUnit, sTilePos.x, sTilePos.y, 0);
               }
             }
@@ -610,7 +605,7 @@ static void __stdcall CLIENT_PlayIndexedUnitSound(D2UnitStrc * pUnit, int32_t nS
     0x0,
     0x0
 }; D2_STATIC_GUARD(gwPlayerAnimationState, "D2Client::UNIT::Player::CLIENT_PlayIndexedUnitSound::gwPlayerAnimationState");
-    static uint32_t gaClientSoundUnitIndexArray = 0x9; D2_STATIC_GUARD(gaClientSoundUnitIndexArray, "D2Client::UNIT::Player::CLIENT_PlayIndexedUnitSound::gaClientSoundUnitIndexArray");
+    static int gaClientSoundUnitIndexArray = 0x9; D2_STATIC_GUARD(gaClientSoundUnitIndexArray, "D2Client::UNIT::Player::CLIENT_PlayIndexedUnitSound::gaClientSoundUnitIndexArray");
 
     if (gaClientSoundUnitIndexArray <= nSoundIndex) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2cb);
@@ -1280,8 +1275,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
         }
 
         nTargetY = Units::GetYPosFromDynamicPathUnit(pTargetUnit);
-        nTargetX = Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget);
-        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x59, nUnitType, nClassId, nTargetX, nTargetY);
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x59, nUnitType, nClassId, Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget), nTargetY);
         pTargetUnit = pUnderMouse->pTarget;
         if (pTargetUnit && pTargetUnit->eUnitType == UNIT_MONSTER && pTargetUnit->pUnitData.pUnitDataPlayer) {
           puVar1 = &pTargetUnit->pUnitData.pUnitDataPlayer->unk0x28;

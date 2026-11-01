@@ -297,8 +297,7 @@ void __stdcall INPUT_DialogMouseDown(D2UIMouseMsgStrc * pMsg) {
             return;
           }
 
-          dwBorderType = Path::DRAW_GetTypeOfBorder();
-          bMiniPanelFlag = ui::UI_IsMouseOnSkillButton(dwBorderType, nMouseY, nMouseX);
+          bMiniPanelFlag = ui::UI_IsMouseOnSkillButton(Path::DRAW_GetTypeOfBorder(), nMouseY, nMouseX);
           if (!bMiniPanelFlag) {
             return;
           }

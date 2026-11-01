@@ -743,6 +743,7 @@ uint32_t __fastcall NET_IsClientAllowedToLeave(uint32_t nParam) {
 // Game-cleanup save: force-saves the disconnecting client's character (SaveGameAllGameTypes with bForceFullSave=1), then iterates all remaining clients in the game and soft-saves each (bForceFullSave=0). For non-singleplayer games, also invokes BattleNetServerService->fpUpdateCharacterLadder with the player's level, experience, char status, guild info, and file-time pointer so the ladder record stays current. No-ops if pClient or its player unit is null.
 void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame) {
     int iVar1;
+    char* szCharName;
     fnUpdateCharacterLadder* ppfpUpdateLadder;
     uint32_t nCharStatus;
     uint32_t nLevel;
@@ -762,8 +763,7 @@ void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame)
     }
 
     BOOL bSaveSuccess = 1;
-    char* szCharName = Clients::GetCharName(pClient);
-    bSaveSuccess = PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayer, szCharName, bSaveSuccess);
+    bSaveSuccess = PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayer, Clients::GetCharName(pClient), bSaveSuccess);
     if (!bSaveSuccess) {
       return;
     }
@@ -780,9 +780,7 @@ void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame)
       pPlayer = Clients::CLIENTS_GetControlUnit(pClientLoop, 0);
       if (pPlayer) {
         if (pClientLoop != pClient) {
-          bSaveSuccess = 0;
-          szCharName = Clients::GetCharName(pClientLoop);
-          PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayer, szCharName, bSaveSuccess);
+          PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayer, Clients::GetCharName(pClientLoop), 0);
         }
         if (BattleNetServerService && BattleNetServerService->fpUpdateCharacterLadder && pGame->eGameType != GAMETYPE_SINGLEPLAYER) {
           Clients::GetGuildInfo(pClientLoop, &nGuildRank, &nGuildEmblem, &nGuildUnknown);
@@ -812,7 +810,6 @@ void __fastcall SaveAllPlayers(::SGAMEDATA * pGame) {
     uint8_t nGuildRank;
     uint8_t nGuildEmblem;
     uint8_t nGuildUnknown;
-    BOOL bSaveUnknownFlag;
     uint32_t dwUnusedParam;
     D2ClientStrc* pClient;
     FILETIME* ppFileTime;
@@ -827,9 +824,7 @@ void __fastcall SaveAllPlayers(::SGAMEDATA * pGame) {
       pClientNext = pClient->pNext;
       pPlayerUnit_lcl = Clients::CLIENTS_GetControlUnit(pClient, 0);
       if (pPlayerUnit_lcl) {
-        bSaveUnknownFlag = 0;
-        pCharName = Clients::GetCharName(pClient);
-        PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayerUnit_lcl, pCharName, bSaveUnknownFlag);
+        PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayerUnit_lcl, Clients::GetCharName(pClient), 0);
         if (BattleNetServerService && BattleNetServerService->fpUpdateCharacterLadder && pGame->eGameType != GAMETYPE_SINGLEPLAYER) {
           Clients::GetGuildInfo(pClient, &nGuildRank, &nGuildEmblem, &nGuildUnknown);
           iVar1 = pPlayerUnit_lcl->nClassId;
@@ -1179,9 +1174,6 @@ void __stdcall CheckClientTimeouts(::SGAMEDATA * pGame, int * pnParam) {
     // Static local variables (originally global data)
     static uint32_t gnClientTimeoutCheckInterval = 0x1; D2_STATIC_GUARD(gnClientTimeoutCheckInterval, "D2Game::GAME::Server::CheckClientTimeouts::gnClientTimeoutCheckInterval");
 
-    char* pCharName;
-    D2UnitStrc* pUnit;
-    BOOL bSaveUnknownFlag;
     uint32_t dwClientTimeout;
     D2ClientStrc* pClient;
     if (!gnClientTimeoutCheckInterval) {
@@ -1202,10 +1194,7 @@ void __stdcall CheckClientTimeouts(::SGAMEDATA * pGame, int * pnParam) {
       dwFileFlags = Clients::CLIENT_TestFileFlags(pClient, 4);
       dwClientTimeout = pClient->dwTimeOut;
       if (dwCurrentTick > dwClientTimeout && (dwFileFlags && dwCurrentTick - dwClientTimeout > 10000 && (uint32_t)pClient->tQServerExt.nHeartbeatSampleCount > 10 || dwCurrentTick - dwClientTimeout > 45000 || pClient->tQServerExt.nForceTimeoutDisconnect) && BattleNetServerService) {
-        bSaveUnknownFlag = 0;
-        pCharName = Clients::GetCharName(pClient);
-        pUnit = Clients::CLIENTS_GetControlUnit(pClient, 0);
-        PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pUnit, pCharName, bSaveUnknownFlag);
+        PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, Clients::CLIENTS_GetControlUnit(pClient, 0), Clients::GetCharName(pClient), 0);
         *pnParam = 1;
         SERVER_DisconnectClient(pGame, pClient, '\0');
       }
@@ -2849,7 +2838,7 @@ void __fastcall SetGameName(::SGAMEDATA * pGame, char * szGameName, uint32_t dwF
     }
 
     memcpy(szDedupeName, szGameName, nBaseNameLen);
-    sprintf(szDedupeName + nBaseNameLen, "~%d", (int)szGameName);
+    sprintf(szDedupeName + nBaseNameLen, "~%d", szGameName, 0);
     int nDedupeIdx = 1;
     bNameAvailable = GAME_CheckIfGameNameExistsSafely(szDedupeName);
     if (!bNameAvailable) {

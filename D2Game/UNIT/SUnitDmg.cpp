@@ -1792,7 +1792,7 @@ void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
         if (!(pDamage->dwHitFlags & 0x20U)) {
           goto clamp_and_apply_damage;
         }
-        if (-1 < (char)pDamage->dwHitFlags) {
+        if ((char)pDamage->dwHitFlags >= 0) {
           SUnitEvent::UNITEVENT_DispatchEventsByType(pGame, 6, pUnit, pUnit_00, pDamage);
         }
 
@@ -2983,7 +2983,6 @@ static int32_t DAMAGE_GetSkillDamageBonus(D2UnitStrc * pUnit) {
 static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     int32_t nParryBonus;
     uint32_t nRandRoll;
-    ::SGAMEDATA* pSVar2;
     int nDodgeChance;
     uint32_t nEvadeRoll;
     int nAvoidChance;
@@ -3013,9 +3012,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
           nAvoidChance = DVar1.nSeedLow % 100;
           nSeedMod = "evades";
           nParryBonus = nParam;
-          nDodgeChance = nAvoidChance;
-          pSVar2 = SUnit::GetGamePointer(pUnit2);
-          nullsub_4Arg(pSVar2, pUnit2, pUnit, nParryBonus, nDodgeChance, (uint32_t)nSeedMod);
+          nullsub_4Arg(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nParryBonus, nAvoidChance, (uint32_t)nSeedMod);
           nRandRoll = 8;
           if (nAvoidChance < nParam) {
             return nRandRoll;
@@ -3034,8 +3031,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
             pDVar3 = pUnit;
             iVar4 = nParryBonus;
             nWeaponClass3 = nRandRoll;
-            pSVar2 = SUnit::GetGamePointer(pUnit2);
-            nullsub_4Arg(pSVar2, pUnit2, pDVar3, iVar4, nRandRoll, nDebugAddr);
+            nullsub_4Arg(SUnit::GetGamePointer(pUnit2), pUnit2, pDVar3, iVar4, nRandRoll, nDebugAddr);
             if ((int)nWeaponClass3 < nParryBonus) {
               return 0x10;
             }
@@ -3064,8 +3060,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
         pDVar3 = pUnit;
         iVar4 = nParryBonus;
         nWeaponClass2 = nRandRoll;
-        pSVar2 = SUnit::GetGamePointer(pUnit2);
-        nullsub_4Arg(pSVar2, pUnit2, pDVar3, iVar4, nRandRoll, (uint32_t)nSeedMod);
+        nullsub_4Arg(SUnit::GetGamePointer(pUnit2), pUnit2, pDVar3, iVar4, nRandRoll, (uint32_t)nSeedMod);
         if ((int)nWeaponClass2 < nParryBonus) {
           return 0x10;
         }
@@ -3078,10 +3073,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
       if (nDodgeChance > 0) {
         nEvadeRoll = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
         nSeedMod = "dodges";
-        nAvoidChance = nDodgeChance;
-        nRandRoll = nEvadeRoll;
-        pSVar2 = SUnit::GetGamePointer(pUnit2);
-        nullsub_4Arg(pSVar2, pUnit2, pUnit, nAvoidChance, nRandRoll, (uint32_t)nSeedMod);
+        nullsub_4Arg(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nDodgeChance, nEvadeRoll, (uint32_t)nSeedMod);
         if ((int)nEvadeRoll < nDodgeChance) {
           return 4;
         }
@@ -3091,10 +3083,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t nParam, D2UnitStrc 
       if (nDodgeChance > 0) {
         nEvadeRoll = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
         nSeedMod = "avoids";
-        nAvoidChance = nDodgeChance;
-        nRandRoll = nEvadeRoll;
-        pSVar2 = SUnit::GetGamePointer(pUnit2);
-        nullsub_4Arg(pSVar2, pUnit2, pUnit, nAvoidChance, nRandRoll, (uint32_t)nSeedMod);
+        nullsub_4Arg(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nDodgeChance, nEvadeRoll, (uint32_t)nSeedMod);
         if ((int)nEvadeRoll < nDodgeChance) {
           return 2;
         }
@@ -3608,11 +3597,10 @@ static void __stdcall SERVER_SEND_MercExperience(int32_t nExperience, D2UnitStrc
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit2, UNITSTAT_experience, nValue, 0);
-    uint16_t wPacketType = 0xd;
-    uint32_t nNewMercXp = nValue;
-    GAME::SCmd::NET_D2GS_SERVER_Send_0xA1_0xA2_0xA0_MercExperience(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUnitDmg.cpp", 0xfbd), pUnit2, wPacketType, nMercGUID_00, nNewMercXp);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0xA1_0xA2_0xA0_MercExperience(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUnitDmg.cpp", 0xfbd), pUnit2, 0xd, nMercGUID_00, nValue);
     int32_t nLevel = nMercLevel;
     do {
+      uint32_t nNewMercXp;
       nOwnerLevel = nLevel + 1;
       nNewMercXp = D2Common::Merc::GetBaseExperience(nOwnerLevel, pHirelingTxt->expPerLvl);
       if (nNewMercXp > nValue) {

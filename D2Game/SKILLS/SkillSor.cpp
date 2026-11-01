@@ -1479,8 +1479,7 @@ BOOL __fastcall Skills_SrvDoFunc_144_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
                         eOwnerUnitType = D2Client::Units::GetType(pUnit);
                         if (eOwnerUnitType == UNIT_MONSTER) {
-                          nSkillRange = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
-                          UNIT::SUnit::SetAlignment(pSummon, (uint8_t)nSkillRange, eOwnerUnitType);
+                          UNIT::SUnit::SetAlignment(pSummon, (uint8_t)D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit), eOwnerUnitType);
                         }
                       }
 

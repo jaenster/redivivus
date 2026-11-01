@@ -3437,7 +3437,6 @@ int __stdcall SFileOpenFileEx(D2ArchiveStrc * pArchive, char * szFileName, uint3
     char szResolvedPath[260];
     D2MPQBlockEntryStrc* pSavedBlockEntry;
     D2ArchiveStrc* pFileArchive;
-    int* pRefCount;
     uint32_t nResult = -1;
     char* pFileName = szFileName;
     if (!phFile) {
@@ -3525,8 +3524,7 @@ int __stdcall SFileOpenFileEx(D2ArchiveStrc * pArchive, char * szFileName, uint3
         nResult = pSavedBlockEntry->dwCRC32 ? gbSFileStreamCallbackPending : 0;
         pMpqFileRecord->nChecksumState = 1;
         pMpqFileRecord->bChecksumEnabled = nResult;
-        pRefCount = &pFileArchive->nRefCount;
-        (*pRefCount)++;
+        pFileArchive->nRefCount++;
         *phFile = pMpqFileRecord;
         nResult = 1;
         szFileName = pFileName;

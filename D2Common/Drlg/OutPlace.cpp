@@ -1204,7 +1204,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
 
                       switch (uVar4) {
                         case 0:
-                          if (pSubLevelDistMap[(nGridY - 1) * iVar5 + nExitCol] && pSubLevelDistMap[(nGridY - 1) * iVar5 + nExitCol] < 0xf && -1 < (char)nConnFlags) {
+                          if (pSubLevelDistMap[(nGridY - 1) * iVar5 + nExitCol] && pSubLevelDistMap[(nGridY - 1) * iVar5 + nExitCol] < 0xf && (char)nConnFlags >= 0) {
                             nConnFlags |= 0x80;
                             stop_extra_link_search:
                             bFoundExit = false;

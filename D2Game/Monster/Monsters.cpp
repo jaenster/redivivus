@@ -1023,6 +1023,7 @@ void __fastcall MONSTER_OnDeathScheduleDelayed(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Server-side handler for a monster corpse explosion (Necromancer Corpse Explosion skill or similar). Spawns a MISSILE_Monstercorpseexplode at the corpse's position, scales damage from MonStats using difficulty-dependent CEDamagePercent (Normal -25%, Nightmare -33%, Hell -87.5% reduction), then applies AoE physical damage around the origin via DAMAGE_ApplyAreaOfEffectDamage.
 void __fastcall MONSTER_CorpseExplode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nUnused1, uint32_t nUnused2) {
+    int iVar5;
     int64_t nDivResult;
     D2DamageStrc sDamage;
     D2MonStatsInitStrc sMonStats;
@@ -1058,9 +1059,7 @@ void __fastcall MONSTER_CorpseExplode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
     memset(&sMonStats, 0, 0x38);
     int32_t nMonStatsId = pUnit->nClassId;
     D2MonStatsInitStrc* pScaledStats = &sMonStats;
-    uint32_t nRandDamage = 1;
-    int iVar5 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonStatsId, bIsMultiplayer, (uint32_t)pGame->nDifficulty, iVar5, nRandDamage, pScaledStats);
+    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonStatsId, bIsMultiplayer, (uint32_t)pGame->nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), 1, pScaledStats);
     D2DifficultyLevelsTxt* pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)pGame->nDifficulty);
     if (!pDiffLevels) {
       return;
@@ -1099,7 +1098,7 @@ void __fastcall MONSTER_CorpseExplode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
       iVar5 = (int)(nDamageAdjusted * 0x3c) / 100;
     }
 
-    nRandDamage = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, nDamageAdjusted - iVar5);
+    uint32_t nRandDamage = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, nDamageAdjusted - iVar5);
     memset(&sDamage, 0, 0x70);
     sDamage.dwPhysDamage = (nRandDamage + iVar5) * 0x40;
     sDamage.dwFireDmg = sDamage.dwPhysDamage;
@@ -2942,8 +2941,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
         nClassId = pUnit->nClassId;
         pScaledStats = &sMonStats;
         nElDifficultyIdx = 0x20;
-        nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-        D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nClassId, __frame0.bIsMultiplayer, __frame0.nDifficultyIdx, nLevel, nElDifficultyIdx, pScaledStats);
+        D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nClassId, __frame0.bIsMultiplayer, __frame0.nDifficultyIdx, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), nElDifficultyIdx, pScaledStats);
         nLevel = sMonStats.nS1MinD + __frame0.nPetBonusMinDmg;
         iVar2 = sMonStats.nS1MaxD + __frame0.nPetBonusMaxDmg;
         iVar1 = sMonStats.nTH;
@@ -2953,8 +2951,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
         nClassId = pUnit->nClassId;
         pScaledStats = &sMonStats;
         nElDifficultyIdx = 8;
-        nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-        D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nClassId, __frame0.bIsMultiplayer, __frame0.nDifficultyIdx, nLevel, nElDifficultyIdx, pScaledStats);
+        D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nClassId, __frame0.bIsMultiplayer, __frame0.nDifficultyIdx, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), nElDifficultyIdx, pScaledStats);
         nLevel = __frame0.nPetBonusMinDmg + sMonStats.nA1MinD;
         iVar2 = __frame0.nPetBonusMaxDmg + sMonStats.nA1MaxD;
         iVar1 = __frame0.nPetBonusToHit;
@@ -2964,8 +2961,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
       nClassId = pUnit->nClassId;
       pScaledStats = &sMonStats;
       nElDifficultyIdx = 0x10;
-      nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-      D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nClassId, __frame0.bIsMultiplayer, __frame0.nDifficultyIdx, nLevel, nElDifficultyIdx, pScaledStats);
+      D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nClassId, __frame0.bIsMultiplayer, __frame0.nDifficultyIdx, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), nElDifficultyIdx, pScaledStats);
       nLevel = sMonStats.nA2MinD + __frame0.nPetBonusMinDmg;
       sMonStats.nS1MaxD = sMonStats.nA2MaxD;
       iVar2 = sMonStats.nS1MaxD + __frame0.nPetBonusMaxDmg;

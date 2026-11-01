@@ -816,7 +816,7 @@ void StaticInit_6cadb0() {
     do {
       Fog::File::CONTAINER_InitializeBuffer(gaGroundItemLabels[-iVar1 + 31].wszName, 2, 0x80, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
       iVar1--;
-    } while (-1 < iVar1);
+    } while (iVar1 >= 0);
 }
 
 void StaticInit_6cade0() {

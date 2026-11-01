@@ -718,8 +718,7 @@ void __fastcall ShowUnrecoverableErrorDialog(int32_t nParam, char * szText, int 
     int nCopyIdx;
     if (szText) {
       nCopyIdx = nLine;
-      pScan = StripPathPrefixToRelative(szText);
-      Storm::Source::SSTR::SStrPrintf(szFormattedMessageBuffer, 0x1000, "--------  FILE: %s    LINE: %d  --------\n\n", pScan, nCopyIdx);
+      Storm::Source::SSTR::SStrPrintf(szFormattedMessageBuffer, 0x1000, "--------  FILE: %s    LINE: %d  --------\n\n", StripPathPrefixToRelative(szText), nCopyIdx);
       LogManager::LogWithCategory("", "%s", szFormattedMessageBuffer);
     }
     if (!szSourceFile) {

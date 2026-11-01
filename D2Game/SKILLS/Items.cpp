@@ -440,10 +440,7 @@ uint32_t __stdcall ITEMMOD_RollMagicAffix(D2UnitStrc * pUnit, int32_t bIsSuffix,
       return pCurAffix & -65536;
     }
 
-    uint32_t nMax;
-    nMax = nCandidatesFound;
-    pItemSeed = D2Common::ITEMS::Items::GetItemSeed(pUnit);
-    pCurAffix = D2Client::Seed::RollBetweenMinAndMax(pItemSeed, 0, nMax);
+    pCurAffix = D2Client::Seed::RollBetweenMinAndMax(D2Common::ITEMS::Items::GetItemSeed(pUnit), 0, nCandidatesFound);
     if ((int)pCurAffix >= (int)nCandidatesFound) {
       return pCurAffix & -65536;
     }
@@ -692,8 +689,7 @@ int32_t __stdcall ITEMMOD_RollMagicAffixClassic(D2UnitStrc * pItem, int32_t bIsS
     }
 
     nClassId = nWeightSum + 1;
-    pItemSeed = D2Common::ITEMS::Items::GetItemSeed(pItem);
-    pItemTxt = D2Client::Seed::RollBetweenMinAndMax(pItemSeed, 0, nClassId);
+    pItemTxt = D2Client::Seed::RollBetweenMinAndMax(D2Common::ITEMS::Items::GetItemSeed(pItem), 0, nClassId);
     nCandidateIdx = 0;
     if ((int)pDVar4 <= 0) {
       return pItemTxt & -65536;
@@ -1982,9 +1978,7 @@ BOOL __fastcall ITEMMOD_ApplyCrudeQualityClassic(D2UnitStrc * pUnit, D2ItemGenCo
         nStatValue = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_throw_mindamage, 0);
         nStatValue = SKILLITEMS_ApplyPercentWithMinimum(nStatValue, 2, iVar1);
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, nStatValue, 0);
-        iVar1 = 0x4b;
-        nStatValue = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_throw_maxdamage, 0);
-        nScaledStat = SKILLITEMS_ApplyPercentWithMinimum(nStatValue, 1, iVar1);
+        nScaledStat = SKILLITEMS_ApplyPercentWithMinimum(D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_throw_maxdamage, 0), 1, 0x4b);
         eUnitStat = UNITSTAT_item_throw_maxdamage;
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nScaledStat, 0);
       }

@@ -323,8 +323,7 @@ void __fastcall Q28_PlayerCompleteForgeInAct4(::SGAMEDATA * pGame, D2UnitStrc * 
       return;
     }
 
-    int* pForgeCompletedCount = &pHellsForgeQuest->pQuestSpecificData.pA2Q6->nStatusCode;
-    (*pForgeCompletedCount)++;
+    pHellsForgeQuest->pQuestSpecificData.pA2Q6->nStatusCode++;
 }
 
 // A4Q3 Hell's Forge — OBJOP_A4Q3_HellforgeSmash (Objects_OperateFn49): the Hellforge operate handler — the core quest action. Bails if Hell's Forge already Completed/RewardAwaits. Branches on the forge object's anim mode: Death(idle) — if player carries Mephisto's Soulstone 'mss ', plays anim, broadcasts internal state 3, consumes the soulstone (this places the stone on the anvil); else plays "can't" sound and bumps stateFlag to 1. Walk(active) — if player has the Hellforge Hammer 'hfh ' equipped as weapon and has struck 3x, this is the SMASH: removes the hammer, sets JustCompleted+RewardAwaits, clears step-states, runs Q28_PlayerCompleteForgeInAct4 for the whole party, sets stateFlag 4 then broadcasts state 0xd, schedules the rune-drop event, marks other party members CannotComplete, and fires NotifyPlayersAboutEvent(0xe). Item codes: 'mss '=0x2073736d (Mephisto's Soulstone), 'hfh '=0x20686668 (Hellforge Hammer).
@@ -335,7 +334,6 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
     eD2ObjectAnimMode eForgeMode;
     D2UnitStrc* pQuestItem;
     D2ItemsTxt* pItemsTxt;
-    int* pStrikeCount;
     D2QuestDataA4Q3Strc* pForgeQuestSpecific;
     D2QuestDataA4Q3Strc* pA4Q3Data;
     D2QuestDataStrc* pForgeQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_HellsForge);
@@ -413,8 +411,7 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
                 if (pQuestItem) {
                   pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pQuestItem->nClassId);
                   if (pItemsTxt->dwCode == 0x20686668) {
-                    pStrikeCount = &pA4Q3Data->nHammerStrikeCount;
-                    (*pStrikeCount)++;
+                    pA4Q3Data->nHammerStrikeCount++;
                     if (pA4Q3Data->nHammerStrikeCount <= 2) {
                       return 0;
                     }

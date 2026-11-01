@@ -170,7 +170,7 @@ void __stdcall ITEM_GetPlayerNameAkaNamedString(struct D2UnitStrc * pUnit, char 
 uint8_t __stdcall ITEM_GetItemData_nEarLevel(struct D2UnitStrc * pUnit);
 void __stdcall ITEM_SetItemData_nEarLevel(struct D2UnitStrc * pUnit, uint8_t nEarLevel);
 uint8_t __stdcall ITEM_GetItemData_bVariant(struct D2UnitStrc * pUnit);
-void __stdcall ITEM_SetItemData_bVariant(struct D2UnitStrc * pUnit, bool bVariant);
+void __stdcall ITEM_SetItemData_bVariant(struct D2UnitStrc * pUnit, BYTE bVariant);
 int32_t __stdcall ITEMTYPE_IsShoots(int32_t nItemType);
 int32_t __stdcall ITEMTYPE_IsQuiver(int32_t nItemType);
 BOOL __stdcall ITEMTYPE_IsAutostack(int32_t nItemType);

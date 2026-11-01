@@ -12,7 +12,6 @@
 struct D2ClientStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
-typedef uint32_t eD2UnitStat;
 typedef uint32_t eD2UnitType;
 
 // Data types
@@ -160,7 +159,7 @@ void __fastcall UnitQueuePacket0x99(struct D2UnitStrc * pUnit, uint16_t wParam, 
 void __fastcall UnitQueuePacket0x9A(struct D2UnitStrc * pUnit, uint16_t wParam1, uint8_t byArg1, uint16_t wArg2, uint16_t wParam2, uint8_t bParam);
 // Allocates a 0x14-byte D2SUnitMsgStrc with packet id 0x9E (stat update) and enqueues it on pUnit's message list. Payload: unit GUID (4B), stat id (1B), new stat value (4B). Asserts eUnitStat <= 0xFE. Calls ROOM_LinkUnitToUpdateList to mark unit dirty.
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0x9E(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t dwStatValue);
+void __fastcall UnitQueuePacket0x9E(struct D2UnitStrc * pUnit, uint16_t eUnitStat, uint32_t dwStatValue);
 // Allocates a 0x18-byte D2SUnitMsgStrc with packet id 0xA1 (stat change notification) and enqueues it on pUnit's message list only if nOldValue != nNewValue. Payload: unit GUID, nParam (1B), old value (4B), new value (4B). Asserts nParam <= 0xFE. Marks unit dirty via ROOM_LinkUnitToUpdateList.
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall UnitQueuePacket0xA1(struct D2UnitStrc * pUnit, uint16_t nParam, int32_t nOldValue, int32_t nNewValue);

@@ -83,7 +83,7 @@ bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext) {
     /* LPCONTEXT lpContext for GetThreadContext */ /* HANDLE hThread for GetThreadContext */ bGotContext = GetThreadContext(hThread, pContext);
     /* HANDLE hThread for ResumeThread */ ResumeThread(hThread);
     /* HANDLE hObject for CloseHandle */ CloseHandle(hThread);
-    return bGotContext != 0;
+    return bGotContext;
 }
 
 static uint32_t DEBUG_GetPEImageType(short * nMagic) {
@@ -774,7 +774,7 @@ void __stdcall MISC_GetValueFromD2Ini(D2IniConfigStrc * pD2IniData) {
     UINT dwIniValue;
     char* pDestField;
     char szIniPath[260];
-    char cVar1;
+    uint8_t cVar1;
     Source::SFile::SFILE_GetExecutableDirectory(szIniPath, 0x104);
     Storm::Source::SSTR::SStrPack(szIniPath, "D2.ini", 0x104);
     uint32_t nEntryOffset = 0;

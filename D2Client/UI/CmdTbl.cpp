@@ -1368,7 +1368,7 @@ void __stdcall WindowsKeyPressedEvent(D2UIMouseMsgStrc * pMsg) {
       }
     }
 
-    /* int nVirtKey for GetKeyState */ if (!((g_KeyBindingsTable[nIndex].wKeyCode != 0x73 || (sKeyState = GetKeyState(0x12) , -1 < sKeyState)) && (gbKeyBindingsEnabled != 2 || gaCmdBindings[g_KeyBindingsTable[nIndex].nCmdIndex].nHasParam))) {
+    /* int nVirtKey for GetKeyState */ if (!((g_KeyBindingsTable[nIndex].wKeyCode != 0x73 || (sKeyState = GetKeyState(0x12) , sKeyState >= 0)) && (gbKeyBindingsEnabled != 2 || gaCmdBindings[g_KeyBindingsTable[nIndex].nCmdIndex].nHasParam))) {
       return;
     }
 

@@ -17,6 +17,6 @@ void __fastcall DEBUG_SetLoggingFlag(int dwParam);
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 0051a470..0051a479; unreferenced in 1.14d.
 __time32_t __stdcall DEBUG_GetTime32(__time32_t * pTime);
-void DEBUG_UnusedDebugFunction(char * str);
+void DEBUG_UnusedDebugFunction(char * str, ...);
 
 } // namespace Bnclient::Debug

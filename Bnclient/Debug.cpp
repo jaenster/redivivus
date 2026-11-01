@@ -29,7 +29,7 @@ __time32_t __stdcall DEBUG_GetTime32(__time32_t * pTime) {
     return _Var1;
 }
 
-void DEBUG_UnusedDebugFunction(char * str) {
+void DEBUG_UnusedDebugFunction(char * str, ...) {
 
 }
 

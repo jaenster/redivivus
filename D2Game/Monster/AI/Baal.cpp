@@ -892,7 +892,6 @@ static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, int32_t nParam, D2
     D2DynamicPathStrc* pDynamicPath;
     int32_t nOwnerGuid;
     eD2UnitType eOwnerType;
-    uint16_t uVar1;
     int nPosY;
     nPosY = 0;
     __frame1.nPowerfulSkillCount = 0;
@@ -996,12 +995,8 @@ static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, int32_t nParam, D2
     }
 
     Ai::AiGeneral::AssignMinionOwner(pGame, pTargetUnit, nOwnerGuid, eOwnerType, 1, 0);
-    uVar1 = 0;
-    nOwnerGuid = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_maxhp, nOwnerGuid / 3, uVar1);
-    uVar1 = 0;
-    nPosY = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_hitpoints, nPosY / 3, uVar1);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_maxhp, D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit) / 3, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) / 3, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_hpregen, 0, 0);
     D2Common::Units::StoreOwner(pTargetUnit, pUnit);
     D2Common::Units::StoreOwner(pUnit, pTargetUnit);

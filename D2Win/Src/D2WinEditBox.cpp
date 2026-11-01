@@ -2193,8 +2193,7 @@ BOOL __fastcall DrawFlag0x8(::D2WinEditBox * pEditBox) {
     ::D2WinEditBox* pNewEditBox = D2_NEW_AT(::D2WinEditBox, ".\\Src\\D2WinEditBox.cpp", 0x39);
     memset(pNewEditBox, 0, 0x284);
     pNewEditBox->sControl.neD2FormType = FORM_EditBox;
-    int* pStateField = &pNewEditBox->sControl.dwState;
-    *pStateField |= gadwBitMasks[0];
+    pNewEditBox->sControl.dwState |= gadwBitMasks[0];
     uVar1 = pNewEditBox->sControl.dwState | gadwBitMasks[2];
     pNewEditBox->sControl.pDC6 = pDC6;
     pNewEditBox->sControl.dwState = uVar1;

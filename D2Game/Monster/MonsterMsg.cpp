@@ -305,9 +305,7 @@ void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUn
         wTargetY = (uint16_t)nTmp2;
         nTmp2 = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
         GAME::SCmd::NET_D2GS_SERVER_Send_0x6D_UNITCHANGE_MONSTERNEUTRAL(pClientSide, nTargetY, (uint16_t)nTmp2, wTargetY, uVar1);
-        wTargetY = 0;
-        nTmp2 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0);
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, nTmp2 + 1, wTargetY);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
         return;
       }
       if (eAnimMode == Knockback) {
@@ -346,16 +344,14 @@ void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUn
       nTargetY = pUnit->nUnitGUID;
       nTmp2 = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
       wPosY = (uint16_t)nTmp2;
-      nTmp2 = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x6B_UNITCHANGE_MONSTERXYPOSITION(pClientSide, 'k', nTargetY, (uint8_t)byMoveParam2, (uint16_t)wTargetX, wTargetY, byMoveParam1, byLastHitClass, (uint16_t)nTmp2, wPosY);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x6B_UNITCHANGE_MONSTERXYPOSITION(pClientSide, 'k', nTargetY, (uint8_t)byMoveParam2, (uint16_t)wTargetX, wTargetY, byMoveParam1, byLastHitClass, (uint16_t)D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), wPosY);
       return;
     }
 
     nMonsterGUID = pUnit->nUnitGUID;
     nTmp2 = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
     wTargetY = (uint16_t)nTmp2;
-    nTmp2 = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x6C_UNITCHANGE_MONSTERIDPOSITION(pClientSide, 'l', nMonsterGUID, (uint8_t)byMoveParam2, byExtraParam, nTargetY, byMoveParam1, (uint16_t)nTmp2, wTargetY);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x6C_UNITCHANGE_MONSTERIDPOSITION(pClientSide, 'l', nMonsterGUID, (uint8_t)byMoveParam2, byExtraParam, nTargetY, byMoveParam1, (uint16_t)D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), wTargetY);
 }
 
 } // namespace D2Game::Monster::MonsterMsg

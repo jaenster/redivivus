@@ -549,9 +549,7 @@ void __fastcall Q03_CheckPlayerHasMalus(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
 // Q03_CheckPartyHasMalus (A1Q3) — returns whether the player (or anyone in their party) holds the Horadric Malus. Fast path: true if the player carries it. Else if not partied, false. Otherwise clears field_0xA0 and runs Q03_CheckPlayerHasMalus over all party members, returning field_0xA0. Read-only on record.
 static BOOL Q03_CheckPartyHasMalus(D2UnitStrc * pUnitStrc, D2QuestDataStrc * pQuestData) {
-    uint32_t dwItemCode = 0x206d6468;
-    ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnitStrc);
-    D2UnitStrc* pMalusItem = ITEMS::Items::Drop::HasQuestItem(pGame, pUnitStrc, dwItemCode);
+    D2UnitStrc* pMalusItem = ITEMS::Items::Drop::HasQuestItem(UNIT::SUnit::GetGamePointer(pUnitStrc), pUnitStrc, 0x206d6468);
     if (pMalusItem) {
       return 1;
     }
@@ -644,13 +642,11 @@ bool __fastcall Q03_SequenceFilter(D2QuestDataStrc * pQuestData) {
 
 // A1Q3 Tools of the Trade, state-0xd (load/join reconcile) handler. If the player carries the Malus (item 0x206d6468), increments nQuestItemCount and sets bSequenceReady. Then, if quest is not Completed and not FinishedInPreviousGame, restores the in-memory nStateFlag from the persisted record: Step0x02 -> nStateFlag=2/prev=1; Step0x03 -> nStateFlag=3/prev=1. Reads record only; does not write quest-record bits.
 void __fastcall Q03_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    int32_t* pQuestItemCount;
     D2UnitStrc* pMalusUnit = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x206d6468);
     if (pMalusUnit) {
       D2QuestDataA1Q3Strc* pA1Q3Data;
       pA1Q3Data = pQuestData->pQuestSpecificData.pA1Q3;
-      pQuestItemCount = &pA1Q3Data->nQuestItemCount;
-      (*pQuestItemCount)++;
+      pA1Q3Data->nQuestItemCount++;
       pA1Q3Data->bSequenceReady = 1;
     }
 

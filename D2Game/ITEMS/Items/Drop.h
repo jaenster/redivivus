@@ -46,7 +46,7 @@ struct __attribute__((packed)) D2ItemGenContextStrc {
     /* 0x44 */ eD2ItemFlag neD2ItemFlag;
     /* 0x48 */ int nInitSeed;
     /* 0x4C */ int nModSeed;
-    /* 0x50 */ bool bGrade;
+    /* 0x50 */ BYTE bGrade;
     /* 0x51 */ uint8_t field_0x51;
     /* 0x52 */ uint8_t field_0x52;
     /* 0x53 */ uint8_t field_0x53;

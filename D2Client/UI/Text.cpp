@@ -1292,7 +1292,6 @@ static BOOL TEXT_FormatEventMessage(int32_t pEventData, uint16_t * wszText) {
 void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMessageCtx) {
     D2UnitStrc* pPlayerUnit_lcl;
     uint8_t* pszMyName;
-    uint16_t* pWVar1;
     D2ObjectsTxt* pObjectTxt;
     D2MonStatsTxt* pMonStatsTxt;
     D2SuperUniquesTxt* pSuperUniqueTxt;
@@ -1411,17 +1410,12 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
         if (pszName != pMessageCtx->szName2 + 1) {
           Fog::File::CONTAINER_InitializeBuffer(awszName2, 2, 0x10, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
           D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName2, pMessageCtx->szName2, 0x10);
-          pwszLocale = awszName2;
-          pwszArg = awszName;
-          pWVar1 = D2Lang::StrTable::strtable::GetLocaleString(0xe3b);
-          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, pWVar1, pwszArg, pwszLocale);
+          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe3b), awszName, awszName2);
           TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
           return;
         }
 
-        pwszLocale = awszName;
-        pwszArg = D2Lang::StrTable::strtable::GetLocaleString(0xe39);
-        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, pwszArg, pwszLocale);
+        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe39), awszName);
         TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
         return;
       }
@@ -1438,17 +1432,12 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
         if (pszName != pMessageCtx->szName2 + 1) {
           Fog::File::CONTAINER_InitializeBuffer(awszName2, 2, 0x10, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
           D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName2, pMessageCtx->szName2, 0x10);
-          pwszLocale = awszName2;
-          pwszArg = awszName;
-          pWVar1 = D2Lang::StrTable::strtable::GetLocaleString(0xe3c);
-          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, pWVar1, pwszArg, pwszLocale);
+          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe3c), awszName, awszName2);
           TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
           return;
         }
 
-        pwszLocale = awszName;
-        pwszArg = D2Lang::StrTable::strtable::GetLocaleString(0xe3a);
-        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, pwszArg, pwszLocale);
+        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe3a), awszName);
         TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
         return;
       }
@@ -1575,33 +1564,26 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
       return;
       case '\v':
         D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
-      pwszLocale = awszName;
-      pwszArg = D2Lang::StrTable::strtable::GetLocaleString(0x69b);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, pwszArg, pwszLocale);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0x69b), awszName);
       TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
       return;
       default:
         return;
       case '\x0f':
         pnFmtArg = pMessageCtx->nArg;
-      pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe43);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, pwszLocale, pnFmtArg);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe43), pnFmtArg);
       TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
       return;
       case '\x11':
         pnFmtArg = pMessageCtx->nArg;
-      pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x2afc);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, pwszLocale, pnFmtArg);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0x2afc), pnFmtArg);
       TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
       return;
       case '\x12':
         pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x2afd);
       D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, pwszLocale);
       if (sgpDrlgAct) {
-        bEclipseEvent = 1;
-        nMonNameLen = 0;
-        nLine = 5;
-        D2Common::Environment::DRLGENV_InitializeEnvironment(sgpDrlgAct, UNIT::CUnit::GetCurrentRoom(), nLine, nMonNameLen, bEclipseEvent);
+        D2Common::Environment::DRLGENV_InitializeEnvironment(sgpDrlgAct, UNIT::CUnit::GetCurrentRoom(), 5, 0, 1);
       }
 
       GAME::View::SetShake(6, 4000, 10000, 4000);

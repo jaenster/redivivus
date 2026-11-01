@@ -401,8 +401,7 @@ int32_t __fastcall OBJECTRGN_CheckPointsCapacity(::SGAMEDATA * pGame, eD2LevelId
 }
 
 void __fastcall OBJECT_IncrementLevelSpawnCount(::SGAMEDATA * pGame, eD2LevelId eLevel) {
-    int* pnSpawnCount = &pGame->pObjectControl->aLevelsRng[eLevel]->pad_0x10;
-    (*pnSpawnCount)++;
+    pGame->pObjectControl->aLevelsRng[eLevel]->pad_0x10++;
 }
 
 uint32_t __fastcall OBJECT_IsPositionNearSpawnPoint2(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {

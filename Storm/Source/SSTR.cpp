@@ -162,7 +162,7 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
 
           nOffset = nOffsetPrev + 4;
           *(uint32_t*)(pDstLast + nOffsetPrev - 3) = dwWord;
-          if (-1 < nOffset) {
+          if (nOffset >= 0) {
             goto copy_tail_bytes;
           }
 
@@ -196,7 +196,7 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
 
           nOffset += 4;
           guStringAlignmentTemp = dwMask2;
-          if (-1 < nOffset) {
+          if (nOffset >= 0) {
             break;
           }
 
@@ -365,7 +365,7 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
 
           nOffset = nOffsetPrev + 4;
           *(uint32_t*)(pDstLast + nOffsetPrev - 3) = dwWord;
-          if (-1 < nOffset) {
+          if (nOffset >= 0) {
             goto copy_tail_bytes;
           }
 
@@ -399,7 +399,7 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
 
           nOffset += 4;
           guStringAlignmentTemp = dwWord2;
-          if (-1 < nOffset) {
+          if (nOffset >= 0) {
             break;
           }
 
@@ -2004,7 +2004,7 @@ uint32_t __stdcall UTF8_DecodeNextChar(uint8_t * pbParam, int * pnParam) {
       nContinuationBytesNeeded = 2;
     } else {
       if ((bByte & 0xe0) != 0xc0) {
-        if (-1 >= (char)bByte) {
+        if ((char)bByte < 0) {
           return 0x80000000;
         }
 

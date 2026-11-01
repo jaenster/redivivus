@@ -458,8 +458,7 @@ static void __stdcall Q36_CompleteQuestAndSetStatus(D2UnitStrc * pUnit, D2BitBuf
       return;
     }
 
-    int32_t* pnPlayersInWorldstone = &pQuestData->pQuestSpecificData.pA5Q6->nPlayersInWorldstone;
-    (*pnPlayersInWorldstone)++;
+    pQuestData->pQuestSpecificData.pA5Q6->nPlayersInWorldstone++;
 }
 
 // A5Q6 Eve of Destruction. Per-player iterate callback: if this player's quest is JustCompleted(0xd), look up their party and propagate Baal-kill credit to every party member via ExecuteFunctionForEveryPartyMember(Q36_SetCompleteForPartyMember).

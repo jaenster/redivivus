@@ -356,7 +356,7 @@ void __fastcall Send0x8bRelationshipStatus(D2UnitStrc * pUnit, D2UnitStrc * pUni
       dwTargetArg = pUnit2->nUnitGUID;
     }
 
-    bool bIsPartied = (uint8_t)(uint32_t)pListEntry->bIsPartied;
+    uint8_t bIsPartied = (uint8_t)pListEntry->bIsPartied;
     GAME::SCmd::NET_D2GS_SERVER_Send_0x8B_PlayerRelationship(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\PlayerList.cpp", 0x10b), dwTargetArg, bIsPartied);
 }
 

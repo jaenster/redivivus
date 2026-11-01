@@ -389,7 +389,7 @@ uint32_t __stdcall fpGameLoopFunction(uint32_t dwUnused) {
     return (uint32_t)(gbCharScreenOkPressed != 0);
 }
 
-bool fpRequiredUserAction() {
+BOOL fpRequiredUserAction() {
     uint32_t dwActPalIdx;
     gbCharScreenOkPressed = 0;
     D2Win::Src::D2WinPalette::D2WINPALETTE_SetPaletteIndex(0);
@@ -403,7 +403,7 @@ bool fpRequiredUserAction() {
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIEngineFlagInit, 4);
     GAME::Game::GAMEDATA_SetDrawFunction(0);
     LOADER_FreePopupImages();
-    return true;
+    return 1;
 }
 
 // Sets draw function mode, registers event handlers, runs game loop with custom fpGameLoopFunction, then cleans up

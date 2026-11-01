@@ -3279,29 +3279,29 @@ void __fastcall PlaceGuardInFrontOfJerhyn(D2QuestDataStrc * pQuestData, D2Object
     ReplaceJerhyn(pObjectInitArg->pRoom, pQuestData, &pPoint);
 }
 
-bool __fastcall QUEST_CheckJerhynShouldBlock(::SGAMEDATA * pGame) {
+BYTE __fastcall QUEST_CheckJerhynShouldBlock(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pArcaneSanctuaryQuest = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheArcaneSanctuary);
     if (!(pArcaneSanctuaryQuest && pArcaneSanctuaryQuest->pQuestSpecificData.pA2Q4->bShouldSpawnJerhyn != '\0')) {
-      return true;
+      return '\x01';
     }
 
     D2QuestDataStrc* pRadamentsLairQuest = GetQuestDataByQuestNoInternal(pArcaneSanctuaryQuest->pGame, QUESTINT_RadamentsLair);
     if (!(pRadamentsLairQuest && pRadamentsLairQuest->bIsNotIntroduction != '\0' && pRadamentsLairQuest->nStateFlag != 5)) {
-      return true;
+      return '\x01';
     }
 
     bool bVar1 = A2Q7::Q14_IsSevenTombsLessThanState4(pArcaneSanctuaryQuest->pGame);
     if (!bVar1 && pArcaneSanctuaryQuest->bIsNotIntroduction == '\x01' && pArcaneSanctuaryQuest->nStateFlag < 2) {
-      return false;
+      return '\0';
     }
 
-    return true;
+    return '\x01';
 }
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
 BOOL __fastcall QUEST_ShouldBlockJerhyn(::SGAMEDATA * pGame) {
-    bool bVar1 = QUEST_CheckJerhynShouldBlock(pGame);
-    return (uint32_t)bVar1;
+    uint8_t BVar1 = QUEST_CheckJerhynShouldBlock(pGame);
+    return (uint32_t)(BVar1 == '\x01');
 }
 
 // A2Q7 server AI logic for the Jerhyn NPC, gating his movement to the palace and the Duriel reveal. Out-params *pdwParam1/*pdwParam2 tell the caller the desired idle/move outcome. Bails (idle: 1,0) unless the Arcane Sanctuary quest is in progress and Seven Tombs is appropriately staged. When conditions hold it walks Jerhyn toward the recorded target coords (WalkToCoords), and once close locates the Duriel-tomb portal object, finds free neighbouring-room coordinates and relocates Jerhyn there (SUNIT_RelocateUnit), updating the A2Q4 quest-specific data flag bytes that track his progress.
@@ -3448,8 +3448,7 @@ BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow1(D2ObjectOperateFnArg * pOperati
     D2QuestDataA4Q2Strc* pA4Q2Data = pQuestData->pQuestSpecificData.pA4Q2;
     POINT* pGlowCoord = &pA4Q2Data->sInfectorCoords;
     D2Common::Units::GetCoords(pOperation->sArg.pVictim, pGlowCoord);
-    LONG* pGlowCoordY = &pA4Q2Data->sInfectorCoords.y;
-    *pGlowCoordY += -0x34;
+    pA4Q2Data->sInfectorCoords.y += -0x34;
     pGlowCoord->x += -0xc;
     CreateSealGlow(pOperation, pGlowCoord, 1);
     return 0;
@@ -3469,8 +3468,7 @@ BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow2(D2ObjectOperateFnArg * pOperati
     D2QuestDataA4Q2Strc* pA4Q2Data = pQuestData->pQuestSpecificData.pA4Q2;
     POINT* pCoord = &pA4Q2Data->sSeisCoords;
     D2Common::Units::GetCoords(pOperation->sArg.pVictim, pCoord);
-    LONG* pSeisY = &pA4Q2Data->sSeisCoords.y;
-    *pSeisY += 0x21;
+    pA4Q2Data->sSeisCoords.y += 0x21;
     pCoord->x += -0x27;
     CreateSealGlow(pOperation, pCoord, 3);
     return 0;
@@ -3490,8 +3488,7 @@ BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow3(D2ObjectOperateFnArg * pOperati
     D2QuestDataA4Q2Strc* pA4Q2Data = pQuestData->pQuestSpecificData.pA4Q2;
     POINT* pCoord = &pA4Q2Data->sVisierCoords;
     D2Common::Units::GetCoords(pOperation->sArg.pVictim, pCoord);
-    LONG* pVisierY = &pA4Q2Data->sVisierCoords.y;
-    *pVisierY += 0x10;
+    pA4Q2Data->sVisierCoords.y += 0x10;
     pCoord->x += 0x20;
     CreateSealGlow(pOperation, pCoord, 5);
     return 0;

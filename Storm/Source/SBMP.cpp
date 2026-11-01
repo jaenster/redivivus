@@ -25,7 +25,7 @@ namespace Storm::Source::SBMP {
 // Validates TGA file header structure. Checks image type (1, 2, 9, or 10), color map type (0 or 1), bit depth (8, 24, or 32), and verifies image dimensions are within valid range (< 257).
 static BOOL __stdcall SBMP_ValidateTGAHeader(TGAHeaderStrc * descriptor) {
     uint8_t uVar1 = descriptor->nImageType;
-    if ((uVar1 == '\x01' || uVar1 == '\x02' || uVar1 == '\t' || uVar1 == '\n') && (descriptor->nColorMapType == '\0' && (descriptor->nPixelDepth == '\x18' && !(descriptor->nDescriptor & 0xf) || descriptor->nPixelDepth == ' ' && (descriptor->nDescriptor & 0xf) == 8) || descriptor->nColorMapType == '\x01' && descriptor->nPixelDepth == '\b' && (uint32_t)descriptor->nCMapLength + (uint32_t)descriptor->nCMapFirst < 0x101 && (descriptor->nCMapEntrySize == '\x18' || descriptor->nCMapEntrySize == ' ')) && !(descriptor->nDescriptor & 0xc0)) {
+    if ((uVar1 == '\x01' || uVar1 == '\x02' || uVar1 == '\t' || uVar1 == '\n') && (descriptor->nColorMapType == '\0' && (descriptor->nPixelDepth == '\x18' && !(descriptor->nDescriptor & 0xf) || descriptor->nPixelDepth == ' ' && (descriptor->nDescriptor & 0xf) == 8) || descriptor->nColorMapType == '\x01' && descriptor->nPixelDepth == '\b' && descriptor->nCMapLength + descriptor->nCMapFirst <= 0x100 && (descriptor->nCMapEntrySize == '\x18' || descriptor->nCMapEntrySize == ' ')) && !(descriptor->nDescriptor & 0xc0)) {
       return 1;
     }
 

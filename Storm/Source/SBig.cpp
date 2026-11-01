@@ -3811,8 +3811,7 @@ void __stdcall SBigDiv(BigData * pResult, BigData * pBigA, BigData * pBigB) {
     uint32_t uVar2 = pResult->sStack.nUsed;
     pResult->sStack.nUsed = uVar2 + 1;
     BigBuffer_Div(&pResult->sPrimary, pResult->sStack.aBuffers + uVar2, &pBigB->sPrimary, &pResult->sStack, &pBigA->sPrimary);
-    uint32_t* puVar1 = &pResult->sStack.nUsed;
-    (*puVar1)--;
+    pResult->sStack.nUsed--;
 }
 
 // @renamed-from SBIG_GCDWrapper (2026-08-28, Storm PowerPC oracle pass 4)
@@ -3829,8 +3828,7 @@ void __stdcall SBigMod(BigData * pResult, BigData * pBigA, BigData * pBigB) {
     uint32_t uVar2 = pResult->sStack.nUsed;
     pResult->sStack.nUsed = uVar2 + 1;
     BigBuffer_Div(pResult->sStack.aBuffers + uVar2, &pResult->sPrimary, &pBigB->sPrimary, &pResult->sStack, &pBigA->sPrimary);
-    uint32_t* puVar1 = &pResult->sStack.nUsed;
-    (*puVar1)--;
+    pResult->sStack.nUsed--;
 }
 
 // @renamed-from SBIG_MontgomeryMulWrapper (2026-08-28, Storm PowerPC oracle pass 4)

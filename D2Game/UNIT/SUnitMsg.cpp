@@ -57,7 +57,6 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
-#include "D2Common/ITEMS/ItemMods.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -819,10 +818,10 @@ void __fastcall UnitQueuePacket0x9A(D2UnitStrc * pUnit, uint16_t wParam1, uint8_
 
 // Allocates a 0x14-byte D2SUnitMsgStrc with packet id 0x9E (stat update) and enqueues it on pUnit's message list. Payload: unit GUID (4B), stat id (1B), new stat value (4B). Asserts eUnitStat <= 0xFE. Calls ROOM_LinkUnitToUpdateList to mark unit dirty.
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0x9E(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t dwStatValue) {
+void __fastcall UnitQueuePacket0x9E(D2UnitStrc * pUnit, uint16_t eUnitStat, uint32_t dwStatValue) {
     D2PoolManagerStrc* pMemory;
     int nUnitGUID;
-    if ((uint16_t)eUnitStat >= 0xff) {
+    if (eUnitStat >= 0xff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ad);
       exit(-1);
     }
@@ -1099,10 +1098,8 @@ void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pC
     int32_t _byAttackerType;
     uint8_t byAttackerType;
     uint32_t dwSkillID;
-    eD2UnitType eUnitType;
     uint32_t dwTmp;
     D2UnitStrc* pUnitEx;
-    uint32_t dwUnitGUID;
     eD2UnitType ePacketUnitType;
     uint32_t dwAttackerGUID;
     uint32_t dwSkillId;
@@ -1139,9 +1136,7 @@ void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pC
         nCastDirection = 1;
         wTargetGUIDLo = pMsg->uArgs.s9A.field_0x6;
         targetX = pMsg->uArgs.s9A.field_0x4;
-        DVar5 = D2Client::UNIT::GetGUID(pUnit);
-        eUnitType = D2Client::Units::GetType(pUnit);
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x4D_SKILL_XY(pClient, (uint8_t)eUnitType, DVar5, targetX, wTargetGUIDLo, dwSkillId, wTargetGUIDHi, bySkillMode, nCastDirection);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x4D_SKILL_XY(pClient, (uint8_t)D2Client::Units::GetType(pUnit), D2Client::UNIT::GetGUID(pUnit), targetX, wTargetGUIDLo, dwSkillId, wTargetGUIDHi, bySkillMode, nCastDirection);
         break;
         case 0x9e:
           GAME::SCmd::NET_D2GS_SERVER_Send_0x9E_0x9F_0xA0_MercAttribute(pClient, pUnit, (uint16_t)pMsg->uArgs.s9E.nStatId, pMsg->uArgs.s9E.dwStatValue);
@@ -1176,9 +1171,7 @@ void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pC
           DVar5 = pMsg->uArgs.s23.field_0x0;
         wTargetX = pMsg->uArgs.s23.field_0x4;
         nSkillSlot = pMsg->uArgs.s23.field_0x6;
-        dwUnitGUID = D2Client::UNIT::GetGUID(pUnit);
-        ePacketUnitType = D2Client::Units::GetType(pUnit);
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x23_SetSkill(pClient, (uint8_t)ePacketUnitType, dwUnitGUID, nSkillSlot, wTargetX, DVar5);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x23_SetSkill(pClient, (uint8_t)D2Client::Units::GetType(pUnit), D2Client::UNIT::GetGUID(pUnit), nSkillSlot, wTargetX, DVar5);
         break;
       }
     }

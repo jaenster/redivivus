@@ -673,7 +673,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   ((D2CubeSetupEntryStrc*)(ppOutputEntry - 1))->pUnit1 = pCubeItem;
                                   *ppOutputEntry = (D2UnitStrc*)-1;
                                   wInputFlags = pRecipe->pOutputItem[0].wFlagsAndUpgrade;
-                                  if (-1 < (char)wInputFlags) {
+                                  if ((char)wInputFlags >= 0) {
                                     goto try_ultra_upgrade;
                                   }
 
@@ -2504,7 +2504,6 @@ eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc *
     D2UnitStrc* pCursorItem;
     DWORD dwTick;
     uint8_t byTradeAction;
-    uint8_t nTradeId;
     int32_t nLine;
     uint32_t dwInteractGUID;
     eD2UnitType eInteractType;
@@ -2676,11 +2675,8 @@ eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc *
         if (pPlayerData->pTradeCopyInventory) {
           byGoldSide = '\0';
           pPlayerData->pTradeCopyInventory->nTradeStatus = dwParam;
-          pClient = UNIT::SUnit::SUNIT_GetClient(pTradePartner, ".\\PLAYER\\PlrTrade.cpp", 0xbc3);
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x79_TRADEGOLD(pClient, dwParam, byGoldSide);
-          nTradeId = '\x01';
-          pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0xbc4);
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x79_TRADEGOLD(pClient, dwParam, nTradeId);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x79_TRADEGOLD(UNIT::SUnit::SUNIT_GetClient(pTradePartner, ".\\PLAYER\\PlrTrade.cpp", 0xbc3), dwParam, byGoldSide);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x79_TRADEGOLD(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0xbc4), dwParam, '\x01');
         }
       }
 

@@ -977,6 +977,7 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     POINT sPortalCoords;
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nRoomCount;
+    eD2QuestState eSurvivalTierState;
     ::SGAMEDATA* pGameLoop;
     D2UnitStrc* pIterUnit;
     ::SGAMEDATA* pGameSaved;
@@ -1081,15 +1082,12 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
     pQuestSpecificDataSaved->anBarricadePortalGUID[nGroupIndex] = nCollisionDist;
     GAME::Event::SetEvent(pQuestData->pGame, pPortalUnit, 7, pQuestData->pGame->dwGameFrame + 0x19, 0, 0);
-    BOOL bQuestStateResult;
-    bQuestStateResult = 0;
-    pAttackerRoom = D2Common::Units::UNITS_GetRoom(pPortalUnit);
-    D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pAttackerRoom, bQuestStateResult);
+    D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pPortalUnit), 0);
     update_rescue_progress:
     pPlayerData = D2Common::Units::GetPlayerData(pUnitSaved);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGameSaved->nDifficulty];
     if (pQuestSpecificData->nTotalPrisonersToFree == pQuestSpecificData->nPrisonersKilledByMonsters + pQuestSpecificData->nPrisonersFreed && pQuestSpecificData->abGroupAllFreed[0] && pQuestSpecificData->abGroupAllFreed[1] && pQuestSpecificData->abGroupAllFreed[2]) {
-      eD2QuestState eSurvivalTierState;
+      BOOL bQuestStateResult;
       if (pQuestSpecificData->nPrisonersFreed > 0xb) {
         pQuestData->nQuestPacketFlags = '\0';
         QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, true);

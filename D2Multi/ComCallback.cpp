@@ -543,7 +543,6 @@ void __fastcall COMCALLBACK_FormatChatMessage(char * szText1, char * szText2, ch
     int32_t nCmpResult;
     int nUserCmp;
     uint32_t dwFlags;
-    int32_t nBufferOutputLength;
     D2QuestDataA5Q2Strc* pUserListNode;
     *szFormattedOutput = '\0';
     *szText2 = '\0';
@@ -589,9 +588,7 @@ void __fastcall COMCALLBACK_FormatChatMessage(char * szText1, char * szText2, ch
         if (pUserListNode) {
           dwFlags = D2Win::Src::D2Comp::D2COMP_GetFlags((D2CharSelCompStrc*)pUserListNode->aBarricadePos[2].x);
           if (gadwBitMasks[6] & dwFlags || gadwBitMasks[7] & dwFlags) {
-            nBufferOutputLength = 0x7fffffff;
-            pszAtPos = D2Win::Src::D2Comp::D2COMP_GetTitlePrefix((uint32_t)pUserListNode->abGroupAllFreed[0], (dwFlags >> 5 & 1) * 3 + (dwFlags >> 7 & 1) * 2 + (dwFlags >> 6 & 1), dwFlags >> 0xc & 1);
-            Storm::Source::SSTR::SStrCopy(szText2, pszAtPos, nBufferOutputLength);
+            Storm::Source::SSTR::SStrCopy(szText2, D2Win::Src::D2Comp::D2COMP_GetTitlePrefix((uint32_t)pUserListNode->abGroupAllFreed[0], (dwFlags >> 5 & 1) * 3 + (dwFlags >> 7 & 1) * 2 + (dwFlags >> 6 & 1), dwFlags >> 0xc & 1), 0x7fffffff);
           }
         }
 
@@ -2251,7 +2248,7 @@ BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * p
       nVal--;
       *pbScan = abKeyBuf[nHash];
       abKeyBuf[nHash] = byChar;
-    } while (-1 < nVal);
+    } while (nVal >= 0);
 
     nChecksum = 0x13ac9741;
     nVal = 0xf;
@@ -2267,7 +2264,7 @@ BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * p
       }
 
       nVal--;
-    } while (-1 < nVal);
+    } while (nVal >= 0);
 
     Storm::Source::SSTR::SStrCopy((char*)&nChecksum, (char*)abKeyBuf, 3);
     Storm::Source::SSTR::SStrCopy(szKeyLoHex, (char*)(abKeyBuf + 2), 7);

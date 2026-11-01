@@ -1008,8 +1008,8 @@ DWORD __stdcall GetDnsResults(void * lpThreadParam) {
     Debug::DEBUG_UnusedDebugFunction("Original servlist:");
     _union_1226* pInAddr = (_union_1226*)*ppAddrList;
     while (pInAddr) {
-      /* in_addr in for inet_ntoa */ inet_ntoa((in_addr)pInAddr->S_un_b);
-      Debug::DEBUG_UnusedDebugFunction("%d --> %s");
+      /* in_addr in for inet_ntoa */ szWriteCursor = inet_ntoa((in_addr)pInAddr->S_un_b);
+      Debug::DEBUG_UnusedDebugFunction("%d --> %s", nAddrCount, szWriteCursor);
       nRandIdx = nAddrCount + 1;
       nAddrCount++;
       pInAddr = (_union_1226*)ppAddrList[nRandIdx];
@@ -1031,7 +1031,7 @@ DWORD __stdcall GetDnsResults(void * lpThreadParam) {
           exit(-1);
         }
 
-        Debug::DEBUG_UnusedDebugFunction("%d <-> %d SWAP");
+        Debug::DEBUG_UnusedDebugFunction("%d <-> %d SWAP", nAddrCount, nRandIdx);
         dwAddrSwapTmp = *(uint32_t*)ppAddrList[nAddrCount];
         nLpThreadParam = (int)(nLpThreadParam - 1);
         *(uint32_t*)ppAddrList[nAddrCount] = *(uint32_t*)ppAddrList[nRandIdx];
@@ -1623,7 +1623,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
         if (dwCurrentTick - __frame0.dwBatchStartTick >= 5000) {
           __frame0.dwBatchStartTick = GetTickCount();
           if (pszToken && *pszToken != '\0' && __frame0.nCandidateCount < 0x20) {
-            Debug::DEBUG_UnusedDebugFunction("  Try to connect to %s");
+            Debug::DEBUG_UnusedDebugFunction("  Try to connect to %s", pszToken);
             pCandidateIter = __frame0.pCandidateSlotNext;
             iVar4 = (int)__frame0.pCandidateSlotNext - (int)pszToken;
             do {
@@ -1855,7 +1855,7 @@ int __stdcall BattleConnectFastest() {
 
     BnDownload::BNDOWNLOAD_ResetState(0x66);
     GetBnetIp(RealmDNS, 0x100);
-    Debug::DEBUG_UnusedDebugFunction("   connect to: %s");
+    Debug::DEBUG_UnusedDebugFunction("   connect to: %s", RealmDNS);
     Bnet::BNET_LogIndent(2, 4);
     Bnet::BnetLog_WriteLine("querying gateway %s", RealmDNS);
     *(uint8_t*)(char*)&EntireDnsRecordOfServers = '\0';
@@ -2847,7 +2847,7 @@ int __fastcall BNSEND_DecodeCDKeyString(uint32_t * pOutProduct, uint32_t * pOutP
       nLoopIdx--;
       *pCurByte = __frame1.abWorkBuf[nChecksumAccum];
       __frame1.abWorkBuf[nChecksumAccum] = bSwapChar;
-    } while (-1 < nLoopIdx);
+    } while (nLoopIdx >= 0);
 
     __frame0.szProductBuf = 0x13ac9741;
     nLoopIdx = 0xf;
@@ -2864,7 +2864,7 @@ int __fastcall BNSEND_DecodeCDKeyString(uint32_t * pOutProduct, uint32_t * pOutP
       }
 
       nLoopIdx--;
-    } while (-1 < nLoopIdx);
+    } while (nLoopIdx >= 0);
 
     Storm::Source::SSTR::SStrCopy((char*)&__frame0.szProductBuf, (char*)__frame1.abWorkBuf, 3);
     Storm::Source::SSTR::SStrCopy(__frame0.szPublicBuf, (char*)(__frame1.abWorkBuf + 2), 7);

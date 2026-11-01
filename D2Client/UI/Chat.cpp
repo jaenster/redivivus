@@ -224,7 +224,6 @@ void __stdcall CHAT_InitIME() {
     BOOL bResult;
     DWORD dwConversionMode;
     DWORD dwSentenceMode;
-    DWORD dwHotKeyId;
     int32_t nEventCount;
     nEventCount = 4;
     HWND hWnd;
@@ -260,21 +259,18 @@ void __stdcall CHAT_InitIME() {
           if (langId == 0x411) {
             nEventCount = 7;
             gbChatInputEnabled = 1;
-            hWnd = D2gfx::D2GFX::GetHwnd();
-            _Message::MESSAGE_RegisterEventHandlerBatch(hWnd, &g_UIFlagInitChatPanel, nEventCount);
+            _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &g_UIFlagInitChatPanel, nEventCount);
             /* BOOL param_2 for ImmSetOpenStatus */ /* HIMC param_1 for ImmSetOpenStatus */ bResult = ImmSetOpenStatus(hIMC, 1);
             if (bResult) {
               /* HIMC param_2 for ImmReleaseContext */ gaChatInputBuffer = '\x01';
               gnIMEInputMode = 3;
-              hWnd = D2gfx::D2GFX::GetHwnd();
-              /* HWND param_1 for ImmReleaseContext */ ImmReleaseContext(hWnd, hIMC);
+              /* HWND param_1 for ImmReleaseContext */ ImmReleaseContext(D2gfx::D2GFX::GetHwnd(), hIMC);
               return;
             }
 
             /* HIMC param_2 for ImmReleaseContext */ gaChatInputBuffer = '\0';
             gnIMEInputMode = 0;
-            hWnd = D2gfx::D2GFX::GetHwnd();
-            /* HWND param_1 for ImmReleaseContext */ ImmReleaseContext(hWnd, hIMC);
+            /* HWND param_1 for ImmReleaseContext */ ImmReleaseContext(D2gfx::D2GFX::GetHwnd(), hIMC);
             return;
           }
         goto release_ime_context;
@@ -304,9 +300,7 @@ void __stdcall CHAT_InitIME() {
         hKeyboardLayout = GetKeyboardLayout(0);
         /* HKL param_1 for ImmIsIME */ bResult = ImmIsIME(hKeyboardLayout);
         if (!bResult) {
-          /* DWORD param_2 for ImmSimulateHotKey */ dwHotKeyId = 0x70;
-          hWnd = D2gfx::D2GFX::GetHwnd();
-          /* HWND param_1 for ImmSimulateHotKey */ ImmSimulateHotKey(hWnd, dwHotKeyId);
+          /* DWORD param_2 for ImmSimulateHotKey */ /* HWND param_1 for ImmSimulateHotKey */ ImmSimulateHotKey(D2gfx::D2GFX::GetHwnd(), 0x70);
         }
 
         /* BOOL param_2 for ImmSetOpenStatus */ /* HIMC param_1 for ImmSetOpenStatus */ ImmSetOpenStatus(hIMC, 1);
@@ -320,9 +314,7 @@ void __stdcall CHAT_InitIME() {
         hKeyboardLayout = GetKeyboardLayout(0);
         /* HKL param_1 for ImmIsIME */ bResult = ImmIsIME(hKeyboardLayout);
         if (!bResult) {
-          /* DWORD param_2 for ImmSimulateHotKey */ dwHotKeyId = 0x10;
-          hWnd = D2gfx::D2GFX::GetHwnd();
-          /* HWND param_1 for ImmSimulateHotKey */ ImmSimulateHotKey(hWnd, dwHotKeyId);
+          /* DWORD param_2 for ImmSimulateHotKey */ /* HWND param_1 for ImmSimulateHotKey */ ImmSimulateHotKey(D2gfx::D2GFX::GetHwnd(), 0x10);
         }
 
         /* BOOL param_2 for ImmSetOpenStatus */ /* HIMC param_1 for ImmSetOpenStatus */ ImmSetOpenStatus(hIMC, 1);
@@ -330,9 +322,7 @@ void __stdcall CHAT_InitIME() {
         break;
       }
 
-      nEventCount = 7;
-      hWnd = D2gfx::D2GFX::GetHwnd();
-      _Message::MESSAGE_RegisterEventHandlerBatch(hWnd, &g_UIFlagInitChatPanel, nEventCount);
+      _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &g_UIFlagInitChatPanel, 7);
     }
 
     release_ime_context:
@@ -630,8 +620,7 @@ void __stdcall DRAW_UI_ChatInput() {
           pWrapNext = pWrapLine->pNext;
           if (!pWrapNext && gbChatInputEnabled && gaChatInputBuffer != '\0') {
             nPosY = i - 0x58 + ScreenSizeY;
-            nInputLen = D2Win::Src::D2WinFont::DRAW_text0(pWrapLine->wszLine);
-            CHAT_DrawIMEComposition(nInputLen + 0x83, nPosY);
+            CHAT_DrawIMEComposition(D2Win::Src::D2WinFont::DRAW_text0(pWrapLine->wszLine) + 0x83, nPosY);
           }
 
           nLineIdx++;
@@ -1099,7 +1088,6 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
     static char gszChatWhisperTargetName[2] = " "; D2_STATIC_GUARD(gszChatWhisperTargetName, "D2Client::UI::Chat::CHAT_HandleWhisperCommand::gszChatWhisperTargetName");
 
     D2BNetClientCallbacksStrc* pCallbacks;
-    char* pdwMsgDst;
     char szMessageText[256];
     MessageStrc MStack_334;
     char szTargetName[256];
@@ -1155,9 +1143,7 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
         send_whisper:
         if (bInGame) {
           for (pRoster = GAME::Roster::GetNextRosterPlayer(nullptr); pRoster; pRoster = GAME::Roster::GetNextRosterPlayer(pRoster)) {
-            pScan = szTargetName;
-            pdwMsgDst = GAME::Roster::GetRosterName(pRoster);
-            nTokenCount = _stricmp(pdwMsgDst, pScan);
+            nTokenCount = _stricmp(GAME::Roster::GetRosterName(pRoster), szTargetName);
             if (!nTokenCount) {
               strncpy(sWhisperPacket.szMsg, szMessageText, 0xff);
               sWhisperPacket.szMsg[0xff] = '\0';
@@ -1191,7 +1177,7 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
     MStack_334.messageColor = 3;
     sprintf(sWhisperPacket.szMsg + 0xd, "<BattleNet>: Correct usage is: %s (name) (message)", szCommandName);
     pScan = sWhisperPacket.szMsg + 0xd;
-    pdwMsgDst = MStack_334.message;
+    char* pdwMsgDst = MStack_334.message;
     memcpy(pdwMsgDst, pScan, 0x100);
     Text::TEXT_ProcessChatMessage(&MStack_334);
     return 1;

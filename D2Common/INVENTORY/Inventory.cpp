@@ -591,8 +591,7 @@ static BOOL __stdcall INVENTORY_PlaceItemInGrid(int32_t nnX, int32_t nnY, int32_
         if (bHasFlag) {
           iVar4 = pUnit->nUnitGUID;
           eUnitType = pUnit->eUnitType;
-          pRoom = Units::UNITS_GetRoom(pUnit);
-          DUNGEON::Dungeon::AllocDrlgDelete(pRoom, eUnitType, iVar4);
+          DUNGEON::Dungeon::AllocDrlgDelete(Units::UNITS_GetRoom(pUnit), eUnitType, iVar4);
         }
 
         Units::RemoveCollision_Vector(pUnit);
@@ -878,7 +877,7 @@ static uint32_t __stdcall INVENTORY_FindBestPlacementWithScore(int * * ppnOutX, 
         }
 
         nCurRow--;
-      } while (-1 < nCurRow);
+      } while (nCurRow >= 0);
     } while (true);
 }
 
@@ -888,7 +887,7 @@ static BOOL __stdcall INVENTORY_FindFirstEmptySlot(int * pnOutX, int * pnOutY, u
     int32_t* pGridCell;
     uint8_t byGridWidth;
     int nX = *(uint8_t*)(pGridInfo + 8) - 1;
-    if (-1 >= nX) {
+    if (nX < 0) {
       return 0;
     }
 
@@ -916,7 +915,7 @@ static BOOL __stdcall INVENTORY_FindFirstEmptySlot(int * pnOutX, int * pnOutY, u
       }
 
       nX--;
-    } while (-1 < nX);
+    } while (nX >= 0);
 
     return 0;
 }

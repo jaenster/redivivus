@@ -287,7 +287,6 @@ void __stdcall DRLGLOGIC_BuildCoordRegions(D2RoomExStrc * pRoomEx, D2DrlgCoordLi
     int nColX;
     int iScanX;
     bool bRowBreak;
-    int* pRectField;
     D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
     DrlgGrid::DRLGGRID_InitGridCells(pMemory, &pCoordList->sCoordIndexGrid, pRoomEx->sCoords.WorldSize.x + 1, pRoomEx->sCoords.WorldSize.y + 1);
     int nGridHeight = pRoomEx->sCoords.WorldSize.y + 1;
@@ -370,13 +369,10 @@ void __stdcall DRLGLOGIC_BuildCoordRegions(D2RoomExStrc * pRoomEx, D2DrlgCoordLi
               nRowY++;
             }
 
-            pRectField = &_Dst->pBox.nPosY;
-            *pRectField += pRoomEx->sCoords.WorldPosition.y;
-            pRectField = &_Dst->pBox.nHeight;
-            *pRectField += pRoomEx->sCoords.WorldPosition.y;
+            _Dst->pBox.nPosY += pRoomEx->sCoords.WorldPosition.y;
+            _Dst->pBox.nHeight += pRoomEx->sCoords.WorldPosition.y;
             _Dst->pBox.nPosX += pRoomEx->sCoords.WorldPosition.x;
-            pRectField = &_Dst->pBox.nWidth;
-            *pRectField += pRoomEx->sCoords.WorldPosition.x;
+            _Dst->pBox.nWidth += pRoomEx->sCoords.WorldPosition.x;
             nRowY = _Dst->pBox.nPosY;
             _Dst->pRect.left = _Dst->pBox.nPosX;
             nColX = _Dst->pBox.nWidth;

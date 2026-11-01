@@ -5206,7 +5206,7 @@ void PKWARE_CompareItemValues(int nCount, uint8_t * pBitsTable, uint8_t * pBaseT
     while (true) {
       uint32_t nBaseIndex;
       nCount--;
-      if (-1 >= nCount) {
+      if (nCount < 0) {
         break;
       }
 

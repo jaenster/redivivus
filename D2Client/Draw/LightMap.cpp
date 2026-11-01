@@ -528,7 +528,7 @@ static void __fastcall LIGHTMAP_SampleGridToBuffer(D2LightMapStrc * pLightMap) {
     int nStartX = pLightMap->nGridX - (pLightMap->nGridX & 7U) - nCurX;
     int nYCoord = pLightMap->nGridY - (pLightMap->nGridY & 7U) - nCurX;
     int nCellSpan = nCurX * 2 >> 3;
-    if (-1 >= nCellSpan) {
+    if (nCellSpan < 0) {
       return;
     }
 

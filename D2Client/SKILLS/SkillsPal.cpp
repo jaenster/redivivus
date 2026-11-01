@@ -297,7 +297,6 @@ BOOL __fastcall Skills_CltDoFunc_Pal_RandomRadiusMissileField(D2UnitStrc * pUnit
 // Client-side particle FX: draws a fading trail of charge particles behind a moving unit (e.g. Charge/Leap). Gets the unit's current skill and screen velocity via PATH_GetScreenVelocity; bails if velocity Y sign doesn't match nDirectionFlag (selects above- vs below-ground trail half). Normalizes velocity to a length-15 step, walks SKILL_GetParam3 frames backward through the unit's animation frames, and at each step calls DRAW_WORLD_Unit_1 to render nParticleType at an interpolated offset (perspective-corrected when D2GFX perspective is active). Restores the unit's original gfx frame before returning.
 void __fastcall SKILL_DrawChargeTrail(D2UnitStrc * pUnit, uint32_t nParticleType, int32_t nDirectionFlag) {
     uint32_t bPerspective;
-    int32_t nPrecisionX;
     uint32_t nRandDir;
     int nWorldOffsetXOrY;
     int nCurFrame;
@@ -312,7 +311,6 @@ void __fastcall SKILL_DrawChargeTrail(D2UnitStrc * pUnit, uint32_t nParticleType
     uint32_t nTrailCount;
     BOOL bOrder;
     int nDrawX;
-    int32_t nPerspAngle;
     int nWorldOffsetY;
     uint32_t* pXpos;
     DRAWMODE* pYpos;
@@ -385,10 +383,7 @@ void __fastcall SKILL_DrawChargeTrail(D2UnitStrc * pUnit, uint32_t nParticleType
           bOrder = 0;
           pYpos = &nDrawY;
           pXpos = &nTrailCount;
-          nPerspAngle = 0x60;
-          nPrecisionY = D2Common::Units::GetPrecisionY(pUnit);
-          nPrecisionX = D2Common::Units::GetPrecisionX(pUnit);
-          D2gfx::D2GFX::D2GFX_PerspecitveScalePosition(nPrecisionX, nPrecisionY, nPerspAngle, (int*)pXpos, (int*)pYpos, bOrder);
+          D2gfx::D2GFX::D2GFX_PerspecitveScalePosition(D2Common::Units::GetPrecisionX(pUnit), D2Common::Units::GetPrecisionY(pUnit), 0x60, (int*)pXpos, (int*)pYpos, bOrder);
           nPrecisionY = UI::Path::DRAW_GetWorldOffsetX();
           nTrailCount += nPrecisionY;
           nPrecisionY = UI::Path::DRAW_GetWorldOffsetY();

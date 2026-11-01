@@ -3018,7 +3018,7 @@ extern DC6 * gpDC6YouDiedHardcoreImage;
 extern DC6 * gpDC6DeathInstructionImage;
 extern D2UIFlagDescStrc gaUIFlagDescsClient[3];
 extern uint32_t gnGoldDialogTransactionMode;
-extern uint32_t gnLoadScreenAnimFrame;
+extern int32_t gnLoadScreenAnimFrame;
 extern uint16_t gU16ImmunityStringBuffer2[256];
 extern uint32_t gnImmunityText2Color;
 extern uint16_t UNICODE_007a2c80[80];

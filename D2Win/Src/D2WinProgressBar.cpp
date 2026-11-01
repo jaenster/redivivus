@@ -65,8 +65,7 @@ BOOL __fastcall Draw(::D2WinProgressBar * pProgressBar) {
     ::D2WinProgressBar* pNewBar = D2_NEW_AT(::D2WinProgressBar, ".\\Src\\D2WinProgressBar.cpp", 0x1a);
     memset(pNewBar, 0, 0x44);
     pNewBar->sControl.neD2FormType = FORM_ProgressBar;
-    int* pStateField = &pNewBar->sControl.dwState;
-    *pStateField |= gadwBitMasks[0];
+    pNewBar->sControl.dwState |= gadwBitMasks[0];
     uVar1 = pNewBar->sControl.dwState | gadwBitMasks[2];
     pNewBar->fCurrentProgress = 0.0;
     pNewBar->sControl.dwState = uVar1;

@@ -535,7 +535,6 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     D2GSPacketSrv0x5D nNpcNo;
     char nRewardClassId[4];
     eD2ItemQuality eRewardQuality;
-    int32_t* pnIceScrollCount;
     uint32_t nMessageIndex = (uint32_t)pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2QuestDataA5Q3Strc* pRewardList = pQuestData->pQuestSpecificData.pA5Q3;
@@ -566,8 +565,7 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
           return;
         }
 
-        pnIceScrollCount = &pDVar1->nIceItemCount;
-        (*pnIceScrollCount)++;
+        pDVar1->nIceItemCount++;
         pClient = UNIT::SUnit::SUNIT_GetClient(pQuestArgs->pPlayer, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q3.cpp", 0x214);
         nNpcNo.nExtra = 0;
         nNpcNo.nPacketId = ']';
@@ -1193,9 +1191,7 @@ void __fastcall Q33_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 void __fastcall Q33_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2UnitStrc* pScrollItem = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20656369);
     if (pScrollItem) {
-      int32_t* pnScrollCount;
-      pnScrollCount = &pQuestData->pQuestSpecificData.pA5Q3->nIceItemCount;
-      (*pnScrollCount)++;
+      pQuestData->pQuestSpecificData.pA5Q3->nIceItemCount++;
     }
     if (!(pQuestData->bIsNotIntroduction == '\0' || pQuestData->nStateFlag >= 5)) {
       return;
@@ -1568,10 +1564,8 @@ BOOL __fastcall Q33_SpawnPortalNearAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
     D2RoomStrc* pNearbyRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pNearbyRoom, pDVar2->sAnyaPosition.x, nPortalY);
     if (!pNearbyRoom) {
-      LONG* pLVar1;
       pDVar2->sAnyaPosition.x += 3;
-      pLVar1 = &pDVar2->sAnyaPosition.y;
-      *pLVar1 += 3;
+      pDVar2->sAnyaPosition.y += 3;
     } else {
       pPortalUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, pDVar2->sAnyaPosition.x, pDVar2->sAnyaPosition.y, pGame, pNearbyRoom, 1, 1, nullptr);
       if (pPortalUnit) {

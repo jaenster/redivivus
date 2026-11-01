@@ -714,29 +714,33 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
             Debug::DEBUG_UnusedDebugFunction("User must revert to an older version");
           }
         } else {
-          SID_SetStateFlag1((uint32_t)((nByteIndex >> 4 & 0xf) != 0) * 4 + 3);
-          Debug::DEBUG_UnusedDebugFunction("User has an invalid cdkey (%ld)");
+          nByteIndex = nByteIndex >> 4 & 0xf;
+          SID_SetStateFlag1((uint32_t)(nByteIndex != 0) * 4 + 3);
+          Debug::DEBUG_UnusedDebugFunction("User has an invalid cdkey (%ld)", nByteIndex);
         }
       } else {
         switch (dwResultCode) {
           case 0x201:
             {
-              SID_SetStateFlag1((uint32_t)((nByteIndex >> 4 & 0xf) != 0) * 4 + 6);
+              nByteIndex = nByteIndex >> 4 & 0xf;
+              SID_SetStateFlag1((uint32_t)(nByteIndex != 0) * 4 + 6);
               Storm::Source::SSTR::SStrCopy(gszCDKeyInUseByUsername, (char*)szAdditionalInfo.dwHighDateTime, 0x100);
               SID_SetStateFlag2((uint32_t)gszCDKeyInUseByUsername);
-              Debug::DEBUG_UnusedDebugFunction("CD Key is in use by %s (%ld)");
+              Debug::DEBUG_UnusedDebugFunction("CD Key is in use by %s (%ld)", gszCDKeyInUseByUsername, nByteIndex);
               break;
             }
           case 0x202:
             {
-              SID_SetStateFlag1((uint32_t)((nByteIndex >> 4 & 0xf) != 0) * 4 + 4);
-              Debug::DEBUG_UnusedDebugFunction("CD Key is disabled (%ld)");
+              nByteIndex = nByteIndex >> 4 & 0xf;
+              SID_SetStateFlag1((uint32_t)(nByteIndex != 0) * 4 + 4);
+              Debug::DEBUG_UnusedDebugFunction("CD Key is disabled (%ld)", nByteIndex);
               break;
             }
           case 0x203:
             {
-              SID_SetStateFlag1((uint32_t)((nByteIndex >> 4 & 0xf) != 0) * 4 + 5);
-              Debug::DEBUG_UnusedDebugFunction("CD Key is for another product (%ld)");
+              nByteIndex = nByteIndex >> 4 & 0xf;
+              SID_SetStateFlag1((uint32_t)(nByteIndex != 0) * 4 + 5);
+              Debug::DEBUG_UnusedDebugFunction("CD Key is for another product (%ld)", nByteIndex);
               break;
             }
         }
@@ -2023,7 +2027,7 @@ void __stdcall NET_SID_CLIENT_SubstitutionBoxShuffle(int32_t pToken) {
       outWordIdx = 3 - wordIdx;
       sboxTableOffset += -0x10;
       *(uint32_t*)(pToken + outWordIdx * 4) = (gaNetSidSubstitutionBox[sboxLookupIdx] & 0xf) << bitShift | ~(0xf << bitShift) & *(uint32_t*)(pToken + outWordIdx * 4);
-    } while (-1 < sboxTableOffset);
+    } while (sboxTableOffset >= 0);
 }
 
 void __fastcall NET_SID_CLIENT_TransformCdKeyToken(int32_t nCdKeyValue, uint32_t * pOutPublic, uint32_t * pOutProduct, uint16_t * pOutHash) {

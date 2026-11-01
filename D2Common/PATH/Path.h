@@ -45,7 +45,7 @@ uint32_t __stdcall Get8FlagsFromDynamicPath(struct D2DynamicPathStrc * pDynamicP
 void __stdcall PATH_SetPathTarget(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 BOOL __stdcall PATH_AdvanceUnitAlongPath(struct D2UnitStrc * pUnit, int pExternalPath);
 BOOL __stdcall PATH_GetCollisionMaskAt(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY);
-int32_t __stdcall PATH_GetCollisionTypeAt(uint32_t * pDynamicPath, struct D2UnitStrc * dwUnused, struct D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY);
+int32_t __stdcall PATH_GetCollisionTypeAt(uint32_t * pDynamicPath, struct D2UnitStrc * dwUnused, struct D2RoomStrc * pRoom, int wPosX, int wPosY);
 void __stdcall PATH_CheckCollisionFlags(struct D2DynamicPathStrc * pDynamicPath, uint32_t dwUnused, struct D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY);
 uint32_t __stdcall PATH_TestLineOfSight(struct D2DynamicPathStrc * pDynamicPath, int * pbCollisionType, struct D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY);
 BOOL __stdcall IsAllyOf(struct D2UnitStrc * pUnit, struct D2UnitStrc * pRosterUnit);

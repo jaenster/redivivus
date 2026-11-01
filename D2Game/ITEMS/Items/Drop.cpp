@@ -1608,7 +1608,7 @@ void ITEM_RollVariantGraphic(D2UnitStrc * pUnit) {
 
     bVarInvGfxMax = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_varinvgfx(pUnit);
     int32_t nRolledVariant = D2Client::Seed::RollBetweenMinAndMax(&pUnit->sSeed, 0, (uint32_t)bVarInvGfxMax);
-    D2Common::ITEMS::Items::ITEM_SetItemData_bVariant(pUnit, (uint8_t)(uint32_t)nRolledVariant);
+    D2Common::ITEMS::Items::ITEM_SetItemData_bVariant(pUnit, (uint8_t)nRolledVariant);
 }
 
 // Initializes the base (pre-affix) stats of a freshly created item unit based on its item type. Gold items get a seeded random gold amount (clamped to inventory limit if owned by a player). Quivers/stackables roll a quantity between min and max stack (seeded), forced to 1 if magic-or-better; weapons/armor roll durability and max-durability (seeded, capped at 255), armor also sets block% and rolls base AC, weapons set attack/velocity rate and base damage. Rolls varinvgfx variant. If bApplyQuality and a generation context is supplied, calls ITEM_ApplyQualityAndAffixes and, for quest items, attaches a stat list storing the quest item difficulty and marks it identified. pGame/pItem=target item, pItemGenCtx=generation parameters (preset quantity etc.). Returns a BOOL in EAX.
@@ -1778,7 +1778,7 @@ int __fastcall ITEM_InitItemBaseStats(::SGAMEDATA * pGame, D2UnitStrc * * ppItem
     if (bVarInvGfx) {
       bVarInvGfx = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_varinvgfx(eUnitType);
       nMinStackQuiverCount = D2Client::Seed::RollBetweenMinAndMax(&eUnitType->sSeed, 0, (uint32_t)bVarInvGfx);
-      D2Common::ITEMS::Items::ITEM_SetItemData_bVariant(eUnitType, (uint8_t)(uint32_t)nMinStackQuiverCount);
+      D2Common::ITEMS::Items::ITEM_SetItemData_bVariant(eUnitType, (uint8_t)nMinStackQuiverCount);
     }
 
     nAmount = 1;
@@ -2103,7 +2103,7 @@ void __fastcall ITEMS_FillItemGenerationData(::SGAMEDATA * pGame, D2ItemGenConte
     pItemGenCtx->bFromCustomData = 0;
     eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit);
     if (eItemType == ITEMTYPE_PlayerBodyPart) {
-      bool bIsBodyPart;
+      uint8_t bIsBodyPart;
       pcSrcName = D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pUnit);
       pcDstName = pItemGenCtx->szCustomName;
       do {
@@ -2113,7 +2113,7 @@ void __fastcall ITEMS_FillItemGenerationData(::SGAMEDATA * pGame, D2ItemGenConte
         pcDstName++;
       } while (cNameChar != '\0');
 
-      bIsBodyPart = (bool)D2Common::ITEMS::Items::ITEM_GetItemData_nEarLevel(pUnit);
+      bIsBodyPart = D2Common::ITEMS::Items::ITEM_GetItemData_nEarLevel(pUnit);
       pItemGenCtx->bGrade = bIsBodyPart;
       return;
     }
@@ -2621,7 +2621,6 @@ D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, D2ItemGenCo
     D2SeedStrc* pModSeed;
     uint32_t bFlagSet;
     uint32_t uVar1;
-    eD2ItemFlag eItemFlags;
     uint32_t nModSeed;
     eD2ItemTypes eItemType;
     uint32_t nValue;
@@ -2702,8 +2701,7 @@ D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, D2ItemGenCo
           uVar1 = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(pItemGenCtx->neD2ItemFlag, ITEMFLAG_SOCKETED);
           if (uVar1) {
             eFlagToCheck = ITEMFLAG_SOCKETED;
-            eItemFlags = D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(pItem);
-            uVar1 = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(eItemFlags, eFlagToCheck);
+            uVar1 = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(pItem), eFlagToCheck);
             if (!uVar1) {
               byMaxSocksCheck = D2Common::ITEMS::Items::ITEM_GetMaxSockCount(pItem);
               if (!byMaxSocksCheck) {
@@ -2775,8 +2773,7 @@ D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, D2ItemGenCo
 
     apply_player_name_and_refresh:
     eFlagToCheck = ITEMFLAG_PLAYERNAME;
-    eItemFlags = D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(pItem);
-    uVar1 = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(eItemFlags, eFlagToCheck);
+    uVar1 = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(pItem), eFlagToCheck);
     if (uVar1) {
       if (!pItemGenCtx->bFromCustomData) {
         szCustomName = D2Common::Units::GetPlayerData(pItemGenCtx->pUnit)->szCharName;
@@ -3285,9 +3282,6 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     BOOL _bDurabilityBelowOne;
     bool bIsThrowable;
     bool bDurabilityBelowOne;
-    D2ClientStrc* pClient;
-    bool bSendUpdate;
-    char bSendUpdateFlag;
     D2SeedStrc sNewSeed;
     uint16_t wStatLayer;
     D2UnitStrc* pItemUnit;
@@ -3355,30 +3349,22 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
           D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_quantity, bIsArmor, 0);
           wStatLayer = 0;
           _bIsThrowable = 0x46;
-          bSendUpdate = true;
-          pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", 0xc70);
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItemUnit, bSendUpdate, _bIsThrowable, bIsArmor, wStatLayer);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", 0xc70), pItemUnit, true, _bIsThrowable, bIsArmor, wStatLayer);
           bIsArmor = D2Common::Stats::StatsEx::GetTxtMaxDurability(pItemUnit);
           D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_durability, bIsArmor, 0);
           wStatLayer = 0;
           _bIsThrowable = 0x48;
-          bSendUpdateFlag = '\x01';
-          pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", 0xc73);
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItemUnit, bSendUpdateFlag, _bIsThrowable, bIsArmor, wStatLayer);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", 0xc73), pItemUnit, '\x01', _bIsThrowable, bIsArmor, wStatLayer);
         } else {
           D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_durability, 0, 0);
           wStatLayer = 0;
           bIsWeapon = 0;
           _bIsThrowable = 0x48;
-          bSendUpdateFlag = '\x01';
-          pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", 0xc78);
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItemUnit, bSendUpdateFlag, _bIsThrowable, bIsWeapon, wStatLayer);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", 0xc78), pItemUnit, '\x01', _bIsThrowable, bIsWeapon, wStatLayer);
           D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_quantity, 0, 0);
           wStatLayer = 0;
           _bIsThrowable = 0x46;
-          bSendUpdateFlag = '\x01';
-          pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", 0xc7b);
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItemUnit, bSendUpdateFlag, _bIsThrowable, bIsArmor, wStatLayer);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", 0xc7b), pItemUnit, '\x01', _bIsThrowable, bIsArmor, wStatLayer);
           PLAYER::PlayerModes::PLRMODES_CheckWeaponQuantityAndDurability(pGame, pUnit);
         }
 
@@ -3398,8 +3384,8 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
     wStatLayer = 0;
     int32_t nStatId = 0x48;
-    bSendUpdateFlag = '\x01';
-    pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", _bIsThrowable);
+    char bSendUpdateFlag = '\x01';
+    D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", _bIsThrowable);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItemUnit, bSendUpdateFlag, nStatId, bIsArmor, wStatLayer);
 }
 

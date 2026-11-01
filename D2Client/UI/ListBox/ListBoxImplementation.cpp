@@ -825,7 +825,7 @@ int __thiscall OnMouseUp(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMs
       Fog::File::CONTAINER_InitializeBuffer(pBuffer->wszText + 5, 2, 0x400, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
       pBuffer++;
       nInitRow--;
-    } while (-1 < nInitRow);
+    } while (nInitRow >= 0);
 
     pThis->nPosY = nPosY;
     pThis->nWidth = nWidth;

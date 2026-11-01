@@ -4588,10 +4588,7 @@ int __fastcall Hits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarge
     int32_t nToHitThenStat;
     uint32_t nHitFuncResult;
     D2RoomStrc* pRoom;
-    eD2CollisionUnitSize nWidth;
-    int32_t nX;
     int32_t eCurrMode;
-    int32_t eCollisionFlag;
     D2DamageStrc tDamage;
     D2UnitStrc* pOwnerSaved;
     ::SGAMEDATA* pGameSaved;
@@ -4727,11 +4724,7 @@ int __fastcall Hits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarge
         return 2;
       }
 
-      eCollisionFlag = 0x40;
-      nWidth = D2Common::Units::GetUnitSizeX(pUnit);
-      nToHitThenStat = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-      nX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-      D2Common::Collision::RemoveCollision_Width(pRoom, nX, nToHitThenStat, nWidth, eCollisionFlag);
+      D2Common::Collision::RemoveCollision_Width(pRoom, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), D2Client::Units::GetYPosFromDynamicPathUnit(pUnit), D2Common::Units::GetUnitSizeX(pUnit), 0x40);
       return 2;
     }
     return 1;
@@ -5208,8 +5201,7 @@ int __fastcall MISSMODE_SrvDoFn10_BlizzardCenter(::SGAMEDATA * pGame, D2UnitStrc
     D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
     int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pOwner, nClassId, eSkillForCalc, nSkillLvl_00);
     nClassId = pSkillsTxt->calc[1];
-    pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-    int32_t nSpawnInterval = D2Common::Skills::D2GetSkillCalc(pOwner, nClassId, eSkill, nSkillLvl);
+    int32_t nSpawnInterval = D2Common::Skills::D2GetSkillCalc(UNIT::SUnit::GetOwnerUnit(pGame, pUnit), nClassId, eSkill, nSkillLvl);
     MISSILES_SpawnPeriodicRandom(pGame, nMissileCount, (int)pMissilesTxt->SubMissile1, 5, nSpawnInterval, pUnit);
     nClassId = MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
     return nClassId;

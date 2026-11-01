@@ -160,9 +160,7 @@ void __thiscall Draw(::EditBoxImplementation * pThis) {
           bShadow = 0;
           pThis->wszScratch[pThis->nCursorPos] = L'\0';
           nYOffset = pThis->nTextY;
-          nLinePixelWidth = 0;
-          nScrollCharOff = D2Win::Src::D2WinFont::DRAW_text0(pThis->wszScratch);
-          D2Win::Src::D2WinFont::DRAW_text(szCursorWchar, nScrollCharOff + pThis->nTextX, nYOffset, nLinePixelWidth, bShadow);
+          D2Win::Src::D2WinFont::DRAW_text(szCursorWchar, D2Win::Src::D2WinFont::DRAW_text0(pThis->wszScratch) + pThis->nTextX, nYOffset, 0, bShadow);
           return;
         }
 

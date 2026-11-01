@@ -2463,7 +2463,6 @@ void __fastcall DRAW_OOG_ChannelPlayers(D2QuestDataA3Q6Strc * pA3Q6Data) {
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    uint16_t* pWideStr;
     int32_t nLineColor;
     int nIconAnchorY;
     char* szGameTypeName;
@@ -2478,7 +2477,6 @@ void __fastcall DRAW_OOG_ChannelPlayers(D2QuestDataA3Q6Strc * pA3Q6Data) {
     uint32_t dwPlayerInfoCopy;
     D2MapAIStrc* nPingMs;
     int nPlayerFlags;
-    uint8_t (*pTextLayoutArg)[520];
     int* pnLineCountArg;
     int* pnMaxWidthArg;
     int* pnTotalWidthArg;
@@ -2521,17 +2519,14 @@ void __fastcall DRAW_OOG_ChannelPlayers(D2QuestDataA3Q6Strc * pA3Q6Data) {
         nPingMs = pA3Q6Data[10].pDrlgMap;
         if ((int)nPingMs > 0) {
           memset(wszLineText, 0, 0x200);
-          pWideStr = D2Lang::StrTable::strtable::GetLocaleString(0x1399);
-          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszLineText, pWideStr, nPingMs);
+          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszLineText, D2Lang::StrTable::strtable::GetLocaleString(0x1399), nPingMs);
           D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
           dwPlayerInfoCopy = (uint32_t)((uint32_t)(uint8_t)pA3Q6Data->bQuestTimerActive | (uint32_t)(uint8_t)pA3Q6Data->bBridgeObjectValid << 8 | (uint32_t)(uint8_t)pA3Q6Data->bBridge2Valid << 16 | (uint32_t)(uint8_t)pA3Q6Data->bAcceptedQuest << 24);
           if (dwPlayerInfoCopy & gadwBitMasks[5]) {
             pnTotalWidthArg = &__frame0.nTotalWidth;
             pnMaxWidthArg = &__frame0.nMaxLineWidth;
             pnLineCountArg = &__frame0.nLineCount;
-            pTextLayoutArg = aLineLayouts;
-            pWideStr = D2Lang::StrTable::strtable::GetLocaleString(0x1398);
-            D2COMP_AddTextLineToLayout(pWideStr, *pTextLayoutArg, pnLineCountArg, pnMaxWidthArg, pnTotalWidthArg);
+            D2COMP_AddTextLineToLayout(D2Lang::StrTable::strtable::GetLocaleString(0x1398), *aLineLayouts, pnLineCountArg, pnMaxWidthArg, pnTotalWidthArg);
           }
 
           D2Lang::UTF8_ConvertToWideChar(wszLineText, "Realm: ", 0x100);
@@ -2740,9 +2735,7 @@ void __stdcall D2COMP_AllocTxt_EverythingItems() {
     pBitFieldExcel = aItemTypesFieldDefs;
     char* szTxtName;
     szTxtName = "itemtypes";
-    D2PoolManagerStrc* pArchive;
-    pArchive = D2WinArchive::ReturnZero();
-    gpItemTypesTxt = LoadTxt(pArchive, szTxtName, pBitFieldExcel, pSize, nLineCount);
+    gpItemTypesTxt = LoadTxt(D2WinArchive::ReturnZero(), szTxtName, pBitFieldExcel, pSize, nLineCount);
     D2BinFieldInputStrc aHitClassFieldDefs[2] = {
       {"code", FIELDTYPE_CODE4, 0, 0, &gnHitClassTxtLinkHandle},
       {"end", FIELDTYPE_END, 0, 0, 0}
@@ -2752,8 +2745,8 @@ void __stdcall D2COMP_AllocTxt_EverythingItems() {
     pSize = 0;
     pBitFieldExcel = aHitClassFieldDefs;
     szTxtName = "hitclass";
-    pArchive = D2WinArchive::ReturnZero();
-    gpHitClassTxt = LoadTxt(pArchive, szTxtName, pBitFieldExcel, pSize, nLineCount);
+    gpHitClassTxt = LoadTxt(D2WinArchive::ReturnZero(), szTxtName, pBitFieldExcel, pSize, nLineCount);
+    D2PoolManagerStrc* pArchive;
     pArchive = D2WinArchive::ReturnZero();
     D2COMP_AllocTxt_Items(pArchive);
     int nSlotIdx;

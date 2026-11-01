@@ -174,8 +174,7 @@ void __fastcall SaveMercData(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SaveFile
     uint32_t uVar2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMerc, UNITSTAT_experience, 0);
     pSaveHeader->sMerc.dwExperience = uVar2;
     pSaveHeader->sMerc.dwFlags = 0;
-    uint16_t* puVar1 = &pSaveHeader->sMerc.wNameIndex;
-    *puVar1 -= pHirelingTxt->nNameFirst;
+    pSaveHeader->sMerc.wNameIndex -= pHirelingTxt->nNameFirst;
     bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pMerc);
     if (!bIsDead) {
       return;
@@ -187,7 +186,7 @@ void __fastcall SaveMercData(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SaveFile
 // Serializes the fixed 0x14f-byte .d2s save-file header for a player into the caller's output buffer (pStartAddress..pEndAddress). Builds a D2SaveFileHeaderStrc: magic 0xAA55AA55, file version 0x60, char name, character-status flags (sets expansion 0x20 and non-SP 0x40 bits), class id, level, create/current time, init seed, the 16 hotkey skill/item bindings, left/right/swap-hand skill+item indices, per-difficulty current act (|0x80), 0xFF-filled appearance arrays (filled by SaveCharAppearance), merc data, and guild rank. Then memcpy's the header (0x14f bytes) to the buffer and advances *pStartAddress by 0x14f. Returns a Fog::GuardStack value; bails (returns guard 2) if client/name/length invalid, or if the buffer is too small.
 // @sourcefile .\PLAYER\PlrSave2.cpp
 int32_t __fastcall SaveHeader(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * pStartAddress, DWORD pEndAddress) {
-    bool bWeaponSwapped;
+    uint8_t bWeaponSwapped;
     uint8_t byCurrentAct;
     int16_t nHotkeyItemIndex;
     char* pcVar2;
@@ -275,7 +274,7 @@ int32_t __fastcall SaveHeader(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * p
           sSaveHeader.nMaxSkillsCount = (uint8_t)sgptDataTable->nSkillCountMaxPerClass;
           pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave2.cpp", 0x1dd);
           bWeaponSwapped = GAME::Clients::HasWeaponSwapped(pClient);
-          if (bWeaponSwapped) {
+          if (bWeaponSwapped != '\0') {
             *(uint32_t*)((char*)&sSaveHeader + 16) |= 1;
           }
 
@@ -1519,7 +1518,7 @@ D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Merc
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_experience, nMinExp, 0);
     }
 
-    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, UNITSTAT_experience, nMinExp);
+    UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0xd, nMinExp);
     pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)sMercSave.wHirelingId, 1);
     while (pHirelingTxt) {
       pSaveCopyDst = (D2MercSaveDataStrc*)((uintptr_t)&pMercSaveData->dwFlags + 1);
@@ -1858,8 +1857,8 @@ void __fastcall SetStatsAndHotkeys(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, 
     DWORD dwNextLevelExp = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(iHotkey, nScratch);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_nextexp, dwNextLevelExp, 0);
     D2ClientStrc* pClient = pClientLocal;
-    bool bWeaponSwapped = GAME::Clients::HasWeaponSwapped(pClientLocal);
-    if (!bWeaponSwapped) {
+    uint8_t bWeaponSwapped = GAME::Clients::HasWeaponSwapped(pClientLocal);
+    if (bWeaponSwapped == '\0') {
       return;
     }
 
@@ -1993,8 +1992,7 @@ int32_t __fastcall PLAYERSAVE_LoadModernFormat(::SGAMEDATA * pGame, D2ClientStrc
       if (pRoom) {
         nSavedHitpoints = pUnit->nUnitGUID;
         eUnitType = pUnit->eUnitType;
-        pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-        D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, eUnitType, nSavedHitpoints);
+        D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nSavedHitpoints);
       }
 
       UNIT::SUnit::FreeServerUnit(pGame, pUnit);

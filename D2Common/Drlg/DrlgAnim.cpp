@@ -40,7 +40,6 @@ namespace D2Common::Drlg::DrlgAnim {
 
 // Scans every cell in the room's grid, looks up the tile in all tile projects, and for any tile whose library flags include bit 0x100 (animated) adds (matchCount-1) to the floor, wall, or roof animated tile counters in pRoomTiles and sets the animated-room flag 0x8000000 on pRoomEx.
 void __fastcall DRLGROOMTILE_CountAnimTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pGrid, D2DrlgGridStrc * pOrientGrid, D2DrlgCoordStrc * pUnused, int nKillEdgeX, int nKillEdgeY) {
-    int* piVar1;
     uint32_t nGridFlags;
     D2DrlgCoordStrc* pOrientation;
     uint32_t nMatchCount;
@@ -85,15 +84,12 @@ void __fastcall DRLGROOMTILE_CountAnimTilesFromGrid(D2RoomExStrc * pRoomEx, D2Dr
               if (nTileLibFlags & 0x100) {
                 nCellY = nMatchCount - 1;
                 if (nGridFlags & 2) {
-                  piVar1 = &pTileGrid->sRoomTiles.nFloorTilesCount;
-                  *piVar1 += nCellY;
+                  pTileGrid->sRoomTiles.nFloorTilesCount += nCellY;
                 } else {
                   if (nGridFlags & 1) {
-                    piVar1 = &pTileGrid->sRoomTiles.nWallTilesCount;
-                    *piVar1 += nCellY;
+                    pTileGrid->sRoomTiles.nWallTilesCount += nCellY;
                   } else {
-                    piVar1 = &pTileGrid->sRoomTiles.nRoofTilesCount;
-                    *piVar1 += nCellY;
+                    pTileGrid->sRoomTiles.nRoofTilesCount += nCellY;
                   }
                 }
 

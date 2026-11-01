@@ -1049,7 +1049,6 @@ void __fastcall InitRoomTiles(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pGrid, D2
 
 // Counts wall/floor/shadow tiles from grid flags.
 void __fastcall DRLGROOMTILE_CountTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pGrid, int bCountFloors, int bKillEdgeX, int bKillEdgeY) {
-    int* piVar1;
     int32_t nCellFlagsOffset;
     BOOL bIsInside;
     int nWorldPosX = pRoomEx->sCoords.WorldPosition.x;
@@ -1069,16 +1068,13 @@ void __fastcall DRLGROOMTILE_CountTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGr
         do {
           nCellFlagsOffset = DrlgGrid::GetOffset(pGrid, nX, bKillEdgeX);
           if (*(uint8_t*)nCellFlagsOffset & 1) {
-            piVar1 = &pTileGrid->sRoomTiles.nWallTilesCount;
-            (*piVar1)++;
+            pTileGrid->sRoomTiles.nWallTilesCount++;
           }
           if (*(uint8_t*)nCellFlagsOffset & 2 || bCountFloors && (bIsInside = DrlgRoom::AreXYInsideCoordinates(&pRoomEx->sCoords, nX + nWorldPosX, bKillEdgeX + nWorldPosY) , bIsInside != 0)) {
-            piVar1 = &pTileGrid->sRoomTiles.nFloorTilesCount;
-            (*piVar1)++;
+            pTileGrid->sRoomTiles.nFloorTilesCount++;
           }
           if (*(uint32_t*)nCellFlagsOffset & 0x8000000) {
-            piVar1 = &pTileGrid->sRoomTiles.nRoofTilesCount;
-            (*piVar1)++;
+            pTileGrid->sRoomTiles.nRoofTilesCount++;
           }
 
           nX++;
@@ -1092,7 +1088,6 @@ void __fastcall DRLGROOMTILE_CountTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGr
 // Secondary counting pass for specific wall/shadow flag combos.
 void __fastcall DRLGROOMTILE_CountWallTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pFloorGrid, D2DrlgGridStrc * pOrientGrid, int bKillEdgeX, int bKillEdgeY) {
     int nTileType;
-    int* pnTileCounter;
     D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
     int nWidth = (uint32_t)!bKillEdgeX + pRoomEx->sCoords.WorldSize.x;
     int nY = 0;
@@ -1108,16 +1103,13 @@ void __fastcall DRLGROOMTILE_CountWallTilesFromGrid(D2RoomExStrc * pRoomEx, D2Dr
         do {
           nTileType = DrlgGrid::GetGridFlags(pOrientGrid, nColIdx, nY);
           if (nTileType == 3) {
-            pnTileCounter = &pTileGrid->sRoomTiles.nWallTilesCount;
-            (*pnTileCounter)++;
+            pTileGrid->sRoomTiles.nWallTilesCount++;
           } else if (nTileType - 10U <= 1) {
             nTileType = DrlgGrid::GetGridFlags(pFloorGrid, nColIdx, nY);
-            if (-1 < nTileType) {
-              pnTileCounter = &pTileGrid->sRoomTiles.nWallTilesCount;
-              (*pnTileCounter)++;
+            if (nTileType >= 0) {
+              pTileGrid->sRoomTiles.nWallTilesCount++;
             } else {
-              pnTileCounter = &pTileGrid->sRoomTiles.nFloorTilesCount;
-              *pnTileCounter += 6;
+              pTileGrid->sRoomTiles.nFloorTilesCount += 6;
             }
           }
 
@@ -1228,8 +1220,7 @@ void __fastcall DRLGROOMTILE_GrowTileDataArray(D2PoolManagerStrc * pMemory, D2Dr
     }
 
     pTileGrid->sRoomTiles.pRoofTiles[nIndex].pNext = 0;
-    int* piVar1 = &pTileGrid->sRoomTiles.nRoofTilesCount;
-    *piVar1 += nAdditionalTiles;
+    pTileGrid->sRoomTiles.nRoofTilesCount += nAdditionalTiles;
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pPoolManagerStrc (EDI): D2PoolManagerStrc*

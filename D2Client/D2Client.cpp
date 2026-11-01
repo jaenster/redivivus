@@ -1029,7 +1029,7 @@ void __fastcall AUTOMAP_UpdatePartyNamesCallback(D2EscMenuItemStrc * pItem, D2UI
 }
 
 // The ECX slot that carries a function pointer was one variable holding three callees with two
-// different conventions - fpRequiredUserAction (bool __cdecl(void)), UI_ShowPopupDialog and
+// different conventions - fpRequiredUserAction (BOOL __cdecl(void)), UI_ShowPopupDialog and
 // NET_D2GS_CLIENT_Send_0x6D_PING (void __stdcall(void)). Typing it void * split it into two register
 // variables with disjoint live ranges: pfnCallback, which reaches MPQ_LoadVideoMpqFiles, and pfFrame,
 // which reaches D2GFX_PlayCutScene and only ever holds PING or 0. void * is the honest type for both -
@@ -1130,7 +1130,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
 
       load_and_play:
       Engine::LOADER_SetConnectionLostFlag(bConnectionLost);
-      pfnCallback = (void*)(bool (*)())Engine::fpRequiredUserAction;
+      pfnCallback = (void*)(BOOL (*)())Engine::fpRequiredUserAction;
       if (!bConnectionLost) {
         pfnCallback = (void*)UI::ui::UI_ShowPopupDialog;
       }
@@ -1176,7 +1176,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
           D2Win::D2GFX::SetResolutionModeWithEndCutScene(dwResult);
         }
         Engine::LOADER_SetConnectionLostFlag(1);
-        bConnectionLost = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles((::fpRequiredUserAction)(bool (*)())Engine::fpRequiredUserAction, 0, 1);
+        bConnectionLost = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles((::fpRequiredUserAction)Engine::fpRequiredUserAction, 0, 1);
         if (bConnectionLost) {
           nCurrentCutsceneId = 6;
           if (gbLoggerStateInactive != '\0') {
@@ -1233,7 +1233,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
     GAME::Game::D2CLIENT_ExitGame(nErrorLine);
     reload_media_mpqs:
     D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
-    D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)(bool (*)())Engine::fpRequiredUserAction, (::fpRequiredUserAction)LOADER_RunInsertDiscPopup, 0, D2IniData_client);
+    D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)Engine::fpRequiredUserAction, (::fpRequiredUserAction)LOADER_RunInsertDiscPopup, 0, D2IniData_client);
     gbItemDescDirtyFlag = 0;
 }
 

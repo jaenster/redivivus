@@ -79,6 +79,6 @@ char * __fastcall inet_nameToIp(char * szText);
 int __fastcall SAFESOCK_SetSocketNonBlocking(struct D2NetDataStrc * pNetData, u_long bNonBlocking);
 void __fastcall SAFESOCK_EnableNonBlocking(struct D2NetDataStrc * pNetData);
 void __fastcall SAFESOCK_DisableNonBlocking(struct D2NetDataStrc * pNetData);
-struct D2NetDataStrc * __fastcall Create_Flag0(char * szText1, u_short nParam, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szText2);
+struct D2NetDataStrc * __fastcall Create_Flag0(char * szText1, int nParam, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szText2);
 
 } // namespace Fog::Src::Safesock

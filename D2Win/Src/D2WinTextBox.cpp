@@ -1258,8 +1258,7 @@ int __fastcall D2WINTEXTBOX_GetScrollbarStyle(::D2WinTextBox * pTextBox) {
     }
 
     pNew->sControl.neD2FormType = FORM_TextBox;
-    int* pnStateFlags = &pNew->sControl.dwState;
-    *pnStateFlags |= gadwBitMasks[0];
+    pNew->sControl.dwState |= gadwBitMasks[0];
     uVar1 = pNew->sControl.dwState | gadwBitMasks[2];
     pNew->sControl.dwPosX = nParam1;
     pNew->sControl.dwSizeY = nHeight;
@@ -1360,7 +1359,6 @@ BOOL __fastcall SetText(::D2WinTextBox * pTextBox, uint16_t * szText, int32_t nL
     bool bAutoScroll;
     int32_t nSourceLine;
     ::D2WinScrollbar* pScrollbar;
-    int* pnLineCount;
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x132);
       exit(-1);
@@ -1441,15 +1439,13 @@ BOOL __fastcall SetText(::D2WinTextBox * pTextBox, uint16_t * szText, int32_t nL
       pLineEntry[7] = 0;
       bAutoScroll = false;
       if (!pTextBox->sStyleControl.dwState) {
-        pnLineCount = &pTextBox->sStyleControl.dwSizeX;
-        (*pnLineCount)++;
+        pTextBox->sStyleControl.dwSizeX++;
         pTextBox->sStyleControl.dwState = (int)pLineEntry;
         pTextBox->sStyleControl.dwPosX = (int)pLineEntry;
         pTextBox->sStyleControl.dwPosY = (int)pLineEntry;
       } else {
         *(int**)(pTextBox->sStyleControl.dwPosX + 0x1c) = (int*)pLineEntry;
-        pnLineCount = &pTextBox->sStyleControl.dwSizeX;
-        (*pnLineCount)++;
+        pTextBox->sStyleControl.dwSizeX++;
         pTextBox->sStyleControl.dwPosX = (int)pLineEntry;
         nStrLen = D2WINTEXTBOX_GetVisibleLineCount(pTextBox);
         nMaxWidth = D2WINTEXTBOX_GetVisibleLinesFromScroll(pTextBox);
@@ -1496,7 +1492,6 @@ int __fastcall D2WINTEXTBOX_AddLines(::D2WinTextBox * pnParam, uint16_t * wszTex
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a7);
       exit(-1);
     } else {
-      int* piVar1;
       if (pnParam->sControl.neD2FormType != FORM_TextBox) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a8);
         exit(-1);
@@ -1519,8 +1514,7 @@ int __fastcall D2WINTEXTBOX_AddLines(::D2WinTextBox * pnParam, uint16_t * wszTex
             *(uint32_t**)(pnParam->sStyleControl.dwPosX + 0x1c) = (uint32_t*)pNewEntry;
           }
 
-          piVar1 = &pnParam->sStyleControl.dwSizeX;
-          (*piVar1)++;
+          pnParam->sStyleControl.dwSizeX++;
           nRepeatCount--;
           pnParam->sStyleControl.dwPosX = (int)pNewEntry;
         } while (nRepeatCount);

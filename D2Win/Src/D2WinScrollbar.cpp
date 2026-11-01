@@ -363,8 +363,7 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
     ::D2WinScrollbar* pNewScrollbar = D2_NEW_AT(::D2WinScrollbar, ".\\Src\\D2WinScrollbar.cpp", 0x1c);
     memset(pNewScrollbar, 0, 0x60);
     pNewScrollbar->sControl.neD2FormType = FORM_Scrollbar;
-    int* pStateField = &pNewScrollbar->sControl.dwState;
-    *pStateField |= gadwBitMasks[0];
+    pNewScrollbar->sControl.dwState |= gadwBitMasks[0];
     pNewScrollbar->sControl.dwState |= gadwBitMasks[2];
     pNewScrollbar->sControl.pDC6 = pDC6;
     pNewScrollbar->sControl.dwPosX = nPosX;

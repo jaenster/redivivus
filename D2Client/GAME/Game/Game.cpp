@@ -488,7 +488,7 @@ void __stdcall HandleMouseButtonEvent(int32_t pMouseEvent) {
       uint16_t uVar1;
       uVar1 = UI::CmdTbl::CMD_GetKeyForCommand(0x22, 1);
       /* int vKey for GetAsyncKeyState */ keyState = GetAsyncKeyState((uint32_t)uVar1);
-      if (-1 < keyState) {
+      if (keyState >= 0) {
         gRunKeyDown = 0;
       }
     }
@@ -826,8 +826,7 @@ void __stdcall DrawLoadingMessage() {
           nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(pLine->wszLine);
           bSceneBegun = 0;
           nLineX = WindowSizeX - nTextWidth;
-          nTextWidth = 0;
-          D2Win::Src::D2WinFont::DRAW_text(pLine->wszLine, nLineX >> 1, D2Win::Src::D2WinFont::D2WINFONT_GetCurrentFontHeight() * iLine * 2 + 200, nTextWidth, bSceneBegun);
+          D2Win::Src::D2WinFont::DRAW_text(pLine->wszLine, nLineX >> 1, D2Win::Src::D2WinFont::D2WINFONT_GetCurrentFontHeight() * iLine * 2 + 200, 0, bSceneBegun);
           pLine = pLine->pNext;
           iLine++;
         } while (iLine < nLineCount);

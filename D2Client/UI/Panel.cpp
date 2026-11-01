@@ -707,8 +707,7 @@ void __stdcall PANEL_DrawStaminaBar() {
       return;
     }
 
-    pwszCursor = D2Lang::StrTable::strtable::GetLocaleString(0x1044);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszTooltip, pwszCursor, nCurStaminaUnits, nMaxStaminaUnits);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszTooltip, D2Lang::StrTable::strtable::GetLocaleString(0x1044), nCurStaminaUnits, nMaxStaminaUnits);
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltip, ScreenSizeX / 2 - 0x4c, ScreenSizeY - 0x34, nCurStamina, 1);
 }
 
@@ -1477,9 +1476,7 @@ void __stdcall ClickBelt(D2InventoryStrc * pInventory, int32_t nMouseY, int32_t 
     UNIT::ITEM_RemoveClientSide(pCursorItem_lcl);
     play_item_sound:
     nSoundArg3 = 0;
-    int32_t nSoundArg2 = 0;
-    nSoundArg1 = 0;
-    Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pCursorItem_lcl), nullptr, nSoundArg1, nSoundArg2, nSoundArg3);
+    Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pCursorItem_lcl), nullptr, 0, 0, nSoundArg3);
 }
 
 static void CLIENT_HandleBeltMouseDown(D2InventoryStrc * pInventory, int32_t nMouseY, int32_t nMouseX) {

@@ -83,7 +83,6 @@ int __stdcall SELECT_GetConstant13_Y() {
 // Client-side unit-selection setter (__fastcall via EAX:pUnit). Updates D2Client::_Selection state to the hovered/clicked pUnit. Handles NPC overhead-text menu selection, deselect of a previously selected warp (UpdateWarpRoomDeselect), and per-type selection effects: monster (caches attackable non-NPC monster class into gnSelectConstant13_X/Y), object door (debounced 500ms, sends 'AoF'/0x3d highlight-door packet to GS via NET_D2GS_CLIENT_Send_INT), and warp (UpdateWarpRoomSelect + view dirty flag). No return; mutates global selection state and may emit a network message.
 void SetSelectedUnit_I(D2UnitStrc * pUnit) {
     D2UnitStrc* pLookupUnit;
-    D2RoomStrc* pRoom;
     BOOL bIsDoor;
     DWORD dwTickCount;
     D2MonStatsTxt* pMonStats;
@@ -127,8 +126,7 @@ void SetSelectedUnit_I(D2UnitStrc * pUnit) {
       pLookupUnit = UNIT::Player::UNITS_FindClientSideUnit(_Selection::nSelectedUnitGUID, UNIT_WARP);
       if (pLookupUnit) {
         nWarpClassId = pLookupUnit->nClassId;
-        pRoom = D2Common::Units::UNITS_GetRoom(pLookupUnit);
-        D2Common::DUNGEON::Dungeon::UpdateWarpRoomDeselect(pRoom, nWarpClassId);
+        D2Common::DUNGEON::Dungeon::UpdateWarpRoomDeselect(D2Common::Units::UNITS_GetRoom(pLookupUnit), nWarpClassId);
         View::SetFlag0x1(D2GameView);
       }
     }
@@ -145,8 +143,7 @@ void SetSelectedUnit_I(D2UnitStrc * pUnit) {
       if (_Selection::eSelectedUnitType != UNIT_OBJECT) {
         if (_Selection::eSelectedUnitType == UNIT_WARP && !bSameUnitAsLast) {
           nWarpClassId = pUnit->nClassId;
-          pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          D2Common::DUNGEON::Dungeon::UpdateWarpRoomSelect(pRoom, nWarpClassId);
+          D2Common::DUNGEON::Dungeon::UpdateWarpRoomSelect(D2Common::Units::UNITS_GetRoom(pUnit), nWarpClassId);
           View::SetFlag0x1(D2GameView);
           return;
         }

@@ -3621,8 +3621,7 @@ void __stdcall UpdateAnimSpeed(D2UnitStrc * pUnit, char * szFile, int32_t nLine)
           nAnimFrameTime = 0xd0a;
           pUnit_00->nAnimSpeed = (short int)nVelocityPct;
           szFile_00 = ".\\UNITS\\Units.cpp";
-          nFastStat = UNITS_GetBaseWalkVelocity((eD2UnitType)pUnit, nFastStat);
-          PATH::DynamicPath::SetVelocities(pUnit_00->pPath.pDynamicPath, nFastStat * nBaseFrameTime / 100, szFile_00, nAnimFrameTime);
+          PATH::DynamicPath::SetVelocities(pUnit_00->pPath.pDynamicPath, UNITS_GetBaseWalkVelocity((eD2UnitType)pUnit, nFastStat) * nBaseFrameTime / 100, szFile_00, nAnimFrameTime);
           return;
         }
 
