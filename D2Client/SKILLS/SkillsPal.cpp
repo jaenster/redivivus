@@ -85,11 +85,7 @@ BOOL __fastcall Skills_CltDoFunc_Pal_Zeal_DirOffsetMissile(D2UnitStrc * pUnit, e
     uint32_t nDirIndex;
     int nTableOffset;
     int nXOffset;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -236,52 +232,50 @@ BOOL __fastcall Skills_CltDoFunc_Pal_RandomRadiusMissileField(D2UnitStrc * pUnit
       D2SeedStrc* pSeed;
       bIsTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
       if (!bIsTown) {
-        if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
-          pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
-          if (pSkillTxt) {
-            eVar1 = SkillsAss::SKILLSASS_GetCltMissileByAuraLevel(pUnit, eSkill);
-            if ((int)eVar1 >= 0 && (int)eVar1 < sgptDataTable->nTxtMissilesSize) {
-              nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, nSkillLvl);
-              if (nRadius > 0) {
-                nBaseRangeCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, 1);
-                if (nBaseRangeCalc > 0) {
-                  pSeed = &pUnit->sSeed;
-                  nRandSector = Archive::UNIT_GetModuloFromSeed(pSeed, 0x12);
-                  nCenterX = nRadius * nRadius / (nBaseRangeCalc * nBaseRangeCalc) / (int)(nRandSector + 1);
-                  nBaseRangeCalc = Units::GetXPosFromDynamicPathUnit(pUnit);
-                  nBaseRadius = Units::GetYPosFromDynamicPathUnit(pUnit);
-                  memset(&sSkillArg, 0, 0x5c);
-                  sSkillArg.nFlags = 0x2001;
-                  sSkillArg.nSkillLevel = nSkillLvl;
-                  nSkillLvl = nCenterX;
-                  sSkillArg.pOwner = pUnit;
-                  sSkillArg.nMissileTxtNo = eVar1;
-                  sSkillArg.eSkillNo = eSkill;
-                  if (nCenterX <= 0) {
-                    return 1;
-                  }
-
-                  do {
-                    nRandSector = nRadius * 2 + 1;
-                    nRandY = Archive::RANDOM_RandomNumberSelector(pSeed, nRandSector);
-                    nOffsetX = nRandY - nRadius;
-                    nRandSector = Archive::RANDOM_RandomNumberSelector(pSeed, nRandSector);
-                    nCenterX = nRandSector - nRadius;
-                    if (nCenterX * nCenterX + nOffsetX * nOffsetX < nRadius * nRadius) {
-                      sSkillArg.nX = nOffsetX + 2 + nBaseRangeCalc;
-                      sSkillArg.nY = nCenterX + 2 + nBaseRadius;
-                      pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
-                      if (pMissile) {
-                        nRandSector = Archive::UNIT_GetModuloFromSeed(pSeed, 0x40);
-                        D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pMissile->pPath.pDynamicPath, (uint8_t)nRandSector);
-                      }
-                    }
-
-                    nSkillLvl--;
-                  } while (nSkillLvl);
-
+        pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+        if (pSkillTxt) {
+          eVar1 = SkillsAss::SKILLSASS_GetCltMissileByAuraLevel(pUnit, eSkill);
+          if ((int)eVar1 >= 0 && (int)eVar1 < sgptDataTable->nTxtMissilesSize) {
+            nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, nSkillLvl);
+            if (nRadius > 0) {
+              nBaseRangeCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, 1);
+              if (nBaseRangeCalc > 0) {
+                pSeed = &pUnit->sSeed;
+                nRandSector = Archive::UNIT_GetModuloFromSeed(pSeed, 0x12);
+                nCenterX = nRadius * nRadius / (nBaseRangeCalc * nBaseRangeCalc) / (int)(nRandSector + 1);
+                nBaseRangeCalc = Units::GetXPosFromDynamicPathUnit(pUnit);
+                nBaseRadius = Units::GetYPosFromDynamicPathUnit(pUnit);
+                memset(&sSkillArg, 0, 0x5c);
+                sSkillArg.nFlags = 0x2001;
+                sSkillArg.nSkillLevel = nSkillLvl;
+                nSkillLvl = nCenterX;
+                sSkillArg.pOwner = pUnit;
+                sSkillArg.nMissileTxtNo = eVar1;
+                sSkillArg.eSkillNo = eSkill;
+                if (nCenterX <= 0) {
                   return 1;
                 }
+
+                do {
+                  nRandSector = nRadius * 2 + 1;
+                  nRandY = Archive::RANDOM_RandomNumberSelector(pSeed, nRandSector);
+                  nOffsetX = nRandY - nRadius;
+                  nRandSector = Archive::RANDOM_RandomNumberSelector(pSeed, nRandSector);
+                  nCenterX = nRandSector - nRadius;
+                  if (nCenterX * nCenterX + nOffsetX * nOffsetX < nRadius * nRadius) {
+                    sSkillArg.nX = nOffsetX + 2 + nBaseRangeCalc;
+                    sSkillArg.nY = nCenterX + 2 + nBaseRadius;
+                    pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
+                    if (pMissile) {
+                      nRandSector = Archive::UNIT_GetModuloFromSeed(pSeed, 0x40);
+                      D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pMissile->pPath.pDynamicPath, (uint8_t)nRandSector);
+                    }
+                  }
+
+                  nSkillLvl--;
+                } while (nSkillLvl);
+
+                return 1;
               }
             }
           }
@@ -428,16 +422,10 @@ BOOL __fastcall Skills_CltStFunc_SetupHolyChargeMovement(D2UnitStrc * pUnit, eD2
     if (!pSkill) {
       return 0;
     }
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
 
     D2SkillsTxt* pSkillsTxt;
-    pSkillsTxt = sgptDataTable->pTxtSkills;
-    if (!(pSkillsTxt + eSkill)) {
+    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -469,7 +457,7 @@ BOOL __fastcall Skills_CltStFunc_SetupHolyChargeMovement(D2UnitStrc * pUnit, eD2
       }
     }
     if (pUnit->eUnitType == UNIT_PLAYER) {
-      nSndId = pSkillsTxt[eSkill].dosounda;
+      nSndId = pSkillsTxt->dosounda;
       if (nSndId <= 0) {
         goto setup_charge;
       }
@@ -687,15 +675,8 @@ void __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, shor
     eD2States eTargetState;
     int32_t bCastSucceeded;
     bool bCorpseStateSet;
-    if ((int)eSkill < 0) {
-      return;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return;
-    }
-
     D2SkillsTxt* pSkillTxt;
-    pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return;
     }

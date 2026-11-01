@@ -109,17 +109,15 @@ D2MonLvlTxt * __fastcall GetMonLvlTxt(int32_t nMonLvlId) {
 }
 
 uint32_t __fastcall MONSTER_CheckMonTypeHasFlag(D2UnitStrc * pUnit, int32_t nMonTypeFlag) {
+    D2MonStatsTxt* pMonStatsTxt;
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
       return 0;
     }
 
     int nMonStatId = pUnit->nClassId;
-    if (nMonStatId >= 0 && nMonStatId < sgptDataTable->nTxtMonStatsSize) {
-      D2MonStatsTxt* pMonStatsTxt;
-      pMonStatsTxt = sgptDataTable->pTxtMonStats + nMonStatId;
-      if (pMonStatsTxt && pMonStatsTxt->MonType >= 0 && (int)pMonStatsTxt->MonType < sgptDataTable->nTxtMonTypeSize && nMonTypeFlag >= 0 && nMonTypeFlag < sgptDataTable->nTxtMonTypeSize) {
-        return *(uint32_t*)((uint8_t*)sgptDataTable->pTxtMonTypeUnknown + (sgptDataTable->nMonTypeEquivRowDwords * nMonTypeFlag + ((int)pMonStatsTxt->MonType >> 5)) * 4) & gadwBitMasks[(int)pMonStatsTxt->MonType & 0x1f];
-      }
+    pMonStatsTxt = nMonStatId >= 0 && nMonStatId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonStatId : nullptr;
+    if (pMonStatsTxt && pMonStatsTxt->MonType >= 0 && (int)pMonStatsTxt->MonType < sgptDataTable->nTxtMonTypeSize && nMonTypeFlag >= 0 && nMonTypeFlag < sgptDataTable->nTxtMonTypeSize) {
+      return *(uint32_t*)((uint8_t*)sgptDataTable->pTxtMonTypeUnknown + (sgptDataTable->nMonTypeEquivRowDwords * nMonTypeFlag + ((int)pMonStatsTxt->MonType >> 5)) * 4) & gadwBitMasks[(int)pMonStatsTxt->MonType & 0x1f];
     }
 
     return 0;
@@ -3140,11 +3138,7 @@ void __fastcall ApplyDamageCritical(int * pnParam, D2UnitStrc * pUnit, D2DamageS
     }
 
     int iVar1 = pnParam[1];
-    if (!(iVar1 >= 0 && iVar1 < sgptDataTable->nTxtMonStatsSize)) {
-      return;
-    }
-
-    D2MonStatsTxt* pMonStats = sgptDataTable->pTxtMonStats + iVar1;
+    D2MonStatsTxt* pMonStats = iVar1 >= 0 && iVar1 < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + iVar1 : nullptr;
     if (!(pMonStats && pMonStats->Crit != '\0')) {
       return;
     }

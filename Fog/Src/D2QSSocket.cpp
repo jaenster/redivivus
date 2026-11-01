@@ -350,12 +350,13 @@ D2QSSocketStrc * __stdcall STRUCT_D2QSSocket_Init(char * szIpAddress, int nPort,
       Storm::Source::SSTR::SStrCopy(pD2QSSocket->szIpAddress, szIpAddress, 0x104);
       if (szName) {
         dwErrorCode = 4;
+        Storm::Source::SSTR::SStrCopy(pD2QSSocket->szName, szName, 4);
       } else {
         dwErrorCode = 0x40;
         szName = "UNKNOWN";
+        Storm::Source::SSTR::SStrCopy(pD2QSSocket->szName, szName, 0x40);
       }
 
-      Storm::Source::SSTR::SStrCopy(pD2QSSocket->szName, szName, dwErrorCode);
       pD2QSSocket->nPort = nPort;
       D2QSQueue::D2QSQUEUE_Initialize(&pD2QSSocket->aQueue);
       pD2QSSocket->nHeaderSize = 2;

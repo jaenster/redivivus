@@ -1059,17 +1059,15 @@ BOOL thunk_Release() {
 
 // @sourcefile .\Src\ddCore.cpp
 BOOL __fastcall InitPerspective(D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc * pHelpers) {
-    GUID* pGlideConfig;
+    HRESULT nResult;
     pD2GFXRenderedDataStrc = pSettings;
     D2GfxRendereInitFunctionsStrc = pHelpers;
     D2ddDebugFont_Alloc();
-    if (gdwDDrawInitFlags & gadwBitMasks[0]) {
-      pGlideConfig = 0;
+    if (!(gdwDDrawInitFlags & gadwBitMasks[0])) {
+      nResult = DirectDrawCreate(&gGlideOpenWindowConfig, &pWindowHandleBuffer, nullptr);
     } else {
-      pGlideConfig = &gGlideOpenWindowConfig;
+      nResult = DirectDrawCreate(0, &pWindowHandleBuffer, nullptr);
     }
-
-    HRESULT nResult = DirectDrawCreate(pGlideConfig, &pWindowHandleBuffer, nullptr);
     if (nResult) {
       DirectDrawErrorHandler("DirectDrawCreate failed!", nResult);
       return 0;

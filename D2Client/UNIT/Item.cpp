@@ -621,31 +621,27 @@ static int32_t ITEM_GetItemDropSound(uint32_t * pnParam, D2UnitStrc * pUnit) {
       eItemQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
       if (eItemQuality >= 0) {
         eItemQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-        if (eItemQuality >= 0 && eItemQuality < sgptDataTable->nTxtUniqueItemsSize) {
-          pUniqueItemsTxt = sgptDataTable->pTxtUniqueItems + eItemQuality;
-          if (pUniqueItemsTxt && pUniqueItemsTxt->dropsound > 0) {
-            if (!(pnParam && (uint8_t)pUniqueItemsTxt->dropsfxframe > 0)) {
-              return (int)pUniqueItemsTxt->dropsound;
-            }
-
-            *pnParam = (uint32_t)(uint8_t)pUniqueItemsTxt->dropsfxframe;
+        pUniqueItemsTxt = eItemQuality >= 0 && eItemQuality < sgptDataTable->nTxtUniqueItemsSize ? sgptDataTable->pTxtUniqueItems + eItemQuality : nullptr;
+        if (pUniqueItemsTxt && pUniqueItemsTxt->dropsound > 0) {
+          if (!(pnParam && (uint8_t)pUniqueItemsTxt->dropsfxframe > 0)) {
             return (int)pUniqueItemsTxt->dropsound;
           }
+
+          *pnParam = (uint32_t)(uint8_t)pUniqueItemsTxt->dropsfxframe;
+          return (int)pUniqueItemsTxt->dropsound;
         }
       }
     } else {
       eItemQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
       if (eItemQuality == 5) {
         eItemQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-        if (eItemQuality >= 0 && eItemQuality < sgptDataTable->nTxtSetItemsSize) {
-          pSetItemsTxt = sgptDataTable->pTxtSetItems + eItemQuality;
-          if (pSetItemsTxt && pSetItemsTxt->dropsound > 0) {
-            if (pnParam && (uint8_t)pSetItemsTxt->dropsfxframe > 0) {
-              *pnParam = (uint32_t)(uint8_t)pSetItemsTxt->dropsfxframe;
-            }
-
-            nDropSound = (int32_t)pSetItemsTxt->dropsound;
+        pSetItemsTxt = eItemQuality >= 0 && eItemQuality < sgptDataTable->nTxtSetItemsSize ? sgptDataTable->pTxtSetItems + eItemQuality : nullptr;
+        if (pSetItemsTxt && pSetItemsTxt->dropsound > 0) {
+          if (pnParam && (uint8_t)pSetItemsTxt->dropsfxframe > 0) {
+            *pnParam = (uint32_t)(uint8_t)pSetItemsTxt->dropsfxframe;
           }
+
+          nDropSound = (int32_t)pSetItemsTxt->dropsound;
         }
       }
     }
@@ -673,21 +669,17 @@ static int32_t ITEM_GetItemUseSound(D2UnitStrc * pUnit) {
     if (eQuality == 7) {
       D2UniqueItemsTxt* pUniqueItemsTxt;
       eQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-      if (eQuality >= 0 && eQuality < sgptDataTable->nTxtUniqueItemsSize) {
-        pUniqueItemsTxt = sgptDataTable->pTxtUniqueItems + eQuality;
-        if (pUniqueItemsTxt && pUniqueItemsTxt->dropsound > 0) {
-          return (int)pUniqueItemsTxt->usesound;
-        }
+      pUniqueItemsTxt = eQuality >= 0 && eQuality < sgptDataTable->nTxtUniqueItemsSize ? sgptDataTable->pTxtUniqueItems + eQuality : nullptr;
+      if (pUniqueItemsTxt && pUniqueItemsTxt->dropsound > 0) {
+        return (int)pUniqueItemsTxt->usesound;
       }
     } else {
       eQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
       if (eQuality == 5) {
         eQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-        if (eQuality >= 0 && eQuality < sgptDataTable->nTxtSetItemsSize) {
-          pSetItemsTxt = sgptDataTable->pTxtSetItems + eQuality;
-          if (pSetItemsTxt && pSetItemsTxt->dropsound > 0) {
-            nSoundId = (int32_t)pSetItemsTxt->usesound;
-          }
+        pSetItemsTxt = eQuality >= 0 && eQuality < sgptDataTable->nTxtSetItemsSize ? sgptDataTable->pTxtSetItems + eQuality : nullptr;
+        if (pSetItemsTxt && pSetItemsTxt->dropsound > 0) {
+          nSoundId = (int32_t)pSetItemsTxt->usesound;
         }
       }
     }

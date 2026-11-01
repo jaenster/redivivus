@@ -480,59 +480,55 @@ int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t nParam1, int32_t
     D2SkillsTxt* pSkillsTxt;
     short int nSpawnId;
     if (!nParam1 || !pUnit || pUnit->eUnitType != UNIT_MONSTER) {
-      if (nParam2 >= 0 && nParam2 < sgptDataTable->nTxtSkillsCount) {
-        pSkillsTxt = sgptDataTable->pTxtSkills + nParam2;
-        if (pSkillsTxt && pSkillsTxt->summon >= 0 && (int)pSkillsTxt->summon < sgptDataTable->nTxtMonStatsSize) {
-          if (pnParam1) {
-            nPosXY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-            *pnParam1 = nPosXY;
-          }
-          if (pnParam2) {
-            nPosXY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-            *pnParam2 = nPosXY;
-          }
-          if (!pnMode) {
-            return (int)pSkillsTxt->summon;
-          }
-
-          nSumModeOrSpawnMode = (int)pSkillsTxt->summode;
-          *pnMode = nSumModeOrSpawnMode;
-          if (!(nSumModeOrSpawnMode < 0 || nSumModeOrSpawnMode >= 0x10)) {
-            return (int)pSkillsTxt->summon;
-          }
-
-          *pnMode = 1;
+      pSkillsTxt = nParam2 >= 0 && nParam2 < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nParam2 : nullptr;
+      if (pSkillsTxt && pSkillsTxt->summon >= 0 && (int)pSkillsTxt->summon < sgptDataTable->nTxtMonStatsSize) {
+        if (pnParam1) {
+          nPosXY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+          *pnParam1 = nPosXY;
+        }
+        if (pnParam2) {
+          nPosXY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+          *pnParam2 = nPosXY;
+        }
+        if (!pnMode) {
           return (int)pSkillsTxt->summon;
         }
+
+        nSumModeOrSpawnMode = (int)pSkillsTxt->summode;
+        *pnMode = nSumModeOrSpawnMode;
+        if (!(nSumModeOrSpawnMode < 0 || nSumModeOrSpawnMode >= 0x10)) {
+          return (int)pSkillsTxt->summon;
+        }
+
+        *pnMode = 1;
+        return (int)pSkillsTxt->summon;
       }
     } else {
       D2MonStatsTxt* pMonStatsTxt;
       nSumModeOrSpawnMode = pUnit->nClassId;
-      if (nSumModeOrSpawnMode >= 0 && nSumModeOrSpawnMode < sgptDataTable->nTxtMonStatsSize) {
-        pMonStatsTxt = sgptDataTable->pTxtMonStats + nSumModeOrSpawnMode;
-        if (pMonStatsTxt) {
-          nSpawnId = pMonStatsTxt->spawn;
-          if (pnParam1) {
-            nPosXY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-            *pnParam1 = nPosXY + pMonStatsTxt->spawnx;
-          }
-          if (pnParam2) {
-            nPosXY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-            *pnParam2 = nPosXY + pMonStatsTxt->spawny;
-          }
-          if (!pnMode) {
-            return (int)nSpawnId;
-          }
-
-          nSumModeOrSpawnMode = (int)pMonStatsTxt->spawnmode;
-          *pnMode = nSumModeOrSpawnMode;
-          if (!(nSumModeOrSpawnMode < 0 || nSumModeOrSpawnMode >= 0x10)) {
-            return (int)nSpawnId;
-          }
-
-          *pnMode = 1;
+      pMonStatsTxt = nSumModeOrSpawnMode >= 0 && nSumModeOrSpawnMode < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nSumModeOrSpawnMode : nullptr;
+      if (pMonStatsTxt) {
+        nSpawnId = pMonStatsTxt->spawn;
+        if (pnParam1) {
+          nPosXY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+          *pnParam1 = nPosXY + pMonStatsTxt->spawnx;
+        }
+        if (pnParam2) {
+          nPosXY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+          *pnParam2 = nPosXY + pMonStatsTxt->spawny;
+        }
+        if (!pnMode) {
           return (int)nSpawnId;
         }
+
+        nSumModeOrSpawnMode = (int)pMonStatsTxt->spawnmode;
+        *pnMode = nSumModeOrSpawnMode;
+        if (!(nSumModeOrSpawnMode < 0 || nSumModeOrSpawnMode >= 0x10)) {
+          return (int)nSpawnId;
+        }
+
+        *pnMode = 1;
+        return (int)nSpawnId;
       }
     }
 

@@ -113,11 +113,12 @@ void __stdcall LoadPanelImages() {
       char szPath[260];
       if (bExpansion) {
         ppszPath = "%s\\UI\\InvChar6";
+        sprintf(szPath, "%s\\UI\\InvChar6", "DATA\\LOCAL");
       } else {
         ppszPath = "%s\\UI\\InvChar";
+        sprintf(szPath, "%s\\UI\\InvChar", "DATA\\LOCAL");
       }
 
-      sprintf(szPath, ppszPath, "DATA\\LOCAL");
       InvChar = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
     } else {
       ppszPath = "Panel\\InvChar6";
@@ -481,11 +482,11 @@ void __stdcall PANEL_DrawHealthOrb() {
         eRenderer = D2gfx::D2GFX::D2GFX_GetRendererMode();
         if (eRenderer == RENDERER_Direct3D) {
           nValue = 0x1c;
+          D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1c, ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
         } else {
           nValue = 0x1d;
+          D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1d, ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
         }
-
-        D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, nValue, ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
       }
     }
 

@@ -552,7 +552,6 @@ void __stdcall QUESTLOG_ResetState() {
 // Lazy-loads all quest log DC6 image assets on first call. Checks INV_GetItemDescDirtyFlag to avoid redundant loads, then conditionally loads 6 DC6 files via IMAGE_LoadDC6Ex: questbackground, questtabs (classic vs expansion variant), questsockets, questdone, invps, and questlast. All file paths are sprintf-formatted into a 260-byte buffer using format strings from gTxtCompilationMemPool.pOverflow with "DATA\\GLOBAL" directory prefix.
 void __stdcall LoadQuestimages() {
     char szPathBuffer[260];
-    char* pFormatStr;
     uint8_t bAlreadyLoaded = INV_GetItemDescDirtyFlag();
     if (bAlreadyLoaded != '\0') {
       return;
@@ -565,12 +564,11 @@ void __stdcall LoadQuestimages() {
       BOOL bIsExpansion;
       bIsExpansion = Fog::D2CheckExpansionGame();
       if (!bIsExpansion || (bIsExpansion = GAME::Game::CLIENT_CheckExpansion() , !bIsExpansion)) {
-        pFormatStr = "%s\\ui\\menu\\questtabs";
+        sprintf(szPathBuffer, "%s\\ui\\menu\\questtabs", "DATA\\GLOBAL");
       } else {
-        pFormatStr = "%s\\ui\\menu\\expquesttabs";
+        sprintf(szPathBuffer, "%s\\ui\\menu\\expquesttabs", "DATA\\GLOBAL");
       }
 
-      sprintf(szPathBuffer, pFormatStr, "DATA\\GLOBAL");
       gQuestLog.questtabs = Core::Archive::IMAGE_LoadDC6Ex(szPathBuffer, 0);
     }
     if (!gQuestLog.questsockets) {

@@ -1014,20 +1014,18 @@ int32_t __fastcall ITEMS_CalcChargedSkillPriceModifier(D2UnitStrc * pUnit, int32
         nSkillLevel = (int)(uint32_t)(uint16_t)aStatValues[nStatIdx].wSubIndex >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
         uVar2 = aStatValues[nStatIdx].nStatValue & 0xff;
         nMaxCharges = aStatValues[nStatIdx].nStatValue >> 8;
-        if ((int)uVar2 < nMaxCharges && nSkillLevel >= 0 && nSkillLevel < sgptDataTable->nTxtSkillsCount) {
-          pSkillsTxt = sgptDataTable->pTxtSkills + nSkillLevel;
-          if (pSkillsTxt) {
-            nSkillLevel = (sgptDataTable->dwChargedSkillLevelMask & (uint32_t)(uint16_t)aStatValues[nStatIdx].wSubIndex) + 2 + (int)pSkillsTxt->reqlevel / 6 * 2;
-            nCostTmp = nSkillLevel * nMultiplier;
-            if (nCostTmp <= 0xffff || !pSkillsTxt->costmult) {
-              nSkillLevel = pSkillsTxt->costmult * nSkillLevel * nMultiplier;
-              nSkillLevel = (int)((nSkillLevel >> 0x1f & 0x3ffU) + nSkillLevel) >> 10;
-            } else {
-              nSkillLevel = ((int)((nCostTmp >> 0x1f & 0x3ffU) + nCostTmp) >> 10) * pSkillsTxt->costmult;
-            }
-
-            nTotalModifier += (int)((nMaxCharges - uVar2) * (nSkillLevel + pSkillsTxt->costadd)) / nMaxCharges;
+        pSkillsTxt = (int)uVar2 < nMaxCharges && nSkillLevel >= 0 && nSkillLevel < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillLevel : nullptr;
+        if (pSkillsTxt) {
+          nSkillLevel = (sgptDataTable->dwChargedSkillLevelMask & (uint32_t)(uint16_t)aStatValues[nStatIdx].wSubIndex) + 2 + (int)pSkillsTxt->reqlevel / 6 * 2;
+          nCostTmp = nSkillLevel * nMultiplier;
+          if (nCostTmp <= 0xffff || !pSkillsTxt->costmult) {
+            nSkillLevel = pSkillsTxt->costmult * nSkillLevel * nMultiplier;
+            nSkillLevel = (int)((nSkillLevel >> 0x1f & 0x3ffU) + nSkillLevel) >> 10;
+          } else {
+            nSkillLevel = ((int)((nCostTmp >> 0x1f & 0x3ffU) + nCostTmp) >> 10) * pSkillsTxt->costmult;
           }
+
+          nTotalModifier += (int)((nMaxCharges - uVar2) * (nSkillLevel + pSkillsTxt->costadd)) / nMaxCharges;
         }
 
         nStatIdx++;
@@ -1074,119 +1072,117 @@ void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice,
       for (; nStatIdx < nStatCount; nStatIdx++ , pItem = pItemSaved , pnSellPrice = pnSellPriceSaved) {
         eUnitStat = (eD2UnitStat)(uint16_t)aStatBuf[nStatIdx].wStatIndex;
         nStatVal = Stats::StatsEx::STATLIST_GetStatBonusFromLists(pItem, eUnitStat, (uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex);
-        if (nStatVal && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize) {
-          pStatCostTxt = sgptDataTable->pTxtItemStatCost + eUnitStat;
-          if (pStatCostTxt) {
-            if (pStatCostTxt->valshift) {
-              nStatVal = (int)nStatVal >> (pStatCostTxt->valshift & 0x1fU);
+        pStatCostTxt = nStatVal && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
+        if (pStatCostTxt) {
+          if (pStatCostTxt->valshift) {
+            nStatVal = (int)nStatVal >> (pStatCostTxt->valshift & 0x1fU);
+          }
+
+          switch (pStatCostTxt->encode) {
+            case '\x01':
+              if (false || (int)(uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex >= sgptDataTable->nTxtSkillsCount || (pSkillsTxt = sgptDataTable->pTxtSkills + (uint16_t)aStatBuf[nStatIdx].wSubIndex , !pSkillsTxt)) {
+                continue;
+              }
+            nCostTmp = *pnSellPriceSaved * nStatVal;
+            if (nCostTmp <= 0xffff || !pSkillsTxt->costmult) {
+              nCostTmp = pSkillsTxt->costmult;
+              nRepairCostTmp = pSkillsTxt->costadd;
+              nCostAdd = nCostTmp * *pnSellPriceSaved * nStatVal;
+              nSellCostSum = nSellCostSum + nCostAdd / 1024 + nRepairCostTmp;
+              nCostAdd = *pnBuyPrice * nCostTmp * nStatVal;
+              nBuyCostSum = nBuyCostSum + nCostAdd / 4096 + nRepairCostTmp;
+              nCostTmp = *pnRepairPrice * nCostTmp * nStatVal;
+              nRepairCostTmp = nCostTmp / 1024 + nRepairCostTmp;
+            } else {
+              nCostAdd = pSkillsTxt->costmult;
+              nRepairCostTmp = pSkillsTxt->costadd;
+              nSellCostSum = nSellCostSum + nCostTmp / 1024 * nCostAdd + nRepairCostTmp;
+              nBuyCostSum = nBuyCostSum + (int)(*pnBuyPrice * nStatVal) / 4096 * nCostAdd + nRepairCostTmp;
+              nRepairCostTmp = (int)(*pnRepairPrice * nStatVal) / 1024 * nCostAdd + nRepairCostTmp;
             }
 
-            switch (pStatCostTxt->encode) {
-              case '\x01':
-                if (false || (int)(uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex >= sgptDataTable->nTxtSkillsCount || (pSkillsTxt = sgptDataTable->pTxtSkills + (uint16_t)aStatBuf[nStatIdx].wSubIndex , !pSkillsTxt)) {
-                  continue;
-                }
-              nCostTmp = *pnSellPriceSaved * nStatVal;
-              if (nCostTmp <= 0xffff || !pSkillsTxt->costmult) {
-                nCostTmp = pSkillsTxt->costmult;
-                nRepairCostTmp = pSkillsTxt->costadd;
-                nCostAdd = nCostTmp * *pnSellPriceSaved * nStatVal;
-                nSellCostSum = nSellCostSum + nCostAdd / 1024 + nRepairCostTmp;
-                nCostAdd = *pnBuyPrice * nCostTmp * nStatVal;
-                nBuyCostSum = nBuyCostSum + nCostAdd / 4096 + nRepairCostTmp;
-                nCostTmp = *pnRepairPrice * nCostTmp * nStatVal;
-                nRepairCostTmp = nCostTmp / 1024 + nRepairCostTmp;
-              } else {
-                nCostAdd = pSkillsTxt->costmult;
-                nRepairCostTmp = pSkillsTxt->costadd;
-                nSellCostSum = nSellCostSum + nCostTmp / 1024 * nCostAdd + nRepairCostTmp;
-                nBuyCostSum = nBuyCostSum + (int)(*pnBuyPrice * nStatVal) / 4096 * nCostAdd + nRepairCostTmp;
-                nRepairCostTmp = (int)(*pnRepairPrice * nStatVal) / 1024 * nCostAdd + nRepairCostTmp;
-              }
+            nRepairCostSum += nRepairCostTmp;
+            continue;
+            case '\x02':
 
-              nRepairCostSum += nRepairCostTmp;
-              continue;
-              case '\x02':
+            case '\x03':
+              nCostTmp = (int)(uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
+            nAvgDmgCost = sgptDataTable->dwChargedSkillLevelMask & (uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex;
+            if (nCostTmp < 0 || nCostTmp >= sgptDataTable->nTxtSkillsCount) {
+              pSkillsTxt = 0;
+            } else {
+              pSkillsTxt = sgptDataTable->pTxtSkills + nCostTmp;
+            }
 
-              case '\x03':
-                nCostTmp = (int)(uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
-              nAvgDmgCost = sgptDataTable->dwChargedSkillLevelMask & (uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex;
-              if (nCostTmp < 0 || nCostTmp >= sgptDataTable->nTxtSkillsCount) {
-                pSkillsTxt = 0;
-              } else {
-                pSkillsTxt = sgptDataTable->pTxtSkills + nCostTmp;
-              }
-
-              nSellPriceIn = *pnSellPriceSaved;
-              nCostTmp = nSellPriceIn * nAvgDmgCost;
-              if (nCostTmp > 0xffff && pSkillsTxt->costmult) {
-                nRepairCostTmp = pSkillsTxt->costmult;
-                nCostAdd = pSkillsTxt->costadd;
-                nCostTmp = nCostTmp / 1024 * nRepairCostTmp + nCostAdd;
-                nCostResult = (int)(*pnBuyPrice * nAvgDmgCost) / 4096;
-                goto add_costs_divide_first;
-              }
-
-              nCostTmp = pSkillsTxt->costmult;
+            nSellPriceIn = *pnSellPriceSaved;
+            nCostTmp = nSellPriceIn * nAvgDmgCost;
+            if (nCostTmp > 0xffff && pSkillsTxt->costmult) {
+              nRepairCostTmp = pSkillsTxt->costmult;
               nCostAdd = pSkillsTxt->costadd;
-              nRepairCostTmp = nCostTmp * nSellPriceIn * nAvgDmgCost;
+              nCostTmp = nCostTmp / 1024 * nRepairCostTmp + nCostAdd;
+              nCostResult = (int)(*pnBuyPrice * nAvgDmgCost) / 4096;
+              goto add_costs_divide_first;
+            }
+
+            nCostTmp = pSkillsTxt->costmult;
+            nCostAdd = pSkillsTxt->costadd;
+            nRepairCostTmp = nCostTmp * nSellPriceIn * nAvgDmgCost;
+            nCostResult = nRepairCostTmp / 1024 + nCostAdd;
+            nRepairCostTmp = *pnBuyPrice * nCostTmp * nAvgDmgCost;
+            nRepairCostTmp = nRepairCostTmp / 4096;
+            add_costs_multiply_first:
+            nBuyCostSum = nBuyCostSum + nRepairCostTmp + nCostAdd;
+            nCostTmp = *pnRepairPrice * nCostTmp * nAvgDmgCost;
+            nSellCostSum += nCostResult;
+            nRepairCostTmp = nCostTmp / 1024;
+            break;
+            case '\x04':
+              ItemMods::ITEMMODS_CalculateRepairCost(nStatVal, 0, 0, &nRepairCost, &nRepairMinDmg, &nRepairMaxDmg);
+            nAvgDmgCost = (nRepairMinDmg + nRepairMaxDmg) / 2;
+            nCostTmp = *pnSellPriceSaved * nAvgDmgCost;
+            if (nCostTmp <= 0xffff || !pStatCostTxt->multiply) {
+              nCostTmp = pStatCostTxt->multiply;
+              nCostAdd = pStatCostTxt->add;
+              nRepairCostTmp = nCostTmp * *pnSellPriceSaved * nAvgDmgCost;
               nCostResult = nRepairCostTmp / 1024 + nCostAdd;
               nRepairCostTmp = *pnBuyPrice * nCostTmp * nAvgDmgCost;
-              nRepairCostTmp = nRepairCostTmp / 4096;
-              add_costs_multiply_first:
-              nBuyCostSum = nBuyCostSum + nRepairCostTmp + nCostAdd;
-              nCostTmp = *pnRepairPrice * nCostTmp * nAvgDmgCost;
+              nRepairCostTmp = nRepairCostTmp / 1024;
+              goto add_costs_multiply_first;
+            }
+
+            nRepairCostTmp = pStatCostTxt->multiply;
+            nCostAdd = pStatCostTxt->add;
+            nCostTmp = nCostTmp / 1024 * nRepairCostTmp + nCostAdd;
+            nCostResult = (int)(*pnBuyPrice * nAvgDmgCost) / 1024;
+            add_costs_divide_first:
+            nSellCostSum += nCostTmp;
+            nBuyCostSum = nBuyCostSum + nCostResult * nRepairCostTmp + nCostAdd;
+            nRepairCostTmp = (int)(*pnRepairPrice * nAvgDmgCost) / 1024 * nRepairCostTmp;
+            break;
+            default:
+              nCostTmp = *pnSellPriceSaved * nStatVal;
+            if (nCostTmp <= 0xffff || !pStatCostTxt->multiply) {
+              nCostTmp = pStatCostTxt->multiply;
+              nCostAdd = pStatCostTxt->add;
+              nRepairCostTmp = nCostTmp * *pnSellPriceSaved * nStatVal;
+              nCostResult = nRepairCostTmp / 1024 + nCostAdd;
+              nRepairCostTmp = *pnBuyPrice * nCostTmp * nStatVal;
+              nBuyCostSum = nBuyCostSum + nRepairCostTmp / 1024 + nCostAdd;
+              nCostTmp = *pnRepairPrice * nCostTmp * nStatVal;
               nSellCostSum += nCostResult;
               nRepairCostTmp = nCostTmp / 1024;
               break;
-              case '\x04':
-                ItemMods::ITEMMODS_CalculateRepairCost(nStatVal, 0, 0, &nRepairCost, &nRepairMinDmg, &nRepairMaxDmg);
-              nAvgDmgCost = (nRepairMinDmg + nRepairMaxDmg) / 2;
-              nCostTmp = *pnSellPriceSaved * nAvgDmgCost;
-              if (nCostTmp <= 0xffff || !pStatCostTxt->multiply) {
-                nCostTmp = pStatCostTxt->multiply;
-                nCostAdd = pStatCostTxt->add;
-                nRepairCostTmp = nCostTmp * *pnSellPriceSaved * nAvgDmgCost;
-                nCostResult = nRepairCostTmp / 1024 + nCostAdd;
-                nRepairCostTmp = *pnBuyPrice * nCostTmp * nAvgDmgCost;
-                nRepairCostTmp = nRepairCostTmp / 1024;
-                goto add_costs_multiply_first;
-              }
-
-              nRepairCostTmp = pStatCostTxt->multiply;
-              nCostAdd = pStatCostTxt->add;
-              nCostTmp = nCostTmp / 1024 * nRepairCostTmp + nCostAdd;
-              nCostResult = (int)(*pnBuyPrice * nAvgDmgCost) / 1024;
-              add_costs_divide_first:
-              nSellCostSum += nCostTmp;
-              nBuyCostSum = nBuyCostSum + nCostResult * nRepairCostTmp + nCostAdd;
-              nRepairCostTmp = (int)(*pnRepairPrice * nAvgDmgCost) / 1024 * nRepairCostTmp;
-              break;
-              default:
-                nCostTmp = *pnSellPriceSaved * nStatVal;
-              if (nCostTmp <= 0xffff || !pStatCostTxt->multiply) {
-                nCostTmp = pStatCostTxt->multiply;
-                nCostAdd = pStatCostTxt->add;
-                nRepairCostTmp = nCostTmp * *pnSellPriceSaved * nStatVal;
-                nCostResult = nRepairCostTmp / 1024 + nCostAdd;
-                nRepairCostTmp = *pnBuyPrice * nCostTmp * nStatVal;
-                nBuyCostSum = nBuyCostSum + nRepairCostTmp / 1024 + nCostAdd;
-                nCostTmp = *pnRepairPrice * nCostTmp * nStatVal;
-                nSellCostSum += nCostResult;
-                nRepairCostTmp = nCostTmp / 1024;
-                break;
-              }
-
-              nRepairCostTmp = pStatCostTxt->multiply;
-              nCostAdd = pStatCostTxt->add;
-              nSellCostSum = nSellCostSum + nCostTmp / 1024 * nRepairCostTmp + nCostAdd;
-              nBuyCostSum = nBuyCostSum + (int)(*pnBuyPrice * nStatVal) / 1024 * nRepairCostTmp + nCostAdd;
-              nRepairCostTmp = (int)(*pnRepairPrice * nStatVal) / 1024 * nRepairCostTmp;
             }
 
-            nRepairCostTmp += nCostAdd;
-            nRepairCostSum += nRepairCostTmp;
+            nRepairCostTmp = pStatCostTxt->multiply;
+            nCostAdd = pStatCostTxt->add;
+            nSellCostSum = nSellCostSum + nCostTmp / 1024 * nRepairCostTmp + nCostAdd;
+            nBuyCostSum = nBuyCostSum + (int)(*pnBuyPrice * nStatVal) / 1024 * nRepairCostTmp + nCostAdd;
+            nRepairCostTmp = (int)(*pnRepairPrice * nStatVal) / 1024 * nRepairCostTmp;
           }
+
+          nRepairCostTmp += nCostAdd;
+          nRepairCostSum += nRepairCostTmp;
         }
       }
     }
@@ -3409,11 +3405,7 @@ uint8_t __stdcall ITEM_GetMaxSockCount(D2UnitStrc * pUnit) {
     }
 
     eD2ItemTypes eItemType = ITEM_GetItemData_wType(pUnit);
-    if (!((int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize)) {
-      return 0;
-    }
-
-    D2ItemTypesTxt* pItemTypesTxt = sgptDataTable->pTxtItemTypes + eItemType;
+    D2ItemTypesTxt* pItemTypesTxt = (int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + eItemType : nullptr;
     if (!pItemTypesTxt) {
       return 0;
     }
@@ -3768,17 +3760,15 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
         do {
           eStateId = (eD2States)sgptDataTable->pStatesItemTypesDataTbl[nStateOrAffixIdx].nStateId;
           eUnitState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eStateId);
-          if (eUnitState != STATE_none && (int)eStateId >= 0 && (int)eStateId < sgptDataTable->nTxtStatesSize) {
-            pDVar1 = sgptDataTable->pTxtStates + eStateId;
-            if (pDVar1 && pDVar1->itemtrans < 0x15) {
-              bIsType = ITEMS_IsA(pItem, (int)pDVar1->itemtype);
-              if (bIsType) {
-                bIsType = D2Client::UNIT::GetClassId(pItem);
-                pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(bIsType);
-                if (pItemsTxt) {
-                  pPaletteResult = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)pItemsTxt->bTransform, (uint32_t)pDVar1->itemtrans);
-                  return pPaletteResult;
-                }
+          pDVar1 = eUnitState != STATE_none && (int)eStateId >= 0 && (int)eStateId < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eStateId : nullptr;
+          if (pDVar1 && pDVar1->itemtrans < 0x15) {
+            bIsType = ITEMS_IsA(pItem, (int)pDVar1->itemtype);
+            if (bIsType) {
+              bIsType = D2Client::UNIT::GetClassId(pItem);
+              pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(bIsType);
+              if (pItemsTxt) {
+                pPaletteResult = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)pItemsTxt->bTransform, (uint32_t)pDVar1->itemtrans);
+                return pPaletteResult;
               }
             }
           }
@@ -4993,11 +4983,12 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
       uVar1 = 0;
       if (nParam2 <= 0x50) {
         nClassId = 8;
+        nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 8);
       } else {
         nClassId = 9;
+        nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 9);
       }
 
-      nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nClassId);
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_quantity, nBitVal, uVar1);
     }
     if (!pUnit || pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataItem) {
@@ -5420,11 +5411,12 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
                 }
               if (nParam2 <= 0x49) {
                 nClassId = 0x1d;
+                nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x1d);
               } else {
                 nClassId = 0x1e;
+                nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 0x1e);
               }
 
-              nBitVal = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nClassId);
               ItemMods::ITEMMODS_GetQualityAllFields(nBitVal, &nChargeMax, (uint32_t*)nChargeBuf, &nChargeSkillLevel, &nChargeSkillId);
               Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_charged_skill, (nChargeSkillLevel & 0xff) + nChargeSkillId * 0x100, (short int)(nChargeMax << ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f)) + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & nChargeBuf[0]));
               break;
@@ -5762,26 +5754,24 @@ D2Row_char_32 * __stdcall ITEM_GetTxtItemTypes_invgfx(D2UnitStrc * pUnit, uint32
     // Static local variables (originally global data)
     static char * gpszItemNoInvGfx = (char *)&lpDefault_006cc837; D2_STATIC_GUARD(gpszItemNoInvGfx, "D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_invgfx::gpszItemNoInvGfx");
 
-    uint32_t nMaxGfxIdx;
+    D2ItemTypesTxt* pItemTypesTxt;
     uint32_t nClampedGfxIdx;
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return (D2Row_char_32*)(char (*)[32])gpszItemNoInvGfx;
     }
 
     eD2ItemTypes eItemType = ITEM_GetItemData_wType(pUnit);
-    if ((int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize) {
-      D2ItemTypesTxt* pItemTypesTxt;
-      pItemTypesTxt = sgptDataTable->pTxtItemTypes + eItemType;
-      if (pItemTypesTxt) {
-        nMaxGfxIdx = (uint8_t)pItemTypesTxt->varinvgfx - 1;
-        nClampedGfxIdx = (int)nParam <= 0 ? 0 : nParam;
-        if ((int)nClampedGfxIdx >= (int)nMaxGfxIdx) {
-          return pItemTypesTxt->invgfx + nMaxGfxIdx;
-        }
-
-        nMaxGfxIdx = nClampedGfxIdx;
+    pItemTypesTxt = (int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + eItemType : nullptr;
+    if (pItemTypesTxt) {
+      uint32_t nMaxGfxIdx;
+      nMaxGfxIdx = (uint8_t)pItemTypesTxt->varinvgfx - 1;
+      nClampedGfxIdx = (int)nParam <= 0 ? 0 : nParam;
+      if ((int)nClampedGfxIdx >= (int)nMaxGfxIdx) {
         return pItemTypesTxt->invgfx + nMaxGfxIdx;
       }
+
+      nMaxGfxIdx = nClampedGfxIdx;
+      return pItemTypesTxt->invgfx + nMaxGfxIdx;
     }
 
     return (D2Row_char_32*)(char (*)[32])gpszItemNoInvGfx;
@@ -5830,6 +5820,7 @@ uint32_t __stdcall ITEM_GetTxtItemTypes_normal(D2UnitStrc * pUnit) {
 }
 
 void __stdcall ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(D2UnitStrc * pUnit, eD2BodyLoc * nBodyLoc1, eD2BodyLoc * nBodyLoc2) {
+    D2ItemTypesTxt* pItemTypesTxt;
     if (!pUnit || pUnit->eUnitType != UNIT_ITEM) {
       *nBodyLoc1 = BODYLOC_NONE;
       *nBodyLoc2 = BODYLOC_NONE;
@@ -5837,14 +5828,11 @@ void __stdcall ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(D2UnitStrc * pUnit, eD2B
     }
 
     eD2ItemTypes eItemType = ITEM_GetItemData_wType(pUnit);
-    if ((int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize) {
-      D2ItemTypesTxt* pItemTypesTxt;
-      pItemTypesTxt = sgptDataTable->pTxtItemTypes + eItemType;
-      if (pItemTypesTxt) {
-        *nBodyLoc1 = pItemTypesTxt->bodyloc1;
-        *nBodyLoc2 = pItemTypesTxt->bodyloc2;
-        return;
-      }
+    pItemTypesTxt = (int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + eItemType : nullptr;
+    if (pItemTypesTxt) {
+      *nBodyLoc1 = pItemTypesTxt->bodyloc1;
+      *nBodyLoc2 = pItemTypesTxt->bodyloc2;
+      return;
     }
 
     *nBodyLoc1 = BODYLOC_NONE;
@@ -7069,12 +7057,13 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
           }
 
           nErrLine = 0xb;
+          Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, 0xb);
         } else {
           nErrLine = 1;
           nBitValue = 0;
+          Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, 1);
         }
 
-        Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, nErrLine);
         nStatValue += 2;
       } while (nStatValue < 0x44);
 

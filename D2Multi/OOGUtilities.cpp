@@ -2158,23 +2158,21 @@ void __stdcall UIMENU_PlayerProfileLabels() {
 // Provenance: asm 00443e10..00443ea0; the forms are the ones OOGUTIL_CreateViewProfileDialog / OOGUTIL_CreateEditProfileDialog create.
 void __stdcall OOGUTIL_CloseProfileDialog() {
     if (gnProfileDialogMode) {
-      ::D2WinTextBox** ppFormToDestroy;
       if (gnProfileDialogMode == 1) {
         D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gpProfileViewBackground);
         D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpProfileViewAccountName);
         D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpProfileViewSex);
         D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpProfileViewLocation);
-        ppFormToDestroy = &gpProfileViewDescription;
+        D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpProfileViewDescription);
       } else {
         D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gpProfileEditBackground);
         D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpProfileEditAccountName);
         D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpProfileEditSex);
         D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpProfileEditLocation);
         D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpProfileEditDescription);
-        ppFormToDestroy = (::D2WinTextBox**)&gpProfileCloseButton;
+        D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)(::D2WinTextBox**)&gpProfileCloseButton);
       }
 
-      D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)ppFormToDestroy);
       gnProfileDialogMode = 0;
       D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gUIPlayerProfileCharacterNameLabel);
       D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gUIPlayerProfileCharacterLevelLabel);
@@ -2824,6 +2822,7 @@ void __stdcall OOGUTIL_UpdateLevelRestrictionControls() {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUIGameListLevelRestrictionDownButton->sControl, 1);
       D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 4, (bool)0, 0);
       nTextAlign = 4;
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLevelsLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148c), 4, false, 0);
     } else {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gUIGameListLevelRestrictionInactiveImage, 1);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gUIGameListLevelRestrictionInactiveArrowButton, 1);
@@ -2834,12 +2833,9 @@ void __stdcall OOGUTIL_UpdateLevelRestrictionControls() {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUIGameListLevelRestrictionDownButton->sControl, 0);
       D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 5, false, 0);
       nTextAlign = 5;
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLevelsLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148c), 5, false, 0);
     }
 
-    int dwTextFlags = 0;
-    bool bVar1 = false;
-    uint16_t* pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x148c);
-    D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLevelsLabel, pwszLabel, nTextAlign, bVar1, dwTextFlags);
     OOGUTIL_RefreshGameList();
 }
 
@@ -2986,6 +2982,7 @@ BOOL __stdcall OOGUTIL_OnPressLevelRestrictionCheckbox(D2ControlMsg * pControlMs
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUIGameListLevelRestrictionDownButton->sControl, 1);
       D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 4, (bool)0, 0);
       nTextAlign = 4;
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLevelsLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148c), 4, false, 0);
     } else {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gUIGameListLevelRestrictionInactiveImage, 1);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gUIGameListLevelRestrictionInactiveArrowButton, 1);
@@ -2996,12 +2993,9 @@ BOOL __stdcall OOGUTIL_OnPressLevelRestrictionCheckbox(D2ControlMsg * pControlMs
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUIGameListLevelRestrictionDownButton->sControl, 0);
       D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148b), 5, false, 0);
       nTextAlign = 5;
+      D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLevelsLabel, D2Lang::StrTable::strtable::GetLocaleString(0x148c), 5, false, 0);
     }
 
-    int dwTextFlags = 0;
-    bool bVar1 = false;
-    uint16_t* pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x148c);
-    D2Win::Src::D2WinTextBox::SetText(gUIGameListLevelRestrictionLevelsLabel, pwszLocale, nTextAlign, bVar1, dwTextFlags);
     OOGUTIL_RefreshGameList();
     return 1;
 }

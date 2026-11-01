@@ -869,7 +869,7 @@ void __fastcall FIELDTBLS_FreePlayerData_STUB(D2UnitStrc * pUnit) {
 
 }
 
-void __stdcall FIELDTBLS_InitTxtFiles_NoOp() {
+void __fastcall FIELDTBLS_InitTxtFiles_NoOp(D2PoolManagerStrc * pMemory) {
 
 }
 

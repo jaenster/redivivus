@@ -122,29 +122,27 @@ uint32_t __stdcall OVERLAYTBLS_GetTrans(int32_t nParam) {
 }
 
 uint32_t __stdcall OVERLAYTBLS_GetLightRadiusAndRGB(int32_t nOverlayId, int * pnInitRadius, int * pnRadius, char * pbyRed, char * pbyGreen, char * pbyBlue) {
-    if (nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize) {
-      D2OverlayTxt* pOverlay;
-      pOverlay = sgptDataTable->pTxtOverlay + nOverlayId;
-      if (pOverlay) {
-        *pnInitRadius = pOverlay->InitRadius;
-        *pnRadius = pOverlay->Radius;
-        *pbyRed = pOverlay->Red;
-        *pbyGreen = pOverlay->Green;
-        *pbyBlue = pOverlay->Blue;
-        if (!*pnRadius && !*pnInitRadius) {
-          return 0;
-        }
-
-        return 1;
-      }
+    D2OverlayTxt* pOverlay;
+    pOverlay = nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
+    if (!pOverlay) {
+      *pnInitRadius = 0;
+      *pnRadius = 0;
+      *pbyRed = '\0';
+      *pbyGreen = '\0';
+      *pbyBlue = '\0';
+      return 0;
     }
 
-    *pnInitRadius = 0;
-    *pnRadius = 0;
-    *pbyRed = '\0';
-    *pbyGreen = '\0';
-    *pbyBlue = '\0';
-    return 0;
+    *pnInitRadius = pOverlay->InitRadius;
+    *pnRadius = pOverlay->Radius;
+    *pbyRed = pOverlay->Red;
+    *pbyGreen = pOverlay->Green;
+    *pbyBlue = pOverlay->Blue;
+    if (!*pnRadius && !*pnInitRadius) {
+      return 0;
+    }
+
+    return 1;
 }
 
 int32_t __stdcall OVERLAYTBLS_Get1ofN(int32_t nParam) {
@@ -276,11 +274,7 @@ uint32_t __stdcall OVERLAYTBLS_GetMonsterComponentOverlay(int32_t nMonStatId, ui
     }
 
     int nMonStats2Idx = (int)sgptDataTable->pTxtMonStats[nMonStatId].MonStatsEx;
-    if (!(nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsExSize)) {
-      return 0;
-    }
-
-    D2MonStats2Txt* pMonStats2 = sgptDataTable->pTxtMonStatsEx + nMonStats2Idx;
+    D2MonStats2Txt* pMonStats2 = nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStats2Idx : nullptr;
     if (!(pMonStats2 && pMonStats2->aComponents[nComponentIdx] > nVariantIdx)) {
       return 0;
     }

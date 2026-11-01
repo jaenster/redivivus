@@ -1548,12 +1548,13 @@ void __fastcall NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(D2ClientStrc * pClient
     if (nStatLayerOrCount < 0x100) {
       Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, 0, 1);
       nBitPos = 8;
+      Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)nStatLayerOrCount, 8);
     } else {
       Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, 1, 1);
       nBitPos = 0x10;
+      Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)nStatLayerOrCount, 0x10);
     }
 
-    Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)nStatLayerOrCount, nBitPos);
     nBitPos = Fog::BitBuffer::GetNextPositon(&bitBuf);
     aPacket[1] = (char)nBitPos + 2;
     SCMD_QueuePacketForClient(aPacket, 0x22, pClient);
@@ -2465,13 +2466,14 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
       if (!(pUnit->eUnitFlagsEx >> 10 & 1) || pUnit->eOwnerType != UNIT_PLAYER) {
         nScratch = 1;
         nStatIndex = 0;
+        Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, nStatIndex, 1);
       } else {
         Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, 1, 1);
         nScratch = 0x1f;
         nStatIndex = pUnit->nOwnerGUID & 0x8fffffff;
+        Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, nStatIndex, 0x1f);
       }
 
-      Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, nStatIndex, nScratch);
       bHasStats = 0;
       pStatListEx = D2Common::Stats::StatsEx::GetStatList(pUnit, STATE_none, 0x40);
       if (!pStatListEx) {
@@ -2489,23 +2491,21 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
             nStatIndex = (uint32_t)(uint16_t)aStatBuf[nIndex].wStatIndex;
             pComponentBytes = (char*)(uint32_t)(uint16_t)aStatBuf[nIndex].wSubIndex;
             nStatValue = aStatBuf[nIndex].nStatValue;
-            if ((int)nStatIndex < pDataTable->nTxtItemStatCostSize) {
-              pStatCostTxt = pDataTable->pTxtItemStatCost + nStatIndex;
-              if (pStatCostTxt && (char)pStatCostTxt->dwItemStatFlags & (uint8_t)gadwBitMasks[0] && pStatCostTxt->sendBits > '\0') {
-                if (!bHasStats) {
-                  bHasStats = 1;
-                  Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, 1, 1);
-                }
-
-                Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, nStatIndex, 9);
-                if (pStatCostTxt->sendParamBits) {
-                  Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, (uint32_t)pComponentBytes & 0xffff, (uint32_t)pStatCostTxt->sendParamBits);
-                }
-
-                Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, nStatValue, (uint32_t)pStatCostTxt->sendBits);
-                nScratch = nStatCount;
-                pDataTable = sgptDataTable;
+            pStatCostTxt = (int)nStatIndex < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatIndex : nullptr;
+            if (pStatCostTxt && (char)pStatCostTxt->dwItemStatFlags & (uint8_t)gadwBitMasks[0] && pStatCostTxt->sendBits > '\0') {
+              if (!bHasStats) {
+                bHasStats = 1;
+                Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, 1, 1);
               }
+
+              Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, nStatIndex, 9);
+              if (pStatCostTxt->sendParamBits) {
+                Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, (uint32_t)pComponentBytes & 0xffff, (uint32_t)pStatCostTxt->sendParamBits);
+              }
+
+              Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, nStatValue, (uint32_t)pStatCostTxt->sendBits);
+              nScratch = nStatCount;
+              pDataTable = sgptDataTable;
             }
 
             nIndex++;

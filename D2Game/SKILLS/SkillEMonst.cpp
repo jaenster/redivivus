@@ -146,12 +146,8 @@ BOOL __fastcall Skills_SrvDoFunc_125_CatapultFireBomb(::SGAMEDATA * pGame, D2Uni
 }
 
 BOOL __fastcall SKILLEMONST_SrvStFn59_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTable = sgptDataTable->pTxtSkills;
-    if (!(pSkillTable + eSkill)) {
+    D2SkillsTxt* pSkillTable = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTable) {
       return 0;
     }
 
@@ -160,7 +156,7 @@ BOOL __fastcall SKILLEMONST_SrvStFn59_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc
       return 0;
     }
 
-    int nCalcDuration = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTable[eSkill].calc[0], eSkill, nSkillLvl);
+    int nCalcDuration = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTable->calc[0], eSkill, nSkillLvl);
     if (nCalcDuration < 1) {
       nCalcDuration = 1;
     }
@@ -183,21 +179,13 @@ BOOL __fastcall Skills_SrvDoFunc_126_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc 
     eD2States eCurrentState;
     D2SkillArgStrc sSkillArg;
     int32_t nCalcResult;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillRecord = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillRecord) {
       return 0;
     }
 
     eMissilesId eMissileId = (eMissilesId)pSkillRecord->srvmissile[1];
-    if (!((int)eMissileId > 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize)) {
-      return 0;
-    }
-
-    D2MissilesTxt* pMissileRecord = sgptDataTable->pTxtMissiles + eMissileId;
+    D2MissilesTxt* pMissileRecord = (int)eMissileId > 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + eMissileId : nullptr;
     if (!pMissileRecord) {
       return 0;
     }
@@ -260,11 +248,7 @@ BOOL __fastcall Skills_SrvDoFunc_126_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc 
 BOOL __fastcall SKILLEMONST_SrvStFn60_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     int nLifeLeech;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillRecord = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillRecord) {
       return 0;
     }
@@ -306,15 +290,8 @@ BOOL __fastcall Skills_SrvDoFunc_127_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc *
     int32_t nHealAmount;
     D2UnitStrc* pOwner;
     uint32_t nDivisor;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTable = sgptDataTable->pTxtSkills;
-    if (!(pSkillTable + eSkill)) {
+    D2SkillsTxt* pSkillTable = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTable) {
       return 0;
     }
 
@@ -349,7 +326,7 @@ BOOL __fastcall Skills_SrvDoFunc_127_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc *
       }
 
       nDivisor = 100;
-      nHealAmount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTable[eSkill].calc[0], eSkill, nSkillLvl);
+      nHealAmount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTable->calc[0], eSkill, nSkillLvl);
       nHealAmount = D2Client::Stats::D2ApplyPercent(nDmgHp, nHealAmount, nDivisor);
       nCurHp += nHealAmount;
       nDmgHp = 1;
@@ -373,14 +350,7 @@ BOOL __fastcall Skills_SrvDoFunc_127_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc *
 // SrvDoFunc 128: monster-side summon skill. Gets the skill's target unit, calculates a game-frame deadline via calc[0], issues CreateMinion AI command, and optionally applies srvoverlay to the target. Returns FALSE if no valid target or caster is not a monster.
 BOOL __fastcall Skills_SrvDoFunc_128_MonsterCreateMinion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2AiCmdArgumentsStrc sAiCmd;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillRecord = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillRecord) {
       return 0;
     }
@@ -599,11 +569,7 @@ static int __stdcall SKILLSOR_GetMeteorSubMissileCount(eMissilesId pParam, eD2Sk
 }
 
 BOOL __fastcall Skills_SrvDoFunc_130_SpawnSubMissiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillRecord = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillRecord) {
       return 0;
     }
@@ -629,11 +595,7 @@ BOOL __fastcall Skills_SrvDoFunc_130_SpawnSubMissiles(::SGAMEDATA * pGame, D2Uni
 }
 
 static void __stdcall SKILLEMONST_ApplyAuraBuff(D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return;
-    }
-
-    D2SkillsTxt* pSkillRecord = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillRecord) {
       return;
     }
@@ -660,11 +622,7 @@ static void __stdcall SKILLEMONST_TransformMonsterClass(D2UnitStrc * pUnit, DWOR
     eD2UnitType eUnitType;
     D2MonsterKillStrc sMonsterKill;
     int32_t nDifficulty;
-    if (!(nParam >= 0 && nParam < sgptDataTable->nTxtSkillsCount)) {
-      return;
-    }
-
-    D2SkillsTxt* pSkillRecord = sgptDataTable->pTxtSkills + nParam;
+    D2SkillsTxt* pSkillRecord = nParam >= 0 && nParam < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nParam : nullptr;
     if (!pSkillRecord) {
       return;
     }
@@ -824,18 +782,16 @@ void __fastcall SKILLEMONST_OnDeathSpawnExpire(D2UnitStrc * pUnit, eD2States eSt
     if (nStatListParam) {
       eD2Skills nSkillId;
       nSkillId = D2Common::Stats::StatsEx::GetSkillId((D2StatListExStrc*)nStatListParam);
-      if ((int)nSkillId >= 0 && (int)nSkillId < sgptDataTable->nTxtSkillsCount) {
-        pSkillRecord = sgptDataTable->pTxtSkills + nSkillId;
-        if (pSkillRecord) {
-          sSummonId = pSkillRecord->summon;
-          if (sSummonId > 0 && (int)sSummonId < sgptDataTable->nTxtMonStatsSize) {
-            nSummonMonStatsId = (int)sSummonId;
-          }
+      pSkillRecord = (int)nSkillId >= 0 && (int)nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
+      if (pSkillRecord) {
+        sSummonId = pSkillRecord->summon;
+        if (sSummonId > 0 && (int)sSummonId < sgptDataTable->nTxtMonStatsSize) {
+          nSummonMonStatsId = (int)sSummonId;
+        }
 
-          cSummonMode = pSkillRecord->summode;
-          if (cSummonMode >= 0 && cSummonMode < '\x10') {
-            eSpawnAnimMode = (eD2MonsterAnimMode)cSummonMode;
-          }
+        cSummonMode = pSkillRecord->summode;
+        if (cSummonMode >= 0 && cSummonMode < '\x10') {
+          eSpawnAnimMode = (eD2MonsterAnimMode)cSummonMode;
         }
       }
     }
@@ -884,27 +840,25 @@ BOOL __fastcall Skills_SrvDoFunc_133_SetDeathSpawnState(::SGAMEDATA * pGame, D2U
 BOOL __fastcall Skills_SrvDoFunc_134_AreaExplosionAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillRecord;
     D2DamageStrc sDamage;
-    if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
+    pSkillRecord = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (pSkillRecord && pSkillRecord->srvmissile[1] > 0 && (int)pSkillRecord->srvmissile[1] < sgptDataTable->nTxtMissilesSize) {
       int32_t nAuraRange;
-      pSkillRecord = sgptDataTable->pTxtSkills + eSkill;
-      if (pSkillRecord && pSkillRecord->srvmissile[1] > 0 && (int)pSkillRecord->srvmissile[1] < sgptDataTable->nTxtMissilesSize) {
-        if (pUnit) {
-          pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-        }
-
-        memset(&sDamage, 0, 0x70);
-        sDamage.wResultFlags |= pSkillRecord->ResultFlags;
-        sDamage.dwHitFlags = sDamage.dwHitFlags | 1U | pSkillRecord->HitFlags;
-        if (pSkillRecord->HitClass) {
-          sDamage.dwHitClass = pSkillRecord->HitClass;
-        }
-
-        SkillsServer::SKILLS_AddRandomSkillDamage(pUnit, &sDamage.dwHitFlags, eSkill, nSkillLvl);
-        SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
-        nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->aurarangecalc, eSkill, nSkillLvl);
-        SkillsServer::SKILLS_ApplyAreaDamage(pGame, pUnit, 0, 0, nAuraRange, &sDamage, 0);
-        return 1;
+      if (pUnit) {
+        pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
+
+      memset(&sDamage, 0, 0x70);
+      sDamage.wResultFlags |= pSkillRecord->ResultFlags;
+      sDamage.dwHitFlags = sDamage.dwHitFlags | 1U | pSkillRecord->HitFlags;
+      if (pSkillRecord->HitClass) {
+        sDamage.dwHitClass = pSkillRecord->HitClass;
+      }
+
+      SkillsServer::SKILLS_AddRandomSkillDamage(pUnit, &sDamage.dwHitFlags, eSkill, nSkillLvl);
+      SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
+      nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->aurarangecalc, eSkill, nSkillLvl);
+      SkillsServer::SKILLS_ApplyAreaDamage(pGame, pUnit, 0, 0, nAuraRange, &sDamage, 0);
+      return 1;
     }
 
     return 0;
@@ -930,15 +884,8 @@ BOOL __fastcall SKILLEMONST_SrvStFn62_MinionSpawner(::SGAMEDATA * pGame, D2UnitS
 // SrvDoFunc 135: spawns a monster using coordinates and class id stored in the active skill's params 1-4. Finds the nearest valid room, calls SpawnMonster twice (first with radius -1, then 4 on failure), marks the spawn with NOXP|NOTC flags, sets it as owned by caster, and applies sumoverlay.
 BOOL __fastcall Skills_SrvDoFunc_135_SpawnMinionFromParams(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     short int sSumOverlay;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills;
-    if (!(pSkillTxt + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
 
@@ -968,7 +915,7 @@ BOOL __fastcall Skills_SrvDoFunc_135_SpawnMinionFromParams(::SGAMEDATA * pGame, 
 
     pSpawnedUnit->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC;
     D2Common::Units::StoreOwner(pSpawnedUnit, pUnit);
-    sSumOverlay = pSkillTxt[eSkill].sumoverlay;
+    sSumOverlay = pSkillTxt->sumoverlay;
     if (!(sSumOverlay >= 0 && (int)sSumOverlay < sgptDataTable->nTxtOverlaySize)) {
       return 1;
     }
@@ -981,14 +928,7 @@ BOOL __fastcall Skills_SrvDoFunc_135_SpawnMinionFromParams(::SGAMEDATA * pGame, 
 BOOL __fastcall Skills_SrvDoFunc_136_FireSpeedScaledMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nCursorX;
     uint32_t nCursorY;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillRecord = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillRecord) {
       return 0;
     }
@@ -1076,55 +1016,53 @@ BOOL __fastcall Skills_SrvDoFunc_138_FirePerpendicularMissileLine(::SGAMEDATA * 
     int32_t nDirX;
     uint32_t nCursorY;
     uint32_t nCursorX;
-    if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
+    pSkillRecord = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (pSkillRecord) {
       eMissilesId eMissileId;
-      pSkillRecord = sgptDataTable->pTxtSkills + eSkill;
-      if (pSkillRecord) {
-        eMissileId = (eMissilesId)pSkillRecord->srvmissile[1];
-        if ((int)eMissileId > 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
-          bGotTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nCursorX, &nCursorY);
-          if (!bGotTargetPos) {
-            return 1;
-          }
-
-          nUnitPosX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-          nDirX = nCursorX - nUnitPosX;
-          nLineCount = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-          nDirY = nCursorY - nLineCount;
-          SkillsServer::SKILLS_NormalizeDirectionMin(&nDirX, &nDirY);
-          SkillsServer::SKILLS_NormalizeDirectionPerp(&nDirX, &nDirY);
-          nLineCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[0], eSkill, nSkillLvl);
-          nCursorX -= nLineCount * nDirX / 2;
-          nCursorY -= nLineCount * nDirY / 2;
-          nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
-          memset(&sSkillArg, 0, 0x5c);
-          sSkillArg.nFlags = 0x20;
-          sSkillArg.pOwner = pUnit;
-          sSkillArg.pMissile = pUnit;
-          sSkillArg.eSkillNo = eSkill;
-          sSkillArg.nSkillLevel = nSkillLvl;
-          sSkillArg.nMissileTxtNo = eMissileId;
-          sSkillArg.nTotalFrames = nTotalFrames;
-          if (nLineCount > 0) {
-            do {
-              sSkillArg.nUnitX = nCursorX;
-              sSkillArg.nUnitY = nCursorY;
-              MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-              nCursorX += nDirX;
-              nCursorY += nDirY;
-              nLineCount--;
-            } while (nLineCount);
-          }
-
-          eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-          if (eUnitState == STATE_none) {
-            return 1;
-          }
-
-          D2Common::Units::SetSequenceFrame(pUnit, 8);
-          pUnit->nFrameCount = 0x600;
+      eMissileId = (eMissilesId)pSkillRecord->srvmissile[1];
+      if ((int)eMissileId > 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
+        bGotTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nCursorX, &nCursorY);
+        if (!bGotTargetPos) {
           return 1;
         }
+
+        nUnitPosX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+        nDirX = nCursorX - nUnitPosX;
+        nLineCount = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+        nDirY = nCursorY - nLineCount;
+        SkillsServer::SKILLS_NormalizeDirectionMin(&nDirX, &nDirY);
+        SkillsServer::SKILLS_NormalizeDirectionPerp(&nDirX, &nDirY);
+        nLineCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[0], eSkill, nSkillLvl);
+        nCursorX -= nLineCount * nDirX / 2;
+        nCursorY -= nLineCount * nDirY / 2;
+        nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
+        memset(&sSkillArg, 0, 0x5c);
+        sSkillArg.nFlags = 0x20;
+        sSkillArg.pOwner = pUnit;
+        sSkillArg.pMissile = pUnit;
+        sSkillArg.eSkillNo = eSkill;
+        sSkillArg.nSkillLevel = nSkillLvl;
+        sSkillArg.nMissileTxtNo = eMissileId;
+        sSkillArg.nTotalFrames = nTotalFrames;
+        if (nLineCount > 0) {
+          do {
+            sSkillArg.nUnitX = nCursorX;
+            sSkillArg.nUnitY = nCursorY;
+            MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+            nCursorX += nDirX;
+            nCursorY += nDirY;
+            nLineCount--;
+          } while (nLineCount);
+        }
+
+        eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+        if (eUnitState == STATE_none) {
+          return 1;
+        }
+
+        D2Common::Units::SetSequenceFrame(pUnit, 8);
+        pUnit->nFrameCount = 0x600;
+        return 1;
       }
     }
 

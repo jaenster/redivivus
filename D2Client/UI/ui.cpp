@@ -1662,7 +1662,8 @@ int UI_GoldInputCallback_ReturnZero() {
 }
 
 int __stdcall UI_GoldDialogScrollCallback() {
-    eD2UnitStat eUnitStat;
+    D2UnitStrc* pUnit;
+    uint32_t uMaxGoldAvailable;
     int nScrollDirection = gpCurrentDialog->pVtable->GetValue(gpCurrentDialog);
     uint32_t uScrollDelta = gpCurrentDialog->pVtable->GetRepeatDelta(gpCurrentDialog, 0);
     if (gpDialogDefaultActionCallback) {
@@ -1672,13 +1673,12 @@ int __stdcall UI_GoldDialogScrollCallback() {
     uint32_t uGoldAmount = gnGoldDialogTransactionMode;
     uint16_t nLayer = 0;
     if (gnGoldDialogTransactionType == 4) {
-      eUnitStat = UNITSTAT_goldbank;
+      pUnit = UNIT::Player::GetPlayerUnit_UI();
+      uMaxGoldAvailable = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_goldbank, nLayer);
     } else {
-      eUnitStat = UNITSTAT_gold;
+      pUnit = UNIT::Player::GetPlayerUnit_UI();
+      uMaxGoldAvailable = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, nLayer);
     }
-
-    D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    uint32_t uMaxGoldAvailable = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, nLayer);
     if (nScrollDirection == 1) {
       uGoldAmount += uScrollDelta;
       if (uGoldAmount > uMaxGoldAvailable) {
@@ -6431,15 +6431,8 @@ int32_t __stdcall UI_BuildStatWindowDescriptions() {
 
     int nMonIdx;
     nMonIdx = GAME::Select::SELECT_GetConstant13_Y();
-    if (nMonIdx < 0) {
-      return 0;
-    }
-    if (nMonIdx >= sgptDataTable->nTxtMonStatsSize) {
-      return 0;
-    }
-
     D2MonStatsTxt* pMonStatsTxt;
-    pMonStatsTxt = sgptDataTable->pTxtMonStats + nMonIdx;
+    pMonStatsTxt = nMonIdx >= 0 && nMonIdx < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonIdx : nullptr;
     if (!pMonStatsTxt) {
       return 0;
     }

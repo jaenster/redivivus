@@ -39,7 +39,6 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
-#include "D2Client/UI/QuestLog.h"
 #include "D2Game/D2Game.h"
 #include "D2Game/Quests/QUESTS/A2Q5.h"
 #include "D2Game/Quests/QUESTS/Quest40.h"
@@ -895,7 +894,6 @@ void __fastcall Q14_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     BOOL bQuestStateResult;
     bool bNpcActive;
-    eD2QuestState eQuestState;
     if (nTargetClassId == MonsterUnitJerhyn) {
       /* GetQuestState(TheSevenTombs, 0=Completed) — Jerhyn: inactive once quest
                          complete */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Completed);
@@ -913,7 +911,9 @@ bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId
         }
       }
 
-      eQuestState = QUESTSTATE_Step0x03;
+      /* GetQuestState(TheSevenTombs, state) — shared "required-state" test:
+                         Jerhyn->Step0x03(3), Drognan(0xd2)->Step0x04(4) (jumps here with 4 pushed).
+                         Active iff set. */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x03);
     } else {
       if (nTargetClassId != MonsterUnitMeshif) {
         if (nTargetClassId == MonsterUnitTyrael2) {
@@ -982,12 +982,11 @@ bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId
         return false;
       }
 
-      eQuestState = QUESTSTATE_Step0x04;
+      /* GetQuestState(TheSevenTombs, state) — shared "required-state" test:
+                         Jerhyn->Step0x03(3), Drognan(0xd2)->Step0x04(4) (jumps here with 4 pushed).
+                         Active iff set. */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x04);
     }
 
-    /* GetQuestState(TheSevenTombs, state) — shared "required-state" test:
-                         Jerhyn->Step0x03(3), Drognan(0xd2)->Step0x04(4) (jumps here with 4 pushed).
-                         Active iff set. */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, eQuestState);
     bNpcActive = bQuestStateResult == 1;
     if (bNpcActive) {
       return true;

@@ -142,12 +142,8 @@ void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, B
     }
 
     int nClassId = pUnit->nClassId;
-    if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize)) {
-      return;
-    }
-
-    D2MonStatsTxt* pMonStatsTxt = sgptDataTable->pTxtMonStats;
-    if (!(pMonStatsTxt + nClassId && bUnknown)) {
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    if (!(pMonStatsTxt && bUnknown)) {
       return;
     }
 
@@ -183,7 +179,7 @@ void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, B
 
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_damagepercent, nDamageBonus, 0);
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_item_tohit_percent, nToHitBonus, 0);
-    short int nVelocity = pMonStatsTxt[nClassId].Velocity;
+    short int nVelocity = pMonStatsTxt->Velocity;
     if (!(nVelocity > 0 && nIndex != 0x24)) {
       return;
     }

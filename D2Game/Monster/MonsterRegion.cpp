@@ -249,16 +249,14 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
         }
 
         nMonStatIdx = (int)(short int)nMonClassId;
-        if (nMonStatIdx >= 0 && nMonStatIdx < sgptDataTable->nTxtMonStatsSize) {
-          pMonStats = sgptDataTable->pTxtMonStats + nMonStatIdx;
-          if (pMonStats && *((uint8_t*)pMonStats + 0xc) & (uint8_t)gadwBitMasks[0]) {
-            pMonField->nClassId = nMonClassId;
-            pMonField->nRarity = pMonStats->Rarity;
-            pMonsterRegion->nTotalRarity += pMonStats->Rarity;
-            pMonsterRegion->nSpawnCount++;
-            pMonsterRegion->nCounter++;
-            pMonField++;
-          }
+        pMonStats = nMonStatIdx >= 0 && nMonStatIdx < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr;
+        if (pMonStats && *((uint8_t*)pMonStats + 0xc) & (uint8_t)gadwBitMasks[0]) {
+          pMonField->nClassId = nMonClassId;
+          pMonField->nRarity = pMonStats->Rarity;
+          pMonsterRegion->nTotalRarity += pMonStats->Rarity;
+          pMonsterRegion->nSpawnCount++;
+          pMonsterRegion->nCounter++;
+          pMonField++;
         }
 
         nMonsPicked++;

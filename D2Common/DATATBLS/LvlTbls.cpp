@@ -1018,7 +1018,7 @@ D2LvlSubTxt * __fastcall TXT_LvlSub_GetLineFromSubType(int32_t nSubType) {
 
 // Allocates and populates the pExpansionLvlTbls array (one D2ExpansionLvlTblsTxt per LvlTypes row, 0x1000 bytes each). For each LvlTypes row iterates up to 32 File[] entries (stride 60 bytes); skips entries whose filename starts with "0" and skips expansion-only tiles in classic mode. Calls TILEPROJECT_AllocSlot for each valid tile file.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
-void __stdcall TXT_LoadExpansionLvlTbls() {
+void __fastcall TXT_LoadExpansionLvlTbls(D2PoolManagerStrc * pMemory) {
     char* szFilename;
     int nFileStrOffset;
     bool bCharsMatch;

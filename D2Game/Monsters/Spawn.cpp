@@ -56,11 +56,7 @@
 namespace D2Game::Monsters::Spawn {
 
 int32_t __fastcall MONSTER_GetMonsterClassByDifficulty(int32_t nMonstatId, int32_t nParam) {
-    if (!(nMonstatId >= 0 && nMonstatId < sgptDataTable->nTxtMonStatsSize)) {
-      return -1;
-    }
-
-    D2MonStatsTxt* pMonStatLine = sgptDataTable->pTxtMonStats + nMonstatId;
+    D2MonStatsTxt* pMonStatLine = nMonstatId >= 0 && nMonstatId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonstatId : nullptr;
     if (!pMonStatLine) {
       return -1;
     }
@@ -73,14 +69,7 @@ int32_t __fastcall MONSTER_GetMonsterClassByDifficulty(int32_t nMonstatId, int32
 
     do {
       nClassId = (int32_t)pMonStatLine->NextInClass;
-      if (nClassId < 0) {
-        return nClassId;
-      }
-      if (nClassId >= sgptDataTable->nTxtMonStatsSize) {
-        return nClassId;
-      }
-
-      pMonStatLine = sgptDataTable->pTxtMonStats + nClassId;
+      pMonStatLine = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
       if (!pMonStatLine) {
         return nClassId;
       }
@@ -565,12 +554,8 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithCollisionObj(::SGAMEDATA * p
     BOOL _bObjColFlag;
     bool bRescueQuestDone;
     bool bObjColFlag;
-    if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize)) {
-      return nullptr;
-    }
-
-    D2MonStatsTxt* pMonStats = sgptDataTable->pTxtMonStats;
-    if (!(pMonStats + nClassId)) {
+    D2MonStatsTxt* pMonStats = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    if (!pMonStats) {
       return nullptr;
     }
     if (nClassId == 0x1b2) {
@@ -587,7 +572,7 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithCollisionObj(::SGAMEDATA * p
     }
 
     int16_t nSpawnFlags = 0;
-    if (*((uint8_t*)&pMonStats[nClassId] + 0xe) & (uint8_t)gadwBitMasks[2]) {
+    if (*((uint8_t*)pMonStats + 0xe) & (uint8_t)gadwBitMasks[2]) {
       nSpawnFlags = 8;
     }
 

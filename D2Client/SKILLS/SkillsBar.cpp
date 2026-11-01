@@ -206,14 +206,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_SoftMonster_BloodParticles(D2UnitStrc * pUn
 // Client do-function for the Barbarian Whirlwind/Corpse Explosion skill action. Confirms the current target is a soft (corpse-explodable) monster, finds a free nearby coordinate, selects the appropriate size-based cltmissile (small/normal/large from MonStats2), and spawns both the size missile and a MISSILE_Corpseexplosion at that location. Sets UNITFLAG_SKSRVDOFUNC on the player unit.
 BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     POINT nFreeCoordTmp;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -293,15 +286,8 @@ static BOOL __stdcall SKILL_ValidateTeleportDestination(D2UnitStrc * pUnit, int3
     LONG nCandidateX;
     LONG nCandidateY;
     int nClampedDestY;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills;
-    if (!(pSkillTxt + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
 
@@ -323,7 +309,7 @@ static BOOL __stdcall SKILL_ValidateTeleportDestination(D2UnitStrc * pUnit, int3
       nUnitX = 0;
     }
 
-    int32_t nRangeCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt[eSkill].aurarangecalc, eSkill, nParam);
+    int32_t nRangeCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, nParam);
     int nMaxTeleportRange = nRangeCalc;
     int32_t nDistToDestination = D2Common::Collision::GetDistanceToXY(pUnit, *pnParam1, *pnParam2);
     if (nDistToDestination <= 1) {

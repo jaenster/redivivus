@@ -504,11 +504,7 @@ void __fastcall TXT_AllocTxt_monstats(D2PoolManagerStrc * pMemory) {
 // Computes level/difficulty-scaled monster combat stats from monstats.txt + monlvl.txt into the caller-supplied pnOutStats[] array. Inputs: nMonStatsId (monstats row), bIsChampion (selects champion HP/AC/XP/TH/DM column triplet), nDifficultyIdx (0-2, clamped), nMonLevel (clamped to monlvl table), nStatFlags (bitmask 0x1..0x100 selecting which stat groups to fill: HP, AC, XP, to-hit/damage, elemental). Per the monstat noRatio flag, values are either taken raw from the monstats row or scaled against the monlvl base via D2ApplyPercent(base, percent, 100). Returns 1 on success, 0 if the monstats/monlvl row is out of range or null. Pure stat computation; no unit mutation.
 BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bIsChampion, uint32_t nDifficultyIdx, int32_t nMonLevel, uint32_t nStatFlags, D2MonStatsInitStrc * pOutStats) {
     int32_t nScaledStat;
-    if (!(nMonStatsId >= 0 && nMonStatsId < sgptDataTable->nTxtMonStatsSize)) {
-      return 0;
-    }
-
-    D2MonStatsTxt* pMonStatsTxt = sgptDataTable->pTxtMonStats + nMonStatsId;
+    D2MonStatsTxt* pMonStatsTxt = nMonStatsId >= 0 && nMonStatsId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonStatsId : nullptr;
     if (!pMonStatsTxt) {
       return 0;
     }
@@ -517,11 +513,8 @@ BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bI
     if (nMonLevel < nClampedLevel) {
       nClampedLevel = nMonLevel;
     }
-    if (!(nClampedLevel >= 0 && nClampedLevel < sgptDataTable->nTxtMonLvlSize)) {
-      return 0;
-    }
 
-    D2MonLvlTxt* pMonLvlEntry = sgptDataTable->pTxtMonLvl + nClampedLevel;
+    D2MonLvlTxt* pMonLvlEntry = nClampedLevel >= 0 && nClampedLevel < sgptDataTable->nTxtMonLvlSize ? sgptDataTable->pTxtMonLvl + nClampedLevel : nullptr;
     if (!pMonLvlEntry) {
       return 0;
     }

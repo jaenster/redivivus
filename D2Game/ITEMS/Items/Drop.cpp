@@ -632,20 +632,13 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2It
     }
     if (pItemGenContext->bFromCustomData) {
       dwFileIndex = pItemGenContext->dwFileIndex;
-      if ((int)dwFileIndex < 0) {
-        return 0;
-      }
-      if ((int)dwFileIndex >= sgptDataTable->nTxtUniqueItemsSize) {
-        return 0;
-      }
-
-      pUniqueItemsTxt = sgptDataTable->pTxtUniqueItems;
-      if (!(pUniqueItemsTxt + dwFileIndex)) {
+      pUniqueItemsTxt = (int)dwFileIndex >= 0 && (int)dwFileIndex < sgptDataTable->nTxtUniqueItemsSize ? sgptDataTable->pTxtUniqueItems + dwFileIndex : nullptr;
+      if (!pUniqueItemsTxt) {
         return 0;
       }
 
       D2Common::ITEMS::Items::ITEM_SetItemData_nFileIndex(pUnit, dwFileIndex);
-      if (pUniqueItemsTxt[dwFileIndex].dwItemCode != pItemsTxt->dwCode) {
+      if (pUniqueItemsTxt->dwItemCode != pItemsTxt->dwCode) {
         return 1;
       }
     } else {
@@ -1351,6 +1344,7 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
       if (iVar1) {
         pItem = *ppItem;
         eQuality = QUALITY_UNIQUE;
+        D2Common::ITEMS::Items::SetItemQuality(pItem, QUALITY_UNIQUE);
       } else {
         iVar1 = D2Common::ITEMS::Items::ITEM_CheckItemData_ItemQualityIsMagicOrBetter(*ppItem);
         if (iVar1) {
@@ -1359,9 +1353,8 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
 
         pItem = *ppItem;
         eQuality = QUALITY_MAGIC;
+        D2Common::ITEMS::Items::SetItemQuality(pItem, QUALITY_MAGIC);
       }
-
-      D2Common::ITEMS::Items::SetItemQuality(pItem, eQuality);
     }
 
     apply_type_quality_limits:

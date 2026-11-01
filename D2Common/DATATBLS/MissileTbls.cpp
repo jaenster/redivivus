@@ -462,14 +462,12 @@ void __stdcall MISSILETBLS_FreeTxt() {
 }
 
 int32_t __stdcall MISSILETBLS_CalculateVelocity(int32_t nMissileId, int32_t nLevel) {
-    int nVelLevProduct;
-    if (nMissileId >= 0 && nMissileId < sgtDataTable.nTxtMissilesSize) {
-      D2MissilesTxt* pMissileTxt;
-      pMissileTxt = sgtDataTable.pTxtMissiles + nMissileId;
-      if (pMissileTxt) {
-        nVelLevProduct = (uint32_t)(uint8_t)pMissileTxt->VelLev * nLevel;
-        return nVelLevProduct / 8 + (uint32_t)pMissileTxt->Vel;
-      }
+    D2MissilesTxt* pMissileTxt;
+    pMissileTxt = nMissileId >= 0 && nMissileId < sgtDataTable.nTxtMissilesSize ? sgtDataTable.pTxtMissiles + nMissileId : nullptr;
+    if (pMissileTxt) {
+      int nVelLevProduct;
+      nVelLevProduct = (uint32_t)(uint8_t)pMissileTxt->VelLev * nLevel;
+      return nVelLevProduct / 8 + (uint32_t)pMissileTxt->Vel;
     }
 
     return 0;

@@ -2977,7 +2977,7 @@ void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStr
         }
       }
     } else {
-      A3Q7::Q24_HandleKhalimsWillCompletion(pGame);
+      A3Q7::Q24_HandleKhalimsWillCompletion(pGame, nEventCode);
     }
 }
 

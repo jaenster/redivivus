@@ -367,11 +367,7 @@ void __fastcall SOUNDHDR_Init(uint32_t bBackgroundActive) {
 }
 
 void __fastcall SOUNDHDR_AdjustReferenceCount(int32_t nSoundId, int32_t nDelta) {
-    if (!(nSoundId && pTxtSounds && nSoundId >= 0 && nSoundId < nTxtSoundsSize)) {
-      return;
-    }
-
-    D2SoundsTxt* pSound = pTxtSounds + nSoundId;
+    D2SoundsTxt* pSound = nSoundId && pTxtSounds && nSoundId >= 0 && nSoundId < nTxtSoundsSize ? pTxtSounds + nSoundId : nullptr;
     if (!(pSound && (pSound->nRefCount || nDelta != -1))) {
       return;
     }
@@ -400,11 +396,7 @@ void __fastcall SOUNDHDR_AdjustReferenceCount(int32_t nSoundId, int32_t nDelta) 
 
 void __fastcall SOUNDHDR_ClearReferenceCounts(eD2Sounds eSound) {
     int nSoundsCount = nTxtSoundsSize;
-    if (!(eSound != SOUND_NONE && pTxtSounds && (int)eSound >= 0 && (int)eSound < nTxtSoundsSize)) {
-      return;
-    }
-
-    D2SoundsTxt* pSound = pTxtSounds + eSound;
+    D2SoundsTxt* pSound = eSound != SOUND_NONE && pTxtSounds && (int)eSound >= 0 && (int)eSound < nTxtSoundsSize ? pTxtSounds + eSound : nullptr;
     if (!pSound) {
       return;
     }

@@ -264,11 +264,7 @@ static void __stdcall STATLIST_TrackChangedStat(int32_t nShiftedStat, D2StatList
 static int32_t __stdcall STATLIST_LookupBaseStatWithMinAccr(D2ItemStatCostTxt * pItemStatCostLine, D2StatListExStrc * pStatList, int32_t nParam) {
     D2StatInfoStrc* pnParam = &pStatList->sStatList.sBaseStats;
     long int lVar2 = Logging::STATLIST_BinarySearchStatById(nParam, (int*)pnParam);
-    if (lVar2 < 0) {
-      return 0;
-    }
-
-    D2StatStrc* pDVar1 = pnParam->pStatInfo + lVar2;
+    D2StatStrc* pDVar1 = lVar2 >= 0 ? pnParam->pStatInfo + lVar2 : nullptr;
     if (!pDVar1) {
       return 0;
     }
@@ -843,11 +839,7 @@ void __stdcall STATLIST_DispatchUnchangedStatToCallback(D2UnitStrc * pUnit, D2Un
 
     D2StatInfoStrc* pBaseStats = &pDVar2->sStatList.sBaseStats;
     long int lVar3 = Logging::STATLIST_BinarySearchStatById(eUnitStat << 0x10, (int*)pBaseStats);
-    if (lVar3 < 0) {
-      return;
-    }
-
-    D2StatStrc* pDVar1 = pBaseStats->pStatInfo + lVar3;
+    D2StatStrc* pDVar1 = lVar3 >= 0 ? pBaseStats->pStatInfo + lVar3 : nullptr;
     if (!pDVar1) {
       return;
     }
@@ -1378,12 +1370,8 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
     uint16_t wBaseStat;
     eD2UnitStat eStatType;
     eStatType = nStatShifted >> 0x10 & 0xffff;
-    if ((int)eStatType >= sgptDataTable->nTxtItemStatCostSize) {
-      return 0;
-    }
-
     D2ItemStatCostTxt* pItemStatCostLine;
-    pItemStatCostLine = sgptDataTable->pTxtItemStatCost + eStatType;
+    pItemStatCostLine = (int)eStatType < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eStatType : nullptr;
     if (!pItemStatCostLine) {
       return 0;
     }
@@ -1739,11 +1727,7 @@ void __fastcall STATLIST_PropagateStatChange(D2StatListExStrc * pStatsEx, int32_
     }
 
     uint32_t dwFlags = nShiftedStat >> 0x10 & 0xffff;
-    if ((int)dwFlags >= sgptDataTable->nTxtItemStatCostSize) {
-      return;
-    }
-
-    D2ItemStatCostTxt* pItemStatCostLine = sgptDataTable->pTxtItemStatCost + dwFlags;
+    D2ItemStatCostTxt* pItemStatCostLine = (int)dwFlags < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + dwFlags : nullptr;
     if (!pItemStatCostLine) {
       return;
     }

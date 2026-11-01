@@ -130,12 +130,8 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
 
     eD2UnitStat eStat;
     eStat = eSkill >> 0x10;
-    if ((int)eStat >= sgptDataTable->nTxtItemStatCostSize) {
-      return;
-    }
-
     D2ItemStatCostTxt* pStatCostTxt;
-    pStatCostTxt = sgptDataTable->pTxtItemStatCost + eStat;
+    pStatCostTxt = (int)eStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eStat : nullptr;
     if (!pStatCostTxt) {
       return;
     }
@@ -1073,11 +1069,9 @@ static BOOL __stdcall ITEMMODE_CheckDuplicateQuestItem(D2UnitStrc * pUnit, D2Uni
         nCheckResult = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
         if (nCheckResult >= 0) {
           nItemQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-          if (nItemQuality >= 0 && nItemQuality < sgptDataTable->nTxtUniqueItemsSize) {
-            pUniqueTxt = sgptDataTable->pTxtUniqueItems + nItemQuality;
-            if (pUniqueTxt && *((uint8_t*)pUniqueTxt + 0x2c) & (uint8_t)gadwBitMasks[2]) {
-              nUniqueIdx = (int)(short int)pUniqueTxt->wId;
-            }
+          pUniqueTxt = nItemQuality >= 0 && nItemQuality < sgptDataTable->nTxtUniqueItemsSize ? sgptDataTable->pTxtUniqueItems + nItemQuality : nullptr;
+          if (pUniqueTxt && *((uint8_t*)pUniqueTxt + 0x2c) & (uint8_t)gadwBitMasks[2]) {
+            nUniqueIdx = (int)(short int)pUniqueTxt->wId;
           }
         }
       }

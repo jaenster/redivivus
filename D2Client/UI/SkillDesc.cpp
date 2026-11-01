@@ -907,11 +907,7 @@ static int32_t __stdcall SKILLDESC_CalcStatGroupValue(D2UnitStrc * pUnit, eD2Uni
     if (pItemStatCostTxt->op >= 2 && pItemStatCostTxt->op <= 5) {
       eD2UnitStat eUnitStat;
       eUnitStat = (eD2UnitStat)pItemStatCostTxt->opBase;
-      if ((int)eUnitStat >= sgptDataTable->nTxtItemStatCostSize) {
-        return 0;
-      }
-
-      pStatCostLine = sgptDataTable->pTxtItemStatCost + eUnitStat;
+      pStatCostLine = (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
       if (!pStatCostLine) {
         return 0;
       }
@@ -2236,12 +2232,8 @@ void __fastcall SKILLDESC_AppendSetBonusTextByStateValue(D2UnitStrc * pUnit, D2U
     }
 
     nFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit2);
-    if (!(nFileIndex >= 0 && nFileIndex < sgptDataTable->nTxtSetItemsSize)) {
-      return;
-    }
-
-    D2SetItemsTxt* pSetItemsTxt = sgptDataTable->pTxtSetItems;
-    if (!(pSetItemsTxt + nFileIndex)) {
+    D2SetItemsTxt* pSetItemsTxt = nFileIndex >= 0 && nFileIndex < sgptDataTable->nTxtSetItemsSize ? sgptDataTable->pTxtSetItems + nFileIndex : nullptr;
+    if (!pSetItemsTxt) {
       return;
     }
 
@@ -2251,7 +2243,7 @@ void __fastcall SKILLDESC_AppendSetBonusTextByStateValue(D2UnitStrc * pUnit, D2U
       pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, gaeSetBonusStates[i]);
       if (pStatList) {
         nSetValue = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_value, 0);
-        if (pSetItemsTxt[nFileIndex].set == nSetValue) {
+        if (pSetItemsTxt->set == nSetValue) {
           break;
         }
       }
@@ -2589,18 +2581,16 @@ int32_t __stdcall SKILLDESC_GetAuraBonusDamage() {
         pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)sgptDataTable->pAllStatesDataTblFlag0x04[nStateIdx].nStateId);
         if (pStatList) {
           eSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
-          if ((int)eSkill > 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
-            pDVar3 = sgptDataTable->pTxtSkills + eSkill;
-            if (pDVar3) {
-              nStateCount = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_level, 0);
-              if (nStateCount > 0 && pDVar3->prgdam == '\x01') {
-                nAuraStat = pDVar3->aurastat[0];
-                if (nAuraStat >= 0 && (int)nAuraStat < sgptDataTable->nTxtItemStatCostSize) {
-                  nAuraDmgVal = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, (int)nAuraStat, 0);
-                  if (nAuraDmgVal > 0) {
-                    nAuraStatValue = DataTbls::TXT_Skills_GetSkillRange(eSkill, nStateCount);
-                    nTotalDmg += nAuraStatValue * nAuraDmgVal;
-                  }
+          pDVar3 = (int)eSkill > 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+          if (pDVar3) {
+            nStateCount = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_level, 0);
+            if (nStateCount > 0 && pDVar3->prgdam == '\x01') {
+              nAuraStat = pDVar3->aurastat[0];
+              if (nAuraStat >= 0 && (int)nAuraStat < sgptDataTable->nTxtItemStatCostSize) {
+                nAuraDmgVal = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, (int)nAuraStat, 0);
+                if (nAuraDmgVal > 0) {
+                  nAuraStatValue = DataTbls::TXT_Skills_GetSkillRange(eSkill, nStateCount);
+                  nTotalDmg += nAuraStatValue * nAuraDmgVal;
                 }
               }
             }
@@ -2733,23 +2723,25 @@ static void __stdcall SKILLDESC_CalcSkillElemDamage(D2UnitStrc * pUnit, int * pn
 }
 
 static int __stdcall SKILLDESC_FormatIntValue(uint16_t * wszText, int32_t bPrefixSign, int32_t nValue) {
-    char* pcVar1;
     char szBuf[32];
     if (!bPrefixSign || nValue < 0) {
-      /* LPCSTR param_2 for wsprintfA */ pcVar1 = "%d";
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d", nValue);
     } else {
-      pcVar1 = "+%d";
+      wsprintfA(szBuf, "+%d", nValue);
     }
 
-    wsprintfA(szBuf, pcVar1, nValue);
     D2Lang::UTF8_ConvertToWideChar(wszText, szBuf, 0x20);
     return 1;
 }
 
 static int __stdcall SKILLDESC_FormatDecimalValue(uint16_t * wszText, int32_t bPrefixSign, int32_t nValue, int32_t nFraction) {
     char szBuf[32];
-    char* pszFmt = (char*)(!bPrefixSign || nValue < 0 ? "%d.%d" : "+%d.%d");
-    wsprintfA(szBuf, pszFmt, nValue, nFraction);
+    if (!bPrefixSign || nValue < 0) {
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d.%d", nValue, nFraction);
+    } else {
+      wsprintfA(szBuf, "+%d.%d", nValue, nFraction);
+    }
+
     D2Lang::UTF8_ConvertToWideChar(wszText, szBuf, 0x20);
     return 1;
 }
@@ -2759,7 +2751,6 @@ static void __stdcall SKILLDESC_FormatDamageRange(int32_t bPrefixSign, uint16_t 
     static uint8_t gaSkillDescDamageRangeData = 0x2b; D2_STATIC_GUARD(gaSkillDescDamageRangeData, "D2Client::UI::SkillDesc::SKILLDESC_FormatDamageRange::gaSkillDescDamageRangeData");
 
     char szBuf[32];
-    char* pszFmt;
     if (bUseFormat) {
       uint8_t* pszPrefix;
       if (nMinDamage >= 10000) {
@@ -2783,21 +2774,24 @@ static void __stdcall SKILLDESC_FormatDamageRange(int32_t bPrefixSign, uint16_t 
         return;
       }
     }
-    if (bPrefixSign) {
-      pszFmt = "+%d-%d";
+    if (!bPrefixSign) {
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d-%d", nMinDamage, nMaxDamage);
     } else {
-      /* LPCSTR param_2 for wsprintfA */ pszFmt = "%d-%d";
+      wsprintfA(szBuf, "+%d-%d", nMinDamage, nMaxDamage);
     }
 
-    wsprintfA(szBuf, pszFmt, nMinDamage, nMaxDamage);
     D2Lang::UTF8_ConvertToWideChar(wszText, szBuf, 0x20);
 }
 
 uint32_t SKILLDESC_FormatDamageRangeWithCalc(int32_t bPrefixSign, int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText) {
-    char szBuf[32];
     if (nMinVal == nMaxVal) {
-      char* pcVar1 = (char*)(!bPrefixSign || nMinVal < 0 ? "%d" : "+%d");
-      wsprintfA(szBuf, pcVar1, nMinVal);
+      char szBuf[32];
+      if (!bPrefixSign || nMinVal < 0) {
+        /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d", nMinVal);
+      } else {
+        wsprintfA(szBuf, "+%d", nMinVal);
+      }
+
       D2Lang::UTF8_ConvertToWideChar(wszText, szBuf, 0x20);
       return 1;
     }
@@ -2808,12 +2802,16 @@ uint32_t SKILLDESC_FormatDamageRangeWithCalc(int32_t bPrefixSign, int32_t nMinVa
 
 void __stdcall SKILLDESC_FormatDecimalRange(uint16_t * wszText, int32_t bPrefixSign) {
     char szBuf[32];
-    char* pszFmt = (char*)(!bPrefixSign ? "%d.%d-%d.%d" : "+%d.%d-%d.%d");
-    wsprintfA(szBuf, pszFmt);
+    if (!bPrefixSign) {
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d.%d-%d.%d");
+    } else {
+      wsprintfA(szBuf, "+%d.%d-%d.%d");
+    }
+
     D2Lang::UTF8_ConvertToWideChar(wszText, szBuf, 0x20);
 }
 
-static void __stdcall SKILLDESC_FormatRangeWithStrings(int32_t nBonusRatio, uint16_t * wszText, uint16_t nStatNameId, int32_t nBonusValue) {
+static BOOL __stdcall SKILLDESC_FormatRangeWithStrings(int32_t nBonusRatio, uint16_t * wszText, uint16_t nStatNameId, int32_t nBonusValue) {
     uint16_t wszNumBuf[32];
     char szBuf[32];
     for (int iFill = 0; iFill < 32; iFill++) {
@@ -2831,7 +2829,7 @@ static void __stdcall SKILLDESC_FormatRangeWithStrings(int32_t nBonusRatio, uint
     if (!nRatioInt) {
       if (!nRatioFrac) {
         if (!nValueInt) {
-          return;
+          return 0;
         }
 
         try_whole_range:
@@ -2854,6 +2852,7 @@ static void __stdcall SKILLDESC_FormatRangeWithStrings(int32_t nBonusRatio, uint
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
     pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
+    return 1;
 }
 
 static int __stdcall SKILLDESC_FormatRangeDivided(uint16_t * wszText, uint16_t nMinLabel, uint16_t nMaxLabel, uint32_t nMinValue, uint32_t nMaxValue, int32_t nDivisor) {
@@ -2938,7 +2937,6 @@ static int __stdcall SKILLDESC_FormatStringWithCalc(uint32_t dwSkillCalcCtx, uin
 static void __stdcall SKILLDESC_FormatSignedValue(int32_t nSignedValue, uint16_t nStatLabelId, int32_t nValue, uint16_t * wszText) {
     uint16_t wszNumBuf[32];
     char szBuf[32];
-    char* pszFormat;
     for (int iFill = 0; iFill < 32; iFill++) {
       wszNumBuf[iFill] = L'\0';
     }
@@ -2947,12 +2945,11 @@ static void __stdcall SKILLDESC_FormatSignedValue(int32_t nSignedValue, uint16_t
       return;
     }
     if (!nValue || nSignedValue < 0) {
-      /* LPCSTR param_2 for wsprintfA */ pszFormat = "%d";
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d", nSignedValue);
     } else {
-      pszFormat = "+%d";
+      wsprintfA(szBuf, "+%d", nSignedValue);
     }
 
-    wsprintfA(szBuf, pszFormat, nSignedValue);
     D2Lang::UTF8_ConvertToWideChar(wszNumBuf, szBuf, 0x20);
     uint16_t* pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(nStatLabelId);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
@@ -3031,7 +3028,6 @@ static void __stdcall SKILLDESC_FormatDecimalWithLabel(int32_t nDecimalPart, uin
 static int __stdcall SKILLDESC_FormatValuePercentage(int32_t nValue, uint16_t nSuffixLabelId, int32_t bPrefixSign, uint16_t * wszText) {
     uint16_t wszNumBuf[32];
     char szBuf[32];
-    char* pszFormat;
     for (int iFill = 0; iFill < 32; iFill++) {
       wszNumBuf[iFill] = L'\0';
     }
@@ -3040,12 +3036,11 @@ static int __stdcall SKILLDESC_FormatValuePercentage(int32_t nValue, uint16_t nS
       return 0;
     }
     if (!bPrefixSign || nValue < 0) {
-      /* LPCSTR param_2 for wsprintfA */ pszFormat = "%d";
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d", nValue);
     } else {
-      pszFormat = "+%d";
+      wsprintfA(szBuf, "+%d", nValue);
     }
 
-    wsprintfA(szBuf, pszFormat, nValue);
     D2Lang::UTF8_ConvertToWideChar(wszNumBuf, szBuf, 0x20);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszNumBuf);
     uint16_t* pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(nSuffixLabelId);
@@ -3058,7 +3053,6 @@ static int __stdcall SKILLDESC_FormatValuePercentage(int32_t nValue, uint16_t nS
 static void __stdcall SKILLDESC_FormatValueTwoStrings(int32_t nValue, uint16_t nLabel1Id, uint16_t nLabel2Id, int32_t bPrefixSign, uint16_t * wszText) {
     uint16_t wszNumBuf[32];
     char szBuf[32];
-    char* pszFormat;
     for (int iFill = 0; iFill < 32; iFill++) {
       wszNumBuf[iFill] = L'\0';
     }
@@ -3067,12 +3061,11 @@ static void __stdcall SKILLDESC_FormatValueTwoStrings(int32_t nValue, uint16_t n
       return;
     }
     if (!bPrefixSign || nValue < 0) {
-      /* LPCSTR param_2 for wsprintfA */ pszFormat = "%d";
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d", nValue);
     } else {
-      pszFormat = "+%d";
+      wsprintfA(szBuf, "+%d", nValue);
     }
 
-    wsprintfA(szBuf, pszFormat, nValue);
     D2Lang::UTF8_ConvertToWideChar(wszNumBuf, szBuf, 0x20);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszNumBuf);
     uint16_t* pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(nLabel1Id);
@@ -3086,7 +3079,6 @@ static void __stdcall SKILLDESC_FormatValueTwoStrings(int32_t nValue, uint16_t n
 static void __stdcall SKILLDESC_FormatTwoValuesSigned(uint16_t nSingularLabelId, uint16_t nPluralLabelId, int32_t bPrefixSign, int32_t nValue, uint16_t * wszText) {
     uint16_t wszNumBuf[32];
     char szBuf[32];
-    char* pszFormat;
     for (int iFill = 0; iFill < 32; iFill++) {
       wszNumBuf[iFill] = L'\0';
     }
@@ -3095,12 +3087,11 @@ static void __stdcall SKILLDESC_FormatTwoValuesSigned(uint16_t nSingularLabelId,
       return;
     }
     if (!bPrefixSign || nValue < 0) {
-      /* LPCSTR param_2 for wsprintfA */ pszFormat = "%d";
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d", nValue);
     } else {
-      pszFormat = "+%d";
+      wsprintfA(szBuf, "+%d", nValue);
     }
 
-    wsprintfA(szBuf, pszFormat, nValue);
     D2Lang::UTF8_ConvertToWideChar(wszNumBuf, szBuf, 0x20);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszNumBuf);
     if (nValue != 1) {
@@ -3116,7 +3107,6 @@ static void __stdcall SKILLDESC_FormatTwoValuesSigned(uint16_t nSingularLabelId,
 static void __stdcall SKILLDESC_FormatSignedRangeOrValue(int32_t nValue, uint16_t nPrefixLabelId, uint16_t nSuffixLabelId, int32_t bPrefixSign, uint16_t * wszText) {
     uint16_t wszNumBuf[32];
     char szBuf[32];
-    char* pszFormat;
     for (int iFill = 0; iFill < 32; iFill++) {
       wszNumBuf[iFill] = L'\0';
     }
@@ -3125,12 +3115,11 @@ static void __stdcall SKILLDESC_FormatSignedRangeOrValue(int32_t nValue, uint16_
       return;
     }
     if (!bPrefixSign || nValue < 0) {
-      /* LPCSTR param_2 for wsprintfA */ pszFormat = "%d";
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d", nValue);
     } else {
-      pszFormat = "+%d";
+      wsprintfA(szBuf, "+%d", nValue);
     }
 
-    wsprintfA(szBuf, pszFormat, nValue);
     D2Lang::UTF8_ConvertToWideChar(wszNumBuf, szBuf, 0x20);
     uint16_t* pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(nPrefixLabelId);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
@@ -3145,7 +3134,6 @@ static void __stdcall SKILLDESC_FormatMinMaxRange(int32_t nMinVal, int32_t nMaxV
     uint16_t* pWszLabel;
     uint16_t wszRangeStr[32];
     char szBuf[32];
-    char* pszFmt;
     if (nMinVal == nMaxVal) {
       SKILLDESC_FormatSignedRangeOrValue(nMinVal, nPrefixLabelId, nSuffixLabelId, 0, wszText);
       return;
@@ -3155,13 +3143,12 @@ static void __stdcall SKILLDESC_FormatMinMaxRange(int32_t nMinVal, int32_t nMaxV
       wszRangeStr[iFill] = L'\0';
     }
 
-    if (bPrefixSign) {
-      pszFmt = "+%d-%d";
+    if (!bPrefixSign) {
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d-%d", nMinVal, nMaxVal);
     } else {
-      /* LPCSTR param_2 for wsprintfA */ pszFmt = "%d-%d";
+      wsprintfA(szBuf, "+%d-%d", nMinVal, nMaxVal);
     }
 
-    wsprintfA(szBuf, pszFmt, nMinVal, nMaxVal);
     D2Lang::UTF8_ConvertToWideChar(wszRangeStr, szBuf, 0x20);
     if (nPrefixLabelId != 0x1506) {
       pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(nPrefixLabelId);
@@ -3181,7 +3168,6 @@ static void __stdcall SKILLDESC_FormatMinMaxRange(int32_t nMinVal, int32_t nMaxV
 static void __stdcall SKILLDESC_FormatMinMaxRangeLabelsFirst(int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText, int32_t bPrefixSign, uint16_t nSuffixLabelId, uint16_t nPrefixLabelId) {
     uint16_t wszRangeStr[32];
     char szBuf[32];
-    char* pszFmt;
     if (nMinVal == nMaxVal) {
       SKILLDESC_FormatSignedRangeOrValue(nMinVal, nPrefixLabelId, nSuffixLabelId, 0, wszText);
       return;
@@ -3191,13 +3177,12 @@ static void __stdcall SKILLDESC_FormatMinMaxRangeLabelsFirst(int32_t nMinVal, in
       wszRangeStr[iFill] = L'\0';
     }
 
-    if (bPrefixSign) {
-      pszFmt = "+%d-%d";
+    if (!bPrefixSign) {
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d-%d", nMinVal, nMaxVal);
     } else {
-      /* LPCSTR param_2 for wsprintfA */ pszFmt = "%d-%d";
+      wsprintfA(szBuf, "+%d-%d", nMinVal, nMaxVal);
     }
 
-    wsprintfA(szBuf, pszFmt, nMinVal, nMaxVal);
     D2Lang::UTF8_ConvertToWideChar(wszRangeStr, szBuf, 0x20);
     uint16_t* pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(nPrefixLabelId);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
@@ -3211,7 +3196,6 @@ static void __stdcall SKILLDESC_FormatMinMaxRangeLabelsFirst(int32_t nMinVal, in
 static int __stdcall SKILLDESC_FormatDamageMinMax(int32_t nMinDmg, int32_t nMaxDmg, uint16_t * wszText, int32_t bShowLabel, uint16_t nLabelId, int32_t bPrefixSign) {
     uint16_t wszMinMaxW[32];
     char szMinMaxA[32];
-    char* pszFmt;
     if (nMinDmg == nMaxDmg) {
       int32_t nResult;
       SKILLDESC_FormatSignedValue(nMinDmg, nLabelId, bPrefixSign, wszText);
@@ -3222,13 +3206,12 @@ static int __stdcall SKILLDESC_FormatDamageMinMax(int32_t nMinDmg, int32_t nMaxD
       wszMinMaxW[iFill] = L'\0';
     }
 
-    if (bPrefixSign) {
-      pszFmt = "+%d-%d";
+    if (!bPrefixSign) {
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szMinMaxA, "%d-%d", nMinDmg, nMaxDmg);
     } else {
-      /* LPCSTR param_2 for wsprintfA */ pszFmt = "%d-%d";
+      wsprintfA(szMinMaxA, "+%d-%d", nMinDmg, nMaxDmg);
     }
 
-    wsprintfA(szMinMaxA, pszFmt, nMinDmg, nMaxDmg);
     D2Lang::UTF8_ConvertToWideChar(wszMinMaxW, szMinMaxA, 0x20);
     uint16_t* pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(nLabelId);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
@@ -3246,7 +3229,6 @@ static int __stdcall SKILLDESC_FormatDamageMinMax(int32_t nMinDmg, int32_t nMaxD
 static void __stdcall SKILLDESC_FormatThreeValues(int32_t pThis, uint16_t nLabel1Id, uint16_t nLabel2Id, uint16_t nLabel3Id, int32_t bPrefixSign, uint16_t * wszText) {
     uint16_t wszValueW[32];
     char szValueA[32];
-    char* pszFmtStr;
     for (int iFill = 0; iFill < 32; iFill++) {
       wszValueW[iFill] = L'\0';
     }
@@ -3255,12 +3237,11 @@ static void __stdcall SKILLDESC_FormatThreeValues(int32_t pThis, uint16_t nLabel
       return;
     }
     if (!bPrefixSign || pThis < 0) {
-      /* LPCSTR param_2 for wsprintfA */ pszFmtStr = "%d";
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szValueA, "%d", pThis);
     } else {
-      pszFmtStr = "+%d";
+      wsprintfA(szValueA, "+%d", pThis);
     }
 
-    wsprintfA(szValueA, pszFmtStr, pThis);
     D2Lang::UTF8_ConvertToWideChar(wszValueW, szValueA, 0x20);
     uint16_t* pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(nLabel1Id);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
@@ -4183,20 +4164,17 @@ static void __stdcall SKILLDESC_DrawDamageNumbers(int32_t nParam1, int32_t nPara
     if (nParam1 == nParam2) {
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDmgTextA, "%d", nParam1);
     } else {
-      char* pszFmt;
       if (nParam1 < 10000) {
         if (nParam2 < 10000) {
           /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDmgTextA, "%d-%d", nParam1, nParam2);
           goto draw_damage_text;
         }
 
-        /* LPCSTR param_2 for wsprintfA */ pszFmt = "%s%d-%dK";
+        /* LPCSTR param_2 for wsprintfA */ wsprintfA(szDmgTextA, "%s%d-%dK", "", nParam1, (nParam2 + 500) / 1000);
       } else {
         nParam1 = (nParam1 + 500) / 1000;
-        pszFmt = "%s%dK-%dK";
+        wsprintfA(szDmgTextA, "%s%dK-%dK", "", nParam1, (nParam2 + 500) / 1000);
       }
-
-      wsprintfA(szDmgTextA, pszFmt, "", nParam1, (nParam2 + 500) / 1000);
     }
 
     draw_damage_text:
@@ -4328,12 +4306,12 @@ static void __stdcall SKILLDESC_DrawSkillDmgPhysical(int32_t pSkillRecord, D2Uni
 
         /* LPCSTR param_2 for wsprintfA */ szFmt = "%s%d-%dK";
         /* LPSTR param_1 for wsprintfA */ nMinDmgScaled = __frame0.nMainMinDmg;
+        wsprintfA(szDmgTextA, "%s%d-%dK", "", nMinDmgScaled, (nElemDmg + 500) / 1000);
       } else {
         nMinDmgScaled = (__frame0.nMainMinDmg + 500) / 1000;
         szFmt = "%s%dK-%dK";
+        wsprintfA(szDmgTextA, "%s%dK-%dK", "", nMinDmgScaled, (nElemDmg + 500) / 1000);
       }
-
-      wsprintfA(szDmgTextA, szFmt, "", nMinDmgScaled, (nElemDmg + 500) / 1000);
     }
 
     format_second_range:
@@ -4350,12 +4328,12 @@ static void __stdcall SKILLDESC_DrawSkillDmgPhysical(int32_t pSkillRecord, D2Uni
 
         /* LPCSTR param_2 for wsprintfA */ szFmt = "%s%d-%dK";
         /* LPSTR param_1 for wsprintfA */ nMinDmgScaled = nItemClassId;
+        wsprintfA(szDmgTextA, "%s%d-%dK", "", nMinDmgScaled, (__frame0.nOffhandMaxDmg + 500) / 1000);
       } else {
         nMinDmgScaled = (nItemClassId + 500) / 1000;
         szFmt = "%s%dK-%dK";
+        wsprintfA(szDmgTextA, "%s%dK-%dK", "", nMinDmgScaled, (__frame0.nOffhandMaxDmg + 500) / 1000);
       }
-
-      wsprintfA(szDmgTextA, szFmt, "", nMinDmgScaled, (__frame0.nOffhandMaxDmg + 500) / 1000);
     }
 
     draw_both_ranges:
@@ -4449,12 +4427,12 @@ void __fastcall SKILLDESC_DrawSkillDmgElemental(D2UnitStrc * pUnit, D2SkillStrc 
         }
 
         /* LPCSTR param_2 for wsprintfA */ szFmt = "%s%d-%dK";
+        wsprintfA(szDmgTextA, "%s%d-%dK", "", nPhysMinDmg, (int)(pSkillsTxt->EMinLev + 3) / 1000);
       } else {
         nPhysMinDmg = (nPhysMinDmg + 500) / 1000;
         szFmt = "%s%dK-%dK";
+        wsprintfA(szDmgTextA, "%s%dK-%dK", "", nPhysMinDmg, (int)(pSkillsTxt->EMinLev + 3) / 1000);
       }
-
-      wsprintfA(szDmgTextA, szFmt, "", nPhysMinDmg, (int)(pSkillsTxt->EMinLev + 3) / 1000);
     }
 
     draw_both_ranges:
@@ -4920,12 +4898,12 @@ void __fastcall SKILLDESC_DrawSkillDmgComplex(D2UnitStrc * pUnit, D2SkillStrc * 
         }
 
         /* LPCSTR param_2 for wsprintfA */ szFmtStr = "%s%d-%dK";
+        wsprintfA(szDmgTextA, "%s%d-%dK", "", nElemMaxShifted, (nElemMaxDmg + 500) / 1000);
       } else {
         nElemMaxShifted = (nElemMaxShifted + 500) / 1000;
         szFmtStr = "%s%dK-%dK";
+        wsprintfA(szDmgTextA, "%s%dK-%dK", "", nElemMaxShifted, (nElemMaxDmg + 500) / 1000);
       }
-
-      wsprintfA(szDmgTextA, szFmtStr, "", nElemMaxShifted, (nElemMaxDmg + 500) / 1000);
     }
 
     draw_both_ranges:
@@ -5069,12 +5047,12 @@ void __fastcall SKILLDESC_DrawSkillDmgRanged(D2UnitStrc * pUnit, D2SkillStrc * p
         }
 
         /* LPCSTR param_2 for wsprintfA */ szFmtStr = "%s%d-%dK";
+        wsprintfA(szDmgTextA, "%s%d-%dK", "", nElemMinCopy, (nElemMaxDmg + 500) / 1000);
       } else {
         nElemMinCopy = (nElemMinCopy + 500) / 1000;
         szFmtStr = "%s%dK-%dK";
+        wsprintfA(szDmgTextA, "%s%dK-%dK", "", nElemMinCopy, (nElemMaxDmg + 500) / 1000);
       }
-
-      wsprintfA(szDmgTextA, szFmtStr, "", nElemMinCopy, (nElemMaxDmg + 500) / 1000);
     }
 
     draw_both_ranges:
@@ -5545,12 +5523,12 @@ void __fastcall SKILLDESC_DrawSkillDmgProgressive(D2UnitStrc * pUnit, D2SkillStr
         }
 
         /* LPCSTR param_2 for wsprintfA */ pszFormatStr = "%s%d-%dK";
+        wsprintfA(szNumberBuffer, "%s%d-%dK", "", pSkillLevelB, (nSkillLevel + 500) / 1000);
       } else {
         pSkillLevelB = (uintptr_t)&((D2SkillStrc*)(pSkillLevelB + 0x1c0))->nOwnerGUID / 1000;
         pszFormatStr = "%s%dK-%dK";
+        wsprintfA(szNumberBuffer, "%s%dK-%dK", "", pSkillLevelB, (nSkillLevel + 500) / 1000);
       }
-
-      wsprintfA(szNumberBuffer, pszFormatStr, "", pSkillLevelB, (nSkillLevel + 500) / 1000);
     }
 
     draw_both_ranges:
@@ -5573,19 +5551,15 @@ void __fastcall SKILLDESC_DrawSkillDmgProgElem(D2UnitStrc * pUnit, D2SkillStrc *
 
 static void __stdcall SKILLDESC_DescLineD_AppendDuration(uint16_t * wszText, int32_t nParam1, int32_t nParam2, int32_t nParam3) {
     D2MonStatsInitStrc sMonStats;
-    if (!(nParam3 >= 0 && nParam3 < sgptDataTable->nTxtMonStatsSize)) {
-      return;
-    }
-
-    D2MonStatsTxt* pMonStatsTxt = sgptDataTable->pTxtMonStats;
-    if (!(pMonStatsTxt + nParam3)) {
+    D2MonStatsTxt* pMonStatsTxt = nParam3 >= 0 && nParam3 < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nParam3 : nullptr;
+    if (!pMonStatsTxt) {
       return;
     }
 
     uint8_t bVar1 = GAME::Game::GetDificulity();
     uint32_t nDifficultyIdx = (uint32_t)bVar1;
     memset(&sMonStats, 0, 0x38);
-    int nMonLevel = (int)pMonStatsTxt[nParam3].aLevel[nDifficultyIdx];
+    int nMonLevel = (int)pMonStatsTxt->aLevel[nDifficultyIdx];
     D2MonStatsInitStrc* pnScaledStats = &sMonStats;
     BOOL BVar2 = D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nParam3, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficultyIdx, nMonLevel, 1, pnScaledStats);
     if (!BVar2) {
@@ -5661,7 +5635,6 @@ static void __stdcall SKILLDESC_DescLine9_ElemDamage(D2UnitStrc * pUnit, uint16_
     int64_t uDivResult;
     uint16_t wszNumBuf[32];
     char szFormattedA[32];
-    char* szFmtStr;
     for (int iFill = 0; iFill < 32; iFill++) {
       wszNumBuf[iFill] = L'\0';
     }
@@ -5720,13 +5693,12 @@ static void __stdcall SKILLDESC_DescLine9_ElemDamage(D2UnitStrc * pUnit, uint16_
         return;
       }
     } else if (nMinFinal == iVar1) {
-      if (nMinFinal >= 0) {
-        szFmtStr = "+%d";
+      if (nMinFinal < 0) {
+        /* LPCSTR param_2 for wsprintfA */ wsprintfA(szFormattedA, "%d", nMinFinal);
       } else {
-        /* LPCSTR param_2 for wsprintfA */ szFmtStr = "%d";
+        wsprintfA(szFormattedA, "+%d", nMinFinal);
       }
 
-      wsprintfA(szFormattedA, szFmtStr, nMinFinal);
       goto append_damage_line;
     }
 
@@ -5858,7 +5830,6 @@ static void __stdcall SKILLDESC_DescLine3F_SignedPctRange(int32_t nValue, uint16
     uint16_t* pLocalStr;
     uint16_t wszValueStr[32];
     char szFormattedA[32];
-    char* szFmtStr;
     if (!nValue) {
       return;
     }
@@ -5868,12 +5839,11 @@ static void __stdcall SKILLDESC_DescLine3F_SignedPctRange(int32_t nValue, uint16
     }
 
     if (!nParam1 || nValue < 0) {
-      /* LPCSTR param_2 for wsprintfA */ szFmtStr = "%d";
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szFormattedA, "%d", nValue);
     } else {
-      szFmtStr = "+%d";
+      wsprintfA(szFormattedA, "+%d", nValue);
     }
 
-    wsprintfA(szFormattedA, szFmtStr, nValue);
     D2Lang::UTF8_ConvertToWideChar(wszValueStr, szFormattedA, 0x20);
     if (nParam != 0x1506) {
       pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(nParam);

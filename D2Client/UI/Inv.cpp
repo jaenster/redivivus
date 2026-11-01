@@ -961,6 +961,8 @@ static BOOL INV_IsQuestItemConsumable(int32_t pUnit) {
     int nItemCode = *(int*)(pUnit + 0x80);
     if (nItemCode == 0x20737361) {
       eQuest = QUEST_RadamentsLair;
+      eQuestState = QUESTSTATE_Step0x05;
+      bQuestState = D2Common::QuestRecord::GetQuestState(npcmenu::GetQuestInfo(), QUEST_RadamentsLair, eQuestState);
     } else {
       if (nItemCode != 0x207a7978) {
         if (nItemCode != 0x20327274) {
@@ -985,11 +987,9 @@ static BOOL INV_IsQuestItemConsumable(int32_t pUnit) {
       }
 
       eQuest = QUEST_TheGoldenBird;
+      eQuestState = QUESTSTATE_Step0x05;
+      bQuestState = D2Common::QuestRecord::GetQuestState(npcmenu::GetQuestInfo(), QUEST_TheGoldenBird, eQuestState);
     }
-
-    eQuestState = QUESTSTATE_Step0x05;
-    D2BitBufferStrc* pQuestInfo = npcmenu::GetQuestInfo();
-    bQuestState = D2Common::QuestRecord::GetQuestState(pQuestInfo, eQuest, eQuestState);
     if (bQuestState) {
       return 0;
     }

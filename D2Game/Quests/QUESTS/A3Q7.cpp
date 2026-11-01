@@ -116,7 +116,7 @@ void __fastcall Q23_NotifyGuardianStateToPlayers(::SGAMEDATA * pGame, char cPara
 }
 
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_HandleKhalimsWillCompletion(pGame): on the Guardian quest data, force Khalim's-Eye and Khalim's-Flail counts to 2 (mark Khalim's Will assembled), then if the orb unit exists flag it for client update (SetupUpdateFlag 1, and mode-2 update for the secondary orb ref). Cross-quest helper: pokes the Khalim's-Will item bookkeeping that gates the Mephisto fight. No quest-state transitions.
-void __fastcall Q24_HandleKhalimsWillCompletion(::SGAMEDATA * pGame) {
+void __fastcall Q24_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, uint32_t nEventCode) {
     D2UnitStrc* pQuestData;
     D2QuestDataStrc* pOrbUnit = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheGuardian);
     if (!pOrbUnit) {

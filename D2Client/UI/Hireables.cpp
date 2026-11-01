@@ -227,11 +227,7 @@ static void __stdcall DrawHirelingName(int32_t nX, int32_t nY, int32_t nColor, u
 
 static void __stdcall GetAndDrawHirelingName(int32_t nX, int32_t nY, int32_t nPetType) {
     uint16_t wszName[32];
-    if (!(nPetType >= 0 && nPetType < sgptDataTable->nTxtPetTypeSize)) {
-      return;
-    }
-
-    D2PetTypeTxt* pPetTypeTxt = sgptDataTable->pTxtPetType + nPetType;
+    D2PetTypeTxt* pPetTypeTxt = nPetType >= 0 && nPetType < sgptDataTable->nTxtPetTypeSize ? sgptDataTable->pTxtPetType + nPetType : nullptr;
     if (!(pPetTypeTxt && pPetTypeTxt->name > 0 && pPetTypeTxt->name != 0x1506)) {
       return;
     }
@@ -289,14 +285,7 @@ void __stdcall UI_DrawHirelingGoldCost(int nGoldCost, int32_t nDrawPositionX) {
 DC6 * __fastcall GetRosterIcon(D2UnitStrc * pUnit, int32_t nSkillId, int32_t * pRosterGUID, uint32_t * pFlagOut) {
     int nIconIndex;
     char szIconPath[256];
-    if (nSkillId < 0) {
-      return nullptr;
-    }
-    if (nSkillId >= sgptDataTable->nTxtPetTypeSize) {
-      return nullptr;
-    }
-
-    D2PetTypeTxt* pPetType = sgptDataTable->pTxtPetType + nSkillId;
+    D2PetTypeTxt* pPetType = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtPetTypeSize ? sgptDataTable->pTxtPetType + nSkillId : nullptr;
     if (!pPetType) {
       return nullptr;
     }

@@ -544,6 +544,7 @@ typedef BOOL (__stdcall *pfnSymUnloadModule64)(HANDLE hProcess, DWORD BaseOfDllL
 typedef D2FontGlyphStrc * (__fastcall *pfnFontGetGlyphEntry)(uint16_t wCharCode);
 typedef D2RoomExStrc * (__fastcall *fpDrlgMazeFindEdgeRoom)(D2DrlgLevelStrc * pLevel);
 typedef D2UnitStrc * (__fastcall *D2InitUnitObject)(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nMonStatsId, int32_t nPosX, int32_t nPosY, BOOL bUseMonStats);
+typedef D2UnitStrc * (__fastcall *D2ObjectPopulateFnFunc)(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int nObjectClassId, uint16_t nChancePercent);
 typedef DWORD (__stdcall *fnGetUnknownFlag)();
 typedef DWORD (__stdcall *fnSendKeepAlive)();
 typedef DWORD (__stdcall *pfnSymGetModuleBase)(HANDLE hProcess, DWORD dwAddr);
@@ -627,7 +628,6 @@ typedef void (__fastcall *D2MissileCltDoFunc)(D2UnitStrc * pMissile);
 typedef void (__fastcall *D2MissileSrvDmgFunc)(::SGAMEDATA * pGame, D2UnitStrc * pMissile, D2UnitStrc * pTarget, D2DamageStrc * pDamage);
 typedef void (__fastcall *D2NET_CLIENT_D2GStoCLT)(char * pBytes);
 typedef void (__fastcall *D2NET_CLIENT_D2GStoCLT_Unit)(D2UnitStrc * pUnit, char * pBytes);
-typedef void (__fastcall *D2ObjectPopulateFnFunc)(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int nObjectClassId, uint16_t nChancePercent);
 typedef void (__fastcall *D2ObjectsInitFnFunc)(D2ObjectInitFnArg * pInitArg);
 typedef void (__fastcall *D2SkillDescAttackFunc)(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 typedef void (__fastcall *D2SkillDescDamageFunc)(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight);

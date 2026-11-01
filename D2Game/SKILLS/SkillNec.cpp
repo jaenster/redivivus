@@ -141,11 +141,8 @@ BOOL __fastcall Skills_SrvStFunc_16_ApplyHitAndDamage(::SGAMEDATA * pGame, D2Uni
     if (bIsInTown) {
       return 0;
     }
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
 
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -556,65 +553,63 @@ BOOL __fastcall Skills_SrvDoFunc_030_CastCurseAoE(::SGAMEDATA * pGame, D2UnitStr
     D2NecroSkillArgStrc sNecroArg;
     int* pAuraStatCalc;
     short int nAuraStatId;
-    if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
+    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize) {
       uint32_t bIsReviveOrSkel;
-      pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
-      if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize) {
-        if (pUnit) {
-          pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-        }
-
-        bIsReviveOrSkel = SKILLNEC_IsReviveOrRaiseSkeleton((int)pSkillsTxt->auratargetstate);
-        nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnitForCalc, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
-        pAuraStatCalc = (int*)D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
-        if (bIsReviveOrSkel) {
-          pAuraStatCalc = (int*)SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, (int32_t)pAuraStatCalc);
-        }
-
-        memset(&sNecroArg, 0, 0x68);
-        iStatIdx = 0;
-        sNecroArg.eSkill = eSkill;
-        sNecroArg.nSkillLvl = nSkillLvl;
-        sNecroArg.nDurationInFrames = (int32_t)pAuraStatCalc;
-        sNecroArg.bUpdateAnimSpeed = 0;
-        psAuraStatPtr = pSkillsTxt->aurastat;
-        sNecroArg.pGame = pGame;
-        sNecroArg.pUnit = pUnit;
-        sNecroArg.bRegisterExpireCallback = bIsReviveOrSkel;
-        pAuraStatCalc = pSkillsTxt->aurastatcalc;
-        do {
-          nAuraStatId = *psAuraStatPtr;
-          if (nAuraStatId < 0 || (int)nAuraStatId >= sgptDataTable->nTxtItemStatCostSize) {
-            sNecroArg.eStat[iStatIdx] = ~UNITSTAT_strength;
-            break;
-          }
-
-          pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine((int)nAuraStatId);
-          if (!pStatCostTxt) {
-            break;
-          }
-          if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1]) {
-            sNecroArg.bUpdateAnimSpeed = 1;
-          }
-
-          sNecroArg.eStat[iStatIdx] = (int)*psAuraStatPtr;
-          nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraStatCalc, eSkill, nSkillLvl);
-          pAuraStatCalc++;
-          sNecroArg.aSkillCalc[iStatIdx] = nStatCalc;
-          iStatIdx++;
-          psAuraStatPtr++;
-        } while (iStatIdx < 6);
-
-        sNecroArg.eAuraState = (eD2States)pSkillsTxt->auratargetstate;
-        sNecroArg.nAuraEvent[0] = (int32_t)pSkillsTxt->auraevent[0];
-        sNecroArg.nAuraEventFunc[0] = (int32_t)pSkillsTxt->auraeventfunc[0];
-        sNecroArg.nAuraEvent[1] = (int32_t)pSkillsTxt->auraevent[1];
-        sNecroArg.nAuraEventFunc[1] = (int32_t)pSkillsTxt->auraeventfunc[1];
-        sNecroArg.nAuraEvent[2] = (int32_t)pSkillsTxt->auraevent[2];
-        sNecroArg.nAuraEventFunc[2] = (int32_t)pSkillsTxt->auraeventfunc[2];
-        bIsReviveOrSkel = SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGame, pSkillsTxt->aurafilter, pUnit, nAuraRange, (pfnSkillRangeCb)SKILLNEC_ApplyCurseToUnit, &sNecroArg);
-        return bIsReviveOrSkel;
+      if (pUnit) {
+        pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
+
+      bIsReviveOrSkel = SKILLNEC_IsReviveOrRaiseSkeleton((int)pSkillsTxt->auratargetstate);
+      nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnitForCalc, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
+      pAuraStatCalc = (int*)D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
+      if (bIsReviveOrSkel) {
+        pAuraStatCalc = (int*)SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, (int32_t)pAuraStatCalc);
+      }
+
+      memset(&sNecroArg, 0, 0x68);
+      iStatIdx = 0;
+      sNecroArg.eSkill = eSkill;
+      sNecroArg.nSkillLvl = nSkillLvl;
+      sNecroArg.nDurationInFrames = (int32_t)pAuraStatCalc;
+      sNecroArg.bUpdateAnimSpeed = 0;
+      psAuraStatPtr = pSkillsTxt->aurastat;
+      sNecroArg.pGame = pGame;
+      sNecroArg.pUnit = pUnit;
+      sNecroArg.bRegisterExpireCallback = bIsReviveOrSkel;
+      pAuraStatCalc = pSkillsTxt->aurastatcalc;
+      do {
+        nAuraStatId = *psAuraStatPtr;
+        if (nAuraStatId < 0 || (int)nAuraStatId >= sgptDataTable->nTxtItemStatCostSize) {
+          sNecroArg.eStat[iStatIdx] = ~UNITSTAT_strength;
+          break;
+        }
+
+        pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine((int)nAuraStatId);
+        if (!pStatCostTxt) {
+          break;
+        }
+        if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1]) {
+          sNecroArg.bUpdateAnimSpeed = 1;
+        }
+
+        sNecroArg.eStat[iStatIdx] = (int)*psAuraStatPtr;
+        nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraStatCalc, eSkill, nSkillLvl);
+        pAuraStatCalc++;
+        sNecroArg.aSkillCalc[iStatIdx] = nStatCalc;
+        iStatIdx++;
+        psAuraStatPtr++;
+      } while (iStatIdx < 6);
+
+      sNecroArg.eAuraState = (eD2States)pSkillsTxt->auratargetstate;
+      sNecroArg.nAuraEvent[0] = (int32_t)pSkillsTxt->auraevent[0];
+      sNecroArg.nAuraEventFunc[0] = (int32_t)pSkillsTxt->auraeventfunc[0];
+      sNecroArg.nAuraEvent[1] = (int32_t)pSkillsTxt->auraevent[1];
+      sNecroArg.nAuraEventFunc[1] = (int32_t)pSkillsTxt->auraeventfunc[1];
+      sNecroArg.nAuraEvent[2] = (int32_t)pSkillsTxt->auraevent[2];
+      sNecroArg.nAuraEventFunc[2] = (int32_t)pSkillsTxt->auraeventfunc[2];
+      bIsReviveOrSkel = SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGame, pSkillsTxt->aurafilter, pUnit, nAuraRange, (pfnSkillRangeCb)SKILLNEC_ApplyCurseToUnit, &sNecroArg);
+      return bIsReviveOrSkel;
     }
 
     return 0;
@@ -712,14 +707,7 @@ BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2Unit
     int32_t iStack_18;
     int32_t iStack_14;
     int32_t iStack_10;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pDVar2 = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pDVar2 = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pDVar2) {
       return 0;
     }
@@ -866,54 +854,52 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
     int* pAuraStatCalc;
     short int wCurAuraStatId;
     eD2Skills eSkillSaved = eSkill;
-    if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
+    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize) {
       int32_t nRadius;
-      pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
-      if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize) {
-        if (pUnit) {
-          pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
+      if (pUnit) {
+        pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
+      }
+
+      nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
+      nDurationCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
+      nDurationCalc = SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, nDurationCalc);
+      memset(&pGameArg, 0, 0x68);
+      pAuraStatCalc = pSkillsTxt->aurastatcalc;
+      pGameArg.eSkill = eSkill;
+      pGameArg.nSkillLvl = nSkillLvl;
+      pGameArg.bUpdateAnimRate = 0;
+      iAuraStatIdx = 1;
+      pGameArg.pGame = pGame;
+      pGameArg.pCaster = pUnit;
+      pGameArg.nDurationInFrames = nDurationCalc;
+      eSkill = (eD2Skills)pSkillsTxt->aurastat;
+      do {
+        pAuraStatCalc++;
+        eSkill += 2;
+        wCurAuraStatId = *(short int*)eSkill;
+        if (wCurAuraStatId < 0 || (int)wCurAuraStatId >= sgptDataTable->nTxtItemStatCostSize) {
+          pGameArg.anStatIds[iAuraStatIdx] = -1;
+          break;
         }
 
-        nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
-        nDurationCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
-        nDurationCalc = SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, nDurationCalc);
-        memset(&pGameArg, 0, 0x68);
-        pAuraStatCalc = pSkillsTxt->aurastatcalc;
-        pGameArg.eSkill = eSkill;
-        pGameArg.nSkillLvl = nSkillLvl;
-        pGameArg.bUpdateAnimRate = 0;
-        iAuraStatIdx = 1;
-        pGameArg.pGame = pGame;
-        pGameArg.pCaster = pUnit;
-        pGameArg.nDurationInFrames = nDurationCalc;
-        eSkill = (eD2Skills)pSkillsTxt->aurastat;
-        do {
-          pAuraStatCalc++;
-          eSkill += 2;
-          wCurAuraStatId = *(short int*)eSkill;
-          if (wCurAuraStatId < 0 || (int)wCurAuraStatId >= sgptDataTable->nTxtItemStatCostSize) {
-            pGameArg.anStatIds[iAuraStatIdx] = -1;
-            break;
-          }
+        pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine((int)wCurAuraStatId);
+        if (!pStatCostTxt) {
+          break;
+        }
+        if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1]) {
+          pGameArg.bUpdateAnimRate = 1;
+        }
 
-          pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine((int)wCurAuraStatId);
-          if (!pStatCostTxt) {
-            break;
-          }
-          if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1]) {
-            pGameArg.bUpdateAnimRate = 1;
-          }
+        pGameArg.anStatIds[iAuraStatIdx] = (int)*(short int*)eSkill;
+        nDurationCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraStatCalc, eSkillSaved, nSkillLvl);
+        pGameArg.anStatValues[iAuraStatIdx] = nDurationCalc;
+        iAuraStatIdx++;
+      } while (iAuraStatIdx < 6);
 
-          pGameArg.anStatIds[iAuraStatIdx] = (int)*(short int*)eSkill;
-          nDurationCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraStatCalc, eSkillSaved, nSkillLvl);
-          pGameArg.anStatValues[iAuraStatIdx] = nDurationCalc;
-          iAuraStatIdx++;
-        } while (iAuraStatIdx < 6);
-
-        pGameArg.eAuraState = (int32_t)pSkillsTxt->auratargetstate;
-        bResult = SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGame, pSkillsTxt->aurafilter, pUnit, nRadius, (pfnSkillRangeCb)SKILLNEC_ApplyConvertToUnit, &pGameArg);
-        return bResult;
-      }
+      pGameArg.eAuraState = (int32_t)pSkillsTxt->auratargetstate;
+      bResult = SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGame, pSkillsTxt->aurafilter, pUnit, nRadius, (pfnSkillRangeCb)SKILLNEC_ApplyConvertToUnit, &pGameArg);
+      return bResult;
     }
 
     return 0;
@@ -1341,15 +1327,9 @@ void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, D2UnitStrc * 
     if (nLevel >= nLevelClamped) {
       nLevel = nLevelClamped;
     }
-    if (nLevel < 0) {
-      return;
-    }
-    if (nLevel >= sgptDataTable->nTxtMonLvlSize) {
-      return;
-    }
 
     D2MonLvlTxt* pDVar1;
-    pDVar1 = sgptDataTable->pTxtMonLvl + nLevel;
+    pDVar1 = nLevel >= 0 && nLevel < sgptDataTable->nTxtMonLvlSize ? sgptDataTable->pTxtMonLvl + nLevel : nullptr;
     if (!pDVar1) {
       return;
     }
@@ -1393,11 +1373,7 @@ BOOL __fastcall Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse(::SGAMEDATA * pGame
     }
 
     SKILLNEC_ApplyBloodCost(pGame, pUnit, eSkill, nSkillLvl);
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -2418,11 +2394,8 @@ BOOL __fastcall ITEMEVENT_NecroAuraStatDrain(::SGAMEDATA * pGame, uint32_t nUnit
     if (!pDamage) {
       return 0;
     }
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
 
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillTxt) {
       D2StatListExStrc* pStatList;
       nAuraStateId = pSkillTxt->aurastate;

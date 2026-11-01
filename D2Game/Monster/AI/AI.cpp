@@ -7853,15 +7853,8 @@ void __fastcall AI_Hireling_SelectAndCastSkill(::SGAMEDATA * pGame, D2UnitStrc *
     eD2Skills eSkillId;
     short int nAuraStateTmp;
     uint64_t uNewMercSeed;
-    if (nMonStatIdx < 0) {
-      return;
-    }
-    if (nMonStatIdx >= sgptDataTable->nTxtMonStatsSize) {
-      return;
-    }
-
     D2MonStatsTxt* pMonStats;
-    pMonStats = sgptDataTable->pTxtMonStats + nMonStatIdx;
+    pMonStats = nMonStatIdx >= 0 && nMonStatIdx < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr;
     if (!pMonStats) {
       return;
     }
@@ -12161,14 +12154,7 @@ void __fastcall AITHINK_Fn1_DeathSentry(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // Checks whether a monster AI can summon a specific pet type identified by skill enum byPetTypeB. Validates skill entry in TxtSkills; returns false (0) if skill has no summon field. If the existing pet (byPetTypeA) already matches the summon class, returns false. Otherwise checks pettype field against the owner unit's active pet type count via GetOwnersPetType; returns false if the pet slot is already filled, true if summoning is allowed. Used by Shadow Master AI to gate skill mirroring.
 BOOL __fastcall MONSTERAI_CanSummonPetType(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2PetStrc * byPetTypeA, int32_t byPetTypeB) {
     uint32_t nExistingPetClass;
-    if (byPetTypeB < 0) {
-      return 0;
-    }
-    if (byPetTypeB >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pDVar1 = sgptDataTable->pTxtSkills + byPetTypeB;
+    D2SkillsTxt* pDVar1 = byPetTypeB >= 0 && byPetTypeB < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + byPetTypeB : nullptr;
     if (!pDVar1) {
       return 0;
     }
@@ -12207,11 +12193,7 @@ int __fastcall MONSTERAI_ValidateSkillConditions(::SGAMEDATA * pGame, D2UnitStrc
     int nCooldownOrSummonFlag;
     int nContextModeFlag = *(int*)(nParam + 0x18);
     D2UnitStrc* pAuraStatList = *(D2UnitStrc**)(nParam + 8);
-    if (!(nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + nSkillId;
+    D2SkillsTxt* pSkillTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -15914,7 +15896,6 @@ uint32_t __fastcall MONSTERAI_FindNearestEvilMonster(uint32_t dwUnused, D2UnitSt
 void __fastcall AITHINK_Fn1_SandRaider(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct sNearestEvilParams;
     uint32_t nSeedHighScratch;
-    eD2States eState;
     uint32_t nOverlay;
     D2SeedStrc sNewSeed;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
@@ -15935,22 +15916,22 @@ void __fastcall AITHINK_Fn1_SandRaider(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     if (pMonsterAiGeneral->dwArg0 == nMulHighScratch) {
       if (pMonStats->aip[5][pGame->nDifficulty] != 1) {
         nOverlay = 0x2e;
+        D2Common::Units::SetOverlay(pUnitCopy, 0x2e, 0);
       } else {
         nOverlay = 0x96;
+        D2Common::Units::SetOverlay(pUnitCopy, 0x96, 0);
       }
 
-      D2Common::Units::SetOverlay(pUnitCopy, nOverlay, 0);
       PlanNextAiMove(pGame, pUnitCopy, pMonStats->aidel[pGame->nDifficulty] + 1);
       return;
     }
     if (nMulHighScratch < pMonsterAiGeneral->dwArg0) {
-      if (pMonStats->aip[5][pGame->nDifficulty] != 1) {
-        eState = STATE_red;
+      if (pMonStats->aip[5][pGame->nDifficulty] == 1) {
+        D2Common::DATATBLS::ItemStats::SetState(pUnitCopy, STATE_blue, 1);
       } else {
-        eState = STATE_blue;
+        D2Common::DATATBLS::ItemStats::SetState(pUnitCopy, STATE_red, 1);
       }
 
-      D2Common::DATATBLS::ItemStats::SetState(pUnitCopy, eState, 1);
       pMonsterAiGeneral->dwArg1 = 1;
     }
     if (pMonsterAiGeneral->dwArg2 < 7) {
@@ -21876,7 +21857,6 @@ void __fastcall AI_Fn1_EvilHole(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     eD2MonsterAnimMode eSpawnAnimMode;
     uint32_t nSpawnOffset;
     int32_t nDistToTarget;
-    int32_t nSpawnSkillId;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     D2AiParamStrc* pDVar1 = (D2AiParamStrc*)pAiParam->nDistanceToTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
@@ -21897,7 +21877,7 @@ void __fastcall AI_Fn1_EvilHole(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
         return;
       }
 
-      nSpawnSkillId = 10;
+      MONSTERAI_CommandSkillAtPosition(pGame, pUnit, 10, 0, 0);
     } else {
       D2RoomStrc* pSpawnRoom;
       if (eAnimMode != eD2MonsterAnimMode_ns::Skill3) {
@@ -21929,10 +21909,9 @@ void __fastcall AI_Fn1_EvilHole(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
         return;
       }
 
-      nSpawnSkillId = 0xb;
+      MONSTERAI_CommandSkillAtPosition(pGame, pUnit, 0xb, 0, 0);
     }
 
-    MONSTERAI_CommandSkillAtPosition(pGame, pUnit, nSpawnSkillId, 0, 0);
     RestartAiThink(pGame, pUnit, 0x14);
 }
 
@@ -22352,11 +22331,7 @@ uint32_t __fastcall MONSTERAI_SetSpecialAttackSkill(D2UnitStrc * pUnit, int32_t 
     }
 
     nClassId = (int)sgptDataTable->pTxtMonStats[nClassId].MonStatsEx;
-    if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsExSize)) {
-      return 1;
-    }
-
-    D2MonStats2Txt* pDVar1 = sgptDataTable->pTxtMonStatsEx + nClassId;
+    D2MonStats2Txt* pDVar1 = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nClassId : nullptr;
     if (!pDVar1) {
       return 1;
     }

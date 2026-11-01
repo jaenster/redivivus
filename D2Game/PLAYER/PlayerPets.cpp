@@ -355,11 +355,7 @@ void __fastcall SummonAndAssign(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2PetAr
 void __fastcall PETS_UpdatePetData(D2UnitStrc * pUnit, int32_t nParam, int32_t nTargetPetGUID, D2PetDataStrc * pNewPetData) {
     D2PetStrc* pPet;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    if (!(pPlayerData->pPets && nParam >= 0 && nParam < sgptDataTable->nTxtPetTypeSize)) {
-      return;
-    }
-
-    D2PetListStrc* pDVar1 = pPlayerData->pPets->pPetList + nParam;
+    D2PetListStrc* pDVar1 = pPlayerData->pPets && nParam >= 0 && nParam < sgptDataTable->nTxtPetTypeSize ? pPlayerData->pPets->pPetList + nParam : nullptr;
     if (!pDVar1) {
       return;
     }
@@ -810,11 +806,8 @@ void __fastcall SERVERUNIT_RemovePetFromUnit(::SGAMEDATA * pGame, D2UnitStrc * p
     if (nErrLine != 7) {
       RemovePetByGuidAndNotify(pGameSaved, pUnitSaved, nPetGUID, 0);
     }
-    if (!(nErrLine >= 0 && nErrLine < sgptDataTable->nTxtPetTypeSize)) {
-      return;
-    }
 
-    D2PetListStrc* pDVar1 = pPets->pPetList + nErrLine;
+    D2PetListStrc* pDVar1 = nErrLine >= 0 && nErrLine < sgptDataTable->nTxtPetTypeSize ? pPets->pPetList + nErrLine : nullptr;
     if (!pDVar1) {
       return;
     }
@@ -858,11 +851,8 @@ D2UnitDataPlayerPetsStrc * __fastcall PETS_HandleDeadPet(::SGAMEDATA * pGame, D2
     if (nErrLine != 7) {
       RemovePetByGuidAndNotify(pGame, pUnit, nPetGUID, 0);
     }
-    if (!(nErrLine >= 0 && nErrLine < sgptDataTable->nTxtPetTypeSize)) {
-      return nullptr;
-    }
 
-    D2PetListStrc* paPetList = pPets->pPetList + nErrLine;
+    D2PetListStrc* paPetList = nErrLine >= 0 && nErrLine < sgptDataTable->nTxtPetTypeSize ? pPets->pPetList + nErrLine : nullptr;
     if (!paPetList) {
       return nullptr;
     }
@@ -1152,11 +1142,8 @@ void __fastcall PETS_SetMaxAndTrimExcess(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x200);
       exit(-1);
     }
-    if (!((nIndex != 1 || nBaseMax == 1) && pPlayerData->pPets && nIndex >= 0 && nIndex < sgptDataTable->nTxtPetTypeSize)) {
-      return;
-    }
 
-    D2PetListStrc* pDVar1 = pPlayerData->pPets->pPetList + nIndex;
+    D2PetListStrc* pDVar1 = (nIndex != 1 || nBaseMax == 1) && pPlayerData->pPets && nIndex >= 0 && nIndex < sgptDataTable->nTxtPetTypeSize ? pPlayerData->pPets->pPetList + nIndex : nullptr;
     if (!pDVar1) {
       return;
     }

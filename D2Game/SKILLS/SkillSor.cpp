@@ -116,12 +116,8 @@ BOOL __fastcall INFERNO_CastInfernoTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     int32_t nCalcDuration;
     uint32_t nTargetY;
     uint32_t nTargetX;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxtBase = sgptDataTable->pTxtSkills;
-    if (!(pSkillTxtBase + eSkill && (int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize)) {
+    D2SkillsTxt* pSkillTxtBase = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!(pSkillTxtBase && (int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
 
@@ -135,7 +131,7 @@ BOOL __fastcall INFERNO_CastInfernoTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       int32_t nCalcFrames;
       nCalcFrames = D2Common::Skills::SKILL_GetParam1(pSkill);
       if (nCalcFrames) {
-        sSkillArg.nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase[eSkill].calc[0], eSkill, nSkillLvl2);
+        sSkillArg.nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase->calc[0], eSkill, nSkillLvl2);
         if (sSkillArg.nTotalFrames < 1) {
           sSkillArg.nTotalFrames = 1;
         }
@@ -228,11 +224,7 @@ BOOL __fastcall INFERNO_BeginOrContinueChannel(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 BOOL __fastcall SKILLSOR_SrvStFn11_InfernoChannel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -471,11 +463,7 @@ void __fastcall SetFrozenArmorState(D2UnitStrc * pUnit, eD2States eState, int32_
 BOOL __fastcall Skills_SrvDoFunc_018_Armor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2StatListExStrc* pStatsEx;
     int iAuraEvent;
-    /* Set State (Armor buff), set Auratarget event, event, event func */ if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    /* Set State (Armor buff), set Auratarget event, event, event func */ D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!(pSkillTxt && pSkillTxt->aurastate >= 0 && (int)pSkillTxt->aurastate < sgptDataTable->nTxtStatesSize)) {
       return 0;
     }
@@ -600,11 +588,7 @@ uint32_t __fastcall SKILLSOR_ApplyStaticFieldToUnit(D2SkillCallbackContextStrc *
 // @sourcefile .\SKILLS\SkillSor.cpp
 BOOL __fastcall Skills_SrvDoFunc_020_Static(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2StaticFieldArgStrc sStaticArgs;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -646,14 +630,7 @@ BOOL __fastcall Skills_SrvDoFunc_021_Telekenis(::SGAMEDATA * pGame, D2UnitStrc *
     uint32_t nRandRoll;
     D2DamageStrc sDamage;
     ::SGAMEDATA* pGameHit;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -759,12 +736,9 @@ BOOL __fastcall Skills_SrvDoFunc_022_Nova_FrostNova(::SGAMEDATA * pGame, D2UnitS
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
 
-    D2SkillsTxt* pSkillTxtBase = sgptDataTable->pTxtSkills;
-    if (!(pSkillTxtBase + eSkill)) {
+    D2SkillsTxt* pSkillTxtBase = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxtBase) {
       return 0;
     }
 
@@ -772,7 +746,7 @@ BOOL __fastcall Skills_SrvDoFunc_022_Nova_FrostNova(::SGAMEDATA * pGame, D2UnitS
     if ((int)peMissileId >= 0 && (int)peMissileId < sgptDataTable->nTxtMissilesSize) {
       int32_t nVelocity;
       nVelocity = D2Common::DATATBLS::MissileTbls::MISSILETBLS_CalculateVelocity(peMissileId, nSkillLvl);
-      nCalc0 = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase[eSkill].calc[0], eSkill, nSkillLvl);
+      nCalc0 = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase->calc[0], eSkill, nSkillLvl);
       SkillsServer::SKILLS_CreateMissileRing(pGame, pUnit, pUnit, peMissileId, eSkill, nSkillLvl, nVelocity + nCalc0);
       return 1;
     }
@@ -890,11 +864,7 @@ BOOL __fastcall Skills_SrvDoFunc_024_FireWall(::SGAMEDATA * pGame, D2UnitStrc * 
     uint32_t nTargetY;
     int32_t nUnitY;
     D2SkillArgStrc sSkillArg;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1048,11 +1018,7 @@ BOOL __fastcall Skills_SrvDoFunc_025_Enchant(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 BOOL __fastcall Skills_SrvDoFunc_026_ChainLighting(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1077,11 +1043,7 @@ BOOL __fastcall Skills_SrvDoFunc_026_ChainLighting(::SGAMEDATA * pGame, D2UnitSt
 
 // Generic server do-func (skill 151) that fires a single directional missile from a skill's srvmissilea entry. Sets UNITFLAG_SKSRVDOFUNC, evaluates calc[0] as a target-distance parameter stored on the missile via SetTargetX, computes delta-X/Y from caster to target unit (GetTargetEx), spawns the missile via CreatingAMissile with those deltas, and stores the calc[0] value as the missile's target-X to drive its range cutoff.
 BOOL __fastcall Skills_SrvDoFunc_151_FireDirectionalMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1199,14 +1161,7 @@ BOOL __fastcall Skills_SrvDoFunc_029_ThunderStorm(::SGAMEDATA * pGame, D2UnitStr
     D2UnitStrc* pThunderTarget;
     D2StatListExStrc* pStatsEx;
     D2SkillsTxt* pSkillTxt2;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pDVar1 = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pDVar1 = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pDVar1) {
       return 0;
     }
@@ -1327,72 +1282,71 @@ BOOL __fastcall ITEMEVENT_SorAuraManaAbsorb(::SGAMEDATA * pGame, uint32_t nUnitE
     if (!pDamage) {
       return 0;
     }
-    if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
+
+    pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (pSkillTxt) {
       uint8_t bVar1;
-      pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
-      if (pSkillTxt) {
-        eSkillAuraState = pSkillTxt->aurastate;
-        if (eSkillAuraState >= 0 && (int)eSkillAuraState < sgptDataTable->nTxtStatesSize) {
-          pStatsEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)eSkillAuraState);
-          if (pStatsEx) {
-            nAbsorbPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
-            if (nAbsorbPct > 0) {
-              nCurMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-              nSkillLvl = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
-              if (nSkillLvl <= 0) {
-                nSkillLvl = 1;
-              }
+      eSkillAuraState = pSkillTxt->aurastate;
+      if (eSkillAuraState >= 0 && (int)eSkillAuraState < sgptDataTable->nTxtStatesSize) {
+        pStatsEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)eSkillAuraState);
+        if (pStatsEx) {
+          nAbsorbPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
+          if (nAbsorbPct > 0) {
+            nCurMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
+            nSkillLvl = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
+            if (nSkillLvl <= 0) {
+              nSkillLvl = 1;
+            }
 
-              bNotMonsterOnly = true;
-              if (pTarget && (pTarget->eUnitType != UNIT_MONSTER || (bIsMerc = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pTarget) , bIsMerc != 0))) {
-                bNotMonsterOnly = false;
-              }
+            bNotMonsterOnly = true;
+            if (pTarget && (pTarget->eUnitType != UNIT_MONSTER || (bIsMerc = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pTarget) , bIsMerc != 0))) {
+              bNotMonsterOnly = false;
+            }
 
-              eSkill = SKILL_Attack;
-              pAbsorbEntry = (uint32_t*)gnAuraManaAbsorbIndex;
-              do {
-                if (!pAbsorbEntry[1] || bNotMonsterOnly) {
-                  piVar2 = (int32_t*)((uintptr_t)&pDamage->dwHitFlags + *pAbsorbEntry);
-                  nValue = *piVar2;
-                  if (nValue > 0) {
-                    nAbsorbAmt = D2Client::Stats::D2ApplyPercent(nValue, nAbsorbPct, 100);
-                    nManaCap = D2Client::Stats::D2ApplyPercent(nCurMana, 0x10, nSkillLvl);
-                    if (nAbsorbAmt >= nManaCap) {
-                      nAbsorbAmt = nManaCap;
-                    }
-
-                    eSkill += nAbsorbAmt;
-                    *piVar2 = nValue - nAbsorbAmt;
-                    nValue = D2Client::Stats::D2ApplyPercent(nAbsorbAmt, nSkillLvl, 0x10);
-                    nCurMana = (int)(nCurMana - nValue) <= 0 ? 0 : nCurMana - nValue;
+            eSkill = SKILL_Attack;
+            pAbsorbEntry = (uint32_t*)gnAuraManaAbsorbIndex;
+            do {
+              if (!pAbsorbEntry[1] || bNotMonsterOnly) {
+                piVar2 = (int32_t*)((uintptr_t)&pDamage->dwHitFlags + *pAbsorbEntry);
+                nValue = *piVar2;
+                if (nValue > 0) {
+                  nAbsorbAmt = D2Client::Stats::D2ApplyPercent(nValue, nAbsorbPct, 100);
+                  nManaCap = D2Client::Stats::D2ApplyPercent(nCurMana, 0x10, nSkillLvl);
+                  if (nAbsorbAmt >= nManaCap) {
+                    nAbsorbAmt = nManaCap;
                   }
+
+                  eSkill += nAbsorbAmt;
+                  *piVar2 = nValue - nAbsorbAmt;
+                  nValue = D2Client::Stats::D2ApplyPercent(nAbsorbAmt, nSkillLvl, 0x10);
+                  nCurMana = (int)(nCurMana - nValue) <= 0 ? 0 : nCurMana - nValue;
                 }
-
-                pAbsorbEntry += 2;
-              } while ((int)pAbsorbEntry < (intptr_t)((char*)&gnAuraManaAbsorbIndex + sizeof(gnAuraManaAbsorbIndex)));
-
-              nCurMana = (int)nCurMana <= 0 ? 0 : nCurMana;
-              D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, nCurMana, 0);
-              if (pTarget && (int)eSkill > 0 && pSkillTxt->prgoverlay >= 0 && (int)pSkillTxt->prgoverlay <= sgptDataTable->nTxtOverlaySize) {
-                nAbsorbPct = D2Client::Units::GetYPosFromDynamicPathUnit(pTarget);
-                nDirection = D2Common::Units::GetDirectionToCoords(pUnit, D2Client::Units::GetXPosFromDynamicPathUnit(pTarget), nAbsorbPct);
-                bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2((uint8_t)nDirection);
-                D2Common::Units::SetOverlay(pUnit, (int)pSkillTxt->prgoverlay + (uint32_t)bVar1, 0);
-              }
-              if ((int)nCurMana > 0) {
-                return 1;
               }
 
-              pStatsEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillTxt->aurastate);
-              if (pStatsEx) {
-                D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatsEx);
-                D2Common::Stats::StatsEx::FreeStatList(&pStatsEx->sStatList);
-                return 1;
-              }
+              pAbsorbEntry += 2;
+            } while ((int)pAbsorbEntry < (intptr_t)((char*)&gnAuraManaAbsorbIndex + sizeof(gnAuraManaAbsorbIndex)));
 
-              D2Common::DATATBLS::ItemStats::SetState(pUnit, (int)pSkillTxt->aurastate, 0);
+            nCurMana = (int)nCurMana <= 0 ? 0 : nCurMana;
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, nCurMana, 0);
+            if (pTarget && (int)eSkill > 0 && pSkillTxt->prgoverlay >= 0 && (int)pSkillTxt->prgoverlay <= sgptDataTable->nTxtOverlaySize) {
+              nAbsorbPct = D2Client::Units::GetYPosFromDynamicPathUnit(pTarget);
+              nDirection = D2Common::Units::GetDirectionToCoords(pUnit, D2Client::Units::GetXPosFromDynamicPathUnit(pTarget), nAbsorbPct);
+              bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2((uint8_t)nDirection);
+              D2Common::Units::SetOverlay(pUnit, (int)pSkillTxt->prgoverlay + (uint32_t)bVar1, 0);
+            }
+            if ((int)nCurMana > 0) {
               return 1;
             }
+
+            pStatsEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillTxt->aurastate);
+            if (pStatsEx) {
+              D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatsEx);
+              D2Common::Stats::StatsEx::FreeStatList(&pStatsEx->sStatList);
+              return 1;
+            }
+
+            D2Common::DATATBLS::ItemStats::SetState(pUnit, (int)pSkillTxt->aurastate, 0);
+            return 1;
           }
         }
       }
@@ -1422,72 +1376,70 @@ BOOL __fastcall Skills_SrvDoFunc_144_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUn
     uint32_t nSpawnX;
     ::SGAMEDATA* pGameSaved;
     eD2Skills eSkillOrig = iHydraIdx;
-    if ((int)iHydraIdx >= 0 && (int)iHydraIdx < sgptDataTable->nTxtSkillsCount) {
+    pSkillTxt = (int)iHydraIdx >= 0 && (int)iHydraIdx < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + iHydraIdx : nullptr;
+    if (pSkillTxt) {
       D2RoomStrc* pRoom;
-      pSkillTxt = sgptDataTable->pTxtSkills + iHydraIdx;
-      if (pSkillTxt) {
-        pGameSaved = pGame;
-        sSummonParams.pSkillTxt = (D2SkillsTxt*)SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, iHydraIdx, nSkillLvl, &nAnimMode, nullptr, nullptr);
-        if ((int)sSummonParams.pSkillTxt >= 0) {
-          nPetType = (BOOL)pSkillTxt->pettype;
-          if (nPetType >= 0 && nPetType < sgptDataTable->nTxtPetTypeSize) {
-            pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-            if (pRoom) {
-              _bGotTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGameSaved, pUnit, &nSpawnX, &nSpawnY);
-              if (_bGotTarget) {
-                pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nSpawnX, nSpawnY);
-                if (pRoom) {
-                  _bGotTarget = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-                  if (!_bGotTarget) {
-                    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-                      bIsMerc = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit);
-                      if (bIsMerc) {
-                        pSummon = Ai::AiGeneral::GetOwnerUnit(pUnit);
-                        if (pSummon) {
-                          pUnit = pSummon;
-                        }
+      pGameSaved = pGame;
+      sSummonParams.pSkillTxt = (D2SkillsTxt*)SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, iHydraIdx, nSkillLvl, &nAnimMode, nullptr, nullptr);
+      if ((int)sSummonParams.pSkillTxt >= 0) {
+        nPetType = (BOOL)pSkillTxt->pettype;
+        if (nPetType >= 0 && nPetType < sgptDataTable->nTxtPetTypeSize) {
+          pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+          if (pRoom) {
+            _bGotTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGameSaved, pUnit, &nSpawnX, &nSpawnY);
+            if (_bGotTarget) {
+              pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nSpawnX, nSpawnY);
+              if (pRoom) {
+                _bGotTarget = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
+                if (!_bGotTarget) {
+                  if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+                    bIsMerc = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit);
+                    if (bIsMerc) {
+                      pSummon = Ai::AiGeneral::GetOwnerUnit(pUnit);
+                      if (pSummon) {
+                        pUnit = pSummon;
+                      }
+                    }
+                  }
+
+                  nSkillRange = D2Client::DataTbls::TXT_Skills_GetSkillRange(iHydraIdx, nSkillLvl);
+                  sSummonParams.nPetType = nSkillRange + pGameSaved->dwGameFrame;
+                  sSummonParams.classId = 0;
+                  sSummonParams.nX = 0;
+                  sSummonParams.nY2 = 0;
+                  sSummonParams.nSkillCalc = 0;
+                  sSummonParams.nFlags = 1;
+                  sSummonParams.nFunctionId = 0;
+                  sSummonParams.nMode = nAnimMode;
+                  sSummonParams.nType = nPetType;
+                  sSummonParams.pPlayer = pUnit;
+                  sSummonParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, iHydraIdx, nSkillLvl);
+                  nPetType = 0;
+                  iHydraIdx = SKILL_Attack;
+                  do {
+                    sSummonParams.classId = (int)sSummonParams.pSkillTxt->srvprgfunc + (iHydraIdx - SKILL_Nova);
+                    sSummonParams.nX = gnSkillMissileCount_Hydra[iHydraIdx] + nSpawnX;
+                    sSummonParams.nY2 = gnAuraDamageScale_ManaAbsorb[iHydraIdx] + nSpawnY;
+                    pSummon = SkillsServer::SKILL_CreateSummon(pGameSaved, &sSummonParams);
+                    if (pSummon) {
+                      SkillsServer::SetSkill(pSummon, eSkillOrig, nSkillLvl, 1);
+                      SkillNec::SKILLNEC_ApplySummonBuffs(pGameSaved, pUnit, pSummon, eSkillOrig, nSkillLvl, 0);
+                      nPetType = 1;
+                      pSummonAi = UNIT::Monster::GetAiGeneral(pSummon);
+                      if (pSummonAi) {
+                        Monster::AI::SetDwArgsIfNotNeg0x29a(pSummonAi, sSummonParams.nPetType, -0x29a, -0x29a);
+                      }
+
+                      eOwnerUnitType = D2Client::Units::GetType(pUnit);
+                      if (eOwnerUnitType == UNIT_MONSTER) {
+                        UNIT::SUnit::SetAlignment(pSummon, (uint8_t)D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit), eOwnerUnitType);
                       }
                     }
 
-                    nSkillRange = D2Client::DataTbls::TXT_Skills_GetSkillRange(iHydraIdx, nSkillLvl);
-                    sSummonParams.nPetType = nSkillRange + pGameSaved->dwGameFrame;
-                    sSummonParams.classId = 0;
-                    sSummonParams.nX = 0;
-                    sSummonParams.nY2 = 0;
-                    sSummonParams.nSkillCalc = 0;
-                    sSummonParams.nFlags = 1;
-                    sSummonParams.nFunctionId = 0;
-                    sSummonParams.nMode = nAnimMode;
-                    sSummonParams.nType = nPetType;
-                    sSummonParams.pPlayer = pUnit;
-                    sSummonParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, iHydraIdx, nSkillLvl);
-                    nPetType = 0;
-                    iHydraIdx = SKILL_Attack;
-                    do {
-                      sSummonParams.classId = (int)sSummonParams.pSkillTxt->srvprgfunc + (iHydraIdx - SKILL_Nova);
-                      sSummonParams.nX = gnSkillMissileCount_Hydra[iHydraIdx] + nSpawnX;
-                      sSummonParams.nY2 = gnAuraDamageScale_ManaAbsorb[iHydraIdx] + nSpawnY;
-                      pSummon = SkillsServer::SKILL_CreateSummon(pGameSaved, &sSummonParams);
-                      if (pSummon) {
-                        SkillsServer::SetSkill(pSummon, eSkillOrig, nSkillLvl, 1);
-                        SkillNec::SKILLNEC_ApplySummonBuffs(pGameSaved, pUnit, pSummon, eSkillOrig, nSkillLvl, 0);
-                        nPetType = 1;
-                        pSummonAi = UNIT::Monster::GetAiGeneral(pSummon);
-                        if (pSummonAi) {
-                          Monster::AI::SetDwArgsIfNotNeg0x29a(pSummonAi, sSummonParams.nPetType, -0x29a, -0x29a);
-                        }
+                    iHydraIdx += SKILL_Kick;
+                  } while ((int)iHydraIdx < 3);
 
-                        eOwnerUnitType = D2Client::Units::GetType(pUnit);
-                        if (eOwnerUnitType == UNIT_MONSTER) {
-                          UNIT::SUnit::SetAlignment(pSummon, (uint8_t)D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit), eOwnerUnitType);
-                        }
-                      }
-
-                      iHydraIdx += SKILL_Kick;
-                    } while ((int)iHydraIdx < 3);
-
-                    return nPetType;
-                  }
+                  return nPetType;
                 }
               }
             }

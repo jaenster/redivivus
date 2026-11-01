@@ -1506,21 +1506,13 @@ static void __stdcall GFX_BuildMonsterCofPath(uint32_t nModeId, LPSTR szOutputPa
     char szAnimToken[4];
     char szCompToken[4];
     char szMonCode[4];
-    if (!(nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize)) {
-      return;
-    }
-
-    D2MonStatsTxt* pMonStats = sgptDataTable->pTxtMonStats + nMonsterClassId;
+    D2MonStatsTxt* pMonStats = nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonsterClassId : nullptr;
     if (!pMonStats) {
       return;
     }
 
     int nMonStatsExId = (int)pMonStats->MonStatsEx;
-    if (!(nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize)) {
-      return;
-    }
-
-    D2MonStats2Txt* pMonStatsEx = sgptDataTable->pTxtMonStatsEx + nMonStatsExId;
+    D2MonStats2Txt* pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
     if (!pMonStatsEx) {
       return;
     }
@@ -1672,21 +1664,13 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
 
 void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFlags) {
     uint32_t nModeId;
-    if (!(nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize)) {
-      return;
-    }
-
-    D2MonStatsTxt* pMonStats = sgptDataTable->pTxtMonStats + nMonsterClassId;
+    D2MonStatsTxt* pMonStats = nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonsterClassId : nullptr;
     if (!pMonStats) {
       return;
     }
 
     int nIndex = (int)pMonStats->MonStatsEx;
-    if (!(nIndex >= 0 && nIndex < sgptDataTable->nTxtMonStatsExSize)) {
-      return;
-    }
-
-    D2MonStats2Txt* pMonStatsEx = sgptDataTable->pTxtMonStatsEx + nIndex;
+    D2MonStats2Txt* pMonStatsEx = nIndex >= 0 && nIndex < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nIndex : nullptr;
     if (!pMonStatsEx) {
       return;
     }
@@ -1980,12 +1964,8 @@ static void __stdcall GFX_PrecacheMonsterModeSprites(int32_t nAsyncBlockId, D2Un
     }
 
     int nMonStatsExId = (int)sgptDataTable->pTxtMonStats[nClassId].MonStatsEx;
-    if (!(nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize)) {
-      return;
-    }
-
-    D2MonStats2Txt* pMonStatsEx = sgptDataTable->pTxtMonStatsEx;
-    if (!(pMonStatsEx + nMonStatsExId)) {
+    D2MonStats2Txt* pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
+    if (!pMonStatsEx) {
       return;
     }
 
@@ -1997,7 +1977,7 @@ static void __stdcall GFX_PrecacheMonsterModeSprites(int32_t nAsyncBlockId, D2Un
     do {
       int* pModeEntry;
       pModeEntry = (int*)gaMonsterModePrecacheEntries[nModeIdx];
-      if ((uint8_t)gadwBitMasks[(uint32_t)pModeEntry & 7] & pMonStatsEx[nMonStatsExId].mDT[(uint32_t)pModeEntry >> 3]) {
+      if ((uint8_t)gadwBitMasks[(uint32_t)pModeEntry & 7] & pMonStatsEx->mDT[(uint32_t)pModeEntry >> 3]) {
         GFX_AsyncLoadMonsterSprites(nAsyncBlockId, pModeEntry, pUnit);
       }
 
@@ -2198,14 +2178,7 @@ void __fastcall GFX_AddOverlayToUnit(D2UnitStrc * pUnit, eOverlayId eOverlay, in
     D2GfxInfoStrc* pGfxInfo;
     int iVar1;
     int32_t nErrLine;
-    if ((int)eOverlay < 0) {
-      return;
-    }
-    if ((int)eOverlay >= sgptDataTable->nTxtOverlaySize) {
-      return;
-    }
-
-    D2OverlayTxt* pOverlayTxt = sgptDataTable->pTxtOverlay + eOverlay;
+    D2OverlayTxt* pOverlayTxt = (int)eOverlay >= 0 && (int)eOverlay < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + eOverlay : nullptr;
     if (!pOverlayTxt) {
       return;
     }

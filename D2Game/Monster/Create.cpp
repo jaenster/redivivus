@@ -674,11 +674,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
     BOOL bMinionIsLeader;
     int32_t nTmp;
     int32_t nPartySize = pGame->nClassId;
-    if (!(nPartySize >= 0 && nPartySize < sgptDataTable->nTxtMonStatsSize)) {
-      return;
-    }
-
-    D2MonStatsTxt* pMonStats = sgptDataTable->pTxtMonStats + nPartySize;
+    D2MonStatsTxt* pMonStats = nPartySize >= 0 && nPartySize < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nPartySize : nullptr;
     if (!pMonStats) {
       return;
     }

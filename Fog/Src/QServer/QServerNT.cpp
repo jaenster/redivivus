@@ -684,7 +684,6 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
     HANDLE hThread;
     char optTcpNoDelay[4];
     sockaddr bindAddr;
-    char* pszErrFmt;
     uint32_t nPortLocal = nPort;
     int32_t pIocp = (int32_t)CreateIoCompletionPort((HANDLE)-1, (HANDLE)0x0, 0, 0);
     if (!(HANDLE)pIocp) {
@@ -720,7 +719,7 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
     nResult = _Wrappers::bind(hListenSocket, &bindAddr, 0x10);
     if (nResult == -1) {
       nResult = WSAGetLastError();
-      pszErrFmt = "[SERVER]  QSNTInit failed on bind() - err=%d";
+      LogManager::LOGFILE_WriteStringToFile("[SERVER]  QSNTInit failed on bind() - err=%d", nResult);
     } else {
       /* int backlog for listen */ /* SOCKET s for listen */ nResult = _Wrappers::listen(hListenSocket, 0xfa);
       if (nResult != -1) {
@@ -750,10 +749,9 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
       }
 
       nResult = WSAGetLastError();
-      pszErrFmt = "[SERVER]  QSNTInit failed on listen() - err=%d";
+      LogManager::LOGFILE_WriteStringToFile("[SERVER]  QSNTInit failed on listen() - err=%d", nResult);
     }
 
-    LogManager::LOGFILE_WriteStringToFile(pszErrFmt, nResult);
     Safesock::closeSocket(hListenSocket);
     return 0;
 }

@@ -1009,18 +1009,16 @@ static uint32_t __stdcall CUNIT_IsItemInAnyInventory(D2UnitStrc * pExcludeUnit, 
 // @basis behaviour-confirmed and caller-corroborated. The old name was wrong in both halves and was flagged by the preceding pass. Body: null-check, then GFX_AddOverlayToUnit(pUnit, eOverlay, type, 0, nDuration, 0,0,0) with type 1 when nDuration > 0 and type 2 (engine default duration) otherwise, plus a fixed sound for OVERLAY_steallife and OVERLAY_stealmana. Nothing counts, reports or reacts to a death, and the subject is a plain D2UnitStrc, not a monster - MonsterMessage passes non-monster units through five of the six call sites' shared path.
 // "UnitDoOverlay" is a descriptive name taken from the Blizzard packet verb SCMD_UNIT_DOOVERLAY, which names opcode 0x11, whose handler NET_D2GS_CLIENT_Incoming0x11_UnitDoOverlay (0045d11c) is one of this function's six callers.
 void __fastcall UnitDoOverlay(D2UnitStrc * pUnit, eOverlayId eOverlay, uint32_t nDuration) {
-    int32_t nOverlayType;
     if (!pUnit) {
       return;
     }
-    if ((int)nDuration > 0) {
-      nOverlayType = 1;
-    } else {
+    if ((int)nDuration <= 0) {
       nDuration = 0;
-      nOverlayType = 2;
+      Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay, 2, 0, nDuration, 0, 0, 0);
+    } else {
+      Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay, 1, 0, nDuration, 0, 0, 0);
     }
 
-    Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay, nOverlayType, 0, nDuration, 0, 0, 0);
     switch (eOverlay) {
       case OVERLAY_steallife:
         {

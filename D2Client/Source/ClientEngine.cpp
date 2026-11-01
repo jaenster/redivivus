@@ -1119,11 +1119,7 @@ void __fastcall CLIENT_SpawnMonstersAroundUnit(D2UnitStrc * pUnit, int32_t nMons
     }
 
     int nSpawnX = (int)sgptDataTable->pTxtMonStats[nMonsterClassId].MonStatsEx;
-    if (!(nSpawnX >= 0 && nSpawnX < sgptDataTable->nTxtMonStatsExSize)) {
-      return;
-    }
-
-    D2MonStats2Txt* pMonStats2 = sgptDataTable->pTxtMonStatsEx + nSpawnX;
+    D2MonStats2Txt* pMonStats2 = nSpawnX >= 0 && nSpawnX < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nSpawnX : nullptr;
     if (!pMonStats2) {
       return;
     }

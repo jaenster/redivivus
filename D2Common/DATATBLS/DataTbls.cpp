@@ -2200,7 +2200,7 @@ void __stdcall TXT_InitTxtFiles(D2PoolManagerStrc * pMemory, int32_t nZero2, int
     LvlTbls::TXT_AllocTxt_leveldefs(pMemory);
     LvlTbls::TXT_AllocTxt_lvltypes(pMemory);
     if (nZero2) {
-      LvlTbls::TXT_LoadExpansionLvlTbls();
+      LvlTbls::TXT_LoadExpansionLvlTbls(pMemory);
     }
 
     LvlTbls::TXT_AllocTxt_lvlprest(pMemory, nZero2);
@@ -2215,7 +2215,7 @@ void __stdcall TXT_InitTxtFiles(D2PoolManagerStrc * pMemory, int32_t nZero2, int
     FieldTbls::FIELDTBLS_LoadExpFieldFile(pMemory);
     BeltsTbls::LoadBeltsTxt(pMemory);
     MonsterTbls::DATATBLS_CompileBodyLocsTxt(pMemory);
-    Txt::Cube::FIELDTBLS_InitTxtFiles_NoOp();
+    Txt::Cube::FIELDTBLS_InitTxtFiles_NoOp(pMemory);
     Txt::Cube::CUBE_LoadCubeMainTable(pMemory);
     TXT_AllocTxt_difficultylevels(pMemory);
     MonsterTbls::TXT_FreeTxt_sounds();

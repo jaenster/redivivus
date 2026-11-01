@@ -1517,11 +1517,12 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x3E_ITEMUPDATESTAT(char * pBytes) {
     uint32_t nStatParam = Fog::BitBuffer::ReadUnsigned(&bitBuf, 1);
     if (!nStatParam) {
       nBits = 8;
+      nStatParam = Fog::BitBuffer::ReadUnsigned(&bitBuf, 8);
     } else {
       nBits = 0x10;
+      nStatParam = Fog::BitBuffer::ReadUnsigned(&bitBuf, 0x10);
     }
 
-    nStatParam = Fog::BitBuffer::ReadUnsigned(&bitBuf, nBits);
     UNIT::ITEM_HandleStatUpdatePacket(nUnitGUID, (char)bSigned, eStatId, nStatValue, (uint16_t)nStatParam);
 }
 

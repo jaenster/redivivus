@@ -1009,83 +1009,81 @@ void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, 
           pSkillsTxt2 = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
           if (pSkillsTxt2) {
             nSkillId = (int)pSkillsTxt2->skilldesc;
-            if (nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillDescSize) {
-              pSkillDescTxt = sgptDataTable->pTxtSkillDesc + nSkillId;
-              if (pSkillDescTxt && (!bWeaponSwap || *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[6]) && !(*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)gadwBitMasks[4])) {
-                dwSkillFlags = D2Common::Skills::SKILL_GetFlags(pCurSkill);
-                if (!(dwSkillFlags & 8)) {
-                  nOwnerGUID = -1;
-                  nChargesLeft = 0;
-                  nChargeQty = 0;
-                  bIsChargedOrValid = D2Common::Skills::SKILLS_GetSkillData(pCurSkill, &nOwnerGUID, nullptr, nullptr, &nChargesLeft);
-                  if (!bWeaponSwap && !bIsChargedOrValid) {
-                    nChargeQty = D2Common::Skills::SKILL_GetQuantity(pCurSkill);
-                    if (nChargeQty > 0 && *((uint8_t*)pSkillsTxt + 0x8) & (uint8_t)gadwBitMasks[4]) {
-                      bIsChargedOrValid = 1;
-                    }
+            pSkillDescTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillDescSize ? sgptDataTable->pTxtSkillDesc + nSkillId : nullptr;
+            if (pSkillDescTxt && (!bWeaponSwap || *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)gadwBitMasks[6]) && !(*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)gadwBitMasks[4])) {
+              dwSkillFlags = D2Common::Skills::SKILL_GetFlags(pCurSkill);
+              if (!(dwSkillFlags & 8)) {
+                nOwnerGUID = -1;
+                nChargesLeft = 0;
+                nChargeQty = 0;
+                bIsChargedOrValid = D2Common::Skills::SKILLS_GetSkillData(pCurSkill, &nOwnerGUID, nullptr, nullptr, &nChargesLeft);
+                if (!bWeaponSwap && !bIsChargedOrValid) {
+                  nChargeQty = D2Common::Skills::SKILL_GetQuantity(pCurSkill);
+                  if (nChargeQty > 0 && *((uint8_t*)pSkillsTxt + 0x8) & (uint8_t)gadwBitMasks[4]) {
+                    bIsChargedOrValid = 1;
                   }
-                  if (nRow < 4) {
-                    if (!bIsChargedOrValid && nRow == (char)pSkillDescTxt->ListRow) {
-                      draw_skill:
-                      nCanUse = UNIT::PlrSkills::PLRSKILLS_CanUseSkillCheck(pLocalUnit, pCurSkill);
-                      if (nCanUse) {
-                        nGlobalPaletteShift = (nCanUse != 6 ? -3 : 0) + PALETTE_GOLD;
-                      } else {
-                        nGlobalPaletteShift = 0;
-                      }
-                      if (nLastRow < nRow) {
-                        nCurY += -0x30;
-                        nLastRow = nRow;
-                      }
-                      if (pSkillDescTxt->ListPool > 0) {
-                        dwSkillFlags = (uint32_t)pSkillDescTxt->ListPool;
-                        if (dwSkillFlags < 0x100) {
-                          if ((uint8_t)aListPoolSeen[dwSkillFlags] > '\0') {
-                            continue;
-                          }
-
-                          aListPoolSeen[dwSkillFlags] = '\x01';
-                        }
-                      }
-                      if (!bShowTooltips) {
-                        if (!bChargedOnly) {
-                          SpellSel::SPELLSEL_DrawSkillIcon(&pSkillsTxt->skill, nOwnerGUID, nChargesLeft, nGlobalPaletteShift, nCurX, nCurY, bWeaponSwap);
+                }
+                if (nRow < 4) {
+                  if (!bIsChargedOrValid && nRow == (char)pSkillDescTxt->ListRow) {
+                    draw_skill:
+                    nCanUse = UNIT::PlrSkills::PLRSKILLS_CanUseSkillCheck(pLocalUnit, pCurSkill);
+                    if (nCanUse) {
+                      nGlobalPaletteShift = (nCanUse != 6 ? -3 : 0) + PALETTE_GOLD;
+                    } else {
+                      nGlobalPaletteShift = 0;
+                    }
+                    if (nLastRow < nRow) {
+                      nCurY += -0x30;
+                      nLastRow = nRow;
+                    }
+                    if (pSkillDescTxt->ListPool > 0) {
+                      dwSkillFlags = (uint32_t)pSkillDescTxt->ListPool;
+                      if (dwSkillFlags < 0x100) {
+                        if ((uint8_t)aListPoolSeen[dwSkillFlags] > '\0') {
+                          continue;
                         }
 
-                        nCurX = SPELLSEL_RegisterSkillSlot(bWeaponSwap, nCurY, bWeaponSwap, nGlobalPaletteShift, pCurSkill, nCurX);
-                      } else {
-                        if (!nChargeQty) {
-                          nCanUse = nChargesLeft;
-                          nSkillId = nCurX;
-                          nTooltipX = nCurY;
-                          SPELLSEL_DrawSkillTooltip(&pSkillsTxt->skill, nGlobalPaletteShift, D2Common::Skills::GetSkillLevel(pLocalUnit, pCurSkill, 1), nCanUse, nSkillId, nTooltipX);
-                        } else {
-                          SPELLSEL_DrawSkillRequirementTooltip(&pSkillsTxt->skill, nGlobalPaletteShift, nChargeQty, nCurX, nCurY);
-                        }
-
-                        nCurX += nXStep;
-                      }
-
-                      switch (nRow) {
-                        case 1:
-                          gnSpellSelGridDrawX1 = nCurY;
-                        break;
-                        case 2:
-                          gnSpellSelGridDrawX2 = nCurY;
-                        break;
-                        case 3:
-                          gnSpellSelGridDrawX3 = nCurY;
-                        break;
-                        case 4:
-                          gnSpellSelGridDrawX4[0] = (uint8_t)nCurY;
-                        gnSpellSelGridDrawX4[1] = *(uint8_t*)((char*)&nCurY + 1);
-                        gnSpellSelGridDrawX4[2] = *(uint8_t*)((char*)&nCurY + 2);
-                        gnSpellSelGridDrawX4[3] = *(uint8_t*)((char*)&nCurY + 3);
+                        aListPoolSeen[dwSkillFlags] = '\x01';
                       }
                     }
-                  } else if (bIsChargedOrValid) {
-                    goto draw_skill;
+                    if (!bShowTooltips) {
+                      if (!bChargedOnly) {
+                        SpellSel::SPELLSEL_DrawSkillIcon(&pSkillsTxt->skill, nOwnerGUID, nChargesLeft, nGlobalPaletteShift, nCurX, nCurY, bWeaponSwap);
+                      }
+
+                      nCurX = SPELLSEL_RegisterSkillSlot(bWeaponSwap, nCurY, bWeaponSwap, nGlobalPaletteShift, pCurSkill, nCurX);
+                    } else {
+                      if (!nChargeQty) {
+                        nCanUse = nChargesLeft;
+                        nSkillId = nCurX;
+                        nTooltipX = nCurY;
+                        SPELLSEL_DrawSkillTooltip(&pSkillsTxt->skill, nGlobalPaletteShift, D2Common::Skills::GetSkillLevel(pLocalUnit, pCurSkill, 1), nCanUse, nSkillId, nTooltipX);
+                      } else {
+                        SPELLSEL_DrawSkillRequirementTooltip(&pSkillsTxt->skill, nGlobalPaletteShift, nChargeQty, nCurX, nCurY);
+                      }
+
+                      nCurX += nXStep;
+                    }
+
+                    switch (nRow) {
+                      case 1:
+                        gnSpellSelGridDrawX1 = nCurY;
+                      break;
+                      case 2:
+                        gnSpellSelGridDrawX2 = nCurY;
+                      break;
+                      case 3:
+                        gnSpellSelGridDrawX3 = nCurY;
+                      break;
+                      case 4:
+                        gnSpellSelGridDrawX4[0] = (uint8_t)nCurY;
+                      gnSpellSelGridDrawX4[1] = *(uint8_t*)((char*)&nCurY + 1);
+                      gnSpellSelGridDrawX4[2] = *(uint8_t*)((char*)&nCurY + 2);
+                      gnSpellSelGridDrawX4[3] = *(uint8_t*)((char*)&nCurY + 3);
+                    }
                   }
+                } else if (bIsChargedOrValid) {
+                  goto draw_skill;
                 }
               }
             }
@@ -1935,11 +1933,7 @@ void __stdcall SKILLTREE_DrawSkillNode(eD2Skills eSkill, D2SkillsTxt * pSkillTxt
     }
 
     int nColumnX = (int)sgptDataTable->pTxtSkills[eSkill].skilldesc;
-    if (!(nColumnX >= 0 && nColumnX < sgptDataTable->nTxtSkillDescSize)) {
-      return;
-    }
-
-    D2SkillDescTxt* pSkillDesc = sgptDataTable->pTxtSkillDesc + nColumnX;
+    D2SkillDescTxt* pSkillDesc = nColumnX >= 0 && nColumnX < sgptDataTable->nTxtSkillDescSize ? sgptDataTable->pTxtSkillDesc + nColumnX : nullptr;
     if (!pSkillDesc) {
       return;
     }
@@ -2082,65 +2076,63 @@ void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills() {
     do {
       eD2Skills eSkill;
       eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, nSkillIdx);
-      if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
-        pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
-        if (pSkillTxt) {
-          nSkillDescIdx = (int)pSkillTxt->skilldesc;
-          if (nSkillDescIdx >= 0 && nSkillDescIdx < sgptDataTable->nTxtSkillDescSize && sgptDataTable->pTxtSkillDesc + nSkillDescIdx && nSkillTreeActiveTab == sgptDataTable->pTxtSkillDesc[nSkillDescIdx].skillpage) {
-            BVar1 = D2Common::Skills::SkillCalculateIfWeCanSkillThisSkill(pUnit, eSkill);
-            if (BVar1) {
-              bCanSkill = 1;
-              nCurLevel = 0;
-              pCurSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
-              if (pCurSkill) {
-                nCurLevel = D2Common::Skills::GetSkillLevel(pUnit, pCurSkill, 0);
-              }
-
-              nNewSkills = DataTbls::SKILL_GetMaxLevelForSkill((int)pSkillTxt->skill);
-              if (nCurLevel >= nNewSkills) {
-                bCanSkill = 0;
-              }
-
-              nClassId = D2Common::Skills::SpendSkillPointOnSkill(pUnit, eSkill);
-              if (!nClassId) {
-                bCanSkill = 0;
-              }
-
-              nSkillDescIdx = 1;
-              if (pSkillTxt->skpoints != -1) {
-                nSkillDescIdx = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->skpoints, eSkill, nCurLevel);
-              }
-              if (nNewSkillPts < nSkillDescIdx || !bCanSkill) {
-                gaSpellSelSkillTreeState[nSkillIdx] = -1;
-                gbSpellSelSkillTreeNodeHovered[nSkillIdx] = 5;
-              } else if (gaSpellSelSkillTreeState[nSkillIdx] != 1) {
-                gaSpellSelSkillTreeState[nSkillIdx] = 0;
-                gbSpellSelSkillTreeNodeHovered[nSkillIdx] = 0;
-              }
-
-              nSkillDescIdx = 0;
-              if (pCurSkill) {
-                nSkillDescIdx = D2Common::Skills::GetSkillLevel(pUnit, pCurSkill, 1);
-              }
-
-              nGlobalPaletteShift = gbSpellSelSkillTreeNodeHovered[nSkillIdx];
-              nSkillIconState = gaSpellSelSkillTreeState[nSkillIdx];
-            } else {
-              gaSpellSelSkillTreeState[nSkillIdx] = -1;
-              gbSpellSelSkillTreeNodeHovered[nSkillIdx] = 5;
-              pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, (int)pSkillTxt->skill, -1);
-              if (!pSkill || (nSkillDescIdx = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1) , !nSkillDescIdx)) {
-                nGlobalPaletteShift = gbSpellSelSkillTreeNodeHovered[nSkillIdx];
-                nSkillIconState = gaSpellSelSkillTreeState[nSkillIdx];
-                nSkillDescIdx = 0;
-              } else {
-                nGlobalPaletteShift = gbSpellSelSkillTreeNodeHovered[nSkillIdx];
-                nSkillIconState = gaSpellSelSkillTreeState[nSkillIdx];
-              }
+      pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+      if (pSkillTxt) {
+        nSkillDescIdx = (int)pSkillTxt->skilldesc;
+        if (nSkillDescIdx >= 0 && nSkillDescIdx < sgptDataTable->nTxtSkillDescSize && sgptDataTable->pTxtSkillDesc + nSkillDescIdx && nSkillTreeActiveTab == sgptDataTable->pTxtSkillDesc[nSkillDescIdx].skillpage) {
+          BVar1 = D2Common::Skills::SkillCalculateIfWeCanSkillThisSkill(pUnit, eSkill);
+          if (BVar1) {
+            bCanSkill = 1;
+            nCurLevel = 0;
+            pCurSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
+            if (pCurSkill) {
+              nCurLevel = D2Common::Skills::GetSkillLevel(pUnit, pCurSkill, 0);
             }
 
-            SKILLTREE_DrawSkillNode(eSkill, pSkillTxt, nSkillDescIdx, nSkillIconState, nGlobalPaletteShift);
+            nNewSkills = DataTbls::SKILL_GetMaxLevelForSkill((int)pSkillTxt->skill);
+            if (nCurLevel >= nNewSkills) {
+              bCanSkill = 0;
+            }
+
+            nClassId = D2Common::Skills::SpendSkillPointOnSkill(pUnit, eSkill);
+            if (!nClassId) {
+              bCanSkill = 0;
+            }
+
+            nSkillDescIdx = 1;
+            if (pSkillTxt->skpoints != -1) {
+              nSkillDescIdx = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->skpoints, eSkill, nCurLevel);
+            }
+            if (nNewSkillPts < nSkillDescIdx || !bCanSkill) {
+              gaSpellSelSkillTreeState[nSkillIdx] = -1;
+              gbSpellSelSkillTreeNodeHovered[nSkillIdx] = 5;
+            } else if (gaSpellSelSkillTreeState[nSkillIdx] != 1) {
+              gaSpellSelSkillTreeState[nSkillIdx] = 0;
+              gbSpellSelSkillTreeNodeHovered[nSkillIdx] = 0;
+            }
+
+            nSkillDescIdx = 0;
+            if (pCurSkill) {
+              nSkillDescIdx = D2Common::Skills::GetSkillLevel(pUnit, pCurSkill, 1);
+            }
+
+            nGlobalPaletteShift = gbSpellSelSkillTreeNodeHovered[nSkillIdx];
+            nSkillIconState = gaSpellSelSkillTreeState[nSkillIdx];
+          } else {
+            gaSpellSelSkillTreeState[nSkillIdx] = -1;
+            gbSpellSelSkillTreeNodeHovered[nSkillIdx] = 5;
+            pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, (int)pSkillTxt->skill, -1);
+            if (!pSkill || (nSkillDescIdx = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1) , !nSkillDescIdx)) {
+              nGlobalPaletteShift = gbSpellSelSkillTreeNodeHovered[nSkillIdx];
+              nSkillIconState = gaSpellSelSkillTreeState[nSkillIdx];
+              nSkillDescIdx = 0;
+            } else {
+              nGlobalPaletteShift = gbSpellSelSkillTreeNodeHovered[nSkillIdx];
+              nSkillIconState = gaSpellSelSkillTreeState[nSkillIdx];
+            }
           }
+
+          SKILLTREE_DrawSkillNode(eSkill, pSkillTxt, nSkillDescIdx, nSkillIconState, nGlobalPaletteShift);
         }
       }
 
@@ -2182,24 +2174,22 @@ void __stdcall SKILLTREE_DrawAllSkillNodes() {
       eD2Skills eSkill;
       nSkillLevel = 0;
       eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(UNIT::GetClassId(pUnit), nSkillIdx);
-      if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
-        pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
-        if (pSkillTxt) {
-          nSkillDescIdx = (int)pSkillTxt->skilldesc;
-          if (nSkillDescIdx >= 0 && nSkillDescIdx < sgptDataTable->nTxtSkillDescSize && sgptDataTable->pTxtSkillDesc + nSkillDescIdx && nSkillTreeActiveTab == sgptDataTable->pTxtSkillDesc[nSkillDescIdx].skillpage) {
-            gaSpellSelSkillTreeState[nSkillIdx] = -1;
-            gbSpellSelSkillTreeNodeHovered[nSkillIdx] = 5;
-            pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnitCopy, eSkill, -1);
-            if (pSkill) {
-              nSkillLevel = D2Common::Skills::GetSkillLevel(pUnitCopy, pSkill, 1);
-              if (nSkillLevel > 0) {
-                gaSpellSelSkillTreeState[nSkillIdx] = 0;
-                gbSpellSelSkillTreeNodeHovered[nSkillIdx] = 0;
-              }
+      pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+      if (pSkillTxt) {
+        nSkillDescIdx = (int)pSkillTxt->skilldesc;
+        if (nSkillDescIdx >= 0 && nSkillDescIdx < sgptDataTable->nTxtSkillDescSize && sgptDataTable->pTxtSkillDesc + nSkillDescIdx && nSkillTreeActiveTab == sgptDataTable->pTxtSkillDesc[nSkillDescIdx].skillpage) {
+          gaSpellSelSkillTreeState[nSkillIdx] = -1;
+          gbSpellSelSkillTreeNodeHovered[nSkillIdx] = 5;
+          pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnitCopy, eSkill, -1);
+          if (pSkill) {
+            nSkillLevel = D2Common::Skills::GetSkillLevel(pUnitCopy, pSkill, 1);
+            if (nSkillLevel > 0) {
+              gaSpellSelSkillTreeState[nSkillIdx] = 0;
+              gbSpellSelSkillTreeNodeHovered[nSkillIdx] = 0;
             }
-
-            SKILLTREE_DrawSkillNode(eSkill, pSkillTxt, nSkillLevel, gaSpellSelSkillTreeState[nSkillIdx], gbSpellSelSkillTreeNodeHovered[nSkillIdx]);
           }
+
+          SKILLTREE_DrawSkillNode(eSkill, pSkillTxt, nSkillLevel, gaSpellSelSkillTreeState[nSkillIdx], gbSpellSelSkillTreeNodeHovered[nSkillIdx]);
         }
       }
 

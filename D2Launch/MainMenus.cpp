@@ -111,11 +111,12 @@ void __stdcall IMAGE_LoadPredefinedImages() {
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     if (bIsExpansion) {
       szFormatString = "%s\\UI\\FrontEnd\\trademarkscreenEXP";
+      wsprintfA(szPathBuffer, "%s\\UI\\FrontEnd\\trademarkscreenEXP", "DATA\\GLOBAL");
     } else {
       /* LPCSTR param_2 for wsprintfA */ szFormatString = "%s\\UI\\FrontEnd\\trademark";
+      wsprintfA(szPathBuffer, "%s\\UI\\FrontEnd\\trademark", "DATA\\GLOBAL");
     }
 
-    wsprintfA(szPathBuffer, szFormatString, "DATA\\GLOBAL");
     DC6_FrontEnd_trademark = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\UI\\CURSOR\\ohand", "DATA\\GLOBAL");
     DC6_CURSOR_ohand = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
@@ -132,20 +133,22 @@ void __stdcall IMAGE_LoadPredefinedImages() {
     bIsExpansion = Fog::D2CheckExpansionGame();
     if (bIsExpansion) {
       szFormatString = "%s\\ui\\FrontEnd\\gameselectscreenEXP";
+      wsprintfA(szPathBuffer, "%s\\ui\\FrontEnd\\gameselectscreenEXP", "DATA\\GLOBAL");
     } else {
       /* LPCSTR param_2 for wsprintfA */ szFormatString = "%s\\ui\\FrontEnd\\TitleScreen";
+      wsprintfA(szPathBuffer, "%s\\ui\\FrontEnd\\TitleScreen", "DATA\\GLOBAL");
     }
 
-    wsprintfA(szPathBuffer, szFormatString, "DATA\\GLOBAL");
     DC6_FrontEnd_TitleScreen_or_gameselectscreenEXP = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
     bIsExpansion = Fog::D2CheckExpansionGame();
     if (bIsExpansion) {
       szFormatString = "%s\\ui\\CharSelect\\creditsbckgexpand";
+      wsprintfA(szPathBuffer, "%s\\ui\\CharSelect\\creditsbckgexpand", "DATA\\GLOBAL");
     } else {
       /* LPCSTR param_2 for wsprintfA */ szFormatString = "%s\\ui\\CharSelect\\creditsbckg";
+      wsprintfA(szPathBuffer, "%s\\ui\\CharSelect\\creditsbckg", "DATA\\GLOBAL");
     }
 
-    wsprintfA(szPathBuffer, szFormatString, "DATA\\GLOBAL");
     DC6_CharSelect_creditsbckg = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\FrontEnd\\WideButtonBlank", "DATA\\GLOBAL");
     DC6_FrontEnd_WideButtonBlank = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
@@ -214,20 +217,22 @@ void __stdcall IMAGE_LoadPredefinedImages() {
     bIsExpansion = Fog::D2CheckExpansionGame();
     if (bIsExpansion) {
       szFormatString = "%s\\ui\\CharSelect\\Realmselect";
+      wsprintfA(szPathBuffer, "%s\\ui\\CharSelect\\Realmselect", "DATA\\GLOBAL");
     } else {
       /* LPCSTR param_2 for wsprintfA */ szFormatString = "%s\\ui\\FrontEnd\\CurRealm";
+      wsprintfA(szPathBuffer, "%s\\ui\\FrontEnd\\CurRealm", "DATA\\GLOBAL");
     }
 
-    wsprintfA(szPathBuffer, szFormatString, "DATA\\GLOBAL");
     DC6_FrontEnd_CurRealm_or_Realmselect = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
     bIsExpansion = Fog::D2CheckExpansionGame();
     if (bIsExpansion) {
       szFormatString = "%s\\ui\\CharSelect\\RealmSelectbuttonthin";
+      wsprintfA(szPathBuffer, "%s\\ui\\CharSelect\\RealmSelectbuttonthin", "DATA\\GLOBAL");
     } else {
       /* LPCSTR param_2 for wsprintfA */ szFormatString = "%s\\ui\\FrontEnd\\NarrowButtonBlank02";
+      wsprintfA(szPathBuffer, "%s\\ui\\FrontEnd\\NarrowButtonBlank02", "DATA\\GLOBAL");
     }
 
-    wsprintfA(szPathBuffer, szFormatString, "DATA\\GLOBAL");
     DC6_FrontEnd_NarrowButtonBlank02_or_RealmSelectbuttonthin = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\CharSelect\\password", "DATA\\GLOBAL");
     DC6_CharSelect_password = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
@@ -238,11 +243,12 @@ void __stdcall IMAGE_LoadPredefinedImages() {
     bIsExpansion = Fog::D2CheckExpansionGame();
     if (bIsExpansion) {
       szFormatString = "%s\\UI\\FrontEnd\\tcpipscreen";
+      wsprintfA(szPathBuffer, "%s\\UI\\FrontEnd\\tcpipscreen", "DATA\\GLOBAL");
     } else {
       /* LPCSTR param_2 for wsprintfA */ szFormatString = "%s\\UI\\FrontEnd\\tcpipbckg";
+      wsprintfA(szPathBuffer, "%s\\UI\\FrontEnd\\tcpipbckg", "DATA\\GLOBAL");
     }
 
-    wsprintfA(szPathBuffer, szFormatString, "DATA\\GLOBAL");
     DC6_FrontEnd_tcpipbckg_or_tcpipscreen = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\UI\\FrontEnd\\IPAddressBox", "DATA\\GLOBAL");
     DC6_FrontEnd_IPAddressBox = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
@@ -2455,7 +2461,6 @@ void __stdcall UIMENU_PleaseReadAfterCreatingAccount() {
 // Extended image loader for additional UI assets beyond IMAGE_LoadPredefinedImages. Loads character selection screens, button graphics, and expansion-specific UI elements. Uses the same wsprintfA path construction pattern with expansion detection for conditional asset loading.
 void __stdcall IMAGE_LoadPredefinedImagesEx() {
     char szPathBuffer[260];
-    char* szFormatString;
     if (DC6_FrontEnd_CharacterCreate_or_charactercreationscreenEXP) {
       return;
     }
@@ -2463,13 +2468,12 @@ void __stdcall IMAGE_LoadPredefinedImagesEx() {
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\FrontEnd\\MediumSelButtonBlank", "DATA\\GLOBAL");
     DC6_FrontEnd_MediumSelButtonBlank = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    if (bIsExpansion) {
-      szFormatString = "%s\\ui\\FrontEnd\\charactercreationscreenEXP";
+    if (!bIsExpansion) {
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\FrontEnd\\CharacterCreate", "DATA\\GLOBAL");
     } else {
-      /* LPCSTR param_2 for wsprintfA */ szFormatString = "%s\\ui\\FrontEnd\\CharacterCreate";
+      wsprintfA(szPathBuffer, "%s\\ui\\FrontEnd\\charactercreationscreenEXP", "DATA\\GLOBAL");
     }
 
-    wsprintfA(szPathBuffer, szFormatString, "DATA\\GLOBAL");
     DC6_FrontEnd_CharacterCreate_or_charactercreationscreenEXP = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\FrontEnd\\fire", "DATA\\GLOBAL");
     DC6_FrontEnd_fire = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
@@ -4026,7 +4030,6 @@ void __stdcall PlaysBlizzardNorthCutScene() {
     uint32_t bBnetIpFlag;
     D2ArchiveStrc* pVideoArchive;
     int32_t nLine;
-    char* szBlizNorthVideo;
     if (D2IniData_launcher->padding_0x35F[0]) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8d4);
       exit(-1);
@@ -4041,14 +4044,13 @@ void __stdcall PlaysBlizzardNorthCutScene() {
       if (!bIsExpansion) {
         D2gfx::D2GFX::D2GFX_PlayCutScene("Data\\Local\\Video\\New_BLIZ640x480.bik", 0, nullptr);
         nLine = 0;
-        szBlizNorthVideo = "Data\\Local\\Video\\BlizNorth640x480.bik";
+        D2gfx::D2GFX::D2GFX_PlayCutScene("Data\\Local\\Video\\BlizNorth640x480.bik", 0, nullptr);
       } else {
         D2gfx::D2GFX::D2GFX_PlayCutScene("Data\\Local\\Video\\New_BLIZ640x240.bik", 2, nullptr);
         nLine = 2;
-        szBlizNorthVideo = "Data\\Local\\Video\\BlizNorth640x240.bik";
+        D2gfx::D2GFX::D2GFX_PlayCutScene("Data\\Local\\Video\\BlizNorth640x240.bik", 2, nullptr);
       }
 
-      D2gfx::D2GFX::D2GFX_PlayCutScene(szBlizNorthVideo, nLine, nullptr);
       pBnetRegEntry = (D2ArchiveStrc*)MAINMENU_ReadBattleNetRegistry();
       if (!pBnetRegEntry) {
         pVideoArchive = pBnetRegEntry;

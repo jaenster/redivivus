@@ -79,24 +79,22 @@ int32_t __stdcall PATH_GetDynamicPathField(int32_t nMonStatsIdx) {
     if (nMonStatsIdx >= 0 && nMonStatsIdx < sgptDataTable->nTxtMonStatsSize) {
       int nMonStatsExId;
       nMonStatsExId = (int)sgptDataTable->pTxtMonStats[nMonStatsIdx].MonStatsEx;
-      if (nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize) {
-        pMonStatsEx = sgptDataTable->pTxtMonStatsEx + nMonStatsExId;
-        if (pMonStatsEx && (uint32_t)(int)pMonStatsEx->SizeX <= 3) {
-          uVar1 = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsEx + 0x5);
-          nMonStatsExId = gaUnitTypeInteractSizes[pMonStatsEx->SizeX];
-          if (!((gadwBitMasks[0] & uVar1 || gadwBitMasks[2] & uVar1) && !(gadwBitMasks[1] & uVar1))) {
-            return nMonStatsExId;
-          }
-          if (nMonStatsExId != 1) {
-            if (nMonStatsExId == 2) {
-              return 4;
-            }
-          } else {
-            nMonStatsExId = 3;
-          }
-
+      pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
+      if (pMonStatsEx && (uint32_t)(int)pMonStatsEx->SizeX <= 3) {
+        uVar1 = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsEx + 0x5);
+        nMonStatsExId = gaUnitTypeInteractSizes[pMonStatsEx->SizeX];
+        if (!((gadwBitMasks[0] & uVar1 || gadwBitMasks[2] & uVar1) && !(gadwBitMasks[1] & uVar1))) {
           return nMonStatsExId;
         }
+        if (nMonStatsExId != 1) {
+          if (nMonStatsExId == 2) {
+            return 4;
+          }
+        } else {
+          nMonStatsExId = 3;
+        }
+
+        return nMonStatsExId;
       }
     }
 

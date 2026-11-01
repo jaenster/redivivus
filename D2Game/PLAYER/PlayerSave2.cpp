@@ -521,44 +521,42 @@ BOOL __fastcall SaveStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * pStar
             nStatId = (uint32_t)(uint16_t)statsBuf[iStat].wStatIndex;
             nSubIndex = statsBuf[iStat].wSubIndex;
             nRawStatValue = statsBuf[iStat].nStatValue;
-            if ((int)nStatId < pDataTable->nTxtItemStatCostSize) {
-              pStatCostTxt = pDataTable->pTxtItemStatCost + nStatId;
-              if (pStatCostTxt) {
-                byCsvBitWidth = pStatCostTxt->csvbits;
-                if (byCsvBitWidth > 0) {
-                  nClampedValue = nRawStatValue;
-                  if (byCsvBitWidth < 0x20) {
-                    if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[5]) {
-                      nClampMask = -1 << byCsvBitWidth - 1;
-                      nClamped = nRawStatValue;
-                      if ((int)nRawStatValue <= (int)nClampMask) {
-                        nClamped = nClampMask;
-                      }
+            pStatCostTxt = (int)nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
+            if (pStatCostTxt) {
+              byCsvBitWidth = pStatCostTxt->csvbits;
+              if (byCsvBitWidth > 0) {
+                nClampedValue = nRawStatValue;
+                if (byCsvBitWidth < 0x20) {
+                  if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[5]) {
+                    nClampMask = -1 << byCsvBitWidth - 1;
+                    nClamped = nRawStatValue;
+                    if ((int)nRawStatValue <= (int)nClampMask) {
+                      nClamped = nClampMask;
+                    }
 
-                      nClampedValue = (1 << byCsvBitWidth - 1) - 1;
-                      if ((int)nClamped < (int)nClampedValue) {
-                        nClampedValue = nRawStatValue;
-                        if ((int)nRawStatValue <= (int)nClampMask) {
-                          nClampedValue = nClampMask;
-                        }
-                      }
-                    } else {
-                      nClampMask = (1 << byCsvBitWidth) - 1;
-                      nClampedValue = (int)nRawStatValue <= 0 ? 0 : nRawStatValue;
-                      if ((int)nClampedValue >= (int)nClampMask) {
+                    nClampedValue = (1 << byCsvBitWidth - 1) - 1;
+                    if ((int)nClamped < (int)nClampedValue) {
+                      nClampedValue = nRawStatValue;
+                      if ((int)nRawStatValue <= (int)nClampMask) {
                         nClampedValue = nClampMask;
                       }
                     }
+                  } else {
+                    nClampMask = (1 << byCsvBitWidth) - 1;
+                    nClampedValue = (int)nRawStatValue <= 0 ? 0 : nRawStatValue;
+                    if ((int)nClampedValue >= (int)nClampMask) {
+                      nClampedValue = nClampMask;
+                    }
                   }
-
-                  Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nStatId, 9);
-                  if (pStatCostTxt->csvparam) {
-                    Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)nSubIndex, (uint32_t)(uint8_t)pStatCostTxt->csvparam);
-                  }
-
-                  Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nClampedValue, (uint32_t)(uint8_t)pStatCostTxt->csvbits);
-                  pDataTable = sgptDataTable;
                 }
+
+                Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nStatId, 9);
+                if (pStatCostTxt->csvparam) {
+                  Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)nSubIndex, (uint32_t)(uint8_t)pStatCostTxt->csvparam);
+                }
+
+                Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nClampedValue, (uint32_t)(uint8_t)pStatCostTxt->csvbits);
+                pDataTable = sgptDataTable;
               }
             }
 

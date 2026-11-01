@@ -1827,11 +1827,7 @@ int32_t __fastcall ITEMMOD_AddStatToItem(D2UnitStrc * pUnit2, uint32_t nParam22,
     }
 
     eD2UnitStat eTargetStat = (eD2UnitStat)nParam;
-    if (!((int)eTargetStat >= 0 && (int)eTargetStat < sgptDataTable->nTxtItemStatCostSize)) {
-      return 0;
-    }
-
-    D2ItemStatCostTxt* pItemStatCost = sgptDataTable->pTxtItemStatCost + eTargetStat;
+    D2ItemStatCostTxt* pItemStatCost = (int)eTargetStat >= 0 && (int)eTargetStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eTargetStat : nullptr;
     if (!pItemStatCost) {
       return 0;
     }
@@ -2593,11 +2589,7 @@ void __stdcall ITEMMOD_ApplyPropertyToUnitStatsExpansion(uint32_t dwParam1, D2Un
     }
 
     int nFuncCode = pSetsTxtF->fcode;
-    if (!(nFuncCode >= 0 && nFuncCode < sgptDataTable->nTxtPropertiesSize)) {
-      return;
-    }
-
-    D2PropertiesTxt* pPropTxt = sgptDataTable->pTxtProperties + nFuncCode;
+    D2PropertiesTxt* pPropTxt = nFuncCode >= 0 && nFuncCode < sgptDataTable->nTxtPropertiesSize ? sgptDataTable->pTxtProperties + nFuncCode : nullptr;
     if (!pPropTxt) {
       return;
     }

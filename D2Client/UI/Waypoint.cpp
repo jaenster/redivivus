@@ -99,7 +99,6 @@ static int32_t WAYPOINT_GetWaypointIndexFromMouse(int32_t nMouseX, int32_t nMous
 
 void __stdcall DRAW_UI_WaypointGFXLoad() {
     char szPath[260];
-    char* pszFormat;
     if (!WaypointWayGateBackGround) {
       sprintf(szPath, "%s\\ui\\menu\\waygatebackground", "DATA\\GLOBAL");
       WaypointWayGateBackGround = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
@@ -108,12 +107,11 @@ void __stdcall DRAW_UI_WaypointGFXLoad() {
       BOOL bIsExpansion;
       bIsExpansion = Fog::D2CheckExpansionGame();
       if (!bIsExpansion || (bIsExpansion = GAME::Game::CLIENT_CheckExpansion() , !bIsExpansion)) {
-        pszFormat = "%s\\ui\\menu\\waygatetabs";
+        sprintf(szPath, "%s\\ui\\menu\\waygatetabs", "DATA\\GLOBAL");
       } else {
-        pszFormat = "%s\\ui\\menu\\expwaygatetabs";
+        sprintf(szPath, "%s\\ui\\menu\\expwaygatetabs", "DATA\\GLOBAL");
       }
 
-      sprintf(szPath, pszFormat, "DATA\\GLOBAL");
       WaypointWayGateTabs = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
     }
     if (WaypointWaygateIcons) {

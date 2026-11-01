@@ -109,11 +109,7 @@ void __fastcall PLAYER_InitBaseStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ui
     }
 
     int nStatValue = pUnit->nClassId;
-    if (!(nStatValue >= 0 && nStatValue < sgptDataTable->nTxtCharStatsSize)) {
-      return;
-    }
-
-    D2CharStatsTxt* pCharStats = sgptDataTable->pTxtCharStats + nStatValue;
+    D2CharStatsTxt* pCharStats = nStatValue >= 0 && nStatValue < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nStatValue : nullptr;
     if (!pCharStats) {
       return;
     }
@@ -222,11 +218,7 @@ static void PLAYER_AddEnergyStatPoints(D2UnitStrc * pUnit, int32_t nPoints) {
     }
 
     int nCharClassId = pUnit->nClassId;
-    if (!(nCharClassId >= 0 && nCharClassId < sgptDataTable->nTxtCharStatsSize)) {
-      return;
-    }
-
-    D2CharStatsTxt* pCharStats = sgptDataTable->pTxtCharStats + nCharClassId;
+    D2CharStatsTxt* pCharStats = nCharClassId >= 0 && nCharClassId < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nCharClassId : nullptr;
     if (!pCharStats) {
       return;
     }
@@ -254,11 +246,7 @@ static void PLAYER_AddVitalityStatPoints(int32_t nPoints, D2UnitStrc * pUnit) {
     }
 
     int nMaxStat = pUnit->nClassId;
-    if (!(nMaxStat >= 0 && nMaxStat < sgptDataTable->nTxtCharStatsSize)) {
-      return;
-    }
-
-    D2CharStatsTxt* pCharStats = sgptDataTable->pTxtCharStats + nMaxStat;
+    D2CharStatsTxt* pCharStats = nMaxStat >= 0 && nMaxStat < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nMaxStat : nullptr;
     if (!pCharStats) {
       return;
     }
@@ -296,11 +284,7 @@ void __fastcall ClearStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 
     int nStatDelta = pUnit->nClassId;
-    if (!(nStatDelta >= 0 && nStatDelta < sgptDataTable->nTxtCharStatsSize)) {
-      return;
-    }
-
-    D2CharStatsTxt* pCharStats = sgptDataTable->pTxtCharStats + nStatDelta;
+    D2CharStatsTxt* pCharStats = nStatDelta >= 0 && nStatDelta < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nStatDelta : nullptr;
     if (!pCharStats) {
       return;
     }
@@ -434,44 +418,42 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
                     nStatId = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].wStatIndex;
                     uVar1 = aStatBuf[nStatBufIdx].nStatValue;
                     nStatSubIndex = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].wSubIndex;
-                    if ((int)nStatId < pDataTable->nTxtItemStatCostSize) {
-                      pItemStatCost = pDataTable->pTxtItemStatCost + nStatId;
-                      if (pItemStatCost) {
-                        bySendBits = pItemStatCost->sendBits;
-                        if (bySendBits > 0) {
-                          nValue = uVar1;
-                          if (bySendBits < 0x20) {
-                            if ((char)pItemStatCost->dwItemStatFlags & (uint8_t)gadwBitMasks[1]) {
-                              nMaxVal = -1 << bySendBits - 1;
-                              nClampedVal = uVar1;
-                              if ((int)uVar1 <= (int)nMaxVal) {
-                                nClampedVal = nMaxVal;
-                              }
+                    pItemStatCost = (int)nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
+                    if (pItemStatCost) {
+                      bySendBits = pItemStatCost->sendBits;
+                      if (bySendBits > 0) {
+                        nValue = uVar1;
+                        if (bySendBits < 0x20) {
+                          if ((char)pItemStatCost->dwItemStatFlags & (uint8_t)gadwBitMasks[1]) {
+                            nMaxVal = -1 << bySendBits - 1;
+                            nClampedVal = uVar1;
+                            if ((int)uVar1 <= (int)nMaxVal) {
+                              nClampedVal = nMaxVal;
+                            }
 
-                              nValue = (1 << bySendBits - 1) - 1;
-                              if ((int)nClampedVal < (int)nValue) {
-                                nValue = uVar1;
-                                if ((int)uVar1 <= (int)nMaxVal) {
-                                  nValue = nMaxVal;
-                                }
-                              }
-                            } else {
-                              nMaxVal = (1 << bySendBits) - 1;
-                              nValue = (int)uVar1 <= 0 ? 0 : uVar1;
-                              if ((int)nValue >= (int)nMaxVal) {
+                            nValue = (1 << bySendBits - 1) - 1;
+                            if ((int)nClampedVal < (int)nValue) {
+                              nValue = uVar1;
+                              if ((int)uVar1 <= (int)nMaxVal) {
                                 nValue = nMaxVal;
                               }
                             }
+                          } else {
+                            nMaxVal = (1 << bySendBits) - 1;
+                            nValue = (int)uVar1 <= 0 ? 0 : uVar1;
+                            if ((int)nValue >= (int)nMaxVal) {
+                              nValue = nMaxVal;
+                            }
                           }
-
-                          Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nStatId, 9);
-                          if (pItemStatCost->sendParamBits) {
-                            Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nStatSubIndex & 0xffff, (uint32_t)pItemStatCost->sendParamBits);
-                          }
-
-                          Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nValue, (uint32_t)pItemStatCost->sendBits);
-                          pDataTable = sgptDataTable;
                         }
+
+                        Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nStatId, 9);
+                        if (pItemStatCost->sendParamBits) {
+                          Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nStatSubIndex & 0xffff, (uint32_t)pItemStatCost->sendParamBits);
+                        }
+
+                        Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nValue, (uint32_t)pItemStatCost->sendBits);
+                        pDataTable = sgptDataTable;
                       }
                     }
 
@@ -584,44 +566,42 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
                           nStatId = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].wStatIndex;
                           uVar1 = aStatBuf[nStatBufIdx].nStatValue;
                           nStatSubIndex = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].wSubIndex;
-                          if ((int)nStatId < pDataTable->nTxtItemStatCostSize) {
-                            pItemStatCost = pDataTable->pTxtItemStatCost + nStatId;
-                            if (pItemStatCost) {
-                              bySendBits = pItemStatCost->sendBits;
-                              if (bySendBits > 0) {
-                                nValue = uVar1;
-                                if (bySendBits < 0x20) {
-                                  if ((char)pItemStatCost->dwItemStatFlags & (uint8_t)gadwBitMasks[1]) {
-                                    nMaxVal = -1 << bySendBits - 1;
-                                    nClampedVal = uVar1;
-                                    if ((int)uVar1 <= (int)nMaxVal) {
-                                      nClampedVal = nMaxVal;
-                                    }
+                          pItemStatCost = (int)nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
+                          if (pItemStatCost) {
+                            bySendBits = pItemStatCost->sendBits;
+                            if (bySendBits > 0) {
+                              nValue = uVar1;
+                              if (bySendBits < 0x20) {
+                                if ((char)pItemStatCost->dwItemStatFlags & (uint8_t)gadwBitMasks[1]) {
+                                  nMaxVal = -1 << bySendBits - 1;
+                                  nClampedVal = uVar1;
+                                  if ((int)uVar1 <= (int)nMaxVal) {
+                                    nClampedVal = nMaxVal;
+                                  }
 
-                                    nValue = (1 << bySendBits - 1) - 1;
-                                    if ((int)nClampedVal < (int)nValue) {
-                                      nValue = uVar1;
-                                      if ((int)uVar1 <= (int)nMaxVal) {
-                                        nValue = nMaxVal;
-                                      }
-                                    }
-                                  } else {
-                                    nMaxVal = (1 << bySendBits) - 1;
-                                    nValue = (int)uVar1 <= 0 ? 0 : uVar1;
-                                    if ((int)nValue >= (int)nMaxVal) {
+                                  nValue = (1 << bySendBits - 1) - 1;
+                                  if ((int)nClampedVal < (int)nValue) {
+                                    nValue = uVar1;
+                                    if ((int)uVar1 <= (int)nMaxVal) {
                                       nValue = nMaxVal;
                                     }
                                   }
+                                } else {
+                                  nMaxVal = (1 << bySendBits) - 1;
+                                  nValue = (int)uVar1 <= 0 ? 0 : uVar1;
+                                  if ((int)nValue >= (int)nMaxVal) {
+                                    nValue = nMaxVal;
+                                  }
                                 }
-
-                                Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nStatId, 9);
-                                if (pItemStatCost->sendParamBits) {
-                                  Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nStatSubIndex & 0xffff, (uint32_t)pItemStatCost->sendParamBits);
-                                }
-
-                                Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nValue, (uint32_t)pItemStatCost->sendBits);
-                                pDataTable = sgptDataTable;
                               }
+
+                              Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nStatId, 9);
+                              if (pItemStatCost->sendParamBits) {
+                                Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nStatSubIndex & 0xffff, (uint32_t)pItemStatCost->sendParamBits);
+                              }
+
+                              Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nValue, (uint32_t)pItemStatCost->sendBits);
+                              pDataTable = sgptDataTable;
                             }
                           }
 

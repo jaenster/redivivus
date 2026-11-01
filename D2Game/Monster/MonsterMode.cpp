@@ -378,75 +378,73 @@ void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         nLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pDrlgRoom);
         D2Common::Drlg::GetActNoFromLevelNumber(nLevelId);
         nMonClassId = pUnit->nClassId;
-        if (nMonClassId >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize) {
-          pMonStats = sgptDataTable->pTxtMonStats + nMonClassId;
-          if (pMonStats) {
-            nDifficulty = (uint32_t)pGame->nDifficulty;
-            nVictimLevel = ITEMS::Items::Drop::GetLevel(pUnit, nLevelId);
-            nTcIndex = Monsters::MONSTER_GetBossNo(pGame, pUnit);
-            if (nTcIndex != -1) {
-              pSuperUniquesTxt = D2Common::DATATBLS::MonsterTbls::TXT_SuperUniques_GetLine(nTcIndex);
-              if (!pSuperUniquesTxt) {
-                nSelectedTC_00 = pMonStats->TreasureClass[nDifficulty].TreasureClass3;
-              } else {
-                nSelectedTC_00 = pSuperUniquesTxt->TC[nDifficulty];
-              }
-            } else {
-              bIsChamp = Monsters::CheckMonsterType(pUnit, 4);
-              if (bIsChamp) {
-                nSelectedTC_00 = pMonStats->TreasureClass[nDifficulty].TreasureClass2;
-              } else {
-                bIsUnique = Monsters::CheckMonsterType(pUnit, 8);
-                if (bIsUnique) {
-                  nSelectedTC_00 = pMonStats->TreasureClass[nDifficulty].TreasureClass3;
-                } else {
-                  nSelectedTC_00 = pMonStats->TreasureClass[nDifficulty].TreasureClass1;
-                }
-              }
-            }
-            if (pMonStats->TCQuestId > '\0' && (uint16_t)pMonStats->TreasureClass[nDifficulty].TreasureClass4 > 0 && pUnitKill) {
-              pAttacker = pUnitKill->pAttacker;
-              if (pAttacker) {
-                if (pAttacker->eUnitType != UNIT_PLAYER) {
-                  pEffectiveAttacker = Ai::AiGeneral::GetOwnerUnit(pAttacker);
-                  _bHasCurseState = D2Common::DATATBLS::ItemStats::STATES_HasCurseState(pAttacker);
-                  if (_bHasCurseState) {
-                    pStatList = D2Common::Stats::StatsEx::GetStatsByFlags(pAttacker, 0x800);
-                    if (pStatList) {
-                      eAttackerUnitType = D2Common::Stats::StatsEx::GetOwnerType(pStatList);
-                      dwFindGUID = D2Common::Stats::StatsEx::GetOwnerGUID(pStatList);
-                      pEffectiveAttacker = UNIT::SUnit::FindUnitFromTable(pGame, eAttackerUnitType, dwFindGUID);
-                    }
-                  }
-                  if (pEffectiveAttacker) {
-                    pAttacker = pEffectiveAttacker;
-                  }
-                }
-                if (pAttacker && pAttacker->eUnitType == UNIT_PLAYER) {
-                  pBitBuffer = Quests::QUESTS::GetQuestBitBuffer(pGame, pAttacker);
-                  if (pBitBuffer) {
-                    bQuestFinished = D2Common::QuestRecord::GetQuestState(pBitBuffer, (eD2Quests)pMonStats->TCQuestId, QUESTSTATE_FinishedInPreviousGame);
-                    if (bQuestFinished != 1) {
-                      _bHasCurseState = D2Common::QuestRecord::GetQuestState(pBitBuffer, (eD2Quests)pMonStats->TCQuestId, QUESTSTATE_RewardAwaits);
-                      if (_bHasCurseState != 1) {
-                        _bHasCurseState = D2Common::QuestRecord::GetQuestState(pBitBuffer, (eD2Quests)pMonStats->TCQuestId, (eD2QuestState)(uint8_t)pMonStats->TCQuestCP);
-                        if (_bHasCurseState != 1) {
-                          nSelectedTC_00 = pMonStats->TreasureClass[nDifficulty].TreasureClass4;
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
+        pMonStats = nMonClassId >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
+        if (!pMonStats) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x19a);
+          exit(-1);
+        }
 
-            ITEMS::Items::Drop::SERVER_ITEM_RollItemAndGetTreasureClass(pGame, pUnit, pUnitKill->pAttacker, nSelectedTC_00, ITEMTYPE_None1, nVictimLevel, bIsItemFindDrop, nullptr, nullptr, 0);
-            return;
+        nDifficulty = (uint32_t)pGame->nDifficulty;
+        nVictimLevel = ITEMS::Items::Drop::GetLevel(pUnit, nLevelId);
+        nTcIndex = Monsters::MONSTER_GetBossNo(pGame, pUnit);
+        if (nTcIndex != -1) {
+          pSuperUniquesTxt = D2Common::DATATBLS::MonsterTbls::TXT_SuperUniques_GetLine(nTcIndex);
+          if (!pSuperUniquesTxt) {
+            nSelectedTC_00 = pMonStats->TreasureClass[nDifficulty].TreasureClass3;
+          } else {
+            nSelectedTC_00 = pSuperUniquesTxt->TC[nDifficulty];
+          }
+        } else {
+          bIsChamp = Monsters::CheckMonsterType(pUnit, 4);
+          if (bIsChamp) {
+            nSelectedTC_00 = pMonStats->TreasureClass[nDifficulty].TreasureClass2;
+          } else {
+            bIsUnique = Monsters::CheckMonsterType(pUnit, 8);
+            if (bIsUnique) {
+              nSelectedTC_00 = pMonStats->TreasureClass[nDifficulty].TreasureClass3;
+            } else {
+              nSelectedTC_00 = pMonStats->TreasureClass[nDifficulty].TreasureClass1;
+            }
+          }
+        }
+        if (pMonStats->TCQuestId > '\0' && (uint16_t)pMonStats->TreasureClass[nDifficulty].TreasureClass4 > 0 && pUnitKill) {
+          pAttacker = pUnitKill->pAttacker;
+          if (pAttacker) {
+            if (pAttacker->eUnitType != UNIT_PLAYER) {
+              pEffectiveAttacker = Ai::AiGeneral::GetOwnerUnit(pAttacker);
+              _bHasCurseState = D2Common::DATATBLS::ItemStats::STATES_HasCurseState(pAttacker);
+              if (_bHasCurseState) {
+                pStatList = D2Common::Stats::StatsEx::GetStatsByFlags(pAttacker, 0x800);
+                if (pStatList) {
+                  eAttackerUnitType = D2Common::Stats::StatsEx::GetOwnerType(pStatList);
+                  dwFindGUID = D2Common::Stats::StatsEx::GetOwnerGUID(pStatList);
+                  pEffectiveAttacker = UNIT::SUnit::FindUnitFromTable(pGame, eAttackerUnitType, dwFindGUID);
+                }
+              }
+              if (pEffectiveAttacker) {
+                pAttacker = pEffectiveAttacker;
+              }
+            }
+            if (pAttacker && pAttacker->eUnitType == UNIT_PLAYER) {
+              pBitBuffer = Quests::QUESTS::GetQuestBitBuffer(pGame, pAttacker);
+              if (pBitBuffer) {
+                bQuestFinished = D2Common::QuestRecord::GetQuestState(pBitBuffer, (eD2Quests)pMonStats->TCQuestId, QUESTSTATE_FinishedInPreviousGame);
+                if (bQuestFinished != 1) {
+                  _bHasCurseState = D2Common::QuestRecord::GetQuestState(pBitBuffer, (eD2Quests)pMonStats->TCQuestId, QUESTSTATE_RewardAwaits);
+                  if (_bHasCurseState != 1) {
+                    _bHasCurseState = D2Common::QuestRecord::GetQuestState(pBitBuffer, (eD2Quests)pMonStats->TCQuestId, (eD2QuestState)(uint8_t)pMonStats->TCQuestCP);
+                    if (_bHasCurseState != 1) {
+                      nSelectedTC_00 = pMonStats->TreasureClass[nDifficulty].TreasureClass4;
+                    }
+                  }
+                }
+              }
+            }
           }
         }
 
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x19a);
-        exit(-1);
+        ITEMS::Items::Drop::SERVER_ITEM_RollItemAndGetTreasureClass(pGame, pUnit, pUnitKill->pAttacker, nSelectedTC_00, ITEMTYPE_None1, nVictimLevel, bIsItemFindDrop, nullptr, nullptr, 0);
+        return;
       }
     }
 }
@@ -867,11 +865,7 @@ void __stdcall MONMODE_OwnerCastOrDie(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 
     int nOwnerMonClassId = pOwner->nClassId;
-    if (!(nOwnerMonClassId >= 0 && nOwnerMonClassId < sgptDataTable->nTxtMonStatsSize)) {
-      return;
-    }
-
-    D2MonStatsTxt* pMonStats = sgptDataTable->pTxtMonStats + nOwnerMonClassId;
+    D2MonStatsTxt* pMonStats = nOwnerMonClassId >= 0 && nOwnerMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nOwnerMonClassId : nullptr;
     if (!pMonStats) {
       return;
     }
@@ -956,21 +950,15 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2MonsterKillStrc *
     }
 
     int nMonStatsSize = sgptDataTable->nTxtMonStatsSize;
-    if (nClassId >= nMonStatsSize) {
-      return 1;
-    }
-
-    D2MonStatsTxt* pMonStats = sgptDataTable->pTxtMonStats + nClassId;
+    D2MonStatsTxt* pMonStats = nClassId < nMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!(pMonStats && (uint8_t)*((uint8_t*)pMonStats + 0xe) & gadwBitMasks[4])) {
       return 1;
     }
     if (pVictim->eUnitType == UNIT_MONSTER && nClassId >= 0) {
       D2MonStatsTxt* pMonStats2;
-      if (nClassId < nMonStatsSize) {
-        pMonStats2 = sgptDataTable->pTxtMonStats + nClassId;
-        if (pMonStats2) {
-          nClassId = (int)pMonStats2->BaseId;
-        }
+      pMonStats2 = nClassId < nMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+      if (pMonStats2) {
+        nClassId = (int)pMonStats2->BaseId;
       }
       if (nClassId >= 0 && nClassId < nMonStatsSize) {
         if (nClassId == 0xd4) {
@@ -1047,11 +1035,7 @@ void __fastcall MONMODE_HandleSpecialEndDeath(::SGAMEDATA * pGame, D2UnitStrc * 
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 0xc);
     UNIT::SUnitEvent::UNITEVENT_DispatchEventsByType(pGame, 0xd, pUnit, nullptr, nullptr);
     int nClassId = pUnit->nClassId;
-    if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize)) {
-      return;
-    }
-
-    D2MonStatsTxt* pMonStats = sgptDataTable->pTxtMonStats + nClassId;
+    D2MonStatsTxt* pMonStats = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!pMonStats) {
       return;
     }

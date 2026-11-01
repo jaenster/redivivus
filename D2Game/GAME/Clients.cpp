@@ -1252,11 +1252,9 @@ BOOL __fastcall SERVER_IsPlayerCharacterInGame(char * szText1, char * szText2) {
 // Appends an incoming save-data chunk to the client's in-progress save buffer. Looks up the client by nClientId in the QServer bucket table (under critical section), allocates pSaveGame on the first chunk, memcpys the chunk, advances nSaveOpenSize. When nSaveOpenSize reaches nTotalSize the save is complete: sets fClientFlags bit 3, runs PLAYERSAVE_CRC32MissileTable, and returns 1. Returns 0 if the QServer tables are uninitialised or the client is not found.
 // @sourcefile .\GAME\Clients.cpp
 int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, size_t size, size_t nTotalSize, uint32_t dwSaveFlags, uint32_t dwParam1, uint32_t dwParam2) {
-    bool _bComplete;
     D2SaveFileHeaderStrc* pSaveBuffer;
     void* nAddress;
-    bool bComplete;
-    _bComplete = 0;
+    BOOL bComplete = 0;
     if (!gQServerClientTablesInitialized) {
       return 0;
     }
@@ -1266,7 +1264,7 @@ int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, size
     do {
       if (!pClient) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByIdCs);
-        return _bComplete;
+        return bComplete;
       }
       if (pClient->nClientNo == nClientId) {
         if (!pClient->nSaveOpenSize) {
@@ -1287,11 +1285,11 @@ int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, size
           pClient->fClientFlags |= 8;
           nAddress = (void*)PLAYER::PlayerSave::PLAYERSAVE_CRC32MissileTable((D2MissilesTxt*)pClient->pSaveGame, pClient->nSaveOpenSize);
           pClient->pSavePacketList = nAddress;
-          _bComplete = 1;
+          bComplete = 1;
         }
 
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByIdCs);
-        return _bComplete;
+        return bComplete;
       }
 
       pClient = pClient->pServerNext;

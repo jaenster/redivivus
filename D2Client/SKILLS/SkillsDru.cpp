@@ -39,11 +39,7 @@
 namespace D2Client::SKILLS::SkillsDru {
 
 BOOL __fastcall Skills_CltStFunc_AddAuraToggleOverlay(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!(pSkillTxt && pSkillTxt->aurastate >= 0)) {
       return 0;
     }
@@ -147,12 +143,8 @@ BOOL __fastcall SKILLSDRU_CltCreateShapeShiftMissile(D2UnitStrc * pUnit, int32_t
 }
 
 BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_FwdArc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills;
-    if (!(pSkillTxt + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
 
@@ -164,7 +156,7 @@ BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_FwdArc(D2UnitStrc * pUnit, eD2Sk
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt[eSkill].calc[0], eSkill, nSkillLvl);
+    int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
     if (nMissileCount > 0) {
       BOOL bResult;
       bResult = SKILLSDRU_CltCreateShapeShiftMissile(pUnit, nMissileCount, eMissileId, eSkill, nSkillLvl, 0x200, 1, 0);
@@ -175,12 +167,8 @@ BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_FwdArc(D2UnitStrc * pUnit, eD2Sk
 }
 
 BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_SideArc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills;
-    if (!(pSkillTxt + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
 
@@ -192,7 +180,7 @@ BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_SideArc(D2UnitStrc * pUnit, eD2S
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt[eSkill].calc[0], eSkill, nSkillLvl);
+    int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
     if (nMissileCount > 0) {
       BOOL bResult;
       bResult = SKILLSDRU_CltCreateShapeShiftMissile(pUnit, nMissileCount, eMissileId, eSkill, nSkillLvl, 0x100, 0, 1);
@@ -203,12 +191,8 @@ BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_SideArc(D2UnitStrc * pUnit, eD2S
 }
 
 BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_BackArc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills;
-    if (!(pSkillTxt + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
 
@@ -220,7 +204,7 @@ BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_BackArc(D2UnitStrc * pUnit, eD2S
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt[eSkill].calc[0], eSkill, nSkillLvl);
+    int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
     if (nMissileCount > 0) {
       BOOL bResult;
       bResult = SKILLSDRU_CltCreateShapeShiftMissile(pUnit, nMissileCount, eMissileId, eSkill, nSkillLvl, 0x200, 0, 1);

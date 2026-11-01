@@ -603,12 +603,8 @@ void __fastcall MONSTER_InitLightMap(D2UnitStrc * pUnit) {
     }
 
     int nClassId = pUnit->nClassId;
-    if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize)) {
-      return;
-    }
-
-    D2MonStatsTxt* pMonStatsTxt = sgptDataTable->pTxtMonStats;
-    if (!(pMonStatsTxt + nClassId)) {
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    if (!pMonStatsTxt) {
       return;
     }
 
@@ -624,7 +620,7 @@ void __fastcall MONSTER_InitLightMap(D2UnitStrc * pUnit) {
 
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if (eLevelId == LEVEL_DenOfEvil && (uVar1 = GetQuestAvailabilityByIndex(0, 1) , uVar1 != 0) && (uVar1 = CheckFlags(pUnit, UNITFLAG_ISASYNC) , !uVar1 && (cAlign = pMonStatsTxt[nClassId].Align , cAlign != '\x01' && cAlign != '\x02'))) {
+    if (eLevelId == LEVEL_DenOfEvil && (uVar1 = GetQuestAvailabilityByIndex(0, 1) , uVar1 != 0) && (uVar1 = CheckFlags(pUnit, UNITFLAG_ISASYNC) , !uVar1 && (cAlign = pMonStatsTxt->Align , cAlign != '\x01' && cAlign != '\x02'))) {
       byFinalLightRadius = 3;
     } else if (!byFinalLightRadius) {
       return;
@@ -895,30 +891,16 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, uint32_t nParam1, in
     D2DifficultyLevelsTxt* pDiffLevels;
     int i;
     int32_t nErrLine;
-    if (nClassId < 0) {
-      return;
-    }
-    if (nClassId >= sgptDataTable->nTxtMonStatsSize) {
-      return;
-    }
-
     D2MonStatsTxt* pMonStatsTxt;
-    pMonStatsTxt = sgptDataTable->pTxtMonStats + nClassId;
+    pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!pMonStatsTxt) {
       return;
     }
 
     int nMonStats2Idx;
     nMonStats2Idx = (int)pMonStatsTxt->MonStatsEx;
-    if (nMonStats2Idx < 0) {
-      return;
-    }
-    if (nMonStats2Idx >= sgptDataTable->nTxtMonStatsExSize) {
-      return;
-    }
-
     D2MonStats2Txt* pMonStats2;
-    pMonStats2 = sgptDataTable->pTxtMonStatsEx + nMonStats2Idx;
+    pMonStats2 = nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStats2Idx : nullptr;
     if (!pMonStats2) {
       return;
     }
@@ -1103,30 +1085,16 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
     DWORD nPalShiftIdx;
     short int* pSkillIdPtr;
     D2UnitDataMonsterStrc* pMonData;
-    if (nClassId < 0) {
-      return;
-    }
-    if (nClassId >= sgptDataTable->nTxtMonStatsSize) {
-      return;
-    }
-
     D2MonStatsTxt* pMonStatsTxtNew;
-    pMonStatsTxtNew = sgptDataTable->pTxtMonStats + nClassId;
+    pMonStatsTxtNew = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!pMonStatsTxtNew) {
       return;
     }
 
     int nMonStats2Idx;
     nMonStats2Idx = (int)pMonStatsTxtNew->MonStatsEx;
-    if (nMonStats2Idx < 0) {
-      return;
-    }
-    if (nMonStats2Idx >= sgptDataTable->nTxtMonStatsExSize) {
-      return;
-    }
-
     D2MonStats2Txt* pMonStats2;
-    pMonStats2 = sgptDataTable->pTxtMonStatsEx + nMonStats2Idx;
+    pMonStats2 = nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStats2Idx : nullptr;
     if (!pMonStats2) {
       return;
     }
@@ -1601,11 +1569,7 @@ static void MONSTER_ProcessSkillAnimation(D2UnitStrc * pUnit) {
     }
 
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\Monster.cpp", 0x3b5);
-    if (!((int)eSkillId >= 0 && (int)eSkillId < sgptDataTable->nTxtSkillsCount)) {
-      return;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkillId;
+    D2SkillsTxt* pSkillTxt = (int)eSkillId >= 0 && (int)eSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkillId : nullptr;
     if (!pSkillTxt) {
       return;
     }
@@ -2215,15 +2179,8 @@ void __fastcall MonsterMessage(int32_t nParam, D2UnitStrc * pUnit, D2ServerMessa
     }
 
     nClassId = (int)sgptDataTable->pTxtMonStats[nClassId].MonStatsEx;
-    if (nClassId < 0) {
-      return;
-    }
-    if (nClassId >= sgptDataTable->nTxtMonStatsExSize) {
-      return;
-    }
-
     D2MonStats2Txt* pMonStats2;
-    pMonStats2 = sgptDataTable->pTxtMonStatsEx + nClassId;
+    pMonStats2 = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nClassId : nullptr;
     if (!pMonStats2) {
       return;
     }

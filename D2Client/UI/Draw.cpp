@@ -72,20 +72,15 @@ namespace D2Client::UI::Draw {
 
 void __stdcall LoadingsScreen() {
     char szPath[260];
-    char* _Format;
-    char* pszBaseDir;
     ui::CleanupAfterLoadingAct();
     ui::PALETTE_LoadLoadingScreenPalette();
     uint32_t nLangCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
-    if (nLangCode) {
-      pszBaseDir = "DATA\\LOCAL";
-      _Format = "%s\\UI\\LoadingScreen";
+    if (!nLangCode) {
+      sprintf(szPath, "%s\\UI\\Loading\\Loadingscreen", "DATA\\GLOBAL");
     } else {
-      pszBaseDir = "DATA\\GLOBAL";
-      _Format = "%s\\UI\\Loading\\Loadingscreen";
+      sprintf(szPath, "%s\\UI\\LoadingScreen", "DATA\\LOCAL");
     }
 
-    sprintf(szPath, _Format, pszBaseDir);
     gnLoadedActIndex = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
     gnLoadScreenAnimFrame = 0;
     gnLastOpenPanelId = 1;

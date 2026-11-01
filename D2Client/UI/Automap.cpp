@@ -2261,7 +2261,6 @@ void __stdcall AUTOMAP_DrawDifficulty() {
 
 void __stdcall AUTOMAP_LoadDC6Sprites() {
     char szPath[260];
-    char* szFmt;
     szPath[0] = '\0';
     memset(szPath + 1, 0, 0x103);
     DC6** ppDC6 = pAutoMapDC6;
@@ -2292,7 +2291,7 @@ void __stdcall AUTOMAP_LoadDC6Sprites() {
         return;
       }
 
-      szFmt = "%s\\UI\\AutoMap\\ExTnMap";
+      sprintf(szPath, "%s\\UI\\AutoMap\\ExTnMap", "DATA\\GLOBAL");
     } else {
       sprintf(szPath, "%s\\UI\\AutoMap\\MaxiMapS", "DATA\\GLOBAL");
       pAutoMapDC6[0] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
@@ -2303,10 +2302,9 @@ void __stdcall AUTOMAP_LoadDC6Sprites() {
       sprintf(szPath, "%s\\UI\\AutoMap\\Act4MapS", "DATA\\GLOBAL");
       pAutoMapDC6[2] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
       nAutoMapDC6FrameCount[2] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[2]);
-      szFmt = "%s\\UI\\AutoMap\\ExTnMapS";
+      sprintf(szPath, "%s\\UI\\AutoMap\\ExTnMapS", "DATA\\GLOBAL");
     }
 
-    sprintf(szPath, szFmt, "DATA\\GLOBAL");
     pAutoMapDC6[3] = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
     nAutoMapDC6FrameCount[3] = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pAutoMapDC6[3]);
 }

@@ -871,7 +871,6 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogon(char * pPacketData, siz
 // If verification succeeds, mutual authentication complete and session key K established.
 // On status 2, password was incorrect. Logon fails on proof mismatch or unknown status.
 BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogonProof(char * pPacketData, size_t nPacketSize) {
-    char* szFailureMessage;
     if (nPacketSize < 0x18) {
       Debug::DEBUG_UnusedDebugFunction("INVALID: AuthAccountLogonProof");
       return 0;
@@ -884,7 +883,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogonProof(char * pPacketData
         return 1;
       }
 
-      szFailureMessage = "Logon Proof failed: Unknown result";
+      Debug::DEBUG_UnusedDebugFunction("Logon Proof failed: Unknown result");
     } else {
       int32_t bProofValid;
       bProofValid = NET_SID_CLIENT_VerifyServerProof(pPacketData + 4);
@@ -894,10 +893,9 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogonProof(char * pPacketData
         return 1;
       }
 
-      szFailureMessage = "Logon Proof failed: Server didn\'t know our password but told us it did!";
+      Debug::DEBUG_UnusedDebugFunction("Logon Proof failed: Server didn\'t know our password but told us it did!");
     }
 
-    Debug::DEBUG_UnusedDebugFunction(szFailureMessage);
     BNMESSQUEUE_SetStateIfZero(0x12);
     return 0;
 }

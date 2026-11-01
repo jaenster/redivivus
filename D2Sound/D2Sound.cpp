@@ -81,15 +81,12 @@ DWORD __stdcall SOUND_GetHardwareAccelerationFlag() {
 BOOL __fastcall SOUND_ToggleEAXEnvironmentPreset(int nPresetType) {
     HRESULT hResult;
     uint32_t nPropertyValue;
-    uint8_t* pEAXProperty;
-    ULONG uPropertyId;
     if (!gpDirectSoundEAXInterface) {
       return 0;
     }
     if (nPresetType == 1) {
       nPropertyValue = 0;
-      uPropertyId = 2;
-      pEAXProperty = gEAXPropertyGuid_Reserved1;
+      hResult = gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 2, nullptr, 0, &nPropertyValue, 4);
     } else {
       nPropertyValue = -10000;
       hResult = gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 2, nullptr, 0, &nPropertyValue, 4);
@@ -97,11 +94,8 @@ BOOL __fastcall SOUND_ToggleEAXEnvironmentPreset(int nPresetType) {
         return 0;
       }
 
-      uPropertyId = 3;
-      pEAXProperty = gEAXPropertyGuid_Reserved2;
+      hResult = gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 3, nullptr, 0, &nPropertyValue, 4);
     }
-
-    hResult = gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, pEAXProperty, uPropertyId, nullptr, 0, &nPropertyValue, 4);
     if (hResult < 0) {
       return 0;
     }

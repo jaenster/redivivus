@@ -236,7 +236,6 @@ BOOL __fastcall DRAW_LoadPaletteFromPCX(LPCSTR szFilePath) {
     uint8_t* pbPaletteEntry;
     PcxPaletteTrailer pcxPaletteTrailer;
     D2PcxHeaderStrc sPcxHeader;
-    char* lpOutputString;
     HANDLE hFile = CreateFileA(szFilePath, 0x80000000, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0, (HANDLE)0x0);
     if (hFile == (HANDLE)-1) {
       /* LPCSTR lpOutputString for OutputDebugStringA */ OutputDebugStringA("Unable to open ");
@@ -268,12 +267,11 @@ BOOL __fastcall DRAW_LoadPaletteFromPCX(LPCSTR szFilePath) {
         return 1;
       }
 
-      lpOutputString = "Unable to extract palette from\n";
+      OutputDebugStringA("Unable to extract palette from\n");
     } else {
-      /* LPCSTR lpOutputString for OutputDebugStringA */ lpOutputString = "File is not a valid 256-color PCX file.\n";
+      /* LPCSTR lpOutputString for OutputDebugStringA */ OutputDebugStringA("File is not a valid 256-color PCX file.\n");
     }
 
-    OutputDebugStringA(lpOutputString);
     /* HANDLE hObject for CloseHandle */ CloseHandle(hFile);
     return 0;
 }

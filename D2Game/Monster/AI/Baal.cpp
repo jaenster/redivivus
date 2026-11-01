@@ -1033,14 +1033,7 @@ void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
       }
 
       nMonClassId = pUnit->nClassId;
-      if (nMonClassId < 0) {
-        return;
-      }
-      if (nMonClassId >= sgptDataTable->nTxtMonStatsSize) {
-        return;
-      }
-
-      pMonStats = sgptDataTable->pTxtMonStats + nMonClassId;
+      pMonStats = nMonClassId >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
       if (!pMonStats) {
         return;
       }
