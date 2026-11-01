@@ -296,7 +296,7 @@ BOOL __stdcall MAINMENU_OnPressDestroyListsAndReturnToMainMenu(struct D2ControlM
 BOOL __stdcall UIMENU_ConnectToServerCallback(struct D2ControlStrc * pUnusedArg);
 BOOL __fastcall MAINMENU_DeleteCharacterOnRealm(struct D2CharSelStrc * pCharSel, uint8_t * pszRealm);
 uint32_t __fastcall MAINMENU_UpgradeCharacterToExpansion(struct D2CharSelStrc * pCharSel, uint8_t * pszRealm);
-int __fastcall SelectedCharBnetSingleTcpIp(struct D2CharSelStrc * charName, eD2PlayerStatus pPlayerStatus, int32_t nClassId, char * pRealm);
+int __fastcall SelectedCharBnetSingleTcpIp(struct D2CharSelStrc * charName, eD2PlayerStatus pPlayerStatus, eD2PlayerClassID nClassId, char * pRealm);
 BOOL __stdcall UIMENU_PlayIntroAndReturnToMainScreen(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall thunk_UIMENU_MainMenu(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressReturnToMainMenu(struct D2ControlMsg * pControlMsg);

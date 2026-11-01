@@ -445,13 +445,13 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
                           nValue = uVar1;
                           if (bySendBits < 0x20) {
                             if ((char)pItemStatCost->dwItemStatFlags & (uint8_t)gadwBitMasks[1]) {
-                              nMaxVal = -1 << (bySendBits - 1 & 0x1f);
+                              nMaxVal = -1 << bySendBits - 1;
                               nClampedVal = uVar1;
                               if ((int)uVar1 <= (int)nMaxVal) {
                                 nClampedVal = nMaxVal;
                               }
 
-                              nValue = (1 << (bySendBits - 1 & 0x1f)) - 1;
+                              nValue = (1 << bySendBits - 1) - 1;
                               if ((int)nClampedVal < (int)nValue) {
                                 nValue = uVar1;
                                 if ((int)uVar1 <= (int)nMaxVal) {
@@ -459,7 +459,7 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
                                 }
                               }
                             } else {
-                              nMaxVal = (1 << (bySendBits & 0x1f)) - 1;
+                              nMaxVal = (1 << bySendBits) - 1;
                               nValue = (int)uVar1 <= 0 ? 0 : uVar1;
                               if ((int)nValue >= (int)nMaxVal) {
                                 nValue = nMaxVal;
@@ -595,13 +595,13 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
                                 nValue = uVar1;
                                 if (bySendBits < 0x20) {
                                   if ((char)pItemStatCost->dwItemStatFlags & (uint8_t)gadwBitMasks[1]) {
-                                    nMaxVal = -1 << (bySendBits - 1 & 0x1f);
+                                    nMaxVal = -1 << bySendBits - 1;
                                     nClampedVal = uVar1;
                                     if ((int)uVar1 <= (int)nMaxVal) {
                                       nClampedVal = nMaxVal;
                                     }
 
-                                    nValue = (1 << (bySendBits - 1 & 0x1f)) - 1;
+                                    nValue = (1 << bySendBits - 1) - 1;
                                     if ((int)nClampedVal < (int)nValue) {
                                       nValue = uVar1;
                                       if ((int)uVar1 <= (int)nMaxVal) {
@@ -609,7 +609,7 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
                                       }
                                     }
                                   } else {
-                                    nMaxVal = (1 << (bySendBits & 0x1f)) - 1;
+                                    nMaxVal = (1 << bySendBits) - 1;
                                     nValue = (int)uVar1 <= 0 ? 0 : uVar1;
                                     if ((int)nValue >= (int)nMaxVal) {
                                       nValue = nMaxVal;

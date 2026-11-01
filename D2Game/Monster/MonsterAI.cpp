@@ -342,7 +342,7 @@ static uint32_t __stdcall NPC_BeginInteraction(::SGAMEDATA * pGame, D2MonsterAiS
     D2Common::Text::STRUCT_FreeTxtMessageForPacket0x27(pTxtMsg);
     Quests::QUESTS::NET_D2GS_SERVER_Send_0x29_GAMEQUESTRECORD_Prepare(pGame, pClient);
     dwTmp = pNpcUnit->nUnitGUID;
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(pClient, 0x28, 1, dwTmp, Quests::QUESTS::GetQuestBitBuffer(pGame, pPlayer), questActionType);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(pClient, 0x28, '\x01', dwTmp, Quests::QUESTS::GetQuestBitBuffer(pGame, pPlayer), questActionType);
     return 0;
 }
 

@@ -945,10 +945,10 @@ void __fastcall NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(D2ClientStrc * pClient, 
     SCMD_QueuePacketForClient(&packet.packetId, 0xc, pClient);
 }
 
-void __fastcall NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(D2ClientStrc * pClient, uint8_t eUnitType, int32_t nUnitGUID, eD2Skills eSkill, int32_t nNewQuantity) {
+void __fastcall NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(D2ClientStrc * pClient, uint8_t eUnitType, int32_t nUnitGUID, eD2Skills eSkill, uint8_t nNewQuantity) {
     D2GSPacketSrv0x22_0x23 packet;
     packet.skill = (uint16_t)eSkill;
-    packet.nBaseAmount = (uint8_t)nNewQuantity;
+    packet.nBaseAmount = nNewQuantity;
     packet.packetId = 0x22;
     packet.unitType = eUnitType;
     packet.unitId = nUnitGUID;
@@ -991,7 +991,6 @@ void __fastcall NET_D2GS_SERVER_Send_0x94_SETALLSKILLS(D2ClientStrc * pClient, D
     eD2Skills eSkillId;
     uint8_t* pSkillEntryBuf;
     size_t nAllocSize;
-    int32_t nLine;
     D2SkillListStrc* pSkillsList;
     if (pUnit) {
       D2SkillStrc* pSkill;
@@ -1009,30 +1008,34 @@ void __fastcall NET_D2GS_SERVER_Send_0x94_SETALLSKILLS(D2ClientStrc * pClient, D
         pPktBuf = (uint8_t*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, nAllocSize, ".\\GAME\\SCmd.cpp", 0x568);
         pSkillEntryBuf = pPktBuf + 6;
         *pPktBuf = 0x94;
-        if (nSkillCountIter < 0x100) {
-          pPktBuf[1] = (uint8_t)nSkillCountIter;
-          *(int*)(pPktBuf + 2) = pUnit->nUnitGUID;
-          pSkill = D2Common::Skills::GetFirstSkill(pSkillsList);
-          while (pSkill) {
-            nSkillCountIter = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 0);
-            pSkillEntryBuf[2] = (uint8_t)nSkillCountIter;
-            eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\GAME\\SCmd.cpp", 0x576);
-            *(short int*)pSkillEntryBuf = (short int)eSkillId;
-            pSkill = D2Common::Skills::GetNext(pSkill);
-            pSkillEntryBuf += 3;
-          }
-
-          SCMD_QueuePacketForClient(pPktBuf, nAllocSize, pClient);
-          D2_FREE_POOL_AT(pGame->pMemoryPool, pPktBuf, ".\\GAME\\SCmd.cpp", 0x57e);
-          return;
+        if (!(nSkillCountIter < 0x100)) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x56e);
+          exit(-1);
         }
 
-        nLine = 0x56e;
-      }
-    }
+        pPktBuf[1] = (uint8_t)nSkillCountIter;
+        *(int*)(pPktBuf + 2) = pUnit->nUnitGUID;
+        pSkill = D2Common::Skills::GetFirstSkill(pSkillsList);
+        while (pSkill) {
+          nSkillCountIter = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 0);
+          pSkillEntryBuf[2] = (uint8_t)nSkillCountIter;
+          eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\GAME\\SCmd.cpp", 0x576);
+          *(short int*)pSkillEntryBuf = (short int)eSkillId;
+          pSkill = D2Common::Skills::GetNext(pSkill);
+          pSkillEntryBuf += 3;
+        }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
-    exit(-1);
+        SCMD_QueuePacketForClient(pPktBuf, nAllocSize, pClient);
+        D2_FREE_POOL_AT(pGame->pMemoryPool, pPktBuf, ".\\GAME\\SCmd.cpp", 0x57e);
+        return;
+      } else {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x55d);
+        exit(-1);
+      }
+    } else {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x55a);
+      exit(-1);
+    }
 }
 
 // Builds and sends S2C packet 0x93 (8 bytes) to adjust skill level bonuses filtered by element type and skill tree page. Used for item mods like "+1 to Fire Skills" or "+2 to [class] Skill Tab". If bAllPages is 0, nSkillPage is overridden to 4 (all pages). Appears to be dead code in 1.14d — zero callers, superseded by packet 0x94 bulk skill sync.
@@ -1557,7 +1560,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(D2ClientStrc * pClient
     SCMD_QueuePacketForClient(aPacket, 0x22, pClient);
 }
 
-void __fastcall NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(D2ClientStrc * pClient, D2UnitStrc * pUnit, int32_t nItemSlot, BOOL bUseUnitGUID, int32_t nParam, uint16_t nSkillId) {
+void __fastcall NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint8_t nItemSlot, BOOL bUseUnitGUID, int32_t nParam, uint16_t nSkillId) {
     D2GSPacketSrv0x3F tPacket;
     uint32_t dwUnitGUID;
     dwUnitGUID = 0;
@@ -1570,7 +1573,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(D2ClientStrc * pClient, D
         dwUnitGUID = pUnit->nUnitGUID;
       }
     } else {
-      tPacket.nItemSlot = (uint8_t)nItemSlot;
+      tPacket.nItemSlot = nItemSlot;
       if (!pUnit) {
         goto write_skill_and_send;
       }
@@ -1784,10 +1787,10 @@ void __fastcall NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkil
     SCMD_QueuePacketForClient((uint8_t*)&aPacket, 0x11, pClient);
 }
 
-void __fastcall NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nUpdateType, uint32_t nUnitGUID, D2BitBufferStrc * pBitBuffer, uint8_t nActionType) {
+void __fastcall NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUpdateType, uint32_t nUnitGUID, D2BitBufferStrc * pBitBuffer, uint8_t nActionType) {
     D2GSPacketSrv0x28 sPacket0x28;
     sPacket0x28.nUnitGUID = nUnitGUID;
-    sPacket0x28.nUpdateType = (uint8_t)nUpdateType;
+    sPacket0x28.nUpdateType = nUpdateType;
     sPacket0x28.nActionType = nActionType;
     sPacket0x28.nPacketId = nPacketId;
     D2Common::QuestRecord::CopyQuestBitBuffer(pBitBuffer, sPacket0x28.szQuestBits, 0x60, 0);
@@ -2628,7 +2631,7 @@ void __fastcall Send0x9DAllSocketedItems(D2ClientStrc * pClient, D2UnitStrc * pU
 }
 
 // Sends opcode 0x9C item-world packet to pClient. Fills D2GSPacketSrv0x9C with action, item GUID, container slot (relative to the client's player unit), then serialises the item into the bitstream with eItemFlag temporarily applied. Sends socketed children via Send0x9DItemInSocket. Halts if player unit is null or serialised size >= 0xFD.
-void __fastcall NET_D2GS_SERVER_Send_0x9C_ITEMEX(D2ClientStrc * pClient, D2UnitStrc * pUnit, int nItemAction, eD2ItemFlag eItemFlag, uint32_t nParam) {
+void __fastcall NET_D2GS_SERVER_Send_0x9C_ITEMEX(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint8_t nItemAction, eD2ItemFlag eItemFlag, uint32_t nParam) {
     D2GSPacketSrv0x9C sPacket;
     int32_t nLine;
     D2UnitStrc* pPlayerUnit_lcl = Clients::CLIENTS_GetControlUnit(pClient, 0);
@@ -2638,7 +2641,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x9C_ITEMEX(D2ClientStrc * pClient, D2UnitS
     } else {
       eD2ItemFlag eSavedItemFlags;
       sPacket.nPacketId = 0x9c;
-      sPacket.nAction = (uint8_t)nItemAction;
+      sPacket.nAction = nItemAction;
       if (!pUnit) {
         sPacket.nItemGUID = -1;
       } else {
@@ -2665,7 +2668,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x9C_ITEMEX(D2ClientStrc * pClient, D2UnitS
 }
 
 void __fastcall Send0x9CItemAddToGround(D2ClientStrc * pClient, D2UnitStrc * pUnit, eD2ItemFlag eItemFlag) {
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, 0, eItemFlag, 0);
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, '\0', eItemFlag, 0);
 }
 
 // @sourcefile .\GAME\SCmd.cpp
@@ -2678,7 +2681,7 @@ void __fastcall Send0x9CItemPickedFromGround(D2ClientStrc * pClient, D2UnitStrc 
 
     D2Common::Units::SetXForStaticUnit(pItem, 0);
     D2Common::Units::SetYForStaticUnit(pItem, 0);
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, 1, eItemFlags, 0);
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, '\x01', eItemFlags, 0);
 }
 
 // @sourcefile .\GAME\SCmd.cpp
@@ -2689,7 +2692,7 @@ void __fastcall Send0x9CItemDroppedToGround(D2ClientStrc * pClient, D2UnitStrc *
       exit(-1);
     }
 
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, 2, eItemFlags, 0);
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, '\x02', eItemFlags, 0);
 }
 
 // @sourcefile .\GAME\SCmd.cpp
@@ -2700,7 +2703,7 @@ void __fastcall Send0x9CItemOnGround(D2ClientStrc * pClient, D2UnitStrc * pUnit,
       exit(-1);
     }
 
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, 3, eItemFlags, 0);
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, '\x03', eItemFlags, 0);
 }
 
 // @sourcefile .\GAME\SCmd.cpp
@@ -2711,7 +2714,7 @@ void __fastcall Send0x9CItemPutInContainer(D2ClientStrc * pClient, D2UnitStrc * 
       exit(-1);
     }
 
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, 4, eItemFlags, 0);
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, '\x04', eItemFlags, 0);
 }
 
 // @sourcefile .\GAME\SCmd.cpp
@@ -2722,7 +2725,7 @@ void __fastcall Send0x9CItemAddQuantity(D2ClientStrc * pClient, D2UnitStrc * pUn
       exit(-1);
     }
 
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, 10, eItemFlags, 0);
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, '\n', eItemFlags, 0);
 }
 
 // @sourcefile .\GAME\SCmd.cpp
@@ -2733,7 +2736,7 @@ void __fastcall Send0x9CItemSwapInContainer(D2ClientStrc * pClient, D2UnitStrc *
       exit(-1);
     }
 
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, 0xd, eItemFlags, 0);
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, '\r', eItemFlags, 0);
 }
 
 // @sourcefile .\GAME\SCmd.cpp
@@ -2744,22 +2747,22 @@ void __fastcall Send0x9CItemPutInBelt(D2ClientStrc * pClient, D2UnitStrc * pUnit
       exit(-1);
     }
 
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, 0xe, eItemFlags, 0);
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pItem, '\x0e', eItemFlags, 0);
 }
 
 // EDX pPlayer: callers pass the item's owner; overwritten here before any read.
 void __fastcall Send0x9CItemRemoveFromBelt(D2ClientStrc * pClient, D2UnitStrc * pPlayer, D2UnitStrc * pUnit, eD2ItemFlag eItemFlag) {
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, 0xf, eItemFlag, 0);
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, '\x0f', eItemFlag, 0);
 }
 
 // EDX pPlayer: callers pass the item's owner; overwritten here before any read.
 void __fastcall Send0x9CItemSwapInBelt(D2ClientStrc * pClient, D2UnitStrc * pPlayer, D2UnitStrc * pUnit, eD2ItemFlag eItemFlag) {
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, 0x10, eItemFlag, 0);
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, '\x10', eItemFlag, 0);
 }
 
 // EDX pPlayer: callers pass the item's owner; overwritten here before any read.
 void __fastcall Send0x9CItemToCursor(D2ClientStrc * pClient, D2UnitStrc * pPlayer, D2UnitStrc * pUnit) {
-    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, 0x12, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD), 0);
+    NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, '\x12', ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD), 0);
 }
 
 // @sourcefile .\GAME\SCmd.cpp
@@ -2782,7 +2785,7 @@ void __fastcall Send0x9CItemHandleInShop(D2ClientStrc * pClient, D2UnitStrc * pP
             }
           }
 
-          NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, 0xb, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD), nUnidentifiedFlag);
+          NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, '\v', ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD), nUnidentifiedFlag);
           break;
         }
       case '9':
@@ -2790,7 +2793,7 @@ void __fastcall Send0x9CItemHandleInShop(D2ClientStrc * pClient, D2UnitStrc * pP
           eCurrentPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pUnit);
           ePreviousPage = D2Common::ITEMS::Items::ITEM_GetItemData_ePreviousPage(pUnit);
           D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pUnit, ePreviousPage);
-          NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, 0xc, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD), 0);
+          NET_D2GS_SERVER_Send_0x9C_ITEMEX(pClient, pUnit, '\f', ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD), 0);
           D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pUnit, eCurrentPage);
           return;
         }

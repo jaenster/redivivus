@@ -842,7 +842,7 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
                 }
               case '\x01':
                 {
-                  pSpawnedMonster = Monsters::SERVER_SpawnMonster(pGame, pRoom, (int32_t)pbyPosX, nAlignmentVal, (int32_t)pbyClassId, pInactiveMonRec->nUnitGUID, (uint32_t)pInactiveMonRec->nNameSeed, pInactiveMonRec->nTypeFlags & 2, pInactiveMonRec->nTypeFlags & 0x800, pInactiveMonRec->nBossNo, (char*)pInactiveMonRec->nMonUMods);
+                  pSpawnedMonster = Monsters::SERVER_SpawnMonster(pGame, pRoom, (int32_t)pbyPosX, nAlignmentVal, (int32_t)pbyClassId, pInactiveMonRec->nUnitGUID, pInactiveMonRec->nNameSeed, pInactiveMonRec->nTypeFlags & 2, pInactiveMonRec->nTypeFlags & 0x800, pInactiveMonRec->nBossNo, (char*)pInactiveMonRec->nMonUMods);
                   break;
                 }
               case '\x02':

@@ -2377,7 +2377,7 @@ D2UnitStrc * __fastcall SpawnUniquePack(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
 }
 
 // Server-side monster spawn with modifiers. Creates the unit via SERVER_SpawnMonsterInternal, then sets champion/super-unique type flags, copies the 9-byte MonUMod enchantment list from mods into the monster data, applies enchantments (UMOD_ApplyEnchantmentsToMonster), seeds the name (nNameSeed), and applies AuraEnchanted if any mod is 0x1e (aura-enchanted). For super uniques, stores nBossNo and attaches the appropriate quest to the unit by SuperUnique id (Countess->ForgottenTower, Council->BlackenedTemple, Chaos bosses->TerrorsEnd, Cow King, Siege boss, Ancients, Nihlathak, etc.). Returns the spawned unit or NULL.
-D2UnitStrc * __fastcall SERVER_SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nClassId, int32_t nGUID, int32_t nSeed, BOOL bIsChampion, BOOL bIsSuperUnique, eD2SuperUniqueId nSuperUniqueId, char * mods) {
+D2UnitStrc * __fastcall SERVER_SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nClassId, int32_t nGUID, uint16_t nSeed, BOOL bIsChampion, BOOL bIsSuperUnique, eD2SuperUniqueId nSuperUniqueId, char * mods) {
     D2UnitStrc* pUnit = SERVER_SpawnMonsterInternal(nClassId, pGame, pRoom, nullptr, nX, nY, nGUID, 1);
     if (!pUnit) {
       return nullptr;
@@ -2418,7 +2418,7 @@ D2UnitStrc * __fastcall SERVER_SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
     char byUMod9 = mods[8];
     UMOD_ApplyEnchantmentsToMonster(0, nullptr, pGame, pUnit, 0, 0);
     if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
-      pUnit->pUnitData.pUnitDataMonster->nNameSeed = (uint16_t)nSeed;
+      pUnit->pUnitData.pUnitDataMonster->nNameSeed = nSeed;
     }
     if (byUMod9 == '\x1e' || byUMod8 == '\x1e' || byUMod7 == '\x1e' || byUMod6 == '\x1e' || byUMod5 == '\x1e' || byUMod4 == '\x1e' || byUMod3 == '\x1e' || byUMod2 == '\x1e' || byUMod1 == '\x1e') {
       Umod::AuraEnchanted(pUnit, 0x1e, 1);

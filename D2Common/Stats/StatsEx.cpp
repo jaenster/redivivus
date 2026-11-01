@@ -538,7 +538,7 @@ int __stdcall STATLIST_GetFullListFromStatList(D2StatListExStrc * pStatList) {
     return pStatList->sStatList.nTimeout;
 }
 
-int32_t __stdcall STATLIST_GetStatFromBaseArray(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nParam) {
+int32_t __stdcall STATLIST_GetStatFromBaseArray(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint16_t nParam) {
     if (!pStatList) {
       return 0;
     }
@@ -548,11 +548,11 @@ int32_t __stdcall STATLIST_GetStatFromBaseArray(D2StatListExStrc * pStatList, eD
       return 0;
     }
 
-    int32_t nStatValue = STATLIST_LookupBaseStatWithMinAccr(pItemStatCostTxt, pStatList, eUnitStat * 0x10000 + (nParam & 0xffff));
+    int32_t nStatValue = STATLIST_LookupBaseStatWithMinAccr(pItemStatCostTxt, pStatList, eUnitStat * 0x10000 + (uint32_t)nParam);
     return nStatValue;
 }
 
-int32_t __stdcall SERVER_GetUnitStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nParam) {
+int32_t __stdcall SERVER_GetUnitStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint16_t nParam) {
     if (!pUnit) {
       return 0;
     }
@@ -565,11 +565,11 @@ int32_t __stdcall SERVER_GetUnitStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, 
       return 0;
     }
 
-    int32_t nStatValue = STATLIST_LookupBaseStatWithMinAccr(pItemStatCostTxt, pUnit->pStatsEx, eUnitStat * 0x10000 + (nParam & 0xffff));
+    int32_t nStatValue = STATLIST_LookupBaseStatWithMinAccr(pItemStatCostTxt, pUnit->pStatsEx, eUnitStat * 0x10000 + (uint32_t)nParam);
     return nStatValue;
 }
 
-int32_t __stdcall STATLIST_GetMinimalStatValueShifted(D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, uint32_t nParam) {
+int32_t __stdcall STATLIST_GetMinimalStatValueShifted(D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, uint16_t nParam) {
     if (!pStatsEx) {
       return 0;
     }
@@ -579,7 +579,7 @@ int32_t __stdcall STATLIST_GetMinimalStatValueShifted(D2StatListExStrc * pStatsE
       return 0;
     }
 
-    int32_t nStatValue = TXT_ItemStatCost_GetMinimumStatValueShifted(pItemStatCostTxt, pStatsEx, eUnitStat * 0x10000 + (nParam & 0xffff));
+    int32_t nStatValue = TXT_ItemStatCost_GetMinimumStatValueShifted(pItemStatCostTxt, pStatsEx, eUnitStat * 0x10000 + (uint32_t)nParam);
     return nStatValue;
 }
 
@@ -603,17 +603,17 @@ int __stdcall STATSEX_GetCurrentStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, 
 }
 
 int32_t __stdcall thunk_STATLIST_GetStatFromBaseArray(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nParam) {
-    int32_t iVar1 = STATLIST_GetStatFromBaseArray(pStatList, eUnitStat, nParam);
+    int32_t iVar1 = STATLIST_GetStatFromBaseArray(pStatList, eUnitStat, (uint16_t)nParam);
     return iVar1;
 }
 
 int32_t __stdcall thunk_STATLIST_GetMinimalStatValueShifted(D2StatListExStrc * pStatListEx, eD2UnitStat eUnitStat, uint32_t nParam) {
-    int32_t nResult = STATLIST_GetMinimalStatValueShifted(pStatListEx, eUnitStat, nParam);
+    int32_t nResult = STATLIST_GetMinimalStatValueShifted(pStatListEx, eUnitStat, (uint16_t)nParam);
     return nResult;
 }
 
 int32_t __stdcall ITEM_GetMinimalStatValueShifted(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nParam) {
-    int32_t nStatValue = STATLIST_GetMinimalStatValueShifted(pUnit->pStatsEx, eUnitStat, nParam);
+    int32_t nStatValue = STATLIST_GetMinimalStatValueShifted(pUnit->pStatsEx, eUnitStat, (uint16_t)nParam);
     return nStatValue;
 }
 
@@ -622,8 +622,8 @@ int __stdcall STATLIST_GetStatBonusFromList(D2StatListExStrc * pStatList, eD2Uni
       return 0;
     }
 
-    int32_t nMinShifted = STATLIST_GetMinimalStatValueShifted(pStatList, eUnitStat, nParam);
-    int32_t nBaseValue = STATLIST_GetStatFromBaseArray(pStatList, eUnitStat, nParam);
+    int32_t nMinShifted = STATLIST_GetMinimalStatValueShifted(pStatList, eUnitStat, (uint16_t)nParam);
+    int32_t nBaseValue = STATLIST_GetStatFromBaseArray(pStatList, eUnitStat, (uint16_t)nParam);
     return nMinShifted - nBaseValue;
 }
 
@@ -633,8 +633,8 @@ int32_t __stdcall STATLIST_GetStatBonusFromLists(D2UnitStrc * pUnit, eD2UnitStat
       return 0;
     }
 
-    int32_t nMinShifted = STATLIST_GetMinimalStatValueShifted(pStatsEx, eUnitStat, nParam);
-    int32_t nBaseValue = STATLIST_GetStatFromBaseArray(pStatsEx, eUnitStat, nParam);
+    int32_t nMinShifted = STATLIST_GetMinimalStatValueShifted(pStatsEx, eUnitStat, (uint16_t)nParam);
+    int32_t nBaseValue = STATLIST_GetStatFromBaseArray(pStatsEx, eUnitStat, (uint16_t)nParam);
     return nMinShifted - nBaseValue;
 }
 
@@ -1118,7 +1118,7 @@ void __stdcall STATLIST_SetExpireFunction(D2StatListExStrc * pStatsEx, PFN_StatE
 }
 
 int __stdcall STATLIST_GetBaseStatValue(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nParam) {
-    int32_t nResult = STATLIST_GetStatFromBaseArray(pStatList, eUnitStat, nParam);
+    int32_t nResult = STATLIST_GetStatFromBaseArray(pStatList, eUnitStat, (uint16_t)nParam);
     return nResult;
 }
 

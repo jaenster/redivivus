@@ -73,19 +73,23 @@ static uint16_t * __stdcall STRTABLE_GetStringByIndex(D2StringTableTblFileStrc *
       pcEntry = (char*)((uintptr_t)&pStrTable[1].wCRC + nStringIdx * 0x11 + (uint32_t)pStrTable->wIndexCount * 2);
       if (pcEntry < (char*)((uintptr_t)&pStrTable->wCRC + pStrTable->dwFileSize)) {
         if (*pcEntry != '\x01') {
-          dwErrorCode = 0x107;
-        } else {
-          if (ppEntryTable[nStringIdx]) {
-            return ppEntryTable[nStringIdx];
-          }
-
-          dwErrorCode = 0x109;
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x107);
+          exit(-1);
         }
-      }
-    }
+        if (!ppEntryTable[nStringIdx]) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x109);
+          exit(-1);
+        }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), dwErrorCode);
-    exit(-1);
+        return ppEntryTable[nStringIdx];
+      } else {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x106);
+        exit(-1);
+      }
+    } else {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x102);
+      exit(-1);
+    }
 }
 
 // @sourcefile .\StrTable\strtable.cpp

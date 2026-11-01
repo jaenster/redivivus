@@ -217,7 +217,7 @@ void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos) {
       if (nBitCount < 0xf) {
         pCopyByte = pInput + 1;
         pInput += 2;
-        dwBitHold = dwBitHold + ((uint32_t)*pCopyByte << ((uint8_t)nBitCount & 0x1f)) + ((uint32_t)*pInput << ((uint8_t)nBitCount + 8 & 0x1f));
+        dwBitHold = dwBitHold + ((uint32_t)*pCopyByte << (uint8_t)nBitCount) + ((uint32_t)*pInput << (uint8_t)nBitCount + 8);
         nBitCount += 0x10;
       }
 
@@ -242,7 +242,7 @@ void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos) {
           if (nBitCount < 0xf) {
             pCopyByte = pInput + 1;
             pInput += 2;
-            dwBitHold = dwBitHold + ((uint32_t)*pCopyByte << ((uint8_t)nBitCount & 0x1f)) + ((uint32_t)*pInput << ((uint8_t)nBitCount + 8 & 0x1f));
+            dwBitHold = dwBitHold + ((uint32_t)*pCopyByte << (uint8_t)nBitCount) + ((uint32_t)*pInput << (uint8_t)nBitCount + 8);
             nBitCount += 0x10;
           }
 

@@ -4286,6 +4286,8 @@ static BOOL MISSMODE_CheckCollisionMode(int nCollisionMode, int * pnParam) {
           return 0;
         }
       return 1;
+      case 3:
+        return 1;
     }
 
     return 1;

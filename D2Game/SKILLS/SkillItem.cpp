@@ -453,7 +453,7 @@ BOOL __fastcall SKILLITEM_ItemSpellInit_UseStackable(::SGAMEDATA * pGame, D2Unit
       return 1;
     }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillItem.cpp", 0x40), pItem, nSpellIcon, 0, 1, (uint16_t)eSkill);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillItem.cpp", 0x40), pItem, (uint8_t)nSpellIcon, 0, 1, (uint16_t)eSkill);
     return 1;
 }
 
@@ -484,6 +484,7 @@ static D2InventoryStrc * SKILLITEM_FindItemInInventory(D2UnitStrc * pUnit, D2Uni
 static void SKILLITEM_ClearCursorFlagAndNotifyClient(D2UnitStrc * pUnit) {
     D2UnitStrc* pUnitTmp;
     BOOL bHasCursorFlag;
+    uint8_t nItemSlot;
     int32_t nParam;
     uint16_t nSkillId;
     if (!pUnit->pInventory) {
@@ -499,7 +500,8 @@ static void SKILLITEM_ClearCursorFlagAndNotifyClient(D2UnitStrc * pUnit) {
         nSkillId = 0xffff;
         nParam = 0;
         bHasCursorFlag = 1;
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillItem.cpp", 0x7a), pUnitTmp2, 0xff, bHasCursorFlag, nParam, nSkillId);
+        nItemSlot = 0xff;
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillItem.cpp", 0x7a), pUnitTmp2, nItemSlot, bHasCursorFlag, nParam, nSkillId);
       }
     }
 }

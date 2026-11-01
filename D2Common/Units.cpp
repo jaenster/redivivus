@@ -319,6 +319,8 @@ int32_t __stdcall GetUnitSizeX(D2UnitStrc * pUnit) {
       }
 
       break;
+      case 5:
+        return 0;
     }
 
     return 0;
@@ -353,6 +355,8 @@ int32_t __stdcall GetUnitSizeY(D2UnitStrc * pUnit) {
       }
 
       break;
+      case 5:
+        return 0;
     }
 
     return 0;
@@ -846,7 +850,7 @@ void __stdcall RefreshInventory(D2UnitStrc * pUnit, BOOL bHasInventory) {
 }
 
 // Returns the eInventoryPage for a given unit and page index. For players, maps nInvPage (1-4) to trade/transmog/bank pages, or performs a class-specific lookup. For monsters, always returns INVPAGE_Monster. For objects, recognises Guild Vault (0x152) and Trophy Case (0x153). Returns INVPAGE_None on mismatch or null input (halts on null). RETURN WIDTH: every exit writes the whole of EAX (MOV EAX,imm32 / LEA EAX,[EAX*4+8] / MOV EAX,[ECX*8+0x744548]) and InitializeiInventoryPages takes it with MOV ESI,EAX - no MOVZX anywhere.
-int32_t __stdcall GetInventoryPage(D2UnitStrc * pUnit, int32_t nInvPage, BOOL bLoD) {
+int32_t __stdcall GetInventoryPage(D2UnitStrc * pUnit, uint8_t nInvPage, BOOL bLoD) {
     // Static local variables (originally global data)
     static int aPlayerInventoryPage[14] = {
     0x0,
@@ -878,14 +882,14 @@ int32_t __stdcall GetInventoryPage(D2UnitStrc * pUnit, int32_t nInvPage, BOOL bL
     switch (eUnitType) {
       case UNIT_PLAYER:
         {
-          switch (nInvPage & 0xff) {
-            case 1:
+          switch (nInvPage) {
+            case '\x01':
               return 6;
-            case 2:
+            case '\x02':
               return 7;
-            case 4:
+            case '\x04':
               /* Lod/Classic inventory sizes decide */ return (uint32_t)(bLoD != 0) * 4 + 8;
-            case 3:
+            case '\x03':
               return 9;
           }
 

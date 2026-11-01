@@ -1,20 +1,20 @@
-tree f2fbecc0a-dirty; compiler sp1; flags /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS; D2Client/ /GS-; D2DDraw/ /GS-; D2Direct3D/ /GS-; D2Gdi/ /GS-; D2Glide/ /GS-; D2Launch/ /GS-; D2Launch/Engine/ ; D2MCPClient/ /GS-; D2Multi/ /GS-; D2Sound/ /GS-; D2Win/ /GS-; D2gfx/ /GS-; Fog/3rdparty/crashy /Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT
-Without the C runtime: 5729 of 14812 functions MATCH (38.68%), 397385 of 2555443 bytes (15.55%)
+tree 2eb77877f-dirty; compiler sp1; flags /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS; D2Client/ /GS-; D2DDraw/ /GS-; D2Direct3D/ /GS-; D2Gdi/ /GS-; D2Glide/ /GS-; D2Launch/ /GS-; D2Launch/Engine/ ; D2MCPClient/ /GS-; D2Multi/ /GS-; D2Sound/ /GS-; D2Win/ /GS-; D2gfx/ /GS-; Fog/3rdparty/crashy /Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT
+Without the C runtime: 5733 of 14812 functions MATCH (38.71%), 397773 of 2555443 bytes (15.57%)
   runtime left out: 709 functions (123094 bytes): libmap pairs, the library run 00681a48..006b00b3, import thunks, runtime.tsv
 whole binary:
 original functions: 15521 (2678537 bytes of code)
 mapped and compared: 13857
-  MATCH               6084
+  MATCH               6088
   REF_DIFF               6
-  INSN_MATCH           335
-  INSN_COUNT_MATCH    1331
-  OUR+-N              6101
+  INSN_MATCH           336
+  INSN_COUNT_MATCH    1328
+  OUR+-N              6099
   QUARANTINE             0
   MISSING                0
-matched code: 448380 bytes (16.74% of the original)
+matched code: 448768 bytes (16.75% of the original)
   of which the statically linked runtime (libmap.tsv): 421 compared (95143 bytes), 353 MATCH (50983 bytes)
-pairings by funcmap tier: sourcemap 12106, votes 435, exact 376, lib-exact 309, bracket 248, calls 161, lib-order 58, align 40, lib-similar 39, refs 33, string 22, lib-votes 15, name 11, import 4
-globals seen at aligned instructions: 2283, of which consistent 2212 (datamap.tsv)
+pairings by funcmap tier: sourcemap 12106, votes 434, exact 377, lib-exact 309, bracket 248, calls 161, lib-order 58, align 40, lib-similar 39, refs 33, string 22, lib-votes 15, name 11, import 4
+globals seen at aligned instructions: 2284, of which consistent 2213 (datamap.tsv)
 self-check, names carrying their own address: 202 agree, 2 elsewhere
   look at: D2Direct3D::Renderer::Catch_All_006b4c42 at 006b4770
   look at: D2Direct3D::Renderer::Catch_All_006b4c73 at 006b4900

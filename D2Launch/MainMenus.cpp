@@ -3755,7 +3755,7 @@ uint32_t __fastcall MAINMENU_UpgradeCharacterToExpansion(D2CharSelStrc * pCharSe
     return (uint32_t)!bHasPeer;
 }
 
-int __fastcall SelectedCharBnetSingleTcpIp(D2CharSelStrc * charName, eD2PlayerStatus pPlayerStatus, int32_t nClassId, char * pRealm) {
+int __fastcall SelectedCharBnetSingleTcpIp(D2CharSelStrc * charName, eD2PlayerStatus pPlayerStatus, eD2PlayerClassID nClassId, char * pRealm) {
     uint32_t nResult;
     int nEmailResult;
     int32_t bEmailOk;
@@ -3789,7 +3789,7 @@ int __fastcall SelectedCharBnetSingleTcpIp(D2CharSelStrc * charName, eD2PlayerSt
     } while (chCopy != '\0');
 
     D2IniData_launcher->eCTEMP_eD2PlayerStatus = pPlayerStatus;
-    MAINMENU_SetSelectedClassInINI((eD2PlayerClassID)nClassId);
+    MAINMENU_SetSelectedClassInINI(nClassId);
     if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET || OogCurrentCharSelectionMode == CHAR_SELECTION_BNET_OPEN_Unsure) {
       BOOL bConnected;
       bConnected = gpBNetCallbacks->pfnIsSocketConnected();

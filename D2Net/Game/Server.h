@@ -35,7 +35,7 @@ int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode1(char * pBytes, size_t nSiz
 int32_t __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode0(char * pBytes, size_t nSize);
 int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode2(char * pBytes, size_t nSize);
 // Low-level server-to-client packet send. In single-player mode, loops the packet back via NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket. In multiplayer: skips logging/compression for opcode 0xAF (handshake) or nMode==2; otherwise compresses the packet (up to 1032 bytes) and sends via QServer::SendPacketByClientId with a 1- or 2-byte length prefix. Halts if raw packet exceeds 0x204 bytes.
-int32_t __stdcall NET_D2GS_SERVER_SendPacketToClient(int32_t nMode, int32_t nClientId, char * pBytes, size_t nSize);
+int32_t __stdcall NET_D2GS_SERVER_SendPacketToClient(uint8_t nMode, int32_t nClientId, char * pBytes, size_t nSize);
 void __stdcall NET_QServer_FindIpAddressByClientIdForQServer(int32_t nClientId, char * szIpAddress, int32_t nBufferSize);
 void __stdcall GetIpFromToken(uint32_t nToken);
 void __stdcall SERVER_GetClientSocketByToken(uint32_t nToken);

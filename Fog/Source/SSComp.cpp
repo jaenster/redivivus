@@ -213,8 +213,8 @@ void __fastcall COMPRESS_BuildHuffmanDecodeTable(uint8_t * pCodeLengths) {
           byCodeLen = asSortedSymbols[nLenIndex + 0xff];
           if (byCodeLen <= 8) {
             bySymbol = asSortedSymbols[nLenIndex + 0x1ff];
-            nIndex = 1 << (8 - byCodeLen & 0x1f);
-            pTableEntry = gaHuffmanFastDecodeTable + ((uint32_t)gabHuffmanNextTable[bySymbol] << (8 - byCodeLen & 0x1f));
+            nIndex = 1 << 8 - byCodeLen;
+            pTableEntry = gaHuffmanFastDecodeTable + ((uint32_t)gabHuffmanNextTable[bySymbol] << 8 - byCodeLen);
             *pTableEntry = (uint32_t)pDecodeBuf;
             *pDecodeBuf = 0;
             pDecodeBuf += 2;

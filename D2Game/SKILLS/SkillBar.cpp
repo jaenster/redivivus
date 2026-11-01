@@ -980,7 +980,7 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
           break;
         }
 
-        SkillsServer::D2SetAuraEvent(pGame2, pUnit, (uint8_t)*pAuraEventCursor, eSkill, nSkillLvl, (int)pAuraEventCursor[3], 1, (int)pSkillsTxt->aurastate);
+        SkillsServer::D2SetAuraEvent(pGame2, pUnit, (int)*pAuraEventCursor, eSkill, nSkillLvl, (int)pAuraEventCursor[3], 1, (int)pSkillsTxt->aurastate);
         pNearbyTarget = (D2UnitStrc*)((int)pNearbyTarget + 1);
         pAuraEventCursor++;
       } while ((int)pNearbyTarget < 3);

@@ -527,7 +527,7 @@ void __fastcall SKILLNEC_ApplyCurseToUnit(D2UnitStrc * pUnit, D2NecroSkillArgStr
     iStatLoop = 3;
     do {
       if (pNecroSkillArg->nAuraEvent[0] >= 0 && pNecroSkillArg->nAuraEventFunc[0] > 0) {
-        SkillsServer::D2SetAuraEvent(pNecroSkillArg->pGame, pUnit, (uint8_t)*pItemEventIds, pNecroSkillArg->eSkill, pNecroSkillArg->nSkillLvl, pItemEventIds[3], 1, pNecroSkillArg->eAuraState);
+        SkillsServer::D2SetAuraEvent(pNecroSkillArg->pGame, pUnit, *pItemEventIds, pNecroSkillArg->eSkill, pNecroSkillArg->nSkillLvl, pItemEventIds[3], 1, pNecroSkillArg->eAuraState);
       }
 
       pItemEventIds++;
@@ -1137,12 +1137,12 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
               pDataTable = sgptDataTable;
               if (!fEventSearchResult) {
                 nStatCalc = D2Client::UNIT::GetGUID(pSummonStatList);
-                SkillsServer::D2SetAuraEvent(pGame, pSummonStatList, (uint8_t)pStatCostTxt->itemevent1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc1, 2, nStatCalc);
-                nEventOrState = pStatCostTxt->itemevent2;
+                SkillsServer::D2SetAuraEvent(pGame, pSummonStatList, (int)pStatCostTxt->itemevent1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc1, 2, nStatCalc);
+                sVar1 = pStatCostTxt->itemevent2;
                 pDataTable = sgptDataTable;
-                if (nEventOrState > 0) {
+                if (sVar1 > 0) {
                   nStatCalc = D2Client::UNIT::GetGUID(pSummonStatList);
-                  SkillsServer::D2SetAuraEvent(pGame, pSummonStatList, (uint8_t)nEventOrState, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc2, 2, nStatCalc);
+                  SkillsServer::D2SetAuraEvent(pGame, pSummonStatList, (int)sVar1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc2, 2, nStatCalc);
                   pDataTable = sgptDataTable;
                 }
               }
@@ -1189,12 +1189,12 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
                 pDataTable = sgptDataTable;
                 if (!fEventSearchResult) {
                   nStatCalc = D2Client::UNIT::GetGUID(pSummon);
-                  SkillsServer::D2SetAuraEvent(pGame, pSummon, (uint8_t)pStatCostTxt->itemevent1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc1, 2, nStatCalc);
+                  SkillsServer::D2SetAuraEvent(pGame, pSummon, (int)pStatCostTxt->itemevent1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc1, 2, nStatCalc);
                   sVar1 = pStatCostTxt->itemevent2;
                   pDataTable = sgptDataTable;
                   if (sVar1 > 0) {
                     nStatCalc = D2Client::UNIT::GetGUID(pSummon);
-                    SkillsServer::D2SetAuraEvent(pGame, pSummon, (uint8_t)sVar1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc2, 2, nStatCalc);
+                    SkillsServer::D2SetAuraEvent(pGame, pSummon, (int)sVar1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc2, 2, nStatCalc);
                     pDataTable = sgptDataTable;
                   }
                 }
@@ -1275,7 +1275,7 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
           break;
         }
 
-        SkillsServer::D2SetAuraEvent(pGame, pSummon, (uint8_t)*pSumSkillCursor, eSkill, nParam1, (int)pSumSkillCursor[3], 1, (int)pSkillsTxt->aurastate);
+        SkillsServer::D2SetAuraEvent(pGame, pSummon, (int)*pSumSkillCursor, eSkill, nParam1, (int)pSumSkillCursor[3], 1, (int)pSkillsTxt->aurastate);
         nHpBonus++;
         pSumSkillCursor++;
       } while (nHpBonus < 3);

@@ -636,7 +636,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x95_PLAYERCOMMONSTATCHANGE_MEDIUM(struct D
 void __fastcall NET_D2GS_SERVER_Send_0x96_PLAYERCOMMONSTATCHANGE_SMALL(struct D2ClientStrc * pClient, uint16_t nX, uint16_t nY, uint16_t nZone, uint8_t bParam1, uint8_t bParam2);
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, eD2Skills eSkill, uint8_t nBaseAmount, uint8_t bRemove);
-void __fastcall NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(struct D2ClientStrc * pClient, uint8_t eUnitType, int32_t nUnitGUID, eD2Skills eSkill, int32_t nNewQuantity);
+void __fastcall NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(struct D2ClientStrc * pClient, uint8_t eUnitType, int32_t nUnitGUID, eD2Skills eSkill, uint8_t nNewQuantity);
 // Server-to-client set skill assignment. Opcode 0x23.
 void __fastcall NET_D2GS_SERVER_Send_0x23_SetSkill(struct D2ClientStrc * pClient, uint8_t bParam, uint32_t dwSkillId, uint8_t nSkillSlot, uint16_t wSkill, uint32_t dwReserved);
 // Sends opcode 0x94 skills-list packet to pClient for pUnit. Walks the unit's skill list twice: first to count skills, then to serialise each entry as 3 bytes (skill ID + level) into a game-pool-allocated buffer. Halts if pUnit/skills null or skill count >= 256.
@@ -676,7 +676,7 @@ void __fastcall Send0x9DItemSwapBodyItem(struct D2ClientStrc * pClient, struct D
 void __fastcall Send0x9DItemWeaponSwitch(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, eD2ItemFlag eItemFlag);
 // Sends opcode 0x3E item-stat-update packet to pClient. Encodes unit GUID, equipped flag, stat ID (9 bits), stat value (variable size), and stat layer/count (8 or 16 bits) into a bit-buffer inside a 34-byte stack packet, then sends it.
 void __fastcall NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, char bIsEquipped, int32_t nStatId, uint32_t nStatValue, uint16_t nStatLayerOrCount);
-void __fastcall NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, int32_t nItemSlot, BOOL bUseUnitGUID, int32_t nParam, uint16_t nSkillId);
+void __fastcall NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint8_t nItemSlot, BOOL bUseUnitGUID, int32_t nParam, uint16_t nSkillId);
 void __fastcall NET_D2GS_SERVER_Send_0x40_ITEMSETFLAG(struct D2ClientStrc * pClient, struct D2UnitStrc * pTargetUnit, uint32_t dwSkillId, uint32_t dwSkillLevel);
 void __fastcall Send0x9DItemAutoUnequip(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, eD2ItemFlag eItemFlag);
 void __fastcall NET_D2GS_SERVER_Send_0x42_DESTROYHANDITEM(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit);
@@ -696,7 +696,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x4D_SKILL_XY(struct D2ClientStrc * pClient
 // Smart optimization: avoids sending GUID for units client might not know about yet.
 // Sent for all skill casts: player, monster, missile triggers.
 void __fastcall NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkill_XY(struct D2ClientStrc * pClient, uint8_t nUnitType, uint32_t dwAttackerGUID, uint8_t byAttackerType2, uint32_t dwSkillID, uint16_t wUnused, uint16_t wSkillLevel, uint8_t bUseXY, int32_t nPacketIdModifier);
-void __fastcall NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(struct D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nUpdateType, uint32_t nUnitGUID, struct D2BitBufferStrc * pBitBuffer, uint8_t nActionType);
+void __fastcall NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUpdateType, uint32_t nUnitGUID, struct D2BitBufferStrc * pBitBuffer, uint8_t nActionType);
 void __fastcall NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP(struct D2ClientStrc * pClient, uint8_t nPacketId, char eUnitType, int32_t nMonsterGUID, uint32_t dwParam5);
 void __fastcall NET_D2GS_SERVER_Send_0x29_GAMEQUESTRECORD(struct D2ClientStrc * pClient, uint8_t * pPacket);
 void __fastcall NET_D2GS_SERVER_Send_0x5D_QuestState(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x5D * pPacket);
@@ -783,7 +783,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA(str
 // server flag 8 and sends one 0x9D per item. 0053d330 sends exactly one.
 void __fastcall Send0x9DAllSocketedItems(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint32_t eItemFlags);
 // Sends opcode 0x9C item-world packet to pClient. Fills D2GSPacketSrv0x9C with action, item GUID, container slot (relative to the client's player unit), then serialises the item into the bitstream with eItemFlag temporarily applied. Sends socketed children via Send0x9DItemInSocket. Halts if player unit is null or serialised size >= 0xFD.
-void __fastcall NET_D2GS_SERVER_Send_0x9C_ITEMEX(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, int nItemAction, eD2ItemFlag eItemFlag, uint32_t nParam);
+void __fastcall NET_D2GS_SERVER_Send_0x9C_ITEMEX(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint8_t nItemAction, eD2ItemFlag eItemFlag, uint32_t nParam);
 void __fastcall Send0x9CItemAddToGround(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, eD2ItemFlag eItemFlag);
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall Send0x9CItemPickedFromGround(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, eD2ItemFlag eItemFlags);

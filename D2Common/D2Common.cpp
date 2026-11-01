@@ -132,10 +132,10 @@ int __stdcall ITEMMOD_RollRandomInRange(int nRangeStart, int nRangeEnd, D2UnitSt
 // Returns the count of valid entries in the object preset table for a given act.
 // Iterates the global object ID table (gpsPresetObjectTable) in strides of 6, returning
 // the index of the first zero entry. Max 150 entries per act (0x96).
-int32_t __stdcall DRLGPRESET_GetObjectTableActCount(int32_t nActNo) {
+int32_t __stdcall DRLGPRESET_GetObjectTableActCount(uint8_t nActNo) {
     int nCount = 0;
     int nStride = 0;
-    int* pObjectEntry = gpsPresetObjectTable + (nActNo & 0xffU) * 0x96 + 1;
+    int* pObjectEntry = gpsPresetObjectTable + (uint32_t)nActNo * 0x96 + 1;
     while (true) {
       if (!pObjectEntry[-1]) {
         return nCount;
@@ -171,8 +171,8 @@ int32_t __stdcall DRLGPRESET_GetObjectTableActCount(int32_t nActNo) {
 // Looks up an object ID from the global object preset table indexed by act and slot.
 // Accesses gpsPresetObjectTable[(act * 0x96 + index) * 4]. Used during DS1 file parsing
 // to remap object preset IDs to actual object class IDs.
-int32_t __stdcall DRLGPRESET_GetObjectIdFromActTable(int32_t nActNo, int32_t nIndex) {
-    return gpsPresetObjectTable[(nActNo & 0xffU) * 0x96 + nIndex];
+int32_t __stdcall DRLGPRESET_GetObjectIdFromActTable(uint8_t nActNo, int32_t nIndex) {
+    return gpsPresetObjectTable[(uint32_t)nActNo * 0x96 + nIndex];
 }
 
 } // namespace D2Common

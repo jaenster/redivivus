@@ -154,23 +154,24 @@ void __stdcall InitializeiInventoryPages() {
 
     BOOL bIsExpansion;
     bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-    int32_t nInvPageIndex;
-    nInvPageIndex = 0;
+    uint8_t nInvPage;
+    nInvPage = '\0';
     D2UnitStrc* pNpc;
     pNpc = UNIT::Player::GetPlayerUnit_UI();
-    nInvPageIndex = D2Common::Units::GetInventoryPage(pNpc, nInvPageIndex, bIsExpansion);
-    D2Common::DATATBLS::TokTbls::GetInvDimensions(nInvPageIndex, nScreenMode, &pInventoryScreenCoordinates);
-    D2Common::DATATBLS::TokTbls::GetGridDimensions(nInvPageIndex, nScreenMode, &pInventoryGridScreenCoordinated);
-    D2Common::DATATBLS::TokTbls::GetBodyDimensions(nInvPageIndex, nScreenMode, gaPlayerBodySlotScreenCoords + 4, BODY_rArm);
-    D2Common::DATATBLS::TokTbls::GetBodyDimensions(nInvPageIndex, nScreenMode, gaPlayerBodySlotScreenCoords + 3, BODY_torso);
-    D2Common::DATATBLS::TokTbls::GetBodyDimensions(nInvPageIndex, nScreenMode, gaPlayerBodySlotScreenCoords + 5, BODY_lArm);
-    D2Common::DATATBLS::TokTbls::GetBodyDimensions(nInvPageIndex, nScreenMode, gaPlayerBodySlotScreenCoords + 1, BODY_head);
-    D2Common::DATATBLS::TokTbls::GetBodyDimensions(nInvPageIndex, nScreenMode, gaPlayerBodySlotScreenCoords + 2, BODY_neck);
-    D2Common::DATATBLS::TokTbls::GetBodyDimensions(nInvPageIndex, nScreenMode, gaPlayerBodySlotScreenCoords + 6, BODY_lHand);
-    D2Common::DATATBLS::TokTbls::GetBodyDimensions(nInvPageIndex, nScreenMode, gaPlayerBodySlotScreenCoords + 7, BODY_rHand);
-    D2Common::DATATBLS::TokTbls::GetBodyDimensions(nInvPageIndex, nScreenMode, gaPlayerBodySlotScreenCoords + 8, BODY_belt);
-    D2Common::DATATBLS::TokTbls::GetBodyDimensions(nInvPageIndex, nScreenMode, gaPlayerBodySlotScreenCoords + 9, BODY_feet);
-    D2Common::DATATBLS::TokTbls::GetBodyDimensions(nInvPageIndex, nScreenMode, gaPlayerBodySlotScreenCoords + 10, BODY_gloves);
+    int32_t iVar1;
+    iVar1 = D2Common::Units::GetInventoryPage(pNpc, nInvPage, bIsExpansion);
+    D2Common::DATATBLS::TokTbls::GetInvDimensions(iVar1, nScreenMode, &pInventoryScreenCoordinates);
+    D2Common::DATATBLS::TokTbls::GetGridDimensions(iVar1, nScreenMode, &pInventoryGridScreenCoordinated);
+    D2Common::DATATBLS::TokTbls::GetBodyDimensions(iVar1, nScreenMode, gaPlayerBodySlotScreenCoords + 4, BODY_rArm);
+    D2Common::DATATBLS::TokTbls::GetBodyDimensions(iVar1, nScreenMode, gaPlayerBodySlotScreenCoords + 3, BODY_torso);
+    D2Common::DATATBLS::TokTbls::GetBodyDimensions(iVar1, nScreenMode, gaPlayerBodySlotScreenCoords + 5, BODY_lArm);
+    D2Common::DATATBLS::TokTbls::GetBodyDimensions(iVar1, nScreenMode, gaPlayerBodySlotScreenCoords + 1, BODY_head);
+    D2Common::DATATBLS::TokTbls::GetBodyDimensions(iVar1, nScreenMode, gaPlayerBodySlotScreenCoords + 2, BODY_neck);
+    D2Common::DATATBLS::TokTbls::GetBodyDimensions(iVar1, nScreenMode, gaPlayerBodySlotScreenCoords + 6, BODY_lHand);
+    D2Common::DATATBLS::TokTbls::GetBodyDimensions(iVar1, nScreenMode, gaPlayerBodySlotScreenCoords + 7, BODY_rHand);
+    D2Common::DATATBLS::TokTbls::GetBodyDimensions(iVar1, nScreenMode, gaPlayerBodySlotScreenCoords + 8, BODY_belt);
+    D2Common::DATATBLS::TokTbls::GetBodyDimensions(iVar1, nScreenMode, gaPlayerBodySlotScreenCoords + 9, BODY_feet);
+    D2Common::DATATBLS::TokTbls::GetBodyDimensions(iVar1, nScreenMode, gaPlayerBodySlotScreenCoords + 10, BODY_gloves);
     D2Common::DATATBLS::TokTbls::GetInvDimensions(0xd, nScreenMode, &pHirelingScreenCoordinates);
     D2Common::DATATBLS::TokTbls::GetGridDimensions(0xd, nScreenMode, &pHirelingGridScreenCoordinates);
     D2Common::DATATBLS::TokTbls::GetBodyDimensions(0xd, nScreenMode, gaHirelingBodySlotScreenCoords + 4, BODY_rArm);
@@ -205,9 +206,9 @@ void __stdcall InitializeiInventoryPages() {
         pNpc = UNIT::Player::UNITS_FindClientSideUnit(nInteractedNpcGUID, UNIT_MONSTER);
         if (pNpc) {
           bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-          nInvPageIndex = D2Common::Units::GetInventoryPage(pNpc, 0, bIsExpansion);
-          D2Common::DATATBLS::TokTbls::GetInvDimensions(nInvPageIndex, nScreenMode, &pNpcInventoryScreenCoordinates);
-          D2Common::DATATBLS::TokTbls::GetGridDimensions(nInvPageIndex, nScreenMode, &pNpcInventoryGridScreenCoordinates);
+          iVar1 = D2Common::Units::GetInventoryPage(pNpc, '\0', bIsExpansion);
+          D2Common::DATATBLS::TokTbls::GetInvDimensions(iVar1, nScreenMode, &pNpcInventoryScreenCoordinates);
+          D2Common::DATATBLS::TokTbls::GetGridDimensions(iVar1, nScreenMode, &pNpcInventoryGridScreenCoordinates);
           gbInvNpcScreenCoordsInitialized = 1;
         }
       }
@@ -1069,7 +1070,7 @@ void __stdcall DRAW_UI_InventoryContent(D2UnitStrc * pUnit) {
 
     bEquipReqMet = GAME::Game::CLIENT_CheckExpansion();
     int32_t nGridIndex;
-    nGridIndex = D2Common::Units::GetInventoryPage(pUnit, (uint32_t)CurrentInventoryPage, bEquipReqMet);
+    nGridIndex = D2Common::Units::GetInventoryPage(pUnit, CurrentInventoryPage, bEquipReqMet);
     for (pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory); pInvItem; pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvItem)) {
       D2UnitStrc* pItem;
       pItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pInvItem);
@@ -1336,7 +1337,7 @@ void InitInventory() {
     D2UnitStrc* pUnit;
     pUnit = UNIT::Player::GetPlayerUnit_UI();
     bFlagResult = GAME::Game::CLIENT_CheckExpansion();
-    D2Common::Units::GetInventoryPage(pUnit, 0, bFlagResult);
+    D2Common::Units::GetInventoryPage(pUnit, '\0', bFlagResult);
     InitializeiInventoryPages();
     int nBodySlot;
     nBodySlot = 0;
@@ -3017,7 +3018,7 @@ static void __stdcall INV_UpdateItemUnderCursor(D2UnitStrc * pUnit, D2InventoryS
     int nCellY;
     uint32_t nOverlayHeight;
     BOOL bExpansion = GAME::Game::CLIENT_CheckExpansion();
-    int32_t nYPos = D2Common::Units::GetInventoryPage(pUnit, nPage, bExpansion);
+    int32_t nYPos = D2Common::Units::GetInventoryPage(pUnit, (uint8_t)nPage, bExpansion);
     uint32_t nCol = (nMouseX - pGridLayout->nPixelLeft) / (uint32_t)pGridLayout->nCellWidth;
     uint32_t nRow = (uint32_t)(nMouseY - pGridLayout->nTop) / (uint32_t)pGridLayout->nCellHeight;
     if (!pCursorItem) {
@@ -3339,8 +3340,9 @@ int32_t __stdcall ClickItemRight(D2UnitStrc * pItem, D2InventoryStrc * pGridCoor
     int nCellY;
     eD2UnitType eUnitType;
     BOOL bExpansion = GAME::Game::CLIENT_CheckExpansion();
-    int32_t nInvPageFull = D2Common::Units::GetInventoryPage(pPlayer, nPage, bExpansion);
-    if ((uint8_t)nPage == '\0') {
+    uint8_t nInvPage = (uint8_t)nPage;
+    int32_t nInvPageFull = D2Common::Units::GetInventoryPage(pPlayer, nInvPage, bExpansion);
+    if (nInvPage == '\0') {
       nCol = (uint32_t)((int)pGridCoords - pInventoryGridScreenCoordinated.nPixelLeft) / (uint32_t)pInventoryGridScreenCoordinated.nCellWidth;
       nRowOffset = (int)pItem - pInventoryGridScreenCoordinated.nTop;
       nCellHeightDivisor = (uint32_t)pInventoryGridScreenCoordinated.nCellHeight;
@@ -3357,7 +3359,7 @@ int32_t __stdcall ClickItemRight(D2UnitStrc * pItem, D2InventoryStrc * pGridCoor
       }
     }
 
-    D2UnitStrc* pItemAtCell = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInventory, nCol, nRowOffset / nCellHeightDivisor, &nCellX, &nCellY, nInvPageFull, (uint8_t)nPage);
+    D2UnitStrc* pItemAtCell = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInventory, nCol, nRowOffset / nCellHeightDivisor, &nCellX, &nCellY, nInvPageFull, nInvPage);
     if (!pItemAtCell) {
       return 0;
     }
@@ -9161,7 +9163,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
     BOOL nItemType;
     nItemType = GAME::Game::CLIENT_CheckExpansion();
     int32_t eInvPage;
-    eInvPage = D2Common::Units::GetInventoryPage(pUnit, nPage, nItemType);
+    eInvPage = D2Common::Units::GetInventoryPage(pUnit, cPage, nItemType);
     uint32_t nGridCellX;
     nGridCellX = (x - pInvLayout->left) / (uint32_t)pInvLayout->SlotPixelWidth;
     uint32_t nGridCellY;
@@ -9339,7 +9341,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
         if (nCallResult) {
           nItemType = GAME::Game::CLIENT_CheckExpansion();
           pTargetItem = pUnit;
-          nTxCost = D2Common::Units::GetInventoryPage(pUnit, 3, nItemType);
+          nTxCost = D2Common::Units::GetInventoryPage(pUnit, '\x03', nItemType);
           nCallResult = D2Common::INVENTORY::Inventory::INVENTORY_FindItemGridPosition(pInvWork, pCursorItem_lcl, nTxCost, (int**)&y, (int*)&pInventory, 3);
           if (nCallResult) {
             if (!targetItem) {

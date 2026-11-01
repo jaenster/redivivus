@@ -739,7 +739,7 @@ void __fastcall QUEST_DebugPrint(::SGAMEDATA * pGame, char * szMessage, char * s
       return;
     }
 
-    PLAYER::PlayerMsg::PrepareClientMessage(pGame, szMessage, 4);
+    PLAYER::PlayerMsg::PrepareClientMessage(pGame, szMessage, '\x04');
 }
 
 // @sourcefile .\QUESTS\QUESTS.CPP
@@ -885,11 +885,11 @@ void __fastcall QUEST_SetStateFlag(D2QuestDataStrc * pQuestData, int32_t nState,
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ pQuestData->nStateFlag = (uint8_t)nState;
     wsprintfA(szDebugMsg, "changing state to %d\n", nState);
     if (DEBUGPRINT) {
-      PLAYER::PlayerMsg::PrepareClientMessage(pQuestData->pGame, szDebugMsg, 4);
+      PLAYER::PlayerMsg::PrepareClientMessage(pQuestData->pGame, szDebugMsg, '\x04');
     }
 }
 
-void __fastcall QUEST_OnNpcGossip(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, uint32_t nNpcGUID, uint32_t nGossipIndex) {
+void __fastcall QUEST_OnNpcGossip(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, uint32_t nNpcGUID, uint16_t nGossipIndex) {
     D2QuestArgStrc questArg;
     memset(&questArg, 0, sizeof(questArg));
     questArg.pGame = pGame;
@@ -905,7 +905,7 @@ void __fastcall QUEST_OnNpcGossip(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, uin
       }
     }
 
-    questArg.sQuestArgs.sNpcActivate.nIndex = nGossipIndex & 0xffff;
+    questArg.sQuestArgs.sNpcActivate.nIndex = (int)nGossipIndex;
     QUEST_DispatchBroadcast(true, '\x01', &questArg);
 }
 
@@ -1853,7 +1853,9 @@ void __fastcall QUEST_SendQuestInfoToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUni
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     uint8_t nActionType = 0;
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, 6, 0, pBitBuffer, nActionType);
+    uint32_t nUnitGUID = 0;
+    uint8_t nUpdateType = '\x06';
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, nUpdateType, nUnitGUID, pBitBuffer, nActionType);
 }
 
 void __fastcall QUEST_SetSuccessFinishStates(::SGAMEDATA * pGame, D2QuestGUIDStrc * pQuestGUID, eD2Quests eQuestId, int32_t nSoundId) {
@@ -1913,7 +1915,9 @@ BOOL __fastcall QUESTS_SendQuestInfoAndEventTrigger(::SGAMEDATA * pGame, D2UnitS
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     uint8_t nActionType = 0;
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, 6, 0, pBitBuffer, nActionType);
+    uint32_t nUnitGUID = 0;
+    uint8_t nUpdateType = '\x06';
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, nUpdateType, nUnitGUID, pBitBuffer, nActionType);
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xd0e);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x89_QUESTEVENTTRIGGER(pClient, &DStack_8);
     return 0;
@@ -2221,7 +2225,7 @@ void __fastcall AttachToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc
       return;
     }
 
-    PLAYER::PlayerMsg::PrepareClientMessage(pGame, "Error attaching to unit", 4);
+    PLAYER::PlayerMsg::PrepareClientMessage(pGame, "Error attaching to unit", '\x04');
 }
 
 void __stdcall QUEST_InitializeQuestDataStruct(uint32_t dwParam1, uint32_t dwParam2, bool bIsNotIntroduction, D2QuestDataStrc * pQuestData) {
@@ -2386,7 +2390,7 @@ void RemoveQuestTimer(D2QuestDataStrc * pQuestData, QUESTUPDATE pQuestUpdate, ::
       return;
     }
 
-    PLAYER::PlayerMsg::PrepareClientMessage(pGame, "Error in timer usage", 4);
+    PLAYER::PlayerMsg::PrepareClientMessage(pGame, "Error in timer usage", '\x04');
 }
 
 // Resends a player's full quest state to their client (called on (re)entering a game / quest log refresh). Sends the raw quest-record bitfield via the 0x28 PlayerQuestInfo packet, then walks the game's quest-data linked list computing each quest's display state into a 0x29-byte per-quest array using each quest's fpStatusFilter callback (or QUEST_GetQuestLogDisplayState fallback). Builds and conditionally sends a 0x50 QuestSpecial packet carrying Act1 Den-of-Evil monsters-left, Act5 RescueOnMountArreat barbarians-left, and (once the Summoner is dead and Act2 reached) Tal Rasha's tomb symbol level id. Finally sends the assembled 0x52 PlayerQuestLog packet. Halts via ErrorManager on a malformed quest list / bad filter pointer.
@@ -2412,7 +2416,9 @@ void __fastcall RefreshQuestDataForUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer2 = pPlayerData->pQuestRecord[pGame->nDifficulty];
     uint8_t nUpdateType = 0;
-    /* Send player quest states info to client */ GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, 6, 0, pBitBuffer2, nUpdateType);
+    uint32_t nUnitGUID = 0;
+    uint8_t nUpdateType_00 = '\x06';
+    /* Send player quest states info to client */ GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, nUpdateType_00, nUnitGUID, pBitBuffer2, nUpdateType);
     D2ClientStrc* pClientData = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0x49a);
     __frame0.byMsgId52 = 0x52;
     memset(__frame0.aQuestStateArray, 0, 0x29);
@@ -2514,10 +2520,12 @@ void __fastcall QUEST_OnPlayerJoinGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     int nExtendedIndex;
     void* pQuestInitEntry;
     D2QuestDataStrc* pQuestDataIter;
+    uint8_t nUpdateType;
     D2QuestArgStrc sQuestArgs;
     D2QuestJoinFrameSlotUnion uSavedGameOrPacket0x89;
     D2GSPacketSrv0x5E sPacket0x5E;
     uint8_t byActionType;
+    uint32_t nUnitGUID;
     eD2Quests nQuestId_00;
     D2BitBufferStrc* pBitBuffer;
     QUESTCALLBACKFN pQVar3;
@@ -2580,7 +2588,9 @@ void __fastcall QUEST_OnPlayerJoinGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       pPlayerData = D2Common::Units::GetPlayerData(pUnit);
       pQuestRecordPool = pPlayerData->pQuestRecord[pGame->nDifficulty];
       byActionType = 0;
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, 6, 0, pQuestRecordPool, byActionType);
+      nUnitGUID = 0;
+      nUpdateType = '\x06';
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, nUpdateType, nUnitGUID, pQuestRecordPool, byActionType);
       NET_D2GS_SERVER_Send_0x29_GAMEQUESTRECORD_Prepare(pGame, pClient);
       if (pGame->pQuestControl) {
         pQuestDataIter = pGame->pQuestControl->pQuestData;
@@ -2933,7 +2943,9 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
 void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t param_1, uint32_t nEventCode) {
     D2UnitStrc* pQuestItem;
     D2ClientStrc* pClient;
+    uint8_t nUpdateType;
     uint8_t byActionType;
+    uint32_t nUnitGUID;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2UnitDataPlayerStrc* pPlayerData2 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData2->pQuestRecord[pGame->nDifficulty];
@@ -2977,7 +2989,9 @@ void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStr
         pPlayerData2 = D2Common::Units::GetPlayerData(pUnit);
         pBitBuffer = pPlayerData2->pQuestRecord[pGame->nDifficulty];
         byActionType = 0;
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, 6, 0, pBitBuffer, byActionType);
+        nUnitGUID = 0;
+        nUpdateType = '\x06';
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, nUpdateType, nUnitGUID, pBitBuffer, byActionType);
         pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xb56);
         if (pPlayerData->dwTradeTick != 1) {
           pPlayerData->dwTradeTick = 1;

@@ -7520,7 +7520,7 @@ void __stdcall DRAW_UI_StatWindow_I() {
     }
 }
 
-void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnitGUID, char * pQuestBuffer, int32_t nActionType) {
+void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnitGUID, char * pQuestBuffer, uint8_t nActionType) {
     short int nMessage;
     D2GSPacketSrv0x27_TextStrc* pOverheadTextPtr;
     BOOL bMonInteractFlag;
@@ -7546,7 +7546,7 @@ void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnit
         pNpcUnit->pUnitData.pUnitDataPlayer->nTargetUnitGUID = 0;
       }
 
-      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x30, nActionType & 0xff, nUnitGUID);
+      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x30, (uint32_t)nActionType, nUnitGUID);
       npcmenu::NPCMENU_ClearHireListAndStopNpcSound(nUnitGUID);
       return;
     }

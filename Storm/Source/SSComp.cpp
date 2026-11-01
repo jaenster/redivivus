@@ -1064,7 +1064,7 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(int32_t pThis, uint16_t * * pBitBuf) {
     if (wWord <= 7) {
       wRefill = **pBitBuf;
       pBitBuf[2] = (uint16_t*)(wWord + 0x10);
-      pBitBuf[1] = (uint16_t*)((uint32_t)pBitBuf[1] | (uint32_t)wRefill << ((uint8_t)wWord & 0x1f));
+      pBitBuf[1] = (uint16_t*)((uint32_t)pBitBuf[1] | (uint32_t)wRefill << (uint8_t)wWord);
       (*pBitBuf)++;
     }
 
@@ -1075,7 +1075,7 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(int32_t pThis, uint16_t * * pBitBuf) {
       nBitCount = pQuickEntry[1];
       if (nBitCount <= 7) {
         pBitBuf[2] = (uint16_t*)((int)pBitBuf[2] - nBitCount);
-        pBitBuf[1] = (uint16_t*)((uint32_t)puVar2 >> ((uint8_t)nBitCount & 0x1f));
+        pBitBuf[1] = (uint16_t*)((uint32_t)puVar2 >> (uint8_t)nBitCount);
         return pQuickEntry[2];
       }
 
@@ -1123,7 +1123,7 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(int32_t pThis, uint16_t * * pBitBuf) {
     }
 
     uint32_t nQuickIdx = 0xffffffffU >> (0x20 - (uint8_t)nBitCount & 0x1f) & (uint32_t)puVar2 & 0x7f;
-    nQuickStep = 1 << ((uint8_t)nBitCount & 0x1f);
+    nQuickStep = 1 << (uint8_t)nBitCount;
     uint32_t* pQuickFill = (uint32_t*)(pThis + 0x347c + nQuickIdx * 0xc);
     do {
       pQuickFill[-2] = *(uint32_t*)(pThis + 4);
@@ -4190,7 +4190,7 @@ int __thiscall HUFFMAN_DecompressBlock(uint32_t * pDecoderCtx, uint8_t * pDst, i
     if (wWord <= 8) {
       wRefill = **pBitBuf;
       pBitBuf[2] = (uint16_t*)(wWord + 0x10);
-      pBitBuf[1] = (uint16_t*)((uint32_t)pBitBuf[1] | (uint32_t)wRefill << ((uint8_t)wWord & 0x1f));
+      pBitBuf[1] = (uint16_t*)((uint32_t)pBitBuf[1] | (uint32_t)wRefill << (uint8_t)wWord);
       (*pBitBuf)++;
     }
 
@@ -4990,7 +4990,7 @@ uint8_t PKWARE_explode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, TDcmpStru
     *pBufByteCount = 3;
     uVar1 = pWorkBuf->dsize_bits;
     if (uVar1 >= 4 && uVar1 <= 6) {
-      pWorkBuf->dsize_mask = 0xffff >> (0x10U - (char)uVar1 & 0x1f);
+      pWorkBuf->dsize_mask = 0xffff >> 0x10U - (char)uVar1;
       if (pWorkBuf->ctype) {
         if (pWorkBuf->ctype != 1) {
           return 2;
@@ -5494,7 +5494,7 @@ void PKWARE_IterateItemData(TDcmpStruct * pState) {
         nTableFillIndex = (uint32_t)*pHuffCodeWidthEntry;
         do {
           pState->offs2C34[nTableFillIndex] = bySymbolValue;
-          nTableFillIndex += 1 << (byBitLength & 0x1f);
+          nTableFillIndex += 1 << byBitLength;
         } while (nTableFillIndex < 0x100);
       } else if (*pHuffCodeWidthEntry & 0xff) {
         pState->offs2C34[*pHuffCodeWidthEntry & 0xff] = 0xff;

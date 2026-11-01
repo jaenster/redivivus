@@ -193,7 +193,7 @@ void __fastcall QUEST_SendQuestUpdateToPlayer(::SGAMEDATA * pGame, struct D2Unit
 void __stdcall QUEST_SendQuestUpdateToPlayer_HaltTail(int nLine);
 void __fastcall QUEST_SetStateAndBroadcast(struct D2QuestDataStrc * pQuestData, int nPrevStateFlag, struct D2UnitStrc * pUnit, ::fpExecuteOnUnitFunction fpFunction, bool bExecute);
 void __fastcall QUEST_SetStateFlag(struct D2QuestDataStrc * pQuestData, int32_t nState, char * szSourceFile, uint32_t nSourceLine);
-void __fastcall QUEST_OnNpcGossip(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, uint32_t nNpcGUID, uint32_t nGossipIndex);
+void __fastcall QUEST_OnNpcGossip(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, uint32_t nNpcGUID, uint16_t nGossipIndex);
 int32_t __stdcall QUEST_GetQuestSpecificDataPtr(::SGAMEDATA * pGame);
 uint32_t __stdcall CheckIntroductionFlagByInternalQuestId(::SGAMEDATA * pGame, eD2QuestsInternal nQuestNoInternal);
 void __fastcall NET_D2GS_SERVER_Send_0x29_GAMEQUESTRECORD_Prepare(::SGAMEDATA * pGame, struct D2ClientStrc * pClient);

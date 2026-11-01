@@ -1066,7 +1066,8 @@ void __fastcall Transmorgify(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc
     uint16_t sUnkPacketArg = 0xffff;
     int32_t nStatIdPacket = 0;
     _bTransmorgified = 1;
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x6af), nullptr, 0xff, _bTransmorgified, nStatIdPacket, sUnkPacketArg);
+    uint8_t nItemSlot = 0xff;
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x6af), nullptr, nItemSlot, _bTransmorgified, nStatIdPacket, sUnkPacketArg);
 }
 
 uint32_t __fastcall IsSkillBoundToClass(D2UnitStrc * pUnit, int32_t nSkillId) {
@@ -2701,7 +2702,7 @@ uint32_t __fastcall SKILLS_CalcMissileToHit(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Creates and queues a SUnitEvent for an aura skill proc on pUnit. Validates nItemEventFuncId is within the ITEMSTATCOST_ITEMEVENTFUNC table (max 0x32) and the entry is non-null, then calls SUNITEVENT_Alloc with the resolved function pointer. Returns the new event, or null on failure.
-D2SUnitEventStrc * __fastcall D2SetAuraEvent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t nUnitEvent, eD2Skills eSkill, int32_t nSkillLevel, uint32_t nItemEventFuncId, int32_t nQueueNo, int32_t nOwnerKey) {
+D2SUnitEventStrc * __fastcall D2SetAuraEvent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nUnitEvent, eD2Skills eSkill, int32_t nSkillLevel, uint32_t nItemEventFuncId, int32_t nQueueNo, int32_t nOwnerKey) {
     // Static local variables (originally global data)
     static D2ItemStatCostItemEventFunc ITEMSTATCOST_ITEMEVENTFUNC[50] = {
     nullptr,
@@ -2758,7 +2759,7 @@ D2SUnitEventStrc * __fastcall D2SetAuraEvent(::SGAMEDATA * pGame, D2UnitStrc * p
 
     if (nItemEventFuncId <= 0x31 && ITEMSTATCOST_ITEMEVENTFUNC[nItemEventFuncId]) {
       D2SUnitEventStrc* pDVar1;
-      pDVar1 = UNIT::SUnitEvent::SUNITEVENT_Alloc(pGame, pUnit, nUnitEvent, eSkill, nSkillLevel, ITEMSTATCOST_ITEMEVENTFUNC[nItemEventFuncId], nQueueNo, nOwnerKey);
+      pDVar1 = UNIT::SUnitEvent::SUNITEVENT_Alloc(pGame, pUnit, (uint8_t)nUnitEvent, eSkill, nSkillLevel, ITEMSTATCOST_ITEMEVENTFUNC[nItemEventFuncId], nQueueNo, nOwnerKey);
       return pDVar1;
     }
 

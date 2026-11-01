@@ -1978,8 +1978,9 @@ BOOL __stdcall DAMAGE_CheckKnockbackThreshold(D2UnitStrc * pUnit, D2DamageStrc *
       case ELEMENTAL_POISON:
         nKbDivisor = 0x40;
       break;
-      default:
-        nKbDivisor = 0x10;
+      case 12:
+        default:
+          nKbDivisor = 0x10;
       break;
     }
 

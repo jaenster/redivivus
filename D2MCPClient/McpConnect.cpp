@@ -215,7 +215,7 @@ uint32_t __stdcall MCPCONNECT_GetD2GSGameHash() {
 }
 
 void __stdcall MCPCONNECT_SendCharCreate(char * szCharName, uint32_t dwArg1, uint32_t dwArg2) {
-    NET_MCP_CLIENT_Send_0x02_CharCreate(szCharName, dwArg1, dwArg2);
+    NET_MCP_CLIENT_Send_0x02_CharCreate(szCharName, dwArg1, (WORD)dwArg2);
 }
 
 void __stdcall thunk_NET_MCP_CLIENT_Send_0x07_CharLogon(char * szText) {
@@ -458,14 +458,14 @@ int32_t __fastcall NET_MCP_CLIENT_Send_0x01_StartUp(int * pnParam) {
     return nLine;
 }
 
-void __fastcall NET_MCP_CLIENT_Send_0x02_CharCreate(char * szCharName, DWORD dwCharClassFlags, uint32_t dwUnused) {
+void __fastcall NET_MCP_CLIENT_Send_0x02_CharCreate(char * szCharName, DWORD dwCharClassFlags, WORD dwUnused) {
     MCP_CHARCREATE mcp0x02;
     SetD2GSJoinResult(0);
     MCPSTATE_SetConnectionEstablished(0);
     char* pStrLen = 0;
     mcp0x02.nPacketId = '\x02';
     mcp0x02.dwCharClass = dwCharClassFlags;
-    mcp0x02.wCharFlags = (WORD)dwUnused;
+    mcp0x02.wCharFlags = dwUnused;
     STRING_GetStringLength(szCharName, &pStrLen, (char*)0x400, (int32_t)mcp0x02.szCharName);
     if ((char*)0xfffe < pStrLen + 7) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x7e);

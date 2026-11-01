@@ -506,7 +506,7 @@ int32_t __fastcall DRLGOUTDOOR_GetAdjacentLevelVisMask(D2DrlgLevelStrc * pLevel,
       return 0;
     }
 
-    return 1 << ((char)nIndex + 4U & 0x1f);
+    return 1 << (char)nIndex + 4U;
 }
 
 // Given a vertex position on the outdoor level grid, determines which edge direction it lies on (N/S/E/W corner), then searches the level's orthogonal link list for a matching neighbor in that direction whose world-coordinate bounds contain the vertex. If found and the link type is 0, returns the adjacent level's visibility mask via DRLGOUTDOOR_GetAdjacentLevelVisMask; otherwise returns 0.
@@ -1108,7 +1108,7 @@ void __fastcall SpawnAct12Waypoint(D2DrlgLevelStrc * pLevel) {
       } while (nVisIdx < 8);
 
       nGridY = 0;
-      dwWaypointDirMask = 1 << ((char)nVisIdx + 4U & 0x1f);
+      dwWaypointDirMask = 1 << (char)nVisIdx + 4U;
       nGridWidth = pOutdoorsData->nGridCoordsWidth;
       nGridHeight = pOutdoorsData->nGridCoordsHeight;
       nGridHeightCopy = nGridHeight;

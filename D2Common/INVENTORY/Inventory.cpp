@@ -138,26 +138,21 @@ static BOOL __stdcall INVENTORY_IsGridRectEmpty(int32_t nRow, uint32_t nCol, int
     return 1;
 }
 
-static void __stdcall INVENTORY_FillGridRect(uint32_t nWidth, int32_t nStartCol, int32_t pGridInfo, uint8_t bParam, uint32_t dwParam, int32_t nStartRow) {
+static void __stdcall INVENTORY_FillGridRect(uint8_t nWidth, int32_t nStartCol, int32_t pGridInfo, uint8_t bParam, uint32_t dwParam, int32_t nStartRow) {
     int nColsRemaining;
     uint32_t* pCellPtr;
     int nRowEnd = (uint32_t)bParam + nStartRow;
-    if (nStartRow >= nRowEnd) {
-      return;
-    }
-
-    do {
-      int nColEnd = (nWidth & 0xff) + nStartCol;
-      if (nStartCol < nColEnd) {
+    while (nStartRow < nRowEnd) {
+      if (nStartCol < (int)((uint32_t)nWidth + nStartCol)) {
         pCellPtr = (uint32_t*)(*(int*)(pGridInfo + 0xc) + (uint32_t)*(uint8_t*)(pGridInfo + 8) * nStartRow * 4 + nStartCol * 4);
-        for (nColsRemaining = nColEnd - nStartCol; nColsRemaining; nColsRemaining--) {
+        for (nColsRemaining = (uint32_t)nWidth + nStartCol - nStartCol; nColsRemaining; nColsRemaining--) {
           *pCellPtr = dwParam;
           pCellPtr++;
         }
       }
 
       nStartRow++;
-    } while (nStartRow < nRowEnd);
+    }
 }
 
 // Unlinks pItem from the doubly-linked page list (prev/next pointers in D2UnitDataItemStrc) and clears the corresponding grid-cell slots in pPageList->pGridCells. When bUseWidthHeight is non-zero, clears all width×height cells occupied by the item; otherwise clears only the single origin cell. Resets eInventoryGrid to INVENTORY_GRID_BODYLOC and nulls the prev/next links.
@@ -634,7 +629,7 @@ static BOOL __stdcall INVENTORY_PlaceItemInGrid(int32_t nnX, int32_t nnY, int32_
 
     insert_in_page_list:
     INVENTORY_InsertItemInPageList(pInventory, pUnit, pGridInfo);
-    INVENTORY_FillGridRect((uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pGridInfo >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byItemW), nnX, (int32_t)pGridInfo, (uint8_t)nItemH, (uint32_t)pUnit, nnY);
+    INVENTORY_FillGridRect(byItemW, nnX, (int32_t)pGridInfo, (uint8_t)nItemH, (uint32_t)pUnit, nnY);
     *(char*)(ppItemDataPtr + 3) = (char)nParam1 + '\x01';
     pInventory->nItemCount++;
     Units::SetXForStaticUnit(pUnit, nnX);
@@ -1615,7 +1610,7 @@ D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInStash(D2InventoryStrc * pIn
     pGridDims = 0;
     if (pCurItem && pCurItem->eUnitType == UNIT_PLAYER) {
       int32_t neInventoryPage;
-      neInventoryPage = Units::GetInventoryPage(pCurItem, 0, 1);
+      neInventoryPage = Units::GetInventoryPage(pCurItem, '\0', 1);
       DATATBLS::TokTbls::GetGridDimensions(neInventoryPage, 0, &local_1c);
       pGridDims = &local_1c;
     }
@@ -1775,7 +1770,7 @@ D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(int * pnParam, D2UnitStr
     D2GridScreenCoordinates* pGridDims;
     pGridDims = 0;
     if (pCurItem && pCurItem->eUnitType == UNIT_PLAYER) {
-      neInventoryPage = Units::GetInventoryPage(pCurItem, 0, 1);
+      neInventoryPage = Units::GetInventoryPage(pCurItem, '\0', 1);
       DATATBLS::TokTbls::GetGridDimensions(neInventoryPage, 0, &local_1c);
       pGridDims = &local_1c;
     }
@@ -2359,7 +2354,7 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByType(D2InventoryStrc * pInventory, in
     D2GridScreenCoordinates* pGridDims = 0;
     if (pCurItem && pCurItem->eUnitType == UNIT_PLAYER) {
       int32_t neInventoryPage;
-      neInventoryPage = Units::GetInventoryPage(pCurItem, 0, 1);
+      neInventoryPage = Units::GetInventoryPage(pCurItem, '\0', 1);
       DATATBLS::TokTbls::GetGridDimensions(neInventoryPage, 0, &local_1c);
       pGridDims = &local_1c;
     }
@@ -4594,7 +4589,7 @@ static uint32_t __stdcall INVENTORY_GetEquipSwapAction(D2UnitStrc * pUnit, D2Uni
           return 5;
         }
 
-        int32_t ePage = Units::GetInventoryPage(pUnit1, 0, 1);
+        int32_t ePage = Units::GetInventoryPage(pUnit1, '\0', 1);
         uint32_t bCanMoveToPage = INVENTORY_CanMoveEquippedToPage(pInventory, pNewItem, nParam, ePage);
         return bCanMoveToPage ? 7 : 0;
       }
@@ -4772,7 +4767,7 @@ BOOL CopyInventory(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
       return 0;
     }
 
-    int32_t eInventoryPage = Units::GetInventoryPage(pUnit, 0, 1);
+    int32_t eInventoryPage = Units::GetInventoryPage(pUnit, '\0', 1);
     DATATBLS::TokTbls::GetGridDimensions(eInventoryPage, 0, &local_1c);
     D2InventoryGridInfoStrc* pDstGridInfo = ReinitializeInventoryGrid(pInventory, (D2InventorySizesStrc*)&local_1c, 2);
     if (!pDstGridInfo) {
@@ -4813,7 +4808,7 @@ static BOOL __stdcall INVENTORY_ReserveGridCells(D2InventoryStrc * pInventory, D
       return 0;
     }
 
-    int32_t neInventoryPage = Units::GetInventoryPage(pUnit, 0, 1);
+    int32_t neInventoryPage = Units::GetInventoryPage(pUnit, '\0', 1);
     DATATBLS::TokTbls::GetGridDimensions(neInventoryPage, 0, &gridDims);
     D2InventoryGridInfoStrc* pInvGridInfo = ReinitializeInventoryGrid(pInventory, (D2InventorySizesStrc*)&gridDims, 2);
     D2UnitStrc* pRowIter = pUnit2;

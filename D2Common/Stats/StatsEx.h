@@ -48,9 +48,9 @@ void __stdcall SetState(struct D2StatListExStrc * pStatsEx, eD2States eState);
 eD2States __stdcall GetState(struct D2StatListExStrc * pStatList);
 void __stdcall SetTimeout_WithFlag(struct D2StatListExStrc * pStatList, int32_t nTimeout);
 int __stdcall STATLIST_GetFullListFromStatList(struct D2StatListExStrc * pStatList);
-int32_t __stdcall STATLIST_GetStatFromBaseArray(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nParam);
-int32_t __stdcall SERVER_GetUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nParam);
-int32_t __stdcall STATLIST_GetMinimalStatValueShifted(struct D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, uint32_t nParam);
+int32_t __stdcall STATLIST_GetStatFromBaseArray(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint16_t nParam);
+int32_t __stdcall SERVER_GetUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint16_t nParam);
+int32_t __stdcall STATLIST_GetMinimalStatValueShifted(struct D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, uint16_t nParam);
 // Returns unsigned stat value for the given stat ID and layer from the unit's D2StatListExStrc. Uses ItemStatCost.txt minimum/shifted calculation.
 // @blizzard StatsGetCurrentStat
 int __stdcall STATSEX_GetCurrentStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint16_t nLayer);

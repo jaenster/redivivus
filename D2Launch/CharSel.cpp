@@ -1406,7 +1406,7 @@ BOOL __stdcall SelectCharHandler(D2ControlMsg * pControlMsg) {
             }
 
             D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szRealmName, (uint16_t*)pSelectedChar->szCommandStringTable, 0xff);
-            MainMenus::SelectedCharBnetSingleTcpIp(pSelectedChar, pSelectedChar->nCharacterFlags, (uint32_t)pSelectedChar->ePlayerClassID, szRealmName);
+            MainMenus::SelectedCharBnetSingleTcpIp(pSelectedChar, pSelectedChar->nCharacterFlags, pSelectedChar->ePlayerClassID, szRealmName);
           }
         }
       }
@@ -1442,7 +1442,7 @@ void __fastcall UIMENU_CALLBACK_SetDificultySingleplayerTcpIp(D2ControlMsg * pCo
     D2IniData_launcher->nDifficulty = (uint8_t)byDifficulty;
     MainMenus::FORMS_DestroyList();
     D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szRealmName, (uint16_t*)pSelectedChar->szCommandStringTable, 0xff);
-    MainMenus::SelectedCharBnetSingleTcpIp(pSelectedChar, pSelectedChar->nCharacterFlags, (uint32_t)pSelectedChar->ePlayerClassID, szRealmName);
+    MainMenus::SelectedCharBnetSingleTcpIp(pSelectedChar, pSelectedChar->nCharacterFlags, pSelectedChar->ePlayerClassID, szRealmName);
 }
 
 BOOL __stdcall UIMENU_Callback_NormalButtonSingleplayerTcpIp(D2ControlMsg * pControlMsg) {

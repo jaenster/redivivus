@@ -744,7 +744,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x26_Chat(struct D2ClientStrc * pClient, st
 // @sourcefile .\PLAYER\PlrMsg.cpp
 eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x15_ChatMessage * pPacket, uint32_t nSize);
 // Builds a 0x26 chat packet inline on the stack using a D2UnitStrc as raw packet buffer, then broadcasts to all clients via ForEachClient. dwParam is packed into the locale/color byte of the 0x26 header.
-void __fastcall PrepareClientMessage(::SGAMEDATA * pGame, char * szMessage, uint32_t dwParam);
+void __fastcall PrepareClientMessage(::SGAMEDATA * pGame, char * szMessage, uint8_t dwParam);
 // Broadcasts a pre-built 0x26 chat packet (pointed to by pdwParam as uint32_t array) to all clients in the game. dwParam is packed into the packet color/locale byte. Wraps ForEachClient with NET_D2GS_SERVER_Send_0x26_Chat callback.
 void __fastcall CHAT_BroadcastMessageToAllClients(::SGAMEDATA * pGame, uint32_t * pdwParam, uint32_t dwParam);
 // Iterates all clients in pGame via ForEachClient, broadcasting a 0x5A EventMessages packet built from nParam (pointer to message data). First measures the embedded character name string (capped at 16 chars); skips broadcast if name exceeds that limit. Side-effect: sends to every player in the game session.

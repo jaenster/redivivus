@@ -517,7 +517,7 @@ BOOL __fastcall Skills_SrvDoFunc_018_Armor(::SGAMEDATA * pGame, D2UnitStrc * pUn
             break;
           }
 
-          SkillsServer::D2SetAuraEvent(pGameCtx, pUnit, (uint8_t)*psAuraEvent, eSkill, nSkillLvl, (int)psAuraEvent[3], 1, (int)pSkillTxt->aurastate);
+          SkillsServer::D2SetAuraEvent(pGameCtx, pUnit, (int)*psAuraEvent, eSkill, nSkillLvl, (int)psAuraEvent[3], 1, (int)pSkillTxt->aurastate);
           iAuraEvent++;
           psAuraEvent++;
           pStatsExTmp = pStatsEx;
@@ -831,7 +831,7 @@ BOOL __fastcall Skills_SrvDoFunc_023_Blaze_EnergyShield(::SGAMEDATA * pGame, D2U
         return 1;
       }
 
-      SkillsServer::D2SetAuraEvent(pGameSaved, pUnit, (uint8_t)*psAuraEvent, eSkill, nSkillLvl, (int)psAuraEvent[3], 1, (int)pSkillTxt->aurastate);
+      SkillsServer::D2SetAuraEvent(pGameSaved, pUnit, (int)*psAuraEvent, eSkill, nSkillLvl, (int)psAuraEvent[3], 1, (int)pSkillTxt->aurastate);
       nAuraEventIdx++;
       psAuraEvent++;
     } while (nAuraEventIdx < 3);

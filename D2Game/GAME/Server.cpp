@@ -850,13 +850,13 @@ void __fastcall SaveAllPlayers(::SGAMEDATA * pGame) {
 }
 
 // Gracefully disconnects a single client from a game. Broadcasts a 0x5A leave-game event message with char name and account name, calls CleanUpClient to remove the client from game state, sends 0xB0 ConnectionTerminated packet, then calls QSERVER_KillConnection to close the network connection. nDisconnectReason byte is embedded in the event packet.
-void __fastcall SERVER_DisconnectClient(::SGAMEDATA * pGame, D2ClientStrc * pClient, uint32_t nDisconnectReason) {
+void __fastcall SERVER_DisconnectClient(::SGAMEDATA * pGame, D2ClientStrc * pClient, uint8_t nDisconnectReason) {
     D2Packet0x5aEventStructure packet0x5a;
     int32_t nCleanupFlag;
     if (pClient) {
       int32_t nClientId;
       nClientId = Clients::GetClientNo(pClient);
-      packet0x5a.nMessageType = (uint8_t)nDisconnectReason;
+      packet0x5a.nMessageType = nDisconnectReason;
       packet0x5a.nArgTypes = '\0';
       memset(packet0x5a.szName1, 0, 16 * sizeof(packet0x5a.szName1[0]));
       memset(packet0x5a.szName2, 0, 16 * sizeof(packet0x5a.szName2[0]));
@@ -914,12 +914,12 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(char * pBytes, int32
           nSize = 0x10;
           pSendBuffer = szSendBuffer;
           szSendBuffer[0] = -6;
-          D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient(2, nClientId, pSendBuffer, nSize);
+          D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x02', nClientId, pSendBuffer, nSize);
           break;
           case -5:
             D2Net::Game::Server::NET_QServer_FindIpAddressByClientIdForQServer(nClientId, szSendBuffer + 0x10, 0x10);
           szSendBuffer[0] = -5;
-          D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient(2, nClientId, szSendBuffer, 0x10);
+          D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x02', nClientId, szSendBuffer, 0x10);
           D2Net::Game::Server::QSERVER_KillConnection(nClientId);
           /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&lpAddend_00883d64);
           return;
@@ -928,7 +928,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(char * pBytes, int32
           nSize = 0x10;
           pSendBuffer = szSendBuffer;
           szSendBuffer[0] = -4;
-          D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient(2, nClientId, pSendBuffer, nSize);
+          D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x02', nClientId, pSendBuffer, nSize);
           break;
           case '\x01':
 
@@ -982,7 +982,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(char * pBytes, int32
               }
 
               pSendBuffer = (char*)&sPacketFF01;
-              D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient(2, nClientId, pSendBuffer, nSize);
+              D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x02', nClientId, pSendBuffer, nSize);
               break;
             }
           break;
@@ -1203,7 +1203,7 @@ void __stdcall CheckClientTimeouts(::SGAMEDATA * pGame, int * pnParam) {
       if (dwCurrentTick > dwClientTimeout && (dwFileFlags && dwCurrentTick - dwClientTimeout > 10000 && (uint32_t)pClient->tQServerExt.nHeartbeatSampleCount > 10 || dwCurrentTick - dwClientTimeout > 45000 || pClient->tQServerExt.nForceTimeoutDisconnect) && BattleNetServerService) {
         PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, Clients::CLIENTS_GetControlUnit(pClient, 0), Clients::GetCharName(pClient), 0);
         *pnParam = 1;
-        SERVER_DisconnectClient(pGame, pClient, 0);
+        SERVER_DisconnectClient(pGame, pClient, '\0');
       }
     }
 
@@ -1865,7 +1865,7 @@ static void __stdcall NET_D2GS_SERVER_Send_0xB3_SendSaveFile(::SGAMEDATA * pGame
       } while (nBytesLeft);
     }
 
-    int32_t nSendResult = D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient(0, pClient->nClientNo, pBytes, iVar1 + 7);
+    int32_t nSendResult = D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\0', pClient->nClientNo, pBytes, iVar1 + 7);
     if (nSendResult) {
       pClient->nFileSize += iVar1;
       if (pClient->nFileSize == pClient->nSaveOpenSize) {
@@ -1883,7 +1883,7 @@ static void __stdcall NET_D2GS_SERVER_Send_0xB3_SendSaveFile(::SGAMEDATA * pGame
     }
 
     Clients::DeleteCurrentSave(pClient);
-    SERVER_DisconnectClient(pGame, pClient, 0);
+    SERVER_DisconnectClient(pGame, pClient, '\0');
 }
 
 void __fastcall SendSaveFileToClient(::SGAMEDATA * pGame) {
@@ -1948,7 +1948,7 @@ static void __stdcall FlushClientPackets(::SGAMEDATA * pGame, int32_t nParam, D2
           return;
         }
 
-        nErrorLine = D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient(1, pClient->nClientNo, pPacketList->pBytes, pPacketList->nSize);
+        nErrorLine = D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x01', pClient->nClientNo, pPacketList->pBytes, pPacketList->nSize);
         if ((uint32_t)nErrorLine > 0) {
           nParam++;
           pPacketList->nSize = 0;
@@ -1961,7 +1961,7 @@ static void __stdcall FlushClientPackets(::SGAMEDATA * pGame, int32_t nParam, D2
           pClient->dwPacketsInList++;
           Clients::CLIENT_SetPacketList(pClient, (int32_t)pPacketList);
           if (pClient->dwPacketsInList >= 3) {
-            SERVER_DisconnectClient(pGame, pClient, 0);
+            SERVER_DisconnectClient(pGame, pClient, '\0');
             return;
           }
         }
@@ -3190,7 +3190,7 @@ void __fastcall QServer_AlternativeDisconnect(uint32_t nClientId, uint32_t dwPar
     if (bIsInGame) {
       D2ClientStrc* pClient;
       pClient = Clients::SERVER_GetClientFromGmeByClientId(pGame, nClientId);
-      SERVER_DisconnectClient(pGame, pClient, dwParam);
+      SERVER_DisconnectClient(pGame, pClient, (uint8_t)dwParam);
       Server::Unlock(pGame);
       return;
     }

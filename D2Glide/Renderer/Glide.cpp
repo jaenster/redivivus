@@ -919,7 +919,7 @@ static void RENDERER_GLIDE_CalculateTextureSize(GlideTexInfoStrc * pTexInfo) {
         nLodLevel++;
       } while (nLodLevel < 3);
 
-      pTexInfo->nTexWidth = (int)nTexHeightPow2 >> ((uint8_t)nLodLevel & 0x1f);
+      pTexInfo->nTexWidth = (int)nTexHeightPow2 >> (uint8_t)nLodLevel;
       pTexInfo->nAspect = gnGlideCacheSizeB[nLodLevel];
     } else {
       nLodLevel = 0;
@@ -932,7 +932,7 @@ static void RENDERER_GLIDE_CalculateTextureSize(GlideTexInfoStrc * pTexInfo) {
         nLodLevel++;
       } while (nLodLevel < 3);
 
-      pTexInfo->nTexHeight = (int)nTexWidthPow2 >> ((uint8_t)nLodLevel & 0x1f);
+      pTexInfo->nTexHeight = (int)nTexWidthPow2 >> (uint8_t)nLodLevel;
       pTexInfo->nAspect = gnGlideCacheSizeA[nLodLevel];
     }
 

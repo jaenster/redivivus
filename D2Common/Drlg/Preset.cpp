@@ -1813,7 +1813,7 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
                       nErrLine = nFlags / 8;
                     }
 
-                    DrlgGrid::AlterGridFlag(pDrlgGrid, nCellFlags, nErrLine, 1 << ((char)nTileType + 4U & 0x1f), 0);
+                    DrlgGrid::AlterGridFlag(pDrlgGrid, nCellFlags, nErrLine, 1 << (char)nTileType + 4U, 0);
                   }
                   if (pPopsConfig && nTileType - 8 <= 0x15) {
                     nVisIndex = 0;

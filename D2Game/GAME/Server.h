@@ -281,7 +281,7 @@ void __fastcall SavePlayerOnCleanUp(struct D2ClientStrc * pClient, ::SGAMEDATA *
 // Saves all connected players to persistent storage. Iterates client list, gets player unit for each, calls SaveGameAllGameTypes to write character data (inventory/stats/quests/waypoints). For BNet non-singleplayer games, also updates ladder ranking via fpUpdateCharacterLadder callback with level, experience, character status, guild info (rank/emblem), and file timestamp. Called every 8192 frames (5.5 minutes) or on disconnects/timeouts. Critical for preventing rollback on crashes.
 void __fastcall SaveAllPlayers(::SGAMEDATA * pGame);
 // Gracefully disconnects a single client from a game. Broadcasts a 0x5A leave-game event message with char name and account name, calls CleanUpClient to remove the client from game state, sends 0xB0 ConnectionTerminated packet, then calls QSERVER_KillConnection to close the network connection. nDisconnectReason byte is embedded in the event packet.
-void __fastcall SERVER_DisconnectClient(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, uint32_t nDisconnectReason);
+void __fastcall SERVER_DisconnectClient(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, uint8_t nDisconnectReason);
 BOOL __fastcall FindMe_6E_Handler(int32_t nParam);
 void __fastcall KillConnection(int32_t nParam);
 // SYSTEM PACKET HANDLER - Server (Mode 2)

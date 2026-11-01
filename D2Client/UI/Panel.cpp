@@ -1570,7 +1570,7 @@ void __stdcall ClickBeltRight(uint32_t nBeltSlot, D2UnitStrc * pUnit, D2Inventor
     }
 
     bClickable = GAME::Game::CLIENT_CheckExpansion();
-    int32_t nErrorLine = D2Common::Units::GetInventoryPage(pUnit, 0, bClickable);
+    int32_t nErrorLine = D2Common::Units::GetInventoryPage(pUnit, '\0', bClickable);
     D2Common::DATATBLS::TokTbls::GetGridDimensions(nErrorLine, nScreenMode, &sGridCoords);
     pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemInBeltSlot(pInventory, nBeltSlot);
     if (!pItem) {
