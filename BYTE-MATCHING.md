@@ -58,6 +58,13 @@ honest; they answer different questions:
 - **Whole functions:** how much of the program is provably the original code?
 - **Matching instructions:** how much of the code is already right, even in functions that still differ elsewhere?
 
+Instructions match by chance too: every function starts and ends the same way, and
+`push 0` is everywhere. As a control, each original function was paired with a *wrong*
+function of similar size from the same source file and scored the same way; that comes
+to about 7% of the code (measured on the Ghidra v1790 evidence). So nearly all of the
+matching instructions come from the reconstruction, not from shared prologues and
+idioms.
+
 The diagram above splits the original's code into these kinds. Its numbers come from
 the same run as [`audit.tsv.summary`](asm_matching/msvc8/evidence/audit.tsv.summary).
 

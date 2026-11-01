@@ -69,6 +69,7 @@ At this commit, generated from version 1790 of the Ghidra database:
 |-|-|
 |Functions|5,823 of 14,642 (39.8%)|
 |Code|444,474 of 2,602,915 bytes (17.08%)|
+|Instructions|1,716,082 of 2,602,915 bytes (65.9%), counting identical instructions in functions that still differ|
 
 These leave out the C runtime that Visual C++ 2005 linked in statically (libcmt): the
 rebuild links a runtime instead of reconstructing it. Code the compiler generates for C++
