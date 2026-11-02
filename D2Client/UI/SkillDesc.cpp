@@ -3070,7 +3070,7 @@ static void __stdcall SKILLDESC_FormatTwoValuesSigned(uint16_t nSingularLabelId,
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
 }
 
-static void __stdcall SKILLDESC_FormatSignedRangeOrValue(int32_t nValue, uint16_t nPrefixLabelId, uint16_t nSuffixLabelId, int32_t bPrefixSign, uint16_t * wszText) {
+static BOOL __stdcall SKILLDESC_FormatSignedRangeOrValue(int32_t nValue, uint16_t nPrefixLabelId, uint16_t nSuffixLabelId, int32_t bPrefixSign, uint16_t * wszText) {
     uint16_t wszNumBuf[32];
     char szBuf[32];
     for (int iFill = 0; iFill < 32; iFill++) {
@@ -3078,7 +3078,7 @@ static void __stdcall SKILLDESC_FormatSignedRangeOrValue(int32_t nValue, uint16_
     }
 
     if (!nValue) {
-      return;
+      return 0;
     }
     if (!bPrefixSign || nValue < 0) {
       /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d", nValue);
@@ -3094,15 +3094,17 @@ static void __stdcall SKILLDESC_FormatSignedRangeOrValue(int32_t nValue, uint16_
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
     pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
+    return 1;
 }
 
-static void __stdcall SKILLDESC_FormatMinMaxRange(int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText, int32_t bPrefixSign, uint16_t nPrefixLabelId, uint16_t nSuffixLabelId) {
+static BOOL __stdcall SKILLDESC_FormatMinMaxRange(int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText, int32_t bPrefixSign, uint16_t nPrefixLabelId, uint16_t nSuffixLabelId) {
     uint16_t* pWszLabel;
     uint16_t wszRangeStr[32];
     char szBuf[32];
     if (nMinVal == nMaxVal) {
-      SKILLDESC_FormatSignedRangeOrValue(nMinVal, nPrefixLabelId, nSuffixLabelId, 0, wszText);
-      return;
+      BOOL nFmtResult;
+      nFmtResult = SKILLDESC_FormatSignedRangeOrValue(nMinVal, nPrefixLabelId, nSuffixLabelId, 0, wszText);
+      return nFmtResult;
     }
 
     for (int iFill = 0; iFill < 32; iFill++) {
@@ -3129,6 +3131,7 @@ static void __stdcall SKILLDESC_FormatMinMaxRange(int32_t nMinVal, int32_t nMaxV
 
     pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
+    return 1;
 }
 
 static void __stdcall SKILLDESC_FormatMinMaxRangeLabelsFirst(int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText, int32_t bPrefixSign, uint16_t nSuffixLabelId, uint16_t nPrefixLabelId) {

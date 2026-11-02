@@ -1554,20 +1554,21 @@ static void __stdcall BigBuffer_Div_Ux(uint32_t * pRemainderOut, BigBuffer * pDi
 // @renamed-from SBIG_IsOdd (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm mangled symbol .IsOdd__FRC9BigBuffer @1009e4d0 -- sole target of SBigIsOdd's forwarder.
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
-static void BigBuffer_IsOdd(BigBuffer * pBignum) {
+static BOOL BigBuffer_IsOdd(BigBuffer * pBignum) {
     SBIG_TrimLeadingZeros(pBignum);
     uint32_t nLowWord = pBignum->nStartWord;
-    if (pBignum->nCount == nLowWord) {
-      return;
+    if (pBignum->nCount != nLowWord) {
+      if (nLowWord < pBignum->nCount) {
+        nLowWord = pBignum->pData[nLowWord];
+      } else {
+        nLowWord = 0;
+      }
+      if (nLowWord & 1) {
+        return 1;
+      }
     }
-    if (nLowWord < pBignum->nCount) {
-      nLowWord = pBignum->pData[nLowWord];
-    } else {
-      nLowWord = 0;
-    }
-    if (!(nLowWord & 1)) {
-      return;
-    }
+
+    return 0;
 }
 
 // @renamed-from SBIG_IsOne (2026-08-28, Storm PowerPC oracle pass 4)
