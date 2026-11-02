@@ -23,6 +23,7 @@ struct D2Sha1ContextStrc {
     /* 0x04 */ uint32_t nBitCountHigh; // message length in bits, high dword
     /* 0x08 */ uint32_t aState[5]; // H0..H4; Sha1_Initialize stores 0x67452301..0xc3d2e1f0
     /* 0x1C */ uint8_t aBuffer[64]; // partial 64-byte block; Sha1_Append buffers at ctx+0x1c
+    /* 0x5C */ uint32_t dwUnknown5C;
 };
 
 struct __attribute__((packed)) D2SsigContextStrc {
@@ -36,10 +37,6 @@ struct __attribute__((packed)) D2SsigContextStrc {
     /* 0x16 */ uint8_t field_0x16;
     /* 0x17 */ uint8_t field_0x17;
     /* 0x18 */ D2Sha1ContextStrc sSha1; // SHA-1 context; SSignatureVerifyStream_* pass &ctx+0x18 to Sha1_*
-    /* 0x74 */ uint8_t field_0x74;
-    /* 0x75 */ uint8_t field_0x75;
-    /* 0x76 */ uint8_t field_0x76;
-    /* 0x77 */ uint8_t field_0x77;
 };
 
 namespace Storm::Source::SSignature {
