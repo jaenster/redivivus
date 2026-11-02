@@ -58,7 +58,7 @@ void __fastcall FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(char * szGame
 // Writes a log record whose body is a hex dump to its log file, one formatted line at a time.
 void __fastcall WriteHexDumpLogEntry(int32_t pLogRecord);
 void __stdcall CloseStaleLogFileHandles();
-void __fastcall DeleteOldLogFile(int32_t pRefFileTime, char * szFileName);
+void __fastcall DeleteOldLogFile(FILETIME * pRefFileTime, char * szFileName);
 void __fastcall CloseLogFileByName(uint8_t * szFileName);
 uint32_t __thiscall ComputeAbsoluteFromRelative(int * pNode, int * pBase);
 void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix);

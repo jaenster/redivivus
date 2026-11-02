@@ -86,7 +86,7 @@ uint32_t SStrVPrintf(char * szOutput, size_t nSize, char * szFormatString, va_li
 // Signed conversion. Its neighbour has no sign handling at all and is SStrToUnsigned.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_AtoiSigned
-uint32_t __stdcall SStrToInt(char * szText);
+int32_t __stdcall SStrToInt(char * szText);
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrToUnsigned(const char *)
 // @oracle-basis One parameter. Identical digit loop to SStrToInt with the sign handling absent, so it cannot produce
@@ -192,9 +192,9 @@ void __stdcall UTF8_EncodeChar(uint32_t uCodepoint, uint8_t * pbOut);
 void __stdcall UTF8_StepBackOneChar(uint8_t * str_base, int position);
 // ECX is not an argument: neither this body nor UTF8_AdvanceToCharBoundary reads it.
 void __stdcall UTF8_StepForwardOneChar(uint8_t * str_base, int position);
-void __stdcall TRANSTBL_UnicodeToLatin1(uint8_t * pbOut, void * pSrcUTF16, int nCount);
-void __stdcall TRANSTBL_UnicodeToLatin2(uint8_t * pbOut, void * pSrcUTF16, int nCount);
-void __stdcall TRANSTBL_UnicodeToKorean(uint8_t * pbOut, void * pSrcUTF16, int nCount);
+void __stdcall TRANSTBL_UnicodeToLatin1(uint8_t * pbOut, uint16_t * pSrcUTF16, int nCount);
+void __stdcall TRANSTBL_UnicodeToLatin2(uint8_t * pbOut, uint16_t * pSrcUTF16, int nCount);
+void __stdcall TRANSTBL_UnicodeToKorean(uint8_t * pbOut, uint16_t * pSrcUTF16, int nCount);
 int __stdcall TRANSTBL_Latin1ToUnicode(uint16_t * dest, uint8_t * src, int count);
 // ECX is not an argument: neither this body nor TRANSTBL_SingleByteToUnicode reads it.
 void __stdcall TRANSTBL_Latin2ToUnicode(uint16_t * dest, uint8_t * src, int count);

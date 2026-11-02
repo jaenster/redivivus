@@ -44,7 +44,7 @@ void __fastcall FASTCMP_DecompressRLEDispatcher(uint8_t * pImageHeader, uint8_t 
 // Decompresses RLE-compressed image data with radial effect mapping for circular/radial patterns
 void __fastcall FASTCMP_DecompressRLEWithEffect(int32_t nStride);
 void __stdcall DRAW_DebugFillRect(int32_t nRowStart, int32_t nRowStride);
-void __fastcall FASTCMP_DecompressRLEWithAlpha(BYTE * pFrameBlock, BYTE * pDst, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nSkipRows, int32_t nRowCount, BYTE * pBlendTable, uint8_t byBlendColor);
+void __fastcall FASTCMP_DecompressRLEWithAlpha(struct DC6Block * pFrameBlock, BYTE * pDst, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nSkipRows, int32_t nRowCount, BYTE * pBlendTable, uint8_t byBlendColor);
 // Decompress indexed RLE frames from a source DCC linked-list and write palette-converted DC6Block frames into a destination DC6 sprite
 uint32_t __fastcall FASTCMP_DecompressRLEWithPaletteConversion(int32_t pDCCSrc, struct DC6 * pDCCDest);
 // 1 internal function (defined in .cpp)

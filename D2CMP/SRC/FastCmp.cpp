@@ -1749,7 +1749,7 @@ void __stdcall DRAW_DebugFillRect(int32_t nRowStart, int32_t nRowStride) {
     } while (nMaxRow >= -0x9c);
 }
 
-void __fastcall FASTCMP_DecompressRLEWithAlpha(BYTE * pFrameBlock, BYTE * pDst, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nSkipRows, int32_t nRowCount, BYTE * pBlendTable, uint8_t byBlendColor) {
+void __fastcall FASTCMP_DecompressRLEWithAlpha(DC6Block * pFrameBlock, BYTE * pDst, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nSkipRows, int32_t nRowCount, BYTE * pBlendTable, uint8_t byBlendColor) {
     int iVar1;
     uint8_t bRLEToken;
     uint32_t nCopyCount;
@@ -1760,23 +1760,23 @@ void __fastcall FASTCMP_DecompressRLEWithAlpha(BYTE * pFrameBlock, BYTE * pDst, 
     uint8_t* puDstRunEnd;
     int32_t nDrawXSave;
     nDrawXSave = nDrawX;
-    if (nDstPitch < *(uint32_t*)(pFrameBlock + 4)) {
+    if (nDstPitch < (uint32_t)pFrameBlock->nWidth) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x74f);
       exit(-1);
     }
 
-    uint8_t* pbRLEData;
-    pbRLEData = pFrameBlock + 0x20;
+    DC6Block* pbRLEData;
+    pbRLEData = pFrameBlock + 1;
     for (nNegPitch = nSkipRows * 2; nNegPitch; nNegPitch--) {
       do {
         while (true) {
-          bRLEToken = *pbRLEData;
-          pbRLEData++;
+          bRLEToken = (uint8_t)pbRLEData->nFlip;
+          pbRLEData = (DC6Block*)((uintptr_t)&pbRLEData->nFlip + 1);
           if ((char)bRLEToken < '\0') {
             break;
           }
 
-          pbRLEData += (char)bRLEToken;
+          pbRLEData = (DC6Block*)((uintptr_t)&pbRLEData->nFlip + (int)(char)bRLEToken);
         }
       } while (bRLEToken & 0x7f);
     }
@@ -1786,8 +1786,8 @@ void __fastcall FASTCMP_DecompressRLEWithAlpha(BYTE * pFrameBlock, BYTE * pDst, 
     do {
       while (true) {
         while (true) {
-          bRLEToken = *pbRLEData;
-          pbRLEData++;
+          bRLEToken = (uint8_t)pbRLEData->nFlip;
+          pbRLEData = (DC6Block*)((uintptr_t)&pbRLEData->nFlip + 1);
           if ((char)bRLEToken >= 0) {
             break;
           }
@@ -1803,10 +1803,10 @@ void __fastcall FASTCMP_DecompressRLEWithAlpha(BYTE * pFrameBlock, BYTE * pDst, 
             }
 
             do {
-              bRLEToken = *pbRLEData;
-              pbRLEData++;
+              bRLEToken = (uint8_t)pbRLEData->nFlip;
+              pbRLEData = (DC6Block*)((uintptr_t)&pbRLEData->nFlip + 1);
               if ((char)bRLEToken > 0) {
-                pbRLEData += (char)bRLEToken;
+                pbRLEData = (DC6Block*)((uintptr_t)&pbRLEData->nFlip + (int)(char)bRLEToken);
               } else {
                 bRLEToken &= 0x7f;
               }
@@ -1845,7 +1845,7 @@ void __fastcall FASTCMP_DecompressRLEWithAlpha(BYTE * pFrameBlock, BYTE * pDst, 
 
         advance_past_run:
         nDrawX += nRunLen;
-        pbRLEData += nRunLen;
+        pbRLEData = (DC6Block*)((uintptr_t)&pbRLEData->nFlip + nRunLen);
         pDst = puDstRunEnd;
       }
 
@@ -1868,7 +1868,7 @@ void __fastcall FASTCMP_DecompressRLEWithAlpha(BYTE * pFrameBlock, BYTE * pDst, 
       } while (pDst < puDstLimit);
 
       nDrawX += nRunLen;
-      pbRLEData += nRunLen;
+      pbRLEData = (DC6Block*)((uintptr_t)&pbRLEData->nFlip + nRunLen);
       pDst = puDstRunEnd;
     } while (true);
 }

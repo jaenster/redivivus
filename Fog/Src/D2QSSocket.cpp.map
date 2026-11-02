@@ -366,7 +366,8 @@
         "NET_MCP_CLIENT_SendPacketToSafesocket"
       ],
       "usedTypes": [
-        "D2QSSocketStrc"
+        "D2QSSocketStrc",
+        "uint16_t"
       ]
     },
     {

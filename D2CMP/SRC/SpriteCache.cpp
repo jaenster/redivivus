@@ -1407,15 +1407,15 @@ void __fastcall SPRITECACHE_AllocateMemory(void * pCache, int32_t pEntry) {
     LeaveCriticalSection((LPCRITICAL_SECTION)((int)pCache + 0x30));
 }
 
-void __fastcall SPRITECACHE_FreeMemory(D2GfxMemoryStrc * pGfxMemory, void * pCacheEntry, int32_t nFreedSize, uint32_t bEvictPriority) {
+void __fastcall SPRITECACHE_FreeMemory(D2GfxMemoryStrc * pGfxMemory, D2SpriteCacheEntryStrc * pCacheEntry, int32_t nFreedSize, uint32_t bEvictPriority) {
     uint32_t uVar1;
     CRITICAL_SECTION* lpCriticalSection = &pGfxMemory->lpCriticalSection;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-    int nSize = *(int*)((int)pCacheEntry + 4);
+    uint32_t nSize = pCacheEntry->nSize;
     pGfxMemory->nUsedMemory -= nSize;
-    *(uint32_t*)((int)pCacheEntry + 0xc) |= 2;
+    pCacheEntry->dwFlags |= 2;
     nSize = nFreedSize + nSize;
-    *(int*)((int)pCacheEntry + 4) = nSize;
+    pCacheEntry->nSize = nSize;
     pGfxMemory->nUsedMemory += nSize;
     uVar1 = pGfxMemory->nUsedMemory;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
@@ -1425,7 +1425,7 @@ void __fastcall SPRITECACHE_FreeMemory(D2GfxMemoryStrc * pGfxMemory, void * pCac
       if (!pUsedMemory) {
         break;
       }
-      if ((void*)pUsedMemory == pCacheEntry) {
+      if (pUsedMemory == pCacheEntry) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa47);
         exit(-1);
       }
@@ -1436,7 +1436,7 @@ void __fastcall SPRITECACHE_FreeMemory(D2GfxMemoryStrc * pGfxMemory, void * pCac
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-    *(uint32_t*)((int)pCacheEntry + 0xc) &= -3;
+    pCacheEntry->dwFlags &= -3;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
 }
 

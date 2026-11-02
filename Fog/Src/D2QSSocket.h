@@ -34,7 +34,7 @@ void __stdcall FreeD2QSSocket(struct D2QSSocketStrc * pSocket);
 void __stdcall QSSOCKET_WaitForEvent(struct D2QSSocketStrc * pQSSocket, DWORD dwTimeout);
 struct D2NetDataStrc * __stdcall NET_D2QSocket_GetSafesock(struct D2QSSocketStrc * pQSSocket);
 void __stdcall QSSOCKET_SignalEvent(struct D2QSSocketStrc * pQSSocket);
-int __stdcall NET_MCP_CLIENT_SendPacketToQSocket(struct D2QSSocketStrc * pQSocket, char * pBytes, short nSize);
+int __stdcall NET_MCP_CLIENT_SendPacketToQSocket(struct D2QSSocketStrc * pQSocket, char * pBytes, uint16_t nSize);
 int32_t __stdcall NET_MCP_CLIENT_Send(struct D2QSSocketStrc * pQSocket, char * pBytes, uint16_t nDataSizeNoHeader);
 // 3 internal functions (defined in .cpp)
 

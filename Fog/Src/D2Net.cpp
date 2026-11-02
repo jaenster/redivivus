@@ -123,7 +123,7 @@ size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferS
     return (int)pOut - (int)pBuffer;
 }
 
-uint8_t * __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBufferSize, char * pBytes, size_t nBytesSize) {
+int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBufferSize, char * pBytes, size_t nBytesSize) {
     // Static local variables (originally global data)
     static uint32_t gadwHuffmanBitMasks[16] = {
     0x0,

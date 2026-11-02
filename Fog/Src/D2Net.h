@@ -14,6 +14,6 @@ namespace Fog::Src::D2Net {
 void __stdcall NET_SERVER_SentPacketLog_Clear();
 void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, size_t nSize);
 size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferSize, char * pBytes, size_t nBytesSize);
-uint8_t * __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBufferSize, char * pBytes, size_t nBytesSize);
+int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBufferSize, char * pBytes, size_t nBytesSize);
 
 } // namespace Fog::Src::D2Net

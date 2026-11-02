@@ -485,7 +485,7 @@ uint32_t SStrVPrintf(char * szOutput, size_t nSize, char * szFormatString, va_li
 // Signed conversion. Its neighbour has no sign handling at all and is SStrToUnsigned.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_AtoiSigned
-uint32_t __stdcall SStrToInt(char * szText) {
+int32_t __stdcall SStrToInt(char * szText) {
     char cDigit;
     if (!szText) {
       SErr::SErrSetLastError(0x57);
@@ -2196,15 +2196,15 @@ static int __fastcall TRANSTBL_SingleByteToUnicode(uint8_t * pbSrc, int nCount, 
     return (int)puVar1 - (int)pDest >> 1;
 }
 
-void __stdcall TRANSTBL_UnicodeToLatin1(uint8_t * pbOut, void * pSrcUTF16, int nCount) {
+void __stdcall TRANSTBL_UnicodeToLatin1(uint8_t * pbOut, uint16_t * pSrcUTF16, int nCount) {
     TRANSTBL_UnicodeToSingleByte(pSrcUTF16, gszUnicodeLatin1_1, pbOut, nCount);
 }
 
-void __stdcall TRANSTBL_UnicodeToLatin2(uint8_t * pbOut, void * pSrcUTF16, int nCount) {
+void __stdcall TRANSTBL_UnicodeToLatin2(uint8_t * pbOut, uint16_t * pSrcUTF16, int nCount) {
     TRANSTBL_UnicodeToSingleByte(pSrcUTF16, gszUnicodeLatin2_1, pbOut, nCount);
 }
 
-void __stdcall TRANSTBL_UnicodeToKorean(uint8_t * pbOut, void * pSrcUTF16, int nCount) {
+void __stdcall TRANSTBL_UnicodeToKorean(uint8_t * pbOut, uint16_t * pSrcUTF16, int nCount) {
     TRANSTBL_UnicodeToSingleByte(pSrcUTF16, gszUnicodeKorean_1, pbOut, nCount);
 }
 

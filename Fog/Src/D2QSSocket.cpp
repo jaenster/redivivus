@@ -417,13 +417,13 @@ void __stdcall QSSOCKET_SignalEvent(D2QSSocketStrc * pQSSocket) {
     /* HANDLE hEvent for SetEvent */ SetEvent(pQSSocket->pEvent);
 }
 
-int __stdcall NET_MCP_CLIENT_SendPacketToQSocket(D2QSSocketStrc * pQSocket, char * pBytes, short nSize) {
+int __stdcall NET_MCP_CLIENT_SendPacketToQSocket(D2QSSocketStrc * pQSocket, char * pBytes, uint16_t nSize) {
     int nResult;
     if (pQSocket) {
       D2NetDataStrc* pSafesocket;
       pSafesocket = pQSocket->pSafesock;
       if (pSafesocket && pSafesocket->bConnected) {
-        nResult = NET_MCP_CLIENT_SendPacketToSafesocket(pSafesocket, pBytes, (uint32_t)(uint16_t)nSize);
+        nResult = NET_MCP_CLIENT_SendPacketToSafesocket(pSafesocket, pBytes, (uint32_t)nSize);
         return nResult;
       }
     }

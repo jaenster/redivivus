@@ -102,7 +102,7 @@ BOOL __stdcall MCPSTATE_GetConnectionEstablished() {
     return g_bMCPConnectionEstablished;
 }
 
-void __stdcall MCPSTATE_SetConnectionEstablished(uint32_t bEstablished) {
+void __stdcall MCPSTATE_SetConnectionEstablished(BOOL bEstablished) {
     g_bMCPConnectionEstablished = bEstablished;
 }
 
@@ -110,7 +110,7 @@ BOOL __stdcall MCPSTATE_GetCharLogonSuccess() {
     return g_bMCPCharLogonSuccess;
 }
 
-void __stdcall MCPSTATE_SetCharLogonSuccess(uint32_t bSuccess) {
+void __stdcall MCPSTATE_SetCharLogonSuccess(BOOL bSuccess) {
     g_bMCPCharLogonSuccess = bSuccess;
 }
 
@@ -118,7 +118,7 @@ BOOL __stdcall MCPSTATE_GetJoinGameSuccess() {
     return g_bMCPJoinGameSuccess;
 }
 
-void __stdcall MCPSTATE_SetJoinGameSuccess(uint32_t bSuccess) {
+void __stdcall MCPSTATE_SetJoinGameSuccess(BOOL bSuccess) {
     g_bMCPJoinGameSuccess = bSuccess;
 }
 
@@ -126,7 +126,7 @@ BOOL __stdcall MCPSTATE_GetCreateGameSuccess() {
     return g_bMCPCreateGameSuccess;
 }
 
-void __stdcall MCPSTATE_SetCreateGameSuccess(uint32_t bSuccess) {
+void __stdcall MCPSTATE_SetCreateGameSuccess(BOOL bSuccess) {
     g_bMCPCreateGameSuccess = bSuccess;
 }
 

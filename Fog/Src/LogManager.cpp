@@ -827,7 +827,7 @@ void __stdcall CloseStaleLogFileHandles() {
     } while (nSlotOffset < 20);
 }
 
-void __fastcall DeleteOldLogFile(int32_t pRefFileTime, char * szFileName) {
+void __fastcall DeleteOldLogFile(FILETIME * pRefFileTime, char * szFileName) {
     _FILETIME fileTime;
     uint16_t nDay[2];
     WORD nMonth[2];
@@ -848,7 +848,7 @@ void __fastcall DeleteOldLogFile(int32_t pRefFileTime, char * szFileName) {
     sysTimeHead.wMonth = nMonth[0];
     /* LPFILETIME lpFileTime for SystemTimeToFileTime */ /* SYSTEMTIME * lpSystemTime for SystemTimeToFileTime */ *(uint32_t*)((char*)&sysTimeHead + 4) = (uint32_t)nDay[0] << 0x10;
     SystemTimeToFileTime(&sysTimeHead, &fileTime);
-    if (!(*(uint32_t*)(pRefFileTime + 4) >= fileTime.dwHighDateTime && *(uint32_t*)(pRefFileTime + 4) - fileTime.dwHighDateTime >= 0x4b7)) {
+    if (!(pRefFileTime->dwHighDateTime >= fileTime.dwHighDateTime && pRefFileTime->dwHighDateTime - fileTime.dwHighDateTime >= 0x4b7)) {
       return;
     }
 
