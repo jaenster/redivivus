@@ -3475,7 +3475,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindNearestInteractNpc(::SGAMEDATA * pGame, D2
     return pPlayerCandidate;
 }
 
-D2UnitStrc * __fastcall MONSTERAI_FindNearestUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, bool * pbIsClose) {
+D2UnitStrc * __fastcall MONSTERAI_FindNearestUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, BOOL * pbIsClose) {
     D2MonsterAiParameterStruct sAiParams;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
@@ -3492,10 +3492,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindNearestUnit(::SGAMEDATA * pGame, D2UnitStr
       return sAiParams.pBestUnit;
     }
 
-    pbIsClose[0] = true;
-    pbIsClose[1] = false;
-    pbIsClose[2] = false;
-    pbIsClose[3] = false;
+    *pbIsClose = 1;
     return sAiParams.pBestUnit;
 }
 
@@ -9046,7 +9043,7 @@ bool __fastcall _PlayerNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     nNearestGuid[2] = false;
     nNearestGuid[3] = false;
     ::SGAMEDATA* pGameLocal = pGame;
-    D2UnitStrc* pPlayer = MONSTERAI_FindNearestUnit(pGame, pUnit, nNearestGuid);
+    D2UnitStrc* pPlayer = MONSTERAI_FindNearestUnit(pGame, pUnit, &nNearestGuid);
     int32_t nDistToPlayer = AI::GetDistance(pUnit, pPlayer);
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return false;
@@ -9573,11 +9570,8 @@ void __fastcall AITHINK_Fn1_NpcStationary(::SGAMEDATA * pGame, D2UnitStrc * pUni
     bool bNearestUnitGuid[4];
     D2MonsterAiStrc* pMonsterAi;
     D2AiGeneralStrc* pMonsterAiGeneral;
-    bNearestUnitGuid[0] = false;
-    bNearestUnitGuid[1] = false;
-    bNearestUnitGuid[2] = false;
-    bNearestUnitGuid[3] = false;
-    D2UnitStrc* pUnit_00 = MONSTERAI_FindNearestUnit(pGame, pUnit, bNearestUnitGuid);
+    BOOL bNearestUnitGuid = 0;
+    D2UnitStrc* pUnit_00 = MONSTERAI_FindNearestUnit(pGame, pUnit, &bNearestUnitGuid);
     if (!pUnit_00 || pUnit_00 == pUnit) {
       if (pUnit) {
         if (pUnit->nClassId == 0xfb) {
@@ -9709,7 +9703,7 @@ void __fastcall AITHINK_Fn1_JarJar(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     }
     if (pHomeCmd) {
       D2UnitStrc* pUnit2;
-      pUnit2 = MONSTERAI_FindNearestUnit(pGame, pUnit, (bool*)&sSummonerCoord.nY);
+      pUnit2 = MONSTERAI_FindNearestUnit(pGame, pUnit, &sSummonerCoord.nY);
       iVar2 = AI::GetDistance(pUnit, pUnit2);
       bSummonerFound = Quests::QUESTS::A2Q4::Q12_CheckJournalState(pGame);
       if (bSummonerFound && (nRandRoll2 = MONSTERAI_GetDistanceToCoords(pUnit, pHomeCmd->nCmdArg[1], pHomeCmd->nCmdArg[2] - 3) , nRandRoll2 > 2) || (nRandRoll2 = MONSTERAI_GetDistanceToCoords(pUnit, pHomeCmd->nCmdArg[1], pHomeCmd->nCmdArg[2] - 3) , nRandRoll2 > 7)) {
@@ -10040,7 +10034,7 @@ void __fastcall AITHINK_Fn1_Navi(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPa
       return;
     }
 
-    D2UnitStrc* pNearestUnit = MONSTERAI_FindNearestUnit(pGame, pUnit, (bool*)&nNearestGuid);
+    D2UnitStrc* pNearestUnit = MONSTERAI_FindNearestUnit(pGame, pUnit, &nNearestGuid);
     if (pNearestUnit && pNearestUnit->eUnitType == UNIT_PLAYER) {
       int32_t bIsTradeBusy;
       bIsTradeBusy = PLAYER::Player::GetPlayerTradeTickOrBusy(pNearestUnit);
@@ -14636,11 +14630,8 @@ void __fastcall AITHINK_Fn1_Wussie(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
       }
     } else {
       D2UnitStrc* pNearestPlayer;
-      bSearchFlags[0] = false;
-      bSearchFlags[1] = false;
-      bSearchFlags[2] = false;
-      bSearchFlags[3] = false;
-      pNearestPlayer = MONSTERAI_FindNearestUnit(pGame, pUnit, bSearchFlags);
+      bSearchFlags = 0;
+      pNearestPlayer = MONSTERAI_FindNearestUnit(pGame, pUnit, &bSearchFlags);
       if (pNearestPlayer && pNearestPlayer->eUnitType == UNIT_PLAYER) {
         nQuestResult = Quests::QUESTS::Q32_CheckNearbyPrisoners(pGame, pNearestPlayer, pUnit);
         if (nQuestResult) {

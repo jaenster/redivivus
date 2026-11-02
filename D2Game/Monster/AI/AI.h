@@ -213,7 +213,7 @@ struct D2UnitStrc * __fastcall FindTargetAndDistance(::SGAMEDATA * pGame, struct
 void __fastcall MONSTERAI_ApplyTerrorToMonster(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetMonster, uint32_t nUnused, uint32_t nUnused2, int32_t nTerrorDurationFrames);
 struct D2UnitStrc * __fastcall MONSTERAI_FindTargetInRange(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiGeneralStrc * pAiGeneral, int * pDistanceOut, BOOL * bResult, int32_t nParam);
 struct D2UnitStrc * __fastcall MONSTERAI_FindNearestInteractNpc(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayerCandidate, struct D2UnitStrc * * pSearchData);
-struct D2UnitStrc * __fastcall MONSTERAI_FindNearestUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, bool * pbIsClose);
+struct D2UnitStrc * __fastcall MONSTERAI_FindNearestUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, BOOL * pbIsClose);
 int32_t __fastcall AI_ChangeModeAndTargetUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nAnimMode, struct D2UnitStrc * pAttacker);
 int __fastcall MONSTERAI_CommandSkillAtPosition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nAnimMode, int32_t nX, int32_t nY);
 int32_t __fastcall MONSTERAI_CommandSkillSequence(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, struct D2UnitStrc * pTarget, int32_t nX, int32_t nY);
