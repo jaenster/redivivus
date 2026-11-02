@@ -2521,7 +2521,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x59_AssignPlayer(D2ClientStrc * pClient, u
 void __fastcall NET_D2GS_SERVER_Send_0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA(D2ClientStrc * pClient, uint32_t nNewValue, uint32_t nCurrentValue) {
     D2GSPacketSrv0x1F aPacket;
     int nGoldDelta = nNewValue - nCurrentValue;
-    if (nGoldDelta - 1U <= 0xfd) {
+    if (nGoldDelta >= 0x1 && nGoldDelta <= 0xfe) {
       *(uint16_t*)(char*)&nCurrentValue = (uint16_t)((uint16_t)(uint8_t)(char)nGoldDelta << 8 | (uint16_t)(uint8_t)0x19);
       SCMD_QueuePacketForClient((uint8_t*)&nCurrentValue, 2, pClient);
       return;

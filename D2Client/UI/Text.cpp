@@ -5412,7 +5412,7 @@ void __fastcall TEXT_DrawObjectHoverText(D2UnitStrc * pUnit) {
     if (ptScreenPos.y > 0 && ptScreenPos.y < ScreenSizeY && ptScreenPos.x > -100 && ptScreenPos.x < ScreenSizeX + 100) {
       D2Common::Chat::TEXT_CopyHoverMessageString(pHoverText, szMessage);
       nStringId = atoi(szMessage);
-      if (nStringId - 1U <= 0xfffd) {
+      if (nStringId >= 0x1 && nStringId <= 0xfffe) {
         wszString = D2Lang::StrTable::strtable::GetLocaleString((uint16_t)nStringId);
         if (wszString) {
           Fog::File::CONTAINER_InitializeBuffer(wszLocaleString, 2, 200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);

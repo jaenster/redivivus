@@ -109,7 +109,7 @@ void __stdcall LoadPanelImages() {
         bExpansion = true;
       }
     }
-    if (nLanguageCode - 6 <= 3) {
+    if (nLanguageCode >= 0x6 && nLanguageCode <= 0x9) {
       char szPath[260];
       if (bExpansion) {
         ppszPath = "%s\\UI\\InvChar6";
@@ -456,7 +456,7 @@ void __stdcall PANEL_DrawHealthOrb() {
     }
 
     int nPercentHideFromBottom = nValue * 0x50 / nMaxValue;
-    if (nPercentHideFromBottom - 1U <= 1) {
+    if (nPercentHideFromBottom >= 0x1 && nPercentHideFromBottom <= 0x2) {
       pUnit = UNIT::Player::GetPlayerUnit_UI();
       if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead) {
         nPercentHideFromBottom = 2;
@@ -2064,11 +2064,11 @@ void __stdcall INPUT_PanelLeftClickDown(D2UIMouseMsgStrc * pMsg) {
         pMsg->bHandled = 0;
         return;
       }
-      if (nMouseX - 0x75U <= 0x30 && nMouseY <= ScreenSizeY) {
+      if (nMouseX >= 0x75 && nMouseX <= 0xa5 && nMouseY <= ScreenSizeY) {
         gpPanelClickedButton = 1;
         gbPanelLeftBeltArrowClicked = 1;
       } else if (nMouseX < ScreenSizeX - 0xa5 || nMouseX > ScreenSizeX - 0x75 || nMouseY > ScreenSizeY) {
-        if (nMouseX - 0x1eU <= 0x50 && nMouseY >= ScreenSizeY - 0x4b && nMouseY <= ScreenSizeY - 0xf) {
+        if (nMouseX >= 0x1e && nMouseX <= 0x6e && nMouseY >= ScreenSizeY - 0x4b && nMouseY <= ScreenSizeY - 0xf) {
           bShowHpText = (BOOL)!bShowHpText;
           Storm::Source::SReg::SRegSaveValue("Diablo II", "Show HP Text", 0, bShowHpText);
         } else if (nMouseX < ScreenSizeX - 0x6f || nMouseX > ScreenSizeX - 0x1f || nMouseY < ScreenSizeY - 0x4b || nMouseY > ScreenSizeY - 0xf) {

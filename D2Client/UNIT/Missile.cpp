@@ -1936,7 +1936,7 @@ void __fastcall MISSILE_CreateRandomSubInRadius(D2UnitStrc * pUnit, D2UnitStrc *
 }
 
 void __fastcall MISSILE_CreatePeriodicAreaSub(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, eMissilesId nMissileId, uint32_t nGameFrame) {
-    if (nGameFrame - 0xc9 <= 0x17) {
+    if (nGameFrame >= 0xc9 && nGameFrame <= 0xe0) {
       MISSILE_CreateRandomSubInRadius(pUnit, pUnit2, nMissileId, 6);
       MISSILE_CreateRandomSubInRadius(pUnit, pUnit2, nMissileId, 6);
       return;
@@ -6023,7 +6023,7 @@ void __fastcall MISSILE_CltDoFn07_Homing(D2UnitStrc * pUnit) {
                 nCollisionDist = D2Common::Units::Missile::GetRemainingFrames(pUnit);
                 if (!(nCollisionDist % nRecalcInterval)) {
                   nCollisionDist = D2Common::Collision::GetCollisionDistance(pUnit, pUnit_01);
-                  if (nCollisionDist - 4U <= 0x14) {
+                  if (nCollisionDist >= 0x4 && nCollisionDist <= 0x18) {
                     D2Common::PATH::DynamicPath::PATH_CalculatePath(pUnit->pPath.pDynamicPath, pUnit, 0);
                   }
                 }
@@ -7439,7 +7439,7 @@ void __fastcall MISSILE_CltDoFn29_AndyControl(D2UnitStrc * pUnit) {
           nArg3 = nClassId / 3 * 25000 / 0x19;
           GAME::View::SetShake(8, nArg3, (nClassId + nClassId / 3 * -2) * 25000 / 0x19, nArg3);
         }
-        if (pMissileTxt->CltSubMissile3 > 0 && nRemainingFrames2 - 0x74 <= 198) {
+        if (pMissileTxt->CltSubMissile3 > 0 && nRemainingFrames2 >= 0x74 && nRemainingFrames2 <= 0x13a) {
           MISSILE_CreatePeriodicAreaSub(pOwner, pUnit, (int)pMissileTxt->CltSubMissile3, nRemainingFrames2);
         }
 

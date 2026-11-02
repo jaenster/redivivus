@@ -130,7 +130,7 @@ D2UnitStrc * __fastcall MakeRandomShrine(::SGAMEDATA * pGame, D2RoomStrc * pRoom
 }; D2_STATIC_GUARD(aOBJECTCLASSID, "D2Game::Objects::MakeRandomShrine::aOBJECTCLASSID");
 
     int32_t nLine;
-    if (nMonStatsId - 0x23eU <= 5) {
+    if (nMonStatsId >= 0x23e && nMonStatsId <= 0x243) {
       int nObjClassOffset = nMonStatsId * 3;
       if (!pRoom) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xde);
@@ -272,7 +272,7 @@ D2UnitStrc * __fastcall MakeRandomSparklyChest(::SGAMEDATA * pGame, D2RoomStrc *
     if (!pUnit) {
       return nullptr;
     }
-    if ((uint32_t)(eLevelId - LEVEL_MaggotLairLevel1) <= 2) {
+    if (eLevelId >= LEVEL_MaggotLairLevel1 && eLevelId <= LEVEL_MaggotLairLevel1 + 0x2) {
       D2SeedStrc* pObjSeed;
       pObjSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
       seedTmp = D2_SEED_NEXT(*pObjSeed);

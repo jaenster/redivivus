@@ -1213,7 +1213,7 @@ void __stdcall MAINMENU_ValidateCharacterNameCallback() {
       int32_t nNameLength;
       nNameLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszString);
       D2Lang::WideCharToUTF8(szNameBuffer, wszString, 0x20);
-      if (nNameLength - 2U <= 0xd && szNameBuffer[nNameLength - 1] != '_' && szNameBuffer[0] != '_' && szNameBuffer[nNameLength - 1] != '-' && szNameBuffer[0] != '-') {
+      if (nNameLength >= 0x2 && nNameLength <= 0xf && szNameBuffer[nNameLength - 1] != '_' && szNameBuffer[0] != '_' && szNameBuffer[nNameLength - 1] != '-' && szNameBuffer[0] != '-') {
         nSpecialCharCount = 0;
         nCharIndex = 0;
         if (nNameLength > 0) {
@@ -1249,7 +1249,7 @@ void __stdcall MAINMENU_ValidatePasswordChangeForm() {
       int32_t nAccountLen;
       nAccountLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszString);
       nPasswordLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszString_00);
-      if (nAccountLen - 1U <= 0x31 && nPasswordLen - 1U <= 0xc) {
+      if (nAccountLen >= 0x1 && nAccountLen <= 0x32 && nPasswordLen >= 0x1 && nPasswordLen <= 0xd) {
         bIsValid = 1;
       }
     }
@@ -3629,7 +3629,7 @@ BOOL __fastcall MAINMENU_DeleteCharacterOnRealm(D2CharSelStrc * pCharSel, uint8_
     if (!bHasPeer) {
       uint32_t nConnectResult;
       nConnectResult = MAINMENU_ConnectToRealm(pszRealm, 0);
-      if (nConnectResult - 1 <= 1) {
+      if (nConnectResult >= 0x1 && nConnectResult <= 0x2) {
         D2MCPClient::McpConnect::FreeMCP();
         return 0;
       }
@@ -3646,7 +3646,7 @@ uint32_t __fastcall MAINMENU_UpgradeCharacterToExpansion(D2CharSelStrc * pCharSe
     if (!bHasPeer) {
       uint32_t nConnectResult;
       nConnectResult = MAINMENU_ConnectToRealm(pszRealm, 0);
-      if (nConnectResult - 1 <= 1) {
+      if (nConnectResult >= 0x1 && nConnectResult <= 0x2) {
         D2MCPClient::McpConnect::FreeMCP();
         return 0;
       }
@@ -4432,7 +4432,7 @@ void __stdcall NET_MCP_CLIENT_HandleCharCreation() {
     char szCharName[80];
     uint8_t* pszPreferredRealm = (uint8_t*)CharSel::GetPreferedRealm();
     uint32_t nConnectResult = MAINMENU_ConnectToRealm(pszPreferredRealm, 0);
-    if (nConnectResult - 1 <= 1) {
+    if (nConnectResult >= 0x1 && nConnectResult <= 0x2) {
       UIMENU_CreateHeroSinglePlayer();
       return;
     }

@@ -1788,7 +1788,7 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
 
                       DrlgGrid::AlterGridFlag(pDrlgGrid, nCellFlags, nErrLine, 1 << (char)nTileType + 4U, 0);
                     }
-                    if (pPopsConfig && nTileType - 8 <= 0x15) {
+                    if (pPopsConfig && nTileType >= 0x8 && nTileType <= 0x1d) {
                       nVisIndex = 0;
                       if (nPopCount > 0) {
                         pIndexIter = (uint32_t*)pDrlgMap->pPopsIndex;
@@ -1813,7 +1813,7 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
                         nPopCount++;
                       }
                     }
-                    if (nScanMode && nTileType - 0x1e <= 3) {
+                    if (nScanMode && nTileType >= 0x1e && nTileType <= 0x21) {
                       pLevel->aSpawnPoints[pLevel->nSpawnPointCount].nX = (int)pMemoryOrXIndex->pPools + pDrlgMap->nRealOffsetX - 0x20;
                       pLevel->aSpawnPoints[pLevel->nSpawnPointCount].nY = pDrlgMap->nRealOffsetY + nFlags;
                       switch (nTileType) {

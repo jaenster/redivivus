@@ -1581,7 +1581,7 @@ BOOL __fastcall OBJECT_CheckAutoLight(D2UnitStrc * pUnit, int32_t bSkipCofLoad) 
 
     int32_t nPeriodOfDay = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(sgpDrlgAct, nullptr);
     if (nPeriodOfDay) {
-      if (nPeriodOfDay - 1U <= 2) {
+      if (nPeriodOfDay >= 0x1 && nPeriodOfDay <= 0x3) {
         if (pUnit->eAnimMode.ePlayerMode == Death) {
           pUnit->eAnimMode.ePlayerMode = eD2PlayerAnimMode_ns::Neutral;
           if (!bSkipCofLoad) {

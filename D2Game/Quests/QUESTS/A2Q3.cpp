@@ -786,7 +786,7 @@ void __fastcall Q11_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     ::SGAMEDATA* pGame;
     uint32_t nMsgIndex = (uint32_t)pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     if (nMsgIndex != 0x15c) {
-      if (nMsgIndex - 0x16a <= 0xa) {
+      if (nMsgIndex >= 0x16a && nMsgIndex <= 0x174) {
         pGame = pQuestArgs->pGame;
         pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
         pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

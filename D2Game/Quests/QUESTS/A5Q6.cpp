@@ -721,7 +721,7 @@ void __fastcall Q36_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 bool __fastcall Q36_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     bool bQuestState;
     eD2QuestState eQuestState;
-    if ((uint32_t)(nTargetClassId - MonsterUnitAncientStatue1) <= 2) {
+    if (nTargetClassId >= MonsterUnitAncientStatue1 && nTargetClassId <= MonsterUnitAncientStatue1 + 0x2) {
       D2QuestDataStrc* pA5Q5QuestData;
       pA5Q5QuestData = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_RiteOfPassage);
       if (pA5Q5QuestData && pA5Q5QuestData->pQuestSpecificData.pA5Q5->bAncientsSpawned && !pA5Q5QuestData->pQuestSpecificData.pA5Q5->nAncientsAlive && pQuestData->nStateFlag == 1 && !pQuestData->pQuestSpecificData.pA5Q6->bAnyaTransformed) {

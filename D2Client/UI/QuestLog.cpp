@@ -631,7 +631,7 @@ void __stdcall QUESTLOG_FreeQuestImages_Thunk() {
 
 static int32_t QUESTLOG_HitTestCloseButton(int32_t nParam1, int32_t nParam2) {
     uint32_t dwHitResult = (uint32_t)(nParam2 - 0xe6U >> 8) & 0xffffffu;
-    if (nParam2 - 0xe6U <= 0x1d && nParam1 - 0x187U <= 0x20) {
+    if (nParam2 - 0xe6U <= 0x1d && nParam1 >= 0x187 && nParam1 <= 0x1a7) {
       return (uint32_t)((uint32_t)((uint32_t)dwHitResult & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     }
 
@@ -662,7 +662,7 @@ static int32_t QUESTLOG_HitTestQuestIcon(int32_t nX, int32_t nY) {
 
 static int32_t QUESTLOG_HitTestOpenButton(int32_t nParam1, int32_t nParam2) {
     uint32_t dwHitResult = (uint32_t)(nParam2 - 0x116U >> 8) & 0xffffffu;
-    if (nParam2 - 0x116U <= 0x23 && nParam1 - 0x188U <= 0x21) {
+    if (nParam2 - 0x116U <= 0x23 && nParam1 >= 0x188 && nParam1 <= 0x1a9) {
       return (uint32_t)((uint32_t)((uint32_t)dwHitResult & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     }
 
@@ -1749,7 +1749,7 @@ void __stdcall DRAW_UI_Quest() {
     nQuestSlot = ui::GetMouseY();
     nActIndex -= gnPanelOffsetX;
     nQuestSlot += gnPanelOffsetY;
-    if (nActIndex - 0x116U <= 0x23 && nQuestSlot - 0x188U <= 0x21) {
+    if (nActIndex >= 0x116 && nActIndex <= 0x139 && nQuestSlot >= 0x188 && nQuestSlot <= 0x1a9) {
       D2Win::Src::D2WinFont::SetAndReturnLastFont(9);
       pwszText = D2Lang::StrTable::strtable::GetLocaleString(0x1030);
       D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(pwszText, gnPanelOffsetX + 0x128, gnPanelOffsetY - 0x5f + ScreenSizeY, 0, 1);
@@ -2020,7 +2020,7 @@ void __stdcall QUESTLOG_OnMouseUp(D2UIMouseMsgStrc * pMsg) {
     int nPanelRelX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX - gnPanelOffsetX;
     int nPanelRelY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY + gnPanelOffsetY;
     if (gQuestLog.bQuestLogOpenBtnPressed != '\0') {
-      if (nPanelRelX - 0x116U <= 0x23 && nPanelRelY - 0x188U <= 0x21) {
+      if (nPanelRelX >= 0x116 && nPanelRelX <= 0x139 && nPanelRelY >= 0x188 && nPanelRelY <= 0x1a9) {
         QUESTLOG_ToggleQuestScreen(0);
       }
     } else {
@@ -2033,7 +2033,7 @@ void __stdcall QUESTLOG_OnMouseUp(D2UIMouseMsgStrc * pMsg) {
             gQuestLog.nQuestLogActiveAct = bHitIcon;
           }
         } else {
-          if (gQuestLog.bQuestLogCloseBtnPressed == '\x01' && nPanelRelX - 0xe6U <= 0x1d && nPanelRelY - 0x187U <= 0x20 && gQuestLog.nQuestLogActiveAct != -1) {
+          if (gQuestLog.bQuestLogCloseBtnPressed == '\x01' && nPanelRelX >= 0xe6 && nPanelRelX <= 0x103 && nPanelRelY >= 0x187 && nPanelRelY <= 0x1a7 && gQuestLog.nQuestLogActiveAct != -1) {
             QUESTLOG_ShowQuestDescription(gQuestLog.nQuestLogActiveAct);
           }
         }

@@ -236,7 +236,7 @@ void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUn
       dwTmp = 0x68;
       if (eAnimMode == Walk || eAnimMode == eD2MonsterAnimMode_ns::Run) {
         bIsNear = D2Common::PATH::DynamicPath::GetPathType(pDynamicPath);
-        if (bIsNear - 5U <= 1) {
+        if (bIsNear >= 0x5 && bIsNear <= 0x6) {
           *(uint8_t*)(char*)&byMoveParam2 = (uint8_t)gaUnitModeUpdateFields[eAnimMode * 6 + 4];
           nTmp2 = D2Common::PATH::DynamicPath::GetLastPathPointX(pDynamicPath);
           *(uint16_t*)(char*)&wTargetX = (uint16_t)nTmp2;

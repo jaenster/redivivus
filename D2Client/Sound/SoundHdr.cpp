@@ -598,12 +598,12 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, char * pszOutPath) {
     } else {
       pSound = pTxtSounds + nSoundId;
     }
-    if (nSoundId - 0xb76U <= 0x6ba) {
+    if (nSoundId >= 0xb76 && nSoundId <= 0x1230) {
       memcpy(pszOutPath, "DATA\\LOCAL", 0xb);
     } else {
       memcpy(pszOutPath, "DATA\\GLOBAL", 0xc);
     }
-    if (nSoundId - 0x1231U <= 0x29) {
+    if (nSoundId >= 0x1231 && nSoundId <= 0x125a) {
       pszDst = pszOutPath - 1;
       do {
         pScanDwordEnd = pszDst;

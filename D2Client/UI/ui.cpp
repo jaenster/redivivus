@@ -1129,7 +1129,7 @@ void __stdcall UI_DrawPlayerStateOverlays() {
             nStatId = pStateTxt->stat;
             if (nStatId >= 0 && (int)nStatId <= sgptDataTable->nTxtItemStatCostSize) {
               nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, (int)nStatId, 0);
-              if (nStatValue - 1U <= 2) {
+              if (nStatValue >= 0x1 && nStatValue <= 0x3) {
                 Engine::Gfx::GFX_DrawOverlayOnUnit(pPlayerUnit_lcl, pStateTxt->pgsvoverlay - 1 + nStatValue, nScreenX, nScreenY);
                 nScreenX -= gnStateOverlayXSpacing;
               }

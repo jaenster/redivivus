@@ -1065,7 +1065,7 @@ int32_t __fastcall SOUND_SelectNpcGreetingSound(D2UnitStrc * pUnit, int32_t nMod
         nCycleIdx = D2Common::Environment::DRLGENV_GetCycleIndexFromAct(sgpDrlgAct);
         nSoundId = pGreetingSounds->nTimeOfDaySoundId;
         if (nCycleIdx != 1) {
-          if (nCycleIdx - 2U <= 1) {
+          if (nCycleIdx >= 0x2 && nCycleIdx <= 0x3) {
             nSoundId++;
           } else {
             nSoundId += 2;

@@ -1410,13 +1410,13 @@ void __fastcall UNITSND_PlayPlayerSound(D2UnitStrc * pUnit, uint16_t nAnimModePa
         return;
       }
     }
-    if (uVar2 - 0x19 <= 7) {
+    if (uVar2 >= 0x19 && uVar2 <= 0x20) {
       nResult = Sound::SOUND_FindChannelForSound((int32_t)pUnit);
       if (!nResult) {
         eSoundId = piVar1[8] - 0x32 + uVar2 * 2;
       }
     }
-    if (uVar2 - 0x21 <= 0x32) {
+    if (uVar2 >= 0x21 && uVar2 <= 0x53) {
       eSoundId = piVar1[9] - 0x21 + uVar2;
       if (uVar2 == 0x23) {
         GAME::Wall2::WALL2_ScheduleSoundSequence(0x1250, 0, 300, 1, eSoundId, 0xfa, 1);

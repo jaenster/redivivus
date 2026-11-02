@@ -3561,7 +3561,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
     sUseMenuPkt.y = (LONG)byMaxSockets;
     eVar14 = D2Common::ITEMS::Items::GetItemQuality(pClonedItem);
     if (eVar14 != 4) {
-      if (eVar14 - 5U <= 4 && (eVar14 = 1 , 0 < sUseMenuPkt.y)) {
+      if (eVar14 >= 0x5 && eVar14 <= 0x9 && (eVar14 = 1 , 0 < sUseMenuPkt.y)) {
         sUseMenuPkt.y = eVar14;
       }
     } else {

@@ -4826,7 +4826,7 @@ int __fastcall MISSMODE_SrvDoFn07_GuidedMissile(::SGAMEDATA * pGame, D2UnitStrc 
           nCurrentFrame = D2Common::Units::Missile::GetCurrentFrame(pUnit);
           if (!(nCurrentFrame % nClassId)) {
             nCurrentFrame = D2Common::Collision::GetCollisionDistance(pUnit, pTargetUnit);
-            if (nCurrentFrame - 4U <= 0x14) {
+            if (nCurrentFrame >= 0x4 && nCurrentFrame <= 0x18) {
               D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
             }
           }
@@ -6463,7 +6463,7 @@ int __fastcall MISSILESMODE_SrvDoFn19_RadamentDeath(::SGAMEDATA * pGame, D2UnitS
     ::fpBaalWaveFunction pfnRedemptionHitFn;
     eD2UnitType eUnitType;
     int32_t nCurrentFrame = D2Common::Units::Missile::GetCurrentFrame(pUnit);
-    if (nCurrentFrame - 2U <= 0x16) {
+    if (nCurrentFrame >= 0x2 && nCurrentFrame <= 0x18) {
       eUnitType = pUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
         nCurrentFrame = pUnit->pPath.pStaticPath->nPosY;

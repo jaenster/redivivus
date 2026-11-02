@@ -498,7 +498,7 @@ void __fastcall D2WINTEXTBOX_SetColumnCount(::D2WinTextBox * pnParam, int32_t nC
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2de);
       exit(-1);
     } else {
-      if (nColumnCount - 1U <= 4) {
+      if (nColumnCount >= 0x1 && nColumnCount <= 0x5) {
         if (!((int)pnParam->sStyleControl.fpPush <= nColumnCount)) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e2);
           exit(-1);

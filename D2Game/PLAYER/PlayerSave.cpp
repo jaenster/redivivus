@@ -731,7 +731,7 @@ int32_t __fastcall PLRSAVE_SerializeCorpseData(::SGAMEDATA * pGame, D2UnitStrc *
       } else {
         nCorpsePosY = 0;
       }
-      if (nBufferSize - 4U < 0xc) {
+      if (nBufferSize >= 0x4 && nBufferSize <= 0xf) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x97a);
         exit(-1);
       } else {
@@ -1945,7 +1945,7 @@ int __fastcall PLRSAVE_DispatchItemLoadByFormat(::SGAMEDATA * pGame, D2UnitStrc 
       nNewStreamResult = PLRSAVE_RestoreItemsFromStream(pGame, pUnit, (short int*)pItemData, 0x47, nStreamEnd, bUsePageHandler, (int*)ppnShort);
       return nNewStreamResult;
     }
-    if (eFormat - 0x48 <= 0x18) {
+    if (eFormat >= 0x48 && eFormat <= 0x60) {
       nNewStreamResult = PLRSAVE_LoadItemListFromStream(pGame, pUnit, (D2UnitStrc*)pItemData, eFormat, nStreamEnd, bUsePageHandler, ppnShort);
       return nNewStreamResult;
     }
@@ -2296,7 +2296,7 @@ int __stdcall _oldSaveGameLoadingPart9(D2UnitStrc * pUnit, uint8_t * pbParam, ui
     do {
       uint32_t nRawSkillId;
       nRawSkillId = (uint32_t)*pHotkeyEntry;
-      if (nRawSkillId - 0x9c <= 0x3c) {
+      if (nRawSkillId >= 0x9c && nRawSkillId <= 0xd8) {
         nRawSkillId += 0x41;
       } else if (nRawSkillId == 0xff) {
         nRawSkillId = -1;

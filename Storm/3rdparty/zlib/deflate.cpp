@@ -1883,7 +1883,7 @@ int32_t __fastcall deflateInit2_(z_stream * pStream, uint32_t nLevel, int32_t nM
       nWrap = 2;
       nWindowBits += -0x10;
     }
-    if (nMemLevel - 1U <= 8 && nMethod == 8 && nWindowBits - 8U <= 7 && nEffLevel <= 9 && nStrategy <= 4) {
+    if (nMemLevel >= 0x1 && nMemLevel <= 0x9 && nMethod == 8 && nWindowBits >= 0x8 && nWindowBits <= 0xf && nEffLevel <= 9 && nStrategy <= 4) {
       deflate_state* pState;
       if (nWindowBits == 8) {
         nWindowBits = 9;

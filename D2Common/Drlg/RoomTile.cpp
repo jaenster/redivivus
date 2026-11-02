@@ -1102,7 +1102,7 @@ void __fastcall DRLGROOMTILE_CountWallTilesFromGrid(D2RoomExStrc * pRoomEx, D2Dr
         nTileType = DrlgGrid::GetGridFlags(pOrientGrid, nColIdx, nY);
         if (nTileType == 3) {
           pTileGrid->sRoomTiles.nWallTilesCount++;
-        } else if (nTileType - 10U <= 1) {
+        } else if (nTileType >= 0xa && nTileType <= 0xb) {
           nTileType = DrlgGrid::GetGridFlags(pFloorGrid, nColIdx, nY);
           if (nTileType >= 0) {
             pTileGrid->sRoomTiles.nWallTilesCount++;

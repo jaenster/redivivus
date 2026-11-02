@@ -1892,7 +1892,7 @@ static int32_t DRLGPATH_ExtractPathFromResult(int32_t nPathCtx, int32_t nCurNode
       nCurNode = pParentNode;
     } while (pParentNode);
 
-    if (nWaypointCount - 2U <= 0x4b) {
+    if (nWaypointCount >= 0x2 && nWaypointCount <= 0x4d) {
       memcpy(pWaypointDst, (void**)(aWaypointStack + 78) - nWaypointCount, nWaypointCount * 4);
       return nWaypointCount;
     }
@@ -2505,7 +2505,7 @@ static int32_t DRLGPATH_ExtractPathFromResult2(D2PathTypeArg * pPathTypeArg, D2D
       pCurNode = (D2DrlgPathNodeStrc*)sFrame.pParentNode;
     } while ((D2DrlgPathNodeStrc*)sFrame.pParentNode);
 
-    if (nWaypointCount - 1U <= 0x4c) {
+    if (nWaypointCount >= 0x1 && nWaypointCount <= 0x4d) {
       memcpy(sFrame.pWaypointDst, (void*)((uintptr_t)&sFrame + nWaypointCount * -4 + 0x138), nWaypointCount * 4);
       return nWaypointCount;
     }

@@ -476,7 +476,7 @@ static void DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets(D2DrlgLevelStrc *
         nGridX = D2Client::Archive::UNIT_GetModuloFromSeed(&pLevel->sSeed, pLevelData->nGridCoordsWidth / 2);
         nGridY = D2Client::Archive::UNIT_GetModuloFromSeed(&pLevel->sSeed, pLevelData->nGridCoordsHeight / 2);
         nPresetCoord = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridX * 2, nGridY * 2);
-        if (nPresetCoord - 0x393U <= 7) {
+        if (nPresetCoord >= 0x393 && nPresetCoord <= 0x39a) {
           Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridX * 2, nGridY * 2, nPresetCoord + 0x10, -1, 0);
           nPlacedCount++;
         }
@@ -536,7 +536,7 @@ static void DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets(D2DrlgLevelStrc *
             nGridWidth = (int)(nXIter + nStartX * 2) % nGridWidth;
             nY = (int)(nAttempts + nStartY * 2) % pLevelData->nGridCoordsHeight;
             iVar2 = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridWidth, nY);
-            if (iVar2 - 0x393U <= 7) {
+            if (iVar2 >= 0x393 && iVar2 <= 0x39a) {
               Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridWidth, nY, iVar2 + 0x10, -1, 0);
               nPlacedCount++;
             }

@@ -731,7 +731,7 @@ uint32_t __stdcall MONSTER_GetMercType(D2UnitStrc * pUnit) {
       if (nClassId == 338) {
         return 2;
       }
-    } else if (nClassId - 0x230 <= 1) {
+    } else if (nClassId >= 0x230 && nClassId <= 0x231) {
       return 4;
     }
 

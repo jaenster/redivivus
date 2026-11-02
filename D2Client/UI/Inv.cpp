@@ -1536,7 +1536,7 @@ static void INV_FormatPlayerNameOnItem(uint16_t * wszText, D2UnitStrc * pUnit) {
     }
 
     int nQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
-    if (!(nQuality - 5U > 4)) {
+    if (nQuality >= 0x5 && nQuality <= 0x9) {
       return;
     }
 

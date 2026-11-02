@@ -561,7 +561,7 @@ void __stdcall DRAW_UI_Waypoint() {
         pDrawOffsets += 6;
       } while (nWaypointIndex < MaximumAmountOfWaypointInSelectedAct);
     }
-    if (nMouseX - 0x111U <= 0x23 && nMouseY - 0x183U <= 0x21) {
+    if (nMouseX >= 0x111 && nMouseX <= 0x134 && nMouseY >= 0x183 && nMouseY <= 0x1a4) {
       /* Draw cancel hoover */ pwszText = D2Lang::StrTable::strtable::GetLocaleString(0x1022);
       nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(pwszText);
       nMouseX = nTextWidth / 2;
@@ -671,7 +671,7 @@ void __stdcall INPUT_WaypointMouseUp(D2UIMouseMsgStrc * pMsg) {
       nMouseX = uVar1 - gnPanelOffsetX;
       nRelMouseY = nMouseY + gnPanelOffsetY;
       if (gbWaypointButtonPressed != '\0') {
-        if (nMouseX - 0x111U <= 0x23 && nRelMouseY - 0x183U <= 0x21) {
+        if (nMouseX >= 0x111 && nMouseX <= 0x134 && nRelMouseY >= 0x183 && nRelMouseY <= 0x1a4) {
           ui::SetUIFlag(UI_WAYPOINT, UI_RESET, 0);
           WAYPOINT_SendClosePacket();
         }
@@ -752,7 +752,7 @@ void __stdcall INPUT_WaypointMouseDown(D2UIMouseMsgStrc * pMsg) {
       }
 
       ClickingDownOnWaypointEntry = -1;
-      if (nWaypointMouseX - 0x111U <= 0x23 && nRelMouseY - 0x183U <= 0x21) {
+      if (nWaypointMouseX >= 0x111 && nWaypointMouseX <= 0x134 && nRelMouseY >= 0x183 && nRelMouseY <= 0x1a4) {
         gbWaypointButtonPressed = 1;
         Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
       } else {

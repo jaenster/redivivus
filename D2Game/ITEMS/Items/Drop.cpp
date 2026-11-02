@@ -1548,7 +1548,7 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
     }
 
     nAffixLoopIdx = D2Common::ITEMS::Items::GetItemQuality(*ppItem);
-    if (nAffixLoopIdx - 1U <= 2) {
+    if (nAffixLoopIdx >= 0x1 && nAffixLoopIdx <= 0x3) {
       Drop::ITEM_RollSocketCount(pGame, *ppItem, pItemGenContext);
     }
 
@@ -2443,7 +2443,7 @@ int32_t __fastcall ITEM_CalculateDespawnTimer(::SGAMEDATA * pGame, D2UnitStrc * 
     int nDespawnFrame = D2Common::ITEMS::Items::GetItemQuality(pUnit);
     if (nDespawnFrame != 4) {
       eD2ItemTypes eItemType;
-      if (nDespawnFrame - 5U <= 4) {
+      if (nDespawnFrame >= 0x5 && nDespawnFrame <= 0x9) {
         return pGame->dwGameFrame + 45000;
       }
 

@@ -706,7 +706,7 @@ uint32_t __stdcall SStrHash(char * pszText, uint8_t bCaseSensitive, uint32_t nSe
     } else {
       while (nChar) {
         pszText++;
-        if (nChar - 0x61 <= 0x19) {
+        if (nChar >= 0x61 && nChar <= 0x7a) {
           nChar -= 0x20;
         }
         if (nChar == 0x2f) {
@@ -825,7 +825,7 @@ ULONGLONG __stdcall SSTR_HashString64(uint8_t * pszText, uint8_t bCaseSensitive,
     } else {
       while (nChar) {
         pszText++;
-        if (nChar - 0x61 <= 0x19) {
+        if (nChar >= 0x61 && nChar <= 0x7a) {
           nChar -= 0x20;
         }
         if (nChar == 0x2f) {
@@ -928,7 +928,7 @@ int __stdcall SStrHashHT(uint8_t * pszText) {
     uint8_t bChar = *pszText;
     uint8_t* pWrite = szUpper;
     for (nLen = 0; nChar = (uint32_t)bChar , nChar && (pszText++ , nLen < 0x3ff); nLen++) {
-      if (nChar - 0x61 <= 0x19) {
+      if (nChar >= 0x61 && nChar <= 0x7a) {
         bChar -= 0x20;
       } else if (nChar == 0x2f) {
         bChar = 0x5c;
@@ -1626,7 +1626,7 @@ int __stdcall UTF16_CalculateUTF8Length(uint16_t * pszUTF16, int nMaxChars, int 
 
         uCodepoint = (uint32_t)*pCur;
         pEnd = pCur + 1;
-        if (uCodepoint - 0xd800 <= 0x3ff) {
+        if (uCodepoint >= 0xd800 && uCodepoint <= 0xdbff) {
           if (pEnd >= pNext) {
             nUTF8Len = -1;
             break;
@@ -1699,13 +1699,13 @@ int __stdcall UTF16_ToUTF8(uint8_t * pbUTF8, int nOutMaxChars, uint16_t * pszUTF
     while (pInCur < pOutEnd) {
       uCodepoint = (uint32_t)*pInCur;
       nPszUTF16Out = (int)(uint16_t*)0x1;
-      if (uCodepoint - 0xd800 <= 0x3ff) {
+      if (uCodepoint >= 0xd800 && uCodepoint <= 0xdbff) {
         if (pInCur + 1 >= pOutEnd) {
           break;
         }
 
         uSurrPair = (uint32_t)pInCur[1];
-        if (uSurrPair - 0xdc00 <= 0x3ff) {
+        if (uSurrPair >= 0xdc00 && uSurrPair <= 0xdfff) {
           uCodepoint = (uCodepoint - 0xd7f7) * 0x400 + uSurrPair;
           nPszUTF16Out = (int)(uint16_t*)0x2;
         }

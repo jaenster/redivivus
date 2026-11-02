@@ -1955,7 +1955,7 @@ int32_t __stdcall BARBARIAN_CheckItemData_b1or2Handed_isTrue(D2UnitStrc * pUnit,
 }
 
 static char ITEMS_ValidateItemQualityCode(uint32_t nQuality, int32_t nCode) {
-    if (nCode - 1U <= 7 && nQuality <= 0x14) {
+    if (nCode >= 0x1 && nCode <= 0x8 && nQuality <= 0x14) {
       return (char)nCode * ' ' + ((uint8_t)nQuality & 0x1f);
     }
 

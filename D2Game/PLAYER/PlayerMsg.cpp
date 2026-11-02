@@ -1848,7 +1848,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x14_OverheadMessage(::SGAMEDATA * pGame
     uint32_t nHoverExpiryFrame;
     char szMessage[256];
     char szSenderName[16];
-    if (nSize - 4 <= 0x10f) {
+    if (nSize >= 0x4 && nSize <= 0x113) {
       uint32_t szMsgFiltered = Storm::Source::SSTR::SStrLen(pPacket->szMsg);
       if ((int)szMsgFiltered > 0) {
         Storm::Source::SSTR::SStrCopy(szMessage, pPacket->szMsg, 0x100);
@@ -2040,7 +2040,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, D2
         sPacket.nPacketId = '&';
         sPacket.nUnitGUID = 0;
         sPacket.nMsgSubType = '\x02';
-        if (szFiltered - 1 < 0xf) {
+        if (szFiltered >= 0x1 && szFiltered <= 0xf) {
           sPacket.nMessageType = '\x02';
           pfnChatCallback = (fpForEachClientFn)CHAT_DeliverWhisper;
         } else {
@@ -4020,7 +4020,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x5F_SyncPosition(::SGAMEDATA * pGame, D
     }
 
     eSyncWarpState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_sync_warped);
-    if (eSyncWarpState == STATE_none && nErrLine - 0xfU <= 0x1e) {
+    if (eSyncWarpState == STATE_none && nErrLine >= 0xf && nErrLine <= 0x2d) {
       bPathReachable = ValidateSyncWarpPath(pGame, pUnit, nY, nX);
       if (bPathReachable) {
         bDead = RelocateAndApplySyncWarp(pGame, pUnit, nX, nY);

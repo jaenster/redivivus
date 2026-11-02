@@ -650,7 +650,7 @@ void __stdcall INPUT_HireableLongPress(D2UIMouseMsgStrc * pMsg) {
     uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     bool bNotCombatMode = gnHireDisplayMode != 2;
     pMsg->bHandled = 0;
-    if (bNotCombatMode && (int)uVar1 >= gpHireHoverUnit && (int)uVar1 <= gpHireHoverUnit + 0x2e && (uint32_t)(nMouseY - 0x18) <= 0x24) {
+    if (bNotCombatMode && (int)uVar1 >= gpHireHoverUnit && (int)uVar1 <= gpHireHoverUnit + 0x2e && nMouseY >= 0x18 && nMouseY <= 0x3c) {
       DWORD dwNow;
       if (!gnHireIconHoverIndex) {
         gnHireIconHoverIndex = GetTickCount();

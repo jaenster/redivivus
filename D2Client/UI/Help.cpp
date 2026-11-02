@@ -267,7 +267,7 @@ void __stdcall INPUT_HelpCloseButtonDown(D2UIMouseMsgStrc * pMsg) {
     } else {
       nRelX -= 0x20d;
     }
-    if (nRelX <= 0x20 && (uint32_t)(nMouseY - 0x18) <= 0x20) {
+    if (nRelX <= 0x20 && nMouseY >= 0x18 && nMouseY <= 0x38) {
       gpHelpCloseButton = 1;
       pMsg->bHandled = 1;
       pMsg->dwResult = 0;
@@ -911,7 +911,7 @@ void __stdcall INPUT_HelpCloseButtonUp(D2UIMouseMsgStrc * pMsg) {
       } else {
         nRelX -= 0x20d;
       }
-      if (nRelX <= 0x20 && (uint32_t)(nMouseY - 0x18) <= 0x20) {
+      if (nRelX <= 0x20 && nMouseY >= 0x18 && nMouseY <= 0x38) {
         ui::SetUIFlag(UI_HELPSCREEN, UI_TOGGLE, 0);
         HELP_HideMiniPanel();
         goto consume_click;

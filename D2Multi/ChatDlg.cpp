@@ -760,16 +760,16 @@ void __stdcall CHATDLG_ClearLadderBoard() {
 // Returns the ladder filter id for class tab nLadderTab (0 Overall .. 7 Assassin) in the same group as nCurrentFilterMode: groups start at 0, 9, 0x13 and 0x1b and hold 8 ids each; any other nCurrentFilterMode halts at line 0x1a23. The eight CHATDLG_OnPressLadder* tab handlers pass their tab and g_nLadderFilterMode and store the result back into it.
 // Provenance: asm 0043f150..0043f1c3 (tab on the stack, filter in EAX).
 static int32_t __stdcall CHATDLG_GetLadderFilterForTab(int32_t nLadderTab, uint32_t nCurrentFilterMode) {
-    if (nCurrentFilterMode - 9 <= 7) {
+    if (nCurrentFilterMode >= 0x9 && nCurrentFilterMode <= 0x10) {
       return nLadderTab + 9;
     }
     if (nCurrentFilterMode <= 7) {
       return nLadderTab;
     }
-    if (nCurrentFilterMode - 0x13 <= 7) {
+    if (nCurrentFilterMode >= 0x13 && nCurrentFilterMode <= 0x1a) {
       return nLadderTab + 0x13;
     }
-    if (nCurrentFilterMode - 0x1b <= 7) {
+    if (nCurrentFilterMode >= 0x1b && nCurrentFilterMode <= 0x22) {
       return nLadderTab + 0x1b;
     }
 

@@ -869,7 +869,7 @@ int __stdcall CLIENT_GetDenOfEvilLightIntensity(uint8_t * pRed, uint8_t * pGreen
 int __fastcall ROOM_GetLevelLightColor(D2RoomStrc * pRoom, char * pRed, char * pGreen, char * pBlue) {
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     if (eLevelId != LEVEL_DenOfEvil) {
-      if ((uint32_t)(eLevelId - LEVEL_RiverOfFlame) <= 1) {
+      if (eLevelId >= LEVEL_RiverOfFlame && eLevelId <= LEVEL_RiverOfFlame + 0x1) {
         if (gnDiabloSpawnLightActive && gnDiabloSpawnLightTimer == -1) {
           *pRed = -1;
           *pGreen = 64;
@@ -939,7 +939,7 @@ void __fastcall CLIENT_CheckWorldstoneShake(D2RoomStrc * pRoom) {
     }
 
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if ((uint32_t)(eLevelId - LEVEL_ThroneOfDestruction) <= 1) {
+    if (eLevelId >= LEVEL_ThroneOfDestruction && eLevelId <= LEVEL_ThroneOfDestruction + 0x1) {
       D2UnitStrc* pPlayerUnit_lcl;
       if (!gbWorldstoneShakeFired && gbWorldstoneShouldShake) {
         pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_Net();
