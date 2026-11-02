@@ -986,7 +986,7 @@ void __stdcall BetaScreen_NextPageIfVisible(D2UIMouseMsgStrc * pMsg) {
 // Draw beta screens; caches result in `gBetaScreenEntries[]` and uses `gD2QServer` congrats image/palette handles when the slideshow is active.
 uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused) {
     // Static local variables (originally global data)
-    static uint32_t gnBetaScreenCount = 0xa; D2_STATIC_GUARD(gnBetaScreenCount, "D2Client::GAME::Game::DrawBetaScreen::gnBetaScreenCount");
+    static int gnBetaScreenCount = 0xa; D2_STATIC_GUARD(gnBetaScreenCount, "D2Client::GAME::Game::DrawBetaScreen::gnBetaScreenCount");
     static BetaScreenEntry gBetaScreenEntries[10] = {
     {
         /* .lastLoadTick = */ 0x0,
@@ -1107,7 +1107,7 @@ uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused) {
     }
 
     int iScreen = 0;
-    if ((int32_t)gnBetaScreenCount > 0) {
+    if (gnBetaScreenCount > 0) {
       ppCachedImage = &gBetaScreenEntries[0].cachedImage;
       nScreenCount = gnBetaScreenCount;
       do {

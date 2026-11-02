@@ -1036,8 +1036,8 @@ void __fastcall D2COMP_DrawUnitShadow(uint32_t * pCompUnit) {
 void __fastcall D2COMP_DrawCompositeUnit(uint32_t * pCompUnit, int32_t nDrawColor) {
     // Static local variables (originally global data)
     static uint32_t gnUniqueCursorAnimTick; D2_STATIC_GUARD_BSS(gnUniqueCursorAnimTick, "D2Win::Src::D2Comp::D2COMP_DrawCompositeUnit::gnUniqueCursorAnimTick");
-    static uint32_t gnUniqueCursorFrame; D2_STATIC_GUARD_BSS(gnUniqueCursorFrame, "D2Win::Src::D2Comp::D2COMP_DrawCompositeUnit::gnUniqueCursorFrame");
-    static uint32_t gnPentaSpinCursorFrame; D2_STATIC_GUARD_BSS(gnPentaSpinCursorFrame, "D2Win::Src::D2Comp::D2COMP_DrawCompositeUnit::gnPentaSpinCursorFrame");
+    static int gnUniqueCursorFrame; D2_STATIC_GUARD_BSS(gnUniqueCursorFrame, "D2Win::Src::D2Comp::D2COMP_DrawCompositeUnit::gnUniqueCursorFrame");
+    static int gnPentaSpinCursorFrame; D2_STATIC_GUARD_BSS(gnPentaSpinCursorFrame, "D2Win::Src::D2Comp::D2COMP_DrawCompositeUnit::gnPentaSpinCursorFrame");
 
     int* pCOFEntry;
     uint8_t* pLayerFlags;

@@ -63,26 +63,27 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
     short int* pMonList;
     D2MonStatsTxt* pMonStats;
     uint32_t nCopyWords;
+    int iVar1;
     uint16_t nMonClassId;
     int nRangedRetryCount;
     int nMonsPicked;
     uint16_t aMonIdPool[26];
     int64_t lSeedProduct;
     D2SeedStrc sRolledSeed;
-    uint32_t nMaxMons;
-    nMaxMons = (uint32_t)pTxtLevels->NumMon;
-    if (0xd < (int32_t)nMaxMons) {
+    int nMaxMons;
+    nMaxMons = (int)pTxtLevels->NumMon;
+    if (0xd < (int32_t)(uint32_t)nMaxMons) {
       nMaxMons = 0xd;
     }
 
     uint32_t nValidMonCount;
     nValidMonCount = (uint32_t)(uint8_t)pTxtLevels->nValidMonCount;
-    uint32_t nRandPick;
+    int nRandPick;
     nRandPick = nValidMonCount;
     if (bIsNotNormalDifficulty) {
-      nRandPick = (uint32_t)(uint8_t)pTxtLevels->nValinNMonCount;
+      nRandPick = (int)(uint8_t)pTxtLevels->nValinNMonCount;
     }
-    if (nRandPick < nMaxMons) {
+    if ((uint32_t)nRandPick < (uint32_t)nMaxMons) {
       nMaxMons = nRandPick;
     }
 
@@ -122,22 +123,22 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
     if (nMaxMons) {
       int nMonStatIdx;
       do {
-        nValidMonCount = nRandPick;
-        if ((int)nRandPick <= 0) {
+        iVar1 = nRandPick;
+        if (nRandPick <= 0) {
           break;
         }
 
-        nCopyWords = nRandPick - 1 & nRandPick;
-        if (nCopyWords) {
+        nValidMonCount = nRandPick - 1U & nRandPick;
+        if (nValidMonCount) {
           sRolledSeed = D2_SEED_NEXT(*pSeed);
           pSeed->nSeedHigh = sRolledSeed.nSeedHigh;
           pSeed->nSeedLow = sRolledSeed.nSeedLow;
-          nRandPick = (uint32_t)(sRolledSeed.nSeedLow % nRandPick);
+          nRandPick = (int)(sRolledSeed.nSeedLow % (uint32_t)nRandPick);
         } else {
           sRolledSeed = D2_SEED_NEXT(*pSeed);
           pSeed->nSeedHigh = sRolledSeed.nSeedHigh;
           pSeed->nSeedLow = sRolledSeed.nSeedLow;
-          nRandPick = nRandPick - 1 & sRolledSeed.nSeedLow;
+          nRandPick = nRandPick - 1U & sRolledSeed.nSeedLow;
         }
 
         nMonClassId = aMonIdPool[nRandPick];
@@ -150,16 +151,16 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
             }
 
             lSeedProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-            if (nCopyWords) {
+            if (nValidMonCount) {
               sRolledSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pSeed->nSeedHigh);
               pSeed->nSeedHigh = sRolledSeed.nSeedHigh;
               pSeed->nSeedLow = sRolledSeed.nSeedLow;
-              nRandPick = (uint32_t)(sRolledSeed.nSeedLow % nValidMonCount);
+              nRandPick = (int)(sRolledSeed.nSeedLow % (uint32_t)iVar1);
             } else {
               sRolledSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pSeed->nSeedHigh);
               pSeed->nSeedHigh = sRolledSeed.nSeedHigh;
               pSeed->nSeedLow = sRolledSeed.nSeedLow;
-              nRandPick = nValidMonCount - 1 & sRolledSeed.nSeedLow;
+              nRandPick = iVar1 - 1U & sRolledSeed.nSeedLow;
             }
 
             nMonClassId = aMonIdPool[nRandPick];
@@ -169,16 +170,16 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
             }
 
             lSeedProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-            if (nCopyWords) {
+            if (nValidMonCount) {
               sRolledSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pSeed->nSeedHigh);
               pSeed->nSeedHigh = sRolledSeed.nSeedHigh;
               pSeed->nSeedLow = sRolledSeed.nSeedLow;
-              nRandPick = (uint32_t)(sRolledSeed.nSeedLow % nValidMonCount);
+              nRandPick = (int)(sRolledSeed.nSeedLow % (uint32_t)iVar1);
             } else {
               sRolledSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pSeed->nSeedHigh);
               pSeed->nSeedHigh = sRolledSeed.nSeedHigh;
               pSeed->nSeedLow = sRolledSeed.nSeedLow;
-              nRandPick = nValidMonCount - 1 & sRolledSeed.nSeedLow;
+              nRandPick = iVar1 - 1U & sRolledSeed.nSeedLow;
             }
 
             nMonClassId = aMonIdPool[nRandPick];
@@ -188,16 +189,16 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
             }
 
             lSeedProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-            if (nCopyWords) {
+            if (nValidMonCount) {
               sRolledSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pSeed->nSeedHigh);
               pSeed->nSeedHigh = sRolledSeed.nSeedHigh;
               pSeed->nSeedLow = sRolledSeed.nSeedLow;
-              nRandPick = (uint32_t)(sRolledSeed.nSeedLow % nValidMonCount);
+              nRandPick = (int)(sRolledSeed.nSeedLow % (uint32_t)iVar1);
             } else {
               sRolledSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pSeed->nSeedHigh);
               pSeed->nSeedHigh = sRolledSeed.nSeedHigh;
               pSeed->nSeedLow = sRolledSeed.nSeedLow;
-              nRandPick = nValidMonCount - 1 & sRolledSeed.nSeedLow;
+              nRandPick = iVar1 - 1U & sRolledSeed.nSeedLow;
             }
 
             nMonClassId = aMonIdPool[nRandPick];
@@ -207,16 +208,16 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
             }
 
             lSeedProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-            if (nCopyWords) {
+            if (nValidMonCount) {
               sRolledSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pSeed->nSeedHigh);
               pSeed->nSeedHigh = sRolledSeed.nSeedHigh;
               pSeed->nSeedLow = sRolledSeed.nSeedLow;
-              nRandPick = (uint32_t)(sRolledSeed.nSeedLow % nValidMonCount);
+              nRandPick = (int)(sRolledSeed.nSeedLow % (uint32_t)iVar1);
             } else {
               sRolledSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pSeed->nSeedHigh);
               pSeed->nSeedHigh = sRolledSeed.nSeedHigh;
               pSeed->nSeedLow = sRolledSeed.nSeedLow;
-              nRandPick = nValidMonCount - 1 & sRolledSeed.nSeedLow;
+              nRandPick = iVar1 - 1U & sRolledSeed.nSeedLow;
             }
 
             nMonClassId = aMonIdPool[nRandPick];
@@ -226,16 +227,16 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
             }
 
             lSeedProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-            if (nCopyWords) {
+            if (nValidMonCount) {
               sRolledSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pSeed->nSeedHigh);
               pSeed->nSeedHigh = sRolledSeed.nSeedHigh;
               pSeed->nSeedLow = sRolledSeed.nSeedLow;
-              nRandPick = (uint32_t)(sRolledSeed.nSeedLow % nValidMonCount);
+              nRandPick = (int)(sRolledSeed.nSeedLow % (uint32_t)iVar1);
             } else {
               sRolledSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pSeed->nSeedHigh);
               pSeed->nSeedHigh = sRolledSeed.nSeedHigh;
               pSeed->nSeedLow = sRolledSeed.nSeedLow;
-              nRandPick = nValidMonCount - 1 & sRolledSeed.nSeedLow;
+              nRandPick = iVar1 - 1U & sRolledSeed.nSeedLow;
             }
 
             nMonClassId = aMonIdPool[nRandPick];
@@ -243,9 +244,9 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
           } while (nRangedRetryCount < 0x14);
         }
 
-        nValidMonCount--;
-        if ((int)nRandPick < (int)nValidMonCount) {
-          memmove(aMonIdPool + nRandPick, aMonIdPool + nRandPick + 1, (nValidMonCount - nRandPick) * 2);
+        iVar1--;
+        if (nRandPick < iVar1) {
+          memmove(aMonIdPool + nRandPick, aMonIdPool + nRandPick + 1, (iVar1 - nRandPick) * 2);
         }
 
         nMonStatIdx = (int)(short int)nMonClassId;
@@ -260,8 +261,8 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
         }
 
         nMonsPicked++;
-        nRandPick = nValidMonCount;
-      } while (nMonsPicked < (int)nMaxMons);
+        nRandPick = iVar1;
+      } while (nMonsPicked < nMaxMons);
     }
 }
 

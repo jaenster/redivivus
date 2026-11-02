@@ -1429,7 +1429,8 @@ void __fastcall D2GFX_DrawWallTileWithPerspective(uint8_t * pbTileData, uint8_t 
 }
 
 void __stdcall D2GFX_InitializeLineBuffer() {
-    uint32_t nBlendValue;
+    int nBlendValue;
+    uint32_t uVar1;
     int iPixel;
     int nColorStep;
     uint8_t (*pbTileRowPtr)[32];
@@ -1443,19 +1444,19 @@ void __stdcall D2GFX_InitializeLineBuffer() {
       pbTileRowPtr = pbCurTileEntry;
       do {
         iPixel = 0;
-        nBlendValue = iTileRow << 0x18;
+        uVar1 = iTileRow << 0x18;
         do {
-          nBlendValue = (int)nBlendValue <= 0 ? 0 : nBlendValue;
-          if ((int)nBlendValue >= 0x1f000000) {
+          nBlendValue = (int)uVar1 <= 0 ? 0 : uVar1;
+          if (nBlendValue >= 0x1f000000) {
             nBlendValue = 0x1f000000;
           }
 
-          (*(uint8_t (*)[32])*pbTileRowPtr)[iPixel] = (uint8_t)(nBlendValue >> 0x18);
+          (*(uint8_t (*)[32])*pbTileRowPtr)[iPixel] = (uint8_t)((uint32_t)nBlendValue >> 0x18);
           iPixel++;
-          nBlendValue += nColorStep >> 5;
+          uVar1 = nBlendValue + (nColorStep >> 5);
         } while (iPixel < 0x20);
 
-        if ((int)nBlendValue >> 0x18 != nExpectedEndVal) {
+        if ((int)uVar1 >> 0x18 != nExpectedEndVal) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x285);
           exit(-1);
         }

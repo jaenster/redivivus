@@ -17,7 +17,7 @@ int __stdcall DrawAgreeToTrade();
 int __stdcall TRADE_GetPartnerGoldAmount();
 void __stdcall TRADE_HandleTradeCancel();
 void __stdcall TRADE_CloseTrade();
-void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(uint8_t * pBytes);
 void __fastcall TRADE_HandleTradeGoldUpdate(uint8_t * pPacket);
 uint16_t * __stdcall TRADE_GetTradeWindowPtr();
 void __stdcall AcceptTrade();

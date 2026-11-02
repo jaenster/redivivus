@@ -2550,11 +2550,11 @@ void __fastcall HireMercFromNpc(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, int32
     int* pSlotInUse;
     int* pSlotAvail;
     int nNpcDataIdx;
-    uint32_t nNameLast;
+    int nNameLast;
     int nNameRange;
     int pHireList;
     int nMercClassId;
-    uint32_t nNameFirst;
+    int nNameFirst;
     D2GSPacketSrv0x50 sPacket;
     D2GameNpcStrc* pNpcData;
     pNpcData = sunitproxy::GetGameNpcbyClassId(pGame, nNpcClassId, &nNpcDataIdx);
@@ -2587,12 +2587,12 @@ void __fastcall HireMercFromNpc(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, int32
         exit(-1);
       }
 
-      nNameLast = (uint32_t)pHirelingTxt->nNameLast;
-      nNameFirst = (uint32_t)pHirelingTxt->nNameFirst;
+      nNameLast = (int)pHirelingTxt->nNameLast;
+      nNameFirst = (int)pHirelingTxt->nNameFirst;
       nMercClassId = pHirelingTxt->classId;
       nNameRange = nNameLast - nNameFirst + 1;
       pNpcData = pNpcDataSaved;
-      if (nNameFirst <= nNameLast) {
+      if ((uint32_t)nNameFirst <= (uint32_t)nNameLast) {
         iHireSlot = 0;
         pSlotAvail = (int*)(pHireList + 0xc);
         pSlotInUse = (int*)(pHireList + 8);
@@ -2628,7 +2628,7 @@ void __fastcall HireMercFromNpc(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, int32
           pSlotInUse += 4;
           pSlotAvail += 4;
           iHireSlot++;
-        } while ((int)nNameFirst <= (int)nNameLast);
+        } while (nNameFirst <= nNameLast);
       }
     }
 

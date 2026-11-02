@@ -142,7 +142,7 @@ namespace Storm::Source::SComp {
 void __thiscall LINKEDLIST_Unlink(int * pList, uint32_t * pNode);
 uint32_t __thiscall BITBUFFER_PeekBits(uint16_t * * pBitBuffer, uint16_t * nBitCount, uint32_t nMask);
 void __thiscall LINKEDLIST_Clear(int32_t pBitBuffer, int32_t nBits);
-void __thiscall LINKEDLIST_InsertAfter(struct D2BitStreamWriterStrc * pList, uint8_t * pNode, int32_t pNewNode);
+struct D2BitStreamWriterStrc * __thiscall LINKEDLIST_InsertAfter(struct D2BitStreamWriterStrc * pList, uint8_t * pNode, int32_t pNewNode);
 int32_t __fastcall BITBUFFER_GetRemainingBits(int * pBitStream);
 void __thiscall BITSTREAM_WriteBits(struct D2BitStreamWriterStrc * pBitStream, int32_t nBitsValue, int32_t nBitCount);
 void __fastcall BITSTREAM_Flush(struct D2BitStreamWriterStrc * pBitStream);

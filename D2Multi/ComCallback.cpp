@@ -1602,7 +1602,7 @@ BOOL __fastcall COMCALLBACK_ProcessEmoteCommand(uint32_t dwCbArg1, uint32_t dwCb
 // Provenance: asm 00448bd0..00448c6c; the four user-list scroll buttons call it with -10, 10, -1 and 1.
 void __fastcall COMCALLBACK_ScrollChannelUserList(int32_t nScrollDelta) {
     uint32_t nMaxOffset;
-    uint32_t nOldOffset = gnChannelUserListScrollOffset;
+    int nOldOffset = gnChannelUserListScrollOffset;
     BOOL bShowUpArrows = 0;
     BOOL bShowDownArrows = 0;
     if (gnChannelUserCount <= 0xb) {
@@ -1614,10 +1614,10 @@ void __fastcall COMCALLBACK_ScrollChannelUserList(int32_t nScrollDelta) {
       gnChannelUserListScrollOffset = nMaxOffset;
       if ((int)((int)nNewOffset <= 0 ? 0 : nNewOffset) < (int)nMaxOffset && (gnChannelUserListScrollOffset = nNewOffset , (int)nNewOffset <= 0)) {
         gnChannelUserListScrollOffset = 0;
-      } else if ((int)gnChannelUserListScrollOffset > 0) {
+      } else if (gnChannelUserListScrollOffset > 0) {
         bShowUpArrows = 1;
       }
-      if ((int)gnChannelUserListScrollOffset < (int)nMaxOffset) {
+      if (gnChannelUserListScrollOffset < (int)nMaxOffset) {
         bShowDownArrows = 1;
       }
     }

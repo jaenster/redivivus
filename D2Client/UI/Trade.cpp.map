@@ -160,7 +160,8 @@
         "OpenCube"
       ],
       "usedTypes": [
-        "D2UnitStrc"
+        "D2UnitStrc",
+        "uint8_t"
       ]
     },
     {

@@ -63,12 +63,13 @@ void __thiscall LINKEDLIST_Clear(int32_t pBitBuffer, int32_t nBits) {
     *(int*)(pBitBuffer + 8) -= nBits;
 }
 
-void __thiscall LINKEDLIST_InsertAfter(D2BitStreamWriterStrc * pList, uint8_t * pNode, int32_t pNewNode) {
+D2BitStreamWriterStrc * __thiscall LINKEDLIST_InsertAfter(D2BitStreamWriterStrc * pList, uint8_t * pNode, int32_t pNewNode) {
     pList->pOutPtr = pNode;
     pList->nPad00 = (uint32_t)(uintptr_t)pNode;
     pList->nBytesRemaining = pNewNode;
     pList->nBitAccum = 0;
     pList->nBitsHeld = 0;
+    return pList;
 }
 
 int32_t __fastcall BITBUFFER_GetRemainingBits(int * pBitStream) {

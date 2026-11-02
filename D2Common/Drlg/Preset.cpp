@@ -1169,8 +1169,9 @@ static void __stdcall DRLGPRESET_InitDrlgMapPopLocations(int32_t nPopCount, D2Dr
     } while (nPopIndex < nPopCount);
 }
 
-void __fastcall DRLGPRESET_SetPickedFileInDrlgMap(D2DrlgMapStrc * pDrlgMap, int32_t nPickedFile) {
+int32_t __fastcall DRLGPRESET_SetPickedFileInDrlgMap(D2DrlgMapStrc * pDrlgMap, int32_t nPickedFile) {
     pDrlgMap->nRandomMapFileSelector = nPickedFile;
+    return nPickedFile;
 }
 
 // Allocates and initializes D2DrlgMapStrc from LvlPrest. Chooses random map file selector (power-of-two fast path), sets size/offset from coord or LvlPrest defaults, links into level map list.

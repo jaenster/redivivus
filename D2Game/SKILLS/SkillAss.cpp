@@ -1380,9 +1380,6 @@ BOOL __fastcall Skills_SrvDoFunc_041_BladeFury(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Server-side Assassin charge-up release: when a melee finishing-move combat entry fires (nCombatEntryParam flag bit 0 set) and a target is in melee range, scans the unit's active charge-up state stat-lists (pAllStatesDataTblFlag0x04). For each, reads the stored skill id and charge level, clamps charges to 1..3, and invokes the skill's per-charge srvprgfunc handlers (SKILLSRVDOFUNCS dispatch) up to the charge count, broadcasting a unit-message packet to the target. Consumes the charge by removing/freeing each charge-up stat-list afterward. Seed is rolled then restored to preserve determinism. No return.
 void __fastcall SKILLASS_ReleaseChargeUpAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2DamageStrc * pDamage) {
-    // Static local variables (originally global data)
-    static uint32_t gnSkillAssSpinDamage_RingAngle = 0xbf; D2_STATIC_GUARD(gnSkillAssSpinDamage_RingAngle, "D2Game::SKILLS::SkillAss::SKILLASS_ReleaseChargeUpAttack::gnSkillAssSpinDamage_RingAngle");
-
     D2SeedStrc* pSeed;
     D2StatListExStrc* pStatList;
     D2SkillsTxt* pDVar4;
@@ -1460,7 +1457,7 @@ void __fastcall SKILLASS_ReleaseChargeUpAttack(::SGAMEDATA * pGame, D2UnitStrc *
                   if (nChargeLvlMax > 0) {
                     pSrvPrgFunc = pDVar4->srvprgfunc;
                     do {
-                      if (*pSrvPrgFunc > 0 && *pSrvPrgFunc < gnSkillAssSpinDamage_RingAngle) {
+                      if (*pSrvPrgFunc > 0 && *pSrvPrgFunc < 0xbf) {
                         D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatListSaved, (int)pDVar4->aurastat[0], i + 1, 0);
                         if (SKILLSRVDOFUNCS[*pSrvPrgFunc]) {
                           (*SKILLSRVDOFUNCS[*pSrvPrgFunc])(pGameCopy, pUnit, eSkillId, nEffectiveSkillLvl);
@@ -1476,7 +1473,7 @@ void __fastcall SKILLASS_ReleaseChargeUpAttack(::SGAMEDATA * pGame, D2UnitStrc *
                 }
 
                 eAuraStat = pDVar4->srvprgfunc[nChargeLvl - 1];
-                if (eAuraStat > 0 && eAuraStat < gnSkillAssSpinDamage_RingAngle && SKILLSRVDOFUNCS[eAuraStat]) {
+                if (eAuraStat > 0 && eAuraStat < 0xbf && SKILLSRVDOFUNCS[eAuraStat]) {
                   (*SKILLSRVDOFUNCS[eAuraStat])(pGameCopy, pUnit, eSkillId, nEffectiveSkillLvl);
                 }
 

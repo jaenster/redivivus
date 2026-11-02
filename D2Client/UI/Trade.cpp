@@ -108,30 +108,30 @@ void __stdcall TRADE_CloseTrade() {
     g_nTradeWindowState = 7;
 }
 
-void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(char * pBytes) {
+void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(uint8_t * pBytes) {
     D2UnitStrc* pPlayerUnit_lcl;
     int nDialogOrDrawResult;
     DWORD dwSetUIFlagResult;
     BOOL bUIFlag;
     switch (pBytes[1]) {
-      case '\x15':
+      case 0x15:
         Inv::OpenCube();
       return;
-      case '\x10':
+      case 0x10:
         Inv::CloseStash2();
       return;
-      case '\x11':
+      case 0x11:
         Inv::CloseStash();
       return;
-      case '\f':
+      case 0xc:
         g_nTradeWindowState = 0;
       ui::UI_CloseTradeWindow(0);
       return;
-      case '\r':
+      case 0xd:
         g_nTradeWindowState = 0;
       ui::UI_CloseTradeWindow(1);
       return;
-      case '\0':
+      case 0:
         if (!g_nTradeWindowState) {
           bUIFlag = ui::GetUIFlag(UI_MPTRADE);
           if (!bUIFlag) {
@@ -150,11 +150,11 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(char * pBytes) {
           return;
         }
       break;
-      case '\t':
+      case 9:
         pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
       UNIT::UnitSnd::UNITSND_PlayPlayerSound(pPlayerUnit_lcl, 0x17);
       return;
-      case '\n':
+      case 10:
         pPlayerUnit_lcl = UNIT::Player::UNITS_FindClientSideUnit(gnTradeGoldUpdateBuffer, UNIT_PLAYER);
       if (!pPlayerUnit_lcl) {
         return;
@@ -162,7 +162,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(char * pBytes) {
 
       UNIT::UnitSnd::UNITSND_PlayPlayerSound(pPlayerUnit_lcl, 0x17);
       return;
-      case '\x01':
+      case 1:
         if (!g_nTradeWindowState) {
           pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
           pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerUnit_lcl->pInventory);
@@ -196,13 +196,13 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(char * pBytes) {
           return;
         }
       break;
-      case '\x02':
+      case 2:
         Inv::INV_PlayTradeStatusSound(0, 0);
       ui::UI_CloseTradeWindow(0);
       return;
       default:
         return;
-      case '\x05':
+      case 5:
         bUIFlag = ui::UI_GetFlag(UI_MPTRADE);
       if (!bUIFlag) {
         return;
@@ -227,7 +227,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(char * pBytes) {
       }
 
       break;
-      case '\x06':
+      case 6:
         bUIFlag = ui::UI_GetFlag(UI_MPTRADE);
       if (!bUIFlag) {
         return;
@@ -265,10 +265,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(char * pBytes) {
       }
 
       break;
-      case '\x0e':
+      case 0xe:
         Inv::INV_SetItemDescPending();
       return;
-      case '\x0f':
+      case 0xf:
         Inv::INV_ClearItemDescPending();
       return;
     }

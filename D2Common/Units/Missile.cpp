@@ -111,12 +111,12 @@ void __stdcall SetFlags(D2UnitStrc * pUnit, int32_t dwFlags) {
     pUnit->pUnitData.pUnitDataObject->unk0x14 = dwFlags;
 }
 
-void __stdcall SetLevel(D2UnitStrc * pUnit, int16_t nLevel) {
+void __stdcall SetLevel(D2UnitStrc * pUnit, int nLevel) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
     }
 
-    pUnit->pUnitData.pUnitDataMissile->nSkillLevel = nLevel;
+    pUnit->pUnitData.pUnitDataMissile->nSkillLevel = (int16_t)nLevel;
 }
 
 int32_t __stdcall GetLevel(D2UnitStrc * pUnit) {
@@ -263,12 +263,12 @@ BOOL __stdcall CheckUnitIfOwner(D2UnitStrc * pMissile, D2UnitStrc * pUnit) {
     return 0;
 }
 
-void __stdcall SetStreamMissile(D2UnitStrc * pUnit, int16_t nStreamMissile) {
+void __stdcall SetStreamMissile(D2UnitStrc * pUnit, int nStreamMissile) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataPlayer)) {
       return;
     }
 
-    *(int16_t*)(pUnit->pUnitData.pUnitDataPlayer->szCharName + 4) = nStreamMissile;
+    *(uint16_t*)(pUnit->pUnitData.pUnitDataPlayer->szCharName + 4) = (uint16_t)nStreamMissile;
 }
 
 int32_t __stdcall GetStreamMissile(D2UnitStrc * pUnit) {

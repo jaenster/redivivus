@@ -242,7 +242,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x29_GAMEQUESTRECORD(char * pBytes);
 // Recomputes stat contributions of all items in pUnit's inventory. Snapshots the unit's current left/right skills, iterates every item via INVENTORY_GetFirstItem/GetNextItem, and for each carried item whose owner is confirmed, strips and re-applies its stat list via STATLIST_RemoveFromOwnerAndRecalc + STATLIST_SetItemStatActive. Finally re-selects the saved left/right skills to update skill state. Called after inventory changes that may alter active stats.
 void __fastcall SCMD_RecalcInventoryItemStats(struct D2UnitStrc * pUnit);
 // Server→client handler for stat-update opcodes 0x9E–0xA2 targeting a monster unit. Decodes the stat id (byte 1) and a value (bytes 6+, width varies by opcode: byte/word/dword). Opcodes 0xA1/0xA2 add to the stat (STATLIST_AddUnitStat); others set it (STATLIST_SetUnitStat). If the stat is UNITSTAT_level, also triggers ITEM_CltRecalcEquippedFromUnit to refresh item-level requirements.
-void __fastcall NET_D2GS_CLIENT_Incoming0x9Eto0xA2(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x9Eto0xA2(uint8_t * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0xA4_PRELOAD_MONSTER(char * pBytes);

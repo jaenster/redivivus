@@ -1712,8 +1712,9 @@ void __fastcall MISSILE_CreateMultiShatter(D2UnitStrc * pUnit, D2UnitStrc * pUni
 }
 
 // Spawns a sub-missile and handles periodic sound/particle effects for a parent missile. Every other frame (or every 16th frame at low levels), spawns 1–4 child missiles via MakeMissile with a random positional offset scaled by skill level. Also triggers CltSubMissile1 shatter and plays ProgSound at frame 0x13B if configured in MissilesTxt.
-void __fastcall MISSILE_CreateSubWithSound(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, eMissilesId nMissileId, uint32_t nGameFrame, int32_t nLevel) {
+void __fastcall MISSILE_CreateSubWithSound(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, eMissilesId nMissileId, int nGameFrame, int32_t nLevel) {
     int nPosX;
+    uint32_t uVar1;
     D2SkillArgStrc sSkillArg;
     D2MissilesTxt* pMissileTxt = (int)nMissileId >= 0 && (int)nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
@@ -1726,42 +1727,42 @@ void __fastcall MISSILE_CreateSubWithSound(D2UnitStrc * pUnit, D2UnitStrc * pUni
       Sound::SOUND_PlaySound((int)pMissileTxt->ProgSound, pUnit, 0, 0, 0);
     }
 
-    uint32_t nSpawnCountByLevel = nGameFrame & 0x80000001;
+    int nSpawnCountByLevel = nGameFrame & 0x80000001;
     bool bFrameAligned = !nSpawnCountByLevel;
-    if ((int)nSpawnCountByLevel < 0) {
-      bFrameAligned = (nSpawnCountByLevel - 1 | -2) == -1;
+    if (nSpawnCountByLevel < 0) {
+      bFrameAligned = (nSpawnCountByLevel - 1U | -2) == -1;
     }
     if (!bFrameAligned) {
       return;
     }
     if (nLevel < 3) {
-      nSpawnCountByLevel = nGameFrame & 0x8000000f;
-      bFrameAligned = !nSpawnCountByLevel;
-      if ((int)nSpawnCountByLevel < 0) {
-        bFrameAligned = (nSpawnCountByLevel - 1 | -16) == -1;
+      uVar1 = nGameFrame & 0x8000000f;
+      bFrameAligned = !uVar1;
+      if ((int)uVar1 < 0) {
+        bFrameAligned = (uVar1 - 1 | -16) == -1;
       }
       if (!bFrameAligned) {
         return;
       }
     }
 
-    nSpawnCountByLevel = 4;
+    uVar1 = 4;
     if (nLevel < 3) {
-      nSpawnCountByLevel = 1;
+      uVar1 = 1;
     } else if (nLevel < 6) {
-      nSpawnCountByLevel = 2;
+      uVar1 = 2;
     } else if (nLevel < 9) {
-      nSpawnCountByLevel = 3;
+      uVar1 = 3;
     }
 
     int nOffsetX = 0;
     nLevel = 0;
-    if (1 < (int32_t)nSpawnCountByLevel) {
+    if (1 < (int32_t)uVar1) {
       uint32_t nRandOffset;
-      nRandOffset = Archive::RANDOM_RandomNumberSelector(&pUnit2->sSeed, nSpawnCountByLevel);
-      nOffsetX = nRandOffset - nSpawnCountByLevel / 2;
-      nRandOffset = Archive::RANDOM_RandomNumberSelector(&pUnit2->sSeed, nSpawnCountByLevel);
-      nLevel = nRandOffset - nSpawnCountByLevel / 2;
+      nRandOffset = Archive::RANDOM_RandomNumberSelector(&pUnit2->sSeed, uVar1);
+      nOffsetX = nRandOffset - uVar1 / 2;
+      nRandOffset = Archive::RANDOM_RandomNumberSelector(&pUnit2->sSeed, uVar1);
+      nLevel = nRandOffset - uVar1 / 2;
     }
 
     memset(&sSkillArg, 0, 0x5c);

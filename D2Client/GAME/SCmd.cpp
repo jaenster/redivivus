@@ -956,30 +956,30 @@ static void __stdcall SCMD_HandleStatChangeEffect(D2UnitStrc * pUnit, eD2UnitSta
 }
 
 // Server→client handler for stat-update opcodes 0x9E–0xA2 targeting a monster unit. Decodes the stat id (byte 1) and a value (bytes 6+, width varies by opcode: byte/word/dword). Opcodes 0xA1/0xA2 add to the stat (STATLIST_AddUnitStat); others set it (STATLIST_SetUnitStat). If the stat is UNITSTAT_level, also triggers ITEM_CltRecalcEquippedFromUnit to refresh item-level requirements.
-void __fastcall NET_D2GS_CLIENT_Incoming0x9Eto0xA2(char * pBytes) {
+void __fastcall NET_D2GS_CLIENT_Incoming0x9Eto0xA2(uint8_t * pBytes) {
     uint32_t nValue;
     bool bIsAdd = false;
     switch (*pBytes) {
-      case -0x62:
-        nValue = (uint32_t)(uint8_t)pBytes[6];
+      case 0x9e:
+        nValue = (uint32_t)pBytes[6];
       break;
-      case -0x60:
+      case 0xa0:
         nValue = *(uint32_t*)(pBytes + 6);
       break;
-      case -0x5f:
-        nValue = (uint32_t)(uint8_t)pBytes[6];
+      case 0xa1:
+        nValue = (uint32_t)pBytes[6];
       bIsAdd = true;
       break;
-      case -0x5e:
+      case 0xa2:
         bIsAdd = true;
-      case -0x61:
+      case 0x9f:
         nValue = (uint32_t)*(uint16_t*)(pBytes + 6);
       break;
       default:
         return;
     }
 
-    eD2UnitStat eUnitStat = (eD2UnitStat)(uint8_t)pBytes[1];
+    eD2UnitStat eUnitStat = (eD2UnitStat)pBytes[1];
     D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), UNIT_MONSTER);
     if (!pUnit) {
       return;

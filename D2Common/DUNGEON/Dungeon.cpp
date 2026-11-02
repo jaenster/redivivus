@@ -1787,9 +1787,9 @@ static void AddRoomDataActual(D2RoomExStrc * pRoomEx, uint8_t nInitDepth) {
     uint16_t* pnRefCount;
     D2DrlgStrc* pAct;
     InitNearRooms(pRoomEx->pLevel->pDrlg->pMemoryPool, pRoomEx, nInitDepth + 1);
-    uint32_t nDepth;
-    nDepth = (uint32_t)nInitDepth;
-    if (nDepth <= pRoomEx->fRoomStatus) {
+    int nDepth;
+    nDepth = (int)nInitDepth;
+    if ((uint32_t)nDepth <= (uint32_t)pRoomEx->fRoomStatus) {
       int nRefCheckIndex;
       nRefCheckIndex = 0;
       pnRefCount = pRoomEx->awRoomsInList;
@@ -1800,7 +1800,7 @@ static void AddRoomDataActual(D2RoomExStrc * pRoomEx, uint8_t nInitDepth) {
 
         nRefCheckIndex++;
         pnRefCount++;
-      } while (nRefCheckIndex <= (int)nDepth);
+      } while (nRefCheckIndex <= nDepth);
 
       (*gaRoomExActivationHandlers[nDepth])(pRoomEx);
     }
