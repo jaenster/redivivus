@@ -186,6 +186,17 @@ call where the epilogue lands. Calls into the statically linked CRT are known on
 If the generator's `.cpp.map` source maps (gitignored in this repo) are
 present next to the sources, the `sourcemap` tier reads them and everything
 else only fills gaps; the other tiers need nothing but the tree and the image.
+A checkout without them can rebuild them from the Ghidra database:
+`scripts/mcp_sourcemap.py` takes each function's name, namespace and address
+as the Redivivus MCP server's `list_symbols` serves them (`type: FUNCTION`),
+and writes the address of every function of ours it finds there by namespace
+and name. The database is live and the tree a snapshot of it, so a function
+renamed since the regeneration stays with the other tiers. Symbols of only
+some functions, such as the ones `funcmap.tsv.unmapped` lists, also move pairs
+they do not name: a function they pin can lie inside another file's code,
+where the map pairs nothing by position, or shift a run of look-alikes paired
+by position. `mcp_sourcemap.py --changed` lists the functions whose pair a run
+lost or moved; their symbols, added to the others, pin those the database has.
 
 Two checks keep the map honest. Functions paired by order-blind evidence
 (strings, imports, calls, refs) should also fall in address order within their
@@ -497,6 +508,7 @@ map (`bracket`, `align`) and `tulayout.py` order our functions by source line
 | `scripts/peimage.py`, `refimage.py`, `funcdecode.py` | the original, carved and decoded |
 | `scripts/coffobj.py`, `objfuncs.py`, `ours.py` | our objects |
 | `scripts/funcmap.py` | which original function is which |
+| `scripts/mcp_sourcemap.py` | the `.cpp.map` files, rebuilt from the database's function symbols (the Redivivus MCP server) |
 | `scripts/compare.py`, `audit.py`, `asmdiff.py` | the judgement |
 | `scripts/byte_match_svg.py` | the summary's byte kinds as a bar chart |
 | `scripts/check.py`, `snippet.py` | the inner loop: re-judge a TU, try a variant |
