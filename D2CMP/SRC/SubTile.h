@@ -14,6 +14,19 @@
 typedef uint8_t (__stdcall *pfnRGBToPaletteIndex)(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 #endif
 
+// Data types
+struct __attribute__((packed)) D2GroundSubTileStrc {
+    /* 0x00 */ short nOffsetX; // Sub-tile screen X offset
+    /* 0x02 */ short nOffsetY; // Sub-tile screen Y offset
+    /* 0x04 */ short nTextureCacheIndex; // 1-based index of this subtile's texture-cache node, 0 = not cached; read/written as a signed word (0050fbd3, 0050fce3, 006bba09, 006bbbc3)
+    /* 0x06 */ uint8_t nSubIdxLo; // Sub-tile index low byte (pSubTile[3])
+    /* 0x07 */ uint8_t nSubIdxHi; // Sub-tile index high byte
+    /* 0x08 */ uint16_t wFormat; // DT1 sub-block format word; renderers read it as a word (GLBLOCKS_RenderTileSubBlocks, D3D_RenderTileComponentsToPixelBuffer) and test bit 0 and bit 2 (bit 2 clear = isometric block)
+    /* 0x0A */ uint32_t dwField0A; // Unknown (no reader found)
+    /* 0x0E */ uint16_t wField0E; // Unknown (no reader found)
+    /* 0x10 */ uint8_t * pPixelData; // Pointer to tile pixel/palette data
+};
+
 namespace D2CMP::SRC::SubTile {
 
 // Function declarations

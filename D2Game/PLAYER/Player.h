@@ -50,7 +50,6 @@ namespace D2Game::PLAYER::Player {
 void __fastcall PLAYER_AllocPlayerInteractedArray(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall PLAYERDATA_FreeInteractions(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall STRUCT_FillPlayerUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t dwUnitGUID);
-void PLAYER_FreeAllCorpseUnits(int32_t nParam, ::SGAMEDATA * pGame);
 // Tears down all server-side state for a departing player unit: frees pets, removes from party, frees combat/player-list data, destroys all corpse units in the player's inventory, frees inventory items and inventory struct, releases arena slot, frees interaction state, player data, hover-text, and all event timers.
 void __fastcall PLAYER_FreeAllResources(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall FreePlayers(::SGAMEDATA * pGame);
@@ -100,6 +99,6 @@ struct D2UnitStrc * __fastcall PLAYER_GetActiveWeaponForSkill(struct D2UnitStrc 
 // Recalculates active stat-list flags for dual-wield weapon slots on pUnit. If nParam is non-zero, deactivates stat lists for currently equipped and primary weapons (cleanup pass). Then, if the unit can dual-wield, activates the correct weapon's stat list based on the active-weapon-for-skill selection: primary-only, swap-only, or the dual-wield split. Uses STATLIST_SetItemStatActive(1=active, 0=inactive).
 void __fastcall EQUIPMENT_RecalcDualWieldWeaponStats(struct D2UnitStrc * pUnit, int32_t bResetWeaponStats);
 void __fastcall WEAPON_ApplyEquippedWeaponStats(struct D2UnitStrc * pUnit, int32_t bResetWeaponStats);
-// 6 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
 } // namespace D2Game::PLAYER::Player

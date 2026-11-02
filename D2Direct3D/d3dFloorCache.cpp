@@ -3,7 +3,7 @@
 #include "D2Direct3D/d3dFloorCache.h"
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SpriteCache.h"
-#include "D2Client/D2GfxHelperStrc.h"
+#include "D2CMP/SRC/SubTile.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"

@@ -93,7 +93,6 @@ uint32_t __fastcall SKILLNEC_ValidateCorpseTarget(::SGAMEDATA * pGame, struct D2
 BOOL __fastcall Skills_SrvStFunc_18_AlwaysAllow(::SGAMEDATA * pGame, struct D2UnitStrc * pAttacker, eD2Skills eD2Skill, int nSkillLvl);
 BOOL __fastcall Skills_SrvStFunc_19_IsTargetOutsideTown(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvStFunc_20_IsGroundItemForIronGolem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-BOOL CorpseConsumedCheck(struct D2UnitStrc * pUnit);
 BOOL __fastcall Skills_SrvStFunc_21_IsRevivableCorpse(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 void __fastcall SKILLNEC_OnCurseExpire(struct D2UnitStrc * pUnit, eD2States eState, int32_t dwParam);
 uint32_t __fastcall SKILLNEC_IsReviveOrRaiseSkeleton(eD2Skills eSkill);
@@ -161,6 +160,6 @@ BOOL __fastcall ITEMEVENT_NecroReviveLeech(::SGAMEDATA * pGame, uint32_t nUnitEv
 // Item-event callback that applies the Slows Target item modifier to pTarget. Reads UNITSTAT_item_slow from pUnit's gear, caps it at 50% for players/slow-immune monsters or 90% for normal monsters, then applies STATE_slowed via SetStateWithExpiryTime (750-frame duration) and additionally slows UNITSTAT_attackrate and UNITSTAT_other_animrate by the same amount, triggering an animation-speed update.
 BOOL __fastcall ITEMEVENT_ItemSlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl);
 int32_t __fastcall BloodGolemLifeLeech(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nParam);
-// 6 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
 } // namespace D2Game::SKILLS::SkillNec

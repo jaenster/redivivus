@@ -4908,7 +4908,7 @@ void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, B
       __frame0.local_100c = 0;
       Storm::Source::SReg::SRegLoadValue("Diablo II", "TraceUnfreedMemory", 0, &__frame0.local_100c);
       *(uint32_t*)(char*)&gFogMemoryPoolPadding = __frame0.local_100c;
-      Memory::InitializePoolSystem(nullptr, "Global Pool System", 0x40000);
+      Memory::InitializePoolSystem(nullptr, "Global Pool System", 0x40000, 0x8000);
       SMem::SMemInitPerfCounters();
       iBitIdx = 0;
       do {

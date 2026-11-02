@@ -2,8 +2,8 @@
 
 #include "D2CMP/Pallete.h"
 #include "D2CMP/SRC/LRUCache.h"
+#include "D2CMP/SRC/SubTile.h"
 #include "D2CMP/SRC/TileProjects.h"
-#include "D2Client/D2GfxHelperStrc.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Common/DATATBLS/DataTbls.h"
 #include "Fog/Src/ErrorManager.h"

@@ -2,7 +2,7 @@
 
 #include "D2Glide/glFloorCache.h"
 #include "D2CMP/SRC/LRUCache.h"
-#include "D2Client/D2GfxHelperStrc.h"
+#include "D2CMP/SRC/SubTile.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"

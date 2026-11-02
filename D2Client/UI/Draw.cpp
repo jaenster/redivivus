@@ -5,13 +5,13 @@
 #include "D2CMP/SRC/CelCmp.h"
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SpriteCache.h"
+#include "D2CMP/SRC/SubTile.h"
 #include "D2Client/ButtonWrapper.h"
 #include "D2Client/Core/Archive.h"
 #include "D2Client/D2Client.h"
 #include "D2Client/D2DialogStrc.h"
 #include "D2Client/D2GameViewStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
-#include "D2Client/D2GfxHelperStrc.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Msg.h"
@@ -67,6 +67,11 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+#ifndef RECON_FPTD_fnUnitIterCallback
+#define RECON_FPTD_fnUnitIterCallback
+typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
+#endif
 
 namespace D2Client::UI::Draw {
 

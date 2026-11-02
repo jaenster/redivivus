@@ -163,11 +163,11 @@ void __fastcall STRUCT_FillPlayerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
     UNIT::SUnit::SetAlignment(pUnit, '\x02', 1);
 }
 
-void PLAYER_FreeAllCorpseUnits(int32_t nParam, ::SGAMEDATA * pGame) {
+static void PLAYER_FreeAllCorpseUnits(D2UnitStrc * pPlayer, ::SGAMEDATA * pGame) {
     D2CorpseStrc* pRoomCorpse;
     D2UnitStrc* pUnit;
     D2RoomStrc* pRoom;
-    for (pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(*(D2InventoryStrc**)(nParam + 0x60)); pRoomCorpse; pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse(pRoomCorpse)) {
+    for (pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(pPlayer->pInventory); pRoomCorpse; pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse(pRoomCorpse)) {
       uint32_t dwFindGUID;
       dwFindGUID = D2Common::INVENTORY::Inventory::ROOMCORPSE_GetGUID(pRoomCorpse);
       pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, dwFindGUID);
@@ -184,27 +184,11 @@ void PLAYER_FreeAllCorpseUnits(int32_t nParam, ::SGAMEDATA * pGame) {
 
 // Tears down all server-side state for a departing player unit: frees pets, removes from party, frees combat/player-list data, destroys all corpse units in the player's inventory, frees inventory items and inventory struct, releases arena slot, frees interaction state, player data, hover-text, and all event timers.
 void __fastcall PLAYER_FreeAllResources(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    D2CorpseStrc* pRoomCorpse;
-    D2UnitStrc* pUnit_00;
-    D2RoomStrc* pRoom;
     PlayerPets::FreePets(pGame, pUnit);
     UNIT::Party::PARTY_RemoveUnitFromParty(pGame, pUnit);
     UNIT::PlayerList::PLAYERDATA_FreePlayerList(pGame, pUnit);
     UNIT::SUnitDmg::FreeCombat(pGame, pUnit);
-    for (pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(pUnit->pInventory); pRoomCorpse; pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse(pRoomCorpse)) {
-      uint32_t dwFindGUID;
-      dwFindGUID = D2Common::INVENTORY::Inventory::ROOMCORPSE_GetGUID(pRoomCorpse);
-      pUnit_00 = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, dwFindGUID);
-      if (pUnit_00) {
-        pRoom = D2Common::Units::UNITS_GetRoom(pUnit_00);
-        if (pRoom) {
-          D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, pUnit_00->eUnitType, pUnit_00->nUnitGUID);
-        }
-
-        UNIT::SUnit::FreeServerUnit(pGame, pUnit_00);
-      }
-    }
-
+    PLAYER_FreeAllCorpseUnits(pUnit, pGame);
     UNIT::SUnit::UNITS_FreeInventoryItems(pGame, pUnit);
     D2Common::INVENTORY::Inventory::STRUCT_FreeInventory(pUnit->pInventory);
     GAME::Arena::FreePlayerArena(pGame, pUnit);

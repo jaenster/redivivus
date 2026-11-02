@@ -20,8 +20,6 @@ namespace D2Common::Environment {
 // Function declarations
 struct D2DrlgEnvironmentStrc * __fastcall DRLGENV_AllocEnvironment(struct D2PoolManagerStrc * pMemory);
 void __fastcall DRLGENV_FreeEnvironment(struct D2PoolManagerStrc * pMemory, struct D2DrlgEnvironmentStrc * pDrlgEnvironment);
-// Advances the day/night environment cycle by one tick. Act 2 and 3 have accelerated cycle rates. Updates phase index and intensity when thresholds are crossed.
-struct D2DrlgEnvironmentStrc * DRLGENV_UpdateEnvironmentCycle(struct D2DrlgEnvironmentStrc * pEnvironment, int nActNo);
 // Advances the day/night environment cycle for an act's DRLG environment by one tick and updates lighting. Increments nTicks (with act-specific bias for acts 2/3 and eclipse handling), wraps at nTimeRate*360, and when the tick threshold for the next time-index entry (from aENVIRONMENTDATA1/2/3 tables, chosen by eclipse flag and act) is passed, advances nTimeIndex and stores the new nEnvironmentData. Then recomputes global light intensity and color; forces a fixed sky-blue tint for level 0x78. Returns nonzero (TRUE) if the environment-data value changed this tick, signaling callers to refresh.
 BOOL __stdcall DRLGENV_UpdatePeriodOfDay(struct D2DrlgActStrc * pDrlgAct, struct D2RoomStrc * pRoom);
 // Advances the day/night environment cycle for a DRLG act and reports whether the lighting/sky state changed. Fetches the act's environment struct; increments its tick counter, with act-specific adjustments (act 3 adds 0xF; act 2 adds extra ticks when the current ENVIRONMENTDATA1 phase flag==2) unless an eclipse is active. Wraps ticks at nTimeRate*0x168. Selects the next cycle index (0..5 wrap) from the appropriate ENVIRONMENTDATA table (1=normal, 2=eclipse/act!=3, 3=eclipse act 3); when ticks exceed that phase's duration*rate it advances nTimeIndex and updates nEnvironmentData/nTicks. Returns TRUE if the derived base-time bucket moved more than 0x10, or if env-data or time-index changed; FALSE otherwise. Drives sky color/light cycling in outdoor acts.
@@ -40,6 +38,6 @@ int32_t __stdcall DRLGENV_GetTimeRateFromAct(struct D2DrlgActStrc * pDrlgAct);
 void __stdcall DRLGENV_SetNextTimeRate(struct D2DrlgActStrc * pDrlgAct, struct D2RoomStrc * pRoom);
 void __stdcall DRLGENV_TaintedSunBegin(struct D2DrlgActStrc * pDrlgAct);
 void __stdcall DRLGENV_TaintedSunEnd(struct D2DrlgActStrc * pDrlgAct);
-// 3 internal functions (defined in .cpp)
+// 4 internal functions (defined in .cpp)
 
 } // namespace D2Common::Environment

@@ -20,14 +20,13 @@
 namespace D2Client::Items::ItemMods {
 
 // Sets the socket count on an item unit. Computes the socket cap from the item's grid dimensions (width*height, max 6) and the item's own max socket limit, rolls a random socket count if none supplied, clamps to [1, cap], then sets ITEMFLAG_SOCKETED and UNITSTAT_item_numsockets on the item. Returns the final socket count, or 0 if the item is invalid or has zero area.
-uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t nParam1, uint32_t dwParam2, int32_t nParam12, uint32_t dwParam3, uint32_t nParam2, int32_t nParam22, uint32_t nParam3, uint32_t dwParam4) {
-    uint32_t nDimProduct;
-    uint32_t uVar1;
-    uint32_t nSocketMin;
-    uint32_t nValue;
+uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t dwParam4) {
+    uint8_t* nDimProduct;
+    uint8_t* nSocketMin;
+    uint8_t* nValue;
     uint32_t nWidthOut;
     D2UnitStrc* pItemUnit2 = pUnit2;
-    if (!nParam1) {
+    if (!pProperty) {
       return 0;
     }
     if (pUnit2 && pUnit2->eUnitType == UNIT_ITEM) {
@@ -35,9 +34,9 @@ uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D
       nWidthOut = dwParam1 & 0xffffff;
       pUnit2 = (D2UnitStrc*)((uint32_t)pUnit2 & 0xffffff);
       D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItemUnit2, (char*)((uintptr_t)&nWidthOut + 3), (char*)((uintptr_t)&pUnit2 + 3), "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
-      nDimProduct = ((uint32_t)pUnit2 >> 0x18) * (nWidthOut >> 0x18);
-      nValue = 6;
-      if (nDimProduct < 7) {
+      nDimProduct = (uint8_t*)(((uint32_t)pUnit2 >> 0x18) * (nWidthOut >> 0x18));
+      nValue = (uint8_t*)(void*)0x6;
+      if (nDimProduct < (uint8_t*)0x7) {
         nValue = nDimProduct;
         if (!nDimProduct) {
           return 0;
@@ -45,32 +44,32 @@ uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D
       }
 
       nMaxSockCap = D2Common::ITEMS::Items::ITEM_GetMaxSockCount(pItemUnit2);
-      if (nMaxSockCap <= nValue) {
+      if ((uint8_t*)(uint32_t)nMaxSockCap <= nValue) {
         nMaxSockCap = D2Common::ITEMS::Items::ITEM_GetMaxSockCount(pItemUnit2);
-        nValue = (uint32_t)nMaxSockCap;
+        nValue = (uint8_t*)(uint32_t)nMaxSockCap;
       }
 
-      uVar1 = nParam2;
-      if ((int)nParam2 <= 0) {
-        uVar1 = D2Common::ITEMS::ItemMods::ITEMMOD_RollRandomValue(pItemUnit2, *(int32_t*)(nParam1 + 8), *(int32_t*)(nParam1 + 0xc));
-        if ((int)uVar1 <= 0) {
-          uVar1 = *(uint32_t*)(nParam1 + 4);
+      nDimProduct = (uint8_t*)nRolledValue;
+      if ((int)nRolledValue <= 0) {
+        nDimProduct = (uint8_t*)D2Common::ITEMS::ItemMods::ITEMMOD_RollRandomValue(pItemUnit2, pProperty->fmin, pProperty->fmax);
+        if ((int)nDimProduct <= 0) {
+          nDimProduct = (uint8_t*)pProperty->fparam;
         }
       }
 
-      nSocketMin = uVar1;
-      if ((int)uVar1 <= 1) {
-        nSocketMin = 1;
+      nSocketMin = nDimProduct;
+      if ((int)nDimProduct <= 1) {
+        nSocketMin = (uint8_t*)0x1;
       }
-      if ((int)nSocketMin < (int)nValue && (nValue = uVar1 , (int)uVar1 <= 1)) {
-        nValue = 1;
+      if ((int)nSocketMin < (int)nValue && (nValue = nDimProduct , (int)nDimProduct <= 1)) {
+        nValue = (uint8_t*)0x1;
       } else if ((int)nValue <= 0) {
         return 0;
       }
 
       D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItemUnit2, ITEMFLAG_SOCKETED, 1);
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit2, UNITSTAT_item_numsockets, nValue, 0);
-      return nValue;
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit2, UNITSTAT_item_numsockets, (int32_t)nValue, 0);
+      return (uint32_t)nValue;
     }
 
     return 0;

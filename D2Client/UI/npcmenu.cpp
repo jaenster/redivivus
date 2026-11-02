@@ -3976,8 +3976,8 @@ void __stdcall NPCMENU_RefreshMenuDialog() {
 }
 
 int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nParam, int32_t nScrollState) {
+    D2UnitStrc* pNpcUnit;
     int32_t nMenuIndex;
-    bool bIsInteractableSideNpc;
     gnNpcMenuTradeActionGold = NPCMENU_FindNextUnhandledMessage(gnNpcMenuRepairCostGold);
     if (gnNpcMenuRepairCostGold == 0x251) {
       Sound::SOUND_PlaySound(SOUND_WEAPON_PUNCH_4, nullptr, 0, 0, 0);
@@ -3986,7 +3986,7 @@ int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nParam, int32
       Sound::SOUND_PlaySound(SOUND_ITEM_WOODSHIELD, nullptr, 0, 0, 0);
     }
     if (gnNpcMenuActiveMode == '\x01') {
-      D2UnitStrc* pNpcUnit;
+      bool bVar1;
       if (gnNpcMenuTradeActionGold != -1 && _Interaction::bInteractingWithNpc) {
         pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
         if (pNpcUnit) {
@@ -4021,12 +4021,8 @@ int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nParam, int32
 
       nMenuIndex = NPCMENU_FindMenuIndexByNpcId((int32_t)pNpcUnit);
       if (!nParam || !nScrollState) {
-        if (_Interaction::nCurrentInteractedNpcClassId == 0x92 || _Interaction::nCurrentInteractedNpcClassId == 0x20f || _Interaction::nCurrentInteractedNpcClassId == 0x219 || _Interaction::nCurrentInteractedNpcClassId == 0x21a || _Interaction::nCurrentInteractedNpcClassId == 0x21b || _Interaction::nCurrentInteractedNpcClassId == 0x209 || _Interaction::nCurrentInteractedNpcClassId == 0x10a || _Interaction::nCurrentInteractedNpcClassId == 0x17a || _Interaction::nCurrentInteractedNpcClassId == 0xfb || _Interaction::nCurrentInteractedNpcClassId == 0x179 || _Interaction::nCurrentInteractedNpcClassId == 0x14b || _Interaction::nCurrentInteractedNpcClassId == 0x196 || _Interaction::nCurrentInteractedNpcClassId == 0x198) {
-          bIsInteractableSideNpc = true;
-        } else {
-          bIsInteractableSideNpc = false;
-        }
-        if (!bIsInteractableSideNpc && nMenuIndex >= 0) {
+        bVar1 = inline_NPC_IsInteractableSideNpc(_Interaction::nCurrentInteractedNpcClassId);
+        if (!bVar1 && nMenuIndex >= 0) {
           pNpcUnit = GetInteractedUnit();
           if (pNpcUnit && nMenuIndex < NPC::D2NpcMenuOptionsCount && NPC::D2NpcMenuOptions[nMenuIndex].bEnabled) {
             _Interaction::geNpcUiState = NPCUI_MENU;

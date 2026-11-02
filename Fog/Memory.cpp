@@ -648,7 +648,7 @@ void FreeMemoryPool(D2PoolManagerStrc * pMemory) {
     DeleteCriticalSection(&pGlobalPoolSystem.pSync);
 }
 
-void __stdcall InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int32_t nParam) {
+void InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int32_t nParam, int nUnused) {
     int nSizeClass;
     size_t nBlocksPerRegion;
     uint32_t nRegionSize;
@@ -786,7 +786,7 @@ void * __fastcall Alloc(D2PoolManagerStrc * pMemory, size_t MemSize, char * szFi
       pMemory = pGlobalPoolSystem.pManagers;
     }
     if (!pGlobalPoolSystem.bInit) {
-      InitializePoolSystem(nullptr, "Global Pool System", 0x40000);
+      InitializePoolSystem(nullptr, "Global Pool System", 0x40000, 0x8000);
     }
     if (pMemory->nPoolId) {
       pOverflowResult = POOL_AllocOverflowBlock(pMemory, MemSize, szFile, Line);

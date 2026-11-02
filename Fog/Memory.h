@@ -44,7 +44,7 @@ void * __fastcall ReallocTrackedAllocation(struct D2PoolManagerStrc * pManager, 
 void __fastcall Free(struct D2PoolManagerStrc * pMemory, void * * pStruct, char * szFile, int32_t Line0);
 void InitializeMemoryManagers(struct D2PoolManagerStrc * pMemory);
 void FreeMemoryPool(struct D2PoolManagerStrc * pMemory);
-void __stdcall InitializePoolSystem(struct D2PoolManagerStrc * * pPoolManager, char * szName, int32_t nParam);
+void InitializePoolSystem(struct D2PoolManagerStrc * * pPoolManager, char * szName, int32_t nParam, int nUnused);
 void SetPoolIdForMemoryManager(struct D2PoolManagerStrc * pMemory, int32_t nPoolId);
 DWORD getDwMemory(struct D2PoolManagerStrc * pMemory);
 void * __fastcall Alloc(struct D2PoolManagerStrc * pMemory, size_t MemSize, char * szFile, int32_t Line);

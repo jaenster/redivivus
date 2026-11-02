@@ -1208,7 +1208,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x79_TRADEGOLD(D2ClientStrc * pClient, uint
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 6, pClient);
 }
 
-BOOL SCMD_DetectPositionDesync(int32_t pState, int32_t nNewPos) {
+static BOOL SCMD_DetectPositionDesync(int32_t pState, int32_t nNewPos) {
     int nDelta = nNewPos - *(int*)(pState + 4);
     if (nDelta) {
       if (nDelta < 0) {
@@ -1237,28 +1237,13 @@ static BOOL __stdcall SCMD_CheckMonsterPositionDesync(D2UnitStrc * pUnit, D2Unit
       return 0;
     }
 
-    D2UnitDataItemStrc* pMonsterData = pUnit2->pUnitData.pUnitDataItem;
-    if (!pMonsterData || pMonsterData == (D2UnitDataItemStrc*)-60) {
-      return 0;
-    }
-    if (*(int*)(pMonsterData->wMagicSuffix + 1) == nNewPos) {
+    D2UnitDataPlayerStrc* pDVar1 = pUnit2->pUnitData.pUnitDataPlayer;
+    if (!(pDVar1 && &pDVar1->nOwnerGUID && pDVar1->nNecroPet != nNewPos)) {
       return 0;
     }
 
-    int nDelta = nNewPos - *(int*)(pMonsterData->wMagicSuffix + 1);
-    if (!nDelta) {
-      return 0;
-    }
-    if (nDelta < 0) {
-      nDelta = -nDelta;
-    }
-    if (!(nDelta > 8 || (pMonsterData->nEarLevel++ , pMonsterData->nEarLevel > 6))) {
-      return 0;
-    }
-
-    pMonsterData->nEarLevel = 0;
-    *(int32_t*)(pMonsterData->wMagicSuffix + 1) = nNewPos;
-    return 1;
+    BOOL BVar2 = SCMD_DetectPositionDesync((uintptr_t)&pDVar1->nOwnerGUID, nNewPos);
+    return BVar2;
 }
 
 // Ensures a D2PartyDataStrc entry exists in pUnit2's player-data party list for the unit identified by pUnit, then checks whether the position/life snapshot has changed enough to warrant a network update. Both units must share the same party ID. Allocates a new node from the server memory pool if one is not found. Returns 1 if a state update should be broadcast (area changed, or life delta &gt;8 accumulated 6+ times), 0 otherwise.
@@ -1304,38 +1289,27 @@ static BOOL __stdcall PLAYERDATA_AllocPartyData(D2UnitStrc * pUnit, int32_t nUni
     }
 
     pPartyData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2PartyDataStrc, ".\\GAME\\SCmd.cpp", 0x6fa);
-    if (!pPartyData) {
-      return 0;
+    if (pPartyData) {
+      BOOL BVar1;
+      pPartyData->nUnitGUID = 0;
+      pPartyData->nLifePercent = 0;
+      pPartyData->eLevelId = LEVEL_None;
+      pPartyData->field3_0xc = 0;
+      pPartyData->pPrev = 0;
+      pPartyData->pPrev = pPlayerData->pPartyData;
+      pPlayerData->pPartyData = pPartyData;
+      pPartyData->nUnitGUID = nUnitGUID;
+      check_update_needed:
+      if (pPartyData->eLevelId != eLevel) {
+        pPartyData->nLifePercent = nUnitLife;
+        pPartyData->eLevelId = eLevel;
+        return 1;
+      }
+      BVar1 = SCMD_DetectPositionDesync((int32_t)pPartyData, nUnitLife);
+      return BVar1;
     }
 
-    pPartyData->nUnitGUID = 0;
-    pPartyData->nLifePercent = 0;
-    pPartyData->eLevelId = LEVEL_None;
-    pPartyData->field3_0xc = 0;
-    pPartyData->pPrev = 0;
-    pPartyData->pPrev = pPlayerData->pPartyData;
-    pPlayerData->pPartyData = pPartyData;
-    pPartyData->nUnitGUID = nUnitGUID;
-    check_update_needed:
-    if (pPartyData->eLevelId != eLevel) {
-      pPartyData->nLifePercent = nUnitLife;
-      pPartyData->eLevelId = eLevel;
-      return 1;
-    }
-    nUnitGUID = nUnitLife - pPartyData->nLifePercent;
-    if (!nUnitGUID) {
-      return 0;
-    }
-    if (nUnitGUID < 0) {
-      nUnitGUID = -nUnitGUID;
-    }
-    if (!(nUnitGUID > 8 || (*(char*)&pPartyData->field3_0xc += '\x01' , *(uint8_t*)&pPartyData->field3_0xc > 6))) {
-      return 0;
-    }
-
-    *(uint8_t*)&pPartyData->field3_0xc = 0;
-    pPartyData->nLifePercent = nUnitLife;
-    return 1;
+    return 0;
 }
 
 static BOOL __stdcall SCMD_DispatchUnitPartyData(D2UnitStrc * pUnit, int32_t nUnitLife, eD2LevelId eLevel, D2UnitStrc * pUnit2) {

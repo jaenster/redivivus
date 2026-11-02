@@ -1120,7 +1120,7 @@ static void __stdcall PLRMODES_HandleDepletedAmmoOrThrowable(::SGAMEDATA * pGame
 }
 
 // @sourcefile .\PLAYER\PlrModes.cpp
-void PLRMODES_CheckSwapWeaponSkill(eD2Skills * peSkillId, D2UnitStrc * pUnit) {
+static void PLRMODES_CheckSwapWeaponSkill(eD2Skills * peSkillId, D2UnitStrc * pUnit) {
     eD2Skills eSkillId;
     D2SkillStrc* pSkill = D2Common::Units::GetLeftSkill(pUnit);
     if (pSkill) {
@@ -1211,24 +1211,7 @@ void __fastcall PLRMODES_CheckWeaponQuantityAndDurability(::SGAMEDATA * pGame, D
       return;
     }
 
-    D2SkillStrc* pSkill = D2Common::Units::GetLeftSkill(pUnit);
-    if (pSkill) {
-      aSwappedSkillState[3] = D2Common::Skills::GetOwnerGUID(pSkill);
-      aSwappedSkillState[1] = D2Common::Skills::GetSkillId(pSkill, ".\\PLAYER\\PlrModes.cpp", 0x56e);
-    } else {
-      aSwappedSkillState[3] = -1;
-      aSwappedSkillState[1] = 0;
-    }
-
-    pSkill = D2Common::Units::GetRightSkill(pUnit);
-    if (pSkill) {
-      aSwappedSkillState[2] = D2Common::Skills::GetOwnerGUID(pSkill);
-      aSwappedSkillState[0] = D2Common::Skills::GetSkillId(pSkill, ".\\PLAYER\\PlrModes.cpp", 0x57a);
-    } else {
-      aSwappedSkillState[2] = -1;
-      aSwappedSkillState[0] = 0;
-    }
-
+    PLRMODES_CheckSwapWeaponSkill((eD2Skills*)aSwappedSkillState, pUnit);
     D2UnitStrc* pWeaponItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
     if (pWeaponItem) {
       PLRMODES_HandleDepletedAmmoOrThrowable(pGame, pWeaponItem, pUnit);

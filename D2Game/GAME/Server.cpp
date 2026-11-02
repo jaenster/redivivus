@@ -3419,7 +3419,7 @@ uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePass
     LPCRITICAL_SECTION lpCriticalSection = (LPCRITICAL_SECTION)D2_ALLOC_POOL_AT(nullptr, 0x18, ".\\GAME\\Game.cpp", 0x31c);
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ pGame->lpCriticalSection = lpCriticalSection;
     InitializeCriticalSection(lpCriticalSection);
-    Fog::Memory::InitializePoolSystem(&pGame->pMemoryPool, szGameName, 0x8000);
+    Fog::Memory::InitializePoolSystem(&pGame->pMemoryPool, szGameName, 0x8000, 0x1000);
     memset(pGame->pUnitList, 0, 0x200);
     memset(pGame->pUnitList + 1, 0, 0x200);
     memset(pGame->pUnitList + 2, 0, 0x200);

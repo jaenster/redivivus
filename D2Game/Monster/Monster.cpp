@@ -290,7 +290,7 @@ int32_t __fastcall PlayerMultiplyer2(int32_t nParam) {
 
 // Initialises a D2MonsterLevelDataStrc with player-count and difficulty multipliers for a monster. Queries the current player count (SERVER_GAME_CountPlayers), computes PlayerMultiplyer/2/3, and reads MonsterSkillBonus from the DifficultyLevels txt. Skips scaling for boss/special-aligned monsters (Align != 0) and sets nPlayerMultiplyer3=1 for them instead.
 void __fastcall MONSTER_InitLevelDifficultyScaling(::SGAMEDATA * pGame, D2MonsterLevelDataStrc * pMonsterLevelData, D2RoomStrc * pRoom, D2UnitStrc * pUnit) {
-    uint32_t nPlayer;
+    uint32_t nMultiplier;
     if (!pMonsterLevelData) {
       return;
     }
@@ -309,25 +309,16 @@ void __fastcall MONSTER_InitLevelDifficultyScaling(::SGAMEDATA * pGame, D2Monste
       return;
     }
     if (pMonStatsTxt->Align == '\0') {
-      uint32_t uVar1;
+      uint32_t nPlayer;
       nPlayer = PLAYER::Player::SERVER_GAME_CountPlayers(pGame);
       if ((int)nPlayer < 1) {
         nPlayer = 1;
       }
-      if ((int)nPlayer < 9) {
-        uVar1 = ::PlayerMultiplyer[nPlayer];
-      } else {
-        uVar1 = (nPlayer - 2) * 0x32;
-      }
 
-      pMonsterLevelData->nPlayerMultiplyer = uVar1;
-      if ((int)nPlayer < 9) {
-        uVar1 = ::PlayerMultiplyer2[nPlayer];
-      } else {
-        uVar1 = (nPlayer * 5 + 0x82) * 2;
-      }
-
-      pMonsterLevelData->nPlayerMultiplyer2 = uVar1;
+      nMultiplier = PlayerMultiplyer(nPlayer);
+      pMonsterLevelData->nPlayerMultiplyer = nMultiplier;
+      nMultiplier = PlayerMultiplyer2(nPlayer);
+      pMonsterLevelData->nPlayerMultiplyer2 = nMultiplier;
       pMonsterLevelData->nPlayerMultiplyer3 = nPlayer;
     } else {
       pMonsterLevelData->nPlayerMultiplyer3 = 1;

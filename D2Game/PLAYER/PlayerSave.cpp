@@ -789,7 +789,7 @@ uint8_t * __fastcall PLAYERSAVE_ByteArrayToHexString(uint8_t * pParam, uint8_t *
 
     *pParam = 0x30;
     pParam[1] = 0x78;
-    uint8_t* pOutCursor = pParam + 2;
+    char* pOutCursor = (char*)(pParam + 2);
     do {
       PLAYERSAVE_ByteToHexChar(pOutCursor, *pbParam);
       pOutCursor += 2;
@@ -797,8 +797,8 @@ uint8_t * __fastcall PLAYERSAVE_ByteArrayToHexString(uint8_t * pParam, uint8_t *
       nLength--;
     } while (nLength);
 
-    *pOutCursor = 0;
-    return pOutCursor;
+    *pOutCursor = '\0';
+    return (uint8_t*)pOutCursor;
 }
 
 // Computes a CRC32 over a D2MissilesTxt row for save-file integrity. For rows with packed flags > 0x5B, temporarily zeros out server-side function IDs (pSrvDoFunc/pSrvHitFunc), sub-missiles, sounds, and extra hit flags before hashing, then restores them — ensuring the CRC covers only data that is stable across patches.

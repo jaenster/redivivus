@@ -142,7 +142,7 @@ static D2PetListStrc * __stdcall GetPetListFromId(D2UnitDataPlayerPetsStrc * pPe
 
 // Iterates a player's pet list performing free or kill operations on each entry. If nParam1==0 calls KillHandlerPet (kill path); otherwise locates the pet monster, broadcasts a 0x7A summon-log packet, removes it from the DRLG room, and either frees the server unit (nParam2==0) or executes a Death lifecycle transition and sends a 0x9B merc-revive-cost packet to the client. Decrements nPets2/nMax and frees the D2PetStrc node from the game memory pool on removal.
 // @sourcefile .\PLAYER\PlayerPets.cpp
-static void __stdcall PETS_FreeOrKillPetList(D2UnitStrc * pUnit, D2PetListStrc * pPetList, int32_t nParam1, int32_t nParam2, ::SGAMEDATA * pGame) {
+static void __stdcall PETS_FreeOrKillPetList(D2UnitStrc * pUnit, D2PetListStrc * pPetList, int32_t bIsHireable, int32_t nParam2, ::SGAMEDATA * pGame) {
     D2UnitStrc* pPetUnit;
     D2RoomStrc* pPetRoom;
     uint32_t nReviveCost;
@@ -163,7 +163,7 @@ static void __stdcall PETS_FreeOrKillPetList(D2UnitStrc * pUnit, D2PetListStrc *
       }
 
       pCurPet = pPetStrc->pNext;
-      if (nParam1) {
+      if (bIsHireable) {
         pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pPetStrc->nPetGUID);
         if (pPetUnit) {
           D2PetArgStrc sPetArgs = {0};
@@ -865,7 +865,7 @@ D2UnitDataPlayerPetsStrc * __fastcall PETS_HandleDeadPet(::SGAMEDATA * pGame, D2
 }
 
 // Iterates the player's pet list (pbParam) and removes any pet whose distance from pUnit exceeds nParam tiles. For each live, non-disabled pet node, looks up the monster unit by GUID, computes the 2D distance from the player, and calls RemovePetByGuidAndNotify if too far. Called with custom convention: pGame/pUnit/nParam on stack, pbParam in EAX.
-static void __stdcall PETS_RemoveDistantPets(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nParam, uint8_t * * pbParam) {
+static void __stdcall PETS_RemoveDistantPets(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMaxDistanceSq, uint8_t * * pbParam) {
     eD2UnitType eVar1;
     D2UnitStrc* pPetUnit;
     int32_t nPetPosX;
@@ -923,7 +923,7 @@ static void __stdcall PETS_RemoveDistantPets(::SGAMEDATA * pGame, D2UnitStrc * p
           }
 
           nCalcDist = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nOwnerX, nDist, nPetPosX, nPetPosY);
-          if (nCalcDist > nParam) {
+          if (nCalcDist > nMaxDistanceSq) {
             RemovePetByGuidAndNotify(pGame, pUnit, *(DWORD*)(pCurPetNode + 4), 1);
           }
         }
@@ -1060,18 +1060,18 @@ void __fastcall SendAllyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // Removes all existing pets that share the same PetType group as the incoming pet type nParam. Iterates every PetType entry; for each whose group field matches and whose index differs from nParam, calls SERVER_GetUnitPetByTypeId and then RemovePetByGuidAndNotify in a loop until no more pets of that type remain. Enforces the "only one pet per group" constraint before a new summon is registered.
-static void __stdcall PLAYERPETS_RemoveConflictingPetsByGroup(int32_t nParam, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+static void __stdcall PLAYERPETS_RemoveConflictingPetsByGroup(ePetType nPetType, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     char* pTxtPetTypeBase;
     D2UnitStrc* pConflictingPet;
     D2UnitDataPlayerStrc* pPlayerData;
     int* pPetListEntry;
     int pPetNodeEntry;
-    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && nParam >= 0)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && (int)nPetType >= 0)) {
       return;
     }
 
     int32_t nPetTypeSize = sgptDataTable->nTxtPetTypeSize;
-    D2PetTypeTxt* pPetTypeTxt = nParam < nPetTypeSize ? sgptDataTable->pTxtPetType + nParam : nullptr;
+    D2PetTypeTxt* pPetTypeTxt = (int)nPetType < nPetTypeSize ? sgptDataTable->pTxtPetType + nPetType : nullptr;
     if (!pPetTypeTxt) {
       return;
     }
@@ -1090,7 +1090,7 @@ static void __stdcall PLAYERPETS_RemoveConflictingPetsByGroup(int32_t nParam, ::
     int32_t nTxtPetTypeStride = 0;
     D2DataTableTxtStrc* pDataTable = sgptDataTable;
     do {
-      if (nePetType != nParam && (int)nePetType >= 0 && (int)nePetType < nPetTypeSize) {
+      if (nePetType != nPetType && (int)nePetType >= 0 && (int)nePetType < nPetTypeSize) {
         pTxtPetTypeBase = (char*)&pDataTable->pTxtPetType[nTxtPetTypeStride].petType;
         if (pTxtPetTypeBase && *(short int*)(pTxtPetTypeBase + 8) == wGroup) {
           pConflictingPet = SERVER_GetUnitPetByTypeId(pGame, pUnit, nePetType, 1);

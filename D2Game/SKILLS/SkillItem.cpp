@@ -1820,7 +1820,6 @@ BOOL __fastcall ITEMEVENT_OpenWounds(::SGAMEDATA * pGame, uint32_t nUnitEvent, D
 // Item-event handler that applies the Crushing Blow effect. Reads the chance from ITEM_GetMinimalStatValueShifted and rolls against the unit seed. Computes the divisor (1/4 vs monsters, 1/8 vs bosses/champions, 1/10 vs players/mercs) scaled by player-count multiplier; doubles for open wounds (param1==6). Reduces target HP by (current_HP / divisor) after subtracting physical resistance, clamped to 1 HP minimum. Sets an overlay (0x93) and marks the damage-result struct (pParam+4 |= 2) if the target would die.
 BOOL __fastcall ITEMEVENT_CrushingBlow(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     uint32_t bIsBoss;
-    int nTargetHP;
     uint32_t nNewHP;
     if (!pUnit || !pTarget) {
       return 0;
@@ -1853,17 +1852,14 @@ BOOL __fastcall ITEMEVENT_CrushingBlow(::SGAMEDATA * pGame, uint32_t nUnitEvent,
           nCrushDivisor = 8;
         }
 
-        nTargetHP = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_monster_playercount, 0);
-        if (nTargetHP < 1) {
-          nTargetHP = 1;
+        nChance = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_monster_playercount, 0);
+        if (nChance < 1) {
+          nChance = 1;
         }
-        if (nTargetHP < 9) {
-          nNewHP = ::PlayerMultiplyer[nTargetHP];
-        } else {
-          nNewHP = (nTargetHP - 2) * 0x32;
-        }
-        if (nNewHP) {
-          nChance = D2Client::Stats::D2ApplyPercent(nCrushDivisor, nNewHP, 100);
+
+        nChance = Monster::PlayerMultiplyer(nChance);
+        if (nChance) {
+          nChance = D2Client::Stats::D2ApplyPercent(nCrushDivisor, nChance, 100);
           nCrushDivisor += nChance;
         }
       }
@@ -1872,6 +1868,7 @@ BOOL __fastcall ITEMEVENT_CrushingBlow(::SGAMEDATA * pGame, uint32_t nUnitEvent,
       nCrushDivisor *= 2;
     }
 
+    int nTargetHP;
     nTargetHP = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
     nCrushDivisor = nTargetHP / nCrushDivisor;
     nChance = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_damageresist, 0);

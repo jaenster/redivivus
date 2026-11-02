@@ -22,6 +22,7 @@ struct D2GSPacketSrv0x7F;
 struct D2GSPacketSrv0x81;
 struct D2GSPacketSrv0x82;
 struct D2GSPacketSrv0x8B;
+struct D2GSPacketSrv0x8D;
 struct D2GSPacketSrv0x8E;
 struct D2GSPacketSrv0x90;
 struct D2ItemStatCostTxt;
@@ -65,6 +66,12 @@ struct __attribute__((packed)) D2GSPacketSrv0x40 {
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ eD2ItemFlag eItemFlag;
     /* 0x09 */ BOOL bSet;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x65 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwUnitGUID;
+    /* 0x05 */ uint16_t wKillCount;
 };
 
 struct __attribute__((packed)) D2GSPacketSrv0x74 {

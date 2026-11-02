@@ -277,12 +277,6 @@ struct __attribute__((packed)) D2GSPacketSrv0x63 {
     /* 0x05 */ D2WaypointStrc sWaypoints;
 };
 
-struct __attribute__((packed)) D2GSPacketSrv0x65 {
-    /* 0x00 */ uint8_t nPacketId;
-    /* 0x01 */ uint32_t dwUnitGUID;
-    /* 0x05 */ uint16_t wKillCount;
-};
-
 struct __attribute__((packed)) D2GSPacketSrv0x67 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwMonsterGUID;
@@ -660,7 +654,6 @@ void __fastcall NET_D2GS_SERVER_Send_0x7A_UPDATEPET(struct D2ClientStrc * pClien
 void __fastcall NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(struct D2ClientStrc * pClient, uint8_t bUnused, uint8_t byAction, uint32_t dwPetGUID, uint32_t dwMercUnitGUID, uint16_t wMercType, uint32_t dwOwnerUnitGUID, uint32_t dwMercExperience);
 // Server-to-client gold amount in trade. Opcode 0x79.
 void __fastcall NET_D2GS_SERVER_Send_0x79_TRADEGOLD(struct D2ClientStrc * pClient, uint32_t dwGold, uint8_t nTradeId);
-BOOL SCMD_DetectPositionDesync(int32_t pState, int32_t nNewPos);
 // Server-to-client ally/party info update. Always sends 0x7F (ally party info: GUID, life%, level).
 // If target is player and > 50 units away, appends 0x90 (automap position: GUID, X, Y).
 // Dual-packet system for efficiency: nearby allies get minimal update, distant players get automap sync.
@@ -810,6 +803,6 @@ void __fastcall Send0x9CItemToCursor(struct D2ClientStrc * pClient, struct D2Uni
 void __fastcall Send0x9CItemHandleInShop(struct D2ClientStrc * pClient, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pUnit, uint8_t cParam);
 BOOL __fastcall STRING_CheckIfStringLengthDoNotExceedSize(char * szText, int32_t nMaxLength);
 void __fastcall thunk_NET_D2GS_SERVER_Send_0x5A_EventMessages(struct D2ClientStrc * pClient, struct D2Packet0x5aEventStructure * pEventPacket);
-// 4 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace D2Game::GAME::SCmd

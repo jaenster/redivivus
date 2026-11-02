@@ -7368,14 +7368,13 @@ void __stdcall DRAW_UI_StatWindow_I() {
 
 void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnitGUID, char * pQuestBuffer, uint8_t nActionType) {
     short int nMessage;
+    bool bVar1;
     D2GSPacketSrv0x27_TextStrc* pOverheadTextPtr;
     BOOL bMonInteractFlag;
     D2UnitStrc* pPlayerUnit_lcl;
     uint16_t wMsgType0;
     uint32_t dwMsgType;
-    bool bInteractableSideNpc;
     int32_t nLine;
-    int nNpcClassId2;
     short int wMsgType1;
     if (nUpdateType == 6) {
       D2Common::QuestRecord::ReadQuestRecordFromBuffer(gpNpcMenuBitBuffer, pQuestBuffer, 0x60, 0);
@@ -7469,20 +7468,17 @@ void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnit
       return;
     }
 
-    nNpcClassId2 = pNpcUnit->nClassId;
-    bMonInteractFlag = DataTbls::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nNpcClassId2, interact);
+    nLine = pNpcUnit->nClassId;
+    bMonInteractFlag = DataTbls::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nLine, interact);
     if (!bMonInteractFlag) {
       npcmenu::NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
       SetUIFlag(UI_NPCMENU, UI_RESET, 0);
       gnNpcMenuShopMode = 0;
       return;
     }
-    if (nNpcClassId2 == 0x92 || nNpcClassId2 == 0x20f || nNpcClassId2 == 0x219 || nNpcClassId2 == 0x21a || nNpcClassId2 == 0x21b || nNpcClassId2 == 0x209 || nNpcClassId2 == 0x10a || nNpcClassId2 == 0x17a || nNpcClassId2 == 0xfb || nNpcClassId2 == 0x179 || nNpcClassId2 == 0x14b || nNpcClassId2 == 0x196 || nNpcClassId2 == 0x198) {
-      bInteractableSideNpc = true;
-    } else {
-      bInteractableSideNpc = false;
-    }
-    if (bInteractableSideNpc) {
+
+    bVar1 = npcmenu::inline_NPC_IsInteractableSideNpc(nLine);
+    if (bVar1) {
       _Interaction::bInteractingWithNpc = 1;
       _Interaction::nCurrentInteractedNpcGUID = pNpcUnit->nUnitGUID;
       _Interaction::nCurrentInteractedNpcClassId = pNpcUnit->nClassId;

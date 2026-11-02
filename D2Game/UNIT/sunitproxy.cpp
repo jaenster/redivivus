@@ -146,21 +146,21 @@ void __fastcall SUNITPROXY_AddItemToNpcProxy(D2UnitStrc * pNpcUnit, ::SGAMEDATA 
 }
 
 // @sourcefile .\UNIT\sunitproxy.cpp
-static void SUNITPROXY_InitNpcTradeItems(int32_t nParam1, ::SGAMEDATA * pGame, void * * pParam) {
+static void SUNITPROXY_InitNpcTradeItems(int32_t nNpcTableIdx, ::SGAMEDATA * pGame, void * * pParam) {
     void* nNpcTradeIdx;
-    if (nParam1 >= 0x11) {
+    if (nNpcTableIdx >= 0x11) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa4);
       exit(-1);
     }
 
-    pParam[1] = (void*)gaNpcItemTables[nParam1].nTradeCount;
-    nNpcTradeIdx = D2_ALLOC_POOL_AT(pGame->pMemoryPool, gaNpcItemTables[nParam1].nTradeCount * 0xc, ".\\UNIT\\sunitproxy.cpp", 0xa8);
+    pParam[1] = (void*)gaNpcItemTables[nNpcTableIdx].nTradeCount;
+    nNpcTradeIdx = D2_ALLOC_POOL_AT(pGame->pMemoryPool, gaNpcItemTables[nNpcTableIdx].nTradeCount * 0xc, ".\\UNIT\\sunitproxy.cpp", 0xa8);
     *pParam = nNpcTradeIdx;
-    memcpy(nNpcTradeIdx, gaNpcItemTables[nParam1].pTradeItems, gaNpcItemTables[nParam1].nTradeCount * 0xc);
-    pParam[3] = (void*)gaNpcItemTables[nParam1].nQuestCount;
-    nNpcTradeIdx = D2_ALLOC_POOL_AT(pGame->pMemoryPool, gaNpcItemTables[nParam1].nQuestCount * 4, ".\\UNIT\\sunitproxy.cpp", 0xab);
+    memcpy(nNpcTradeIdx, gaNpcItemTables[nNpcTableIdx].pTradeItems, gaNpcItemTables[nNpcTableIdx].nTradeCount * 0xc);
+    pParam[3] = (void*)gaNpcItemTables[nNpcTableIdx].nQuestCount;
+    nNpcTradeIdx = D2_ALLOC_POOL_AT(pGame->pMemoryPool, gaNpcItemTables[nNpcTableIdx].nQuestCount * 4, ".\\UNIT\\sunitproxy.cpp", 0xab);
     pParam[2] = nNpcTradeIdx;
-    memcpy(nNpcTradeIdx, gaNpcItemTables[nParam1].pQuestItems, gaNpcItemTables[nParam1].nQuestCount * 4);
+    memcpy(nNpcTradeIdx, gaNpcItemTables[nNpcTableIdx].pQuestItems, gaNpcItemTables[nNpcTableIdx].nQuestCount * 4);
 }
 
 // Server-side init of the game's NPC control table. Allocates the D2GameNpcControlStrc and its 0x1100-byte NPC array from the game pool, seeds its RNG from the game seed, and iterates every monstats.txt row: for each monster flagged as an NPC (npc bit), allocates a player-style inventory, assigns a control-table slot (max 64, halts via ErrorManager if exceeded), and copies init data (flags/name) from the static gpNpcControlInitTable. For trade-enabled NPCs (flag==1) it dispatches on monster id to SUNITPROXY_InitNpcTradeItems with the per-vendor store index and marks the slot tradeable/repair. Stores the result in pGame->pNpcControl. __fastcall(pGame).

@@ -257,7 +257,7 @@ BOOL __fastcall Skills_SrvStFunc_20_IsGroundItemForIronGolem(::SGAMEDATA * pGame
     return (uint32_t)!pTarget;
 }
 
-BOOL CorpseConsumedCheck(D2UnitStrc * pUnit) {
+static BOOL CorpseConsumedCheck(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
@@ -286,27 +286,8 @@ BOOL __fastcall Skills_SrvStFunc_21_IsRevivableCorpse(::SGAMEDATA * pGame, D2Uni
     if (!pTarget) {
       return 0;
     }
-    if (!(pTarget && pTarget->eUnitType == UNIT_MONSTER)) {
-      return 0;
-    }
 
-    BOOL bIsCorpse = D2Client::UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pTarget->nClassId, TXTMonStats2Field0x04DWORD_ns::revive);
-    if (!bIsCorpse) {
-      return 0;
-    }
-
-    bIsCorpse = UNIT::SUnit::CheckForModeZeroDeath(pTarget);
-    if (!bIsCorpse) {
-      return 0;
-    }
-
-    uint32_t nRevivable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTarget, 0);
-    if (!nRevivable) {
-      return 0;
-    }
-
-    bIsCorpse = SkillsServer::D2CheckCorpseConsumed(pTarget, 7);
-    return (uint32_t)(bIsCorpse != 0);
+    CorpseConsumedCheck(pTarget);
 }
 
 void __fastcall SKILLNEC_OnCurseExpire(D2UnitStrc * pUnit, eD2States eState, int32_t dwParam) {
@@ -1825,27 +1806,8 @@ BOOL __fastcall Skills_SrvDoFunc_058_ReviveCorpseCheck(::SGAMEDATA * pGame, D2Un
     if (!pTarget) {
       return 0;
     }
-    if (!(pTarget && pTarget->eUnitType == UNIT_MONSTER)) {
-      return 0;
-    }
 
-    BOOL bCheckResult = D2Client::UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pTarget->nClassId, TXTMonStats2Field0x04DWORD_ns::revive);
-    if (!bCheckResult) {
-      return 0;
-    }
-
-    bCheckResult = UNIT::SUnit::CheckForModeZeroDeath(pTarget);
-    if (!bCheckResult) {
-      return 0;
-    }
-
-    uint32_t nCorpseConsumable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTarget, 0);
-    if (!nCorpseConsumable) {
-      return 0;
-    }
-
-    bCheckResult = SkillsServer::D2CheckCorpseConsumed(pTarget, 7);
-    return (uint32_t)(bCheckResult != 0);
+    CorpseConsumedCheck(pTarget);
 }
 
 // Server-side skill DoFunc 60 (Necromancer golem summon at cursor, e.g. Blood/Clay/Iron/Fire golem). Resolves the cursor/target position, finds a valid non-town room nearby (DRLGROOM_FindBetterNearbyRoom). Resolves the summon's monster class id and pettype via SKILLS_GetSummonMonsterClassId, then creates the golem with SKILL_CreateSummon at the target position. On success: assigns the caster as minion owner (AssignMinionOwner), applies umods (InitUmods) and summon buffs (SKILLNEC_ApplySummonBuffs), registers it in the targets node table. If the golem's room is not in town and a server missile (srvmissilea) is configured with calc[1]/2 > 1, fires two CreatingMissile missiles perpendicular to the caster-to-golem vector (an emerge/spawn effect), each retargeted to the golem GUID. Returns 1 on full success (missiles spawned), 0 on failure or invalid target. Side effect: sets UNITFLAG_SKSRVDOFUNC on caster.

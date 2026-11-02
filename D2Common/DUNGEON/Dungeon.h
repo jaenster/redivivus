@@ -9,6 +9,7 @@
 #include "d2_platform.h"
 
 // Forward declarations
+struct D2ClientStrc;
 struct D2CoordStrc;
 struct D2DrlgActStrc;
 struct D2DrlgCoordsStrc;

@@ -476,7 +476,7 @@ eD2ServerIncomingStatus __fastcall PlayerScreen_DispatchAction(::SGAMEDATA * pGa
     (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_ToggleHostile,
     nullptr,
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SendPartyInvite,
-    (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SetMutualPlayerRelationship,
+    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SetMutualPlayerRelationship,
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_AcceptPartyInvite,
     (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::CallPlayerEventForEachPlayer
 }; D2_STATIC_GUARD(g_PlayerScreenActionTable, "D2Game::PLAYER::PlayerScreen::PlayerScreen_DispatchAction::g_PlayerScreenActionTable");

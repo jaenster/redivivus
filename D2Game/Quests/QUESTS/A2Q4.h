@@ -41,8 +41,6 @@ void __fastcall Q12_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, 
 BOOL __fastcall Q12_SetCannotComplete(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // A2Q4 - CheckArcaneAndReward. Per-player iterator callback: the actual quest-COMPLETE grant. If not already Completed(0)/RewardAwaits(1) and the player is standing in LEVEL_ArcaneSanctuary, sets the full completion bit set on the record: JustCompleted(0xd), RewardAwaits(1), Completed(0), clears all step bits, then re-sets Step0x08+Step0x07; finally propagates completion to every party member via Q12_SetArcaneCompleteOnPartyMember.
 BOOL __fastcall Q12_CheckArcaneAndReward(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-// A2Q4 - SequenceFilter (inlined real body). Runs the sequence filter of the chained follow-up quest (nSequenceQuestId = The Summoner): looks up that quest's data and invokes its fpSequenceFilter. Halts via ErrorManager if the function pointer is a bad code ptr.
-bool __fastcall Q12_SequenceFilterInlined(struct D2QuestDataStrc * pQuestData);
 // A2Q4 - SequenceFilter (entry). On first activation (stateFlag==0 and intro done) sets stateFlag 1, then chains into the sequence quest (The Summoner) by calling its fpSequenceFilter. Halts via ErrorManager if the fn ptr is bad.
 bool __fastcall Q12_SequenceFilter(struct D2QuestDataStrc * pQuestData);
 // A2Q4 - Callback_13 (load/sync handler). Reconstructs in-memory quest stateFlag from the persisted record on game load. If TaintedSun Completed(0) -> mark journal fields. If Sanctuary Completed(0) or RewardAwaits(1): set record JustCompleted(0xd) and mark journal done. If player holds the quest item -> stateFlag 1. Else map step bits to stateFlag: Step0x05->4/4, Step0x04->4/3, Step0x03->3/3, Step0x02->2/2. Also checks HoradricStaff Completed(0) to mark the journal entry.
@@ -74,6 +72,6 @@ BOOL __fastcall OBJOP_A2Q4_StaffOfKingsAltar(struct D2ObjectOperateFnArg * pOper
 void __fastcall Objects_InitFn29(struct D2ObjectInitFnArg * pInitArg);
 // A2Q4 - SetObjectOperateState. Toggles the two paired Sanctuary-portal substate fields when an object is operated. nParam 0x4a: if Cellar field unset, set it to 1 and mark portal substate 2. nParam 0x36: if portal substate unset, set portal 1 and Cellar field 2. Keeps the Cellar<->Sanctuary portal pair consistent. No quest-record writes.
 void __fastcall Q12_SetObjectOperateState(::SGAMEDATA * pGame, int32_t nParam);
-// 1 internal function (defined in .cpp)
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Game::Quests::QUESTS::A2Q4

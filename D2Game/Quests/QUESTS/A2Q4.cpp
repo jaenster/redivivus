@@ -460,7 +460,7 @@ BOOL __fastcall Q12_CheckArcaneAndReward(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // A2Q4 - SequenceFilter (inlined real body). Runs the sequence filter of the chained follow-up quest (nSequenceQuestId = The Summoner): looks up that quest's data and invokes its fpSequenceFilter. Halts via ErrorManager if the function pointer is a bad code ptr.
-bool __fastcall Q12_SequenceFilterInlined(D2QuestDataStrc * pQuestData) {
+static bool __fastcall Q12_SequenceFilterInlined(D2QuestDataStrc * pQuestData) {
     D2QuestDataStrc* pQuestData_00 = GetQuestDataByQuestNoInternal(pQuestData->pGame, pQuestData->nSequenceQuestId);
     if (pQuestData_00) {
       BOOL BVar2 = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
@@ -483,18 +483,7 @@ bool __fastcall Q12_SequenceFilter(D2QuestDataStrc * pQuestData) {
     }
 
     QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x35a);
-    D2QuestDataStrc* pQuestData_00 = GetQuestDataByQuestNoInternal(pQuestData->pGame, pQuestData->nSequenceQuestId);
-    if (!pQuestData_00) {
-      return true;
-    }
-
-    BOOL BVar1 = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
-    if (BVar1) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34e);
-      exit(-1);
-    }
-
-    pQuestData_00->fpSequenceFilter(pQuestData_00);
+    Q12_SequenceFilterInlined(pQuestData);
     return true;
 }
 

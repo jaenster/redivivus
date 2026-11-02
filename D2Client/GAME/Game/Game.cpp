@@ -1896,7 +1896,7 @@ void __stdcall GAME_InitClientSide() {
     gLevelLoadInProgress = 0;
     gClickModifierDown = 0;
     memset(&gClientGameData, 0, 0x80);
-    Fog::Memory::InitializePoolSystem(&gClientGameData.gpClientPoolManager, "Client Pool System", 0x40000);
+    Fog::Memory::InitializePoolSystem(&gClientGameData.gpClientPoolManager, "Client Pool System", 0x40000, 0x1000);
     UNIT::Player::HANDSHAKE_SetClientPlayerUnit(nullptr);
     GAMEDATA_CheckColorTxtOverride();
     if (!D2GameView) {
