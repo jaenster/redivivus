@@ -166,14 +166,14 @@ uint32_t __stdcall TILEPROJECT_GetTileOrientationIndex(uint32_t * pnOrientationI
     return *pnOrientationIndex;
 }
 
-int __stdcall TILEPROJECT_GetRoofHeightIndex(int32_t nParam) {
-    if (!nParam) {
+int __stdcall TILEPROJECT_GetRoofHeightIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {
+    if (!pTileLibraryEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x80);
       exit(-1);
     }
 
-    return *(int*)(nParam + 8);
-    return *(int*)(nParam + 8);
+    return pTileLibraryEntry->nHeight;
+    return pTileLibraryEntry->nHeight;
 }
 
 BYTE * __stdcall TILE_GetTileFlags(D2TileLibraryEntryStrc * pTileLibraryEntry) {

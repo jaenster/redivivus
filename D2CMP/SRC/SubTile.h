@@ -22,8 +22,8 @@ char * __fastcall SUBTILE_CompressToRLE(char * pDataStart, char * * ppCompressed
 void __fastcall SUBTILE_AllocAndCompress(uint32_t * pRawData, int bIsRaw);
 void __fastcall SUBTILE_ConvertToIndexed(uint32_t * pDstFrame, uint32_t * pSrcFrame, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex);
 char * __stdcall SUBTILE_ConvertRGBToIndexed(char * pSrcRGBData, uint32_t nRGBDataSize, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex);
-void __stdcall SUBTILE_ExtractIsometricPixels(int32_t pSubTileEntry, int32_t pSrcPixelData);
-void __fastcall SUBTILE_RecompressExisting(int32_t pSubTileEntry);
+void __stdcall SUBTILE_ExtractIsometricPixels(struct D2GroundSubTileStrc * pSubTileEntry, uint8_t * pSrcPixelData);
+void __fastcall SUBTILE_RecompressExisting(struct D2GroundSubTileStrc * pSubTileEntry);
 void __fastcall CELCMP_CompressAllFramesWithColorKey(int32_t pSrcCelFile, int32_t pDstCelFile, uint32_t dwColorKey, uint8_t * pfnGetPaletteIndex);
 // 3 internal functions (defined in .cpp)
 

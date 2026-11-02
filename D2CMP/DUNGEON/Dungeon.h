@@ -25,7 +25,7 @@ uint32_t __stdcall TILEPROJECT_GetTileDataPtr(int32_t nParam);
 uint32_t __stdcall TILEPROJECT_GetAnimatedTileDataPtr(int32_t nParam);
 int32_t __stdcall GetSubIndex(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 uint32_t __stdcall TILEPROJECT_GetTileOrientationIndex(uint32_t * pnOrientationIndex);
-int __stdcall TILEPROJECT_GetRoofHeightIndex(int32_t nParam);
+int __stdcall TILEPROJECT_GetRoofHeightIndex(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 BYTE * __stdcall TILE_GetTileFlags(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 
 } // namespace D2CMP::DUNGEON::Dungeon

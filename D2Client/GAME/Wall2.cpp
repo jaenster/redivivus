@@ -1147,7 +1147,7 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
       int nScreenYAdj;
       do {
         pTileLibEntry = pTileData->pTileLibraryEntry;
-        nRoofHeightIdx2 = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetRoofHeightIndex((int32_t)pTileLibEntry);
+        nRoofHeightIdx2 = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetRoofHeightIndex(pTileLibEntry);
         D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160(pTileData->nScreenX, pTileData->nScreenY, &nIsoX, &nIsoY);
         nRoofHeightIdx = nIsoY - 1;
         nIsoY = nRoofHeightIdx;
@@ -1186,7 +1186,7 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
     nTileIdx = 0;
     if (nTileCount > 0) {
       do {
-        nRoofHeightIdx2 = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetRoofHeightIndex((int32_t)pTileData->pTileLibraryEntry);
+        nRoofHeightIdx2 = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetRoofHeightIndex(pTileData->pTileLibraryEntry);
         D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160(pTileData->nScreenX, pTileData->nScreenY, &nIsoY, &nIsoX);
         nRoofHeightIdx = nIsoX - 1;
         nIsoX = nRoofHeightIdx;

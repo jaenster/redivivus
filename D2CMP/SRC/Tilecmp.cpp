@@ -1114,7 +1114,7 @@ static void __stdcall TILECMP_CompressSubTile(uint32_t * pSrcSubTile, uint32_t *
               exit(-1);
             }
 
-            SubTile::SUBTILE_RecompressExisting((int32_t)pDstSubTile);
+            SubTile::SUBTILE_RecompressExisting((D2GroundSubTileStrc*)pDstSubTile);
             return;
           }
         }
