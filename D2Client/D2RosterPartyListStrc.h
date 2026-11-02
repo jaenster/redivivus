@@ -13,7 +13,7 @@ struct D2RosterStrc;
 
 // Data types
 struct D2RosterPartyListStrc {
-    /* 0x00 */ short nPartyId;
+    /* 0x00 */ uint16_t nPartyId;
     /* 0x02 */ uint8_t field_0x2;
     /* 0x03 */ uint8_t field_0x3;
     /* 0x04 */ struct D2RosterStrc * pOwner;

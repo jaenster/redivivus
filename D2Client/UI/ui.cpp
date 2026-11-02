@@ -1463,7 +1463,6 @@ void __stdcall UI_DrawPartyRoster() {
     // Static local variables (originally global data)
     static uint32_t gnPartyRosterRowHeight = 0x13; D2_STATIC_GUARD(gnPartyRosterRowHeight, "D2Client::UI::ui::UI_DrawPartyRoster::gnPartyRosterRowHeight");
 
-    uint16_t wPartyId;
     uint16_t* pwszLabel;
     char* pszRosterName;
     uint16_t* pwszPartyLabel;
@@ -1480,7 +1479,7 @@ void __stdcall UI_DrawPartyRoster() {
     D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xfa4), 0x96, 0x37, 4, 0);
     int iVar1 = gnPartyRosterRowHeight * 2 + 0x1e;
     do {
-      int16_t nPartyId;
+      uint16_t nPartyId;
       if (!pRoster) {
         return;
       }
@@ -1496,14 +1495,14 @@ void __stdcall UI_DrawPartyRoster() {
       }
 
       nPartyId = GAME::Roster::GetRosterPartyId(pRoster);
-      if (nPartyId == -1) {
+      if (nPartyId == 0xffff) {
         pwszPartyLabel = D2Lang::StrTable::strtable::GetLocaleString(0xfaf);
       } else {
         wszPartyIdNum[0] = L'\0';
         wszPartyIdNum[1] = L'\0';
         wszPartyIdNum[2] = L'\0';
-        wPartyId = GAME::Roster::GetRosterPartyId(pRoster);
-        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPartyIdText, "%d", (uint32_t)wPartyId);
+        nPartyId = GAME::Roster::GetRosterPartyId(pRoster);
+        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPartyIdText, "%d", (uint32_t)nPartyId);
         D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszPartyIdNum, szPartyIdText, 2);
         pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xfb0);
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszPartyText, pwszLabel);

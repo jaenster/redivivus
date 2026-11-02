@@ -331,7 +331,7 @@ static D2RosterStrc * ROSTER_SortByLevel(D2RosterStrc * pRoster) {
 }
 
 // @sourcefile .\GAME\Roster.cpp
-void AllocRosterPartyList(int16_t nPartyId) {
+void AllocRosterPartyList(uint16_t nPartyId) {
     D2RosterPartyListStrc* pNewParty;
     D2RosterPartyListStrc* pPartyIter = pRosterPartyList;
     while (true) {
@@ -413,7 +413,7 @@ void __stdcall ROSTER_SortPartyListsByPartyId() {
         pInsertAfter = 0;
         do {
           pScanNode = pScan;
-          if ((uint16_t)pRosterPartyList->nPartyId < (uint16_t)pScanNode->nPartyId) {
+          if (pRosterPartyList->nPartyId < pScanNode->nPartyId) {
             break;
           }
 
@@ -436,13 +436,13 @@ void __stdcall ROSTER_SortPartyListsByPartyId() {
 }
 
 // Promotes the party entry matching nPartyId to the front of pRosterPartyList, then within that party's pOwner chain promotes the roster node matching nRosterGUID to the front. Used to prioritize a specific player in the party display order. No-ops if nPartyId is -1 or the entries are not found.
-static void __stdcall ROSTER_MoveRosterPlayerToFrontOfParty(int16_t nPartyId, int32_t nRosterGUID) {
+static void __stdcall ROSTER_MoveRosterPlayerToFrontOfParty(uint16_t nPartyId, int32_t nRosterGUID) {
     D2RosterStrc* pCurrent;
     D2RosterStrc* pPrevious;
     D2RosterStrc* pNext;
     D2RosterPartyListStrc* pList = pRosterPartyList;
     D2RosterPartyListStrc* pPrevParty = 0;
-    if (nPartyId == -1) {
+    if (nPartyId == 0xffff) {
       return;
     }
 
@@ -657,10 +657,10 @@ D2RosterStrc * __fastcall GetRosterByGUID(int32_t nRosterGUID) {
     return pRoster;
 }
 
-int16_t __fastcall GetRosterPartyId(D2RosterStrc * pRoster) {
+uint16_t __fastcall GetRosterPartyId(D2RosterStrc * pRoster) {
     int nMemberCount = 0;
     if (!(pRoster && gpRosterPlayers)) {
-      return -1;
+      return 0xffff;
     }
 
     D2RosterStrc* pCurrent = gpRosterPlayers;
@@ -673,7 +673,7 @@ int16_t __fastcall GetRosterPartyId(D2RosterStrc * pRoster) {
     } while (pCurrent);
 
     if (nMemberCount <= 1) {
-      return -1;
+      return 0xffff;
     }
 
     return pRoster->nPartyId;

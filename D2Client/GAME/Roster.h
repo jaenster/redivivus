@@ -57,7 +57,7 @@ char * __fastcall GetRosterName(struct D2RosterStrc * pRoster);
 // Insertion-sorts a singly-linked D2RosterStrc list ascending by szRosterName (lexicographic). Builds a new sorted list by walking the original and inserting each node at its comparison position. Returns the sorted head, or NULL on NULL input.
 struct D2RosterStrc * __stdcall ROSTER_SortByName(struct D2RosterStrc * pRoster);
 // @sourcefile .\GAME\Roster.cpp
-void AllocRosterPartyList(int16_t nPartyId);
+void AllocRosterPartyList(uint16_t nPartyId);
 // @sourcefile .\GAME\Roster.cpp
 void __stdcall FreeRosterPartyList();
 // Insertion-sorts the global pRosterPartyList singly-linked list ascending by nPartyId. Rebuilds the list in-place by relinking pNext pointers and reassigns the global head when done. No allocation; operates on the existing D2RosterPartyListStrc chain.
@@ -74,7 +74,7 @@ int32_t __fastcall ROSTER_GetArenaScore(struct D2RosterStrc * pRoster);
 uint32_t __fastcall GetRosterLevel(struct D2RosterStrc * pRoster);
 int32_t __fastcall GetRosterCharType(struct D2RosterStrc * pRoster);
 struct D2RosterStrc * __fastcall GetRosterByGUID(int32_t nRosterGUID);
-int16_t __fastcall GetRosterPartyId(struct D2RosterStrc * pRoster);
+uint16_t __fastcall GetRosterPartyId(struct D2RosterStrc * pRoster);
 int16_t __fastcall GetUnitPartyId(struct D2UnitStrc * pUnit);
 uint32_t __fastcall ROSTER_GetLootFlag(struct D2RosterStrc * pRoster);
 uint32_t __fastcall ROSTER_GetListenFlag(struct D2RosterStrc * pRoster);

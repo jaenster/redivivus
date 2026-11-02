@@ -2774,7 +2774,7 @@ void __stdcall AUTOMAP_DrawPlayersAndParty() {
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    int16_t nMemberPartyId;
+    uint16_t nMemberPartyId;
     D2RosterStrc* pRoster = GAME::Roster::GetNextRosterPlayer(nullptr);
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     int* pNumRooms = &__frame0.nRoomCount;
@@ -2794,8 +2794,8 @@ void __stdcall AUTOMAP_DrawPlayersAndParty() {
       } while (i < nNumRooms);
     }
 
-    int16_t nMyPartyId = GAME::Roster::GetRosterPartyId(pRoster);
-    if (!(nMyPartyId != -1 && nAutoMapParty)) {
+    uint16_t nMyPartyId = GAME::Roster::GetRosterPartyId(pRoster);
+    if (!(nMyPartyId != 0xffff && nAutoMapParty)) {
       return;
     }
 

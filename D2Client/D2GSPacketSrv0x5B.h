@@ -16,7 +16,7 @@ struct __attribute__((packed)) D2GSPacketSrv0x5B {
     /* 0x07 */ uint8_t nCharType;
     /* 0x08 */ char szPlayerName[16];
     /* 0x18 */ short nPlayerLevel;
-    /* 0x1A */ short nPartyId;
+    /* 0x1A */ uint16_t nPartyId;
     /* 0x1C */ short nUnused;
     /* 0x1E */ short bInParty;
     /* 0x20 */ short nGuildFlags;

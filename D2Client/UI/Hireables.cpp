@@ -750,13 +750,13 @@ static BOOL __stdcall UI_DrawPartyMembersHirelingIcons(int * pnY, int * pnYOffse
     uint32_t nPlayerGUID;
     int nIconDrawX;
     bool bDrewAny = false;
-    int16_t nPartyId = UNIT::CUnit::GetPlayerUnitPartyId(pUnit);
+    uint16_t nPartyId = UNIT::CUnit::GetPlayerUnitPartyId(pUnit);
     if (!pUnit) {
       nPlayerGUID = -1;
     } else {
       nPlayerGUID = pUnit->nUnitGUID;
     }
-    if (!(nPartyId != -1 && !gnHireDisplayMode)) {
+    if (!(nPartyId != 0xffff && !gnHireDisplayMode)) {
       return 0;
     }
 
@@ -766,7 +766,7 @@ static BOOL __stdcall UI_DrawPartyMembersHirelingIcons(int * pnY, int * pnYOffse
     }
 
     for (; pRoster; pRoster = GAME::Roster::GetNextRosterPlayer(pRoster)) {
-      int16_t nRosterPartyId;
+      uint16_t nRosterPartyId;
       nRosterPartyId = GAME::Roster::GetRosterPartyId(pRoster);
       if (nPartyId == nRosterPartyId) {
         nRosterGUID = GAME::Roster::GetRosterGUID(pRoster);

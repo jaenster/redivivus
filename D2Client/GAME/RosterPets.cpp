@@ -260,13 +260,13 @@ int __fastcall ROSTER_GetPetOwnershipRelation(int32_t nRosterGUID) {
     }
 
     D2RosterStrc* pRoster = Roster::GetRosterByGUID(nPlayerGUID);
-    int16_t nMyPartyId = Roster::GetRosterPartyId(pRoster);
-    if (nMyPartyId == -1) {
+    uint16_t nMyPartyId = Roster::GetRosterPartyId(pRoster);
+    if (nMyPartyId == 0xffff) {
       return 0;
     }
 
     pRoster = Roster::GetRosterByGUID(pPet->nOwnerGUID);
-    int16_t nOwnerPartyId = Roster::GetRosterPartyId(pRoster);
+    uint16_t nOwnerPartyId = Roster::GetRosterPartyId(pRoster);
     if (nMyPartyId != nOwnerPartyId) {
       return 0;
     }

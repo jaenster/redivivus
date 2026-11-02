@@ -341,8 +341,8 @@ void __thiscall UI_DrawPartyButtonLabelText(int32_t eButtonType, int32_t nBaseY,
 void __stdcall UI_DrawPartyLeaveButton() {
     D2RosterStrc* pRoster = GAME::Roster::GetNextRosterPlayer(nullptr);
     D2Win::Src::D2WinFont::SetAndReturnLastFont(0);
-    int16_t nPartyId = GAME::Roster::GetRosterPartyId(pRoster);
-    if (nPartyId != -1) {
+    uint16_t nPartyId = GAME::Roster::GetRosterPartyId(pRoster);
+    if (nPartyId != 0xffff) {
       UI_DrawPartyButtonFrame(pMenu_partybuttons, 0xe3, 0, 0x23);
       ui::UI_DrawTextCentered(gnPanelOffsetX + 0xe3, 0x21 - gnPanelOffsetY, gnPanelOffsetX + 0x118, D2Lang::StrTable::strtable::GetLocaleString(0x1038), 2);
     }
@@ -632,8 +632,8 @@ void __stdcall DRAW_UI_PartyWindow_II() {
     D2UiPartyStrc* pUiPartyGlobal = pUiParty;
     D2RosterStrc* pRoster = GAME::Roster::GetNextRosterPlayer(nullptr);
     cRed = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0, 0);
-    int16_t nPartyId = GAME::Roster::GetRosterPartyId(pRoster);
-    if (nPartyId != -1) {
+    uint16_t nPartyId = GAME::Roster::GetRosterPartyId(pRoster);
+    if (nPartyId != 0xffff) {
       nTmp = ui::GetMouseX();
       nTmpX = ui::GetMouseY();
       if (nTmp >= gnPanelOffsetX + 0xe3 && nTmp <= gnPanelOffsetX + 0x118 && nTmpX >= 0x18 - gnPanelOffsetY && nTmpX <= 0x23 - gnPanelOffsetY) {
@@ -1356,9 +1356,9 @@ void __stdcall INPUT_PartyScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
     int nMouseY;
     nMouseY = ui::GetMouseY();
     if (nMouseX < gnPanelOffsetX + 0x116 || nMouseX > gnPanelOffsetX + 0x136 || nMouseY < 0x185 - gnPanelOffsetY || nMouseY > 0x1a5 - gnPanelOffsetY) {
-      int16_t nPartyId;
+      uint16_t nPartyId;
       bIsInTown = UI_CheckMouseInRectangle(0xe3, 0x23, 0x35, 0xb);
-      if (!bIsInTown || (nPartyId = GAME::Roster::GetRosterPartyId(pRosterPlayer) , nPartyId == -1)) {
+      if (!bIsInTown || (nPartyId = GAME::Roster::GetRosterPartyId(pRosterPlayer) , nPartyId == 0xffff)) {
         if (gpWaypointButtonHover) {
           pRosterPlayer = GAME::Roster::GetNextRosterPlayer(pRosterPlayer);
           while (pRosterPlayer && pUiParty) {
@@ -1503,7 +1503,7 @@ static void __stdcall UI_DrawPartyMemberLevel(uint32_t nCharLevel, int32_t dwCol
 
 void __stdcall UI_DrawPartyMembers() {
     D2UiPartyStrc* pUiParty;
-    int16_t nPartyIdCheck;
+    uint16_t nPartyIdCheck;
     BOOL bHasHostile;
     int32_t dwColor;
     int nMemberIndex;
@@ -1511,14 +1511,14 @@ void __stdcall UI_DrawPartyMembers() {
     pUiParty = Party::pUiParty;
     int32_t nY = 0x5a;
     D2RosterStrc* pRoster = GAME::Roster::GetNextRosterPlayer(nullptr);
-    int16_t nMyPartyId = GAME::Roster::GetRosterPartyId(pRoster);
+    uint16_t nMyPartyId = GAME::Roster::GetRosterPartyId(pRoster);
     pRoster = GAME::Roster::GetNextRosterPlayer(pRoster);
     for (nMemberIndex = 0; pUiParty && (dwColor = 0 , pRoster != 0) && nMemberIndex < 8; nMemberIndex++) {
-      int16_t nPartyId;
+      uint16_t nPartyId;
       bSameParty = false;
       nPartyId = GAME::Roster::GetRosterPartyId(pRoster);
       nPartyIdCheck = GAME::Roster::GetRosterPartyId(pRoster);
-      if (nPartyIdCheck != -1) {
+      if (nPartyIdCheck != 0xffff) {
         if (nMyPartyId == nPartyId) {
           dwColor = 2;
           bSameParty = true;
@@ -1533,7 +1533,7 @@ void __stdcall UI_DrawPartyMembers() {
       }
 
       D2Win::Src::D2WinFont::SetAndReturnLastFont(0);
-      UI_DrawPartyMemberName((D2UiPartyStrc*)pUiParty->szPlayerName, nY, dwColor, (uint32_t)(nPartyId != -1));
+      UI_DrawPartyMemberName((D2UiPartyStrc*)pUiParty->szPlayerName, nY, dwColor, (uint32_t)(nPartyId != 0xffff));
       UI_DrawPartyMemberClass(nY + 0xc, pUiParty->nCharType, dwColor);
       UI_DrawPartyMemberLevel(pUiParty->nCharLevel, dwColor, nY + 0xc);
       if (bSameParty && pUiParty->eLevelId != LEVEL_None) {
