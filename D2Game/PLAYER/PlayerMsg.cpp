@@ -1005,12 +1005,12 @@ static eD2ServerIncomingStatus __stdcall ItemIsOfPlayerAndNotOnCursor(uint32_t n
     return (uint32_t)(pCursorItem_lcl != pItem);
 }
 
-uint8_t __stdcall MONSTER_SetAlignmentCallback(D2UnitStrc * pUnit, int32_t nGridOffset) {
-    if (nGridOffset != 4 && nGridOffset != 5) {
+uint8_t __stdcall PLRMSG_CheckWeaponSlotEmpty(D2UnitStrc * pUnit, int32_t nBodyLoc) {
+    if (nBodyLoc != 4 && nBodyLoc != 5) {
       return 3;
     }
 
-    D2UnitStrc* pBodyItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pUnit->pInventory, nGridOffset);
+    D2UnitStrc* pBodyItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pUnit->pInventory, nBodyLoc);
     return !pBodyItem;
 }
 
@@ -3592,18 +3592,18 @@ eD2ServerIncomingStatus __fastcall SCMD_0x47_CommandMercenary(::SGAMEDATA * pGam
     return (eD2ServerIncomingStatus)nResult;
 }
 
-// C2S packet 0x48 handler (1 byte): [opcode:1]. Clears the dwTradeTick lock on D2UnitDataPlayerStrc+0x4C. Acts as a client acknowledgment that trade state has been processed. Validates dwTradeTick is non-zero before clearing. Prevents trade state corruption by requiring explicit client confirmation before unlocking player actions.
-eD2ServerIncomingStatus __fastcall SCMD_0x48_ConfirmTradeTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x48_TransmogrifyItem * pPacket, uint32_t nSize) {
+// C2S 0x48 (1 byte), sent by the client's ExitGamePlayCutScene 0x00482ef0 when an act cutscene ends; clears the cutscene-pending flag at player data +0x4c that the server set before S2C 0x61.
+eD2ServerIncomingStatus __fastcall SCMD_0x48_CutsceneOver(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x48_TransmogrifyItem * pPacket, uint32_t nSize) {
     if (nSize != 1) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    if (!pPlayerData->dwTradeTick) {
+    if (!pPlayerData->bCutscenePending) {
       return SERVERSTATUS_BAD_DATA;
     }
 
-    Player::PLAYER_ClearTradeTick(pUnit);
+    Player::PLAYER_ClearCutsceneFlag(pUnit);
     return SERVERSTATUS_OK;
 }
 

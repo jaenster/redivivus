@@ -71,7 +71,7 @@ BOOL __fastcall CheckIfPlayerCanAffordCost(::SGAMEDATA * pGame, struct D2UnitStr
 // @sourcefile .\UNIT\SUNITNPC.CPP
 void __fastcall SUNITNPC_ApplyScrollSkill(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nQuantityUsed);
 bool __fastcall SUNITNPC_CheckNpcCanSellItem(::SGAMEDATA * pGame, struct D2UnitStrc * pNpcUnit, struct D2UnitStrc * pUnit);
-void __fastcall SUNITNPC_ReturnOne(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nGoldAmount);
+void __fastcall SUNITNPC_GiveGoldOrDrop(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nGoldAmount);
 // Handles post-purchase NPC item refresh. For gamble mode (nBuyMode==2) with a personal NPC inventory, scans the player's carried items and refreshes the matching gamble item via SUNITNPC_RefreshNpcItem. Otherwise checks if the NPC can still sell the item; if not, refills the NPC's inventory slot via SUNITNPC_FillNpcInventory.
 void __fastcall SUNITNPC_DeductGoldForPurchase(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * param_1, struct D2UnitStrc * pPlayerRaw, int32_t nBuyMode);
 // Checks the hireling slot array for an NPC (indexed by nNpcClassId via D2HirelingTxt name range). If all slots with valid entries are unfilled (count==0), frees the slot array, clears the pointer and a flags byte, then re-initialises the NPC's hireling inventory via SUNITNPC_InitNpcInventory. Halts if the hireling entry or name range is invalid.

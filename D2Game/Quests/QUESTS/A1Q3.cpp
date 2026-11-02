@@ -425,7 +425,7 @@ void __fastcall Q03_Callback06_Unused(D2QuestDataStrc * pQuestData, D2QuestArgSt
 
 // Already documented.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q3.cpp
-BOOL __fastcall OBJOP_A1Q3_DenOfEvil_CheckCompletion(D2ObjectOperateFnArg * pOperation) {
+BOOL __fastcall OBJOP_A1Q3_UseMalus(D2ObjectOperateFnArg * pOperation) {
     eD2ObjectAnimMode ePlayerAnimMode;
     D2ObjectOperateFnArg* pOperationLocal;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_ToolsOfTheTrade);

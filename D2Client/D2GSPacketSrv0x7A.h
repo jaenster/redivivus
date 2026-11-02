@@ -12,8 +12,8 @@
 struct __attribute__((packed)) D2GSPacketSrv0x7A {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nAction;
-    /* 0x02 */ uint8_t nSkillID;
-    /* 0x03 */ short nSummonType;
+    /* 0x02 */ uint8_t nPetType;
+    /* 0x03 */ short wClassId;
     /* 0x05 */ int nPlayerGUID;
     /* 0x09 */ int nSummonGUID;
 };

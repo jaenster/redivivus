@@ -207,20 +207,20 @@ uint32_t UNITMODE_CanInterruptSkill(D2UnitStrc * pUnit) {
     return 1;
 }
 
-BOOL __fastcall HandleMessage(int32_t pTargetUid, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pMessage, int32_t nParam) {
+BOOL __fastcall HandleMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pMessage, int32_t nParam) {
     BOOL nResult;
     switch (pUnit->eUnitType) {
       case UNIT_PLAYER:
-        nResult = Player::PlayerMessage(pTargetUid, pUnit, pMessage, nParam);
+        nResult = Player::PlayerMessage(nMessageType, pUnit, pMessage, nParam);
       return nResult;
       case UNIT_MONSTER:
-        Monster::MonsterMessage(pTargetUid, pUnit, pMessage);
+        Monster::MonsterMessage(nMessageType, pUnit, pMessage);
       return 1;
       case UNIT_OBJECT:
-        Object::ObjectMessage(pTargetUid, pUnit, pMessage);
+        Object::ObjectMessage(nMessageType, pUnit, pMessage);
       return 1;
       case UNIT_ITEM:
-        ItemMessage(pTargetUid, pUnit, (D2ServerMessageHandleStrc*)pMessage->nSkillId, pMessage->nItemId);
+        ItemMessage(nMessageType, pUnit, (D2ServerMessageHandleStrc*)pMessage->nSkillId, pMessage->nItemId);
     }
 
     return 1;

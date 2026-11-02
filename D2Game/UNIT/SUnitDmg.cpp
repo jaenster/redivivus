@@ -3089,17 +3089,17 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
     return 0;
 }
 
-uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pDefUnit, int32_t nAttackRating, int32_t bRollBlock) {
+uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pDefUnit, int32_t bIsMissile, int32_t bRollBlock) {
     uint32_t uBlockResult;
     if (!bRollBlock) {
-      uBlockResult = DAMAGE_CheckDefenseEvasion(nAttackRating, pDefUnit, pUnit);
+      uBlockResult = DAMAGE_CheckDefenseEvasion(bIsMissile, pDefUnit, pUnit);
       return uBlockResult;
     }
 
     int bExpansion = pGame->bExpansion;
     int nBlockRate = D2Common::Units::GetBlockRate(pDefUnit, bExpansion);
     if (nBlockRate <= 0) {
-      uBlockResult = DAMAGE_CheckDefenseEvasion(nAttackRating, pDefUnit, pUnit);
+      uBlockResult = DAMAGE_CheckDefenseEvasion(bIsMissile, pDefUnit, pUnit);
       return uBlockResult;
     }
     if (pDefUnit && pDefUnit->eUnitType == UNIT_PLAYER) {
@@ -3117,7 +3117,7 @@ uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, D2UnitStrc 
     D2UnitStrc* nRandRoll = pDefUnit;
     nullsub_4Arg(SUnit::GetGamePointer(pUnit), pUnit, nRandRoll, nBlockRate, nSeedMod, nDebugAddr);
     if (nSeedMod >= nBlockRate) {
-      uBlockResult = DAMAGE_CheckDefenseEvasion(nAttackRating, pDefUnit, pUnit);
+      uBlockResult = DAMAGE_CheckDefenseEvasion(bIsMissile, pDefUnit, pUnit);
       return uBlockResult;
     }
 

@@ -115,7 +115,7 @@ void __fastcall WARDEN_CbAllocModuleStruct(uint32_t nSize);
 void __fastcall WARDEN_CbFreeModuleStruct(void * pParam);
 // @sourcefile .\WARDEN\WardenClient.cpp
 LPVOID * __thiscall WARDEN_DestroyModuleObject(LPVOID * ppModule, uint8_t bFreeStruct);
-uint32_t __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t pModuleRequest);
+uint32_t __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t nSize);
 void __thiscall SendPacket(::WardenClient * pThis, void * pData, uint32_t nLen);
 bool __thiscall CheckModule(::WardenClient * pThis, uint8_t * pModuleHash, void * pRc4Key);
 void __thiscall LoadModule(::WardenClient * pThis, uint8_t * pModuleHash, void * pData, uint32_t nSize);

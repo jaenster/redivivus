@@ -351,7 +351,7 @@ D2NET_SERVER_D2GS_ClientToServer NET_D2GS_SERVER_INCOMING[103] = {
         /* .field1_0x4 = */ 0x0
     },
     {
-        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x48_ConfirmTradeTick,
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x48_CutsceneOver,
         /* .field1_0x4 = */ 0x1
     },
     {
@@ -1209,7 +1209,7 @@ D2SkillSrvDoFunc SKILLSRVDOFUNCS[191] = {
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillDruid::Skills_SrvDoFunc_120_FeralRage,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillDruid::Skills_SrvDoFunc_121_Rabies,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillDruid::Skills_SrvDoFunc_122_Hunger,
-    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillDruid::Skills_SrvDoFunc_123_Tornado,
+    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillDruid::Skills_SrvDoFunc_123_Volcano,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillDruid::Skills_SrvDoFunc_124_Armageddon,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillEMonst::Skills_SrvDoFunc_125_CatapultFireBomb,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillEMonst::Skills_SrvDoFunc_126_ImpInferno,
@@ -1232,7 +1232,7 @@ D2SkillSrvDoFunc SKILLSRVDOFUNCS[191] = {
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_143_ChargeRelease_GroundStrike,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillSor::Skills_SrvDoFunc_144_Hydra,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillDruid::Skills_SrvDoFunc_145_Hurricane,
-    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillDruid::Skills_SrvDoFunc_146_CycloneArmor,
+    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillDruid::Skills_SrvDoFunc_146_ArmageddonTick,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillEMonst::Skills_SrvDoFunc_147_ReturnToOwner,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_148_FireMissileBodyPart10,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_149_FireMissileBodyPart11,
@@ -1352,7 +1352,7 @@ D2ObjectOperateFnFunc OBJECTSOPERATEFN[101] = {
     &D2Game::Objects::ObjectsMode::OBJOP_DestroyDestructible,
     &D2Game::Objects::ObjectsMode::OBJOP_SpawnExceptionalItemDrop,
     &D2Game::Objects::ObjectsMode::OBJOP_SpawnNormalItemDrop,
-    &D2Game::Quests::QUESTS::A1Q3::OBJOP_A1Q3_DenOfEvil_CheckCompletion,
+    &D2Game::Quests::QUESTS::A1Q3::OBJOP_A1Q3_UseMalus,
     &D2Game::Objects::ObjectsMode::OBJOP_ActivateHealingWell,
     &D2Game::Objects::ObjectsMode::OBJOP_ActivateWaypoint,
     &D2Game::Quests::QUESTS::A2Q3::OBJOP_A2Q3_ActivateHoradricStaffAltar,

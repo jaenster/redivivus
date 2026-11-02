@@ -113,7 +113,7 @@ int32_t __fastcall SKILLS_GetValueByLevelBreakpoints(int32_t nLevel, int * pLeve
 int32_t __stdcall SERVER_MinDamage(struct D2UnitStrc * pUnit, int32_t eSkillId, int32_t nSkillLevel, BOOL bApplyMastery);
 int32_t __stdcall SERVER_MaxDamage(struct D2UnitStrc * pUnit, int32_t eSkillId, int32_t nSkillLevel, int32_t bApplyElemBonus);
 // Computes the synergy duration/length bonus for a skill at a given level. Uses the ELevLen breakpoint array (three tiers: levels 1-8, 9-16, 17+) to compute a scaled length offset added to ELen, then optionally evaluates ELenSymPerCalc formula for a percent modifier. Used to calculate e.g. cold duration granted by a synergy skill. Returns 0 if skill or level is invalid.
-int32_t __stdcall SERVER_Synergy1(struct D2UnitStrc * pUnit, int32_t eSkillId, int32_t nSkillLevel, int32_t nUnused);
+int32_t __stdcall SKILLS_GetElementalLength(struct D2UnitStrc * pUnit, int32_t eSkillId, int32_t nSkillLevel, int32_t nUnused);
 int32_t __stdcall SKILLS_GetCharClassFromSkillId(int32_t eSkillId);
 uint32_t __stdcall SKILLS_GetCharClassFromSkillId_Validated(int32_t eSkillId, int * pOutCharClass);
 int32_t __stdcall SKILL_GetQuantity(struct D2SkillStrc * pSkill);

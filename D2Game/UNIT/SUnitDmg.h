@@ -145,7 +145,7 @@ uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(int32_t nParam, uint32_t * pnPar
 // Checked BEFORE block/dodge/avoid/evade (all independent rolls).
 BOOL __fastcall DAMAGE_RollAttackHit(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, int32_t bIsRangedAttack);
 void __fastcall DAMAGE_CalculateAndApplyDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim, struct D2DamageStrc * pDamage, uint8_t byScale);
-uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pDefUnit, int32_t nAttackRating, int32_t bRollBlock);
+uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pDefUnit, int32_t bIsMissile, int32_t bRollBlock);
 // Applies missile hit damage to all units within nRadius of (nCenterX,nCenterY) that pass targeting checks. Builds a UnitFind result set (flags nUnitFlags, default 0x583), skips the owner and owner-owner unless bHitOwner/bHitOwnerOwner are set, requires line-of-sight (COLLISION_LOS), optionally filters through pfnProc callback, then calls MISSMODE_ApplyMissileHitDamage for each hit. Returns 1 if any unit was hit, 0 otherwise.
 void __fastcall DAMAGE_ApplyAreaOfEffectDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nCenterX, int32_t nCenterY, int32_t nRadius, struct D2DamageStrc * pDamage, BOOL bHitOwner, BOOL bHitOwnerOwner, pfnAoEDamageFilter pfnProc, int32_t nUnitFlags);
 void __fastcall DAMAGE_AddSkillBonusDamage(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, struct D2DamageStrc * param_1);

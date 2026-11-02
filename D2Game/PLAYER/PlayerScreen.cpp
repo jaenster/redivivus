@@ -104,7 +104,7 @@ static void __stdcall SendPlayerInfo(uint16_t wRelationFlag, uint32_t nRelationS
 }
 
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall PARTYSCREEN_TogglePlayerSquelch(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t bNewState, uint32_t dwParam) {
+void __fastcall PARTYSCREEN_SetCorpseLootPermission(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t bNewState, uint32_t dwParam) {
     uint32_t bIsConnected;
     uint8_t nPartyEventCode;
     uint8_t bEventType;
@@ -266,7 +266,7 @@ void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * 
 // @caveat neither has xrefs (both are dispatch-table entries), so which one Blizzard called
 // 'AcceptPartyInvite' is inferred from behaviour, not proven. What would settle it: the party-screen
 // packet handler table that references them, or the SendPlayerEvent event-code enum (6 vs 8).
-void __fastcall PARTYSCREEN_SetMutualPlayerRelationship(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pInvitee, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall PARTYSCREEN_CancelPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pInvitee, uint32_t dwUnused1, uint32_t dwUnused2) {
     uint32_t nInviterGUID;
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pInvitee);
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pInvitee, pUnit);
@@ -341,7 +341,7 @@ void __fastcall SendPlayerPartyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
     GAME::SCmd::NET_D2GS_SERVER_Send_0x75_UPDATEROSTER(pTarget, pUnit);
 }
 
-void __fastcall CallPlayerEventForEachPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, uint32_t dwParam2, uint32_t dwParam3) {
+void __fastcall PARTYSCREEN_LeaveParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, uint32_t dwParam2, uint32_t dwParam3) {
     uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
     UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)PARTY_SendPlayerLeftEvent, (BOOL)(uintptr_t)pUnit);
     UNIT::Party::PARTY_RemoveUnitFromParty(pGame, pUnit);
@@ -450,7 +450,7 @@ void __fastcall PARTYSCREEN_ToggleHostile(::SGAMEDATA * pGame, D2UnitStrc * pUni
           return;
         }
 
-        CallPlayerEventForEachPlayer(pGame, pUnit, 0, 0, (uint32_t)&bWantHostile);
+        PARTYSCREEN_LeaveParty(pGame, pUnit, 0, 0, (uint32_t)&bWantHostile);
         return;
       }
 
@@ -470,15 +470,15 @@ eD2ServerIncomingStatus __fastcall PlayerScreen_DispatchAction(::SGAMEDATA * pGa
     // Static local variables (originally global data)
     static pfnPartyScreenAction g_PlayerScreenActionTable[10] = {
     nullptr,
-    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_TogglePlayerSquelch,
+    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SetCorpseLootPermission,
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_UpdateMuteRelation,
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_UpdateSquelchRelation,
     (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_ToggleHostile,
     nullptr,
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SendPartyInvite,
-    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SetMutualPlayerRelationship,
+    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_CancelPartyInvite,
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_AcceptPartyInvite,
-    (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::CallPlayerEventForEachPlayer
+    (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_LeaveParty
 }; D2_STATIC_GUARD(g_PlayerScreenActionTable, "D2Game::PLAYER::PlayerScreen::PlayerScreen_DispatchAction::g_PlayerScreenActionTable");
 
     int nError = 0;

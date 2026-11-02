@@ -968,7 +968,7 @@ BOOL __fastcall OBJOP_A5Q6_TyraelPortalToEnd(D2ObjectOperateFnArg * pOperation) 
         nTradeTick = PLAYER::Player::GetPlayerTradeTickOrBusy(pOperation->pAttacker);
         if (!nTradeTick) {
           UNIT::SUnit::ClearInteractInfo(pOperation->pAttacker);
-          pPlayerData->dwTradeTick = 1;
+          pPlayerData->bCutscenePending = 1;
           GAME::SCmd::NET_D2GS_SERVER_Send_0x61_CanGoToAct(pClient, 7);
           /* SetQuestState(QUEST_EveOfDestruction, 0xa=Step0x10) — mark "returned to
                          town via Tyrael's portal" */ D2Common::QuestRecord::SetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Step0x10);

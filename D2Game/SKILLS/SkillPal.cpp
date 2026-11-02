@@ -1095,7 +1095,7 @@ BOOL __fastcall SKILPAL_SrvStFn35_Vengeance(::SGAMEDATA * pGame, D2UnitStrc * pU
 
       nRandDmg = D2Client::Stats::D2ApplyPercent(nRandDmg, nMasteryCalc, 100);
       sDamage.dwLtngDamage += nRandDmg;
-      nRandDmg = D2Common::Skills::SERVER_Synergy1(pUnit, eSkill_00, nSkillLvl, 1);
+      nRandDmg = D2Common::Skills::SKILLS_GetElementalLength(pUnit, eSkill_00, nSkillLvl, 1);
       sDamage.dwColdLength += nRandDmg;
       nRandDmg = D2Common::Skills::SKILL_GetParam1(pSkill);
       switch (nRandDmg) {

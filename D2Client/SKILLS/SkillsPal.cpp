@@ -288,8 +288,8 @@ BOOL __fastcall Skills_CltDoFunc_Pal_RandomRadiusMissileField(D2UnitStrc * pUnit
     return 0;
 }
 
-// Client-side particle FX: draws a fading trail of charge particles behind a moving unit (e.g. Charge/Leap). Gets the unit's current skill and screen velocity via PATH_GetScreenVelocity; bails if velocity Y sign doesn't match nDirectionFlag (selects above- vs below-ground trail half). Normalizes velocity to a length-15 step, walks SKILL_GetParam3 frames backward through the unit's animation frames, and at each step calls DRAW_WORLD_Unit_1 to render nParticleType at an interpolated offset (perspective-corrected when D2GFX perspective is active). Restores the unit's original gfx frame before returning.
-void __fastcall SKILL_DrawChargeTrail(D2UnitStrc * pUnit, uint32_t nParticleType, int32_t nDirectionFlag) {
+// Client-side particle FX: draws a fading trail of charge particles behind a moving unit (e.g. Charge/Leap). Gets the unit's current skill and screen velocity via PATH_GetScreenVelocity; bails if velocity Y sign doesn't match nDirectionFlag (selects above- vs below-ground trail half). Normalizes velocity to a length-15 step, walks SKILL_GetParam3 frames backward through the unit's animation frames, and at each step calls DRAW_WORLD_Unit_1 to redraw the unit at an interpolated offset, passing nGamma through as its EDX gamma/brightness byte (perspective-corrected when D2GFX perspective is active). Restores the unit's original gfx frame before returning.
+void __fastcall SKILL_DrawChargeTrail(D2UnitStrc * pUnit, uint32_t nGamma, int32_t nDirectionFlag) {
     uint32_t bPerspective;
     uint32_t nRandDir;
     int nWorldOffsetXOrY;
@@ -394,7 +394,7 @@ void __fastcall SKILL_DrawChargeTrail(D2UnitStrc * pUnit, uint32_t nParticleType
 
         nDrawY = nWorldOffsetXOrY - nWorldOffsetY;
         nTrailCount = nRandDir - nDrawX;
-        Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nParticleType, nTrailCount, nDrawY, (D2GamePalShiftGreenBloodStrc*)0x1, 0);
+        Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nGamma, nTrailCount, nDrawY, (D2GamePalShiftGreenBloodStrc*)0x1, 0);
         nNormStepY += nNormVelX;
         nNormStepX += nAbsVelY;
         nAccumY -= nAbsVelX;

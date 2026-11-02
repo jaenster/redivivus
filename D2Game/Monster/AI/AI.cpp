@@ -13629,9 +13629,9 @@ void __fastcall AITHINK_Fn0_Raven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // Tail-calls MONSTERAI_ExecuteLifecycleTransition (already fixed to return int32_t) as its final statement, dropping the result.
-int32_t __fastcall MONSTERAI_CommandWalkToUnitWithCombat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pWalkTarget, uint8_t bySkillMode, int32_t nPathType) {
+int32_t __fastcall MONSTERAI_CommandWalkToUnitWithCombat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pWalkTarget, uint8_t nSteps, int32_t nPathType) {
     D2MonsterKillStrc killCtx;
-    ApplyCombatAndMonStats(pUnit, nPathType, 0, bySkillMode);
+    ApplyCombatAndMonStats(pUnit, nPathType, 0, nSteps);
     MonsterMode::SetCurrentSkill(pUnit, Walk, &killCtx);
     D2Common::PATH::DynamicPath::SetStepNum(pUnit->pPath.pDynamicPath, 1);
     killCtx.pAttacker = pWalkTarget;

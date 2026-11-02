@@ -751,14 +751,14 @@ static BOOL __stdcall WARDEN_ResolveAndLoadModule(void * pRc4Key, uint8_t * pMod
     return bCacheReadSuccess;
 }
 
-uint32_t __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t pModuleRequest) {
+uint32_t __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t nSize) {
     _FILETIME fileTime;
     if (!sgpUnknownSequence) {
       return 0;
     }
 
     /* LPFILETIME lpSystemTimeAsFileTime for GetSystemTimeAsFileTime */ GetSystemTimeAsFileTime(&fileTime);
-    BOOL bResult = sgpUnknownSequence->pfnCacheWriteData(szKey, pData, pModuleRequest, (int*)&fileTime, -1, -1);
+    BOOL bResult = sgpUnknownSequence->pfnCacheWriteData(szKey, pData, nSize, (int*)&fileTime, -1, -1);
     return bResult;
 }
 

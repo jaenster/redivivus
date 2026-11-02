@@ -646,7 +646,7 @@ int32_t __stdcall PLAYERMSG_GetMessagePriority(uint32_t nParam);
 eD2ServerIncomingStatus __thiscall SERVER_IsItemOnCursor(void * pThis, struct D2UnitStrc * pUnit, uint32_t dwItemGUID);
 eD2ServerIncomingStatus __thiscall IsPlayerTheOwner(void * pThis, struct D2UnitStrc * pOwner, uint32_t nItemGid);
 eD2ServerIncomingStatus __thiscall ItemBelongsToUnit(void * pThis, struct D2UnitStrc * pOwner, uint32_t nItemGid);
-uint8_t __stdcall MONSTER_SetAlignmentCallback(struct D2UnitStrc * pUnit, int32_t nGridOffset);
+uint8_t __stdcall PLRMSG_CheckWeaponSlotEmpty(struct D2UnitStrc * pUnit, int32_t nBodyLoc);
 eD2ServerIncomingStatus __thiscall ItemBelongsToInventoryOf(void * pThis, struct D2UnitStrc * pPlayer, uint32_t nItemGid);
 int32_t __stdcall MONSTER_FindNearbyAllyUnit(::SGAMEDATA * pGame, int32_t bCheckRange, struct D2UnitStrc * * ppUnit, struct D2UnitStrc * pUnit, DWORD nUnitId);
 // C->S Packet 0x01 - Walk to XY (5 bytes)
@@ -884,8 +884,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x45_Unused(::SGAMEDATA * pGame, struct 
 eD2ServerIncomingStatus __fastcall SCMD_0x46_NpcInteractMerc(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x46_NpcInteractMerc * pPacket, uint32_t nSize);
 // C2S packet 0x47 handler (13 bytes): [opcode:1][mercGUID:u32][targetX:u16][pad:2][targetY:u16][pad:2]. Issues an AI command to the player's mercenary. Validates the unit is the player's hired merc (PETTYPE_hireable), player is within 50 units of target coords, then resets AI state and injects a new command with the target coordinates. Sent when player directs their merc to a location.
 eD2ServerIncomingStatus __fastcall SCMD_0x47_CommandMercenary(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x47_CommandMercenary * pPacket, uint32_t nSize);
-// C2S packet 0x48 handler (1 byte): [opcode:1]. Clears the dwTradeTick lock on D2UnitDataPlayerStrc+0x4C. Acts as a client acknowledgment that trade state has been processed. Validates dwTradeTick is non-zero before clearing. Prevents trade state corruption by requiring explicit client confirmation before unlocking player actions.
-eD2ServerIncomingStatus __fastcall SCMD_0x48_ConfirmTradeTick(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x48_TransmogrifyItem * pPacket, uint32_t nSize);
+// C2S 0x48 (1 byte), sent by the client's ExitGamePlayCutScene 0x00482ef0 when an act cutscene ends; clears the cutscene-pending flag at player data +0x4c that the server set before S2C 0x61.
+eD2ServerIncomingStatus __fastcall SCMD_0x48_CutsceneOver(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x48_TransmogrifyItem * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x49_TakeWaypoint(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x49_TakeWaypoint * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x4D_ResetNpcIntroFlag(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x4D_ResetNpcIntroFlag * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x4B_ForceUnitUpdate(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x4B_ForceUnitUpdate * pPacket, uint32_t nSize);

@@ -194,7 +194,7 @@ BOOL __fastcall OBJOP_A4Q2_PandemoniumFortressGate(D2ObjectOperateFnArg * pOpera
         nTradeTick = PLAYER::Player::GetPlayerTradeTickOrBusy(pOperation->pAttacker);
         if (!nTradeTick) {
           UNIT::SUnit::ClearInteractInfo(pOperation->pAttacker);
-          pPlayerData->dwTradeTick = 1;
+          pPlayerData->bCutscenePending = 1;
           D2GSPacketSrv0x5D aQuestStatePacket = {0};
           aQuestStatePacket.nPacketId = ']';
           aQuestStatePacket.nQuestId = '\x17';

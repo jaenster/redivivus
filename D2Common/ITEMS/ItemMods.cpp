@@ -2215,8 +2215,8 @@ uint32_t __fastcall ITEMPROP_AddClassSkillBonus(uint32_t dwParam1, D2UnitStrc * 
     return nResult;
 }
 
-// Applies a charged-skill item property to pUnit: resolves the skill level from the property record (nParam1) — computing it from item level vs. required level when the stored level is 0 or negative — clamps to max skill level, then calls ITEMMOD_AddStatToItem with the encoded skill+level+max-charge value.
-uint32_t __fastcall ITEMPROP_AddSkillCharges(uint32_t dwParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t dwParam4) {
+// Properties func 11 (att-skill/hit-skill/gethit-skill/kill-skill/death-skill/levelup-skill): resolves the skill level (derived from item level vs. skill req level when <= 0, clamped to max), takes the chance (default 5), and adds the stat with param skill<<6 | level via ITEMMOD_AddStatToItem. No RNG draw.
+uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t dwParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t dwParam4) {
     int32_t nReqLevel;
     int32_t nItemLevel;
     uint32_t nPropPtr;
@@ -2288,7 +2288,7 @@ uint32_t __fastcall ITEMPROP_AddSkillCharges(uint32_t dwParam1, D2UnitStrc * pUn
 }
 
 // Item-property applier for "skill charges" / charged-skill modifiers (the prop pointed to by nParam1 holds skill id at +4, charge spec at +8, level spec at +0xc). Validates pUnit2 is an item and the skill id is valid. Resolves the granted skill level: explicit value, or derived from (item level - skill req level)/4 +1 (clamped to 1..skill max level), or a negative spec meaning a per-level scaling. Resolves the max charge count (explicit, default 5, or per-skill-level computed), clamped to 1..0xff. Rolls a random initial current-charge count from the item seed (RANDOM_RandomNumberSelector). Then adds the charges stat onto the item's stat list (ITEMMOD_GetOrCreateStatList + D2AddStatToStatsListEx), packing current/max charges and the skill id+level into the stat value/param using the itemstatcost shift fields. Returns the max charge count (0 on validation failure).
-uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t dwParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t dwParam5) {
+uint32_t __fastcall ITEMPROP_AddSkillCharges(uint32_t dwParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t dwParam5) {
     int32_t nReqLevel;
     int32_t nItemLevel;
     int nSkillLvlClamped;

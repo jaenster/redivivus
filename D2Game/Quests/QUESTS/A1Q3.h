@@ -48,7 +48,7 @@ void __fastcall Q03_Callback10_PlayerLeavesGame(struct D2QuestDataStrc * pQuestD
 void __fastcall Q03_Callback06_Unused(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // Already documented.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q3.cpp
-BOOL __fastcall OBJOP_A1Q3_DenOfEvil_CheckCompletion(struct D2ObjectOperateFnArg * pOperation);
+BOOL __fastcall OBJOP_A1Q3_UseMalus(struct D2ObjectOperateFnArg * pOperation);
 // Q03_ActiveFilter (A1Q3) — predicate: is the quest "active" (shows quest log / NPC has dialog) for this player+Charsi? Returns false if target isn't Charsi (0x9a) or quest is Completed. Returns true if quest started (nStateFlag!=0) and reward not yet awaiting. Otherwise true only if player is level >=8 AND carries the Horadric Malus ('hdm '). Read-only.
 bool __fastcall Q03_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nTargetClassId, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2UnitStrc * pUnitEx);
 // Q03_CheckPlayerHasMalus (A1Q3) — party-iteration callback. If this player carries the Horadric Malus ('hdm '), set the shared A1Q3 flag field_0xA0=1 (used by Q03_CheckPartyHasMalus to test whether anyone in the party holds the Malus). No quest-record writes.

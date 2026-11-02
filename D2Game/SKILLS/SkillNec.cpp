@@ -1527,7 +1527,7 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
     }
     if (pSkillData->EType != ELEMENTAL_NONE) {
       int32_t nCalcResult;
-      nCorpseHpRaw = D2Common::Skills::SERVER_Synergy1(pUnit, eSkill, nSkillLvl, 1);
+      nCorpseHpRaw = D2Common::Skills::SKILLS_GetElementalLength(pUnit, eSkill, nSkillLvl, 1);
       pMonStatsOut = 0;
       pSynergyNull = 0;
       nCalcResult = D2Client::Stats::D2ApplyPercent(iVar1, nEleConvPctClamped, 100);

@@ -605,7 +605,7 @@ BOOL __fastcall Skills_SrvDoFunc_020_Static(::SGAMEDATA * pGame, D2UnitStrc * pU
       sStaticArgs.nStaticMin = pDiffLvlTxt->StaticFieldMin;
     }
 
-    sStaticArgs.nSynergyBonus = D2Common::Skills::SERVER_Synergy1(pUnit, eSkill, nSkillLvl, 1);
+    sStaticArgs.nSynergyBonus = D2Common::Skills::SKILLS_GetElementalLength(pUnit, eSkill, nSkillLvl, 1);
     sStaticArgs.eElemType = (eSkillEType)pSkillTxt->EType;
     int32_t nRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, nSkillLvl);
     SkillsServer::SKILLS_ApplyAreaEffect(pGame, pUnit, 0, 0, nRange, pSkillTxt->aurafilter, SKILLSOR_ApplyStaticFieldToUnit, &sStaticArgs, 0, ".\\SKILLS\\SkillSor.cpp", 0x273);

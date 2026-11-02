@@ -187,7 +187,7 @@ int32_t __fastcall GetMeleeRangePlusFour(struct D2UnitStrc * pUnit);
 void __fastcall SKILLS_ApplyAttackRateBuff(struct D2UnitStrc * pUnit, int32_t nAttackRate);
 void __fastcall SKILLS_FreeMonsterMinions(struct D2UnitStrc * pUnit);
 int32_t __fastcall SKILLS_GetUnitWalkVelocity(struct D2UnitStrc * pnParam);
-int32_t __fastcall SKILLS_GetSummonMonsterClassId(struct D2UnitStrc * pUnit, int32_t bUseMonsterSpawnData, int32_t nSummonMode, int32_t nSummonParam, int * pPtr, int * pnParam1, int * pnParam2);
+int32_t __fastcall SKILLS_GetSummonMonsterClassId(struct D2UnitStrc * pUnit, int32_t bUseMonsterSpawnData, int32_t nSkillId, int32_t nSummonParam, int * pPtr, int * pnParam1, int * pnParam2);
 uint16_t __fastcall SKILLS_CalcToHitAndApply(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2SkillsTxt * pSkillsTxt, int32_t nParam1, int32_t nParam2, struct D2DamageStrc * pDamage, int32_t nParam4);
 uint16_t __fastcall SKILLS_CalcMissileToHit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit2, struct D2UnitStrc * pUnit, uint32_t nParam1, int32_t nParam12, uint32_t nParam2, int32_t nParam22);
 // Creates and queues a SUnitEvent for an aura skill proc on pUnit. Validates nItemEventFuncId is within the ITEMSTATCOST_ITEMEVENTFUNC table (max 0x32) and the entry is non-null, then calls SUNITEVENT_Alloc with the resolved function pointer. Returns the new event, or null on failure.

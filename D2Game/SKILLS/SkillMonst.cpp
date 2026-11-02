@@ -1510,7 +1510,7 @@ BOOL __fastcall Skills_SrvDoFunc_100_FreezingMeleeAttack(::SGAMEDATA * pGame, D2
       sDamage.dwHitClass = pSkillsTxt->HitClass;
     }
 
-    sDamage.dwFrzLength = D2Common::Skills::SERVER_Synergy1(pUnit, eSkill, nSkillLvl, 1);
+    sDamage.dwFrzLength = D2Common::Skills::SKILLS_GetElementalLength(pUnit, eSkill, nSkillLvl, 1);
     SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
     UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pUnit, pTarget, 1, &sDamage);
     nTargetHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
@@ -2060,7 +2060,7 @@ BOOL __fastcall Skills_SrvDoFunc_107_LeechMeleeMultiHit(::SGAMEDATA * pGame, D2U
     uint32_t nModulo = (nDmgShifted >> 8) - nNewHp;
     dwFindGUID = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, nModulo);
     sDamage.dwPoisDamage = (dwFindGUID + nNewHp) * 2;
-    sDamage.dwPoisLength = D2Common::Skills::SERVER_Synergy1(pUnit, eSkill, nSkillLvl, 1);
+    sDamage.dwPoisLength = D2Common::Skills::SKILLS_GetElementalLength(pUnit, eSkill, nSkillLvl, 1);
     dwFindGUID = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, nModulo);
     sDamage.dwManaLeech = (dwFindGUID + nNewHp) * 0x100;
     dwFindGUID = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, nModulo);

@@ -890,61 +890,61 @@ void __fastcall ITEMMODE_RemoveItemStates(D2UnitStrc * pOwner, D2UnitStrc * pIte
 
 // Removes all stat contributions of an item being unequipped from its owner unit. Fires the periodic-stats timer trigger, handles set-item dequip logic, removes the stat list from the owner (unless broken and nEquipState==0), conditionally re-activates the off-hand weapon's stat list when dual-wielding, removes item states, and optionally updates resource stats (if nParam != 0). No-ops if either pointer is NULL or the item unit type is wrong.
 // @sourcefile .\ITEMS\ItemMode.cpp
-void __fastcall ITEMMODE_UnequipItemStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, int32_t nEquipState, int32_t bUpdateResourceStats) {
+void __fastcall ITEMMODE_UnequipItemStats(::SGAMEDATA * pGame, D2UnitStrc * pItem, D2UnitStrc * pUnit, int32_t nEquipState, int32_t bUpdateResourceStats) {
     uint32_t bIsWeapon;
     D2UnitStrc* pOffhandOwner;
-    if (!(pItem && pUnit && pUnit->eUnitType == UNIT_ITEM)) {
+    if (!(pUnit && pItem && pItem->eUnitType == UNIT_ITEM)) {
       return;
     }
-    if (pItem->eUnitType == UNIT_PLAYER) {
+    if (pUnit->eUnitType == UNIT_PLAYER) {
       eD2States eState;
-      eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pItem, STATE_playerbody);
+      eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody);
       if (eState != STATE_none) {
         return;
       }
     }
 
-    GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pItem, UNITEVENTCALLBACK_PERIODICSTATS, pUnit->nUnitGUID);
-    D2UnitStrc* pItemOwner = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pUnit, nullptr);
-    if (pItem != pItemOwner) {
+    GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, pItem->nUnitGUID);
+    D2UnitStrc* pItemOwner = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pItem, nullptr);
+    if (pUnit != pItemOwner) {
       return;
     }
 
-    int nSetItemQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
+    int nSetItemQuality = D2Common::ITEMS::Items::GetItemQuality(pItem);
     if (nSetItemQuality == 5) {
-      D2Common::ITEM_ProcessSetItemEquip(pItem, pUnit, 1, 0);
+      D2Common::ITEM_ProcessSetItemEquip(pUnit, pItem, 1, 0);
     }
 
     pItemOwner = 0;
-    if (pItem->eUnitType == UNIT_PLAYER) {
-      pItemOwner = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pItem->pInventory);
+    if (pUnit->eUnitType == UNIT_PLAYER) {
+      pItemOwner = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pUnit->pInventory);
     }
 
-    BOOL bIsBroken = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_BROKEN, 0x3d8, ".\\ITEMS\\ItemMode.cpp");
+    BOOL bIsBroken = D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_BROKEN, 0x3d8, ".\\ITEMS\\ItemMode.cpp");
     if (!bIsBroken || nEquipState) {
-      D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pItem, pUnit);
+      D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pUnit, pItem);
     }
 
-    bIsBroken = D2Common::Units::CanDualWield(pItem);
+    bIsBroken = D2Common::Units::CanDualWield(pUnit);
     if (bIsBroken && pItemOwner) {
-      bIsWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Weapon);
-      if (bIsWeapon && pItemOwner != pUnit) {
+      bIsWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Weapon);
+      if (bIsWeapon && pItemOwner != pItem) {
         bIsBroken = D2Common::ITEMS::Items::CheckItemFlag(pItemOwner, ITEMFLAG_BROKEN, 0x3e6, ".\\ITEMS\\ItemMode.cpp");
         if (!bIsBroken || nEquipState) {
           pOffhandOwner = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pItemOwner, nullptr);
           if (pOffhandOwner) {
-            D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pItem, pItemOwner, 1);
+            D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pItemOwner, 1);
           }
         }
       }
     }
 
-    ITEMMODE_RemoveItemStates(pItem, pUnit);
+    ITEMMODE_RemoveItemStates(pUnit, pItem);
     if (!bUpdateResourceStats) {
       return;
     }
 
-    D2Common::Stats::StatsEx::UpdateResourceStats(pItem);
+    D2Common::Stats::StatsEx::UpdateResourceStats(pUnit);
 }
 
 // Handles a player picking up a gold pile (pUnit=gold item, pUnit2=player). Computes how much gold fits under the player's inventory cap; if the pile has an owner, delegates to ChangeGoldForPlayer; if the player is in a party, splits via PARTY_SplitGoldToPartyMembers; otherwise credits directly via STATLIST_AddUnitStat. Removes the gold item from the room and deletes it. If the pile overflowed the cap, spawns the remainder as a new gold pile and plays a pickup sound (0x17).

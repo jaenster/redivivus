@@ -2662,7 +2662,7 @@ static void __stdcall SKILLDESC_CalcSkillElemDamage(D2UnitStrc * pUnit, int * pn
     int iVar1;
     if ((char)pSkillDescTxt[0xee] == '\x05') {
       int32_t nSynergyMul;
-      nSynergyMul = D2Common::Skills::SERVER_Synergy1(pUnit, (int)*pSkillDescTxt, nSkillLevel, 1);
+      nSynergyMul = D2Common::Skills::SKILLS_GetElementalLength(pUnit, (int)*pSkillDescTxt, nSkillLevel, 1);
       *pdwColorIdx = 2;
       nMinDmgRaw = D2Common::Skills::SERVER_MinDamage(pUnit, (int)*pSkillDescTxt, nSkillLevel, 1);
       iVar1 = nSynergyMul * nMinDmgRaw;
@@ -4890,7 +4890,7 @@ void __fastcall SKILLDESC_DrawSkillDmgElem2H(D2UnitStrc * pUnit, D2SkillStrc * p
     nMinDamage += nDamageShifted >> 8;
     if (pSkillsTxt->EType == ELEMENTAL_POISON) {
       int32_t nSynergyMaxDmg;
-      nDamageShifted = D2Common::Skills::SERVER_Synergy1(pUnit, (int)pSkillsTxt->skill, nSkillLevel, 1);
+      nDamageShifted = D2Common::Skills::SKILLS_GetElementalLength(pUnit, (int)pSkillsTxt->skill, nSkillLevel, 1);
       nSynergyMaxDmg = D2Common::Skills::SERVER_MinDamage(pUnit, (int)pSkillsTxt->skill, nSkillLevel, 1);
       nMaxDamage += nSynergyMaxDmg * nDamageShifted >> 8;
       nSynergyMaxDmg = D2Common::Skills::SERVER_MaxDamage(pUnit, (int)pSkillsTxt->skill, nSkillLevel, 1);
@@ -4922,7 +4922,7 @@ void __fastcall SKILLDESC_DrawSkillDmgElem2HAlt(D2UnitStrc * pUnit, D2SkillStrc 
     D2UnitStrc* pUnitForMaxDmg = pUnitSaved;
     if (pSkillsTxt->EType == ELEMENTAL_POISON) {
       int32_t nSynergyFactor;
-      nDamageShifted = D2Common::Skills::SERVER_Synergy1(pUnitSaved, (int)pSkillsTxt->skill, nSkillLevel, 1);
+      nDamageShifted = D2Common::Skills::SKILLS_GetElementalLength(pUnitSaved, (int)pSkillsTxt->skill, nSkillLevel, 1);
       nSynergyFactor = D2Common::Skills::SERVER_MinDamage(pUnitSaved, (int)pSkillsTxt->skill, nSkillLevel, 1);
       nMinDamage += nSynergyFactor * nDamageShifted >> 8;
       nSynergyFactor = D2Common::Skills::SERVER_MaxDamage(pUnitSaved, (int)pSkillsTxt->skill, nSkillLevel, 1);
@@ -5675,7 +5675,7 @@ static void __stdcall SKILLDESC_DescLine9_ElemDamage(D2UnitStrc * pUnit, uint16_
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
 }
 
-static void SKILLDESC_DescLine8_AppendMana(int32_t eSkill, D2UnitStrc * pUnit, uint16_t * wszText, int32_t nSkillLevel) {
+static void SKILLDESC_DescLine8_AppendToHit(int32_t eSkill, D2UnitStrc * pUnit, uint16_t * wszText, int32_t nSkillLevel) {
     uint32_t nToHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLevel);
     if (!nToHitResult) {
       return;
@@ -6566,7 +6566,7 @@ static uint32_t __stdcall SKILLDESC_FormatValueWithSign(int32_t pThis, uint16_t 
 
 // Register params: nSkillLevel (EAX), nSkillId (ECX), pUnitStrc (EDX). Writes the signed synergy bonus line for cold/poison skills.
 static void __fastcall SKILLDESC_DescLineB_SignedFormat(int32_t nSkillLevel, int32_t nSkillId, D2UnitStrc * pUnitStrc, uint16_t * wszText, D2SkillsTxt * pSkillsTxt) {
-    int32_t nSynergy = D2Common::Skills::SERVER_Synergy1(pUnitStrc, nSkillId, nSkillLevel, 0);
+    int32_t nSynergy = D2Common::Skills::SKILLS_GetElementalLength(pUnitStrc, nSkillId, nSkillLevel, 0);
     if (!nSynergy) {
       return;
     }
@@ -6585,7 +6585,7 @@ static int __stdcall SKILLDESC_DescLineE_PerLevelBonus(int32_t nSkillId, D2UnitS
     bool bMinEqualsMax;
     uint16_t wszDamageRange[32];
     char szDamageRange[32];
-    int32_t nSynergyBonus = D2Common::Skills::SERVER_Synergy1(pUnit, nSkillId, nParam1, 0);
+    int32_t nSynergyBonus = D2Common::Skills::SKILLS_GetElementalLength(pUnit, nSkillId, nParam1, 0);
     int32_t nDamage = D2Common::Skills::SERVER_MinDamage(pUnit, nSkillId, nParam1, 1);
     int nMinDamage = nDamage * nSynergyBonus >> 8;
     nDamage = D2Common::Skills::SERVER_MaxDamage(pUnit, nSkillId, nParam1, 1);
@@ -6717,7 +6717,7 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
         D2Lang::Unicode::UNISYS::AppendToBuffer(pwszOutput, pWszLocale);
       }
 
-      SKILLDESC_DescLine8_AppendMana(eSkill, pUnitLocal, pwszOutput, nSkillLevel);
+      SKILLDESC_DescLine8_AppendToHit(eSkill, pUnitLocal, pwszOutput, nSkillLevel);
       return 1;
       case 9:
         if (wDescTextA != 0x1506) {

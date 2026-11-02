@@ -198,7 +198,7 @@ BOOL PLRMODES_CanInterruptCurrentMode(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, u
 
 // Attempts to cancel current player mode and initiate movement to a target location. Validates unit state, checks for blocking modes, and dispatches path-finding for the move.
 // @sourcefile .\PLAYER\PlrModes.cpp
-int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int nX, int nY, D2SkillStrc * pSkill) {
+int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int nModeIndex, int bCheckInterrupt, D2SkillStrc * pSkill) {
     int32_t nConcPct;
     uint32_t nConcRandRoll;
     int32_t iVar1;
@@ -215,7 +215,7 @@ int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2Un
     if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead) {
       return 0;
     }
-    if (!nX || !nY) {
+    if (!nModeIndex || !bCheckInterrupt) {
       return 1;
     }
 
@@ -261,7 +261,7 @@ int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2Un
       }
     } else {
       if (pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
-        switch (nX) {
+        switch (nModeIndex) {
           case 7:
 
           case 8:

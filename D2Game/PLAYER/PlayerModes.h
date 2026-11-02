@@ -26,7 +26,7 @@ int32_t __fastcall PLRMODES_HasAnimEventLastOrComing5Frames(::SGAMEDATA * pGame,
 BOOL PLRMODES_CanInterruptCurrentMode(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t nNewMode);
 // Attempts to cancel current player mode and initiate movement to a target location. Validates unit state, checks for blocking modes, and dispatches path-finding for the move.
 // @sourcefile .\PLAYER\PlrModes.cpp
-int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int nX, int nY, struct D2SkillStrc * pSkill);
+int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int nModeIndex, int bCheckInterrupt, struct D2SkillStrc * pSkill);
 void __fastcall PLRMODES_SetIdleMode(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nMode, int32_t nX, int32_t nY);
 int32_t __fastcall PLRMODES_ModeCallback_DeathDead(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 int32_t __fastcall PLRMODES_ModeCallback_Neutral(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);

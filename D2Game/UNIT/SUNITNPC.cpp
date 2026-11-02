@@ -823,7 +823,7 @@ bool __fastcall SUNITNPC_CheckNpcCanSellItem(::SGAMEDATA * pGame, D2UnitStrc * p
     return false;
 }
 
-void __fastcall SUNITNPC_ReturnOne(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nGoldAmount) {
+void __fastcall SUNITNPC_GiveGoldOrDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nGoldAmount) {
     ITEMS::Items::Drop::ITEM_GiveGoldOrDrop(pGame, pUnit, nGoldAmount);
 }
 

@@ -1706,7 +1706,7 @@ void __stdcall AllocPlayerData(D2UnitStrc * pUnit) {
 
       nLine = DUNGEON::Dungeon::GetPortalFlagFromLevelId(LEVEL_RogueEncampment);
       pUnit->pUnitData.pUnitDataPlayer->nPortalFlags = nLine;
-      pUnit->pUnitData.pUnitDataPlayer->dwTradeTick = 0;
+      pUnit->pUnitData.pUnitDataPlayer->bCutscenePending = 0;
       Txt::Cube::FIELDTBLS_AllocPlayerData_NoOp(pUnit);
       return;
     }

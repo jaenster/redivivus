@@ -977,8 +977,8 @@ BOOL __fastcall Skills_SrvDoFunc_122_Hunger(::SGAMEDATA * pGame, D2UnitStrc * pU
     return 1;
 }
 
-// Server DoFunc for Druid skill 123 (Tornado). Resolves the charge-up missile ID, gets the target/cursor position, checks missile collision clearance, then creates the Tornado missile via CreatingMissile with UNITFLAG_SKSRVDOFUNC set. Seeds the missile's target X from the unit's RNG (mod 256) for random spin direction. Sends a unit message packet to clients with skill, level, target coords, and the random seed byte.
-BOOL __fastcall Skills_SrvDoFunc_123_Tornado(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+// Server DoFunc, srvdofunc slot 123; skills.txt row 244 Volcano. Resolves the charge-up missile ID, gets the target/cursor position, checks missile collision clearance, then creates the skill's missile via CreatingMissile with UNITFLAG_SKSRVDOFUNC set. Seeds the missile's target X from the unit's RNG (mod 256) for random spin direction. Sends a unit message packet to clients with skill, level, target coords, and the random seed byte.
+BOOL __fastcall Skills_SrvDoFunc_123_Volcano(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     bool bHasTarget;
     bool bCanFire;
     D2SkillArgStrc sSkillArg;
@@ -1151,7 +1151,7 @@ BOOL __fastcall Skills_SrvDoFunc_145_Hurricane(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Server-side skill DoFunc 146 (Druid Cyclone Armor, a chargeup/active-state skill). Validates the skill, its aurastate, and that the state is currently active on the unit. If skill flags2 bit0 is clear and the unit is in town, it tears down the active aura (remove stat list, clear state). Otherwise it (re)schedules the active-state timer event (GetSkilParam3 frames), seeds the unit RNG from skill Param1, and — when not in town — repeatedly rolls a random offset within aurarangecalc range, checking line-of-sight and player-missile collision, up to 5 retries, to find a valid spot to spawn the chargeup missile (SKILLS_CreateMissileAtTarget) and broadcast a unit message. Returns TRUE on a successful cast, FALSE otherwise; always fires the ACTIVESTATE timer trigger.
-BOOL __fastcall Skills_SrvDoFunc_146_CycloneArmor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_SrvDoFunc_146_ArmageddonTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     eD2States eActiveAuraState;
     D2RoomStrc* pRoom;
     BOOL bIsInTown;
@@ -1424,7 +1424,7 @@ BOOL __fastcall Skills_SrvDoFunc_121_Rabies(::SGAMEDATA * pGame, D2UnitStrc * pU
       D2Common::Skills::SKILL_SetParam1(pSkill, 0);
       SKILLDRUID_ApplyAccumulatedStateDamage(pGame, pUnit, nSkillLvl);
       UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
-      nSynergyBonus = D2Common::Skills::SERVER_Synergy1(pUnit, eSkill, nSkillLvl, 1);
+      nSynergyBonus = D2Common::Skills::SKILLS_GetElementalLength(pUnit, eSkill, nSkillLvl, 1);
       SKILLDRUID_ApplyAuraWithMissile(pGame, pUnit, pTarget, nSynergyBonus, eSkill, nSkillLvl);
       SKILLDRUID_GetSummonDamageBonus(pSkillTxtBase, pGame, pTarget, nSynergyBonus, nSkillLvl, eSkill, pUnit);
       return 1;

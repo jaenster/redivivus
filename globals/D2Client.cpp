@@ -2125,7 +2125,7 @@ D2NET_CLIENT_D2GS_ServerToClient NET_D2GS_CLIENT_INCOMING[175] = {
         /* .fpIncomingHandlerUnit = */ nullptr
     },
     {
-        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x96_PlayerLeave,
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x96_UpdateStaminaAndPosition,
         /* .nExpectedSize = */ 0x9,
         /* .fpIncomingHandlerUnit = */ nullptr
     },

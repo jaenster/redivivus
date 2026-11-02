@@ -484,7 +484,7 @@ BOOL __fastcall Q27_PlayerEnterGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
     D2GSPacketSrv0x50 sPacket50;
     PLAYER::Player::PLAYER_CancelInteraction(pGame, pUnit);
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    pPlayerData->dwTradeTick = 1;
+    pPlayerData->bCutscenePending = 1;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TerrorsEnd);
     pQuestData->pQuestSpecificData.pA4Q2->pPlayerUnit = pUnit;
     pPlayerData = D2Common::Units::GetPlayerData(pUnit);

@@ -61,7 +61,7 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, struct D2UnitStrc
 void __fastcall PLAYER_CreateAllStarterItems(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint8_t byAct);
 void __fastcall PLAYER_SendAllItemsToClient(struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient);
 int32_t __fastcall GetPlayerTradeTickOrBusy(struct D2UnitStrc * pPlayer);
-void __fastcall PLAYER_ClearTradeTick(struct D2UnitStrc * pUnit);
+void __fastcall PLAYER_ClearCutsceneFlag(struct D2UnitStrc * pUnit);
 void __fastcall PLAYER_EndInteraction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Ends the player's active interaction with any unit type (player trade, NPC, object, or Horadric Cube item). Dispatches to the appropriate close handler per unit type, then sends packet 0x62 (MakeUnitTargetable) to notify the client the interaction has ended.
 // @sourcefile .\PLAYER\Player.cpp

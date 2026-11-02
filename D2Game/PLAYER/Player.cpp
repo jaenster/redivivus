@@ -517,20 +517,20 @@ int32_t __fastcall GetPlayerTradeTickOrBusy(D2UnitStrc * pPlayer) {
       }
 
       pPlayerData = D2Common::Units::GetPlayerData(pPlayer);
-      return pPlayerData->dwTradeTick;
+      return pPlayerData->bCutscenePending;
     }
 
     return 0;
 }
 
-void __fastcall PLAYER_ClearTradeTick(D2UnitStrc * pUnit) {
+void __fastcall PLAYER_ClearCutsceneFlag(D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    if (!pPlayerData->dwTradeTick) {
+    if (!pPlayerData->bCutscenePending) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1c7);
       exit(-1);
     }
 
-    pPlayerData->dwTradeTick = 0;
+    pPlayerData->bCutscenePending = 0;
 }
 
 void __fastcall PLAYER_EndInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
@@ -816,7 +816,7 @@ uint32_t __fastcall CheckItemMovePermission(::SGAMEDATA * pGame, D2UnitStrc * pU
       UNIT::SUnit::ClearInteractInfo(pUnit);
     } else {
       pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-      if (!pPlayerData->dwTradeTick) {
+      if (!pPlayerData->bCutscenePending) {
         bCanMove = PlayerTrade::PLRTRADE_ValidateAndInitiateTrade(pGame, pUnit, pItem);
         return bCanMove;
       }

@@ -1253,7 +1253,7 @@ static void __stdcall DecodeIncoming0x96(D2GSPacket0x96Decoded * pDest, char * p
     pDest->dY = (uint8_t)nField;
 }
 
-void __fastcall NET_D2GS_CLIENT_Incoming0x96_PlayerLeave(char * pBytes) {
+void __fastcall NET_D2GS_CLIENT_Incoming0x96_UpdateStaminaAndPosition(char * pBytes) {
     D2GSPacket0x96Decoded sDecoded;
     DecodeIncoming0x96(&sDecoded, pBytes);
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_Net();
@@ -1842,7 +1842,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x79_TRADEGOLD(char * pBytes) {
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x7A_UPDATEPET(D2GSPacketSrv0x7A * pBytes) {
     if (pBytes->nAction) {
-      RosterPets::AddRosterPet(pBytes->nSummonGUID, pBytes->nPlayerGUID, (uint32_t)pBytes->nSkillID, (uint32_t)(uint16_t)pBytes->nSummonType);
+      RosterPets::AddRosterPet(pBytes->nSummonGUID, pBytes->nPlayerGUID, (uint32_t)pBytes->nPetType, (uint32_t)(uint16_t)pBytes->wClassId);
       return;
     }
 

@@ -294,7 +294,7 @@ int32_t __stdcall SFileEnableDirectAccess(BOOL D2Ini_bUseDirect);
 // that name belongs to 004164a0.
 // @wasnamed SFILE_SetAsyncThrottle
 // Enables seek-distance-ordered selection in the async request scheduler.
-void __stdcall SFileEnableSeekOptimization(uint32_t dwThrottleDelay);
+void __stdcall SFileEnableSeekOptimization(BOOL bEnable);
 // Retrieves archive type and priority flag. Validates archive handle, then reads type from offset 0x118 into *param2 and priority flag (archive[0x110] == 3) into *param3. Thread-safe via lpCriticalSection_00779068. Returns 1 on success, 0 on invalid handle.
 // @blizzard SFileGetArchiveInfo (SFILE.CPP)
 int __stdcall SFileGetArchiveInfo(struct D2ArchiveStrc * pArchive, int * pnArchiveType, uint32_t * pnIsPriority);

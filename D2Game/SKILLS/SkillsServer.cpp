@@ -2384,7 +2384,7 @@ int32_t __fastcall SetDamageOnEvent(D2UnitStrc * pUnit, D2DamageStrc * pEvent, e
       return 0;
     }
 
-    int32_t nSynergy = D2Common::Skills::SERVER_Synergy1(pUnit, eSkill, nSkillLvl, 1);
+    int32_t nSynergy = D2Common::Skills::SKILLS_GetElementalLength(pUnit, eSkill, nSkillLvl, 1);
     int32_t nMinDamage = D2Common::Skills::SERVER_MinDamage(pUnit, eSkill, nSkillLvl, 1);
     int32_t nMaxDamage = D2Common::Skills::SERVER_MaxDamage(pUnit, eSkill, nSkillLvl, 1);
     uint32_t nRandDamage = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, nMaxDamage - nMinDamage);
@@ -2603,8 +2603,8 @@ int32_t __fastcall SKILLS_GetUnitWalkVelocity(D2UnitStrc * pnParam) {
     return 0x600;
 }
 
-int32_t __fastcall SKILLS_GetSummonMonsterClassId(D2UnitStrc * pUnit, int32_t bUseMonsterSpawnData, int32_t nSummonMode, int32_t nSummonParam, int * pPtr, int * pnParam1, int * pnParam2) {
-    int32_t nMonsterClassId = D2Common::Monsters::MONSTERS::SummonOrSpawnMode(pUnit, bUseMonsterSpawnData, nSummonMode, nSummonParam, pPtr, pnParam1, pnParam2);
+int32_t __fastcall SKILLS_GetSummonMonsterClassId(D2UnitStrc * pUnit, int32_t bUseMonsterSpawnData, int32_t nSkillId, int32_t nSummonParam, int * pPtr, int * pnParam1, int * pnParam2) {
+    int32_t nMonsterClassId = D2Common::Monsters::MONSTERS::SummonOrSpawnMode(pUnit, bUseMonsterSpawnData, nSkillId, nSummonParam, pPtr, pnParam1, pnParam2);
     if (!(nMonsterClassId < 0 || nMonsterClassId >= sgptDataTable->nTxtMonStatsSize)) {
       return nMonsterClassId;
     }

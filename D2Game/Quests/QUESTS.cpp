@@ -2816,8 +2816,8 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
             D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct2, QUESTSTATE_JustCompleted);
             QUEST_SendQuestInfoToUnit(pGame, pUnit);
             pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xad3);
-            if (__frame0.pPlayerDataSaved->dwTradeTick != 1) {
-              __frame0.pPlayerDataSaved->dwTradeTick = 1;
+            if (__frame0.pPlayerDataSaved->bCutscenePending != 1) {
+              __frame0.pPlayerDataSaved->bCutscenePending = 1;
               GAME::SCmd::NET_D2GS_SERVER_Send_0x61_CanGoToAct(pClient, 2);
             }
 
@@ -2879,8 +2879,8 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
             QUEST_GrantActTransitionReward(ACT_II, pGame, pUnit);
             QUEST_SendQuestInfoToUnit(pGame, pUnit);
             pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xb0f);
-            if (__frame0.pPlayerDataSaved->dwTradeTick != 1) {
-              __frame0.pPlayerDataSaved->dwTradeTick = 1;
+            if (__frame0.pPlayerDataSaved->bCutscenePending != 1) {
+              __frame0.pPlayerDataSaved->bCutscenePending = 1;
               GAME::SCmd::NET_D2GS_SERVER_Send_0x61_CanGoToAct(pClient, 3);
               return;
             }
@@ -2897,8 +2897,8 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
             QUEST_GrantActTransitionReward(ACT_II, pGame, pUnit);
             QUEST_SendQuestInfoToUnit(pGame, pUnit);
             pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xb1f);
-            if (__frame0.pPlayerDataSaved->dwTradeTick != 1) {
-              __frame0.pPlayerDataSaved->dwTradeTick = 1;
+            if (__frame0.pPlayerDataSaved->bCutscenePending != 1) {
+              __frame0.pPlayerDataSaved->bCutscenePending = 1;
               __frame0.wPacketPad = 0;
               __frame0.pPlayerDataSaved = (D2UnitDataPlayerStrc*)0x2175d;
               GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, (D2GSPacketSrv0x5D*)&__frame0.pPlayerDataSaved);
@@ -2961,8 +2961,8 @@ void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStr
         pBitBuffer = pPlayerData2->pQuestRecord[pGame->nDifficulty];
         GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, '\x06', 0, pBitBuffer, 0);
         pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xb56);
-        if (pPlayerData->dwTradeTick != 1) {
-          pPlayerData->dwTradeTick = 1;
+        if (pPlayerData->bCutscenePending != 1) {
+          pPlayerData->bCutscenePending = 1;
           GAME::SCmd::NET_D2GS_SERVER_Send_0x61_CanGoToAct(pClient, 4);
           return;
         }

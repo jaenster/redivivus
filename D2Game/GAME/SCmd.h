@@ -471,7 +471,7 @@ struct __attribute__((packed)) D2GSPacketSrv0xA3 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nParam2;
     /* 0x02 */ uint16_t wSkillId;
-    /* 0x04 */ uint16_t wStatId;
+    /* 0x04 */ uint16_t wSkillLevel;
     /* 0x06 */ uint8_t nParam3;
     /* 0x07 */ uint32_t dwValue1;
     /* 0x0B */ uint8_t nParam4;
@@ -510,7 +510,7 @@ struct __attribute__((packed)) D2GSPacketSrv0xAB {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
-    /* 0x06 */ uint8_t nHpPercent;
+    /* 0x06 */ uint8_t nHpPercent128;
 };
 
 struct __attribute__((packed)) D2GSPacketSrv0xAE {
@@ -562,9 +562,9 @@ void __fastcall NET_D2GS_SERVER_Send_CMD_BYTE_INT(struct D2ClientStrc * pClient,
 // Server-to-client portal flags notification. Opcode 0x5F, 5 bytes. Sends player's portal flags (GetPlayerPortalFlags) during character load sequence.
 void __fastcall NET_D2GS_SERVER_Send_0x5F_PortalFlags(struct D2ClientStrc * pClient, uint8_t nPacketId, uint32_t dwPortalFlags);
 // Server-to-client NPC health update. Opcode 0x0C, 9 bytes.
-void __fastcall NET_D2GS_SERVER_Send_0x0C_UNITCHANGE(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nNpcHitType, uint32_t nUnitGUID, uint8_t nMessageType, uint8_t bParam2, uint8_t bParam3);
+void __fastcall NET_D2GS_SERVER_Send_0x0C_UNITCHANGE(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t nUnitGUID, uint8_t nMessageType, uint8_t bParam2, uint8_t bParam3);
 // Server-to-client object state update. Opcode 0x0E, 12 bytes.
-void __fastcall NET_D2GS_SERVER_Send_0x0E_UNITCHANGE_ID(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nObjectType, uint32_t dwObjectState, uint8_t nMessageType, uint8_t bParam2, uint32_t dwParam);
+void __fastcall NET_D2GS_SERVER_Send_0x0E_UNITCHANGE_ID(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nObjectType, uint32_t dwUnitGUID, uint8_t nMessageType, uint8_t bParam2, uint32_t dwParam);
 // Server-to-client player stop message. Opcode 0x0D, 13 bytes. Sent when player stops moving.
 void __fastcall NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t nUnitGUID, uint8_t nMessageType, uint16_t wX, uint16_t wY, uint8_t bParam2, uint8_t nHpPercent);
 // Server-to-client character to object message. Opcode 0x10, 16 bytes.
@@ -572,11 +572,11 @@ void __fastcall NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS(struct D2ClientStrc *
 // Server-to-client player move message. Opcode 0x0F, 16 bytes.
 void __fastcall NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t dwGUID, uint8_t nMessageType, uint16_t wX, uint16_t wY, uint8_t bParam2, uint16_t wX2, uint16_t wY2);
 // Server-to-client monster move to entity message. Opcode 0x68, 21 bytes.
-void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH(struct D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nTargetType, uint8_t nTargetUnitType, uint32_t dwTargetGUID, uint8_t bParam2);
+void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH(struct D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nMode, uint8_t nTargetUnitType, uint32_t dwTargetGUID, uint8_t bParam2);
 // Server-to-client monster move message. Opcode 0x67, 16 bytes.
 void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH(struct D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nMoveType, uint16_t wX, uint16_t wY, uint8_t bParam);
 // Sends S→C packet 0x68 (NPC move-to-entity, extended form) to one client. Looks up the monster unit by GUID, reads its current X/Y position (dynamic path for monsters/players, static path for objects/missiles), reads path type (remapping 0x08→0x0B) and clamped velocity-percent stat. Packs all fields into a 0x15-byte stack buffer and delivers via NET_D2GS_SERVER_SendPacket_Helper. No-ops silently if the unit is not found.
-void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH_Ex(struct D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nTargetType, uint8_t nTargetUnitType, uint32_t dwTargetGUID, uint8_t bParam2, uint8_t bParam3, uint8_t bParam);
+void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH_Ex(struct D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nMode, uint8_t nTargetUnitType, uint32_t dwTargetGUID, uint8_t bParam2, uint8_t bParam3, uint8_t bParam);
 // Extended variant of 0x67 NPC move. Looks up the monster by GUID, reads its dynamic path type and velocity percent stat, then sends a 16-byte move packet to pClient. Unlike the basic variant, accepts three extra flag bytes (bParam1/2/3) packed into the destination-Y/flags field. Path types 5-6 are overridden to type 1 (walk-to-last-waypoint); type 8 becomes 0xB.
 void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH_Ex(struct D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nMoveType, uint16_t wDestXParam, uint16_t wDestY, uint8_t bParam1, uint8_t bParam2, uint8_t bParam3);
 // Builds and sends S2C packet 0x6A (12 bytes) when a monster/NPC performs a stationary action while targeting a specific entity. Part of the NPC update family: 0x67 NpcMove, 0x68 NpcMoveToEntity, 0x69 NpcState (no target), 0x6A NpcStateToEntity (this), 0x6B NpcAction (no target), 0x6C NpcAttack, 0x6D NpcStop. Sent by MONSTER_SendUpdateToClient when animMode is non-moving, non-attacking, and unit has a target (e.g., casting curse, roaring, channeling).
@@ -602,9 +602,9 @@ void __fastcall NET_D2GS_SERVER_Send_0x07_MapReveal(struct D2ClientStrc * pClien
 // Server-to-client map hide. Opcode 0x08, 6 bytes.
 void __fastcall NET_D2GS_SERVER_Send_0x08_REMOVEROOM(struct D2ClientStrc * pClient, int nLevelId, uint16_t nTileX, uint16_t nTileY);
 // Server-to-client level warp assignment. Opcode 0x09.
-void __fastcall NET_D2GS_SERVER_Send_0x09_NEWUNIT(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nLevelId, uint32_t dwGUID, uint8_t nClassId, uint16_t wX, uint16_t wY);
+void __fastcall NET_D2GS_SERVER_Send_0x09_NEWUNIT(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t dwGUID, uint8_t nClassId, uint16_t wX, uint16_t wY);
 // Server-to-client world object assignment. Opcode 0x51.
-void __fastcall NET_D2GS_SERVER_Send_0x51_NEWOBJECT(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nObjectType, uint32_t dwObjectGUID, uint16_t wX, uint16_t wY, uint16_t wObjectState, uint8_t nState, uint8_t nInteraction);
+void __fastcall NET_D2GS_SERVER_Send_0x51_NEWOBJECT(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nObjectType, uint32_t dwObjectGUID, uint16_t wClassId, uint16_t wX, uint16_t wY, uint8_t nState, uint8_t nInteraction);
 void __fastcall NET_D2GS_SERVER_Send_0x0A_REMOVEUNIT(struct D2ClientStrc * pClient, uint8_t nPacketId, eD2UnitType eUnitType, uint32_t pUnitGUID);
 // Server-to-client experience gain notification. Uses size-based opcode encoding: 0x1A (2 bytes), 0x1B (3 bytes), 0x1C (5 bytes).
 void __fastcall NET_D2GS_SERVER_Send_0x1A_0x1B_0x1C_Experience(struct D2ClientStrc * pClient, uint32_t nCurrentExp, uint32_t nPreviousExp);
@@ -614,25 +614,25 @@ void __fastcall NET_D2GS_SERVER_Send_0x1D_0x1E_0x1F_SetAttribute(struct D2Client
 void __fastcall NET_D2GS_SERVER_Send_0x9E_0x9F_0xA0_MercAttribute(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint16_t nValue, uint32_t dwMercGUID);
 // Server-to-client merc experience update. Opcodes 0xA1, 0xA2, 0xA0.
 void __fastcall NET_D2GS_SERVER_Send_0xA1_0xA2_0xA0_MercExperience(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint16_t nExp, uint32_t nMercGUID, uint32_t nMaxExp);
-// Server-to-client skill aura stat update. Opcode 0xA3.
-void __fastcall NET_D2GS_SERVER_Send_0xA3_PROGRESSIVE_SKILL(struct D2ClientStrc * pClient, uint8_t bParam1, uint16_t nSkillId, uint16_t nStatId, uint8_t nCasterType, uint32_t dwValue1, uint8_t nTargetType, uint32_t dwValue2, uint32_t dwValue3, uint32_t dwValue4);
+// Server-to-client skill event: skill id, skill level, caster type+GUID, target type+GUID, two params. Opcode 0xA3.
+void __fastcall NET_D2GS_SERVER_Send_0xA3_PROGRESSIVE_SKILL(struct D2ClientStrc * pClient, uint8_t bParam1, uint16_t nSkillId, uint16_t nSkillLevel, uint8_t nCasterType, uint32_t dwValue1, uint8_t nTargetType, uint32_t dwValue2, uint32_t dwValue3, uint32_t dwValue4);
 // Server-to-client NPC heal message. Opcode 0xAB.
-void __fastcall NET_D2GS_SERVER_Send_0xAB_HEALTH_UPDATE(struct D2ClientStrc * pClient, uint8_t nUnitType, uint32_t nHeal, uint8_t nType);
+void __fastcall NET_D2GS_SERVER_Send_0xAB_HEALTH_UPDATE(struct D2ClientStrc * pClient, uint8_t nUnitType, uint32_t dwUnitGUID, uint8_t nHpPercent128);
 // Server-to-client state skill move. Opcode 0xA5.
-void __fastcall NET_D2GS_SERVER_Send_0xA5_FORCESTOPSKILL(struct D2ClientStrc * pClient, uint8_t nUnitType, uint32_t dwSkill, uint16_t nX);
+void __fastcall NET_D2GS_SERVER_Send_0xA5_FORCESTOPSKILL(struct D2ClientStrc * pClient, uint8_t nUnitType, uint32_t dwUnitGUID, uint16_t nSkillId);
 // Server-to-client attribute update for units. Opcode 0x20.
 void __fastcall NET_D2GS_SERVER_Send_0x20_STATCHANGE_PLAYER(struct D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nUnitGUID, uint16_t nAttributeId, uint32_t dwValue);
 // Server-to-client player HP/MP update. Opcode 0x18.
 void __fastcall NET_D2GS_SERVER_Send_0x18_PLAYERCOMMONSTATCHANGE_BIG(struct D2ClientStrc * pClient, uint16_t nLife, uint16_t nMana, uint16_t nStamina, uint8_t bLifePercent, uint8_t bManaPercent, uint16_t nMaxLife, uint16_t nMaxMana, uint8_t bMaxLifePercent, uint8_t bMaxManaPercent);
 // Server-to-client life/mana update. Opcode 0x95.
-void __fastcall NET_D2GS_SERVER_Send_0x95_PLAYERCOMMONSTATCHANGE_MEDIUM(struct D2ClientStrc * pClient, uint16_t nLife, uint16_t nMana, uint16_t nMaxLife, uint16_t nMaxMana, uint16_t wParam5, uint8_t bManaPercent, uint8_t nDeltaY);
+void __fastcall NET_D2GS_SERVER_Send_0x95_PLAYERCOMMONSTATCHANGE_MEDIUM(struct D2ClientStrc * pClient, uint16_t nLife, uint16_t nMana, uint16_t nStamina, uint16_t nX, uint16_t wParam5, uint8_t nDeltaX, uint8_t nDeltaY);
 // Server-to-client walk verification. Opcode 0x96.
-void __fastcall NET_D2GS_SERVER_Send_0x96_PLAYERCOMMONSTATCHANGE_SMALL(struct D2ClientStrc * pClient, uint16_t nX, uint16_t nY, uint16_t nZone, uint8_t nDeltaX, uint8_t nDeltaY);
+void __fastcall NET_D2GS_SERVER_Send_0x96_PLAYERCOMMONSTATCHANGE_SMALL(struct D2ClientStrc * pClient, uint16_t nStamina, uint16_t nX, uint16_t nY, uint8_t nDeltaX, uint8_t nDeltaY);
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, eD2Skills eSkill, uint8_t nBaseAmount, uint8_t bRemove);
 void __fastcall NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(struct D2ClientStrc * pClient, uint8_t eUnitType, int32_t nUnitGUID, eD2Skills eSkill, uint8_t nNewQuantity);
 // Server-to-client set skill assignment. Opcode 0x23.
-void __fastcall NET_D2GS_SERVER_Send_0x23_SetSkill(struct D2ClientStrc * pClient, uint8_t nUnitType, uint32_t dwSkillId, uint8_t nSkillSlot, uint16_t wSkill, uint32_t dwReserved);
+void __fastcall NET_D2GS_SERVER_Send_0x23_SetSkill(struct D2ClientStrc * pClient, uint8_t nUnitType, uint32_t dwUnitGUID, uint8_t nSkillSlot, uint16_t wSkill, uint32_t dwReserved);
 // Sends opcode 0x94 skills-list packet to pClient for pUnit. Walks the unit's skill list twice: first to count skills, then to serialise each entry as 3 bytes (skill ID + level) into a game-pool-allocated buffer. Halts if pUnit/skills null or skill count >= 256.
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_SERVER_Send_0x94_SETALLSKILLS(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit);
@@ -649,7 +649,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x5C_REMOVECLIENT(struct D2ClientStrc * pCl
 void __fastcall NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(struct D2ClientStrc * pClient, uint8_t byTradeAction);
 void __fastcall NET_D2GS_SERVER_Send_0x78_TRADENAME(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x78 * pPacketData);
 // Server-to-client summon log update. Opcode 0x7A.
-void __fastcall NET_D2GS_SERVER_Send_0x7A_UPDATEPET(struct D2ClientStrc * pClient, uint8_t nAction, uint8_t nUnitType, uint32_t dwGUID, uint32_t dwMercGUID, uint16_t wExperience);
+void __fastcall NET_D2GS_SERVER_Send_0x7A_UPDATEPET(struct D2ClientStrc * pClient, uint8_t nAction, uint8_t nPetType, uint32_t dwGUID, uint32_t dwMercGUID, uint16_t wClassId);
 // DL bUnused: both callers set DL=1 (as for 0x7A); overwritten here before any read.
 void __fastcall NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(struct D2ClientStrc * pClient, uint8_t bUnused, uint8_t byAction, uint32_t dwPetGUID, uint32_t dwMercUnitGUID, uint16_t wMercType, uint32_t dwOwnerUnitGUID, uint32_t dwMercExperience);
 // Server-to-client gold amount in trade. Opcode 0x79.

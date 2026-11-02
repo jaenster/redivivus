@@ -1511,7 +1511,7 @@ int32_t __stdcall SERVER_MaxDamage(D2UnitStrc * pUnit, int32_t eSkillId, int32_t
 }
 
 // Computes the synergy duration/length bonus for a skill at a given level. Uses the ELevLen breakpoint array (three tiers: levels 1-8, 9-16, 17+) to compute a scaled length offset added to ELen, then optionally evaluates ELenSymPerCalc formula for a percent modifier. Used to calculate e.g. cold duration granted by a synergy skill. Returns 0 if skill or level is invalid.
-int32_t __stdcall SERVER_Synergy1(D2UnitStrc * pUnit, int32_t eSkillId, int32_t nSkillLevel, int32_t nUnused) {
+int32_t __stdcall SKILLS_GetElementalLength(D2UnitStrc * pUnit, int32_t eSkillId, int32_t nSkillLevel, int32_t nUnused) {
     int nLevelLenOffset;
     D2SkillCalcContextStrc sCalcCtx;
     if (!(eSkillId >= 0 && eSkillId < sgptDataTable->nTxtSkillsCount)) {
@@ -2660,7 +2660,7 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t bPara
       nRawDamage = SERVER_MaxDamage(pUnit, eSkill, nParam, bApplyMastery);
       return nRawDamage >> 8;
       case 0x13:
-        uResult = SERVER_Synergy1(pUnit, eSkill, nParam, 0);
+        uResult = SKILLS_GetElementalLength(pUnit, eSkill, nParam, 0);
       return uResult;
       case 0x14:
         uResult = SKILLS_CalcToHit(pUnit, eSkill, nParam);
@@ -2841,7 +2841,7 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t bPara
       nRawDamage = SERVER_MaxDamage(pUnit, eSkill, nParam, bApplyMastery);
       return nRawDamage >> 8;
       case 0x33:
-        uResult = SERVER_Synergy1(pUnit, eSkill, nParam, 1);
+        uResult = SKILLS_GetElementalLength(pUnit, eSkill, nParam, 1);
       return uResult;
       case 0x34:
         uResult = SERVER_MinDamage(pUnit, eSkill, nParam, 1);

@@ -1165,7 +1165,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
       nElemType = (eD2ElementalDamageTypeDWORD)pSkillTxt->EType;
       pDVar2 = (D2UnitStrc*)Skills::SERVER_MinDamage(pUnit, nSkillId, nParam, 1);
       nElemMaxDmg = Skills::SERVER_MaxDamage(pUnit, nSkillId, nParam, 1);
-      nElemLength = Skills::SERVER_Synergy1(pUnit, nSkillId, nParam, 1);
+      nElemLength = Skills::SKILLS_GetElementalLength(pUnit, nSkillId, nParam, 1);
     }
 
     int nUnit = (int)pDVar2;

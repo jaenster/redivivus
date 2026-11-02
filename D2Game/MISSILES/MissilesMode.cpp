@@ -3288,7 +3288,7 @@ BOOL __fastcall Missiles_SrvHitFunc_ApplyDruidAuraWithMissile(::SGAMEDATA * pGam
         return 1;
       }
 
-      nExpireFrame = D2Common::Skills::SERVER_Synergy1(pUnit_00, eSkill, nSkillLvl, 1);
+      nExpireFrame = D2Common::Skills::SKILLS_GetElementalLength(pUnit_00, eSkill, nSkillLvl, 1);
       if (nDuration <= nExpireFrame) {
         SKILLS::SkillDruid::SKILLDRUID_ApplyAuraWithMissile(pGame, pUnit_00, pTarget, nDuration, eSkill, nSkillLvl);
         return 2;
@@ -3798,7 +3798,7 @@ void __fastcall Missiles_SrvDmgFunc_SynergyCappedPoisonLength(::SGAMEDATA * pGam
       nExpireFrame = D2Common::Units::Missile::GetTargetX(pUnit);
       nFrameDelta = nExpireFrame - pGame->dwGameFrame;
       if (nFrameDelta >= 10) {
-        nSkillLevel = D2Common::Skills::SERVER_Synergy1(pOwner, eSkillId, nSkillLevel, 1);
+        nSkillLevel = D2Common::Skills::SKILLS_GetElementalLength(pOwner, eSkillId, nSkillLevel, 1);
         if (nFrameDelta <= nSkillLevel) {
           pDamage->dwPoisLength = nFrameDelta;
           return;

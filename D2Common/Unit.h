@@ -196,7 +196,7 @@ struct D2UnitDataPlayerStrc {
     /* 0x040 */ uint32_t nNecroPet;
     /* 0x044 */ struct D2UnitDataPlayerPetsStrc * pPets; // struct D2UnitDataPlayerPetsStrc*
     /* 0x048 */ uint32_t dwUniqueId; // Unique player id
-    /* 0x04C */ int32_t dwTradeTick; // Trade tick counter, set to 0 in AllocPlayerData
+    /* 0x04C */ int32_t bCutscenePending; // Cutscene-pending flag: set to 1 before S2C 0x61 (and on Q27 game entry), cleared by C2S 0x48 via PLAYER_ClearCutsceneFlag; 0 in AllocPlayerData
     /* 0x050 */ int dwTradeState; // Trade state/action flags
     /* 0x054 */ uint32_t nAiState;
     /* 0x058 */ uint32_t nAcceptTradeTick; // Trade-accept timestamp/tick
