@@ -521,9 +521,9 @@ DWORD __stdcall BNCLIENT_SendKeepAlive() {
     return 1;
 }
 
-uint32_t __fastcall thunk_NET_SID_CLIENT_Send(uint8_t bParam, char * szText) {
+uint32_t __fastcall thunk_NET_SID_CLIENT_Send(uint8_t nPacketId, char * szText) {
     size_t nPayloadSize;
-    NET_SID_CLIENT_Send(bParam, szText, nPayloadSize);
+    NET_SID_CLIENT_Send(nPacketId, szText, nPayloadSize);
     return 1;
 }
 

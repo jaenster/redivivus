@@ -785,7 +785,7 @@ BOOL __fastcall Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn(::SGAMEDATA * pGa
     return 1;
 }
 
-void __fastcall SKILLASS_SetupMissilePath(D2UnitStrc * pUnit, int32_t nParam) {
+void __fastcall SKILLASS_SetupMissilePath(D2UnitStrc * pUnit, int32_t nInitSeed) {
     if (!pUnit) {
       return;
     }
@@ -798,7 +798,7 @@ void __fastcall SKILLASS_SetupMissilePath(D2UnitStrc * pUnit, int32_t nParam) {
     }
 
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, nParam);
+    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, nInitSeed);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 10);
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynamicPath, (uint8_t)nTotalFrames);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);

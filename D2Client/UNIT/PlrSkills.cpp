@@ -102,7 +102,7 @@ static BOOL STATES_IsUnitTransformable(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNIT\PlrSkills.cpp
-void __fastcall PLRSKILLS_CheckSkillWhipAndLeap(D2UnitStrc * pUnit, uint32_t nParam) {
+void __fastcall PLRSKILLS_CheckSkillWhipAndLeap(D2UnitStrc * pUnit, uint32_t nGamma) {
     BOOL _bIsTransformable;
     bool bIsTransformable;
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
@@ -124,25 +124,25 @@ void __fastcall PLRSKILLS_CheckSkillWhipAndLeap(D2UnitStrc * pUnit, uint32_t nPa
     short int sSrvDoFunc = pSkillsTxt->srvdofunc;
     if (sSrvDoFunc != 0x43) {
       if (sSrvDoFunc == 0x4c) {
-        SKILLS::SkillsBar::SKILL_DrawUnitAtRotatedAngle(pUnit, nParam, 1);
+        SKILLS::SkillsBar::SKILL_DrawUnitAtRotatedAngle(pUnit, nGamma, 1);
         return;
       }
     } else {
       uint32_t nSkillFlags;
       nSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
       if (nSkillFlags & 1) {
-        SKILLS::SkillsPal::SKILL_DrawChargeTrail(pUnit, nParam, 1);
+        SKILLS::SkillsPal::SKILL_DrawChargeTrail(pUnit, nGamma, 1);
       }
     }
 }
 
 // JMP thunk
-void __fastcall PLRSKILLS_DrawChargeTrailIfPrimary(D2UnitStrc * pUnit, uint32_t nParam) {
-    ::D2Client::UNIT::PlrSkills::PLRSKILLS_CheckSkillWhipAndLeap(pUnit, nParam);
+void __fastcall PLRSKILLS_DrawChargeTrailIfPrimary(D2UnitStrc * pUnit, uint32_t nGamma) {
+    ::D2Client::UNIT::PlrSkills::PLRSKILLS_CheckSkillWhipAndLeap(pUnit, nGamma);
 }
 
 // @sourcefile .\UNIT\PlrSkills.cpp
-void __fastcall PLRSKILLS_DrawSkillTrail_Secondary(D2UnitStrc * pUnit, uint32_t nParam) {
+void __fastcall PLRSKILLS_DrawSkillTrail_Secondary(D2UnitStrc * pUnit, uint32_t nGamma) {
     BOOL _bIsTransformable;
     bool bIsTransformable;
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
@@ -164,21 +164,21 @@ void __fastcall PLRSKILLS_DrawSkillTrail_Secondary(D2UnitStrc * pUnit, uint32_t 
     short int sSrvDoFunc = pSkillsTxt->srvdofunc;
     if (sSrvDoFunc != 0x43) {
       if (sSrvDoFunc == 0x4c) {
-        SKILLS::SkillsBar::SKILL_DrawUnitAtRotatedAngle(pUnit, nParam, 0);
+        SKILLS::SkillsBar::SKILL_DrawUnitAtRotatedAngle(pUnit, nGamma, 0);
         return;
       }
     } else {
       uint32_t nSkillFlags;
       nSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
       if (nSkillFlags & 1) {
-        SKILLS::SkillsPal::SKILL_DrawChargeTrail(pUnit, nParam, 0);
+        SKILLS::SkillsPal::SKILL_DrawChargeTrail(pUnit, nGamma, 0);
       }
     }
 }
 
 // JMP thunk
-void __fastcall PLRSKILLS_DrawChargeTrailIfSecondary(D2UnitStrc * pUnit, uint32_t nParam) {
-    ::D2Client::UNIT::PlrSkills::PLRSKILLS_DrawSkillTrail_Secondary(pUnit, nParam);
+void __fastcall PLRSKILLS_DrawChargeTrailIfSecondary(D2UnitStrc * pUnit, uint32_t nGamma) {
+    ::D2Client::UNIT::PlrSkills::PLRSKILLS_DrawSkillTrail_Secondary(pUnit, nGamma);
 }
 
 static void __stdcall STATES_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nOverlayId) {

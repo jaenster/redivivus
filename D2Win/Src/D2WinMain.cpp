@@ -543,13 +543,13 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
     D2WINMAIN_FreeLeadingFormControls();
 }
 
-LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nParam, LPARAM lParam) {
+LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lParam) {
     int32_t lResult;
     if (!gbGfxWindowCreated) {
       return 0;
     }
     if (D2Client::GAME::Record::pWndProcB) {
-      lResult = (*D2Client::GAME::Record::pWndProcB)(hWnd, uMsg, nParam, lParam);
+      lResult = (*D2Client::GAME::Record::pWndProcB)(hWnd, uMsg, nWParam, lParam);
       return lResult;
     }
 
@@ -561,12 +561,12 @@ LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nParam, LPARAM lPar
       return 0;
     }
 
-    BOOL bDispatched = Storm::WindowHandle::SMsgDispatchMessage(hWnd, uMsg, nParam, lParam, &bHandled, (LRESULT*)&lReturnValue);
+    BOOL bDispatched = Storm::WindowHandle::SMsgDispatchMessage(hWnd, uMsg, nWParam, lParam, &bHandled, (LRESULT*)&lReturnValue);
     if (bDispatched && bHandled) {
       return lReturnValue;
     }
 
-    /* LPARAM lParam for DefWindowProcA */ /* WPARAM wParam for DefWindowProcA */ /* UINT Msg for DefWindowProcA */ /* HWND hWnd for DefWindowProcA */ lResult = DefWindowProcA(hWnd, uMsg, nParam, lParam);
+    /* LPARAM lParam for DefWindowProcA */ /* WPARAM wParam for DefWindowProcA */ /* UINT Msg for DefWindowProcA */ /* HWND hWnd for DefWindowProcA */ lResult = DefWindowProcA(hWnd, uMsg, nWParam, lParam);
     return lResult;
 }
 

@@ -675,7 +675,7 @@ void __fastcall DRAW_UI(D2GameViewStrc * pGameView) {
         ShowItems::DRAW_AltItems();
         eGameType = GAME::Game::CLIENT_GetD2GSGameType();
         if (eGameType != GAMETYPE_SINGLEPLAYER) {
-          UNIT::CUnit::CUNIT_IterateServerUnitsWithCallback((int32_t)(uintptr_t)ui::UI_DrawPlayerNameOverhead);
+          UNIT::CUnit::CUNIT_IterateServerUnitsWithCallback((fnUnitIterCallback)ui::UI_DrawPlayerNameOverhead);
         }
       }
     }

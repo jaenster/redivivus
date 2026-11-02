@@ -113,7 +113,7 @@ BOOL __stdcall D2WINMAIN_TestMouseInRect(RECT * pRect);
 void __stdcall DrawCursorOOG();
 void __stdcall DRAW_UI_Sprites();
 void __stdcall RENDERER_DrawOutOfGameScene();
-LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nParam, LPARAM lParam);
+LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lParam);
 void __stdcall INPUT_FormKeyHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormKeyUpHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormActivate(struct D2UIMouseMsgStrc * pMsg);

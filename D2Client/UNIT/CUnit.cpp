@@ -757,13 +757,13 @@ void __fastcall FreeLightMap(D2UnitStrc * pUnit) {
     pUnit->uSideData.pClientSide.pLight = 0;
 }
 
-void __fastcall CUNIT_IterateServerUnitsWithCallback(int32_t nParam) {
-    if (!nParam) {
+void __fastcall CUNIT_IterateServerUnitsWithCallback(fnUnitIterCallback pfnCallback) {
+    if (!pfnCallback) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x961);
       exit(-1);
     }
 
-    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[0], (fnUnitIterCallback)nParam);
+    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[0], pfnCallback);
 }
 
 void __fastcall CUNIT_IterateMissilesWithCallback(fnUnitIterCallback pfnCallback) {

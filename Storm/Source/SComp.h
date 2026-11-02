@@ -203,7 +203,7 @@ void __thiscall COMPRESS_EncodeSymbol(struct D2CompressEncoderStrc * pEncoder, i
 void __fastcall COMPRESS_DestroyEncoderContext(uint32_t * pEncoder);
 int __thiscall HUFFMAN_DecompressBlock(uint32_t * pDecoderCtx, uint8_t * pDst, int32_t nDstMax, uint16_t * * pBitBuf);
 int __thiscall COMPRESS_EncodeBuffer(uint32_t * pHuffCtx, int32_t pBitStream, uint8_t * pbSrc, int32_t nSrcLen, int * * nTableSel);
-int32_t __fastcall HUFFMAN_Constructor(int32_t nParam);
+int32_t __fastcall HUFFMAN_Constructor(struct D2CompressEncoderStrc * pEncoder);
 int32_t __fastcall HUFFMAN_ConstructorWithTable(int32_t pHuffCtx);
 // @blizzard HuffmanCompress (SCOMP.CPP)
 void __fastcall SCOMP_HuffmanCompress(uint8_t * pBitStreamCtx, uint32_t * pnBytesWritten, uint8_t * pbSrc, int32_t nSrcLen, uint8_t * pbTableSel, uint32_t dwFlags);

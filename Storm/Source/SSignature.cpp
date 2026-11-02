@@ -628,8 +628,8 @@ void * __thiscall SSIGNATURE_RsaExportZeroPadded(BigData * * pnParam, void * pOu
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_LoadComponent. DESCRIPTIVE, not an oracle name - no PPC counterpart exists. Body is a single SBigFromBinary(this[0], bytes, len), i.e. one half of CryptRSA_Prepare. Zero callers in the whole program: an MSVC out-of-line COMDAT copy of a helper that was inlined at every use. Moved out of SBig into SSignature because that is the translation unit it belongs to.
-void __thiscall SSIGNATURE_RsaLoadComponent(BigData * * pnParam, void * pBytes, uint32_t nParam) {
-    SBig::SBigFromBinary(*pnParam, pBytes, nParam);
+void __thiscall SSIGNATURE_RsaLoadComponent(BigData * * pnParam, void * pBytes, uint32_t nByteCount) {
+    SBig::SBigFromBinary(*pnParam, pBytes, nByteCount);
 }
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.

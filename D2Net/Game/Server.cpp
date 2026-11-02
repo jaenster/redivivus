@@ -252,13 +252,13 @@ uint32_t __stdcall QSERVER_GetClientGameToken(uint32_t nClientId) {
     return gnDefaultClientGameToken;
 }
 
-void __fastcall NET_SendPacketWithFlags(char * szText, uint16_t nParam, int32_t nFlags) {
-    if (nParam > 0x204) {
+void __fastcall NET_SendPacketWithFlags(char * szText, uint16_t nSize, int32_t nFlags) {
+    if (nSize > 0x204) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x209);
       exit(-1);
     }
 
-    Fog::Src::SendPacketToClient(pQServer, szText, (uint32_t)nParam, nFlags);
+    Fog::Src::SendPacketToClient(pQServer, szText, (uint32_t)nSize, nFlags);
 }
 
 uint32_t __fastcall NET_SendPacketToClient(char * szText, uint16_t nSize) {

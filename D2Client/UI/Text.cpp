@@ -5453,7 +5453,7 @@ void __fastcall TEXT_DrawMessageLogAndOverhead(D2GameViewStrc * pGameView) {
     }
 
     gbTextOverheadActive = (uint32_t)(gbTextScrollBoxActive == 1);
-    UNIT::CUnit::CUNIT_IterateServerUnitsWithCallback((int32_t)(uintptr_t)TEXT_DrawMonsterHoverText);
+    UNIT::CUnit::CUNIT_IterateServerUnitsWithCallback((fnUnitIterCallback)TEXT_DrawMonsterHoverText);
     UNIT::CUnit::CUNIT_IterateMissilesWithCallback((fnUnitIterCallback)TEXT_DrawObjectHoverText);
     UNIT::CUnit::CUNIT_IterateItemsWithCallback((fnUnitIterCallback)TEXT_DrawObjectHoverText);
     if (gbTextScrollBoxActive == 1 && gpTextScrollingBox && (gpTextScrollingBox->nState == 1 || !gpTextScrollingBox->nState)) {

@@ -58,7 +58,7 @@ int __fastcall IsActive(struct D2UnitStrc * pUnit);
 int32_t __fastcall IsAlive(struct D2UnitStrc * pUnit);
 struct D2UnitStrc * __fastcall GetConfirmedTargetUnit(struct D2UnitStrc * pUnit);
 void __fastcall FreeLightMap(struct D2UnitStrc * pUnit);
-void __fastcall CUNIT_IterateServerUnitsWithCallback(int32_t nParam);
+void __fastcall CUNIT_IterateServerUnitsWithCallback(fnUnitIterCallback pfnCallback);
 void __fastcall CUNIT_IterateMissilesWithCallback(fnUnitIterCallback pfnCallback);
 void __fastcall CUNIT_IterateItemsWithCallback(fnUnitIterCallback pfnCallback);
 uint16_t * __fastcall ROOM_GetWarpDestinationName(struct D2RoomStrc * pRoom, struct D2UnitStrc * pWarpUnit);

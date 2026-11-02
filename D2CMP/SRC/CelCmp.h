@@ -65,7 +65,7 @@ int __stdcall CELCMP_GetDC6BlockPixelData(struct DC6Block * pDC6Block);
 uint32_t __stdcall CELCMP_RoundUpToMultiple(uint32_t nParam1, uint32_t nParam2);
 void __stdcall CELCMP_FreeCelFileAndData(struct DC6 * pDC6);
 void __stdcall CELCMP_AddCelFrameToCache(uint32_t nParam1, uint32_t * pdwParam, uint32_t nParam2, uint32_t nParam3, uint32_t nParam4, uint32_t nParam5, uint32_t nParam6, uint32_t nParam7);
-void __stdcall CELCMP_FreeCachedCelFrame(uint32_t nParam);
+void __stdcall CELCMP_FreeCachedCelFrame(uint32_t dwHashVal);
 uint32_t __stdcall CELCMP_CreateCelFileFromCache(uint32_t nParam, uint32_t * pdwParam);
 uint32_t __stdcall CELCMP_RoundUpToMultiple_Unreferenced(uint32_t nValue, uint32_t nMultiple);
 void __stdcall GFX_SetSpriteCacheMaxSize(size_t nSize);

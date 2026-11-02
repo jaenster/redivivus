@@ -3205,16 +3205,16 @@ void __fastcall DAMAGE_AddSkillBonusDamage(D2UnitStrc * pUnit, eD2Skills eSkill,
     SKILLS::SkillsServer::SetDamageOnEvent(pUnit, param_1, eSkill, nSkillLevel);
 }
 
-void __fastcall SKILL_CalculateDamageForEvent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nParam, D2DamageStrc * pDamage) {
+void __fastcall SKILL_CalculateDamageForEvent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nSkillLevel, D2DamageStrc * pDamage) {
     if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill)) {
       return;
     }
 
-    int32_t nMinDmg = D2Common::Skills::SKILL_CalcMinDamage(pUnit, eSkill, nParam, 0);
-    int32_t nMaxDmg = D2Common::Skills::SKILL_CalcMaxDamage(pUnit, eSkill, nParam, 0);
+    int32_t nMinDmg = D2Common::Skills::SKILL_CalcMinDamage(pUnit, eSkill, nSkillLevel, 0);
+    int32_t nMaxDmg = D2Common::Skills::SKILL_CalcMaxDamage(pUnit, eSkill, nSkillLevel, 0);
     uint32_t nPhysDmg = DAMAGE_CalculatePhysicalDamage(pUnit, 0, nullptr, nMinDmg, nMaxDmg, 0, 0, 0x80);
     pDamage->dwPhysDamage = nPhysDmg;
-    SKILLS::SkillsServer::SetDamageOnEvent(pUnit, pDamage, eSkill, nParam);
+    SKILLS::SkillsServer::SetDamageOnEvent(pUnit, pDamage, eSkill, nSkillLevel);
 }
 
 // Scales nExperience by the level-difference penalty between attacker and defender. When defender level > 24 and attacker is active, delegates to D2ApplyPercent with raw levels. Otherwise clamps the difference to 10 and looks up a penalty fraction from gaExperiencePenaultyHigherAttacker or gaExperiencePenaultyHigherDefender, then scales via D2ApplyPercent(exp, pct, 0x100). Returns unmodified experience when penalty is 0x100 (no penalty).

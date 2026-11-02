@@ -247,13 +247,13 @@ void __thiscall SRP_ComputeClientProof(int32_t pThis, char * szUsername, void * 
 }
 
 // Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
-void __thiscall SRP_ComputeServerProof(D2Srp * pSrp, void * pParam1, void * pParam2, void * pParam3, int32_t nParam) {
+void __thiscall SRP_ComputeServerProof(D2Srp * pSrp, void * pParam1, void * pParam2, void * pParam3, uint8_t * pHashOut) {
     uint32_t sha1Ctx[23];
     SHA::SHA1_Init(sha1Ctx);
     SHA::SHA1_Update(sha1Ctx, pParam1, 0x20);
     SHA::SHA1_Update(sha1Ctx, pParam2, 0x14);
     SHA::SHA1_Update(sha1Ctx, pParam3, 0x28);
-    SHA::SHA1_Final((uint8_t*)nParam, sha1Ctx);
+    SHA::SHA1_Final(pHashOut, sha1Ctx);
 }
 
 BOOL __fastcall SRP_IsContextInitialized(D2Srp * pSrp) {
@@ -387,7 +387,7 @@ BOOL __thiscall SRP_ClientVerifyServerProof(D2Srp * * pThis, void * pSrpContext,
     int nCmpSign;
     int nCmpDiff;
     uint8_t computedProofBuf[20];
-    SRP_ComputeServerProof(*pThis, (void*)((int)pSrpContext + 0x60), (void*)((int)pSrpContext + 0xa8), (void*)((int)pSrpContext + 0x80), (int32_t)computedProofBuf);
+    SRP_ComputeServerProof(*pThis, (void*)((int)pSrpContext + 0x60), (void*)((int)pSrpContext + 0xa8), (void*)((int)pSrpContext + 0x80), computedProofBuf);
     uint32_t nRemaining;
     nRemaining = 0x14;
     uint8_t* pComputedProof;
@@ -527,7 +527,7 @@ void __thiscall SRP_ClientVerifyAndComputeKey(void * pThis, void * pContext, uin
 
 // Registers: ppSrp in ECX (__thiscall); *ppSrp is forwarded to SRP_ComputeServerProof.
 void __thiscall SRP_ComputeFinalProof(D2Srp * * ppSrp, int32_t nContextBase) {
-    SRP_ComputeServerProof(*ppSrp, (void*)(nContextBase + 0x60), (void*)(nContextBase + 0xe8), (void*)(nContextBase + 0xc0), nContextBase + 0xfc);
+    SRP_ComputeServerProof(*ppSrp, (void*)(nContextBase + 0x60), (void*)(nContextBase + 0xe8), (void*)(nContextBase + 0xc0), (uint8_t*)(nContextBase + 0xfc));
 }
 
 } // namespace Bnclient::SRP

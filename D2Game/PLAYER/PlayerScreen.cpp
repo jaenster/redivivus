@@ -266,10 +266,10 @@ void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * 
 // @caveat neither has xrefs (both are dispatch-table entries), so which one Blizzard called
 // 'AcceptPartyInvite' is inferred from behaviour, not proven. What would settle it: the party-screen
 // packet handler table that references them, or the SendPlayerEvent event-code enum (6 vs 8).
-void __fastcall PARTYSCREEN_SetMutualPlayerRelationship(int32_t nParam, D2UnitStrc * pUnit, D2UnitStrc * pInvitee, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall PARTYSCREEN_SetMutualPlayerRelationship(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pInvitee, uint32_t dwUnused1, uint32_t dwUnused2) {
     uint32_t nInviterGUID;
-    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry((::SGAMEDATA*)nParam, pUnit, pInvitee);
-    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry((::SGAMEDATA*)nParam, pInvitee, pUnit);
+    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pInvitee);
+    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pInvitee, pUnit);
     uint16_t uVar1 = UNIT::PlayerList::PLAYERLIST_IsPartied(pUnit, pInvitee);
     if (uVar1 == 4) {
       uint16_t nPartyId;

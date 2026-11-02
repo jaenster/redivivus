@@ -186,34 +186,34 @@ void __fastcall NET_D2GS_SERVER_Send_0x5F_PortalFlags(D2ClientStrc * pClient, ui
 }
 
 // Server-to-client NPC health update. Opcode 0x0C, 9 bytes.
-void __fastcall NET_D2GS_SERVER_Send_0x0C_UNITCHANGE(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nNpcHitType, uint32_t nUnitGUID, uint8_t bParam1, uint8_t bParam2, uint8_t bParam3) {
+void __fastcall NET_D2GS_SERVER_Send_0x0C_UNITCHANGE(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nNpcHitType, uint32_t nUnitGUID, uint8_t nMessageType, uint8_t bParam2, uint8_t bParam3) {
     D2GSPacketSrv0x0C aPacket;
     aPacket.dwUnitGUID = nUnitGUID;
     aPacket.nUnitType = nNpcHitType;
     aPacket.nParam2 = bParam2;
-    aPacket.nParam1 = bParam1;
+    aPacket.nParam1 = nMessageType;
     aPacket.nParam3 = bParam3;
     aPacket.nPacketId = nPacketId;
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 9, pClient);
 }
 
 // Server-to-client object state update. Opcode 0x0E, 12 bytes.
-void __fastcall NET_D2GS_SERVER_Send_0x0E_UNITCHANGE_ID(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nObjectType, uint32_t dwObjectState, uint8_t bParam1, uint8_t bParam2, uint32_t dwParam) {
+void __fastcall NET_D2GS_SERVER_Send_0x0E_UNITCHANGE_ID(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nObjectType, uint32_t dwObjectState, uint8_t nMessageType, uint8_t bParam2, uint32_t dwParam) {
     D2GSPacketSrv0x0E aPacket;
     aPacket.dwUnitGUID = dwObjectState;
     aPacket.nUnitType = nObjectType;
     aPacket.nParam2 = bParam2;
-    aPacket.nParam1 = bParam1;
+    aPacket.nParam1 = nMessageType;
     aPacket.dwParam = dwParam;
     aPacket.nPacketId = nPacketId;
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 0xc, pClient);
 }
 
 // Server-to-client player stop message. Opcode 0x0D, 13 bytes. Sent when player stops moving.
-void __fastcall NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t nUnitGUID, uint8_t bParam1, uint16_t wX, uint16_t wY, uint8_t bParam2, uint8_t nHpPercent) {
+void __fastcall NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t nUnitGUID, uint8_t nMessageType, uint16_t wX, uint16_t wY, uint8_t bParam2, uint8_t nHpPercent) {
     D2GSPacketSrv0x0D aPacket;
     aPacket.dwUnitGUID = nUnitGUID;
-    aPacket.nParam1 = bParam1;
+    aPacket.nParam1 = nMessageType;
     aPacket.wX = wX;
     aPacket.wY = wY;
     aPacket.nParam2 = bParam2;
@@ -229,12 +229,12 @@ void __fastcall NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(D2ClientStrc * pClient, 
 }
 
 // Server-to-client character to object message. Opcode 0x10, 16 bytes.
-void __fastcall NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t dwGUID, uint8_t bParam1, uint8_t nTargetType, uint32_t dwTargetGUID, uint16_t wX, uint16_t wY) {
+void __fastcall NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t dwGUID, uint8_t nMessageType, uint8_t nTargetType, uint32_t dwTargetGUID, uint16_t wX, uint16_t wY) {
     D2GSPacketSrv0x10 aPacket;
     aPacket.dwUnitGUID = dwGUID;
     aPacket.nUnitType = nUnitType;
     aPacket.nParam2 = nTargetType;
-    aPacket.nParam1 = bParam1;
+    aPacket.nParam1 = nMessageType;
     aPacket.wX = wX;
     aPacket.dwParam = dwTargetGUID;
     aPacket.wY = wY;
@@ -243,10 +243,10 @@ void __fastcall NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS(D2ClientStrc * pClien
 }
 
 // Server-to-client player move message. Opcode 0x0F, 16 bytes.
-void __fastcall NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t dwGUID, uint8_t bParam1, uint16_t wX, uint16_t wY, uint8_t bParam2, uint16_t wX2, uint16_t wY2) {
+void __fastcall NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t dwGUID, uint8_t nMessageType, uint16_t wX, uint16_t wY, uint8_t bParam2, uint16_t wX2, uint16_t wY2) {
     D2GSPacketSrv0x0F aPacket;
     aPacket.dwUnitGUID = dwGUID;
-    aPacket.nParam1 = bParam1;
+    aPacket.nParam1 = nMessageType;
     aPacket.wX = wX;
     aPacket.wY = wY;
     aPacket.nParam2 = bParam2;

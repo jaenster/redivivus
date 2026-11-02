@@ -4459,7 +4459,7 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
         pGameDrop = pGameSaved;
         if (pBestDropRoom) {
           ITEMMODE_UnequipItemStats(pGameSaved, pUnit_00, pUnit, 0, 1);
-          Items::Drop::DropItem(pGameDrop, (int32_t)pUnit, pUnit_00, pBestDropRoom, ptDropSpot.x, ptDropSpot.y);
+          Items::Drop::DropItem(pGameDrop, pUnit, pUnit_00, pBestDropRoom, ptDropSpot.x, ptDropSpot.y);
         }
       }
 
@@ -6682,7 +6682,7 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
         pDropRoom = Items::Drop::FindBestSpotToSpawnItem(pDropRoom, &ptUnitPos, pNewPosition, dwCarriedGUID, bSparseSearch);
         pCubeItem = pSavedCubeItem;
         if (pDropRoom) {
-          Items::Drop::DropItem(pGame, (int32_t)pUnit2, pCarriedItem, pDropRoom, ptDropPos.x, ptDropPos.y);
+          Items::Drop::DropItem(pGame, pUnit2, pCarriedItem, pDropRoom, ptDropPos.x, ptDropPos.y);
           pCubeItem = pNextItem;
         }
       }
@@ -6732,7 +6732,7 @@ void __fastcall SERVER_DropItemFromPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUni
         return;
       }
 
-      Items::Drop::DropItem(pGame, (int32_t)pUnit, pItem, pDropRoom, ptDropPos.x, ptDropPos.y);
+      Items::Drop::DropItem(pGame, pUnit, pItem, pDropRoom, ptDropPos.x, ptDropPos.y);
       D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pUnit->pInventory, nullptr);
       bHasSocketed = ITEMMODE_HasSocketedItems(pItem, ".\\ITEMS\\ItemMode.cpp", 0x85b);
       if (bHasSocketed) {

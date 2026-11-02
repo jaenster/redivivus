@@ -1845,8 +1845,8 @@ void __fastcall ITEM_RemoveFromOwnerInventory(::SGAMEDATA * pGame, D2UnitStrc * 
     INVENTORY_RemoveItemFromOwner(pUnit->pInventory, pItem);
 }
 
-void thunk_IterateAllUnits(::SGAMEDATA * pGame, uint32_t * dwParam) {
-    UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)ITEM_RemoveFromOwnerInventory, dwParam);
+void thunk_IterateAllUnits(::SGAMEDATA * pGame, uint32_t * pArgs) {
+    UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)ITEM_RemoveFromOwnerInventory, pArgs);
 }
 
 void __fastcall ITEM_DeleteItemAndFreeUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
@@ -2469,7 +2469,7 @@ int32_t __fastcall ITEM_CalculateDespawnTimer(::SGAMEDATA * pGame, D2UnitStrc * 
     return nDespawnFrame + 30000;
 }
 
-void __fastcall DropItem(::SGAMEDATA * pGame, int32_t nParam, D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t x, int32_t y) {
+void __fastcall DropItem(::SGAMEDATA * pGame, D2UnitStrc * pSourceUnit, D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t x, int32_t y) {
     if (!pRoom) {
       return;
     }
@@ -2489,11 +2489,11 @@ void __fastcall DropItem(::SGAMEDATA * pGame, int32_t nParam, D2UnitStrc * pUnit
 
     int32_t nDespawnFrame = ITEM_CalculateDespawnTimer(pGame, pUnit);
     pUnit->pUnitData.pUnitDataObject->nLinkedPortalY = nDespawnFrame;
-    if (!nParam) {
+    if (!pSourceUnit) {
       return;
     }
 
-    Quests::QUESTS::QUEST_OnItemDropped(pGame, (D2UnitStrc*)nParam, pUnit);
+    Quests::QUESTS::QUEST_OnItemDropped(pGame, pSourceUnit, pUnit);
 }
 
 // Scans all rooms in an act and despawns expired ground items. For each UNIT_ITEM whose despawn frame (stored in nLinkedPortalY) has passed, removes it from collision, detaches it from any owner inventory via unit iteration, and frees the server unit.
@@ -3438,7 +3438,7 @@ void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
         }
 
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pGoldItem, UNITSTAT_gold, nPileAmount, 0);
-        DropItem(pGameSaved, (int32_t)pUnit, pGoldItem, pCurrentRoom, ptSpawnPos.x, ptSpawnPos.y);
+        DropItem(pGameSaved, pUnit, pGoldItem, pCurrentRoom, ptSpawnPos.x, ptSpawnPos.y);
         pUnitTable[*pnUnitCount] = pGoldItem;
         (*pnUnitCount)++;
       }
@@ -3474,7 +3474,7 @@ void __fastcall ITEM_DropEarOnPvpDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) 
       return;
     }
 
-    DropItem(pGame, 0, pUnit_00, pSpawnRoom, ptSpawnPos.x, ptSpawnPos.y);
+    DropItem(pGame, nullptr, pUnit_00, pSpawnRoom, ptSpawnPos.x, ptSpawnPos.y);
 }
 
 // Two explicit GuardStack tails: GuardStack((int)pClonedItem) on success, GuardStack(0) on failure. Returns the cloned item unit or NULL.

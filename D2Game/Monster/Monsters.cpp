@@ -1586,7 +1586,7 @@ void __fastcall MONSTER_StealPotionFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pClonedItem, ITEMFLAG_NEW, 1);
-    ITEMS::Items::Drop::DropItem(pGameLocal, (int32_t)pTargetPlayer, pClonedItem, (D2RoomStrc*)pGameTemp, ptDropPos.x, ptDropPos.y);
+    ITEMS::Items::Drop::DropItem(pGameLocal, pTargetPlayer, pClonedItem, (D2RoomStrc*)pGameTemp, ptDropPos.x, ptDropPos.y);
     nErrorLine = D2Client::Units::GetXPosFromDynamicPathUnit(pBeltItem);
     ITEMS::ItemMode::ITEMMODE_ConsumeItemAndRemove(pGameLocal, pTargetPlayer, pBeltItem);
     ITEMS::ItemMode::ITEMMODE_SortBeltColumn(pGameLocal, pTargetPlayer, (uint8_t)nErrorLine);

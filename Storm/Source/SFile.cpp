@@ -4560,13 +4560,13 @@ void __stdcall SFILE_CancelAsyncRequestNoReturn(int32_t nParam) {
 }
 
 // Cancels async request and returns status. Validates handle (returns 0 + ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0) and returns its result (1=success, 0=failure).
-int __stdcall SFILE_CancelAsyncRequestWithStatus(int32_t nParam) {
-    if (!nParam) {
+int __stdcall SFILE_CancelAsyncRequestWithStatus(int32_t nRequestHandle) {
+    if (!nRequestHandle) {
       SErr::SErrSetLastError(0x57);
       return 0;
     }
 
-    int nResult = SFILE_CancelAsyncRequest(nParam, nullptr);
+    int nResult = SFILE_CancelAsyncRequest(nRequestHandle, nullptr);
     return nResult;
 }
 

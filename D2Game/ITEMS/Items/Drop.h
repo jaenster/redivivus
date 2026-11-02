@@ -124,7 +124,7 @@ void __fastcall ITEM_FreeItemInventoryAndTimers(::SGAMEDATA * pGame, struct D2Un
 // Matches fpSUnitIterateCallback (ECX=pGame, EDX=pUnit, Stack[0x4]=pArgs); pGame is unused by the
 // body, which is why the register is never read. Confirmed by RET 0x4 and the CALL EBX at 00553914.
 void __fastcall ITEM_RemoveFromOwnerInventory(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
-void thunk_IterateAllUnits(::SGAMEDATA * pGame, uint32_t * dwParam);
+void thunk_IterateAllUnits(::SGAMEDATA * pGame, uint32_t * pArgs);
 void __fastcall ITEM_DeleteItemAndFreeUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 BOOL __fastcall AlreadyHoldingItem(struct D2UnitStrc * punit, struct D2UnitStrc * pItem, struct D2InventoryStrc * pInventory);
 // Searches a player's inventory (cursor slot + all inventory pages, excluding corpse) for an item matching szItemCode. For quest items also validates that the item's questitemdifficulty stat is >= the current game difficulty, preventing quest items from a lower difficulty from counting. Returns the matching D2UnitStrc* or NULL.
@@ -141,7 +141,7 @@ void __fastcall RefreshQuantity(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 int32_t __fastcall ITEMDROP_AdjustDrop(int32_t nParam1, int32_t nParam2, int32_t nMFAdjusted);
 // Calculates the game-frame at which a ground item should despawn. Quest items never expire (returns 0). Unique/set quality: +30000 frames. High-tier quality (5–9): +45000. Gold &gt;10000: +45000. Socketable items: +30000. All others: +15000.
 int32_t __fastcall ITEM_CalculateDespawnTimer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-void __fastcall DropItem(::SGAMEDATA * pGame, int32_t nParam, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t x, int32_t y);
+void __fastcall DropItem(::SGAMEDATA * pGame, struct D2UnitStrc * pSourceUnit, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t x, int32_t y);
 // Scans all rooms in an act and despawns expired ground items. For each UNIT_ITEM whose despawn frame (stored in nLinkedPortalY) has passed, removes it from collision, detaches it from any owner inventory via unit iteration, and frees the server unit.
 void __fastcall FreeUnusedItems(::SGAMEDATA * pGame, int32_t nAct);
 void __fastcall ITEM_RemoveRuneword(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);

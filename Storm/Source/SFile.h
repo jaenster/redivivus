@@ -498,7 +498,7 @@ void __stdcall SFILE_CreateCdThread();
 // Cancels async request without returning status. Validates handle (sets ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0). Called by ASYNCDATA_Free to silently cancel pending I/O during cleanup.
 void __stdcall SFILE_CancelAsyncRequestNoReturn(int32_t nParam);
 // Cancels async request and returns status. Validates handle (returns 0 + ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0) and returns its result (1=success, 0=failure).
-int __stdcall SFILE_CancelAsyncRequestWithStatus(int32_t nParam);
+int __stdcall SFILE_CancelAsyncRequestWithStatus(int32_t nRequestHandle);
 // Cancels all async I/O requests for a file handle. Validates handle, iterates gSFileStreamRecordList.pNext list, cancels any matching requests (including gpCurrentAsyncIORequest if active), unlinks from queue, decrements refcount, and frees when refcount hits zero. Clears file handle's async flag (offset 0x134). Returns 1 on success, 0 if handle invalid.
 BOOL __stdcall SFileDdaEnd(struct D2MPQFileStrc * hFile);
 // Re-prioritises the queued Storm reads into pReadBuffer: SFILE_SetRequestUrgentByBuffer(pReadBuffer, nPriority > 0), then signals ghAsyncIOEvent if nPriority > 0. SetLastError(0x57) on a NULL buffer. Fog AsyncData passes D2AsyncData_Line0x128.pReadBuffer (+0x3c).

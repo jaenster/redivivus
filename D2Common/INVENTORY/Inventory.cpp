@@ -1848,7 +1848,7 @@ static BOOL INVENTORY_PlaceItemInBeltSlot(uint32_t nBeltSlot, D2InventoryStrc * 
 }
 
 // @sourcefile .\INVENTORY\Inventory.cpp
-BOOL __stdcall INVENTORY_CanPlaceItemInBelt(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, uint32_t nParam) {
+BOOL __stdcall INVENTORY_CanPlaceItemInBelt(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, uint32_t nBeltSlot) {
     char byItemHeight;
     D2UnitStrc* pUnit_00 = pUnit;
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
@@ -1863,7 +1863,7 @@ BOOL __stdcall INVENTORY_CanPlaceItemInBelt(D2InventoryStrc * pInventory, D2Unit
     ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pUnit_00, (char*)((uintptr_t)&pUnit + 3), &byItemHeight, ".\\INVENTORY\\Inventory.cpp", 0xaab);
     if (*(uint8_t*)((char*)&pUnit + 3) == '\x01' && byItemHeight == '\x01') {
       BOOL bPlaceResult;
-      bPlaceResult = INVENTORY_PlaceItemInBeltSlot(nParam, (D2InventoryStrc*)pUnit_00, &pInventory->nSignatureMagic);
+      bPlaceResult = INVENTORY_PlaceItemInBeltSlot(nBeltSlot, (D2InventoryStrc*)pUnit_00, &pInventory->nSignatureMagic);
       return bPlaceResult;
     }
 

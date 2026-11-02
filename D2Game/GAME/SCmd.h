@@ -568,15 +568,15 @@ void __fastcall NET_D2GS_SERVER_Send_CMD_BYTE_INT(struct D2ClientStrc * pClient,
 // Server-to-client portal flags notification. Opcode 0x5F, 5 bytes. Sends player's portal flags (GetPlayerPortalFlags) during character load sequence.
 void __fastcall NET_D2GS_SERVER_Send_0x5F_PortalFlags(struct D2ClientStrc * pClient, uint8_t nPacketId, uint32_t dwPortalFlags);
 // Server-to-client NPC health update. Opcode 0x0C, 9 bytes.
-void __fastcall NET_D2GS_SERVER_Send_0x0C_UNITCHANGE(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nNpcHitType, uint32_t nUnitGUID, uint8_t bParam1, uint8_t bParam2, uint8_t bParam3);
+void __fastcall NET_D2GS_SERVER_Send_0x0C_UNITCHANGE(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nNpcHitType, uint32_t nUnitGUID, uint8_t nMessageType, uint8_t bParam2, uint8_t bParam3);
 // Server-to-client object state update. Opcode 0x0E, 12 bytes.
-void __fastcall NET_D2GS_SERVER_Send_0x0E_UNITCHANGE_ID(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nObjectType, uint32_t dwObjectState, uint8_t bParam1, uint8_t bParam2, uint32_t dwParam);
+void __fastcall NET_D2GS_SERVER_Send_0x0E_UNITCHANGE_ID(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nObjectType, uint32_t dwObjectState, uint8_t nMessageType, uint8_t bParam2, uint32_t dwParam);
 // Server-to-client player stop message. Opcode 0x0D, 13 bytes. Sent when player stops moving.
-void __fastcall NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t nUnitGUID, uint8_t bParam1, uint16_t wX, uint16_t wY, uint8_t bParam2, uint8_t nHpPercent);
+void __fastcall NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t nUnitGUID, uint8_t nMessageType, uint16_t wX, uint16_t wY, uint8_t bParam2, uint8_t nHpPercent);
 // Server-to-client character to object message. Opcode 0x10, 16 bytes.
-void __fastcall NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t dwGUID, uint8_t bParam1, uint8_t nTargetType, uint32_t dwTargetGUID, uint16_t wX, uint16_t wY);
+void __fastcall NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t dwGUID, uint8_t nMessageType, uint8_t nTargetType, uint32_t dwTargetGUID, uint16_t wX, uint16_t wY);
 // Server-to-client player move message. Opcode 0x0F, 16 bytes.
-void __fastcall NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t dwGUID, uint8_t bParam1, uint16_t wX, uint16_t wY, uint8_t bParam2, uint16_t wX2, uint16_t wY2);
+void __fastcall NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t dwGUID, uint8_t nMessageType, uint16_t wX, uint16_t wY, uint8_t bParam2, uint16_t wX2, uint16_t wY2);
 // Server-to-client monster move to entity message. Opcode 0x68, 21 bytes.
 void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH(struct D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nTargetType, uint8_t nTargetUnitType, uint32_t dwTargetGUID, uint8_t bParam2);
 // Server-to-client monster move message. Opcode 0x67, 16 bytes.

@@ -105,7 +105,7 @@ struct BigData * * __thiscall SSIGNATURE_RsaPowMod(struct BigData * * pnParam3, 
 void * __thiscall SSIGNATURE_RsaExportZeroPadded(struct BigData * * pnParam, void * pOutBuf, uint32_t nParam);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_LoadComponent. DESCRIPTIVE, not an oracle name - no PPC counterpart exists. Body is a single SBigFromBinary(this[0], bytes, len), i.e. one half of CryptRSA_Prepare. Zero callers in the whole program: an MSVC out-of-line COMDAT copy of a helper that was inlined at every use. Moved out of SBig into SSignature because that is the translation unit it belongs to.
-void __thiscall SSIGNATURE_RsaLoadComponent(struct BigData * * pnParam, void * pBytes, uint32_t nParam);
+void __thiscall SSIGNATURE_RsaLoadComponent(struct BigData * * pnParam, void * pBytes, uint32_t nByteCount);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_LoadKeyPair. Oracle: ".Prepare__Q25Crypt3RSAFPCvUlPCvUl" @100a2a50 = Crypt::RSA::Prepare(const void*, unsigned long, const void*, unsigned long). Basis: PPC body is exactly two bl .SBigFromBinary calls on this[0] and this[4], and reads r3..r7 = this+4 args; this function is byte-for-byte the same shape with this+4 params. So the object is a pair of BigBuffer handles at +0 and +4.
 // ppKey[0] is the modulus and ppKey[1] the exponent: CryptRSA_Process calls SBigPowMod(out, in, ppKey[1], ppKey[0]). SSignatureGenerate passes one modulus with its private then its public exponent, so neither pair is 'public' or 'private' as a whole.

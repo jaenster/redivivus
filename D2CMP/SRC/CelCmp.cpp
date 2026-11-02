@@ -1959,10 +1959,10 @@ void __stdcall CELCMP_AddCelFrameToCache(uint32_t nParam1, uint32_t * pdwParam, 
     }
 }
 
-void __stdcall CELCMP_FreeCachedCelFrame(uint32_t nParam) {
+void __stdcall CELCMP_FreeCachedCelFrame(uint32_t dwHashVal) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
     int bLockAcquired = -1;
-    ::CELLIST* pHashEntry = gCelCmpCacheHandler.TSHashTable<::CELLIST, HASHKEY_NONE>::Ptr(nParam, &gCelCmpCacheHandler.tKey);
+    ::CELLIST* pHashEntry = gCelCmpCacheHandler.TSHashTable<::CELLIST, HASHKEY_NONE>::Ptr(dwHashVal, &gCelCmpCacheHandler.tKey);
     if (!pHashEntry) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
       bLockAcquired = 0;

@@ -1756,8 +1756,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x63(char * pBytes) {
     UI::Waypoint::WAYPOINT_Init((uint8_t*)&sPayload);
 }
 
-void __fastcall NET_D2GS_CLIENT_Incoming0x65_SCORE_UPDATE(int32_t nParam) {
-    Roster::ROSTER_SetArenaScore(*(int32_t*)(nParam + 1), *(uint16_t*)(nParam + 5));
+void __fastcall NET_D2GS_CLIENT_Incoming0x65_SCORE_UPDATE(D2GSPacketSrv0x65 * pPacket) {
+    Roster::ROSTER_SetArenaScore(pPacket->dwUnitGUID, pPacket->wKillCount);
 }
 
 void __fastcall SCMD_Rcv0x66_Ignore(char * pBytes) {
@@ -1945,8 +1945,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x8C_PLAYERFLAGS(char * pBytes) {
     Roster::ROSTER_SetPlayerHostileFlag(*(int32_t*)(pBytes + 1), *(int32_t*)(pBytes + 5), *(uint16_t*)(pBytes + 9));
 }
 
-void __fastcall NET_D2GS_CLIENT_Incoming0x8D_PLAYERPARTY(int32_t nParam) {
-    Roster::SetRosterPartyId(*(int32_t*)(nParam + 1), *(uint16_t*)(nParam + 5));
+void __fastcall NET_D2GS_CLIENT_Incoming0x8D_PLAYERPARTY(D2GSPacketSrv0x8D * pPacket) {
+    Roster::SetRosterPartyId(pPacket->nUnitGUID, pPacket->nPartyId);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x8E_LINKDEADBODY(D2GSPacketSrv0x8E * pBytes) {

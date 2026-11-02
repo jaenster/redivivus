@@ -3057,18 +3057,18 @@ D2UnitStrc * __fastcall CreatingAMissile(::SGAMEDATA * pGame, eMissilesId nSrvMi
     return pMissile;
 }
 
-D2UnitStrc * __fastcall SKILLS_CreateMissileAtTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, eMissilesId nMissileId, uint32_t nParam1, uint32_t nParam2) {
+D2UnitStrc * __fastcall SKILLS_CreateMissileAtTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, eMissilesId nMissileId, uint32_t nX, uint32_t nY) {
     D2SkillArgStrc sSkillArg;
     if (!pUnit) {
       return nullptr;
     }
-    if (!(nParam1 || nParam2 || (SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nParam1, &nParam2) , nParam1 != 0) || nParam2)) {
+    if (!(nX || nY || (SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nX, &nY) , nX != 0) || nY)) {
       return nullptr;
     }
 
-    uint32_t nTargetX = nParam2;
-    uint32_t nSrcX = nParam1;
-    uint32_t nDistToTarget = D2Common::Collision::GetDistanceToXY(pUnit, nParam1, nParam2);
+    uint32_t nTargetX = nY;
+    uint32_t nSrcX = nX;
+    uint32_t nDistToTarget = D2Common::Collision::GetDistanceToXY(pUnit, nX, nY);
     if (nDistToTarget > 0x64) {
       return nullptr;
     }

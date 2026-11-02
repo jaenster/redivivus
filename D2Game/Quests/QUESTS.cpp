@@ -2775,7 +2775,7 @@ D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitSt
       nFindRadius = 5;
       pRoomsNear = (D2RoomStrc**)&nRewardLevel;
       FindSpawnableLocation(D2Common::Units::UNITS_GetRoom(pUnit), &sDropCoords, 1, 0x3e01, pRoomsNear, nFindRadius, nSearchIterations);
-      ITEMS::Items::Drop::DropItem(pGame, 0, pRewardItem, (D2RoomStrc*)nRewardLevel, sDropCoords.x, sDropCoords.y);
+      ITEMS::Items::Drop::DropItem(pGame, nullptr, pRewardItem, (D2RoomStrc*)nRewardLevel, sDropCoords.x, sDropCoords.y);
       return pRewardItem;
     }
 

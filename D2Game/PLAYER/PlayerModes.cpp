@@ -577,7 +577,7 @@ static void __stdcall PLRMODES_DropAllEquipmentAndGold(::SGAMEDATA * pGame, D2Un
         pSpawnPos = &ptBestSpot;
         pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
         pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pSpawnRoom, &ptUnitPos, pSpawnPos, nGoldAmount, bAllowOnGround);
-        ITEMS::Items::Drop::DropItem(pGame, (int32_t)pUnit, pBodyLocItem, pSpawnRoom, ptBestSpot.x, ptBestSpot.y);
+        ITEMS::Items::Drop::DropItem(pGame, pUnit, pBodyLocItem, pSpawnRoom, ptBestSpot.x, ptBestSpot.y);
         nBodyLoc_00 = nBodyLoc;
       }
 
@@ -785,7 +785,7 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
               pNewPosition = &sDropCoords;
               pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
               pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pSpawnRoom, &sUnitCoords, pNewPosition, uVar2, nMaxSearchRadius);
-              ITEMS::Items::Drop::DropItem(pSavedGame, (int32_t)pUnit, pItemUnit, pSpawnRoom, sDropCoords.x, sDropCoords.y);
+              ITEMS::Items::Drop::DropItem(pSavedGame, pUnit, pItemUnit, pSpawnRoom, sDropCoords.x, sDropCoords.y);
               iVar4 = nBodyLocIndex;
             }
 

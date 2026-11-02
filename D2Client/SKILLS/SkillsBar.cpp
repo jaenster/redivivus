@@ -1088,7 +1088,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2DynamicPathStrc * 
 }
 
 // Renders pUnit at a rotated facing direction for skill animation (e.g. Whirlwind dual-weapon draw). Rotates the unit's dynamic-path direction by +0x2A (full) or +0x15 (half) steps depending on bHalfRotation, computes screen position in both perspective and orthographic modes, calls DRAW_WORLD_Unit_1 to draw the unit, then restores the original direction.
-void __fastcall SKILL_DrawUnitAtRotatedAngle(D2UnitStrc * pUnit, uint32_t nParam, int32_t bHalfRotation) {
+void __fastcall SKILL_DrawUnitAtRotatedAngle(D2UnitStrc * pUnit, uint32_t nGamma, int32_t bHalfRotation) {
     uint32_t bPerspective;
     uint32_t nScreenX;
     DRAWMODE nScreenY;
@@ -1124,7 +1124,7 @@ void __fastcall SKILL_DrawUnitAtRotatedAngle(D2UnitStrc * pUnit, uint32_t nParam
       nScreenY = D2Common::Units::GetTargetY(pUnit);
     }
 
-    Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nParam, nScreenX, nScreenY, (D2GamePalShiftGreenBloodStrc*)(uint32_t)(pUnit->eUnitType == UNIT_PLAYER), 0);
+    Engine::Gfx::DRAW_WORLD_Unit_1(pUnit, nGamma, nScreenX, nScreenY, (D2GamePalShiftGreenBloodStrc*)(uint32_t)(pUnit->eUnitType == UNIT_PLAYER), 0);
     D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, nDirection);
 }
 

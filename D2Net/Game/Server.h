@@ -49,7 +49,7 @@ void __stdcall NET_Thunk_QServerSetHacklistAddLineHook(fpD2QServerLineHook pfnHo
 void __stdcall NET_SetQServerCallbackFunction(void * pfnCallback);
 void __stdcall AssignClientToToken(int32_t nClientId, uint32_t nToken);
 uint32_t __stdcall QSERVER_GetClientGameToken(uint32_t nClientId);
-void __fastcall NET_SendPacketWithFlags(char * szText, uint16_t nParam, int32_t nFlags);
+void __fastcall NET_SendPacketWithFlags(char * szText, uint16_t nSize, int32_t nFlags);
 uint32_t __fastcall NET_SendPacketToClient(char * szText, uint16_t nSize);
 void __stdcall NET_WaitForEmptyEvent(DWORD dwTimeout);
 void __stdcall _NullSub();

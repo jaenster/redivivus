@@ -4294,9 +4294,9 @@ int __thiscall COMPRESS_EncodeBuffer(uint32_t * pHuffCtx, int32_t pBitStream, ui
     }
 }
 
-int32_t __fastcall HUFFMAN_Constructor(int32_t nParam) {
-    HUFFMAN_InitContext((D2CompressEncoderStrc*)nParam);
-    return nParam;
+int32_t __fastcall HUFFMAN_Constructor(D2CompressEncoderStrc * pEncoder) {
+    HUFFMAN_InitContext(pEncoder);
+    return (int32_t)pEncoder;
 }
 
 int32_t __fastcall HUFFMAN_ConstructorWithTable(int32_t pHuffCtx) {

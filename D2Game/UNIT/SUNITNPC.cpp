@@ -381,13 +381,13 @@ D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(D2UnitStrc * pUnit, uint32_t n
     }
 }
 
-void __fastcall SUNITNPC_RefreshNpcItem(D2UnitStrc * nParam1, D2UnitStrc * pUnit, D2UnitStrc * pItem, ::SGAMEDATA * pGame, int32_t nParam2) {
+void __fastcall SUNITNPC_RefreshNpcItem(D2UnitStrc * pPlayerUnit, D2UnitStrc * pUnit, D2UnitStrc * pItem, ::SGAMEDATA * pGame, int32_t nParam2) {
     D2UnitStrc* pItemSaved = pItem;
     if (!(pItem && pUnit)) {
       return;
     }
 
-    D2InventoryStrc* pInventory = sunitproxy::SUNITPROXY_GetPlayerProxyInventory(pGame, nParam1, pUnit);
+    D2InventoryStrc* pInventory = sunitproxy::SUNITPROXY_GetPlayerProxyInventory(pGame, pPlayerUnit, pUnit);
     if (!pInventory) {
       return;
     }
@@ -823,8 +823,8 @@ bool __fastcall SUNITNPC_CheckNpcCanSellItem(::SGAMEDATA * pGame, D2UnitStrc * p
     return false;
 }
 
-void __fastcall SUNITNPC_ReturnOne(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nParam) {
-    ITEMS::Items::Drop::ITEM_GiveGoldOrDrop(pGame, pUnit, nParam);
+void __fastcall SUNITNPC_ReturnOne(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nGoldAmount) {
+    ITEMS::Items::Drop::ITEM_GiveGoldOrDrop(pGame, pUnit, nGoldAmount);
 }
 
 // Handles post-purchase NPC item refresh. For gamble mode (nBuyMode==2) with a personal NPC inventory, scans the player's carried items and refreshes the matching gamble item via SUNITNPC_RefreshNpcItem. Otherwise checks if the NPC can still sell the item; if not, refills the NPC's inventory slot via SUNITNPC_FillNpcInventory.
@@ -3319,7 +3319,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
               D2Common::Units::GetCoords(pUnit, &ptUnitPos);
               pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
               pRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pRoom, &ptUnitPos, &PStack_108, 1, 1);
-              ITEMS::Items::Drop::DropItem(pGame, 0, pClonedItem, pRoom, PStack_108.x, (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&PStack_108.y + 2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)*(uint8_t*)((char*)&PStack_108.y + 1) << 8 | (uint16_t)(uint8_t)PStack_108.y)));
+              ITEMS::Items::Drop::DropItem(pGame, nullptr, pClonedItem, pRoom, PStack_108.x, (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&PStack_108.y + 2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)*(uint8_t*)((char*)&PStack_108.y + 1) << 8 | (uint16_t)(uint8_t)PStack_108.y)));
             }
 
             Quests::QUESTS::A1Q3::DeactivateToolsOfTrade(pGame, pUnit);
@@ -3498,7 +3498,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
               D2Common::Units::GetCoords(pUnit, &ptUnitPos);
               pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
               pRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pRoom, &ptUnitPos, &sUseMenuPkt, 1, 1);
-              ITEMS::Items::Drop::DropItem(pGame, 0, pClonedItem, pRoom, sUseMenuPkt.x, sUseMenuPkt.y);
+              ITEMS::Items::Drop::DropItem(pGame, nullptr, pClonedItem, pRoom, sUseMenuPkt.x, sUseMenuPkt.y);
             }
 
             D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pClonedItem, ITEMFLAG_PLAYERNAME, 1);
@@ -3585,7 +3585,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
       D2Common::Units::GetCoords(pUnit, &ptUnitPos);
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       pRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pRoom, &ptUnitPos, &sUseMenuPkt, 1, 1);
-      ITEMS::Items::Drop::DropItem(pGame, 0, pClonedItem, pRoom, sUseMenuPkt.x, sUseMenuPkt.y);
+      ITEMS::Items::Drop::DropItem(pGame, nullptr, pClonedItem, pRoom, sUseMenuPkt.x, sUseMenuPkt.y);
     }
 
     Quests::QUESTS::A5Q1::Q31_ClaimReward(pGame, pUnit);

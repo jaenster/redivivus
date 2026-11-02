@@ -161,7 +161,7 @@ struct D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInMain(struct D2Invent
 // Searches the player inventory grid for a tome (ITEMTYPE_Book) that matches pScrollItem's magic suffix and is not yet full (quantity < max stack). Iterates the stash grid's item linked list starting from pStartAfterItem (or from the beginning if NULL). Returns the first matching non-full tome, or NULL if none found. Used when auto-stacking a scroll pickup into an existing tome.
 struct D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(struct D2InventoryStrc * pnParam, struct D2UnitStrc * pScrollItem, struct D2UnitStrc * pStartAfterItem);
 // @sourcefile .\INVENTORY\Inventory.cpp
-BOOL __stdcall INVENTORY_CanPlaceItemInBelt(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, uint32_t nParam);
+BOOL __stdcall INVENTORY_CanPlaceItemInBelt(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, uint32_t nBeltSlot);
 void __stdcall INVENTORY_OnBeltChanged_NoOp(struct D2InventoryStrc * dwParam1, uint32_t dwParam2);
 BOOL __stdcall INVENTORY_CanAutoBeltItem(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItem);
 // Finds the best belt slot index for pUnit (a potion item) and writes it to *dwParam. Prefers a column already containing the same potion type (stacking behaviour), falling back to any empty slot if the item's txt entry has bAutoBelt set. Only considers 1x1 beltable items; slot count is capped by the equipped belt's nBoxes. Does nothing if no valid slot is found.
