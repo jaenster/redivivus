@@ -194,10 +194,13 @@ def functions(path, data=None, labels=False):
         def reloc_at(addr, f=f):
             k = f.relocs.get(addr)
             return k[1] if k and k[0] == 'self' else None
-        f.decoded = funcdecode.decode_function(f.code, 0, 0, len(f.code), reloc_at)
+        def external_at(addr, f=f):
+            k = f.relocs.get(addr)
+            return k is not None and k[0] in ('call', 'import')
+        f.decoded = funcdecode.decode_function(f.code, 0, 0, len(f.code), reloc_at, external_at=external_at)
         extra = sorted(x - start for x in roots.get(sec.number, ()) if start < x < end)
         for r in extra:
-            g = funcdecode.decode_function(f.code, 0, r, len(f.code), reloc_at)
+            g = funcdecode.decode_function(f.code, 0, r, len(f.code), reloc_at, external_at=external_at)
             have = {i.addr for i in f.decoded.insns}
             f.decoded.insns += [i for i in g.insns if i.addr not in have]
             f.decoded.tables += g.tables

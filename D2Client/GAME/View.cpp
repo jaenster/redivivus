@@ -398,7 +398,7 @@ void __fastcall SetFlag0x1(D2GameViewStrc * pGameView) {
 }
 
 void __fastcall SetViewRectangleSize(D2GameViewStrc * pGameView, int32_t xLeft, int32_t yTop, int32_t xRight, int32_t yBottom) {
-    bool _bPerspective;
+    uint32_t _bPerspective;
     bool bPerspective;
     if (!pGameView) {
       return;
@@ -409,12 +409,9 @@ void __fastcall SetViewRectangleSize(D2GameViewStrc * pGameView, int32_t xLeft, 
     tagRECT* lprc = &pGameView->rcExtendedView;
     /* LPRECT lprc for SetRect */ SetRect(lprc, -0x50, -0x50, ScreenSizeX + 0x50, ScreenSizeY - 0x2f);
     if (_bPerspective) {
-      LONG* pCoord;
-      pCoord = &pGameView->rcExtendedView.top;
-      *pCoord += -0x1e;
+      pGameView->rcExtendedView.top += -0x1e;
       lprc->left += -0x2d;
-      pCoord = &pGameView->rcExtendedView.right;
-      *pCoord += 0x1e;
+      pGameView->rcExtendedView.right += 0x1e;
     }
 
     pGameView->nFlags |= 1;
@@ -645,11 +642,7 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     gnAncientsScrollDelta = nTargetX - gnAncientsScrollBaseX;
     int nScrollOffset = gnAncientsScrollDelta + (gnAncientsScrollDelta >> 0x1f & 7U);
     uint32_t nCloudFrame = nScrollOffset >> 3;
-    uint32_t nTileFrameX = nCloudFrame & 0x800000ff;
-    if ((int)nTileFrameX < 0) {
-      nTileFrameX = (nTileFrameX - 1 | -256) + 1;
-    }
-
+    uint32_t nTileFrameX = (int)nCloudFrame % 256;
     nCloudFrame = (int)(nCloudFrame + (nScrollOffset >> 0x1f & 0xffU)) >> 8 & 0x80000003;
     if ((int)nCloudFrame < 0) {
       nFrameIdx = nCloudFrame - 1 | -4;
@@ -689,25 +682,13 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
       sGfxData.pDC6 = pSummitDC6;
       sGfxData.nFrameNumber = nCloudFrame;
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nScrollOffset, 0x100, -1, DRAW_SOLID, nullptr);
-      nTileFrameX = nCloudFrame + 1 & 0x80000003;
-      if ((int)nTileFrameX < 0) {
-        nTileFrameX = (nTileFrameX - 1 | -4) + 1;
-      }
-
+      nTileFrameX = (int)(nCloudFrame + 1) % 4;
       sGfxData.nFrameNumber = nTileFrameX;
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nScrollOffset + 0x100, 0x100, -1, DRAW_SOLID, nullptr);
-      nFrameIdx = nCloudFrame + 2 & 0x80000003;
-      if ((int)nFrameIdx < 0) {
-        nFrameIdx = (nFrameIdx - 1 | -4) + 1;
-      }
-
+      nFrameIdx = (int)(nCloudFrame + 2) % 4;
       sGfxData.nFrameNumber = nFrameIdx;
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nScrollOffset + 0x200, 0x100, -1, DRAW_SOLID, nullptr);
-      nTileFrame3 = nCloudFrame + 3 & 0x80000003;
-      if ((int)nTileFrame3 < 0) {
-        nTileFrame3 = (nTileFrame3 - 1 | -4) + 1;
-      }
-
+      nTileFrame3 = (int)(nCloudFrame + 3) % 4;
       sGfxData.nFrameNumber = nTileFrame3;
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nScrollOffset + 0x300, 0x100, -1, DRAW_SOLID, nullptr);
       if (nScrollOffset > 0) {
@@ -929,7 +910,7 @@ void __fastcall ViewDraw2(D2GameViewStrc * pGameView) {
     // Static local variables (originally global data)
     static uint32_t gnFrameDrawCounter; D2_STATIC_GUARD_BSS(gnFrameDrawCounter, "D2Client::GAME::View::ViewDraw2::gnFrameDrawCounter");
 
-    bool _bPerspective;
+    uint32_t _bPerspective;
     bool bPerspective;
     D2UnitStrc* pPlayerUnit_lcl;
     int32_t nYScale;

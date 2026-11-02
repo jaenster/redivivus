@@ -15,7 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/BNGatewayAccess.h"
@@ -27,8 +27,8 @@
 // Same code as HASHKEY_STRI::Constructor 0060dd00 (it could equally be an unproven HASHKEY_STR copy).
 // stpl-orphan: a COMDAT copy in HASHKEY_STRI that no member owns
 ::HASHKEY_STRI * __thiscall Constructor_Unreferenced(::HASHKEY_STRI * pThis, char * szKey) {
-    uint32_t* pszDup = Storm::Source::SSTR::SStrDup(szKey);
-    pThis->szString = (char*)pszDup;
+    char* pszDup = Storm::Source::SSTR::SStrDup(szKey);
+    pThis->szString = pszDup;
     return pThis;
 }
 
@@ -37,17 +37,17 @@
 // stpl-orphan: a COMDAT copy in HASHKEY_STRI that no member owns
 ::HASHKEY_STRI * __thiscall Assign_Unreferenced(::HASHKEY_STRI * pThis, ::HASHKEY_STRI * pSource) {
     if (pThis->szString) {
-      Storm::SMem::SMemFree(pThis->szString, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e9, 0);
+      Storm::Source::SMem::SMemFree(pThis->szString, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e9, 0);
     }
 
-    uint32_t* pszDup = Storm::Source::SSTR::SStrDup(pSource->szString);
-    pThis->szString = (char*)pszDup;
+    char* pszDup = Storm::Source::SSTR::SStrDup(pSource->szString);
+    pThis->szString = pszDup;
     return pThis;
 }
 
 ::HASHKEY_STRI * HASHKEY_STRI::Constructor(char * szKey) {
-    uint32_t* pszDup = Storm::Source::SSTR::SStrDup(szKey);
-    this->szString = (char*)pszDup;
+    char* pszDup = Storm::Source::SSTR::SStrDup(szKey);
+    this->szString = pszDup;
     return this;
 }
 
@@ -63,5 +63,5 @@ void HASHKEY_STRI::Destructor() {
       return;
     }
 
-    Storm::SMem::SMemFree(this->szString, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
+    Storm::Source::SMem::SMemFree(this->szString, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
 }

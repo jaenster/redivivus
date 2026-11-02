@@ -141,7 +141,8 @@ void __fastcall OBJMODE_HandleObjectDeactivation(::SGAMEDATA * pGame, struct D2U
 // NOTE: Register param types inferred (medium confidence): pGameStrc (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
 void __fastcall OBJMODE_OnWaypointFinish(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit);
 // Completes the two-phase town-portal link: given the GUID of a blue portal stub and the destination level, locates the stub object (classId 0x3b), verifies it is unlinked and has an owner unit, then stores the destination level in the portal's component data, sets the linked flag, frees the owner stub unit, and calls LinkPortal to establish the bidirectional connection. Halts with an internal error if preconditions fail.
-void __thiscall OBJMODE_FinalizePortalLink(void * pThis, DWORD dwBluePortalGUID, eD2LevelId eLevel);
+// Registers: pGame in ECX; pOwner in EDX is forwarded to LinkPortal.
+void __fastcall OBJMODE_FinalizePortalLink(::SGAMEDATA * pGame, struct D2UnitStrc * pOwner, DWORD dwBluePortalGUID, eD2LevelId eLevel);
 void __stdcall OBJMODE_FinalizePortalLink_HaltTail(int nLine);
 void __stdcall OBJECT_HandleUnitRevival(struct D2UnitStrc * pUnit, bool * pbRevived);
 BOOL __fastcall OBJOP_ActivateHealingWell(struct D2ObjectOperateFnArg * pOperation);

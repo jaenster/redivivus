@@ -11,7 +11,6 @@
 // Forward declarations
 struct D2HirelingHireData;
 struct D2MonSeqMonsterTbls;
-struct D2MonSeqTxt;
 struct D2UnitStrc;
 
 // Data types
@@ -35,6 +34,14 @@ struct D2MercRolledStatsStrc {
     /* 0x3C */ int field_3C; // buffer tail (pHirelingList[15], unused here)
 };
 
+struct D2MonSeqTxt {
+    /* 0x00 */ short sequence;
+    /* 0x02 */ uint8_t mode;
+    /* 0x03 */ uint8_t frame;
+    /* 0x04 */ uint8_t dir;
+    /* 0x05 */ uint8_t event;
+};
+
 namespace D2Common::Merc {
 
 // Function declarations
@@ -45,9 +52,9 @@ int32_t __stdcall GetCounter1(struct D2UnitStrc * pUnit);
 // 2022.01.09 - dzik
 int32_t __stdcall GetCounter2(struct D2UnitStrc * pUnit);
 // 2022.01.09 - dzik
-void __stdcall ANIM_GetSequenceFrameInfo(uint8_t * pSeqData, int32_t nStartFrame, int32_t nEndFrame, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3, uint32_t * pnParam4);
+void __stdcall ANIM_GetSequenceFrameInfo(struct D2MonSeqTxt * pSeqData, int32_t nStartFrame, int32_t nEndFrame, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3, uint32_t * pnParam4);
 // 2022.01.09 - dzik
-void __stdcall ANIM_GetEventFrame(int32_t pSeqData, int32_t nFrameIdx, uint32_t * pnParam);
+void __stdcall ANIM_GetEventFrame(struct D2MonSeqTxt * pSeqData, int32_t nFrameIdx, uint32_t * pnParam);
 // Deterministically rolls a hireling's combat stats from a seed. Inputs: nSeed (per-merc rng seed), pMercStats (in/out; nMercClass 0-3 selects merc type: Rogue/DesertMerc/IronWolf/Barbarian), nDifficulty (0-2). Seeds a D2SeedStrc and runs five RANDOM_RandomNumberSelector rolls indexing the merc data tables (secondary/tertiary/quaternary/quinary) to populate attack rating, defense, damage/armor bonuses, state(s) (nStateA for class<3 else nStateB), and quinary ability/secondary (sets nAbilityActiveFlag for ability ids 9-11). Finally applies the per-difficulty modifier table. Returns 1 on success, 0 if seed/ptr null, difficulty>=3, or merc class>=4.
 uint32_t __fastcall MERC_GenerateStatsFromSeed(int32_t nSeed, struct D2MercRolledStatsStrc * pMercStats, uint8_t nDifficulty);
 // 2022.01.09 - dzik

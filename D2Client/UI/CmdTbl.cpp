@@ -302,11 +302,10 @@ void __fastcall CMD_InvokeCallbackByParam(int32_t nParam) {
 // Validates whether a command can be bound to mouse buttons (0x103-0x104). Returns false if command handler exists and button is left/right click, true otherwise. Used during key binding setup to prevent invalid mouse button assignments.
 static BOOL CMD_ValidateMouseButtonBinding(int32_t nCmdIndex, uint16_t * pErrorCode, uint32_t nMouseButton) {
     if ((nMouseButton & 0xffff) - 0x103 <= 1 && gaCmdBindings[nCmdIndex].pfnAltHandler) {
-      if (!pErrorCode) {
-        return 0;
+      if (pErrorCode) {
+        *pErrorCode = 0xf8a;
       }
 
-      *pErrorCode = 0xf8a;
       return 0;
     }
 
@@ -1368,7 +1367,7 @@ void __stdcall WindowsKeyPressedEvent(D2UIMouseMsgStrc * pMsg) {
       }
     }
 
-    /* int nVirtKey for GetKeyState */ if (!((g_KeyBindingsTable[nIndex].wKeyCode != 0x73 || (sKeyState = GetKeyState(0x12) , -1 < sKeyState)) && (gbKeyBindingsEnabled != 2 || gaCmdBindings[g_KeyBindingsTable[nIndex].nCmdIndex].nHasParam))) {
+    /* int nVirtKey for GetKeyState */ if (!((g_KeyBindingsTable[nIndex].wKeyCode != 0x73 || (sKeyState = GetKeyState(0x12) , sKeyState >= 0)) && (gbKeyBindingsEnabled != 2 || gaCmdBindings[g_KeyBindingsTable[nIndex].nCmdIndex].nHasParam))) {
       return;
     }
 
@@ -1420,7 +1419,6 @@ void __fastcall CMD_ToggleKeyConfigMode(int32_t nEnable, int32_t bUpdateUIHandle
 }; D2_STATIC_GUARD(gUIFlagCmdTableInit, "D2Client::UI::CmdTbl::CMD_ToggleKeyConfigMode::gUIFlagCmdTableInit");
     static unsigned int gbNormalUIHandlersRegistered; D2_STATIC_GUARD_BSS(gbNormalUIHandlersRegistered, "D2Client::UI::CmdTbl::CMD_ToggleKeyConfigMode::gbNormalUIHandlersRegistered");
 
-    int32_t nHandlerCount;
     gbKeyBindingsEnabled = nEnable;
     if (nEnable) {
       if (!gbKeyConfigModeActive) {
@@ -1434,16 +1432,13 @@ void __fastcall CMD_ToggleKeyConfigMode(int32_t nEnable, int32_t bUpdateUIHandle
         return;
       }
     } else {
-      HWND hWnd;
+      int32_t nHandlerCount;
       if (gbKeyConfigModeActive == 1) {
         nHandlerCount = 4;
         gbKeyConfigModeActive = 0;
-        hWnd = D2gfx::D2GFX::GetHwnd();
-        _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, gsUICmdTblFlagInit, nHandlerCount);
+        _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUICmdTblFlagInit, nHandlerCount);
         if (bUpdateUIHandlers && !gbNormalUIHandlersRegistered) {
-          nHandlerCount = 2;
-          hWnd = D2gfx::D2GFX::GetHwnd();
-          _Message::MESSAGE_RegisterEventHandlerBatch(hWnd, &gUIFlagCmdTableInit, nHandlerCount);
+          _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gUIFlagCmdTableInit, 2);
           gbNormalUIHandlersRegistered = 1;
         }
       }
@@ -1596,6 +1591,10 @@ void __fastcall CMD_InitKeyConfigUI(int32_t nFadeInDuration, int32_t nHoldDurati
     gRoomLightPulse.nFadeInDuration = nFadeInDuration;
     gRoomLightPulse.nFadeOutDuration = nFadeOutDuration;
     gRoomLightPulse.nHoldDuration = nHoldDuration;
+}
+
+void StaticInit_6caad0() {
+    memset(gwKeyNameBuffer, 0, 4 * sizeof(gwKeyNameBuffer[0]));
 }
 
 } // namespace D2Client::UI::CmdTbl

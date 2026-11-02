@@ -83,5 +83,9 @@ eD2ClientAppMode __stdcall NET_QServer_StartServer();
 uint32_t __stdcall CLIENTMODE_Unused4(uint32_t dwUnused);
 // pfModes_ShutdownServer: run MessageGameLoop while shutting down, free QServer, send 0xB0 to clients.
 eD2ClientAppMode __stdcall NET_QServer_ShutdownServer();
+void StaticInit_6ca9a0();
+void StaticInit_6ca9b0();
+void __stdcall QSERVER_InitGlobalGameState();
+void QSERVER_DestroyGlobalGameState();
 
 } // namespace D2Client::ClientModeInGame

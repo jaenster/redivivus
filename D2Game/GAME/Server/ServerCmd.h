@@ -31,7 +31,7 @@ void __fastcall WriteValueBySize(struct D2BitBufferStrc * pBitBuffer, uint32_t n
 void thunk_NET_D2GS_SERVER_SendPacketToClient(char * szText, size_t nSize);
 int __fastcall SERVERCMD_SendBufferToClient(int32_t nClientId, uint16_t wGuildFlags, uint16_t wUniqueCode, char * szPlayerName);
 void __fastcall NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated(int32_t nClientId);
-void __fastcall SERVERCMD_SendSingleBytePacket(int32_t nParam);
+void __fastcall SERVERCMD_SendSingleBytePacket(int32_t nClientId);
 void __fastcall NET_D2GS_SERVER_Send_0xB4_ConnectionRefused(int32_t nClientId, int32_t nReason);
 
 } // namespace D2Game::GAME::Server::ServerCmd

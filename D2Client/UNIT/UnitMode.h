@@ -20,7 +20,8 @@ namespace D2Client::UNIT::UnitMode {
 // Client-side: handles the local player attempting to interact with a unit identified by type+GUID. Finds the client-side target unit; dispatches by unit type: PLAYER/MONSTER face the target and send interact request 0x13 (monster throttled to 200ms); ITEM sends pickup 0x16 (with inventory-open flag). For OBJECT, clears the server path target and, if the object is interactable, faces it and either starts a melee/kick skill cast or sends interact 0x13. Special handling for object class 0x194 (uses Kick/Attack depending on equipped-weapon code and death anim) and 0x178 (sends type-2 interact when dead, attack-skill when walking). No return; communicates via NET_D2GS_CLIENT_Send_* packets.
 // @sourcefile .\UNIT\UnitMode.cpp
 void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID);
-void __thiscall ClickWithSkillOnUnitOrCoord(eD2UnitModeAction pThis, int32_t nTargetOrX, int32_t nParam, uint32_t dwUnused);
+// Registers: eModeAction in ECX; pUnit in EDX is passed by the caller but not read.
+void __fastcall ClickWithSkillOnUnitOrCoord(eD2UnitModeAction eModeAction, struct D2UnitStrc * pUnit, int32_t nTargetOrX, int32_t nParam, uint32_t dwUnused);
 // @sourcefile .\UNIT\UnitMode.cpp
 uint32_t UNITMODE_CanInterruptSkill(struct D2UnitStrc * pUnit);
 BOOL __fastcall HandleMessage(int32_t pTargetUid, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage, int32_t nParam);

@@ -6,7 +6,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/SKILLS/Skills.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
@@ -86,11 +85,7 @@ namespace D2Game::SKILLS::SkillMonst {
 // SrvStFunc 42: monster melee-hit skill state tick. If the caster is a player, delegates to Skills_SrvStFunc_32. Otherwise computes to-hit vs the target, rolls hit check, applies skill ResultFlags/HitFlags/HitClass on hit (with combat stat recalc), and calls DAMAGE_CalculateAndApplyDamage with flag 0x80.
 BOOL __fastcall SKILLMONST_SrvStFn42_FireHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -106,9 +101,7 @@ BOOL __fastcall SKILLMONST_SrvStFn42_FireHit(::SGAMEDATA * pGame, D2UnitStrc * p
     }
 
     memset(&sDamage, 0, 0x70);
-    int32_t nToHitCheck = 0;
-    uint32_t nToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nToHit, nToHitCheck, nToHit);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
     if (sDamage.wResultFlags & 1U) {
       sDamage.wResultFlags |= pSkillTxt->ResultFlags;
       sDamage.dwHitFlags |= pSkillTxt->HitFlags;
@@ -130,7 +123,7 @@ BOOL __fastcall Skills_SrvDoFunc_083_MonsterMeleeAttack(::SGAMEDATA * pGame, D2U
     }
 
     UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
-    UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, (int*)pUnit, (int*)pTarget);
+    UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, pUnit, pTarget);
     BOOL bResult = SkillsServer::SKILLS_SrvStartSkill(pGame, pUnit, eSkill, nSkillLvl, 0);
     return bResult;
 }
@@ -215,7 +208,7 @@ BOOL __fastcall Skills_SrvDoFunc_085_FireUpgradedMissile(::SGAMEDATA * pGame, D2
 
     D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nClassId, nullptr, &eSkill);
     eMissilesId eMissileUpgraded = nMissileBase + eSkill;
-    if (-1 < (int)eMissileUpgraded && (int)eMissileUpgraded < sgptDataTable->nTxtMissilesSize) {
+    if ((int)eMissileUpgraded >= 0 && (int)eMissileUpgraded < sgptDataTable->nTxtMissilesSize) {
       SkillsServer::CreatingAMissile(pGame, eMissileUpgraded, pUnit, eSkillOrig, nSkillLvl, 0, 0, 0, 0, 0);
       return 1;
     }
@@ -228,6 +221,8 @@ BOOL __fastcall SKILLMONST_SrvStFn44_MaggotUp(::SGAMEDATA * pGame, D2UnitStrc * 
     uint32_t nPosY;
     uint32_t nPosX;
     int32_t eCollisionFlag;
+    int32_t nNewPosX;
+    int32_t nNewPosY;
     eD2CollisionShapeType nType;
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -247,9 +242,7 @@ BOOL __fastcall SKILLMONST_SrvStFn44_MaggotUp(::SGAMEDATA * pGame, D2UnitStrc * 
       nPosX = 0;
     }
 
-    int32_t nNewPosX = 0;
-    int32_t nNewPosY = 0;
-    BOOL bRelocated = UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit, D2Common::Units::UNITS_GetRoom(pUnit), nPosX, nPosY, nNewPosY, nNewPosX);
+    BOOL bRelocated = UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit, D2Common::Units::UNITS_GetRoom(pUnit), nPosX, nPosY, 0, 0);
     if (!bRelocated) {
       return 0;
     }
@@ -369,7 +362,7 @@ BOOL __fastcall Skills_SrvDoFunc_087_SpawnBehindTarget(::SGAMEDATA * pGame, D2Un
     int nSpawnX = D2Common::Units::GetDirectionToCoords(pUnit, D2Client::Units::GetXPosFromDynamicPathUnit(pTargetUnit), nTargetY);
     uint8_t bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2((uint8_t)nSpawnX);
     uint32_t nGfxDirMasked = bVar1 & 0x80000007;
-    D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(BYTE_ARRAY_006e3138[nGfxDirMasked & 0xff], &nSkillLvl, &nOffsetY);
+    D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(BYTE_ARRAY_006e3138[(uint8_t)nGfxDirMasked], &nSkillLvl, &nOffsetY);
     nTargetY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
     nSpawnX = nTargetY + nSkillLvl;
     nTargetY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
@@ -409,10 +402,10 @@ BOOL __fastcall SKILLMONST_SrvStFn46_AndrialSpray(::SGAMEDATA * pGame, D2UnitStr
     D2Common::Skills::SKILL_SetParam1(pSkill, nTargetX);
     eUnitType = pTarget->eUnitType;
     if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
-      int32_t nParam2;
+      int32_t nPar2;
       if (pTarget->pPath.pDynamicPath) {
-        nParam2 = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
-        D2Common::Skills::SKILL_SetParam2(pSkill, nParam2);
+        nPar2 = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
+        D2Common::Skills::SKILL_SetParam2(pSkill, nPar2);
         return 1;
       }
 
@@ -429,7 +422,7 @@ BOOL __fastcall Skills_SrvDoFunc_088_FireMissileFromBodyPart(::SGAMEDATA * pGame
     // Static local variables (originally global data)
     static uint8_t BYTE_ARRAY_006e3188[8] = { 0x1d, 0x1c, 0x1b, 0x1a, 0x19, 0x18, 0x1f, 0x1e }; D2_STATIC_GUARD(BYTE_ARRAY_006e3188, "D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_088_FireMissileFromBodyPart::BYTE_ARRAY_006e3188");
 
-    uint8_t _local_1c;
+    uint32_t _local_1c;
     BOOL nDirection;
     D2SkillArgStrc sSkillArg;
     int nAnimFrameCount;
@@ -496,18 +489,11 @@ BOOL __fastcall Skills_SrvDoFunc_088_FireMissileFromBodyPart(::SGAMEDATA * pGame
 BOOL __fastcall SKILLMONST_SrvStFn47_Jump(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nLeapY;
     int32_t nTargetY;
-    int nParam4;
+    int nPar4;
     D2DamageStrc sDamage;
     uint32_t nLeapX;
     int32_t nCalcTmp;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -545,9 +531,7 @@ BOOL __fastcall SKILLMONST_SrvStFn47_Jump(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
     if (pTarget) {
       memset(&sDamage, 0, 0x70);
-      nCalcTmp = 0;
-      nToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-      sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nToHit, nCalcTmp, nToHit);
+      sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
       if (sDamage.wResultFlags & 1U) {
         sDamage.wResultFlags |= pSkillsTxt->ResultFlags;
         sDamage.dwHitFlags |= pSkillsTxt->HitFlags;
@@ -561,12 +545,12 @@ BOOL __fastcall SKILLMONST_SrvStFn47_Jump(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
       UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, 0x80);
       D2Common::Skills::SKILL_SetParam3(pSkill, pTarget->eUnitType);
-      nParam4 = pTarget->nUnitGUID;
+      nPar4 = pTarget->nUnitGUID;
     } else {
-      nParam4 = -1;
+      nPar4 = -1;
     }
 
-    D2Common::Skills::SKILL_SetParam4(pSkill, nParam4);
+    D2Common::Skills::SKILL_SetParam4(pSkill, nPar4);
     D2Common::Collision::AddCollision_Type(pRoom, nLeapX, nLeapY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x100);
     UNIT::SUnit::SetUninterruptableState(pUnit, 1);
     D2Common::Skills::SKILL_SetParam1(pSkill, nLeapX);
@@ -579,7 +563,6 @@ BOOL __fastcall SKILLMONST_SrvStFn47_Jump(::SGAMEDATA * pGame, D2UnitStrc * pUni
 BOOL __fastcall Skills_SrvDoFunc_089_ChargeLeapAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nTargetGuid;
     D2UnitStrc* pTargetUnit;
-    uint32_t nSkillFlags;
     int32_t nMonBaseId;
     int32_t nLandX;
     int32_t nLandY;
@@ -598,16 +581,15 @@ BOOL __fastcall Skills_SrvDoFunc_089_ChargeLeapAttack(::SGAMEDATA * pGame, D2Uni
 
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
     if (pUnit->nActionFrame == 2) {
-      eD2UnitType eTargetType;
       pUnit->nActionFrame = 0;
       nTargetGuid = D2Common::Skills::SKILL_GetParam4(pSkill);
-      eTargetType = D2Common::Skills::SKILL_GetParam3(pSkill);
-      pTargetUnit = UNIT::SUnit::FindUnitFromTable(pGame, eTargetType, nTargetGuid);
+      pTargetUnit = UNIT::SUnit::FindUnitFromTable(pGame, D2Common::Skills::SKILL_GetParam3(pSkill), nTargetGuid);
       if (pTargetUnit) {
         UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTargetUnit, 0);
         return 1;
       }
     } else {
+      uint32_t nSkillFlags;
       nSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
       nMonBaseId = D2Common::Skills::SKILL_GetParam1(pSkill);
       nLandX = D2Common::Skills::SKILL_GetParam2(pSkill);
@@ -715,11 +697,7 @@ BOOL __fastcall SKILLMONST_SrvStFn48_SwarmMove(::SGAMEDATA * pGame, D2UnitStrc *
 
 BOOL __fastcall Skills_SrvDoFunc_090_SetAnimFrameFromCalc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nCalcIdx;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -775,12 +753,8 @@ BOOL __fastcall SKILLMONST_SrvStFn49_NestSpawn(::SGAMEDATA * pGame, D2UnitStrc *
 
 // SrvDoFunc 91: spawns a monster at coordinates stored in skill params 1-4 (class, X, Y, anim mode). Fires ENDANIM timer, clears uninterruptable state, removes collision at the spawn tile, spawns the monster, marks it NOXP|NOTC, and applies sumoverlay. Returns FALSE if room or coords invalid.
 BOOL __fastcall Skills_SrvDoFunc_091_SpawnMinionAtCoords(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxtBase = sgptDataTable->pTxtSkills;
-    if (!(pSkillsTxtBase + eSkill)) {
+    D2SkillsTxt* pSkillsTxtBase = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxtBase) {
       return 0;
     }
 
@@ -807,7 +781,7 @@ BOOL __fastcall Skills_SrvDoFunc_091_SpawnMinionAtCoords(::SGAMEDATA * pGame, D2
     if (pUnit_00) {
       short int nOverlayId;
       pUnit_00->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC;
-      nOverlayId = pSkillsTxtBase[eSkill].sumoverlay;
+      nOverlayId = pSkillsTxtBase->sumoverlay;
       if (!(nOverlayId >= 0 && (int)nOverlayId < sgptDataTable->nTxtOverlaySize)) {
         return 1;
       }
@@ -834,15 +808,8 @@ BOOL __fastcall SKILLMONST_SrvStFn50_QuickStrike(::SGAMEDATA * pGame, D2UnitStrc
 // Body continues at 005cbfc7, the JNZ target of 005cbfbb - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'SKILLMONST_MeleeAttackWithMissile'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'SKILLMONST_MeleeAttackWithMissile':
 BOOL __fastcall SKILLMONST_SrvDoFunc092_MeleeHitThenMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pDVar1 = sgptDataTable->pTxtSkills;
-    if (!(pDVar1 + eSkill)) {
+    D2SkillsTxt* pDVar1 = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pDVar1) {
       return 0;
     }
 
@@ -852,8 +819,8 @@ BOOL __fastcall SKILLMONST_SrvDoFunc092_MeleeHitThenMissile(::SGAMEDATA * pGame,
     }
 
     UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pVictim, 0);
-    UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, (int*)pUnit, (int*)pVictim);
-    eMissilesId nSrvMissle = (eMissilesId)pDVar1[eSkill].srvmissile[1];
+    UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, pUnit, pVictim);
+    eMissilesId nSrvMissle = (eMissilesId)pDVar1->srvmissile[1];
     if ((int)nSrvMissle < 0) {
       if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
         nSrvMissle = D2Common::Monsters::MONSTERS::MONSTER_GetMissileForAnimEvent(pUnit, 1);
@@ -873,13 +840,7 @@ BOOL __fastcall SKILLMONST_SrvDoFunc092_MeleeHitThenMissile(::SGAMEDATA * pGame,
 // Server do-function for monster skill 093. Fires a leading-aim missile (srvmissilea) that predicts target movement: computes the dominant axis of displacement, steps the target position 4 frames forward along that axis, then places the missile origin 1/6 of the delta behind the caster. Sets UNITFLAG_SKSRVDOFUNC on the caster and returns 1 on success.
 BOOL __fastcall Skills_SrvDoFunc_093_FireLeadingMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-    if (!(sgptDataTable->pTxtSkills + eSkill)) {
+    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
 
@@ -965,11 +926,10 @@ BOOL __fastcall Skills_SrvDoFunc_094_ResetAnimFrame(::SGAMEDATA * pGame, D2UnitS
     int nFrameShiftX;
     D2Common::Units::GetShiftedFrameMetrics(pUnit, &nFrameShiftX, &nFrameShiftY);
     pUnit->nActionFrame = 0;
-    if (nFrameShiftX > 0) {
-      return 1;
+    if (nFrameShiftX <= 0) {
+      pUnit->nSeqAnimSpeed = 0;
     }
 
-    pUnit->nSeqAnimSpeed = 0;
     return 1;
 }
 
@@ -983,12 +943,8 @@ BOOL __fastcall SKILLMONST_SrvStFn52_Emerge(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 BOOL __fastcall SKILLMONST_SrvStFn53_MonInferno(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxtBase = sgptDataTable->pTxtSkills;
-    if (!(pSkillsTxtBase + eSkill)) {
+    D2SkillsTxt* pSkillsTxtBase = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxtBase) {
       return 0;
     }
 
@@ -997,7 +953,7 @@ BOOL __fastcall SKILLMONST_SrvStFn53_MonInferno(::SGAMEDATA * pGame, D2UnitStrc 
       return 0;
     }
 
-    int nDuration = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxtBase[eSkill].calc[1], eSkill, nSkillLvl);
+    int nDuration = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxtBase->calc[1], eSkill, nSkillLvl);
     if (nDuration < 1) {
       nDuration = 1;
     }
@@ -1021,11 +977,7 @@ static void __stdcall SKILLASSN_GetTrapHealthBonus(eD2Skills eSkill, D2UnitStrc 
     }
 
     int nLifetime = pMissileUnit->nClassId;
-    if (!(nLifetime >= 0 && nLifetime < sgptDataTable->nTxtMissilesSize)) {
-      return;
-    }
-
-    D2MissilesTxt* pMissileTxt = sgptDataTable->pTxtMissiles + nLifetime;
+    D2MissilesTxt* pMissileTxt = nLifetime >= 0 && nLifetime < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nLifetime : nullptr;
     if (!pMissileTxt) {
       return;
     }
@@ -1069,7 +1021,7 @@ static int SKILLMONST_TriggerModeChange(D2UnitStrc * pUnit, ::SGAMEDATA * pGame)
 
 void __fastcall SKILLASSN_GetShadowHealthBonus(D2SkillsTxt * pSkillsTxt, D2UnitStrc * pUnit) {
     D2MonStats2Txt* pMonStatsEx;
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       int nMonStats2Idx;
       nMonStats2Idx = pUnit->nClassId;
       if (!(nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsSize)) {
@@ -1077,11 +1029,7 @@ void __fastcall SKILLASSN_GetShadowHealthBonus(D2SkillsTxt * pSkillsTxt, D2UnitS
       }
 
       nMonStats2Idx = (int)sgptDataTable->pTxtMonStats[nMonStats2Idx].MonStatsEx;
-      if (!(nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsExSize)) {
-        return;
-      }
-
-      pMonStatsEx = sgptDataTable->pTxtMonStatsEx + nMonStats2Idx;
+      pMonStatsEx = nMonStats2Idx >= 0 && nMonStats2Idx < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStats2Idx : nullptr;
       if (!pMonStatsEx) {
         return;
       }
@@ -1105,11 +1053,7 @@ BOOL __fastcall Skills_SrvDoFunc_095_SpawnTrapMissile(::SGAMEDATA * pGame, D2Uni
     eD2States eStateCheck;
     int32_t dwTmp;
     D2SkillArgStrc sSkillArg;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -1172,11 +1116,7 @@ BOOL __fastcall Skills_SrvDoFunc_152_SpawnTrapMissileVariant(::SGAMEDATA * pGame
     eD2States eStateCheck;
     int32_t dwTmp;
     D2SkillArgStrc sSkillArg;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -1365,11 +1305,7 @@ BOOL __fastcall Skills_SrvDoFunc_097_ResurrectDeadMonster(::SGAMEDATA * pGame, D
     eD2UnitType eUnitType;
     short int nSrvOverlay;
     ::SGAMEDATA* pGameForResurrect;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -1491,68 +1427,59 @@ BOOL __fastcall Skills_SrvDoFunc_099_FireMissileRing8Dir(::SGAMEDATA * pGame, D2
     -0x1
 }; D2_STATIC_GUARD(gnSkillMissileCount_FireRing, "D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_099_FireMissileRing8Dir::gnSkillMissileCount_FireRing");
 
-    int32_t nMissileCount;
+    D2MissilesTxt* pMissileTxt;
     int nDirIndex;
     D2SkillArgStrc sSkillArg;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
 
     eMissilesId eSrvMissileId = (eMissilesId)pSkillsTxt->srvmissile[1];
-    if ((int)eSrvMissileId >= 0 && (int)eSrvMissileId < sgptDataTable->nTxtMissilesSize) {
-      D2MissilesTxt* pMissileTxt;
-      pMissileTxt = sgptDataTable->pTxtMissiles + eSrvMissileId;
-      if (pMissileTxt) {
-        if (pUnit) {
-          pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-        }
+    pMissileTxt = (int)eSrvMissileId >= 0 && (int)eSrvMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + eSrvMissileId : nullptr;
+    if (pMissileTxt) {
+      int32_t nMissileCount;
+      if (pUnit) {
+        pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
+      }
 
-        memset(&sSkillArg, 0, 0x5c);
-        sSkillArg.nFlags = 0x1f;
-        sSkillArg.pOwner = pUnit;
-        sSkillArg.pMissile = pUnit;
-        sSkillArg.nMissileTxtNo = eSrvMissileId;
-        sSkillArg.nX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-        sSkillArg.nY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-        sSkillArg.nSkillLevel = nSkillLvl;
-        sSkillArg.nSubLoopMult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-        sSkillArg.nVelocityOverride = pMissileTxt->Param1 << 6;
-        nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl);
-        if (nMissileCount < 1) {
-          nMissileCount = 1;
-        }
+      memset(&sSkillArg, 0, 0x5c);
+      sSkillArg.nFlags = 0x1f;
+      sSkillArg.pOwner = pUnit;
+      sSkillArg.pMissile = pUnit;
+      sSkillArg.nMissileTxtNo = eSrvMissileId;
+      sSkillArg.nX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+      sSkillArg.nY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+      sSkillArg.nSkillLevel = nSkillLvl;
+      sSkillArg.nSubLoopMult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
+      sSkillArg.nVelocityOverride = pMissileTxt->Param1 << 6;
+      nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl);
+      if (nMissileCount < 1) {
+        nMissileCount = 1;
+      }
 
-        nDirIndex = 0;
-        do {
-          sSkillArg.nUnitX = *(int*)((int)gnSkillMissileCount_FireRing + nDirIndex);
-          sSkillArg.nUnitY = *(int*)((int)gnSkillMissileCount_FireOrb + nDirIndex);
-          MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-          nDirIndex += 8;
-        } while (nDirIndex < 0x40);
+      nDirIndex = 0;
+      do {
+        sSkillArg.nUnitX = *(int*)((int)gnSkillMissileCount_FireRing + nDirIndex);
+        sSkillArg.nUnitY = *(int*)((int)gnSkillMissileCount_FireOrb + nDirIndex);
+        MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+        nDirIndex += 8;
+      } while (nDirIndex < 0x40);
 
-        sSkillArg.nVelocityOverride = pMissileTxt->Param2 << 6;
-        if (nMissileCount <= 1) {
-          return 1;
-        }
-
-        nDirIndex = 0;
-        do {
-          sSkillArg.nUnitX = *(int*)((int)gnSkillMissileCount_FireRing + nDirIndex + 4);
-          sSkillArg.nUnitY = *(int*)((int)gnSkillMissileCount_FireOrb + nDirIndex + 4);
-          MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-          nDirIndex += nMissileCount * 4;
-        } while (nDirIndex < 0x3c);
-
+      sSkillArg.nVelocityOverride = pMissileTxt->Param2 << 6;
+      if (nMissileCount <= 1) {
         return 1;
       }
+
+      nDirIndex = 0;
+      do {
+        sSkillArg.nUnitX = *(int*)((int)gnSkillMissileCount_FireRing + nDirIndex + 4);
+        sSkillArg.nUnitY = *(int*)((int)gnSkillMissileCount_FireOrb + nDirIndex + 4);
+        MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+        nDirIndex += nMissileCount * 4;
+      } while (nDirIndex < 0x3c);
+
+      return 1;
     }
 
     return 0;
@@ -1563,11 +1490,7 @@ BOOL __fastcall Skills_SrvDoFunc_100_FreezingMeleeAttack(::SGAMEDATA * pGame, D2
     int nTargetHp;
     D2DamageStrc sDamage;
     short int nOverlayId;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -1611,11 +1534,7 @@ BOOL __fastcall Skills_SrvDoFunc_101_FireDirectionalMissile(::SGAMEDATA * pGame,
     int32_t nTargetX;
     uint32_t nTargetY;
     D2SkillArgStrc sSkillArg;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -1689,12 +1608,9 @@ void __fastcall SKILLMONST_RandomizeMissilePath(D2UnitStrc * pUnit, int32_t nPar
 
 // Monster skill server do-func: fires multiple randomly-pathed missiles (srvmissilea). calc[0] determines count. Resolves target/cursor position, then loops spawning missiles with SKILLMONST_RandomizeMissilePath callback (flag 0x21) via CreatingMissile.
 BOOL __fastcall Skills_SrvDoFunc_102_FireRandomMultiMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+    int32_t nMissileIdx;
     D2SkillArgStrc sSkillArg;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -1724,16 +1640,10 @@ BOOL __fastcall Skills_SrvDoFunc_102_FireRandomMultiMissile(::SGAMEDATA * pGame,
       return 0;
     }
 
-    int32_t nMissileIdx = 0;
-    if (nMissileCount <= 0) {
-      return 1;
-    }
-
-    do {
+    for (nMissileIdx = 0; nMissileIdx < nMissileCount; nMissileIdx++) {
       sSkillArg.nFunctionParam = nMissileIdx;
       MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-      nMissileIdx++;
-    } while (nMissileIdx < nMissileCount);
+    }
 
     return 1;
 }
@@ -1792,14 +1702,7 @@ BOOL __fastcall Skills_SrvDoFunc_103_ChargeAndMeleeStrike(::SGAMEDATA * pGame, D
     char* pVelFileRef;
     int32_t nVelLineRef;
     ::SGAMEDATA* pGameApplyDmg;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -1891,13 +1794,7 @@ BOOL __fastcall Skills_SrvDoFunc_103_ChargeAndMeleeStrike(::SGAMEDATA * pGame, D
 // Monster skill server do-func: spawns a predefined monster class at a target unit (or object resolved from path SP1). Resolves spawn class via SKILLS_GetSummonMonsterClassId, verifies target room is not a town, then calls MONSTER_SpawnPredefinedAtUnit.
 BOOL __fastcall Skills_SrvDoFunc_104_SpawnPredefinedAtTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DynamicPathStrc* pDynamicPath;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-    if (!(sgptDataTable->pTxtSkills + eSkill)) {
+    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
 
@@ -1947,10 +1844,7 @@ BOOL __fastcall Skills_SrvDoFunc_105_FireParallelMissileVolley(::SGAMEDATA * pGa
     uint32_t nTargetX;
     int nDeltaX;
     nDeltaX = 0;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 
@@ -2088,11 +1982,7 @@ BOOL __fastcall Skills_SrvDoFunc_106_FireMissileRingOnTarget(::SGAMEDATA * pGame
 BOOL __fastcall SKILLMONST_SrvStFn55_Mosquito(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int iVar1;
     D2SeedStrc sSeed;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -2135,11 +2025,7 @@ BOOL __fastcall SKILLMONST_SrvStFn55_Mosquito(::SGAMEDATA * pGame, D2UnitStrc * 
 // Server-side do-function for a monster multi-hit melee leech skill (srvdofunc 107). Retrieves the stored target GUID and type from the current skill params, confirms melee range, then deals randomised physical+poison damage with mana/stamina leech components. Heals the attacker by a calc[2]-percent of physical damage dealt, capped at max HP. Decrements the remaining hit count param and advances the animation sequence frame; returns 1 while hits remain.
 BOOL __fastcall Skills_SrvDoFunc_107_LeechMeleeMultiHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxtLeech = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxtLeech = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxtLeech) {
       return 0;
     }
@@ -2209,58 +2095,48 @@ BOOL __fastcall Skills_SrvDoFunc_107_LeechMeleeMultiHit(::SGAMEDATA * pGame, D2U
 
 // Monster skill server do-func: devours a friendly non-mercenary minion that is in the Kick anim-mode to restore caster HP. Deletes the target monster from the room and frees its server unit, then adds a calc[0]% of the target's max HP to the caster's current HP (clamped to caster max HP).
 BOOL __fastcall Skills_SrvDoFunc_108_DevourMinionForHP(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nTargetMaxHp;
-    int nCurHp;
-    int nMaxHp;
     int nNewHpClamped;
-    eD2UnitType eUnitType;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills;
-    if (!(pSkillsTxt + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (pTarget && pTarget->eUnitType == UNIT_MONSTER) {
-      uint32_t nMercOrPct;
-      nMercOrPct = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pTarget);
-      if (!nMercOrPct && pTarget->eAnimMode.ePlayerMode == Kick) {
-        nTargetMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pTarget);
-        nMaxHp = pTarget->nUnitGUID;
-        eUnitType = UNIT_MONSTER;
-        D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pTarget), eUnitType, nMaxHp);
-        UNIT::SUnit::FreeServerUnit(pGame, pTarget);
-        nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-        nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
-        if (nTargetMaxHp <= 0) {
-          return 1;
-        }
+    if ((pTarget ? pTarget->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+      return 0;
+    }
 
-        nTargetMaxHp = D2Client::Stats::D2ApplyPercent(nTargetMaxHp, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt[eSkill].calc[0], eSkill, nSkillLvl), 100);
-        nCurHp += nTargetMaxHp;
-        nNewHpClamped = nCurHp;
-        if (nCurHp <= 1) {
-          nNewHpClamped = 1;
-        }
-        if (nNewHpClamped < nMaxHp) {
-          nMaxHp = nCurHp;
-          if (nCurHp <= 1) {
-            nMaxHp = 1;
-          }
-        }
+    uint32_t nMercOrPct = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pTarget);
+    if (!(!nMercOrPct && pTarget->eAnimMode.ePlayerMode == Kick)) {
+      return 0;
+    }
 
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nMaxHp, 0);
-        return 1;
+    int32_t nTargetMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pTarget);
+    int nMaxHp = pTarget->nUnitGUID;
+    eD2UnitType eUnitType = UNIT_MONSTER;
+    D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pTarget), eUnitType, nMaxHp);
+    UNIT::SUnit::FreeServerUnit(pGame, pTarget);
+    int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
+    nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    if (nTargetMaxHp <= 0) {
+      return 1;
+    }
+
+    nTargetMaxHp = D2Client::Stats::D2ApplyPercent(nTargetMaxHp, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl), 100);
+    nCurHp += nTargetMaxHp;
+    nNewHpClamped = nCurHp;
+    if (nCurHp <= 1) {
+      nNewHpClamped = 1;
+    }
+    if (nNewHpClamped < nMaxHp) {
+      nMaxHp = nCurHp;
+      if (nCurHp <= 1) {
+        nMaxHp = 1;
       }
     }
 
-    return 0;
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nMaxHp, 0);
+    return 1;
 }
 
 // Returns the first non-zero animation event value from the current frame onward in the caster's anim data, used to determine how many Holy Bolt targets to hit. Handles both sequenced (merc) and non-sequenced monsters. Returns 0 if no event found before the animation ends.
@@ -2280,7 +2156,7 @@ uint32_t __fastcall SKILLPAL_GetHolyBoltTargetCount(D2UnitStrc * pUnit) {
       if (nFrameIdx < nTotalSeqFrames >> 8) {
         nCurFrameShifted <<= 8;
         do {
-          D2Common::Merc::ANIM_GetEventFrame((int32_t)pUnit->pAnimSeq, nCurFrameShifted, &nEventFrame);
+          D2Common::Merc::ANIM_GetEventFrame((D2MonSeqTxt*)pUnit->pAnimSeq, nCurFrameShifted, &nEventFrame);
           if (nEventFrame) {
             return nEventFrame;
           }
@@ -2314,11 +2190,7 @@ uint32_t __fastcall SKILLPAL_GetHolyBoltTargetCount(D2UnitStrc * pUnit) {
 // Performs a single-target melee/ranged skill attack for monsters. Sets target on caster, runs to-hit calculation and hit-check, builds D2DamageStrc with ResultFlags/HitFlags/HitClass and EnDmgPct (calc[1]) on hit, applies damage, processes combat queue, and stores hit/miss result in skill Param1.
 BOOL __fastcall SKILLMONST_SingleTargetSkillAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nParam) {
     D2DamageStrc sDamage;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -2328,9 +2200,7 @@ BOOL __fastcall SKILLMONST_SingleTargetSkillAttack(::SGAMEDATA * pGame, D2UnitSt
 
     D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pTarget);
     memset(&sDamage, 0, 0x70);
-    uint32_t nHitFlags = 0;
-    uint32_t nHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nParam);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nHitResult, nHitFlags, nHitResult);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nParam), 0);
     if (sDamage.wResultFlags & 1U) {
       sDamage.wResultFlags |= pSkillsTxt->ResultFlags;
       sDamage.dwHitFlags |= pSkillsTxt->HitFlags;
@@ -2373,7 +2243,7 @@ BOOL __fastcall Skills_SrvDoFunc_109_MonsterFrenzyAttack(::SGAMEDATA * pGame, D2
       return 0;
     }
 
-    UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, (int*)pUnit, (int*)pTarget);
+    UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, pUnit, pTarget);
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
@@ -2396,11 +2266,7 @@ BOOL __fastcall Skills_SrvDoFunc_109_MonsterFrenzyAttack(::SGAMEDATA * pGame, D2
 // Monster skill server do-func: fires a missile whose ID is srvmissilea offset by the monster's Components[10] body-part variant. Requires a valid target. Chooses SKILLS_CreateMissileFromUnit vs CreatingAMissile based on skill flags bit 1.
 BOOL __fastcall Skills_SrvDoFunc_148_FireMissileBodyPart10(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nBodyPartComponent;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -2445,11 +2311,7 @@ BOOL __fastcall Skills_SrvDoFunc_148_FireMissileBodyPart10(::SGAMEDATA * pGame, 
 // Monster skill server do-func: fires a missile whose ID is srvmissilea offset by the monster's Components[11] body-part variant. Identical logic to _148 but reads Components[0xb] instead of Components[10]. Requires a valid target; chooses create path by skill flags bit 1.
 BOOL __fastcall Skills_SrvDoFunc_149_FireMissileBodyPart11(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nBodyPartComponent;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -2494,11 +2356,7 @@ BOOL __fastcall Skills_SrvDoFunc_149_FireMissileBodyPart11(::SGAMEDATA * pGame, 
 // Monster skill server do-func: fires a missile chosen by arrow-modifier skill. Calls SKILL_GetArrowModifierSkill; if the result is a plain Arrow or Bolt, overrides with srvmissilea and uses SKILLS_CreateMissileFromUnit (skill flags bit 1) or CreatingAMissile. Otherwise fires the modifier missile directly.
 BOOL __fastcall Skills_SrvDoFunc_110_FireArrowModMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2MissilesTxt* pMissileTxt;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -2552,79 +2410,77 @@ BOOL __fastcall Skills_SrvDoFunc_112_RandomCurse(::SGAMEDATA * pGame, D2UnitStrc
     pUnit->sSeed = DVar1;
     int iVar2 = DVar1.nSeedLow % 5;
     eD2Skills eSkill_00 = gnSkillOffset_Necromancer_Curse[iVar2];
-    if ((int)eSkill_00 >= 0 && (int)eSkill_00 < sgptDataTable->nTxtSkillsCount) {
+    pSkillsTxt = (int)eSkill_00 >= 0 && (int)eSkill_00 < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill_00 : nullptr;
+    if (pSkillsTxt && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize) {
       int32_t nRadius;
-      pSkillsTxt = sgptDataTable->pTxtSkills + eSkill_00;
-      if (pSkillsTxt && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize) {
-        if (pUnit) {
-          pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-        }
-
-        nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill_00, nSkillLvl);
-        nDiminishVal = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill_00, nSkillLvl);
-        memset(&sNecroSkillArg, 0, 0x68);
-        sNecroSkillArg.nField08 = 0;
-        sNecroSkillArg.nSkillLvl = nSkillLvl;
-        sNecroSkillArg.bUpdateAnimRate = 0;
-        sNecroSkillArg.eAuraState = (int32_t)pSkillsTxt->auratargetstate;
-        nStatIdx = 0;
-        do {
-          sNecroSkillArg.anStatIds[nStatIdx] = -1;
-          sNecroSkillArg.anStatValues[nStatIdx] = 0;
-          nStatIdx++;
-        } while (nStatIdx < 6);
-
-        sNecroSkillArg.pGame = pGame;
-        sNecroSkillArg.pCaster = pUnit;
-        sNecroSkillArg.eSkill = eSkill_00;
-        sNecroSkillArg.nDurationInFrames = nDiminishVal;
-        switch (iVar2) {
-          case 0:
-            sNecroSkillArg.anStatIds[0] = 0x24;
-          sNecroSkillArg.anStatValues[0] = -100;
-          break;
-          case 1:
-            sNecroSkillArg.anStatIds[0] = 0x19;
-          sNecroSkillArg.anStatValues[0] = -0x32;
-          break;
-          case 2:
-            sNecroSkillArg.anExtra[0] = 5;
-          sNecroSkillArg.anExtra[3] = 4;
-          break;
-          case 3:
-            sNecroSkillArg.anExtra[0] = 1;
-          sNecroSkillArg.anExtra[3] = 5;
-          sNecroSkillArg.anExtra[1] = 2;
-          sNecroSkillArg.anExtra[4] = 5;
-          break;
-          case 4:
-            sNecroSkillArg.bUpdateAnimRate = 1;
-          sNecroSkillArg.anStatIds[0] = 0x43;
-          sNecroSkillArg.anStatValues[0] = pSkillsTxt->Param[6];
-          sNecroSkillArg.anStatIds[1] = 0x19;
-          sNecroSkillArg.anStatValues[1] = -0x32;
-          sNecroSkillArg.anStatIds[2] = 0x24;
-          sNecroSkillArg.anStatValues[2] = -0x32;
-          sNecroSkillArg.anStatIds[3] = 0x44;
-          sNecroSkillArg.anStatValues[3] = pSkillsTxt->Param[6];
-          break;
-          default:
-            nDiminishVal = D2Common::Skills::SKILLS_GetParam45WithDiminishing(nSkillLvl, eSkill_00);
-          sNecroSkillArg.anStatValues[0] = -nDiminishVal;
-          sNecroSkillArg.anStatIds[0] = 0x25;
-          sNecroSkillArg.anStatIds[1] = 0x27;
-          sNecroSkillArg.anStatIds[2] = 0x29;
-          sNecroSkillArg.anStatIds[3] = 0x2b;
-          sNecroSkillArg.anStatIds[4] = 0x2d;
-          sNecroSkillArg.anStatValues[1] = sNecroSkillArg.anStatValues[0];
-          sNecroSkillArg.anStatValues[2] = sNecroSkillArg.anStatValues[0];
-          sNecroSkillArg.anStatValues[3] = sNecroSkillArg.anStatValues[0];
-          sNecroSkillArg.anStatValues[4] = sNecroSkillArg.anStatValues[0];
-        }
-
-        bResult = SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGame, 3, pUnit, nRadius, (pfnSkillRangeCb)SkillNec::SKILLNEC_ApplyCurseToUnit, &sNecroSkillArg);
-        return bResult;
+      if (pUnit) {
+        pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
+
+      nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill_00, nSkillLvl);
+      nDiminishVal = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill_00, nSkillLvl);
+      memset(&sNecroSkillArg, 0, 0x68);
+      sNecroSkillArg.nField08 = 0;
+      sNecroSkillArg.nSkillLvl = nSkillLvl;
+      sNecroSkillArg.bUpdateAnimRate = 0;
+      sNecroSkillArg.eAuraState = (int32_t)pSkillsTxt->auratargetstate;
+      nStatIdx = 0;
+      do {
+        sNecroSkillArg.anStatIds[nStatIdx] = -1;
+        sNecroSkillArg.anStatValues[nStatIdx] = 0;
+        nStatIdx++;
+      } while (nStatIdx < 6);
+
+      sNecroSkillArg.pGame = pGame;
+      sNecroSkillArg.pCaster = pUnit;
+      sNecroSkillArg.eSkill = eSkill_00;
+      sNecroSkillArg.nDurationInFrames = nDiminishVal;
+      switch (iVar2) {
+        case 0:
+          sNecroSkillArg.anStatIds[0] = 0x24;
+        sNecroSkillArg.anStatValues[0] = -100;
+        break;
+        case 1:
+          sNecroSkillArg.anStatIds[0] = 0x19;
+        sNecroSkillArg.anStatValues[0] = -0x32;
+        break;
+        case 2:
+          sNecroSkillArg.anExtra[0] = 5;
+        sNecroSkillArg.anExtra[3] = 4;
+        break;
+        case 3:
+          sNecroSkillArg.anExtra[0] = 1;
+        sNecroSkillArg.anExtra[3] = 5;
+        sNecroSkillArg.anExtra[1] = 2;
+        sNecroSkillArg.anExtra[4] = 5;
+        break;
+        case 4:
+          sNecroSkillArg.bUpdateAnimRate = 1;
+        sNecroSkillArg.anStatIds[0] = 0x43;
+        sNecroSkillArg.anStatValues[0] = pSkillsTxt->Param[6];
+        sNecroSkillArg.anStatIds[1] = 0x19;
+        sNecroSkillArg.anStatValues[1] = -0x32;
+        sNecroSkillArg.anStatIds[2] = 0x24;
+        sNecroSkillArg.anStatValues[2] = -0x32;
+        sNecroSkillArg.anStatIds[3] = 0x44;
+        sNecroSkillArg.anStatValues[3] = pSkillsTxt->Param[6];
+        break;
+        default:
+          nDiminishVal = D2Common::Skills::SKILLS_GetParam45WithDiminishing(nSkillLvl, eSkill_00);
+        sNecroSkillArg.anStatValues[0] = -nDiminishVal;
+        sNecroSkillArg.anStatIds[0] = 0x25;
+        sNecroSkillArg.anStatIds[1] = 0x27;
+        sNecroSkillArg.anStatIds[2] = 0x29;
+        sNecroSkillArg.anStatIds[3] = 0x2b;
+        sNecroSkillArg.anStatIds[4] = 0x2d;
+        sNecroSkillArg.anStatValues[1] = sNecroSkillArg.anStatValues[0];
+        sNecroSkillArg.anStatValues[2] = sNecroSkillArg.anStatValues[0];
+        sNecroSkillArg.anStatValues[3] = sNecroSkillArg.anStatValues[0];
+        sNecroSkillArg.anStatValues[4] = sNecroSkillArg.anStatValues[0];
+      }
+
+      bResult = SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGame, 3, pUnit, nRadius, (pfnSkillRangeCb)SkillNec::SKILLNEC_ApplyCurseToUnit, &sNecroSkillArg);
+      return bResult;
     }
 
     return 0;
@@ -2715,7 +2571,7 @@ BOOL __fastcall Skills_SrvDoFunc_111_ApplyFetishAura(::SGAMEDATA * pGame, D2Unit
       pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
     }
 
-    D2UnitFindDataStrc* pFindData = SkillsServer::SKILLS_FindUnitsInRange((int32_t)pGame, pUnit, pSkillsTxt->Param[3] + nSkillLvl * 2, nTargetY, nTargetX);
+    D2UnitFindDataStrc* pFindData = SkillsServer::SKILLS_FindUnitsInRange(pGame, pUnit, pSkillsTxt->Param[3] + nSkillLvl * 2, nTargetY, nTargetX);
     int nUnitIdx = 0;
     if (pFindData->nCountedUnits > 0) {
       uint32_t bCanAttack;
@@ -2737,7 +2593,7 @@ BOOL __fastcall Skills_SrvDoFunc_111_ApplyFetishAura(::SGAMEDATA * pGame, D2Unit
       } while (nUnitIdx < pFindData->nCountedUnits);
     }
 
-    SkillsServer::SKILLS_FreeUnitFindData((int32_t)pGame, pFindData);
+    SkillsServer::SKILLS_FreeUnitFindData(pGame, pFindData);
     return 1;
 }
 

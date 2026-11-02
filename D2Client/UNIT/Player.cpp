@@ -17,7 +17,6 @@
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/GAME/Select.h"
 #include "D2Client/SKILLS/Skills.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/UI/Path.h"
 #include "D2Client/UI/SkillDesc.h"
@@ -56,6 +55,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
 #include "D2Common/Skills.h"
@@ -347,7 +347,7 @@ void __fastcall CLIENT_OnStatChanged(uint32_t dwUnused, D2UnitStrc * pUnit, D2Un
 
       case UNITSTAT_item_singleskill:
         if (pUnit->eUnitType == UNIT_PLAYER) {
-          eSkill = dwStatIdAndSubIndex & 0xffff;
+          eSkill = (uint16_t)dwStatIdAndSubIndex;
           pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
           if (!nValue) {
             if (pSkill) {
@@ -365,8 +365,8 @@ void __fastcall CLIENT_OnStatChanged(uint32_t dwUnused, D2UnitStrc * pUnit, D2Un
       break;
       case UNITSTAT_item_charged_skill:
         if (pUnit->eUnitType == UNIT_PLAYER) {
-          nSkillIdOrLevel = (int)(dwStatIdAndSubIndex & 0xffff) >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
-          nChargeMax = sgptDataTable->dwChargedSkillLevelMask & dwStatIdAndSubIndex & 0xffff;
+          nSkillIdOrLevel = (int)(uint16_t)dwStatIdAndSubIndex >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
+          nChargeMax = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & dwStatIdAndSubIndex);
           if (pItem) {
             nItemGUID = pItem->nUnitGUID;
             nChargeCount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, eUnitStat, (uint16_t)dwStatIdAndSubIndex);
@@ -523,49 +523,51 @@ static void CLIENT_OnPlayerEnterRoom(D2UnitStrc * pUnit) {
 
 // Client-side collision check for a player unit in Neutral or TownNeutral anim mode. Reads the unit's current tile position, tests for solid-blocking collision via CheckCollision_BlockAll_Type, and if blocked calls GetFreeCoordinates_WithNeighboorRooms + CLIENT_TeleportUnitToPosition to push the unit to the nearest free tile.
 static void CLIENT_ResolvePlayerCollision(D2UnitStrc * pUnit) {
+    eCollisionFlags eCollideResult;
     eD2PlayerAnimMode eAnimMode;
+    D2RoomStrc* pRoom;
     POINT sTilePos;
+    eD2UnitType eUnitType;
     if (!pUnit) {
       eAnimMode = Death;
     } else {
       eAnimMode = pUnit->eAnimMode.ePlayerMode;
     }
-    if (!(eAnimMode == eD2PlayerAnimMode_ns::Neutral || eAnimMode == TownNeutral)) {
-      return;
-    }
 
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      sTilePos.x = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      sTilePos.x = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      sTilePos.x = 0;
-    }
+    switch (eAnimMode) {
+      case eD2PlayerAnimMode_ns::Neutral:
+        case TownNeutral:
+          {
+            eUnitType = pUnit->eUnitType;
+            if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+              sTilePos.x = pUnit->pPath.pStaticPath->nPosX;
+            } else if (pUnit->pPath.pDynamicPath) {
+              sTilePos.x = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+            } else {
+              sTilePos.x = 0;
+            }
 
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      sTilePos.y = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      sTilePos.y = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      sTilePos.y = 0;
-    }
+            eUnitType = pUnit->eUnitType;
+            if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+              sTilePos.y = pUnit->pPath.pStaticPath->nPosY;
+            } else if (pUnit->pPath.pDynamicPath) {
+              sTilePos.y = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+            } else {
+              sTilePos.y = 0;
+            }
 
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return;
-    }
+            pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+            if (pRoom) {
+              eCollideResult = D2Common::Collision::CheckCollision_BlockAll_Type(pRoom, sTilePos.x, sTilePos.y, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0xc01);
+              if (eCollideResult != COLLIDE_NONE) {
+                D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &sTilePos, D2Common::Units::GetUnitSizeX(pUnit), 0xc01, 1);
+                CUnit::CLIENT_TeleportUnitToPosition(pUnit, sTilePos.x, sTilePos.y, 0);
+              }
+            }
 
-    int32_t iVar1 = 0xc01;
-    int32_t nUnitWidth = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
-    eCollisionFlags eCollideResult = D2Common::Collision::CheckCollision_BlockAll_Type(pRoom, sTilePos.x, sTilePos.y, nUnitWidth, iVar1);
-    if (eCollideResult == COLLIDE_NONE) {
-      return;
+            break;
+          }
     }
-
-    D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &sTilePos, D2Common::Units::GetUnitSizeX(pUnit), 0xc01, 1);
-    CUnit::CLIENT_TeleportUnitToPosition(pUnit, sTilePos.x, sTilePos.y, 0);
 }
 
 static void CLIENT_HandlePlayerDeath(D2UnitStrc * pUnit) {
@@ -599,7 +601,7 @@ static void __stdcall CLIENT_PlayIndexedUnitSound(D2UnitStrc * pUnit, int32_t nS
     0x0,
     0x0
 }; D2_STATIC_GUARD(gwPlayerAnimationState, "D2Client::UNIT::Player::CLIENT_PlayIndexedUnitSound::gwPlayerAnimationState");
-    static uint32_t gaClientSoundUnitIndexArray = 0x9; D2_STATIC_GUARD(gaClientSoundUnitIndexArray, "D2Client::UNIT::Player::CLIENT_PlayIndexedUnitSound::gaClientSoundUnitIndexArray");
+    static int gaClientSoundUnitIndexArray = 0x9; D2_STATIC_GUARD(gaClientSoundUnitIndexArray, "D2Client::UNIT::Player::CLIENT_PlayIndexedUnitSound::gaClientSoundUnitIndexArray");
 
     if (gaClientSoundUnitIndexArray <= nSoundIndex) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2cb);
@@ -661,11 +663,10 @@ uint32_t __stdcall PLAYER_ValidateSkillMessage(int * pnUsabilityCode, D2UnitStrc
     eD2Skills eOrigSkillId = pServerMessageHandle->nSkillId;
     eD2Skills eResolvedSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\Player.cpp", 0x32c);
     pServerMessageHandle->nSkillId = eResolvedSkillId;
-    if (eResolvedSkillId == eOrigSkillId) {
-      return 1;
+    if (eResolvedSkillId != eOrigSkillId) {
+      pServerMessageHandle->nItemId = -1;
     }
 
-    pServerMessageHandle->nItemId = -1;
     return 1;
 }
 
@@ -1179,23 +1180,28 @@ static void __stdcall PLAYER_ExecuteSkillAtUnit(eD2UnitType eTargetUnitType, int
           return;
         }
       }
-      if (nWeaponClass == 1 || nWeaponClass == 4) {
-        nWeaponClass = 0;
-        if (!(*(uint8_t*)&pUnderMouse->flags & 0x20)) {
-          UnitMode::UNITMODE_ExecuteSkillAction(pUnderMouse->nAttackActionType, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID, 0);
-          if (*(uint8_t*)&pUnderMouse->flags & 1) {
-            Engine::StoreLastSkillHit(unk1, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
-          }
-          if (!(*(uint8_t*)&pUnderMouse->flags & 2)) {
-            return;
-          }
 
-          Engine::StoreLastSkillHit(unk3 | Poison, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
-          return;
-        }
+      switch (nWeaponClass) {
+        case 1:
+          case 4:
+            {
+              nWeaponClass = 0;
+              if (!(*(uint8_t*)&pUnderMouse->flags & 0x20)) {
+                UnitMode::UNITMODE_ExecuteSkillAction(pUnderMouse->nAttackActionType, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID, 0);
+                if (*(uint8_t*)&pUnderMouse->flags & 1) {
+                  Engine::StoreLastSkillHit(unk1, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+                }
+                if (!(*(uint8_t*)&pUnderMouse->flags & 2)) {
+                  return;
+                }
 
-        PLAYER_ExecuteModeBasedAction(nWeaponClass, pUnderMouse);
-        return;
+                Engine::StoreLastSkillHit(unk3 | Poison, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+                return;
+              }
+
+              PLAYER_ExecuteModeBasedAction(nWeaponClass, pUnderMouse);
+              return;
+            }
       }
     }
 
@@ -1264,8 +1270,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
         }
 
         nTargetY = Units::GetYPosFromDynamicPathUnit(pTargetUnit);
-        nTargetX = Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget);
-        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x59, nUnitType, nClassId, nTargetX, nTargetY);
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x59, nUnitType, nClassId, Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget), nTargetY);
         pTargetUnit = pUnderMouse->pTarget;
         if (pTargetUnit && pTargetUnit->eUnitType == UNIT_MONSTER && pTargetUnit->pUnitData.pUnitDataPlayer) {
           puVar1 = &pTargetUnit->pUnitData.pUnitDataPlayer->unk0x28;
@@ -1833,7 +1838,7 @@ BOOL __fastcall IsUnitNotMoving(D2UnderMouseStrc * pUnderMouse) {
     } else {
       eD2PlayerAnimMode ePlayerAnimMode;
       if (dwFlags & 4) {
-        gnUnitClickState = (pUnderMouse->pTarget != 0) + 1;
+        gnUnitClickState = pUnderMouse->pTarget != 0 ? 2 : 1;
         return 1;
       }
       if (!(dwFlags & 8) || gnUnitClickState && (!pUnderMouse->pTarget || (eTargetUnitType = pUnderMouse->pTarget->eUnitType , (int)eTargetUnitType >= 0 && ((int)eTargetUnitType <= 1 || eTargetUnitType == UNIT_WARP)) && (!pUnderMouse->pPlayer || (ePlayerAnimMode = pUnderMouse->pPlayer->eAnimMode.ePlayerMode , ePlayerAnimMode != Walk && ePlayerAnimMode != eD2PlayerAnimMode_ns::Run) && ePlayerAnimMode != TownWalk))) {
@@ -2051,9 +2056,8 @@ static BOOL INPUT_HandleRightClickWithPet(D2UnderMouseStrc * pUnderMouse) {
 }
 
 // Client input dispatcher for map clicks. Converts raw screen coordinates to perspective-view world coords, builds a D2UnderMouseStrc with the player and currently selected unit, sets run/walk and force-move flags from mouseEventFlags, then dispatches to the appropriate handler based on clickType (0=left-down, 1=left-hold, 2=left-up, 3=right-down, 4=right-hold, 5=right-up). Guards against re-entrant calls and ESC-menu-open state.
-int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint8_t mouseEventFlags) {
-    uint32_t uVar1;
-    D2UnderMouseStrc mouse;
+int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint16_t mouseEventFlags) {
+    uint32_t uVar2;
     int nXConverted = nX;
     BOOL bEscOpen = UI::ui::GetUIFlag(UI_ESCMENU);
     if (bEscOpen) {
@@ -2065,13 +2069,7 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint8_t mouse
 
     bRecursionClick = 1;
     UI::Path::ConvertCoordToPerspectiveView(&nXConverted, &nY);
-    mouse.pPlayer = 0;
-    mouse.pTarget = 0;
-    mouse.nX = 0;
-    mouse.nY = 0;
-    mouse.nMoveActionType = 0;
-    mouse.nAttackActionType = 0;
-    mouse.pSkill = 0;
+    D2UnderMouseStrc mouse = {0};
     mouse.flags = 0;
     mouse.pPlayer = GetPlayerUnit_UI();
     mouse.pTarget = GAME::Select::GetSelectedUnit();
@@ -2082,7 +2080,7 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint8_t mouse
       mouse.nY = Units::GetYPosFromDynamicPathUnit(mouse.pTarget);
     }
 
-    uint8_t byRawMouseFlags = mouseEventFlags;
+    uint16_t uVar1 = mouseEventFlags;
     if (mouseEventFlags & 8) {
       int nStamina;
       nStamina = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(mouse.pPlayer, UNITSTAT_stamina, 0);
@@ -2090,7 +2088,7 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint8_t mouse
         mouse.flags |= 0x40;
       }
     }
-    if (byRawMouseFlags & 4) {
+    if (uVar1 & 4) {
       mouse.flags |= 0x20;
     }
 
@@ -2111,8 +2109,8 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint8_t mouse
         }
       case 1:
         mouse.flags |= 9;
-      uVar1 = WalkToCoordOrUnit(&mouse);
-      return uVar1;
+      uVar2 = WalkToCoordOrUnit(&mouse);
+      return uVar2;
       case 2:
         GAME::Select::ClearSelectedUnit();
       mouse.flags |= 0x11;
@@ -2509,8 +2507,8 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
     }
 }; D2_STATIC_GUARD(gaPlayerModeAttribs, "D2Client::UNIT::Player::PLAYER_ProcessPlayerModeSimulation::gaPlayerModeAttribs");
 
-    bool _bStepDone;
-    bool _bHasDmgState;
+    uint32_t _bStepDone;
+    BOOL _bHasDmgState;
     D2DynamicPathStrc* pDynamicPath_00;
     bool bHasDmgState;
     uint16_t nX;
@@ -2692,12 +2690,12 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
     CLIENT_ResolvePlayerCollision(pUnit);
 }
 
-uint32_t __fastcall CheckFlagWithMask(D2UnitStrc * pUnit, uint32_t nParam) {
+uint32_t __fastcall CheckFlagWithMask(D2UnitStrc * pUnit, uint32_t dwMask) {
     if (!pUnit) {
       return 0;
     }
 
-    return (uint32_t)((pUnit->eUnitFlagsEx & nParam) != 0);
+    return (uint32_t)((pUnit->eUnitFlagsEx & dwMask) != 0);
 }
 
 D2RoomStrc * __fastcall DRLGROOM_FindBetterNearbyRoom(D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
@@ -2883,10 +2881,10 @@ uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
           insert_sorted:
           UnitSnd::MuteOrUnmuteUnitSounds(pUnit, 1);
           nHashBucket = pUnit->nUnitGUID & 0x7f;
-          if (!(pUnit->eUnitFlags >> 0x15 & 1)) {
-            papDVar1 = ServerSideUnitHashTables;
-          } else {
+          if (pUnit->eUnitFlags >> 0x15 & 1) {
             papDVar1 = ClientSideUnitHashTables;
+          } else {
+            papDVar1 = ServerSideUnitHashTables;
           }
 
           pNextUnit = papDVar1[pUnit->eUnitType][nHashBucket];
@@ -2902,12 +2900,12 @@ uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
           }
 
           pUnit->pListNext = pCurUnit;
-          if (!pPrevUnit) {
-            papDVar1[pUnit->eUnitType][nHashBucket] = pUnit;
+          if (pPrevUnit) {
+            pPrevUnit->pListNext = pUnit;
             return 1;
           }
 
-          pPrevUnit->pListNext = pUnit;
+          papDVar1[pUnit->eUnitType][nHashBucket] = pUnit;
           return 1;
         }
 
@@ -2933,13 +2931,13 @@ void CLIENT_SendIdlePlayerMessage(D2UnitStrc * pUnit) {
     PlayerMessage(7, pUnit, nullptr, 1);
 }
 
-void __stdcall PLAYER_PlaceUnitInRoom(int32_t nParam1, D2RoomStrc * pRoom, D2UnitStrc * pUnit, int32_t nParam2) {
+void __stdcall PLAYER_PlaceUnitInRoom(int32_t nX, D2RoomStrc * pRoom, D2UnitStrc * pUnit, int32_t nY) {
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_DRAWSHADOW | UNITFLAG_TARGETABLE;
     }
 
-    D2Common::Units::InitializeStaticPath(pUnit, pRoom, nParam1, nParam2);
-    D2Common::Units::BlockCollisionPath(pUnit, pRoom, nParam1, nParam2);
+    D2Common::Units::InitializeStaticPath(pUnit, pRoom, nX, nY);
+    D2Common::Units::BlockCollisionPath(pUnit, pRoom, nX, nY);
     D2Common::Unit::DRLGROOM_AddUnitToRoom(pUnit, pRoom);
 }
 

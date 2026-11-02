@@ -11,7 +11,6 @@
 #include "Fog/Src/D2Net.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/Safesock.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "Fog/D2QServerStrc.h"
 
@@ -303,7 +302,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
       /* int flags for recv */ /* int len for recv */ if (bCompressedMode) {
         /* char * buf for recv */ /* SOCKET s for recv */ pbRecvResult = (uint8_t*)recv(CLIENT_SocketToServer, (char*)(aCompressedBuf + (int)pCompressedRead), 0x5b4, 0);
-        if (0 < (int)pbRecvResult) {
+        if ((int)pbRecvResult > 0) {
           pCompressedRead += (int)pbRecvResult;
           while (true) {
             pCompressedEnd = pCompressedRead;
@@ -321,7 +320,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
               break;
             }
 
-            nSelectResult = 2 - (uint32_t)(pbDecompressResult < (uint8_t*)0xf0);
+            nSelectResult = pbDecompressResult < (uint8_t*)0xf0 ? 0x1U : 0x2U;
             pbRecvResult = Fog::Src::D2Net::NET_D2GS_CLIENT_DecompressPacket(pD2PacketsClientBuffer->pBytes + pD2PacketsClientBuffer->nCount, 0x7b8 - pD2PacketsClientBuffer->nCount, (char*)(aCompressedBuf + (int)(pCompressedConsumed + nSelectResult)), (int)pbDecompressResult - nSelectResult);
             pCompressedEnd += -(int)pbDecompressResult;
             pCompressedConsumed += (int)pbDecompressResult;
@@ -339,7 +338,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
         }
       } else {
         /* char * buf for recv */ /* SOCKET s for recv */ pbRecvResult = (uint8_t*)recv(CLIENT_SocketToServer, pD2PacketsClientBuffer->pBytes + pD2PacketsClientBuffer->nCount, 0x5b4, 0);
-        if (0 < (int)pbRecvResult) {
+        if ((int)pbRecvResult > 0) {
           pD2PacketsClientBuffer->nCount = (int)(pbRecvResult + pD2PacketsClientBuffer->nCount);
           bCompressedMode = NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues();
         }

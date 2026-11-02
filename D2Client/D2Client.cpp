@@ -17,7 +17,6 @@
 #include "D2Client/GAME/Wall2.h"
 #include "D2Client/Message.h"
 #include "D2Client/Renderer/Renderer.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/Sound/SoundHdr.h"
 #include "D2Client/Source/ClientEngine.h"
@@ -60,6 +59,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/Environment.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Units.h"
@@ -141,10 +141,7 @@ BOOL __stdcall WINMAIN_TestMemoryAccess(CMDPARAMS * pParams, char * szCmdLine) {
 
 // Triggers end-game congrats flow: set gShowEndGameCongrats, reset beta index, send exit packet, set ExitVar3.
 void TriggerEndGameCongratsExit() {
-    gEndGameUiState.showCongrats = true;
-    gEndGameUiState._pad0[0] = '\0';
-    gEndGameUiState._pad0[1] = '\0';
-    gEndGameUiState._pad0[2] = '\0';
+    gEndGameUiState.showCongrats = 1;
     gBetaScreenIndex = 0;
     GAME::Msg::NET_D2GS_CLIENT_Send_0x69();
     D2CLIENT_ExitVar3 = 1;
@@ -313,11 +310,7 @@ void __stdcall CMD_AutomapCenterOnPlayer() {
 
 void __stdcall CMD_AutomapCycleFade() {
     int32_t iVar1 = UI::Automap::AUTOMAP_GetFade();
-    uint32_t nAutomapFade = iVar1 + 1U & 0x80000003;
-    if ((int)nAutomapFade < 0) {
-      nAutomapFade = (nAutomapFade - 1 | -4) + 1;
-    }
-
+    uint32_t nAutomapFade = (int)(iVar1 + 1U) % 4;
     UI::Automap::AUTOMAP_SetFade(nAutomapFade);
 }
 
@@ -765,7 +758,7 @@ void __stdcall CMD_SetHoldAlt() {
 }
 
 void __stdcall CMD_StopRun() {
-    bool _bAlwaysRun;
+    BOOL _bAlwaysRun;
     bool bAlwaysRun;
     GAME::Game::SetRunKeyDown(0);
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
@@ -813,20 +806,12 @@ void __stdcall ClientLight_UpdateRoomLightPulse() {
     Draw::LightMap::ROOM_GetAmbientLightColor(pRoom, &nAmbientColor, (char*)pRed, (char*)pGreen, (char*)pBlue, nAmbientArg);
     if ((int)gRoomLightPulse.nCurrentTick < (int)gRoomLightPulse.nFadeInDuration) {
       fVar1 = Fog::MATH_sinTable_f32_LookupOffset(gRoomLightPulse.nSinOffset);
-      fAmbientColorF = (float)(int)nAmbientColor;
-      if ((int)nAmbientColor < 0) {
-        fAmbientColorF += 4.2949673e+09;
-      }
-
+      fAmbientColorF = (float)nAmbientColor;
       gRoomLightPulse.nLightPulseIntensity = (uint32_t)(fAmbientColorF * fVar1);
       gRoomLightPulse.nSinOffset = (int)(gRoomLightPulse.nCurrentTick << 7) / (int)gRoomLightPulse.nFadeInDuration;
     } else if (!((int)gRoomLightPulse.nCurrentTick < (int)(gRoomLightPulse.nTotalDuration - gRoomLightPulse.nFadeOutDuration))) {
       fVar1 = Fog::MATH_sinTable_f32_LookupOffset(gRoomLightPulse.nSinOffset);
-      fAmbientColorF = (float)(int)nAmbientColor;
-      if ((int)nAmbientColor < 0) {
-        fAmbientColorF += 4.2949673e+09;
-      }
-
+      fAmbientColorF = (float)nAmbientColor;
       gRoomLightPulse.nLightPulseIntensity = (uint32_t)(fAmbientColorF * fVar1);
       nFadeOutBase = gRoomLightPulse.nFadeOutDuration - gRoomLightPulse.nTotalDuration;
       if (!gRoomLightPulse.nFadeOutDuration) {
@@ -1029,7 +1014,7 @@ void __fastcall AUTOMAP_UpdatePartyNamesCallback(D2EscMenuItemStrc * pItem, D2UI
 }
 
 // The ECX slot that carries a function pointer was one variable holding three callees with two
-// different conventions - fpRequiredUserAction (bool __cdecl(void)), UI_ShowPopupDialog and
+// different conventions - fpRequiredUserAction (BOOL __cdecl(void)), UI_ShowPopupDialog and
 // NET_D2GS_CLIENT_Send_0x6D_PING (void __stdcall(void)). Typing it void * split it into two register
 // variables with disjoint live ranges: pfnCallback, which reaches MPQ_LoadVideoMpqFiles, and pfFrame,
 // which reaches D2GFX_PlayCutScene and only ever holds PING or 0. void * is the honest type for both -
@@ -1051,11 +1036,9 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
     nExitCodeEcx3 = nCutsceneId;
     int bMpqLoaded;
     char szInstallPath[260];
-    uint32_t szSoundPath[65];
+    char szSoundPath[260];
     char szVideoPath[260];
     int bVideoLoaded;
-    void* pfFrame;
-    char cChar;
     int32_t nErrorLine;
     int nCurrentCutsceneId;
     nCurrentCutsceneId = nCutsceneId;
@@ -1086,12 +1069,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
       }
     } else {
       pszSrcName = gdwSoundHeaderCacheIndex[nCutsceneId].pszVideoPath;
-      bMpqLoaded = -(int)pszSrcName;
-      do {
-        cChar = *pszSrcName;
-        pszSrcName[(int)(szVideoPath + bMpqLoaded)] = cChar;
-        pszSrcName++;
-      } while (cChar != '\0');
+      strcpy(szVideoPath, pszSrcName);
     }
 
     Sound::SoundHdr::Cleanup();
@@ -1130,7 +1108,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
 
       load_and_play:
       Engine::LOADER_SetConnectionLostFlag(bConnectionLost);
-      pfnCallback = (void*)(bool (*)())Engine::fpRequiredUserAction;
+      pfnCallback = (void*)(BOOL (*)())Engine::fpRequiredUserAction;
       if (!bConnectionLost) {
         pfnCallback = (void*)UI::ui::UI_ShowPopupDialog;
       }
@@ -1142,7 +1120,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
         if (gdwSoundHeaderCacheIndex[nCutsceneId].bHasAltSoundPath) {
           Sound::SOUND_LocalizeSoundPath("%s\\video\\%s\\%s", szSoundPath, szVideoPath);
         } else {
-          sprintf((char*)szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
+          sprintf(szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
         }
 
         bExitCutsceneActive = '\x01';
@@ -1151,12 +1129,11 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
         dwResult = D2Win::D2GFX::BeginCutSceneAtResolutionMode0();
         if (dwResult) {
           if (gbCutsceneActive != '\0') {
-            pfFrame = 0;
+            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, 0);
           } else {
-            pfFrame = (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING;
+            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING);
           }
 
-          D2gfx::D2GFX::D2GFX_PlayCutScene((char*)szSoundPath, nPlayMode, pfFrame);
           bCutscenePlayed = 1;
         }
         if (nCurrentCutsceneId != 5 || geCutsceneCurrentSoundId == '\0') {
@@ -1176,26 +1153,26 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
           D2Win::D2GFX::SetResolutionModeWithEndCutScene(dwResult);
         }
         Engine::LOADER_SetConnectionLostFlag(1);
-        bConnectionLost = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles((::fpRequiredUserAction)(bool (*)())Engine::fpRequiredUserAction, 0, 1);
+        bConnectionLost = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles((::fpRequiredUserAction)Engine::fpRequiredUserAction, 0, 1);
         if (bConnectionLost) {
           nCurrentCutsceneId = 6;
           if (gbLoggerStateInactive != '\0') {
             pszSrcName = "640x292";
+            sprintf(szVideoPath, gdwSoundHeaderCacheIndex[6].pszVideoPath, "640x292");
           } else {
             pszSrcName = "640x146";
             nPlayMode = 2;
+            sprintf(szVideoPath, gdwSoundHeaderCacheIndex[6].pszVideoPath, "640x146");
           }
-
-          sprintf(szVideoPath, gdwSoundHeaderCacheIndex[6].pszVideoPath, pszSrcName);
           if (gdwSoundHeaderCacheIndex[6].bHasAltSoundPath) {
             Sound::SOUND_LocalizeSoundPath("%s\\video\\%s\\%s", szSoundPath, szVideoPath);
           } else {
-            sprintf((char*)szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
+            sprintf(szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
           }
 
           dwResult = D2Win::D2GFX::BeginCutSceneAtResolutionMode0();
           if (dwResult) {
-            D2gfx::D2GFX::D2GFX_PlayCutScene((char*)szSoundPath, nPlayMode, (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING);
+            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING);
             Sound::SoundHdr::SOUNDHDR_UpdateRegistryVersion(6);
           }
         }
@@ -1233,7 +1210,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
     GAME::Game::D2CLIENT_ExitGame(nErrorLine);
     reload_media_mpqs:
     D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
-    D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)(bool (*)())Engine::fpRequiredUserAction, (::fpRequiredUserAction)LOADER_RunInsertDiscPopup, 0, D2IniData_client);
+    D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)Engine::fpRequiredUserAction, (::fpRequiredUserAction)LOADER_RunInsertDiscPopup, 0, D2IniData_client);
     gbItemDescDirtyFlag = 0;
 }
 
@@ -1310,7 +1287,7 @@ void __fastcall MONUNIQUE_DispatchDeathEffect(D2UnitStrc * pUnit, int32_t nUMod,
           break;
           case 0xf3:
             if (pUnit->eAnimMode.ePlayerMode == Death) {
-              Source::ClientEngine::CLIENT_StoreUnitGuidForQuestTracking((int32_t)pUnit);
+              Source::ClientEngine::CLIENT_StoreUnitGuidForQuestTracking(pUnit);
               return;
             }
         }
@@ -1440,14 +1417,12 @@ int __stdcall D2CLIENT_GetTradePlayerGoldAmount() {
 }
 
 void __fastcall TRADE_SendGoldToPartner(uint32_t nParam) {
-    eD2UnitStat eUnitStat;
     uint16_t nLayer;
     if (g_nTradeWindowState != 4 && g_nTradeWindowState != 5 && g_nTradeWindowState != 6) {
-      D2UnitStrc* pUnit;
+      eD2UnitStat eUnitStat;
       nLayer = 0;
       eUnitStat = UNITSTAT_gold;
-      pUnit = UNIT::Player::GetPlayerUnit_UI();
-      gnTradePlayerGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, nLayer);
+      gnTradePlayerGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, nLayer);
       if (nParam >= gnTradePlayerGoldAmount) {
         GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 8, (int16_t)(gnTradePlayerGoldAmount >> 0x10), (int16_t)gnTradePlayerGoldAmount);
         return;
@@ -1500,17 +1475,17 @@ void __fastcall NET_D2GS_CLIENT_Handle0x50_QuestSpecial(D2GSPacketSrv0x50 * pPac
         UI::npcmenu::Merc::NPCMENU_SetSelectedMercIndex(pPacket->aPayload[0]);
       return;
       case 1:
-        UI::QuestLog::QUESTLOG_HandleSpecialPacket((int32_t)pPacket);
+        UI::QuestLog::QUESTLOG_HandleSpecialPacket(pPacket);
       return;
       case 3:
 
       case 6:
-        UI::npcmenu::NPCMENU_SetTransactionMode((int32_t)pPacket);
+        UI::npcmenu::NPCMENU_SetTransactionMode(pPacket);
       return;
       case 4:
 
       case 0xd:
-        UI::Text::TEXT_HandleScrollLinePacket(&pPacket->nPacketId);
+        UI::Text::TEXT_HandleScrollLinePacket(pPacket);
       return;
       case 0x17:
         GAME::Msg::NET_D2GS_CLIENT_Send_0x69();
@@ -1606,7 +1581,7 @@ BOOL __fastcall OBJECT_CheckAutoLight(D2UnitStrc * pUnit, int32_t bSkipCofLoad) 
 
     int32_t nPeriodOfDay = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(sgpDrlgAct, nullptr);
     if (nPeriodOfDay) {
-      if (nPeriodOfDay - 1U <= 2) {
+      if (nPeriodOfDay >= 0x1 && nPeriodOfDay <= 0x3) {
         if (pUnit->eAnimMode.ePlayerMode == Death) {
           pUnit->eAnimMode.ePlayerMode = eD2PlayerAnimMode_ns::Neutral;
           if (!bSkipCofLoad) {
@@ -3923,7 +3898,7 @@ void __thiscall WARDEN_RC4Init(D2RC4StateStrc * pRc4State, uint8_t * pKey, uint3
     do {
       uint8_t bySwapTemp;
       nNextIdx = nByteIdx + 1;
-      bySwapIndex = bySwapIndex + pKey[nKeyIdx & 0xff] + pRc4State->sbox[nByteIdx];
+      bySwapIndex = bySwapIndex + pKey[(uint8_t)nKeyIdx] + pRc4State->sbox[nByteIdx];
       bySwapTemp = pRc4State->sbox[nByteIdx];
       pRc4State->sbox[nByteIdx] = pRc4State->sbox[bySwapIndex];
       pRc4State->sbox[bySwapIndex] = bySwapTemp;
@@ -3937,7 +3912,7 @@ void __fastcall SKILLSSOR_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2S
 }
 
 int __fastcall SKILLSCLT_CheckSkillIsValid(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_MISSILE) != UNIT_MISSILE) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MISSILE) {
       return 0;
     }
 
@@ -4050,11 +4025,13 @@ void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFram
               if (msgPeek.message == 0x201) {
                 goto request_skip;
               }
-              if (msgPeek.message == 0x12) {
+              if (msgPeek.message != 0x12) {
+                if (msgPeek.message == 0x102) {
+                  goto request_skip;
+                }
+              } else {
                 g_bBinkDDrawVideoQuitRequested = 1;
                 gbBinkDDrawVideoExitRequested = 1;
-              } else if (msgPeek.message == 0x102) {
-                goto request_skip;
               }
             } else {
               if (!(msgPeek.message != 0x204 && msgPeek.message != 0x207)) {

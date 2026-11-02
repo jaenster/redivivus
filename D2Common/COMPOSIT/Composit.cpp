@@ -3,7 +3,6 @@
 #include "D2Common/COMPOSIT/Composit.h"
 #include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/Engine/Gfx.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
@@ -18,6 +17,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
@@ -396,7 +396,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
     uint32_t* pszWeaponToken;
     uint32_t dwModeToken;
     uint32_t nMonModeItemCode;
-    uint8_t byObjTypeToken0;
+    char byObjTypeToken0[4];
     char szModeToken[4];
     char szWeaponToken[4];
     char szModeTokenObj[4];
@@ -430,16 +430,12 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
             }
           }
 
-          i = 0;
-          if (gnPlayerCompositeOverrideCount > 0) {
-            do {
-              if (nResolvedClass == gaPlayerCompositeOverrideGfx[i].nMode) {
-                nMonModeItemCode = gaPlayerCompositeOverrideGfx[i].dwToken;
-              }
-
-              i++;
-            } while (i < gnPlayerCompositeOverrideCount);
+          for (i = 0; i < gnPlayerCompositeOverrideCount; i++) {
+            if (nResolvedClass == gaPlayerCompositeOverrideGfx[i].nMode) {
+              nMonModeItemCode = gaPlayerCompositeOverrideGfx[i].dwToken;
+            }
           }
+
           if (nResolvedClass == 0xb) {
             nWeaponClassCode = *pnWeaponClass;
             if (nWeaponClassCode != 0x20736831 && nWeaponClassCode != 0x20746831 && nWeaponClassCode != 0x20736a31 && nWeaponClassCode != 0x20746a31 && nWeaponClassCode != 0x20737331 && nWeaponClassCode != 0x20747331) {
@@ -499,15 +495,10 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
             *pOutWeaponClass = uVar1;
           }
 
-          i = 0;
-          if (gnMonsterCompositeOverrideCount > 0) {
-            do {
-              if (nResolvedClass == gaMonsterCompositeOverrideGfx[i].nMode) {
-                dwModeToken = gaMonsterCompositeOverrideGfx[i].dwToken;
-              }
-
-              i++;
-            } while (i < gnMonsterCompositeOverrideCount);
+          for (i = 0; i < gnMonsterCompositeOverrideCount; i++) {
+            if (nResolvedClass == gaMonsterCompositeOverrideGfx[i].nMode) {
+              dwModeToken = gaMonsterCompositeOverrideGfx[i].dwToken;
+            }
           }
 
           nItemCode = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(*(uint8_t*)((int)pOutWeaponClass + 2) == 0x20 ? 0 : *(uint8_t*)((int)pOutWeaponClass + 2)) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(*(uint8_t*)((int)pOutWeaponClass + 1) == 0x20 ? 0 : *(uint8_t*)((int)pOutWeaponClass + 1)) << 8 | (uint16_t)(uint8_t)((uint8_t)*pOutWeaponClass == 0x20 ? 0 : (uint8_t)*pOutWeaponClass))) & 0xffffffu);
@@ -540,7 +531,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
           pObjModeLine = DATATBLS::TokTbls::TxtGetObjTypeModeLine(nPlrClass, 0);
           nResolvedClass = nItemCode;
           nModeOrClass = *(uint32_t*)pObjModeLine->token;
-          byObjTypeToken0 = (uint8_t)nModeOrClass;
+          byObjTypeToken0[0] = (char)nModeOrClass;
           pObjModeLine = DATATBLS::TokTbls::TxtGetObjTypeModeLine(nItemCode, 1);
           nMode2 = *(uint32_t*)pObjModeLine->token;
           szModeToken[0] = (char)nMode2;
@@ -556,7 +547,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
           szWeaponTokenObj[2] = *(uint8_t*)((int)pOutWeaponClass + 2) == 0x20 ? 0 : *(uint8_t*)((int)pOutWeaponClass + 2);
           byRawTokenChar1 = (uint8_t)((uint32_t)nModeOrClass >> 8);
           byRawTokenChar2 = (uint8_t)((uint32_t)nModeOrClass >> 0x10);
-          nCompType = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(byRawTokenChar2 == 0x20 ? 0 : byRawTokenChar2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(byRawTokenChar1 == 0x20 ? 0 : byRawTokenChar1) << 8 | (uint16_t)(uint8_t)(byObjTypeToken0 == 0x20 ? 0 : byObjTypeToken0))) & 0xffffffu);
+          nCompType = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(byRawTokenChar2 == 0x20 ? 0 : byRawTokenChar2) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(byRawTokenChar1 == 0x20 ? 0 : byRawTokenChar1) << 8 | (uint16_t)(uint8_t)(byObjTypeToken0[0] == ' ' ? 0 : byObjTypeToken0[0]))) & 0xffffffu);
           szModeTokenObj[0] = szModeToken[0] == ' ' ? 0 : szModeToken[0];
           szModeTokenObj[1] = szModeToken[1] == ' ' ? 0 : szModeToken[1];
           szModeTokenObj[2] = szModeToken[2] == ' ' ? 0 : szModeToken[2];

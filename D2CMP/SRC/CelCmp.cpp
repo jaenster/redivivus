@@ -17,9 +17,10 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/H/stpl.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
+#include "Storm/H/CCritSect.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -1484,7 +1485,7 @@ void __stdcall CELCMP_FreeCelFileMemory(void * pCelFile) {
     D2_FREE_AT(pCelFile, ".\\SRC\\CelCmp.cpp", 0x40e);
 }
 
-void __stdcall CELCMP_InvokeFormatSpecificCleanup(int32_t nParam, BYTE * dwParam) {
+void __stdcall CELCMP_InvokeFormatSpecificCleanup(int32_t nParam, BYTE * pPaletteRemap) {
     // Static local variables (originally global data)
     static fpCelRemapFrameByFormat gapfnCelRemapFrameByFormat[2] = { &D2CMP::SRC::FastCmp::FASTCMP_RemapFramePaletteIndices, nullptr }; D2_STATIC_GUARD(gapfnCelRemapFrameByFormat, "D2CMP::SRC::CelCmp::CELCMP_InvokeFormatSpecificCleanup::gapfnCelRemapFrameByFormat");
 
@@ -1503,7 +1504,7 @@ void __stdcall CELCMP_InvokeFormatSpecificCleanup(int32_t nParam, BYTE * dwParam
 
       puVar1 = (uint32_t*)(nParam + 0x18);
       do {
-        (*gapfnCelRemapFrameByFormat[*(int*)(nParam + 8)])((DC6Block*)*puVar1, dwParam);
+        (*gapfnCelRemapFrameByFormat[*(int*)(nParam + 8)])((DC6Block*)*puVar1, pPaletteRemap);
         iFrame++;
         puVar1++;
       } while (iFrame < (uint32_t)(*(int*)(nParam + 0x10) * *(int*)(nParam + 0x14)));
@@ -1570,21 +1571,21 @@ void __stdcall CELCMP_DrawCelFrame(D2GfxDataStrc * pGfxData, int32_t nDrawX, int
     exit(-1);
 }
 
-uint32_t __stdcall CELCMP_CopyCelDataToBuffer(int * pDC6, int32_t nDirection, int32_t nFrame, void * pDstBuffer) {
+uint32_t __stdcall CELCMP_CopyCelDataToBuffer(DC6 * pDC6, int32_t nDirection, int32_t nFrame, void * pDstBuffer) {
     uint32_t nDirFrameIndex;
-    if (*pDC6 != 6) {
+    if (pDC6->nVersion != 6) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a0);
       exit(-1);
     }
 
     int iVar1;
-    if (!(*(uint8_t*)(pDC6 + 1) & 4)) {
+    if (!(pDC6->nFlags & 4)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a1);
       exit(-1);
     }
 
-    nDirFrameIndex = CELCMP_GetDirectionFrameTableIndex(nDirection, pDC6[4]);
-    iVar1 = pDC6[nDirFrameIndex * pDC6[5] + nFrame + 6];
+    nDirFrameIndex = CELCMP_GetDirectionFrameTableIndex(nDirection, pDC6->nDirections);
+    iVar1 = *(int*)(pDC6[1].nTerm + (nDirFrameIndex * pDC6->nFrames + nFrame) * 4 - 0xc);
     memcpy(pDstBuffer, (void*)(iVar1 + 0x20), *(int*)(iVar1 + 8) * *(int*)(iVar1 + 4) * 3);
     return 1;
 }
@@ -1844,14 +1845,14 @@ void __stdcall DeleteCellFile(DC6 * pDC6) {
     }
 }
 
-uint32_t __stdcall CELCMP_GetDC6BlockPixelData(int32_t nParam) {
-    if (!nParam) {
+int __stdcall CELCMP_GetDC6BlockPixelData(DC6Block * pDC6Block) {
+    if (!pDC6Block) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x62a);
       exit(-1);
     }
 
-    return *(uint32_t*)(nParam + 0x18);
-    return *(uint32_t*)(nParam + 0x18);
+    return pDC6Block->nNextBlock;
+    return pDC6Block->nNextBlock;
 }
 
 uint32_t __stdcall CELCMP_RoundUpToMultiple(uint32_t nParam1, uint32_t nParam2) {
@@ -1905,7 +1906,7 @@ void __stdcall CELCMP_AddCelFrameToCache(uint32_t nParam1, uint32_t * pdwParam, 
         bCriticalLocked = 0;
       }
 
-      pNewFrame = (::TCELENTRY*)Storm::SMem::SMemAlloc(0x24, s___AUTCELENTRY___00741f14, -2, 8);
+      pNewFrame = (::TCELENTRY*)Storm::Source::SMem::SMemAlloc(0x24, s___AUTCELENTRY___00741f14, -2, 8);
       if (pNewFrame) {
         pNewFrame->m_link.m_prevlink = 0;
         pNewFrame->m_link.m_next = 0;
@@ -1958,10 +1959,10 @@ void __stdcall CELCMP_AddCelFrameToCache(uint32_t nParam1, uint32_t * pdwParam, 
     }
 }
 
-void __stdcall CELCMP_FreeCachedCelFrame(uint32_t nParam) {
+void __stdcall CELCMP_FreeCachedCelFrame(uint32_t dwHashVal) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
     int bLockAcquired = -1;
-    ::CELLIST* pHashEntry = gCelCmpCacheHandler.TSHashTable<::CELLIST, HASHKEY_NONE>::Ptr(nParam, &gCelCmpCacheHandler.tKey);
+    ::CELLIST* pHashEntry = gCelCmpCacheHandler.TSHashTable<::CELLIST, HASHKEY_NONE>::Ptr(dwHashVal, &gCelCmpCacheHandler.tKey);
     if (!pHashEntry) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
       bLockAcquired = 0;
@@ -2080,28 +2081,30 @@ void __stdcall GFX_DestroyGlobalCriticalSection() {
 void __fastcall CELCMP_ApplyColorKeyToAllPixels(void * pFrameData, pfnTilecmpPixelCallback pfnPixelCallback, uint32_t dwColorKey) {
     uint32_t nColorKeyR = dwColorKey >> 0x10;
     uint32_t nColorKeyG = dwColorKey >> 8;
-    uint32_t nColorKeyB = dwColorKey & 0xff;
+    uint32_t nColorKeyB = (uint8_t)dwColorKey;
     uint32_t* pPixel = (uint32_t*)((int)pFrameData + 0x20);
-    dwColorKey = 0;
-    if ((uint32_t)(*(int*)((int)pFrameData + 4) * *(int*)((int)pFrameData + 8)) <= 0) {
-      return;
-    }
-
-    do {
+    for (dwColorKey = 0; dwColorKey < (uint32_t)(*(int*)((int)pFrameData + 4) * *(int*)((int)pFrameData + 8)); dwColorKey++) {
       uint32_t uVar1;
       uVar1 = d2_load24(pPixel);
       pPixel = (uint32_t*)((int)pPixel + 3);
-      if ((uint32_t)uVar1 != ((nColorKeyR & 0xff) * 0x100 + (nColorKeyG & 0xff)) * 0x100 + nColorKeyB) {
+      if ((uint32_t)uVar1 != ((nColorKeyR & 0xff) * 0x100 + (uint8_t)nColorKeyG) * 0x100 + nColorKeyB) {
         (*pfnPixelCallback)((uint32_t)uVar1);
       }
-
-      dwColorKey++;
-    } while (dwColorKey < (uint32_t)(*(int*)((int)pFrameData + 4) * *(int*)((int)pFrameData + 8)));
+    }
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca286(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
     return ExceptionContinueSearch;
+}
+
+void StaticInit_6cafc0() {
+    gCelCmpCacheHandler.TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>::Constructor();
+    gCelCmpCacheHandler.nSequence = 0xf71733f;
+    gCelCmpCacheHandler.bWrapped = 0;
+    gCelCmpCacheHandler.pVtable = (TSHashTable<::CELLIST, HASHKEY_NONE>::Vtable*)(void*)TSExportTableSync<::CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::vftable;
+    InitializeCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
+    atexit(StaticFini_gCelCmpCacheHandler);
 }
 
 void StaticFini_gCelCmpCacheHandler() {

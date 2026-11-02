@@ -236,8 +236,7 @@ BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
     ::D2WinAccountList* pNewList = D2_NEW_AT(::D2WinAccountList, ".\\Src\\D2WinAccountList.cpp", 0x24);
     memset(pNewList, 0, 0x58);
     pNewList->sControl.neD2FormType = FORM_AccountList;
-    int* pStateField = &pNewList->sControl.dwState;
-    *pStateField |= gadwBitMasks[0];
+    pNewList->sControl.dwState |= gadwBitMasks[0];
     uVar1 = pNewList->sControl.dwState | gadwBitMasks[2];
     pNewList->nUserData = nUserData;
     pNewList->sControl.dwState = uVar1;

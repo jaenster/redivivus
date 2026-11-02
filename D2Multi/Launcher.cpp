@@ -616,12 +616,10 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
     D2Lang::Unicode::UNISYS::AppendToBuffer(sLevelLineText.wszLevelLine, wszLevelStr);
     D2Lang::Unicode::UNISYS::AppendToBuffer(sLevelLineText.wszLevelLine, wszClassName);
     D2Win::Src::D2WinTextBox::SetText(gpCtlConfirmDialog, sLevelLineText.wszLevelLine, 0, false, 0);
-    nDifficultyDone = 0;
-    bool bCentered = false;
-    /* Last Difficulty Setting Completed: */ D2Win::Src::D2WinTextBox::SetText(gpCtlConfirmDialog, D2Lang::StrTable::strtable::GetLocaleString(0x2b74), 0, bCentered, nDifficultyDone);
+    /* Last Difficulty Setting Completed: */ D2Win::Src::D2WinTextBox::SetText(gpCtlConfirmDialog, D2Lang::StrTable::strtable::GetLocaleString(0x2b74), 0, false, 0);
     nDifficultyDone = (int)((uint64_t)(D2IniData_multiplayer->eCTEMP_eD2PlayerStatus >> 8 & 0x1f) / (uint64_t)(int64_t)(int)((D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & 0x20 | 0x80) >> 5));
     int nVertAlign = 0;
-    bCentered = false;
+    bool bCentered = false;
     int32_t dwTextColor = 0;
     switch (nDifficultyDone) {
       case 0:
@@ -652,9 +650,7 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
       return;
     }
 
-    nDifficultyDone = 0;
-    bCentered = false;
-    /* Battle.net News Updates */ D2Win::Src::D2WinTextBox::SetText(BattleNetNews, D2Lang::StrTable::strtable::GetLocaleString(0x2b73), 3, bCentered, nDifficultyDone);
+    /* Battle.net News Updates */ D2Win::Src::D2WinTextBox::SetText(BattleNetNews, D2Lang::StrTable::strtable::GetLocaleString(0x2b73), 3, false, 0);
 }
 
 void __stdcall CHATDLG_DestroyAllForms() {

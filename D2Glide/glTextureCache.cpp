@@ -33,7 +33,7 @@ int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart
     pCache->pNodes = pNodeArray;
     memset(pNodeArray, 0, nAllocSize);
     int iNode = 0;
-    if (-1 < (int)(pCache->nMaxEntries - 1)) {
+    if ((int)(pCache->nMaxEntries - 1) >= 0) {
       int* pNode;
       nByteOffset = 0;
       nVramAddr = nVramStart;

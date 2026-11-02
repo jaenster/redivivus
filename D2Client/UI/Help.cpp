@@ -226,7 +226,7 @@ void __stdcall DrawSellBtn() {
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
     sGfxData.nDirection = 0;
-    sGfxData.nFrameNumber = (gpHelpCloseButton != 0) + 10;
+    sGfxData.nFrameNumber = gpHelpCloseButton != 0 ? 11 : 10;
     DWORD eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode == 2) {
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x2ad, 0x38, -1, DRAW_SOLID, nullptr);
@@ -267,7 +267,7 @@ void __stdcall INPUT_HelpCloseButtonDown(D2UIMouseMsgStrc * pMsg) {
     } else {
       nRelX -= 0x20d;
     }
-    if (nRelX <= 0x20 && (uint32_t)(nMouseY - 0x18) <= 0x20) {
+    if (nRelX <= 0x20 && nMouseY >= 0x18 && nMouseY <= 0x38) {
       gpHelpCloseButton = 1;
       pMsg->bHandled = 1;
       pMsg->dwResult = 0;
@@ -279,6 +279,10 @@ void __stdcall INPUT_HelpCloseButtonDown(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
+}
+
+void __stdcall HELP_MiniPanelKeyNoOp(D2UIMouseMsgStrc * pMsg) {
+
 }
 
 void __stdcall HELP_HideMiniPanel() {
@@ -301,7 +305,6 @@ BOOL __stdcall MouseIsInRange(int32_t nSizeX, int32_t nSizeY, int32_t nX, int32_
 }
 
 void __stdcall HELP_DrawHelpButtonTooltip() {
-    uint16_t* pWVar2;
     int i;
     uint16_t wszTooltip[200];
     uint16_t wszKeyLine[30];
@@ -319,8 +322,7 @@ void __stdcall HELP_DrawHelpButtonTooltip() {
     if (uVar1 != 0xffff) {
       memset(wszKeyLine, 0, 0x3c);
       pKeyDescPrimary = CmdTbl::CMD_GetKeyDescForCommand(6, 1);
-      pWVar2 = D2Lang::StrTable::strtable::GetLocaleString(0x1052);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x1e, wszKeyLine, pWVar2, pKeyDescPrimary);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x1e, wszKeyLine, D2Lang::StrTable::strtable::GetLocaleString(0x1052), pKeyDescPrimary);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, wszKeyLine);
     }
 
@@ -328,8 +330,7 @@ void __stdcall HELP_DrawHelpButtonTooltip() {
     if (uVar1 != 0xffff) {
       memset(wszKeyLine, 0, 0x3c);
       pKeyDescPrimary = CmdTbl::CMD_GetKeyDescForCommand(6, 0);
-      pWVar2 = D2Lang::StrTable::strtable::GetLocaleString(0x1052);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x1e, wszKeyLine, pWVar2, pKeyDescPrimary);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x1e, wszKeyLine, D2Lang::StrTable::strtable::GetLocaleString(0x1052), pKeyDescPrimary);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, wszKeyLine);
     }
 
@@ -467,32 +468,28 @@ void __stdcall DRAW_UI_HelpXpac() {
     }
 
     pStr = CmdTbl::CMD_GetKeyNameForCommand(0x22, 1);
-    uint16_t* pFormat = D2Lang::StrTable::strtable::GetLocaleString(0x1067);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf4, pFormat, pStr);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf4, D2Lang::StrTable::strtable::GetLocaleString(0x1067), pStr);
     D2Win::Src::D2WinFont::DRAW_text(wszBuf4, 0x75, 0x4e, 0, 0);
     for (i = 0; i < 0x64; i++) {
       wszBuf1[i] = L'\0';
     }
 
     pStr = CmdTbl::CMD_GetKeyNameForCommand(0x25, 1);
-    pFormat = D2Lang::StrTable::strtable::GetLocaleString(0x1068);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf1, pFormat, pStr);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf1, D2Lang::StrTable::strtable::GetLocaleString(0x1068), pStr);
     D2Win::Src::D2WinFont::DRAW_text(wszBuf1, 0x75, 0x62, 0, 0);
     for (i = 0; i < 0x64; i++) {
       wszBuf2[i] = L'\0';
     }
 
     pStr = CmdTbl::CMD_GetKeyNameForCommand(0x24, 1);
-    pFormat = D2Lang::StrTable::strtable::GetLocaleString(0x1069);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf2, pFormat, pStr);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf2, D2Lang::StrTable::strtable::GetLocaleString(0x1069), pStr);
     D2Win::Src::D2WinFont::DRAW_text(wszBuf2, 0x75, 0x76, 0, 0);
     for (i = 0; i < 0x64; i++) {
       wszBuf3[i] = L'\0';
     }
 
     pStr = CmdTbl::CMD_GetKeyNameForCommand(7, 1);
-    pFormat = D2Lang::StrTable::strtable::GetLocaleString(0x106a);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf3, pFormat, pStr);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf3, D2Lang::StrTable::strtable::GetLocaleString(0x106a), pStr);
     D2Win::Src::D2WinFont::DRAW_text(wszBuf3, 0x75, 0x8a, 0, 0);
     D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x106b), 0x75, 0x9e, 0, 0);
     D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x106c), 0x75, 0xb2, 0, 0);
@@ -502,8 +499,7 @@ void __stdcall DRAW_UI_HelpXpac() {
     }
 
     pStr = CmdTbl::CMD_GetKeyNameForCommand(6, 1);
-    pFormat = D2Lang::StrTable::strtable::GetLocaleString(0x106e);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf5, pFormat, pStr);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf5, D2Lang::StrTable::strtable::GetLocaleString(0x106e), pStr);
     D2Win::Src::D2WinFont::DRAW_text(wszBuf5, 0x75, 0xda, 0, 0);
     for (i = 0; i < 0x64; i++) {
       wszBuf[i] = L'\0';
@@ -698,32 +694,28 @@ void __stdcall DRAW_UI_HelpClassic() {
     }
 
     pDst = CmdTbl::CMD_GetKeyNameForCommand(0x22, 1);
-    uint16_t* pFormat = D2Lang::StrTable::strtable::GetLocaleString(0x1067);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf4, pFormat, pDst);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf4, D2Lang::StrTable::strtable::GetLocaleString(0x1067), pDst);
     D2Win::Src::D2WinFont::DRAW_text(wszBuf4, 0x75, 0x4e, 0, 0);
     for (i = 0; i < 0x64; i++) {
       wszBuf1[i] = L'\0';
     }
 
     pDst = CmdTbl::CMD_GetKeyNameForCommand(0x25, 1);
-    pFormat = D2Lang::StrTable::strtable::GetLocaleString(0x1068);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf1, pFormat, pDst);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf1, D2Lang::StrTable::strtable::GetLocaleString(0x1068), pDst);
     D2Win::Src::D2WinFont::DRAW_text(wszBuf1, 0x75, 0x62, 0, 0);
     for (i = 0; i < 0x64; i++) {
       wszBuf2[i] = L'\0';
     }
 
     pDst = CmdTbl::CMD_GetKeyNameForCommand(0x24, 1);
-    pFormat = D2Lang::StrTable::strtable::GetLocaleString(0x1069);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf2, pFormat, pDst);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf2, D2Lang::StrTable::strtable::GetLocaleString(0x1069), pDst);
     D2Win::Src::D2WinFont::DRAW_text(wszBuf2, 0x75, 0x76, 0, 0);
     for (i = 0; i < 0x64; i++) {
       wszBuf3[i] = L'\0';
     }
 
     pDst = CmdTbl::CMD_GetKeyNameForCommand(7, 1);
-    pFormat = D2Lang::StrTable::strtable::GetLocaleString(0x106a);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf3, pFormat, pDst);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf3, D2Lang::StrTable::strtable::GetLocaleString(0x106a), pDst);
     D2Win::Src::D2WinFont::DRAW_text(wszBuf3, 0x75, 0x8a, 0, 0);
     D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x106b), 0x75, 0x9e, 0, 0);
     D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x106c), 0x75, 0xb2, 0, 0);
@@ -733,8 +725,7 @@ void __stdcall DRAW_UI_HelpClassic() {
     }
 
     pDst = CmdTbl::CMD_GetKeyNameForCommand(6, 1);
-    pFormat = D2Lang::StrTable::strtable::GetLocaleString(0x106e);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf5, pFormat, pDst);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBuf5, D2Lang::StrTable::strtable::GetLocaleString(0x106e), pDst);
     D2Win::Src::D2WinFont::DRAW_text(wszBuf5, 0x75, 0xda, 0, 0);
     for (i = 0; i < 0x64; i++) {
       wszBuf[i] = L'\0';
@@ -920,7 +911,7 @@ void __stdcall INPUT_HelpCloseButtonUp(D2UIMouseMsgStrc * pMsg) {
       } else {
         nRelX -= 0x20d;
       }
-      if (nRelX <= 0x20 && (uint32_t)(nMouseY - 0x18) <= 0x20) {
+      if (nRelX <= 0x20 && nMouseY >= 0x18 && nMouseY <= 0x38) {
         ui::SetUIFlag(UI_HELPSCREEN, UI_TOGGLE, 0);
         HELP_HideMiniPanel();
         goto consume_click;
@@ -933,6 +924,16 @@ void __stdcall INPUT_HelpCloseButtonUp(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
+}
+
+void __stdcall HELP_OnEscapeOrSpace(D2UIMouseMsgStrc * pMsg) {
+    ui::SetUIFlag(UI_HELPSCREEN, UI_RESET, 0);
+    if (!gbMiniPanel) {
+      return;
+    }
+
+    ui::SetUIFlag(UI_MINIPANEL, UI_RESET, 0);
+    gbMiniPanel = 0;
 }
 
 void __fastcall HELP_SetUIVarW(eD2UIvars eUIVar, eD2UIvarsSetType eUIVarSetType, uint32_t dwArg1) {

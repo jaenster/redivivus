@@ -14,7 +14,7 @@
 #include "D2gfx/D2GFX.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/SMem.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Dialog.h"
@@ -187,19 +187,17 @@ int __thiscall OnMouseDown(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * p
 }
 
 int __thiscall OnMouseUp(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
-    if (!pThis->bMouseCaptured) {
-      return 0;
-    }
-
-    pThis->nRepeatStep = 0;
-    pThis->bMouseCaptured = 0;
-    if (pThis->bUpPressed == 1) {
-      pThis->bUpPressed = 0;
-      return 1;
-    }
-    if (pThis->bDownPressed == 1) {
-      pThis->bDownPressed = 0;
-      return 1;
+    if (pThis->bMouseCaptured) {
+      pThis->nRepeatStep = 0;
+      pThis->bMouseCaptured = 0;
+      if (pThis->bUpPressed == 1) {
+        pThis->bUpPressed = 0;
+        return 1;
+      }
+      if (pThis->bDownPressed == 1) {
+        pThis->bDownPressed = 0;
+        return 1;
+      }
     }
 
     return 0;
@@ -280,7 +278,7 @@ int __thiscall OnLeftArrow(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * p
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

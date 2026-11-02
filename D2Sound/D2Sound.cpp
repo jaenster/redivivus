@@ -7,7 +7,6 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -81,15 +80,12 @@ DWORD __stdcall SOUND_GetHardwareAccelerationFlag() {
 BOOL __fastcall SOUND_ToggleEAXEnvironmentPreset(int nPresetType) {
     HRESULT hResult;
     uint32_t nPropertyValue;
-    uint8_t* pEAXProperty;
-    ULONG uPropertyId;
     if (!gpDirectSoundEAXInterface) {
       return 0;
     }
     if (nPresetType == 1) {
       nPropertyValue = 0;
-      uPropertyId = 2;
-      pEAXProperty = gEAXPropertyGuid_Reserved1;
+      hResult = gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 2, nullptr, 0, &nPropertyValue, 4);
     } else {
       nPropertyValue = -10000;
       hResult = gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 2, nullptr, 0, &nPropertyValue, 4);
@@ -97,11 +93,8 @@ BOOL __fastcall SOUND_ToggleEAXEnvironmentPreset(int nPresetType) {
         return 0;
       }
 
-      uPropertyId = 3;
-      pEAXProperty = gEAXPropertyGuid_Reserved2;
+      hResult = gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 3, nullptr, 0, &nPropertyValue, 4);
     }
-
-    hResult = gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, pEAXProperty, uPropertyId, nullptr, 0, &nPropertyValue, 4);
     if (hResult < 0) {
       return 0;
     }
@@ -268,13 +261,12 @@ void __fastcall SOUNDSMP_ClearBuffer(IDirectSoundBuffer * pSoundSmp, DWORD dwWri
 }
 
 BOOL __stdcall SOUNDSMP_CreateSoundBuffer(uint32_t nFlags, D2SoundSmpStrc * pSoundSmp) {
-    DSBUFFERDESC tBufferDesc;
     WAVEFORMATEX tWaveFormat;
     uint32_t dwEaxCapabilities;
     uint8_t* pObstructionGuid;
     IKsPropertySet** ppEaxInterface2;
-    Src::D2SoundSmp::SOUNDSMP_InitWaveFormat(&tWaveFormat, ((nFlags & 1) != 0) + 1);
-    tBufferDesc.dwReserved = 0;
+    Src::D2SoundSmp::SOUNDSMP_InitWaveFormat(&tWaveFormat, (nFlags & 1) != 0 ? 2 : 1);
+    DSBUFFERDESC tBufferDesc = {0};
     uint32_t nBufSize = nFlags & 1 ? 0x40000 : 0x20000;
     uint32_t uVar1 = g_nSoundSampleParam ? 0x80a0 : 0xa0;
     uint32_t u3DFlag = nFlags & 2;

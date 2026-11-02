@@ -10,6 +10,7 @@
 
 // Forward declarations
 struct D2CrashFrameStrc;
+struct D2FogDebugModuleEntryStrc;
 struct D2IniConfigStrc;
 
 // Data types
@@ -35,12 +36,62 @@ struct D2DebugModuleInfo {
     /* 0x224 */ uint32_t dwBuild;
 };
 
+#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
+
+struct IMAGE_DATA_DIRECTORY {
+    IMAGE_DATA_DIRECTORY() = default;
+    IMAGE_DATA_DIRECTORY(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+    IMAGE_DATA_DIRECTORY(uint32_t a0, uint32_t a1) : VirtualAddress(a0), Size(a1) {}
+
+    /* 0x00 */ uint32_t VirtualAddress;
+    /* 0x04 */ uint32_t Size;
+};
+
+#pragma pack(push, 1)
+struct IMAGE_OPTIONAL_HEADER32 {
+    /* 0x00 */ uint16_t Magic;
+    /* 0x02 */ uint8_t MajorLinkerVersion;
+    /* 0x03 */ uint8_t MinorLinkerVersion;
+    /* 0x04 */ uint32_t SizeOfCode;
+    /* 0x08 */ uint32_t SizeOfInitializedData;
+    /* 0x0C */ uint32_t SizeOfUninitializedData;
+    /* 0x10 */ uint32_t AddressOfEntryPoint;
+    /* 0x14 */ uint32_t BaseOfCode;
+    /* 0x18 */ uint32_t BaseOfData;
+    /* 0x1C */ uint32_t ImageBase;
+    /* 0x20 */ uint32_t SectionAlignment;
+    /* 0x24 */ uint32_t FileAlignment;
+    /* 0x28 */ uint16_t MajorOperatingSystemVersion;
+    /* 0x2A */ uint16_t MinorOperatingSystemVersion;
+    /* 0x2C */ uint16_t MajorImageVersion;
+    /* 0x2E */ uint16_t MinorImageVersion;
+    /* 0x30 */ uint16_t MajorSubsystemVersion;
+    /* 0x32 */ uint16_t MinorSubsystemVersion;
+    /* 0x34 */ uint32_t Win32VersionValue;
+    /* 0x38 */ uint32_t SizeOfImage;
+    /* 0x3C */ uint32_t SizeOfHeaders;
+    /* 0x40 */ uint32_t CheckSum;
+    /* 0x44 */ uint16_t Subsystem;
+    /* 0x46 */ uint16_t DllCharacteristics;
+    /* 0x48 */ uint32_t SizeOfStackReserve;
+    /* 0x4C */ uint32_t SizeOfStackCommit;
+    /* 0x50 */ uint32_t SizeOfHeapReserve;
+    /* 0x54 */ uint32_t SizeOfHeapCommit;
+    /* 0x58 */ uint32_t LoaderFlags;
+    /* 0x5C */ uint32_t NumberOfRvaAndSizes;
+    /* 0x60 */ IMAGE_DATA_DIRECTORY DataDirectory[16];
+};
+#pragma pack(pop)
+
+#endif // _WIN32
+
 namespace Fog::Engine::Application {
 
 // Function declarations
 bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext);
 bool __stdcall DEBUG_IsValidDebugDirectorySize(uint32_t nDirSize);
-uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, int pModuleInfoOut);
+uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, struct D2FogDebugModuleEntryStrc * pModuleInfoOut);
 bool __stdcall DEBUG_EnumerateModulesViaPsapi(int * pnParam);
 bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList);
 bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pnParam);
@@ -48,7 +99,7 @@ bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pnParam);
 // Provenance: asm 00404f20..00404f3f; unreferenced in 1.14d (EnumerateAndDumpAllFunctions inlines the same chain at 00402f1f).
 bool __stdcall DEBUG_EnumerateModules(int * pModuleList);
 void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, int32_t pOptHeader);
-void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, int32_t pOptHeader);
+void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, IMAGE_OPTIONAL_HEADER32 * pOptHeader);
 // Unwinds stack frames for crash dumps. Walks EBP chain up to 128 frames, validates stack pointers, skips first N frames. Captures EIP, ESP, EBP for each frame. Handles current thread or remote thread via OpenThread/SuspendThread.
 int __thiscall DEBUG_UnwindStackFrames(CONTEXT * pContext, DWORD dwThreadId, struct D2CrashFrameStrc * pFrameArray, uint32_t nSkipFrames);
 bool __stdcall DEBUG_FormatAddressInfo(uint32_t nAddress, char * pOutput);
@@ -59,7 +110,7 @@ void * MISC_OperatorNewShim(uint32_t nSize);
 void __stdcall MISC_GetValueFromD2Ini(struct D2IniConfigStrc * pD2IniData);
 int32_t __stdcall INI_FindConfigValueIndex(uint8_t * pbArgName);
 uint32_t __fastcall INI_IsDelimiterChar(char cChar);
-int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, int32_t pOutValue);
+int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, char * pOutValue);
 void __stdcall CloseDiablo();
 void __thiscall MISC_ParseCommandLineAndPutIntoD2IniData(char * szText, struct D2IniConfigStrc * pD2IniData);
 void __fastcall MISC_InitD2IniAndIgnorelist(struct D2IniConfigStrc * D2IniData, char * szCommandLine);

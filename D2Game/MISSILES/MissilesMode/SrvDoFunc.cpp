@@ -3,7 +3,6 @@
 #include "D2Game/MISSILES/MissilesMode/SrvDoFunc.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -15,6 +14,7 @@
 #include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Units/Missile.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
@@ -34,7 +34,7 @@
 namespace D2Game::MISSILES::MissilesMode::SrvDoFunc {
 
 static BOOL __stdcall fpMissileDoSrvFuncHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2MissilesTxt * pMissileTxt, D2UnitStrc * pUnit2) {
-    bool _bIsOwner;
+    BOOL _bIsOwner;
     bool bIsOwner;
     if (!(pUnit2 && pUnit2->eUnitFlags >> 3 & 1 && pUnit2->eUnitFlags >> 2 & 1)) {
       return 0;

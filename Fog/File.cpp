@@ -33,7 +33,7 @@ static char * STRING_CopyStringBounded(int32_t nDestSize, char * szDest, char * 
 void __stdcall CONTAINER_InitializeBuffer(void * pBuffer, int32_t nTypeSize, int32_t nBufferSize, CONTAINER_TypeInitialValue fpInitValueCallback) {
     while (true) {
       nBufferSize--;
-      if (-1 >= nBufferSize) {
+      if (nBufferSize < 0) {
         break;
       }
 
@@ -55,10 +55,10 @@ void __fastcall CRASH_DumpThreadContext(DWORD dwThreadId, void * pContext, fnCra
       memset(pFrameBufCursor + 3, 0, 4 * sizeof(pFrameBufCursor[0]));
       pFrameBufCursor += 9;
       nFrameCountClamped--;
-    } while (-1 < nFrameCountClamped);
+    } while (nFrameCountClamped >= 0);
 
     int32_t nFrameCount = Engine::Application::DEBUG_UnwindStackFrames((CONTEXT*)pContext, dwThreadId, aFrames, nMaxFrames);
-    if (0 >= nFrameCount) {
+    if (nFrameCount <= 0) {
       return;
     }
     if (nFrameCount > 0x80) {
@@ -82,7 +82,6 @@ void __fastcall CRASH_FormatStackTrace(DWORD dwThreadId, D2CrashFrameStrc * aFra
     __frame0_t __frame0;
     int nWritten;
     int nChunkLen;
-    char* pszScan;
     uint32_t nLineLen;
     void* pThreadStackBase;
     LPCVOID pThreadEsp;
@@ -116,9 +115,7 @@ void __fastcall CRASH_FormatStackTrace(DWORD dwThreadId, D2CrashFrameStrc * aFra
       }
 
       Debug::FormatAddressDebugString(&aFrameAddrs->dwReturnAddr, __frame0.szAddressInfo, __frame0.szLineBuffer);
-      pszScan = __frame0.szLineBuffer;
-      pszScan = pszScan + strlen(pszScan) + 1;
-      nLineLen = (int)pszScan - (int)(__frame0.szLineBuffer + 1);
+      nLineLen = (int)strlen(__frame0.szLineBuffer);
       if (nLineLen >= 0x3ff) {
         __frame0.szLineBuffer[0x3fe] = '\n';
         __frame0.szLineBuffer[0x3ff] = '\0';
@@ -236,14 +233,8 @@ void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputC
 }
 
 void __fastcall CRASH_EnumerateThreads(fnCrashOutputLine pOutputCallback, ::Report * pReport, DWORD dwSkipThreadId) {
-    THREADENTRY32 threadEntry;
     uint32_t dwCurrentPid;
-    threadEntry.cntUsage = 0;
-    threadEntry.th32ThreadID = 0;
-    threadEntry.th32OwnerProcessID = 0;
-    threadEntry.tpBasePri = 0;
-    threadEntry.tpDeltaPri = 0;
-    threadEntry.dwFlags = 0;
+    THREADENTRY32 threadEntry = {0};
     threadEntry.dwSize = 0x1c;
     HANDLE hObject = (HANDLE)CreateToolhelp32Snapshot(4, 0);
     if (hObject == (HANDLE)-1) {
@@ -381,7 +372,7 @@ LONG __stdcall ERRORMANAGER_UnhandledExceptionFilter(_EXCEPTION_POINTERS * pExce
       sCrashReport.nSkipFrames = 0;
       nFilterResult = (*gpCurrentExceptionFilter)(&sCrashReport, gpCurrentExceptionContext);
       if (nFilterResult) {
-        return (uint32_t)(nFilterResult != 1) * 2 - 1;
+        return nFilterResult != 1 ? 0x1U : 0xffffffff;
       }
     }
 
@@ -407,7 +398,7 @@ void __fastcall CRASH_SetExceptionHandler(pfnFogExceptionFilter pfnFilter, void 
     }
 }
 
-uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, char * nDestSize, char * szSrcPath) {
+uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDestSize, char * szSrcPath) {
     char* pSep = strrchr(szSrcPath, 0x2f);
     char* pLastSep = 0;
     if (pSep) {
@@ -426,8 +417,8 @@ uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, char * nDestSize, c
     if (!pLastSep) {
       *szDest = '\0';
     } else {
-      szDest = STRING_CopyStringBounded((int32_t)nDestSize, szDest, szSrcPath);
-      if (szDest >= nDestSize) {
+      szDest = STRING_CopyStringBounded(nDestSize, szDest, szSrcPath);
+      if ((uintptr_t)szDest >= nDestSize) {
         return (uint32_t)szDest & -256;
       }
     }
@@ -435,7 +426,7 @@ uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, char * nDestSize, c
     return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)szDest >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
 }
 
-uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, char * nDestSize) {
+uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, uint32_t nDestSize) {
     char* pSep;
     pSep = strrchr(szSrcPath, 0x2f);
     char* pLastSep;
@@ -457,32 +448,33 @@ uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, ch
       szSrcPath = pLastSep + 1;
     }
 
-    pSep = szSrcPath;
-    pLastSep = nDestSize;
+    pLastSep = szSrcPath;
+    uint32_t uVar1;
+    uVar1 = nDestSize;
     if (nDestSize) {
       char cCurChar;
       do {
-        pLastSep--;
-        if (!pLastSep) {
+        uVar1--;
+        if (!uVar1) {
           goto truncate;
         }
 
-        cCurChar = *pSep;
+        cCurChar = *pLastSep;
         *szDest = cCurChar;
         szDest++;
-        pSep++;
+        pLastSep++;
       } while (cCurChar != '\0');
 
-      if (pLastSep) {
-        return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(pSep + (-1 - (int)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)(pSep + (-1 - (int)szSrcPath) < nDestSize));
+      if (uVar1) {
+        return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(pLastSep + (-1 - (int)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (int)szSrcPath)) < nDestSize));
       }
 
       truncate:
       *szDest = '\0';
     }
 
-    pSep = pSep + strlen(pSep) + 1;
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(pSep + (-1 - (int)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)(pSep + (-1 - (int)szSrcPath) < nDestSize));
+    pLastSep = pLastSep + strlen(pLastSep) + 1;
+    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(pLastSep + (-1 - (int)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (int)szSrcPath)) < nDestSize));
 }
 
 bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(char * szPath) {
@@ -574,7 +566,6 @@ int STRING_FormatVarArgs(char * szFormat, char * szDest, int32_t nDestSize, ...)
 bool __fastcall FILETOOLS_StartApplicationWithCommandLine_UTF8(LPCSTR lpApplicationName, LPCSTR szCommandLine) {
     int nConverted;
     _STARTUPINFOW startupInfo;
-    _PROCESS_INFORMATION processInfo;
     uint16_t wszCommandLine[32768];
     uint16_t wszAppName[1024];
     if (szCommandLine) {
@@ -592,10 +583,7 @@ bool __fastcall FILETOOLS_StartApplicationWithCommandLine_UTF8(LPCSTR lpApplicat
 
     startupInfo.cb = 0x44;
     memset(&startupInfo.lpReserved, 0, 0x40);
-    processInfo.hProcess = (HANDLE)0x0;
-    processInfo.hThread = (HANDLE)0x0;
-    processInfo.dwProcessId = 0;
-    processInfo.dwThreadId = 0;
+    _PROCESS_INFORMATION processInfo = {0};
     BOOL bCreated = CreateProcessW((LPCWSTR)(lpApplicationName ? (uint32_t)wszAppName : 0), (LPWSTR)(szCommandLine ? (uint32_t)wszCommandLine : 0), (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPVOID)0x0, (LPCWSTR)0x0, &startupInfo, &processInfo);
     if (bCreated) {
       /* HANDLE hObject for CloseHandle */ CloseHandle(processInfo.hProcess);

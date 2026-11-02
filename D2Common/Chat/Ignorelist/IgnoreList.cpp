@@ -7,7 +7,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/Source/SFile.h"
 #include "Storm/H/stpl.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
@@ -210,7 +210,7 @@ int32_t __thiscall CheckCharNameIgnored(::IgnoreList * pThis, char * szCharName)
 
 // Returns whether the player name is on the ignore list. Tail-calls Fog::Debug::GuardStack, which returns its argument, so the result is already in EAX; typed void the reconstruction dropped it.
 int32_t __thiscall CheckIgnored(::IgnoreList * pThis, char * szPlayerName) {
-    bool _bIsEnabled;
+    int32_t _bIsEnabled;
     bool bIsEnabled;
     bool bFound;
     char szSuffix[256];
@@ -256,11 +256,11 @@ void __thiscall Destructor(::IgnoreList * pThis) {
     int nSehState = 3;
     pThis->tIgnoredPatterns.InternalClear(0);
     pThis->tAccountMappings.InternalClear(0);
-    *(uint8_t*)(char*)&nSehState = 2;
+    nSehState = (int)((uint32_t)nSehState & 0xffffff00u | 2u);
     pThis->tAccountMappings.Destructor();
-    *(uint8_t*)(char*)&nSehState = 1;
+    nSehState = (int)((uint32_t)nSehState & 0xffffff00u | 1u);
     pThis->tIgnoredAccounts.Destructor();
-    nSehState = (uint32_t)d2_load24((char*)&nSehState + 1) << 8;
+    nSehState = (uint32_t)(uint32_t)((uint32_t)nSehState >> 8 & 0xffffffu) << 8;
     pThis->tIgnoredPatterns.Destructor();
     pThis->_vfptr = (IgnoreListVtable*)(void*)ChatIgnoreList::vftable;
     ExceptionList = pExSave;
@@ -272,7 +272,7 @@ void __thiscall Destructor(::IgnoreList * pThis) {
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -304,26 +304,19 @@ int32_t __thiscall AddByPattern(::IgnoreList * pThis, char * szPattern) {
 
 // Adds an account name to the ignore list and returns the result. Tail-calls Fog::Debug::GuardStack, which returns its argument, so the value is already in EAX; typed void the reconstruction dropped it.
 int32_t __thiscall AddByAccountName(::IgnoreList * pThis, char * szAccountName) {
-    // Frame slots -264..-8 are ONE object: &cIgnorePrefix is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char cIgnorePrefix;
-      uint8_t szAccountNameBuf[255];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 256, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    int32_t bCanAdd;
     ::StringEntryNode* pExistingEntry;
+    char cIgnorePrefix[256];
     if (szAccountName && *szAccountName != '\0') {
+      int32_t bCanAdd;
       bCanAdd = pThis->_vfptr->GetPersistentSetting(pThis);
       if (bCanAdd && *szAccountName != '\0') {
         pExistingEntry = pThis->tIgnoredAccounts.Ptr(szAccountName);
         if (!pExistingEntry) {
           pThis->tIgnoredAccounts.New(szAccountName, 0, 0);
-          memset(__frame0.szAccountNameBuf, 0, 0xff);
-          __frame0.cIgnorePrefix = '!';
-          Storm::Source::SSTR::SStrPack(&__frame0.cIgnorePrefix, szAccountName, 0x100);
-          AppendLineToFile(pThis, &__frame0.cIgnorePrefix);
+          memset(cIgnorePrefix + 1, 0, 0xff);
+          cIgnorePrefix[0] = '!';
+          Storm::Source::SSTR::SStrPack(cIgnorePrefix, szAccountName, 0x100);
+          AppendLineToFile(pThis, cIgnorePrefix);
         }
 
         return 1;
@@ -392,7 +385,7 @@ void __thiscall LoadFromFile(::IgnoreList * pThis) {
     pThis->tIgnoredPatterns.Constructor();
     pThis->tIgnoredAccounts.Constructor();
     pThis->tAccountMappings.Constructor();
-    nSehState = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nSehState + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)3);
+    nSehState = (uint32_t)((uint32_t)((uint32_t)nSehState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)3);
     pThis->pAppendFile = 0;
     pThis->nPersistentIgnore = 1;
     Fog::Source::SFile::SFILE_GetExecutableDirectory(__frame0.szExePath, 0x104);
@@ -414,38 +407,31 @@ void __thiscall LoadFromFile(::IgnoreList * pThis) {
 
 // @sourcefile .\Chat\Ignorelist.cpp
 void __thiscall AddAccountMapping(::IgnoreList * pThis, char * szRaw, int32_t nRawLen) {
-    // Frame slots -776..-8 are ONE object: &cPatternPrefix is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char cPatternPrefix;
-      uint8_t szPatternBuf[255];
-      char szCharName[256];
-      char szAccountName[256];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 768, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     int32_t bIsOnline;
     ::MappingEntryNode* pNameEntry;
-    uint32_t* pszPatternDup;
+    char* pszPatternDup;
     size_t nOpenParenIdx;
     uint32_t nCharIdx;
+    char cPatternPrefix[256];
+    char szCharName[256];
+    char szAccountName[256];
     if (szRaw && *szRaw != '\0') {
       bIsOnline = pThis->_vfptr->GetPersistentSetting(pThis);
       if (bIsOnline) {
-        Storm::Source::SSystem::SMemZero(__frame0.szCharName, 0x100);
-        Storm::Source::SSystem::SMemZero(__frame0.szAccountName, 0x100);
+        Storm::Source::SSystem::SMemZero(szCharName, 0x100);
+        Storm::Source::SSystem::SMemZero(szAccountName, 0x100);
         nOpenParenIdx = 0;
         nCharIdx = 0;
         if (*szRaw != '\0') {
           while (nCharIdx < nRawLen - 1U) {
             if (szRaw[nCharIdx + 1] == '(') {
               nOpenParenIdx = nCharIdx + 1;
-              Storm::Source::SSystem::SMemCopy(__frame0.szAccountName, szRaw, nOpenParenIdx);
+              Storm::Source::SSystem::SMemCopy(szAccountName, szRaw, nOpenParenIdx);
             }
             if (szRaw[nCharIdx + 1] == ')') {
-              Storm::Source::SSystem::SMemCopy(__frame0.szCharName, szRaw + nOpenParenIdx + 1, nCharIdx - nOpenParenIdx);
+              Storm::Source::SSystem::SMemCopy(szCharName, szRaw + nOpenParenIdx + 1, nCharIdx - nOpenParenIdx);
             }
-            if (__frame0.szAccountName[0] != '\0' && __frame0.szCharName[0] != '\0') {
+            if (szAccountName[0] != '\0' && szCharName[0] != '\0') {
               break;
             }
 
@@ -455,20 +441,20 @@ void __thiscall AddAccountMapping(::IgnoreList * pThis, char * szRaw, int32_t nR
             }
           }
         }
-        if (__frame0.szAccountName[0] != '\0' && __frame0.szCharName[0] != '\0') {
-          pNameEntry = pThis->tAccountMappings.Ptr(__frame0.szAccountName);
+        if (szAccountName[0] != '\0' && szCharName[0] != '\0') {
+          pNameEntry = pThis->tAccountMappings.Ptr(szAccountName);
           if (!pNameEntry) {
-            pNameEntry = pThis->tAccountMappings.New(__frame0.szAccountName, 0, 0);
+            pNameEntry = pThis->tAccountMappings.New(szAccountName, 0, 0);
           }
           if (pNameEntry->szMappedValue) {
-            Storm::SMem::SMemFree(pNameEntry->szMappedValue, ".\\Chat\\Ignorelist.cpp", 0x142, 0);
+            Storm::Source::SMem::SMemFree(pNameEntry->szMappedValue, ".\\Chat\\Ignorelist.cpp", 0x142, 0);
           }
 
-          memset(__frame0.szPatternBuf, 0, 0xff);
-          __frame0.cPatternPrefix = '*';
-          Storm::Source::SSTR::SStrPack(&__frame0.cPatternPrefix, __frame0.szCharName, 0x100);
-          pszPatternDup = Storm::Source::SSTR::SStrDup(&__frame0.cPatternPrefix);
-          pNameEntry->szMappedValue = (char*)pszPatternDup;
+          memset(cPatternPrefix + 1, 0, 0xff);
+          cPatternPrefix[0] = '*';
+          Storm::Source::SSTR::SStrPack(cPatternPrefix, szCharName, 0x100);
+          pszPatternDup = Storm::Source::SSTR::SStrDup(cPatternPrefix);
+          pNameEntry->szMappedValue = pszPatternDup;
           return;
         }
 

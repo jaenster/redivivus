@@ -48,7 +48,7 @@ void __fastcall PlaceAct1245OutdoorBorders(struct D2DrlgLevelStrc * pLevel);
 // Computes the direction between the two levels' coordinate rects, then calls AllocDrlgOrth
 // on the RoomEx at offset +0x264 of the level data struct.
 // Used as a callback during level chain parsing to establish orthogonal room linkage.
-void DRLGLEVEL_AllocOrthForAdjacentLevel(struct D2DrlgStrc * pDrlg, int32_t pLevelData, eD2LevelId eLevel);
+void DRLGLEVEL_AllocOrthForAdjacentLevel(struct D2DrlgStrc * pDrlg, struct D2DrlgLevelStrc * pLevelData, eD2LevelId eLevel);
 int32_t __stdcall DRLGLEVEL_FixDrlgLevelForLowerKurast(struct D2DrlgLevelStrc * pLevel);
 // Act-specific level allocation. Parses per-act level data tables, allocates level ranges for the act, initializes Act III special handling, and sets Act V warp connections. Act IV sets a flag in Outer Steppes level data before allocating the rest.
 void __fastcall DRLGACTMISC_AllocDrlgLevelForAct(struct D2DrlgStrc * pDrlg, eAct nActNo);

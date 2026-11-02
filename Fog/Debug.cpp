@@ -9,13 +9,12 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/Engine/Application.h"
 #include "Fog/Memory.h"
-#include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/LogManager.h"
+#include "Fog/Src/String/FogString.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Game/Objects/ObjectsRgn.h"
@@ -413,7 +412,6 @@ bool __stdcall GetSourceLineForAddress(uint32_t dwQueryAddr, char * szFileName, 
     __frame0_t __frame0;
     int uInitSymbolsResult;
     BOOL bGotLine;
-    IMAGEHLP_LINE64 sLineInfo;
     uint32_t nSehState;
     nSehState = -1;
     pfnEHHandlerRoutine pSehHandlerFunc;
@@ -438,9 +436,7 @@ bool __stdcall GetSourceLineForAddress(uint32_t dwQueryAddr, char * szFileName, 
       }
     }
     if (pSymGetLineFromAddr64) {
-      sLineInfo.Key = 0;
-      sLineInfo.LineNumber = 0;
-      sLineInfo.FileName = 0;
+      IMAGEHLP_LINE64 sLineInfo = {0};
       *(uint32_t*)(char*)&sLineInfo.Address = 0;
       *(uint32_t*)((char*)&sLineInfo.Address + 4) = 0;
       sLineInfo.SizeOfStruct = 0x18;
@@ -481,7 +477,7 @@ bool __stdcall EnumerateLoadedModules(uint32_t pfnModuleCallback, uint32_t pUser
       bEnumOk = (*pEnumerateLoadedModules64)(ghCurrentProcessHandle, (void*)pfnModuleCallback, (void*)pUserContext);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
       ExceptionList = pPrevExceptionFrame;
-      return bEnumOk != 0;
+      return bEnumOk;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
@@ -678,7 +674,7 @@ bool __stdcall WalkStackFrame(HANDLE hThread, uint32_t pStackFrame, uint32_t pCo
       bWalkOk = (*pStackWalk64)(0x14c, ghCurrentProcessHandle, hThread, (void*)pStackFrame, (void*)pContextRecord, nullptr, (void*)pSymFunctionTableAccess64, (void*)pSymGetModuleBase64, nullptr);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
       ExceptionList = pSehFrame;
-      return bWalkOk != 0;
+      return bWalkOk;
     }
 
     error:
@@ -1030,7 +1026,7 @@ static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable) {
       pEntryBase++;
       pEntryCursor += 0x114;
       nRemaining--;
-    } while (-1 < nRemaining);
+    } while (nRemaining >= 0);
 }
 
 int __stdcall DEBUG_UnloadStackCrawlDbgHelp() {
@@ -1050,9 +1046,9 @@ void __fastcall DumpThreadContext(HANDLE hHandle) {
     /* LPCONTEXT lpContext for GetThreadContext */ /* HANDLE hThread for GetThreadContext */ sContext.ContextFlags = 0x10007;
     GetThreadContext(hHandle, &sContext);
     Src::LogManager::LogWithCategoryVarArgs("", "Stack bytes:\n");
-    Src::LogManager::EnqueueLogMessage("ERR", "", (void*)sContext.Esp, (void*)0x1000, nullptr, 1, 0);
+    Src::LogManager::EnqueueLogMessage("ERR", "", (void*)sContext.Esp, 0x1000, nullptr, 1, 0);
     Src::LogManager::LogWithCategoryVarArgs("", "Code bytes:\n");
-    Src::LogManager::EnqueueLogMessage("ERR", "", (void*)sContext.Eip, (void*)0x20, nullptr, 1, 0);
+    Src::LogManager::EnqueueLogMessage("ERR", "", (void*)sContext.Eip, 0x20, nullptr, 1, 0);
 }
 
 static BOOL __stdcall GetSourceLineWithRetry(HANDLE hProcess, DWORD nAddress, void * pdwDisplacement, void * pLine) {
@@ -1075,11 +1071,10 @@ static BOOL __stdcall GetSourceLineWithRetry(HANDLE hProcess, DWORD nAddress, vo
       bLineFound = (*pSymGetLineFromAddr)(hProcess, nAddress - nSearchOffset, pdwDisplacement, pLine);
     } while (!bLineFound);
 
-    if (!nSearchOffset) {
-      return 1;
+    if (nSearchOffset) {
+      *(int*)pdwDisplacement = nSearchOffset;
     }
 
-    *(int*)pdwDisplacement = nSearchOffset;
     return 1;
 }
 
@@ -1096,7 +1091,6 @@ void __fastcall FOG_FreeModuleList(D2FogModuleNodeStrc * pModuleList) {
 
 // @sourcefile .\Src\Exceptions.cpp
 D2FogModuleNodeStrc * __stdcall EnumerateModulesToolhelp32(uint32_t dwProcessId) {
-    char* pszCopySrc;
     D2FogModuleNodeStrc* pDVar1;
     D2FogModuleNodeStrc* pPrevModule;
     char* aszLibNames[2];
@@ -1104,7 +1098,6 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesToolhelp32(uint32_t dwProcessId)
     MODULEENTRY32 tModuleEntry;
     D2FogModuleNodeStrc* pSortedHead;
     D2FogModuleNodeStrc* pCurModule;
-    char chCopy;
     pfnCreateToolhelp32Snapshot pfnCreateSnapshot = 0;
     D2FogModuleNodeStrc* pModuleListHead = 0;
     pfnModule32First pModule32First = 0;
@@ -1153,22 +1146,8 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesToolhelp32(uint32_t dwProcessId)
 
       pModuleNode = D2_NEW_AT(D2FogModuleNodeStrc, ".\\Src\\Exceptions.cpp", 0x253);
       memset(pModuleNode, 0, 0x210);
-      pszCopySrc = tModuleEntry.szExePath;
-      bHasMore = (int)pModuleNode - (int)pszCopySrc;
-      do {
-        chCopy = *pszCopySrc;
-        pszCopySrc[bHasMore] = chCopy;
-        pszCopySrc++;
-      } while (chCopy != '\0');
-
-      pszCopySrc = tModuleEntry.szModule;
-      bHasMore = 0x104 - (int)pszCopySrc;
-      do {
-        chCopy = *pszCopySrc;
-        pszCopySrc[(int)pModuleNode + bHasMore] = chCopy;
-        pszCopySrc++;
-      } while (chCopy != '\0');
-
+      strcpy(pModuleNode->szModulePath, tModuleEntry.szExePath);
+      strcpy(pModuleNode->szModuleName, tModuleEntry.szModule);
       pModuleNode->dwBaseAddress = tModuleEntry.modBaseAddr;
       pModuleNode->pNext = pModuleListHead;
       pModuleNode->dwSize = tModuleEntry.modBaseSize;
@@ -1202,7 +1181,6 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
     DWORD dwLastError;
     BOOL bCallOk;
     D2FogModuleNodeStrc* pModuleNode;
-    int nCopyOffset;
     D2FogModuleNodeStrc* pPrevModule;
     D2FogModuleNodeStrc* pSortedHead;
     int iVar1;
@@ -1214,7 +1192,6 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
     char szModuleName[256];
     char szModulePath[260];
     D2FogModuleNodeStrc* pCurModule;
-    char chCopy;
     char* pszCopySrc;
     HANDLE hProcessLocal;
     hProcessLocal = hProcess;
@@ -1250,7 +1227,7 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
       if (nModuleCount < 0x101) {
         Src::LogManager::LOGMANAGER_TraceToModuleLog("", "\nEnumerate modules...");
         iVar1 = 0;
-        if (0 < (int)nModuleCount) {
+        if ((int)nModuleCount > 0) {
           do {
             bCallOk = (*pFVar1)(hProcessLocal2, ahModules[iVar1], &sModuleInfo, 0xc);
             if (!bCallOk) {
@@ -1275,22 +1252,8 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
 
             pModuleNode = D2_NEW_AT(D2FogModuleNodeStrc, ".\\Src\\Exceptions.cpp", 0x2d3);
             memset(pModuleNode, 0, 0x210);
-            pszCopySrc = szModulePath;
-            nCopyOffset = (int)pModuleNode - (int)pszCopySrc;
-            do {
-              chCopy = *pszCopySrc;
-              pszCopySrc[nCopyOffset] = chCopy;
-              pszCopySrc++;
-            } while (chCopy != '\0');
-
-            pszCopySrc = szModuleName;
-            nCopyOffset = 0x104 - (int)pszCopySrc;
-            do {
-              chCopy = *pszCopySrc;
-              pszCopySrc[(int)pModuleNode + nCopyOffset] = chCopy;
-              pszCopySrc++;
-            } while (chCopy != '\0');
-
+            strcpy(pModuleNode->szModulePath, szModulePath);
+            strcpy(pModuleNode->szModuleName, szModuleName);
             pModuleNode->dwBaseAddress = (BYTE*)sModuleInfo.lpBaseOfDll;
             pModuleNode->pNext = pModuleListHead;
             pModuleNode->dwSize = sModuleInfo.SizeOfImage;
@@ -1521,7 +1484,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
 
         iVar2 = _stricmp(__frame1.pBytesToDump, "`string\'");
         if (!iVar2 && !__frame0.nSymDisplacement) {
-          pEscapedStr = SMem::SMemEscapeString(__frame1.aEscapedString, pAsciiOut, 0x50, 0);
+          pEscapedStr = Src::String::FogString::SMemEscapeString(__frame1.aEscapedString, pAsciiOut, 0x50, 0);
           pBytesRemaining = "\n                           // 0x%08X - %s - %s=\'%s\'\n\n";
         } else {
           pBytesRemaining = "\n                           // 0x%08X - %s - %s+%04X\n\n";
@@ -1543,7 +1506,6 @@ static D2FogModuleNodeStrc * __stdcall LoadSymbolsForAllModules(HANDLE hProcess,
     // Static local variables (originally global data)
     static uint32_t gnSymbolLoadState; D2_STATIC_GUARD_BSS(gnSymbolLoadState, "Fog::Debug::LoadSymbolsForAllModules::gnSymbolLoadState");
 
-    int iVar1;
     D2FogModuleNodeStrc* pszCopySrc;
     char* pcVar2;
     DWORD dwLastError;
@@ -1565,14 +1527,7 @@ static D2FogModuleNodeStrc * __stdcall LoadSymbolsForAllModules(HANDLE hProcess,
           pszCopySrc = (D2FogModuleNodeStrc*)(pszCopySrc->szModulePath + 1);
         } while (chCopy != '\0');
 
-        pcVar2 = pCurModule->szModuleName;
-        iVar1 = -(int)pcVar2;
-        do {
-          chCopy = *pcVar2;
-          pcVar2[(int)(szModuleName + iVar1)] = chCopy;
-          pcVar2++;
-        } while (chCopy != '\0');
-
+        strcpy(szModuleName, pCurModule->szModuleName);
         dwLastError = (*pSymLoadModule)(hProcess, (HANDLE)0x0, szModulePath, szModuleName, (DWORD)pCurModule->dwBaseAddress, pCurModule->dwSize);
         if (!gnSymbolLoadState) {
           if (!dwLastError) {
@@ -1681,10 +1636,9 @@ static int BuildSymbolSearchPath(char * szSearchPath) {
       strcat(szSearchPath, ";");
     }
 
-    char* pszAppendDst = szSearchPath;
-    pszAppendDst = pszAppendDst + strlen(pszAppendDst) + 1;
-    if ((int)pszAppendDst - (int)(szSearchPath + 1)) {
-      szSearchPath[(int)pszAppendDst - (int)(szSearchPath + 1) - 1] = '\0';
+    int nLen2 = (int)strlen(szSearchPath);
+    if (nLen2) {
+      szSearchPath[nLen2 - 1] = '\0';
       Src::LogManager::LOGMANAGER_TraceToModuleLog("", "User defined symbols path: %s", szSearchPath);
     } else {
       Src::LogManager::LOGMANAGER_TraceToModuleLog("", "Unable to generate symbols search path");
@@ -1887,9 +1841,6 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
     uint32_t nStrLen;
     bool bCarry;
     char* pszRelFileName;
-    ULONGLONG qwSymCycles;
-    ULONGLONG qwModInfoCycles;
-    ULONGLONG qwFmtCycles;
     char* pszSymName;
     HANDLE hProcessCur;
     __frame1.pContextCopy = pContext;
@@ -1903,12 +1854,9 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
     uint32_t nCyclesAcc = 0;
     uint32_t nCycleSample = 0;
     int nWalkCyclesHi = 0;
-    *(uint32_t*)(char*)&qwSymCycles = 0;
-    *(uint32_t*)((char*)&qwSymCycles + 4) = 0;
-    *(uint32_t*)(char*)&qwModInfoCycles = 0;
-    *(uint32_t*)((char*)&qwModInfoCycles + 4) = 0;
-    *(uint32_t*)(char*)&qwFmtCycles = 0;
-    *(uint32_t*)((char*)&qwFmtCycles + 4) = 0;
+    ULONGLONG qwSymCycles = 0;
+    ULONGLONG qwModInfoCycles = 0;
+    ULONGLONG qwFmtCycles = 0;
     __frame1.nLineCycleSample = 0;
     HANDLE hCurrentProcess = GetCurrentProcess();
     int bOk = InitializeSymbolsWithRefcount();
@@ -1968,8 +1916,8 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
         }
 
         bCarry = (uint32_t)((uint32_t)qwSymCycles + (uint32_t)nCycleSample) < (uint32_t)qwSymCycles;
-        *(uint32_t*)(char*)&qwSymCycles = (uint32_t)qwSymCycles + nCycleSample;
-        *(uint32_t*)((char*)&qwSymCycles + 4) = *(uint32_t*)((char*)&qwSymCycles + 4) + nCycleSample + (uint32_t)bCarry;
+        qwSymCycles = (ULONGLONG)((uint64_t)qwSymCycles & 0xffffffff00000000ull | (uint64_t)(uint32_t)((uint32_t)qwSymCycles + nCycleSample));
+        qwSymCycles = (ULONGLONG)((uint64_t)qwSymCycles & 0xffffffffull | (uint64_t)(uint32_t)((uint32_t)((uint64_t)qwSymCycles >> 32) + nCycleSample + (uint32_t)bCarry) << 32);
         memset(&__frame2.moduleInfo, 0, 0x23c);
         __frame2.moduleInfo.SizeOfStruct = 0x23c;
         BVar1 = (*pSymGetModuleInfo)(hCurrentProcess, __frame0.stackFrame[0], &__frame2.moduleInfo);
@@ -1979,8 +1927,8 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
         }
 
         bCarry = (uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)nCycleSample) < (uint32_t)qwModInfoCycles;
-        *(uint32_t*)(char*)&qwModInfoCycles = (uint32_t)qwModInfoCycles + nCycleSample;
-        *(uint32_t*)((char*)&qwModInfoCycles + 4) = *(uint32_t*)((char*)&qwModInfoCycles + 4) + nCycleSample + (uint32_t)bCarry;
+        qwModInfoCycles = (ULONGLONG)((uint64_t)qwModInfoCycles & 0xffffffff00000000ull | (uint64_t)(uint32_t)((uint32_t)qwModInfoCycles + nCycleSample));
+        qwModInfoCycles = (ULONGLONG)((uint64_t)qwModInfoCycles & 0xffffffffull | (uint64_t)(uint32_t)((uint32_t)((uint64_t)qwModInfoCycles >> 32) + nCycleSample + (uint32_t)bCarry) << 32);
         if (__frame1.bHasLineInfo) {
           pszRelFileName = Src::ErrorManager::StripPathPrefixToRelative(__frame1.pszFileName);
           nStrLen = Storm::Source::SSTR::SStrLen(__frame2.moduleInfo.ModuleName);
@@ -2003,8 +1951,8 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
     CleanupSymbolsWithRefcount(0);
     nCycleSample = __frame2.nFrameIdx;
     uint32_t nCyclesLo = (uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles + nCyclesAcc;
-    int64_t nAvgCycles = _alldiv(nCyclesLo + (uint32_t)qwFmtCycles, *(uint32_t*)((char*)&qwModInfoCycles + 4) + *(uint32_t*)((char*)&qwSymCycles + 4) + (uint32_t)((uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles) < (uint32_t)qwModInfoCycles) + nWalkCyclesHi + (uint32_t)((uint32_t)((uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles) + (uint32_t)nCyclesAcc) < (uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles)) + *(uint32_t*)((char*)&qwFmtCycles + 4) + (uint32_t)((uint32_t)((uint32_t)nCyclesLo + (uint32_t)qwFmtCycles) < (uint32_t)nCyclesLo), __frame2.nFrameIdx, (int)__frame2.nFrameIdx >> 0x1f);
-    Src::LogManager::LOGMANAGER_TraceToModuleLog(__frame1.szLogCategory, "QuickStackWalk: %d entries, %I64d+%I64d+%I64d+%I64d cycles, %I64d avg", nCycleSample, nCyclesAcc, nWalkCyclesHi, (uint32_t)qwSymCycles, *(uint32_t*)((char*)&qwSymCycles + 4), (uint32_t)qwModInfoCycles, *(uint32_t*)((char*)&qwModInfoCycles + 4), (uint32_t)qwFmtCycles, *(uint32_t*)((char*)&qwFmtCycles + 4), nAvgCycles);
+    int64_t nAvgCycles = _alldiv(nCyclesLo + (uint32_t)qwFmtCycles, (uint32_t)((uint64_t)qwModInfoCycles >> 32) + (uint32_t)((uint64_t)qwSymCycles >> 32) + (uint32_t)((uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles) < (uint32_t)qwModInfoCycles) + nWalkCyclesHi + (uint32_t)((uint32_t)((uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles) + (uint32_t)nCyclesAcc) < (uint32_t)((uint32_t)qwModInfoCycles + (uint32_t)qwSymCycles)) + (uint32_t)((uint64_t)qwFmtCycles >> 32) + (uint32_t)((uint32_t)((uint32_t)nCyclesLo + (uint32_t)qwFmtCycles) < (uint32_t)nCyclesLo), __frame2.nFrameIdx, (int)__frame2.nFrameIdx >> 0x1f);
+    Src::LogManager::LOGMANAGER_TraceToModuleLog(__frame1.szLogCategory, "QuickStackWalk: %d entries, %I64d+%I64d+%I64d+%I64d cycles, %I64d avg", nCycleSample, nCyclesAcc, nWalkCyclesHi, (uint32_t)qwSymCycles, (uint32_t)((uint64_t)qwSymCycles >> 32), (uint32_t)qwModInfoCycles, (uint32_t)((uint64_t)qwModInfoCycles >> 32), (uint32_t)qwFmtCycles, (uint32_t)((uint64_t)qwFmtCycles >> 32), nAvgCycles);
     gnStackWalkInProgress--;
     return 1;
 }
@@ -2270,9 +2218,7 @@ BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) 
           pOutLimit = pOutBufferLocal + nRecDwordCount;
           do {
             recHeader0 = pRecordCur->nFlags;
-            *(uint8_t*)(char*)&recHeader1 = pRecordCur->nAnimSpeed;
-            *(uint8_t*)((char*)&recHeader1 + 1) = pRecordCur->nNumDirections;
-            *(uint16_t*)((char*)&recHeader1 + 2) = pRecordCur->pad_06;
+            recHeader1 = (int)((uint32_t)(uint8_t)pRecordCur->nAnimSpeed | (uint32_t)(uint8_t)pRecordCur->nNumDirections << 8 | (uint32_t)(uint16_t)pRecordCur->pad_06 << 16);
             recHeader2 = pRecordCur->nCurrentFrameFixed;
             nDwordCount = pRecordCur->nNumFrames;
             nFileSize = nDwordCount * 4;

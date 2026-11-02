@@ -3,7 +3,7 @@
 #include "D2Direct3D/d3dFloorCache.h"
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SpriteCache.h"
-#include "D2Client/D2GfxHelperStrc.h"
+#include "D2CMP/SRC/SubTile.h"
 #include "D2Common/D2InventoryStrc.h"
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
@@ -60,7 +60,7 @@ int __fastcall D3DFLOOR_Initialize(D3DFloorCacheStrc * pCache, int nBaseMemoryUs
       BOOL bSurfaceCreated;
       nAvailableMemory = 0;
       do {
-        pCurrentNode = &pCache->pNodeBuffer[nNodeIndex].nIndex;
+        pCurrentNode = (int*)((uintptr_t)&pCache->pNodeBuffer->nIndex + nAvailableMemory);
         *pCurrentNode = nNodeIndex;
         if (nNodeIndex < pCache->nMaxNodes - 1) {
           pCurrentNode[4] = (uintptr_t)&pCache->pNodeBuffer[1].nIndex + nAvailableMemory;

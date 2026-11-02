@@ -16,8 +16,8 @@
 
 namespace D2Client::GAME::Rendering {
 
-void __fastcall SetupGamma(DWORD dwParam) {
-    D2gfx::D2GFX::D2GFX_SetGamma(dwParam);
+void __fastcall SetupGamma(DWORD dwGamma) {
+    D2gfx::D2GFX::D2GFX_SetGamma(dwGamma);
 }
 
 void __stdcall SetCurrentEngineToOne() {
@@ -64,11 +64,7 @@ void __stdcall DrawRenderStats() {
     D2CMP::SRC::SpriteCache::SPRITECACHE_GetStats(&nCacheSize, &nMisses, &nAccesses, &nPercentUtilized);
     if ((int)nAccesses > 0) {
       fValue = (float)(int)nMisses * 100.0 / (float)(int)nAccesses;
-      fKilobytes = (float)(int)nCacheSize;
-      if ((int)nCacheSize < 0) {
-        fKilobytes += 4.2949673e+09;
-      }
-
+      fKilobytes = (float)nCacheSize;
       sprintf(szStatLine, "Tile Cache: (%.2fK) %3.2f%%, Misses: %d, %d percent utilized\n", (double)(fKilobytes * 0.0009765625), (double)fValue, (int)nMisses, nPercentUtilized);
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x30, szStatLine);
     }
@@ -147,12 +143,10 @@ void __stdcall DRAW_UI_FPSStats() {
     int32_t nStatValue;
     eD2RendererMode eRendererMode_lcl;
     int iVar1;
-    int32_t nUsage;
     uint32_t uVar2;
     int32_t nCacheTotal;
     int32_t nAsyncFiles;
     int32_t nCelCacheCurrent;
-    int32_t nCelCacheMax;
     _MEMORYSTATUS memStatus;
     char szVideoMode[32];
     char* szRendererName;
@@ -215,16 +209,14 @@ void __stdcall DRAW_UI_FPSStats() {
       iVar1 = Engine::Gfx::GFX_GetCofCacheFlags();
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x78, "GFX Memory->%i", iVar1);
       iVar1 = Engine::Gfx::GFX_GetGfxSystemFlags();
-      nUsage = Engine::Gfx::GFX_GetCofCacheMemUsage();
-      D2gfx::D2GFX::D2GFX_DrawString(10, 0x84, "COF Memory->%i of %i", nUsage, iVar1);
+      D2gfx::D2GFX::D2GFX_DrawString(10, 0x84, "COF Memory->%i of %i", Engine::Gfx::GFX_GetCofCacheMemUsage(), iVar1);
       uVar2 = D2CMP::SRC::SpriteCache::SPRITECACHE_GetCacheSize();
       nCacheTotal = D2CMP::SRC::SpriteCache::SPRITECACHE_GetTotalEntries();
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x90, "Sprite Cache Memory->%i of %i", nCacheTotal, uVar2);
       nAsyncFiles = Fog::FOG_GetAsyncFileCount_ReturnZero();
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x9c, "Async Files->%i", nAsyncFiles);
       nCelCacheCurrent = D2CMP::SRC::SpriteCache::SPRITECACHE_GetCurrentSize();
-      nCelCacheMax = D2CMP::SRC::SpriteCache::SPRITECACHE_GetMaxSize();
-      D2gfx::D2GFX::D2GFX_DrawString(10, 0xa8, "CelData Cache Memory->%i of %i", nCelCacheMax, nCelCacheCurrent);
+      D2gfx::D2GFX::D2GFX_DrawString(10, 0xa8, "CelData Cache Memory->%i of %i", D2CMP::SRC::SpriteCache::SPRITECACHE_GetMaxSize(), nCelCacheCurrent);
       D2Client::Sound::SoundHdr::SOUNDHDR_Nop();
       DrawRenderStats();
       return;

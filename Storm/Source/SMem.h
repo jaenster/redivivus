@@ -77,9 +77,11 @@ struct SMemHeapDetailsStrc {
     /* 0x124 */ uint32_t dwUnknown124; // summed per region like the fields before it
 };
 
-namespace Storm::SMem {
+namespace Storm::Source::SMem {
 
 // Function declarations
+uint32_t __stdcall SMemExtractBucketIndex(uint32_t nParam);
+uint32_t * __stdcall SMemFindHeapByHash(uint32_t * pnOutBucket, int32_t nFlags, uint32_t nHash);
 // @blizzard ComputePageSize (SMEM.CPP)
 void __stdcall SMEM_ComputePageSize();
 // @blizzard FreeHeap (SMEM.CPP)
@@ -104,7 +106,7 @@ int32_t __stdcall SMemHeapDestroy(LPVOID nHeapId);
 uint32_t __stdcall SMemHeapFree(int32_t nHeapId, uint32_t dwFlags, void * pObject);
 int32_t __stdcall SMemHeapSize(int32_t nHeapId, uint32_t dwFlags, int32_t pObject);
 void * __stdcall SMemAlloc(uint32_t nSize, char * szFile, uint32_t nLine, uint32_t nFlags);
-void __stdcall SMemDumpState(pfnSMemDumpCallback pfnCallback, uint32_t dwCallbackArg);
+BOOL __stdcall SMemDumpState(pfnSMemDumpCallback pfnCallback, uint32_t dwCallbackArg);
 // @blizzard SMemHeapAlloc (SMEM.CPP)
 uint32_t * __stdcall SMemHeapAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t dwFlags);
 // @blizzard SMemHeapReAlloc (Storm assert string)
@@ -113,4 +115,4 @@ uint32_t * __stdcall SMemHeapReAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t 
 uint32_t * __stdcall SMemReAlloc(uint32_t * pBlock, uint32_t nSize, char * szSourceFile, int32_t nSourceLine, uint32_t dwFlags);
 // 20 internal functions (defined in .cpp)
 
-} // namespace Storm::SMem
+} // namespace Storm::Source::SMem

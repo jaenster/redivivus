@@ -8,9 +8,8 @@
 #include "Fog/D2MemoryManagerStrc.h"
 #include "Fog/SMem.h"
 #include "Fog/Src/LogManager.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
-#include "Storm/_unnamespaced.h"
 
 
 // =============================================================================
@@ -1757,6 +1756,11 @@ FILE * globalOpenFileHandleArray[20] = {}; D2_GLOBAL_GUARD(globalOpenFileHandleA
 
 uint32_t gLogFileLastWriteTimeArray[20] = {}; D2_GLOBAL_GUARD(gLogFileLastWriteTimeArray, "gLogFileLastWriteTimeArray");
 
+CRITICAL_SECTION gLogMessageQueueCS = {}; D2_GLOBAL_GUARD(gLogMessageQueueCS, "gLogMessageQueueCS");
+
+// also labelled: FileHandlesCriticalSection_Maybe
+_RTL_CRITICAL_SECTION gLogFileCS = {}; D2_GLOBAL_GUARD(gLogFileCS, "gLogFileCS");
+
 D2StormListHead gLogMessageQueueHead = {}; D2_GLOBAL_GUARD(gLogMessageQueueHead, "gLogMessageQueueHead");
 
 D2HighResTimestampStrc gHighResTimerInitTimestamp = D2HighResTimestampStrc(); D2_GLOBAL_GUARD(gHighResTimerInitTimestamp, "gHighResTimerInitTimestamp");
@@ -1953,9 +1957,9 @@ void * vftable[1] = { (void*)&Fog::_3rdparty::crashy::ScalarDeletingDestructor }
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

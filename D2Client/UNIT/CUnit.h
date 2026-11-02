@@ -10,7 +10,6 @@
 
 // Forward declarations
 struct D2CreateMonsterUnitStrc;
-struct D2DynamicPathStrc;
 struct D2GfxInfoStrc;
 struct D2ObjectsTxt;
 struct D2RoomStrc;
@@ -31,7 +30,7 @@ namespace D2Client::UNIT::CUnit {
 // Thunk callback for CUNIT_IterateHashTableWithCallback. Receives unit pointer in ECX and forwards to STATLIST_ClearChangedStatFlags. Called at end of CLIENT_UpdateUnitGfxState to clear changed-stat dirty flags on all client-side units (players, missiles, server units).
 void __fastcall CLIENT_ClearChangedStatFlags_Thunk(struct D2UnitStrc * pUnit);
 struct D2GfxInfoStrc * __fastcall GetGfxInfo(struct D2UnitStrc * pUnit);
-void __fastcall SetGfxSequenceData(struct D2UnitStrc * pUnit, DWORD dwParam);
+void __fastcall SetGfxSequenceData(struct D2UnitStrc * pUnit, DWORD dwCofDataFlags);
 int32_t __fastcall GetGfxSequenceData(struct D2UnitStrc * pUnit);
 void __fastcall SetPalShiftIndex(struct D2UnitStrc * pUnit, int32_t nPalShiftIndex);
 int32_t __fastcall GetPalShiftIndex(struct D2UnitStrc * pUnit);
@@ -59,14 +58,14 @@ int __fastcall IsActive(struct D2UnitStrc * pUnit);
 int32_t __fastcall IsAlive(struct D2UnitStrc * pUnit);
 struct D2UnitStrc * __fastcall GetConfirmedTargetUnit(struct D2UnitStrc * pUnit);
 void __fastcall FreeLightMap(struct D2UnitStrc * pUnit);
-void __fastcall CUNIT_IterateServerUnitsWithCallback(int32_t nParam);
+void __fastcall CUNIT_IterateServerUnitsWithCallback(fnUnitIterCallback pfnCallback);
 void __fastcall CUNIT_IterateMissilesWithCallback(fnUnitIterCallback pfnCallback);
 void __fastcall CUNIT_IterateItemsWithCallback(fnUnitIterCallback pfnCallback);
 uint16_t * __fastcall ROOM_GetWarpDestinationName(struct D2RoomStrc * pRoom, struct D2UnitStrc * pWarpUnit);
 // Returns the localized display name (WCHAR*) of a unit by its type. Monsters: returns the player-owner override name if set, else the monstats NameStr locale string. Items: the items.txt wNameStr locale string. Objects: for open-warp objects walks the current and adjacent rooms to find the linked warp unit and returns its destination name; for shrines returns the shrine name string, for lockable/locked objects a generic locked string, doors map their anim mode to closed/open/destroyed strings, otherwise the objects.txt NameWideString. Halts (unrecoverable error) if pUnit is NULL; returns NULL for unknown unit types.
 uint16_t * __fastcall GetName(struct D2UnitStrc * pUnit);
 uint32_t __fastcall DecrementGfxTimer(struct D2UnitStrc * pUnit);
-void __fastcall CUNIT_SetUnitFlag3(int32_t pUnit);
+void __fastcall CUNIT_SetUnitFlag3(struct D2UnitStrc * pUnit);
 // Returns the client-side dwStartLight (+0x68) of pUnit; halts (CUnit.cpp line 2623) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 uint32_t __fastcall CUNIT_GetStartLight(struct D2UnitStrc * pUnit);
@@ -81,7 +80,7 @@ uint32_t __fastcall SKILL_IsTargetOwnedPet(struct D2UnitStrc * pUnit, int * pnSk
 // @sourcefile .\UNIT\CUnit.cpp
 uint32_t __fastcall SKILL_IsTargetAlliedUnit(struct D2UnitStrc * pUnit, int * pnSkillParams);
 // Single-player only (halts otherwise): copies an incoming server-authoritative dynamic path snapshot onto the corresponding local client unit's path. Resolves the local unit by type/GUID via QSERVER_FindUnitInFirstActiveGame, then bulk-copies coords, screen pos, path points, target/prev/saved targets, velocity/acceleration, distance, direction vectors and the 0x20 path flags from the local path into the server-path buffer (pServerPath), fixing up the room via DRLGROOM_FindBetterNearbyRoom + PATH_GetCollisionTypeAt if the tile changed. Then reconciles animation mode (Neutral/Walk/Run/Town* transitions, town-awareness) and skill-cast flags between the two paths and triggers a unit update. Clears the path's 0x2000 flag on exit. Effectively the SP-loopback bridge keeping client and 'server' unit paths in sync.
-void __fastcall CLIENT_SyncPathFromServer(struct D2DynamicPathStrc * pDynamicPath);
+void __fastcall CLIENT_SyncPathFromServer(struct D2UnitStrc * pDynamicPath);
 int16_t __fastcall GetPlayerUnitPartyId(struct D2UnitStrc * pUnit);
 struct D2RoomStrc * __fastcall FindRoom(int32_t nX, int32_t nY);
 // Client-side teleport/warp of a unit to (nX,nY). Clears selection if moving the local player, finds the destination room, and validates the unit is alive and not in a death/kick anim. For the local player it also handles cross-room perspective (LVLTBLS_GetNoPer -> D2GFX_SetPerspectiveCapable), act-palette reload when crossing into a level with a different Pal, dungeon pop updates, and optional warp-fade timer (bWarpFade, skipped if current skill has flag 0x40). Snaps to a free collision-valid coordinate via GetFreeCoordinates_WithNeighboorRooms, refreshes the automap, clears weather particles for the player, and sends an idle-player message. Halts via Fog::ErrorManager on invalid path/room/collision states.
@@ -90,7 +89,7 @@ void __fastcall CLIENT_TeleportUnitToPosition(struct D2UnitStrc * pUnit, int32_t
 void __stdcall FreeAllUnits();
 // Client-side per-frame graphics update: iterates all client unit hash tables (objects, missiles, players, items) calling CLIENT_UpdateUnitFrame, then clears changed-stat flags on selected units/items/players. In singleplayer, also syncs server-side path data to client for players and missiles.
 void __stdcall CLIENT_UpdateUnitGfxState();
-void __fastcall FaceTarget(struct D2UnitStrc * pUnit, int32_t nParam);
+void __fastcall FaceTarget(struct D2UnitStrc * pUnit, int32_t bImmediate);
 // Determines whether pUnit may interact with / target pUnit2 (hostility & targetability check). Returns nonzero if interaction allowed, 0 if not. Resolves pets to their player owner via RosterPets::GetRosterOwnerGUID and charmed/owned units. In town: only allows player-vs-player when ROSTER_CheckPlayerCanLoot permits looting a dead party member. Out of town: rejects self/same-unit; player-vs-player uses loot rights then PlayerList party flag (8); against monsters consults MonStats2 alSel/noSel flags (always-selectable / never-selectable); players may always interact with items and objects; otherwise falls back to Path::IsAllyOf (returns true only if NOT an ally). Also blocks a player from interacting with an enemy pet they don't own.
 uint32_t __fastcall CanInteractWith(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 void RemoveObject(int32_t nIndex, struct D2UnitStrc * * ppUnitTable, eD2UnitType eUnitType, int32_t nUnitGUID);

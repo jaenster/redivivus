@@ -339,7 +339,7 @@ int __stdcall SFileGetFileName(struct D2MPQFileStrc * pFile, char * szText, int3
 // @wasnamed SFILE_GetArchiveListFile
 // Copies an open file's name into the caller's buffer, preferring the alternate name at +0x10c.
 // @oracle-note 2026-08-28 pass 4. NOT SFileGetFileName - that is 00416230, settled because D2's PowerPC binary imports SFileGetFileName by name and 00416230 is the only file-name getter 1.14d D2 code calls (D2FILE_GetFileSize / SeekFile / ReadFile). This one has zero callers and returns the +0x10c alias when set, falling back to +8; it is the internal variant. Storm's 337-name export table has exactly one file-name getter, so this is not an export. Left descriptively named.
-int __stdcall SFILE_CopyFileRecordNameOrAlias(struct D2MPQFileStrc * pArchive, void * pParam, int32_t nParam);
+int __stdcall SFILE_CopyFileRecordNameOrAlias(struct D2MPQFileStrc * pArchive, void * pParam, int32_t nBufferOutputLength);
 // @oracle PPC Mac Storm 1.10b export table: SFileGetFileArchive
 // @oracle-basis CONTRADICTION. The old name promised an archive NAME; the function copies no string at
 // all. It validates a FILE handle and, when the record's field at +0x110 equals -1 (the marker for
@@ -377,7 +377,7 @@ void __stdcall SFileSetDataChunkSize(uint32_t nParam);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileSetFilePointer". There is no "SFileSeekFile" on the 337-name list.
 // @wasnamed SFILE_SeekFile
 // @basis behaviour-confirmed. Win32 SetFilePointer semantics exactly: (hFile, LONG lDistanceToMove, PLONG lpDistanceToMoveHigh, DWORD dwMoveMethod), returning the new position or 0xFFFFFFFF on failure, and rejecting a non-zero high dword with ERROR_INVALID_PARAMETER. Method 0/1/2 = FILE_BEGIN/FILE_CURRENT/FILE_END, applied to the MPQ file record's logical position field, and delegated straight to the Win32 SetFilePointer when the record wraps a plain OS handle (field 0x44 != -1). Also invalidates the record's cached sector on every move.
-DWORD __stdcall SFileSetFilePointer(struct D2MPQFileStrc * pMPQFile, int32_t nParam, int * pnParam, DWORD dwParam);
+DWORD __stdcall SFileSetFilePointer(struct D2MPQFileStrc * pMPQFile, int32_t nDistanceToMove, int * pnParam, DWORD dwMoveMethod);
 BOOL __stdcall SFileSetIoErrorMode(int32_t nErrorMode, pfnSFileReadError pfnErrorHandler);
 void __stdcall SFileSetLocale(uint16_t nLocale);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileSetPlatform"
@@ -498,7 +498,7 @@ void __stdcall SFILE_CreateCdThread();
 // Cancels async request without returning status. Validates handle (sets ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0). Called by ASYNCDATA_Free to silently cancel pending I/O during cleanup.
 void __stdcall SFILE_CancelAsyncRequestNoReturn(int32_t nParam);
 // Cancels async request and returns status. Validates handle (returns 0 + ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0) and returns its result (1=success, 0=failure).
-int __stdcall SFILE_CancelAsyncRequestWithStatus(int32_t nParam);
+int __stdcall SFILE_CancelAsyncRequestWithStatus(int32_t nRequestHandle);
 // Cancels all async I/O requests for a file handle. Validates handle, iterates gSFileStreamRecordList.pNext list, cancels any matching requests (including gpCurrentAsyncIORequest if active), unlinks from queue, decrements refcount, and frees when refcount hits zero. Clears file handle's async flag (offset 0x134). Returns 1 on success, 0 if handle invalid.
 BOOL __stdcall SFileDdaEnd(struct D2MPQFileStrc * hFile);
 // Re-prioritises the queued Storm reads into pReadBuffer: SFILE_SetRequestUrgentByBuffer(pReadBuffer, nPriority > 0), then signals ghAsyncIOEvent if nPriority > 0. SetLastError(0x57) on a NULL buffer. Fog AsyncData passes D2AsyncData_Line0x128.pReadBuffer (+0x3c).
@@ -511,7 +511,7 @@ int __stdcall SFileReadFileEx2(struct D2MPQFileStrc * pFileHandle, void * pOutpu
 // @basis behaviour-confirmed as part of a three-way arity lock. The 8-parameter worker (archive, filename, buffer, bytes, extrabytes, flags, callback, readflags) that both shorter members forward into: open, size, allocate size+extrabytes, read, close. SFileLoadFileEx2 is the only 8-parameter Load in the real API, and the extra 8th slot is precisely the readflags the 7-parameter caller pins to 0.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx 0041b680
 // @sourcefile .\SOURCE\SFILE.CPP
-uint32_t __stdcall SFileLoadFileEx2(struct D2ArchiveStrc * pArchive, uint32_t * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx, int nReadFlags);
+uint32_t __stdcall SFileLoadFileEx2(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx, int nReadFlags);
 // @blizzard SFileReadFile (SFILE.CPP)
 int __stdcall SFileReadFile(struct D2MPQFileStrc * pMPQFile, void * pOutputBuffer, uint32_t nBytesToRead, uint32_t * pnSize, int32_t pAsyncReadCtx);
 // Simplified wrapper for SFILE_ReadFile that passes 0 for the completion callback parameter and param6 as the async flags. Used when caller doesn't need completion notification.
@@ -531,7 +531,7 @@ uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * 
 // @wasnamed SFILE_LoadFileToMemory2
 // @basis behaviour-confirmed as part of a three-way arity lock. 7 parameters, positionally identical to SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback); the body forwards them unchanged to the 8-parameter worker with readflags = 0, which is exactly what distinguishes Ex from Ex2.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx2 0041af60
-uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, uint32_t * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx);
+uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard s_OpenArchive (SFILE.CPP, Storm 1.10b PPC)
 int __fastcall SFILE_s_OpenArchive(struct D2ArchiveStrc * ppArchive, uint32_t nFlags, int32_t bAllowEmpty, struct D2ArchiveStrc * * ppArchiveOut);
@@ -545,6 +545,13 @@ void __fastcall CRC32_UpdateCRC(uint8_t * pbData, int32_t nLength, uint32_t * pd
 uint32_t __fastcall CRC32_Calculate(uint8_t * pbData, int nLen);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9e98(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9ec8(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
+void StaticInit_6ca7b0();
+void StaticInit_6ca7d0();
+void StaticInit_6ca7f0();
+void StaticInit_6ca810();
+void StaticInit_6ca830();
+void StaticInit_6ca850();
+void StaticInit_6ca870();
 void StaticFini_CriticalSection_00779068();
 void StaticFini_CriticalSection_00779080();
 // Runs at exit: removes every element from the open MPQ archive list gMpqArchiveList, then unlinks the list head itself.

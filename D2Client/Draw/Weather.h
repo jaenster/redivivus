@@ -65,8 +65,10 @@ void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel);
 void __stdcall WEATHER_FreeDC6Graphics();
 void __fastcall WEATHER_ClearParticleArrays(int bUpdateAct5);
 void __fastcall WEATHER_InitBlizzardState(int nSpellId);
-void __stdcall WEATHER_UpdateSplashes();
-void __stdcall WEATHER_UpdateBubbles();
+// Registers: pSeed (ECX) is passed by WeatherEffects but not read.
+void __fastcall WEATHER_UpdateSplashes(struct D2SeedStrc * pSeed);
+// Registers: pSeed (ECX) is passed by WeatherEffects but not read.
+void __fastcall WEATHER_UpdateBubbles(struct D2SeedStrc * pSeed);
 void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int nWorldY);
 void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int nWorldY);
 void __stdcall WEATHER_UpdateParticles(struct D2SeedStrc * pSeed);

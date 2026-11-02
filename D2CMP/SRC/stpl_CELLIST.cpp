@@ -15,7 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 
@@ -24,7 +24,7 @@
 
 template<> void TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::SyncEnterLock(int32_t * pLockedHandle, int32_t bForWriting) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&this->tSync.m_critsect);
-    *pLockedHandle = (uint32_t)(bForWriting != 0) * 2 - 1;
+    *pLockedHandle = bForWriting != 0 ? 0x1U : 0xffffffff;
 }
 
 template<> TSLink<::CELLIST>* TSLink<CELLIST>::NextLink(int32_t nLinkOffset) {
@@ -608,7 +608,7 @@ template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Cl
       }
 
       ((TSGrowableArray<::CELLIST>*)pObject)->Destructor();
-      Storm::SMem::SMemFree(pObject, s___AV__TSHashObjectChunk_UCELLIST_00741fb4, -2, 0);
+      Storm::Source::SMem::SMemFree(pObject, s___AV__TSHashObjectChunk_UCELLIST_00741fb4, -2, 0);
     }
 }
 

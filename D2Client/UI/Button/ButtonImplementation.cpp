@@ -15,7 +15,7 @@
 #include "D2Win/Src/D2WinTextBox.h"
 #include "D2gfx/D2GFX.h"
 #include "Fog/3rdparty/crashy/Report.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Button.h"
 #include "D2Client/UI/Dialog.h"
@@ -162,7 +162,7 @@ int __thiscall OnMouseWheel(::ButtonImplementation * pThis, D2UIMouseMsgStrc * p
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -175,7 +175,7 @@ void __thiscall Draw(::ButtonImplementation * pThis) {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pThis->nPosX, pThis->nPosY, -1, DRAW_SOLID, nullptr);
     uint32_t nCurMouseX = ui::GetMouseX();
     uint32_t nCurMouseY = ui::GetMouseY();
-    if (!((int)(nCurMouseX & 0xffff) >= pThis->nPosX && (int)(nCurMouseX & 0xffff) <= pThis->nWidth + pThis->nPosX && (int)(nCurMouseY & 0xffff) >= pThis->nPosY - pThis->nHeight && (int)(nCurMouseY & 0xffff) <= pThis->nPosY)) {
+    if (!((int)(uint16_t)nCurMouseX >= pThis->nPosX && (int)(uint16_t)nCurMouseX <= pThis->nWidth + pThis->nPosX && (int)(nCurMouseY & 0xffff) >= pThis->nPosY - pThis->nHeight && (int)(nCurMouseY & 0xffff) <= pThis->nPosY)) {
       return;
     }
 

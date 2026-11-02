@@ -149,5 +149,8 @@ void __stdcall D2GFX_InitializeLineBuffer();
 void __fastcall PALETTE_InitColorLookupTables(BYTE * * ppPaletteTable);
 void __stdcall D2GFX_InitializeWindowSize();
 BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode);
+void StaticInit_6cadf0();
+void StaticInit_6cae00();
+void StaticInit_6cae10();
 
 } // namespace D2gfx::D2GFX

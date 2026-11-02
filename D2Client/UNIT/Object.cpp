@@ -384,8 +384,6 @@ static void OBJECT_UpdateAnimation(D2UnitStrc * pUnit) {
 
 // Sets an object unit's animation mode and recomputes its collision/targetable/shadow state (used for portals and other interactive objects). nNewAnimMode (0..7) selects the new ObjectAnimMode; handles special transitions (open<->close, death->operate) using the ObjectsTxt FrameCnt/Start frame tables. Toggles UNITFLAG_TARGETABLE from bTargetable, blocks or removes the unit's collision path on the relevant mode changes, reloads the unit COF, sets the starting GFX frame, and finally sets/clears UNITFLAG_DRAWSHADOW from the ObjectsTxt BlocksLight table for the current mode. Halts if nNewAnimMode > 7.
 static void __stdcall OBJECT_HandlePortalOpen(int32_t bTargetable, int32_t nNewAnimMode, D2UnitStrc * pUnit) {
-    int32_t nErrLine;
-    D2RoomStrc* pRoom;
     eD2ObjectAnimMode eCurAnimMode;
     uint8_t byStartFrame;
     int32_t iVar5;
@@ -402,9 +400,7 @@ static void __stdcall OBJECT_HandlePortalOpen(int32_t bTargetable, int32_t nNewA
         Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
         pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
         iVar5 = Units::GetYPosFromDynamicPathUnit(pUnit);
-        nErrLine = Units::GetXPosFromDynamicPathUnit(pUnit);
-        pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-        D2Common::Units::BlockCollisionPath(pUnit, pRoom, nErrLine, iVar5);
+        D2Common::Units::BlockCollisionPath(pUnit, D2Common::Units::UNITS_GetRoom(pUnit), Units::GetXPosFromDynamicPathUnit(pUnit), iVar5);
         goto update_shadow;
       }
 
@@ -422,9 +418,7 @@ static void __stdcall OBJECT_HandlePortalOpen(int32_t bTargetable, int32_t nNewA
           }
         } else if (!nNewAnimMode && eCurAnimMode != eD2ObjectAnimMode_ns::Neutral) {
           iVar5 = Units::GetYPosFromDynamicPathUnit(pUnit);
-          nErrLine = Units::GetXPosFromDynamicPathUnit(pUnit);
-          pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          D2Common::Units::BlockCollisionPath(pUnit, pRoom, nErrLine, iVar5);
+          D2Common::Units::BlockCollisionPath(pUnit, D2Common::Units::UNITS_GetRoom(pUnit), Units::GetXPosFromDynamicPathUnit(pUnit), iVar5);
         }
 
         D2Common::Units::SetupUpdateFlag(pUnit, nNewAnimMode);
@@ -1217,7 +1211,7 @@ bool __fastcall OBJECT_ExecuteClientFunction(D2UnitStrc * pUnit) {
     return true;
 }
 
-void __fastcall WAYPOINT_HandleActivation(int32_t pMessage) {
+void __fastcall WAYPOINT_HandleActivation(uint8_t * pMessage) {
     D2UnitStrc* pUnit;
     if (!pMessage) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x556);
@@ -1229,12 +1223,12 @@ void __fastcall WAYPOINT_HandleActivation(int32_t pMessage) {
         return;
       }
       if (pUnit->nClassId == 0x3b || pUnit->nClassId == 0x3c) {
-        pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = *(char*)(pMessage + 2);
+        pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = pMessage[2];
         byPortalFlags = D2Common::Units::GetObjectPortalFlags(pUnit);
-        if (*(uint8_t*)(pMessage + 1) & 2) {
+        if (pMessage[1] & 2) {
           byPortalFlags |= 2;
         }
-        if (*(uint8_t*)(pMessage + 1) & 1) {
+        if (pMessage[1] & 1) {
           byPortalFlags |= 1;
         }
 

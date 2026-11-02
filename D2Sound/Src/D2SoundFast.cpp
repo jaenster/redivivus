@@ -11,7 +11,6 @@
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
 #include "Storm/Source/SReg.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -139,7 +138,7 @@ int __stdcall SOUND_PlayNextAmbientSound() {
     nAmbientCount = gaAmbientSoundFlags;
     do {
       iVar8 = 0;
-      if (0 < nAmbientCount) {
+      if (nAmbientCount > 0) {
         do {
           pAmbientEntry = Sound::SOUND_GetAmbientSoundEntry(iVar8);
           if (!pAmbientEntry[1]) {

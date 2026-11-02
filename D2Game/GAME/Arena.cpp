@@ -63,12 +63,13 @@ static inline bool __stdcall ARENA_TestFlag(::SGAMEDATA * pGame, uint32_t nParam
 }
 
 // @sourcefile .\GAME\Arena.cpp
-void __thiscall AllocArenaControl(void * pThis, eD2ArenaFlags eArenaFlags, uint8_t nTemplate) {
-    D2ArenaControlStrc* pArenaCtrl = D2_NEW_POOL_AT(*(D2PoolManagerStrc**)((int)pThis + 0x1c), D2ArenaControlStrc, ".\\GAME\\Arena.cpp", 0x32);
+// EDX nArena: 0 from GAME_CreateBattleNetGame, the arena argument from GAME_CreateSingleplayerGame; not read here.
+void __fastcall AllocArenaControl(::SGAMEDATA * pGame, int32_t nArena, eD2ArenaFlags eArenaFlags, uint8_t nTemplate) {
+    D2ArenaControlStrc* pArenaCtrl = D2_NEW_POOL_AT(pGame->pMemoryPool, D2ArenaControlStrc, ".\\GAME\\Arena.cpp", 0x32);
     pArenaCtrl->eLevelId = LEVEL_None;
     pArenaCtrl->nArenaTxtRecord = 0;
     pArenaCtrl->nTemplateLevel = 0;
-    *(D2ArenaControlStrc**)((int)pThis + 0x1d28) = (D2ArenaControlStrc*)pArenaCtrl;
+    pGame->pArenaCtrl = pArenaCtrl;
     pArenaCtrl->eArenaFlags = eArenaFlags & 0x3179c7;
     *(uint8_t*)&pArenaCtrl->nTemplateLevel = nTemplate;
 }
@@ -124,7 +125,7 @@ eD2LevelId __fastcall GetTownLevelFromArenaCtrl(::SGAMEDATA * pGame) {
 
 // pGame in EAX: returns pArenaCtrl->nArenaTxtRecord; halts (Arena.cpp line 108, ptArena) when there is no arena control.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-int __stdcall ARENA_GetArenaTxtRecord(::SGAMEDATA * pGame) {
+static inline int __stdcall ARENA_GetArenaTxtRecord(::SGAMEDATA * pGame) {
     if (!pGame->pArenaCtrl) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6c);
       exit(-1);
@@ -223,12 +224,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
             pPlayerData = D2Common::Units::GetPlayerData(pUnit);
             pArenaData = pPlayerData->pArena;
             if (pArenaData) {
-              if (!pGame->pArenaCtrl) {
-                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6c);
-                exit(-1);
-              }
-
-              pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(pGame->pArenaCtrl->nArenaTxtRecord);
+              pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(ARENA_GetArenaTxtRecord(pGame));
               pArenaData->nScore += pArenaTxt->dwSuicide;
               goto mark_score_dirty;
             }
@@ -245,12 +241,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
               pPlayerData = D2Common::Units::GetPlayerData(pUnit);
               pArenaData = pPlayerData->pArena;
               if (pArenaData) {
-                if (!pGame->pArenaCtrl) {
-                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6c);
-                  exit(-1);
-                }
-
-                pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(pGame->pArenaCtrl->nArenaTxtRecord);
+                pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(ARENA_GetArenaTxtRecord(pGame));
                 pArenaData->nScore += pArenaTxt->dwPlayerKill;
                 pArenaData->bScoreDirty = 1;
                 if (!pGame->pArenaCtrl) {
@@ -269,12 +260,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
                 pPlayerData = D2Common::Units::GetPlayerData(pUnit);
                 pArenaData = pPlayerData->pArena;
                 if (pArenaData) {
-                  if (!pGame->pArenaCtrl) {
-                    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6c);
-                    exit(-1);
-                  }
-
-                  pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(pGame->pArenaCtrl->nArenaTxtRecord);
+                  pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(ARENA_GetArenaTxtRecord(pGame));
                   pPlayerData = D2Common::Units::GetPlayerData(pVictim);
                   if (!pPlayerData->pArena) {
                     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8c);
@@ -299,12 +285,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
                   pPlayerData = D2Common::Units::GetPlayerData(pVictim);
                   pArenaData = pPlayerData->pArena;
                   if (pArenaData) {
-                    if (!pGame->pArenaCtrl) {
-                      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6c);
-                      exit(-1);
-                    }
-
-                    pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(pGame->pArenaCtrl->nArenaTxtRecord);
+                    pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(ARENA_GetArenaTxtRecord(pGame));
                     pArenaData->nScore += pArenaTxt->dwPlayerDeath;
                     pArenaData->bScoreDirty = 1;
                     if (!pGame->pArenaCtrl) {
@@ -323,12 +304,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
                     pPlayerData = D2Common::Units::GetPlayerData(pVictim);
                     pArenaData = pPlayerData->pArena;
                     if (pArenaData) {
-                      if (!pGame->pArenaCtrl) {
-                        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6c);
-                        exit(-1);
-                      }
-
-                      pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(pGame->pArenaCtrl->nArenaTxtRecord);
+                      pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(ARENA_GetArenaTxtRecord(pGame));
                       pPlayerData = D2Common::Units::GetPlayerData(pUnit);
                       if (!pPlayerData->pArena) {
                         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8c);
@@ -355,12 +331,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
               pPlayerData = D2Common::Units::GetPlayerData(pUnit);
               pArenaData = pPlayerData->pArena;
               if (pArenaData) {
-                if (!pGame->pArenaCtrl) {
-                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6c);
-                  exit(-1);
-                }
-
-                pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(pGame->pArenaCtrl->nArenaTxtRecord);
+                pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(ARENA_GetArenaTxtRecord(pGame));
                 pArenaData->nScore += pArenaTxt->dwMonsterKill;
                 pArenaData->bScoreDirty = 1;
                 pArenaCtrl = pGame->pArenaCtrl;
@@ -388,12 +359,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
           pPlayerData = D2Common::Units::GetPlayerData(pVictim);
           pArenaData = pPlayerData->pArena;
           if (pArenaData) {
-            if (!pGame->pArenaCtrl) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6c);
-              exit(-1);
-            }
-
-            pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(pGame->pArenaCtrl->nArenaTxtRecord);
+            pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(ARENA_GetArenaTxtRecord(pGame));
             pArenaData->nScore += pArenaTxt->dwMonsterDeath;
             mark_score_dirty:
             pArenaData->bScoreDirty = 1;
@@ -502,8 +468,8 @@ static void __stdcall ARENA_BroadcastKillToPlayers(::SGAMEDATA * pGame, int32_t 
 }
 
 void __fastcall ARENA_UpdatePlayerKillState(::SGAMEDATA * pGame, D2ClientStrc * pClient) {
-    bool _bScoreDirty;
-    bool _bClientDead;
+    int _bScoreDirty;
+    uint32_t _bClientDead;
     bool bScoreDirty;
     bool bClientDead;
     if (!(pGame->pArenaCtrl && pGame->pArenaCtrl->eArenaFlags & ARENAFLAG_ScoresDirty)) {

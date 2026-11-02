@@ -26,7 +26,7 @@ void __stdcall main(DWORD dwNumServicesArgs, LPSTR * lpServiceArgVectors) {
 BOOL StartDiablo2ServerAsService() {
     SERVICE_TABLE_ENTRYA aServiceTable[2];
     DWORD dwVersion = GetVersion();
-    if (-1 >= (int)dwVersion) {
+    if ((int)dwVersion < 0) {
       return 0;
     }
 

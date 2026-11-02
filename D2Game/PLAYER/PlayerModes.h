@@ -45,24 +45,22 @@ int32_t __fastcall PLRMODES_ModeCallback_GetHitCast(::SGAMEDATA * pGame, struct 
 void __fastcall PLRMODES_ChangeAnimModeAndResetSkill(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nAnimMode, int32_t dwParam1, int32_t dwParam2);
 void __fastcall PLRMODES_StartCastAtPosition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nAnimMode, int32_t nPosX, int32_t nPosY);
 void __fastcall PLRMODES_StartCastAtEntity(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nAnimMode, struct D2UnitStrc * pTargetUnit);
-// @sourcefile .\PLAYER\PlrModes.cpp
-void PLRMODES_CheckSwapWeaponSkill(eD2Skills * peSkillId, struct D2UnitStrc * pUnit);
 // End-of-attack maintenance check. Snapshots the current left/right skill assignments, then calls PLRMODES_HandleDepletedAmmoOrThrowable for both the right-arm and left-arm weapon slots to unequip exhausted quivers or thrown weapons. Finally calls PLRMODES_RestoreSwappedSkill with the saved skill snapshot to re-select the appropriate skills after any weapon removal.
 void __fastcall PLRMODES_CheckWeaponQuantityAndDurability(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Iterates a player's inventory looking for equipped weapons (eInvGridType==3) with zero durability that are not already broken. For each such weapon, sets the ITEMFLAG_BROKEN flag via ITEMMODE_SendItemUpdate and broadcasts the item state change. Sets a unit update flag on the first break found. No-op if pUnit is null or not a player.
 // @sourcefile .\PLAYER\PlrModes.cpp
 void __fastcall PLRMODES_BreakZeroDurabilityWeapons(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 int32_t __fastcall PLRMODES_ModeCallback_AttackSkill(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nModeArg, int32_t nSeqFrame);
-uint8_t PLRMODES_GetHpPercent128(struct D2UnitStrc * pUnit);
+uint8_t __fastcall PLRMODES_GetHpPercent128(struct D2UnitStrc * pUnit);
 void __fastcall PLRMODES_RemoveExpiredStatLists(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 void __fastcall PLRMODES_PeriodicStatRegen(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 // Flushes all pending per-unit network state to a single client after a mode change. Sends ReassignPlayer if the unit is warping or is a remote player. If bSendItems is set, sends updated inventory items (0x9C packet) plus two equipped-item-recalc packets (0x47, 0x48). Dispatches the mode-change net message if DOUPDATE is flagged. Then drains the unit's packet queue, sends pending sound/hover-text/life-class/state/overlay packets, and fires attribute-update callbacks for velocity, attack-rate, level, strength, and dexterity stats that changed.
 void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient, BOOL bSendItems);
 // Server-side player movement dispatcher. Checks whether the player's current mode can be interrupted (PLRMODES_CanInterruptCurrentMode); if so, optionally cancels it (PLRMODES_TryCancelModeAndMoveToLocation), sets the active skill, then invokes the mode-specific move function from gaPlayerModeMoveFuncs[nIndex*2]. Halts on null game or invalid function pointer.
-void __fastcall PLRMODES_MoveToLocation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, int32_t nIndex, int32_t nX, int32_t nY, int32_t nParam);
+void __fastcall PLRMODES_MoveToLocation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, int32_t nIndex, int32_t nX, int32_t nY, int32_t bSkipCancelAttempt);
 // Initiates a targeted player animation/action mode by mode index. Looks up the target unit by (eUnitType, nUid), checks PLRMODES_CanInterruptCurrentMode, cancels the current mode if interruptible or nParam!=0, clears queued skill and pending interact flags, then dispatches via gaPlayerModeMoveFuncs[nModeIndex*2+1]. Halts with an internal error if pGame is null or the mode function pointer is bad.
 // @sourcefile .\PLAYER\PlrModes.cpp
-void __fastcall PLRMODES_StartModeID(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, int32_t nModeIndex, eD2UnitType eUnitType, DWORD nUid, int32_t nParam);
+void __fastcall PLRMODES_StartModeID(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, int32_t nModeIndex, eD2UnitType eUnitType, DWORD nUid, int32_t bSkipCancelAttempt);
 void __fastcall HoverTextEvent(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 void __fastcall PLRMODES_BroadcastAllyAndPartyInfo(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 // Per-frame server mode tick for a player in Walk/Run mode. Refreshes target, runs Blaze trail if STATE_blaze is set, drains stamina (downgrading Run->Walk on empty), and advances movement via UNITS_ProcessUnitMovement. Maintains the anti-teleport-hack trail: every ~25ms it records the player's path coords into a ring of 20 slots and, if movement exceeded a distance threshold, advances the slot. When movement completes (mode==2) it resolves any pending interact/queued skill: with no queued skill -> idle + SERVER_InteractOrPick on the target unit; with a queued skill -> GetSkill/GetSkillMode then PLRMODES_StartModeID to begin the skill. Clears bHasPendingInteract. Returns the resulting mode code.
@@ -76,6 +74,6 @@ void __fastcall PLRMODES_OnModeComplete(::SGAMEDATA * pGame, struct D2UnitStrc *
 // Per-tick dispatcher for the player's current animation mode. Reads pUnit->eAnimMode, looks up the corresponding callback in gaPlayerModeCallbacks[], invokes it with (nArg1, nArg2), and calls PLRMODES_OnModeComplete if the callback returns 2 (mode finished).
 void __fastcall PLRMODES_ProcessPlayerMode(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 void __fastcall PLAYEREVENT_DefaultCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nArg1, int32_t nArg2);
-// 15 internal functions (defined in .cpp)
+// 16 internal functions (defined in .cpp)
 
 } // namespace D2Game::PLAYER::PlayerModes

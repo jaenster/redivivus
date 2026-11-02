@@ -115,6 +115,7 @@ int32_t __fastcall Return1(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
 void __stdcall ExecuteHit(D2UnitStrc * pUnit, int32_t eCollisionFlag, uint32_t nWidth, fpHit nfpHit) {
     D2UnitStrc* pHitUnit;
     BOOL bBadPtr;
+    int nPathIdx;
     D2PathPointStrc* pPathPoints;
     uint16_t wY;
     uint16_t wX;
@@ -123,12 +124,7 @@ void __stdcall ExecuteHit(D2UnitStrc * pUnit, int32_t eCollisionFlag, uint32_t n
     PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
     int32_t nPathCount = PATH::DynamicPath::GetPathPoint(pDynamicPath, &pPathPoints);
     D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
-    int nPathIdx = 0;
-    if (nPathCount <= 0) {
-      return;
-    }
-
-    do {
+    for (nPathIdx = 0; nPathIdx < nPathCount; nPathIdx++) {
       eCollisionFlags eCollision;
       wY = pPathPoints[nPathIdx].nY;
       wX = pPathPoints[nPathIdx].nX;
@@ -145,9 +141,7 @@ void __stdcall ExecuteHit(D2UnitStrc * pUnit, int32_t eCollisionFlag, uint32_t n
           (*nfpHit)(pUnit, pHitUnit);
         }
       }
-
-      nPathIdx++;
-    } while (nPathIdx < nPathCount);
+    }
 }
 
 // Server-side per-frame update for a missile "stream" (e.g. lightning/firewall-like spread). Computes the dynamic path for pMissile, then walks path segments creating child missiles via the fpCreate callback into the unit's persistent D2MissileStreamStrc array (allocated/grown from the game-pool). Distributes nParam1 damage across segments in steps of nParam2 and spreads extra missiles using a spacing remainder so the stream covers the gap evenly. Recycles unused stream slots via fpUnknown. Halts with Fog error 0x8a if the stream struct is missing, 0xa9 if fpCreate is a bad code ptr.
@@ -235,10 +229,7 @@ void __stdcall Update(D2UnitStrc * pUnit, D2UnitStrc * pMissile, int32_t nParam1
             pStream->pStream[nPathIdx] = nCreated;
             if (bExtended) {
               nCreated = (int)nExtraSpacing / 4;
-              nExtraSpacingRem = nExtraSpacing & 0x80000003;
-              if ((int)nExtraSpacingRem < 0) {
-                nExtraSpacingRem = (nExtraSpacingRem - 1 | -4) + 1;
-              }
+              nExtraSpacingRem = (int)nExtraSpacing % 4;
               if (nExtraCycleCounter < (int)nExtraSpacingRem) {
                 nCreated++;
               }

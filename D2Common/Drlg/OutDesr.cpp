@@ -57,12 +57,8 @@ static void __stdcall PlacePresetVariants(D2DrlgLevelStrc * pLevel, D2LvlPrestId
       if (bIterateFiles) {
         pLvlPrest = DATATBLS::LvlTbls::TXT_LvlPrest_GetLine(pLevelPrestIds[nRandVariantIdx]);
         nFileCount = pLvlPrest->Files;
-        nFileIdx = 0;
-        if (nFileCount > 0) {
-          do {
-            Outdoors::SpawnOutdoorLevelPreset(pLevel, pLevelPrestIds[nRandVariantIdx], nFileIdx, 0, '\x0f');
-            nFileIdx++;
-          } while (nFileIdx < nFileCount);
+        for (nFileIdx = 0; nFileIdx < nFileCount; nFileIdx++) {
+          Outdoors::SpawnOutdoorLevelPreset(pLevel, pLevelPrestIds[nRandVariantIdx], nFileIdx, 0, '\x0f');
         }
       } else {
         Outdoors::SpawnOutdoorLevelPreset(pLevel, pLevelPrestIds[nRandVariantIdx], -1, 0, '\x0f');

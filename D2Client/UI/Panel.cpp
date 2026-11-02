@@ -109,15 +109,16 @@ void __stdcall LoadPanelImages() {
         bExpansion = true;
       }
     }
-    if (nLanguageCode - 6 <= 3) {
+    if (nLanguageCode >= 0x6 && nLanguageCode <= 0x9) {
       char szPath[260];
       if (bExpansion) {
         ppszPath = "%s\\UI\\InvChar6";
+        sprintf(szPath, "%s\\UI\\InvChar6", "DATA\\LOCAL");
       } else {
         ppszPath = "%s\\UI\\InvChar";
+        sprintf(szPath, "%s\\UI\\InvChar", "DATA\\LOCAL");
       }
 
-      sprintf(szPath, ppszPath, "DATA\\LOCAL");
       InvChar = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
     } else {
       ppszPath = "Panel\\InvChar6";
@@ -455,7 +456,7 @@ void __stdcall PANEL_DrawHealthOrb() {
     }
 
     int nPercentHideFromBottom = nValue * 0x50 / nMaxValue;
-    if (nPercentHideFromBottom - 1U <= 1) {
+    if (nPercentHideFromBottom >= 0x1 && nPercentHideFromBottom <= 0x2) {
       pUnit = UNIT::Player::GetPlayerUnit_UI();
       if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead) {
         nPercentHideFromBottom = 2;
@@ -481,11 +482,11 @@ void __stdcall PANEL_DrawHealthOrb() {
         eRenderer = D2gfx::D2GFX::D2GFX_GetRendererMode();
         if (eRenderer == RENDERER_Direct3D) {
           nValue = 0x1c;
+          D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1c, ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
         } else {
           nValue = 0x1d;
+          D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1d, ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
         }
-
-        D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, nValue, ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
       }
     }
 
@@ -572,7 +573,6 @@ void __stdcall PANEL_InitBeltColors() {
 }
 
 void __stdcall PANEL_ShowRunButtonTooltip() {
-    uint16_t* pWVar2;
     int nClearCount;
     uint16_t wszTooltip[200];
     uint16_t wszKeyLine[30];
@@ -590,8 +590,7 @@ void __stdcall PANEL_ShowRunButtonTooltip() {
     if (uVar1 != 0xffff) {
       memset(wszKeyLine, 0, 0x3c);
       pwszCursor = CmdTbl::CMD_GetKeyDescForCommand(0x23, 1);
-      pWVar2 = D2Lang::StrTable::strtable::GetLocaleString(0x1052);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x1e, wszKeyLine, pWVar2, pwszCursor);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x1e, wszKeyLine, D2Lang::StrTable::strtable::GetLocaleString(0x1052), pwszCursor);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, wszKeyLine);
     }
 
@@ -599,8 +598,7 @@ void __stdcall PANEL_ShowRunButtonTooltip() {
     if (uVar1 != 0xffff) {
       memset(wszKeyLine, 0, 0x3c);
       pwszCursor = CmdTbl::CMD_GetKeyDescForCommand(0x23, 0);
-      pWVar2 = D2Lang::StrTable::strtable::GetLocaleString(0x1052);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x1e, wszKeyLine, pWVar2, pwszCursor);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x1e, wszKeyLine, D2Lang::StrTable::strtable::GetLocaleString(0x1052), pwszCursor);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, wszKeyLine);
     }
 
@@ -710,8 +708,7 @@ void __stdcall PANEL_DrawStaminaBar() {
       return;
     }
 
-    pwszCursor = D2Lang::StrTable::strtable::GetLocaleString(0x1044);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszTooltip, pwszCursor, nCurStaminaUnits, nMaxStaminaUnits);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszTooltip, D2Lang::StrTable::strtable::GetLocaleString(0x1044), nCurStaminaUnits, nMaxStaminaUnits);
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltip, ScreenSizeX / 2 - 0x4c, ScreenSizeY - 0x34, nCurStamina, 1);
 }
 
@@ -897,7 +894,7 @@ void __stdcall PANEL_DrawExperienceBar() {
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTooltip, pwszStr);
     pwszStr = ui::AppendAsWideChar(wszItemName, 0);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, pwszStr);
-    if (!(-1 < gnBeltTooltipX && -1 < gnBeltTooltipY)) {
+    if (!(gnBeltTooltipX >= 0 && gnBeltTooltipY >= 0)) {
       return;
     }
 
@@ -1251,8 +1248,7 @@ void __stdcall PANEL_DrawPanelLayout() {
         nStatValue = 1;
       }
 
-      pwszBuf = D2Lang::StrTable::strtable::GetLocaleString(0x1045);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszHpFormatted, pwszBuf, nStatValue, nMouseY);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszHpFormatted, D2Lang::StrTable::strtable::GetLocaleString(0x1045), nStatValue, nMouseY);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszHpText, wszHpFormatted);
       nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszHpText);
       D2Win::Src::D2WinFont::DRAW_text(wszHpText, 0x41 - nTextWidth / 2, ScreenSizeY - 0x5f, 0, 0);
@@ -1267,8 +1263,7 @@ void __stdcall PANEL_DrawPanelLayout() {
     nMouseX = nTextWidth >> 8;
     nTextWidth = D2Common::Stats::StatsEx::GetTxtMaxMana(pUnit);
     nMouseY = nTextWidth >> 8;
-    pwszBuf = D2Lang::StrTable::strtable::GetLocaleString(0x1046);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszMpFormatted, pwszBuf, nMouseX, nMouseY);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszMpFormatted, D2Lang::StrTable::strtable::GetLocaleString(0x1046), nMouseX, nMouseY);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszMpText, wszMpFormatted);
     nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszMpText);
     D2Win::Src::D2WinFont::DRAW_text(wszMpText, ScreenSizeX - nTextWidth / 2 - 0x50, ScreenSizeY - 0x5f, 0, 0);
@@ -1482,9 +1477,7 @@ void __stdcall ClickBelt(D2InventoryStrc * pInventory, int32_t nMouseY, int32_t 
     UNIT::ITEM_RemoveClientSide(pCursorItem_lcl);
     play_item_sound:
     nSoundArg3 = 0;
-    int32_t nSoundArg2 = 0;
-    nSoundArg1 = 0;
-    Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pCursorItem_lcl), nullptr, nSoundArg1, nSoundArg2, nSoundArg3);
+    Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pCursorItem_lcl), nullptr, 0, 0, nSoundArg3);
 }
 
 static void CLIENT_HandleBeltMouseDown(D2InventoryStrc * pInventory, int32_t nMouseY, int32_t nMouseX) {
@@ -1541,7 +1534,7 @@ static BOOL __fastcall PANEL_CheckEquipmentClickable(D2ItemsTxt * pItemTxt, D2Un
 
     BOOL bClickable = 1;
     if (pItemTxt->bUnique == '\x01' || pItemTxt->bQuest == '\x01') {
-      Text::TEXT_OpenQuestScroll(nItemSlot, (int32_t)pItemTxt);
+      Text::TEXT_OpenQuestScroll((D2UnitStrc*)nItemSlot, pItemTxt);
       bClickable = 0;
     } else if (pItemTxt->bUseable != '\x01') {
       UNIT::UnitSnd::UNITSND_PlayPlayerSound(pUnit, 0x14);
@@ -1570,7 +1563,7 @@ void __stdcall ClickBeltRight(uint32_t nBeltSlot, D2UnitStrc * pUnit, D2Inventor
     }
 
     bClickable = GAME::Game::CLIENT_CheckExpansion();
-    int32_t nErrorLine = D2Common::Units::GetInventoryPage(pUnit, 0, bClickable);
+    int32_t nErrorLine = D2Common::Units::GetInventoryPage(pUnit, '\0', bClickable);
     D2Common::DATATBLS::TokTbls::GetGridDimensions(nErrorLine, nScreenMode, &sGridCoords);
     pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemInBeltSlot(pInventory, nBeltSlot);
     if (!pItem) {
@@ -1780,7 +1773,6 @@ void __stdcall PANEL_DrawGoldAmount() {
     int32_t nCurrentExp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0);
     int32_t nServerLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_level, 0);
     DWORD nNextLevelExp = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(ePlayerClass, nServerLevel);
-    DWORD nNextLevelExp2 = nNextLevelExp;
     int32_t nCurLevelExp = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(ePlayerClass, nCurrentLevel - 1);
     uint32_t nBarWidth = nNextLevelExp - nCurLevelExp;
     if ((uint32_t)nCurrentExp > (uint32_t)nCurLevelExp) {
@@ -1796,10 +1788,8 @@ void __stdcall PANEL_DrawGoldAmount() {
     }
 
     if (nMouseX >= ScreenSizeX / 2 - 0x92 && nMouseX <= ScreenSizeX / 2 - 0x17 && nMouseY >= ScreenSizeY - 0x2b && nMouseY <= ScreenSizeY - 0x22) {
-      uint16_t* pwsText;
-      nNextLevelExp = nNextLevelExp2;
-      pwsText = D2Lang::StrTable::strtable::GetLocaleString(0x1043);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, awsTooltip, pwsText, nCurrentExp, nNextLevelExp);
+      DWORD nNextLevelExp2 = nNextLevelExp;
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, awsTooltip, D2Lang::StrTable::strtable::GetLocaleString(0x1043), nCurrentExp, nNextLevelExp2);
       D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(awsTooltip, ScreenSizeX / 2 - 0x92, ScreenSizeY - 0x33, 0, 1);
     }
     if (!nBarWidth) {
@@ -2074,11 +2064,11 @@ void __stdcall INPUT_PanelLeftClickDown(D2UIMouseMsgStrc * pMsg) {
         pMsg->bHandled = 0;
         return;
       }
-      if (nMouseX - 0x75U <= 0x30 && nMouseY <= ScreenSizeY) {
+      if (nMouseX >= 0x75 && nMouseX <= 0xa5 && nMouseY <= ScreenSizeY) {
         gpPanelClickedButton = 1;
         gbPanelLeftBeltArrowClicked = 1;
       } else if (nMouseX < ScreenSizeX - 0xa5 || nMouseX > ScreenSizeX - 0x75 || nMouseY > ScreenSizeY) {
-        if (nMouseX - 0x1eU <= 0x50 && nMouseY >= ScreenSizeY - 0x4b && nMouseY <= ScreenSizeY - 0xf) {
+        if (nMouseX >= 0x1e && nMouseX <= 0x6e && nMouseY >= ScreenSizeY - 0x4b && nMouseY <= ScreenSizeY - 0xf) {
           bShowHpText = (BOOL)!bShowHpText;
           Storm::Source::SReg::SRegSaveValue("Diablo II", "Show HP Text", 0, bShowHpText);
         } else if (nMouseX < ScreenSizeX - 0x6f || nMouseX > ScreenSizeX - 0x1f || nMouseY < ScreenSizeY - 0x4b || nMouseY > ScreenSizeY - 0xf) {

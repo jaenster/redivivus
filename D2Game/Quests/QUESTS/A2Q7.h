@@ -51,7 +51,7 @@ void __fastcall Objects_InitFn38(struct D2ObjectInitFnArg * pInitArg);
 // Q14 predicate: true if The Seven Tombs is introduced AND the Duriel/town portal has NOT yet been created (!field_0x0B). Inverse of Q14_GetPortalCreatedFlag.
 BOOL __fastcall Q14_IsPortalNotCreated(::SGAMEDATA * pGame);
 // Q14 object InitFn (Objects_InitFn21): orifice/Tal Rasha chamber object init. Records GUID, marks present. If the staff has been used (state byte [3]) but portal not yet created ([0xb]==0), schedules the Q14_TimerCreatePortal timer to spawn the portals and marks timer-armed. Sets object hidden(2). No quest-record state change.
-void __fastcall Objects_InitFn21(uint32_t * pInitArg);
+void __fastcall Objects_InitFn21(struct D2ObjectInitFnArg * pInitArg);
 // Q14 per-party-member callback: completes The Horadric Staff quest record for one player if not already complete and the player is in Act II. Sets Completed+JustCompleted and (unless mid-trade) strips the 3 staff component quest items (hsu/vip/msf). Invoked for every party member when the staff is placed in the orifice.
 void __fastcall Q14_CompleteHoradricStaffOnPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // Q14 object OperateFn (OBJOP_A2Q7_OpenArcaneNpcTrade): player operates the Horadric orifice. If the object is closed (Death anim) and player not busy trading: if player holds the assembled Horadric Staff (item 'hsu '), set interact target + send packet 0x58 to open the staff-in-orifice UI; otherwise play the "can't do that" sound. Closes the interaction when the object returns to Neutral. No quest-record state change here (that happens in Q14_OnStaffUsedInOrifice).

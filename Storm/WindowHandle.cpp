@@ -3,9 +3,9 @@
 #include "Storm/WindowHandle.h"
 #include "D2Client/Message.h"
 #include "D2Client/UI/EscMenu.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SEVT.h"
 #include "Storm/Source/SErr.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
@@ -68,11 +68,11 @@ int __stdcall SMsgPopRegisterState(char * szText) {
 }
 
 // @blizzard SMsgPushRegisterState (SMSG.CPP)
-uint32_t __stdcall SMsgPushRegisterState(uint32_t nParam) {
-    Source::SEVT::SEvtPushState(0x534d5348, nParam);
-    Source::SEVT::SEvtPushState(0x534d5349, nParam);
-    Source::SEVT::SEvtPushState(0x534d534a, nParam);
-    Source::SEVT::SEvtPushState(0x534d5347, nParam);
+uint32_t __stdcall SMsgPushRegisterState(uint32_t nSubId) {
+    Source::SEVT::SEvtPushState(0x534d5348, nSubId);
+    Source::SEVT::SEvtPushState(0x534d5349, nSubId);
+    Source::SEVT::SEvtPushState(0x534d534a, nSubId);
+    Source::SEVT::SEvtPushState(0x534d5347, nSubId);
     return 1;
 }
 
@@ -252,10 +252,12 @@ void __fastcall WND_DetachAndClearChildren(D2StormListHead * pWindow) {
 }
 
 int * * __thiscall WND_AllocRecord(int * * ppList, int32_t nMode, int32_t nSize, uint32_t dwFlags) {
-    int** ppRecord = (int**)SMem::SMemAlloc(nSize + 0xc, s___AUWNDREC___00708850, -2, dwFlags | 8);
-    if (ppRecord) {
-      *ppRecord = 0;
-      ppRecord[1] = 0;
+    int** ppRecordNew = (int**)Source::SMem::SMemAlloc(nSize + 0xc, s___AUWNDREC___00708850, -2, dwFlags | 8);
+    int** ppRecord;
+    if (ppRecordNew) {
+      *ppRecordNew = 0;
+      ppRecordNew[1] = 0;
+      ppRecord = ppRecordNew;
     } else {
       ppRecord = 0;
     }
@@ -288,7 +290,7 @@ int * __thiscall WND_UnlinkAndFreeRecord(int * pRecord, uint8_t byFreeFlags) {
       return pRecord;
     }
 
-    SMem::SMemFree(pRecord, "delete", -1, 0);
+    Source::SMem::SMemFree(pRecord, "delete", -1, 0);
     return pRecord;
 }
 
@@ -296,7 +298,7 @@ int * __thiscall WND_UnlinkAndFreeRecord(int * pRecord, uint8_t byFreeFlags) {
 void __stdcall SMSG_AddWindow(uint32_t hWnd) {
     StormWndRecStrc* pEntry;
     uint32_t nOffset;
-    StormWndRecStrc* pRecord = (StormWndRecStrc*)SMem::SMemAlloc(0xc, s___AUWNDREC___00708850, -2, 8);
+    StormWndRecStrc* pRecord = (StormWndRecStrc*)Source::SMem::SMemAlloc(0xc, s___AUWNDREC___00708850, -2, 8);
     if (pRecord) {
       pRecord->link.pPrevLink = 0;
       pRecord->link.pNext = 0;
@@ -353,7 +355,7 @@ uint32_t __thiscall WND_RemoveAndFreeRecord(void * pListHead, StormWndRecStrc * 
       pRecord->link.pNext = 0;
     }
 
-    SMem::SMemFree(pRecord, s___AUWNDREC___00708850, -2, 0);
+    Source::SMem::SMemFree(pRecord, s___AUWNDREC___00708850, -2, 0);
     return (int)nResult <= 0 ? 0 : nResult;
 }
 
@@ -446,7 +448,7 @@ BOOL __stdcall SMsgDispatchMessage(HWND handle, UINT uMsg, WPARAM nWParam, LPARA
       Source::SEVT::SEvtDispatch(0x534d5347, hCur, uMsg, &hMsgWnd);
       if (uMsg == 0x111) {
         dwEventTag = 0x534d5348;
-        nMsgParam = nWParam & 0xffff;
+        nMsgParam = (uint16_t)nWParam;
         Source::SEVT::SEvtDispatch(dwEventTag, hCur, nMsgParam, &hMsgWnd);
       } else {
         nMsgParam = nWParam;
@@ -467,11 +469,10 @@ BOOL __stdcall SMsgDispatchMessage(HWND handle, UINT uMsg, WPARAM nWParam, LPARA
         if (pbHandled) {
           *pbHandled = hMsgWnd.bHandled;
         }
-        if (!plResult) {
-          return 1;
+        if (plResult) {
+          *plResult = hMsgWnd.dwResult;
         }
 
-        *plResult = hMsgWnd.dwResult;
         return 1;
       }
 
@@ -519,15 +520,15 @@ void __stdcall SMsgUnregisterMessage(uint32_t hWnd, char * szText1, char * szTex
     SMSG_InternalUnregister(0x534d5347, szText1, szText2, (HWND)hWnd);
 }
 
-LRESULT __stdcall WndProcC(HWND hWnd, uint32_t nParam1, uint32_t nParam2, LPARAM lParam) {
+LRESULT __stdcall WndProcC(HWND hWnd, uint32_t nMsg, uint32_t nWParam, LPARAM lParam) {
     BOOL bHandled = 0;
     int32_t lOutResult = 0;
-    BOOL bDispatched = SMsgDispatchMessage(hWnd, nParam1, nParam2, lParam, &bHandled, (LRESULT*)&lOutResult);
+    BOOL bDispatched = SMsgDispatchMessage(hWnd, nMsg, nWParam, lParam, &bHandled, (LRESULT*)&lOutResult);
     if (bDispatched && bHandled) {
       return lOutResult;
     }
 
-    int32_t lResult = DefWindowProcA(hWnd, nParam1, nParam2, lParam);
+    int32_t lResult = DefWindowProcA(hWnd, nMsg, nWParam, lParam);
     return lResult;
 }
 
@@ -567,6 +568,11 @@ int32_t __thiscall WND_EntryArray_AllocOrReuse(int32_t pThis, int32_t pReuseEntr
     }
 
     return pReuseEntry;
+}
+
+void StaticInit_6ca8e0() {
+    gpWndTrackingListHead.pNext = ~(uintptr_t)((char*)&gpWndTrackingListHead + 4);
+    atexit(StaticFini_gWndTrackingList);
 }
 
 // Runs at exit: removes every element from the tracked window list, then unlinks the list head itself.

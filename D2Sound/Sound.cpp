@@ -15,7 +15,6 @@
 #include "Fog/Src/LogManager.h"
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -105,11 +104,7 @@ void __stdcall SOUND_InitDirectSound() {
 
     char* szErrorMsg;
     BOOL BVar2;
-    DSBCAPS sPrimaryBufferCaps;
-    DSBUFFERDESC tEaxBufferDesc;
-    DSBUFFERDESC tPrimaryBufferDesc;
     WAVEFORMATEX tSecondaryFormat;
-    WAVEFORMATEX tPrimaryFormat;
     uint8_t aEAXSupportCaps[4];
     if (gnDSoundPrimaryBufferDelay && gbDirectSoundDelayWorkaround) {
       return;
@@ -140,7 +135,7 @@ void __stdcall SOUND_InitDirectSound() {
       return;
     }
 
-    tPrimaryBufferDesc.dwReserved = 0;
+    DSBUFFERDESC tPrimaryBufferDesc = {0};
     tPrimaryBufferDesc.dwSize = 0x14;
     tPrimaryBufferDesc.dwFlags = 1;
     if (gnDSoundPrimaryBufferDelay) {
@@ -171,7 +166,7 @@ void __stdcall SOUND_InitDirectSound() {
       return;
     }
 
-    tPrimaryFormat.cbSize = 0;
+    WAVEFORMATEX tPrimaryFormat = {0};
     tPrimaryFormat.wFormatTag = 1;
     tPrimaryFormat.nChannels = 2;
     tPrimaryFormat.nSamplesPerSec = 0x5622;
@@ -190,7 +185,7 @@ void __stdcall SOUND_InitDirectSound() {
     gnSoundQualityMode = 0;
     if (gnSound3DLoudness) {
       Src::D2SoundSmp::SOUNDSMP_InitWaveFormat(&tSecondaryFormat, 1);
-      tEaxBufferDesc.dwReserved = 0;
+      DSBUFFERDESC tEaxBufferDesc = {0};
       tEaxBufferDesc.lpwfxFormat = &tSecondaryFormat;
       tEaxBufferDesc.dwSize = 0x14;
       tEaxBufferDesc.dwBufferBytes = 0x400;
@@ -218,10 +213,7 @@ void __stdcall SOUND_InitDirectSound() {
       }
     }
 
-    sPrimaryBufferCaps.dwFlags = 0;
-    sPrimaryBufferCaps.dwBufferBytes = 0;
-    sPrimaryBufferCaps.dwUnlockTransferRate = 0;
-    sPrimaryBufferCaps.dwPlayCpuOverhead = 0;
+    DSBCAPS sPrimaryBufferCaps = {0};
     sPrimaryBufferCaps.dwSize = 0x14;
     gpDSoundPrimaryBuffer->lpVtbl->GetCaps(gpDSoundPrimaryBuffer, &sPrimaryBufferCaps);
     SOUNDSMP_ClearBuffer(gpDSoundPrimaryBuffer, 0, sPrimaryBufferCaps.dwBufferBytes);

@@ -152,7 +152,7 @@ struct __attribute__((packed)) D2MissilesTxt {
     /* 0x180 */ char SubLoop;
     /* 0x181 */ char SubStart;
     /* 0x182 */ char SubStop;
-    /* 0x183 */ char CollideType;
+    /* 0x183 */ uint8_t CollideType;
     /* 0x184 */ char Collision;
     /* 0x185 */ char ClientCol;
     /* 0x186 */ char CollideKill;

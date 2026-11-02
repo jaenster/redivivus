@@ -29,15 +29,13 @@ uint16_t * __fastcall INV_SkipColorCodeSuffix(uint16_t * wszText) {
 }
 
 void __fastcall INV_SubstituteFormatToken(uint16_t * wszText, int32_t nTokenIndex, uint16_t * wszReplacement) {
-    uint16_t _wTokenChar;
     int nCopied;
     uint16_t wszWorkBuffer[400];
-    uint16_t wTokenChar;
     for (nCopied = 0; nCopied < 400; nCopied++) {
       wszWorkBuffer[nCopied] = L'\0';
     }
 
-    _wTokenChar = nTokenIndex + 0x30;
+    int wTokenChar = nTokenIndex + 0x30;
     uint16_t* pDest = wszText;
     int32_t nTextLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
     nCopied = 0;
@@ -46,7 +44,7 @@ void __fastcall INV_SubstituteFormatToken(uint16_t * wszText, int32_t nTokenInde
     }
 
     int nWorkLen = (int)wszWorkBuffer - (int)wszText;
-    while (*wszText != L'%' || (uint16_t)wszText[1] != _wTokenChar) {
+    while (*wszText != L'%' || (uint32_t)(uint16_t)wszText[1] != wTokenChar) {
       *(uint16_t*)(nWorkLen + (int)wszText) = *wszText;
       nCopied++;
       wszText++;

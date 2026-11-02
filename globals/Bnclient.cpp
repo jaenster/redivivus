@@ -14,7 +14,6 @@
 #include "Bnclient/net_sid.h"
 #include "D2Client/D2BNetGatewayAccessStr.h"
 #include "D2Client/D2IniConfigStrc.h"
-#include "Storm/_unnamespaced.h"
 
 
 // =============================================================================
@@ -78,7 +77,7 @@ D2BNetClientCallbacksStrc sgBNetClientCallbacks = {
     /* .pfnSendResetPassword = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x5A_ResetPassword,
     /* .pfnSendChangeEmail = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x5B_ChangeEmail,
     /* .pfnSendLeaveGame = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x1F_LeaveGame,
-    /* .pfnCacheFreeMem = */ &Bnclient::BNGatewayAccess::CACHE_FreeMem,
+    /* .pfnCacheFreeMem = */ (fnCacheFreeMem)&Bnclient::BNGatewayAccess::CACHE_FreeMem,
     /* .pfnCacheReadData = */ (fnCacheReadData)&Bnclient::BNGatewayAccess::CACHE_ReadData,
     /* .pfnCacheWriteData = */ (fnCacheWriteData)&Bnclient::BNGatewayAccess::CACHE_WriteData,
     /* .pfnReserved = */ nullptr
@@ -373,11 +372,17 @@ char s___AUItem_NewsTable___0072ff8c[24] = {
 
 D2BNetGatewayAccessStr ActualRealmInfo = {}; D2_GLOBAL_GUARD(ActualRealmInfo, "ActualRealmInfo");
 
+_RTL_CRITICAL_SECTION lpCriticalSection_00881860 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00881860, "lpCriticalSection_00881860");
+
+_RTL_CRITICAL_SECTION lpCriticalSection_00881894 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00881894, "lpCriticalSection_00881894");
+
 D2BnNewsTableStrc g_nNewsMaxCacheSize = {}; D2_GLOBAL_GUARD(g_nNewsMaxCacheSize, "g_nNewsMaxCacheSize");
 
 char lpFileName_00881c58[260] = {}; D2_GLOBAL_GUARD(lpFileName_00881c58, "lpFileName_00881c58");
 
 char gszBNetChatInputBuffer[260] = {}; D2_GLOBAL_GUARD(gszBNetChatInputBuffer, "gszBNetChatInputBuffer");
+
+_RTL_CRITICAL_SECTION lpCriticalSection_00881f64 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00881f64, "lpCriticalSection_00881f64");
 
 char g_szBnetConnectionStateString[128] = {}; D2_GLOBAL_GUARD(g_szBnetConnectionStateString, "g_szBnetConnectionStateString");
 
@@ -434,7 +439,7 @@ long Target_00881bfc = 0; D2_GLOBAL_GUARD(Target_00881bfc, "Target_00881bfc");
 LONG * Destination_00881c00 = 0; D2_GLOBAL_GUARD(Destination_00881c00, "Destination_00881c00");
 uint32_t g_nBNetThreadInitFlag = 0; D2_GLOBAL_GUARD(g_nBNetThreadInitFlag, "g_nBNetThreadInitFlag");
 uint32_t g_pfnNewsChannelCallback = 0; D2_GLOBAL_GUARD(g_pfnNewsChannelCallback, "g_pfnNewsChannelCallback");
-pfnVoidNoArgCallback g_pfnMotdCallback = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(g_pfnMotdCallback, "g_pfnMotdCallback");
+pfnNewsEntryCallback g_pfnMotdCallback = (pfnNewsEntryCallback)0; D2_GLOBAL_GUARD(g_pfnMotdCallback, "g_pfnMotdCallback");
 pfnVoidNoArgCallback g_pfnNewsCallback = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(g_pfnNewsCallback, "g_pfnNewsCallback");
 uint32_t g_nFirstUnreadNewsIndex = 0; D2_GLOBAL_GUARD(g_nFirstUnreadNewsIndex, "g_nFirstUnreadNewsIndex");
 uint32_t g_dwNewsTimestamp = 0; D2_GLOBAL_GUARD(g_dwNewsTimestamp, "g_dwNewsTimestamp");
@@ -549,9 +554,9 @@ namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

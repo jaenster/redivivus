@@ -1,0 +1,13 @@
+# Blank issues stay enabled on purpose: build failures, generator bugs and crashes do not
+# fit either form, and a generator-bug report becomes a regression fixture.
+blank_issues_enabled: true
+contact_links:
+  - name: Discord
+    url: https://discord.gg/MHK2Dg9
+    about: Questions, or working out whether something is worth filing.
+  - name: How proposals work
+    url: https://redivivus.app/about#contributing
+    about: With agent access to the Ghidra databases, a correction goes in as a proposal instead of an issue.
+  - name: Agent setup
+    url: https://redivivus.app/agent-setup/prompt.md
+    about: Read the databases yourself before filing - the house rules and the MCP server.

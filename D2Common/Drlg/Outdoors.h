@@ -24,7 +24,7 @@ namespace D2Common::Drlg::Outdoors {
 int __stdcall DRLGOUTDOOR_GetPrimaryWallGridFlags(int * pLevelCtx, int32_t nGridY, int32_t nGridX);
 int __stdcall DRLGOUTDOOR_ApplySubTileToGrid(int nBaseX, int nBaseY, struct D2UnkOutdoorStrc * pOutdoorCtx, struct D2DrlgCoordStrc * pCoords, struct D2LvlSubTxt * pLvlSub, int nOffset);
 // Shuffles candidate border subtile positions using current level seed, then tries each until `ValidateSubTilePlacement` approves and calls `ApplySubTileToGrid`. Defaults to random variant (pRect[5]) and returns as soon as a placement succeeds when the level flag indicates only one patch per run.
-BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(struct D2UnkOutdoorStrc * pOutdoorCtx, int32_t pLevelPtr, int * pRect);
+BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(struct D2UnkOutdoorStrc * pOutdoorCtx, struct D2LvlSubTxt * pLevelPtr, int * pRect);
 // Paste preset units from a LvlSub definition into the active outdoor room. Converts bounds to world coordinates, then for each preset check if it falls inside the sub-rect and spawn a new preset unit offset into the room’s local space.
 void __stdcall DRLGOUTDOOR_CopyPresetUnitsFromSubTxt(int32_t roomX, int32_t roomY, struct D2DrlgWallLayerGridsStrc * pRoomCtx, struct D2PoolManagerStrc * pMemory, struct D2LvlSubTxt * pLvlSub, int * pRect);
 // Checks that applying the LvlSub patch doesn’t conflict with existing floor/wall/shadow cells; returns false if any flagged tiles overlap and existing grids already set the same flags.

@@ -11,7 +11,7 @@
 namespace D2Client::GAME::Rendering {
 
 // Function declarations
-void __fastcall SetupGamma(DWORD dwParam);
+void __fastcall SetupGamma(DWORD dwGamma);
 void __stdcall SetCurrentEngineToOne();
 void __stdcall RENDERER_Set3DFX();
 void __stdcall RENDERER_SetOpenGL();

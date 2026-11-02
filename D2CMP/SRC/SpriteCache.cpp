@@ -6,9 +6,10 @@
 #include "D2CMP/SRC/Codec.h"
 #include "D2CMP/SRC/GfxHash.h"
 #include "D2CMP/SRC/LRUCache.h"
+#include "D2CMP/SRC/SubTile.h"
+#include "D2CMP/SRC/TileProjects.h"
 #include "D2CMP/SRC/Tilecmp.h"
 #include "D2Client/D2GfxDataStrc.h"
-#include "D2Client/D2GfxHelperStrc.h"
 #include "D2Client/D2GfxMemoryStrc.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Common/DATATBLS/DataTbls.h"
@@ -29,7 +30,6 @@
 #include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "D2CMP/D2CMP.h"
-#include "D2CMP/SRC/TileProjects.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -170,27 +170,26 @@ void __stdcall SPRITECACHE_Unlock() {
     LRUCache::LRUCACHE_FreeAll(&gSpriteCacheLru);
 }
 
-void __fastcall SPRITECACHE_TouchEntry(int32_t nParam) {
-    D2LRUCacheNodeStrc* pMemory;
-    int nOffset = 0;
+void __fastcall SPRITECACHE_TouchEntry(D2TileLibraryHeaderStrc * pTileLibrary) {
+    uint8_t* pBVar1;
     int nEntryIdx = 0;
-    if (*(int*)(nParam + 0x10c) <= 0) {
+    if (pTileLibrary->nTiles <= 0) {
       return;
     }
 
     do {
-      int nEntryBase;
-      pMemory = *(D2LRUCacheNodeStrc**)(*(int*)(nParam + 0x110) + 0x5c + nOffset);
-      nEntryBase = *(int*)(nParam + 0x110) + nOffset;
-      if (pMemory) {
-        LRUCache::LRUCACHE_FreeEntry(&gSpriteCacheLru, pMemory);
-        *(uint32_t*)(nEntryBase + 0x54) = 0;
-        *(uint32_t*)(nEntryBase + 0x5c) = 0;
+      D2TileLibraryEntryStrc* pDVar2;
+      pDVar2 = pTileLibrary->pTiles;
+      if (pDVar2[nEntryIdx].pLruNode) {
+        LRUCache::LRUCACHE_FreeEntry(&gSpriteCacheLru, pDVar2[nEntryIdx].pLruNode);
+        pBVar1 = (uint8_t*)(unsigned char*)&pDVar2[nEntryIdx].pSubTiles;
+        memset(pBVar1, 0, 4 * sizeof(pBVar1[0]));
+        pBVar1 = (uint8_t*)(unsigned char*)&pDVar2[nEntryIdx].pLruNode;
+        memset(pBVar1, 0, 4 * sizeof(pBVar1[0]));
       }
 
       nEntryIdx++;
-      nOffset += 0x60;
-    } while (nEntryIdx < *(int*)(nParam + 0x10c));
+    } while (nEntryIdx < pTileLibrary->nTiles);
 }
 
 void __stdcall GFX_InitLRUCache(D2PoolManagerStrc * pMemory, D2PoolManagerStrc * pPoolManager) {
@@ -961,7 +960,7 @@ void __fastcall GFX_AllocSpriteCache(D2GfxMemoryStrc * pGfxMemory, D2PoolManager
       if (nSlotIndex - 2 < 0x13ff) {
         pCacheSlot[5] = (uint32_t)(uintptr_t)(pCacheSlot + 7);
       }
-      if (0 < nSlotIndex - 2) {
+      if (nSlotIndex - 2 > 0) {
         pCacheSlot[6] = (int)(pGfxMemory->pSpriteCache->aEntries - 3) + nOffset;
       }
 
@@ -972,7 +971,7 @@ void __fastcall GFX_AllocSpriteCache(D2GfxMemoryStrc * pGfxMemory, D2PoolManager
       if (nSlotIndex - 1 < 0x13ff) {
         *(int*)((int)pCurSpriteCache->aEntries + nOffset - 8) = (uintptr_t)&pCurSpriteCache->aEntries[0].pData + nOffset;
       }
-      if (0 < nSlotIndex - 1) {
+      if (nSlotIndex - 1 > 0) {
         *(int*)((int)pCurSpriteCache->aEntries + nOffset - 4) = (int)(pGfxMemory->pSpriteCache->aEntries - 2) + nOffset;
       }
 
@@ -983,7 +982,7 @@ void __fastcall GFX_AllocSpriteCache(D2GfxMemoryStrc * pGfxMemory, D2PoolManager
       if (nSlotIndex < 0x13ff) {
         *(int*)((uintptr_t)&pCurSpriteCache->aEntries[0].pNext + nOffset) = (uintptr_t)&pCurSpriteCache->aEntries[1].pData + nOffset;
       }
-      if (0 < nSlotIndex) {
+      if (nSlotIndex > 0) {
         *(int*)((uintptr_t)&pCurSpriteCache->aEntries[0].pPrev + nOffset) = (int)(pGfxMemory->pSpriteCache->aEntries - 1) + nOffset;
       }
 
@@ -1005,7 +1004,7 @@ void __fastcall GFX_AllocSpriteCache(D2GfxMemoryStrc * pGfxMemory, D2PoolManager
       if (nSlotIndex + 2 < 0x13ff) {
         *(int*)((uintptr_t)&pCurSpriteCache->aEntries[2].pNext + nOffset) = (uintptr_t)&pCurSpriteCache->aEntries[3].pData + nOffset;
       }
-      if (0 < nSlotIndex + 2) {
+      if (nSlotIndex + 2 > 0) {
         *(int*)((uintptr_t)&pCurSpriteCache->aEntries[2].pPrev + nOffset) = (uintptr_t)&pGfxMemory->pSpriteCache->aEntries[1].pData + nOffset;
       }
 
@@ -1454,11 +1453,10 @@ uint32_t __stdcall SPRITECACHE_DecodeFrameByIndex(uint32_t * pReadBuffer, size_t
     pvVar3->dwFlags &= -3;
     pDecodeState->nFlags &= 0xfb;
     SPRITECACHE_FreeMemory(&D2GfxMemoryStrc_0089db60, pvVar3, pRequest->nDecodedSize, 0);
-    if (pRequest->pDecodedFrames) {
-      return 1;
+    if (!pRequest->pDecodedFrames) {
+      *pDecodeFlags |= 1;
     }
 
-    *pDecodeFlags |= 1;
     return 1;
 }
 
@@ -1472,7 +1470,6 @@ static void __stdcall SPRITECACHE_LoadCelFileAndCache(char * szCelPath, D2CelFil
     size_t nReadSize;
     D2AsyncData_Line0x128* pAsyncData;
     uint32_t nEndFrame;
-    D2SpriteDecodeRequestStrc tDecodeRequest;
     uint32_t* pOffsetIter;
     int32_t* pFrameOffsetSlot;
     char local_210[260];
@@ -1535,14 +1532,10 @@ static void __stdcall SPRITECACHE_LoadCelFileAndCache(char * szCelPath, D2CelFil
             nStartFrame++;
           } while (nStartFrame <= nEndFrame);
         }
-        if (!(pCelEntry->dwCacheFlags & 2)) {
-          pAsyncData = Fog::Src::AsyncData::STRUCT_AllocAsyncData_Line0x128(D2GfxMemoryStrc_0089db60.pMemory, szCelPath, 0, *puVar1, nReadSize, nullptr, nullptr, -2, ".\\SRC\\SpriteCache.cpp", 0x379);
-          pCacheEntry->tDecode.pAsyncData = pAsyncData;
-        } else {
+        if (pCelEntry->dwCacheFlags & 2) {
           pCacheEntry->tDecode.nFlags |= 4;
+          D2SpriteDecodeRequestStrc tDecodeRequest = {0};
           tDecodeRequest.nStartFrame = nDirection * nFrameCount;
-          tDecodeRequest.pDecodedFrames = 0;
-          tDecodeRequest.nDecodedSize = 0;
           tDecodeRequest.pDecodeState = &pCacheEntry->tDecode;
           tDecodeRequest.pfnComplete = SPRITECACHE_DecodeFrameByIndex;
           tDecodeRequest.nFrameCount = nFrameCount;
@@ -1550,6 +1543,9 @@ static void __stdcall SPRITECACHE_LoadCelFileAndCache(char * szCelPath, D2CelFil
           pAsyncData = Fog::Src::AsyncData::STRUCT_AllocAsyncData_Line0x128(D2GfxMemoryStrc_0089db60.pMemory, szCelPath, 0, *puVar1, nReadSize, nullptr, (D2AsyncDataCallbackStrc*)&tDecodeRequest, -2, ".\\SRC\\SpriteCache.cpp", 0x369);
           pCacheEntry->tDecode.pAsyncData = pAsyncData;
           Fog::Src::AsyncData::ASYNCDATA_GetReadSize(pAsyncData);
+        } else {
+          pAsyncData = Fog::Src::AsyncData::STRUCT_AllocAsyncData_Line0x128(D2GfxMemoryStrc_0089db60.pMemory, szCelPath, 0, *puVar1, nReadSize, nullptr, nullptr, -2, ".\\SRC\\SpriteCache.cpp", 0x379);
+          pCacheEntry->tDecode.pAsyncData = pAsyncData;
         }
         if (!pCacheEntry->tDecode.pAsyncData) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x37d);
@@ -1564,7 +1560,6 @@ static void __stdcall SPRITECACHE_LoadCelFileAndCache(char * szCelPath, D2CelFil
 // Load sprite data from archive into bit buffer with decompression
 // @sourcefile .\SRC\SpriteCache.cpp
 static uint32_t __stdcall SPRITECACHE_LoadFromArchive(D2GfxDataStrc * pGfxData, int nFrameStep, D2CelCacheBlockStrc * pCacheEntry, D2CelFileCacheEntryStrc * pCelEntry, int nFrameGroupIndex, char * szFileName) {
-    D2SpriteDecodeRequestStrc tDecodeRequest;
     int32_t* pEntryOffsetSlot;
     uint32_t* pOffsetIter;
     D2SpriteDecodeRequestStrc* pDecodeRequest;
@@ -1636,31 +1631,30 @@ static uint32_t __stdcall SPRITECACHE_LoadFromArchive(D2GfxDataStrc * pGfxData, 
           nStartFrame++;
         } while (nStartFrame <= nEndFrame);
       }
-      if (!(pCelEntry->dwCacheFlags & 2)) {
-        hArchiveHandle = *pOffsetTable;
-        nLine = 0x3e6;
-        pDecodeRequest = 0;
-      } else {
+      if (pCelEntry->dwCacheFlags & 2) {
         nLine = 0x3da;
+        D2SpriteDecodeRequestStrc tDecodeRequest = {0};
         tDecodeRequest.pCelHeader = (uint8_t*)pCelEntry;
         tDecodeRequest.nStartFrame = nFrameGroupIndex * nFrameStep;
         pCacheEntry->tDecode.nFlags |= 4;
-        tDecodeRequest.pDecodedFrames = 0;
-        tDecodeRequest.nDecodedSize = 0;
         tDecodeRequest.pDecodeState = &pCacheEntry->tDecode;
         pDecodeRequest = &tDecodeRequest;
         hArchiveHandle = *pOffsetTable;
         tDecodeRequest.pfnComplete = SPRITECACHE_DecodeFrameByIndex;
         tDecodeRequest.nFrameCount = nFrameStep;
+      } else {
+        hArchiveHandle = *pOffsetTable;
+        nLine = 0x3e6;
+        pDecodeRequest = 0;
       }
 
       pAsyncData = Fog::Src::AsyncData::STRUCT_AllocAsyncData_Line0x128(D2GfxMemoryStrc_0089db60.pMemory, szFileName, 1, hArchiveHandle, nDataSize2, nullptr, (D2AsyncDataCallbackStrc*)pDecodeRequest, -2, ".\\SRC\\SpriteCache.cpp", nLine);
       pCacheEntry->tDecode.pAsyncData = pAsyncData;
-      if (pAsyncData) {
-        return nDataSize2;
+      if (!pAsyncData) {
+        return -1;
       }
 
-      return -1;
+      return nDataSize2;
     }
 }
 

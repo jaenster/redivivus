@@ -362,9 +362,8 @@ void __stdcall UI_DrawPlayerNameInParty() {
       return;
     }
 
-    char* pszScan = pszName;
-    pszScan = pszScan + strlen(pszScan) + 1;
-    int32_t nLen = D2Lang::UTF8_GetStringLength(pszName, (int)pszScan - (int)(pszName + 1));
+    int nLen2 = (int)strlen(pszName);
+    int32_t nLen = D2Lang::UTF8_GetStringLength(pszName, nLen2);
     uint32_t nLenPlus1 = nLen + 1;
     if (nLenPlus1 > 0xb) {
       if (nLenPlus1 >= 0xe) {
@@ -519,7 +518,7 @@ void __stdcall UI_DrawPartyAcceptButton() {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
-    sGfxData.nFrameNumber = (gpPartyAcceptButton != 0) + 10;
+    sGfxData.nFrameNumber = gpPartyAcceptButton != 0 ? 11 : 10;
     sGfxData.nDirection = 0;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + 0x116, 0x1a5 - gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
 }
@@ -644,8 +643,7 @@ void __stdcall DRAW_UI_PartyWindow_II() {
         nTmpX = 0x37 - gnPanelOffsetY;
         nColorArg = 0;
         nTmp = gnPanelOffsetX + iVar1;
-        pText = D2Lang::StrTable::strtable::GetLocaleString(0x1018);
-        D2Win::Src::D2WinFont::DRAW_text(pText, nTmp, nTmpX, nColorArg, bCenter);
+        D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1018), nTmp, nTmpX, nColorArg, bCenter);
       }
     }
 
@@ -678,8 +676,7 @@ void __stdcall DRAW_UI_PartyWindow_II() {
                 nTmp = 0x32 - gnPanelOffsetY;
                 nColorArg = 0;
                 nTmpX = gnPanelOffsetX - iVar1 / 2;
-                pText = D2Lang::StrTable::strtable::GetLocaleString(0x1004);
-                D2Win::Src::D2WinFont::DRAW_text(pText, nTmpX + 0xda, nTmp, nColorArg, bCenter);
+                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1004), nTmpX + 0xda, nTmp, nColorArg, bCenter);
                 for (nTmp = 0; nTmp < 0x64; nTmp++) {
                   wszLine2[nTmp] = L'\0';
                 }
@@ -691,8 +688,7 @@ void __stdcall DRAW_UI_PartyWindow_II() {
                 nTmp = 0x41 - gnPanelOffsetY;
                 nColorArg = 0;
                 nTmpX = gnPanelOffsetX - iVar1 / 2;
-                pText = D2Lang::StrTable::strtable::GetLocaleString(0x1005);
-                D2Win::Src::D2WinFont::DRAW_text(pText, nTmpX + 0xda, nTmp, nColorArg, bCenter);
+                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1005), nTmpX + 0xda, nTmp, nColorArg, bCenter);
                 break;
               }
             case 2:
@@ -703,15 +699,13 @@ void __stdcall DRAW_UI_PartyWindow_II() {
                 nTmpX = 0x32 - gnPanelOffsetY;
                 nColorArg = 0;
                 nTmp = gnPanelOffsetX + iVar1;
-                pText = D2Lang::StrTable::strtable::GetLocaleString(0x1006);
-                D2Win::Src::D2WinFont::DRAW_text(pText, nTmp, nTmpX, nColorArg, bCenter);
+                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1006), nTmp, nTmpX, nColorArg, bCenter);
                 iVar1 = UI_CalculateCenteredTextXPosition(0x1007, 0xda);
                 bCenter = 0;
                 nTmpX = 0x41 - gnPanelOffsetY;
                 nColorArg = 0;
                 nTmp = gnPanelOffsetX + iVar1;
-                pText = D2Lang::StrTable::strtable::GetLocaleString(0x1007);
-                D2Win::Src::D2WinFont::DRAW_text(pText, nTmp, nTmpX, nColorArg, bCenter);
+                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1007), nTmp, nTmpX, nColorArg, bCenter);
                 break;
               }
             case 4:
@@ -722,15 +716,13 @@ void __stdcall DRAW_UI_PartyWindow_II() {
                 nTmpX = 0x32 - gnPanelOffsetY;
                 nColorArg = 0;
                 nTmp = gnPanelOffsetX + iVar1;
-                pText = D2Lang::StrTable::strtable::GetLocaleString(0x1008);
-                D2Win::Src::D2WinFont::DRAW_text(pText, nTmp, nTmpX, nColorArg, bCenter);
+                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1008), nTmp, nTmpX, nColorArg, bCenter);
                 iVar1 = UI_CalculateCenteredTextXPosition(0x1009, 0xda);
                 bCenter = 0;
                 nTmpX = 0x41 - gnPanelOffsetY;
                 nColorArg = 0;
                 nTmp = gnPanelOffsetX + iVar1;
-                pText = D2Lang::StrTable::strtable::GetLocaleString(0x1009);
-                D2Win::Src::D2WinFont::DRAW_text(pText, nTmp, nTmpX, nColorArg, bCenter);
+                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1009), nTmp, nTmpX, nColorArg, bCenter);
                 break;
               }
           }
@@ -973,8 +965,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
                   nTmpX = 0x32 - gnPanelOffsetY;
                   nTmp3 = 0;
                   nTmp = gnPanelOffsetX + iVar1;
-                  pText = D2Lang::StrTable::strtable::GetLocaleString(0x101a);
-                  D2Win::Src::D2WinFont::DRAW_text(pText, nTmp, nTmpX, nTmp3, bResult);
+                  D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x101a), nTmp, nTmpX, nTmp3, bResult);
                   iVar1 = UI_CalculateCenteredTextXPosition(0x101b, 0xa0);
                   nTmpX = 0x41 - gnPanelOffsetY;
                   nTmp3 = 0;
@@ -994,8 +985,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
                 nTmp = 0x32 - gnPanelOffsetY;
                 nTmp3 = 0;
                 nTmpX = gnPanelOffsetX - iVar1 / 2;
-                pText = D2Lang::StrTable::strtable::GetLocaleString(0x101a);
-                D2Win::Src::D2WinFont::DRAW_text(pText, nTmpX + 0xa0, nTmp, nTmp3, bResult);
+                D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x101a), nTmpX + 0xa0, nTmp, nTmp3, bResult);
                 for (nTmp = 0; nTmp < 0x64; nTmp++) {
                   wszText[nTmp] = L'\0';
                 }
@@ -1026,8 +1016,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
                   nTmpX = 0x32 - gnPanelOffsetY;
                   nTmp3 = 0;
                   nTmp = gnPanelOffsetX + iVar1;
-                  pText = D2Lang::StrTable::strtable::GetLocaleString(0x1010);
-                  D2Win::Src::D2WinFont::DRAW_text(pText, nTmp, nTmpX, nTmp3, bResult);
+                  D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1010), nTmp, nTmpX, nTmp3, bResult);
                   iVar1 = UI_CalculateCenteredTextXPosition(0x1011, 0xff);
                   nTmpX = 0x41 - gnPanelOffsetY;
                   nTmp3 = 0;
@@ -1040,8 +1029,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
                   nTmpX = 0x32 - gnPanelOffsetY;
                   nTmp3 = 0;
                   nTmp = gnPanelOffsetX + iVar1;
-                  pText = D2Lang::StrTable::strtable::GetLocaleString(0x100e);
-                  D2Win::Src::D2WinFont::DRAW_text(pText, nTmp, nTmpX, nTmp3, bResult);
+                  D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x100e), nTmp, nTmpX, nTmp3, bResult);
                   iVar1 = UI_CalculateCenteredTextXPosition(0x100f, 0xff);
                   nTmpX = 0x41 - gnPanelOffsetY;
                   nTmp3 = 0;
@@ -1061,8 +1049,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
                   nTmpX = 0x32 - gnPanelOffsetY;
                   nTmp3 = 0;
                   nTmp = gnPanelOffsetX + iVar1;
-                  pText = D2Lang::StrTable::strtable::GetLocaleString(0x1012);
-                  D2Win::Src::D2WinFont::DRAW_text(pText, nTmp, nTmpX, nTmp3, bResult);
+                  D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1012), nTmp, nTmpX, nTmp3, bResult);
                   iVar1 = UI_CalculateCenteredTextXPosition(0x1013, 0x114);
                   nTmpX = 0x41 - gnPanelOffsetY;
                   nTmp3 = 0;
@@ -1075,8 +1062,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
                   nTmpX = 0x32 - gnPanelOffsetY;
                   nTmp3 = 0;
                   nTmp = gnPanelOffsetX + iVar1;
-                  pText = D2Lang::StrTable::strtable::GetLocaleString(0x1014);
-                  D2Win::Src::D2WinFont::DRAW_text(pText, nTmp, nTmpX, nTmp3, bResult);
+                  D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x1014), nTmp, nTmpX, nTmp3, bResult);
                   iVar1 = UI_CalculateCenteredTextXPosition(0x1015, 0x114);
                   nTmpX = 0x41 - gnPanelOffsetY;
                   nTmp3 = 0;

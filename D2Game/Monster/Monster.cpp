@@ -5,7 +5,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2LightMapStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Item.h"
@@ -33,6 +32,7 @@
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Skills.h"
@@ -94,12 +94,12 @@ D2MonPropTxt * __fastcall MONSTER_GetMonPropTxtRecord(int32_t nParam) {
     return nullptr;
 }
 
-void __fastcall SetAiState(D2UnitStrc * pMonster, D2UnitStrc * nAiState) {
+void __fastcall SetAiState(D2UnitStrc * pMonster, int nAiState) {
     if (!(pMonster && pMonster->eUnitType == UNIT_MONSTER && pMonster->pUnitData.pUnitDataMonster)) {
       return;
     }
 
-    pMonster->pUnitData.pUnitDataMonster->nAiState = (int)nAiState;
+    pMonster->pUnitData.pUnitDataMonster->nAiState = nAiState;
 }
 
 int __fastcall GetAiState(D2UnitStrc * pUnit) {
@@ -290,7 +290,7 @@ int32_t __fastcall PlayerMultiplyer2(int32_t nParam) {
 
 // Initialises a D2MonsterLevelDataStrc with player-count and difficulty multipliers for a monster. Queries the current player count (SERVER_GAME_CountPlayers), computes PlayerMultiplyer/2/3, and reads MonsterSkillBonus from the DifficultyLevels txt. Skips scaling for boss/special-aligned monsters (Align != 0) and sets nPlayerMultiplyer3=1 for them instead.
 void __fastcall MONSTER_InitLevelDifficultyScaling(::SGAMEDATA * pGame, D2MonsterLevelDataStrc * pMonsterLevelData, D2RoomStrc * pRoom, D2UnitStrc * pUnit) {
-    uint32_t nPlayer;
+    uint32_t nMultiplier;
     if (!pMonsterLevelData) {
       return;
     }
@@ -300,7 +300,7 @@ void __fastcall MONSTER_InitLevelDifficultyScaling(::SGAMEDATA * pGame, D2Monste
     pMonsterLevelData->nMonsterSkillBonus = 0;
     pMonsterLevelData->nDifficulty = 0;
     pMonsterLevelData->nPlayerMultiplyer3 = 0;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
     }
 
@@ -309,25 +309,16 @@ void __fastcall MONSTER_InitLevelDifficultyScaling(::SGAMEDATA * pGame, D2Monste
       return;
     }
     if (pMonStatsTxt->Align == '\0') {
-      uint32_t uVar1;
+      uint32_t nPlayer;
       nPlayer = PLAYER::Player::SERVER_GAME_CountPlayers(pGame);
       if ((int)nPlayer < 1) {
         nPlayer = 1;
       }
-      if ((int)nPlayer < 9) {
-        uVar1 = ::PlayerMultiplyer[nPlayer];
-      } else {
-        uVar1 = (nPlayer - 2) * 0x32;
-      }
 
-      pMonsterLevelData->nPlayerMultiplyer = uVar1;
-      if ((int)nPlayer < 9) {
-        uVar1 = ::PlayerMultiplyer2[nPlayer];
-      } else {
-        uVar1 = (nPlayer * 5 + 0x82) * 2;
-      }
-
-      pMonsterLevelData->nPlayerMultiplyer2 = uVar1;
+      nMultiplier = PlayerMultiplyer(nPlayer);
+      pMonsterLevelData->nPlayerMultiplyer = nMultiplier;
+      nMultiplier = PlayerMultiplyer2(nPlayer);
+      pMonsterLevelData->nPlayerMultiplyer2 = nMultiplier;
       pMonsterLevelData->nPlayerMultiplyer3 = nPlayer;
     } else {
       pMonsterLevelData->nPlayerMultiplyer3 = 1;
@@ -353,7 +344,7 @@ void __fastcall MONSTER_RollComponentAppearance(int32_t nParam, D2UnitStrc * pUn
     uint32_t nSeedLow;
     uint32_t* pAppearanceEntry;
     D2UnitDataItemStrc* pItemData;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
     if (!nParam || *(uint8_t*)(nParam + 3) <= 0) {
@@ -426,7 +417,8 @@ BOOL __fastcall CheckComponents(D2UnitStrc * pUnit) {
 void __fastcall MONSTER_CreateAndEquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MonEquipEntryStrc * ppItemId, int32_t nItemLevel, eD2ItemQuality eQuality) {
     bool bEquipSuccess;
     int32_t nItemClassId;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    int32_t nDurStatLayer;
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
     if (!pUnit->pInventory) {
@@ -510,6 +502,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     D2StatListExStrc* pStatsEx;
     D2InventoryStrc* pNpcInventory;
     D2SkillListStrc* pSkillsList;
+    uint16_t nLayer;
     D2MonStatsInitStrc sMonStats;
     D2MonsterLevelDataStrc monLevelData;
     D2MonStatsExTxtSlot uMonTxt;
@@ -643,9 +636,9 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, nTmpInt, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nTmpInt, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_armorclass, sMonStats.nAC, 0);
-    nStatLayer = 0;
+    nLayer = 0;
     nScaledStat = D2Client::Stats::D2ApplyPercent(sMonStats.nExp, monLevelData.nPlayerMultiplyer2, 100);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_experience, nScaledStat + sMonStats.nExp, nStatLayer);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_experience, nScaledStat + sMonStats.nExp, nLayer);
     dwHpRegenRaw = pMonStatsTxt->DamageRegen;
     if ((int)dwHpRegenRaw < 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xde);
@@ -796,7 +789,7 @@ void __fastcall STRUCT_FillDataMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, 
 }
 
 void __fastcall MONSTER_TransformMonsterClass(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nMonStatId, DWORD nUpdateFlags) {
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
     if (!((int)nMonStatId >= 0 && (int)nMonStatId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nMonStatId && *((uint8_t*)&sgptDataTable->pTxtMonStats[nMonStatId] + 0xf) & (uint8_t)gadwBitMasks[1])) {

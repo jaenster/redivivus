@@ -62,7 +62,8 @@ struct D2RoomStrc * __stdcall QSERVER_FindRoomInFirstActiveGame(uint8_t byActInd
 void __stdcall nullsub(struct D2UnitStrc * dwUnused1, uint32_t dwUnused2, uint32_t dwParam3);
 // @wasnamed nullsub - one name on two different functions.
 // @evidence RET 0x10 (c2 10 00) - four dword arguments.
-void __stdcall nullsub_4Arg(struct D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4);
+// Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.
+void __fastcall nullsub_4Arg(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4);
 // @wasnamed nullsub - one name on two different functions.
 // @evidence RET 0x1C (c2 1c 00) - seven dword arguments.
 void __stdcall nullsub_7Arg(struct D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4, uint32_t dwParam5, uint32_t dwParam6, uint32_t dwParam7);

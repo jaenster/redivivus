@@ -9,7 +9,6 @@
 #include "D2Multi/ComCallback.h"
 #include "D2Multi/D2Multi.h"
 #include "D2Multi/OOGUtilities.h"
-#include "Storm/_unnamespaced.h"
 
 
 // =============================================================================
@@ -2146,9 +2145,9 @@ namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

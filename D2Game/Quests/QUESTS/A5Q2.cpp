@@ -922,13 +922,13 @@ BOOL __fastcall Q32_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // Returns 1 if the given unit (nParam) belongs to a barricade group whose 'all prisoners dead' kill-count byte
 // (group[+0x18] / +0x54) is set, i.e. that group's barbarians were slaughtered. Used by barricade/AI logic to
 // detect a botched ("wussie") group. Quest must be in log (bIsNotIntroduction).
-BOOL __fastcall Q32_CheckWussieBarricade(::SGAMEDATA * pGame, int32_t nParam) {
+BOOL __fastcall Q32_CheckWussieBarricade(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RescueOnMountArreat);
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
       return 0;
     }
 
-    int32_t nBarricadeGroup = Q32_FindBarricadeGroup(pQuestData, (D2UnitStrc*)nParam);
+    int32_t nBarricadeGroup = Q32_FindBarricadeGroup(pQuestData, pUnit);
     if (nBarricadeGroup >= 0 && pQuestData->pQuestSpecificData.pA1Q4->sQuestGUID1.aPlayerGUID[nBarricadeGroup + 0x18]) {
       return 1;
     }
@@ -940,14 +940,14 @@ BOOL __fastcall Q32_CheckWussieBarricade(::SGAMEDATA * pGame, int32_t nParam) {
 // Maps nBarricadeGroupId to a group via Q32_FindBarricadeGroup, increments that group's kill count
 // (group[+0x18]); when it exceeds 4 (>=5 = whole group of 5 barbarians dead) sets the group's 'all dead'
 // byte (+0x54). No QuestRecord access.
-void __thiscall Q32_IncrementWussieKillCount(::SGAMEDATA * pGameStrc, int32_t nBarricadeGroupId) {
+void __thiscall Q32_IncrementWussieKillCount(::SGAMEDATA * pGameStrc, D2UnitStrc * nBarricadeGroupId) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGameStrc, QUESTINT_RescueOnMountArreat);
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
       return;
     }
 
     D2QuestDataA5Q2Strc* pA5Q2Data = (D2QuestDataA5Q2Strc*)pQuestData->pQuestSpecificData.pA5Q2;
-    int32_t nGroupIndex = Q32_FindBarricadeGroup(pQuestData, (D2UnitStrc*)nBarricadeGroupId);
+    int32_t nGroupIndex = Q32_FindBarricadeGroup(pQuestData, nBarricadeGroupId);
     if (nGroupIndex < 0) {
       return;
     }
@@ -977,6 +977,7 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     POINT sPortalCoords;
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nRoomCount;
+    eD2QuestState eSurvivalTierState;
     ::SGAMEDATA* pGameLoop;
     D2UnitStrc* pIterUnit;
     ::SGAMEDATA* pGameSaved;
@@ -1081,15 +1082,12 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
     pQuestSpecificDataSaved->anBarricadePortalGUID[nGroupIndex] = nCollisionDist;
     GAME::Event::SetEvent(pQuestData->pGame, pPortalUnit, 7, pQuestData->pGame->dwGameFrame + 0x19, 0, 0);
-    BOOL bQuestStateResult;
-    bQuestStateResult = 0;
-    pAttackerRoom = D2Common::Units::UNITS_GetRoom(pPortalUnit);
-    D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pAttackerRoom, bQuestStateResult);
+    D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pPortalUnit), 0);
     update_rescue_progress:
     pPlayerData = D2Common::Units::GetPlayerData(pUnitSaved);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGameSaved->nDifficulty];
     if (pQuestSpecificData->nTotalPrisonersToFree == pQuestSpecificData->nPrisonersKilledByMonsters + pQuestSpecificData->nPrisonersFreed && pQuestSpecificData->abGroupAllFreed[0] && pQuestSpecificData->abGroupAllFreed[1] && pQuestSpecificData->abGroupAllFreed[2]) {
-      eD2QuestState eSurvivalTierState;
+      BOOL bQuestStateResult;
       if (pQuestSpecificData->nPrisonersFreed > 0xb) {
         pQuestData->nQuestPacketFlags = '\0';
         QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, true);
@@ -1237,14 +1235,14 @@ void __fastcall Q32_PrisonerTimerCallback(D2QuestDataStrc * pQuestData, D2UnitSt
 // For the barricade group containing nParam, if its portal-spawned flag (group[+0x44]) is set, finds the escape
 // portal unit by GUID (group[+0xe]) and returns it via ppPortalOut (returns 1). Else returns 0. Used to locate
 // the prisoner-escape town portal created by Q32_OnBarricadeDestroyed.
-BOOL __fastcall Q32_FindBarricadePortal(::SGAMEDATA * pGame, int32_t nParam, D2UnitStrc * * ppPortalOut) {
+BOOL __fastcall Q32_FindBarricadePortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * * ppPortalOut) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RescueOnMountArreat);
     if (!pQuestData) {
       return 0;
     }
 
     D2QuestDataA5Q2Strc* pA5Q2Data = (D2QuestDataA5Q2Strc*)pQuestData->pQuestSpecificData.pA5Q2;
-    int32_t nGroupIndex = Q32_FindBarricadeGroup(pQuestData, (D2UnitStrc*)nParam);
+    int32_t nGroupIndex = Q32_FindBarricadeGroup(pQuestData, pUnit);
     if (!(nGroupIndex >= 0 && pA5Q2Data->abBarricadePortalSpawned[nGroupIndex])) {
       return 0;
     }

@@ -1,13 +1,17 @@
 """funcdecode.py - decode one function by recursive descent, the same way on
 both sides of a comparison.
 
-    decode_function(code, base, start, limit, reloc_at)
+    decode_function(code, base, start, limit, reloc_at, noreturn, external_at)
 
 `code` holds the bytes of [base, base + len(code)); the function starts at
 `start` and may not extend past `limit` (the next function's start, or the end
 of its COMDAT section). `reloc_at(addr)` says whether the four bytes at `addr`
 are an absolute address (a base relocation in the image, a DIR32 in an object)
-and returns the address they hold, else None.
+and returns the address they hold, else None. `external_at(addr)` says
+whether the rel32 field at `addr` is relocated against another symbol: in an
+object a jmp to another function holds 0, which reads as a jump to the next
+instruction, so without it a tail jump makes the descent run on into whatever
+follows (a switch table).
 
 Following every branch inside the function, rather than sweeping linearly, is
 what keeps MSVC's in-.text switch tables (a dword table of case addresses,
@@ -55,7 +59,7 @@ def _decode_at(code, base, addr):
     return None
 
 
-def decode_function(code, base, start, limit, reloc_at, noreturn=frozenset()):
+def decode_function(code, base, start, limit, reloc_at, noreturn=frozenset(), external_at=None):
     f = DecodedFunction(start)
     seen = {}
     work = [start]
@@ -88,7 +92,9 @@ def decode_function(code, base, start, limit, reloc_at, noreturn=frozenset()):
                 if ops and ops[0].type == cx.X86_OP_IMM:
                     t = ops[0].imm
                     d.target = t
-                    if start <= t < limit:
+                    if external_at is not None and ins.size >= 5 and external_at(nxt - 4):
+                        f.exits.append((a, None))
+                    elif start <= t < limit:
                         work.append(t)
                     else:
                         f.exits.append((a, t))

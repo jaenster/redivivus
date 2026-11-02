@@ -22,4 +22,9 @@ _EXCEPTION_DISPOSITION SehHandler_6ca1d8(EHExceptionRecord * pExceptionRecord, E
     return ExceptionContinueSearch;
 }
 
+// compiler-generated C++ EH handler; its frame is never registered with the OS
+_EXCEPTION_DISPOSITION SehHandler_6ca203(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
+    return ExceptionContinueSearch;
+}
+
 } // namespace D2Client::UI::Spinner

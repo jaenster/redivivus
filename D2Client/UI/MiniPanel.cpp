@@ -93,12 +93,12 @@ void MINIPANEL_DrawBackground(int32_t nPanelSection) {
     }
 }
 
-void __stdcall MINIPANEL_DrawButton(int32_t nParam1, int32_t nParam2, int32_t nParam3) {
+void __stdcall MINIPANEL_DrawButton(int32_t nFrameNumber, int32_t nPositionX, int32_t nPositionY) {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = gpMiniPanelButtonsDC6;
-    sGfxData.nFrameNumber = nParam1;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nParam2, nParam3, -1, DRAW_SOLID, nullptr);
+    sGfxData.nFrameNumber = nFrameNumber;
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nPositionY, -1, DRAW_SOLID, nullptr);
 }
 
 static void MINIPANEL_CalculateButtonPositions(int32_t bIsExpansion) {
@@ -335,7 +335,7 @@ BOOL __stdcall IsRightScreenOpen() {
 }
 
 static void MINIPANEL_HandleButtonClick(int32_t nButtonId) {
-    bool _bFlagActive;
+    BOOL _bFlagActive;
     bool bFlagActive;
     eD2GSGameType eGameType;
     BOOL bFlagSet;
@@ -702,7 +702,6 @@ static void __stdcall MINIPANEL_ShowTooltip(int32_t nX, int32_t nY, int32_t nBut
     int i;
     uint16_t nStringIndex;
     uint16_t wszTooltip[200];
-    uint16_t wszKeyText[30];
     bool bHasCommand = false;
     int nCommandId = 0x39;
     switch (nButtonFrame) {
@@ -755,14 +754,13 @@ static void __stdcall MINIPANEL_ShowTooltip(int32_t nX, int32_t nY, int32_t nBut
     uint16_t* pLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(nStringIndex);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTooltip, pLocaleStr);
     if (bHasCommand && nCommandId != 0x39) {
-      uint16_t* pFormatStr;
+      uint16_t wszKeyText[30];
       Fog::File::CONTAINER_InitializeBuffer(wszKeyText, 2, 0x1e, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
       nStringIndex = CmdTbl::CMD_GetKeyForCommand(nCommandId, 1);
       if (nStringIndex != 0xffff) {
         memset(wszKeyText, 0, 0x3c);
         pLocaleStr = CmdTbl::CMD_GetKeyNameForCommand(nCommandId, 1);
-        pFormatStr = D2Lang::StrTable::strtable::GetLocaleString(0x1052);
-        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x1e, wszKeyText, pFormatStr, pLocaleStr);
+        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x1e, wszKeyText, D2Lang::StrTable::strtable::GetLocaleString(0x1052), pLocaleStr);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, wszKeyText);
       }
 
@@ -770,8 +768,7 @@ static void __stdcall MINIPANEL_ShowTooltip(int32_t nX, int32_t nY, int32_t nBut
       if (nStringIndex != 0xffff) {
         memset(wszKeyText, 0, 0x3c);
         pLocaleStr = CmdTbl::CMD_GetKeyNameForCommand(nCommandId, 0);
-        pFormatStr = D2Lang::StrTable::strtable::GetLocaleString(0x1052);
-        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x1e, wszKeyText, pFormatStr, pLocaleStr);
+        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x1e, wszKeyText, D2Lang::StrTable::strtable::GetLocaleString(0x1052), pLocaleStr);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, wszKeyText);
       }
     }

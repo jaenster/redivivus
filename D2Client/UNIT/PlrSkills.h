@@ -21,11 +21,11 @@ namespace D2Client::UNIT::PlrSkills {
 
 // Function declarations
 // @sourcefile .\UNIT\PlrSkills.cpp
-void __fastcall PLRSKILLS_CheckSkillWhipAndLeap(struct D2UnitStrc * pUnit, uint32_t nParam);
-void __fastcall PLRSKILLS_DrawChargeTrailIfPrimary(struct D2UnitStrc * pUnit, uint32_t nParam);
+void __fastcall PLRSKILLS_CheckSkillWhipAndLeap(struct D2UnitStrc * pUnit, uint32_t nGamma);
+void __fastcall PLRSKILLS_DrawChargeTrailIfPrimary(struct D2UnitStrc * pUnit, uint32_t nGamma);
 // @sourcefile .\UNIT\PlrSkills.cpp
-void __fastcall PLRSKILLS_DrawSkillTrail_Secondary(struct D2UnitStrc * pUnit, uint32_t nParam);
-void __fastcall PLRSKILLS_DrawChargeTrailIfSecondary(struct D2UnitStrc * pUnit, uint32_t nParam);
+void __fastcall PLRSKILLS_DrawSkillTrail_Secondary(struct D2UnitStrc * pUnit, uint32_t nGamma);
+void __fastcall PLRSKILLS_DrawChargeTrailIfSecondary(struct D2UnitStrc * pUnit, uint32_t nGamma);
 void __fastcall PLRSKILLS_StateSetFn01_ProgressiveCharge(struct D2UnitStrc * pUnit, eD2States eState);
 void __fastcall PLRSKILLS_StateRemFn01_ProgressiveCharge(struct D2UnitStrc * pUnit, eD2States eState);
 void __fastcall PLRSKILLS_StateSetFn02_CloakOfShadows(struct D2UnitStrc * pUnit, eD2States eState);

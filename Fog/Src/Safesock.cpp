@@ -2,7 +2,6 @@
 
 #include "Fog/Src/Safesock.h"
 #include "D2Net/Game/Server.h"
-#include "D2Net/in_addr.h"
 #include "D2Net/sockaddr.h"
 #include "Fog/D2QSSocketStrc.h"
 #include "Fog/Memory.h"
@@ -10,6 +9,7 @@
 #include "Fog/Src/LogManager.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Net/in_addr.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -57,7 +57,6 @@ D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_STA
     char nNoDelayOpt[4];
     WSADATA wsaData;
     uint8_t sockNameBuf[16];
-    sockaddr_in connectAddr;
     char cIpChar;
     LPVOID pThreadParamLocal = pThreadParam;
     LPTHREAD_START_ROUTINE pThreadProcLocal = pThreadProc;
@@ -112,10 +111,8 @@ D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_STA
     }
 
     pSafesockStrc->bInit = 1;
-    /* u_short netshort for ntohs */ connectAddr.sin_addr = 0;
-    memset(connectAddr.sin_zero, 0, 8 * sizeof(connectAddr.sin_zero[0]));
+    sockaddr_in connectAddr = {0};
     connectAddr.sin_family = 2;
-    connectAddr.sin_port = 0;
     u_short nPortBE = ntohs(nPort);
     connectAddr.sin_port = nPortBE;
     /* char * cp for inet_addr */ connectAddr.sin_addr = inet_addr(szHostNameOrSockLen);
@@ -354,12 +351,12 @@ char * __stdcall NET_GetLocalIp() {
     return cp_0075d040;
 }
 
-char * __fastcall NET_MakeIPV4AddressHumanFriendly(in_addr sAddr) {
+char * __fastcall NET_MakeIPV4AddressHumanFriendly(uint32_t sAddr) {
     // Static local variables (originally global data)
     static char szIPV4Address[32] = {}; D2_STATIC_GUARD(szIPV4Address, "Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly::szIPV4Address");
 
     char cChar;
-    char* pSrc = inet_ntoa(sAddr);
+    char* pSrc = inet_ntoa((in_addr)sAddr);
     char* pDst = szIPV4Address;
     do {
       cChar = *pSrc;
@@ -378,22 +375,16 @@ int __fastcall GetSocketStatusAndWsaResultToArguments(D2NetDataStrc * pNetData, 
 }
 
 char * __fastcall inet_nameToIp(char * szText) {
-    // Frame slots -20..-4 are ONE object: &nOctet0 is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nOctet0;
-      int nOctets;
-      int nOctet2;
-      int nOctet3;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 16, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     char* pDstIp;
+    int nOctet0;
+    int nOctets;
+    int nOctet2;
+    int nOctet3;
     char cChar;
     bool bDidStartUp;
     bDidStartUp = false;
     int nResult;
-    nResult = sscanf(szText, "%d.%d.%d.%d", &__frame0.nOctet0, &__frame0.nOctets, &__frame0.nOctet2, &__frame0.nOctet3);
+    nResult = sscanf(szText, "%d.%d.%d.%d", &nOctet0, &nOctets, &nOctet2, &nOctet3);
     if (nResult == 4) {
       return szText;
     }
@@ -459,8 +450,8 @@ void __fastcall SAFESOCK_DisableNonBlocking(D2NetDataStrc * pNetData) {
     ioctlsocket(hSocket, -0x7ffb9982, &nIoctlArg);
 }
 
-D2NetDataStrc * __fastcall Create_Flag0(char * szText1, u_short nParam, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szText2) {
-    D2NetDataStrc* pNetData = Create(szText1, nParam, pThreadProc, pThreadParam, szText2, 0);
+D2NetDataStrc * __fastcall Create_Flag0(char * szText1, int nPort, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szText2) {
+    D2NetDataStrc* pNetData = Create(szText1, (u_short)nPort, pThreadProc, pThreadParam, szText2, 0);
     return pNetData;
 }
 

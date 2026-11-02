@@ -22,8 +22,6 @@ namespace D2Game::Quests::QUESTS::A5Q4 {
 int __fastcall Q34_NotifyQuestState(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // Q34_StatusFilter (Betrayal of Harrogath). Computes the quest-log icon/state byte (*nUnknown) shown to the client from the QuestRecord bits: 0=not-yet (intro), 0x0c=CannotComplete-in-this-game, else maps Step0x04 bit (+4) or the in-memory nStateFlagPrev. Read-only on quest state.
 bool __fastcall Q34_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown);
-// A5Q4 (Betrayal of Harrogath) helper. On first call when bPortalSpawned==0, spawns the red portal object (classId 0x3c) at pUnit's tile position +(10,5) leading to LEVEL_NihlathaksTemple via SERVER_SpawnPortal. Sets bPortalSpawned=1 and clears bNotifiedCompletion on success. Gated by A5Q4 specific-data flags; no QuestRecord access.
-bool __stdcall Q34_SpawnNihlathakPortal(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit);
 // A5Q4 (Betrayal of Harrogath) quest-state-2 NPC callback. Fires when the target is Nihlathak (classId 0x200). If group0 prisoners are freed: clears eFlags, calls QUEST_SetStateAndBroadcast to state 1 via Q34_NotifyQuestState, clears group0 flag. If group1 freed but group2 not: inlines Q34_SpawnNihlathakPortal — spawns a portal to LEVEL_NihlathaksTemple (objectClass 0x3c) near Nihlathak's position (+10x, +5y), and advances group1->group2 on success.
 void __fastcall Q34_Callback02_NpcDeactivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // A5Q4 (Betrayal of Harrogath) per-player iterator callback. Requires Prison of Ice completed or reward-pending as a prerequisite. If Betrayal is not yet completed/rewarded, mirrors the shared in-memory nStateFlag (2→Step0x02, 3→Step0x03) into each player's QuestRecord so their quest log tracks the current step.
@@ -72,5 +70,6 @@ void __fastcall Q34_ClaimReward(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall Q34_OnNihlathakAI(::SGAMEDATA * pGame);
 // A5Q4 (Betrayal of Harrogath) deferred-portal spawner. If field_0x89 is set and the unit is currently in Act V, spawns the LEVEL_NihlathaksTemple portal (classId 0x3c) at unit +(10,5) and clears field_0x89 on success. Handles the case where the portal could not spawn earlier (e.g. Halls of Pain waypoint not yet found). No QuestRecord access.
 void __fastcall Q34_NpcSpawnPortalInAct5(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+// 1 internal function (defined in .cpp)
 
 } // namespace D2Game::Quests::QUESTS::A5Q4

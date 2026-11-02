@@ -4,8 +4,8 @@
 #include "Fog/Debug.h"
 #include "Fog/Source/SSignature.h"
 #include "Storm/D2Srp.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SBig.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
 
@@ -28,21 +28,21 @@ void __fastcall SSIG_FreeBigNum(void * * pBigNum) {
     SBig::SBigDel((BigData*)*pBigNum);
 }
 
-static BOOL __stdcall SSIG_FindSignatureMarker(int32_t nOffset, uint32_t nTotalSize, int32_t pBuffer, int * pnFoundOffset) {
+static BOOL __stdcall SSIG_FindSignatureMarker(int32_t nOffset, uint32_t nTotalSize, uint8_t * pBuffer, int * pnFoundOffset) {
     int nMarkerOffset = nTotalSize - nOffset - 4;
     *pnFoundOffset = nMarkerOffset;
-    if (nTotalSize >= nOffset + 4U && *(int*)(nMarkerOffset + pBuffer) == 0x5349474e) {
+    if (nTotalSize >= nOffset + 4U && *(int*)(pBuffer + nMarkerOffset) == 0x5349474e) {
       return 1;
     }
 
     return 0;
 }
 
-static void __stdcall SSIG_HashData(uint32_t nDataLen, uint8_t * pData, int32_t pDigestOut) {
+static void __stdcall SSIG_HashData(uint32_t nDataLen, uint8_t * pData, uint8_t * pDigestOut) {
     D2Sha1ContextStrc shaContext;
     Fog::Source::SSignature::Sha1_Initialize(&shaContext);
     Sha1_Append(&shaContext, pData, nDataLen);
-    Sha1_Finalize(&shaContext, (uint8_t*)pDigestOut);
+    Sha1_Finalize(&shaContext, pDigestOut);
 }
 
 // @sourcefile .\SOURCE\SSignature.cpp
@@ -70,7 +70,7 @@ uint32_t __fastcall SSignatureVerifyStream_GetSignatureLength(D2SsigContextStrc 
 // Was SSIG_UpdateHash. Storm export (PPC vector 100cdfd4 -> 100a3af0). Basis: callee set {Sha1::Append, BlockMoveData} == 1.14d {Sha1_Append, SSYSTEM_Memmove, STORM_Memcpy}; PPC reads r3,r4,r5 = 3 args == 3 params here.
 void __fastcall SSignatureVerifyStream_ProvideData(D2SsigContextStrc * pContext, uint8_t * pData, size_t nDataLen) {
     uint32_t nRemaining = nDataLen - pContext->nBufferSize;
-    if (-1 < (int)nRemaining) {
+    if ((int)nRemaining >= 0) {
       if (pContext->nBytesBuffered > 0) {
         Sha1_Append(&pContext->sSha1, pContext->pDataBuffer, pContext->nBytesBuffered);
       }
@@ -119,7 +119,7 @@ void __fastcall SSIG_FreeRSAPair(BigData * * pRSAPair) {
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SSIG_SignData. Storm export (PPC vector 100cdff4 -> 100a3570). Basis: PPC reads r3..r10 = 8 args == 8 params here (no other SSignature function takes 8). Callee set: PPC {Sha1::Initialize, Sha1::Append, Sha1::Finalize, BlockMoveData, SBigNew, Crypt::RSA::Prepare, Crypt::RSA::Process, SBigDel} == 1.14d {SSIG_HashData (= Init/Append/Finalize factored out), STORM_Memcpy, SSIG_InitRSAPair, CryptRSA_Prepare, CryptRSA_Process, SSIG_FreeRSAPair}. Both search for the "SIGN" magic 0x5349474e in the buffer first.
 // [override: replace]
-int __fastcall SSignatureGenerate(int32_t pData, uint32_t * pnDataLen, void * pModulusBytes, int32_t nKeySize, void * pPrivateExponent, uint32_t nPrivateExponentLen, void * pPublicExponent, uint32_t nPublicExponentLen) {
+int __fastcall SSignatureGenerate(uint8_t * pData, uint32_t * pnDataLen, void * pModulusBytes, int32_t nKeySize, void * pPrivateExponent, uint32_t nPrivateExponentLen, void * pPublicExponent, uint32_t nPublicExponentLen) {
     // Hand-supplied body. Ghidra address 0041d590.
     //
     // Same cause as SSignatureVerifyStream_Finish: three _alloca regions
@@ -160,7 +160,7 @@ int __fastcall SSignatureGenerate(int32_t pData, uint32_t * pnDataLen, void * pM
     uint8_t* pHash = (uint8_t*)__builtin_alloca(nKeySize);       // 0041d5c0-0041d5c7
     SSystem::SMemFill(pHash, nKeySize, 0xbb);              // 0041d5c9-0041d5d0
     pHash[nKeySize - 1] = 0x0b;                                  // 0041d5dc
-    SSIG_HashData((uint32_t)nMarkerOffset, pDataBytes, (int32_t)pHash); // 0041d5d5-0041d5e1
+    SSIG_HashData((uint32_t)nMarkerOffset, pDataBytes, pHash); // 0041d5d5-0041d5e1
 
     uint8_t* pSig1 = (uint8_t*)__builtin_alloca(nKeySize);       // 0041d5e6-0041d5ed
     SSystem::SMemCopy(pSig1, pHash, nKeySize);               // 0041d5ef-0041d5f2
@@ -628,8 +628,8 @@ void * __thiscall SSIGNATURE_RsaExportZeroPadded(BigData * * pnParam, void * pOu
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_LoadComponent. DESCRIPTIVE, not an oracle name - no PPC counterpart exists. Body is a single SBigFromBinary(this[0], bytes, len), i.e. one half of CryptRSA_Prepare. Zero callers in the whole program: an MSVC out-of-line COMDAT copy of a helper that was inlined at every use. Moved out of SBig into SSignature because that is the translation unit it belongs to.
-void __thiscall SSIGNATURE_RsaLoadComponent(BigData * * pnParam, void * pBytes, uint32_t nParam) {
-    SBig::SBigFromBinary(*pnParam, pBytes, nParam);
+void __thiscall SSIGNATURE_RsaLoadComponent(BigData * * pnParam, void * pBytes, uint32_t nByteCount) {
+    SBig::SBigFromBinary(*pnParam, pBytes, nByteCount);
 }
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
@@ -654,7 +654,7 @@ void __thiscall CryptRSA_Process(BigData * * ppKey, void * pData, uint32_t nData
     local_8 = 0;
     SBig::SBigFromBinary(pPlainBn, pData, nDataLen);
     SBig::SBigNew(&pCipherBn);
-    local_8 = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&local_8 + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    local_8 = (uint32_t)((uint32_t)((uint32_t)local_8 >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     SBig::SBigPowMod(pCipherBn, pPlainBn, ppKey[1], *ppKey);
     SBig::SBigToBinaryBuffer(pCipherBn, pData, nBufCapacity, &nDataLen);
     if (nDataLen < nBufCapacity) {

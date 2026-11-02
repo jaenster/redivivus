@@ -300,7 +300,7 @@ void __fastcall D2INIT_CheckCommandLineOrLoadItFromRegistry(char * * ppszText) {
       sprintf(__frame0.szCmdLineBuf, "%s -skiptobnet", pcVar2);
     }
 
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "CmdLine", 0, __frame0.szCmdLineBuf);
+    Storm::Source::SReg::SRegSaveString("Diablo II", "CmdLine", 0, __frame0.szCmdLineBuf);
     finalize_cmd_line:
     __frame0.pUseCmdLine = 0;
     Storm::Source::SReg::SRegSaveValue("Diablo II", "UseCmdLine", 0, 0);

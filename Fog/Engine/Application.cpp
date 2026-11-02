@@ -17,7 +17,7 @@
 #include "Fog/Source/SFile.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Engine/Application.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/_unnamespaced.h"
 #include "support/d2_trace.h"
@@ -57,8 +57,8 @@ typedef HRESULT (__stdcall *pfnSHGetKnownFolderPath)(GUID * rfid, DWORD dwFlags,
 
 namespace Fog::Engine::Application {
 
-static uint32_t DEBUG_ParseNB01DebugInfo(void * pDebugRecord, int32_t pModuleInfo);
-static uint8_t DEBUG_ParseRSDSDebugInfo(void * pDebugRecord, int32_t pModuleInfo);
+static uint32_t DEBUG_ParseNB01DebugInfo(void * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo);
+static uint8_t DEBUG_ParseRSDSDebugInfo(void * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo);
 
 bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext) {
     pContext->ContextFlags = 0x1003f;
@@ -83,7 +83,7 @@ bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext) {
     /* LPCONTEXT lpContext for GetThreadContext */ /* HANDLE hThread for GetThreadContext */ bGotContext = GetThreadContext(hThread, pContext);
     /* HANDLE hThread for ResumeThread */ ResumeThread(hThread);
     /* HANDLE hObject for CloseHandle */ CloseHandle(hThread);
-    return bGotContext != 0;
+    return bGotContext;
 }
 
 static uint32_t DEBUG_GetPEImageType(short * nMagic) {
@@ -142,7 +142,7 @@ bool __stdcall DEBUG_IsValidDebugDirectorySize(uint32_t nDirSize) {
     return nDirSize >= 0x1c;
 }
 
-uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, int pModuleInfoOut) {
+uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, D2FogDebugModuleEntryStrc * pModuleInfoOut) {
     uint32_t nParseResult;
     uint32_t extraout_var;
     if (nDataSize < 4) {
@@ -168,7 +168,7 @@ uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t 
     return nDataSize & -256;
 }
 
-static uint32_t __stdcall DEBUG_ParseDebugDataDirectory(uint32_t nCount, int32_t nBaseAddress, int32_t pDirEntries, int32_t pOutput) {
+static uint32_t __stdcall DEBUG_ParseDebugDataDirectory(uint32_t nCount, int32_t nBaseAddress, int32_t pDirEntries, D2FogDebugModuleEntryStrc * pOutput) {
     uint8_t bVar1;
     BOOL bIsBadPtr;
     uint32_t nParseResult;
@@ -267,7 +267,7 @@ static uint8_t __stdcall DEBUG_ParseModuleHeaders(short * * ppModuleBase, short 
       return 1;
     }
 
-    DEBUG_ParseDebugDataDirectory(nCount, (int32_t)pModuleBase, (int32_t)pDebugDir, (int32_t)ppModuleBase);
+    DEBUG_ParseDebugDataDirectory(nCount, (int32_t)pModuleBase, (int32_t)pDebugDir, (D2FogDebugModuleEntryStrc*)ppModuleBase);
     return 1;
 }
 
@@ -505,17 +505,17 @@ void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA,
     *pnSize = nSize;
 }
 
-void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, int32_t pOptHeader) {
-    if (*(uint32_t*)(pOptHeader + 0x5c) <= 6) {
+void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, IMAGE_OPTIONAL_HEADER32 * pOptHeader) {
+    if (pOptHeader->NumberOfRvaAndSizes <= 6) {
       return;
     }
 
-    uint32_t nSize = *(uint32_t*)(pOptHeader + 0x94);
-    *pnRVA = *(uint32_t*)(pOptHeader + 0x90);
+    uint32_t nSize = pOptHeader->DataDirectory[6].Size;
+    *pnRVA = pOptHeader->DataDirectory[6].VirtualAddress;
     *pnSize = nSize;
 }
 
-static uint32_t DEBUG_ParseNB01DebugInfo(void * pDebugRecord, int32_t pModuleInfo) {
+static uint32_t DEBUG_ParseNB01DebugInfo(void * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo) {
     uint32_t bIsBadPtr = IsBadReadPtr(pDebugRecord, 0x14);
     if (bIsBadPtr) {
       return bIsBadPtr & -256;
@@ -526,17 +526,17 @@ static uint32_t DEBUG_ParseNB01DebugInfo(void * pDebugRecord, int32_t pModuleInf
       return bIsBadPtr & -256;
     }
 
-    strncpy_s((char*)(pModuleInfo + 0x108), 0x100, (LPCSTR)((int)pDebugRecord + 0x10), -1);
-    *(uint32_t*)(pModuleInfo + 0x21c) = *(uint32_t*)((int)pDebugRecord + 0xc);
-    *(uint32_t*)(pModuleInfo + 0x208) = *(uint32_t*)((int)pDebugRecord + 8);
-    *(uint32_t*)(pModuleInfo + 0x20c) = 0;
-    *(uint32_t*)(pModuleInfo + 0x210) = 0;
-    *(uint32_t*)(pModuleInfo + 0x214) = 0;
-    *(uint32_t*)(pModuleInfo + 0x218) = 0;
+    strncpy_s(pModuleInfo->szImagePath, 0x100, (LPCSTR)((int)pDebugRecord + 0x10), -1);
+    pModuleInfo->dwUnknown21c = *(uint32_t*)((int)pDebugRecord + 0xc);
+    pModuleInfo->dwUnknown208 = *(uint32_t*)((int)pDebugRecord + 8);
+    pModuleInfo->guidPdb.Data1 = 0;
+    pModuleInfo->guidPdb.Data2 = 0;
+    pModuleInfo->guidPdb.Data3 = 0;
+    memset(pModuleInfo->guidPdb.Data4, 0, 8 * sizeof(pModuleInfo->guidPdb.Data4[0]));
     return 1;
 }
 
-static uint8_t DEBUG_ParseRSDSDebugInfo(void * pDebugRecord, int32_t pModuleInfo) {
+static uint8_t DEBUG_ParseRSDSDebugInfo(void * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo) {
     BOOL bIsBadPtr = IsBadReadPtr(pDebugRecord, 0x1c);
     if (bIsBadPtr) {
       return 0;
@@ -547,12 +547,14 @@ static uint8_t DEBUG_ParseRSDSDebugInfo(void * pDebugRecord, int32_t pModuleInfo
       return 0;
     }
 
-    strncpy_s((char*)(pModuleInfo + 0x108), 0x100, (LPCSTR)((int)pDebugRecord + 0x18), -1);
-    *(uint32_t*)(pModuleInfo + 0x21c) = *(uint32_t*)((int)pDebugRecord + 0x14);
-    *(uint32_t*)(pModuleInfo + 0x20c) = *(uint32_t*)((int)pDebugRecord + 4);
-    *(uint32_t*)(pModuleInfo + 0x210) = *(uint32_t*)((int)pDebugRecord + 8);
-    *(uint32_t*)(pModuleInfo + 0x214) = *(uint32_t*)((int)pDebugRecord + 0xc);
-    *(uint32_t*)(pModuleInfo + 0x218) = *(uint32_t*)((int)pDebugRecord + 0x10);
+    strncpy_s(pModuleInfo->szImagePath, 0x100, (LPCSTR)((int)pDebugRecord + 0x18), -1);
+    pModuleInfo->dwUnknown21c = *(uint32_t*)((int)pDebugRecord + 0x14);
+    pModuleInfo->guidPdb.Data1 = *(uint32_t*)((int)pDebugRecord + 4);
+    uint32_t uVar1 = *(uint32_t*)((int)pDebugRecord + 8);
+    pModuleInfo->guidPdb.Data2 = (short int)uVar1;
+    pModuleInfo->guidPdb.Data3 = (short int)((uint32_t)uVar1 >> 0x10);
+    *(uint32_t*)pModuleInfo->guidPdb.Data4 = *(uint32_t*)((int)pDebugRecord + 0xc);
+    *(uint32_t*)(pModuleInfo->guidPdb.Data4 + 4) = *(uint32_t*)((int)pDebugRecord + 0x10);
     return 1;
 }
 
@@ -762,11 +764,11 @@ void MISC_OperatorDeleteShim(void * p) {
       return;
     }
 
-    Storm::SMem::SMemFree(p, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(p, "delete", -1, 0);
 }
 
 void * MISC_OperatorNewShim(uint32_t nSize) {
-    void* pvVar1 = Storm::SMem::SMemAlloc(nSize, "new", -1, 0);
+    void* pvVar1 = Storm::Source::SMem::SMemAlloc(nSize, "new", -1, 0);
     return pvVar1;
 }
 
@@ -774,35 +776,35 @@ void __stdcall MISC_GetValueFromD2Ini(D2IniConfigStrc * pD2IniData) {
     UINT dwIniValue;
     char* pDestField;
     char szIniPath[260];
-    char cVar1;
+    uint8_t cVar1;
     Source::SFile::SFILE_GetExecutableDirectory(szIniPath, 0x104);
     Storm::Source::SSTR::SStrPack(szIniPath, "D2.ini", 0x104);
     uint32_t nEntryOffset = 0;
     do {
-      cVar1 = D2IniConfigValues[0].szCmdLineArg[nEntryOffset + 0x1b];
-      pDestField = pD2IniData->bD2ExpMpqExistsOrLanugageCode + *(int*)(D2IniConfigValues[0].szCmdLineArg + nEntryOffset + 0x1e);
+      cVar1 = (char)D2IniConfigValues[nEntryOffset].nType;
+      pDestField = pD2IniData->bD2ExpMpqExistsOrLanugageCode + D2IniConfigValues[nEntryOffset].nOffset;
       switch (cVar1) {
         case '\0':
           {
-            /* LPCSTR lpFileName for GetPrivateProfileIntA */ /* INT nDefault for GetPrivateProfileIntA */ /* LPCSTR lpKeyName for GetPrivateProfileIntA */ /* LPCSTR lpAppName for GetPrivateProfileIntA */ dwIniValue = GetPrivateProfileIntA(D2IniConfigValues[0].szAppName + nEntryOffset, D2IniConfigValues[0].szKeyName + nEntryOffset, *(INT*)(D2IniConfigValues[0].szCmdLineArg + nEntryOffset + 0x22), szIniPath);
+            /* LPCSTR lpFileName for GetPrivateProfileIntA */ /* INT nDefault for GetPrivateProfileIntA */ /* LPCSTR lpKeyName for GetPrivateProfileIntA */ /* LPCSTR lpAppName for GetPrivateProfileIntA */ dwIniValue = GetPrivateProfileIntA(D2IniConfigValues[nEntryOffset].szAppName, D2IniConfigValues[nEntryOffset].szKeyName, D2IniConfigValues[nEntryOffset].nDefaultValue, szIniPath);
             *pDestField = dwIniValue != 0;
             break;
           }
         case '\x01':
           {
-            /* LPCSTR lpFileName for GetPrivateProfileIntA */ /* INT nDefault for GetPrivateProfileIntA */ /* LPCSTR lpKeyName for GetPrivateProfileIntA */ /* LPCSTR lpAppName for GetPrivateProfileIntA */ dwIniValue = GetPrivateProfileIntA(D2IniConfigValues[0].szAppName + nEntryOffset, D2IniConfigValues[0].szKeyName + nEntryOffset, *(INT*)(D2IniConfigValues[0].szCmdLineArg + nEntryOffset + 0x22), szIniPath);
+            /* LPCSTR lpFileName for GetPrivateProfileIntA */ /* INT nDefault for GetPrivateProfileIntA */ /* LPCSTR lpKeyName for GetPrivateProfileIntA */ /* LPCSTR lpAppName for GetPrivateProfileIntA */ dwIniValue = GetPrivateProfileIntA(D2IniConfigValues[nEntryOffset].szAppName, D2IniConfigValues[nEntryOffset].szKeyName, D2IniConfigValues[nEntryOffset].nDefaultValue, szIniPath);
             *(UINT*)pDestField = dwIniValue;
             break;
           }
         case '\x02':
           {
-            /* LPCSTR lpFileName for GetPrivateProfileStringA */ /* DWORD nSize for GetPrivateProfileStringA */ /* LPSTR lpReturnedString for GetPrivateProfileStringA */ /* LPCSTR lpDefault for GetPrivateProfileStringA */ /* LPCSTR lpKeyName for GetPrivateProfileStringA */ /* LPCSTR lpAppName for GetPrivateProfileStringA */ GetPrivateProfileStringA(D2IniConfigValues[0].szAppName + nEntryOffset, D2IniConfigValues[0].szKeyName + nEntryOffset, "", pDestField, 0x1b, szIniPath);
+            /* LPCSTR lpFileName for GetPrivateProfileStringA */ /* DWORD nSize for GetPrivateProfileStringA */ /* LPSTR lpReturnedString for GetPrivateProfileStringA */ /* LPCSTR lpDefault for GetPrivateProfileStringA */ /* LPCSTR lpKeyName for GetPrivateProfileStringA */ /* LPCSTR lpAppName for GetPrivateProfileStringA */ GetPrivateProfileStringA(D2IniConfigValues[nEntryOffset].szAppName, D2IniConfigValues[nEntryOffset].szKeyName, "", pDestField, 0x1b, szIniPath);
             break;
           }
       }
 
-      nEntryOffset += 0x5c;
-    } while (nEntryOffset < 0x14d8);
+      nEntryOffset++;
+    } while (nEntryOffset < 58);
 }
 
 int32_t __stdcall INI_FindConfigValueIndex(uint8_t * pbArgName) {
@@ -902,7 +904,7 @@ static void INI_StripDelimiters(char * szText) {
     szText[nWriteIdx] = '\0';
 }
 
-int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, int32_t pOutValue) {
+int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, char * pOutValue) {
     char szArgNameBuf[256];
     char cChar;
     int nDstOffset;
@@ -970,12 +972,12 @@ int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, in
     nCmdLen = 0;
     while (szArgNameBuf[0] != '\0') {
       szArgNameBuf[0] = szArgNameBuf[nCmdLen + 1];
-      *(uint8_t*)(pOutValue + nCmdLen) = pbArgName[(int)(szArgNameBuf + (nCmdLen - (int)pbScan))];
+      pOutValue[nCmdLen] = pbArgName[(int)(szArgNameBuf + (nCmdLen - (int)pbScan))];
       nCmdLen++;
     }
 
-    *(uint8_t*)(pOutValue + nCmdLen) = 0;
-    INI_StripDelimiters((char*)pOutValue);
+    pOutValue[nCmdLen] = '\0';
+    INI_StripDelimiters(pOutValue);
     return nConfigIdx;
 }
 
@@ -984,57 +986,44 @@ void __stdcall CloseDiablo() {
 }
 
 void __thiscall MISC_ParseCommandLineAndPutIntoD2IniData(char * szText, D2IniConfigStrc * pD2IniData) {
-    char* pcVar4;
     long int nConfigIdx;
     int nDstOffset;
+    int nPos;
     uint8_t szArgName[256];
     char szArgValue[256];
     uint8_t bVar2;
-    char cChar;
     char* pCmdEnd = szText;
     pCmdEnd = pCmdEnd + strlen(pCmdEnd) + 1;
     int iVar1 = (int)pCmdEnd - (int)(szText + 1);
-    int nPos = 0;
-    if (iVar1 > 0) {
-      do {
-        if (szText[nPos] == '-') {
-          nPos++;
-          if (nPos < iVar1) {
-            nDstOffset = INI_ParseCommandLineArg(szArgName, szText + nPos, (int32_t)szArgValue);
-            if (nDstOffset != -1) {
-              bVar2 = D2IniConfigValues[nDstOffset].nType;
-              pCmdEnd = pD2IniData->bD2ExpMpqExistsOrLanugageCode + D2IniConfigValues[nDstOffset].nOffset;
-              switch (bVar2) {
-                case 0:
-                  {
-                    *pCmdEnd = '\x01';
-                    break;
-                  }
-                case 1:
-                  {
-                    nConfigIdx = atoi(szArgValue);
-                    *(long int*)pCmdEnd = nConfigIdx;
-                    break;
-                  }
-                case 2:
-                  {
-                    pcVar4 = szArgValue;
-                    nDstOffset = (int)pCmdEnd - (int)pcVar4;
-                    do {
-                      cChar = *pcVar4;
-                      pcVar4[nDstOffset] = cChar;
-                      pcVar4++;
-                    } while (cChar != '\0');
-
-                    break;
-                  }
-              }
+    for (nPos = 0; nPos < iVar1; nPos++) {
+      if (szText[nPos] == '-') {
+        nPos++;
+        if (nPos < iVar1) {
+          nDstOffset = INI_ParseCommandLineArg(szArgName, szText + nPos, szArgValue);
+          if (nDstOffset != -1) {
+            bVar2 = D2IniConfigValues[nDstOffset].nType;
+            pCmdEnd = pD2IniData->bD2ExpMpqExistsOrLanugageCode + D2IniConfigValues[nDstOffset].nOffset;
+            switch (bVar2) {
+              case 0:
+                {
+                  *pCmdEnd = '\x01';
+                  break;
+                }
+              case 1:
+                {
+                  nConfigIdx = atoi(szArgValue);
+                  *(long int*)pCmdEnd = nConfigIdx;
+                  break;
+                }
+              case 2:
+                {
+                  strcpy(pCmdEnd, szArgValue);
+                  break;
+                }
             }
           }
         }
-
-        nPos++;
-      } while (nPos < iVar1);
+      }
     }
 }
 
@@ -1159,42 +1148,29 @@ BOOL __stdcall ReturnTrue() {
 }
 
 void __stdcall CreateRegedit() {
-    // Frame slots -1568..-1560 are ONE object: &dwValueNameLen is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      DWORD dwValueNameLen;
-      DWORD dwValueDataSize;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    // Frame slots -268..-8 are ONE object: &szInstallPath is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame1_t {
-      char szInstallPath;
-      uint8_t szInstallPathBuf[259];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame1_t) == 260, "frame group __frame1_t must reproduce the Ghidra frame layout");
-    __frame1_t __frame1;
-    DWORD dwIndex;
     LPDWORD dwValueInfo;
+    DWORD dwValueNameLen;
+    DWORD dwValueDataSize;
     HKEY hKeyDest;
     HKEY hKeySrc;
     uint8_t dataBuf[1024];
     char szValueName[260];
+    char szInstallPath[260];
     LSTATUS nRegStatus = RegOpenKeyA((HKEY)0x80000002, "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta", &hKeySrc);
     if (!nRegStatus) {
+      DWORD dwIndex;
       /* PHKEY phkResult for RegCreateKeyA */ /* LPCSTR lpSubKey for RegCreateKeyA */ /* HKEY hKey for RegCreateKeyA */ RegCreateKeyA((HKEY)0x80000002, "SOFTWARE\\Blizzard Entertainment\\Diablo II", &hKeyDest);
       dwIndex = 0;
       do {
-        /* LPDWORD lpcbData for RegEnumValueA */ /* LPBYTE lpData for RegEnumValueA */ /* LPDWORD lpType for RegEnumValueA */ /* LPDWORD lpReserved for RegEnumValueA */ /* LPDWORD lpcchValueName for RegEnumValueA */ /* LPSTR lpValueName for RegEnumValueA */ /* DWORD dwIndex for RegEnumValueA */ /* HKEY hKey for RegEnumValueA */ __frame0.dwValueNameLen = 0x104;
-        __frame0.dwValueDataSize = 0x400;
-        nRegStatus = RegEnumValueA(hKeySrc, dwIndex, szValueName, &__frame0.dwValueNameLen, (LPDWORD)0x0, (LPDWORD)&dwValueInfo, dataBuf, &__frame0.dwValueDataSize);
+        /* LPDWORD lpcbData for RegEnumValueA */ /* LPBYTE lpData for RegEnumValueA */ /* LPDWORD lpType for RegEnumValueA */ /* LPDWORD lpReserved for RegEnumValueA */ /* LPDWORD lpcchValueName for RegEnumValueA */ /* LPSTR lpValueName for RegEnumValueA */ /* DWORD dwIndex for RegEnumValueA */ /* HKEY hKey for RegEnumValueA */ dwValueNameLen = 0x104;
+        dwValueDataSize = 0x400;
+        nRegStatus = RegEnumValueA(hKeySrc, dwIndex, szValueName, &dwValueNameLen, (LPDWORD)0x0, (LPDWORD)&dwValueInfo, dataBuf, &dwValueDataSize);
         dwIndex++;
         if (nRegStatus) {
           break;
         }
 
-        /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ nRegStatus = RegSetValueExA(hKeyDest, szValueName, 0, (DWORD)dwValueInfo, dataBuf, __frame0.dwValueDataSize);
+        /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ nRegStatus = RegSetValueExA(hKeyDest, szValueName, 0, (DWORD)dwValueInfo, dataBuf, dwValueDataSize);
       } while (!nRegStatus);
 
       /* HKEY hKey for RegCloseKey */ RegCloseKey(hKeyDest);
@@ -1202,11 +1178,11 @@ void __stdcall CreateRegedit() {
       /* LPCSTR lpSubKey for RegDeleteKeyA */ /* HKEY hKey for RegDeleteKeyA */ RegDeleteKeyA((HKEY)0x80000002, "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta");
     }
 
-    __frame1.szInstallPath = '\0';
-    memset(__frame1.szInstallPathBuf, 0, 0x103);
-    Source::SFile::SFILE_GetInstallPath(&__frame1.szInstallPath, 0x104);
+    szInstallPath[0] = '\0';
+    memset(szInstallPath + 1, 0, 0x103);
+    Source::SFile::SFILE_GetInstallPath(szInstallPath, 0x104);
     if (gnServiceRunning) {
-      /* LPCSTR lpPathName for SetCurrentDirectoryA */ SetCurrentDirectoryA(&__frame1.szInstallPath);
+      /* LPCSTR lpPathName for SetCurrentDirectoryA */ SetCurrentDirectoryA(szInstallPath);
     }
 }
 
@@ -1225,7 +1201,6 @@ static int __stdcall CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgum
     // Static local variables (originally global data)
     static char * gApplicationModeCommandLineArgumentArray[6] = { s_modstate0_006cc928, s_client_006cc920, s_server_006cc918, s_multiplayer_006cc90c, s_launcher_006cc900, s_expand_006cc8f8 }; D2_STATIC_GUARD(gApplicationModeCommandLineArgumentArray, "Fog::Engine::Application::CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument::gApplicationModeCommandLineArgumentArray");
 
-    char* pszModeStrEnd;
     int nStrCmp;
     char cChar;
     char* pszModeStr;
@@ -1239,9 +1214,8 @@ static int __stdcall CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgum
       eMode = APPMODE_mode0;
       do {
         pszModeStr = gApplicationModeCommandLineArgumentArray[eMode];
-        pszModeStrEnd = pszModeStr;
-        pszModeStrEnd = pszModeStrEnd + strlen(pszModeStrEnd) + 1;
-        nStrCmp = strncmp(pszCmdToken, pszModeStr, (int)pszModeStrEnd - (int)(pszModeStr + 1));
+        int nLen = (int)strlen(pszModeStr);
+        nStrCmp = strncmp(pszCmdToken, pszModeStr, nLen);
         if (!nStrCmp && eMode != APPMODE_client) {
           *eAppMode = eMode;
         }
@@ -1294,7 +1268,7 @@ void __fastcall PreInitApplication(int32_t argc, char * * argv) {
     D2TRACE("PreInitApplication enter");
     Storm::Source::SSTR::SStrPrintf(szVersionString, 0x104, "v%d.%02d", 1, 0xe);
     D2TRACE("SetLogFilePath");
-    Source::SFile::FILETOOLS_SetLogFilePathWithoutDateAndExtension2((FILE*)"D2");
+    Source::SFile::FILETOOLS_SetLogFilePathWithoutDateAndExtension2("D2");
     D2TRACE("ERRORMANAGER_InitErrorManager");
     Src::ErrorManager::ERRORMANAGER_InitErrorManager("Diablo II", szVersionString, 1);
     HANDLE hDiabloOkEvent = OpenEventA(2, 1, "DIABLO_II_OK");

@@ -39,7 +39,6 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
-#include "D2Client/UI/QuestLog.h"
 #include "D2Game/D2Game.h"
 #include "D2Game/Quests/QUESTS/A2Q5.h"
 #include "D2Game/Quests/QUESTS/Quest40.h"
@@ -500,8 +499,6 @@ bool __fastcall Q14_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 
 // A2Q6 "The Seven Tombs" — main NPC-dialogue (state 0xb) driver, the quest's spine. Cain(0xfb)/msg 0x12e: spawns the Lut Gholein town portal (Tyrael's), sets nStateFlag 4, then runs CheckDurielLairAndComplete+PropagateRewardToParty+SetCannotComplete to finalize. Jerhyn(0xc9): msg 0x1ae sets flag 2 and kicks TheTaintedSun's sequence filter (opens the seven tombs storyline); msg 0x1ba (requires record Step0x03) advances record Step0x03->Step0x04 and sets flag 5. Drognan(0xd2)/msg 0x1c2 (requires Step0x04 + TheHoradricStaff Completed): strips the staff/viper/shaft quest items, and if JustCompleted writes the game-wide TheSevenTombs record + broadcasts state 0xd + marks record Completed + clears Step0x04 + records the finishing player GUID. switch(msg): 0x1bc/0x1bd/0x1be/0x1bf/0x1c1/0x1c4 set the per-NPC "talked" record bits Step0x09/06/07/0x11/08/0x10.
 void __fastcall Q14_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    int32_t nPlayerY;
-    D2RoomStrc* pRoom;
     BOOL bPortalSpawned;
     D2QuestDataStrc* pTaintedSunData;
     eD2LevelId eLevel;
@@ -514,17 +511,13 @@ void __fastcall Q14_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     D2QuestDataA2Q6Strc* pSpecificData = pQuestData->pQuestSpecificData.pA2Q6;
     if (nNpcNo == 0xfb) {
-      int32_t nPlayerX;
       if (pQuestData->bIsNotIntroduction != '\0' && nMessageIndex == 0x12e && !pSpecificData->bTyraelPortalSpawnLock) {
         bPortalSpawned = 0;
         nPortalClassId = 0x3b;
         ppSpawnedPortal = 0;
         pSpecificData->bPortalSpawnInProgress = 1;
         eLevel = LEVEL_LutGholein;
-        nPlayerY = D2Client::Units::GetYPosFromDynamicPathUnit(pQuestArgs->pPlayer);
-        nPlayerX = D2Client::Units::GetXPosFromDynamicPathUnit(pQuestArgs->pPlayer);
-        pRoom = D2Common::Units::UNITS_GetRoom(pQuestArgs->pPlayer);
-        bPortalSpawned = SKILLS::SkillsServer::SERVER_SpawnPortal(pQuestData->pGame, pQuestArgs->pPlayer, pRoom, nPlayerX, nPlayerY, eLevel, ppSpawnedPortal, nPortalClassId, bPortalSpawned);
+        bPortalSpawned = SKILLS::SkillsServer::SERVER_SpawnPortal(pQuestData->pGame, pQuestArgs->pPlayer, D2Common::Units::UNITS_GetRoom(pQuestArgs->pPlayer), D2Client::Units::GetXPosFromDynamicPathUnit(pQuestArgs->pPlayer), D2Client::Units::GetYPosFromDynamicPathUnit(pQuestArgs->pPlayer), eLevel, ppSpawnedPortal, nPortalClassId, bPortalSpawned);
         if (bPortalSpawned) {
           QUEST_SetStateFlag(pQuestData, 4, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q6.cpp", 0x241);
           UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q14_CheckDurielLairAndComplete);
@@ -792,7 +785,7 @@ void __fastcall Q14_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
                   UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestArgs->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q14_SetTombEntryOnPartyMember, 0);
                 }
 
-                QUEST_StubEmpty(0x3d);
+                QUEST_StubEmpty(pQuestData, pQuestArgs, 0x3d);
               }
             }
           }
@@ -895,7 +888,6 @@ void __fastcall Q14_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     BOOL bQuestStateResult;
     bool bNpcActive;
-    eD2QuestState eQuestState;
     if (nTargetClassId == MonsterUnitJerhyn) {
       /* GetQuestState(TheSevenTombs, 0=Completed) — Jerhyn: inactive once quest
                          complete */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Completed);
@@ -913,7 +905,9 @@ bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId
         }
       }
 
-      eQuestState = QUESTSTATE_Step0x03;
+      /* GetQuestState(TheSevenTombs, state) — shared "required-state" test:
+                         Jerhyn->Step0x03(3), Drognan(0xd2)->Step0x04(4) (jumps here with 4 pushed).
+                         Active iff set. */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x03);
     } else {
       if (nTargetClassId != MonsterUnitMeshif) {
         if (nTargetClassId == MonsterUnitTyrael2) {
@@ -982,12 +976,11 @@ bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId
         return false;
       }
 
-      eQuestState = QUESTSTATE_Step0x04;
+      /* GetQuestState(TheSevenTombs, state) — shared "required-state" test:
+                         Jerhyn->Step0x03(3), Drognan(0xd2)->Step0x04(4) (jumps here with 4 pushed).
+                         Active iff set. */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x04);
     }
 
-    /* GetQuestState(TheSevenTombs, state) — shared "required-state" test:
-                         Jerhyn->Step0x03(3), Drognan(0xd2)->Step0x04(4) (jumps here with 4 pushed).
-                         Active iff set. */ bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, eQuestState);
     bNpcActive = bQuestStateResult == 1;
     if (bNpcActive) {
       return true;

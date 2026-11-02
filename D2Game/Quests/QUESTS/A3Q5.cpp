@@ -141,7 +141,6 @@ void __fastcall Q21_CheckGoldenBirdDropConditions(D2QuestDataStrc * pQuestData, 
 
 // Q22_OnCouncilMemberKilled (BLACKENED TEMPLE / Travincal council, internal Q22) — on-death notifier for a tracked Council member. Reads quest-specific data off the game (offset 0x18); if its byte[2] tracking flag is set and the killer's GUID (param2 unit field [0xc], -1 if none) matches the recorded killer GUID at [4], clears tracking byte[2] and sets the "kill confirmed" byte[1]. No quest-record state calls (operates on the in-memory D2QuestDataA3Q5Strc council-kill bookkeeping).
 void __fastcall Q22_OnCouncilMemberKilled(D2QuestDataStrc * pQuestData, D2UnitStrc * pKillerUnit) {
-    int iVar1;
     int nKillerGUID;
     D2QuestDataA3Q5Strc* pCouncilQuestData = pQuestData->pQuestSpecificData.pA3Q5;
     if (pCouncilQuestData->bCouncilMemberTracking != '\x01') {
@@ -153,10 +152,7 @@ void __fastcall Q22_OnCouncilMemberKilled(D2QuestDataStrc * pQuestData, D2UnitSt
       nKillerGUID = pKillerUnit->nUnitGUID;
     }
 
-    *(uint8_t*)(char*)&iVar1 = pCouncilQuestData->nTrackedCouncilByte0;
-    *(uint8_t*)((char*)&iVar1 + 1) = pCouncilQuestData->bCouncilTrackingActive;
-    *(uint8_t*)((char*)&iVar1 + 2) = pCouncilQuestData->field_0x6;
-    *(uint8_t*)((char*)&iVar1 + 3) = pCouncilQuestData->field_0x7;
+    int iVar1 = (int)((uint32_t)(uint8_t)pCouncilQuestData->nTrackedCouncilByte0 | (uint32_t)(uint8_t)pCouncilQuestData->bCouncilTrackingActive << 8 | (uint32_t)(uint8_t)pCouncilQuestData->field_0x6 << 16 | (uint32_t)(uint8_t)pCouncilQuestData->field_0x7 << 24);
     if (iVar1 != nKillerGUID) {
       return;
     }
@@ -239,7 +235,6 @@ BOOL __fastcall Q22_PlayerUpdateBlackenedTempleState(::SGAMEDATA * pGame, D2Unit
 // State flow: requires !Completed && !Step0x04 -> set Completed|Step0x04, set JustCompleted.
 BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     bool _bSameOrAdjacentRoom;
-    uint32_t nUnitGUID;
     uint32_t iAdjRoomIdx;
     D2RoomStrc** pAdjRoomList;
     uint32_t nAdjRoomCount;
@@ -273,10 +268,7 @@ BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * p
 
     D2QuestDataStrc* pQuestDataBlackenedTemple = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheBlackenedTemple);
     D2QuestDataA3Q5Strc* pDVar1 = pQuestDataBlackenedTemple->pQuestSpecificData.pA3Q5;
-    *(uint8_t*)(char*)&nUnitGUID = pDVar1->bLastKilledCouncilByte0;
-    *(uint8_t*)((char*)&nUnitGUID + 1) = pDVar1->bCouncilMemberKillNotify;
-    *(uint8_t*)((char*)&nUnitGUID + 2) = pDVar1->bCouncilMemberTracking;
-    *(uint8_t*)((char*)&nUnitGUID + 3) = pDVar1->field_0x3;
+    uint32_t nUnitGUID = (uint32_t)((uint32_t)(uint8_t)pDVar1->bLastKilledCouncilByte0 | (uint32_t)(uint8_t)pDVar1->bCouncilMemberKillNotify << 8 | (uint32_t)(uint8_t)pDVar1->bCouncilMemberTracking << 16 | (uint32_t)(uint8_t)pDVar1->field_0x3 << 24);
     D2UnitStrc* pCouncilUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nUnitGUID);
     if (!pCouncilUnit) {
       return 0;
@@ -298,16 +290,11 @@ BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * p
       }
 
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &pAdjRoomList, (int*)&nAdjRoomCount);
-      iAdjRoomIdx = 0;
-      if (nAdjRoomCount > 0) {
-        do {
-          if (pAdjRoomList[iAdjRoomIdx] == pTargetRoom) {
-            _bSameOrAdjacentRoom = 1;
-            break;
-          }
-
-          iAdjRoomIdx++;
-        } while (iAdjRoomIdx < nAdjRoomCount);
+      for (iAdjRoomIdx = 0; iAdjRoomIdx < nAdjRoomCount; iAdjRoomIdx++) {
+        if (pAdjRoomList[iAdjRoomIdx] == pTargetRoom) {
+          _bSameOrAdjacentRoom = 1;
+          break;
+        }
       }
     }
 
@@ -489,7 +476,7 @@ void __fastcall Q22_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 // Q22_Callback_11 (BLACKENED TEMPLE) — quest-state[0xb] NPC-gossip handler, the main Ormus dialog path. Bails if the quest is already Completed. For special NPC 0xff + msg 0x252: sets nStateFlag 2/3 and the bTaintedSunStartedFailed flag (string varies by Lam Esen's Tome completion). For Ormus (class 0xf5) + msg 0x272, only when at Step0x04: if Khalim's Will is done, strips the 5 Khalim's Will items (eye/heart/brain/flail qf1/qf2) from the player; if a JustCompleted flag is pending and live nStateFlag!=7, marks the quest-record JustCompleted, broadcasts live state 0xd, sets nStateFlag 7, runs the sequence filter, then writes record Completed and clears Step0x04, and adds the player to the completion GUID list. Finally sends the NPC gossip packet.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q5.cpp
 void __fastcall Q22_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    bool _bLamEsenDone;
+    int _bLamEsenDone;
     bool bLamEsenDone;
     int32_t nSetStateFlag;
     uint32_t dwSrcLine;
@@ -665,7 +652,7 @@ void __fastcall Q22_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // State flow: log council kill; broadcast live state 1/3; nStateFlag -> 4/5 by Lam Esen.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q5.cpp
 void __fastcall Q22_TrackCouncilKill(::SGAMEDATA * pGame, D2UnitStrc * pKillerUnit) {
-    uint8_t _nBroadcastState;
+    int _nBroadcastState;
     uint8_t nBroadcastState;
     int32_t nNewStateFlag;
     int nLoopIdx;
@@ -843,12 +830,11 @@ void __fastcall Q22_PlayerCompleteKhalimsWill(::SGAMEDATA * pGame, D2UnitStrc * 
 // OBJOP_A3Q5_NihlathakAltarLaunchOrb (BLACKENED TEMPLE) — object OperateFn53 for the Compelling Orb altar in Travincal: the player uses Khalim's Will (assembled flail "qf2") on it. Requires the equipped weapon to be Khalim's Will and 2 uses (counter @0x38); on the 2nd use it sets Khalim's Will record Completed + JustCompleted, removes the flail, and if Blackened Temple is at Step0x04 promotes it to Completed. Then commands the Council boss (Compelling Orb effect) to launch an orb, fires the object animation/event, activates Jerhyn/Ormus AI, notifies players (event 10), runs the sequence filter, and runs Q22_PlayerCompleteKhalimsWill for every party member.
 // State flow: set Khalim's Will Completed+JustCompleted; if Blackened Temple Step0x04 -> Completed; party-wide Khalim completion.
 BOOL __fastcall OBJOP_A3Q5_NihlathakAltarLaunchOrb(D2ObjectOperateFnArg * pOperation) {
-    bool _bQuestState;
+    BOOL _bQuestState;
     bool bQuestState;
     int32_t nItemCode;
     D2QuestDataStrc* pQuestData;
     D2UnitDataPlayerStrc* pAttackerPlayerData;
-    D2BitBufferStrc* pQuestBitBuffer;
     eD2QuestState eQuestState_00;
     int32_t nClassId;
     D2ObjectsTxt* pObjectsTxt;
@@ -890,14 +876,12 @@ BOOL __fastcall OBJOP_A3Q5_NihlathakAltarLaunchOrb(D2ObjectOperateFnArg * pOpera
         if (_bQuestState) {
           eQuestState = QUESTSTATE_Completed;
           eQuestId = QUEST_TheBlackenedTemple;
-          pQuestBitBuffer = GetQuestBitBuffer(pOperation->sArg.pGame, pOperation->pAttacker);
           /* GetQuestState(Blackened Temple=0x15, Completed=0): guard to avoid
-                         re-completing */ eQuestState_00 = D2Common::QuestRecord::GetQuestState(pQuestBitBuffer, eQuestId, eQuestState);
+                         re-completing */ eQuestState_00 = D2Common::QuestRecord::GetQuestState(GetQuestBitBuffer(pOperation->sArg.pGame, pOperation->pAttacker), eQuestId, eQuestState);
           if (eQuestState_00 == QUESTSTATE_Completed) {
             nQuestId = QUEST_TheBlackenedTemple;
-            pQuestBitBuffer = GetQuestBitBuffer(pOperation->sArg.pGame, pOperation->pAttacker);
             /* SetQuestState(Blackened Temple=0x15, Completed=0): finish the temple quest
-                         (council + Khalim's Will both done) */ D2Common::QuestRecord::SetQuestState(pQuestBitBuffer, nQuestId, eQuestState_00);
+                         (council + Khalim's Will both done) */ D2Common::QuestRecord::SetQuestState(GetQuestBitBuffer(pOperation->sArg.pGame, pOperation->pAttacker), nQuestId, eQuestState_00);
           }
         }
 
@@ -983,7 +967,6 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     int32_t nKhalimsWillDropCount;
     int32_t nDropLoop;
     D2QuestDataA3Q2Strc* pQuestSpecificDataA3Q2;
-    int32_t* pnKhalimsWillCount;
     QUEST_DebugPrint(pQuestData->pGame, "killed boss for quest", "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", 0x391);
     D2UnitStrc* pTargetUnit = pQuestArgs->pTarget;
     D2QuestDataA3Q5Strc* pDVar1 = pQuestData->pQuestSpecificData.pA3Q5;
@@ -1013,8 +996,7 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
             pQuestDataKhalimsWill = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_KhalimsWill);
             if (pQuestDataKhalimsWill) {
               pQuestSpecificDataA3Q2 = pQuestDataKhalimsWill->pQuestSpecificData.pA3Q2;
-              pnKhalimsWillCount = &pQuestSpecificDataA3Q2->nKhalimsWillCount;
-              *pnKhalimsWillCount += nKhalimsWillDropCount;
+              pQuestSpecificDataA3Q2->nKhalimsWillCount += nKhalimsWillDropCount;
               pQuestSpecificDataA3Q2->bOrbCountUpdated = true;
             }
           }
@@ -1022,12 +1004,8 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
       } else if (!pDVar1->bBoxDropped) {
         pDVar1->bBoxDropped = true;
         pQuestArgs->pTarget->dwDropItemCode = 0x20786f62;
-        nDropLoop = 0;
-        if (pDVar1->nBoxDropPlayerCount > 0) {
-          do {
-            ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nRewardItemGUID, nullptr, -1, 0);
-            nDropLoop++;
-          } while (nDropLoop < pDVar1->nBoxDropPlayerCount);
+        for (nDropLoop = 0; nDropLoop < pDVar1->nBoxDropPlayerCount; nDropLoop++) {
+          ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nRewardItemGUID, nullptr, -1, 0);
         }
       }
       if (pQuestData->bIsNotIntroduction != '\0' && pDVar1->nCouncilKillsRemaining > 0) {
@@ -1082,7 +1060,7 @@ uint32_t __thiscall Q22_StatusFilter(int32_t pThis, uint32_t param_1, D2BitBuffe
     if (bQuestState) {
       /* GetQuestState(Blackened Temple=0x15, JustCompleted=0xd): bumps completed
                          status byte 0xb -> 0xd */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
-      *szText = (bQuestState != 0) * '\x02' + '\v';
+      *szText = bQuestState != 0 ? 13 : 11;
       return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)bQuestState >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     }
 

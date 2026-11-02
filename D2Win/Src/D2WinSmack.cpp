@@ -178,8 +178,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     ::D2WinSmack* pSmack = D2_NEW_AT(::D2WinSmack, ".\\Src\\D2WinSmack.cpp", 0x23);
     memset(pSmack, 0, 0x150);
     pSmack->sControl.neD2FormType = FORM_Smack;
-    int* pState = &pSmack->sControl.dwState;
-    *pState |= gadwBitMasks[0];
+    pSmack->sControl.dwState |= gadwBitMasks[0];
     uVar1 = pSmack->sControl.dwState | gadwBitMasks[2];
     pSmack->sControl.dwSizeX = nWidth;
     pSmack->sControl.dwState = uVar1;

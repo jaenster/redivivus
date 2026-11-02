@@ -32,7 +32,6 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "D2Multi/OOG/ChatDlg.h"
 #include "D2Win/D2WinEditBox.h"
@@ -277,7 +276,7 @@ void __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, int32_t ps
       return;
     }
 
-    FILETIME utcFileTime = d2_bits_as<FILETIME>(_allmul(nUnixTime + 0xb6109100, (0x49ef6eff < nUnixTime) + 2, 10000000, 0));
+    FILETIME utcFileTime = d2_bits_as<FILETIME>(_allmul(nUnixTime + 0xb6109100, 0x49ef6eff < nUnixTime ? 3 : 2, 10000000, 0));
     /* LPFILETIME lpLocalFileTime for FileTimeToLocalFileTime */ /* FILETIME * lpFileTime for FileTimeToLocalFileTime */ FileTimeToLocalFileTime(&utcFileTime, &localFileTime);
     CHATDLG_FormatFileTimeToDate(&localFileTime, 0x40, szDateStr);
     StoreData((LPRECT)0x0, 0, szDateStr);
@@ -311,21 +310,21 @@ void __stdcall CHATDLG_EnqueueClearMessage() {
     LeaveCriticalSection(&lpCriticalSection_0077ae28);
 }
 
-int __fastcall CHATDLG_AppendTextToTextBox(uint16_t * wszText, int32_t nParam) {
+int __fastcall CHATDLG_AppendTextToTextBox(uint16_t * wszText, int32_t nLineStyle) {
     if (!gpChatMessagesTextBox) {
       return 1;
     }
 
-    D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszText, nParam, false, 1);
+    D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszText, nLineStyle, false, 1);
     return 1;
 }
 
-uint32_t __fastcall CHATDLG_AppendTextToTextBox_ForComCallback(uint16_t * wszText, int32_t nParam) {
+uint32_t __fastcall CHATDLG_AppendTextToTextBox_ForComCallback(uint16_t * wszText, int32_t nLineStyle) {
     if (!gpChatMessagesTextBox) {
       return 1;
     }
 
-    D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszText, nParam, false, 1);
+    D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszText, nLineStyle, false, 1);
     return 1;
 }
 
@@ -459,7 +458,7 @@ BOOL __stdcall CHATDLG_FindSubstringMatch(int32_t nTargetHash, int32_t nWordLen,
     int nStrLen = Storm::Source::SSTR::SStrLen(szText);
     int nStart = 0;
     int nMaxStart = nStrLen - nWordLen;
-    if (-1 >= nMaxStart) {
+    if (nMaxStart < 0) {
       return 0;
     }
 
@@ -761,16 +760,16 @@ void __stdcall CHATDLG_ClearLadderBoard() {
 // Returns the ladder filter id for class tab nLadderTab (0 Overall .. 7 Assassin) in the same group as nCurrentFilterMode: groups start at 0, 9, 0x13 and 0x1b and hold 8 ids each; any other nCurrentFilterMode halts at line 0x1a23. The eight CHATDLG_OnPressLadder* tab handlers pass their tab and g_nLadderFilterMode and store the result back into it.
 // Provenance: asm 0043f150..0043f1c3 (tab on the stack, filter in EAX).
 static int32_t __stdcall CHATDLG_GetLadderFilterForTab(int32_t nLadderTab, uint32_t nCurrentFilterMode) {
-    if (nCurrentFilterMode - 9 <= 7) {
+    if (nCurrentFilterMode >= 0x9 && nCurrentFilterMode <= 0x10) {
       return nLadderTab + 9;
     }
     if (nCurrentFilterMode <= 7) {
       return nLadderTab;
     }
-    if (nCurrentFilterMode - 0x13 <= 7) {
+    if (nCurrentFilterMode >= 0x13 && nCurrentFilterMode <= 0x1a) {
       return nLadderTab + 0x13;
     }
-    if (nCurrentFilterMode - 0x1b <= 7) {
+    if (nCurrentFilterMode >= 0x1b && nCurrentFilterMode <= 0x22) {
       return nLadderTab + 0x1b;
     }
 
@@ -1002,11 +1001,11 @@ uint32_t __stdcall CHATDLG_ToggleLadderNews(D2ControlMsg * pControlMsg) {
           if (!(nRand % 1000)) {
             Fog::File::CONTAINER_InitializeBuffer(awszMessage, 2, 0x14, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
             D2Lang::UTF8_ConvertToWideChar(awszMessage, "Moooooooo!", 0xc);
-            if (gpChatMessagesTextBox) {
-              D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, awszMessage, 9, false, 1);
+            if (!gpChatMessagesTextBox) {
               return 1;
             }
 
+            D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, awszMessage, 9, false, 1);
             return 1;
           }
         }
@@ -1016,11 +1015,10 @@ uint32_t __stdcall CHATDLG_ToggleLadderNews(D2ControlMsg * pControlMsg) {
     }
 
     uint16_t* szText = D2Lang::StrTable::strtable::GetLocaleString(nStringId);
-    if (!gpChatMessagesTextBox) {
-      return 1;
+    if (gpChatMessagesTextBox) {
+      D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, szText, 0xb, false, 1);
     }
 
-    D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, szText, 0xb, false, 1);
     return 1;
 }
 
@@ -1038,8 +1036,6 @@ void __stdcall CHATDLG_RefreshGameNameDisplay() {
     uint16_t awszGameNames[512];
     char aszGameNames[512];
     char cCurrent;
-    int nUsedLen;
-    nUsedLen = 0;
     for (nClearCount = 0; nClearCount < 0x200; nClearCount++) {
       awszGameNames[nClearCount] = L'\0';
     }
@@ -1052,17 +1048,16 @@ void __stdcall CHATDLG_RefreshGameNameDisplay() {
     char* pszNameNode;
     pszNameNode = (char*)gpChatPlayerNameListHead;
     if (gpChatPlayerNameListHead) {
-      char* pszCursor;
+      int nUsedLen = 0;
       do {
         if (nUsedLen >= 0x200) {
           break;
         }
 
         strncat(aszGameNames, pszNameNode, 0x200 - nUsedLen);
-        pszCursor = aszGameNames;
-        pszCursor = pszCursor + strlen(pszCursor) + 1;
+        int nLen = (int)strlen(aszGameNames);
         pszNameNode = *(char**)(pszNameNode + 0x204);
-        nUsedLen = (int)pszCursor - (int)(aszGameNames + 1);
+        nUsedLen = nLen;
       } while (pszNameNode);
 
       if (aszGameNames[0] != '\0') {
@@ -1108,7 +1103,7 @@ void __stdcall CHATDLG_ParseCommandArgument(int32_t nMaxLen, char * szSource, ch
 }
 
 void __stdcall SafeDefaultChannel(char * pszChannel) {
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Default Channel", 0, pszChannel);
+    Storm::Source::SReg::SRegSaveString("Diablo II", "Default Channel", 0, pszChannel);
 }
 
 void __stdcall CHATDLG_DestroyAllForms() {
@@ -1148,20 +1143,13 @@ uint32_t __stdcall CHATDLG_SetDestroyCallback(uint32_t dwUnused, ChatDlgCallback
 }
 
 int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char * szText) {
-    // Frame slots -1028..-4 are ONE object: &szArgRemainder is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char szArgRemainder;
-      char acStack1027[255];
-      char szArgPrefix[256];
-      char szChannelName[256];
-      char szInputText[256];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1024, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     char* pcInputEnd;
     char* pcChannelEnd;
     uint16_t wszResult[256];
+    char szArgRemainder[256];
+    char szArgPrefix[256];
+    char szChannelName[256];
+    char szInputText[256];
     char cCur;
     if (*szText == '\x0e') {
       uint16_t* pwszInput;
@@ -1170,37 +1158,36 @@ int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char 
         return 0;
       }
 
-      OOGUtilities::OOGUTIL_CopyChannelName((char*)((int)gpCurrentChatRoomContext + 4), __frame0.szChannelName);
+      OOGUtilities::OOGUTIL_CopyChannelName((char*)((int)gpCurrentChatRoomContext + 4), szChannelName);
       Fog::File::CONTAINER_InitializeBuffer(wszResult, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(__frame0.szInputText, (uint16_t*)pwszInput, 0x100);
-      pcInputEnd = __frame0.szInputText;
+      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szInputText, (uint16_t*)pwszInput, 0x100);
+      pcInputEnd = szInputText;
       pcInputEnd = pcInputEnd + strlen(pcInputEnd) + 1;
-      pcChannelEnd = __frame0.szChannelName;
+      pcChannelEnd = szChannelName;
       pcChannelEnd = pcChannelEnd + strlen(pcChannelEnd) + 1;
-      if ((int)(pcInputEnd + (int)(pcChannelEnd + (-(int)(__frame0.szChannelName + 1) - (int)(__frame0.szInputText + 1)))) > 0xff) {
+      if ((int)(pcInputEnd + (int)(pcChannelEnd + (-(int)(szChannelName + 1) - (int)(szInputText + 1)))) > 0xff) {
         return 0;
       }
 
-      strncpy(__frame0.szArgPrefix, __frame0.szInputText, nSize);
-      __frame0.szArgPrefix[nSize] = '\0';
-      strncpy(&__frame0.szArgRemainder, __frame0.szInputText + nSize, (size_t)(pcInputEnd + (-nSize - (int)(__frame0.szInputText + 1))));
-      __frame0.acStack1027[(int)(pcInputEnd + (-nSize - (int)(__frame0.szInputText + 1)) - 1)] = '\0';
-      sprintf(__frame0.szInputText, "%s%s%s", __frame0.szArgPrefix, __frame0.szChannelName, &__frame0.szArgRemainder);
-      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszResult, __frame0.szInputText, 0x100);
+      strncpy(szArgPrefix, szInputText, nSize);
+      szArgPrefix[nSize] = '\0';
+      strncpy(szArgRemainder, szInputText + nSize, (size_t)(pcInputEnd + (-nSize - (int)(szInputText + 1))));
+      szArgRemainder[(int)(pcInputEnd + (-nSize - (int)(szInputText + 1)))] = '\0';
+      sprintf(szInputText, "%s%s%s", szArgPrefix, szChannelName, szArgRemainder);
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszResult, szInputText, 0x100);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpChatDlgInputEditBox, wszResult);
       return 0;
     }
     if (*szText == '\t') {
-      if (!gnChatHistoryEntryCount) {
-        return 0;
+      if (gnChatHistoryEntryCount) {
+        gnChatTabCompletionIndex++;
+        if (gnChatTabCompletionIndex >= gnChatHistoryEntryCount) {
+          gnChatTabCompletionIndex = 0;
+        }
+
+        D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpChatDlgInputEditBox, gaChatDlgHistoryBuffer[gnChatTabCompletionIndex]);
       }
 
-      gnChatTabCompletionIndex++;
-      if (gnChatTabCompletionIndex >= gnChatHistoryEntryCount) {
-        gnChatTabCompletionIndex = 0;
-      }
-
-      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpChatDlgInputEditBox, gaChatDlgHistoryBuffer[gnChatTabCompletionIndex]);
       return 0;
     }
 

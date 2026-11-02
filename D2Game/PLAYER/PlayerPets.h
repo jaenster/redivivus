@@ -62,7 +62,7 @@ void __fastcall Send0x7aSummonLog(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit
 void __fastcall FreePets(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // @sourcefile .\PLAYER\PlayerPets.cpp
 void __fastcall SummonAndAssign(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2PetArgStrc * pSummonArgs);
-void __fastcall PETS_UpdatePetData(struct D2UnitStrc * pUnit, int32_t nParam, int32_t nTargetPetGUID, struct D2PetDataStrc * pNewPetData);
+void __fastcall PETS_UpdatePetData(struct D2UnitStrc * pUnit, ePetType nPetType, int32_t nTargetPetGUID, struct D2PetDataStrc * pNewPetData);
 // Returns the pet-type index (1..nTxtPetTypeSize-1) that owns the monster with the given GUID in the player's pet lists, or 0 if not found. Halts fatally if player data is null. Used to classify whether a unit is a summoned pet and of which type (e.g. 7 = merc).
 int32_t __fastcall GetOwnersPetType(struct D2UnitStrc * pUnit, int32_t nUnitGUID);
 // Searches the owner player's pet list for a pet whose GUID matches pPetUnit, clears its active flag, captures its class ID / seed / name ID / pet-type index, then calls SUnit::IterateAllUnits with SummonAndAssign to re-spawn it. Returns 1 if the pet was found and a resummon was triggered, 0 if pPetUnit is not in the pet list or the player has no pet data.

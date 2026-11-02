@@ -22,6 +22,7 @@ struct D2GSPacketSrv0x7F;
 struct D2GSPacketSrv0x81;
 struct D2GSPacketSrv0x82;
 struct D2GSPacketSrv0x8B;
+struct D2GSPacketSrv0x8D;
 struct D2GSPacketSrv0x8E;
 struct D2GSPacketSrv0x90;
 struct D2ItemStatCostTxt;
@@ -65,6 +66,12 @@ struct __attribute__((packed)) D2GSPacketSrv0x40 {
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ eD2ItemFlag eItemFlag;
     /* 0x09 */ BOOL bSet;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x65 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwUnitGUID;
+    /* 0x05 */ uint16_t wKillCount;
 };
 
 struct __attribute__((packed)) D2GSPacketSrv0x74 {
@@ -140,7 +147,7 @@ struct D2ServerMessageHandleStrc {
 namespace D2Client::GAME::SCmd {
 
 // Function declarations
-void __fastcall SCMD_SetOrClearBitFlag(int32_t pUnit, uint32_t dwFlagMask, int32_t bSet);
+void __fastcall SCMD_SetOrClearBitFlag(struct D2UnitStrc * pUnit, uint32_t dwFlagMask, int32_t bSet);
 int32_t __stdcall GetTxtMonStatsSize();
 void __fastcall SCMD_ClearPlayerTradeFields(struct D2UnitStrc * pUnit);
 struct D2SkillsTxt * __fastcall TXT_Skills_GetLine(eD2Skills eSkill);
@@ -293,7 +300,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x5F_PORTALFLAGS(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x60_SETWARPDEST(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x61(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x63(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x65_SCORE_UPDATE(int32_t nParam);
+void __fastcall NET_D2GS_CLIENT_Incoming0x65_SCORE_UPDATE(struct D2GSPacketSrv0x65 * pPacket);
 void __fastcall SCMD_Rcv0x66_Ignore(char * pBytes);
 // Server-to-client SCMD 0x73 handler: spawns a missile on the client from a D2GSPacketSrv0x73 descriptor. Reads missile class, owner GUID/type, spawn coords, target coords, skill level, pierce index, and current frame. Builds a D2SkillArgStrc (flags 0x40000001; adds 0x20 if target coords are non-zero), calls MakeMissile, stores owner info, sets pierce-idx stat if present, sets the current frame, then randomises nGfxCurrentFrame within the frame count.
 // Blizzard packet name SCMD_CREATEMISSILE. The body memsets a D2SkillArgStrc, fills
@@ -319,7 +326,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x89(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x8A(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x8B_PLAYERBUTTON(struct D2GSPacketSrv0x8B * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x8C_PLAYERFLAGS(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x8D_PLAYERPARTY(int32_t nParam);
+void __fastcall NET_D2GS_CLIENT_Incoming0x8D_PLAYERPARTY(struct D2GSPacketSrv0x8D * pPacket);
 void __fastcall NET_D2GS_CLIENT_Incoming0x8E_LINKDEADBODY(struct D2GSPacketSrv0x8E * pBytes);
 // Packet 0x9B: hands the unsigned words at +1 and +3 to SetPlayersMercInfo.
 void __fastcall NET_D2GS_CLIENT_Incoming0x9B_DEAD_HIRELING(char * pBytes);

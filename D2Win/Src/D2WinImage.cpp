@@ -399,8 +399,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     ::D2WinImage* pNewImage = D2_NEW_AT(::D2WinImage, ".\\Src\\D2WinImage.cpp", 0x1d);
     memset(pNewImage, 0, 0x4c);
     pNewImage->sControl.neD2FormType = FORM_Image;
-    int* pDwState = &pNewImage->sControl.dwState;
-    *pDwState |= gadwBitMasks[0];
+    pNewImage->sControl.dwState |= gadwBitMasks[0];
     uVar1 = pNewImage->sControl.dwState | gadwBitMasks[2];
     pNewImage->sControl.pDC6 = pDC6;
     pNewImage->sControl.dwState = uVar1;

@@ -22,5 +22,6 @@ namespace D2Client::UI::Spinner {
 _EXCEPTION_DISPOSITION SehHandler_6ca198(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION SehHandler_6ca1b8(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION SehHandler_6ca1d8(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
+_EXCEPTION_DISPOSITION SehHandler_6ca203(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 
 } // namespace D2Client::UI::Spinner

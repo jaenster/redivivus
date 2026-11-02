@@ -1,0 +1,127 @@
+name: "Correction: name, type or prototype"
+description: A wrong or missing name, type, field, prototype or calling convention in the reverse-engineering.
+labels: ["correction"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Most of the tree is generated, so a fix that belongs in the reverse-engineering lands in
+        Ghidra and survives the next regeneration. If you have agent access to the databases,
+        prefer a proposal - see [Contributing](../../#contributing). Use this issue when you do
+        not, or when the change is one the proposal tools cannot express.
+
+        **Not for a wrong *function set*** - data that is really code, a function that should
+        split or merge. That is a
+        [Structural: function discovery/boundary](?template=structural.yml) issue, because it
+        forces a full rebuild and has to go through a human.
+
+        **One issue is one claim.** A rename and a retype are two issues, even on the same
+        function.
+
+  - type: dropdown
+    id: program
+    attributes:
+      label: Program
+      description: Which database. Windows is ground truth; a paired symbol ends with the same name on both.
+      options:
+        - "win - 1.14d Game.exe"
+        - "mac - the Intel Mac build"
+        - Both
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What is wrong
+      options:
+        - Function name
+        - Local or parameter name
+        - Global name
+        - Type of a local, parameter or global
+        - Struct field (name, type or offset)
+        - Function prototype or return type
+        - Calling convention
+        - Enum or enum constant
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: target
+    attributes:
+      label: Target, by address
+      description: >-
+        Address the target, never name it. For a local or parameter: the function address plus
+        the storage (stack offset or register). For a type: the type path.
+      placeholder: "0x00464a60, local at EBP-0x4  |  0x0073ca18  |  /D2Structs/D2UnitStrc field at 0x1e"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: The value you saw
+      description: >-
+        What the database says right now, verbatim. This is how a reviewer tells whether it
+        changed in the meantime.
+      placeholder: |
+        Name: uVar3
+        Type: undefined4
+        Prototype: void SSignatureGenerate(void *, int)
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed
+    attributes:
+      label: What it should be
+      placeholder: |
+        Name: nAiIndex
+        Type: uint16_t
+        Prototype: int SSignatureGenerate(void *pBuffer, int nLength)
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence a reviewer can re-check
+      description: >-
+        Strongest first: the developers' own words (assert strings, `__FILE__` paths); the
+        paired function on the other build; field accesses on an already-typed struct and the
+        names of the callees it feeds; strings it references. Inference from behaviour alone is
+        the weakest - if that is all you have, say so and propose a type-based fallback name
+        (`pTmp`, `nTmp`) instead of a specific one. "It looks like" and "the name suggests" are
+        not evidence.
+      placeholder: |
+        - Assert string at 0x...: "AiTatics.cpp"
+        - Mac counterpart 0x... carries the name ...
+        - The value is passed as arg 2 to 0x... (MONSTERTBLS_GetMonSeqFrameCount), whose
+          parameter is already typed ...
+        - Disassembly, where it matters:
+
+          005b161f  MOVZX EAX, word ptr [ESI + 0x1e]
+          005b1628  CMP   AX, 0x94
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Before filing
+      options:
+        - label: This is one claim.
+          required: true
+        - label: >-
+            The current name is a default one (`FUN_*`, `DAT_*`, `param_N`, `local_XX`,
+            `uVarN`, ...), **or** I am claiming an existing chosen name is wrong and have given
+            the evidence for that rather than just a better-sounding alternative.
+          required: true
+        - label: >-
+            The target is not CRT/STL/Win32 runtime code (`std::*`, `__crt*`, `_malloc`,
+            `mem*`, `str*`, `__security_*`, printf/scanf cores) or a stack-cookie or SEH slot.
+            (Storm and Fog *are* Blizzard code and are in scope.)
+          required: true
+        - label: I kept any misspelling that is itself evidence, rather than correcting a Blizzard typo.
+          required: true

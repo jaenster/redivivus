@@ -267,7 +267,7 @@ BOOL __stdcall DRLGROOM_IsUnitInRoom(D2RoomStrc * pRoom, D2UnitStrc * pUnit) {
 
 // DRLGROOM_AddUnitToRoomList - Core function that prepends a unit to a room's unit linked list. Checks collision flags, links via pRoomFirstUnit, increments allied count for players/allied monsters.
 BOOL __stdcall DRLGROOM_AddUnitToRoomList(D2UnitStrc * pUnit, D2RoomStrc * pRoom, eD2UnitType nUnitType) {
-    bool _bValid;
+    BOOL _bValid;
     bool bValid;
     D2UnitStrc** ppUnitList;
     int32_t nLine;

@@ -89,13 +89,13 @@ void __stdcall TILECMP_CacheTileData(int * pTileMeasures, uint32_t * pTilePixels
 void __stdcall TILECMP_InitTileSetFromDT1(struct D2TileCmpTileSetStrc * pTileSet, int32_t nDT1Data);
 // @sourcefile .\SRC\Tilecmp.cpp
 // @note ESI nErrLine is not a real input (ESI is only saved, then overwritten at 00609df0). It stays because the halt tail at 00609d71 is reached at several stack depths (0x224/0x22d/0x239/0x247); without it the decompiler reads the 0x239 line as unaff_ESI.
-uint32_t __stdcall TILECMP_ExportCacheToBuffer(struct D2TileCmpTileSetListStrc * pTileSetList, void * ppOutBuffer, DWORD nErrLine);
+uint32_t __stdcall TILECMP_ExportCacheToBuffer(struct D2TileCmpTileSetListStrc * pTileSetList, struct D2TileLibraryHeaderStrc * * ppOutBuffer, DWORD nErrLine);
 // @sourcefile .\SRC\Tilecmp.cpp
 void __stdcall TILECMP_FreeTileCache(struct D2TileLibraryHeaderStrc * pTileLibrary, int32_t nUnused);
 // @sourcefile .\SRC\Tilecmp.cpp
 void __thiscall TILECMP_DeserializeAndFixup(int32_t pThis, void * pTileSetData, void * * ppDstBuffer, size_t * pSizeOut);
-void __stdcall TILECMP_FixupPointersInPlace(int * pTileCmpHdr, int * * ppTileCmpHdrOut, char * szText);
-void __stdcall TILECMP_FixupMinimalPointers(int * pTileCmpHdr, int * * ppTileCmpHdrOut, char * szText);
+void __stdcall TILECMP_FixupPointersInPlace(struct D2TileLibraryHeaderStrc * pTileCmpHdr, struct D2TileLibraryHeaderStrc * * ppTileCmpHdrOut, char * szText);
+void __stdcall TILECMP_FixupMinimalPointers(struct D2TileLibraryHeaderStrc * pTileCmpHdr, struct D2TileLibraryHeaderStrc * * ppTileCmpHdrOut, char * szText);
 void __stdcall TILECMP_FixupMinimalPointers_HaltTail(int nLine);
 // Allocates the 128-slot tile hash table (FINDTILE_AllocHashTable) and registers every tile of the loaded DT1 library, pTiles[0..nTiles) at a 0x60 stride, with FINDTILE_Register; halts on line 0x3b9 (no table) or 0x3ba (null header). Returns the table, which TileProjects Alloc stores as the project node's pHash.
 // Provenance: asm 0060a440..0060a4b6; ECX = header, [ESI+0x10c] count, [ESI+0x110] tile array.
@@ -114,7 +114,7 @@ void __stdcall TILECMP_RelocateSubTilePixelData(struct D2TileLibraryEntryStrc * 
 // conversion error at Tilecmp.cpp:1044. Do not retype either half without solving both roles.
 void __stdcall TILECMP_ProcessAllTilePixels(int32_t pTileCmpHdr, void * pNodeByteIter);
 // @sourcefile .\SRC\Tilecmp.cpp
-void __stdcall TILECMP_DeepCopyWithRecompression(uint32_t * pSrcTileCmpHdr, uint32_t * ppDstTileCmpHdr, void * pPaletteContext);
+void __stdcall TILECMP_DeepCopyWithRecompression(struct D2TileLibraryHeaderStrc * pSrcTileCmpHdr, struct D2TileLibraryHeaderStrc * * ppDstTileCmpHdr, void * pPaletteContext);
 // @sourcefile .\SRC\Tilecmp.cpp
 void __stdcall TILECMP_ShallowCopyZeroPointers(void * pParam, void * * pParam2, size_t * pnSize);
 // 10 internal functions (defined in .cpp)

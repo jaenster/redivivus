@@ -127,7 +127,7 @@ void __stdcall INPUT_HandleScrollToEnd(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandleSysCommand(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandlePassthrough(struct D2UIMouseMsgStrc * pMsg);
 // Handle mouse button event: clear selection/UI, update run key, and normalize queued click state.
-void __stdcall HandleMouseButtonEvent(int32_t pMouseEvent);
+void __stdcall HandleMouseButtonEvent(struct D2UIMouseMsgStrc * pMouseEvent);
 void __stdcall GAMEDATA_CheckAutomapCenterOnLoad();
 void __stdcall NET_D2GS_CLIENT_HandleAllNonVariableSizePackets();
 // Client-side world tick: init room, missiles, and DenOfEvil lighting for current act.
@@ -267,6 +267,8 @@ uint32_t __stdcall GetStepsOfMissileMovement();
 eD2GSGameType __stdcall CLIENT_GetD2GSGameType();
 void __fastcall GAMEDATA_ExtendTimeout(int32_t nDelayMs);
 void __stdcall GAMEDATA_LoadActTiles(uint32_t nAct);
+// ESI is not an argument: the body never reads it.
+void GAMEDATA_CheckColorTxtOverride();
 BOOL __stdcall GAMEDATA_GetBloodFlag();
 void __fastcall CLIENT_SetDifficulty(char nDifficulty);
 void __fastcall CLIENT_SetExpansion(bool bExpansion);
@@ -315,6 +317,5 @@ BOOL __stdcall RegisterCmdLineLngOption();
 void __stdcall FreeLanguage();
 void __stdcall thunk_GAMEDATA_CheckAutomapCenterOnLoad();
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca026(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
-// 1 internal function (defined in .cpp)
 
 } // namespace D2Client::GAME::Game

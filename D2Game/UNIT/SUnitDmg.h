@@ -101,10 +101,10 @@ uint32_t __fastcall DAMAGE_CheckMonsterTypeVsMonsterType(uint32_t nMonTypeA, int
 void __fastcall DAMAGE_OnColdExpire(struct D2UnitStrc * pUnit, eD2States eState, uint32_t dwParam);
 int32_t __fastcall DAMAGE_GetMonsterDelayByDifficulty(struct D2UnitStrc * pUnit, struct D2UnitStrc * pMonster);
 // Computes the physical damage total in nParam throughout the body; the only caller (DAMAGE_CalculateOffensiveDamage) assigns the never-set local nPhysDmgResult straight from this call's result into pDmgStrc->dwPhysDamage, proving the value is meant to flow back. The final D2ApplyPercent(nParam,...) call (when bParam!=0x80) also drops its own int32_t return, which is this function's true final value.
-uint32_t __fastcall DAMAGE_CalculatePhysicalDamage(struct D2UnitStrc * pUnit, int32_t nParam1, struct D2UnitStrc * pWeapon, int32_t nMinDmg, int32_t nParam2, int32_t nParam3, uint32_t nParam, uint8_t bParam);
-void __stdcall DAMAGE_ApplyDemonBonus(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nParam);
+uint32_t __fastcall DAMAGE_CalculatePhysicalDamage(struct D2UnitStrc * pUnit, int32_t bUseWeaponStats, struct D2UnitStrc * pWeapon, int32_t nMinDmg, int32_t nMaxDmg, int32_t nBonusPercent, uint32_t nFlatDamage, uint8_t byScale);
+void __stdcall DAMAGE_ApplyDemonBonus(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2DamageStrc * pDamage);
 // Server-side computation of a unit's full outgoing attack damage into pDmgStrc. Recalcs dual-wield/equipped weapon stats for weapon slot nParam, then accumulates: target-AC penetration and demon/undead/monster-type bonus vs monster targets; physical damage with crit/deadly-strike/critical-strike rolls (doubles phys, sets wResultFlags 0x2000); per-element (fire/light/cold/magic) rolls scaled by the bParam attack-rating-percent (0x80=100%); life/mana/stamina leech, poison (+length), cold/stun/burn lengths; and damage-conversion (nConvType) reallocating phys into an element. Dispatches the on-attack unit event and applies monster crit. bParam defaults to 0x80 if 0.
-void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDmgStrc, int32_t nParam, uint8_t bParam);
+void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDmgStrc, int32_t bResetWeaponStats, uint8_t byScale);
 // DEFENSIVE REDUCTION: Resistance, absorb, and DR pipeline.
 // Order per element (fire/cold/ltng/poison/magic):
 // 1. Pierce from attacker (Conviction, Lower Resist) - BEFORE max cap
@@ -123,7 +123,7 @@ void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, struct D2UnitStrc 
 // @sourcefile .\UNIT\SUnitDmg.cpp
 void __fastcall FreeCombat(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // @sourcefile .\UNIT\SUnitDmg.cpp
-void __fastcall DAMAGE_RemoveDamageListEntry(::SGAMEDATA * pGame, int * pnParam, int * pUnit2);
+void __fastcall DAMAGE_RemoveDamageListEntry(::SGAMEDATA * pGame, struct D2UnitStrc * pnParam, struct D2UnitStrc * pUnit2);
 // Returns 1 (no knockback) if unit is frozen, damage is pure poison, or total damage is below 256. Otherwise tests whether damage meets a fraction of max HP threshold (divisor varies by elemental type: physical=16, lightning/drain/burn=8, cold=32, poison=64) with probabilistic fallback rolls. Also checks a monster stat flag (index 3) to allow knockback immunity on specific monster types. Returns 0 if knockback should be applied.
 BOOL __stdcall DAMAGE_CheckKnockbackThreshold(struct D2UnitStrc * pUnit, struct D2DamageStrc * pDamage1, eD2ElementalDamageTypeDWORD pDamage2);
 // Server-side kill handler for player and monster units. Guards against already-dead or unkillable units (MonStats killable flag). For monsters: optionally removes the unit from its owner's pet list, awards kill XP and arena credit to the attacker, fires the Death lifecycle transition (computing facing direction from attacker position), triggers quest callbacks, and handles objCol-flagged monster cleanup (e.g. removing companion objects at coords 0x23B/0x23C). No-ops on invalid unit types.
@@ -144,12 +144,12 @@ uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(int32_t nParam, uint32_t * pnPar
 // Always 5% minimum, 95% maximum hit chance.
 // Checked BEFORE block/dodge/avoid/evade (all independent rolls).
 BOOL __fastcall DAMAGE_RollAttackHit(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, int32_t bIsRangedAttack);
-void __fastcall DAMAGE_CalculateAndApplyDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim, struct D2DamageStrc * pDamage, uint8_t bParam);
-uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pDefUnit, int32_t nAttackRating, int32_t nParam2);
+void __fastcall DAMAGE_CalculateAndApplyDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim, struct D2DamageStrc * pDamage, uint8_t byScale);
+uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pDefUnit, int32_t nAttackRating, int32_t bRollBlock);
 // Applies missile hit damage to all units within nRadius of (nCenterX,nCenterY) that pass targeting checks. Builds a UnitFind result set (flags nUnitFlags, default 0x583), skips the owner and owner-owner unless bHitOwner/bHitOwnerOwner are set, requires line-of-sight (COLLISION_LOS), optionally filters through pfnProc callback, then calls MISSMODE_ApplyMissileHitDamage for each hit. Returns 1 if any unit was hit, 0 otherwise.
 void __fastcall DAMAGE_ApplyAreaOfEffectDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nCenterX, int32_t nCenterY, int32_t nRadius, struct D2DamageStrc * pDamage, BOOL bHitOwner, BOOL bHitOwnerOwner, pfnAoEDamageFilter pfnProc, int32_t nUnitFlags);
 void __fastcall DAMAGE_AddSkillBonusDamage(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, struct D2DamageStrc * param_1);
-void __fastcall SKILL_CalculateDamageForEvent(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nParam, struct D2DamageStrc * pDamage);
+void __fastcall SKILL_CalculateDamageForEvent(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nSkillLevel, struct D2DamageStrc * pDamage);
 int32_t __fastcall DAMAGE_SafeShiftMultiply(int32_t nParam1, int32_t nParam2, int32_t nShiftBits);
 // Iterator callback used when distributing kill experience to nearby party members. For each candidate player unit (pUnit), checks if dead (early-return), then tests whether the unit is within range of the victim (squared-distance threshold 0x1900). If in range, appends the unit and its level into the pPartyExp accumulator struct (max 8 players); halts fatally if the party array is full.
 BOOL __fastcall ExperienceLoopOverPlayers(uint32_t dwParam, struct D2UnitStrc * pUnit, struct D2PartyExperienceStrc * pPartyExp);
@@ -157,8 +157,9 @@ void __fastcall SERVER_KillExperience(::SGAMEDATA * pGame, struct D2UnitStrc * p
 void __fastcall DAMAGE_AwardKillExperience(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nXpGain);
 // Forces a player or mercenary unit to reach nTargetLevel by granting the required XP delta. For players, reads the Experience.txt threshold and calls SERVER_PlayerUpdateExperience with the deficit. For merc monsters, locates the owner's pet data and HirelingTxt record, then calls SERVER_SEND_MercExperience to synchronise. No-ops if unit is already at or above nTargetLevel.
 void __fastcall DAMAGE_SetUnitToLevel(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nTargetLevel);
-// Server-side melee hit resolution between attacker pUnit and defender pUnit2. Validates both are player/monster, can attack each other, and are within melee range (range widened by nParam2 + the attacker's melee range; monster attackers get +2). Sets a "moving" flag if a player defender is running, then rolls the attack (DAMAGE_RollAttackHit using nParam1) and checks block/evasion (DAMAGE_CheckBlockAndEvasion), folding the resulting STATE_* flags into a packed uint16 result (hit / block / dodge / evade / parry bits, plus an uninterruptable-stun bit). Returns the packed hit-result word (0 = out of range / cannot attack). Custom-register convention.
-uint16_t __stdcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nParam1, int32_t nParam2, eD2UnitType eUnitType);
+// Server-side melee hit resolution between attacker pUnit and defender pUnit2. Validates both are player/monster, can attack each other, and are within melee range (range widened by nParam2 + the attacker's melee range; monster attackers get +2). Sets a "moving" flag if a player defender is running, then rolls the attack (DAMAGE_RollAttackHit using nParam1) and checks block/evasion (DAMAGE_CheckBlockAndEvasion), folding the resulting STATE_* flags into a packed uint16 result (hit / block / dodge / evade / parry bits, plus an uninterruptable-stun bit). Returns the packed hit-result word (0 = out of range / cannot attack).
+// Registers: pGame in ECX and pUnit in EDX (__fastcall); EAX is not an input.
+uint16_t __fastcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, int32_t nExtraRange);
 // 35 internal functions (defined in .cpp)
 
 } // namespace D2Game::UNIT::SUnitDmg

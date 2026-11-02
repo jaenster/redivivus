@@ -3,7 +3,7 @@
 #include "D2CMP/SRC/CelCmp/TCELENTRY.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Storm/H/stpl.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -32,7 +32,7 @@ namespace D2CMP::SRC::CelCmp::TCELENTRY {
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

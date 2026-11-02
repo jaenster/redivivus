@@ -267,20 +267,28 @@ BOOL __fastcall Draw(::D2WinAnimImage * pAnimImage) {
     }
 
     uint32_t nFrameIntervalMs = pDC6Block * 1000 / 0x19;
-    if (pAnimImage->nAnimState != 2 && pAnimImage->nAnimState != 4) {
-      dwTick = GetTickCount();
-      pAnimImage->nCurrentFrame = (int)((uint64_t)((dwTick - pAnimImage->dwAnimStartTick) / nFrameIntervalMs) % (uint64_t)(nFrameCount - 1));
-      return 1;
+    switch (pAnimImage->nAnimState) {
+      case 2:
+        case 4:
+          {
+            dwTick = GetTickCount();
+            nFrameIntervalMs = (dwTick - pAnimImage->dwAnimStartTick) / nFrameIntervalMs;
+            pAnimImage->nCurrentFrame = nFrameIntervalMs;
+            if ((int)nFrameIntervalMs >= (int)(nFrameCount - 1U)) {
+              nFrameIntervalMs = nFrameCount - 1U;
+            }
+
+            pAnimImage->nCurrentFrame = nFrameIntervalMs;
+            break;
+          }
+      default:
+        {
+          dwTick = GetTickCount();
+          pAnimImage->nCurrentFrame = (int)((uint64_t)((dwTick - pAnimImage->dwAnimStartTick) / nFrameIntervalMs) % (uint64_t)(nFrameCount - 1));
+          return 1;
+        }
     }
 
-    dwTick = GetTickCount();
-    nFrameIntervalMs = (dwTick - pAnimImage->dwAnimStartTick) / nFrameIntervalMs;
-    pAnimImage->nCurrentFrame = nFrameIntervalMs;
-    if ((int)nFrameIntervalMs >= (int)(nFrameCount - 1U)) {
-      nFrameIntervalMs = nFrameCount - 1U;
-    }
-
-    pAnimImage->nCurrentFrame = nFrameIntervalMs;
     return 1;
 }
 
@@ -337,8 +345,7 @@ BOOL __stdcall D2WINANIMIMAGE_SetAnimate(::D2WinAnimImage * pAnimImage, BOOL bAn
     ::D2WinAnimImage* pNewAnimImage = D2_NEW_AT(::D2WinAnimImage, ".\\D2WinAnimImage.cpp", 0x1c);
     memset(pNewAnimImage, 0, 0x60);
     pNewAnimImage->sControl.neD2FormType = FORM_Image;
-    int* pStateField = &pNewAnimImage->sControl.dwState;
-    *pStateField |= gadwBitMasks[0];
+    pNewAnimImage->sControl.dwState |= gadwBitMasks[0];
     uVar1 = pNewAnimImage->sControl.dwState | gadwBitMasks[2];
     pNewAnimImage->sControl.pDC6 = pDC6;
     pNewAnimImage->sControl.dwState = uVar1;

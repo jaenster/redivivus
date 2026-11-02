@@ -44,7 +44,8 @@ uint32_t __thiscall MISSILE_RollAttackHit(void * pThis, struct D2UnitStrc * pUni
 // Packet flows to MISSMODE_ApplyMissileHitDamage:
 // → ToHit → Absorb → Resist → DR → HP update
 // Connects skill calculation → actual damage dealt.
-void __stdcall MISSILE_SetDamage(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamage);
+// Registers: pGame (ECX) and pOwner (EDX) are passed by every caller but not read.
+void __fastcall MISSILE_SetDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pOwner, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamage);
 // Server-side: computes one missile's damage component and writes it into pMissileDamageData, dispatched on the missile's elemental type (from GetElemTypeFromMissileId of pUnit->nClassId). NONE=physical: rolls min/max, applies damage% plus demon/undead bonuses vs pTarget (floored at -90%), and deadly-strike (sets flag bit 0x2000, doubles max). FIRE/LIGHT/MAGIC/COLD/POISON/BURNING/FREEZE roll element damage with the matching mastery stat and store min/max + length/count fields. LIFEDRAIN/MANADRAIN/STAMDRAIN/STUN pull the corresponding drain/stun stat. Returns the computed damage value (poison/burning return min*25). Field naming in the struct appears offset/reused across cases (noted).
 int32_t __fastcall MISSILES_CalculateElementalDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamage);
 void __fastcall MISSILES_SetDamageByElementType(::SGAMEDATA * pGame, struct D2UnitStrc * pMissile, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamageStruct, int nDuration);
@@ -52,7 +53,7 @@ void __fastcall MISSILES_SetDamageByElementType(::SGAMEDATA * pGame, struct D2Un
 void __fastcall MISSILESMODE_SetElementalDamageField(int32_t nMissileUnit, int32_t nParam1, int32_t nUnused, struct D2DamageStrc * pDamageStruct, int32_t nParam2);
 uint32_t __fastcall MISSILESMODE_GetElementalDamageField(int32_t nUnused1, int32_t nParam, int32_t nUnused2, struct D2DamageStrc * pDamageStruct, int32_t nUnused3);
 // Zeroes all damage fields in a D2DamageStrc for the given missile. Clears phys/fire/lightning/magic/cold/poison/leech/stun/burn damage and flags, then based on the missile's elemental type also clears the appropriate duration fields (cold/freeze/poison/burn lengths), leaving only the relevant ones intact.
-void __fastcall MISSILES_ClearDamageStruct(::SGAMEDATA * pGameStrc, int32_t nMissileId, struct D2DamageStrc * pDamage);
+void __fastcall MISSILES_ClearDamageStruct(::SGAMEDATA * pGameStrc, struct D2UnitStrc * nMissileId, struct D2DamageStrc * pDamage);
 // Adds nParam bonus to the D2MissileDamageDataStrc field that corresponds to the missile's elemental type (derived from its class ID). Dispatches on ELEMENTAL_NONE/FIRE/LIGHTNING/MAGIC/COLD/POISON/LIFEDRAIN/MANADRAIN/STAMDRAIN/STUN/BURNING/FREEZE, mapping each to the appropriate min/max/length/count field.
 void __fastcall MISSILES_AddElementalDamageBonus(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamage, int32_t nParam);
 // Spawns a radial burst of missiles from pUnit aimed at pTarget's position. Fires up to 16/nParam3 primary missiles using direction vectors from gnSubMissileCount_RadialPattern1/2 tables (velocity from MissileTxt.Param1&lt;&lt;7), then optionally a second ring of up to 15/nParam2 missiles using gaMissileOffsets_RadialPattern tables (velocity from Param2&lt;&lt;7). nParam4 non-zero sets nSubLoopMult in the skill arg. Returns 1 on success, 0 if missile table lookup fails or either unit is null.

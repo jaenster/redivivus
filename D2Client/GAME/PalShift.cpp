@@ -4,7 +4,6 @@
 #include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Monster.h"
@@ -18,6 +17,7 @@
 #include "D2Common/DATATBLS/DataTbls.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Seed.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
@@ -54,7 +54,7 @@ namespace D2Client::GAME::PalShift {
 
 // @sourcefile .\GAME\PalShift.cpp
 void __stdcall AllocPalShift_GreenBlood() {
-    bool _bFileExists;
+    BOOL _bFileExists;
     bool bFileExists;
     D2MPQFileStrc* pFileHandle;
     _bFileExists = D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, "Data\\Global\\Monsters\\GreenBlood.dat", &pFileHandle, 1);
@@ -71,6 +71,7 @@ void __stdcall AllocPalShift_GreenBlood() {
 
 // @sourcefile .\GAME\PalShift.cpp
 void __stdcall InitPal() {
+    int i;
     D2MPQFileStrc* pGreenBloodFile;
     D2MPQFileStrc* pRandTransformFile;
     size_t nAllocSize = sgptDataTable->nTxtMonStatsSize * 8;
@@ -78,12 +79,8 @@ void __stdcall InitPal() {
     gpMonsterPalShiftList = pPalShiftList;
     memset(pPalShiftList, 0, nAllocSize);
     int nMonStatsCount = sgptDataTable->nTxtMonStatsSize;
-    if (nMonStatsCount > 0) {
-      int i = 0;
-      do {
-        *(int*)((int)pPalShiftList + i * 8) = i;
-        i++;
-      } while (i < nMonStatsCount);
+    for (i = 0; i < nMonStatsCount; i++) {
+      *(int*)((int)pPalShiftList + i * 8) = i;
     }
 
     gpPalShiftEntryListHead = 0;
@@ -263,6 +260,7 @@ void __fastcall PALSHIFT_LoadMonsterPalShift(int32_t nMonsterId) {
 
 // @sourcefile .\GAME\PalShift.cpp
 void __stdcall PALSHIFT_InitPalShiftTable() {
+    int i;
     void* pPalShiftList;
     while (gpPalShiftEntryListHead) {
       pPalShiftList = *(void**)((int)gpPalShiftEntryListHead + 0x1004);
@@ -277,12 +275,8 @@ void __stdcall PALSHIFT_InitPalShiftTable() {
 
     pPalShiftList = gpMonsterPalShiftList;
     memset(gpMonsterPalShiftList, 0, nTxtMonStatsCount * 8);
-    if (nTxtMonStatsCount > 0) {
-      int i = 0;
-      do {
-        *(int*)((int)pPalShiftList + i * 8) = i;
-        i++;
-      } while (i < nTxtMonStatsCount);
+    for (i = 0; i < nTxtMonStatsCount; i++) {
+      *(int*)((int)pPalShiftList + i * 8) = i;
     }
 
     PALSHIFT_LoadMonsterPalShift(0x16b);
@@ -295,7 +289,7 @@ void __stdcall PALSHIFT_InitPalShiftTable() {
 D2GamePalShiftRandTransformStrc * * __fastcall PALSHIFT_GetMonsterTransform(D2UnitStrc * pUnit) {
     BOOL nBloodFlag;
     D2MonStats2Txt* pMonStats2;
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return nullptr;
     }
 
@@ -315,13 +309,13 @@ D2GamePalShiftRandTransformStrc * * __fastcall PALSHIFT_GetMonsterTransform(D2Un
       break;
       default:
         if (gbPalShiftRandTransformLoaded) {
-          if (nPalShiftIndex - 8U > 0x1d) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x160);
-            exit(-1);
+          if (nPalShiftIndex - 8U <= 0x1d) {
+            return (D2GamePalShiftRandTransformStrc**)(PalShift_RandTransform + (nPalShiftIndex - 8U) * 0x100);
+            return (D2GamePalShiftRandTransformStrc**)(PalShift_RandTransform + (nPalShiftIndex - 8U) * 0x100);
           }
 
-          return (D2GamePalShiftRandTransformStrc**)(PalShift_RandTransform + (nPalShiftIndex - 8U) * 0x100);
-          return (D2GamePalShiftRandTransformStrc**)(PalShift_RandTransform + (nPalShiftIndex - 8U) * 0x100);
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x160);
+          exit(-1);
         }
       case 2:
 
@@ -346,13 +340,13 @@ D2GamePalShiftRandTransformStrc * * __fastcall PALSHIFT_GetMonsterTransform(D2Un
     return (D2GamePalShiftRandTransformStrc**)(nPalShiftIndex * 0x100 + 4 + pPalShiftEntryPtr);
 }
 
-int32_t __fastcall PALSHIFT_GenerateShiftDuration(int32_t pUnitSeedBase, uint32_t nSeedInput) {
+int32_t __fastcall PALSHIFT_GenerateShiftDuration(D2UnitStrc * pUnitSeedBase, uint32_t nSeedInput) {
     if (!pUnitSeedBase) {
       return 9;
     }
 
-    D2SeedStrc* pSeed = (D2SeedStrc*)(pUnitSeedBase + 0x20);
-    D2Common::Seed::InitSeed_Param_666(pSeed, (nSeedInput & 0xffff) + *(int*)(pUnitSeedBase + 4));
+    D2SeedStrc* pSeed = &pUnitSeedBase->sSeed;
+    D2Common::Seed::InitSeed_Param_666(pSeed, (nSeedInput & 0xffff) + pUnitSeedBase->nClassId);
     D2SeedStrc qwRandState = D2_SEED_NEXT(*pSeed);
     *pSeed = qwRandState;
     return qwRandState.nSeedLow % 0x1e + 9;

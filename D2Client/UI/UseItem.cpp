@@ -201,7 +201,7 @@ void __stdcall INPUT_UseItemPassthrough(D2UIMouseMsgStrc * pMsg) {
 void __stdcall TEXT_DrawCashDisplay() {
     uint16_t* pszTooltipStr;
     D2TextLineStrc* pMemoryToFree;
-    uint16_t nParam;
+    uint16_t nStringIndex;
     uint32_t* pTabEntry;
     uint16_t nStringId;
     int nTabIdx;
@@ -230,7 +230,7 @@ void __stdcall TEXT_DrawCashDisplay() {
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x69, 0x10e, -1, DRAW_SOLID, nullptr);
       sGfxData.pDC6 = ui::GetBuySellBtnDC6();
       nTabIdx = 0;
-      if (0 < nCashDisplayItemCount) {
+      if (nCashDisplayItemCount > 0) {
         pTabEntry = (uint32_t*)&gaNpcCashTabs[0].nBaseCelFrame;
         do {
           sGfxData.nFrameNumber = (uint32_t)((char)pTabEntry[1] != '\0') + *pTabEntry;
@@ -246,7 +246,7 @@ void __stdcall TEXT_DrawCashDisplay() {
       nMouseY = nTabIdx;
       if (nMouseX < 0x140 && nTabIdx < ScreenSizeY - 0x30) {
         nTabIdx2 = 0;
-        if (0 < nCashDisplayItemCount) {
+        if (nCashDisplayItemCount > 0) {
           do {
             if (nMouseX >= gaNpcCashTabs[nTabIdx2].nHitBoxX1 && nMouseX <= gaNpcCashTabs[nTabIdx2].nHitBoxX2 && nTabIdx >= gaNpcCashTabs[nTabIdx2].nHitBoxY1 && nTabIdx <= gaNpcCashTabs[nTabIdx2].nHitBoxY2) {
               nStringId = gaNpcCashTabs[nTabIdx2].nTooltipStringId;
@@ -286,18 +286,18 @@ void __stdcall TEXT_DrawCashDisplay() {
         }
       }
       if (nHoradricCubeUIState == 1) {
-        nParam = 0x275c;
+        nStringIndex = 0x275c;
         dwColor = npcmenu::GetInteractedUnitClassId();
         if (dwColor == 0x1ff) {
-          nParam = 0x58de;
+          nStringIndex = 0x58de;
         } else {
           dwColor = npcmenu::GetInteractedUnitClassId();
           if (dwColor == 0x200) {
-            nParam = 0x58db;
+            nStringIndex = 0x58db;
           }
         }
 
-        pszTooltipStr = D2Lang::StrTable::strtable::GetLocaleString(nParam);
+        pszTooltipStr = D2Lang::StrTable::strtable::GetLocaleString(nStringIndex);
         pMemoryToFree = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(pszTooltipStr, &nWrappedWidth, 300);
         if (pMemoryToFree) {
           nTabIdx = 0x1e;

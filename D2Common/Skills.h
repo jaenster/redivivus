@@ -57,7 +57,7 @@ struct D2SkillStrc * __fastcall GetSkillByIdAndOwner(struct D2UnitStrc * pUnit, 
 // Thin wrapper around UNIT_GetSkill. Takes (eSkill, pUnit) in fastcall register order and calls UNIT_GetSkill(pUnit, eSkill). Called from 82+ sites including skill spawn, hit calculation, etc.
 struct D2SkillStrc * __fastcall SKILLS_GetSkillByEnum(struct D2UnitStrc * pUnit, eD2Skills eSkill);
 struct D2LightMapStrc * __stdcall SwapLightMap(struct D2UnitStrc * pUnit, struct D2LightMapStrc * pLight);
-uint32_t __stdcall SKILLS_GetUnitField0xa8_0x14(struct D2UnitStrc * pUnit);
+struct D2LightMapStrc * __stdcall SKILLS_GetUnitField0xa8_0x14(struct D2UnitStrc * pUnit);
 // Frees the entire skill list on a unit. Iterates through pFirstSkill linked list, freeing each D2SkillStrc, then frees the D2SkillListStrc itself. Sets pUnit->pSkillsList to NULL. Called by FreeUnit.
 // @sourcefile .\SKILLS\Skills.cpp
 void __stdcall SKILLS_FreeSkillList(struct D2UnitStrc * pUnit);
@@ -85,10 +85,10 @@ int32_t __stdcall SKILL_GetParam1(struct D2SkillStrc * pSkill);
 int32_t __stdcall SKILL_GetParam2(struct D2SkillStrc * pSkill);
 int32_t __stdcall SKILL_GetParam3(struct D2SkillStrc * pSkill);
 int32_t __stdcall SKILL_GetParam4(struct D2SkillStrc * pSkill);
-void __stdcall SKILL_SetParam1(struct D2SkillStrc * pSkill, int32_t nParam1);
-void __stdcall SKILL_SetParam2(struct D2SkillStrc * pSkill, int32_t nParam2);
-void __stdcall SKILL_SetParam3(struct D2SkillStrc * pSkill, int32_t nParam3);
-void __stdcall SKILL_SetParam4(struct D2SkillStrc * pSkill, int32_t nParam4);
+void __stdcall SKILL_SetParam1(struct D2SkillStrc * pSkill, int32_t nPar1);
+void __stdcall SKILL_SetParam2(struct D2SkillStrc * pSkill, int32_t nPar2);
+void __stdcall SKILL_SetParam3(struct D2SkillStrc * pSkill, int32_t nPar3);
+void __stdcall SKILL_SetParam4(struct D2SkillStrc * pSkill, int32_t nPar4);
 void __stdcall SKILL_SetFlags(struct D2SkillStrc * pSkill, int32_t nFlags);
 int32_t __stdcall SKILL_GetFlags(struct D2SkillStrc * pSkill);
 int32_t __stdcall TXT_Skills_GetReqLevel(eD2Skills eSkill);
@@ -124,7 +124,7 @@ int __stdcall SKILLS_ValidateAnimModeForMonster(int32_t eAnimMode, int32_t nMonI
 // Resolves the visual transform imposed on a unit by its active transformation state (flag 0x08 on eUnitFlagsEx). Iterates the global transform-state list; for each active state with gfxtype==1 (monster form) or gfxtype==2 (player form), writes the target unit type and gfx class to the out-params, and remaps *pAnimMode for cross-type animation compatibility. Returns without writing if no transform state is active or the unit lacks the transform flag.
 void __stdcall SKILLS_GetStateTransformGfx(struct D2UnitStrc * pUnit, eD2UnitType * pUnitType, int * pGfxClass, int * pAnimMode, char * szFile, int32_t nLine);
 // Initialises or advances a skill sequence entry for a unit. Searches the unit's sequence list for the entry matching nSeqId that has not yet been committed (pSeqEntry[0xd] == -1). Derives a position seed from the unit's dynamic path sub-positions (or player-specific fields). If the seed matches the stored seed, advances the sequence frame by 7; otherwise resets both seed and frame to the new value. Writes the resulting frame and constant 0x29A into the unit param array. Halts fatally if no matching sequence entry is found.
-void __stdcall SKILLS_InitSkillSequence(int * pnParam, int32_t bIsPlayerUnit, int32_t nSeqId);
+void __stdcall SKILLS_InitSkillSequence(struct D2UnitStrc * pnParam, int32_t bIsPlayerUnit, int32_t nSeqId);
 int32_t __stdcall SKILLS_GetSkillWeaponClass(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
 uint32_t __stdcall SKILLS_CheckMonsterCorpseSelectable(int32_t bCheckDead, struct D2UnitStrc * pUnit);
 uint32_t __stdcall D2CheckIfCorpseIsConsumable(struct D2UnitStrc * pUnit, int32_t bCheckDead);
@@ -175,11 +175,11 @@ void __stdcall SKILL_RemoveSkillCallback(struct D2UnitStrc * pUnit, eD2Skills eS
 // Grants a skill to a unit. If the unit already owns the skill (pRecord match, nOwnerGUID==-1), increments its level up to the txt-defined max (uncapped for monsters) and refreshes passive stats. Otherwise allocates a new D2SkillStrc from the unit's skill memory pool, sets anim mode (monster vs. player; special-case Druid Left-Hand Swing = 0x10), level=1, and appends it to the skill list. Activates any passive state from the skill txt record.
 // @sourcefile .\SKILLS\Skills.cpp
 struct D2SkillStrc * __stdcall AllocSkill(struct D2UnitStrc * pUnit, eD2Skills eSkill);
-void __stdcall AddSkill(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nParam, char * szFile, int32_t nLine);
+void __stdcall AddSkill(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t bRemoveAtZero, char * szFile, int32_t nLine);
 // Adds or removes an item-granted skill on a player unit's skill list, keyed by (nOwnerGUID, skill record). bRemove!=0: deselects the skill if it is the current left/right/active skill, then unlinks and frees the matching D2SkillStrc node from the player's skill list. bRemove==0: if a matching item-skill node already exists it just updates its level/charges; otherwise allocates a new 0x40-byte D2SkillStrc, sets its anim-derived mode (defaults 10), level, charges, bItemSkill=1, owner GUID, and appends it to the list. No-op for non-player units, level<1, or out-of-range eSkill.
 // @sourcefile .\SKILLS\Skills.cpp
 void __stdcall SKILLS_AddOrRemoveItemSkill(struct D2UnitStrc * pUnit, int32_t nOwnerGUID, eD2Skills eSkill, int32_t nLevel, int32_t nCharges, int32_t bRemove);
-void __stdcall thunk_SKILLS_AddOrRemoveItemSkill(struct D2UnitStrc * pUnit, int32_t nParam1, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5);
+void __stdcall thunk_SKILLS_AddOrRemoveItemSkill(struct D2UnitStrc * pUnit, int32_t nOwnerGUID, int32_t eSkill, int32_t nLevel, int32_t nCharges, int32_t bRemove);
 // Checks whether the unit satisfies a skill's weapon/ammo requirement before the skill can be used. If the skill record has flag 0x10 set it instead checks the skill's nQuantity (charge/ammo count > 0). Otherwise it branches on the skill record's weapon-requirement code: 2 and 4 require an equipped throwable weapon (or its item_throwable stat) in main/alt hand via INVENTORY_GetEquippedWeaponInfo + SKILLS_GetWeaponByHand; 5 requires a melee weapon of ITEMTYPE_Weapon and dual-wield capability. Any other code returns 1 (no requirement). Returns nonzero if the requirement is met, 0 otherwise.
 uint32_t __fastcall SKILLS_HasRequiredWeaponOrQuantity(struct D2SkillStrc * pSkill, struct D2UnitStrc * pUnit);
 // Validates whether pUnit can currently activate pSkill. Returns an error code: 0=ok/can use (via SKILL_IsDelayExpired returning non-zero producing 8), 1=not enough mana or start-mana check failed, 2=no item charges or missing required weapon/quantity, 3=skill record missing or flag2 bit2 clear (not usable), 4=restriction check failed, 5=skill flag bit4 set, 6=skill flag bit5 set, 7=skill level zero. Halts with an internal error if pSkill is null.

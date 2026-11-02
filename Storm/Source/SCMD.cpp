@@ -10,8 +10,8 @@
 #include "D2Game/Monster/Monsters.h"
 #include "D2Game/UNIT/sunitproxy.h"
 #include "Storm/SCMD.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SErr.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
@@ -66,10 +66,7 @@ static void __fastcall SCMD_ConvertBool(D2GameNpcStrc * cmdDef, char * str, uint
     cmdDef->unk0x3C &= dwTradeFlagBits;
     if (bSetFlags) {
       uint32_t dwFlagBits;
-      *(uint8_t*)(char*)&dwFlagBits = cmdDef->sTrade.unk0x04;
-      *(uint8_t*)((char*)&dwFlagBits + 1) = cmdDef->sTrade.unk0x05;
-      *(uint8_t*)((char*)&dwFlagBits + 2) = cmdDef->sTrade.unk0x06;
-      *(uint8_t*)((char*)&dwFlagBits + 3) = cmdDef->sTrade.unk0x07;
+      dwFlagBits = (uint32_t)((uint32_t)(uint8_t)cmdDef->sTrade.unk0x04 | (uint32_t)(uint8_t)cmdDef->sTrade.unk0x05 << 8 | (uint32_t)(uint8_t)cmdDef->sTrade.unk0x06 << 16 | (uint32_t)(uint8_t)cmdDef->sTrade.unk0x07 << 24);
       cmdDef->unk0x3C = dwFlagBits | cmdDef->unk0x3C;
     }
 
@@ -84,10 +81,7 @@ static void __fastcall SCMD_ConvertBool(D2GameNpcStrc * cmdDef, char * str, uint
     }
 
     pTradeBitmask = (uint32_t*)cmdDef->sTrade.pTradeList1;
-    *(uint8_t*)(char*)&dwTradeFlagBits = cmdDef->sTrade.unk0x04;
-    *(uint8_t*)((char*)&dwTradeFlagBits + 1) = cmdDef->sTrade.unk0x05;
-    *(uint8_t*)((char*)&dwTradeFlagBits + 2) = cmdDef->sTrade.unk0x06;
-    *(uint8_t*)((char*)&dwTradeFlagBits + 3) = cmdDef->sTrade.unk0x07;
+    dwTradeFlagBits = (uint32_t)((uint32_t)(uint8_t)cmdDef->sTrade.unk0x04 | (uint32_t)(uint8_t)cmdDef->sTrade.unk0x05 << 8 | (uint32_t)(uint8_t)cmdDef->sTrade.unk0x06 << 16 | (uint32_t)(uint8_t)cmdDef->sTrade.unk0x07 << 24);
     *pTradeBitmask |= dwTradeFlagBits;
 }
 
@@ -493,7 +487,7 @@ BOOL __stdcall SCmdRegisterArgument(uint32_t dwFlags, uint32_t dwId, char * szTe
     } else {
       nNextOffset = -1;
     }
-    if (!bValidArgType && nTextLen < 1) {
+    if (!bValidArgType && nTextLen <= 0) {
       nCmdScope = 0;
     } else {
       nCmdScope = -1;
@@ -915,7 +909,7 @@ uint32_t __stdcall SCmdDestroy() {
         pListHead = &gStormCmdListHeadBackslash;
       }
 
-      for (pNode = pListHead->pNext; 0 < pNode; pNode = *(int*)(pNode + 4)) {
+      for (pNode = pListHead->pNext; pNode > 0; pNode = *(int*)(pNode + 4)) {
         if ((*(uint32_t*)(pNode + 8) & 0x30000) == 0x20000 && *(void**)(pNode + 0x3c)) {
           SMem::SMemFree(*(void**)(pNode + 0x3c), ".\\SOURCE\\SCMD.CPP", 0x212, 0);
           *(uint32_t*)(pNode + 0x3c) = 0;
@@ -1040,7 +1034,7 @@ BOOL __fastcall SCMD_ProcessString(uint32_t * ppszCursor, int * pCmdCtx, uint32_
     while (cCursorChar != '\0') {
       pszPos = (char*)*ppszCursor;
       nTokenLen = 0;
-      SSTR::SStrTokenize(&pszPos, szTokenBuf, (char*)0x100, " ,;\"\t\n\r\x1a", (uint32_t*)&nTokenLen);
+      SSTR::SStrTokenize(&pszPos, szTokenBuf, 0x100, " ,;\"\t\n\r\x1a", (uint32_t*)&nTokenLen);
       if (szTokenBuf[0] != '\0') {
         bDispatchResult = SCMD_ProcessToken(pCmdList, szTokenBuf, pCmdCtx, nTokenLen, pfnUnknownCallback, pfnErrorCallback);
         if (!bDispatchResult) {
@@ -1083,7 +1077,7 @@ int __stdcall SCmdProcess(char * szCommandLine, int bSkipFirstToken, pfnSCmdUnkn
       SErr::SErrSetLastError(0x57);
     } else {
       if (bSkipFirstToken) {
-        SSTR::SStrTokenize(&pszCursor, nullptr, nullptr, " ,;\"\t\n\r\x1a", nullptr);
+        SSTR::SStrTokenize(&pszCursor, nullptr, 0, " ,;\"\t\n\r\x1a", nullptr);
       }
 
       SSystem::SMemZero(cmdCtx, 0x18);
@@ -1133,6 +1127,16 @@ void __stdcall SCmdProcessCommandLine(pfnSCmdUnknownArgCallback pfnUnknownCallba
     int bSkipFirstToken = 1;
     LPSTR szCommandLine = GetCommandLineA();
     SCmdProcess(szCommandLine, bSkipFirstToken, pfnUnknownCallback, pfnErrorCallback);
+}
+
+void StaticInit_6cb030() {
+    gStormCmdListHeadBackslash.pNext = ~(uintptr_t)((char*)&gStormCmdListHeadBackslash + 4);
+    atexit(StaticFini_gStormCmdListBackslash);
+}
+
+void StaticInit_6cb050() {
+    gStormCmdListHeadSlash.pNext = ~(uintptr_t)((char*)&gStormCmdListHeadSlash + 4);
+    atexit(StaticFini_gStormCmdListSlash);
 }
 
 // Runs at exit: removes every element from the Storm command-argument list gStormCmdListHeadBackslash, then unlinks the list head itself.

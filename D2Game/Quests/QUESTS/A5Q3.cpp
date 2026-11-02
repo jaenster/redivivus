@@ -4,7 +4,6 @@
 #include "D2Client/Archive.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
@@ -28,6 +27,7 @@
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/D2DrlgFileStrc.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Stats/StatsEx.h"
@@ -173,12 +173,10 @@ void __fastcall Q33_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 // Used as the AI-sub clear callback when the frozen-Anya monster (0x20f) is killed.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q3.cpp
 void __fastcall Q33_SendQuestStatePacket(D2UnitStrc * pUnit) {
-    D2GSPacketSrv0x5D aPacketBuf;
-    aPacketBuf.nExtra = 0;
+    D2GSPacketSrv0x5D aPacketBuf = {0};
     aPacketBuf.nPacketId = ']';
     aPacketBuf.nQuestId = '!';
     aPacketBuf.nAlertFlags = ' ';
-    aPacketBuf.nFilterStatus = '\0';
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q3.cpp", 0x11e);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &aPacketBuf);
 }
@@ -529,13 +527,11 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     uint32_t nPlayerLevel;
     D2SeedStrc* pSeed;
     uint32_t nRandIndex;
-    int32_t nRewardLevel;
     D2ItemsTxt* pItemTxt;
     int nPlayerClassId;
     D2GSPacketSrv0x5D nNpcNo;
     char nRewardClassId[4];
     eD2ItemQuality eRewardQuality;
-    int32_t* pnIceScrollCount;
     uint32_t nMessageIndex = (uint32_t)pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2QuestDataA5Q3Strc* pRewardList = pQuestData->pQuestSpecificData.pA5Q3;
@@ -566,8 +562,7 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
           return;
         }
 
-        pnIceScrollCount = &pDVar1->nIceItemCount;
-        (*pnIceScrollCount)++;
+        pDVar1->nIceItemCount++;
         pClient = UNIT::SUnit::SUNIT_GetClient(pQuestArgs->pPlayer, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q3.cpp", 0x214);
         nNpcNo.nExtra = 0;
         nNpcNo.nPacketId = ']';
@@ -701,8 +696,7 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       memcpy(nRewardClassId, (const void*)(pRewardList->sQuestGUID.aPlayerGUID[nPlayerClassId * 2] + nRandIndex * 4), sizeof(nRewardClassId));
       bQuestStateResult = 1;
       eRewardQuality = QUALITY_RARE;
-      nRewardLevel = ITEMS::Items::Drop::GetLevel(pQuestArgs->pPlayer, LEVEL_None);
-      pQuestSpecificData = ITEM_RewardItemInInventory(pQuestArgs->pGame, pQuestArgs->pPlayer, (int32_t)nRewardClassId, nRewardLevel, eRewardQuality, bQuestStateResult);
+      pQuestSpecificData = ITEM_RewardItemInInventory(pQuestArgs->pGame, pQuestArgs->pPlayer, (int32_t)nRewardClassId, ITEMS::Items::Drop::GetLevel(pQuestArgs->pPlayer, LEVEL_None), eRewardQuality, bQuestStateResult);
       if (!pQuestSpecificData) {
         return;
       }
@@ -1104,29 +1098,27 @@ void __fastcall AddBonusResistances(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uin
 // CalculateBonusResistances (PrisonOfIce reward applicator): sums +10 all-res for each difficulty (Normal/NM/Hell record
 // pools 1/2/3) where the player has Step0x07 set (Scroll-of-Resistance used). Applies total via AddBonusResistances on join.
 void __fastcall CalculateBonusResistances(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bHasScrollQuestState;
+    BOOL _bHasScrollQuestState;
     bool bHasScrollQuestState;
     eD2QuestState eScrollState = QUESTSTATE_Step0x07;
     eD2Quests eQuestId = QUEST_PrisonOfIce;
     uint32_t nBonusTotal = 0;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    _bHasScrollQuestState = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[0], eQuestId, eScrollState);
+    D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[0];
+    _bHasScrollQuestState = D2Common::QuestRecord::GetQuestState(pQuestRecord, eQuestId, eScrollState);
     if (_bHasScrollQuestState) {
       nBonusTotal = 10;
     }
 
     eD2QuestState eScrollStateInner = QUESTSTATE_Step0x07;
     eD2Quests eQuestIdInner = QUEST_PrisonOfIce;
-    pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    _bHasScrollQuestState = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[1], eQuestIdInner, eScrollStateInner);
+    _bHasScrollQuestState = D2Common::QuestRecord::GetQuestState(D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[1], eQuestIdInner, eScrollStateInner);
     if (_bHasScrollQuestState) {
       nBonusTotal += 10;
     }
 
     eD2QuestState eScrollStateInner2 = QUESTSTATE_Step0x07;
     eD2Quests eQuestIdInner2 = QUEST_PrisonOfIce;
-    pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    _bHasScrollQuestState = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[2], eQuestIdInner2, eScrollStateInner2);
+    _bHasScrollQuestState = D2Common::QuestRecord::GetQuestState(D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[2], eQuestIdInner2, eScrollStateInner2);
     if (_bHasScrollQuestState) {
       nBonusTotal += 10;
     }
@@ -1193,9 +1185,7 @@ void __fastcall Q33_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 void __fastcall Q33_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2UnitStrc* pScrollItem = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20656369);
     if (pScrollItem) {
-      int32_t* pnScrollCount;
-      pnScrollCount = &pQuestData->pQuestSpecificData.pA5Q3->nIceItemCount;
-      (*pnScrollCount)++;
+      pQuestData->pQuestSpecificData.pA5Q3->nIceItemCount++;
     }
     if (!(pQuestData->bIsNotIntroduction == '\0' || pQuestData->nStateFlag >= 5)) {
       return;
@@ -1369,10 +1359,7 @@ void __fastcall SpawnFrozenAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       return;
     }
 
-    void* pSpawnArg = 0;
-    int32_t nSpawnArg6 = 0;
-    bool bInitUnit = true;
-    D2UnitStrc* pFrozenAnya = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x22e, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), D2Client::Units::GetYPosFromDynamicPathUnit(pUnit), pGame, D2Common::Units::UNITS_GetRoom(pUnit), bInitUnit, nSpawnArg6, pSpawnArg);
+    D2UnitStrc* pFrozenAnya = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x22e, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), D2Client::Units::GetYPosFromDynamicPathUnit(pUnit), pGame, D2Common::Units::UNITS_GetRoom(pUnit), true, 0, 0);
     if (pFrozenAnya) {
       pFrozenAnya->eUnitFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
       pQuestSpecificData->bFrozenAnyaSpawning = '\x01';
@@ -1571,10 +1558,8 @@ BOOL __fastcall Q33_SpawnPortalNearAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
     D2RoomStrc* pNearbyRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     pNearbyRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pNearbyRoom, pDVar2->sAnyaPosition.x, nPortalY);
     if (!pNearbyRoom) {
-      LONG* pLVar1;
       pDVar2->sAnyaPosition.x += 3;
-      pLVar1 = &pDVar2->sAnyaPosition.y;
-      *pLVar1 += 3;
+      pDVar2->sAnyaPosition.y += 3;
     } else {
       pPortalUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, pDVar2->sAnyaPosition.x, pDVar2->sAnyaPosition.y, pGame, pNearbyRoom, 1, 1, nullptr);
       if (pPortalUnit) {

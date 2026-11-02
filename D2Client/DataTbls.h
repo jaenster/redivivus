@@ -19,10 +19,10 @@ typedef uint32_t eD2Skills;
 namespace D2Client::DataTbls {
 
 // Function declarations
-struct D2CharStatsTxt * __fastcall INV_GetCharStatsTxtLine(int32_t nParam);
+struct D2CharStatsTxt * __fastcall INV_GetCharStatsTxtLine(int32_t nClassId);
 struct D2SetsTxt * __fastcall GetSetsLine(int32_t nSetId);
 struct D2SetItemsTxt * __fastcall GetSetItemsLine(int32_t nSetItemId);
-struct D2UniqueItemsTxt * __fastcall INV_GetUniqueItemsTxtLine(int32_t nParam);
+struct D2UniqueItemsTxt * __fastcall INV_GetUniqueItemsTxtLine(int32_t nFileIndex);
 struct D2SkillDescTxt * __fastcall GetSkillDescription(eD2Skills eSkillId);
 int32_t __fastcall SKILL_GetMaxLevelForSkill(int32_t skillId);
 int32_t __fastcall CheckMonStatId(int32_t nMonStatsId);

@@ -106,7 +106,7 @@ void __stdcall MONSTERTBLS_Unused_HaltLine1710();
 // Compile body locations txt - monster hit location armor percentages
 void __fastcall DATATBLS_CompileBodyLocsTxt(struct D2PoolManagerStrc * pMemory);
 void __stdcall thunk_UnloadBin_MonStats();
-int32_t __stdcall TC_GetTreasureClassArrayEntry(int32_t nTCArrayIdx);
+struct D2MonItemPercentTxt * __stdcall TC_GetTreasureClassArrayEntry(int32_t nTCArrayIdx);
 // Defines and compiles the MonUMod.txt field schema into the global data table. Sets up 16 D2BinFieldInputStrc entries (uniquemod, version, enabled, xfer, champion, fpick, exclude1/2, cpick/upick per difficulty, constants), calls CompileTxt to parse the file, allocates the MonUMod link table, and caps nTxtMonUmodSize at 256.
 void __fastcall TXT_AllocTxt_monumod(struct D2PoolManagerStrc * pMemory);
 // Loads and compiles superuniques.txt into sgtDataTable. Declares the column schema (Superunique key, Name string-id, Class->MonStats link, hcIdx, MonSound link, Mod1-3, Min/MaxGrp, AutoPos, EClass, Stacks, Replaceable, Utrans/(N)/(H), TC/(N)/(H)->MonsterTbls links) and a TxtLink, then compiles via CompileTxt into pTxtSuperUniques (cap 0x200 rows). Builds the aTxtSuperUniquesHardcoded[] reverse-lookup array (init -1) mapping each row's hcIdx (<66) to its first row index, then asserts every hardcoded slot was filled (unrecoverable-halt at line 0x782 if any is still -1). Side effect: populates global superunique data table and hardcoded index map. Server-side D2Common DataTbls (MonsterTbls).

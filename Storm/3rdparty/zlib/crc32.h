@@ -15,8 +15,8 @@ uint32_t * get_crc_table();
 int32_t __stdcall crc32_big(uint32_t nLength, uint32_t dwInitialCrc, uint8_t * pbParam);
 uint32_t __fastcall gf2_matrix_times(uint32_t dwVec, uint32_t * pdwMat);
 uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int32_t nLengthLo, int32_t nLengthHi);
-void __fastcall crc32_combine(uint32_t nParam1, uint32_t nParam2, int32_t nExp);
-void __fastcall crc32_combine64(uint32_t nParam1, uint32_t nParam2, int32_t nExpLo, int32_t nExpHi);
+void __fastcall crc32_combine(uint32_t dwCrc, uint32_t dwFinalXor, int32_t nExp);
+void __fastcall crc32_combine64(uint32_t dwCrc, uint32_t dwFinalXor, int32_t nExpLo, int32_t nExpHi);
 uint32_t __fastcall crc32(uint32_t dwCrcSeed, uint8_t * pBuffer, uint32_t nLength);
 // 2 internal functions (defined in .cpp)
 

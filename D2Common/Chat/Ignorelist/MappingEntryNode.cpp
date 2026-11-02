@@ -3,7 +3,7 @@
 #include "D2Common/Chat/Ignorelist/MappingEntryNode.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Storm/H/stpl.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -14,7 +14,7 @@ namespace D2Common::Chat::Ignorelist::MappingEntryNode {
 // @sourcefile .\Chat\Ignorelist.cpp
 void __thiscall Destructor(::MappingEntryNode * pThis) {
     if (pThis->szMappedValue) {
-      Storm::SMem::SMemFree(pThis->szMappedValue, ".\\Chat\\Ignorelist.cpp", 0x11, 0);
+      Storm::Source::SMem::SMemFree(pThis->szMappedValue, ".\\Chat\\Ignorelist.cpp", 0x11, 0);
     }
 
     pThis->Destructor();
@@ -23,7 +23,7 @@ void __thiscall Destructor(::MappingEntryNode * pThis) {
 // @sourcefile .\Chat\Ignorelist.cpp
 ::MappingEntryNode * __thiscall ScalarDeletingDestructor(::MappingEntryNode * pThis, uint32_t dwFlags) {
     if (pThis->szMappedValue) {
-      Storm::SMem::SMemFree(pThis->szMappedValue, ".\\Chat\\Ignorelist.cpp", 0x11, 0);
+      Storm::Source::SMem::SMemFree(pThis->szMappedValue, ".\\Chat\\Ignorelist.cpp", 0x11, 0);
     }
 
     pThis->Destructor();
@@ -31,7 +31,7 @@ void __thiscall Destructor(::MappingEntryNode * pThis) {
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

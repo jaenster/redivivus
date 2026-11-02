@@ -129,7 +129,7 @@ void __stdcall INPUT_HandleIMEEndComposition(struct D2UIMouseMsgStrc * pMsg);
 // Small callback/thunk that reads a party names field from ECX+0x124 and forwards it to AUTOMAP_SetPartyNames.
 void __fastcall AUTOMAP_UpdatePartyNamesCallback(struct D2EscMenuItemStrc * pItem, struct D2UIMouseMsgStrc * pMsg);
 // The ECX slot that carries a function pointer was one variable holding three callees with two
-// different conventions - fpRequiredUserAction (bool __cdecl(void)), UI_ShowPopupDialog and
+// different conventions - fpRequiredUserAction (BOOL __cdecl(void)), UI_ShowPopupDialog and
 // NET_D2GS_CLIENT_Send_0x6D_PING (void __stdcall(void)). Typing it void * split it into two register
 // variables with disjoint live ranges: pfnCallback, which reaches MPQ_LoadVideoMpqFiles, and pfFrame,
 // which reaches D2GFX_PlayCutScene and only ever holds PING or 0. void * is the honest type for both -

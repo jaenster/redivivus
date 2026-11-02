@@ -105,7 +105,7 @@ struct D2UnitDataItemStrc {
     /* 0x46 */ uint8_t eExchangePage; // Exchange/trade page
     /* 0x47 */ uint8_t ePreviousPage; // Previous page before move
     /* 0x48 */ uint8_t nEarLevel; // Ear level (for player ears)
-    /* 0x49 */ bool bVariant; // Item variant flag
+    /* 0x49 */ BYTE bVariant; // Item variant flag
     /* 0x4A */ char szPlayerName[16]; // Player name (for ears/personalized items)
     /* 0x5A */ int16_t wRuneWordIndex; // Runeword ID
     /* 0x5C */ D2ItemInventoryNodeStrc sInvNode; // Socketed items inventory

@@ -460,7 +460,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlendAndClip(uint8_t * pbParam, int32_t
     }
 }
 
-void __fastcall FASTCMP_DecompressRLEWithLookup2(uint8_t * pbParam, uint8_t * pParam, int32_t nRowCount, int32_t nDstPitch, int32_t nParam1, int32_t nParam2) {
+void __fastcall FASTCMP_DecompressRLEWithLookup2(uint8_t * pbParam, uint8_t * pParam, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable1, uint8_t * pLookupTable2) {
     uint8_t bVar1;
     int nFullChunks;
     uint8_t* pbSrc;
@@ -481,31 +481,31 @@ void __fastcall FASTCMP_DecompressRLEWithLookup2(uint8_t * pbParam, uint8_t * pP
           nFullChunks = (int)(char)bVar1 >> 3;
           switch (nRemainder) {
             case 7:
-              pParam[6] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrc[7] + nParam2) + nParam1);
+              pParam[6] = pLookupTable1[pLookupTable2[pbSrc[7]]];
             case 6:
-              pParam[5] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrc[6] + nParam2) + nParam1);
+              pParam[5] = pLookupTable1[pLookupTable2[pbSrc[6]]];
             case 5:
-              pParam[4] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrc[5] + nParam2) + nParam1);
+              pParam[4] = pLookupTable1[pLookupTable2[pbSrc[5]]];
             case 4:
-              pParam[3] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrc[4] + nParam2) + nParam1);
+              pParam[3] = pLookupTable1[pLookupTable2[pbSrc[4]]];
             case 3:
-              pParam[2] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrc[3] + nParam2) + nParam1);
+              pParam[2] = pLookupTable1[pLookupTable2[pbSrc[3]]];
             case 2:
-              pParam[1] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrc[2] + nParam2) + nParam1);
+              pParam[1] = pLookupTable1[pLookupTable2[pbSrc[2]]];
             case 1:
-              *pParam = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)*pbParam + nParam2) + nParam1);
+              *pParam = pLookupTable1[pLookupTable2[*pbParam]];
             case 0:
               pParam += nRemainder;
             pbParam += nRemainder;
             for (; nFullChunks; nFullChunks--) {
-              pParam[7] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbParam[7] + nParam2) + nParam1);
-              pParam[6] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbParam[6] + nParam2) + nParam1);
-              pParam[5] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbParam[5] + nParam2) + nParam1);
-              pParam[4] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbParam[4] + nParam2) + nParam1);
-              pParam[3] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbParam[3] + nParam2) + nParam1);
-              pParam[2] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbParam[2] + nParam2) + nParam1);
-              pParam[1] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbParam[1] + nParam2) + nParam1);
-              *pParam = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)*pbParam + nParam2) + nParam1);
+              pParam[7] = pLookupTable1[pLookupTable2[pbParam[7]]];
+              pParam[6] = pLookupTable1[pLookupTable2[pbParam[6]]];
+              pParam[5] = pLookupTable1[pLookupTable2[pbParam[5]]];
+              pParam[4] = pLookupTable1[pLookupTable2[pbParam[4]]];
+              pParam[3] = pLookupTable1[pLookupTable2[pbParam[3]]];
+              pParam[2] = pLookupTable1[pLookupTable2[pbParam[2]]];
+              pParam[1] = pLookupTable1[pLookupTable2[pbParam[1]]];
+              *pParam = pLookupTable1[pLookupTable2[*pbParam]];
               pParam += 8;
               pbParam += 8;
             }
@@ -527,7 +527,7 @@ void __fastcall FASTCMP_DecompressRLEWithLookup2(uint8_t * pbParam, uint8_t * pP
     }
 }
 
-void __fastcall FASTCMP_DecompressRLEWithLookup2AndClip(uint8_t * pbParam, int32_t nParam1, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5, int32_t nParam6) {
+void __fastcall FASTCMP_DecompressRLEWithLookup2AndClip(uint8_t * pbParam, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, uint8_t * pLookupTable1, uint8_t * pLookupTable2) {
     uint8_t bRLEToken;
     int nRunLen;
     uint32_t nClipCount;
@@ -535,11 +535,12 @@ void __fastcall FASTCMP_DecompressRLEWithLookup2AndClip(uint8_t * pbParam, int32
     uint8_t* puDstClipped;
     int nFullChunks;
     uint32_t nRemainder;
-    int32_t nDstRowBase2 = nParam5;
+    int nLookupTable1;
+    uint8_t* puVar1 = pLookupTable1;
     int32_t nXPos = nParam2;
     while (true) {
-      int nDstRowStart;
-      nDstRowStart = nDstPitch + nParam1;
+      uint8_t* nDstRowStart;
+      nDstRowStart = pDstBuffer + nDstPitch;
       nParam2 = nXPos;
       do {
         while (true) {
@@ -549,9 +550,9 @@ void __fastcall FASTCMP_DecompressRLEWithLookup2AndClip(uint8_t * pbParam, int32
             break;
           }
 
-          nParam5 = nParam3 - nParam2;
-          if (nParam5 < 0) {
-            nParam5 = 0;
+          nLookupTable1 = (int)(nParam3 - nParam2);
+          if (nLookupTable1 < 0) {
+            nLookupTable1 = 0x0;
           }
 
           nRunLen = -nParam2 + nParam4;
@@ -560,39 +561,39 @@ void __fastcall FASTCMP_DecompressRLEWithLookup2AndClip(uint8_t * pbParam, int32
             nRunLen = nFullChunks;
           }
 
-          nClipCount = nRunLen - nParam5;
+          nClipCount = nRunLen - nLookupTable1;
           if ((int)nClipCount > 0) {
-            pbSrcClipped = pbParam + nParam5;
-            puDstClipped = (uint8_t*)(nParam1 + nParam5);
+            pbSrcClipped = pbParam + nLookupTable1;
+            puDstClipped = pDstBuffer + nLookupTable1;
             nRemainder = nClipCount & 7;
             nRunLen = (int)nClipCount >> 3;
             switch (nRemainder) {
               case 7:
-                puDstClipped[6] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[6] + nParam6) + nDstRowBase2);
+                puDstClipped[6] = puVar1[pLookupTable2[pbSrcClipped[6]]];
               case 6:
-                puDstClipped[5] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[5] + nParam6) + nDstRowBase2);
+                puDstClipped[5] = puVar1[pLookupTable2[pbSrcClipped[5]]];
               case 5:
-                puDstClipped[4] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[4] + nParam6) + nDstRowBase2);
+                puDstClipped[4] = puVar1[pLookupTable2[pbSrcClipped[4]]];
               case 4:
-                puDstClipped[3] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[3] + nParam6) + nDstRowBase2);
+                puDstClipped[3] = puVar1[pLookupTable2[pbSrcClipped[3]]];
               case 3:
-                puDstClipped[2] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[2] + nParam6) + nDstRowBase2);
+                puDstClipped[2] = puVar1[pLookupTable2[pbSrcClipped[2]]];
               case 2:
-                puDstClipped[1] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[1] + nParam6) + nDstRowBase2);
+                puDstClipped[1] = puVar1[pLookupTable2[pbSrcClipped[1]]];
               case 1:
-                *puDstClipped = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)*pbSrcClipped + nParam6) + nDstRowBase2);
+                *puDstClipped = puVar1[pLookupTable2[*pbSrcClipped]];
               case 0:
                 puDstClipped += nRemainder;
               pbSrcClipped += nRemainder;
               for (; nRunLen; nRunLen--) {
-                puDstClipped[7] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[7] + nParam6) + nDstRowBase2);
-                puDstClipped[6] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[6] + nParam6) + nDstRowBase2);
-                puDstClipped[5] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[5] + nParam6) + nDstRowBase2);
-                puDstClipped[4] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[4] + nParam6) + nDstRowBase2);
-                puDstClipped[3] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[3] + nParam6) + nDstRowBase2);
-                puDstClipped[2] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[2] + nParam6) + nDstRowBase2);
-                puDstClipped[1] = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[1] + nParam6) + nDstRowBase2);
-                *puDstClipped = *(uint8_t*)((uint32_t)*(uint8_t*)((uint32_t)*pbSrcClipped + nParam6) + nDstRowBase2);
+                puDstClipped[7] = puVar1[pLookupTable2[pbSrcClipped[7]]];
+                puDstClipped[6] = puVar1[pLookupTable2[pbSrcClipped[6]]];
+                puDstClipped[5] = puVar1[pLookupTable2[pbSrcClipped[5]]];
+                puDstClipped[4] = puVar1[pLookupTable2[pbSrcClipped[4]]];
+                puDstClipped[3] = puVar1[pLookupTable2[pbSrcClipped[3]]];
+                puDstClipped[2] = puVar1[pLookupTable2[pbSrcClipped[2]]];
+                puDstClipped[1] = puVar1[pLookupTable2[pbSrcClipped[1]]];
+                *puDstClipped = puVar1[pLookupTable2[*pbSrcClipped]];
                 puDstClipped += 8;
                 pbSrcClipped += 8;
               }
@@ -600,12 +601,12 @@ void __fastcall FASTCMP_DecompressRLEWithLookup2AndClip(uint8_t * pbParam, int32
               default:
                 nParam2 += nFullChunks;
               pbParam += nFullChunks;
-              nParam1 = nFullChunks + nParam1;
+              pDstBuffer += nFullChunks;
             }
           } else {
             nParam2 += nFullChunks;
             pbParam += nFullChunks;
-            nParam1 += nFullChunks;
+            pDstBuffer += nFullChunks;
           }
         }
 
@@ -615,18 +616,18 @@ void __fastcall FASTCMP_DecompressRLEWithLookup2AndClip(uint8_t * pbParam, int32
         }
 
         nParam2 += (char)bRLEToken;
-        nParam1 += (char)bRLEToken;
+        pDstBuffer += (char)bRLEToken;
       } while (true);
 
       nRowCount--;
-      nParam1 = nDstRowStart;
+      pDstBuffer = nDstRowStart;
       if (!nRowCount) {
         return;
       }
     }
 }
 
-void __fastcall FASTCMP_DecompressRLEWithLookup1(uint8_t * pbParam, uint8_t * pParam, int32_t nRowCount, int32_t nDstPitch, int32_t nParam) {
+void __fastcall FASTCMP_DecompressRLEWithLookup1(uint8_t * pbParam, uint8_t * pParam, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable) {
     uint8_t bVar1;
     uint32_t nRemainder;
     uint8_t* pbSrc;
@@ -647,31 +648,31 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1(uint8_t * pbParam, uint8_t * pP
           nFullChunks = (int)(char)bVar1 >> 3;
           switch (nRemainder) {
             case 7:
-              pParam[6] = *(uint8_t*)((uint32_t)pbSrc[7] + nParam);
+              pParam[6] = pLookupTable[pbSrc[7]];
             case 6:
-              pParam[5] = *(uint8_t*)((uint32_t)pbSrc[6] + nParam);
+              pParam[5] = pLookupTable[pbSrc[6]];
             case 5:
-              pParam[4] = *(uint8_t*)((uint32_t)pbSrc[5] + nParam);
+              pParam[4] = pLookupTable[pbSrc[5]];
             case 4:
-              pParam[3] = *(uint8_t*)((uint32_t)pbSrc[4] + nParam);
+              pParam[3] = pLookupTable[pbSrc[4]];
             case 3:
-              pParam[2] = *(uint8_t*)((uint32_t)pbSrc[3] + nParam);
+              pParam[2] = pLookupTable[pbSrc[3]];
             case 2:
-              pParam[1] = *(uint8_t*)((uint32_t)pbSrc[2] + nParam);
+              pParam[1] = pLookupTable[pbSrc[2]];
             case 1:
-              *pParam = *(uint8_t*)((uint32_t)*pbParam + nParam);
+              *pParam = pLookupTable[*pbParam];
             case 0:
               pParam += nRemainder;
             pbParam += nRemainder;
             for (; nFullChunks; nFullChunks--) {
-              pParam[7] = *(uint8_t*)((uint32_t)pbParam[7] + nParam);
-              pParam[6] = *(uint8_t*)((uint32_t)pbParam[6] + nParam);
-              pParam[5] = *(uint8_t*)((uint32_t)pbParam[5] + nParam);
-              pParam[4] = *(uint8_t*)((uint32_t)pbParam[4] + nParam);
-              pParam[3] = *(uint8_t*)((uint32_t)pbParam[3] + nParam);
-              pParam[2] = *(uint8_t*)((uint32_t)pbParam[2] + nParam);
-              pParam[1] = *(uint8_t*)((uint32_t)pbParam[1] + nParam);
-              *pParam = *(uint8_t*)((uint32_t)*pbParam + nParam);
+              pParam[7] = pLookupTable[pbParam[7]];
+              pParam[6] = pLookupTable[pbParam[6]];
+              pParam[5] = pLookupTable[pbParam[5]];
+              pParam[4] = pLookupTable[pbParam[4]];
+              pParam[3] = pLookupTable[pbParam[3]];
+              pParam[2] = pLookupTable[pbParam[2]];
+              pParam[1] = pLookupTable[pbParam[1]];
+              *pParam = pLookupTable[*pbParam];
               pParam += 8;
               pbParam += 8;
             }
@@ -693,7 +694,7 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1(uint8_t * pbParam, uint8_t * pP
     }
 }
 
-void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip(uint8_t * pbParam, int32_t nParam1, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5) {
+void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip(uint8_t * pbParam, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, uint8_t * pLookupTable) {
     int nRunLen;
     uint32_t nClipCount;
     uint32_t nRemainder;
@@ -701,11 +702,12 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip(uint8_t * pbParam, int32
     uint8_t* puDstClipped;
     uint8_t bRLEToken;
     int nFullChunks;
-    int32_t nDstRowBase2 = nParam5;
+    int nLookupTable;
+    uint8_t* puVar1 = pLookupTable;
     int32_t nXPos = nParam2;
     while (true) {
-      int nDstRowStart;
-      nDstRowStart = nDstPitch + nParam1;
+      uint8_t* nDstRowStart;
+      nDstRowStart = pDstBuffer + nDstPitch;
       nParam2 = nXPos;
       do {
         while (true) {
@@ -715,9 +717,9 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip(uint8_t * pbParam, int32
             break;
           }
 
-          nParam5 = nParam3 - nParam2;
-          if (nParam5 < 0) {
-            nParam5 = 0;
+          nLookupTable = (int)(nParam3 - nParam2);
+          if (nLookupTable < 0) {
+            nLookupTable = 0x0;
           }
 
           nRunLen = -nParam2 + nParam4;
@@ -726,39 +728,39 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip(uint8_t * pbParam, int32
             nRunLen = nFullChunks;
           }
 
-          nClipCount = nRunLen - nParam5;
+          nClipCount = nRunLen - nLookupTable;
           if ((int)nClipCount > 0) {
             nRemainder = nClipCount & 7;
             nRunLen = (int)nClipCount >> 3;
-            pbSrcClipped = pbParam + nParam5;
-            puDstClipped = (uint8_t*)(nParam1 + nParam5);
+            pbSrcClipped = pbParam + nLookupTable;
+            puDstClipped = pDstBuffer + nLookupTable;
             switch (nRemainder) {
               case 7:
-                puDstClipped[6] = *(uint8_t*)((uint32_t)pbSrcClipped[6] + nDstRowBase2);
+                puDstClipped[6] = puVar1[pbSrcClipped[6]];
               case 6:
-                puDstClipped[5] = *(uint8_t*)((uint32_t)pbSrcClipped[5] + nDstRowBase2);
+                puDstClipped[5] = puVar1[pbSrcClipped[5]];
               case 5:
-                puDstClipped[4] = *(uint8_t*)((uint32_t)pbSrcClipped[4] + nDstRowBase2);
+                puDstClipped[4] = puVar1[pbSrcClipped[4]];
               case 4:
-                puDstClipped[3] = *(uint8_t*)((uint32_t)pbSrcClipped[3] + nDstRowBase2);
+                puDstClipped[3] = puVar1[pbSrcClipped[3]];
               case 3:
-                puDstClipped[2] = *(uint8_t*)((uint32_t)pbSrcClipped[2] + nDstRowBase2);
+                puDstClipped[2] = puVar1[pbSrcClipped[2]];
               case 2:
-                puDstClipped[1] = *(uint8_t*)((uint32_t)pbSrcClipped[1] + nDstRowBase2);
+                puDstClipped[1] = puVar1[pbSrcClipped[1]];
               case 1:
-                *puDstClipped = *(uint8_t*)((uint32_t)*pbSrcClipped + nDstRowBase2);
+                *puDstClipped = puVar1[*pbSrcClipped];
               case 0:
                 puDstClipped += nRemainder;
               pbSrcClipped += nRemainder;
               for (; nRunLen; nRunLen--) {
-                puDstClipped[7] = *(uint8_t*)((uint32_t)pbSrcClipped[7] + nDstRowBase2);
-                puDstClipped[6] = *(uint8_t*)((uint32_t)pbSrcClipped[6] + nDstRowBase2);
-                puDstClipped[5] = *(uint8_t*)((uint32_t)pbSrcClipped[5] + nDstRowBase2);
-                puDstClipped[4] = *(uint8_t*)((uint32_t)pbSrcClipped[4] + nDstRowBase2);
-                puDstClipped[3] = *(uint8_t*)((uint32_t)pbSrcClipped[3] + nDstRowBase2);
-                puDstClipped[2] = *(uint8_t*)((uint32_t)pbSrcClipped[2] + nDstRowBase2);
-                puDstClipped[1] = *(uint8_t*)((uint32_t)pbSrcClipped[1] + nDstRowBase2);
-                *puDstClipped = *(uint8_t*)((uint32_t)*pbSrcClipped + nDstRowBase2);
+                puDstClipped[7] = puVar1[pbSrcClipped[7]];
+                puDstClipped[6] = puVar1[pbSrcClipped[6]];
+                puDstClipped[5] = puVar1[pbSrcClipped[5]];
+                puDstClipped[4] = puVar1[pbSrcClipped[4]];
+                puDstClipped[3] = puVar1[pbSrcClipped[3]];
+                puDstClipped[2] = puVar1[pbSrcClipped[2]];
+                puDstClipped[1] = puVar1[pbSrcClipped[1]];
+                *puDstClipped = puVar1[*pbSrcClipped];
                 puDstClipped += 8;
                 pbSrcClipped += 8;
               }
@@ -766,12 +768,12 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip(uint8_t * pbParam, int32
               default:
                 nParam2 += nFullChunks;
               pbParam += nFullChunks;
-              nParam1 = nFullChunks + nParam1;
+              pDstBuffer += nFullChunks;
             }
           } else {
             nParam2 += nFullChunks;
             pbParam += nFullChunks;
-            nParam1 += nFullChunks;
+            pDstBuffer += nFullChunks;
           }
         }
 
@@ -781,18 +783,18 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip(uint8_t * pbParam, int32
         }
 
         nParam2 += (char)bRLEToken;
-        nParam1 += (char)bRLEToken;
+        pDstBuffer += (char)bRLEToken;
       } while (true);
 
       nRowCount--;
-      nParam1 = nDstRowStart;
+      pDstBuffer = nDstRowStart;
       if (!nRowCount) {
         return;
       }
     }
 }
 
-void __fastcall FASTCMP_DecompressRLEWithBlend2(uint8_t * pbParam1, uint8_t * pbParam2, int32_t nRowCount, int32_t nDstPitch, int32_t nParam1, int32_t nParam2) {
+void __fastcall FASTCMP_DecompressRLEWithBlend2(uint8_t * pbParam1, uint8_t * pbParam2, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable, uint8_t * pBlendTable) {
     uint8_t bVar1;
     uint32_t nRemainder;
     uint8_t* pbSrc;
@@ -813,31 +815,31 @@ void __fastcall FASTCMP_DecompressRLEWithBlend2(uint8_t * pbParam1, uint8_t * pb
           nFullChunks = (int)(char)bVar1 >> 3;
           switch (nRemainder) {
             case 7:
-              pbParam2[6] = *(uint8_t*)((uint32_t)pbParam2[6] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrc[7] + nParam1) + nParam2);
+              pbParam2[6] = pBlendTable[(uint32_t)pbParam2[6] * 0x100 + (uint32_t)pLookupTable[pbSrc[7]]];
             case 6:
-              pbParam2[5] = *(uint8_t*)((uint32_t)pbParam2[5] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrc[6] + nParam1) + nParam2);
+              pbParam2[5] = pBlendTable[(uint32_t)pbParam2[5] * 0x100 + (uint32_t)pLookupTable[pbSrc[6]]];
             case 5:
-              pbParam2[4] = *(uint8_t*)((uint32_t)pbParam2[4] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrc[5] + nParam1) + nParam2);
+              pbParam2[4] = pBlendTable[(uint32_t)pbParam2[4] * 0x100 + (uint32_t)pLookupTable[pbSrc[5]]];
             case 4:
-              pbParam2[3] = *(uint8_t*)((uint32_t)pbParam2[3] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrc[4] + nParam1) + nParam2);
+              pbParam2[3] = pBlendTable[(uint32_t)pbParam2[3] * 0x100 + (uint32_t)pLookupTable[pbSrc[4]]];
             case 3:
-              pbParam2[2] = *(uint8_t*)((uint32_t)pbParam2[2] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrc[3] + nParam1) + nParam2);
+              pbParam2[2] = pBlendTable[(uint32_t)pbParam2[2] * 0x100 + (uint32_t)pLookupTable[pbSrc[3]]];
             case 2:
-              pbParam2[1] = *(uint8_t*)((uint32_t)pbParam2[1] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrc[2] + nParam1) + nParam2);
+              pbParam2[1] = pBlendTable[(uint32_t)pbParam2[1] * 0x100 + (uint32_t)pLookupTable[pbSrc[2]]];
             case 1:
-              *pbParam2 = *(uint8_t*)((uint32_t)*pbParam2 * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)*pbParam1 + nParam1) + nParam2);
+              *pbParam2 = pBlendTable[(uint32_t)*pbParam2 * 0x100 + (uint32_t)pLookupTable[*pbParam1]];
             case 0:
               pbParam2 += nRemainder;
             pbParam1 += nRemainder;
             for (; nFullChunks; nFullChunks--) {
-              pbParam2[7] = *(uint8_t*)((uint32_t)pbParam2[7] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbParam1[7] + nParam1) + nParam2);
-              pbParam2[6] = *(uint8_t*)((uint32_t)pbParam2[6] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbParam1[6] + nParam1) + nParam2);
-              pbParam2[5] = *(uint8_t*)((uint32_t)pbParam2[5] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbParam1[5] + nParam1) + nParam2);
-              pbParam2[4] = *(uint8_t*)((uint32_t)pbParam2[4] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbParam1[4] + nParam1) + nParam2);
-              pbParam2[3] = *(uint8_t*)((uint32_t)pbParam2[3] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbParam1[3] + nParam1) + nParam2);
-              pbParam2[2] = *(uint8_t*)((uint32_t)pbParam2[2] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbParam1[2] + nParam1) + nParam2);
-              pbParam2[1] = *(uint8_t*)((uint32_t)pbParam2[1] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbParam1[1] + nParam1) + nParam2);
-              *pbParam2 = *(uint8_t*)((uint32_t)*pbParam2 * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)*pbParam1 + nParam1) + nParam2);
+              pbParam2[7] = pBlendTable[(uint32_t)pbParam2[7] * 0x100 + (uint32_t)pLookupTable[pbParam1[7]]];
+              pbParam2[6] = pBlendTable[(uint32_t)pbParam2[6] * 0x100 + (uint32_t)pLookupTable[pbParam1[6]]];
+              pbParam2[5] = pBlendTable[(uint32_t)pbParam2[5] * 0x100 + (uint32_t)pLookupTable[pbParam1[5]]];
+              pbParam2[4] = pBlendTable[(uint32_t)pbParam2[4] * 0x100 + (uint32_t)pLookupTable[pbParam1[4]]];
+              pbParam2[3] = pBlendTable[(uint32_t)pbParam2[3] * 0x100 + (uint32_t)pLookupTable[pbParam1[3]]];
+              pbParam2[2] = pBlendTable[(uint32_t)pbParam2[2] * 0x100 + (uint32_t)pLookupTable[pbParam1[2]]];
+              pbParam2[1] = pBlendTable[(uint32_t)pbParam2[1] * 0x100 + (uint32_t)pLookupTable[pbParam1[1]]];
+              *pbParam2 = pBlendTable[(uint32_t)*pbParam2 * 0x100 + (uint32_t)pLookupTable[*pbParam1]];
               pbParam2 += 8;
               pbParam1 += 8;
             }
@@ -859,18 +861,19 @@ void __fastcall FASTCMP_DecompressRLEWithBlend2(uint8_t * pbParam1, uint8_t * pb
     }
 }
 
-void __fastcall FASTCMP_DecompressRLEWithBlend2AndClip(uint8_t * pbParam, int32_t nParam1, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5, int32_t nParam6) {
+void __fastcall FASTCMP_DecompressRLEWithBlend2AndClip(uint8_t * pbParam, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, uint8_t * pLookupTable, uint8_t * pBlendTable) {
     uint8_t bRLEToken;
     int nRunLen;
     uint32_t nClipCount;
     uint8_t* pbSrcClipped;
     uint8_t* pbDstClipped;
     int nFullChunks;
-    int32_t nDstRowBase = nParam5;
+    int nLookupTable;
+    uint8_t* puVar1 = pLookupTable;
     int32_t nXPos = nParam2;
     while (true) {
-      int nDstRowStart;
-      nDstRowStart = nDstPitch + nParam1;
+      uint8_t* nDstRowStart;
+      nDstRowStart = pDstBuffer + nDstPitch;
       nParam2 = nXPos;
       do {
         while (true) {
@@ -880,9 +883,9 @@ void __fastcall FASTCMP_DecompressRLEWithBlend2AndClip(uint8_t * pbParam, int32_
             break;
           }
 
-          nParam5 = nParam3 - nParam2;
-          if (nParam5 < 0) {
-            nParam5 = 0;
+          nLookupTable = (int)(nParam3 - nParam2);
+          if (nLookupTable < 0) {
+            nLookupTable = 0x0;
           }
 
           nRunLen = -nParam2 + nParam4;
@@ -891,39 +894,39 @@ void __fastcall FASTCMP_DecompressRLEWithBlend2AndClip(uint8_t * pbParam, int32_
             nRunLen = nFullChunks;
           }
 
-          nClipCount = nRunLen - nParam5;
+          nClipCount = nRunLen - nLookupTable;
           if ((int)nClipCount > 0) {
             nRunLen = (int)nClipCount >> 3;
             nClipCount &= 7;
-            pbSrcClipped = pbParam + nParam5;
-            pbDstClipped = (uint8_t*)(nParam1 + nParam5);
+            pbSrcClipped = pbParam + nLookupTable;
+            pbDstClipped = pDstBuffer + nLookupTable;
             switch (nClipCount) {
               case 7:
-                pbDstClipped[6] = *(uint8_t*)((uint32_t)pbDstClipped[6] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[6] + nDstRowBase) + nParam6);
+                pbDstClipped[6] = pBlendTable[(uint32_t)pbDstClipped[6] * 0x100 + (uint32_t)puVar1[pbSrcClipped[6]]];
               case 6:
-                pbDstClipped[5] = *(uint8_t*)((uint32_t)pbDstClipped[5] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[5] + nDstRowBase) + nParam6);
+                pbDstClipped[5] = pBlendTable[(uint32_t)pbDstClipped[5] * 0x100 + (uint32_t)puVar1[pbSrcClipped[5]]];
               case 5:
-                pbDstClipped[4] = *(uint8_t*)((uint32_t)pbDstClipped[4] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[4] + nDstRowBase) + nParam6);
+                pbDstClipped[4] = pBlendTable[(uint32_t)pbDstClipped[4] * 0x100 + (uint32_t)puVar1[pbSrcClipped[4]]];
               case 4:
-                pbDstClipped[3] = *(uint8_t*)((uint32_t)pbDstClipped[3] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[3] + nDstRowBase) + nParam6);
+                pbDstClipped[3] = pBlendTable[(uint32_t)pbDstClipped[3] * 0x100 + (uint32_t)puVar1[pbSrcClipped[3]]];
               case 3:
-                pbDstClipped[2] = *(uint8_t*)((uint32_t)pbDstClipped[2] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[2] + nDstRowBase) + nParam6);
+                pbDstClipped[2] = pBlendTable[(uint32_t)pbDstClipped[2] * 0x100 + (uint32_t)puVar1[pbSrcClipped[2]]];
               case 2:
-                pbDstClipped[1] = *(uint8_t*)((uint32_t)pbDstClipped[1] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[1] + nDstRowBase) + nParam6);
+                pbDstClipped[1] = pBlendTable[(uint32_t)pbDstClipped[1] * 0x100 + (uint32_t)puVar1[pbSrcClipped[1]]];
               case 1:
-                *pbDstClipped = *(uint8_t*)((uint32_t)*pbDstClipped * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)*pbSrcClipped + nDstRowBase) + nParam6);
+                *pbDstClipped = pBlendTable[(uint32_t)*pbDstClipped * 0x100 + (uint32_t)puVar1[*pbSrcClipped]];
               case 0:
                 pbDstClipped += nClipCount;
               pbSrcClipped += nClipCount;
               for (; nRunLen; nRunLen--) {
-                pbDstClipped[7] = *(uint8_t*)((uint32_t)pbDstClipped[7] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[7] + nDstRowBase) + nParam6);
-                pbDstClipped[6] = *(uint8_t*)((uint32_t)pbDstClipped[6] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[6] + nDstRowBase) + nParam6);
-                pbDstClipped[5] = *(uint8_t*)((uint32_t)pbDstClipped[5] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[5] + nDstRowBase) + nParam6);
-                pbDstClipped[4] = *(uint8_t*)((uint32_t)pbDstClipped[4] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[4] + nDstRowBase) + nParam6);
-                pbDstClipped[3] = *(uint8_t*)((uint32_t)pbDstClipped[3] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[3] + nDstRowBase) + nParam6);
-                pbDstClipped[2] = *(uint8_t*)((uint32_t)pbDstClipped[2] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[2] + nDstRowBase) + nParam6);
-                pbDstClipped[1] = *(uint8_t*)((uint32_t)pbDstClipped[1] * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)pbSrcClipped[1] + nDstRowBase) + nParam6);
-                *pbDstClipped = *(uint8_t*)((uint32_t)*pbDstClipped * 0x100 + (uint32_t)*(uint8_t*)((uint32_t)*pbSrcClipped + nDstRowBase) + nParam6);
+                pbDstClipped[7] = pBlendTable[(uint32_t)pbDstClipped[7] * 0x100 + (uint32_t)puVar1[pbSrcClipped[7]]];
+                pbDstClipped[6] = pBlendTable[(uint32_t)pbDstClipped[6] * 0x100 + (uint32_t)puVar1[pbSrcClipped[6]]];
+                pbDstClipped[5] = pBlendTable[(uint32_t)pbDstClipped[5] * 0x100 + (uint32_t)puVar1[pbSrcClipped[5]]];
+                pbDstClipped[4] = pBlendTable[(uint32_t)pbDstClipped[4] * 0x100 + (uint32_t)puVar1[pbSrcClipped[4]]];
+                pbDstClipped[3] = pBlendTable[(uint32_t)pbDstClipped[3] * 0x100 + (uint32_t)puVar1[pbSrcClipped[3]]];
+                pbDstClipped[2] = pBlendTable[(uint32_t)pbDstClipped[2] * 0x100 + (uint32_t)puVar1[pbSrcClipped[2]]];
+                pbDstClipped[1] = pBlendTable[(uint32_t)pbDstClipped[1] * 0x100 + (uint32_t)puVar1[pbSrcClipped[1]]];
+                *pbDstClipped = pBlendTable[(uint32_t)*pbDstClipped * 0x100 + (uint32_t)puVar1[*pbSrcClipped]];
                 pbDstClipped += 8;
                 pbSrcClipped += 8;
               }
@@ -931,12 +934,12 @@ void __fastcall FASTCMP_DecompressRLEWithBlend2AndClip(uint8_t * pbParam, int32_
               default:
                 nParam2 += nFullChunks;
               pbParam += nFullChunks;
-              nParam1 = nFullChunks + nParam1;
+              pDstBuffer += nFullChunks;
             }
           } else {
             nParam2 += nFullChunks;
             pbParam += nFullChunks;
-            nParam1 += nFullChunks;
+            pDstBuffer += nFullChunks;
           }
         }
 
@@ -946,18 +949,18 @@ void __fastcall FASTCMP_DecompressRLEWithBlend2AndClip(uint8_t * pbParam, int32_
         }
 
         nParam2 += (char)bRLEToken;
-        nParam1 += (char)bRLEToken;
+        pDstBuffer += (char)bRLEToken;
       } while (true);
 
       nRowCount--;
-      nParam1 = nDstRowStart;
+      pDstBuffer = nDstRowStart;
       if (!nRowCount) {
         return;
       }
     }
 }
 
-void __fastcall FASTCMP_DecompressRLEWithLookup1_v2(uint8_t * pbParam, uint8_t * pParam, int32_t nRowCount, int32_t nDstPitch, int32_t nParam) {
+void __fastcall FASTCMP_DecompressRLEWithLookup1_v2(uint8_t * pbParam, uint8_t * pParam, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable) {
     uint8_t bVar1;
     uint32_t nRemainder;
     uint8_t* pbSrc;
@@ -978,31 +981,31 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1_v2(uint8_t * pbParam, uint8_t *
           nFullChunks = (int)(char)bVar1 >> 3;
           switch (nRemainder) {
             case 7:
-              pParam[6] = *(uint8_t*)((uint32_t)pbSrc[7] + nParam);
+              pParam[6] = pLookupTable[pbSrc[7]];
             case 6:
-              pParam[5] = *(uint8_t*)((uint32_t)pbSrc[6] + nParam);
+              pParam[5] = pLookupTable[pbSrc[6]];
             case 5:
-              pParam[4] = *(uint8_t*)((uint32_t)pbSrc[5] + nParam);
+              pParam[4] = pLookupTable[pbSrc[5]];
             case 4:
-              pParam[3] = *(uint8_t*)((uint32_t)pbSrc[4] + nParam);
+              pParam[3] = pLookupTable[pbSrc[4]];
             case 3:
-              pParam[2] = *(uint8_t*)((uint32_t)pbSrc[3] + nParam);
+              pParam[2] = pLookupTable[pbSrc[3]];
             case 2:
-              pParam[1] = *(uint8_t*)((uint32_t)pbSrc[2] + nParam);
+              pParam[1] = pLookupTable[pbSrc[2]];
             case 1:
-              *pParam = *(uint8_t*)((uint32_t)*pbParam + nParam);
+              *pParam = pLookupTable[*pbParam];
             case 0:
               pParam += nRemainder;
             pbParam += nRemainder;
             for (; nFullChunks; nFullChunks--) {
-              pParam[7] = *(uint8_t*)((uint32_t)pbParam[7] + nParam);
-              pParam[6] = *(uint8_t*)((uint32_t)pbParam[6] + nParam);
-              pParam[5] = *(uint8_t*)((uint32_t)pbParam[5] + nParam);
-              pParam[4] = *(uint8_t*)((uint32_t)pbParam[4] + nParam);
-              pParam[3] = *(uint8_t*)((uint32_t)pbParam[3] + nParam);
-              pParam[2] = *(uint8_t*)((uint32_t)pbParam[2] + nParam);
-              pParam[1] = *(uint8_t*)((uint32_t)pbParam[1] + nParam);
-              *pParam = *(uint8_t*)((uint32_t)*pbParam + nParam);
+              pParam[7] = pLookupTable[pbParam[7]];
+              pParam[6] = pLookupTable[pbParam[6]];
+              pParam[5] = pLookupTable[pbParam[5]];
+              pParam[4] = pLookupTable[pbParam[4]];
+              pParam[3] = pLookupTable[pbParam[3]];
+              pParam[2] = pLookupTable[pbParam[2]];
+              pParam[1] = pLookupTable[pbParam[1]];
+              *pParam = pLookupTable[*pbParam];
               pParam += 8;
               pbParam += 8;
             }
@@ -1024,7 +1027,7 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1_v2(uint8_t * pbParam, uint8_t *
     }
 }
 
-void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip_v2(uint8_t * pbParam, int32_t nParam1, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5) {
+void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip_v2(uint8_t * pbParam, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, uint8_t * pLookupTable) {
     int nRunLen;
     uint32_t nClipCount;
     uint32_t nRemainder;
@@ -1032,11 +1035,12 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip_v2(uint8_t * pbParam, in
     uint8_t* puDstClipped;
     uint8_t bRLEToken;
     int nFullChunks;
-    int32_t nDstRowBase = nParam5;
+    int nLookupTable;
+    uint8_t* puVar1 = pLookupTable;
     int32_t nXPos = nParam2;
     while (true) {
-      int nDstRowStart;
-      nDstRowStart = nDstPitch + nParam1;
+      uint8_t* nDstRowStart;
+      nDstRowStart = pDstBuffer + nDstPitch;
       nParam2 = nXPos;
       do {
         while (true) {
@@ -1046,9 +1050,9 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip_v2(uint8_t * pbParam, in
             break;
           }
 
-          nParam5 = nParam3 - nParam2;
-          if (nParam5 < 0) {
-            nParam5 = 0;
+          nLookupTable = (int)(nParam3 - nParam2);
+          if (nLookupTable < 0) {
+            nLookupTable = 0x0;
           }
 
           nRunLen = -nParam2 + nParam4;
@@ -1057,39 +1061,39 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip_v2(uint8_t * pbParam, in
             nRunLen = nFullChunks;
           }
 
-          nClipCount = nRunLen - nParam5;
+          nClipCount = nRunLen - nLookupTable;
           if ((int)nClipCount > 0) {
             nRemainder = nClipCount & 7;
             nRunLen = (int)nClipCount >> 3;
-            pbSrcClipped = pbParam + nParam5;
-            puDstClipped = (uint8_t*)(nParam1 + nParam5);
+            pbSrcClipped = pbParam + nLookupTable;
+            puDstClipped = pDstBuffer + nLookupTable;
             switch (nRemainder) {
               case 7:
-                puDstClipped[6] = *(uint8_t*)((uint32_t)pbSrcClipped[6] + nDstRowBase);
+                puDstClipped[6] = puVar1[pbSrcClipped[6]];
               case 6:
-                puDstClipped[5] = *(uint8_t*)((uint32_t)pbSrcClipped[5] + nDstRowBase);
+                puDstClipped[5] = puVar1[pbSrcClipped[5]];
               case 5:
-                puDstClipped[4] = *(uint8_t*)((uint32_t)pbSrcClipped[4] + nDstRowBase);
+                puDstClipped[4] = puVar1[pbSrcClipped[4]];
               case 4:
-                puDstClipped[3] = *(uint8_t*)((uint32_t)pbSrcClipped[3] + nDstRowBase);
+                puDstClipped[3] = puVar1[pbSrcClipped[3]];
               case 3:
-                puDstClipped[2] = *(uint8_t*)((uint32_t)pbSrcClipped[2] + nDstRowBase);
+                puDstClipped[2] = puVar1[pbSrcClipped[2]];
               case 2:
-                puDstClipped[1] = *(uint8_t*)((uint32_t)pbSrcClipped[1] + nDstRowBase);
+                puDstClipped[1] = puVar1[pbSrcClipped[1]];
               case 1:
-                *puDstClipped = *(uint8_t*)((uint32_t)*pbSrcClipped + nDstRowBase);
+                *puDstClipped = puVar1[*pbSrcClipped];
               case 0:
                 puDstClipped += nRemainder;
               pbSrcClipped += nRemainder;
               for (; nRunLen; nRunLen--) {
-                puDstClipped[7] = *(uint8_t*)((uint32_t)pbSrcClipped[7] + nDstRowBase);
-                puDstClipped[6] = *(uint8_t*)((uint32_t)pbSrcClipped[6] + nDstRowBase);
-                puDstClipped[5] = *(uint8_t*)((uint32_t)pbSrcClipped[5] + nDstRowBase);
-                puDstClipped[4] = *(uint8_t*)((uint32_t)pbSrcClipped[4] + nDstRowBase);
-                puDstClipped[3] = *(uint8_t*)((uint32_t)pbSrcClipped[3] + nDstRowBase);
-                puDstClipped[2] = *(uint8_t*)((uint32_t)pbSrcClipped[2] + nDstRowBase);
-                puDstClipped[1] = *(uint8_t*)((uint32_t)pbSrcClipped[1] + nDstRowBase);
-                *puDstClipped = *(uint8_t*)((uint32_t)*pbSrcClipped + nDstRowBase);
+                puDstClipped[7] = puVar1[pbSrcClipped[7]];
+                puDstClipped[6] = puVar1[pbSrcClipped[6]];
+                puDstClipped[5] = puVar1[pbSrcClipped[5]];
+                puDstClipped[4] = puVar1[pbSrcClipped[4]];
+                puDstClipped[3] = puVar1[pbSrcClipped[3]];
+                puDstClipped[2] = puVar1[pbSrcClipped[2]];
+                puDstClipped[1] = puVar1[pbSrcClipped[1]];
+                *puDstClipped = puVar1[*pbSrcClipped];
                 puDstClipped += 8;
                 pbSrcClipped += 8;
               }
@@ -1097,12 +1101,12 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip_v2(uint8_t * pbParam, in
               default:
                 nParam2 += nFullChunks;
               pbParam += nFullChunks;
-              nParam1 = nFullChunks + nParam1;
+              pDstBuffer += nFullChunks;
             }
           } else {
             nParam2 += nFullChunks;
             pbParam += nFullChunks;
-            nParam1 += nFullChunks;
+            pDstBuffer += nFullChunks;
           }
         }
 
@@ -1112,18 +1116,18 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip_v2(uint8_t * pbParam, in
         }
 
         nParam2 += (char)bRLEToken;
-        nParam1 += (char)bRLEToken;
+        pDstBuffer += (char)bRLEToken;
       } while (true);
 
       nRowCount--;
-      nParam1 = nDstRowStart;
+      pDstBuffer = nDstRowStart;
       if (!nRowCount) {
         return;
       }
     }
 }
 
-void __fastcall FASTCMP_DecompressRLEWithBlend3(uint8_t * pbParam1, uint8_t * pbParam2, int32_t nRowCount, int32_t nDstPitch, int32_t nParam) {
+void __fastcall FASTCMP_DecompressRLEWithBlend3(uint8_t * pbParam1, uint8_t * pbParam2, int32_t nRowCount, int32_t nDstPitch, uint8_t * pBlendTable) {
     uint8_t bVar1;
     uint32_t nRemainder;
     uint8_t* pbSrc;
@@ -1144,31 +1148,31 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3(uint8_t * pbParam1, uint8_t * pb
           nFullChunks = (int)(char)bVar1 >> 3;
           switch (nRemainder) {
             case 7:
-              pbParam2[6] = *(uint8_t*)((uint32_t)pbSrc[7] + (uint32_t)pbParam2[6] * 0x100 + nParam);
+              pbParam2[6] = pBlendTable[(uint32_t)pbSrc[7] + (uint32_t)pbParam2[6] * 0x100];
             case 6:
-              pbParam2[5] = *(uint8_t*)((uint32_t)pbSrc[6] + (uint32_t)pbParam2[5] * 0x100 + nParam);
+              pbParam2[5] = pBlendTable[(uint32_t)pbSrc[6] + (uint32_t)pbParam2[5] * 0x100];
             case 5:
-              pbParam2[4] = *(uint8_t*)((uint32_t)pbSrc[5] + (uint32_t)pbParam2[4] * 0x100 + nParam);
+              pbParam2[4] = pBlendTable[(uint32_t)pbSrc[5] + (uint32_t)pbParam2[4] * 0x100];
             case 4:
-              pbParam2[3] = *(uint8_t*)((uint32_t)pbSrc[4] + (uint32_t)pbParam2[3] * 0x100 + nParam);
+              pbParam2[3] = pBlendTable[(uint32_t)pbSrc[4] + (uint32_t)pbParam2[3] * 0x100];
             case 3:
-              pbParam2[2] = *(uint8_t*)((uint32_t)pbSrc[3] + (uint32_t)pbParam2[2] * 0x100 + nParam);
+              pbParam2[2] = pBlendTable[(uint32_t)pbSrc[3] + (uint32_t)pbParam2[2] * 0x100];
             case 2:
-              pbParam2[1] = *(uint8_t*)((uint32_t)pbSrc[2] + (uint32_t)pbParam2[1] * 0x100 + nParam);
+              pbParam2[1] = pBlendTable[(uint32_t)pbSrc[2] + (uint32_t)pbParam2[1] * 0x100];
             case 1:
-              *pbParam2 = *(uint8_t*)((uint32_t)*pbParam1 + (uint32_t)*pbParam2 * 0x100 + nParam);
+              *pbParam2 = pBlendTable[(uint32_t)*pbParam1 + (uint32_t)*pbParam2 * 0x100];
             case 0:
               pbParam2 += nRemainder;
             pbParam1 += nRemainder;
             for (; nFullChunks; nFullChunks--) {
-              pbParam2[7] = *(uint8_t*)((uint32_t)pbParam1[7] + (uint32_t)pbParam2[7] * 0x100 + nParam);
-              pbParam2[6] = *(uint8_t*)((uint32_t)pbParam1[6] + (uint32_t)pbParam2[6] * 0x100 + nParam);
-              pbParam2[5] = *(uint8_t*)((uint32_t)pbParam1[5] + (uint32_t)pbParam2[5] * 0x100 + nParam);
-              pbParam2[4] = *(uint8_t*)((uint32_t)pbParam1[4] + (uint32_t)pbParam2[4] * 0x100 + nParam);
-              pbParam2[3] = *(uint8_t*)((uint32_t)pbParam1[3] + (uint32_t)pbParam2[3] * 0x100 + nParam);
-              pbParam2[2] = *(uint8_t*)((uint32_t)pbParam1[2] + (uint32_t)pbParam2[2] * 0x100 + nParam);
-              pbParam2[1] = *(uint8_t*)((uint32_t)pbParam1[1] + (uint32_t)pbParam2[1] * 0x100 + nParam);
-              *pbParam2 = *(uint8_t*)((uint32_t)*pbParam1 + (uint32_t)*pbParam2 * 0x100 + nParam);
+              pbParam2[7] = pBlendTable[(uint32_t)pbParam1[7] + (uint32_t)pbParam2[7] * 0x100];
+              pbParam2[6] = pBlendTable[(uint32_t)pbParam1[6] + (uint32_t)pbParam2[6] * 0x100];
+              pbParam2[5] = pBlendTable[(uint32_t)pbParam1[5] + (uint32_t)pbParam2[5] * 0x100];
+              pbParam2[4] = pBlendTable[(uint32_t)pbParam1[4] + (uint32_t)pbParam2[4] * 0x100];
+              pbParam2[3] = pBlendTable[(uint32_t)pbParam1[3] + (uint32_t)pbParam2[3] * 0x100];
+              pbParam2[2] = pBlendTable[(uint32_t)pbParam1[2] + (uint32_t)pbParam2[2] * 0x100];
+              pbParam2[1] = pBlendTable[(uint32_t)pbParam1[1] + (uint32_t)pbParam2[1] * 0x100];
+              *pbParam2 = pBlendTable[(uint32_t)*pbParam1 + (uint32_t)*pbParam2 * 0x100];
               pbParam2 += 8;
               pbParam1 += 8;
             }
@@ -1190,7 +1194,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3(uint8_t * pbParam1, uint8_t * pb
     }
 }
 
-void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbParam, int32_t nParam1, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5) {
+void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbParam, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, uint8_t * pBlendTable) {
     int nRunLen;
     uint32_t nClipCount;
     uint32_t nRemainder;
@@ -1198,11 +1202,12 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbParam, int32_
     uint8_t* pbDstClipped;
     uint8_t bRLEToken;
     int nFullChunks;
-    int32_t nDstRowBase = nParam5;
+    int nBlendTable;
+    uint8_t* puVar1 = pBlendTable;
     int32_t nXPos = nParam2;
     while (true) {
-      int nDstRowStart;
-      nDstRowStart = nDstPitch + nParam1;
+      uint8_t* nDstRowStart;
+      nDstRowStart = pDstBuffer + nDstPitch;
       nParam2 = nXPos;
       do {
         while (true) {
@@ -1212,9 +1217,9 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbParam, int32_
             break;
           }
 
-          nParam5 = nParam3 - nParam2;
-          if (nParam5 < 0) {
-            nParam5 = 0;
+          nBlendTable = (int)(nParam3 - nParam2);
+          if (nBlendTable < 0) {
+            nBlendTable = 0x0;
           }
 
           nRunLen = -nParam2 + nParam4;
@@ -1223,40 +1228,40 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbParam, int32_
             nRunLen = nFullChunks;
           }
 
-          nClipCount = nRunLen - nParam5;
+          nClipCount = nRunLen - nBlendTable;
           if ((int)nClipCount > 0) {
             nRemainder = nClipCount & 7;
             nRunLen = (int)nClipCount >> 3;
-            pbSrcClipped = pbParam + nParam5;
-            pbDstClipped = (uint8_t*)(nParam1 + nParam5);
+            pbSrcClipped = pbParam + nBlendTable;
+            pbDstClipped = pDstBuffer + nBlendTable;
             switch (nRemainder) {
               case 7:
-                pbDstClipped[6] = *(uint8_t*)((uint32_t)pbSrcClipped[6] + (uint32_t)pbDstClipped[6] * 0x100 + nDstRowBase);
+                pbDstClipped[6] = puVar1[(uint32_t)pbSrcClipped[6] + (uint32_t)pbDstClipped[6] * 0x100];
               case 6:
-                pbDstClipped[5] = *(uint8_t*)((uint32_t)pbSrcClipped[5] + (uint32_t)pbDstClipped[5] * 0x100 + nDstRowBase);
+                pbDstClipped[5] = puVar1[(uint32_t)pbSrcClipped[5] + (uint32_t)pbDstClipped[5] * 0x100];
               case 5:
-                pbDstClipped[4] = *(uint8_t*)((uint32_t)pbSrcClipped[4] + (uint32_t)pbDstClipped[4] * 0x100 + nDstRowBase);
+                pbDstClipped[4] = puVar1[(uint32_t)pbSrcClipped[4] + (uint32_t)pbDstClipped[4] * 0x100];
               case 4:
-                pbDstClipped[3] = *(uint8_t*)((uint32_t)pbSrcClipped[3] + (uint32_t)pbDstClipped[3] * 0x100 + nDstRowBase);
+                pbDstClipped[3] = puVar1[(uint32_t)pbSrcClipped[3] + (uint32_t)pbDstClipped[3] * 0x100];
               case 3:
-                pbDstClipped[2] = *(uint8_t*)((uint32_t)pbSrcClipped[2] + (uint32_t)pbDstClipped[2] * 0x100 + nDstRowBase);
+                pbDstClipped[2] = puVar1[(uint32_t)pbSrcClipped[2] + (uint32_t)pbDstClipped[2] * 0x100];
               case 2:
-                pbDstClipped[1] = *(uint8_t*)((uint32_t)pbSrcClipped[1] + (uint32_t)pbDstClipped[1] * 0x100 + nDstRowBase);
+                pbDstClipped[1] = puVar1[(uint32_t)pbSrcClipped[1] + (uint32_t)pbDstClipped[1] * 0x100];
               case 1:
-                *pbDstClipped = *(uint8_t*)((uint32_t)*pbSrcClipped + (uint32_t)*pbDstClipped * 0x100 + nDstRowBase);
+                *pbDstClipped = puVar1[(uint32_t)*pbSrcClipped + (uint32_t)*pbDstClipped * 0x100];
               case 0:
                 if (nRunLen) {
                   pbDstClipped += nRemainder;
                   pbSrcClipped += nRemainder;
                   do {
-                    pbDstClipped[7] = *(uint8_t*)((uint32_t)pbSrcClipped[7] + (uint32_t)pbDstClipped[7] * 0x100 + nDstRowBase);
-                    pbDstClipped[6] = *(uint8_t*)((uint32_t)pbSrcClipped[6] + (uint32_t)pbDstClipped[6] * 0x100 + nDstRowBase);
-                    pbDstClipped[5] = *(uint8_t*)((uint32_t)pbSrcClipped[5] + (uint32_t)pbDstClipped[5] * 0x100 + nDstRowBase);
-                    pbDstClipped[4] = *(uint8_t*)((uint32_t)pbSrcClipped[4] + (uint32_t)pbDstClipped[4] * 0x100 + nDstRowBase);
-                    pbDstClipped[3] = *(uint8_t*)((uint32_t)pbSrcClipped[3] + (uint32_t)pbDstClipped[3] * 0x100 + nDstRowBase);
-                    pbDstClipped[2] = *(uint8_t*)((uint32_t)pbSrcClipped[2] + (uint32_t)pbDstClipped[2] * 0x100 + nDstRowBase);
-                    pbDstClipped[1] = *(uint8_t*)((uint32_t)pbSrcClipped[1] + (uint32_t)pbDstClipped[1] * 0x100 + nDstRowBase);
-                    *pbDstClipped = *(uint8_t*)((uint32_t)*pbSrcClipped + (uint32_t)*pbDstClipped * 0x100 + nDstRowBase);
+                    pbDstClipped[7] = puVar1[(uint32_t)pbSrcClipped[7] + (uint32_t)pbDstClipped[7] * 0x100];
+                    pbDstClipped[6] = puVar1[(uint32_t)pbSrcClipped[6] + (uint32_t)pbDstClipped[6] * 0x100];
+                    pbDstClipped[5] = puVar1[(uint32_t)pbSrcClipped[5] + (uint32_t)pbDstClipped[5] * 0x100];
+                    pbDstClipped[4] = puVar1[(uint32_t)pbSrcClipped[4] + (uint32_t)pbDstClipped[4] * 0x100];
+                    pbDstClipped[3] = puVar1[(uint32_t)pbSrcClipped[3] + (uint32_t)pbDstClipped[3] * 0x100];
+                    pbDstClipped[2] = puVar1[(uint32_t)pbSrcClipped[2] + (uint32_t)pbDstClipped[2] * 0x100];
+                    pbDstClipped[1] = puVar1[(uint32_t)pbSrcClipped[1] + (uint32_t)pbDstClipped[1] * 0x100];
+                    *pbDstClipped = puVar1[(uint32_t)*pbSrcClipped + (uint32_t)*pbDstClipped * 0x100];
                     nRunLen--;
                     pbDstClipped += 8;
                     pbSrcClipped += 8;
@@ -1265,12 +1270,12 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbParam, int32_
               default:
                 nParam2 += nFullChunks;
               pbParam += nFullChunks;
-              nParam1 = nFullChunks + nParam1;
+              pDstBuffer += nFullChunks;
             }
           } else {
             nParam2 += nFullChunks;
             pbParam += nFullChunks;
-            nParam1 += nFullChunks;
+            pDstBuffer += nFullChunks;
           }
         }
 
@@ -1280,11 +1285,11 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbParam, int32_
         }
 
         nParam2 += (char)bRLEToken;
-        nParam1 += (char)bRLEToken;
+        pDstBuffer += (char)bRLEToken;
       } while (true);
 
       nRowCount--;
-      nParam1 = nDstRowStart;
+      pDstBuffer = nDstRowStart;
       if (!nRowCount) {
         return;
       }
@@ -1335,46 +1340,46 @@ void __fastcall FASTCMP_DecompressRLEDispatcher(uint8_t * pImageHeader, uint8_t 
             }
             if (pLookupTable2) {
               if (bNoClip) {
-                FASTCMP_DecompressRLEWithLookup2(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, pLookupTable1, pLookupTable2);
+                FASTCMP_DecompressRLEWithLookup2(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, (uint8_t*)pLookupTable1, (uint8_t*)pLookupTable2);
                 return;
               }
 
-              FASTCMP_DecompressRLEWithLookup2AndClip(pbRLEData, (int32_t)pbDecompressedOutput, nRowCount, nDstPitch, nDrawX, nClipLeft, nClipRight, pLookupTable1, pLookupTable2);
+              FASTCMP_DecompressRLEWithLookup2AndClip(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, nDrawX, nClipLeft, nClipRight, (uint8_t*)pLookupTable1, (uint8_t*)pLookupTable2);
               return;
             }
             if (bNoClip) {
-              FASTCMP_DecompressRLEWithLookup1(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, pLookupTable1);
+              FASTCMP_DecompressRLEWithLookup1(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, (uint8_t*)pLookupTable1);
               return;
             }
 
-            FASTCMP_DecompressRLEWithLookup1AndClip(pbRLEData, (int32_t)pbDecompressedOutput, nRowCount, nDstPitch, nDrawX, nClipLeft, nClipRight, pLookupTable1);
+            FASTCMP_DecompressRLEWithLookup1AndClip(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, nDrawX, nClipLeft, nClipRight, (uint8_t*)pLookupTable1);
             return;
           }
           if (pLookupTable2) {
             if (pBlendTable) {
               if (bNoClip) {
-                FASTCMP_DecompressRLEWithBlend2(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, pLookupTable2, pBlendTable);
+                FASTCMP_DecompressRLEWithBlend2(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, (uint8_t*)pLookupTable2, (uint8_t*)pBlendTable);
                 return;
               }
 
-              FASTCMP_DecompressRLEWithBlend2AndClip(pbRLEData, (int32_t)pbDecompressedOutput, nRowCount, nDstPitch, nDrawX, nClipLeft, nClipRight, pLookupTable2, pBlendTable);
+              FASTCMP_DecompressRLEWithBlend2AndClip(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, nDrawX, nClipLeft, nClipRight, (uint8_t*)pLookupTable2, (uint8_t*)pBlendTable);
               return;
             }
             if (bNoClip) {
-              FASTCMP_DecompressRLEWithLookup1_v2(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, pLookupTable2);
+              FASTCMP_DecompressRLEWithLookup1_v2(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, (uint8_t*)pLookupTable2);
               return;
             }
 
-            FASTCMP_DecompressRLEWithLookup1AndClip_v2(pbRLEData, (int32_t)pbDecompressedOutput, nRowCount, nDstPitch, nDrawX, nClipLeft, nClipRight, pLookupTable2);
+            FASTCMP_DecompressRLEWithLookup1AndClip_v2(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, nDrawX, nClipLeft, nClipRight, (uint8_t*)pLookupTable2);
             return;
           }
           if (pBlendTable) {
             if (bNoClip) {
-              FASTCMP_DecompressRLEWithBlend3(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, pBlendTable);
+              FASTCMP_DecompressRLEWithBlend3(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, (uint8_t*)pBlendTable);
               return;
             }
 
-            FASTCMP_DecompressRLEWithBlend3AndClip(pbRLEData, (int32_t)pbDecompressedOutput, nRowCount, nDstPitch, nDrawX, nClipLeft, nClipRight, pBlendTable);
+            FASTCMP_DecompressRLEWithBlend3AndClip(pbRLEData, pbDecompressedOutput, nRowCount, nDstPitch, nDrawX, nClipLeft, nClipRight, (uint8_t*)pBlendTable);
             return;
           }
           if (bNoClip) {

@@ -4,8 +4,8 @@
 #include "D2CMP/SRC/FindTiles.h"
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SpriteCache.h"
+#include "D2CMP/SRC/SubTile.h"
 #include "D2CMP/SRC/Tilecmp.h"
-#include "D2Client/D2GfxHelperStrc.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Common/DATATBLS/DataTbls.h"
 #include "Fog/Memory.h"
@@ -121,7 +121,7 @@ D2TileLibraryHeaderStrc * __stdcall Alloc(D2TileLibraryHashStrc * * ppHash, char
     }
 
     size_t nFileSize = SpriteCache::SPRITECACHE_LoadFromFile(szFilename);
-    int* pTileBuffer = (int*)D2_ALLOC_AT(nFileSize, ".\\SRC\\TileProjects.cpp", 0x6b);
+    D2TileLibraryHeaderStrc* pTileBuffer = (D2TileLibraryHeaderStrc*)D2_ALLOC_AT(nFileSize, ".\\SRC\\TileProjects.cpp", 0x6b);
     if (!pTileBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6c);
       exit(-1);
@@ -131,7 +131,7 @@ D2TileLibraryHeaderStrc * __stdcall Alloc(D2TileLibraryHashStrc * * ppHash, char
       D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, szFilename, &pFile, 0);
       D2FILE_ReadFile(nullptr, pFile, pTileBuffer, nFileSize);
       D2FILE_CloseFile(nullptr, pFile);
-      Tilecmp::TILECMP_FixupMinimalPointers(pTileBuffer, (int**)&pTileData, szFilename);
+      Tilecmp::TILECMP_FixupMinimalPointers(pTileBuffer, &pTileData, szFilename);
       pNewHash = Tilecmp::TILECMP_RegisterTilesForLookup(pTileData);
       pExistingNode = D2_NEW_AT(D2TileProjectStrc, ".\\SRC\\TileProjects.cpp", 0x7b);
       if (!pExistingNode) {

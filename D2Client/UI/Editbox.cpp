@@ -8,7 +8,17 @@
 namespace D2Client::UI::Editbox {
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS
+_EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca138(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
+    return ExceptionContinueSearch;
+}
+
+// compiler-generated C++ EH handler; its frame is never registered with the OS
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca158(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
+    return ExceptionContinueSearch;
+}
+
+// compiler-generated C++ EH handler; its frame is never registered with the OS
+_EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca183(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
     return ExceptionContinueSearch;
 }
 

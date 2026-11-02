@@ -3,13 +3,12 @@
 #include "Storm/Source/SErr.h"
 #include "Fog/3rdparty/crashy.h"
 #include "Fog/Source/SFile.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
 #include "Storm/WindowHandle.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -408,7 +407,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
     __frame0.szErrorText[0] = '\0';
     SErrGetErrorStr(nErrorCode, __frame0.szErrorText, 0x100);
     if (__frame0.szErrorText[0] == '\0') {
-      nCallbackNode = nErrorCode & 0xffff;
+      nCallbackNode = (uint16_t)nErrorCode;
       nErrorCodeArg = nErrorCode;
       ppFormat = SERR_GetString(0);
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(__frame0.szErrorText, (LPCSTR)ppFormat, nCallbackNode, nErrorCodeArg);
@@ -438,7 +437,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
       pCustomMsgArg += nLen;
     }
 
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pCustomMsgArg, " : error %u: ", nErrorCode & 0xffff);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pCustomMsgArg, " : error %u: ", (uint16_t)nErrorCode);
     nErrorCodeArg = SSTR::SStrLen(pCustomMsgArg);
     SSTR::SStrCopy(pCustomMsgArg + nErrorCodeArg, __frame0.szErrorText, 0x7fffffff);
     /* LPCSTR lpOutputString for OutputDebugStringA */ OutputDebugStringA(__frame0.szFullMessage);
@@ -524,7 +523,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
     }
 
     iVar1 = 7;
-    __frame0.nMsgBoxFlags = (uint32_t)(nMessageFlags != 0) * 2 + 1 | 0x52010;
+    __frame0.nMsgBoxFlags = (nMessageFlags != 0 ? 0x3U : 0x1U) | 0x52010;
     for (pCallbackNode = (StormSErrHandlerNode*)(gnStormErrorCallbackCount.pNext <= 0 ? 0 : gnStormErrorCallbackCount.pNext); 0 < (int)pCallbackNode; pCallbackNode = pCallbackNode->pNext) {
       pCustomMsgArg = __frame0.pCustomMsgPtr;
       if (!__frame0.pCustomMsgPtr) {
@@ -598,20 +597,20 @@ void __stdcall SErrReportNamedResourceLeak(char * szMessage, char * szText) {
     static int gnDebugMemoryInitFlag; D2_STATIC_GUARD_BSS(gnDebugMemoryInitFlag, "Storm::Source::SErr::SErrReportNamedResourceLeak::gnDebugMemoryInitFlag");
     static uint32_t gbDebugMemoryInitialized; D2_STATIC_GUARD_BSS(gbDebugMemoryInitialized, "Storm::Source::SErr::SErrReportNamedResourceLeak::gbDebugMemoryInitialized");
 
-    char szDebugOutput[200];
-    uint32_t szFormatted[64];
+    char szFormatted[256];
     if (!gbDebugMemoryInitialized) {
       gbDebugMemoryInitialized = 1;
       SReg::SRegLoadValue("Internal", "Debug Memory", 0, &gnDebugMemoryInitFlag);
     }
     if (gnDebugMemoryInitFlag) {
+      char szDebugOutput[200];
       if (!szText || *szText == '\0') {
-        SSTR::SStrPrintf((char*)szFormatted, 0x100, "%s", szMessage);
+        SSTR::SStrPrintf(szFormatted, 0x100, "%s", szMessage);
       } else {
-        SSTR::SStrPrintf((char*)szFormatted, 0x100, "%s (%s)", szMessage, szText);
+        SSTR::SStrPrintf(szFormatted, 0x100, "%s (%s)", szMessage, szText);
       }
       if (!gnSSystemOption1) {
-        SErrDisplayError(0x8510007f, szFormatted, -3, nullptr, 1, 1);
+        SErrDisplayError(0x8510007f, (uint32_t*)szFormatted, -3, nullptr, 1, 1);
         return;
       }
 
@@ -669,6 +668,11 @@ void __stdcall SErrDisplayAppFatal(char * szText, ...) {
 // @oracle-basis Instruction-for-instruction the same forwarder. The oracle body is li r4,0x0 ; bl 0x100156d0 (= SErrReportNamedResourceLeak) and nothing else; this one is DebugMemoryHandleError(szMessage, NULL). Same argument passed through in slot 1, same NULL in slot 2, same sole callee, one parameter against the target's two.
 void __stdcall SErrReportResourceLeak(char * szMessage) {
     SErrReportNamedResourceLeak(szMessage, nullptr);
+}
+
+void StaticInit_6ca8a0() {
+    gnStormErrorCallbackCount.pNext = ~(uintptr_t)((char*)&gnStormErrorCallbackCount + 4);
+    atexit(StaticFini_gStormErrorCallbackList);
 }
 
 // Runs at exit: removes every element from the Storm error callback list, then unlinks the list head itself.

@@ -357,7 +357,7 @@ void __fastcall ACT1_fpLevelDataFn2_A(struct D2DrlgLevelStrc * pLevel, int nNode
 void __stdcall DRLGLEVEL_ParseLevelData(struct D2DrlgLevelDataList * pLevelData, fpLevelDataFn1 fnPlacementValidator, fpLevelDataFn2 fnLevelDataCallback, struct D2DrlgStrc * pDrlg);
 // Pathfinding entry point for units that cannot reach their target directly (path type fallback). Builds a Bresenham waypoint list from the unit's current packed position toward the destination. For each waypoint, checks collision via CheckCollision_BlockPlayer_Type; on blockage, delegates to DRLGPATH_FindPathDualScan to find the best reachable point. After traversal, simplifies collinear waypoints via DRLGPATH_SimplifyCollinearWaypoints and returns the resulting waypoint count. Only valid for PLAYER or MONSTER unit owners; halts otherwise.
 int32_t __fastcall PATH_FindPathTowardFallback(struct D2PathTypeArg * pPathTypeArg);
-void __fastcall DRLGGRID_OrFlagOnCellList(int32_t nGridPtr, int * pnParam, int32_t nFlag);
+void __fastcall DRLGGRID_OrFlagOnCellList(struct D2DrlgGridStrc * nGridPtr, int * pnParam, int32_t nFlag);
 // Initializes the DRLG collision/tile grids for a room during level generation. Allocates three D2DrlgGridStrc grids (tile-type, wall, floor) sized to the room's world dimensions from the room's memory pool, seeds the floor grid's border cells, and runs Act-1 outdoor room grid setup for ACT_I. Decodes the room's waypoint and shrine sub-counts from eRoomExFlags and lays out their sub-tiles via SubTypeWpShrine using the level's SubWaypoint/SubShrine ids. Applies a level-type-specific grid flag (special areas) to empty floor cells, then finalizes the wall and floor grids. __fastcall, no return value.
 void __fastcall DRLGROOMEX_AllocAndInitRoomGrids(struct D2RoomExStrc * pRoomEx);
 void __fastcall DRLGROOMEX_InitializeMazeRoom(struct D2RoomExStrc * pRoomEx);
@@ -396,7 +396,7 @@ int __stdcall DRLGOUTROOM_EstimatePathDistance(int nX1, int nY1, int dwParam3, i
 // NOTE: Register params: pint (EAX): int *
 int32_t __stdcall DRLGOUTROOM_GetDirectionChangeCost(int * pint, int dwParam2, int dwParam3);
 // Core A* loop: expands nodes, computes f=g+h, uses 900-node pool.
-int * __stdcall DRLGOUTROOM_PathSearchStep(int * * ppNodeList, int32_t nMaxFCost, int32_t pLevelCtx, int * pnTargetPos);
+int * __stdcall DRLGOUTROOM_PathSearchStep(int * * ppNodeList, int32_t nMaxFCost, struct D2DrlgLevelStrc * pLevelCtx, int * pnTargetPos);
 // DRLG level-generation: builds the room-graph path connecting wilderness level exit pair nExitIndex (aExitPoints2 start -> aExitPoints3 target, both converted from world to 8-unit grid coords). If the two exits are adjacent (Manhattan <=1) it just allocates two vertices directly. Otherwise runs an iterative A*-style search (DRLGOUTROOM_PathSearchStep over a ~9000-int node pool, growing the cost bound each pass) and, on success, walks the result node chain allocating a D2DrlgVertexStrc list into pWildData->pAdjacentVertices[nExitIndex] (positions from node[3]/[4]). Returns TRUE if a path was built, FALSE if no path within the cost budget. Vertices come from the level's DRLG memory pool.
 BOOL __fastcall DRLGOUTROOM_FindPathBetweenExits(struct D2DrlgLevelStrc * pLevel, int32_t nExitIndex);
 // 11 internal functions (defined in .cpp)

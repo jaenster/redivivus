@@ -518,10 +518,10 @@ BOOL __fastcall Q05_SetRewardForPlayersInTower(::SGAMEDATA * pGame, D2UnitStrc *
       nPlayerGUID = pUnit->nUnitGUID;
     }
 
-    D2QuestGUIDStrc* pA1Q5GUIDList = &pQuestData->pQuestSpecificData.pA1Q5->sQuestGUID;
-    bPlayerAlreadyTracked = QUESTGUID_SearchForValueInIntArray32(pA1Q5GUIDList, nPlayerGUID);
+    D2QuestDataA1Q5Strc* pA1Q5 = pQuestData->pQuestSpecificData.pA1Q5;
+    bPlayerAlreadyTracked = QUESTGUID_SearchForValueInIntArray32(&pA1Q5->sQuestGUID, nPlayerGUID);
     if (!bPlayerAlreadyTracked) {
-      QUESTGUID_AddPlayerToList(pA1Q5GUIDList, nPlayerGUID);
+      QUESTGUID_AddPlayerToList(&pA1Q5->sQuestGUID, nPlayerGUID);
     }
 
     /* SetQuestState(ForgottenTower, Completed=0) — mark cleared after recording
@@ -776,11 +776,11 @@ bool __fastcall Q05_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
         /* If target is Wariv; inactive */ if (nTargetClassId == 0x9b) {
           return false;
         }
-        /* If target is Gheed: inactive */ if (nTargetClassId != 0x93) {
-          /* Otherwise active */ return true;
+        /* If target is Gheed: inactive */ if (nTargetClassId == 0x93) {
+          return false;
         }
 
-        return false;
+        /* Otherwise active */ return true;
       }
 
       iTmpCount++;

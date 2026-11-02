@@ -264,6 +264,13 @@ class LibMatcher:
             if f.key not in self.map and is_linked(f, self.linked):
                 by_sym.setdefault(f.symbol, []).append(f)
         by_sym = {k: v[0] for k, v in by_sym.items() if len(v) == 1}
+        # A call binds to a definition in the caller's own object first: the
+        # static write_char of outputs.obj is not output.obj's, though both
+        # are `_write_char`, so _output_s_l's calls do not vote for the one
+        # _output_l calls.
+        defined = collections.defaultdict(set)
+        for f in self.fns:
+            defined[f.tu].add(f.symbol)
         votes = collections.defaultdict(collections.Counter)
         for s, e, f in pairs:
             sites = self.memo.get(f, s, (e,))
@@ -272,7 +279,7 @@ class LibMatcher:
                     continue                    # no call that could vote: nothing to align
                 sites = self.memo.put(f, s, self.aligned_calls(f, s, e), (e,))
             for sym, target in sites:
-                if sym in by_sym:
+                if sym in by_sym and (sym not in defined[f.tu] or by_sym[sym].tu == f.tu):
                     votes[sym][target] += 1
         n = 0
         for sym, c in sorted(votes.items()):

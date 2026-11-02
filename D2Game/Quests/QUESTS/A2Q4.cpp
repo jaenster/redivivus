@@ -460,7 +460,7 @@ BOOL __fastcall Q12_CheckArcaneAndReward(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // A2Q4 - SequenceFilter (inlined real body). Runs the sequence filter of the chained follow-up quest (nSequenceQuestId = The Summoner): looks up that quest's data and invokes its fpSequenceFilter. Halts via ErrorManager if the function pointer is a bad code ptr.
-bool __fastcall Q12_SequenceFilterInlined(D2QuestDataStrc * pQuestData) {
+static bool __fastcall Q12_SequenceFilterInlined(D2QuestDataStrc * pQuestData) {
     D2QuestDataStrc* pQuestData_00 = GetQuestDataByQuestNoInternal(pQuestData->pGame, pQuestData->nSequenceQuestId);
     if (pQuestData_00) {
       BOOL BVar2 = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
@@ -483,18 +483,7 @@ bool __fastcall Q12_SequenceFilter(D2QuestDataStrc * pQuestData) {
     }
 
     QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x35a);
-    D2QuestDataStrc* pQuestData_00 = GetQuestDataByQuestNoInternal(pQuestData->pGame, pQuestData->nSequenceQuestId);
-    if (!pQuestData_00) {
-      return true;
-    }
-
-    BOOL BVar1 = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
-    if (BVar1) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34e);
-      exit(-1);
-    }
-
-    pQuestData_00->fpSequenceFilter(pQuestData_00);
+    Q12_SequenceFilterInlined(pQuestData);
     return true;
 }
 
@@ -604,14 +593,13 @@ void __stdcall A2Q4_OnMonsterDeathClass331_NoOp(uint32_t dwArg1, uint32_t dwArg2
 // A2Q4 - CheckJerhynGateOpen. One-shot edge detector: returns 1 the first time Jerhyn's initial-talk flag is set and the gate has not yet been opened (then latches bJerhynGateOpened). Used to open the Lut Gholein palace harem gate once Jerhyn has been spoken to.
 BOOL __fastcall Q12_CheckJerhynGateOpen(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheArcaneSanctuary);
-    if (!pDVar2) {
-      return 0;
-    }
-
-    D2QuestDataA2Q4Strc* pDVar1 = pDVar2->pQuestSpecificData.pA2Q4;
-    if (pDVar1->bJerhynInitial == '\x01' && !pDVar1->bJerhynGateOpened) {
-      pDVar1->bJerhynGateOpened = true;
-      return 1;
+    if (pDVar2) {
+      D2QuestDataA2Q4Strc* pDVar1;
+      pDVar1 = pDVar2->pQuestSpecificData.pA2Q4;
+      if (pDVar1->bJerhynInitial == '\x01' && !pDVar1->bJerhynGateOpened) {
+        pDVar1->bJerhynGateOpened = true;
+        return 1;
+      }
     }
 
     return 0;
@@ -723,21 +711,20 @@ BOOL __fastcall Q12_IsSanctuaryComplete(::SGAMEDATA * pGame) {
 // A2Q4 - GetSummonerCoords. Outputs the Summoner location into pnParam[0/1]. If bSummonerKilled, returns exact (X,Y); if bSummonerCoordsFallback, returns (X, Y-4). Returns 1 if coords written, else 0. Used to place the Canyon-of-the-Magi portal near where the Summoner was.
 BOOL __fastcall Q12_GetSummonerCoords(::SGAMEDATA * pGame, D2CoordStrc * pCoord) {
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheArcaneSanctuary);
-    if (!pDVar2) {
-      return 0;
-    }
-
-    D2QuestDataA2Q4Strc* pDVar1 = pDVar2->pQuestSpecificData.pA2Q4;
-    if (pDVar1->bSummonerKilled) {
-      pCoord->nX = pDVar1->nSummonerX;
-      pCoord->nY = pDVar1->nSummonerY;
-      return 1;
-    }
-    if (pDVar1->bSummonerCoordsFallback) {
-      pCoord->nX = pDVar1->nSummonerX;
-      pCoord->nY = pDVar1->nSummonerY;
-      pCoord->nY += -4;
-      return 1;
+    if (pDVar2) {
+      D2QuestDataA2Q4Strc* pDVar1;
+      pDVar1 = pDVar2->pQuestSpecificData.pA2Q4;
+      if (pDVar1->bSummonerKilled) {
+        pCoord->nX = pDVar1->nSummonerX;
+        pCoord->nY = pDVar1->nSummonerY;
+        return 1;
+      }
+      if (pDVar1->bSummonerCoordsFallback) {
+        pCoord->nX = pDVar1->nSummonerX;
+        pCoord->nY = pDVar1->nSummonerY;
+        pCoord->nY += -4;
+        return 1;
+      }
     }
 
     return 0;

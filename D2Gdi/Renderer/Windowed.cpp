@@ -6,9 +6,9 @@
 #include "D2CMP/SRC/FastCmp.h"
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SpriteCache.h"
+#include "D2CMP/SRC/SubTile.h"
 #include "D2CMP/tagPALETTEENTRY.h"
 #include "D2Client/D2GfxDataStrc.h"
-#include "D2Client/D2GfxHelperStrc.h"
 #include "D2Client/D2GfxSettingsStrc.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Draw.h"
@@ -20,9 +20,9 @@
 #include "D2gfx/D2GFX.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SBMP.h"
 #include "Storm/Source/SFile.h"
+#include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -611,7 +611,8 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int nPosX, int nPos
 
     uint32_t pLookupTable2 = 0;
     int nClipBottom = nDrawLines;
-    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, RENDERER_WINDOWED_nScaleOffsetY, RENDERER_WINDOWED_nScaleWidth, gpRenderBackBufferBits, iVar1, RENDERER_nWindowWidth, 0, (int32_t)RENDERER_WINDOWED_GetPalettePointer(nDrawMode, (uint32_t*)&nDrawLines), nSkipLines, nClipBottom, pLookupTable2);
+    uint8_t* pBlendTable = RENDERER_WINDOWED_GetPalettePointer(nDrawMode, (uint32_t*)&nDrawLines);
+    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, RENDERER_WINDOWED_nScaleOffsetY, RENDERER_WINDOWED_nScaleWidth, gpRenderBackBufferBits, iVar1, RENDERER_nWindowWidth, 0, (int32_t)pBlendTable, nSkipLines, nClipBottom, pLookupTable2);
 }
 
 void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, void * pCropRect, int32_t nDrawMode) {
@@ -639,7 +640,10 @@ void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t n
       return;
     }
 
-    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, __frame0.nCropLeft, __frame0.nCropRight, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, 0, (int32_t)RENDERER_WINDOWED_GetPalettePointer(nDrawMode, (uint32_t*)&pCropRect), __frame0.nClipTop, __frame0.nClipBottom, bOutOfBounds);
+    int32_t nClipTop_00 = __frame0.nClipTop;
+    int32_t nClipBottom_00 = __frame0.nClipBottom;
+    uint8_t* pPalettePtr = RENDERER_WINDOWED_GetPalettePointer(nDrawMode, (uint32_t*)&pCropRect);
+    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, __frame0.nCropLeft, __frame0.nCropRight, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, 0, (int32_t)pPalettePtr, nClipTop_00, nClipBottom_00, bOutOfBounds);
 }
 
 void __fastcall DrawShadow(D2GfxDataStrc * pData, int nPosX, int nPosY) {
@@ -1027,28 +1031,28 @@ void __fastcall DrawRect(uint8_t * pRect, int nPaletteIndex) {
       uint32_t uHeight;
       nRight.y = *(LONG*)(pRect + 0xc);
       nMidX.y = *(LONG*)(pRect + 4);
-      if (nMidX.y <= nRight.y) {
-        uHeight = *(int*)(pRect + 8) - nTop.x;
-        if (!(uHeight && nRight.y - nMidX.y)) {
-          return;
-        }
+      if (!(nMidX.y <= nRight.y)) {
+        nTop.y = nRight.y;
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x127);
+        exit(-1);
+      }
 
-        nTopX.x = *(LONG*)(pRect + 8);
-        nTopX.y = *(int*)(pRect + 4) + ((uint32_t)(nRight.y - nMidX.y) >> 1);
-        nMidX.x = (uHeight >> 1) + nTop.x;
-        byColorParam = (uint8_t)nPaletteIndex;
-        nRight.x = nMidX.x;
-        nTop.y = nTopX.y;
-        RENDERER_WINDOWED_DrawLineBresenham(&nTopX, &nMidX, byColorParam);
-        RENDERER_WINDOWED_DrawLineBresenham(&nRight, &nTopX, byColorParam);
-        RENDERER_WINDOWED_DrawLineBresenham(&nTop, &nRight, byColorParam);
-        RENDERER_WINDOWED_DrawLineBresenham(&nMidX, &nTop, byColorParam);
+      uHeight = *(int*)(pRect + 8) - nTop.x;
+      if (!(uHeight && nRight.y - nMidX.y)) {
         return;
       }
 
-      nTop.y = nRight.y;
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x127);
-      exit(-1);
+      nTopX.x = *(LONG*)(pRect + 8);
+      nTopX.y = *(int*)(pRect + 4) + ((uint32_t)(nRight.y - nMidX.y) >> 1);
+      nMidX.x = (uHeight >> 1) + nTop.x;
+      byColorParam = (uint8_t)nPaletteIndex;
+      nRight.x = nMidX.x;
+      nTop.y = nTopX.y;
+      RENDERER_WINDOWED_DrawLineBresenham(&nTopX, &nMidX, byColorParam);
+      RENDERER_WINDOWED_DrawLineBresenham(&nRight, &nTopX, byColorParam);
+      RENDERER_WINDOWED_DrawLineBresenham(&nTop, &nRight, byColorParam);
+      RENDERER_WINDOWED_DrawLineBresenham(&nMidX, &nTop, byColorParam);
+      return;
     }
 }
 
@@ -1193,7 +1197,7 @@ BOOL __fastcall DrawShadowTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, in
     }
 
     int nTileIndex = 0;
-    if (0 < pTile->nSubTiles) {
+    if (pTile->nSubTiles > 0) {
       int nScreenX;
       do {
         nScreenX = pTile->pSubTiles[nTileIndex].nOffsetX + nPosX;
@@ -1240,7 +1244,7 @@ BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int
     }
 
     nScreenPanels = 0;
-    if (0 >= pTile->nSubTiles) {
+    if (pTile->nSubTiles <= 0) {
       return nLightIdx;
     }
 
@@ -1288,7 +1292,7 @@ BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nPos
     }
 
     nScreenPanels = 0;
-    if (0 < pTile->nSubTiles) {
+    if (pTile->nSubTiles > 0) {
       int bAllocOk;
       do {
         a3 = pTile->pSubTiles[nScreenPanels].nOffsetY + nPosY;
@@ -1416,10 +1420,10 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
       memset(gnSmackerGlideYOffset.pFrameBuffer, 0, 0x6db0);
       nVersion = 0;
       nFileSize = 0;
-      uVar2 = Storm::Source::SFile::SFileLoadFileEx(nullptr, (uint32_t*)szSmacker, (void**)&nVersion, &nFileSize, 0, 3, 0);
+      uVar2 = Storm::Source::SFile::SFileLoadFileEx(nullptr, szSmacker, (void**)&nVersion, &nFileSize, 0, 3, 0);
       if (uVar2 && nVersion) {
         iVar3 = Storm::Source::SBMP::SBmpDecodeImage(2, (void*)nVersion, nFileSize, aPaletteBuf, (uint8_t*)gnSmackerGlideYOffset.pFrameBuffer, 0x6db0, &nImgWidth, &nImgHeight, &nImgBitDepth);
-        Storm::SMem::SMemFree((void*)nVersion, ".\\Src\\gdiSmack.cpp", 0x78, 0);
+        Storm::Source::SMem::SMemFree((void*)nVersion, ".\\Src\\gdiSmack.cpp", 0x78, 0);
         if (iVar3 && nImgWidth == 0x1d4 && nImgHeight == 0x3c && nImgBitDepth == 8) {
           iVar3 = 0;
           do {

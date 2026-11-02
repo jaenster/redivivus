@@ -17,7 +17,7 @@ namespace D2CMP::DUNGEON::Dungeon {
 // Tail-calls TileProjects::Alloc (already int* returning) and passes its result straight through unmodified to RET.
 int * __stdcall TILEPROJECT_AllocSlot(void * pTileProject, char * szFilename);
 void __stdcall TILEPROJECT_FreeSlot(int32_t nParam1, int32_t nParam2);
-uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int32_t nParam2, int32_t nParam3, int32_t nParam4, int * pnFoundTiles, uint32_t nParam);
+uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int32_t nTileType, int32_t nTileSubType, int32_t nParam4, int * pnFoundTiles, uint32_t nParam);
 int32_t __stdcall GetOrientation(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 int32_t __stdcall GetIndex(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 uint32_t __stdcall TILEPROJECT_GetTileCount(int32_t nParam);
@@ -25,7 +25,7 @@ uint32_t __stdcall TILEPROJECT_GetTileDataPtr(int32_t nParam);
 uint32_t __stdcall TILEPROJECT_GetAnimatedTileDataPtr(int32_t nParam);
 int32_t __stdcall GetSubIndex(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 uint32_t __stdcall TILEPROJECT_GetTileOrientationIndex(uint32_t * pnOrientationIndex);
-int __stdcall TILEPROJECT_GetRoofHeightIndex(int32_t nParam);
+int __stdcall TILEPROJECT_GetRoofHeightIndex(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 BYTE * __stdcall TILE_GetTileFlags(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 
 } // namespace D2CMP::DUNGEON::Dungeon

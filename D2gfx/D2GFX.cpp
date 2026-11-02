@@ -3,10 +3,10 @@
 #include "D2gfx/D2GFX.h"
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SpriteCache.h"
+#include "D2CMP/SRC/SubTile.h"
 #include "D2CMP/tagPALETTEENTRY.h"
 #include "D2Client/D2ControlStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
-#include "D2Client/D2GfxHelperStrc.h"
 #include "D2Client/D2GfxSettingsStrc.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Draw.h"
@@ -25,6 +25,7 @@
 #include "Storm/Source/SReg.h"
 #include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
+#include "D2Client/D2GfxHelperStrc.h"
 #include "D2Client/UI/Panel.h"
 #include "D2Win/Src/D2WinFont.h"
 
@@ -200,7 +201,7 @@ BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2Rende
     wndClass.cbWndExtra = 0;
     wndClass.hInstance = hInstance;
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    /* UINT fuLoad for LoadImageA */ /* int cy for LoadImageA */ /* int cx for LoadImageA */ /* UINT type for LoadImageA */ /* LPCSTR name for LoadImageA */ /* HINSTANCE hInst for LoadImageA */ wndClass.hIcon = (HICON)LoadImageA(hInstance, (LPCSTR)((bIsExpansion != 0) + 0x66), 1, 0, 0, 0);
+    /* UINT fuLoad for LoadImageA */ /* int cy for LoadImageA */ /* int cx for LoadImageA */ /* UINT type for LoadImageA */ /* LPCSTR name for LoadImageA */ /* HINSTANCE hInst for LoadImageA */ wndClass.hIcon = (HICON)LoadImageA(hInstance, (LPCSTR)(bIsExpansion != 0 ? 0x67 : 0x66), 1, 0, 0, 0);
     /* LPCSTR lpCursorName for LoadCursorA */ /* HINSTANCE hInstance for LoadCursorA */ wndClass.hCursor = LoadCursorA((HINSTANCE)0x0, (LPCSTR)0x7f00);
     /* int i for GetStockObject */ wndClass.hbrBackground = (HBRUSH)GetStockObject(5);
     /* WNDCLASSA * lpWndClass for RegisterClassA */ wndClass.lpszMenuName = (LPCSTR)0x0;
@@ -686,17 +687,11 @@ void __stdcall D2GFX_CloseSmacker(D2SmackerContextStrc * pContext) {
 
 void __stdcall DRAW_HideTaskbarAppBars() {
     HWND hWnd;
-    _AppBarData appBarData;
     if (bD2GFX_Windowed == 1) {
       return;
     }
 
-    appBarData.uCallbackMessage = 0;
-    appBarData.rc.left = 0;
-    appBarData.rc.top = 0;
-    appBarData.rc.right = 0;
-    appBarData.rc.bottom = 0;
-    appBarData.lParam = 0;
+    _AppBarData appBarData = {0};
     appBarData.cbSize = 0x24;
     appBarData.hWnd = hwndD2GFX_Window;
     UINT nEdge = 0;
@@ -1558,6 +1553,21 @@ BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode) {
     gnResolutionMode = nResolutionMode;
     gbWindowed = bWindowed;
     return 1;
+}
+
+void StaticInit_6cadf0() {
+    // Static local variables (originally global data)
+    static char * fnCursorVisibilityHook = s_Diablo_II_006cc8b8; D2_STATIC_GUARD(fnCursorVisibilityHook, "D2gfx::D2GFX::StaticInit_6cadf0::fnCursorVisibilityHook");
+
+    gpszWindowClassName = fnCursorVisibilityHook;
+}
+
+void StaticInit_6cae00() {
+    szWindowClassName = gpszDiabloIIClassNameSource;
+}
+
+void StaticInit_6cae10() {
+    gpszWindowTitle = gpszDiabloIIClassNameSource;
 }
 
 } // namespace D2gfx::D2GFX

@@ -113,7 +113,7 @@ BOOL __stdcall D2WINMAIN_TestMouseInRect(RECT * pRect);
 void __stdcall DrawCursorOOG();
 void __stdcall DRAW_UI_Sprites();
 void __stdcall RENDERER_DrawOutOfGameScene();
-LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nParam, LPARAM lParam);
+LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lParam);
 void __stdcall INPUT_FormKeyHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormKeyUpHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormActivate(struct D2UIMouseMsgStrc * pMsg);
@@ -127,7 +127,7 @@ int32_t __stdcall D2WIN_FindClosestControlToMouse(struct D2ControlStrc * pContro
 void __stdcall INPUT_FormMouseWheel(struct D2UIMouseMsgStrc * pMsg);
 // Sets gbCursorVisible cursor visibility flag
 void __stdcall D2WINMAIN_SetCursorVisible(BOOL bVisible);
-void __stdcall SetUnsetFlag0x08(struct D2ControlStrc * pControl, int32_t nParam);
+void __stdcall SetUnsetFlag0x08(struct D2ControlStrc * pControl, int32_t bSet);
 // Sets pFormFourth global to the specified control
 void __stdcall D2WINMAIN_SetFormFourth(struct D2ControlStrc * pControl);
 // Returns gnWinMainState global value

@@ -91,11 +91,11 @@ bool __fastcall Q09_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
       }
 
       bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
-      if (bQuestState != 1) {
-        return false;
+      if (bQuestState == 1) {
+        return true;
       }
 
-      return true;
+      return false;
     }
 
     return false;
@@ -362,16 +362,11 @@ BOOL __fastcall Q09_CheckRadamentKillAndReward(::SGAMEDATA * pGame, D2UnitStrc *
       }
 
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &pAdjacentRooms, (int*)&nAdjacentRoomCount);
-      nAdjacentRoomIdx = 0;
-      if (nAdjacentRoomCount > 0) {
-        do {
-          if (pAdjacentRooms[nAdjacentRoomIdx] == pA1Q1Data->pRadamentRoom) {
-            bPlayerNearKill = 1;
-            break;
-          }
-
-          nAdjacentRoomIdx++;
-        } while (nAdjacentRoomIdx < nAdjacentRoomCount);
+      for (nAdjacentRoomIdx = 0; nAdjacentRoomIdx < nAdjacentRoomCount; nAdjacentRoomIdx++) {
+        if (pAdjacentRooms[nAdjacentRoomIdx] == pA1Q1Data->pRadamentRoom) {
+          bPlayerNearKill = 1;
+          break;
+        }
       }
     }
 
@@ -405,7 +400,6 @@ BOOL __fastcall Q09_CheckRadamentKillAndReward(::SGAMEDATA * pGame, D2UnitStrc *
 // A2Q1: Book-of-Skill drop accounting + completion sound. Run per-player after Radament's death. If quest is in Step0x05 (reward earned, book not yet consumed) AND the player does NOT currently hold the Book of Skill quest item (code 0x20737361 = 'ass '), increments the pending book-drop counter (A2Q1 nBookOfSkillDropCount, via the A1Q1-aliased GUID slot) so the death handler drops a (re)book. Separately, if the quest is JustCompleted (0xd), plays the quest-complete sound event 0x32 on the player.
 BOOL __fastcall Q09_CheckBookOfSkillAndSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pBookItem;
-    int32_t* pnBookDropCount;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     BOOL BVar3 = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_RadamentsLair, QUESTSTATE_Step0x05);
     if (BVar3) {
@@ -414,8 +408,7 @@ BOOL __fastcall Q09_CheckBookOfSkillAndSound(::SGAMEDATA * pGame, D2UnitStrc * p
       if (pQuestData) {
         pBookItem = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20737361);
         if (!pBookItem) {
-          pnBookDropCount = &pQuestData->pQuestSpecificData.pA2Q1->nBookOfSkillDropCount;
-          (*pnBookDropCount)++;
+          pQuestData->pQuestSpecificData.pA2Q1->nBookOfSkillDropCount++;
         }
       }
     }
@@ -433,6 +426,7 @@ BOOL __fastcall Q09_CheckBookOfSkillAndSound(::SGAMEDATA * pGame, D2UnitStrc * p
 // A2Q1 callback[8]: Radament death handler (the actual quest-objective trigger). For an active (non-intro) quest: debug-logs, advances nStateFlag to 4, pushes QUESTSTATE_JustCompleted to the quest record, records Radament's room (pRadamentRoom in the A1Q3-aliased scratch), unhooks handler[2]. Then iterates all players: Q09_CheckRadamentKillAndReward (grant reward to nearby), Q09_SetCannotComplete (lock out absent), Q09_CheckBookOfSkillAndSound (tally how many Book-of-Skill copies must drop). Schedules Q09_OnEndCallback timer (0xc) once. Finally sets the target's dropItemCode to 0x20737361 ('ass '=Book of Skill) and drops that many shield-type reward items so each eligible player can get a book.
 void __fastcall Q09_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nDropItemCode;
+    int nBookDropCount;
     if (pQuestData->bIsNotIntroduction == '\0') {
       return;
     }
@@ -458,15 +452,9 @@ void __fastcall Q09_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestArgs->pTarget->dwDropItemCode = 0x20737361;
-    int nBookDropCount = 0;
-    if (pDVar1->nBookOfSkillDropCount <= 0) {
-      return;
-    }
-
-    do {
+    for (nBookDropCount = 0; nBookDropCount < pDVar1->nBookOfSkillDropCount; nBookDropCount++) {
       ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nDropItemCode, nullptr, -1, 0);
-      nBookDropCount++;
-    } while (nBookDropCount < pDVar1->nBookOfSkillDropCount);
+    }
 }
 
 // A2Q1 callback[3]: Atma introduction-reply handler. Triggered when the gossip control id == 0x28 (player finished Atma's intro speech). Removes the player from the pending-gossip GUID list. If quest is at nStateFlag==2 (introduced) and not yet Completed/RewardAwaits, advances to nStateFlag 3 (objective active: go kill Radament) and mirrors state into all players' records via Q09_UpdateQuestRecord.

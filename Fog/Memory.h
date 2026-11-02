@@ -37,14 +37,14 @@ namespace Fog::Memory {
 
 // Function declarations
 void OutOfMemoryHandler(char * format, ...);
-int32_t __fastcall FindFirstFreeBit(uint32_t nParam);
+int32_t __fastcall FindFirstFreeBit(uint32_t dwBits);
 void * __fastcall POOL_AllocOverflowBlock(struct D2PoolManagerStrc * pMemory, int32_t nSize, char * szFile, int32_t nFileLine);
-void __fastcall FreeTrackedAllocation(int32_t nManager, int32_t nUserPtr, char * szFile, int32_t nLine);
+void __fastcall FreeTrackedAllocation(struct D2PoolManagerStrc * nManager, void * nUserPtr, char * szFile, int32_t nLine);
 void * __fastcall ReallocTrackedAllocation(struct D2PoolManagerStrc * pManager, void * pUserPtr, int32_t nNewSize, char * szFile, int32_t nLine);
 void __fastcall Free(struct D2PoolManagerStrc * pMemory, void * * pStruct, char * szFile, int32_t Line0);
 void InitializeMemoryManagers(struct D2PoolManagerStrc * pMemory);
 void FreeMemoryPool(struct D2PoolManagerStrc * pMemory);
-void __stdcall InitializePoolSystem(struct D2PoolManagerStrc * * pPoolManager, char * szName, int32_t nParam);
+void InitializePoolSystem(struct D2PoolManagerStrc * * pPoolManager, char * szName, int32_t nParam, int nUnused);
 void SetPoolIdForMemoryManager(struct D2PoolManagerStrc * pMemory, int32_t nPoolId);
 DWORD getDwMemory(struct D2PoolManagerStrc * pMemory);
 void * __fastcall Alloc(struct D2PoolManagerStrc * pMemory, size_t MemSize, char * szFile, int32_t Line);

@@ -561,9 +561,9 @@ namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

@@ -4,7 +4,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2LightMapStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
@@ -29,6 +28,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
 #include "D2Common/Skills.h"
@@ -163,11 +163,11 @@ void __fastcall STRUCT_FillPlayerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
     UNIT::SUnit::SetAlignment(pUnit, '\x02', 1);
 }
 
-void PLAYER_FreeAllCorpseUnits(int32_t nParam, ::SGAMEDATA * pGame) {
+static void PLAYER_FreeAllCorpseUnits(D2UnitStrc * pPlayer, ::SGAMEDATA * pGame) {
     D2CorpseStrc* pRoomCorpse;
     D2UnitStrc* pUnit;
     D2RoomStrc* pRoom;
-    for (pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(*(D2InventoryStrc**)(nParam + 0x60)); pRoomCorpse; pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse(pRoomCorpse)) {
+    for (pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(pPlayer->pInventory); pRoomCorpse; pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse(pRoomCorpse)) {
       uint32_t dwFindGUID;
       dwFindGUID = D2Common::INVENTORY::Inventory::ROOMCORPSE_GetGUID(pRoomCorpse);
       pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, dwFindGUID);
@@ -184,27 +184,11 @@ void PLAYER_FreeAllCorpseUnits(int32_t nParam, ::SGAMEDATA * pGame) {
 
 // Tears down all server-side state for a departing player unit: frees pets, removes from party, frees combat/player-list data, destroys all corpse units in the player's inventory, frees inventory items and inventory struct, releases arena slot, frees interaction state, player data, hover-text, and all event timers.
 void __fastcall PLAYER_FreeAllResources(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    D2CorpseStrc* pRoomCorpse;
-    D2UnitStrc* pUnit_00;
-    D2RoomStrc* pRoom;
     PlayerPets::FreePets(pGame, pUnit);
     UNIT::Party::PARTY_RemoveUnitFromParty(pGame, pUnit);
     UNIT::PlayerList::PLAYERDATA_FreePlayerList(pGame, pUnit);
     UNIT::SUnitDmg::FreeCombat(pGame, pUnit);
-    for (pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(pUnit->pInventory); pRoomCorpse; pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse(pRoomCorpse)) {
-      uint32_t dwFindGUID;
-      dwFindGUID = D2Common::INVENTORY::Inventory::ROOMCORPSE_GetGUID(pRoomCorpse);
-      pUnit_00 = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, dwFindGUID);
-      if (pUnit_00) {
-        pRoom = D2Common::Units::UNITS_GetRoom(pUnit_00);
-        if (pRoom) {
-          D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, pUnit_00->eUnitType, pUnit_00->nUnitGUID);
-        }
-
-        UNIT::SUnit::FreeServerUnit(pGame, pUnit_00);
-      }
-    }
-
+    PLAYER_FreeAllCorpseUnits(pUnit, pGame);
     UNIT::SUnit::UNITS_FreeInventoryItems(pGame, pUnit);
     D2Common::INVENTORY::Inventory::STRUCT_FreeInventory(pUnit->pInventory);
     GAME::Arena::FreePlayerArena(pGame, pUnit);
@@ -319,13 +303,13 @@ uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t nParam, D
     }
 }
 
-static D2UnitStrc * __stdcall PLAYER_CreateRewardItemFromTemplate(int32_t nGamePtr, int32_t bNoSkill, int32_t nItemClassId, int32_t pTemplateTxt, D2UnitStrc * pUnit) {
+static D2UnitStrc * __stdcall PLAYER_CreateRewardItemFromTemplate(::SGAMEDATA * nGamePtr, int32_t bNoSkill, int32_t nItemClassId, int32_t pTemplateTxt, D2UnitStrc * pUnit) {
     if (!pUnit) {
       return nullptr;
     }
 
     int32_t nItemLevel = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
-    D2UnitStrc* pCreatedItem = ITEMS::Items::Drop::ITEM_CreateFromTemplate(pUnit, nItemClassId, (::SGAMEDATA*)nGamePtr, 4, QUALITY_NORMAL, 1, 1, nItemLevel, 0, 0, 0);
+    D2UnitStrc* pCreatedItem = ITEMS::Items::Drop::ITEM_CreateFromTemplate(pUnit, nItemClassId, nGamePtr, 4, QUALITY_NORMAL, 1, 1, nItemLevel, 0, 0, 0);
     if (!pCreatedItem) {
       return pCreatedItem;
     }
@@ -371,10 +355,10 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
     uint32_t bIsQuiver;
     BOOL nBeltResult;
     eD2UnitStat eUnitStat;
+    uint16_t uVar1;
     eD2UnitStat eStatId;
     eD2UnitType eItemUnitType;
     int32_t nLine;
-    int32_t nStatValue;
     ::SGAMEDATA* pGameLocal;
     D2ItemsTxt* pItemsTxt;
     pItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(*pnParam, &__frame0.nItemTxtLine);
@@ -389,7 +373,7 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
     do {
       __frame0.pGameSaved = pGame;
-      pNewItem = PLAYER_CreateRewardItemFromTemplate((int32_t)__frame0.pGameSaved, nDifficulty, __frame0.nItemTxtLine, eClassId, pUnit);
+      pNewItem = PLAYER_CreateRewardItemFromTemplate(__frame0.pGameSaved, nDifficulty, __frame0.nItemTxtLine, eClassId, pUnit);
       D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pNewItem, ITEMFLAG_BEGINNER, 1);
       D2Common::ITEMS::Items::SetBodyLoc(pNewItem, *(eD2BodyLoc*)(pnParam + 1));
       nLine = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_beltable(pNewItem);
@@ -425,31 +409,32 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
           }
 
           bIsQuiver = D2Common::ITEMS::Items::ITEMS_IsA(pNewItem, ITEMTYPE_BowQuiver);
-          nStatValue = 0;
+          uVar1 = 0;
           if (bIsQuiver) {
             nLine = 0xfa;
             set_quiver_quantity:
-            nStatValue = 0;
+            uVar1 = 0;
             eStatId = UNITSTAT_quantity;
           } else {
             nLine = D2Common::Stats::StatsEx::GetTxtMaxDurability(pNewItem);
             eStatId = UNITSTAT_durability;
           }
 
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eStatId, nLine, nStatValue);
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eStatId, nLine, uVar1);
         } else {
           PLAYER_PlaceItemInInventory(__frame0.pGameSaved, 1, pUnit, pNewItem);
           bIsQuiver = D2Common::ITEMS::Items::ITEMS_IsA(pNewItem, ITEMTYPE_BowQuiver);
-          nLine = 0;
+          uVar1 = 0;
           if (bIsQuiver) {
-            nStatValue = 0xfa;
+            nLine = 0xfa;
             eUnitStat = UNITSTAT_quantity;
           } else {
-            nStatValue = D2Common::Stats::StatsEx::GetTxtMaxDurability(pNewItem);
+            uVar1 = 0;
+            nLine = D2Common::Stats::StatsEx::GetTxtMaxDurability(pNewItem);
             eUnitStat = UNITSTAT_durability;
           }
 
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eUnitStat, nStatValue, nLine);
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eUnitStat, nLine, uVar1);
           bIsQuiver = D2Common::ITEMS::Items::ITEMS_IsA(pNewItem, ITEMTYPE_BowQuiver);
           if (bIsQuiver) {
             nLine = 100;
@@ -468,11 +453,7 @@ void __fastcall PLAYER_CreateAllStarterItems(D2UnitStrc * pUnit, ::SGAMEDATA * p
     }
 
     int i = pUnit->nClassId;
-    if (!(i >= 0 && i < sgptDataTable->nTxtCharStatsSize)) {
-      return;
-    }
-
-    D2CharStatsTxt* pCharStatsTxt = sgptDataTable->pTxtCharStats + i;
+    D2CharStatsTxt* pCharStatsTxt = i >= 0 && i < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + i : nullptr;
     if (!pCharStatsTxt) {
       return;
     }
@@ -653,7 +634,7 @@ void __fastcall PLAYER_PlaceCorpse(::SGAMEDATA * pGame, D2RoomStrc * pRoom, DWOR
       return;
     }
 
-    D2Common::PATH::Path::PATH_GetCollisionTypeAt((uint32_t*)pUnit->pPath.pStaticPath, pUnit, pRoom, (uint16_t)pPoint->x, (uint16_t)pPoint->y);
+    D2Common::PATH::Path::PATH_GetCollisionTypeAt(pUnit->pPath.pDynamicPath, pUnit, pRoom, pPoint->x, pPoint->y);
     pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
     D2Common::Units::SetupUpdateFlag(pUnit, 0x11);
     pUnit->eUnitFlags &= ~UNITFLAG_ISVALIDTARGET;
@@ -823,7 +804,7 @@ uint32_t __fastcall CheckItemMovePermission(::SGAMEDATA * pGame, D2UnitStrc * pU
             }
           case UNIT_MONSTER:
             {
-              bCanMove = Monster::MonsterAI::NpcStateIsntZero(pInteractUnit, (int32_t)pUnit);
+              bCanMove = Monster::MonsterAI::NpcStateIsntZero(pInteractUnit, pUnit);
               return bCanMove;
             }
         }
@@ -874,15 +855,14 @@ void __fastcall PLAYER_CountLivingPlayerInLevelCallback(::SGAMEDATA * pGame, D2U
 // PLAYER_CountLivingPlayerInLevelCallback and returns nCount.
 // No references in 1.14d. It counts; it finds no unit.
 int32_t __fastcall PLAYER_CountLivingPlayersInLevel(::SGAMEDATA * pGame, eD2LevelId eLevelId) {
-    D2LevelPlayerCountArgStrc sArgs;
-    sArgs.nCount = 0;
+    D2LevelPlayerCountArgStrc sArgs = {0};
     sArgs.eLevelId = eLevelId;
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYER_CountLivingPlayerInLevelCallback, &sArgs);
     return sArgs.nCount;
 }
 
 void __fastcall CountModeZeroDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * pnAlivePlayerCount) {
-    bool _hasModeZero;
+    BOOL _hasModeZero;
     bool hasModeZero;
     DWORD PlayerCountRelated;
     _hasModeZero = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
@@ -1098,8 +1078,7 @@ void __fastcall PLAYER_CheckIsHostileToPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
 
 DWORD __fastcall PLAYER_CountPlayersWithFilter(::SGAMEDATA * pGame, D2UnitStrc * pnFilter) {
     if (pGame && pnFilter && pnFilter->eUnitType == UNIT_PLAYER) {
-      D2PlayerHostileCheckArgStrc sHostileArgs;
-      sHostileArgs.bHostile = 0;
+      D2PlayerHostileCheckArgStrc sHostileArgs = {0};
       sHostileArgs.pPlayer = pnFilter;
       UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYER_CheckIsHostileToPlayer, &sHostileArgs);
       return sHostileArgs.bHostile;
@@ -1119,8 +1098,7 @@ void __fastcall PLAYER_CheckPlayerIsHostileToThis(::SGAMEDATA * pGame, D2UnitStr
 
 DWORD __fastcall PLAYER_CountPlayersWithFilter2(::SGAMEDATA * pGame, D2UnitStrc * pnFilter) {
     if (pGame && pnFilter && pnFilter->eUnitType == UNIT_PLAYER) {
-      D2PlayerHostileCheckArgStrc sHostileArgs;
-      sHostileArgs.bHostile = 0;
+      D2PlayerHostileCheckArgStrc sHostileArgs = {0};
       sHostileArgs.pPlayer = pnFilter;
       UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYER_CheckPlayerIsHostileToThis, &sHostileArgs);
       return sHostileArgs.bHostile;
@@ -1222,11 +1200,11 @@ D2UnitStrc * __fastcall PLAYER_GetActiveWeaponForSkill(D2UnitStrc * pUnit) {
 }
 
 // Recalculates active stat-list flags for dual-wield weapon slots on pUnit. If nParam is non-zero, deactivates stat lists for currently equipped and primary weapons (cleanup pass). Then, if the unit can dual-wield, activates the correct weapon's stat list based on the active-weapon-for-skill selection: primary-only, swap-only, or the dual-wield split. Uses STATLIST_SetItemStatActive(1=active, 0=inactive).
-void __fastcall EQUIPMENT_RecalcDualWieldWeaponStats(D2UnitStrc * pUnit, int32_t nParam) {
+void __fastcall EQUIPMENT_RecalcDualWieldWeaponStats(D2UnitStrc * pUnit, int32_t bResetWeaponStats) {
     D2UnitStrc* pEquippedWeapon;
     D2UnitStrc* pPrimaryWeapon;
     D2UnitStrc* pOwner;
-    if (nParam) {
+    if (bResetWeaponStats) {
       pEquippedWeapon = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pUnit->pInventory);
       if (pEquippedWeapon) {
         pPrimaryWeapon = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pEquippedWeapon, nullptr);
@@ -1286,8 +1264,8 @@ void __fastcall EQUIPMENT_RecalcDualWieldWeaponStats(D2UnitStrc * pUnit, int32_t
     }
 }
 
-void __fastcall WEAPON_ApplyEquippedWeaponStats(D2UnitStrc * pUnit, int32_t nParam) {
-    if (!nParam) {
+void __fastcall WEAPON_ApplyEquippedWeaponStats(D2UnitStrc * pUnit, int32_t bResetWeaponStats) {
+    if (!bResetWeaponStats) {
       return;
     }
 

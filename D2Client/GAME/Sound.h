@@ -11,6 +11,7 @@
 // Forward declarations
 struct D2ClientSoundChannelStrc;
 struct D2SoundChannelStrc;
+struct D2SoundsTxt;
 struct D2UnitStrc;
 
 // Data types
@@ -57,7 +58,7 @@ BOOL __stdcall SOUND_IsInitialized_ForSoundVolumeItem();
 BOOL __stdcall SOUND_IsInitialized_ForMusicVolumeItem();
 BOOL __stdcall SOUND_Is3DMixerActive_For3DBiasItem();
 BOOL __stdcall SOUND_IsInitialized_ForNpcSpeechItem();
-void __fastcall SOUND_ParseStreamWavHeader(int32_t pSoundStream);
+void __fastcall SOUND_ParseStreamWavHeader(struct D2SoundsTxt * pSoundStream);
 // Sets the EAX reverb environment for the current room if the active sound mixer supports 3D audio and the requested environment ID differs from the current one. Reads all EAX parameters (room volume, HF, decay, reflections, reverb, size, diffusion, air absorption, room rolloff) from the SoundEnvironTxt record for nEnvId, scales integer fields by /1000 to floats, and calls SOUND_ApplyEAXEnvironment. Updates gnCurrentEaxEnvironmentId.
 void __fastcall SOUND_SetEaxEnvironment(int32_t nEnvId);
 uint32_t __thiscall SOUND_MatchesSoundId(int32_t pSoundEntry, int32_t nSoundId);
@@ -72,7 +73,7 @@ BOOL __stdcall SOUND_Is3DMixerActive();
 uint32_t __stdcall SOUND_IsEaxMixerActive();
 // Body continues at 004df9e6, the JNZ target of 004df9de - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'SOUND_FindPlayingById'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'SOUND_FindPlayingById':
-int * __fastcall SOUND_FindPlayingByIdSafe(int32_t nId);
+struct D2ClientSoundChannelStrc * __fastcall SOUND_FindPlayingByIdSafe(int32_t nId);
 uint32_t __fastcall SOUND_GetPlaybackStatus(int * * ppnParam);
 void __stdcall SOUND_ShutdownAudio();
 // Recomputes and re-applies a positional sound channel's mixing state (__fastcall, ECX=pSoundChannel). Reads the channel's sound descriptor (pSoundChannel[2]) and its sounds.txt line; halts via Fog::ErrorManager if descriptor is null. Computes effective volume by chaining music/master volume, per-channel left/right multipliers (skipping certain reserved sound-id ranges and Solo lines), and positional bias from the mixer. If the new volume and the descriptor's 3D position (offsets 0xC/0x10/0x14/0x20) match the channel's cached copy (pSoundChannel[3..7]) it returns 0 early (no change); otherwise distance-attenuates volume via falloff min/max, calls SOUNDSMP_CalculateVolumeAndPan/SetPan/Set3DPosition/SetEaxObstruction/SetVolume, caches the new pos+volume into the channel, and returns the descriptor pointer. Side-effects: drives the underlying audio mixer sample.

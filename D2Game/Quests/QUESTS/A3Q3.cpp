@@ -183,7 +183,7 @@ bool __fastcall Q20_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     if (bQuestState) {
       /* GetQuestState JustCompleted(0xd): if fresh, +2 -> display code 0x0d
                          (completion glow) else 0x0b */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_BladeOfTheOldReligion, QUESTSTATE_JustCompleted);
-      *nUnknown = (bQuestState != 0) * '\x02' + '\v';
+      *nUnknown = bQuestState != 0 ? 13 : 11;
       return true;
     }
 
@@ -195,7 +195,7 @@ bool __fastcall Q20_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
       return true;
     }
     if (pQuestSpecific->field_0x20 != '\0') {
-      *nUnknown = (pQuestData->pGame->nGameType == SGAMETYPE_SINGLEPLAYER) + '\a';
+      *nUnknown = pQuestData->pGame->nGameType == SGAMETYPE_SINGLEPLAYER ? 8 : 7;
       return true;
     }
 
@@ -214,7 +214,7 @@ bool __fastcall Q20_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     } else {
       bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x04);
       if (bQuestState) {
-        *nUnknown = (pQuestSpecific->bSerpentItemDropped == '\x01') + '\x02';
+        *nUnknown = pQuestSpecific->bSerpentItemDropped == '\x01' ? 3 : 2;
         return true;
       }
 
@@ -508,8 +508,8 @@ void __fastcall Q20_PlayerCheckInAct3SetStep06(::SGAMEDATA * pGame, D2UnitStrc *
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q3.cpp
 void __fastcall Q20_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2UnitStrc* pPlayerData;
+    int nDifficulty;
     int32_t iVar1;
-    uint8_t nDifficulty;
     int* piQuestCounter;
     uint16_t nNPCNo = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     short int nNPCId = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
@@ -583,7 +583,7 @@ void __fastcall Q20_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
       /* SetQuestState Step0x08: post-orb reward branch taken (bolts/quiver granted)
                           */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08);
-      nDifficulty = pQuestArgs->pGame->nDifficulty;
+      nDifficulty = (int)pQuestArgs->pGame->nDifficulty;
       iVar1 = 0x15;
       switch (nDifficulty) {
         case 1:
@@ -893,7 +893,7 @@ uint32_t __fastcall Q20_GetBladeHasBeenGiven(::SGAMEDATA * pGame) {
 // the drop fails, clears bCanDropBlade. No quest-state bit writes.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q3.cpp
 void __fastcall Q20_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2QuestDataStrc* pQuestDataArg = pQuestData;
+    D2QuestDataStrc* pQuestDataArg;
     QUEST_DebugPrint(pQuestData->pGame, "killed boss for quest", "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q3.cpp", 0x3df);
     D2QuestDataA3Q3Strc* pA3Q3Data = pQuestData->pQuestSpecificData.pA3Q3;
     if (!(pA3Q3Data->bCanDropBlade && pQuestData->bIsNotIntroduction != '\0')) {

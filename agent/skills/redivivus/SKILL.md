@@ -21,7 +21,8 @@ so that is where a contribution lands.
 ## Proposing
 
 The server has no proposal tools yet. Until the review flow arrives, a correction goes as an issue on
-https://github.com/jaenster/redivivus/issues. One issue is one claim, and it carries:
+https://github.com/jaenster/redivivus/issues, using the **Correction: name, type or prototype**
+template. One issue is one claim, and it carries:
 
 - **the target by address**: for locals, the function address plus the storage (stack offset or
   register); for types, the type path.
@@ -30,6 +31,34 @@ https://github.com/jaenster/redivivus/issues. One issue is one claim, and it car
   string reference. "It looks like" or "the name suggests" is not evidence.
 
 Accepted corrections land in Ghidra and so in the next regeneration of the source.
+
+## Structural suspicions - file, never propose
+
+Some defects are not a wrong name or type but a wrong **function set**: data that is really code,
+code that is really data, one function that should be two, two that should be one, a call newly
+found never to return. Never route these through a proposal, however good the evidence. File them
+with the **Structural: function discovery/boundary** issue template.
+
+The reason is cost, not ceremony. A change to the function set moves the set of translation units,
+so it invalidates every cached artefact - the dependency graph, the per-function export, the
+emitted tree. The daemon cannot absorb that incrementally; it detects the change and triggers a
+full rebuild, the same path as the weekly full reload. So a human applies it in the writable
+database and schedules that rebuild. A proposal that quietly depends on a function which does not
+exist yet fails at review - later, and more expensively than the issue would have.
+
+One issue is one claim, and it carries:
+
+- **the address or range**, and how Ghidra classifies it today (undefined, defined data, code
+  inside an existing function, already its own function);
+- **what you think it should be**, in a sentence;
+- **how you found it**: the vtable or pointer table whose other slots are entry points, the xref,
+  the call site - plus a disassembly snippet showing the prologue or the boundary you are claiming;
+- **the addresses of the functions you expect to change**: the callers, the function being split,
+  the one the bytes currently sit inside. Best effort is fine; it is what makes the rebuild's
+  result checkable.
+
+Do not disassemble or define anything to "check" first. Everything you have is read-only, and the
+suspicion is reportable from xrefs, the surrounding bytes and the table you found it through.
 
 ## When to name at all
 

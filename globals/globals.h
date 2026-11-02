@@ -34,7 +34,6 @@
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/GAME/Sound.h"
 #include "D2Client/Renderer/Glide.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/Chat.h"
@@ -72,6 +71,7 @@
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Logging/ProfCore.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Unit.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
 #include "D2Direct3D/d3dFloorCache.h"
@@ -115,6 +115,7 @@
 #include "Storm/3rdparty/zlib/deflate.h"
 #include "Storm/3rdparty/zlib/trees.h"
 #include "Storm/Source/SCMD.h"
+#include "Storm/Source/SComp.h"
 #include "Storm/Source/SErr.h"
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
@@ -193,6 +194,7 @@ struct D2DrawFloorStrc;
 struct D2DrlgActEnvironmentData;
 struct D2DrlgActStrc;
 struct D2DrlgFileCacheNodeStrc;
+struct D2DrlgFileStrc;
 struct D2DrlgLevelDataList;
 struct D2DrlgLevelPlacementStrc;
 struct D2DrlgLevelStrc;
@@ -274,7 +276,6 @@ struct D2LowQualityItemsTxt;
 struct D2LvlMazeTxt;
 struct D2LvlPrestTxt;
 struct D2LvlSubTxt;
-struct D2LvlTblsTxt;
 struct D2LvlTypesTxt;
 struct D2LvlWarpTxt;
 struct D2MagicAffixTableStrc;
@@ -483,6 +484,8 @@ struct IDirectSoundBuffer;
 struct IKsPropertySet;
 struct IgnoreList;
 struct ListBoxWrapper;
+struct SCompCodecEntryStrc;
+struct SCompEncodeCodecEntryStrc;
 struct SErrAppFatalContextStrc;
 struct SGAMEDATA;
 struct SMemHeapStatsStrc;
@@ -544,6 +547,7 @@ typedef BOOL (__stdcall *pfnSymUnloadModule64)(HANDLE hProcess, DWORD BaseOfDllL
 typedef D2FontGlyphStrc * (__fastcall *pfnFontGetGlyphEntry)(uint16_t wCharCode);
 typedef D2RoomExStrc * (__fastcall *fpDrlgMazeFindEdgeRoom)(D2DrlgLevelStrc * pLevel);
 typedef D2UnitStrc * (__fastcall *D2InitUnitObject)(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nMonStatsId, int32_t nPosX, int32_t nPosY, BOOL bUseMonStats);
+typedef D2UnitStrc * (__fastcall *D2ObjectPopulateFnFunc)(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int nObjectClassId, uint16_t nChancePercent);
 typedef DWORD (__stdcall *fnGetUnknownFlag)();
 typedef DWORD (__stdcall *fnSendKeepAlive)();
 typedef DWORD (__stdcall *pfnSymGetModuleBase)(HANDLE hProcess, DWORD dwAddr);
@@ -627,7 +631,6 @@ typedef void (__fastcall *D2MissileCltDoFunc)(D2UnitStrc * pMissile);
 typedef void (__fastcall *D2MissileSrvDmgFunc)(::SGAMEDATA * pGame, D2UnitStrc * pMissile, D2UnitStrc * pTarget, D2DamageStrc * pDamage);
 typedef void (__fastcall *D2NET_CLIENT_D2GStoCLT)(char * pBytes);
 typedef void (__fastcall *D2NET_CLIENT_D2GStoCLT_Unit)(D2UnitStrc * pUnit, char * pBytes);
-typedef void (__fastcall *D2ObjectPopulateFnFunc)(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int nObjectClassId, uint16_t nChancePercent);
 typedef void (__fastcall *D2ObjectsInitFnFunc)(D2ObjectInitFnArg * pInitArg);
 typedef void (__fastcall *D2SkillDescAttackFunc)(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 typedef void (__fastcall *D2SkillDescDamageFunc)(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight);
@@ -675,6 +678,7 @@ typedef void (__fastcall *pfnLruFreeEntry)(void * pEntry);
 typedef void (__fastcall *pfnMCPGameListEntry)(uint32_t nEntryField0, uint32_t nEntryCount, uint32_t nEntryField2, uint32_t nListFlag, void * pEntryData);
 typedef void (__fastcall *pfnMCPMessage)(uint32_t nMessageId, uint32_t nDataLength, void * pMessageData);
 typedef void (__fastcall *pfnMonUniqueModInit)(D2UnitStrc * pUnit, int32_t eModifier, int32_t bApply);
+typedef void (__fastcall *pfnNewsEntryCallback)(uint32_t dwEntryId, char * szMessage);
 typedef void (__fastcall *pfnPartyScreenAction)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t dwArg, uint32_t dwArg2);
 typedef void (__fastcall *pfnPlayerModeNetMsg)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nModeIndex);
 typedef void (__fastcall *pfnRoomExActivationHandler)(D2RoomExStrc * pRoomEx);
@@ -831,18 +835,19 @@ struct D2D3DTileCornerStrc {
 };
 
 struct D2EndGameUiState {
-    /* 0x00 */ bool showCongrats; // Show end-game congrats flow
-    /* 0x01 */ uint8_t _pad0[3];
-    /* 0x04 */ bool showCutscene; // End-game cutscene/congrats active flag
-    /* 0x05 */ uint8_t _pad1[3];
-    /* 0x08 */ bool congratzOkClicked; // Congrats OK clicked
-    /* 0x09 */ uint8_t _pad2[3];
+    /* 0x00 */ BOOL showCongrats; // Show end-game congrats flow
+    /* 0x04 */ BOOL showCutscene; // End-game cutscene/congrats active flag
+    /* 0x08 */ BOOL congratzOkClicked; // Congrats OK clicked
 };
 
 struct D2ExitCutsceneState {
+    D2ExitCutsceneState() = default;
+    D2ExitCutsceneState(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+    D2ExitCutsceneState(int a0, BOOL a1) : pendingCutsceneId(a0), cutscenePlayed(a1) {}
+
     /* 0x00 */ int pendingCutsceneId; // Pending exit cutscene id
-    /* 0x04 */ bool cutscenePlayed; // Exit cutscene played/active flag
-    /* 0x05 */ uint8_t _pad0[3];
+    /* 0x04 */ BOOL cutscenePlayed; // Exit cutscene played/active flag
 };
 
 struct __attribute__((packed)) D2GameListEntryStrc {
@@ -1176,16 +1181,6 @@ struct DSCAPS {
     /* 0x54 */ uint32_t dwPlayCpuOverheadSwBuffers;
     /* 0x58 */ uint32_t dwReserved1;
     /* 0x5C */ uint32_t dwReserved2;
-};
-
-struct SCompCodecEntryStrc {
-    /* 0x00 */ uint32_t dwMethodMask;
-    /* 0x04 */ void (__fastcall *pfnCodec)(void *, uint32_t *, void *, uint32_t, uint32_t);
-};
-
-struct SCompEncodeCodecEntryStrc {
-    /* 0x00 */ uint32_t dwMethodMask;
-    /* 0x04 */ void (__fastcall *pfnCodec)(short *, uint32_t *, short *, uint32_t, void *, uint32_t);
 };
 
 struct ZlibHuffCode {
@@ -3017,7 +3012,7 @@ extern DC6 * gpDC6YouDiedHardcoreImage;
 extern DC6 * gpDC6DeathInstructionImage;
 extern D2UIFlagDescStrc gaUIFlagDescsClient[3];
 extern uint32_t gnGoldDialogTransactionMode;
-extern uint32_t gnLoadScreenAnimFrame;
+extern int32_t gnLoadScreenAnimFrame;
 extern uint16_t gU16ImmunityStringBuffer2[256];
 extern uint32_t gnImmunityText2Color;
 extern uint16_t UNICODE_007a2c80[80];
@@ -3242,8 +3237,8 @@ extern D2SoundsTxt * pTxtSounds;
 extern int nTxtSoundsSize;
 extern D2SoundEnvironTxt * pTxtSoundEnviron;
 extern int nTxtSoundEnvironSize;
-extern uint32_t gpSoundHdrGlobal;
-extern uint32_t gnSoundIdRangeMax;
+extern int gpSoundHdrGlobal;
+extern int gnSoundIdRangeMax;
 extern void * gpSoundLRUListHead;
 extern uint32_t gnCurrentGameAudioVolume;
 extern unsigned int gdwLastSoundAsyncLoadTick;
@@ -3678,7 +3673,7 @@ extern D2FogArchiveStrc * MPQ_d2music;
 extern D2FogArchiveStrc * MPQ_d2Xvideo;
 extern D2FogArchiveStrc * MPQ_patch_d2;
 extern D2FogArchiveStrc * MPQ_d2exp;
-extern uint32_t gnPaletteGammaShiftState;
+extern int gnPaletteGammaShiftState;
 extern uint8_t gnPaletteIndexCounter[39];
 extern uint8_t gPaletteTransposeBase[3328];
 extern uint8_t gPaletteMenuInGame[256];
@@ -3787,7 +3782,7 @@ extern int gnGlideSecondaryTMUCount[2];
 extern uint32_t ghGlideWindow;
 extern uint32_t gbGlideInitialized;
 extern uint32_t gbPlayingCutScene;
-extern uint32_t gbWINDOWED;
+extern int gbWINDOWED;
 extern uint32_t gnGlideColorCombineMode;
 extern uint32_t gnGlideAlphaBlendMode;
 extern uint32_t gnGlideTextureFilteringMode;
@@ -3991,7 +3986,7 @@ extern long Target_00881bfc;
 extern LONG * Destination_00881c00;
 extern uint32_t g_nBNetThreadInitFlag;
 extern uint32_t g_pfnNewsChannelCallback;
-extern pfnVoidNoArgCallback g_pfnMotdCallback;
+extern pfnNewsEntryCallback g_pfnMotdCallback;
 extern pfnVoidNoArgCallback g_pfnNewsCallback;
 extern D2BnNewsTableStrc g_nNewsMaxCacheSize;
 extern uint32_t g_nFirstUnreadNewsIndex;
@@ -4172,7 +4167,7 @@ extern D2LvlSubTxt * sgpTxtLvlSub;
 extern int nTxtLvlSubSize;
 extern int * gpnLvlSubTypeToIndex;
 extern D2ExpansionLvlTblsTxt * pExpansionLvlTbls;
-extern D2LvlTblsTxt * pTxtLvlTbls;
+extern D2DrlgFileStrc * * pTxtLvlTbls;
 extern void * gpaDrlgLvlSubPresetFiles;
 extern D2AutoMapLvlTbls * pAutoMapLvlTbls;
 // lpCriticalSection parameter of LeaveCriticalSection
@@ -4676,12 +4671,12 @@ extern void * vftable[1];
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
 // struct Storm::SFile::ARCHIVEREC RTTI Type Descriptor
 extern uint8_t RTTI_Type_Descriptor;
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 
@@ -4757,7 +4752,7 @@ extern uint32_t AutoMapLeft3;
 
 namespace D2Game::GAME::Rendering {
 
-extern uint32_t CurrentRendingEngine;
+extern int CurrentRendingEngine;
 
 } // namespace D2Game::GAME::Rendering
 

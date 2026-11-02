@@ -46,8 +46,9 @@ What is rewritten, and why each is exact:
       (C3865). __fastcall with an unused int second parameter is the same
       callee: receiver in ECX, the rest on the stack, popped by the callee.
       A call casts the callee back to the __thiscall pointer type, which VC8
-      does accept (vc8_thiscall in vc8_compat.h), so the caller loads no EDX
-      for the unused int; the cast folds into a direct `call f`. A callee
+      does accept (vc8_thiscall in vc8_compat.h: a plain cast, its type
+      deduced by the compiler), so the caller loads no EDX for the unused
+      int; the cast folds into a direct `call f`. A callee
       expression the walk back cannot delimit gets the unused int (`f(a, 0,
       b)`, one `xor edx, edx`) instead, and so does a call to a function
       declared static or inline (thiscall_direct): through the cast VC8

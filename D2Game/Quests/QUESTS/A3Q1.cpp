@@ -116,31 +116,31 @@ uint32_t __fastcall Q17_GetHratliCoords(::SGAMEDATA * pGame, int32_t * pdwParam)
 }
 
 // Objects_InitFn50 — (QUEST_SpokeToHratli helper, not Lam Esen). Second-stage init for the Q17 monster: records Charsi-notified flag + monster GUIDs, then — only if record state 0xd (JustCompleted) IS set and the monster was not yet taken — spawns the unique monster (monstats 0xfd), flags it ISRESURRECT|ISINIT, and transplants the DRLG preset map-AI file onto it. Reads SpokeToHratli record state; writes only the quest-specific struct, not the player quest record.
-void __fastcall Objects_InitFn50(int32_t * pdwParam) {
+void __fastcall Objects_InitFn50(D2ObjectInitFnArg * pdwParam) {
     D2UnitStrc* pMonster;
     D2MapAIStrc** ppMonsterMapAi;
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal((::SGAMEDATA*)*pdwParam, QUESTINT_SpokeToHratli);
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pdwParam->pGame, QUESTINT_SpokeToHratli);
     if (!pQuestData) {
       return;
     }
 
     D2QuestDataA3Q0Strc* pA1Q3Data = pQuestData->pQuestSpecificData.pA3Q0;
     pA1Q3Data->bHratliCoordsValid = '\x01';
-    pA1Q3Data->nHratliX = pdwParam[5];
-    pA1Q3Data->nHratliY = pdwParam[6];
-    int bIsJustCompleted = QUEST_GetQuestRecordState((::SGAMEDATA*)*pdwParam, QUEST_SpokeToHratli, 0xd);
+    pA1Q3Data->nHratliX = pdwParam->nX;
+    pA1Q3Data->nHratliY = pdwParam->nY;
+    int bIsJustCompleted = QUEST_GetQuestRecordState(pdwParam->pGame, QUEST_SpokeToHratli, 0xd);
     if (!(bIsJustCompleted && !pA1Q3Data->bHratliMapAiSet)) {
       return;
     }
     if (pA1Q3Data->bHratliSpawned) {
-      pMonster = UNIT::SUnit::FindUnitFromTable((::SGAMEDATA*)*pdwParam, UNIT_MONSTER, pA1Q3Data->nHratliGUID);
+      pMonster = UNIT::SUnit::FindUnitFromTable(pdwParam->pGame, UNIT_MONSTER, pA1Q3Data->nHratliGUID);
       if (pMonster) {
         pA1Q3Data->bHasHratliCoords = true;
         return;
       }
     }
 
-    pMonster = Monster::Create::SpawnMonsterAtRoomPos((::SGAMEDATA*)*pdwParam, (D2RoomStrc*)pdwParam[2], pdwParam[5], pdwParam[6], 0xfd, eD2MonsterAnimMode_ns::Neutral, -1, 0);
+    pMonster = Monster::Create::SpawnMonsterAtRoomPos(pdwParam->pGame, pdwParam->pRoom, pdwParam->nX, pdwParam->nY, 0xfd, eD2MonsterAnimMode_ns::Neutral, -1, 0);
     if (!pMonster) {
       return;
     }
@@ -200,11 +200,11 @@ bool __fastcall Q18_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
     }
 
     D2UnitStrc* pTomeItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20626262);
-    if (!pTomeItem) {
-      return false;
+    if (pTomeItem) {
+      return true;
     }
 
-    return true;
+    return false;
 }
 
 // Q18_InitObjectMode — Lam Esen's Tome. Sets the render/update mode of the associated object: default mode 2 when a flag byte is clear, otherwise a mode read from the quest data table. No quest-state record access.
@@ -572,7 +572,7 @@ void __fastcall Q18_Callback05_ItemDropped(D2QuestDataStrc * pQuestData, D2Quest
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
 BOOL __fastcall OBJOP_A3Q1_KhalimsRelicAltar(D2ObjectOperateFnArg * pOperation) {
     int32_t nVictimGUID;
-    D2ObjectOperateFnArg* pDropCountOut = pOperation;
+    D2ObjectOperateFnArg* pDropCountOut;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_LamEsensTome);
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
       return 0;
@@ -753,7 +753,7 @@ bool __fastcall Q18_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     if (bQuestState) {
       /* GetQuestState(LamEsensTome, state 0xd=JustCompleted) — adds 2 to log byte
                          (0xb -> 0xd) when freshly done */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_LamEsensTome, QUESTSTATE_JustCompleted);
-      *nUnknown = (bQuestState != 0) * '\x02' + '\v';
+      *nUnknown = bQuestState != 0 ? 13 : 11;
       return true;
     }
 
@@ -780,7 +780,7 @@ bool __fastcall Q18_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     if (pQuestData->nStateFlag < 4) {
       *nUnknown = '\x01';
       if (pLamEsenData->bNotifiedPlayers == '\x01' && !pLamEsenData->nPlayersInArea) {
-        *nUnknown = (pQuestData->pGame->nGameType != SGAMETYPE_SINGLEPLAYER) + '\b';
+        *nUnknown = pQuestData->pGame->nGameType != SGAMETYPE_SINGLEPLAYER ? 9 : 8;
         return true;
       }
     } else {

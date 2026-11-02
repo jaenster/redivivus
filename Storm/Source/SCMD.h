@@ -123,6 +123,8 @@ int __stdcall SCmdProcess(char * szCommandLine, int bSkipFirstToken, pfnSCmdUnkn
 // @rename-basis Cross-architecture body match. PPC 10008640 is a two-argument function that saves both arguments, calls the OS command-line getter at 1006e100, then calls .SCmdProcess with (result, 1, arg1, arg2). This function is the same two-argument wrapper with GetCommandLineA in that slot. It is the only SCmd function that reads the process command line rather than a caller-supplied string.
 // @former-name SCMD_ParseCommandLineFromOS
 void __stdcall SCmdProcessCommandLine(pfnSCmdUnknownArgCallback pfnUnknownCallback, pfnSCmdErrorCallback pfnErrorCallback);
+void StaticInit_6cb030();
+void StaticInit_6cb050();
 // Runs at exit: removes every element from the Storm command-argument list gStormCmdListHeadBackslash, then unlinks the list head itself.
 void StaticFini_gStormCmdListBackslash();
 // Runs at exit: removes every element from the Storm command-argument list gStormCmdListHeadSlash, then unlinks the list head itself.

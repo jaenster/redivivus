@@ -161,7 +161,8 @@ void __stdcall nullsub(D2UnitStrc * dwUnused1, uint32_t dwUnused2, uint32_t dwPa
 
 // @wasnamed nullsub - one name on two different functions.
 // @evidence RET 0x10 (c2 10 00) - four dword arguments.
-void __stdcall nullsub_4Arg(D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4) {
+// Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.
+void __fastcall nullsub_4Arg(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4) {
 
 }
 
@@ -370,14 +371,12 @@ void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(D2UnitStrc * pUnit, eD2Stat
     }
 
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
-    DWORD dwMode = 1;
-    ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
-    UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, dwMode);
+    UNIT::SUnit::FreeCombatAndChangeAnimMode(UNIT::SUnit::GetGamePointer(pUnit), pUnit, 1);
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
     }
 
-    pGame = UNIT::SUnit::GetGamePointer(pUnit);
+    ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
     if (!(pGame && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
     }

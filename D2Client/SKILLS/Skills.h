@@ -68,7 +68,7 @@ void __fastcall AssignProperLight(struct D2UnitStrc * pUnit, int32_t nMissileId)
 // → 71 hit handlers apply damage/effects
 // This connects skills → simulation loop.
 struct D2UnitStrc * __fastcall MakeMissile(eMissilesId neMissilesId, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nOffsetX, int32_t nOffsetY, int32_t nX, int32_t nY);
-uint32_t __fastcall SKILLS_GetTargetTypeForSkill(int32_t nParam, int * pnParam);
+uint32_t __fastcall SKILLS_GetTargetTypeForSkill(struct D2UnitStrc * pUnit, struct D2UnitStrc * pnParam);
 // Tests whether pUnit2 is a legal skill target for caster pUnit under the skill's target-flags bitmask (nTargetFlags). Switches on the target's unit type, requiring the matching allow-bit (player/monster/object/missile/item) and checking liveness/anim-mode (e.g. dead/death rejected unless the corpse-target bit 0x1000 is set). Applies optional filters per bit: undead-only (0x4), exclude-boss (0x4000), monster-stat flag (0x40000), not-in-town (0x100), skill-target-type & non-NPC (0x10000), CanInteractWith (0x8000), in-melee-range (0x20000), not just-hit (0x80000), and line-of-sight wall collision (0x200). Returns 1 if the target passes all applicable checks, 0 otherwise.
 uint32_t __fastcall SKILL_ValidateTarget(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, uint32_t nTargetFlags);
 // Iterates all units in adjacent rooms within nRadius of (nCenterX, nCenterY) and invokes fpCallback for each valid target. Builds a room list via DRLGROOM_GetAdjacentRoomsList, skips town rooms if nTargetFlags has bit 0x2000, filters by distance-squared, calls SKILL_ValidateTarget with nTargetFlags, optionally skips aura-immune monsters (bExcludeAuraImmune), and passes a D2fpSkillFuncArg to the callback. Accumulates hit count in sCallbackArg.nSize.
@@ -112,7 +112,7 @@ void __fastcall SKILLS_SetMissileDirectionCallback(struct D2UnitStrc * pUnit, in
 void __fastcall SKILLS_CreateMissileScatter(struct D2UnitStrc * pUnit, struct D2SkillArgStrc * pSkillArg, int32_t nRadius, int32_t nCount);
 BOOL __fastcall CLIENT_HandleUnitMessage0x16(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 uint32_t __fastcall SKILL_GetWeaponClassMask(struct D2UnitStrc * pUnit);
-void __fastcall SKILLS_ApplyDamageReduction(int32_t pUnit, int32_t nReductionPercent);
+void __fastcall SKILLS_ApplyDamageReduction(struct D2UnitStrc * pUnit, int32_t nReductionPercent);
 // Spawns nCount missiles at random positions within nRadius of the casting unit. Seeds the unit's RNG from its current map coordinates, then for each spawn picks a random (X,Y) offset within the diameter, rejects positions within 3 distance units of the caster, and calls MISSILE_CreateFromUnitWithOffset with the given missile ID array, skill, and skill level. Returns 1 on success, 0 if coordinates could not be retrieved.
 uint32_t __fastcall SKILL_SpawnRandomMissilesInArea(struct D2UnitStrc * pUnit, uint8_t * pMissileId, int32_t nCount, int32_t nRadius, eD2Skills eSkill, int32_t nSkillLevel);
 // Client-side skill expiry handler called when a skill animation completes. If the unit's current skill is not STATE_skill_move and has no loop flag (bit 1), looks up the skill's srvdofunc: 0x43 stops and clears the uninterruptable skill (Paladin Holy Shield etc.), 0x4C stops and clears sound (Barbarian), 0x4D/0x4E handles teleport landing. No-ops for all other srvdofunc values.
@@ -126,7 +126,7 @@ uint32_t __fastcall SKILL_CheckMissileCollisionAtTarget(struct D2UnitStrc * pUni
 int32_t __fastcall GetMeleeRangePlusFour(struct D2UnitStrc * pUnit);
 // @sourcefile .\SKILLS\Skills.cpp
 void __fastcall SKILLS_CltAllocStatListForSkill(struct D2UnitStrc * pUnit, int32_t nAttackRate);
-struct D2CUnitEventStrc * __fastcall AttachClientStateHandler(struct D2UnitStrc * pUnit, struct D2UnitStrc * nParam1, int32_t nMsgParam1, int32_t nMsgParam2, uint32_t nHandlerIdx, int32_t nParam2, int32_t nParam3);
+struct D2CUnitEventStrc * __fastcall AttachClientStateHandler(struct D2UnitStrc * pUnit, struct D2UnitStrc * pEventUnit, int32_t nMsgParam1, int32_t nMsgParam2, uint32_t nHandlerIdx, int32_t nParam2, int32_t nParam3);
 // 4 internal functions (defined in .cpp)
 
 } // namespace D2Client::SKILLS::Skills

@@ -74,7 +74,7 @@ uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, char cParam
 uint16_t * __fastcall UI_RemoveColorCodesFromString(uint16_t * wszText);
 uint16_t * __fastcall UI_WrapStringWithColorCodes(uint16_t * wszText, char cStartColor, char cEndColor);
 void __fastcall UI_StoreGlobalTooltipText(uint16_t * wszText, int32_t nScreenX, int32_t nScreenY, int32_t nHpBarValue);
-void __fastcall UI_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nParam1, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5);
+void __fastcall UI_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nFontId, int32_t nX, int32_t nY, int32_t nAlignment, int32_t nCustomField);
 void __fastcall UI_StoreGlobalUIText(uint16_t * wszText, DWORD dwTextColor);
 BOOL __fastcall UI_GetUniqueMonsterName(struct D2UnitStrc * pUnit, uint16_t nNameMode);
 int32_t __fastcall UI_GetMonsterHpBarValue(struct D2UnitStrc * pUnit);
@@ -137,8 +137,8 @@ void __fastcall UI_UnregisterHandlersForPanel(eD2UIvars ePanel);
 DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DWORD bAdjustMouse);
 BOOL __fastcall UI_CloseActivePanels(int32_t bForceAutomap, int32_t bAdjustMouse);
 bool __stdcall UI_ShowPopupDialog();
-void __stdcall UI_HandleCursorMouseDown(int32_t pMsg);
-void __stdcall UI_HandleCursorMouseMove(uint8_t * pMsgEvent);
+void __stdcall UI_HandleCursorMouseDown(struct D2UIMouseMsgStrc * pMsg);
+void __stdcall UI_HandleCursorMouseMove(struct D2UIMouseMsgStrc * pMsgEvent);
 void __stdcall UI_HandleCursorMouseUp(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall CURSOR_SetCursorItem(struct D2UnitStrc * pUnit, int32_t nAnimFrame);
 void __fastcall UI_SetCursorToSpecialIcon(int32_t nAnimFrame, int32_t bAltIcon);
@@ -167,8 +167,8 @@ void __stdcall UI_ToggleBeltRows();
 void __stdcall UI_ReadLineFromShortArray(short * pnDest, int32_t nMaxChars, short * * ppnShort);
 void __stdcall UI_InitializeStatDescriptionPointers();
 int64_t __stdcall UI_GetControlConfigRowCount();
-void __fastcall UI_ScrollConfigListVertical(int32_t nParam);
-void __fastcall UI_ScrollConfigListHorizontal(int32_t nParam);
+void __fastcall UI_ScrollConfigListVertical(int32_t nSteps);
+void __fastcall UI_ScrollConfigListHorizontal(int32_t nSteps);
 uint32_t __stdcall UI_IsMouseInRightColumn(int32_t nParam);
 // Returns TRUE when (nMouseX, nMouseY) is over one of the control-config tabs: UI_GetControlConfigTabIndex(nMouseX@ESI, nMouseY@EDX) != 3 (SETNZ at 004a4a0a).
 // Was code outside any function; no direct reference reaches it in 1.14d.
@@ -220,14 +220,16 @@ void __stdcall INPUT_SkillTreeButtonUp(struct D2UIMouseMsgStrc * pMsg);
 bool __stdcall UI_CanAllocateStatPoint(int32_t nParam);
 void __stdcall UI_DrawLevelUpButtonLeft();
 void __stdcall DRAW_UI_NewStatPoints_II();
+// Returns a byte in AL (callers test AL); EAX is not an argument.
+bool __stdcall UI_GetNewSkillPointsForClass(int32_t nCharClass);
 void __stdcall UI_DrawLevelUpButtonRight();
 void __stdcall Draw_UI_NewStatPoints();
-void __fastcall UI_DrawTextCentered(int32_t nPositionXStart, int32_t nParam1, int32_t nPositionXEnd, uint16_t * wszMessage, int32_t nParam2);
+void __fastcall UI_DrawTextCentered(int32_t nPositionXStart, int32_t nPositionY, int32_t nPositionXEnd, uint16_t * wszMessage, int32_t dwColor);
 // Body continues at 004a7354, the JNZ target of 004a734a - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'UI_FormatStatTooltip'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'UI_FormatStatTooltip':
 int32_t __stdcall UI_GetStatValueForDisplay(int32_t nUnit);
 int32_t __stdcall UI_BuildStatWindowDescriptions();
-int __fastcall UI_AppendColorCodeToString(void * pWszString, void * pNextLineOut);
+int __fastcall UI_AppendColorCodeToString(uint16_t * pWszString, uint16_t * * pNextLineOut);
 void __stdcall INPUT_StatScreenMouseDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_StatScreenMouseUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall UI_ClearGoldStashMode();
@@ -235,11 +237,11 @@ void __stdcall UI_SetGoldStashMode();
 void __stdcall UI_PrecomputeStatDescriptionWidths();
 void __stdcall CHAR_FreePanelAssets_NoOp();
 void __stdcall DRAW_UI_StatWindow_I();
-void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnitGUID, char * pQuestBuffer, int32_t nActionType);
+void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnitGUID, char * pQuestBuffer, uint8_t nActionType);
 void __stdcall UI_ResetTradeGlobals();
 void __stdcall DRAW_UI_TradePrompt();
 void __stdcall UI_InitTradeState();
-void __fastcall UI_CloseTradeWindow(int32_t nParam);
+void __fastcall UI_CloseTradeWindow(int32_t bToggleInventory);
 int __stdcall TRADE_GetTradeStatus();
 void __stdcall UI_FreeHoradricCubeAssets();
 void __stdcall PACKET_SendUnitInteraction0x44(struct D2UIMouseMsgStrc * pMsg);
@@ -248,10 +250,15 @@ BOOL __stdcall NPCSHOP_IsRepairTabActive();
 void __stdcall UI_ShowHoradricCubeTransmuteDialog();
 BOOL __stdcall thunk_NPCSHOP_IsRepairTabActive();
 void __stdcall INPUT_GambleRepairClick(struct D2UIMouseMsgStrc * pMsg);
-void __fastcall UI_HandleHoradricCubePacket(int32_t pPacket);
+void __fastcall UI_HandleHoradricCubePacket(uint8_t * pPacket);
 void __fastcall UI_OpenHoradricCubeWithNpcInteraction(int nNpcShopTab);
 BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, int * pnBottom, int32_t nPlacementMode, int32_t nMaxX, int32_t nMinX);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca05c(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
-// 27 internal functions (defined in .cpp)
+void StaticInit_6caa10();
+void StaticInit_6caa30();
+void StaticInit_6caa50();
+void StaticInit_6caa70();
+void StaticInit_6cace0();
+// 26 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::ui

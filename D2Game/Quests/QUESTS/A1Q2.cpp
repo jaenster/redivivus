@@ -311,16 +311,11 @@ BOOL __fastcall Q02_SetRewardForNearbyPlayers(::SGAMEDATA * pGame, D2UnitStrc * 
       }
 
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pUnitRoom, &pAdjacentRooms, (int*)&nAdjacentRoomCount);
-      nRoomIdx = 0;
-      if (nAdjacentRoomCount > 0) {
-        do {
-          if (pAdjacentRooms[nRoomIdx] == pBloodRavenRoom) {
-            bIsNearBloodRaven = 1;
-            break;
-          }
-
-          nRoomIdx++;
-        } while (nRoomIdx < nAdjacentRoomCount);
+      for (nRoomIdx = 0; nRoomIdx < nAdjacentRoomCount; nRoomIdx++) {
+        if (pAdjacentRooms[nRoomIdx] == pBloodRavenRoom) {
+          bIsNearBloodRaven = 1;
+          break;
+        }
       }
     }
 
@@ -528,11 +523,11 @@ bool __fastcall Q02_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
       /* GetQuestState(QUESTSTATE_RewardAwaits=1): reward awaiting -> active (ready to
                          turn in) */ /* If reward is available: active */ bIsQuestInState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
-      if (bIsQuestInState != 1) {
-        return false;
+      if (bIsQuestInState == 1) {
+        return true;
       }
 
-      return true;
+      return false;
     }
 
     return false;

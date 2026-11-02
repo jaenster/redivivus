@@ -3,7 +3,6 @@
 #include "D2Game/Monster/MonsterRegion.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Common/D2InventoryStrc.h"
@@ -21,6 +20,7 @@
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
@@ -249,16 +249,14 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
         }
 
         nMonStatIdx = (int)(short int)nMonClassId;
-        if (nMonStatIdx >= 0 && nMonStatIdx < sgptDataTable->nTxtMonStatsSize) {
-          pMonStats = sgptDataTable->pTxtMonStats + nMonStatIdx;
-          if (pMonStats && *((uint8_t*)pMonStats + 0xc) & (uint8_t)gadwBitMasks[0]) {
-            pMonField->nClassId = nMonClassId;
-            pMonField->nRarity = pMonStats->Rarity;
-            pMonsterRegion->nTotalRarity += pMonStats->Rarity;
-            pMonsterRegion->nSpawnCount++;
-            pMonsterRegion->nCounter++;
-            pMonField++;
-          }
+        pMonStats = nMonStatIdx >= 0 && nMonStatIdx < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonStatIdx : nullptr;
+        if (pMonStats && *((uint8_t*)pMonStats + 0xc) & (uint8_t)gadwBitMasks[0]) {
+          pMonField->nClassId = nMonClassId;
+          pMonField->nRarity = pMonStats->Rarity;
+          pMonsterRegion->nTotalRarity += pMonStats->Rarity;
+          pMonsterRegion->nSpawnCount++;
+          pMonsterRegion->nCounter++;
+          pMonField++;
         }
 
         nMonsPicked++;
@@ -335,19 +333,13 @@ void __fastcall AllocMonsterRegion(D2PoolManagerStrc * pMemory, D2Row_D2MonsterR
 
 // @sourcefile .\MONSTER\MonsterRegion.cpp
 void __fastcall FreeMonsterRegion(D2PoolManagerStrc * pMemory, int32_t nParam) {
-    int i = 1;
-    if (1 >= sgptDataTable->nTxtLevelsSize) {
-      return;
-    }
-
-    do {
+    int i;
+    for (i = 1; i < sgptDataTable->nTxtLevelsSize; i++) {
       nParam += 4;
       if (*(void**)nParam) {
         D2_FREE_POOL_AT(pMemory, *(void**)nParam, ".\\MONSTER\\MonsterRegion.cpp", 0xc5);
       }
-
-      i++;
-    } while (i < sgptDataTable->nTxtLevelsSize);
+    }
 }
 
 D2MonsterRegionStrc * __fastcall ReturnMonsterRegionEntryForLevel(D2MonsterRegionStrc * * ppMonsterRegion, eD2LevelId eLevel) {
@@ -439,7 +431,7 @@ void __fastcall IncreaseMonsterSpawnCount(D2MonsterRegionStrc * * ppMonsterRegio
 }
 
 void __fastcall DecreaseMonsterSpawnCount(D2MonsterRegionStrc * * ppMonsterRegion, D2UnitStrc * pUnit, int32_t nPrevMode, int32_t nCurrMode) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 

@@ -3,7 +3,7 @@
 #include "D2Glide/glBlocks.h"
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SpriteCache.h"
-#include "D2Client/D2GfxHelperStrc.h"
+#include "D2CMP/SRC/SubTile.h"
 #include "D2Client/Message.h"
 #include "D2Client/Renderer/Renderer.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
@@ -366,10 +366,12 @@ void __fastcall GLBLOCKS_PlayBinkVideo(char * szFileName, int32_t nAudioChannel,
               if (msg.message == 0x201) {
                 goto request_skip;
               }
-              if (msg.message == 0x12) {
+              if (msg.message != 0x12) {
+                if (msg.message == 0x102) {
+                  goto request_skip;
+                }
+              } else {
                 g_bGlideBinkVideoQuitRequested = 1;
-              } else if (msg.message == 0x102) {
-                goto request_skip;
               }
             } else {
               if (!(msg.message != 0x204 && msg.message != 0x207)) {

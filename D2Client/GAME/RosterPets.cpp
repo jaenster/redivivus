@@ -4,7 +4,6 @@
 #include "D2Client/D2RosterStrc.h"
 #include "D2Client/GAME/Roster.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Client/UNIT/Monster.h"
@@ -18,6 +17,7 @@
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/Path.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Units.h"
@@ -267,11 +267,11 @@ int __fastcall ROSTER_GetPetOwnershipRelation(int32_t nRosterGUID) {
 
     pRoster = Roster::GetRosterByGUID(pPet->nOwnerGUID);
     int16_t nOwnerPartyId = Roster::GetRosterPartyId(pRoster);
-    if (nMyPartyId == nOwnerPartyId) {
-      return 2;
+    if (nMyPartyId != nOwnerPartyId) {
+      return 0;
     }
 
-    return 0;
+    return 2;
 }
 
 D2RosterPetSeedStrc * __fastcall GetSeed(int32_t nRosterGUID) {

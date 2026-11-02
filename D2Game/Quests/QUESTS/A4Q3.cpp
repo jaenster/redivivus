@@ -4,7 +4,6 @@
 #include "D2Client/Archive.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
@@ -28,6 +27,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
@@ -153,7 +153,6 @@ void __fastcall Objects_InitFn78(D2ObjectInitFnArg * pInitArg) {
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 BOOL __fastcall OBJOP_A4Q2_PandemoniumFortressGate(D2ObjectOperateFnArg * pOperation) {
     int32_t nTradeTick;
-    D2GSPacketSrv0x5D aQuestStatePacket;
     ::SGAMEDATA* pGame = pOperation->sArg.pGame;
     if (!pGame->bExpansion) {
       return 0;
@@ -196,11 +195,10 @@ BOOL __fastcall OBJOP_A4Q2_PandemoniumFortressGate(D2ObjectOperateFnArg * pOpera
         if (!nTradeTick) {
           UNIT::SUnit::ClearInteractInfo(pOperation->pAttacker);
           pPlayerData->dwTradeTick = 1;
-          aQuestStatePacket.nExtra = 0;
+          D2GSPacketSrv0x5D aQuestStatePacket = {0};
           aQuestStatePacket.nPacketId = ']';
           aQuestStatePacket.nQuestId = '\x17';
           aQuestStatePacket.nAlertFlags = '\x02';
-          aQuestStatePacket.nFilterStatus = '\0';
           GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pPlayerClient, &aQuestStatePacket);
           GAME::SCmd::NET_D2GS_SERVER_Send_0x61_CanGoToAct(pPlayerClient, 5);
         }
@@ -244,8 +242,7 @@ void __fastcall Objects_InitFn48(D2ObjectInitFnArg * pInitArg) {
       D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 3);
     } else {
       uint16_t uVar1;
-      *(uint8_t*)(char*)&uVar1 = pQuestData->pQuestSpecificData.pA4Q3->nForgeStage;
-      *(uint8_t*)((char*)&uVar1 + 1) = pQuestData->pQuestSpecificData.pA4Q3->field_0x01;
+      uVar1 = (uint16_t)((uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA4Q3->nForgeStage | (uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA4Q3->field_0x01 << 8);
       D2Common::Units::SetupUpdateFlag(pInitArg->pObject, (uint32_t)uVar1);
       nUpdateFlag = pQuestData->nStateFlagPrev;
       if (nUpdateFlag != 0xd && nUpdateFlag != 2 && nUpdateFlag != 3) {
@@ -324,8 +321,7 @@ void __fastcall Q28_PlayerCompleteForgeInAct4(::SGAMEDATA * pGame, D2UnitStrc * 
       return;
     }
 
-    int* pForgeCompletedCount = &pHellsForgeQuest->pQuestSpecificData.pA2Q6->nStatusCode;
-    (*pForgeCompletedCount)++;
+    pHellsForgeQuest->pQuestSpecificData.pA2Q6->nStatusCode++;
 }
 
 // A4Q3 Hell's Forge — OBJOP_A4Q3_HellforgeSmash (Objects_OperateFn49): the Hellforge operate handler — the core quest action. Bails if Hell's Forge already Completed/RewardAwaits. Branches on the forge object's anim mode: Death(idle) — if player carries Mephisto's Soulstone 'mss ', plays anim, broadcasts internal state 3, consumes the soulstone (this places the stone on the anvil); else plays "can't" sound and bumps stateFlag to 1. Walk(active) — if player has the Hellforge Hammer 'hfh ' equipped as weapon and has struck 3x, this is the SMASH: removes the hammer, sets JustCompleted+RewardAwaits, clears step-states, runs Q28_PlayerCompleteForgeInAct4 for the whole party, sets stateFlag 4 then broadcasts state 0xd, schedules the rune-drop event, marks other party members CannotComplete, and fires NotifyPlayersAboutEvent(0xe). Item codes: 'mss '=0x2073736d (Mephisto's Soulstone), 'hfh '=0x20686668 (Hellforge Hammer).
@@ -336,7 +332,6 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
     eD2ObjectAnimMode eForgeMode;
     D2UnitStrc* pQuestItem;
     D2ItemsTxt* pItemsTxt;
-    int* pStrikeCount;
     D2QuestDataA4Q3Strc* pForgeQuestSpecific;
     D2QuestDataA4Q3Strc* pA4Q3Data;
     D2QuestDataStrc* pForgeQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_HellsForge);
@@ -414,8 +409,7 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
                 if (pQuestItem) {
                   pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pQuestItem->nClassId);
                   if (pItemsTxt->dwCode == 0x20686668) {
-                    pStrikeCount = &pA4Q3Data->nHammerStrikeCount;
-                    (*pStrikeCount)++;
+                    pA4Q3Data->nHammerStrikeCount++;
                     if (pA4Q3Data->nHammerStrikeCount <= 2) {
                       return 0;
                     }

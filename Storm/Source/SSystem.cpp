@@ -3,9 +3,9 @@
 #include "Storm/Source/SSystem.h"
 #include "Fog/3rdparty/crashy.h"
 #include "Fog/Engine/Application.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SErr.h"
-#include "Storm/Source/SSComp.h"
+#include "Storm/Source/SLog.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
@@ -20,7 +20,7 @@ uint32_t __stdcall SSYSTEM_Shutdown(uint32_t nShutdownCode) {
     static pfnSSystemShutdown fpSSystemShutdownCallback; D2_STATIC_GUARD_BSS(fpSSystemShutdownCallback, "Storm::Source::SSystem::SSYSTEM_Shutdown::fpSSystemShutdownCallback");
 
     SSYSTEM_SetShutdownFlag(1);
-    SSComp::SLogFlushAll();
+    SLog::SLogFlushAll();
     if (!fpSSystemShutdownCallback) {
       return 0;
     }
@@ -31,7 +31,7 @@ uint32_t __stdcall SSYSTEM_Shutdown(uint32_t nShutdownCode) {
 
 void __stdcall SSYSTEM_Initialize() {
     SMem::SMemInitialize();
-    SSComp::SLogInitialize();
+    SLog::SLogInitialize();
     SSTR::SSTR_InitConversionTables();
 }
 
@@ -330,10 +330,12 @@ void __fastcall SSYSTEM_ListClearAll(D2StormListHead * pList) {
 }
 
 int * * __thiscall SSYSTEM_ListAllocNode(int * * pList, int32_t nInsertMode, int32_t nDataSize, uint32_t nAllocFlags) {
-    int** pNode = (int**)SMem::SMemAlloc(nDataSize + 0xc, gszSSystemListAllocTag, -2, nAllocFlags | 8);
-    if (pNode) {
-      *pNode = 0;
-      pNode[1] = 0;
+    int** pNodeNew = (int**)SMem::SMemAlloc(nDataSize + 0xc, gszSSystemListAllocTag, -2, nAllocFlags | 8);
+    int** pNode;
+    if (pNodeNew) {
+      *pNodeNew = 0;
+      pNodeNew[1] = 0;
+      pNode = pNodeNew;
     } else {
       pNode = 0;
     }
@@ -592,10 +594,12 @@ void __fastcall LINKEDLIST_FreeNodeAndUnlink(void * pParam) {
 }
 
 void * __thiscall LINKEDLIST_AllocAndInsertNode(StormLinkedListStrc * pList, int32_t nInsertMode, int32_t nExtraSize, uint32_t dwFlags) {
-    uint32_t* pNewNode = (uint32_t*)SMem::SMemAlloc(nExtraSize + 0xc, s___AUTMESSAGESOURCE___0072f9fc, -2, dwFlags | 8);
-    if (pNewNode) {
-      *pNewNode = 0;
-      pNewNode[1] = 0;
+    uint32_t* pNewNodeNew = (uint32_t*)SMem::SMemAlloc(nExtraSize + 0xc, s___AUTMESSAGESOURCE___0072f9fc, -2, dwFlags | 8);
+    uint32_t* pNewNode;
+    if (pNewNodeNew) {
+      *pNewNodeNew = 0;
+      pNewNodeNew[1] = 0;
+      pNewNode = pNewNodeNew;
     } else {
       pNewNode = 0;
     }

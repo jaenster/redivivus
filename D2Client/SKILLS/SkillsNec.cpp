@@ -9,7 +9,6 @@
 #include "D2Client/Draw/LightMap.h"
 #include "D2Client/SKILLS/Skills.h"
 #include "D2Client/SKILLS/SkillsAss.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/CUnit.h"
@@ -33,6 +32,7 @@
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
@@ -76,11 +76,7 @@ BOOL __fastcall Skills_CltDoFunc_Nec_CurseCenter_StreamMissile(D2UnitStrc * pUni
     D2SkillArgStrc sSkillArg;
     int nTargetY;
     int nTargetX;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -328,31 +324,15 @@ int __fastcall SKILLSNEC_CltCreateTeethMissiles(D2UnitStrc * pUnit, eD2Skills eS
     int32_t nScatterMax;
     int32_t nScatterMin;
     short int nSubMissileId;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
     D2SkillsTxt* pSkillsTxt;
-    pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
 
     eMissilesId eCltMissileId;
     eCltMissileId = (eMissilesId)pSkillsTxt->cltmissile[1];
-    if ((int)eCltMissileId < 0) {
-      return 0;
-    }
-    if ((int)eCltMissileId >= sgptDataTable->nTxtMissilesSize) {
-      return 0;
-    }
-    if (!nTargetX) {
-      return 0;
-    }
-    if (!nParam1) {
+    if ((int)eCltMissileId < 0 || (int)eCltMissileId >= sgptDataTable->nTxtMissilesSize || !nTargetX || !nParam1) {
       return 0;
     }
 
@@ -453,11 +433,7 @@ BOOL __fastcall Skills_CltDoFunc_Nec_Teeth(D2UnitStrc * pUnit, eD2Skills eSkill,
 int __fastcall SKILLSNEC_CltCreateBoneSpearMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, int32_t nTargetX, int32_t nParam1, int32_t nParam2) {
     D2UnitStrc* pConfirmedTarget;
     D2SkillArgStrc sSkillArg;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -537,15 +513,8 @@ BOOL __fastcall Skills_CltDoFunc_Nec_BoneSpear(D2UnitStrc * pUnit, eD2Skills eSk
 BOOL __fastcall Skills_CltStFunc_CheckCasterRoomNotInTownNec(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nTargetX;
     int32_t nTargetY;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills;
-    if (!(pSkillTxt + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
 
@@ -563,7 +532,7 @@ BOOL __fastcall Skills_CltStFunc_CheckCasterRoomNotInTownNec(D2UnitStrc * pUnit,
     if (!pRoom) {
       return 0;
     }
-    if (*((uint8_t*)&pSkillTxt[eSkill] + 0x5) & (uint8_t)gadwBitMasks[0]) {
+    if (*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)gadwBitMasks[0]) {
       return 1;
     }
 
@@ -609,20 +578,13 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetIsUnclaimedGroundItem(D2UnitStrc * p
 
 // Client start-function for Necromancer Revive. Validates that the confirmed target is a revivable, consumable, convertible monster, then selects a missile type from the skill txt (cltmissilea/b/c) based on the monster's overlayHeight size class (1=medium, 3=large). Launches the selected missile with the corpse as target. Returns 1 on success, 0 if any check fails.
 BOOL __fastcall Skills_CltStFunc_SelectReviveMissileByMonsterSize(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     D2UnitStrc* pCorpse = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
-    if (!(pCorpse && pCorpse->eUnitType == UNIT_MONSTER)) {
+    if ((pCorpse ? pCorpse->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 

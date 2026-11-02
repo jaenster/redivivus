@@ -85,12 +85,11 @@ void __stdcall DrawPopupOk(int32_t nParam) {
 }
 
 void __stdcall LOADER_CheckForInsertedDiscs() {
+    uint16_t* wszInsertMsg;
     int32_t nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
-    int32_t nColor_lcl = 0;
-    uint16_t* wszInsertMsg = D2Lang::StrTable::strtable::GetLocaleString(5168);
-    UI::ui::UI_DrawTextCentered(ScreenSizeX / 2 - 132, 190 - gnPanelOffsetY, gnPanelOffsetX + 452, wszInsertMsg, nColor_lcl);
+    /* Please Insert the Diablo II */ UI::ui::UI_DrawTextCentered(ScreenSizeX / 2 - 132, 190 - gnPanelOffsetY, gnPanelOffsetX + 452, D2Lang::StrTable::strtable::GetLocaleString(5168), 0);
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    nColor_lcl = 0;
+    int32_t nColor_lcl = 0;
     if (bIsExpansion) {
       /* Expansion Disc */ wszInsertMsg = D2Lang::StrTable::strtable::GetLocaleString(21880);
     } else {
@@ -390,7 +389,7 @@ uint32_t __stdcall fpGameLoopFunction(uint32_t dwUnused) {
     return (uint32_t)(gbCharScreenOkPressed != 0);
 }
 
-bool fpRequiredUserAction() {
+BOOL fpRequiredUserAction() {
     uint32_t dwActPalIdx;
     gbCharScreenOkPressed = 0;
     D2Win::Src::D2WinPalette::D2WINPALETTE_SetPaletteIndex(0);
@@ -404,7 +403,7 @@ bool fpRequiredUserAction() {
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIEngineFlagInit, 4);
     GAME::Game::GAMEDATA_SetDrawFunction(0);
     LOADER_FreePopupImages();
-    return true;
+    return 1;
 }
 
 // Sets draw function mode, registers event handlers, runs game loop with custom fpGameLoopFunction, then cleans up
@@ -498,6 +497,7 @@ void __stdcall CLIENT_SetAnimModeAndMoveToCurrentPos(eD2PlayerAnimMode nAnimMode
 
 void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
     eD2States eState;
+    uint32_t nCount;
     D2RoomStrc** pAdjacentRooms;
     uint32_t nRoomCount;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_Net();
@@ -511,12 +511,7 @@ void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
     }
 
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &pAdjacentRooms, (int*)&nRoomCount);
-    uint32_t nCount = 0;
-    if (nRoomCount <= 0) {
-      return;
-    }
-
-    do {
+    for (nCount = 0; nCount < nRoomCount; nCount++) {
       for (pUnit = pAdjacentRooms[nCount]->pUnitList; pUnit; pUnit = pUnit->pRoomNext) {
         if (pUnit->eUnitType == UNIT_MONSTER) {
           eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_dopplezon);
@@ -525,9 +520,7 @@ void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
           }
         }
       }
-
-      nCount++;
-    } while (nCount < nRoomCount);
+    }
 }
 
 void __fastcall CLIENT_UpdateUnitLightRadius(D2UnitStrc * pUnit, int32_t nRadiusBonus) {

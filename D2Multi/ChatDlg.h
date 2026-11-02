@@ -53,8 +53,8 @@ void __stdcall CHATDLG_ProcessPendingMessages();
 void __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, int32_t pszMessage);
 // @sourcefile .\Src\ChatDlg.cpp
 void __stdcall CHATDLG_EnqueueClearMessage();
-int __fastcall CHATDLG_AppendTextToTextBox(uint16_t * wszText, int32_t nParam);
-uint32_t __fastcall CHATDLG_AppendTextToTextBox_ForComCallback(uint16_t * wszText, int32_t nParam);
+int __fastcall CHATDLG_AppendTextToTextBox(uint16_t * wszText, int32_t nLineStyle);
+uint32_t __fastcall CHATDLG_AppendTextToTextBox_ForComCallback(uint16_t * wszText, int32_t nLineStyle);
 int __fastcall FORMS_DisplayBattleNetNews(uint16_t * wszText);
 // Shows gpCtlChannelOkButton only while gpCtlChannelNameEditBox holds a non-empty name: D2WINMAIN_SetControlVisible(gpCtlChannelOkButton, name non-empty). Run by that edit box's change callback and once at the end of OOGUTIL_OpenChannelDialog.
 // Provenance: asm 0043e660..0043e6b6; change callback installed at 00441097, tail jump at 004411d7.

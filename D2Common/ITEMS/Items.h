@@ -151,7 +151,7 @@ int16_t __stdcall GetRarePrefix(struct D2UnitStrc * pUnit);
 void __stdcall SetRarePrefix(struct D2UnitStrc * pUnit, int16_t wRarePrefix);
 int16_t __stdcall GetRareSuffix(struct D2UnitStrc * pUnit);
 void __stdcall SetRareSuffix(struct D2UnitStrc * pUnit, int16_t wRareSuffix);
-BOOL __stdcall CheckItemFlag(struct D2UnitStrc * pUnit, eD2ItemFlag neD2ItemFlag, int32_t nParam, char * szText);
+BOOL __stdcall CheckItemFlag(struct D2UnitStrc * pUnit, eD2ItemFlag neD2ItemFlag, int32_t nLine, char * szText);
 void __stdcall ITEM_EditItemData_eItemFlag(struct D2UnitStrc * pUnit, eD2ItemFlag eItemFlag, BOOL bSet);
 eD2ItemFlag __stdcall ITEM_GetItemData_eD2ItemFlag(struct D2UnitStrc * pUnit);
 uint32_t __stdcall ITEM_CheckItemData_eD2ItemCmd(struct D2UnitStrc * pUnit, eD2ItemCmd eItemCmd);
@@ -170,7 +170,7 @@ void __stdcall ITEM_GetPlayerNameAkaNamedString(struct D2UnitStrc * pUnit, char 
 uint8_t __stdcall ITEM_GetItemData_nEarLevel(struct D2UnitStrc * pUnit);
 void __stdcall ITEM_SetItemData_nEarLevel(struct D2UnitStrc * pUnit, uint8_t nEarLevel);
 uint8_t __stdcall ITEM_GetItemData_bVariant(struct D2UnitStrc * pUnit);
-void __stdcall ITEM_SetItemData_bVariant(struct D2UnitStrc * pUnit, bool bVariant);
+void __stdcall ITEM_SetItemData_bVariant(struct D2UnitStrc * pUnit, BYTE bVariant);
 int32_t __stdcall ITEMTYPE_IsShoots(int32_t nItemType);
 int32_t __stdcall ITEMTYPE_IsQuiver(int32_t nItemType);
 BOOL __stdcall ITEMTYPE_IsAutostack(int32_t nItemType);

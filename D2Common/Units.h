@@ -60,7 +60,7 @@ void __stdcall ResetRoom(struct D2UnitStrc * pUnit);
 struct D2RoomStrc * __stdcall UNITS_GetRoom(struct D2UnitStrc * pUnit);
 void __stdcall SetTargetUnitForDynamicUnit(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 eD2UnitType __stdcall GetTargetTypeFromDynamicUnit(struct D2UnitStrc * pUnit);
-int * __stdcall GetTargetGUIDFromDynamicUnit(struct D2UnitStrc * pUnit);
+int32_t __stdcall GetTargetGUIDFromDynamicUnit(struct D2UnitStrc * pUnit);
 void __stdcall SetTargetUnitForPlayerOrMonster(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 void __stdcall SetAnimSpeedForMonster(struct D2UnitStrc * pUnit);
 void __stdcall GetRunAndWalkVelocityForPlayer(int32_t nUnused, int32_t ePlayerClassId, int * pWalkVelocity, int * pRunVelocity);
@@ -69,7 +69,7 @@ uint32_t __stdcall NeedsRoomUpdate(struct D2UnitStrc * pUnit);
 void __stdcall ChangeAnimMode(struct D2UnitStrc * pUnit, int32_t nMode);
 void __stdcall RefreshInventory(struct D2UnitStrc * pUnit, BOOL bHasInventory);
 // Returns the eInventoryPage for a given unit and page index. For players, maps nInvPage (1-4) to trade/transmog/bank pages, or performs a class-specific lookup. For monsters, always returns INVPAGE_Monster. For objects, recognises Guild Vault (0x152) and Trophy Case (0x153). Returns INVPAGE_None on mismatch or null input (halts on null). RETURN WIDTH: every exit writes the whole of EAX (MOV EAX,imm32 / LEA EAX,[EAX*4+8] / MOV EAX,[ECX*8+0x744548]) and InitializeiInventoryPages takes it with MOV ESI,EAX - no MOVZX anywhere.
-int32_t __stdcall GetInventoryPage(struct D2UnitStrc * pUnit, int32_t nInvPage, BOOL bLoD);
+int32_t __stdcall GetInventoryPage(struct D2UnitStrc * pUnit, uint8_t nInvPage, BOOL bLoD);
 struct D2LightMapStrc * __stdcall GetLightMap(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetAnimOrSeqMode(struct D2UnitStrc * pUnit);
 void __stdcall SetAnimOrSeqMode(struct D2UnitStrc * pUnit, int32_t nAnimMode);

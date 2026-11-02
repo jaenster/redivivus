@@ -30,7 +30,21 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QSSocketStrc) == 0x194, "D2_NEW_A
 #endif
 
 
+#ifndef RECON_FPTD_fpD2QSSocketPacketHandler
+#define RECON_FPTD_fpD2QSSocketPacketHandler
+typedef int (__stdcall *fpD2QSSocketPacketHandler)(void * pContext);
+#endif
+
 namespace Fog::Src::D2QSSocket {
+
+void __stdcall QSSOCKET_SetCallbackHandler1(D2QSSocketStrc * pQSSocket, void * fpCallback, void * pContext) {
+    if (!pQSSocket) {
+      return;
+    }
+
+    pQSSocket->pfnPacketHandler = (fpD2QSSocketPacketHandler)fpCallback;
+    pQSSocket->pHandlerContext = pContext;
+}
 
 int __fastcall NET_MCP_CLIENT_SendPacketToSafesocket(D2NetDataStrc * pSafesocket, char * pBytes, size_t nSize) {
     if (!pSafesocket || pSafesocket->bBlocked) {
@@ -56,7 +70,7 @@ int __fastcall NET_MCP_CLIENT_SendPacketToSafesocket(D2NetDataStrc * pSafesocket
     return nBytesSent;
 }
 
-bool __stdcall QSSOCKET_SendWithTimeout(D2QSSocketStrc * pQSSocket, char * pBuffer, uint16_t nLength) {
+BOOL __stdcall QSSOCKET_SendWithTimeout(D2QSSocketStrc * pQSSocket, char * pBuffer, uint16_t nLength) {
     uint16_t nBytesSentActual;
     D2NetDataStrc* pSafesock;
     if (pQSSocket) {
@@ -71,11 +85,11 @@ bool __stdcall QSSOCKET_SendWithTimeout(D2QSSocketStrc * pQSSocket, char * pBuff
         }
 
         Safesock::LeaveCriticalSection_Safesock(pQSSocket->pSafesock);
-        return nLength == nBytesSentActual;
+        return (uint32_t)(nLength == nBytesSentActual);
       }
     }
 
-    return false;
+    return 0;
 }
 
 int __stdcall ReadBytesFromSocket(D2QSSocketStrc * pMCPQSocket, char * pOutBuf, int nMaxBytes) {
@@ -124,7 +138,7 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
 
         iVar2 = pQServerStrc->pfnPacketHandler(pQServerStrc->pHandlerContext);
         if (!iVar2) {
-          if (0 < pQServerStrc->nSizeFieldOffset) {
+          if (pQServerStrc->nSizeFieldOffset > 0) {
             pParam = pvVar4;
             wMsgSize = wPacketSize;
           }
@@ -278,7 +292,7 @@ int __stdcall ReceiveLoopCallback(D2QSSocketStrc * pQSSocket) {
 
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall QSSOCKET_ThreadEntryPoint(void * lpThreadParam) {
-    D2NetDataStrc* pSafesock = Safesock::Create_Flag0((char*)((int)lpThreadParam + 8), (u_short)*(uint32_t*)((int)lpThreadParam + 0x10c), (LPTHREAD_START_ROUTINE)ReceiveLoopCallback, lpThreadParam, (char*)((int)lpThreadParam + 0x128));
+    D2NetDataStrc* pSafesock = Safesock::Create_Flag0((char*)((int)lpThreadParam + 8), *(int*)((int)lpThreadParam + 0x10c), (LPTHREAD_START_ROUTINE)ReceiveLoopCallback, lpThreadParam, (char*)((int)lpThreadParam + 0x128));
     *(D2NetDataStrc**)((int)lpThreadParam + 0x110) = (D2NetDataStrc*)pSafesock;
     return 1;
 }
@@ -326,17 +340,15 @@ void __stdcall D2QSSOCKET_BlockSocketIfValid(D2QSSocketStrc * pQSSocket) {
 
 // @sourcefile .\Src\D2QSSocket.cpp
 D2QSSocketStrc * __stdcall STRUCT_D2QSSocket_Init(char * szIpAddress, int nPort, char * szName) {
-    D2QSSocketStrc* pD2QSSocket;
     char cCurChar;
     int32_t dwErrorCode;
     if (!szIpAddress) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x242);
       exit(-1);
     } else {
-      char* pszScan;
-      pszScan = szIpAddress;
-      pszScan = pszScan + strlen(pszScan) + 1;
-      if (!((uint32_t)((int)pszScan - (int)(szIpAddress + 1)) < 0x103)) {
+      D2QSSocketStrc* pD2QSSocket;
+      int nLen = (int)strlen(szIpAddress);
+      if (!((uint32_t)nLen < 0x103)) {
         ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x243);
         exit(-1);
       }
@@ -350,12 +362,13 @@ D2QSSocketStrc * __stdcall STRUCT_D2QSSocket_Init(char * szIpAddress, int nPort,
       Storm::Source::SSTR::SStrCopy(pD2QSSocket->szIpAddress, szIpAddress, 0x104);
       if (szName) {
         dwErrorCode = 4;
+        Storm::Source::SSTR::SStrCopy(pD2QSSocket->szName, szName, 4);
       } else {
         dwErrorCode = 0x40;
         szName = "UNKNOWN";
+        Storm::Source::SSTR::SStrCopy(pD2QSSocket->szName, szName, 0x40);
       }
 
-      Storm::Source::SSTR::SStrCopy(pD2QSSocket->szName, szName, dwErrorCode);
       pD2QSSocket->nPort = nPort;
       D2QSQueue::D2QSQUEUE_Initialize(&pD2QSSocket->aQueue);
       pD2QSSocket->nHeaderSize = 2;
@@ -420,7 +433,7 @@ int __stdcall NET_MCP_CLIENT_SendPacketToQSocket(D2QSSocketStrc * pQSocket, char
 }
 
 int32_t __stdcall NET_MCP_CLIENT_Send(D2QSSocketStrc * pQSocket, char * pBytes, uint16_t nDataSizeNoHeader) {
-    uint16_t _nDataSizeNoHeader;
+    uint32_t _nDataSizeNoHeader;
     uint32_t nTotalSendSize;
     uint8_t abLenHeader[4];
     uint8_t aSendBuf[8292];

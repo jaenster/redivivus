@@ -15,338 +15,75 @@ namespace D2Common::DATATBLS::BeltsTbls {
 
 // Builds the D2BinFieldInputStrc schema for belts.txt and compiles it via DataTbls::CompileTxt into the pTxtBelts table. Schema: numboxes plus 16 belt box screen rectangles (boxN left/right/top/bottom) defining the in-belt potion slot layout per belt type. Record stride 0x108. Asserts the produced record count divided by 2 equals 7 (NUM_BELT_STATS across the resolution variants), else fatal Fog error. Called once during data-table init; allocates from the passed D2PoolManagerStrc.
 void __fastcall LoadBeltsTxt(D2PoolManagerStrc * pMemory) {
-    D2BinFieldInputStrc belts[66];
     int nTxtBeltsSize;
-    belts[0].eType = FIELDTYPE_CHAR;
-    belts[0].nOffset = 4;
-    belts[0].szName = "numboxes";
-    belts[0].nSize = 0;
-    belts[0].fpLinker = 0;
-    belts[1].szName = "box1left";
-    belts[1].eType = FIELDTYPE_INT;
-    belts[1].nSize = 0;
-    belts[1].nOffset = 8;
-    belts[1].fpLinker = 0;
-    belts[2].szName = "box1right";
-    belts[2].eType = FIELDTYPE_INT;
-    belts[2].nSize = 0;
-    belts[2].nOffset = 0xc;
-    belts[2].fpLinker = 0;
-    belts[3].szName = "box1top";
-    belts[3].eType = FIELDTYPE_INT;
-    belts[3].nSize = 0;
-    belts[3].nOffset = 0x10;
-    belts[3].fpLinker = 0;
-    belts[4].szName = "box1bottom";
-    belts[4].eType = FIELDTYPE_INT;
-    belts[4].nSize = 0;
-    belts[4].nOffset = 0x14;
-    belts[4].fpLinker = 0;
-    belts[5].szName = "box2left";
-    belts[5].eType = FIELDTYPE_INT;
-    belts[5].nSize = 0;
-    belts[5].nOffset = 0x18;
-    belts[5].fpLinker = 0;
-    belts[6].szName = "box2right";
-    belts[6].eType = FIELDTYPE_INT;
-    belts[6].nSize = 0;
-    belts[6].nOffset = 0x1c;
-    belts[6].fpLinker = 0;
-    belts[7].szName = "box2top";
-    belts[7].eType = FIELDTYPE_INT;
-    belts[7].nSize = 0;
-    belts[7].nOffset = 0x20;
-    belts[7].fpLinker = 0;
-    belts[8].szName = "box2bottom";
-    belts[8].eType = FIELDTYPE_INT;
-    belts[8].nSize = 0;
-    belts[8].nOffset = 0x24;
-    belts[8].fpLinker = 0;
-    belts[9].szName = "box3left";
-    belts[9].eType = FIELDTYPE_INT;
-    belts[9].nSize = 0;
-    belts[9].nOffset = 0x28;
-    belts[9].fpLinker = 0;
-    belts[10].szName = "box3right";
-    belts[10].eType = FIELDTYPE_INT;
-    belts[10].nSize = 0;
-    belts[10].nOffset = 0x2c;
-    belts[10].fpLinker = 0;
-    belts[0xb].szName = "box3top";
-    belts[0xb].eType = FIELDTYPE_INT;
-    belts[0xb].nSize = 0;
-    belts[0xb].nOffset = 0x30;
-    belts[0xb].fpLinker = 0;
-    belts[0xc].szName = "box3bottom";
-    belts[0xc].eType = FIELDTYPE_INT;
-    belts[0xc].nSize = 0;
-    belts[0xc].nOffset = 0x34;
-    belts[0xc].fpLinker = 0;
-    belts[0xd].szName = "box4left";
-    belts[0xd].eType = FIELDTYPE_INT;
-    belts[0xd].nSize = 0;
-    belts[0xd].nOffset = 0x38;
-    belts[0xd].fpLinker = 0;
-    belts[0xe].szName = "box4right";
-    belts[0xe].eType = FIELDTYPE_INT;
-    belts[0xe].nSize = 0;
-    belts[0xe].nOffset = 0x3c;
-    belts[0xe].fpLinker = 0;
-    belts[0xf].szName = "box4top";
-    belts[0xf].eType = FIELDTYPE_INT;
-    belts[0xf].nSize = 0;
-    belts[0xf].nOffset = 0x40;
-    belts[0xf].fpLinker = 0;
-    belts[0x10].szName = "box4bottom";
-    belts[0x10].eType = FIELDTYPE_INT;
-    belts[0x10].nSize = 0;
-    belts[0x10].nOffset = 0x44;
-    belts[0x10].fpLinker = 0;
-    belts[0x11].szName = "box5left";
-    belts[0x11].eType = FIELDTYPE_INT;
-    belts[0x11].nSize = 0;
-    belts[0x11].nOffset = 0x48;
-    belts[0x11].fpLinker = 0;
-    belts[0x12].szName = "box5right";
-    belts[0x12].eType = FIELDTYPE_INT;
-    belts[0x12].nSize = 0;
-    belts[0x12].nOffset = 0x4c;
-    belts[0x12].fpLinker = 0;
-    belts[0x13].szName = "box5top";
-    belts[0x13].eType = FIELDTYPE_INT;
-    belts[0x13].nSize = 0;
-    belts[0x13].nOffset = 0x50;
-    belts[0x13].fpLinker = 0;
-    belts[0x14].szName = "box5bottom";
-    belts[0x14].eType = FIELDTYPE_INT;
-    belts[0x14].nSize = 0;
-    belts[0x14].nOffset = 0x54;
-    belts[0x14].fpLinker = 0;
-    belts[0x15].szName = "box6left";
-    belts[0x15].eType = FIELDTYPE_INT;
-    belts[0x15].nSize = 0;
-    belts[0x15].nOffset = 0x58;
-    belts[0x15].fpLinker = 0;
-    belts[0x16].szName = "box6right";
-    belts[0x16].eType = FIELDTYPE_INT;
-    belts[0x16].nSize = 0;
-    belts[0x16].nOffset = 0x5c;
-    belts[0x16].fpLinker = 0;
-    belts[0x17].szName = "box6top";
-    belts[0x17].eType = FIELDTYPE_INT;
-    belts[0x17].nSize = 0;
-    belts[0x17].nOffset = 0x60;
-    belts[0x17].fpLinker = 0;
-    belts[0x18].szName = "box6bottom";
-    belts[0x18].eType = FIELDTYPE_INT;
-    belts[0x18].nSize = 0;
-    belts[0x18].nOffset = 100;
-    belts[0x18].fpLinker = 0;
-    belts[0x19].szName = "box7left";
-    belts[0x19].eType = FIELDTYPE_INT;
-    belts[0x19].nSize = 0;
-    belts[0x19].nOffset = 0x68;
-    belts[0x19].fpLinker = 0;
-    belts[0x1a].szName = "box7right";
-    belts[0x1a].eType = FIELDTYPE_INT;
-    belts[0x1a].nSize = 0;
-    belts[0x1a].nOffset = 0x6c;
-    belts[0x1a].fpLinker = 0;
-    belts[0x1b].szName = "box7top";
-    belts[0x1b].eType = FIELDTYPE_INT;
-    belts[0x1b].nSize = 0;
-    belts[0x1b].nOffset = 0x70;
-    belts[0x1b].fpLinker = 0;
-    belts[0x1c].szName = "box7bottom";
-    belts[0x1c].eType = FIELDTYPE_INT;
-    belts[0x1c].nSize = 0;
-    belts[0x1c].nOffset = 0x74;
-    belts[0x1c].fpLinker = 0;
-    belts[0x1d].szName = "box8left";
-    belts[0x1d].eType = FIELDTYPE_INT;
-    belts[0x1d].nSize = 0;
-    belts[0x1d].nOffset = 0x78;
-    belts[0x1d].fpLinker = 0;
-    belts[0x1e].szName = "box8right";
-    belts[0x1e].eType = FIELDTYPE_INT;
-    belts[0x1e].nSize = 0;
-    belts[0x1e].nOffset = 0x7c;
-    belts[0x1e].fpLinker = 0;
-    belts[0x1f].szName = "box8top";
-    belts[0x1f].eType = FIELDTYPE_INT;
-    belts[0x1f].nSize = 0;
-    belts[0x1f].nOffset = 0x80;
-    belts[0x1f].fpLinker = 0;
-    belts[0x20].szName = "box8bottom";
-    belts[0x20].eType = FIELDTYPE_INT;
-    belts[0x20].nSize = 0;
-    belts[0x20].nOffset = 0x84;
-    belts[0x20].fpLinker = 0;
-    belts[0x21].szName = "box9left";
-    belts[0x21].eType = FIELDTYPE_INT;
-    belts[0x21].nSize = 0;
-    belts[0x21].nOffset = 0x88;
-    belts[0x21].fpLinker = 0;
-    belts[0x22].szName = "box9right";
-    belts[0x22].eType = FIELDTYPE_INT;
-    belts[0x22].nSize = 0;
-    belts[0x22].nOffset = 0x8c;
-    belts[0x22].fpLinker = 0;
-    belts[0x23].szName = "box9top";
-    belts[0x23].eType = FIELDTYPE_INT;
-    belts[0x23].nSize = 0;
-    belts[0x23].nOffset = 0x90;
-    belts[0x23].fpLinker = 0;
-    belts[0x24].szName = "box9bottom";
-    belts[0x24].eType = FIELDTYPE_INT;
-    belts[0x24].nSize = 0;
-    belts[0x24].nOffset = 0x94;
-    belts[0x24].fpLinker = 0;
-    belts[0x25].szName = "box10left";
-    belts[0x25].eType = FIELDTYPE_INT;
-    belts[0x25].nSize = 0;
-    belts[0x25].nOffset = 0x98;
-    belts[0x25].fpLinker = 0;
-    belts[0x26].szName = "box10right";
-    belts[0x26].eType = FIELDTYPE_INT;
-    belts[0x26].nSize = 0;
-    belts[0x26].nOffset = 0x9c;
-    belts[0x26].fpLinker = 0;
-    belts[0x27].szName = "box10top";
-    belts[0x27].eType = FIELDTYPE_INT;
-    belts[0x27].nSize = 0;
-    belts[0x27].nOffset = 0xa0;
-    belts[0x27].fpLinker = 0;
-    belts[0x28].szName = "box10bottom";
-    belts[0x28].eType = FIELDTYPE_INT;
-    belts[0x28].nSize = 0;
-    belts[0x28].nOffset = 0xa4;
-    belts[0x28].fpLinker = 0;
-    belts[0x29].szName = "box11left";
-    belts[0x29].eType = FIELDTYPE_INT;
-    belts[0x29].nSize = 0;
-    belts[0x29].nOffset = 0xa8;
-    belts[0x29].fpLinker = 0;
-    belts[0x2a].szName = "box11right";
-    belts[0x2a].eType = FIELDTYPE_INT;
-    belts[0x2a].nSize = 0;
-    belts[0x2a].nOffset = 0xac;
-    belts[0x2a].fpLinker = 0;
-    belts[0x2b].szName = "box11top";
-    belts[0x2b].eType = FIELDTYPE_INT;
-    belts[0x2b].nSize = 0;
-    belts[0x2b].nOffset = 0xb0;
-    belts[0x2b].fpLinker = 0;
-    belts[0x2c].szName = "box11bottom";
-    belts[0x2c].eType = FIELDTYPE_INT;
-    belts[0x2c].nSize = 0;
-    belts[0x2c].nOffset = 0xb4;
-    belts[0x2c].fpLinker = 0;
-    belts[0x2d].szName = "box12left";
-    belts[0x2d].eType = FIELDTYPE_INT;
-    belts[0x2d].nSize = 0;
-    belts[0x2d].nOffset = 0xb8;
-    belts[0x2d].fpLinker = 0;
-    belts[0x2e].szName = "box12right";
-    belts[0x2e].eType = FIELDTYPE_INT;
-    belts[0x2e].nSize = 0;
-    belts[0x2e].nOffset = 0xbc;
-    belts[0x2e].fpLinker = 0;
-    belts[0x2f].szName = "box12top";
-    belts[0x2f].eType = FIELDTYPE_INT;
-    belts[0x2f].nSize = 0;
-    belts[0x2f].nOffset = 0xc0;
-    belts[0x2f].fpLinker = 0;
-    belts[0x30].szName = "box12bottom";
-    belts[0x30].eType = FIELDTYPE_INT;
-    belts[0x30].nSize = 0;
-    belts[0x30].nOffset = 0xc4;
-    belts[0x30].fpLinker = 0;
-    belts[0x31].szName = "box13left";
-    belts[0x31].eType = FIELDTYPE_INT;
-    belts[0x31].nSize = 0;
-    belts[0x31].nOffset = 200;
-    belts[0x31].fpLinker = 0;
-    belts[0x32].szName = "box13right";
-    belts[0x32].eType = FIELDTYPE_INT;
-    belts[0x32].nSize = 0;
-    belts[0x32].nOffset = 0xcc;
-    belts[0x32].fpLinker = 0;
-    belts[0x33].szName = "box13top";
-    belts[0x33].eType = FIELDTYPE_INT;
-    belts[0x33].nSize = 0;
-    belts[0x33].nOffset = 0xd0;
-    belts[0x33].fpLinker = 0;
-    belts[0x34].szName = "box13bottom";
-    belts[0x34].eType = FIELDTYPE_INT;
-    belts[0x34].nSize = 0;
-    belts[0x34].nOffset = 0xd4;
-    belts[0x34].fpLinker = 0;
-    belts[0x35].szName = "box14left";
-    belts[0x35].eType = FIELDTYPE_INT;
-    belts[0x35].nSize = 0;
-    belts[0x35].nOffset = 0xd8;
-    belts[0x35].fpLinker = 0;
-    belts[0x36].szName = "box14right";
-    belts[0x36].eType = FIELDTYPE_INT;
-    belts[0x36].nSize = 0;
-    belts[0x36].nOffset = 0xdc;
-    belts[0x36].fpLinker = 0;
-    belts[0x37].szName = "box14top";
-    belts[0x37].eType = FIELDTYPE_INT;
-    belts[0x37].nSize = 0;
-    belts[0x37].nOffset = 0xe0;
-    belts[0x37].fpLinker = 0;
-    belts[0x38].szName = "box14bottom";
-    belts[0x38].eType = FIELDTYPE_INT;
-    belts[0x38].nSize = 0;
-    belts[0x38].nOffset = 0xe4;
-    belts[0x38].fpLinker = 0;
-    belts[0x39].szName = "box15left";
-    belts[0x39].eType = FIELDTYPE_INT;
-    belts[0x39].nSize = 0;
-    belts[0x39].nOffset = 0xe8;
-    belts[0x39].fpLinker = 0;
-    belts[0x3a].szName = "box15right";
-    belts[0x3a].eType = FIELDTYPE_INT;
-    belts[0x3a].nSize = 0;
-    belts[0x3a].nOffset = 0xec;
-    belts[0x3a].fpLinker = 0;
-    belts[0x3b].szName = "box15top";
-    belts[0x3b].eType = FIELDTYPE_INT;
-    belts[0x3b].nSize = 0;
-    belts[0x3b].nOffset = 0xf0;
-    belts[0x3b].fpLinker = 0;
-    belts[0x3c].szName = "box15bottom";
-    belts[0x3c].eType = FIELDTYPE_INT;
-    belts[0x3c].nSize = 0;
-    belts[0x3c].nOffset = 0xf4;
-    belts[0x3c].fpLinker = 0;
-    belts[0x3d].szName = "box16left";
-    belts[0x3d].eType = FIELDTYPE_INT;
-    belts[0x3d].nSize = 0;
-    belts[0x3d].nOffset = 0xf8;
-    belts[0x3d].fpLinker = 0;
-    belts[0x3e].szName = "box16right";
-    belts[0x3e].eType = FIELDTYPE_INT;
-    belts[0x3e].nSize = 0;
-    belts[0x3e].nOffset = 0xfc;
-    belts[0x3e].fpLinker = 0;
-    belts[0x3f].szName = "box16top";
-    belts[0x3f].eType = FIELDTYPE_INT;
-    belts[0x3f].nSize = 0;
-    belts[0x3f].nOffset = 0x100;
-    belts[0x3f].fpLinker = 0;
-    belts[0x40].szName = "box16bottom";
-    belts[0x40].nSize = 0;
-    belts[0x40].fpLinker = 0;
-    belts[0x41].eType = FIELDTYPE_END;
-    belts[0x41].nSize = 0;
-    belts[0x41].nOffset = 0;
-    belts[0x41].fpLinker = 0;
-    belts[0x40].eType = FIELDTYPE_INT;
-    belts[0x40].nOffset = 0x104;
-    belts[0x41].szName = "end";
+    D2BinFieldInputStrc belts[66] = {
+      {"numboxes", FIELDTYPE_CHAR, 0, 4, 0},
+      {"box1left", FIELDTYPE_INT, 0, 8, 0},
+      {"box1right", FIELDTYPE_INT, 0, 0xc, 0},
+      {"box1top", FIELDTYPE_INT, 0, 0x10, 0},
+      {"box1bottom", FIELDTYPE_INT, 0, 0x14, 0},
+      {"box2left", FIELDTYPE_INT, 0, 0x18, 0},
+      {"box2right", FIELDTYPE_INT, 0, 0x1c, 0},
+      {"box2top", FIELDTYPE_INT, 0, 0x20, 0},
+      {"box2bottom", FIELDTYPE_INT, 0, 0x24, 0},
+      {"box3left", FIELDTYPE_INT, 0, 0x28, 0},
+      {"box3right", FIELDTYPE_INT, 0, 0x2c, 0},
+      {"box3top", FIELDTYPE_INT, 0, 0x30, 0},
+      {"box3bottom", FIELDTYPE_INT, 0, 0x34, 0},
+      {"box4left", FIELDTYPE_INT, 0, 0x38, 0},
+      {"box4right", FIELDTYPE_INT, 0, 0x3c, 0},
+      {"box4top", FIELDTYPE_INT, 0, 0x40, 0},
+      {"box4bottom", FIELDTYPE_INT, 0, 0x44, 0},
+      {"box5left", FIELDTYPE_INT, 0, 0x48, 0},
+      {"box5right", FIELDTYPE_INT, 0, 0x4c, 0},
+      {"box5top", FIELDTYPE_INT, 0, 0x50, 0},
+      {"box5bottom", FIELDTYPE_INT, 0, 0x54, 0},
+      {"box6left", FIELDTYPE_INT, 0, 0x58, 0},
+      {"box6right", FIELDTYPE_INT, 0, 0x5c, 0},
+      {"box6top", FIELDTYPE_INT, 0, 0x60, 0},
+      {"box6bottom", FIELDTYPE_INT, 0, 100, 0},
+      {"box7left", FIELDTYPE_INT, 0, 0x68, 0},
+      {"box7right", FIELDTYPE_INT, 0, 0x6c, 0},
+      {"box7top", FIELDTYPE_INT, 0, 0x70, 0},
+      {"box7bottom", FIELDTYPE_INT, 0, 0x74, 0},
+      {"box8left", FIELDTYPE_INT, 0, 0x78, 0},
+      {"box8right", FIELDTYPE_INT, 0, 0x7c, 0},
+      {"box8top", FIELDTYPE_INT, 0, 0x80, 0},
+      {"box8bottom", FIELDTYPE_INT, 0, 0x84, 0},
+      {"box9left", FIELDTYPE_INT, 0, 0x88, 0},
+      {"box9right", FIELDTYPE_INT, 0, 0x8c, 0},
+      {"box9top", FIELDTYPE_INT, 0, 0x90, 0},
+      {"box9bottom", FIELDTYPE_INT, 0, 0x94, 0},
+      {"box10left", FIELDTYPE_INT, 0, 0x98, 0},
+      {"box10right", FIELDTYPE_INT, 0, 0x9c, 0},
+      {"box10top", FIELDTYPE_INT, 0, 0xa0, 0},
+      {"box10bottom", FIELDTYPE_INT, 0, 0xa4, 0},
+      {"box11left", FIELDTYPE_INT, 0, 0xa8, 0},
+      {"box11right", FIELDTYPE_INT, 0, 0xac, 0},
+      {"box11top", FIELDTYPE_INT, 0, 0xb0, 0},
+      {"box11bottom", FIELDTYPE_INT, 0, 0xb4, 0},
+      {"box12left", FIELDTYPE_INT, 0, 0xb8, 0},
+      {"box12right", FIELDTYPE_INT, 0, 0xbc, 0},
+      {"box12top", FIELDTYPE_INT, 0, 0xc0, 0},
+      {"box12bottom", FIELDTYPE_INT, 0, 0xc4, 0},
+      {"box13left", FIELDTYPE_INT, 0, 200, 0},
+      {"box13right", FIELDTYPE_INT, 0, 0xcc, 0},
+      {"box13top", FIELDTYPE_INT, 0, 0xd0, 0},
+      {"box13bottom", FIELDTYPE_INT, 0, 0xd4, 0},
+      {"box14left", FIELDTYPE_INT, 0, 0xd8, 0},
+      {"box14right", FIELDTYPE_INT, 0, 0xdc, 0},
+      {"box14top", FIELDTYPE_INT, 0, 0xe0, 0},
+      {"box14bottom", FIELDTYPE_INT, 0, 0xe4, 0},
+      {"box15left", FIELDTYPE_INT, 0, 0xe8, 0},
+      {"box15right", FIELDTYPE_INT, 0, 0xec, 0},
+      {"box15top", FIELDTYPE_INT, 0, 0xf0, 0},
+      {"box15bottom", FIELDTYPE_INT, 0, 0xf4, 0},
+      {"box16left", FIELDTYPE_INT, 0, 0xf8, 0},
+      {"box16right", FIELDTYPE_INT, 0, 0xfc, 0},
+      {"box16top", FIELDTYPE_INT, 0, 0x100, 0},
+      {"box16bottom", FIELDTYPE_INT, 0, 0x104, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     pTxtBelts = (D2BeltsTxt*)DataTbls::CompileTxt(pMemory, "belts", belts, &nTxtBeltsSize, 0x108);
     /* "nSize / NUM_GAME_RESOLUTIONS == NUM_BELT_STATS" */ if (nTxtBeltsSize / 2 == 7) {
       return;

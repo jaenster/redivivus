@@ -108,7 +108,8 @@ static int __stdcall IsTokenFirstGame(int nMode, int nParam, char * szCharName) 
 
 // D2GS server-side dispatcher for the game-setup / session control packet family (opcodes 0x67..0x70, indexed by pPacket[1]-0x67). Reads the client id from pPacket[0] and routes: 0=GAMELOGON_SP (single-player create via GAME_CreateSingleplayerGame), 1=GAMELOGON_MULTI (token-first-game anti-cheat check, NET_D2GS_SERVER_IsValidChecks then NET_D2GS_SERVER_SrvJoinGame), 2=LEAVEGAME, 3=REQUESTHOSTEDGAMES, 4=JOINGAME (SrvJoinAct), 5=UPLOADSAVE (halts unrecoverably if save size >0x1fff), 6=PING (NET_SendPong), 7=FINDME_6E, 9=force-disconnect (sets QServer nForceTimeoutDisconnect). Most branches gate the action behind a per-command validity/allowed check. Returns via Fog::Debug::GuardStack. pCritSec is the clients-list critical section (released on the force-disconnect path). NOTE: several gate booleans (bSetupCheckResult, bServerValidRequest, bFindMeCheckResult) read as uninitialized in decompile due to lost register-param/inlined-return storage.
 // @sourcefile .\GAME\CCmd.cpp
-void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(D2GSClientMsgEnvelopeStrc * pPacket) {
+// Registers: pPacket in ECX; nPacketSize in EDX (the received length) is passed but not read.
+void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(D2GSClientMsgEnvelopeStrc * pPacket, int32_t nPacketSize) {
     // Frame slots -80..-60 are ONE object: &dwJoinParam3 is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -134,7 +135,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(D2GSClientMsgEnve
       case 'g':
         /* D2GS_GAMELOGON_SP */ bFindMeCheckResult = Server::SetupGameChecks(nClientId, &pPacket->uMsg.sGameLogonSP);
       if (bFindMeCheckResult) {
-        Server::GAME_CreateSingleplayerGame(nClientId, pPacket->uMsg.sGameLogonSP.szGameName, pPacket->uMsg.sGameLogonSP.eHostGameType, pPacket->uMsg.sGameLogonSP.ePlayerClass, pPacket->uMsg.sGameLogonSP.szCharName, pPacket->uMsg.sGameLogonSP.field_0x25, pPacket->uMsg.sGameLogonSP.eArenaFlags, pPacket->uMsg.sGameLogonSP.nTemplate, pPacket->uMsg.sGameLogonSP.field_0x2b, pPacket->uMsg.sGameLogonSP.field_0x2c, pPacket->uMsg.sGameLogonSP.nDifficulty, pPacket->uMsg.sGameLogonSP.nLanguageCode, 0, 0);
+        Server::GAME_CreateSingleplayerGame(nClientId, pPacket->uMsg.sGameLogonSP.szGameName, pPacket->uMsg.sGameLogonSP.eHostGameType, pPacket->uMsg.sGameLogonSP.ePlayerClass, pPacket->uMsg.sGameLogonSP.szCharName, (uint32_t)(uint16_t)pPacket->uMsg.sGameLogonSP.field_0x25, pPacket->uMsg.sGameLogonSP.eArenaFlags, pPacket->uMsg.sGameLogonSP.nTemplate, pPacket->uMsg.sGameLogonSP.field_0x2b, pPacket->uMsg.sGameLogonSP.field_0x2c, pPacket->uMsg.sGameLogonSP.nDifficulty, pPacket->uMsg.sGameLogonSP.nLanguageCode, 0, 0);
         return;
       }
 

@@ -5,13 +5,13 @@
 #include "D2CMP/SRC/CelCmp.h"
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2CMP/SRC/SpriteCache.h"
+#include "D2CMP/SRC/SubTile.h"
 #include "D2Client/ButtonWrapper.h"
 #include "D2Client/Core/Archive.h"
 #include "D2Client/D2Client.h"
 #include "D2Client/D2DialogStrc.h"
 #include "D2Client/D2GameViewStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
-#include "D2Client/D2GfxHelperStrc.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Msg.h"
@@ -68,24 +68,24 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+#ifndef RECON_FPTD_fnUnitIterCallback
+#define RECON_FPTD_fnUnitIterCallback
+typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
+#endif
+
 namespace D2Client::UI::Draw {
 
 void __stdcall LoadingsScreen() {
     char szPath[260];
-    char* _Format;
-    char* pszBaseDir;
     ui::CleanupAfterLoadingAct();
     ui::PALETTE_LoadLoadingScreenPalette();
     uint32_t nLangCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
     if (nLangCode) {
-      pszBaseDir = "DATA\\LOCAL";
-      _Format = "%s\\UI\\LoadingScreen";
+      sprintf(szPath, "%s\\UI\\LoadingScreen", "DATA\\LOCAL");
     } else {
-      pszBaseDir = "DATA\\GLOBAL";
-      _Format = "%s\\UI\\Loading\\Loadingscreen";
+      sprintf(szPath, "%s\\UI\\Loading\\Loadingscreen", "DATA\\GLOBAL");
     }
 
-    sprintf(szPath, _Format, pszBaseDir);
     gnLoadedActIndex = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
     gnLoadScreenAnimFrame = 0;
     gnLastOpenPanelId = 1;
@@ -157,14 +157,12 @@ void __fastcall Draw_UI_LoadGame(int32_t bAdvanceFrame) {
 }
 
 void __stdcall UI_ToggleMiniPanel() {
-    bool _bRegistryRead;
+    int _bRegistryRead;
     bool bRegistryRead;
     uint32_t bScrollActive;
-    HWND pHwnd;
     eD2UIvars eUI;
     int32_t nInteractGuid;
     int nMiniPanelRegVal;
-    int32_t nLine;
     _bRegistryRead = Storm::Source::SReg::SRegLoadValue("Diablo II", "Mini Panel", 1, &nMiniPanelRegVal);
     BOOL bWasMiniPanelOpen = GFX_bShowUIFlag.MiniPanel;
     if (_bRegistryRead && nMiniPanelRegVal) {
@@ -216,9 +214,7 @@ void __stdcall UI_ToggleMiniPanel() {
     }
     if (!bWasMiniPanelOpen) {
       if (GFX_bShowUIFlag.MiniPanel) {
-        nLine = 2;
-        pHwnd = D2gfx::D2GFX::GetHwnd();
-        _Message::MESSAGE_RegisterEventHandlerBatch(pHwnd, g_UIFlagInitDrawUnknown, nLine);
+        _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitDrawUnknown, 2);
         ui::GetMouseX();
         ui::GetMouseY();
         return;
@@ -234,12 +230,10 @@ void __stdcall UI_ToggleMiniPanel() {
 void __stdcall InitializeUI() {
     D2UnitStrc* pPlayer;
     int bIsActive;
-    HWND pHwnd;
     BOOL bResult2;
     eD2UIvars eUI;
     char szPath[260];
     int32_t nInteractGuid;
-    int32_t nLine;
     Panel::LoadPanelImages();
     MiniPanel::MINIPANEL_Init();
     Text::TEXT_InitTextDisplaySettings();
@@ -304,7 +298,7 @@ void __stdcall InitializeUI() {
       bScrollActive = Text::TEXT_IsScrollingTextActive();
       if (!bScrollActive) {
         eUI = UI_GAME;
-        if (0 < gnUIFlagCount) {
+        if (gnUIFlagCount > 0) {
           do {
             if ((&GFX_bShowUIFlag.Game)[eUI] == 1) {
               switch (gUIFlagDismissModeTable[eUI]->anDismissMode[0]) {
@@ -337,9 +331,7 @@ void __stdcall InitializeUI() {
           GFX_bShowUIFlag.Game = 1;
         }
         if (GFX_bShowUIFlag.Game) {
-          nLine = 4;
-          pHwnd = D2gfx::D2GFX::GetHwnd();
-          _Message::MESSAGE_RegisterEventHandlerBatch(pHwnd, g_UIFlagInitDrawMouseDown, nLine);
+          _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitDrawMouseDown, 4);
         }
 
         ui::GetMouseX();
@@ -357,7 +349,7 @@ void __stdcall InitializeUI() {
         bScrollActive = Text::TEXT_IsScrollingTextActive();
         if (!bScrollActive) {
           eUI = UI_GAME;
-          if (0 < gnUIFlagCount) {
+          if (gnUIFlagCount > 0) {
             do {
               if ((&GFX_bShowUIFlag.Game)[eUI] == 1) {
                 switch (gUIFlagDismissModeTable[eUI]->anDismissMode[0x22]) {
@@ -386,14 +378,10 @@ void __stdcall InitializeUI() {
           }
           if (!bResult) {
             if (GFX_bShowUIFlag.HelpScreenRedButton) {
-              nLine = 2;
-              pHwnd = D2gfx::D2GFX::GetHwnd();
-              _Message::MESSAGE_RegisterEventHandlerBatch(pHwnd, gsUIDrawFlagInit1, nLine);
+              _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDrawFlagInit1, 2);
             }
           } else if (!GFX_bShowUIFlag.HelpScreenRedButton) {
-            nLine = 2;
-            pHwnd = D2gfx::D2GFX::GetHwnd();
-            _Message::MESSAGE_UnregisterEventHandlerBatch(pHwnd, gsUIDrawFlagInit1, nLine);
+            _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDrawFlagInit1, 2);
           }
 
           ui::GetMouseX();
@@ -495,13 +483,12 @@ void __stdcall FreeDraw() {
 // UI rendering layer. Drawn AFTER world, BEFORE cursor.
 // All 38 UI panels: inventory, stats, skills, menus, tooltips, automap, chat.
 // GFX_bShowUIFlag controls visibility. UI drawn in screen space (not world).
-void DRAW_UI(D2GameViewStrc * pGameView, short * pnNpcParam) {
+// EDI is not an argument: never read; the callee DRAW_UI_NPC_INTERACTION does not take it either.
+void __fastcall DRAW_UI(D2GameViewStrc * pGameView) {
     uint32_t eBorderType;
     int bIsActive;
-    HWND pHwnd;
     eD2GSGameType eGameType;
     eD2UIvars eUIIndex;
-    int32_t iVar1;
     int32_t nInteractGuid;
     BOOL bWasHelpOpen;
     if (GFX_bShowUIFlag.StatusArea) {
@@ -640,7 +627,7 @@ void DRAW_UI(D2GameViewStrc * pGameView, short * pnNpcParam) {
         eBorderType = Text::TEXT_IsScrollingTextActive();
         if (!eBorderType) {
           eUIIndex = UI_GAME;
-          if (0 < gnUIFlagCount) {
+          if (gnUIFlagCount > 0) {
             do {
               if ((&GFX_bShowUIFlag.Game)[eUIIndex] == 1) {
                 switch (gUIFlagDismissModeTable[eUIIndex]->anDismissMode[0x21]) {
@@ -673,15 +660,11 @@ void DRAW_UI(D2GameViewStrc * pGameView, short * pnNpcParam) {
         }
         if (!bWasHelpOpen) {
           if (GFX_bShowUIFlag.HelpMenu) {
-            iVar1 = 5;
-            pHwnd = D2gfx::D2GFX::GetHwnd();
-            _Message::MESSAGE_RegisterEventHandlerBatch(pHwnd, gsUIDrawFlagInit0, iVar1);
+            _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDrawFlagInit0, 5);
           }
         } else if (!GFX_bShowUIFlag.HelpMenu) {
           Help::HELP_HideMiniPanel();
-          iVar1 = 5;
-          pHwnd = D2gfx::D2GFX::GetHwnd();
-          _Message::MESSAGE_UnregisterEventHandlerBatch(pHwnd, gsUIDrawFlagInit0, iVar1);
+          _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDrawFlagInit0, 5);
         }
 
         ui::GetMouseX();
@@ -697,12 +680,12 @@ void DRAW_UI(D2GameViewStrc * pGameView, short * pnNpcParam) {
         ShowItems::DRAW_AltItems();
         eGameType = GAME::Game::CLIENT_GetD2GSGameType();
         if (eGameType != GAMETYPE_SINGLEPLAYER) {
-          UNIT::CUnit::CUNIT_IterateServerUnitsWithCallback((int32_t)(uintptr_t)ui::UI_DrawPlayerNameOverhead);
+          UNIT::CUnit::CUNIT_IterateServerUnitsWithCallback((fnUnitIterCallback)ui::UI_DrawPlayerNameOverhead);
         }
       }
     }
     if (GFX_bShowUIFlag.NpcMenu) {
-      npcmenu::DRAW_UI_NPC_INTERACTION(pnNpcParam);
+      npcmenu::DRAW_UI_NPC_INTERACTION();
     }
     if (GFX_bShowUIFlag.Cash) {
       ui::DRAW_UI_CASH();
@@ -716,7 +699,7 @@ void DRAW_UI(D2GameViewStrc * pGameView, short * pnNpcParam) {
     ui::DRAW_UnitUModsUnderCursor();
     ui::UI_DrawArenaKillCount();
     ui::DRAW_UI_DeathMessage();
-    Source::ClientEngine::thunk_DRAW_Overlay_SecondsLeftToGame(nullptr);
+    Source::ClientEngine::thunk_DRAW_Overlay_SecondsLeftToGame();
 }
 
 void __fastcall CLIENT_AdjustMemoryBudget(D2PoolManagerStrc * pMemory, int32_t bInitSpriteCache) {
@@ -731,11 +714,7 @@ void __fastcall CLIENT_AdjustMemoryBudget(D2PoolManagerStrc * pMemory, int32_t b
     uint32_t dwPhysMemBytes;
     dwPhysMemBytes = *(uint32_t*)(pStormGlobal + 0xc);
     if (dwPhysMemBytes < 0x167d000) {
-      fPhysMemMB = (float)(int)dwPhysMemBytes;
-      if ((int)dwPhysMemBytes < 0) {
-        fPhysMemMB += 4.2949673e+09;
-      }
-
+      fPhysMemMB = (float)dwPhysMemBytes;
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("This machine doesn\'t have enough physical memory (> %.2f MB) for minimal performance!", (double)(fPhysMemMB * 9.536743e-07));
       exit(-1);
     }

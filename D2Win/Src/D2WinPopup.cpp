@@ -203,8 +203,7 @@ void __stdcall D2WinPopup() {
     ::D2WinPopup* pNewPopup = D2_NEW_AT(::D2WinPopup, ".\\Src\\D2WinPopup.cpp", 0x29);
     memset(pNewPopup, 0, 0x468);
     pNewPopup->sControl.neD2FormType = FORM_Popup;
-    int* pStateField = &pNewPopup->sControl.dwState;
-    *pStateField |= gadwBitMasks[0];
+    pNewPopup->sControl.dwState |= gadwBitMasks[0];
     uVar1 = pNewPopup->sControl.dwState | gadwBitMasks[2];
     pNewPopup->sControl.dwState = uVar1;
     pNewPopup->sControl.dwState = uVar1 | gadwBitMasks[3];

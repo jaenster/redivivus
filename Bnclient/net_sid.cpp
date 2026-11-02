@@ -20,7 +20,6 @@
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Chat.h"
 #include "D2Game/Objects/ObjectsRgn.h"
@@ -269,8 +268,8 @@ BOOL __fastcall NET_SID_CLIENT_WaitForPacketId(uint8_t nPacketId) {
     return 0;
 }
 
-BOOL __fastcall NET_SID_CLIENT_GetRequiredAnswer(uint8_t bParam) {
-    return NET_SID_INCOMING_CLIENT_PacketRequireAnswer[bParam];
+BOOL __fastcall NET_SID_CLIENT_GetRequiredAnswer(uint8_t nPacketId) {
+    return NET_SID_INCOMING_CLIENT_PacketRequireAnswer[nPacketId];
 }
 
 void __fastcall NET_SID_CLIENT_ResetRequireResponse(uint8_t nPacketId) {
@@ -399,12 +398,12 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_ReportVersion(char * pBytes, size_t nSiz
       BnSend::NET_SID_CLIENT_Send_0x5D_ReportCrash();
     }
 
-    Storm::Source::SReg::SRegSaveData((uint32_t*)"Patch", "Patches", 0x82, (uint8_t*)"", 1);
+    Storm::Source::SReg::SRegSaveData("Patch", "Patches", 0x82, (uint8_t*)"", 1);
     if (dwVersionResult == 1) {
       FILETIME ftDownloadTime;
       pszPatchURL = (uint8_t*)(pBytes + 4);
       BnSend::BNSEND_SendRawBytes(pszPatchURL, nSize - 4);
-      Storm::Source::SReg::SRegSaveData((uint32_t*)"Patch", "Patches", 0x82, pszPatchURL, nSize - 4);
+      Storm::Source::SReg::SRegSaveData("Patch", "Patches", 0x82, pszPatchURL, nSize - 4);
       ftDownloadTime.dwLowDateTime = 0;
       ftDownloadTime.dwHighDateTime = 0;
       BnDownload::BNDOWNLOAD_InitiateFileDownload((D2BnetDownloadStateStrc*)0x80000002, 2, 0, 0, &ftDownloadTime, (char*)pszPatchURL, nullptr);
@@ -486,7 +485,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_CDKey3(char * pBytes, size_t nSize) {
 // BATTLE.NET SID_SERVERLIST (0x04) HANDLER
 // Receives comma-separated list of Battle.net server addresses from the server. Saves the server list string (starting at offset +4, skipping 4-byte header) to the Windows registry under Configuration\Server List key for persistent storage and future connection attempts.
 BOOL __fastcall NET_SID_CLIENT_Incoming_ServerList(char * pBytes, size_t nSize) {
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Configuration", "Server List", 2, pBytes + 4);
+    Storm::Source::SReg::SRegSaveString("Configuration", "Server List", 2, pBytes + 4);
     return 1;
 }
 
@@ -642,20 +641,13 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthInfo(SID_S2C_AuthInfo * pPacketData,
 // Key status: 0x200=invalid, 0x201=in use, 0x202=disabled, 0x203=wrong product
 // Initiates MPQ patch download for upgrade paths or sets login state for authentication flow.
 BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketData, size_t nPacketSize) {
-    // Frame slots -264..-8 are ONE object: &szPatchFilename is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint8_t szPatchFilename;
-      uint8_t szPatchFilenameBuffer[255];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 256, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    uint32_t nByteIndex;
     uint32_t nPatchNameLen;
     int nNullCount;
     uint32_t dwResultCode;
     FILETIME szAdditionalInfo;
+    char szPatchFilename[256];
     if (nPacketSize >= 5 && *(char*)((int)pPacketData + (nPacketSize - 1)) == '\0') {
+      uint32_t nByteIndex;
       nByteIndex = 4;
       nNullCount = 0;
       if (4 < nPacketSize - 1) {
@@ -682,7 +674,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
 
       gszCDKeyInUseByUsername[0] = '\0';
       g_SIDPacketResponseFlags[0x42] = 0;
-      Storm::Source::SReg::SRegSaveData((uint32_t*)"Patch", "Patches", 0x82, (uint8_t*)"", 1);
+      Storm::Source::SReg::SRegSaveData("Patch", "Patches", 0x82, (uint8_t*)"", 1);
       if (dwResultCode <= 0x200) {
         if (dwResultCode != 0x200) {
           if (dwResultCode <= 0x101) {
@@ -703,13 +695,13 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
                 }
               case 0x100:
                 {
-                  nPatchNameLen = Storm::Source::SSTR::SStrCopy((char*)&__frame0.szPatchFilename, (char*)szAdditionalInfo.dwHighDateTime, 0xfe);
-                  __frame0.szPatchFilenameBuffer[nPatchNameLen] = 0;
-                  BnSend::BNSEND_SendRawBytes(&__frame0.szPatchFilename, nPatchNameLen + 2);
-                  Storm::Source::SReg::SRegSaveData((uint32_t*)"Patch", "Patches", 0x82, &__frame0.szPatchFilename, nPatchNameLen + 2);
+                  nPatchNameLen = Storm::Source::SSTR::SStrCopy(szPatchFilename, (char*)szAdditionalInfo.dwHighDateTime, 0xfe);
+                  szPatchFilename[nPatchNameLen + 1] = '\0';
+                  BnSend::BNSEND_SendRawBytes(szPatchFilename, nPatchNameLen + 2);
+                  Storm::Source::SReg::SRegSaveData("Patch", "Patches", 0x82, (uint8_t*)szPatchFilename, nPatchNameLen + 2);
                   szAdditionalInfo.dwLowDateTime = 0;
                   szAdditionalInfo.dwHighDateTime = 0;
-                  BnDownload::BNDOWNLOAD_InitiateFileDownload((D2BnetDownloadStateStrc*)0x80000002, 2, 0, 0, &szAdditionalInfo, (char*)&__frame0.szPatchFilename, nullptr);
+                  BnDownload::BNDOWNLOAD_InitiateFileDownload((D2BnetDownloadStateStrc*)0x80000002, 2, 0, 0, &szAdditionalInfo, szPatchFilename, nullptr);
                   g_SIDPacketResponseFlags[0x51] = 0;
                   Debug::DEBUG_UnusedDebugFunction("Downloading Upgrade");
                   break;
@@ -721,29 +713,33 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
             Debug::DEBUG_UnusedDebugFunction("User must revert to an older version");
           }
         } else {
-          SID_SetStateFlag1((uint32_t)((nByteIndex >> 4 & 0xf) != 0) * 4 + 3);
-          Debug::DEBUG_UnusedDebugFunction("User has an invalid cdkey (%ld)");
+          nByteIndex = nByteIndex >> 4 & 0xf;
+          SID_SetStateFlag1(nByteIndex != 0 ? 0x7U : 0x3U);
+          Debug::DEBUG_UnusedDebugFunction("User has an invalid cdkey (%ld)", nByteIndex);
         }
       } else {
         switch (dwResultCode) {
           case 0x201:
             {
-              SID_SetStateFlag1((uint32_t)((nByteIndex >> 4 & 0xf) != 0) * 4 + 6);
+              nByteIndex = nByteIndex >> 4 & 0xf;
+              SID_SetStateFlag1(nByteIndex != 0 ? 0xaU : 0x6U);
               Storm::Source::SSTR::SStrCopy(gszCDKeyInUseByUsername, (char*)szAdditionalInfo.dwHighDateTime, 0x100);
               SID_SetStateFlag2((uint32_t)gszCDKeyInUseByUsername);
-              Debug::DEBUG_UnusedDebugFunction("CD Key is in use by %s (%ld)");
+              Debug::DEBUG_UnusedDebugFunction("CD Key is in use by %s (%ld)", gszCDKeyInUseByUsername, nByteIndex);
               break;
             }
           case 0x202:
             {
-              SID_SetStateFlag1((uint32_t)((nByteIndex >> 4 & 0xf) != 0) * 4 + 4);
-              Debug::DEBUG_UnusedDebugFunction("CD Key is disabled (%ld)");
+              nByteIndex = nByteIndex >> 4 & 0xf;
+              SID_SetStateFlag1(nByteIndex != 0 ? 0x8U : 0x4U);
+              Debug::DEBUG_UnusedDebugFunction("CD Key is disabled (%ld)", nByteIndex);
               break;
             }
           case 0x203:
             {
-              SID_SetStateFlag1((uint32_t)((nByteIndex >> 4 & 0xf) != 0) * 4 + 5);
-              Debug::DEBUG_UnusedDebugFunction("CD Key is for another product (%ld)");
+              nByteIndex = nByteIndex >> 4 & 0xf;
+              SID_SetStateFlag1(nByteIndex != 0 ? 0x9U : 0x5U);
+              Debug::DEBUG_UnusedDebugFunction("CD Key is for another product (%ld)", nByteIndex);
               break;
             }
         }
@@ -874,7 +870,6 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogon(char * pPacketData, siz
 // If verification succeeds, mutual authentication complete and session key K established.
 // On status 2, password was incorrect. Logon fails on proof mismatch or unknown status.
 BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogonProof(char * pPacketData, size_t nPacketSize) {
-    char* szFailureMessage;
     if (nPacketSize < 0x18) {
       Debug::DEBUG_UnusedDebugFunction("INVALID: AuthAccountLogonProof");
       return 0;
@@ -887,7 +882,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogonProof(char * pPacketData
         return 1;
       }
 
-      szFailureMessage = "Logon Proof failed: Unknown result";
+      Debug::DEBUG_UnusedDebugFunction("Logon Proof failed: Unknown result");
     } else {
       int32_t bProofValid;
       bProofValid = NET_SID_CLIENT_VerifyServerProof(pPacketData + 4);
@@ -897,10 +892,9 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogonProof(char * pPacketData
         return 1;
       }
 
-      szFailureMessage = "Logon Proof failed: Server didn\'t know our password but told us it did!";
+      Debug::DEBUG_UnusedDebugFunction("Logon Proof failed: Server didn\'t know our password but told us it did!");
     }
 
-    Debug::DEBUG_UnusedDebugFunction(szFailureMessage);
     BNMESSQUEUE_SetStateIfZero(0x12);
     return 0;
 }
@@ -1336,7 +1330,7 @@ int __stdcall NET_SID_CLIENT_Send_0x50_AuthInfo() {
       /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pfnGetSystemDefaultUILanguage = GetProcAddress(hKernel32, "GetSystemDefaultUILanguage");
       if (pfnGetSystemDefaultUILanguage) {
         uVar1 = (*pfnGetSystemDefaultUILanguage)();
-        /* HMODULE hLibModule for FreeLibrary */ __frame0.sAuthInfoPacket.dwLanguageId = uVar1 & 0xffff;
+        /* HMODULE hLibModule for FreeLibrary */ __frame0.sAuthInfoPacket.dwLanguageId = (uint16_t)uVar1;
         FreeLibrary(hKernel32);
         goto add_country_and_send;
       }
@@ -1480,13 +1474,13 @@ int __fastcall NET_SID_CLIENT_Send_0x52_AuthAccountCreate(char * pUsername, char
     uint32_t salt[8];
     uint8_t verifier[32];
     char usernameBuffer[256];
-    uint32_t passwordUpper[64];
+    char passwordUpper[256];
     char usernameUpper[256];
     Storm::Source::SSTR::SStrCopy(usernameUpper, pUsername, 0x100);
     Storm::Source::SSTR::SStrUpper(usernameUpper);
-    Storm::Source::SSTR::SStrCopy((char*)passwordUpper, pPassword, 0x100);
-    Storm::Source::SSTR::SStrUpper((char*)passwordUpper);
-    SRP::SRP_ClientGenerateVerifier(&g_pSrpContext, usernameUpper, passwordUpper, salt, verifier);
+    Storm::Source::SSTR::SStrCopy(passwordUpper, pPassword, 0x100);
+    Storm::Source::SSTR::SStrUpper(passwordUpper);
+    SRP::SRP_ClientGenerateVerifier(&g_pSrpContext, usernameUpper, (uint32_t*)passwordUpper, salt, verifier);
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(usernameBuffer, pUsername, 0x7fffffff);
     BnSend::NET_SID_CLIENT_Send(0x52, (char*)salt, nUsernameLen + 0x41);
     return 1;
@@ -1497,7 +1491,7 @@ int __fastcall NET_SID_CLIENT_Send_0x55_AuthAccountChange(char * pUsername, char
     char srpClientPublicKeyA[32];
     char usernameBuffer[256];
     char oldPasswordUpper[256];
-    uint32_t newPasswordUpperBuf[64];
+    char newPasswordUpperBuf[256];
     char usernameUpper[256];
     g_bSIDFlag2 = 0;
     Storm::Source::SSystem::SMemZero(&g_srpCredentials, 0xbc);
@@ -1505,9 +1499,9 @@ int __fastcall NET_SID_CLIENT_Send_0x55_AuthAccountChange(char * pUsername, char
     Storm::Source::SSTR::SStrUpper(usernameUpper);
     Storm::Source::SSTR::SStrCopy(oldPasswordUpper, pOldPassword, 0x100);
     Storm::Source::SSTR::SStrUpper(oldPasswordUpper);
-    Storm::Source::SSTR::SStrCopy((char*)newPasswordUpperBuf, pNewPassword, 0x100);
-    Storm::Source::SSTR::SStrUpper((char*)newPasswordUpperBuf);
-    SRP::SRP_ClientGenerateVerifier(&g_pSrpContext, usernameUpper, newPasswordUpperBuf, (uint32_t*)&g_srpSaltVerifier, g_srpSaltVerifier.aVerifier);
+    Storm::Source::SSTR::SStrCopy(newPasswordUpperBuf, pNewPassword, 0x100);
+    Storm::Source::SSTR::SStrUpper(newPasswordUpperBuf);
+    SRP::SRP_ClientGenerateVerifier(&g_pSrpContext, usernameUpper, (uint32_t*)newPasswordUpperBuf, (uint32_t*)&g_srpSaltVerifier, g_srpSaltVerifier.aVerifier);
     SRP::SRP_GenerateAccountCredentials(&g_pSrpContext, g_srpCredentials.szUsername, usernameUpper, oldPasswordUpper);
     Storm::Source::SSystem::SMemCopy(srpClientPublicKeyA, g_srpCredentials.aClientPublicKey_A, 0x20);
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(usernameBuffer, pUsername, 0x100);
@@ -1624,7 +1618,7 @@ void __fastcall NET_SID_CLIENT_BigNumMultiplyAccumulate(int32_t nWords, uint32_t
       pSrcWord = srcPtr - 1;
       srcPtr--;
       nWords--;
-      product64 = _allmul(*pSrcWord, 0, multiplier, 0);
+      product64 = (int64_t)*pSrcWord * multiplier;
       carryIn = (uint32_t)(product64 + carryExpanded >> 0x20);
       pOutWord--;
       *pOutWord = (uint32_t)(product64 + carryExpanded);
@@ -2016,21 +2010,21 @@ void __stdcall NET_SID_CLIENT_SubstitutionBoxShuffle(int32_t pToken) {
           innerNibbleIdx = innerLoopCounter >> 3;
           innerBitShift = ((uint8_t)innerLoopCounter & 7) * '\x04';
           innerLoopCounter--;
-          accumulator = (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + ((*(uint32_t*)(pToken + (3 - innerNibbleIdx) * 4) & 0xf << innerBitShift) >> innerBitShift & 0xff ^ (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + (accumulator & 0xff)])];
+          accumulator = (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + ((uint8_t)((*(uint32_t*)(pToken + (3 - innerNibbleIdx) * 4) & 0xf << innerBitShift) >> innerBitShift) ^ (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + (accumulator & 0xff)])];
         } while ((int)innerLoopCounter > (int)nibbleIdx);
       }
 
       nibbleIdx--;
       for (innerNibbleIdx = nibbleIdx; (int)innerNibbleIdx >= 0; innerNibbleIdx--) {
         innerBitShift = ((uint8_t)innerNibbleIdx & 7) * '\x04';
-        accumulator = (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + ((*(uint32_t*)(pToken + (3 - (innerNibbleIdx >> 3)) * 4) & 0xf << innerBitShift) >> innerBitShift & 0xff ^ (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + (accumulator & 0xff)])];
+        accumulator = (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + ((uint8_t)((*(uint32_t*)(pToken + (3 - (innerNibbleIdx >> 3)) * 4) & 0xf << innerBitShift) >> innerBitShift) ^ (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + (accumulator & 0xff)])];
       }
 
       sboxLookupIdx = sboxTableOffset + (accumulator & 0xff);
       outWordIdx = 3 - wordIdx;
       sboxTableOffset += -0x10;
       *(uint32_t*)(pToken + outWordIdx * 4) = (gaNetSidSubstitutionBox[sboxLookupIdx] & 0xf) << bitShift | ~(0xf << bitShift) & *(uint32_t*)(pToken + outWordIdx * 4);
-    } while (-1 < sboxTableOffset);
+    } while (sboxTableOffset >= 0);
 }
 
 void __fastcall NET_SID_CLIENT_TransformCdKeyToken(int32_t nCdKeyValue, uint32_t * pOutPublic, uint32_t * pOutProduct, uint16_t * pOutHash) {
@@ -2981,7 +2975,7 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
       x1 &= 0xffff;
       if (x1) {
         if (tempMult1) {
-          tempMult2 = x1 * tempMult1 & 0xffff;
+          tempMult2 = (uint16_t)(x1 * tempMult1);
           x1 = x1 * tempMult1 >> 0x10;
           tempMult2 = (tempMult2 < x1) - x1 + tempMult2;
         } else {
@@ -2996,7 +2990,7 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
       x4 &= 0xffff;
       if (x4) {
         if (x1) {
-          tempMult3 = x4 * x1 & 0xffff;
+          tempMult3 = (uint16_t)(x4 * x1);
           x1 = x4 * x1 >> 0x10;
           tempMult3 = (tempMult3 < x1) - x1 + tempMult3;
         } else {
@@ -3010,7 +3004,7 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
       x1 = (x3 + pRoundKey[2] ^ tempMult2) & 0xffff;
       if (x1) {
         if (x4) {
-          tempResult = x1 * x4 & 0xffff;
+          tempResult = (uint16_t)(x1 * x4);
           x1 = x1 * x4 >> 0x10;
           roundMult1 = (tempResult < x1) - x1 + tempResult;
         } else {
@@ -3023,13 +3017,13 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
       x1 = (tempMult3 ^ tempMult1) + roundMult1 & 0xffff;
       if (x1) {
         x4 = (uint32_t)pRoundKey[5];
-        if (!x4) {
-          tempResult = 1 - x1;
-        } else {
+        if (x4) {
           x1 *= x4;
-          tempResult = x1 & 0xffff;
+          tempResult = (uint16_t)x1;
           x1 >>= 0x10;
           tempResult = (tempResult < x1) - x1 + tempResult;
+        } else {
+          tempResult = 1 - x1;
         }
       } else {
         x1 = (uint32_t)pRoundKey[5];
@@ -3044,10 +3038,10 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
       pSubkeys = pRoundKey + 6;
       if (!roundCounter) {
         finalKey0 = pRoundKey[6];
-        if (x1 & 0xffff) {
+        if ((uint16_t)x1) {
           if (finalKey0) {
-            x1 = (x1 & 0xffff) * (uint32_t)finalKey0;
-            finalMult0 = (uint16_t)((x1 & 0xffff) < x1 >> 0x10) - (short int)(x1 >> 0x10) + (short int)x1;
+            x1 = (uint16_t)x1 * (uint32_t)finalKey0;
+            finalMult0 = (uint16_t)((uint16_t)x1 < x1 >> 0x10) - (short int)(x1 >> 0x10) + (short int)x1;
           } else {
             finalMult0 = 1 - (short int)x1;
           }
@@ -3060,7 +3054,7 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
         pCiphertext[2] = pRoundKey[8] + (short int)x2;
         finalKey0 = pRoundKey[9];
         pOut3 = pCiphertext + 3;
-        if (!(x4 & 0xffff)) {
+        if (!(uint16_t)x4) {
           *pOut3 = 1 - finalKey0;
           return;
         }
@@ -3069,8 +3063,8 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
           return;
         }
 
-        x3 = (x4 & 0xffff) * (uint32_t)finalKey0;
-        *pOut3 = (uint16_t)((x3 & 0xffff) < x3 >> 0x10) - (short int)(x3 >> 0x10) + (short int)x3;
+        x3 = (uint16_t)x4 * (uint32_t)finalKey0;
+        *pOut3 = (uint16_t)((uint16_t)x3 < x3 >> 0x10) - (short int)(x3 >> 0x10) + (short int)x3;
         return;
       }
     } while (true);

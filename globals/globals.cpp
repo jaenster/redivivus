@@ -10,22 +10,20 @@
 #include "D2Client/GAME/Msg.h"
 #include "D2Client/Items/ItemMods.h"
 #include "D2Client/Renderer/Glide.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/CmdTbl.h"
 #include "D2Client/UI/EscMenu.h"
 #include "D2Client/UI/Hireables.h"
 #include "D2Client/UI/Panel.h"
-#include "D2Client/UI/QuestLog.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UI/Text.h"
 #include "D2Client/UI/npcmenu.h"
 #include "D2Client/UI/ui.h"
 #include "D2Client/UNIT/Monster.h"
-#include "D2Client/UNIT/Object.h"
 #include "D2Client/UNIT/UnitSnd.h"
 #include "D2Common/D2SeedStrc.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Logging/ProfCore.h"
+#include "D2Common/Merc.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
 #include "D2Win/D2WinAnimImage.h"
 #include "D2Win/Src/D2WinMain.h"
@@ -37122,64 +37120,15 @@ uint8_t gabyFxamClassOffset[16] = {
 
 eD2ApplicationMode geD2ApplicationMode = APPMODE_mode0; D2_GLOBAL_GUARD(geD2ApplicationMode, "geD2ApplicationMode");
 
-CRITICAL_SECTION gLogMessageQueueCS = {}; D2_GLOBAL_GUARD(gLogMessageQueueCS, "gLogMessageQueueCS");
-
-// also labelled: FileHandlesCriticalSection_Maybe
-_RTL_CRITICAL_SECTION gLogFileCS = {}; D2_GLOBAL_GUARD(gLogFileCS, "gLogFileCS");
-
-void * g_SMemHeapBuckets[256] = {}; D2_GLOBAL_GUARD(g_SMemHeapBuckets, "g_SMemHeapBuckets");
-
-CRITICAL_SECTION DebugMemoryCriticalSection[256] = {}; D2_GLOBAL_GUARD(DebugMemoryCriticalSection, "DebugMemoryCriticalSection");
-
-_RTL_CRITICAL_SECTION lpCriticalSection_00779068 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00779068, "lpCriticalSection_00779068");
-
-_RTL_CRITICAL_SECTION lpCriticalSection_00779080 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00779080, "lpCriticalSection_00779080");
-
-_RTL_CRITICAL_SECTION lpCriticalSection_00779214 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00779214, "lpCriticalSection_00779214");
-
-_RTL_CRITICAL_SECTION lpCriticalSection_0077930c = {}; D2_GLOBAL_GUARD(lpCriticalSection_0077930c, "lpCriticalSection_0077930c");
-
-uint16_t pBetaRealmNames[7][256] = {}; D2_GLOBAL_GUARD(pBetaRealmNames, "pBetaRealmNames");
-
 int gaFormList30InitialItems[4] = {}; D2_GLOBAL_GUARD(gaFormList30InitialItems, "gaFormList30InitialItems");
 
 int gaFormList32InitialItems[4] = {}; D2_GLOBAL_GUARD(gaFormList32InitialItems, "gaFormList32InitialItems");
 
 int32_t gaChatTextBoxFontParams[2] = {}; D2_GLOBAL_GUARD(gaChatTextBoxFontParams, "gaChatTextBoxFontParams");
 
-TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0> gQServerGameState; D2_GLOBAL_GUARD(gQServerGameState, "gQServerGameState");
-
-uint16_t gU16ImmunityStringBuffer2[256] = {}; D2_GLOBAL_GUARD(gU16ImmunityStringBuffer2, "gU16ImmunityStringBuffer2");
-
-uint16_t UNICODE_007a2c80[80] = {}; D2_GLOBAL_GUARD(UNICODE_007a2c80, "UNICODE_007a2c80");
-
-uint16_t gU16ImmunityStringBuffer1[256] = {}; D2_GLOBAL_GUARD(gU16ImmunityStringBuffer1, "gU16ImmunityStringBuffer1");
-
-uint16_t gnMonsterHealthBarValue[256] = {}; D2_GLOBAL_GUARD(gnMonsterHealthBarValue, "gnMonsterHealthBarValue");
-
-uint16_t gwKeyNameBuffer[4] = {}; D2_GLOBAL_GUARD(gwKeyNameBuffer, "gwKeyNameBuffer");
-
 D2SeedStrc gAncientsCloudSeed = D2SeedStrc(); D2_GLOBAL_GUARD(gAncientsCloudSeed, "gAncientsCloudSeed");
 
-uint16_t gwcImeCompositionBuffer[32] = {}; D2_GLOBAL_GUARD(gwcImeCompositionBuffer, "gwcImeCompositionBuffer");
-
-// also labelled: ChatValue
-uint16_t gwszChatInputText[257] = {}; D2_GLOBAL_GUARD(gwszChatInputText, "gwszChatInputText");
-
-uint8_t gaChatHistoryBuffer[4112] = {}; D2_GLOBAL_GUARD(gaChatHistoryBuffer, "gaChatHistoryBuffer");
-
-// also labelled: gpIMECompositionString
-uint16_t gwcIMECompositionString[32] = {}; D2_GLOBAL_GUARD(gwcIMECompositionString, "gwcIMECompositionString");
-
-uint8_t gpInvRecipeScrollImage[8192] = {}; D2_GLOBAL_GUARD(gpInvRecipeScrollImage, "gpInvRecipeScrollImage");
-
-D2QuestLogStrc gQuestLog = {}; D2_GLOBAL_GUARD(gQuestLog, "gQuestLog");
-
 uint16_t gnMonsterUniqueNameBuffer[2] = {}; D2_GLOBAL_GUARD(gnMonsterUniqueNameBuffer, "gnMonsterUniqueNameBuffer");
-
-uint16_t gNpcMenuConfirmDialogStrings[40] = {}; D2_GLOBAL_GUARD(gNpcMenuConfirmDialogStrings, "gNpcMenuConfirmDialogStrings");
-
-uint16_t gwszTradePartnerName[16] = {}; D2_GLOBAL_GUARD(gwszTradePartnerName, "gwszTradePartnerName");
 
 uint8_t gaDirectDrawDitherPaletteRemap[1024] = {}; D2_GLOBAL_GUARD(gaDirectDrawDitherPaletteRemap, "gaDirectDrawDitherPaletteRemap");
 
@@ -37193,31 +37142,11 @@ uint8_t gpLineBufferTileArray[32][32][32] = {}; D2_GLOBAL_GUARD(gpLineBufferTile
 // also labelled: gPaletteBlendLookupTable
 uint8_t gaPaletteColorLUT[49][256] = {}; D2_GLOBAL_GUARD(gaPaletteColorLUT, "gaPaletteColorLUT");
 
-D2TooltipTextStrc DisplayedTooltip = {}; D2_GLOBAL_GUARD(DisplayedTooltip, "DisplayedTooltip");
-
-uint16_t gnFontTableCharWidthCache[2] = {}; D2_GLOBAL_GUARD(gnFontTableCharWidthCache, "gnFontTableCharWidthCache");
-
-uint16_t gwFontHeightDefault[2] = {}; D2_GLOBAL_GUARD(gwFontHeightDefault, "gwFontHeightDefault");
-
 CRITICAL_SECTION gcsErrorHandlerList = {}; D2_GLOBAL_GUARD(gcsErrorHandlerList, "gcsErrorHandlerList");
-
-_RTL_CRITICAL_SECTION lpCriticalSection_00881860 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00881860, "lpCriticalSection_00881860");
-
-_RTL_CRITICAL_SECTION lpCriticalSection_00881894 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00881894, "lpCriticalSection_00881894");
-
-_RTL_CRITICAL_SECTION lpCriticalSection_00881f64 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00881f64, "lpCriticalSection_00881f64");
-
-CRITICAL_SECTION aTaskQueueCriticalSections[32] = {}; D2_GLOBAL_GUARD(aTaskQueueCriticalSections, "aTaskQueueCriticalSections");
-
-_RTL_CRITICAL_SECTION lpCriticalSection_0088caa8 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0088caa8, "lpCriticalSection_0088caa8");
-
-TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0> gCelCmpCacheHandler; D2_GLOBAL_GUARD(gCelCmpCacheHandler, "gCelCmpCacheHandler");
 
 D2DataTableTxtStrc sgtDataTable = {}; D2_GLOBAL_GUARD(sgtDataTable, "sgtDataTable");
 
 unsigned long long gpItemTypeTableContext = 0; D2_GLOBAL_GUARD(gpItemTypeTableContext, "gpItemTypeTableContext");
-
-_RTL_CRITICAL_SECTION lpCriticalSection_0096d610 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0096d610, "lpCriticalSection_0096d610");
 
 uint16_t g_Palette16Bit[256] = {}; D2_GLOBAL_GUARD(g_Palette16Bit, "g_Palette16Bit");
 
@@ -38055,15 +37984,11 @@ char * gpszPatchD2MpqName = s_patch_d2_mpq_006dc728; D2_GLOBAL_GUARD(gpszPatchD2
 char * gpszD2ExpMpqName = s_d2exp_mpq_006cd3a0; D2_GLOBAL_GUARD(gpszD2ExpMpqName, "gpszD2ExpMpqName");
 uint16_t gaPossessiveNameData = 0x2073; D2_GLOBAL_GUARD(gaPossessiveNameData, "gaPossessiveNameData");
 char gDebugSpaceString = ' '; D2_GLOBAL_GUARD(gDebugSpaceString, "gDebugSpaceString");
-char * gpszDiabloIICaption = s_Diablo_II_006cc8b8; D2_GLOBAL_GUARD(gpszDiabloIICaption, "gpszDiabloIICaption");
 uint32_t gaScreenResolutionTableIndexArray = 0x40; D2_GLOBAL_GUARD(gaScreenResolutionTableIndexArray, "gaScreenResolutionTableIndexArray");
 uint32_t gaScreenResolutionModeArray = 0x1; D2_GLOBAL_GUARD(gaScreenResolutionModeArray, "gaScreenResolutionModeArray");
 int ScreenSizeX = 0x280; D2_GLOBAL_GUARD(ScreenSizeX, "ScreenSizeX");
 int ScreenSizeY = 0x1e0; D2_GLOBAL_GUARD(ScreenSizeY, "ScreenSizeY");
 uint32_t gnCursorInvTypeAutoOpenA = 0x5; D2_GLOBAL_GUARD(gnCursorInvTypeAutoOpenA, "gnCursorInvTypeAutoOpenA");
-// also labelled: gnGFXUnknownA
-char * gpszDiabloIIClassNameSource = s_Diablo_II_006cc8b8; D2_GLOBAL_GUARD(gpszDiabloIIClassNameSource, "gpszDiabloIIClassNameSource");
-int32_t Frames_PerSecond = 0x19; D2_GLOBAL_GUARD(Frames_PerSecond, "Frames_PerSecond");
 D2DataTableTxtStrc * sgptDataTable = (D2DataTableTxtStrc *)&sgtDataTable; D2_GLOBAL_GUARD(sgptDataTable, "sgptDataTable");
 char * gaLanguageNames_0074430c_11[15] = {}; D2_GLOBAL_GUARD(gaLanguageNames_0074430c_11, "gaLanguageNames_0074430c_11");
 uint32_t DWORD_007467b0 = 0x5070000; D2_GLOBAL_GUARD(DWORD_007467b0, "DWORD_007467b0");
@@ -38079,7 +38004,6 @@ HANDLE MCPThread = 0; D2_GLOBAL_GUARD(MCPThread, "MCPThread");
 pfnMCPGameListEntry g_pfnMCPGameListCallback = (pfnMCPGameListEntry)0; D2_GLOBAL_GUARD(g_pfnMCPGameListCallback, "g_pfnMCPGameListCallback");
 pfnVoidNoArgCallback g_pfnMCPGameListCompleteCallback = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(g_pfnMCPGameListCompleteCallback, "g_pfnMCPGameListCompleteCallback");
 pfnMCPMessage g_pfnMCPMessageCallback = (pfnMCPMessage)0; D2_GLOBAL_GUARD(g_pfnMCPMessageCallback, "g_pfnMCPMessageCallback");
-LPCSTR gpszCmdLineCaptionStr = 0; D2_GLOBAL_GUARD(gpszCmdLineCaptionStr, "gpszCmdLineCaptionStr");
 int WindowSizeY = 0; D2_GLOBAL_GUARD(WindowSizeY, "WindowSizeY");
 int WindowSizeX = 0; D2_GLOBAL_GUARD(WindowSizeX, "WindowSizeX");
 uint32_t gaSpriteArcaneStarYOffset = 0; D2_GLOBAL_GUARD(gaSpriteArcaneStarYOffset, "gaSpriteArcaneStarYOffset");
@@ -38088,8 +38012,6 @@ uint32_t gnEngineMode = 0; D2_GLOBAL_GUARD(gnEngineMode, "gnEngineMode");
 uint32_t gnCurrentEngineFlags = 0; D2_GLOBAL_GUARD(gnCurrentEngineFlags, "gnCurrentEngineFlags");
 void * gpSoundLRUListHead = 0; D2_GLOBAL_GUARD(gpSoundLRUListHead, "gpSoundLRUListHead");
 uint8_t gbInvImageLoadToggle = 0; D2_GLOBAL_GUARD(gbInvImageLoadToggle, "gbInvImageLoadToggle");
-uint32_t gnTextBoxExclusionX = 0; D2_GLOBAL_GUARD(gnTextBoxExclusionX, "gnTextBoxExclusionX");
-int gnUICtrlConfigScrollPosition = 0; D2_GLOBAL_GUARD(gnUICtrlConfigScrollPosition, "gnUICtrlConfigScrollPosition");
 uint32_t gdwSpellSelThrottleTick = 0; D2_GLOBAL_GUARD(gdwSpellSelThrottleTick, "gdwSpellSelThrottleTick");
 uint32_t gnGfxOverlayMode = 0; D2_GLOBAL_GUARD(gnGfxOverlayMode, "gnGfxOverlayMode");
 D2RendererCoreStrc * RENDERER_SelectedRendererCore = 0; D2_GLOBAL_GUARD(RENDERER_SelectedRendererCore, "RENDERER_SelectedRendererCore");
@@ -38102,9 +38024,6 @@ D2GfxHelperStrc * D2GfxRendereInitFunctionsStrc = 0; D2_GLOBAL_GUARD(D2GfxRender
 BYTE * * gpPaletteTable = 0; D2_GLOBAL_GUARD(gpPaletteTable, "gpPaletteTable");
 // also labelled: ppvBits_007c9154
 BYTE * gpRenderBackBufferBits = 0; D2_GLOBAL_GUARD(gpRenderBackBufferBits, "gpRenderBackBufferBits");
-LPCSTR gpszWindowClassName = 0; D2_GLOBAL_GUARD(gpszWindowClassName, "gpszWindowClassName");
-LPCSTR szWindowClassName = 0; D2_GLOBAL_GUARD(szWindowClassName, "szWindowClassName");
-LPCSTR gpszWindowTitle = 0; D2_GLOBAL_GUARD(gpszWindowTitle, "gpszWindowTitle");
 int gnTileInnerClipZMin = 0; D2_GLOBAL_GUARD(gnTileInnerClipZMin, "gnTileInnerClipZMin");
 int gnTileClipXMin = 0; D2_GLOBAL_GUARD(gnTileClipXMin, "gnTileClipXMin");
 int gnTileInnerXMax = 0; D2_GLOBAL_GUARD(gnTileInnerXMax, "gnTileInnerXMax");
@@ -38168,8 +38087,6 @@ uint32_t gbFaultHandlerListInitialized = 0; D2_GLOBAL_GUARD(gbFaultHandlerListIn
 pfnFaultError g_pfnFaultErrorCallback = (pfnFaultError)0; D2_GLOBAL_GUARD(g_pfnFaultErrorCallback, "g_pfnFaultErrorCallback");
 D2Srp * g_pSrpContext = 0; D2_GLOBAL_GUARD(g_pSrpContext, "g_pSrpContext");
 uint32_t gnQServerListenSocket = 0; D2_GLOBAL_GUARD(gnQServerListenSocket, "gnQServerListenSocket");
-uint32_t Frames_TimeBetweenFrames = 0; D2_GLOBAL_GUARD(Frames_TimeBetweenFrames, "Frames_TimeBetweenFrames");
-uint32_t gnSeedCounter = 0; D2_GLOBAL_GUARD(gnSeedCounter, "gnSeedCounter");
 unsigned int gpfnProfCoreInitCallback = {}; D2_GLOBAL_GUARD(gpfnProfCoreInitCallback, "gpfnProfCoreInitCallback");
 unsigned int UINT_0096d6a8 = {}; D2_GLOBAL_GUARD(UINT_0096d6a8, "UINT_0096d6a8");
 IDirectDrawSurface7 * g_pD3DSurfaceBackbuffer = 0; D2_GLOBAL_GUARD(g_pD3DSurfaceBackbuffer, "g_pD3DSurfaceBackbuffer");
@@ -38537,15 +38454,15 @@ void* vftable_meta_ptr = (void*)0x00700a14; D2_GLOBAL_GUARD(vftable_meta_ptr, "F
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
 // =============================================================================
 // Uninitialized data (BSS)
 // =============================================================================
 
-uint8_t RTTI_Type_Descriptor; D2_GLOBAL_GUARD_BSS(RTTI_Type_Descriptor, "Storm::SFile::RTTI_Type_Descriptor");
+uint8_t RTTI_Type_Descriptor; D2_GLOBAL_GUARD_BSS(RTTI_Type_Descriptor, "Storm::Source::SFile::RTTI_Type_Descriptor");
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

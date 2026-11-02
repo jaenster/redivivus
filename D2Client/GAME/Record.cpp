@@ -109,15 +109,8 @@ void __fastcall HandleWinProcMsg(uint32_t uMsg, WPARAM wParam, LPARAM lParam) {
 }
 
 void __stdcall SaveGameRecordToFile() {
-    // Frame slots -12..-4 are ONE object: &dwHeaderSize is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint32_t dwHeaderSize;
-      DWORD dwBytesWritten;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     D2GameRecordFileHeaderStrc sHeader;
+    DWORD dwBytesWritten;
     HANDLE hFile = CreateFileA("Record.dr1", 0x40000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 2, 0x80, (HANDLE)0x0);
     int nBlockCount = 1;
     D2GameRecordStrc* pBlock = &gsGameRecordContext;
@@ -135,12 +128,12 @@ void __stdcall SaveGameRecordToFile() {
     sHeader.nLastBlockEntries = pBlock->nEntrySize - 500 + sHeader.nBlockCount * 500;
     sHeader.nStepCount = Game::GetEntryIndex();
     sHeader.dwSeed = D2Common::DUNGEON::Dungeon::GetInitSeedFromAct(sgpDrlgAct);
-    __frame0.dwHeaderSize = 0x14;
-    WriteFile(hFile, (LPCVOID)&__frame0.dwHeaderSize, 4, &__frame0.dwBytesWritten, (LPOVERLAPPED)0x0);
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)&sHeader, 0x14, &__frame0.dwBytesWritten, (LPOVERLAPPED)0x0);
+    uint32_t dwHeaderSize = 0x14;
+    WriteFile(hFile, (LPCVOID)&dwHeaderSize, 4, &dwBytesWritten, (LPOVERLAPPED)0x0);
+    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)&sHeader, 0x14, &dwBytesWritten, (LPOVERLAPPED)0x0);
     pBlock = &gsGameRecordContext;
     do {
-      /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)pBlock, pBlock->nEntrySize << 4, &__frame0.dwBytesWritten, (LPOVERLAPPED)0x0);
+      /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)pBlock, pBlock->nEntrySize << 4, &dwBytesWritten, (LPOVERLAPPED)0x0);
       pBlock = pBlock->pNext;
     } while (pBlock);
 
@@ -150,17 +143,13 @@ void __stdcall SaveGameRecordToFile() {
 // Loads a game recording from "Record.dr1": opens the file, reads the header (size + 0x14-byte context block), validates the magic word (must equal 0x00000001), then reads gnGameRecordCount blocks of up to 500 entries each into a linked list of D2GameRecordStrc buffers allocated from Fog heap. On magic mismatch, clears IsRecording/IsPlaybackActive and closes the file.
 // @sourcefile .\GAME\Record.cpp
 void __stdcall LoadGameRecordFromFile() {
-    // Frame slots -12..-4 are ONE object: &dwHeaderSize is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint32_t dwHeaderSize;
-      DWORD dwBytesRead;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    D2GameRecordStrc* pBlock;
+    int nBlockIndex;
+    uint32_t dwHeaderSize;
+    DWORD dwBytesRead;
     HANDLE hFile = CreateFileA("Record.dr1", 0x80000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x80, (HANDLE)0x0);
-    /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, &__frame0.dwHeaderSize, 4, &__frame0.dwBytesRead, (LPOVERLAPPED)0x0);
-    /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, &lpBuffer_007a2768, 0x14, &__frame0.dwBytesRead, (LPOVERLAPPED)0x0);
+    /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, &dwHeaderSize, 4, &dwBytesRead, (LPOVERLAPPED)0x0);
+    /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, &lpBuffer_007a2768, 0x14, &dwBytesRead, (LPOVERLAPPED)0x0);
     if (lpBuffer_007a2768.nVersion != 1) {
       /* HANDLE hObject for CloseHandle */ gbIsRecording = 0;
       gbIsPlaybackActive = 0;
@@ -168,31 +157,26 @@ void __stdcall LoadGameRecordFromFile() {
       return;
     }
 
-    int nBlockIndex = 0;
-    if (0 < lpBuffer_007a2768.nBlockCount) {
-      D2GameRecordStrc* pBlock;
-      do {
-        if (nBlockIndex) {
-          pBlock = D2_NEW_AT(D2GameRecordStrc, ".\\GAME\\Record.cpp", 0x35);
-          pBlock->nEntrySize = 0;
-          pBlock->nPlaybackIndex = 0;
-          gpCurrentGameRecord->pNext = pBlock;
-          pBlock->pNext = 0;
-          gpCurrentGameRecord = pBlock;
+    for (nBlockIndex = 0; nBlockIndex < lpBuffer_007a2768.nBlockCount; nBlockIndex++) {
+      if (nBlockIndex) {
+        pBlock = D2_NEW_AT(D2GameRecordStrc, ".\\GAME\\Record.cpp", 0x35);
+        pBlock->nEntrySize = 0;
+        pBlock->nPlaybackIndex = 0;
+        gpCurrentGameRecord->pNext = pBlock;
+        pBlock->pNext = 0;
+        gpCurrentGameRecord = pBlock;
+      }
+      if (lpBuffer_007a2768.nLastBlockEntries <= 0x1f4) {
+        gsGameRecordContext.nEntrySize = lpBuffer_007a2768.nLastBlockEntries;
+        if (nBlockIndex + 1 != lpBuffer_007a2768.nBlockCount) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x100);
+          exit(-1);
         }
-        if (lpBuffer_007a2768.nLastBlockEntries <= 0x1f4) {
-          gsGameRecordContext.nEntrySize = lpBuffer_007a2768.nLastBlockEntries;
-          if (nBlockIndex + 1 != lpBuffer_007a2768.nBlockCount) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x100);
-            exit(-1);
-          }
-        } else {
-          gsGameRecordContext.nEntrySize = 500;
-        }
+      } else {
+        gsGameRecordContext.nEntrySize = 500;
+      }
 
-        /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, gpCurrentGameRecord, gsGameRecordContext.nEntrySize << 4, &__frame0.dwBytesRead, (LPOVERLAPPED)0x0);
-        nBlockIndex++;
-      } while (nBlockIndex < lpBuffer_007a2768.nBlockCount);
+      /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, gpCurrentGameRecord, gsGameRecordContext.nEntrySize << 4, &dwBytesRead, (LPOVERLAPPED)0x0);
     }
 
     /* HANDLE hObject for CloseHandle */ gpCurrentGameRecord = &gsGameRecordContext;

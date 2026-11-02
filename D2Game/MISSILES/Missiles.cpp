@@ -5,7 +5,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GSPacketSrv0x73.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Missile.h"
@@ -29,6 +28,7 @@
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Stats/StatsEx.h"
@@ -100,11 +100,11 @@ void __fastcall ClearMissileUnitData(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GAME::Event::EVENT_FreeAllTimersForUnit(pGame, pUnit);
 }
 
-static void __stdcall MISSILES_EvalDamageAndSetStats(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2, int32_t nParam) {
+static void __stdcall MISSILES_EvalDamageAndSetStats(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2, int32_t nLevel) {
     D2MissileDamageDataStrc sDamageData;
     PLAYER::Player::EQUIPMENT_RecalcDualWieldWeaponStats(pUnit1, 0);
-    D2Common::Units::Missile::EvaluateMissileFormula(&sDamageData, pUnit1, pUnit, pUnit2, nParam);
-    D2Common::Units::Missile::SetDamageStats(pUnit1, pUnit2, &sDamageData, nParam);
+    D2Common::Units::Missile::EvaluateMissileFormula(&sDamageData, pUnit1, pUnit, pUnit2, nLevel);
+    D2Common::Units::Missile::SetDamageStats(pUnit1, pUnit2, &sDamageData, nLevel);
     PLAYER::Player::WEAPON_ApplyEquippedWeaponStats(pUnit1, 0);
 }
 
@@ -279,7 +279,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
       }
     }
 
-    D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_MISSILE, pArgs->nMissileTxtNo, nPosX, nPosY, pGame, pSpawnRoom, 1, (uint32_t)(uint8_t)pMissileTxt->CollideType, nullptr);
+    D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_MISSILE, pArgs->nMissileTxtNo, nPosX, nPosY, pGame, pSpawnRoom, 1, (uint32_t)pMissileTxt->CollideType, nullptr);
     if (!pUnit) {
       return nullptr;
     }
@@ -300,10 +300,10 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
 
     D2Common::Units::Missile::SetTotalFrames(pUnit, nPosX);
     D2Common::Units::Missile::SetCurrentFrame(pUnit, nPosX);
-    if (!(pArgs->nFlags & 0x800U)) {
-      dwFlags = (uint32_t)pMissileTxt->Activate;
-    } else {
+    if (pArgs->nFlags & 0x800U) {
       dwFlags = pArgs->nActivateFrame;
+    } else {
+      dwFlags = (uint32_t)pMissileTxt->Activate;
     }
 
     D2Common::Units::Missile::SetActivateFrame(pUnit, nPosX - dwFlags);
@@ -325,7 +325,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
     }
 
     D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, nOwnerX);
-    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, gaMissileSrvDoFuncTable[(uint8_t)pMissileTxt->CollideType].nFlags);
+    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, gaMissileSrvDoFuncTable[pMissileTxt->CollideType].nFlags);
     if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)gadwBitMasks[4]) {
       pUnit->eUnitFlags |= UNITFLAG_CANBEATTACKED;
     }
@@ -370,14 +370,13 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
       D2Common::Units::Missile::SetFlags(pUnit, dwFlags | 2);
     }
 
-    Monsters::MONSTER_DispatchUModOnSkill(pGame, (int*)pArgs->pOwner, (int32_t)pUnit);
+    Monsters::MONSTER_DispatchUModOnSkill(pGame, pArgs->pOwner, pUnit);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_damage_framerate, pMissileTxt->DamageRate, 0);
     return pUnit;
 }
 
 // Sends packet 0x73 (MissileData) to the given client for a missile unit, but only if the missile's txt-row has the network-visible flag (0x20) set. Packs classId, current position, optional target coords, animation frame, owner type/GUID, missile level, and pierce index into the packet buffer.
 void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t param_1) {
-    D2GSPacketSrv0x73 sPacket;
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
       return;
     }
@@ -392,6 +391,7 @@ void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA *
       return;
     }
 
+    D2GSPacketSrv0x73 sPacket = {0};
     *(uint8_t*)((char*)&sPacket.nUnused + 3) = 0;
     sPacket.nMissileClassId = 0;
     sPacket.nMissileX = 0;

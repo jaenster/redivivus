@@ -2,8 +2,8 @@
 
 #include "Bnclient/SHA.h"
 #include "Storm/D2Srp.h"
-#include "Storm/SMem.h"
 #include "Storm/Source/SBig.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
 
@@ -496,7 +496,7 @@ int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int3
     }
 
     uint32_t nHalfLen = (uint32_t)nLength >> 1;
-    void* pTmpBuf = Storm::SMem::SMemAlloc(nHalfLen, ".\\SHA.cpp", 200, 0);
+    void* pTmpBuf = Storm::Source::SMem::SMemAlloc(nHalfLen, ".\\SHA.cpp", 200, 0);
     uint32_t nByteIdx = 0;
     if (pTmpBuf) {
       if (nHalfLen > 0) {
@@ -536,7 +536,7 @@ int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int3
         pDstByte += 2;
       } while (i < 0x14);
 
-      Storm::SMem::SMemFree(pTmpBuf, ".\\SHA.cpp", 0xef, 0);
+      Storm::Source::SMem::SMemFree(pTmpBuf, ".\\SHA.cpp", 0xef, 0);
       nByteIdx = (uint32_t)pHashOut;
     }
 

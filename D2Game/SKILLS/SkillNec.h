@@ -93,7 +93,6 @@ uint32_t __fastcall SKILLNEC_ValidateCorpseTarget(::SGAMEDATA * pGame, struct D2
 BOOL __fastcall Skills_SrvStFunc_18_AlwaysAllow(::SGAMEDATA * pGame, struct D2UnitStrc * pAttacker, eD2Skills eD2Skill, int nSkillLvl);
 BOOL __fastcall Skills_SrvStFunc_19_IsTargetOutsideTown(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvStFunc_20_IsGroundItemForIronGolem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-BOOL CorpseConsumedCheck(struct D2UnitStrc * pUnit);
 BOOL __fastcall Skills_SrvStFunc_21_IsRevivableCorpse(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 void __fastcall SKILLNEC_OnCurseExpire(struct D2UnitStrc * pUnit, eD2States eState, int32_t dwParam);
 uint32_t __fastcall SKILLNEC_IsReviveOrRaiseSkeleton(eD2Skills eSkill);
@@ -124,7 +123,7 @@ void __fastcall SKILLNEC_DispatchSummonMastery(struct D2UnitStrc * pUnit, int * 
 // Server-side: applies a summon skill's full buff package onto a newly created pet/summon. Reads the skill's passivestat/passivecalc (5 entries) and aurastat/aurastatcalc (6 entries) from SkillsTxt, computing each value via D2GetSkillCalc and adding it to the summon's stat lists; for stats with itemevents it registers aura unit-events (D2SetAuraEvent). Sets the aurastate, scales the summon's max/current HP by the skill's calc[0] percentage, grants sumskill skills (auto-selecting flagged ones), wires auraevent callbacks, applies sumumod monster mods and sumoverlay. Finally calls SKILLASS_EquipSummonItems. pUnit=summoner, pSummonStatList/pSummon=the summon, eSkill=summon skill, nParam1=skill level, nParam2=item level (auto-derived from summoner level if 0). Returns 1 on success, 0 if skill is Attack or stat-list alloc fails.
 uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pSummonStatList, eD2Skills eSkill, int32_t nParam1, int32_t nParam2);
 // Sets the combat stats (level, AC, to-hit) on a corpse unit being revived by the Necromancer's Revive skill. If nLevel < 1, derives the minion level as 75% of the caster's level plus nParam2 (clamped to at least 1). Looks up the D2MonLvlTxt row for the final level, then adds the difficulty- and ladder-adjusted AC and TH values. Returns 1 on success, 0 if MonLvl data is out of range.
-void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCorpseUnit, int32_t nLevel, int32_t nParam2);
+void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCorpseUnit, int32_t nLevel, int32_t nLevelOffset);
 // Server-side cast handler for the Necromancer Revive skill (SrvDoFunc 031). Finds the targeted corpse, verifies it is consumable, applies blood cost, determines the revived monster class via SKILLS_GetSummonMonsterClassId, frees the corpse unit, spawns a new summon at the corpse position, then applies mastery/buffs/passive resistances and registers it in the node table. Returns TRUE on success.
 BOOL __fastcall Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvDoFunc_032_ApplyDirectDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
@@ -161,6 +160,6 @@ BOOL __fastcall ITEMEVENT_NecroReviveLeech(::SGAMEDATA * pGame, uint32_t nUnitEv
 // Item-event callback that applies the Slows Target item modifier to pTarget. Reads UNITSTAT_item_slow from pUnit's gear, caps it at 50% for players/slow-immune monsters or 90% for normal monsters, then applies STATE_slowed via SetStateWithExpiryTime (750-frame duration) and additionally slows UNITSTAT_attackrate and UNITSTAT_other_animrate by the same amount, triggering an animation-speed update.
 BOOL __fastcall ITEMEVENT_ItemSlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl);
 int32_t __fastcall BloodGolemLifeLeech(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nParam);
-// 6 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
 } // namespace D2Game::SKILLS::SkillNec

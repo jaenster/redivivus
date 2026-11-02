@@ -3,8 +3,8 @@
 #include "D2CMP/DUNGEON/Dungeon.h"
 #include "D2CMP/SRC/FindTiles.h"
 #include "D2CMP/SRC/LRUCache.h"
+#include "D2CMP/SRC/SubTile.h"
 #include "D2CMP/SRC/TileProjects.h"
-#include "D2Client/D2GfxHelperStrc.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
@@ -68,7 +68,7 @@ void __stdcall TILEPROJECT_FreeSlot(int32_t nParam1, int32_t nParam2) {
     *(uint32_t*)(nParam1 + nSlotIndex * 4) = 0;
 }
 
-uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int32_t nParam2, int32_t nParam3, int32_t nParam4, int * pnFoundTiles, uint32_t nParam) {
+uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int32_t nTileType, int32_t nTileSubType, int32_t nParam4, int * pnFoundTiles, uint32_t nParam) {
     int32_t nTotalFound;
     if (!ppProjects) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d);
@@ -83,7 +83,7 @@ uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int
         break;
       }
 
-      nTotalFound = SRC::FindTiles::FINDTILE_Lookup((int**)ppProjects[iProjectIdx], (int32_t)(pnFoundTiles + nFoundInProjectAccum), nRemaining, nParam2, nParam3, nParam4);
+      nTotalFound = SRC::FindTiles::FINDTILE_Lookup((int**)ppProjects[iProjectIdx], (int32_t)(pnFoundTiles + nFoundInProjectAccum), nRemaining, nTileType, nTileSubType, nParam4);
       nRemaining -= nTotalFound;
       nFoundInProjectAccum += nTotalFound;
       if (!nRemaining) {
@@ -166,14 +166,14 @@ uint32_t __stdcall TILEPROJECT_GetTileOrientationIndex(uint32_t * pnOrientationI
     return *pnOrientationIndex;
 }
 
-int __stdcall TILEPROJECT_GetRoofHeightIndex(int32_t nParam) {
-    if (!nParam) {
+int __stdcall TILEPROJECT_GetRoofHeightIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {
+    if (!pTileLibraryEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x80);
       exit(-1);
     }
 
-    return *(int*)(nParam + 8);
-    return *(int*)(nParam + 8);
+    return pTileLibraryEntry->nHeight;
+    return pTileLibraryEntry->nHeight;
 }
 
 BYTE * __stdcall TILE_GetTileFlags(D2TileLibraryEntryStrc * pTileLibraryEntry) {

@@ -4,7 +4,6 @@
 #include "D2Client/Archive.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Item.h"
@@ -25,6 +24,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
@@ -473,14 +473,15 @@ static BOOL __stdcall HasBonusStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
 
     DVar1 = D2_SEED_NEXT(pItem->sSeed);
     pItem->sSeed = DVar1;
-    if ((int)(DVar1.nSeedLow % 100) >= nItemBonusDamage) {
-      return 0;
+    if ((int)(DVar1.nSeedLow % 100) < nItemBonusDamage) {
+      return 1;
     }
 
-    return 1;
+    return 0;
 }
 
-// Accumulates all elemental damage stats from pUnit into pMissileDamageData, left-shifted by nShift. Reads fire/lightning/magic/cold/poison/life-drain/mana-drain/burning min+max stats and their durations from pUnit via GetStatUnsignedValue, then adds each (shifted) value to the corresponding field of D2MissileDamageDataStrc. Poison length uses skill_poison_override_length if present, otherwise poisonlength+poison_count. Custom register calling convention: pMissileDamageData=ESI, pUnit=EDI, nShift=BL.
+// Accumulates all elemental damage stats from pUnit into pMissileDamageData, left-shifted by nShift. Reads fire/lightning/magic/cold/poison/life-drain/mana-drain/burning min+max stats and their durations from pUnit via GetStatUnsignedValue, then adds each (shifted) value to the corresponding field of D2MissileDamageDataStrc. Poison length uses skill_poison_override_length if present, otherwise poisonlength+poison_count. Custom register calling convention: pMissileDamageData=ESI, pUnit=EDI, nShift=EBX.
+// nShift is passed in EBX and copied to ECX before each SHL; only CL is used.
 static void AddStatsToDamage(D2MissileDamageDataStrc * pMissileDamageData, D2UnitStrc * pUnit, int32_t nShift) {
     int nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_firemindam, 0);
     uint8_t nShiftTmp = (uint8_t)nShift;
@@ -614,8 +615,9 @@ static int32_t CalculateMasteryBonus(D2UnitStrc * pUnit, eD2ElementalDamageTypeD
 // Writes all damage stats from a D2MissileDamageDataStrc onto a missile unit via STATLIST_SetUnitStat. Covers physical, fire, lightning, magic, cold, poison, life/mana/stamina drain, stun, burning, demon/undead damage%, target-AC, and bypass flags. Also copies damage-vs-montype bonus layers from the caster (pUnit) to the missile if pUnit is non-null.
 void __stdcall SetDamageStats(D2UnitStrc * pUnit, D2UnitStrc * pMissile, D2MissileDamageDataStrc * pMissileDamageData, int32_t nLevel) {
     uint32_t dwMissileFlags;
+    int iBonusLayer;
     D2StatStrc awBonusLayers[128];
-    if (!(pMissile && pMissile->eUnitType == UNIT_MISSILE)) {
+    if ((pMissile ? pMissile->eUnitType : UNIT_COUNT) != UNIT_MISSILE) {
       return;
     }
     if (pMissile->pUnitData.pUnitDataMissile) {
@@ -681,15 +683,9 @@ void __stdcall SetDamageStats(D2UnitStrc * pUnit, D2UnitStrc * pMissile, D2Missi
     }
 
     int32_t nBonusCount = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0xb4, awBonusLayers, 0x80);
-    int iBonusLayer = 0;
-    if (nBonusCount <= 0) {
-      return;
+    for (iBonusLayer = 0; iBonusLayer < nBonusCount; iBonusLayer++) {
+      Stats::StatsEx::STATLIST_SetUnitStat(pMissile, UNITSTAT_damage_vs_montype, awBonusLayers[iBonusLayer].nStatValue, awBonusLayers[iBonusLayer].wSubIndex);
     }
-
-    do {
-      Stats::StatsEx::STATLIST_SetUnitStat(pMissile, UNITSTAT_damage_vs_montype, awBonusLayers[iBonusLayer].nStatValue, (uint32_t)(uint16_t)awBonusLayers[iBonusLayer].wSubIndex);
-      iBonusLayer++;
-    } while (iBonusLayer < nBonusCount);
 }
 
 // Returns the minimum physical damage for a missile at a given level. Resolves nMissileId and nLevel from the pUnit missile if not provided. Looks up D2MissilesTxt base MinDamage + level breakpoint bonus (MinLevDam1), optionally scales by DmgSymPerCalc calc expression, then shifts result left by HitShift. Returns 0 for non-missile units or invalid missile IDs.
@@ -708,11 +704,8 @@ int32_t __stdcall GetMinDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
         nLevel = 0;
       }
     }
-    if (!(nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize)) {
-      return 0;
-    }
 
-    D2MissilesTxt* pMissileTxt = sgptDataTable->pTxtMissiles + nMissileId;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return 0;
     }
@@ -748,11 +741,8 @@ int32_t __stdcall GetMaxDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
         nLevel = 0;
       }
     }
-    if (!(nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize)) {
-      return 0;
-    }
 
-    D2MissilesTxt* pMissileTxt = sgptDataTable->pTxtMissiles + nMissileId;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return 0;
     }
@@ -797,11 +787,8 @@ int32_t __stdcall GetMinElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
         nLevel = 0;
       }
     }
-    if (!(nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize)) {
-      return 0;
-    }
 
-    D2MissilesTxt* pMissileTxt = sgptDataTable->pTxtMissiles + nMissileId;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return 0;
     }
@@ -837,11 +824,8 @@ int32_t __stdcall GetMaxElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
         nLevel = 0;
       }
     }
-    if (!(nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize)) {
-      return 0;
-    }
 
-    D2MissilesTxt* pMissileTxt = sgptDataTable->pTxtMissiles + nMissileId;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return 0;
     }
@@ -864,11 +848,7 @@ int32_t __stdcall GetMaxElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
 
 int32_t __stdcall GetElementalLength(int32_t nUnused, D2UnitStrc * pUnit, int32_t nMissileId, int32_t nLevel) {
     int nLevLenBonus;
-    if (!(nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize)) {
-      return 0;
-    }
-
-    D2MissilesTxt* pMissileTxt = sgptDataTable->pTxtMissiles + nMissileId;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return 0;
     }
@@ -894,11 +874,8 @@ int32_t __stdcall GetSpecialParamValue(D2UnitStrc * pUnit, D2UnitStrc * pOwner, 
     if (pUnit && pUnit->eUnitType != UNIT_MISSILE) {
       return 0;
     }
-    if (!(nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize)) {
-      return 0;
-    }
 
-    D2MissilesTxt* pMissileTxt = sgptDataTable->pTxtMissiles + nMissileId;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return 0;
     }
@@ -1115,7 +1092,7 @@ uint32_t __stdcall MISSILE_EvalMissileCalc(D2UnitStrc * pMissile, D2UnitStrc * p
 
 // Computes the full damage profile for a missile into a D2MissileDamageDataStrc (zeroed first, 0x7c bytes). Resolves base/elemental damage either from missiles.txt fields (SrcDamage/SrcMissDmg, EType, GetMin/MaxDamage, mastery bonus) or, when the missile carries a skill, from that skill's calc functions (SKILL_CalcMin/MaxDamage, SERVER_Min/MaxDamage, synergy). When SrcDamage applies, folds in the owner's weapon-derived physical damage (mindamage/maxdamage scaled by SrcDamage%, two-handed halving, str/dex item bonuses, throwing/secondary/two-hand weapon-damage stats, blunt-vs-undead bonus) plus damage%, item min/max-damage%, demon/undead/targetAC% and skill bypass-undead/demon/beast flags. When SrcMissDmg applies instead, pulls those stats from pUnit2. Routes elemental min/max/length into the matching fire/light/magic/cold/poison/drain/stun/burning fields, then calls AddStatsToDamage + CalculateFinalDamage. Core server missile-damage calc; no output if the missile/owner is invalid.
 void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageData, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2UnitStrc * pMissile, int32_t nParam) {
-    bool _bHasBonusStats;
+    BOOL _bHasBonusStats;
     bool bHasBonusStats;
     int32_t nElemMinDmg;
     int32_t nMasteryElemMin;
@@ -1141,11 +1118,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
     }
 
     int nMissileId = pMissile->nClassId;
-    if (!(nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize)) {
-      return;
-    }
-
-    D2MissilesTxt* pMissileTxt = sgptDataTable->pTxtMissiles + nMissileId;
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       return;
     }

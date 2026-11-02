@@ -7,8 +7,8 @@
 #include "Fog/Engine/Application.h"
 #include "Fog/Memory.h"
 #include "Storm/D2Srp.h"
-#include "Storm/SMem.h"
-#include "Storm/Source/SSComp.h"
+#include "Storm/Source/SLog.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "Bnclient/Bnet.h"
@@ -39,7 +39,7 @@ char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText) {
       cVar2 = '\0';
       if (bVar1) {
         iVar3 = _strnicmp(szSignerOrg, gnFileSignatureResult, 0x200);
-        cVar2 = '\x01' - (iVar3 != 0);
+        cVar2 = iVar3 != 0 ? 0 : 1;
       }
     }
 
@@ -98,7 +98,7 @@ int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {
           }
         } else {
           dwLastError = GetLastError();
-          nVerifyResult = (dwLastError != 0x800b0100) + 1;
+          nVerifyResult = dwLastError != 0x800b0100 ? 2 : 1;
         }
 
         Fog::Engine::Application::MISC_OperatorDeleteShim(pWideStr);
@@ -188,7 +188,7 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
                 /* DWORD cchNameString for CertGetNameStringW */ /* LPWSTR pszNameString for CertGetNameStringW */ /* void * pvTypePara for CertGetNameStringW */ /* DWORD dwFlags for CertGetNameStringW */ /* DWORD dwType for CertGetNameStringW */ /* PCCERT_CONTEXT pCertContext for CertGetNameStringW */ nNameLen = CertGetNameStringW(pCertContext, 3, 0, (void*)"2.5.4.10", (LPWSTR)nWideCharLen, (DWORD)pWideStr);
                 /* LPBOOL lpUsedDefaultChar for WideCharToMultiByte */ /* LPCSTR lpDefaultChar for WideCharToMultiByte */ /* int cbMultiByte for WideCharToMultiByte */ /* LPSTR lpMultiByteStr for WideCharToMultiByte */ /* int cchWideChar for WideCharToMultiByte */ /* LPCWSTR lpWideCharStr for WideCharToMultiByte */ /* DWORD dwFlags for WideCharToMultiByte */ /* UINT CodePage for WideCharToMultiByte */ if (nNameLen) {
                   nAnsiLen = WideCharToMultiByte(0xfde9, 0, (LPCWSTR)nWideCharLen, -1, (LPSTR)0x0, 0, (LPCSTR)0x0, (LPBOOL)0x0);
-                  if (0 < nAnsiLen) {
+                  if (nAnsiLen > 0) {
                     /* LPBOOL lpUsedDefaultChar for WideCharToMultiByte */ /* LPCSTR lpDefaultChar for WideCharToMultiByte */ /* int cbMultiByte for WideCharToMultiByte */ /* LPSTR lpMultiByteStr for WideCharToMultiByte */ /* int cchWideChar for WideCharToMultiByte */ /* LPCWSTR lpWideCharStr for WideCharToMultiByte */ /* DWORD dwFlags for WideCharToMultiByte */ /* UINT CodePage for WideCharToMultiByte */ WideCharToMultiByte(0xfde9, 0, (LPCWSTR)nWideCharLen, -1, szOrgOut, nOrgMaxLen, (LPCSTR)0x0, (LPBOOL)0x0);
                     bGotOrg = true;
                   }
@@ -223,17 +223,17 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
 }
 
 int * __thiscall BNCLIENT_InitFilestream(int * pStream, char * szFilePath) {
-    Storm::Source::SSComp::SLogCreate(szFilePath, 0, pStream);
+    Storm::Source::SLog::SLogCreate(szFilePath, 0, pStream);
     return pStream;
 }
 
 void * __thiscall BNCLIENT_DestroyCompressor(void * pCompressor, uint8_t bFreeMemory) {
-    Storm::Source::SSComp::SLogClose(*(uint32_t*)pCompressor);
+    Storm::Source::SLog::SLogClose(*(uint32_t*)pCompressor);
     if (!(bFreeMemory & 1)) {
       return pCompressor;
     }
 
-    Storm::SMem::SMemFree(pCompressor, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pCompressor, "delete", -1, 0);
     return pCompressor;
 }
 
@@ -254,7 +254,7 @@ void * __stdcall BNCLIENT_GetBnetLogFilestream() {
     }
 
     gbBnetLogInitialized |= 1;
-    Storm::Source::SSComp::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
+    Storm::Source::SLog::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
     atexit(Bnet::StaticFini_gnBnetLogFileHandle);
     return &gnBnetLogFileHandle;
 }
@@ -304,7 +304,7 @@ void __fastcall SRP_DestroyContext(D2Srp * * ppContext) {
       return;
     }
 
-    Storm::SMem::SMemFree(*ppContext, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(*ppContext, "delete", -1, 0);
 }
 
 } // namespace Bnclient

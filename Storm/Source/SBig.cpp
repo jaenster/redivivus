@@ -5,7 +5,7 @@
 #include "Fog/Debug.h"
 #include "Storm/D2Srp.h"
 #include "Storm/H/stpl.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
@@ -252,6 +252,7 @@ uint32_t __stdcall TSGrowableArray_Uc_RoundToChunk(uint32_t nValue, uint32_t nMu
 // TSFixedArray<unsigned char>::ReallocData: sets pBuffer->nCapacity = nNewSize and SMemReAllocs the byte data in place (flag 0x10); if that fails, SMemAllocs a new block, copies min(nLen, nNewSize) bytes and frees the old one.
 // Provenance: 1.14d asm 004211c0 (SMem tag 0x708880); PPC Storm 1.10b .ReallocData__31TSFixedArray<...>FUi has the same shape.
 void __thiscall TSFixedArray_Uc_ReallocData(TSGrowableArray_Uc * pBuffer, uint32_t nNewSize) {
+    uint32_t uCopyIdx;
     uint8_t* pOldBuffer = pBuffer->pData;
     pBuffer->nCapacity = nNewSize;
     uint8_t* pReallocated = (uint8_t*)SMem::SMemReAlloc((uint32_t*)pOldBuffer, nNewSize, s__E_00708880, -2, 0x10);
@@ -268,15 +269,11 @@ void __thiscall TSFixedArray_Uc_ReallocData(TSGrowableArray_Uc * pBuffer, uint32
     if (nNewSize >= pBuffer->nLen) {
       nNewSize = pBuffer->nLen;
     }
-    if (nNewSize > 0) {
-      uint32_t uCopyIdx = 0;
-      do {
-        if (pBuffer->pData + uCopyIdx) {
-          pBuffer->pData[uCopyIdx] = pOldBuffer[uCopyIdx];
-        }
 
-        uCopyIdx++;
-      } while (uCopyIdx < nNewSize);
+    for (uCopyIdx = 0; uCopyIdx < nNewSize; uCopyIdx++) {
+      if (pBuffer->pData + uCopyIdx) {
+        pBuffer->pData[uCopyIdx] = pOldBuffer[uCopyIdx];
+      }
     }
 
     SMem::SMemFree(pOldBuffer, s__E_00708880, -2, 0);
@@ -437,16 +434,15 @@ int32_t __stdcall SBIG_BigBuffer_FindHighestBit(BigBuffer * pBitSet) {
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
 static BOOL __fastcall SBIG_BigBuffer_IsLowestBitClear(BigBuffer * pBitSet) {
     uint32_t uWord = pBitSet->nStartWord;
-    if (pBitSet->nCount == uWord) {
-      return 1;
-    }
-    if (uWord < pBitSet->nCount) {
-      uWord = pBitSet->pData[uWord];
-    } else {
-      uWord = 0;
-    }
-    if (uWord & 1) {
-      return 0;
+    if (pBitSet->nCount != uWord) {
+      if (uWord < pBitSet->nCount) {
+        uWord = pBitSet->pData[uWord];
+      } else {
+        uWord = 0;
+      }
+      if (uWord & 1) {
+        return 0;
+      }
     }
 
     return 1;
@@ -615,6 +611,7 @@ void __thiscall SBIG_ArrayByteAltSetCapacity(int * pArray, int32_t nCapacity) {
 // @oracle-method CONFIRMED. n*4 sizing, SMemReAlloc flag 0x10 with the alloc/copy/free fallback. Matches the block the oracle inlines into .SetCount__29TSGrowableArray<Ui,8TSCD<Ui>>FUi @1009b120. Dword instantiation, SMem tag 0x708874.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void __thiscall TSFixedArray_Ui_ReallocData(uint32_t * pArray, uint32_t nCapacity) {
+    uint32_t nIndex;
     uint32_t* pOldBuffer = (uint32_t*)pArray[2];
     *pArray = nCapacity;
     uint32_t* pNewBuffer = SMem::SMemReAlloc(pOldBuffer, nCapacity * 4, s__I_00708874, -2, 0x10);
@@ -631,16 +628,12 @@ void __thiscall TSFixedArray_Ui_ReallocData(uint32_t * pArray, uint32_t nCapacit
     if (nCapacity >= pArray[1]) {
       nCapacity = pArray[1];
     }
-    if (nCapacity > 0) {
-      uint32_t nIndex = 0;
-      do {
-        pNewBuffer = (uint32_t*)(pArray[2] + nIndex * 4);
-        if (pNewBuffer) {
-          *pNewBuffer = pOldBuffer[nIndex];
-        }
 
-        nIndex++;
-      } while (nIndex < nCapacity);
+    for (nIndex = 0; nIndex < nCapacity; nIndex++) {
+      pNewBuffer = (uint32_t*)(pArray[2] + nIndex * 4);
+      if (pNewBuffer) {
+        *pNewBuffer = pOldBuffer[nIndex];
+      }
     }
 
     SMem::SMemFree(pOldBuffer, s__I_00708874, -2, 0);
@@ -651,6 +644,7 @@ void __thiscall TSFixedArray_Ui_ReallocData(uint32_t * pArray, uint32_t nCapacit
 // @oracle-method CONFIRMED. Identical to TSFixedArray_Uc_ReallocData 004211c0; second byte instantiation, SMem tag 0x70888c.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void __thiscall TSFixedArray_UcAlt_ReallocData(uint32_t * pArray, uint32_t nCapacity) {
+    uint32_t nIndex;
     uint32_t* pOldBuffer = (uint32_t*)pArray[2];
     *pArray = nCapacity;
     uint32_t* pNewBuffer = SMem::SMemReAlloc(pOldBuffer, nCapacity, s__D_0070888c, -2, 0x10);
@@ -667,15 +661,11 @@ void __thiscall TSFixedArray_UcAlt_ReallocData(uint32_t * pArray, uint32_t nCapa
     if (nCapacity >= pArray[1]) {
       nCapacity = pArray[1];
     }
-    if (nCapacity > 0) {
-      uint32_t nIndex = 0;
-      do {
-        if ((uint8_t*)(pArray[2] + nIndex)) {
-          *(uint8_t*)(pArray[2] + nIndex) = *(uint8_t*)(nIndex + (int)pOldBuffer);
-        }
 
-        nIndex++;
-      } while (nIndex < nCapacity);
+    for (nIndex = 0; nIndex < nCapacity; nIndex++) {
+      if ((uint8_t*)(pArray[2] + nIndex)) {
+        *(uint8_t*)(pArray[2] + nIndex) = *(uint8_t*)(nIndex + (int)pOldBuffer);
+      }
     }
 
     SMem::SMemFree(pOldBuffer, s__D_0070888c, -2, 0);
@@ -2991,7 +2981,7 @@ static void __stdcall BigBuffer_Div(BigBuffer * pQuotient, BigBuffer * pRemainde
           nDividend64 = _allmul(pDividendData[nAlignChunk + nDivisorLen], 0, 0, 1);
           nDividend64 += (uint64_t)pTopWordData[uBitIter + nTopIndex];
           SBIG_GrowToIndex(pQuotient, 0);
-          uAligned = _aulldiv((uint32_t)nDividend64, (uint32_t)((uint64_t)nDividend64 >> 0x20), nDivisorHigh, 0);
+          uAligned = (uint64_t)nDividend64 / nDivisorHigh;
           nAlignChunk = (uint32_t)uAligned;
         }
 
@@ -3811,8 +3801,7 @@ void __stdcall SBigDiv(BigData * pResult, BigData * pBigA, BigData * pBigB) {
     uint32_t uVar2 = pResult->sStack.nUsed;
     pResult->sStack.nUsed = uVar2 + 1;
     BigBuffer_Div(&pResult->sPrimary, pResult->sStack.aBuffers + uVar2, &pBigB->sPrimary, &pResult->sStack, &pBigA->sPrimary);
-    uint32_t* puVar1 = &pResult->sStack.nUsed;
-    (*puVar1)--;
+    pResult->sStack.nUsed--;
 }
 
 // @renamed-from SBIG_GCDWrapper (2026-08-28, Storm PowerPC oracle pass 4)
@@ -3829,8 +3818,7 @@ void __stdcall SBigMod(BigData * pResult, BigData * pBigA, BigData * pBigB) {
     uint32_t uVar2 = pResult->sStack.nUsed;
     pResult->sStack.nUsed = uVar2 + 1;
     BigBuffer_Div(pResult->sStack.aBuffers + uVar2, &pResult->sPrimary, &pBigB->sPrimary, &pResult->sStack, &pBigA->sPrimary);
-    uint32_t* puVar1 = &pResult->sStack.nUsed;
-    (*puVar1)--;
+    pResult->sStack.nUsed--;
 }
 
 // @renamed-from SBIG_MontgomeryMulWrapper (2026-08-28, Storm PowerPC oracle pass 4)
@@ -3850,8 +3838,8 @@ void __stdcall SBigMulMod(BigData * pResult, BigData * pBigA, BigData * pBigB, B
 // @renamed-from SBIG_PowerModWrapper (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigPow -> 10099500, single bl .Pow__FR9BigBufferRC9BigBufferUiR8BigStack. 1.14d: 3-arg forwarder onto BigBuffer_Pow 00424640, a square-and-multiply over a SCALAR unsigned exponent with no modulus argument - so it cannot be PowMod.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
-void __stdcall SBigPow(BigData * pResult, BigData * pBigBase, uint32_t nParam) {
-    BigBuffer_Pow(&pResult->sPrimary, &pBigBase->sPrimary, nParam, &pResult->sStack);
+void __stdcall SBigPow(BigData * pResult, BigData * pBigBase, uint32_t nExponent) {
+    BigBuffer_Pow(&pResult->sPrimary, &pBigBase->sPrimary, nExponent, &pResult->sStack);
 }
 
 // @renamed-from SBIG_MontgomeryMulWrapper2 (2026-08-28, Storm PowerPC oracle pass 4)
@@ -4418,22 +4406,8 @@ static void __stdcall BigBuffer_FindPrime(int32_t nBitLength, BigBuffer * pnLowe
 // @renamed-from SBIG_GeneratePrimeWrapper (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigFindPrime -> 10099d20, single bl .FindPrime__FR9BigBufferUiRC9BigBufferRC9BigBufferR8BigStack (5 args -> 4-arg C API). 1.14d: 4-arg forwarder onto BigBuffer_FindPrime 004255e0, whose callee set matches .FindPrime's nine callees one for one.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
-void __stdcall SBigFindPrime(BigData * pResult, int32_t nParam2, BigData * pnParam1, BigData * pnParam2) {
-    BigBuffer_FindPrime(nParam2, &pnParam1->sPrimary, &pnParam2->sPrimary, &pResult->sStack, &pResult->sPrimary);
-}
-
-void __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue) {
-    *pwOut = wValue;
-}
-
-void __thiscall CRYPTO_ByteSwap64Array(uint16_t * pwIn, uint16_t * pwOut) {
-    uint16_t wValue = *pwIn;
-    if (wValue < 0x100) {
-      *pwOut = D2Client::UI::ui::CharacterLookupTable[wValue];
-      return;
-    }
-
-    *pwOut = wValue;
+void __stdcall SBigFindPrime(BigData * pResult, int32_t nBitLength, BigData * pnParam1, BigData * pnParam2) {
+    BigBuffer_FindPrime(nBitLength, &pnParam1->sPrimary, &pnParam2->sPrimary, &pResult->sStack, &pResult->sPrimary);
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

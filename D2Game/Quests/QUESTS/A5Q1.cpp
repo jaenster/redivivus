@@ -324,16 +324,11 @@ BOOL __fastcall Q31_CheckNearShenk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void
     } else {
       uint32_t nAdjRoomIdx;
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &pAdjacentRooms, (int*)&nAdjRoomCount);
-      nAdjRoomIdx = 0;
-      if (nAdjRoomCount > 0) {
-        do {
-          if (pAdjacentRooms[nAdjRoomIdx] == pA5Q1Data->pShenkRoom) {
-            bIsNearShenkRoom = '\x01';
-            break;
-          }
-
-          nAdjRoomIdx++;
-        } while (nAdjRoomIdx < nAdjRoomCount);
+      for (nAdjRoomIdx = 0; nAdjRoomIdx < nAdjRoomCount; nAdjRoomIdx++) {
+        if (pAdjacentRooms[nAdjRoomIdx] == pA5Q1Data->pShenkRoom) {
+          bIsNearShenkRoom = '\x01';
+          break;
+        }
       }
     }
 

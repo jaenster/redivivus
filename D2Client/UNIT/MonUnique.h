@@ -19,7 +19,8 @@ uint8_t * __fastcall GetMonUModList(struct D2UnitStrc * pUnit);
 void __fastcall SetNameSeed(struct D2UnitStrc * pUnit, uint16_t nNameSeed);
 void __fastcall SetBossId(struct D2UnitStrc * pUnit, int16_t nBossId);
 uint16_t __fastcall GetBossId(struct D2UnitStrc * pUnit);
-BOOL CheckMonTypeForMonster(struct D2UnitStrc * pUnit, eD2MonsterType eMonsterType, uint8_t byMonTypeMaskHi);
+// Registers: pUnit in ECX; nTypeFlagMask in DX is tested against the monster's type flags (callers pass 2, 8, 0x80).
+BOOL __fastcall CheckMonTypeForMonster(struct D2UnitStrc * pUnit, uint16_t nTypeFlagMask);
 void __fastcall SetUnsetMonsterType(struct D2UnitStrc * pUnit, uint16_t eMonsterType, BOOL bSetUnset);
 void __fastcall MONSTER_SetUniqueMonsterFlag0x100(struct D2UnitStrc * pUnit, int32_t bApply);
 // Generates and assigns the display name of a unique/champion/super-unique monster. When bApply is set: for hardcoded super-uniques (monster type bit 2) uses the superuniques.txt Name string; for champions builds 'modifier title + base monster name' from the champion-title table (nModifier selects which title); otherwise reseeds the unit RNG and either returns a hardcoded localized name for special monster classIds (big switch on nClassId, e.g. Diablo/Baal bosses), or composes a random prefix/suffix (and ~50% appellation) via MONSTER_GetRandomUniquePrefix/Suffix/Appelation. Final name set via SetSuperUniqueName. No-op when bApply is 0.

@@ -491,10 +491,11 @@ static inline To d2_bit_cast(const From& v) {
   return r;
 }
 // Three bytes at p, little-endian: a 3-byte decompiler field, without touching a fourth.
+// Built from the bytes as the original builds it (MOVZX, SHL, ADD), not in a stack
+// temporary: the bytes are disjoint, so + is |.
 static inline uint32_t d2_load24(const void* p) {
-  uint32_t v = 0;
-  std::memcpy(&v, p, 3);
-  return v;
+  const uint8_t* b = (const uint8_t*)p;
+  return ((uint32_t)b[2] << 16) + ((uint32_t)b[1] << 8) + b[0];
 }
 // The same three bytes as a signed 24-bit value, sign-extended from bit 23.
 static inline int32_t d2_load24s(const void* p) {

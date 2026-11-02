@@ -85,9 +85,9 @@ void __fastcall thunk_PATH_SnapPositionToTile(D2UnitStrc * pUnit) {
     D2Common::PATH::Path::PATH_SnapPositionToTile(pUnit->pPath.pDynamicPath);
 }
 
-uint32_t __fastcall PATH_SetTargetAndCalculate(D2UnitStrc * pUnit, int16_t nParam, int16_t nTargetY) {
+uint32_t __fastcall PATH_SetTargetAndCalculate(D2UnitStrc * pUnit, int16_t nTargetX, int16_t nTargetY) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, nParam, nTargetY);
+    D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, nTargetX, nTargetY);
     uint32_t uVar1 = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, pUnit->eUnitFlags >> 0x15 & 1);
     return uVar1;
 }
@@ -209,8 +209,7 @@ void __fastcall PATH_MoveUnitToPoint(D2UnitStrc * pUnit, uint16_t nX, int32_t nY
       int16_t nSendY;
       nClickYSaved = Units::GetYPosFromDynamicPathUnit(pUnit);
       nSendY = (int16_t)nClickYSaved;
-      nClickYSaved = Units::GetXPosFromDynamicPathUnit(pUnit);
-      GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT(0x5f, (int16_t)nClickYSaved, nSendY);
+      GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT(0x5f, (int16_t)Units::GetXPosFromDynamicPathUnit(pUnit), nSendY);
       return;
     }
     if (pUnit->eUnitType == UNIT_PLAYER) {

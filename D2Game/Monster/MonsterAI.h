@@ -55,7 +55,7 @@ BOOL __fastcall AI_SetSwitchAiTargetParams(struct D2UnitStrc * pUnit, int32_t nP
 struct D2UnitPlayerListStrc * __fastcall AI_GetSwitchAiParam1(struct D2UnitStrc * pUnit);
 struct D2UnitDataPlayerArenaStrc * __fastcall AI_GetSwitchAiParam2(struct D2UnitStrc * pUnit);
 void __fastcall AI_ClearSwitchAiTargetParams(struct D2UnitStrc * pUnit);
-uint32_t __fastcall NpcStateIsntZero(struct D2UnitStrc * pUnit, int32_t nParam);
+uint32_t __fastcall NpcStateIsntZero(struct D2UnitStrc * pUnit, struct D2UnitStrc * nParam);
 // Tears down a monster's D2MonsterAiSubStrc list. For each sub-AI node: sends 0x62 MakeUnitTargetable packet to the interacting client, optionally clears that client's interact-info (if bClientSide and the client was interacting with this monster), calls an optional fpFunction cleanup callback, then frees the node. Sets pMonsterAi->pAiSub to NULL when done.
 // @sourcefile .\MONSTER\MonsterAI.cpp
 void __fastcall ClearAISub(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, fpAiClear fpFunction, bool bClientSide);

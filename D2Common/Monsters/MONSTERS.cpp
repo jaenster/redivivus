@@ -4,7 +4,6 @@
 #include "D2Client/Archive.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/DataTbls/MonsterTbls.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Item.h"
@@ -28,6 +27,7 @@
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Units.h"
@@ -383,7 +383,7 @@ void __fastcall SetSuperUniqueName(D2UnitStrc * pUnit, uint16_t * wszText) {
 }
 
 uint32_t __fastcall MONSTER_IsBossOrChampion(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -435,7 +435,7 @@ uint32_t __stdcall IsDemon(D2UnitStrc * pUnit) {
 }
 
 BOOL __stdcall MONSTER_IsMonsterUndead(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -463,7 +463,7 @@ uint32_t __stdcall UnitIsMarkedBoss(D2MonStatsTxt * pMonStatsTxt, D2UnitStrc * p
 
 // 2022.01.09 - dzik
 BOOL __stdcall CheckIfMonsterIsDead(D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_MONSTER) != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
     if (!(pUnit->eAnimMode.ePlayerMode == Death || pUnit->eAnimMode.ePlayerMode == Kick)) {
@@ -480,59 +480,55 @@ int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t nParam1, int32_t
     D2SkillsTxt* pSkillsTxt;
     short int nSpawnId;
     if (!nParam1 || !pUnit || pUnit->eUnitType != UNIT_MONSTER) {
-      if (nParam2 >= 0 && nParam2 < sgptDataTable->nTxtSkillsCount) {
-        pSkillsTxt = sgptDataTable->pTxtSkills + nParam2;
-        if (pSkillsTxt && pSkillsTxt->summon >= 0 && (int)pSkillsTxt->summon < sgptDataTable->nTxtMonStatsSize) {
-          if (pnParam1) {
-            nPosXY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-            *pnParam1 = nPosXY;
-          }
-          if (pnParam2) {
-            nPosXY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-            *pnParam2 = nPosXY;
-          }
-          if (!pnMode) {
-            return (int)pSkillsTxt->summon;
-          }
-
-          nSumModeOrSpawnMode = (int)pSkillsTxt->summode;
-          *pnMode = nSumModeOrSpawnMode;
-          if (!(nSumModeOrSpawnMode < 0 || nSumModeOrSpawnMode >= 0x10)) {
-            return (int)pSkillsTxt->summon;
-          }
-
-          *pnMode = 1;
+      pSkillsTxt = nParam2 >= 0 && nParam2 < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nParam2 : nullptr;
+      if (pSkillsTxt && pSkillsTxt->summon >= 0 && (int)pSkillsTxt->summon < sgptDataTable->nTxtMonStatsSize) {
+        if (pnParam1) {
+          nPosXY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+          *pnParam1 = nPosXY;
+        }
+        if (pnParam2) {
+          nPosXY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+          *pnParam2 = nPosXY;
+        }
+        if (!pnMode) {
           return (int)pSkillsTxt->summon;
         }
+
+        nSumModeOrSpawnMode = (int)pSkillsTxt->summode;
+        *pnMode = nSumModeOrSpawnMode;
+        if (!(nSumModeOrSpawnMode < 0 || nSumModeOrSpawnMode >= 0x10)) {
+          return (int)pSkillsTxt->summon;
+        }
+
+        *pnMode = 1;
+        return (int)pSkillsTxt->summon;
       }
     } else {
       D2MonStatsTxt* pMonStatsTxt;
       nSumModeOrSpawnMode = pUnit->nClassId;
-      if (nSumModeOrSpawnMode >= 0 && nSumModeOrSpawnMode < sgptDataTable->nTxtMonStatsSize) {
-        pMonStatsTxt = sgptDataTable->pTxtMonStats + nSumModeOrSpawnMode;
-        if (pMonStatsTxt) {
-          nSpawnId = pMonStatsTxt->spawn;
-          if (pnParam1) {
-            nPosXY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-            *pnParam1 = nPosXY + pMonStatsTxt->spawnx;
-          }
-          if (pnParam2) {
-            nPosXY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-            *pnParam2 = nPosXY + pMonStatsTxt->spawny;
-          }
-          if (!pnMode) {
-            return (int)nSpawnId;
-          }
-
-          nSumModeOrSpawnMode = (int)pMonStatsTxt->spawnmode;
-          *pnMode = nSumModeOrSpawnMode;
-          if (!(nSumModeOrSpawnMode < 0 || nSumModeOrSpawnMode >= 0x10)) {
-            return (int)nSpawnId;
-          }
-
-          *pnMode = 1;
+      pMonStatsTxt = nSumModeOrSpawnMode >= 0 && nSumModeOrSpawnMode < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nSumModeOrSpawnMode : nullptr;
+      if (pMonStatsTxt) {
+        nSpawnId = pMonStatsTxt->spawn;
+        if (pnParam1) {
+          nPosXY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+          *pnParam1 = nPosXY + pMonStatsTxt->spawnx;
+        }
+        if (pnParam2) {
+          nPosXY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+          *pnParam2 = nPosXY + pMonStatsTxt->spawny;
+        }
+        if (!pnMode) {
           return (int)nSpawnId;
         }
+
+        nSumModeOrSpawnMode = (int)pMonStatsTxt->spawnmode;
+        *pnMode = nSumModeOrSpawnMode;
+        if (!(nSumModeOrSpawnMode < 0 || nSumModeOrSpawnMode >= 0x10)) {
+          return (int)nSpawnId;
+        }
+
+        *pnMode = 1;
+        return (int)nSpawnId;
       }
     }
 
@@ -548,7 +544,7 @@ uint8_t __stdcall MONSTERS_GetMaxLightRadiusFromEquipment(D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemsTxt;
     int nClassId;
     D2UnitStrc* pUnitSaved = pUnit;
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return '\0';
     }
 
@@ -565,10 +561,10 @@ uint8_t __stdcall MONSTERS_GetMaxLightRadiusFromEquipment(D2UnitStrc * pUnit) {
 
     uint32_t nComponentIdx = 0;
     do {
-      D2UnitStrc* pComponentOverlay;
+      uint32_t pComponentOverlay;
       pComponentOverlay = DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay(pUnitSaved, nComponentIdx, (uint32_t)(uint8_t)pcVar2[nComponentIdx]);
-      if (pComponentOverlay && pComponentOverlay != (D2UnitStrc*)0x2074696c && pComponentOverlay != (D2UnitStrc*)0x2064656d && pComponentOverlay != (D2UnitStrc*)0x20797668) {
-        pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine((uint32_t)pComponentOverlay, &nClassId);
+      if (pComponentOverlay && pComponentOverlay != 0x2074696c && pComponentOverlay != 0x2064656d && pComponentOverlay != 0x20797668) {
+        pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(pComponentOverlay, &nClassId);
         if (pItemsTxt && (uint8_t)pItemsTxt->bLightRadius > *(uint8_t*)((char*)&pUnit + 3)) {
           pUnit = (D2UnitStrc*)((uint32_t)(uint8_t)pItemsTxt->bLightRadius << 0x18);
         }
@@ -720,7 +716,7 @@ void __stdcall MONSTERS_GetUpgradeSkillsAndCount(D2UnitStrc * pUnit, uint32_t * 
 }
 
 uint32_t __stdcall MONSTER_GetMercType(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -735,7 +731,7 @@ uint32_t __stdcall MONSTER_GetMercType(D2UnitStrc * pUnit) {
       if (nClassId == 338) {
         return 2;
       }
-    } else if (nClassId - 0x230 <= 1) {
+    } else if (nClassId >= 0x230 && nClassId <= 0x231) {
       return 4;
     }
 
@@ -752,8 +748,10 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t nParam
 }; D2_STATIC_GUARD(gMonLvl_U_UniqueMonsterLevelChance2, "D2Common::Monsters::MONSTERS::MONSTER_ApplyDifficultyScaling::gMonLvl_U_UniqueMonsterLevelChance2");
 
     uint32_t nDivisor;
+    int32_t nValue;
     int nPercent;
-    if (!(!nParam && bParam && pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    uint16_t nLayer;
+    if (!(!nParam && bParam && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return;
     }
 
@@ -775,7 +773,9 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t nParam
         nDivisor = pScalingEntry[2];
       }
 
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, (*(int (*)[5])(pScalingEntry - 2))[0], D2Client::Stats::D2ApplyPercent(nCurrentStatVal, nPercent, nDivisor), 0);
+      nLayer = 0;
+      nValue = D2Client::Stats::D2ApplyPercent(nCurrentStatVal, nPercent, nDivisor);
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, (*(int (*)[5])(pScalingEntry - 2))[0], nValue, nLayer);
       pScalingEntry += 5;
       nEntriesLeft--;
     } while (nEntriesLeft);

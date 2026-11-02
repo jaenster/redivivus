@@ -4,7 +4,6 @@
 #include "D2Client/Archive.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
@@ -18,6 +17,7 @@
 #include "D2Common/DATATBLS/DataTbls.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
@@ -76,7 +76,7 @@ static void UMOD_IncreaseMonsterHp(uint32_t nUmodConstant, D2UnitStrc * pUnit) {
     }
 
     int64_t nDivResult;
-    nDivResult = _alldiv((uint32_t)((int64_t)(int)nBaseHp * (int64_t)(int)nUmodConstant), (uint32_t)((uint64_t)((int64_t)(int)nBaseHp * (int64_t)(int)nUmodConstant) >> 0x20), 100, 0);
+    nDivResult = (int64_t)(int)nBaseHp * (int64_t)(int)nUmodConstant / 100;
     nHpBonus = (int)nDivResult;
     apply_hp_bonus:
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, nBaseHp + nHpBonus, 0);
@@ -86,7 +86,7 @@ static void UMOD_IncreaseMonsterHp(uint32_t nUmodConstant, D2UnitStrc * pUnit) {
 void __fastcall MONUMOD_ApplyHpBonus(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     uint32_t nUmodConst;
     int32_t nUmodConstIdx;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 
@@ -132,7 +132,7 @@ void __fastcall MONUMOD_ApplyChampionLevelBonus(D2UnitStrc * pUnit, int32_t nInd
 void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     int32_t nBaseMonId;
     int nToHitBonus;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 
@@ -142,12 +142,8 @@ void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, B
     }
 
     int nClassId = pUnit->nClassId;
-    if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize)) {
-      return;
-    }
-
-    D2MonStatsTxt* pMonStatsTxt = sgptDataTable->pTxtMonStats;
-    if (!(pMonStatsTxt + nClassId && bUnknown)) {
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    if (!(pMonStatsTxt && bUnknown)) {
       return;
     }
 
@@ -183,7 +179,7 @@ void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, B
 
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_damagepercent, nDamageBonus, 0);
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_item_tohit_percent, nToHitBonus, 0);
-    short int nVelocity = pMonStatsTxt[nClassId].Velocity;
+    short int nVelocity = pMonStatsTxt->Velocity;
     if (!(nVelocity > 0 && nIndex != 0x24)) {
       return;
     }
@@ -284,8 +280,7 @@ void __fastcall MONUMOD_ApplyColdEnchant(D2UnitStrc * pUnit, int32_t nIndex, BOO
 
     nLvlDmgBase = pMonLvl->DM[nLvlDmgBase * 3 + bUnknown];
     int32_t nMaxDamConst = GetUmodConstant(bUnknown + 0x19);
-    int16_t nLayer = 0;
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmindam, GetUmodConstant(bUnknown + 0x16) * nLvlDmgBase / 100, nLayer);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmindam, GetUmodConstant(bUnknown + 0x16) * nLvlDmgBase / 100, 0);
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmaxdam, nMaxDamConst * nLvlDmgBase / 100, 0);
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldlength, 0x96, 0);
 }
@@ -300,7 +295,7 @@ void __fastcall MONUMOD_ApplyBerserker(D2UnitStrc * pUnit, int32_t nIndex, BOOL 
 }
 
 void __fastcall MONUMOD_ApplyPossessed(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && bUnknown)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && bUnknown)) {
       return;
     }
     if (true && pUnit->pUnitData.pUnitDataMonster) {
@@ -358,7 +353,7 @@ void __fastcall MONUMOD_SetEventTimer(D2UnitStrc * pUnit, int32_t nIndex, BOOL b
 // Monster unique-modifier handler that grants resistances. For a monster unit (when bUnknown is set), dispatched by nIndex (modifier id): index 0x1c doubles armorclass and adds 0x32 to damageresist; 8 ("Stone Skin") and 0x1b raise cold/fire/light resist (+0x28 / +0x14) but bail once two or more resists are already capped (>99); single-element mods 9/0x12/0x11/0x17 add +0x4b to fire/cold/light/poison resist, 0x19 adds +0x14 magicresist. Modifies the unit's resist stats in place via STATLIST_SetUnitStat.
 void __fastcall MagicResist(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     int nFireRes;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && bUnknown)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && bUnknown)) {
       return;
     }
     if (nIndex == 0x1c) {
@@ -461,7 +456,7 @@ void __fastcall MagicResist(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
 }
 
 void __fastcall TeleHeal(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && bUnknown)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && bUnknown)) {
       return;
     }
 
@@ -535,7 +530,7 @@ void __fastcall AuraEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown)
     uint16_t wNameSeed;
     D2SeedStrc sNameSeed;
     int32_t nAuraEntryOffset;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && bUnknown)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && bUnknown)) {
       return;
     }
 

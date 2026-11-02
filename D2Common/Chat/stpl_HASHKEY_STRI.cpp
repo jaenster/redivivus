@@ -15,7 +15,7 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Storm/H/CCritSect.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 
@@ -24,10 +24,10 @@
 
 ::HASHKEY_STRI * HASHKEY_STRI::Assign(::HASHKEY_STRI * pSource) {
     if (this->szString) {
-      Storm::SMem::SMemFree(this->szString, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e9, 0);
+      Storm::Source::SMem::SMemFree(this->szString, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e9, 0);
     }
 
-    uint32_t* pDupStr = Storm::Source::SSTR::SStrDup(pSource->szString);
-    this->szString = (char*)pDupStr;
+    char* pDupStr = Storm::Source::SSTR::SStrDup(pSource->szString);
+    this->szString = pDupStr;
     return this;
 }

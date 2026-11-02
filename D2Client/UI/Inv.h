@@ -113,7 +113,7 @@ int32_t __stdcall INV_GetGoldButtonY();
 BOOL INV_IsInteractiveMode();
 BOOL __stdcall INV_IsInteractiveModeEx();
 int __stdcall INV_CheckActionThrottle();
-BOOL __fastcall INV_IsMouseOverCloseButton(int32_t nParam1, int32_t nParam2);
+BOOL __fastcall INV_IsMouseOverCloseButton(int32_t nMouseX, int32_t nMouseY);
 void __stdcall INV_HandleInventoryRightClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INV_HandleMouseMove(struct D2UIMouseMsgStrc * pMsg);
 int32_t __stdcall ClickItemRight(struct D2UnitStrc * pItem, struct D2InventoryStrc * pGridCoords, int32_t nPage, struct D2UnitStrc * pPlayer, struct D2InventoryStrc * pInventory);
@@ -124,7 +124,7 @@ void __stdcall INV_SetShopPageFromNpc(uint8_t bParam);
 void __stdcall INV_ResetInventoryState();
 void __stdcall INV_SetRefreshFlag();
 void __stdcall INV_SetMercInventoryMode();
-void __stdcall INV_HandleShopAction(DWORD nAction, int32_t pTarget, struct D2UnitStrc * pUnit, DWORD dwParam1, DWORD dwParam2, DWORD dwParam3, DWORD dwParam4);
+void __stdcall INV_HandleShopAction(DWORD nAction, struct D2UnitStrc * pTarget, struct D2UnitStrc * pUnit, DWORD dwSell, DWORD dwParam2, DWORD bSkipConfirm, DWORD dwMode);
 int __stdcall INV_EnterShopMode();
 void __stdcall INV_ReturnToShopFromRepair();
 void __stdcall INV_SetRepairMode();
@@ -196,7 +196,8 @@ void __stdcall INV_LoadCubeImages();
 void __stdcall INV_FreeCubeImages();
 void __fastcall INV_StartCubeTransmuteAnim(int32_t nMenuActionId);
 void __stdcall INV_FreeItemGfxCache();
-void INV_HandleGambleMessage(short * pPacket);
+// EDI is not an argument: the body never reads it.
+void INV_HandleGambleMessage();
 void __stdcall INV_ResetOverlayFlag();
 void __stdcall INV_ResetShopState();
 void __stdcall INV_SetItemDescPending();
@@ -215,6 +216,7 @@ void __stdcall INV_HandleMercInvMouseMove(struct D2UIMouseMsgStrc * pMsg);
 void __thiscall CloseScrollOfWhatever(void * pThis, int32_t nColor);
 void __stdcall INV_DrawRecipeScroll();
 void __stdcall INV_HandleRecipeScrollClick(struct D2UIMouseMsgStrc * pMsg);
+void __stdcall INV_PanelKeyNoOp(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall INV_ExtractTextBetweenBrackets(uint16_t * wszText, short * wszDelimStart);
 void wsprintf(uint16_t * wszDest, uint16_t * wszFormat, ...);
 void __fastcall GetItemName(struct D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize);
@@ -243,6 +245,7 @@ void __stdcall INPUT_WeaponSwap(struct D2UIMouseMsgStrc * pMsg);
 // Input handler for cube left-click. Maps mouse coords to cube grid, calls INV_HandleCubeLeftClick. Clears gbInventoryDragInProgress on cancel, sets on drag start. Handles transmute button.
 void __stdcall INPUT_CubeLeftClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall DrawMercInventory();
+void StaticInit_6cabf0();
 // 50 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Inv

@@ -63,7 +63,7 @@ static void Pre0x9DAnd0x9CPacket(D2ClientStrc * pClient, D2UnitStrc * pUnit, D2U
           return;
         }
 
-        GAME::SCmd::Send0x9CItemHandleInShop(pClient, pItem, '8');
+        GAME::SCmd::Send0x9CItemHandleInShop(pClient, pUnit, pItem, '8');
         return;
       }
       if (pItem->eUnitFlagsEx >> 4 & 1) {
@@ -76,7 +76,7 @@ static void Pre0x9DAnd0x9CPacket(D2ClientStrc * pClient, D2UnitStrc * pUnit, D2U
           return;
         }
 
-        GAME::SCmd::Send0x9CItemHandleInShop(pClient, pItem, '9');
+        GAME::SCmd::Send0x9CItemHandleInShop(pClient, pUnit, pItem, '9');
         return;
       }
     }
@@ -149,19 +149,19 @@ static void Pre0x9DAnd0x9CPacket(D2ClientStrc * pClient, D2UnitStrc * pUnit, D2U
 
     nItemCmdResult = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_BELT_TAKE_ITEM);
     if (nItemCmdResult && pUnit == pPlayer) {
-      GAME::SCmd::Send0x9CItemRemoveFromBelt(pClient, pItem, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD));
+      GAME::SCmd::Send0x9CItemRemoveFromBelt(pClient, pUnit, pItem, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD));
       return;
     }
 
     nItemCmdResult = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_BELT_EXCHANGE_ITEM);
     if (nItemCmdResult && pUnit == pPlayer) {
-      GAME::SCmd::Send0x9CItemSwapInBelt(pClient, pItem, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD));
+      GAME::SCmd::Send0x9CItemSwapInBelt(pClient, pUnit, pItem, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD));
       return;
     }
 
     nItemCmdResult = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_CURSOR_SET_ITEM);
     if (nItemCmdResult && pUnit == pPlayer) {
-      GAME::SCmd::Send0x9CItemToCursor(pClient, pItem);
+      GAME::SCmd::Send0x9CItemToCursor(pClient, pUnit, pItem);
       return;
     }
 
@@ -274,7 +274,7 @@ void __fastcall SendUpdatedItemsToClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pUnit, 0, 1);
-    ITEMS::ItemMode::ITEMMODE_ReturnZero3(1);
+    ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit, 1);
 }
 
 void __fastcall ITEM_ClearFlagsAndCommands(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit) {
@@ -306,27 +306,18 @@ void __fastcall ITEM_ClearFlagsAndCommands(::SGAMEDATA * pGameStrc, D2UnitStrc *
 }; D2_STATIC_GUARD(gaItemClearCommandTable, "D2Game::UNIT::ITEM_ClearFlagsAndCommands::gaItemClearCommandTable");
     static uint32_t gnItemClearCommandCount = 0x15; D2_STATIC_GUARD(gnItemClearCommandCount, "D2Game::UNIT::ITEM_ClearFlagsAndCommands::gnItemClearCommandCount");
 
+    uint32_t nIdx;
     if (pUnit) {
       pUnit->eUnitFlagsEx &= ~(UNITFLAGEX_ITEMINIT | UNITFLAGEX_ISVENDORITEM);
     }
 
-    uint32_t nIdx = 0;
-    if (gnItemClearCommandCount > 0) {
-      do {
-        D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pUnit, gaItemClearCommandTable[nIdx], 0);
-        nIdx++;
-      } while (nIdx < gnItemClearCommandCount);
+    for (nIdx = 0; nIdx < gnItemClearCommandCount; nIdx++) {
+      D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pUnit, gaItemClearCommandTable[nIdx], 0);
     }
 
-    nIdx = 0;
-    if (gnItemClearFlagCount <= 0) {
-      return;
-    }
-
-    do {
+    for (nIdx = 0; nIdx < gnItemClearFlagCount; nIdx++) {
       D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, gaItemClearFlagTable[nIdx], 0);
-      nIdx++;
-    } while (nIdx < gnItemClearFlagCount);
+    }
 }
 
 BOOL __fastcall ITEM_HasPendingInventoryUpdates(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
@@ -515,7 +506,7 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
         if (pPlayer) {
           bIsInNpcState2 = D2Game::Monster::MonsterAI::NpcStateIs2(pUnit, pPlayer);
           if (bIsInNpcState2) {
-            sunitproxy::SUNITPROXY_SendProxyItemsToClient(pGame, pUnit, (int32_t)pPlayer, pClient);
+            sunitproxy::SUNITPROXY_SendProxyItemsToClient(pGame, pUnit, pPlayer, pClient);
             goto send_sound_and_health;
           }
         }

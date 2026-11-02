@@ -9,12 +9,13 @@
 #include "d2_platform.h"
 
 // Forward declarations
+struct D2SetsTxtFStrc;
 struct D2UnitStrc;
 
 namespace D2Client::Items::ItemMods {
 
 // Function declarations
 // Sets the socket count on an item unit. Computes the socket cap from the item's grid dimensions (width*height, max 6) and the item's own max socket limit, rolls a random socket count if none supplied, clamps to [1, cap], then sets ITEMFLAG_SOCKETED and UNITSTAT_item_numsockets on the item. Returns the final socket count, or 0 if the item is invalid or has zero area.
-uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, uint32_t nParam1, uint32_t dwParam2, int32_t nParam12, uint32_t dwParam3, uint32_t nParam2, int32_t nParam22, uint32_t nParam3, uint32_t dwParam4);
+uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t dwParam4);
 
 } // namespace D2Client::Items::ItemMods

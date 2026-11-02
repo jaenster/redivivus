@@ -66,7 +66,7 @@ void * __fastcall D2FILE_AllocAndLoadD2File(D2PoolManagerStrc * pMemory, char * 
     return pBuffer;
 }
 
-static int __stdcall FindMPQOnCd(char * pszMpqName, int * pnPriority, int * * ppArchive, LPSTR szText) {
+static int __stdcall FindMPQOnCd(char * pszMpqName, int * pnPriority, D2ArchiveStrc * * ppArchive, LPSTR szText) {
     char* pcNextBackslash;
     DWORD dwDriveStringsLen;
     UINT nDriveType;
@@ -93,7 +93,7 @@ static int __stdcall FindMPQOnCd(char * pszMpqName, int * pnPriority, int * * pp
     Storm::Source::SSTR::SStrPack(szText, "\\", 0x7fffffff);
     Storm::Source::SSTR::SStrPack(szText, pszMpqName, 0x7fffffff);
     int bOpenArchiveCdOk;
-    bOpenArchiveCdOk = Storm::Source::SFile::SFileOpenArchive(szText, pnPriority, 2, (D2ArchiveStrc**)ppArchive);
+    bOpenArchiveCdOk = Storm::Source::SFile::SFileOpenArchive(szText, pnPriority, 2, ppArchive);
     if (bOpenArchiveCdOk) {
       archive_opened:
       bOpenArchiveCdOk = 1;
@@ -120,7 +120,7 @@ static int __stdcall FindMPQOnCd(char * pszMpqName, int * pnPriority, int * * pp
             if (bVolumeInfoOk) {
               Storm::Source::SSTR::SStrCopy(szText, (char*)szCurrentDrive, 0x7fffffff);
               Storm::Source::SSTR::SStrPack(szText, pszMpqName, 0x7fffffff);
-              bOpenArchiveCdOk = Storm::Source::SFile::SFileOpenArchive(szText, pnPriority, 2, (D2ArchiveStrc**)ppArchive);
+              bOpenArchiveCdOk = Storm::Source::SFile::SFileOpenArchive(szText, pnPriority, 2, ppArchive);
               if (bOpenArchiveCdOk) {
                 goto archive_opened;
               }
@@ -166,7 +166,7 @@ static int * __stdcall FindMpqFromDiskOrCd(char * pszMpqName, int * pnPriority, 
       return ppArchive;
     }
 
-    bOpenedFromCd = FindMPQOnCd(pszMpqName, pnPriority, &ppArchive, szText);
+    bOpenedFromCd = FindMPQOnCd(pszMpqName, pnPriority, (D2ArchiveStrc**)&ppArchive, szText);
     ppArchive = bOpenedFromCd ? (int*)ppArchive : nullptr;
     return ppArchive;
 }

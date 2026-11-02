@@ -34,6 +34,7 @@ void __stdcall DrawSellBtn();
 void __stdcall HELP_DrawDarkOverlay();
 void __stdcall FreeHelpBorder();
 void __stdcall INPUT_HelpCloseButtonDown(struct D2UIMouseMsgStrc * pMsg);
+void __stdcall HELP_MiniPanelKeyNoOp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall HELP_HideMiniPanel();
 BOOL __stdcall MouseIsInRange(int32_t nSizeX, int32_t nSizeY, int32_t nX, int32_t nY);
 void __stdcall HELP_DrawHelpButtonTooltip();
@@ -45,6 +46,7 @@ void __stdcall DRAW_UI_HelpXpac();
 void __stdcall DRAW_UI_HelpClassic();
 void __stdcall DrawBackgroundHelpMenu();
 void __stdcall INPUT_HelpCloseButtonUp(struct D2UIMouseMsgStrc * pMsg);
+void __stdcall HELP_OnEscapeOrSpace(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall HELP_SetUIVarW(eD2UIvars eUIVar, eD2UIvarsSetType eUIVarSetType, uint32_t dwArg1);
 
 } // namespace D2Client::UI::Help

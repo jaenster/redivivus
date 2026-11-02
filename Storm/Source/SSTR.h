@@ -102,7 +102,7 @@ uint32_t __stdcall SStrToUnsigned(char * szText);
 // the token was quoted. Five parameters and there is no other tokenizer in the module.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_ExtractQuotedToken
-void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, char * nMaxLen, char * szDelimiters, uint32_t * pbWasQuoted);
+void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, uint32_t nMaxLen, char * szDelimiters, uint32_t * pbWasQuoted);
 // @blizzard SStrHash (SSTR.CPP)
 uint32_t __stdcall SStrHash(char * pszText, uint8_t bCaseSensitive, uint32_t nSeed);
 // Storm 64-bit string hash: hash = (table[c>>4]-table[c&15]) ^ (seed2+hash); seed2 = seed2*33 + c + hash + 3, per char (upper-cased and '/'->'\\' unless bCaseSensitive); qwSeed 0 means 0x7fed7fed7fed7fed; a 0 result becomes 1.
@@ -136,7 +136,7 @@ void __stdcall SSTR_InitPow10Table();
 // the new buffer. The allocation site's own __FILE__ literal is what proves this module is SSTR.CPP.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_Strdup
-uint32_t * __stdcall SStrDup(char * szText);
+char * __stdcall SStrDup(char * szText);
 void __stdcall SSTR_InitConversionTables();
 // Converts a decimal string to a SIGNED 64-bit integer returned in EDX:EAX. Handles a
 // negative sign prefix; returns 0 for NULL input.
@@ -186,14 +186,18 @@ int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnPa
 int __stdcall UTF8_ToUTF16(short * pszUTF16Out, int nOutMaxChars, uint8_t * pbUTF8In, int nInBytes, int * pnCharsWritten, int * pnBytesRead);
 uint32_t __stdcall UTF8_DecodeNextChar(uint8_t * pbParam, int * pnParam);
 void __stdcall UTF8_EncodeChar(uint32_t uCodepoint, uint8_t * pbOut);
-void __thiscall UTF8_StepBackOneChar(uint32_t ecx_passthru, int str_base, int position);
-void __stdcall UTF8_StepForwardOneChar(int str_base, int position, uint32_t ecx_passthru);
+// ECX is not an argument: neither this body nor UTF8_AdvanceToCharBoundary reads it.
+void __stdcall UTF8_StepBackOneChar(uint8_t * str_base, int position);
+// ECX is not an argument: neither this body nor UTF8_AdvanceToCharBoundary reads it.
+void __stdcall UTF8_StepForwardOneChar(uint8_t * str_base, int position);
 void __stdcall TRANSTBL_UnicodeToLatin1(uint8_t * pbOut, void * pSrcUTF16, int nCount);
 void __stdcall TRANSTBL_UnicodeToLatin2(uint8_t * pbOut, void * pSrcUTF16, int nCount);
 void __stdcall TRANSTBL_UnicodeToKorean(uint8_t * pbOut, void * pSrcUTF16, int nCount);
 int __stdcall TRANSTBL_Latin1ToUnicode(uint16_t * dest, uint8_t * src, int count);
-void __stdcall TRANSTBL_Latin2ToUnicode(uint16_t * dest, uint8_t * src, int count, uint32_t ecx_passthru);
-void __stdcall TRANSTBL_KoreanToUnicode(uint16_t * dest, uint8_t * src, int count, uint32_t ecx_passthru);
+// ECX is not an argument: neither this body nor TRANSTBL_SingleByteToUnicode reads it.
+void __stdcall TRANSTBL_Latin2ToUnicode(uint16_t * dest, uint8_t * src, int count);
+// ECX is not an argument: neither this body nor TRANSTBL_SingleByteToUnicode reads it.
+void __stdcall TRANSTBL_KoreanToUnicode(uint16_t * dest, uint8_t * src, int count);
 int __fastcall SSTR_StringLength(char * szText);
 // 4 internal functions (defined in .cpp)
 

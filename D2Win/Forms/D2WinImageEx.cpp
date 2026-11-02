@@ -35,8 +35,7 @@ namespace D2Win::Forms {
     ::D2WinImageEx* pNewImageEx = D2_NEW_AT(::D2WinImageEx, ".\\Src\\D2WinImage.cpp", 0x3b);
     memset(pNewImageEx, 0, 0x54);
     pNewImageEx->sImage.sControl.neD2FormType = FORM_Image;
-    int* pDwState = &pNewImageEx->sImage.sControl.dwState;
-    *pDwState |= gadwBitMasks[0];
+    pNewImageEx->sImage.sControl.dwState |= gadwBitMasks[0];
     pNewImageEx->sImage.sControl.dwState |= gadwBitMasks[2];
     pNewImageEx->sImage.sControl.pDC6 = pDC6;
     pNewImageEx->sImage.sControl.dwPosX = nPosX;

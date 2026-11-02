@@ -171,11 +171,11 @@ static int32_t __stdcall UTF8_GetNextCharWidth(uint8_t * pUtf8, int32_t nMaxByte
 
       nByteWidth++;
       if (((int)(short int)wTableMask & (uint32_t)byCurByte) == (int)(short int)gaUtf8DecodeTable[nByteWidth - 1].wExpect) {
-        if ((int)(gaUtf8DecodeTable[nByteWidth - 1].dwCodePointMask & uCodePoint) >= (int)gaUtf8DecodeTable[nByteWidth - 1].dwMinValue) {
-          return nByteWidth;
+        if ((int)(gaUtf8DecodeTable[nByteWidth - 1].dwCodePointMask & uCodePoint) < (int)gaUtf8DecodeTable[nByteWidth - 1].dwMinValue) {
+          return -1;
         }
 
-        return -1;
+        return nByteWidth;
       }
       if (nMaxBytes <= nByteWidth) {
         return -1;
@@ -207,17 +207,12 @@ int32_t __fastcall UTF8_GetStringLength(char * szUtf8, int32_t nMaxBytes) {
       int32_t nWidth;
       nWidth = UTF8_GetNextCharWidth((uint8_t*)szUtf8, nMaxBytes);
       if (nWidth != -1) {
-        nBytesRead = 0;
-        if (nWidth > 0) {
-          do {
-            byCurByte = *szUtf8;
-            szUtf8++;
-            if (!byCurByte) {
-              return nCharCount;
-            }
-
-            nBytesRead++;
-          } while (nBytesRead < nWidth);
+        for (nBytesRead = 0; nBytesRead < nWidth; nBytesRead++) {
+          byCurByte = *szUtf8;
+          szUtf8++;
+          if (!byCurByte) {
+            return nCharCount;
+          }
         }
 
         nCharCount++;
@@ -236,9 +231,9 @@ int32_t __fastcall UTF8_GetStringLength(char * szUtf8, int32_t nMaxBytes) {
     return nCharCount;
 }
 
-void __fastcall UTF8_EncodeCodePoint(uint16_t * nParam) {
+void __fastcall UTF8_EncodeCodePoint(uint16_t * pCodePoint) {
     uint8_t abUtf8Buf[8];
-    EncodeUTF8CodePoint(*nParam, abUtf8Buf);
+    EncodeUTF8CodePoint(*pCodePoint, abUtf8Buf);
 }
 
 uint16_t * __fastcall UTF8_ConvertToWideChar(uint16_t * wszText, char * szText, int32_t nMaxWideChars) {

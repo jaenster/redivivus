@@ -8,7 +8,6 @@
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/SKILLS.h"
 #include "D2Client/SKILLS/SkillsAma.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Source/ClientEngine.h"
 #include "D2Client/Stats.h"
 #include "D2Client/UI/SkillDesc.h"
@@ -36,6 +35,7 @@
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/PATH/Path.h"
@@ -141,19 +141,14 @@ BOOL __fastcall Skills_SrvStFunc_16_ApplyHitAndDamage(::SGAMEDATA * pGame, D2Uni
     if (bIsInTown) {
       return 0;
     }
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
 
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
 
     memset(&sDamage, 0, 0x70);
-    int32_t nHitFlags = 0;
-    uint32_t nHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nHitResult, nHitFlags, nHitResult);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
     if (sDamage.wResultFlags & 1U) {
       sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
       if (pSkillsTxt->EType != ELEMENTAL_NONE) {
@@ -262,8 +257,8 @@ BOOL __fastcall Skills_SrvStFunc_20_IsGroundItemForIronGolem(::SGAMEDATA * pGame
     return (uint32_t)!pTarget;
 }
 
-BOOL CorpseConsumedCheck(D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : ~UNIT_MONSTER) != UNIT_MONSTER) {
+static BOOL CorpseConsumedCheck(D2UnitStrc * pUnit) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -291,27 +286,8 @@ BOOL __fastcall Skills_SrvStFunc_21_IsRevivableCorpse(::SGAMEDATA * pGame, D2Uni
     if (!pTarget) {
       return 0;
     }
-    if (!(pTarget && pTarget->eUnitType == UNIT_MONSTER)) {
-      return 0;
-    }
 
-    BOOL bIsCorpse = D2Client::UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pTarget->nClassId, TXTMonStats2Field0x04DWORD_ns::revive);
-    if (!bIsCorpse) {
-      return 0;
-    }
-
-    bIsCorpse = UNIT::SUnit::CheckForModeZeroDeath(pTarget);
-    if (!bIsCorpse) {
-      return 0;
-    }
-
-    uint32_t nRevivable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTarget, 0);
-    if (!nRevivable) {
-      return 0;
-    }
-
-    bIsCorpse = SkillsServer::D2CheckCorpseConsumed(pTarget, 7);
-    return (uint32_t)(bIsCorpse != 0);
+    CorpseConsumedCheck(pTarget);
 }
 
 void __fastcall SKILLNEC_OnCurseExpire(D2UnitStrc * pUnit, eD2States eState, int32_t dwParam) {
@@ -428,7 +404,6 @@ void __fastcall SKILLNEC_ApplyCurseToUnit(D2UnitStrc * pUnit, D2NecroSkillArgStr
     int32_t nAlignment;
     BOOL bCorpseConsumedOk;
     uint32_t nCorpseConsumeType;
-    D2StateExArgStrc sStateExArg;
     eD2States eAuraState;
     if (pNecroSkillArg->bRegisterExpireCallback) {
       if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
@@ -457,7 +432,7 @@ void __fastcall SKILLNEC_ApplyCurseToUnit(D2UnitStrc * pUnit, D2NecroSkillArgStr
       }
     }
 
-    sStateExArg.nSkillCalc = 0;
+    D2StateExArgStrc sStateExArg = {0};
     if ((int)pNecroSkillArg->eStat[0] >= 0) {
       sStateExArg.nSkillCalc = SKILLNEC_ClampResistPenalty(pUnit, pNecroSkillArg->eStat[0], pNecroSkillArg->aSkillCalc[0]);
       if (!sStateExArg.nSkillCalc) {
@@ -527,7 +502,7 @@ void __fastcall SKILLNEC_ApplyCurseToUnit(D2UnitStrc * pUnit, D2NecroSkillArgStr
     iStatLoop = 3;
     do {
       if (pNecroSkillArg->nAuraEvent[0] >= 0 && pNecroSkillArg->nAuraEventFunc[0] > 0) {
-        SkillsServer::D2SetAuraEvent(pNecroSkillArg->pGame, pUnit, (uint8_t)*pItemEventIds, pNecroSkillArg->eSkill, pNecroSkillArg->nSkillLvl, pItemEventIds[3], 1, pNecroSkillArg->eAuraState);
+        SkillsServer::D2SetAuraEvent(pNecroSkillArg->pGame, pUnit, *pItemEventIds, pNecroSkillArg->eSkill, pNecroSkillArg->nSkillLvl, pItemEventIds[3], 1, pNecroSkillArg->eAuraState);
       }
 
       pItemEventIds++;
@@ -556,65 +531,63 @@ BOOL __fastcall Skills_SrvDoFunc_030_CastCurseAoE(::SGAMEDATA * pGame, D2UnitStr
     D2NecroSkillArgStrc sNecroArg;
     int* pAuraStatCalc;
     short int nAuraStatId;
-    if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
+    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize) {
       uint32_t bIsReviveOrSkel;
-      pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
-      if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize) {
-        if (pUnit) {
-          pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-        }
-
-        bIsReviveOrSkel = SKILLNEC_IsReviveOrRaiseSkeleton((int)pSkillsTxt->auratargetstate);
-        nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnitForCalc, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
-        pAuraStatCalc = (int*)D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
-        if (bIsReviveOrSkel) {
-          pAuraStatCalc = (int*)SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, (int32_t)pAuraStatCalc);
-        }
-
-        memset(&sNecroArg, 0, 0x68);
-        iStatIdx = 0;
-        sNecroArg.eSkill = eSkill;
-        sNecroArg.nSkillLvl = nSkillLvl;
-        sNecroArg.nDurationInFrames = (int32_t)pAuraStatCalc;
-        sNecroArg.bUpdateAnimSpeed = 0;
-        psAuraStatPtr = pSkillsTxt->aurastat;
-        sNecroArg.pGame = pGame;
-        sNecroArg.pUnit = pUnit;
-        sNecroArg.bRegisterExpireCallback = bIsReviveOrSkel;
-        pAuraStatCalc = pSkillsTxt->aurastatcalc;
-        do {
-          nAuraStatId = *psAuraStatPtr;
-          if (nAuraStatId < 0 || (int)nAuraStatId >= sgptDataTable->nTxtItemStatCostSize) {
-            sNecroArg.eStat[iStatIdx] = ~UNITSTAT_strength;
-            break;
-          }
-
-          pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine((int)nAuraStatId);
-          if (!pStatCostTxt) {
-            break;
-          }
-          if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1]) {
-            sNecroArg.bUpdateAnimSpeed = 1;
-          }
-
-          sNecroArg.eStat[iStatIdx] = (int)*psAuraStatPtr;
-          nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraStatCalc, eSkill, nSkillLvl);
-          pAuraStatCalc++;
-          sNecroArg.aSkillCalc[iStatIdx] = nStatCalc;
-          iStatIdx++;
-          psAuraStatPtr++;
-        } while (iStatIdx < 6);
-
-        sNecroArg.eAuraState = (eD2States)pSkillsTxt->auratargetstate;
-        sNecroArg.nAuraEvent[0] = (int32_t)pSkillsTxt->auraevent[0];
-        sNecroArg.nAuraEventFunc[0] = (int32_t)pSkillsTxt->auraeventfunc[0];
-        sNecroArg.nAuraEvent[1] = (int32_t)pSkillsTxt->auraevent[1];
-        sNecroArg.nAuraEventFunc[1] = (int32_t)pSkillsTxt->auraeventfunc[1];
-        sNecroArg.nAuraEvent[2] = (int32_t)pSkillsTxt->auraevent[2];
-        sNecroArg.nAuraEventFunc[2] = (int32_t)pSkillsTxt->auraeventfunc[2];
-        bIsReviveOrSkel = SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGame, pSkillsTxt->aurafilter, pUnit, nAuraRange, (pfnSkillRangeCb)SKILLNEC_ApplyCurseToUnit, &sNecroArg);
-        return bIsReviveOrSkel;
+      if (pUnit) {
+        pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
+
+      bIsReviveOrSkel = SKILLNEC_IsReviveOrRaiseSkeleton((int)pSkillsTxt->auratargetstate);
+      nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnitForCalc, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
+      pAuraStatCalc = (int*)D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
+      if (bIsReviveOrSkel) {
+        pAuraStatCalc = (int*)SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, (int32_t)pAuraStatCalc);
+      }
+
+      memset(&sNecroArg, 0, 0x68);
+      iStatIdx = 0;
+      sNecroArg.eSkill = eSkill;
+      sNecroArg.nSkillLvl = nSkillLvl;
+      sNecroArg.nDurationInFrames = (int32_t)pAuraStatCalc;
+      sNecroArg.bUpdateAnimSpeed = 0;
+      psAuraStatPtr = pSkillsTxt->aurastat;
+      sNecroArg.pGame = pGame;
+      sNecroArg.pUnit = pUnit;
+      sNecroArg.bRegisterExpireCallback = bIsReviveOrSkel;
+      pAuraStatCalc = pSkillsTxt->aurastatcalc;
+      do {
+        nAuraStatId = *psAuraStatPtr;
+        if (nAuraStatId < 0 || (int)nAuraStatId >= sgptDataTable->nTxtItemStatCostSize) {
+          sNecroArg.eStat[iStatIdx] = ~UNITSTAT_strength;
+          break;
+        }
+
+        pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine((int)nAuraStatId);
+        if (!pStatCostTxt) {
+          break;
+        }
+        if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1]) {
+          sNecroArg.bUpdateAnimSpeed = 1;
+        }
+
+        sNecroArg.eStat[iStatIdx] = (int)*psAuraStatPtr;
+        nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraStatCalc, eSkill, nSkillLvl);
+        pAuraStatCalc++;
+        sNecroArg.aSkillCalc[iStatIdx] = nStatCalc;
+        iStatIdx++;
+        psAuraStatPtr++;
+      } while (iStatIdx < 6);
+
+      sNecroArg.eAuraState = (eD2States)pSkillsTxt->auratargetstate;
+      sNecroArg.nAuraEvent[0] = (int32_t)pSkillsTxt->auraevent[0];
+      sNecroArg.nAuraEventFunc[0] = (int32_t)pSkillsTxt->auraeventfunc[0];
+      sNecroArg.nAuraEvent[1] = (int32_t)pSkillsTxt->auraevent[1];
+      sNecroArg.nAuraEventFunc[1] = (int32_t)pSkillsTxt->auraeventfunc[1];
+      sNecroArg.nAuraEvent[2] = (int32_t)pSkillsTxt->auraevent[2];
+      sNecroArg.nAuraEventFunc[2] = (int32_t)pSkillsTxt->auraeventfunc[2];
+      bIsReviveOrSkel = SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGame, pSkillsTxt->aurafilter, pUnit, nAuraRange, (pfnSkillRangeCb)SKILLNEC_ApplyCurseToUnit, &sNecroArg);
+      return bIsReviveOrSkel;
     }
 
     return 0;
@@ -702,7 +675,6 @@ void __fastcall SKILLS_NecroShredAlignmentCallback(D2UnitStrc * pUnit, eD2States
 // Retired notes from 'SKILLNEC_CastCorpseSkill':
 // Server-side execution body for Necromancer corpse-targeting skills (e.g. Corpse Explosion, Bone Spirit from corpse). Validates the targeted corpse via SKILLNEC_ValidateCorpseTarget, sets the corpse's alignment/aura-state, frees its minions, computes radius and duration from skill calcs with difficulty divisor, then calls SKILLS_ApplyEffectToUnitsInRange with SKILLNEC_CorpseTarget_ValidateAndScheduleEvent, and finally applies the necro-shred alignment state. Returns 1 on success, 0 on invalid target.
 BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2StateExArgStrc DStack_54;
     ::SGAMEDATA* pSStack_30;
     D2UnitStrc* pDStack_2c;
     eD2Skills eStack_28;
@@ -712,14 +684,7 @@ BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2Unit
     int32_t iStack_18;
     int32_t iStack_14;
     int32_t iStack_10;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pDVar2 = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pDVar2 = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pDVar2) {
       return 0;
     }
@@ -740,6 +705,7 @@ BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2Unit
       iStack_10 = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar2->aurarangecalc, eSkill, nSkillLvl);
       nParam2 = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar2->auralencalc, eSkill, nSkillLvl);
       iStack_18 = SKILLNEC_ApplyCurseDifficultyDivisor(local_8->nDifficulty, nParam2);
+      D2StateExArgStrc DStack_54 = {0};
       DStack_54.pUnit = local_c;
       eStack_28 = eSkill;
       pSStack_30 = local_8;
@@ -755,7 +721,6 @@ BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2Unit
 
       iStack_14 = iStack_18;
       SkillsServer::SKILLS_ApplyEffectToUnitsInRange(local_8, pDVar2->aurafilter, local_c, iStack_10, SKILLNEC_CorpseTarget_ValidateAndScheduleEvent, &pSStack_30);
-      DStack_54.nSkillCalc = 0;
       DStack_54.nSkillLvl = nSkillLvl;
       DStack_54.eSkill = eSkill;
       DStack_54.nDurationInFrames = iStack_14;
@@ -771,7 +736,7 @@ BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2Unit
 }
 
 uint32_t __fastcall SKILLNEC_ValidateReviveTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpse) {
-    if ((pCorpse ? pCorpse->eUnitType : ~UNIT_MONSTER) != UNIT_MONSTER) {
+    if ((pCorpse ? pCorpse->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -866,54 +831,52 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
     int* pAuraStatCalc;
     short int wCurAuraStatId;
     eD2Skills eSkillSaved = eSkill;
-    if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
+    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize) {
       int32_t nRadius;
-      pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
-      if (pSkillsTxt && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < sgptDataTable->nTxtStatesSize) {
-        if (pUnit) {
-          pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
+      if (pUnit) {
+        pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
+      }
+
+      nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
+      nDurationCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
+      nDurationCalc = SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, nDurationCalc);
+      memset(&pGameArg, 0, 0x68);
+      pAuraStatCalc = pSkillsTxt->aurastatcalc;
+      pGameArg.eSkill = eSkill;
+      pGameArg.nSkillLvl = nSkillLvl;
+      pGameArg.bUpdateAnimRate = 0;
+      iAuraStatIdx = 1;
+      pGameArg.pGame = pGame;
+      pGameArg.pCaster = pUnit;
+      pGameArg.nDurationInFrames = nDurationCalc;
+      eSkill = (eD2Skills)pSkillsTxt->aurastat;
+      do {
+        pAuraStatCalc++;
+        eSkill += 2;
+        wCurAuraStatId = *(short int*)eSkill;
+        if (wCurAuraStatId < 0 || (int)wCurAuraStatId >= sgptDataTable->nTxtItemStatCostSize) {
+          pGameArg.anStatIds[iAuraStatIdx] = -1;
+          break;
         }
 
-        nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
-        nDurationCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
-        nDurationCalc = SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, nDurationCalc);
-        memset(&pGameArg, 0, 0x68);
-        pAuraStatCalc = pSkillsTxt->aurastatcalc;
-        pGameArg.eSkill = eSkill;
-        pGameArg.nSkillLvl = nSkillLvl;
-        pGameArg.bUpdateAnimRate = 0;
-        iAuraStatIdx = 1;
-        pGameArg.pGame = pGame;
-        pGameArg.pCaster = pUnit;
-        pGameArg.nDurationInFrames = nDurationCalc;
-        eSkill = (eD2Skills)pSkillsTxt->aurastat;
-        do {
-          pAuraStatCalc++;
-          eSkill += 2;
-          wCurAuraStatId = *(short int*)eSkill;
-          if (wCurAuraStatId < 0 || (int)wCurAuraStatId >= sgptDataTable->nTxtItemStatCostSize) {
-            pGameArg.anStatIds[iAuraStatIdx] = -1;
-            break;
-          }
+        pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine((int)wCurAuraStatId);
+        if (!pStatCostTxt) {
+          break;
+        }
+        if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1]) {
+          pGameArg.bUpdateAnimRate = 1;
+        }
 
-          pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine((int)wCurAuraStatId);
-          if (!pStatCostTxt) {
-            break;
-          }
-          if (*(uint8_t*)((uintptr_t)&pStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1]) {
-            pGameArg.bUpdateAnimRate = 1;
-          }
+        pGameArg.anStatIds[iAuraStatIdx] = (int)*(short int*)eSkill;
+        nDurationCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraStatCalc, eSkillSaved, nSkillLvl);
+        pGameArg.anStatValues[iAuraStatIdx] = nDurationCalc;
+        iAuraStatIdx++;
+      } while (iAuraStatIdx < 6);
 
-          pGameArg.anStatIds[iAuraStatIdx] = (int)*(short int*)eSkill;
-          nDurationCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraStatCalc, eSkillSaved, nSkillLvl);
-          pGameArg.anStatValues[iAuraStatIdx] = nDurationCalc;
-          iAuraStatIdx++;
-        } while (iAuraStatIdx < 6);
-
-        pGameArg.eAuraState = (int32_t)pSkillsTxt->auratargetstate;
-        bResult = SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGame, pSkillsTxt->aurafilter, pUnit, nRadius, (pfnSkillRangeCb)SKILLNEC_ApplyConvertToUnit, &pGameArg);
-        return bResult;
-      }
+      pGameArg.eAuraState = (int32_t)pSkillsTxt->auratargetstate;
+      bResult = SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGame, pSkillsTxt->aurafilter, pUnit, nRadius, (pfnSkillRangeCb)SKILLNEC_ApplyConvertToUnit, &pGameArg);
+      return bResult;
     }
 
     return 0;
@@ -1096,7 +1059,6 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
     int32_t nStatCalc;
     D2SUnitEventStrc* fEventSearchResult;
     int32_t nSummonGUID;
-    eD2UnitType eUnitType;
     eD2Skills eSummonSkill;
     eD2UnitStat eStatId;
     int nHpBonus;
@@ -1104,8 +1066,6 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
     int64_t nDivResult;
     D2SkillsTxt* pSkillsTxt;
     short int nEventOrState;
-    eD2UnitStat nExtraParam;
-    eD2UnitStat eAuraStatId;
     D2SkillsTxt* pSkillsTxtTbl;
     D2UnitStrc* pSummon = pSummonStatList;
     if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
@@ -1131,18 +1091,16 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
             D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pSummonStatList, eStatId, nStatCalc, 0);
             pDataTable = sgptDataTable;
             if (pStatCostTxt->itemevent1 > 0) {
-              eAuraStatId = eStatId;
-              nStatCalc = D2Client::UNIT::GetGUID(pSummonStatList);
-              fEventSearchResult = UNIT::SUnitEvent::UNITEVENT_FindByCallbackParams(pGame, pSummonStatList, 2, nStatCalc, eAuraStatId);
+              fEventSearchResult = UNIT::SUnitEvent::UNITEVENT_FindByCallbackParams(pGame, pSummonStatList, 2, D2Client::UNIT::GetGUID(pSummonStatList), eStatId);
               pDataTable = sgptDataTable;
               if (!fEventSearchResult) {
                 nStatCalc = D2Client::UNIT::GetGUID(pSummonStatList);
-                SkillsServer::D2SetAuraEvent(pGame, pSummonStatList, (uint8_t)pStatCostTxt->itemevent1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc1, 2, nStatCalc);
-                nEventOrState = pStatCostTxt->itemevent2;
+                SkillsServer::D2SetAuraEvent(pGame, pSummonStatList, (int)pStatCostTxt->itemevent1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc1, 2, nStatCalc);
+                sVar1 = pStatCostTxt->itemevent2;
                 pDataTable = sgptDataTable;
-                if (nEventOrState > 0) {
+                if (sVar1 > 0) {
                   nStatCalc = D2Client::UNIT::GetGUID(pSummonStatList);
-                  SkillsServer::D2SetAuraEvent(pGame, pSummonStatList, (uint8_t)nEventOrState, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc2, 2, nStatCalc);
+                  SkillsServer::D2SetAuraEvent(pGame, pSummonStatList, (int)sVar1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc2, 2, nStatCalc);
                   pDataTable = sgptDataTable;
                 }
               }
@@ -1171,8 +1129,7 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
             if (nStatCalc) {
               if (!pSummonStatList) {
                 nSummonGUID = D2Client::UNIT::GetGUID(pSummon);
-                eUnitType = D2Client::Units::GetType(pSummon);
-                pSummonStatList = (D2UnitStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0, 0, eUnitType, nSummonGUID);
+                pSummonStatList = (D2UnitStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0, 0, D2Client::Units::GetType(pSummon), nSummonGUID);
                 if (!pSummonStatList) {
                   return 0;
                 }
@@ -1183,18 +1140,16 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
               D2Common::Stats::StatsEx::D2AddStatToStatsListEx((D2StatListExStrc*)pSummonStatList, eStatId, nStatCalc, 0);
               pDataTable = sgptDataTable;
               if (pStatCostTxt->itemevent1 > 0) {
-                nExtraParam = eStatId;
-                nStatCalc = D2Client::UNIT::GetGUID(pSummon);
-                fEventSearchResult = UNIT::SUnitEvent::UNITEVENT_FindByCallbackParams(pGame, pSummon, 2, nStatCalc, nExtraParam);
+                fEventSearchResult = UNIT::SUnitEvent::UNITEVENT_FindByCallbackParams(pGame, pSummon, 2, D2Client::UNIT::GetGUID(pSummon), eStatId);
                 pDataTable = sgptDataTable;
                 if (!fEventSearchResult) {
                   nStatCalc = D2Client::UNIT::GetGUID(pSummon);
-                  SkillsServer::D2SetAuraEvent(pGame, pSummon, (uint8_t)pStatCostTxt->itemevent1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc1, 2, nStatCalc);
+                  SkillsServer::D2SetAuraEvent(pGame, pSummon, (int)pStatCostTxt->itemevent1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc1, 2, nStatCalc);
                   sVar1 = pStatCostTxt->itemevent2;
                   pDataTable = sgptDataTable;
                   if (sVar1 > 0) {
                     nStatCalc = D2Client::UNIT::GetGUID(pSummon);
-                    SkillsServer::D2SetAuraEvent(pGame, pSummon, (uint8_t)sVar1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc2, 2, nStatCalc);
+                    SkillsServer::D2SetAuraEvent(pGame, pSummon, (int)sVar1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc2, 2, nStatCalc);
                     pDataTable = sgptDataTable;
                   }
                 }
@@ -1221,7 +1176,7 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
     uint32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pSummon);
     if ((int)nMaxHp > 0x100000) {
       if ((int)(nMaxHp & -16) < 0x640) {
-        nDivResult = _alldiv((uint32_t)((int64_t)(int)nMaxHp * (int64_t)(int)nHpPct), (uint32_t)((uint64_t)((int64_t)(int)nMaxHp * (int64_t)(int)nHpPct) >> 0x20), 100, 0);
+        nDivResult = (int64_t)(int)nMaxHp * (int64_t)(int)nHpPct / 100;
         nHpBonus = (int)nDivResult;
       } else {
         nHpBonus = (int)nMaxHp / 100 * nHpPct;
@@ -1229,7 +1184,7 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
     } else {
       if ((int)nHpPct > 0x10000) {
         if ((int)(nHpPct & -16) < 0x640) {
-          nDivResult = _alldiv((uint32_t)((int64_t)(int)nMaxHp * (int64_t)(int)nHpPct), (uint32_t)((uint64_t)((int64_t)(int)nMaxHp * (int64_t)(int)nHpPct) >> 0x20), 100, 0);
+          nDivResult = (int64_t)(int)nMaxHp * (int64_t)(int)nHpPct / 100;
           nHpBonus = (int)nDivResult;
         } else {
           nHpBonus = (int)nHpPct / 100 * nMaxHp;
@@ -1275,7 +1230,7 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
           break;
         }
 
-        SkillsServer::D2SetAuraEvent(pGame, pSummon, (uint8_t)*pSumSkillCursor, eSkill, nParam1, (int)pSumSkillCursor[3], 1, (int)pSkillsTxt->aurastate);
+        SkillsServer::D2SetAuraEvent(pGame, pSummon, (int)*pSumSkillCursor, eSkill, nParam1, (int)pSumSkillCursor[3], 1, (int)pSkillsTxt->aurastate);
         nHpBonus++;
         pSumSkillCursor++;
       } while (nHpBonus < 3);
@@ -1311,13 +1266,13 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Sets the combat stats (level, AC, to-hit) on a corpse unit being revived by the Necromancer's Revive skill. If nLevel < 1, derives the minion level as 75% of the caster's level plus nParam2 (clamped to at least 1). Looks up the D2MonLvlTxt row for the final level, then adds the difficulty- and ladder-adjusted AC and TH values. Returns 1 on success, 0 if MonLvl data is out of range.
-void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpseUnit, int32_t nLevel, int32_t nParam2) {
+void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpseUnit, int32_t nLevel, int32_t nLevelOffset) {
     int nLevelClamped;
     uint32_t nDifficultyIndex;
     if (nLevel <= 0) {
       int nLevelScaled;
       nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-      nLevelScaled = nLevel * 3 / 4 + nParam2;
+      nLevelScaled = nLevel * 3 / 4 + nLevelOffset;
       nLevelClamped = nLevelScaled;
       if (nLevelScaled <= 1) {
         nLevelClamped = 1;
@@ -1341,15 +1296,9 @@ void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, D2UnitStrc * 
     if (nLevel >= nLevelClamped) {
       nLevel = nLevelClamped;
     }
-    if (nLevel < 0) {
-      return;
-    }
-    if (nLevel >= sgptDataTable->nTxtMonLvlSize) {
-      return;
-    }
 
     D2MonLvlTxt* pDVar1;
-    pDVar1 = sgptDataTable->pTxtMonLvl + nLevel;
+    pDVar1 = nLevel >= 0 && nLevel < sgptDataTable->nTxtMonLvlSize ? sgptDataTable->pTxtMonLvl + nLevel : nullptr;
     if (!pDVar1) {
       return;
     }
@@ -1393,11 +1342,7 @@ BOOL __fastcall Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse(::SGAMEDATA * pGame
     }
 
     SKILLNEC_ApplyBloodCost(pGame, pUnit, eSkill, nSkillLvl);
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -1505,12 +1450,12 @@ uint32_t __fastcall SKILLNEC_ApplyCorpseExplosionToUnit(D2SkillCallbackContextSt
 
 // Necromancer Corpse Explosion - detonate corpse with explosion damage at location
 BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+    D2MonStatsInitStrc* pOutStats;
     D2DamageStrc damageEvent;
     D2MonStatsInitStrc sMonStats;
     D2CorpseExplosionArgStrc sExplosionArgs;
     int32_t nPhysDmgMinVal;
     D2SkillsTxt* pSkillData;
-    uint32_t nRandOrLevel;
     int* pMonStatsOut;
     uint32_t* pSynergyNull;
     D2UnitStrc* pCorpseTarget;
@@ -1539,7 +1484,6 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
     int32_t nCorpseHpRaw;
     nCorpseHpRaw = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pCorpseTarget, UNITSTAT_maxhp, 0);
     if (pCorpseTarget->eUnitType == UNIT_MONSTER) {
-      D2MonStatsInitStrc* pOutStats;
       if (pGame->nGameType != SGAMETYPE_BNET_HOST || (nPhysDmgMinVal = 0 , pGame->eGameType != GAMETYPE_SINGLEPLAYER)) {
         nPhysDmgMinVal = 1;
       }
@@ -1547,9 +1491,7 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
       memset(&sMonStats, 0, 0x38);
       nCorpseHpRaw = pCorpseTarget->nClassId;
       pOutStats = &sMonStats;
-      nRandOrLevel = 1;
-      nCorpseMaxHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCorpseTarget, UNITSTAT_level, 0);
-      D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nCorpseHpRaw, nPhysDmgMinVal, (uint32_t)pGame->nDifficulty, nCorpseMaxHp, nRandOrLevel, pOutStats);
+      D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nCorpseHpRaw, nPhysDmgMinVal, (uint32_t)pGame->nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCorpseTarget, UNITSTAT_level, 0), 1, pOutStats);
       nCorpseHpRaw = (sMonStats.nMaxHP + sMonStats.nMinHP) * 0x80;
     }
 
@@ -1559,14 +1501,10 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
     nY = D2Client::Units::GetYPosFromDynamicPathUnit(pCorpseTarget);
     int32_t nSkillCalcTmp;
     nSkillCalcTmp = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillData->aurarangecalc, eSkill, nSkillLvl);
-    nRandOrLevel = 100;
-    int32_t nCalcResult;
-    nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillData->calc[0], eSkill, nSkillLvl);
     int32_t iVar1;
-    iVar1 = D2Client::Stats::D2ApplyPercent(nCalcResult, nCorpseHpRaw, nRandOrLevel);
-    nRandOrLevel = 100;
-    nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillData->calc[1], eSkill, nSkillLvl);
-    nCorpseHpRaw = D2Client::Stats::D2ApplyPercent(nCalcResult, nCorpseHpRaw, nRandOrLevel);
+    iVar1 = D2Client::Stats::D2ApplyPercent(D2Common::Skills::D2GetSkillCalc(pUnit, pSkillData->calc[0], eSkill, nSkillLvl), nCorpseHpRaw, 100);
+    nCorpseHpRaw = D2Client::Stats::D2ApplyPercent(D2Common::Skills::D2GetSkillCalc(pUnit, pSkillData->calc[1], eSkill, nSkillLvl), nCorpseHpRaw, 100);
+    uint32_t nRandOrLevel;
     nRandOrLevel = D2Client::Archive::RANDOM_RandomNumberSelector(&pCorpseTarget->sSeed, nCorpseHpRaw - iVar1);
     iVar1 = nRandOrLevel + iVar1;
     nRandOrLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCorpseTarget, UNITSTAT_level, 0);
@@ -1580,14 +1518,15 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
     nEleConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillData->calc[2], eSkill, nSkillLvl);
     uint32_t nEleConvPctClamped;
     nEleConvPctClamped = (int)nEleConvPct <= 0 ? 0 : nEleConvPct;
-    if ((int)nEleConvPctClamped < 100) {
+    if ((int)nEleConvPctClamped >= 100) {
+      nEleConvPctClamped = 100;
+    } else {
       if ((int)nEleConvPctClamped <= 0) {
         goto apply_explosion_damage;
       }
-    } else {
-      nEleConvPctClamped = 100;
     }
     if (pSkillData->EType != ELEMENTAL_NONE) {
+      int32_t nCalcResult;
       nCorpseHpRaw = D2Common::Skills::SERVER_Synergy1(pUnit, eSkill, nSkillLvl, 1);
       pMonStatsOut = 0;
       pSynergyNull = 0;
@@ -1630,7 +1569,7 @@ BOOL __fastcall Skills_SrvDoFunc_056_SummonGolem(::SGAMEDATA * pGame, D2UnitStrc
     } else {
       pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
     }
-    if (!(eSkill != SKILL_Attack && -1 < pSkillsTxt->summon && (int)pSkillsTxt->summon < sgptDataTable->nTxtMonStatsSize)) {
+    if (!(eSkill != SKILL_Attack && pSkillsTxt->summon >= 0 && (int)pSkillsTxt->summon < sgptDataTable->nTxtMonStatsSize)) {
       return 0;
     }
 
@@ -1867,27 +1806,8 @@ BOOL __fastcall Skills_SrvDoFunc_058_ReviveCorpseCheck(::SGAMEDATA * pGame, D2Un
     if (!pTarget) {
       return 0;
     }
-    if (!(pTarget && pTarget->eUnitType == UNIT_MONSTER)) {
-      return 0;
-    }
 
-    BOOL bCheckResult = D2Client::UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pTarget->nClassId, TXTMonStats2Field0x04DWORD_ns::revive);
-    if (!bCheckResult) {
-      return 0;
-    }
-
-    bCheckResult = UNIT::SUnit::CheckForModeZeroDeath(pTarget);
-    if (!bCheckResult) {
-      return 0;
-    }
-
-    uint32_t nCorpseConsumable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTarget, 0);
-    if (!nCorpseConsumable) {
-      return 0;
-    }
-
-    bCheckResult = SkillsServer::D2CheckCorpseConsumed(pTarget, 7);
-    return (uint32_t)(bCheckResult != 0);
+    CorpseConsumedCheck(pTarget);
 }
 
 // Server-side skill DoFunc 60 (Necromancer golem summon at cursor, e.g. Blood/Clay/Iron/Fire golem). Resolves the cursor/target position, finds a valid non-town room nearby (DRLGROOM_FindBetterNearbyRoom). Resolves the summon's monster class id and pettype via SKILLS_GetSummonMonsterClassId, then creates the golem with SKILL_CreateSummon at the target position. On success: assigns the caster as minion owner (AssignMinionOwner), applies umods (InitUmods) and summon buffs (SKILLNEC_ApplySummonBuffs), registers it in the targets node table. If the golem's room is not in town and a server missile (srvmissilea) is configured with calc[1]/2 > 1, fires two CreatingMissile missiles perpendicular to the caster-to-golem vector (an emerge/spawn effect), each retargeted to the golem GUID. Returns 1 on full success (missiles spawned), 0 on failure or invalid target. Side effect: sets UNITFLAG_SKSRVDOFUNC on caster.
@@ -2108,7 +2028,6 @@ BOOL __fastcall Skills_SrvDoFunc_062_BonePrison(::SGAMEDATA * pGame, D2UnitStrc 
 }; D2_STATIC_GUARD(gnSkillMissileSubCount_BoneStructure, "D2Game::SKILLS::SkillNec::Skills_SrvDoFunc_062_BonePrison::gnSkillMissileSubCount_BoneStructure");
 
     eD2UnitType eOwnerType;
-    int32_t nOwnerGUID;
     int nY;
     uint32_t nDir;
     D2UnitStrc* pUnit_01;
@@ -2135,9 +2054,7 @@ BOOL __fastcall Skills_SrvDoFunc_062_BonePrison(::SGAMEDATA * pGame, D2UnitStrc 
         if (!pFirstMinion) {
           nPosY = 1;
           pFirstMinion = pUnit_00;
-          eOwnerType = D2Client::Units::GetType(pOwnerUnit);
-          nOwnerGUID = D2Client::UNIT::GetGUID(pUnit_01);
-          Ai::AiGeneral::AssignMinionOwner(pGame, pUnit_00, nOwnerGUID, eOwnerType, (int32_t)pPrevFirstMinion, nPosY);
+          Ai::AiGeneral::AssignMinionOwner(pGame, pUnit_00, D2Client::UNIT::GetGUID(pUnit_01), D2Client::Units::GetType(pOwnerUnit), (int32_t)pPrevFirstMinion, nPosY);
         } else {
           Ai::AiGeneral::AssignMinionOwner(pGame, pUnit_00, pFirstMinion->nUnitGUID, pFirstMinion->eUnitType, 0, 0);
           Ai::AiGeneral::AddMinionToList(pGame, pPrevFirstMinion, pUnit_00);
@@ -2219,7 +2136,6 @@ static int32_t SKILLNEC_AddHitpoints(D2UnitStrc * pUnit, int32_t nParam) {
 // Item/skill event handler (__fastcall) implementing a Thorns-style reflect aura with conditional life steal. Validates pTarget/pUnit (must be PLAYER or MONSTER, alive) and an incoming-damage param (>0). Looks up the skill's auratargetstate; only fires if pUnit carries that aura state. Computes reflected physical damage as a percent (D2ApplyPercent) of the incoming damage using a skill calc index chosen by whether owner is merc/player and target is player, then applies it to the target via DAMAGE_ApplyDamageToUnit + SERVER_GetHitCalculation. For a specific monster class (0x122, neutral alignment) it also steals a portion of dealt damage back as hitpoints to the owner and/or pUnit (SKILLNEC_AddHitpoints) and plays overlay 0x97. Returns TRUE if processed, FALSE on validation failure.
 BOOL __fastcall ITEMEVENT_AuraThornsWithLifeSteal(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     D2StatListExStrc* pStatList;
-    eD2UnitType eUnitType;
     D2UnitStrc* pOwnerUnit;
     uint32_t nMercTypeId;
     int32_t nThornsCalc;
@@ -2228,13 +2144,7 @@ BOOL __fastcall ITEMEVENT_AuraThornsWithLifeSteal(::SGAMEDATA * pGame, uint32_t 
     int32_t nHealAmt;
     uint8_t byLifeStealPctMon;
     D2DamageStrc sDamage;
-    if (!pTarget) {
-      return 0;
-    }
-    if (!pUnit) {
-      return 0;
-    }
-    if (pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
+    if (!pTarget || !pUnit || pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
       return 0;
     }
 
@@ -2262,8 +2172,7 @@ BOOL __fastcall ITEMEVENT_AuraThornsWithLifeSteal(::SGAMEDATA * pGame, uint32_t 
         pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillTxt->auratargetstate);
         if (pStatList) {
           nMercTypeId = D2Common::Stats::StatsEx::GetOwnerGUID(pStatList);
-          eUnitType = D2Common::Stats::StatsEx::GetOwnerType(pStatList);
-          pOwnerUnit = UNIT::SUnit::FindUnitFromTable(pGame, eUnitType, nMercTypeId);
+          pOwnerUnit = UNIT::SUnit::FindUnitFromTable(pGame, D2Common::Stats::StatsEx::GetOwnerType(pStatList), nMercTypeId);
           if (pUnit->eUnitType == UNIT_PLAYER || (nMercTypeId = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit) , nMercTypeId != 0)) {
             if (pTarget->eUnitType == UNIT_PLAYER) {
               nThornsOrCalcIdx = pSkillTxt->calc[1];
@@ -2348,7 +2257,6 @@ BOOL __fastcall ITEMEVENT_AuraThornsWithLifeSteal(::SGAMEDATA * pGame, uint32_t 
 
 // Item-event callback for aura-based healing (e.g. Necromancer Life Tap). Given a target unit, looks up the aura's target state on pUnit to find the caster's stat list, computes heal amount via the skill's calc[0] expression scaled by a percentage from pParam, clamps result to [1, maxHP], and writes it back via STATLIST_SetUnitStat UNITSTAT_hitpoints. Also plays the skill's prgoverlay effect on the target. Returns TRUE if heal was applied.
 BOOL __fastcall ITEMEVENT_AuraHealTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pSkillLvlCast, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
-    eD2UnitType eUnitType;
     D2UnitStrc* pTargetUnit = pSkillLvlCast;
     if (!(pUnit && pSkillLvlCast && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER) && (pSkillLvlCast->eUnitType == UNIT_PLAYER || pSkillLvlCast->eUnitType == UNIT_MONSTER))) {
       return 0;
@@ -2430,11 +2338,8 @@ BOOL __fastcall ITEMEVENT_NecroAuraStatDrain(::SGAMEDATA * pGame, uint32_t nUnit
     if (!pDamage) {
       return 0;
     }
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
 
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillTxt) {
       D2StatListExStrc* pStatList;
       nAuraStateId = pSkillTxt->aurastate;
@@ -2501,13 +2406,7 @@ BOOL __fastcall ITEMEVENT_NecroAuraStatDrain(::SGAMEDATA * pGame, uint32_t nUnit
 BOOL __fastcall ITEMEVENT_LifeTap(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bIsDead;
     int32_t nOwnerHealAmt;
-    if (!pUnit) {
-      return 0;
-    }
-    if (!pTarget) {
-      return 0;
-    }
-    if (!pDamage) {
+    if (!pUnit || !pTarget || !pDamage) {
       return 0;
     }
 
@@ -2634,7 +2533,6 @@ BOOL __fastcall ITEMEVENT_NecroReviveLeech(::SGAMEDATA * pGame, uint32_t nUnitEv
 
 // Item-event callback that applies the Slows Target item modifier to pTarget. Reads UNITSTAT_item_slow from pUnit's gear, caps it at 50% for players/slow-immune monsters or 90% for normal monsters, then applies STATE_slowed via SetStateWithExpiryTime (750-frame duration) and additionally slows UNITSTAT_attackrate and UNITSTAT_other_animrate by the same amount, triggering an animation-speed update.
 BOOL __fastcall ITEMEVENT_ItemSlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2StateExArgStrc sStateArg;
     if (!pUnit || !pTarget) {
       return 0;
     }
@@ -2666,10 +2564,9 @@ BOOL __fastcall ITEMEVENT_ItemSlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEven
     }
 
     nSlowAmount = -nSlowAmount;
-    sStateArg.pFunction = 0;
+    D2StateExArgStrc sStateArg = {0};
     sStateArg.pUnit = pUnit;
     sStateArg.pTarget = pTarget;
-    sStateArg.eSkill = SKILL_Attack;
     sStateArg.nSkillLvl = 1;
     sStateArg.nDurationInFrames = 0x2ee;
     sStateArg.eStat = UNITSTAT_velocitypercent;

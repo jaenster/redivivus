@@ -9,7 +9,6 @@
 #include "D2CMP/SRC/FastCmp.h"
 #include "D2CMP/SRC/LRUCache.h"
 #include "D2Client/D2GfxMemoryStrc.h"
-#include "Storm/_unnamespaced.h"
 
 
 // =============================================================================
@@ -669,6 +668,8 @@ BYTE gaGfxHashTable[65536] = {}; D2_GLOBAL_GUARD(gaGfxHashTable, "gaGfxHashTable
 
 D2GfxMemoryStrc D2GfxMemoryStrc_0089db60 = {}; D2_GLOBAL_GUARD(D2GfxMemoryStrc_0089db60, "D2GfxMemoryStrc_0089db60");
 
+TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0> gCelCmpCacheHandler; D2_GLOBAL_GUARD(gCelCmpCacheHandler, "gCelCmpCacheHandler");
+
 uint32_t gaColorDistanceLookupTable[512] = {}; D2_GLOBAL_GUARD(gaColorDistanceLookupTable, "gaColorDistanceLookupTable");
 
 uint8_t gaPaletteMaskData[256] = {}; D2_GLOBAL_GUARD(gaPaletteMaskData, "gaPaletteMaskData");
@@ -805,9 +806,9 @@ namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

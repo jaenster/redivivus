@@ -126,7 +126,10 @@ def our_view(f, sym_to_start, render=True):
             s = sym_to_start.get(tgt)
             tok = ('fn', s) if s is not None else ('fn?', tgt)
         elif kind == 'string':
-            tok = ('str', tgt)
+            # The original names a string by the bytes at the address, so a
+            # reference into the middle of a literal ("Amazon"+4) is "on".
+            add = _addend(f, off)
+            tok = ('str', tgt[add:] if 0 < add < len(tgt) else tgt)
         elif kind == 'import':
             tok = ('import', tgt)
         elif kind == 'self':
@@ -268,12 +271,14 @@ def ref_view_span(start, end, model):
 
 class Result:
     __slots__ = ('status', 'ref_insns', 'our_insns', 'byte_diffs', 'similarity', 'ref_diffs', 'unverified',
-                 'notes', 'wiring')
+                 'notes', 'wiring', 'ident_bytes', 'operand_bytes')
 
     def __init__(self):
         self.byte_diffs = 0
         self.ref_diffs = 0
         self.unverified = 0
+        self.ident_bytes = 0     # original's bytes in instructions identical to an aligned one of ours
+        self.operand_bytes = 0   # original's bytes in an aligned instruction of the same mnemonic, other operands
         self.notes = []
         self.wiring = []     # (our data symbol, original address it implies) at aligned positions
 
@@ -285,12 +290,53 @@ def _tokens_agree(a, b):
     return a == b
 
 
+def _identical(x, y):
+    """One instruction of ours is the original's: the same masked bytes, and
+    every comparable reference agrees (as MATCH judges a whole function)."""
+    return (x.masked == y.masked and len(x.tokens) == len(y.tokens)
+            and all(_tokens_agree(p, q) is not False for p, q in zip(x.tokens, y.tokens)))
+
+
+def aligned_bytes(ours, ref, sm=None):
+    """(ident, operand): the original's bytes in instructions aligned with one
+    of ours that is identical, and in instructions aligned with one of the same
+    mnemonic that is not. The alignment is the similarity's, on the neutral
+    keys; what it leaves unpaired is aligned again on mnemonics alone, so an
+    instruction with another register or displacement still finds its partner.
+    Every original instruction counts at most once."""
+    a = [i.key for i in ours]
+    b = [i.key for i in ref]
+    if sm is None:
+        sm = difflib.SequenceMatcher(None, a, b, autojunk=False)
+    ident = operand = 0
+    for op, i1, i2, j1, j2 in sm.get_opcodes():
+        if op == 'equal':
+            for x, y in zip(ours[i1:i2], ref[j1:j2]):
+                if _identical(x, y):
+                    ident += len(y.masked)
+                else:
+                    operand += len(y.masked)
+        elif op == 'replace':
+            xs, ys = ours[i1:i2], ref[j1:j2]
+            inner = difflib.SequenceMatcher(None, [x.mnemonic for x in xs], [y.mnemonic for y in ys],
+                                            autojunk=False)
+            for _a, _b, n in inner.get_matching_blocks():
+                for x, y in zip(xs[_a:_a + n], ys[_b:_b + n]):
+                    if _identical(x, y):
+                        ident += len(y.masked)
+                    else:
+                        operand += len(y.masked)
+    return ident, operand
+
+
 def compare(ours, ref):
     r = Result()
     r.ref_insns, r.our_insns = len(ref), len(ours)
     a = [i.key for i in ours]
     b = [i.key for i in ref]
-    r.similarity = difflib.SequenceMatcher(None, a, b, autojunk=False).ratio() if a or b else 1.0
+    sm = difflib.SequenceMatcher(None, a, b, autojunk=False)
+    r.similarity = sm.ratio() if a or b else 1.0
+    r.ident_bytes, r.operand_bytes = aligned_bytes(ours, ref, sm)
     if len(ours) != len(ref):
         d = len(ours) - len(ref)
         r.status = 'OUR%+d' % d

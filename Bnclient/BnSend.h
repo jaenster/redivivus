@@ -15,6 +15,10 @@ struct D2BNetGatewayAccessStr;
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 struct sockaddr;
 #endif // _WIN32
+#ifndef RECON_FPTD_pfnNewsEntryCallback
+#define RECON_FPTD_pfnNewsEntryCallback
+typedef void (__fastcall *pfnNewsEntryCallback)(uint32_t dwEntryId, char * szMessage);
+#endif
 #ifndef RECON_FPTD_pfnVoidNoArgCallback
 #define RECON_FPTD_pfnVoidNoArgCallback
 typedef void (__stdcall *pfnVoidNoArgCallback)();
@@ -65,22 +69,22 @@ struct SID_C2S_ClickAd {
     /* 0x04 */ uint32_t dwRequestType; // EDX!=0
 };
 
-struct __attribute__((packed)) SID_C2S_ClientId2 {
+struct SID_C2S_ClientId2 {
     /* 0x00 */ uint32_t dwServerVersion;
     /* 0x04 */ uint32_t dwRegVersion;
     /* 0x08 */ uint32_t dwRegAuthority;
     /* 0x0C */ uint32_t dwClientId;
     /* 0x10 */ uint32_t dwClientToken;
     /* 0x14 */ char szComputerName[1];
-    /* 0x15 */ char szUserName[1];
+    /* 0x15 */ char szUserName[1023];
 };
 
-struct __attribute__((packed)) SID_C2S_DisplayAd {
+struct SID_C2S_DisplayAd {
     /* 0x00 */ uint32_t dwPlatformId;
     /* 0x04 */ uint32_t dwProductId;
     /* 0x08 */ uint32_t dwAdId;
     /* 0x0C */ char szFilename[1];
-    /* 0x0D */ char szUrl[1];
+    /* 0x0D */ char szUrl[1279];
 };
 
 struct SID_C2S_GetFileTime {
@@ -160,10 +164,11 @@ void __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * sz
 uint32_t NET_SID_CLIENT_Send_0x10_LeaveChat();
 void __fastcall NET_SID_CLIENT_Send_0x0E_ChatCommand(uint8_t * pbParam);
 int __stdcall NET_SID_CLIENT_Send_0x15_CheckAd();
-int __stdcall NET_SID_CLIENT_Send_0x21_DisplayAd();
+// Registers: ECX and EDX are loaded by the only caller but not read.
+int __fastcall NET_SID_CLIENT_Send_0x21_DisplayAd(char * szDestPath, void * pPoolMgr);
 void __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * szGamePassword, char * szGameDescription, int32_t nFlags);
 DWORD __stdcall BNCLIENT_SendKeepAlive();
-uint32_t __fastcall thunk_NET_SID_CLIENT_Send(uint8_t bParam, char * szText);
+uint32_t __fastcall thunk_NET_SID_CLIENT_Send(uint8_t nPacketId, char * szText);
 int __stdcall NET_SID_CLIENT_Send_0x1F_LeaveGame();
 BOOL __fastcall BNCLIENT_GetEnterChatResponseFlags(uint32_t * pOutFlags);
 // @sourcefile .\BnSend.cpp
@@ -200,7 +205,7 @@ BOOL __stdcall D2CheckExpansionGame();
 DWORD __stdcall GetDnsResults(void * lpThreadParam);
 void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, int nDnsThreadParam2);
 struct D2BNetGatewayAccessStr * __stdcall BnetLoadAndReturn();
-void __fastcall GetBnetIp(char * szText, int32_t nParam);
+void __fastcall GetBnetIp(char * szText, int32_t nBufferOutputLength);
 // Returns current Battle.net connection state into output parameter. Validates param is non-null.
 void __fastcall BNSEND_GetConnectionState(uint32_t * pdwOutState);
 int __fastcall BNCLIENT_SendLogonRequest(char * szUsername, char * szPassword);
@@ -237,6 +242,7 @@ uint32_t __thiscall BNNEWS_RoundToPowerOfTwo(struct D2BnNewsTableStrc * pNewsTab
 DWORD __stdcall BNNEWS_RoundUpToMultiple(DWORD dwValue, DWORD dwMultiple);
 // @sourcefile .\BNNews.cpp
 void __stdcall BNNEWS_SaveToCache();
+// Calls g_pfnMotdCallback(dwEntryId in ECX, szMessage in EDX) once per unread news entry.
 void __stdcall BNNEWS_InvokeCallbacks();
 void * __thiscall BNNEWS_DestroyNewsTable(void * pNewsTable, uint8_t bFreeMemory);
 void __thiscall BNNEWS_ReallocateNewsTable(struct D2BnNewsTableStrc * pNewsTable, uint32_t dwNewCapacity);
@@ -251,7 +257,7 @@ void __thiscall BNNEWS_SetNewsEntryCount(struct D2BnNewsTableStrc * pNewsTable, 
 BOOL __fastcall NET_SID_CLIENT_Incoming0x46(char * pBytes, size_t nSize);
 // @sourcefile .\BNNews.cpp
 BOOL __stdcall BNNEWS_LoadCachedNews();
-int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnVoidNoArgCallback pfnMotdCallback, pfnVoidNoArgCallback pfnNewsCallback);
+int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnNewsEntryCallback pfnMotdCallback, pfnVoidNoArgCallback pfnNewsCallback);
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 0051dc70..0051dc79; unreferenced in 1.14d.
 __time32_t __stdcall BNSEND_GetTime32(__time32_t * pTime);
@@ -268,6 +274,7 @@ void __fastcall BNSEND_HashCDKeyByType(struct D2CDKeyHashStrc * pOutHash, uint32
 int __fastcall BNSEND_SendRawBytes(void * pBytes, size_t nSize);
 int __fastcall BNSEND_SendString(char * szString);
 void __fastcall NET_SID_CLIENT_Send_0x33_GetFileTime(char * szText, uint32_t dwRequestId);
+void StaticInit_6caec0();
 void StaticFini_gpBNetNewsCache();
 // 2 internal functions (defined in .cpp)
 

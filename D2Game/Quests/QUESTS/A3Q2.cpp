@@ -175,8 +175,7 @@ bool __fastcall Q19_SequenceFilter(D2QuestDataStrc * pQuestData) {
 // Q19_SendQuestStatePacket (Khalim's Will). Builds and sends the 0x5D quest-state packet to the player's client conveying which Khalim's Will sub-stage/relic message to display. No QuestRecord transitions; pure client notification.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q2.cpp
 static void __fastcall Q19_SendQuestStatePacket(uint8_t bStateByte, D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2GSPacketSrv0x5D aPacketFrame;
-    aPacketFrame.nExtra = 0;
+    D2GSPacketSrv0x5D aPacketFrame = {0};
     aPacketFrame.nFilterStatus = bStateByte;
     aPacketFrame.nAlertFlags = pQuestData->nQuestPacketFlags;
     aPacketFrame.nPacketId = ']';
@@ -242,7 +241,7 @@ void __fastcall Q19_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
         return;
       }
     } else {
-      int32_t nQuestStateArg;
+      uint8_t nQuestStateArg;
       if (nItemCode != 0x20316671) {
         if (nItemCode == 0x20796571) {
           if (bMissingKhalimsRib) {
@@ -278,12 +277,12 @@ void __fastcall Q19_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
             goto send_state4_no_heart;
           }
           if (bHasKhalimsFlail) {
-            *(uint8_t*)(char*)&nQuestStateArg = '\x01';
+            nQuestStateArg = '\x01';
             if (bHasKhalimsEye) {
-              *(uint8_t*)(char*)&nQuestStateArg = '\a';
+              nQuestStateArg = '\a';
             }
 
-            Q19_SendQuestStatePacket((uint8_t)nQuestStateArg, pQuestData, pQuestArgs);
+            Q19_SendQuestStatePacket(nQuestStateArg, pQuestData, pQuestArgs);
             return;
           }
         }
@@ -400,7 +399,8 @@ BOOL __fastcall OBJOP_A3Q2_KhalimRelicPedestal(D2ObjectOperateFnArg * pOperation
 }
 
 // Q19_UpdateCompellingOrbObject (Khalim's Will). Per-frame/refresh updater for the Compelling Orb object: if the orb-event flag is set, locates the orb unit, syncs its update flag, and (if changed) schedules its operate event. Maintains orb object state; no QuestRecord transitions.
-void __fastcall Q19_UpdateCompellingOrbObject(D2QuestDataStrc * pQuestData) {
+// Registers: pQuestData in ECX; pMonster in EDX is passed by the caller but not read.
+void __fastcall Q19_UpdateCompellingOrbObject(D2QuestDataStrc * pQuestData, D2UnitStrc * pMonster) {
     D2QuestDataA3Q2Strc* pA1Q2Data = pQuestData->pQuestSpecificData.pA3Q2;
     if (pA1Q2Data->bOrbPlaced != '\x01') {
       return;
@@ -497,8 +497,7 @@ BOOL __fastcall Q19_CheckPlayerHasKhalimsEye(::SGAMEDATA * pGame, D2UnitStrc * p
       return 0;
     }
 
-    int32_t* piVar1 = &pDVar3->pQuestSpecificData.pA3Q2->nKhalimsEyeCount;
-    (*piVar1)++;
+    pDVar3->pQuestSpecificData.pA3Q2->nKhalimsEyeCount++;
     return 0;
 }
 
@@ -519,8 +518,7 @@ BOOL __fastcall Q19_CheckPlayerHasKhalimsBrain(::SGAMEDATA * pGame, D2UnitStrc *
       return 0;
     }
 
-    int32_t* piVar1 = &pDVar3->pQuestSpecificData.pA3Q2->nKhalimsEyeCount;
-    (*piVar1)++;
+    pDVar3->pQuestSpecificData.pA3Q2->nKhalimsEyeCount++;
     return 0;
 }
 
@@ -541,8 +539,7 @@ BOOL __fastcall Q19_CheckPlayerHasKhalimsHeart(::SGAMEDATA * pGame, D2UnitStrc *
       return 0;
     }
 
-    int32_t* piVar1 = &pDVar3->pQuestSpecificData.pA3Q2->nKhalimsEyeCount;
-    (*piVar1)++;
+    pDVar3->pQuestSpecificData.pA3Q2->nKhalimsEyeCount++;
     return 0;
 }
 
@@ -574,7 +571,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOpera
       pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
       pDVar1->nKhalimsEyeCount = 0;
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsHeart);
-      if (0 < pDVar1->nKhalimsEyeCount) {
+      if (pDVar1->nKhalimsEyeCount > 0) {
         do {
           pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
           if (pDroppedUnit) {
@@ -619,7 +616,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOpera
       pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
       pDVar1->nKhalimsEyeCount = 0;
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsEye);
-      if (0 < pDVar1->nKhalimsEyeCount) {
+      if (pDVar1->nKhalimsEyeCount > 0) {
         do {
           pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
           if (pDroppedUnit) {
@@ -664,7 +661,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop3(D2ObjectOperateFnArg * pOpera
       pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
       pDVar1->nKhalimsEyeCount = 0;
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsBrain);
-      if (0 < pDVar1->nKhalimsEyeCount) {
+      if (pDVar1->nKhalimsEyeCount > 0) {
         do {
           pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
           if (pDroppedUnit) {
@@ -689,8 +686,7 @@ void __fastcall Q19_UpdateOrbCount(::SGAMEDATA * pGame, int nParam) {
     }
 
     D2QuestDataA3Q2Strc* pQuestData = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
-    int32_t* pnOrbCount = &pQuestData->nKhalimsWillCount;
-    *pnOrbCount += nParam;
+    pQuestData->nKhalimsWillCount += nParam;
     pQuestData->bOrbCountUpdated = true;
 }
 

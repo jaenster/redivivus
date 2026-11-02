@@ -275,21 +275,21 @@ BOOL __fastcall NET_D2GS_SERVER_IsValidChecks(int32_t nClientID, uint16_t nGameT
 // Tears down game completely. First clears token from global 1024-slot table (0x882d18-0x883d38) under csGameHash lock. Then frees subsystems in order: MonsterRegion, ObjectControl, QuestControl, NpcControl, all clients, all units (5 types), inactive unit lists, timer queue, party, arena. Frees all 5 acts via FreeDungeons. Finally destroys memory pool, leaves and deletes critical section. Called after 5 min idle timeout or when game empties (frames 1500-7500 with zero clients).
 // @sourcefile .\GAME\Game.cpp
 void __fastcall GAME_DestroyGame(int32_t nGameToken, ::SGAMEDATA * pGame);
-uint32_t __fastcall NET_IsClientAllowedToLeave(uint32_t nParam);
+uint32_t __fastcall NET_IsClientAllowedToLeave(uint32_t nClientId);
 // Game-cleanup save: force-saves the disconnecting client's character (SaveGameAllGameTypes with bForceFullSave=1), then iterates all remaining clients in the game and soft-saves each (bForceFullSave=0). For non-singleplayer games, also invokes BattleNetServerService->fpUpdateCharacterLadder with the player's level, experience, char status, guild info, and file-time pointer so the ladder record stays current. No-ops if pClient or its player unit is null.
 void __fastcall SavePlayerOnCleanUp(struct D2ClientStrc * pClient, ::SGAMEDATA * pGame);
 // Saves all connected players to persistent storage. Iterates client list, gets player unit for each, calls SaveGameAllGameTypes to write character data (inventory/stats/quests/waypoints). For BNet non-singleplayer games, also updates ladder ranking via fpUpdateCharacterLadder callback with level, experience, character status, guild info (rank/emblem), and file timestamp. Called every 8192 frames (5.5 minutes) or on disconnects/timeouts. Critical for preventing rollback on crashes.
 void __fastcall SaveAllPlayers(::SGAMEDATA * pGame);
 // Gracefully disconnects a single client from a game. Broadcasts a 0x5A leave-game event message with char name and account name, calls CleanUpClient to remove the client from game state, sends 0xB0 ConnectionTerminated packet, then calls QSERVER_KillConnection to close the network connection. nDisconnectReason byte is embedded in the event packet.
-void __fastcall SERVER_DisconnectClient(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, uint32_t nDisconnectReason);
-BOOL __fastcall FindMe_6E_Handler(int32_t nParam);
-void __fastcall KillConnection(int32_t nParam);
+void __fastcall SERVER_DisconnectClient(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, uint8_t nDisconnectReason);
+BOOL __fastcall FindMe_6E_Handler(int32_t nClientId);
+void __fastcall KillConnection(int32_t nClientId);
 // SYSTEM PACKET HANDLER - Server (Mode 2)
 //   0x01/0xFD: System info/compilation data exchange
 //   0xFA: IP address query + increment connected count
 //   0xFB: Disconnect + decrement connected count
 //   0xFC: IP address query response
-void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(char * pBytes, int32_t iSize);
+void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(uint8_t * pBytes, int32_t iSize);
 // PACKET RECEIVE ENTRY: Server processes incoming client packets.
 // Called from game loop (SP) or QServer thread (MP).
 // Dispatches to 3 modes:
@@ -415,7 +415,7 @@ void __stdcall QSERVER_ClientDisconnectCallback(int32_t nClientId, char * szFile
 // Server join handler: finds game by token, verifies client membership, calls CLIENT_LoadCharacterAndSendGameData (state 1), CLIENT_LoadActAndSetState2 (state 2), CLIENT_PlacePlayerInRoom (state 3). On validation failure sends 0xB4 ConnectionRefused and adds to hack list. Final log "[JOIN 5] Added to game".
 // @sourcefile .\GAME\Game.cpp
 void __fastcall NET_D2GS_SERVER_SrvJoinAct(int32_t nClientId);
-void __fastcall QServer_AlternativeDisconnect(uint32_t nClientId, uint32_t dwParam);
+void __fastcall QServer_AlternativeDisconnect(uint32_t nClientId, uint32_t nDisconnectReason);
 BOOL __stdcall QSERVER_DisconnectClientByName(char * szClientName, uint32_t nReason);
 // Handles client disconnect from game. Looks up client's game token, locks game, verifies client is in game, builds 0x5A event packet containing player name (32-byte buffer), broadcasts packet to all clients, calls CleanUpClient to remove player unit and free resources, then unlocks game.
 void __stdcall QSERVER_DisconnectClientFromGame(uint32_t nClientId);
@@ -432,8 +432,9 @@ uint32_t __stdcall CLIENT_OnDatabaseCharacterReceived(uint32_t nClientId, void *
 uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePassword, char * szGameDescription, eD2ArenaFlags flags, uint8_t bTemplate, uint8_t bReserved, uint8_t bLadder, uint16_t * pServerTokenOut);
 // Already-documented — existing description accurately covers SP/LAN game creation: allocates SGAMEDATA in hash map with generated token, initializes critical section and five unit-type lists, rolls seed, allocates Event/Arena/Party/MonsterRegion/ObjectControl/NpcControl/QuestControl subsystems, creates local D2ClientStrc, sends 0x01 GameFlags and state packets, and enqueues the game-loop task.
 // @sourcefile .\GAME\Game.cpp
-void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName, eD2HostGameType neD2HostGameType, eD2PlayerClassID ePlayerClass, char * szCharName, int16_t Unknown4, eD2ArenaFlags eArenaFlags, uint8_t nTemplate, uint8_t Unknown6, uint8_t Unknown7, uint8_t nDifficulty, uint8_t nLanguageCode, uint32_t arg11, uint32_t arg12);
+void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName, eD2HostGameType neD2HostGameType, eD2PlayerClassID ePlayerClass, char * szCharName, int32_t Unknown4, eD2ArenaFlags eArenaFlags, uint8_t nTemplate, uint8_t Unknown6, uint8_t Unknown7, uint8_t nDifficulty, uint8_t nLanguageCode, uint32_t arg11, uint32_t arg12);
 void __fastcall SetStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue);
+void StaticInit_6caf10();
 // 11 internal functions (defined in .cpp)
 
 } // namespace D2Game::GAME::Server

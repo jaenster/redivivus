@@ -7,10 +7,9 @@
 #include "Fog/Source/SSComp.h"
 #include "Storm/3rdparty/zlib/deflate.h"
 #include "Storm/3rdparty/zlib/trees.h"
+#include "Storm/Source/SComp.h"
 #include "Storm/Source/SErr.h"
-#include "Storm/Source/SSComp.h"
 #include "Storm/Storm.h"
-#include "Storm/_unnamespaced.h"
 
 
 // =============================================================================
@@ -147,23 +146,23 @@ uint32_t gdwADPCMCoefficient[89] = {
 SCompCodecEntryStrc paSCompDecompressCodecTable[5] = {
     {
         /* .dwMethodMask = */ 0x40,
-        /* .pfnCodec = */ (pfnSCompCodec)&Storm::Source::SSComp::SCOMP_AdpcmMonoDecompress
+        /* .pfnCodec = */ (pfnSCompCodec)&Storm::Source::SComp::SCOMP_AdpcmMonoDecompress
     },
     {
         /* .dwMethodMask = */ 0x80,
-        /* .pfnCodec = */ (pfnSCompCodec)&Storm::Source::SSComp::SCOMP_AdpcmStereoDecompress
+        /* .pfnCodec = */ (pfnSCompCodec)&Storm::Source::SComp::SCOMP_AdpcmStereoDecompress
     },
     {
         /* .dwMethodMask = */ 0x1,
-        /* .pfnCodec = */ (pfnSCompCodec)&Storm::Source::SSComp::SCOMP_HuffmanDecompress
+        /* .pfnCodec = */ (pfnSCompCodec)&Storm::Source::SComp::SCOMP_HuffmanDecompress
     },
     {
         /* .dwMethodMask = */ 0x2,
-        /* .pfnCodec = */ (pfnSCompCodec)&Storm::Source::SSComp::SCOMP_Bzip2Decompress
+        /* .pfnCodec = */ (pfnSCompCodec)&Storm::Source::SComp::SCOMP_Bzip2Decompress
     },
     {
         /* .dwMethodMask = */ 0x8,
-        /* .pfnCodec = */ &Storm::Source::SSComp::SCOMP_PkwareDecompress
+        /* .pfnCodec = */ &Storm::Source::SComp::SCOMP_PkwareDecompress
     }
 }; D2_GLOBAL_GUARD(paSCompDecompressCodecTable, "paSCompDecompressCodecTable");
 
@@ -7190,19 +7189,31 @@ D2StormListHead gStormCmdListHeadSlash = {
     /* .pNext = */ 0x0
 }; D2_GLOBAL_GUARD(gStormCmdListHeadSlash, "gStormCmdListHeadSlash");
 
+void * g_SMemHeapBuckets[256] = {}; D2_GLOBAL_GUARD(g_SMemHeapBuckets, "g_SMemHeapBuckets");
+
+CRITICAL_SECTION DebugMemoryCriticalSection[256] = {}; D2_GLOBAL_GUARD(DebugMemoryCriticalSection, "DebugMemoryCriticalSection");
+
 int g_SMemHeapCleanupFlags[256] = {}; D2_GLOBAL_GUARD(g_SMemHeapCleanupFlags, "g_SMemHeapCleanupFlags");
 
 double gdPow10Table[200] = {}; D2_GLOBAL_GUARD(gdPow10Table, "gdPow10Table");
 
 char szSFileBasePath[260] = {}; D2_GLOBAL_GUARD(szSFileBasePath, "szSFileBasePath");
 
+_RTL_CRITICAL_SECTION lpCriticalSection_00779068 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00779068, "lpCriticalSection_00779068");
+
+_RTL_CRITICAL_SECTION lpCriticalSection_00779080 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00779080, "lpCriticalSection_00779080");
+
 SErrAppFatalContextStrc gpSSystemThreadContextCallback = {}; D2_GLOBAL_GUARD(gpSSystemThreadContextCallback, "gpSSystemThreadContextCallback");
 
 _RTL_CRITICAL_SECTION lpCriticalSection_007790cc = {}; D2_GLOBAL_GUARD(lpCriticalSection_007790cc, "lpCriticalSection_007790cc");
 
+_RTL_CRITICAL_SECTION lpCriticalSection_00779214 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00779214, "lpCriticalSection_00779214");
+
 CRITICAL_SECTION gaSLogCritSect[4] = {}; D2_GLOBAL_GUARD(gaSLogCritSect, "gaSLogCritSect");
 
 D2SLogStrc * gaSLogHead[4] = {}; D2_GLOBAL_GUARD(gaSLogHead, "gaSLogHead");
+
+_RTL_CRITICAL_SECTION lpCriticalSection_0077930c = {}; D2_GLOBAL_GUARD(lpCriticalSection_0077930c, "lpCriticalSection_0077930c");
 
 // =============================================================================
 // Initialized scalars
@@ -7352,9 +7363,9 @@ namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

@@ -4,7 +4,6 @@
 #include "D2Client/D2BattleNetEventCallbackTable.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
@@ -29,6 +28,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/Environment.h"
 #include "D2Common/INVENTORY/Inventory.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Units.h"
@@ -72,7 +72,6 @@
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Common/ITEMS/ItemMods.h"
@@ -433,7 +432,6 @@ void __fastcall NET_SendPong(uint32_t nClientID, int32_t nPingTime, int32_t nSeq
 void __fastcall BroadcastPlayerJoin(::SGAMEDATA * pGame, D2ClientStrc * pClient) {
     D2CorpseStrc* pRoomCorpse;
     uint32_t dwCorpseGUIDArg;
-    uint8_t bAssign;
     D2ClientStrc* pClientOther;
     D2UnitStrc* pUnitJoining = Clients::CLIENTS_GetControlUnit(pClient, 0);
     if (!pUnitJoining) {
@@ -453,8 +451,7 @@ void __fastcall BroadcastPlayerJoin(::SGAMEDATA * pGame, D2ClientStrc * pClient)
               for (pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(pUnit->pInventory); pRoomCorpse; pRoomCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse(pRoomCorpse)) {
                 dwCorpseGUIDArg = D2Common::INVENTORY::Inventory::ROOMCORPSE_GetGUID(pRoomCorpse);
                 if (dwCorpseGUIDArg != -1) {
-                  bAssign = 1;
-                  SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign(pClient, D2Client::UNIT::GetGUID(pUnit), dwCorpseGUIDArg, bAssign);
+                  SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign(pClient, D2Client::UNIT::GetGUID(pUnit), dwCorpseGUIDArg, 1);
                 }
               }
             }
@@ -737,14 +734,15 @@ void __fastcall GAME_DestroyGame(int32_t nGameToken, ::SGAMEDATA * pGame) {
     D2_FREE_POOL_AT(nullptr, lpCriticalSection, ".\\GAME\\Game.cpp", 0x8da);
 }
 
-uint32_t __fastcall NET_IsClientAllowedToLeave(uint32_t nParam) {
-    uint32_t bIsAllowed = Clients::QSERVER_IsClientAllowedToJoin(nParam, 4);
+uint32_t __fastcall NET_IsClientAllowedToLeave(uint32_t nClientId) {
+    uint32_t bIsAllowed = Clients::QSERVER_IsClientAllowedToJoin(nClientId, 4);
     return (uint32_t)(bIsAllowed != 0);
 }
 
 // Game-cleanup save: force-saves the disconnecting client's character (SaveGameAllGameTypes with bForceFullSave=1), then iterates all remaining clients in the game and soft-saves each (bForceFullSave=0). For non-singleplayer games, also invokes BattleNetServerService->fpUpdateCharacterLadder with the player's level, experience, char status, guild info, and file-time pointer so the ladder record stays current. No-ops if pClient or its player unit is null.
 void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame) {
     int iVar1;
+    char* szCharName;
     fnUpdateCharacterLadder* ppfpUpdateLadder;
     uint32_t nCharStatus;
     uint32_t nLevel;
@@ -764,8 +762,7 @@ void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame)
     }
 
     BOOL bSaveSuccess = 1;
-    char* szCharName = Clients::GetCharName(pClient);
-    bSaveSuccess = PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayer, szCharName, bSaveSuccess);
+    bSaveSuccess = PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayer, Clients::GetCharName(pClient), bSaveSuccess);
     if (!bSaveSuccess) {
       return;
     }
@@ -782,9 +779,7 @@ void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame)
       pPlayer = Clients::CLIENTS_GetControlUnit(pClientLoop, 0);
       if (pPlayer) {
         if (pClientLoop != pClient) {
-          bSaveSuccess = 0;
-          szCharName = Clients::GetCharName(pClientLoop);
-          PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayer, szCharName, bSaveSuccess);
+          PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayer, Clients::GetCharName(pClientLoop), 0);
         }
         if (BattleNetServerService && BattleNetServerService->fpUpdateCharacterLadder && pGame->eGameType != GAMETYPE_SINGLEPLAYER) {
           Clients::GetGuildInfo(pClientLoop, &nGuildRank, &nGuildEmblem, &nGuildUnknown);
@@ -814,7 +809,6 @@ void __fastcall SaveAllPlayers(::SGAMEDATA * pGame) {
     uint8_t nGuildRank;
     uint8_t nGuildEmblem;
     uint8_t nGuildUnknown;
-    BOOL bSaveUnknownFlag;
     uint32_t dwUnusedParam;
     D2ClientStrc* pClient;
     FILETIME* ppFileTime;
@@ -829,9 +823,7 @@ void __fastcall SaveAllPlayers(::SGAMEDATA * pGame) {
       pClientNext = pClient->pNext;
       pPlayerUnit_lcl = Clients::CLIENTS_GetControlUnit(pClient, 0);
       if (pPlayerUnit_lcl) {
-        bSaveUnknownFlag = 0;
-        pCharName = Clients::GetCharName(pClient);
-        PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayerUnit_lcl, pCharName, bSaveUnknownFlag);
+        PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayerUnit_lcl, Clients::GetCharName(pClient), 0);
         if (BattleNetServerService && BattleNetServerService->fpUpdateCharacterLadder && pGame->eGameType != GAMETYPE_SINGLEPLAYER) {
           Clients::GetGuildInfo(pClient, &nGuildRank, &nGuildEmblem, &nGuildUnknown);
           iVar1 = pPlayerUnit_lcl->nClassId;
@@ -850,13 +842,13 @@ void __fastcall SaveAllPlayers(::SGAMEDATA * pGame) {
 }
 
 // Gracefully disconnects a single client from a game. Broadcasts a 0x5A leave-game event message with char name and account name, calls CleanUpClient to remove the client from game state, sends 0xB0 ConnectionTerminated packet, then calls QSERVER_KillConnection to close the network connection. nDisconnectReason byte is embedded in the event packet.
-void __fastcall SERVER_DisconnectClient(::SGAMEDATA * pGame, D2ClientStrc * pClient, uint32_t nDisconnectReason) {
+void __fastcall SERVER_DisconnectClient(::SGAMEDATA * pGame, D2ClientStrc * pClient, uint8_t nDisconnectReason) {
     D2Packet0x5aEventStructure packet0x5a;
     int32_t nCleanupFlag;
     if (pClient) {
       int32_t nClientId;
       nClientId = Clients::GetClientNo(pClient);
-      packet0x5a.nMessageType = (uint8_t)nDisconnectReason;
+      packet0x5a.nMessageType = nDisconnectReason;
       packet0x5a.nArgTypes = '\0';
       memset(packet0x5a.szName1, 0, 16 * sizeof(packet0x5a.szName1[0]));
       memset(packet0x5a.szName2, 0, 16 * sizeof(packet0x5a.szName2[0]));
@@ -874,15 +866,15 @@ void __fastcall SERVER_DisconnectClient(::SGAMEDATA * pGame, D2ClientStrc * pCli
     }
 }
 
-BOOL __fastcall FindMe_6E_Handler(int32_t nParam) {
+BOOL __fastcall FindMe_6E_Handler(int32_t nClientId) {
     char szPlayerName[16];
-    BOOL bGotName = Clients::NET_D2GS_SERVER_GetPlayerNameByClientId(nParam, szPlayerName);
+    BOOL bGotName = Clients::NET_D2GS_SERVER_GetPlayerNameByClientId(nClientId, szPlayerName);
     return (uint32_t)(bGotName != 0);
 }
 
-void __fastcall KillConnection(int32_t nParam) {
-    ServerCmd::NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated(nParam);
-    D2Net::Game::Server::QSERVER_KillConnection(nParam);
+void __fastcall KillConnection(int32_t nClientId) {
+    ServerCmd::NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated(nClientId);
+    D2Net::Game::Server::QSERVER_KillConnection(nClientId);
 }
 
 // SYSTEM PACKET HANDLER - Server (Mode 2)
@@ -890,7 +882,7 @@ void __fastcall KillConnection(int32_t nParam) {
 //   0xFA: IP address query + increment connected count
 //   0xFB: Disconnect + decrement connected count
 //   0xFC: IP address query response
-void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(char * pBytes, int32_t iSize) {
+void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(uint8_t * pBytes, int32_t iSize) {
     // Static local variables (originally global data)
     static LONG * lpAddend_00883d64; D2_STATIC_GUARD_BSS(lpAddend_00883d64, "D2Game::GAME::Server::NET_D2GS_SERVER_ProcessClientMessage_System::lpAddend_00883d64");
 
@@ -908,31 +900,31 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(char * pBytes, int32
       nClientId = *(int32_t*)pBytes;
       if (!false) {
         switch (pBytes[5]) {
-          case -6:
+          case 0xfa:
             D2Net::Game::Server::NET_QServer_FindIpAddressByClientIdForQServer(nClientId, szSendBuffer + 0x10, 0x10);
           /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_00883d64);
           nSize = 0x10;
           pSendBuffer = szSendBuffer;
           szSendBuffer[0] = -6;
-          D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient(2, nClientId, pSendBuffer, nSize);
+          D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x02', nClientId, pSendBuffer, nSize);
           break;
-          case -5:
+          case 0xfb:
             D2Net::Game::Server::NET_QServer_FindIpAddressByClientIdForQServer(nClientId, szSendBuffer + 0x10, 0x10);
           szSendBuffer[0] = -5;
-          D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient(2, nClientId, szSendBuffer, 0x10);
+          D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x02', nClientId, szSendBuffer, 0x10);
           D2Net::Game::Server::QSERVER_KillConnection(nClientId);
           /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&lpAddend_00883d64);
           return;
-          case -4:
+          case 0xfc:
             D2Net::Game::Server::NET_QServer_FindIpAddressByClientIdForQServer(nClientId, szSendBuffer + 0x10, 0x10);
           nSize = 0x10;
           pSendBuffer = szSendBuffer;
           szSendBuffer[0] = -4;
-          D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient(2, nClientId, pSendBuffer, nSize);
+          D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x02', nClientId, pSendBuffer, nSize);
           break;
           case '\x01':
 
-          case -3:
+          case 0xfd:
             if (BattleNetServerService->fpReserved2_systemMsg && BattleNetServerService->fpServerLogMessage) {
               BattleNetServerService->fpReserved2_systemMsg(&sSystemInfo);
               sPacketFF01.sHead.nPacketSubType = pBytes[5];
@@ -982,7 +974,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(char * pBytes, int32
               }
 
               pSendBuffer = (char*)&sPacketFF01;
-              D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient(2, nClientId, pSendBuffer, nSize);
+              D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x02', nClientId, pSendBuffer, nSize);
               break;
             }
           break;
@@ -1011,7 +1003,7 @@ void NET_D2GS_SERVER_HandleAnyIncomingPacket() {
         break;
       }
 
-      CCmd::NET_D2GS_SERVER_ProcessClientMessage_GameSetup((D2GSClientMsgEnvelopeStrc*)pBytes);
+      CCmd::NET_D2GS_SERVER_ProcessClientMessage_GameSetup((D2GSClientMsgEnvelopeStrc*)pBytes, nSizeMode0);
     }
 
     while (true) {
@@ -1029,7 +1021,7 @@ void NET_D2GS_SERVER_HandleAnyIncomingPacket() {
         break;
       }
 
-      NET_D2GS_SERVER_ProcessClientMessage_System(pBytes, nSizeMode2);
+      NET_D2GS_SERVER_ProcessClientMessage_System((uint8_t*)pBytes, nSizeMode2);
     }
 }
 
@@ -1203,7 +1195,7 @@ void __stdcall CheckClientTimeouts(::SGAMEDATA * pGame, int * pnParam) {
       if (dwCurrentTick > dwClientTimeout && (dwFileFlags && dwCurrentTick - dwClientTimeout > 10000 && (uint32_t)pClient->tQServerExt.nHeartbeatSampleCount > 10 || dwCurrentTick - dwClientTimeout > 45000 || pClient->tQServerExt.nForceTimeoutDisconnect) && BattleNetServerService) {
         PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, Clients::CLIENTS_GetControlUnit(pClient, 0), Clients::GetCharName(pClient), 0);
         *pnParam = 1;
-        SERVER_DisconnectClient(pGame, pClient, 0);
+        SERVER_DisconnectClient(pGame, pClient, '\0');
       }
     }
 
@@ -1501,10 +1493,7 @@ static void GAME_SendNearbyUnitPositions(D2ClientStrc * pClient) {
     }
 
     D2UnitStrc* pPlayerUnit_lcl = Clients::CLIENTS_GetControlUnit(pClient, 0);
-    if (!pPlayerUnit_lcl) {
-      return;
-    }
-    if (pClient->dwRoomTicker < 10) {
+    if (!pPlayerUnit_lcl || pClient->dwRoomTicker < 10) {
       return;
     }
     if (pPlayerUnit_lcl->eUnitType != UNIT_PLAYER) {
@@ -1807,7 +1796,7 @@ void __fastcall RemoveObjects(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
 
 void __thiscall SERVER_EnterCriticalSection(int32_t pThis, int * pCriticalSection, int32_t nParam) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)(pThis + 0x50));
-    *pCriticalSection = (uint32_t)(nParam != 0) * 2 - 1;
+    *pCriticalSection = nParam != 0 ? 0x1U : 0xffffffff;
 }
 
 uint32_t __stdcall ParamIsOne(int32_t nParam) {
@@ -1865,7 +1854,7 @@ static void __stdcall NET_D2GS_SERVER_Send_0xB3_SendSaveFile(::SGAMEDATA * pGame
       } while (nBytesLeft);
     }
 
-    int32_t nSendResult = D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient(0, pClient->nClientNo, pBytes, iVar1 + 7);
+    int32_t nSendResult = D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\0', pClient->nClientNo, pBytes, iVar1 + 7);
     if (nSendResult) {
       pClient->nFileSize += iVar1;
       if (pClient->nFileSize == pClient->nSaveOpenSize) {
@@ -1883,7 +1872,7 @@ static void __stdcall NET_D2GS_SERVER_Send_0xB3_SendSaveFile(::SGAMEDATA * pGame
     }
 
     Clients::DeleteCurrentSave(pClient);
-    SERVER_DisconnectClient(pGame, pClient, 0);
+    SERVER_DisconnectClient(pGame, pClient, '\0');
 }
 
 void __fastcall SendSaveFileToClient(::SGAMEDATA * pGame) {
@@ -1948,7 +1937,7 @@ static void __stdcall FlushClientPackets(::SGAMEDATA * pGame, int32_t nParam, D2
           return;
         }
 
-        nErrorLine = D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient(1, pClient->nClientNo, pPacketList->pBytes, pPacketList->nSize);
+        nErrorLine = D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x01', pClient->nClientNo, pPacketList->pBytes, pPacketList->nSize);
         if ((uint32_t)nErrorLine > 0) {
           nParam++;
           pPacketList->nSize = 0;
@@ -1961,7 +1950,7 @@ static void __stdcall FlushClientPackets(::SGAMEDATA * pGame, int32_t nParam, D2
           pClient->dwPacketsInList++;
           Clients::CLIENT_SetPacketList(pClient, (int32_t)pPacketList);
           if (pClient->dwPacketsInList >= 3) {
-            SERVER_DisconnectClient(pGame, pClient, 0);
+            SERVER_DisconnectClient(pGame, pClient, '\0');
             return;
           }
         }
@@ -2046,7 +2035,7 @@ void __fastcall QSERVER_DestroyGameByToken(uint32_t nToken) {
 }
 
 void __stdcall RequestHostedGames(int32_t nParam) {
-    uint32_t szGameNameCopy[4];
+    char szGameNameCopy[16];
     uint32_t dwStackCookie;
     int nClientsCount;
     uint16_t wServerToken;
@@ -2059,14 +2048,14 @@ void __stdcall RequestHostedGames(int32_t nParam) {
         if (pGame) {
           nClientsCount = pGame->nClientsCount;
           wServerToken = pGame->nServerToken;
-          Storm::Source::SSTR::SStrCopy((char*)szGameNameCopy, pGame->szGameName, 0x7fffffff);
+          Storm::Source::SSTR::SStrCopy(szGameNameCopy, pGame->szGameName, 0x7fffffff);
           if (!pGame->lpCriticalSection) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
             exit(-1);
           }
 
           /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
-          ServerCmd::SERVERCMD_SendBufferToClient(nParam, wServerToken, (uint16_t)nClientsCount, (char*)szGameNameCopy);
+          ServerCmd::SERVERCMD_SendBufferToClient(nParam, wServerToken, (uint16_t)nClientsCount, szGameNameCopy);
         }
       }
 
@@ -2512,7 +2501,7 @@ int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32
     }
 
     int nSearchIdx = 0;
-    if (0 < nCount) {
+    if (nCount > 0) {
       D2UnitStrc* pUnit;
       nOutBufOffsetFromClassIds = (int)pOutBuffer - (int)pClassIds;
       do {
@@ -2540,13 +2529,13 @@ int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32
         pClassIds++;
       } while (nSearchIdx < nCount);
     }
-    if (pGame->lpCriticalSection) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
-      return _nServerId;
-    } else {
+    if (!pGame->lpCriticalSection) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
       exit(-1);
     }
+
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
+    return _nServerId;
 }
 
 // Aggregates unit statistics across all active games in the global token table. For each game, iterates all 128 unit buckets and counts: players (bucket-type 0, increments pBucketCountdown[3]) and objects/monsters at bucket offset 0x19 (increments pBucketCountdown[1]). Also increments pBucketCountdown[0] per game found. Used for server-capacity and monitoring queries.
@@ -2600,7 +2589,6 @@ void __stdcall QSERVER_CountObjectsAndPlayersAllGames(int32_t * pBucketCountdown
 // Iterates every token slot in the game-server token table and, for each live game, sends a message to all connected clients. nMsgType==1 sends a structured 0x5A event packet (category 4, event 0xF, payload dwEventPayload) via BroadcastEventMessage. Any other type sends the raw pszMessage string via CHAT_BroadcastMessageToAllClients, truncating to 255 bytes if needed. Locks and unlocks each game around the send.
 void __stdcall QSERVER_BroadcastPlayerMessage(int32_t nMsgType, uint32_t dwEventPayload, char * pszMessage) {
     ::SGAMEDATA* pGame;
-    char* pszMsgEnd;
     D2Packet0x5aEventStructure sEvent;
     uint32_t dwStackCookie;
     char cCurrent;
@@ -2632,9 +2620,8 @@ void __stdcall QSERVER_BroadcastPlayerMessage(int32_t nMsgType, uint32_t dwEvent
             }
           default:
             {
-              pszMsgEnd = pszMessage;
-              pszMsgEnd = pszMsgEnd + strlen(pszMsgEnd) + 1;
-              if ((uint32_t)((int)pszMsgEnd - (int)(pszMessage + 1)) > 0xff) {
+              int nLen = (int)strlen(pszMessage);
+              if ((uint32_t)nLen > 0xff) {
                 strncpy(szMessage, pszMessage, 0xff);
                 szMessage[0xff] = '\0';
                 PLAYER::PlayerMsg::CHAT_BroadcastMessageToAllClients(pGame, (uint32_t*)szMessage, 1);
@@ -2837,15 +2824,13 @@ void __fastcall SetGameName(::SGAMEDATA * pGame, char * szGameName, uint32_t dwF
       return;
     }
 
-    char* pszCopied = szGameName;
-    pszCopied = pszCopied + strlen(pszCopied) + 1;
-    size_t nBaseNameLen = (int)pszCopied - (int)(szGameName + 1);
+    size_t nBaseNameLen = (int)strlen(szGameName);
     if (0xf - nBaseNameLen < 3) {
       nBaseNameLen = 0xb;
     }
 
     memcpy(szDedupeName, szGameName, nBaseNameLen);
-    sprintf(szDedupeName + nBaseNameLen, "~%d", (int)szGameName);
+    sprintf(szDedupeName + nBaseNameLen, "~%d", szGameName, 0);
     int nDedupeIdx = 1;
     bNameAvailable = GAME_CheckIfGameNameExistsSafely(szDedupeName);
     if (!bNameAvailable) {
@@ -3145,11 +3130,6 @@ void __stdcall QSERVER_ClientDisconnectCallback(int32_t nClientId, char * szFile
 void __fastcall NET_D2GS_SERVER_SrvJoinAct(int32_t nClientId) {
     D2ClientStrc* pClient;
     int32_t nReason;
-    D2UnitStrc* pUnit;
-    D2DrlgActStrc* pDrlgActNull;
-    ::SGAMEDATA* pGameArg;
-    ::SGAMEDATA* pGameNull;
-    D2RoomStrc* pRoom;
     uint32_t nToken = D2Net::Game::Server::QSERVER_GetClientGameToken(nClientId);
     ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
     if (pGame) {
@@ -3167,12 +3147,7 @@ void __fastcall NET_D2GS_SERVER_SrvJoinAct(int32_t nClientId) {
         }
 
         CLIENT_LoadActAndSetState2(pGame, pClient);
-        pGameNull = 0;
-        pDrlgActNull = 0;
-        pRoom = 0;
-        pGameArg = pGame;
-        pUnit = Clients::CLIENTS_GetControlUnit(pClient, 1);
-        Clients::CLIENT_PlacePlayerInRoom(pClient, pUnit, pGameArg, pRoom, pDrlgActNull, pGameNull, (uint32_t)pUnit);
+        Clients::CLIENT_PlacePlayerInRoom(pClient, Clients::CLIENTS_GetControlUnit(pClient, 1), pGame, 0, 0, 0);
         Clients::CLIENT_SetConnectionState(pClient, 3);
         Server::Unlock(pGame);
         SRVLog(6, "[JOIN 5] %d clientid, SrvJoinAct: Added to game.", nClientId);
@@ -3185,7 +3160,7 @@ void __fastcall NET_D2GS_SERVER_SrvJoinAct(int32_t nClientId) {
     SRVLog(6, "[JOIN]  SrvJoinAct: No game found for client(%d)", nClientId);
 }
 
-void __fastcall QServer_AlternativeDisconnect(uint32_t nClientId, uint32_t dwParam) {
+void __fastcall QServer_AlternativeDisconnect(uint32_t nClientId, uint32_t nDisconnectReason) {
     if (!nClientId) {
       return;
     }
@@ -3200,7 +3175,7 @@ void __fastcall QServer_AlternativeDisconnect(uint32_t nClientId, uint32_t dwPar
     if (bIsInGame) {
       D2ClientStrc* pClient;
       pClient = Clients::SERVER_GetClientFromGmeByClientId(pGame, nClientId);
-      SERVER_DisconnectClient(pGame, pClient, dwParam);
+      SERVER_DisconnectClient(pGame, pClient, (uint8_t)nDisconnectReason);
       Server::Unlock(pGame);
       return;
     }
@@ -3444,7 +3419,7 @@ uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePass
     LPCRITICAL_SECTION lpCriticalSection = (LPCRITICAL_SECTION)D2_ALLOC_POOL_AT(nullptr, 0x18, ".\\GAME\\Game.cpp", 0x31c);
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ pGame->lpCriticalSection = lpCriticalSection;
     InitializeCriticalSection(lpCriticalSection);
-    Fog::Memory::InitializePoolSystem(&pGame->pMemoryPool, szGameName, 0x8000);
+    Fog::Memory::InitializePoolSystem(&pGame->pMemoryPool, szGameName, 0x8000, 0x1000);
     memset(pGame->pUnitList, 0, 0x200);
     memset(pGame->pUnitList + 1, 0, 0x200);
     memset(pGame->pUnitList + 2, 0, 0x200);
@@ -3479,7 +3454,7 @@ uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePass
     pGame->nDifficulty = (uint8_t)(flags >> 0xc) & 7;
     Server::RollSeed(pGame);
     Event::EVENT_AllocTimerQueue(pGame);
-    Arena::AllocArenaControl(pGame, flags, '\0');
+    Arena::AllocArenaControl(pGame, 0, flags, '\0');
     Clients::SetGameDataHook(pGame);
     UNIT::Party::AllocPartyControl(pGame);
     Monster::MonsterRegion::AllocMonsterRegionForGame(pGame);
@@ -3504,7 +3479,7 @@ uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePass
 
 // Already-documented — existing description accurately covers SP/LAN game creation: allocates SGAMEDATA in hash map with generated token, initializes critical section and five unit-type lists, rolls seed, allocates Event/Arena/Party/MonsterRegion/ObjectControl/NpcControl/QuestControl subsystems, creates local D2ClientStrc, sends 0x01 GameFlags and state packets, and enqueues the game-loop task.
 // @sourcefile .\GAME\Game.cpp
-void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName, eD2HostGameType neD2HostGameType, eD2PlayerClassID ePlayerClass, char * szCharName, int16_t Unknown4, eD2ArenaFlags eArenaFlags, uint8_t nTemplate, uint8_t Unknown6, uint8_t Unknown7, uint8_t nDifficulty, uint8_t nLanguageCode, uint32_t arg11, uint32_t arg12) {
+void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName, eD2HostGameType neD2HostGameType, eD2PlayerClassID ePlayerClass, char * szCharName, int32_t Unknown4, eD2ArenaFlags eArenaFlags, uint8_t nTemplate, uint8_t Unknown6, uint8_t Unknown7, uint8_t nDifficulty, uint8_t nLanguageCode, uint32_t arg11, uint32_t arg12) {
     TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* self = gpQServerGameState;
     if (!gpQServerGameState) {
       return;
@@ -3546,7 +3521,7 @@ void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName
     pGame->eGameType = eArenaFlags >> 0x15 & GAMETYPE_SINGLEPLAYER_UNCAPPED;
     Server::RollSeed(pGame);
     Event::EVENT_AllocTimerQueue(pGame);
-    Arena::AllocArenaControl(pGame, eArenaFlags, nTemplate);
+    Arena::AllocArenaControl(pGame, Unknown4, eArenaFlags, nTemplate);
     Clients::SetGameDataHook(pGame);
     D2ClientStrc* pClientCreated = Clients::CreateClient(pGame, nClientId, ePlayerClass, szCharName, "", nullptr, nLanguageCode, arg11, arg12);
     D2Net::Game::Server::AssignClientToToken(nClientId, dwGameToken);
@@ -3616,6 +3591,10 @@ void __fastcall SetStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValu
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nValue, 0);
+}
+
+void StaticInit_6caf10() {
+    Frames_TimeBetweenFrames = (int)(1000 / (int64_t)Frames_PerSecond);
 }
 
 } // namespace D2Game::GAME::Server

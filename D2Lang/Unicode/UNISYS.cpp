@@ -8,7 +8,7 @@
 #include "Fog/File.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Launch/MainMenus.h"
@@ -39,15 +39,15 @@ uint32_t __fastcall STRING_CompareWideStrings(uint16_t * wszText1, uint16_t * ws
     return (uint32_t)((uint16_t)*wszText1 > (uint16_t)*wszText2);
 }
 
-int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * nParam1, uint16_t * nParam2, int32_t nMaxChars) {
-    uint16_t wChar1 = *nParam1;
+int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * wszFirst, uint16_t * wszSecond, int32_t nMaxChars) {
+    uint16_t wChar1 = *wszFirst;
     while (true) {
       uint16_t wChar2;
       if (!wChar1) {
         break;
       }
 
-      wChar2 = *nParam2;
+      wChar2 = *wszSecond;
       if (!wChar2) {
         break;
       }
@@ -55,13 +55,13 @@ int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * nParam1, uint16_t * nP
         break;
       }
 
-      nParam1++;
-      nParam2++;
+      wszFirst++;
+      wszSecond++;
       if (wChar1 != wChar2) {
         return (wChar1 < wChar2 ? -2 : 0) + 1;
       }
 
-      wChar1 = *nParam1;
+      wChar1 = *wszFirst;
       nMaxChars--;
     }
 
@@ -712,16 +712,11 @@ bool __thiscall UNICODE_CheckTrailingPunctuation(char * szSourceFile, uint16_t *
 
     nGuardRetVal = 0x52714e;
     int32_t nPunctTableLen = STRING_GetWideStringLength(wszTable);
-    i = 0;
-    if (nPunctTableLen > 0) {
-      do {
-        if (*pwChar == wszTable[i]) {
-          nGuardRetVal = 0x52718c;
-          return true;
-        }
-
-        i++;
-      } while (i < nPunctTableLen);
+    for (i = 0; i < nPunctTableLen; i++) {
+      if (*pwChar == wszTable[i]) {
+        nGuardRetVal = 0x52718c;
+        return true;
+      }
     }
 
     nGuardRetVal = 0x52717a;
@@ -776,15 +771,10 @@ static bool UNICODE_CheckLeadingPunctuation(char * pszTable, uint16_t * wszText)
 
     int32_t nPunctTableLen = STRING_GetWideStringLength(wszTable + 1);
     int32_t nWideLen = STRING_GetWideStringLength(wszText);
-    i = 0;
-    if (nPunctTableLen > 0) {
-      do {
-        if (wszText[nWideLen - 1] == wszTable[i + 1]) {
-          return true;
-        }
-
-        i++;
-      } while (i < nPunctTableLen);
+    for (i = 0; i < nPunctTableLen; i++) {
+      if (wszText[nWideLen - 1] == wszTable[i + 1]) {
+        return true;
+      }
     }
 
     return false;
@@ -972,11 +962,11 @@ void UNICODE_FreeBuffer(void * pParam) {
       return;
     }
 
-    Storm::SMem::SMemFree(pParam, "delete[]", -1, 0);
+    Storm::Source::SMem::SMemFree(pParam, "delete[]", -1, 0);
 }
 
 void UNICODE_AllocBuffer(uint32_t nSize) {
-    Storm::SMem::SMemAlloc(nSize, "new[]", -1, 0);
+    Storm::Source::SMem::SMemAlloc(nSize, "new[]", -1, 0);
 }
 
 void __thiscall UNICODE_ReadByteRange(void * pThis, uint8_t * pByteRange) {
@@ -1013,18 +1003,18 @@ static int32_t __stdcall UNICODE_IsControlChar(uint8_t byChar) {
 
 void __stdcall UNICODE_FreeKamapTables() {
     if (g_pUnicodeKamapTable) {
-      Storm::SMem::SMemFree(g_pUnicodeKamapTable, "delete[]", -1, 0);
+      Storm::Source::SMem::SMemFree(g_pUnicodeKamapTable, "delete[]", -1, 0);
       g_pUnicodeKamapTable = 0;
     }
     if (gpUnicodeKamapToCodeTable) {
-      Storm::SMem::SMemFree(gpUnicodeKamapToCodeTable, "delete[]", -1, 0);
+      Storm::Source::SMem::SMemFree(gpUnicodeKamapToCodeTable, "delete[]", -1, 0);
       gpUnicodeKamapToCodeTable = 0;
     }
     if (!gpUnicodeCodeToMapTable) {
       return;
     }
 
-    Storm::SMem::SMemFree(gpUnicodeCodeToMapTable, "delete[]", -1, 0);
+    Storm::Source::SMem::SMemFree(gpUnicodeCodeToMapTable, "delete[]", -1, 0);
     gpUnicodeCodeToMapTable = 0;
 }
 
@@ -1062,10 +1052,10 @@ void __fastcall UNICODE_LoadKamapFile(D2PoolManagerStrc * pMemory, char * szFile
     uint16_t* pFilePtr = (uint16_t*)(pFileData + nOffset + 0xb);
     uint16_t* pGroupCount = pFilePtr + 1;
     if (g_pUnicodeKamapTable) {
-      Storm::SMem::SMemFree(g_pUnicodeKamapTable, "delete[]", -1, 0);
+      Storm::Source::SMem::SMemFree(g_pUnicodeKamapTable, "delete[]", -1, 0);
     }
 
-    g_pUnicodeKamapTable = Storm::SMem::SMemAlloc((uint32_t)(uint8_t)*pGroupCount * 2, "new[]", -1, 0);
+    g_pUnicodeKamapTable = Storm::Source::SMem::SMemAlloc((uint32_t)(uint8_t)*pGroupCount * 2, "new[]", -1, 0);
     if (!g_pUnicodeKamapTable) {
       D2_FREE_AT(pFileData, ".\\Unicode\\UNISYS.CPP", 0x91);
       return;
@@ -1074,10 +1064,10 @@ void __fastcall UNICODE_LoadKamapFile(D2PoolManagerStrc * pMemory, char * szFile
     memcpy(g_pUnicodeKamapTable, (void*)((int)pFilePtr + 3), (uint32_t)(uint8_t)*pGroupCount * 2);
     uint16_t* pEntryData = (uint16_t*)((int)pFilePtr + 3 + (uint32_t)(uint8_t)*pGroupCount * 2);
     if (gpUnicodeKamapToCodeTable) {
-      Storm::SMem::SMemFree(gpUnicodeKamapToCodeTable, "delete[]", -1, 0);
+      Storm::Source::SMem::SMemFree(gpUnicodeKamapToCodeTable, "delete[]", -1, 0);
     }
 
-    void* pAllocBuf = Storm::SMem::SMemAlloc((uint32_t)*pFilePtr * 4, "new[]", -1, 0);
+    void* pAllocBuf = Storm::Source::SMem::SMemAlloc((uint32_t)*pFilePtr * 4, "new[]", -1, 0);
     gpUnicodeKamapToCodeTable = pAllocBuf;
     if (!pAllocBuf) {
       D2_FREE_AT(pFileData, ".\\Unicode\\UNISYS.CPP", 0x9e);
@@ -1094,10 +1084,10 @@ void __fastcall UNICODE_LoadKamapFile(D2PoolManagerStrc * pMemory, char * szFile
       } while (nOffset < (int)(uint32_t)*pFilePtr);
     }
     if (gpUnicodeCodeToMapTable) {
-      Storm::SMem::SMemFree(gpUnicodeCodeToMapTable, "delete[]", -1, 0);
+      Storm::Source::SMem::SMemFree(gpUnicodeCodeToMapTable, "delete[]", -1, 0);
     }
 
-    uint16_t* pwCodeToMapTable = (uint16_t*)Storm::SMem::SMemAlloc((uint32_t)*pFilePtr * 2, "new[]", -1, 0);
+    uint16_t* pwCodeToMapTable = (uint16_t*)Storm::Source::SMem::SMemAlloc((uint32_t)*pFilePtr * 2, "new[]", -1, 0);
     gpUnicodeCodeToMapTable = pwCodeToMapTable;
     if (!pwCodeToMapTable) {
       D2_FREE_AT(pFileData, ".\\Unicode\\UNISYS.CPP", 0xb0);
@@ -1243,14 +1233,14 @@ uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t
     return wszText;
 }
 
-uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t * nParam, int32_t nSize) {
+uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t * wszSource, int32_t nSize) {
     uint16_t* pFoundEntry;
     int32_t nIsControl;
     uint16_t awSearchKey[2];
     uint16_t wChar;
     if (!gpUnicodeKamapToCodeTable) {
       char* pFallbackResult;
-      pFallbackResult = UNICODE_WideToMultiByte((char*)pParam, nParam, nSize);
+      pFallbackResult = UNICODE_WideToMultiByte((char*)pParam, wszSource, nSize);
       return (uint8_t*)pFallbackResult;
     }
 
@@ -1258,7 +1248,7 @@ uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t *
     i = 0;
     if (nSize > 0) {
       do {
-        wChar = *nParam;
+        wChar = *wszSource;
         if (!wChar) {
           goto terminate_output;
         }
@@ -1282,10 +1272,10 @@ uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t *
           }
         }
 
-        nParam++;
+        wszSource++;
       } while (i < nSize);
     }
-    if (*nParam) {
+    if (*wszSource) {
       return pParam;
     }
 
@@ -1300,6 +1290,7 @@ int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nParam
     int32_t nByteLen;
     uint16_t* pFoundEntry;
     int32_t nIsControl;
+    int i;
     uint16_t wChar;
     if (!gpUnicodeKamapToCodeTable) {
       nByteLen = STRING_GetWideStringLength(wszText);
@@ -1307,13 +1298,7 @@ int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nParam
     }
 
     nByteLen = 0;
-    int i;
-    i = 0;
-    if (nParam <= 0) {
-      return nByteLen;
-    }
-
-    do {
+    for (i = 0; i < nParam; i++) {
       uint16_t awSearchKey[2];
       wChar = wszText[i];
       if (wChar == L'\0') {
@@ -1336,9 +1321,7 @@ int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nParam
           }
         }
       }
-
-      i++;
-    } while (i < nParam);
+    }
 
     return nByteLen;
 }

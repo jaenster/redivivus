@@ -3,7 +3,6 @@
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/DataTbls/MonsterTbls.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
@@ -24,6 +23,7 @@
 #include "D2Common/Drlg/Path.h"
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/Drlg/Transform.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/Path.h"
 #include "D2Common/Unit.h"
@@ -39,6 +39,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Common/D2SeedStrc.h"
 #include "D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -79,24 +80,22 @@ int32_t __stdcall PATH_GetDynamicPathField(int32_t nMonStatsIdx) {
     if (nMonStatsIdx >= 0 && nMonStatsIdx < sgptDataTable->nTxtMonStatsSize) {
       int nMonStatsExId;
       nMonStatsExId = (int)sgptDataTable->pTxtMonStats[nMonStatsIdx].MonStatsEx;
-      if (nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize) {
-        pMonStatsEx = sgptDataTable->pTxtMonStatsEx + nMonStatsExId;
-        if (pMonStatsEx && (uint32_t)(int)pMonStatsEx->SizeX <= 3) {
-          uVar1 = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsEx + 0x5);
-          nMonStatsExId = gaUnitTypeInteractSizes[pMonStatsEx->SizeX];
-          if (!((gadwBitMasks[0] & uVar1 || gadwBitMasks[2] & uVar1) && !(gadwBitMasks[1] & uVar1))) {
-            return nMonStatsExId;
-          }
-          if (nMonStatsExId != 1) {
-            if (nMonStatsExId == 2) {
-              return 4;
-            }
-          } else {
-            nMonStatsExId = 3;
-          }
-
+      pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
+      if (pMonStatsEx && (uint32_t)(int)pMonStatsEx->SizeX <= 3) {
+        uVar1 = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsEx + 0x5);
+        nMonStatsExId = gaUnitTypeInteractSizes[pMonStatsEx->SizeX];
+        if (!((gadwBitMasks[0] & uVar1 || gadwBitMasks[2] & uVar1) && !(gadwBitMasks[1] & uVar1))) {
           return nMonStatsExId;
         }
+        if (nMonStatsExId != 1) {
+          if (nMonStatsExId == 2) {
+            return 4;
+          }
+        } else {
+          nMonStatsExId = 3;
+        }
+
+        return nMonStatsExId;
       }
     }
 
@@ -106,7 +105,7 @@ int32_t __stdcall PATH_GetDynamicPathField(int32_t nMonStatsIdx) {
 int32_t __stdcall GetInteractSize(D2UnitStrc * pUnit, int32_t nSizeX) {
     if ((uint32_t)nSizeX <= 3) {
       int nBaseSize = gaUnitTypeInteractSizes[nSizeX];
-      if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+      if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
         return nBaseSize;
       }
 
@@ -822,7 +821,7 @@ void __stdcall PATH_SetOrClearFlag0x2000(D2DynamicPathStrc * pDynamicPath, int32
 }
 
 void __stdcall PATH_PeriodicPathRecalc(D2UnitStrc * pUnit) {
-    bool _bHasReachedTarget;
+    BOOL _bHasReachedTarget;
     bool bHasReachedTarget;
     if (!(pUnit && !(pUnit->eUnitFlags >> 0x15 & 1) && pUnit->eUnitFlagsEx >> 0xd & 1)) {
       return;
@@ -959,22 +958,18 @@ static uint32_t PATH_BuildDirectPathToTarget(D2DynamicPathStrc * pDynamicPath) {
 void __stdcall PATH_AddUnitCollision(D2UnitStrc * pUnit) {
     D2DynamicPathStrc* pDynamicPath;
     int32_t iVar1;
-    uint32_t nVectorX;
     int32_t nPosY;
     int32_t nPosX;
-    D2RoomStrc* pRoom;
-    int32_t nUnitWidth;
     eD2UnitType eUnitType;
     if (pUnit) {
-      uint32_t nVectorY;
+      int32_t nUnitWidth;
       eUnitType = pUnit->eUnitType;
       if ((int)eUnitType >= 0) {
         if ((int)eUnitType <= 1) {
           pDynamicPath = pUnit->pPath.pDynamicPath;
           nUnitWidth = pDynamicPath->nUnitWidth;
           if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-            *(uint16_t*)(char*)&iVar1 = pDynamicPath->nTargetX;
-            *(uint16_t*)((char*)&iVar1 + 2) = pDynamicPath->nTargetY;
+            iVar1 = (int32_t)((uint32_t)(uint16_t)pDynamicPath->nTargetX | (uint32_t)(uint16_t)pDynamicPath->nTargetY << 16);
           } else if (pDynamicPath) {
             iVar1 = GetYPos(pDynamicPath);
           } else {
@@ -991,18 +986,12 @@ void __stdcall PATH_AddUnitCollision(D2UnitStrc * pUnit) {
           }
 
           nPosX = Units::GetCollisionType(pUnit);
-          pRoom = Units::UNITS_GetRoom(pUnit);
-          Collision::AddCollision_Type(pRoom, nPosY, iVar1, nUnitWidth, nPosX);
+          Collision::AddCollision_Type(Units::UNITS_GetRoom(pUnit), nPosY, iVar1, nUnitWidth, nPosX);
           return;
         }
         if (eUnitType == UNIT_OBJECT) {
           iVar1 = Units::GetCollisionType(pUnit);
-          nVectorY = Units::GetUnitSizeY(pUnit);
-          nVectorX = Units::GetUnitSizeX(pUnit);
-          nPosY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-          nPosX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-          pRoom = Units::UNITS_GetRoom(pUnit);
-          Collision::AddCollision_Vector(pRoom, nPosX, nPosY, nVectorX, nVectorY, iVar1);
+          Collision::AddCollision_Vector(Units::UNITS_GetRoom(pUnit), D2Client::Units::GetXPosFromDynamicPathUnit(pUnit), D2Client::Units::GetYPosFromDynamicPathUnit(pUnit), Units::GetUnitSizeX(pUnit), Units::GetUnitSizeY(pUnit), iVar1);
           return;
         }
       }
@@ -1031,18 +1020,14 @@ void __stdcall PATH_AddUnitCollision(D2UnitStrc * pUnit) {
 }
 
 // Removes a unit's collision footprint from its room's collision grid, choosing the removal method by unit type. For players (Dead anim) and monsters (Kick/Death anim), and any unit when forced via nParam, it removes using the dynamic path's target coords + nUnitWidth (RemoveCollision_Type). For objects it removes a size-X box at the unit's position (RemoveCollision_Width). For other unit types it removes a full sizeX-by-sizeY rectangle (RemoveCollision_Vector). Objects/monsters that have no collision and aren't forced (nParam==0) return 0 without acting. Position is read from the static path (objects/types 4-5) or dynamic path Get X/YPos. Returns 1 if collision was removed, 0 if skipped. Called before moving a unit so its old footprint is cleared.
-BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
-    bool _bHasCollision;
+BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t bForce) {
+    BOOL _bHasCollision;
     D2DynamicPathStrc* pDynamicPath;
     bool bHasCollision;
     int32_t nPosY;
     int32_t nPosX;
     int32_t nCollisionType;
-    int32_t nUnitSizeX;
-    uint32_t nVectorY;
-    uint32_t nVectorX;
     eD2PlayerAnimMode eAnimMode;
-    D2RoomStrc* pRoom1;
     bool bIsDeadOrKick;
     eD2UnitType eUnitType;
     eUnitType = UNIT_COUNT;
@@ -1077,7 +1062,7 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
       case UNIT_OBJECT:
         {
           _bHasCollision = Units::HasCollision(pUnit);
-          if (!_bHasCollision && !nParam) {
+          if (!_bHasCollision && !bForce) {
             return 0;
           }
 
@@ -1100,10 +1085,7 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
           }
 
           nCollisionType = Units::GetCollisionType(pUnit);
-          nVectorY = Units::GetUnitSizeY(pUnit);
-          nVectorX = Units::GetUnitSizeX(pUnit);
-          pRoom1 = Units::UNITS_GetRoom(pUnit);
-          Collision::RemoveCollision_Vector(pRoom1, nPosX, nPosY, nVectorX, nVectorY, nCollisionType);
+          Collision::RemoveCollision_Vector(Units::UNITS_GetRoom(pUnit), nPosX, nPosY, Units::GetUnitSizeX(pUnit), Units::GetUnitSizeY(pUnit), nCollisionType);
           return 1;
         }
       default:
@@ -1127,14 +1109,12 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
           }
 
           nCollisionType = Units::GetCollisionType(pUnit);
-          nUnitSizeX = Units::GetUnitSizeX(pUnit);
-          pRoom1 = Units::UNITS_GetRoom(pUnit);
-          Collision::RemoveCollision_Width(pRoom1, nPosX, nPosY, nUnitSizeX, nCollisionType);
+          Collision::RemoveCollision_Width(Units::UNITS_GetRoom(pUnit), nPosX, nPosY, Units::GetUnitSizeX(pUnit), nCollisionType);
           return 1;
         }
     }
 
-    if (!nParam) {
+    if (!bForce) {
       return 0;
     }
 
@@ -1143,8 +1123,7 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
     int32_t nUnitWidth = pDynamicPath->nUnitWidth;
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      *(uint16_t*)(char*)&nPosY = pDynamicPath->nTargetX;
-      *(uint16_t*)((char*)&nPosY + 2) = pDynamicPath->nTargetY;
+      nPosY = (int32_t)((uint32_t)(uint16_t)pDynamicPath->nTargetX | (uint32_t)(uint16_t)pDynamicPath->nTargetY << 16);
     } else if (pDynamicPath) {
       nPosY = GetYPos(pDynamicPath);
     } else {
@@ -1161,8 +1140,7 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t nParam) {
     }
 
     nCollisionType = Units::GetCollisionType(pUnit);
-    pRoom1 = Units::UNITS_GetRoom(pUnit);
-    Collision::RemoveCollision_Type(pRoom1, nPosX, nPosY, nUnitWidth, nCollisionType);
+    Collision::RemoveCollision_Type(Units::UNITS_GetRoom(pUnit), nPosX, nPosY, nUnitWidth, nCollisionType);
     return 1;
 }
 
@@ -1181,7 +1159,7 @@ static int32_t PATH_CalculateMissilePath(D2DynamicPathStrc * pDynamicPath, int32
         return pDynamicPath->dwPathPoints;
       }
 
-      Drlg::Path::DRLGPATH_BuildRandomizedPathPoints((int32_t)pDynamicPath, (D2DynamicPathStrc*)(nParam + 0x20));
+      Drlg::Path::DRLGPATH_BuildRandomizedPathPoints(pDynamicPath, (D2SeedStrc*)(nParam + 0x20));
     } else {
       nPathPoints = PATH_BuildDirectPathToTarget(pDynamicPath);
       if (!nPathPoints) {
@@ -1373,11 +1351,11 @@ uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitSt
         sPathTypeArg.pCoords.nOffsetY = pDynamicPath_00->nTargetX;
         sPathTypeArg.pCoords.nPosY = pDynamicPath_00->nTargetY;
         if (sPathTypeArg.pCoords.nOffsetX != sPathTypeArg.pCoords.nOffsetY || sPathTypeArg.pCoords.nPosX != sPathTypeArg.pCoords.nPosY) {
-          nDeltaX = (*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) & 0xffff) - (*(uint32_t*)(char*)&sPathTypeArg.pCoords & 0xffff);
+          nDeltaX = (uint16_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) - (uint16_t)*(uint32_t*)(char*)&sPathTypeArg.pCoords;
           bCanPath = ((uint32_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) >> 0x10) - (uint32_t)(uint16_t)sPathTypeArg.pCoords.nPosX;
           if (nDeltaX <= 0x64 && (nDeltaX == -100 || -nDeltaX < 100 && bCanPath <= 0x64) && (bCanPath == -100 || -bCanPath < 100)) {
             sPathTypeArg.pRoom = pDynamicPath_00->pRoom;
-            sPathTypeArg.pRoomNext = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(sPathTypeArg.pRoom, *(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) & 0xffff, (uint32_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) >> 0x10);
+            sPathTypeArg.pRoomNext = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(sPathTypeArg.pRoom, (uint16_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4), (uint32_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) >> 0x10);
             if (sPathTypeArg.pRoom && sPathTypeArg.pRoomNext) {
               uVar9 = Path::PATH_CanMonsterPathInArea(pUnit, (uint16_t*)&sPathTypeArg);
               if (uVar9 || nParam) {
@@ -1579,13 +1557,13 @@ void __stdcall AllocDynamicPath(D2PoolManagerStrc * pMemory, D2RoomStrc * pRoom,
     pDynamicPath->nFlags |= 0x10;
 }
 
-void __stdcall PATH_SetDirectionToTarget(D2DynamicPathStrc * pDynamicPath, int32_t nTargetX, int32_t nTargetY, int32_t nParam) {
+void __stdcall PATH_SetDirectionToTarget(D2DynamicPathStrc * pDynamicPath, int32_t nTargetX, int32_t nTargetY, int32_t bImmediate) {
     if (!pDynamicPath) {
       return;
     }
 
     uint32_t nDirection = Path::PATH_CalculateDistance(pDynamicPath->Coords.tFixed.x, pDynamicPath->Coords.tFixed.y, nTargetX * 0x10000 + 0x8000, nTargetY * 0x10000 + 0x8000);
-    if (nParam) {
+    if (bImmediate) {
       uint8_t nDirectionByte;
       nDirectionByte = (uint8_t)nDirection & 0x3f;
       pDynamicPath->nDirection = nDirectionByte;
@@ -1630,7 +1608,7 @@ void __stdcall PATH_RestoreMonsterCollision(D2UnitStrc * pUnit, int32_t nParam) 
     if (nParam) {
       return;
     }
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x542);
       exit(-1);
     }

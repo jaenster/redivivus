@@ -4093,7 +4093,7 @@ void __stdcall TXT_FreeTxt_LvlSub();
 struct D2LvlSubTxt * __fastcall TXT_LvlSub_GetLineFromSubType(int32_t nSubType);
 // Allocates and populates the pExpansionLvlTbls array (one D2ExpansionLvlTblsTxt per LvlTypes row, 0x1000 bytes each). For each LvlTypes row iterates up to 32 File[] entries (stride 60 bytes); skips entries whose filename starts with "0" and skips expansion-only tiles in classic mode. Calls TILEPROJECT_AllocSlot for each valid tile file.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
-void __stdcall TXT_LoadExpansionLvlTbls();
+void __fastcall TXT_LoadExpansionLvlTbls(struct D2PoolManagerStrc * pMemory);
 // @sourcefile .\DATATBLS\LvlTbls.cpp
 void __stdcall TXT_FreeExpansionLvlTbls();
 // Loads and compiles automap.txt into the runtime AutoMap level tables. Initializes the data-table seed, declares the column schema (LevelName, TileName, Style, Start/EndSequence, Cel1-4), and compiles it via CompileTxt. Allocates a 32-byte-per-row AutoMapLvlTbls array, then per row resolves the automap level id and tile id, copies style/sequence and cel fields, and counts the valid (non -1) cels (halts if a row has zero cels). Then resets the gpaAutoMapRelated index table to -1 and builds, per level type, the start index + count of contiguous same-type rows. Side effects: allocates server memory, fills global automap tables; unrecoverable-halt on bad rows. Server-side D2Common DataTbls (LvlTbls).

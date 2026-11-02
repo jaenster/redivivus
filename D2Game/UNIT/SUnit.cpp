@@ -4,7 +4,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/Monster.h"
@@ -383,7 +382,7 @@ D2ClientStrc * __fastcall SUNIT_GetClient(D2UnitStrc * pUnit, char * szFile, int
 }
 
 void __fastcall UNITS_SendUnitUpdateToClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
-    bool _bNeedsRoomUpdate;
+    uint32_t _bNeedsRoomUpdate;
     bool bNeedsRoomUpdate;
     _bNeedsRoomUpdate = D2Common::Units::NeedsRoomUpdate(pUnit);
     if (!(_bNeedsRoomUpdate && (!pUnit || !(pUnit->eUnitFlags >> 4 & 1)))) {
@@ -793,8 +792,8 @@ void __fastcall UNITS_SetupAnimTimerEvents(::SGAMEDATA * pGame, D2UnitStrc * pUn
       nFrameIndex = nAnimSpeedAccum >> 8;
       nNextEventFrame++;
       for (; iVar1 <= nFrameIndex && iVar1 < 0x90; iVar1++) {
-        if (pUnit->pAnimSeq) {
-          D2Common::Merc::ANIM_GetEventFrame((int32_t)pUnit->pAnimSeq, iVar1 << 8, &nEventType);
+        if ((D2MonSeqTxt*)pUnit->pAnimSeq) {
+          D2Common::Merc::ANIM_GetEventFrame((D2MonSeqTxt*)pUnit->pAnimSeq, iVar1 << 8, &nEventType);
         } else {
           nEventType = (uint32_t)pAnimData->pFrameFlags[iVar1];
         }
@@ -859,8 +858,8 @@ void __fastcall UNITS_SetupAnimTimerEventsFromPercent(::SGAMEDATA * pGame, D2Uni
       nFrameOffset += nAnimSpeed;
       nAnimSpeedAccum += nAnimSpeed;
       for (; pCurEventFrame = nNextEventFrame , nFrameIdx <= nFrameOffset >> 8; nFrameIdx++) {
-        if (pUnit->pAnimSeq) {
-          D2Common::Merc::ANIM_GetEventFrame((int32_t)pUnit->pAnimSeq, nFrameIdx << 8, &nEventType);
+        if ((D2MonSeqTxt*)pUnit->pAnimSeq) {
+          D2Common::Merc::ANIM_GetEventFrame((D2MonSeqTxt*)pUnit->pAnimSeq, nFrameIdx << 8, &nEventType);
         } else {
           nEventType = (uint32_t)pAnimData->pFrameFlags[nFrameIdx];
         }
@@ -918,8 +917,8 @@ void __fastcall UNITS_SetupAnimTimerEventsWithDelay(::SGAMEDATA * pGame, D2UnitS
       nAnimSpeedAccum += nAnimSpeed;
       nFrameIndexShifted = nFrameOffsetAccum >> 8;
       for (; pCurEventFrame = nNextEventFrame , nFrameIdx <= nFrameIndexShifted; nFrameIdx++) {
-        if (pUnit->pAnimSeq) {
-          D2Common::Merc::ANIM_GetEventFrame((int32_t)pUnit->pAnimSeq, nFrameIdx << 8, &nEventType);
+        if ((D2MonSeqTxt*)pUnit->pAnimSeq) {
+          D2Common::Merc::ANIM_GetEventFrame((D2MonSeqTxt*)pUnit->pAnimSeq, nFrameIdx << 8, &nEventType);
         } else {
           nEventType = (uint32_t)pAnimData->pFrameFlags[nFrameIdx];
         }
@@ -971,8 +970,8 @@ void __fastcall UNITS_SetupAnimTimerEventsFromFrame(::SGAMEDATA * pGame, D2UnitS
       nAnimSpeedAccum += nAnimSpeed;
       nFrameIndexShifted = nFrameOffsetAccum >> 8;
       for (; pCurEventFrame = nNextEventFrame , nFrameIdx <= nFrameIndexShifted; nFrameIdx++) {
-        if (pUnit->pAnimSeq) {
-          D2Common::Merc::ANIM_GetEventFrame((int32_t)pUnit->pAnimSeq, nFrameIdx << 8, &nEventType);
+        if ((D2MonSeqTxt*)pUnit->pAnimSeq) {
+          D2Common::Merc::ANIM_GetEventFrame((D2MonSeqTxt*)pUnit->pAnimSeq, nFrameIdx << 8, &nEventType);
         } else {
           nEventType = (uint32_t)pAnimData->pFrameFlags[nFrameIdx];
         }
@@ -1214,13 +1213,13 @@ uint32_t __fastcall UNITS_CheckIfCanAttackTarget(::SGAMEDATA * pGame, D2UnitStrc
     return (uint32_t)!bIsAlly;
 }
 
-BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, int * pnParam, D2UnitStrc * pTarget, eD2Skills eSkill) {
-    if (!(pnParam && pTarget && (!*pnParam || pTarget->eUnitType == UNIT_MONSTER) && (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&sgptDataTable->pTxtSkills[eSkill] + 0x7) & (uint8_t)gadwBitMasks[1])) {
+BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, D2UnitStrc * pnParam, D2UnitStrc * pTarget, eD2Skills eSkill) {
+    if (!(pnParam && pTarget && (pnParam->eUnitType == UNIT_PLAYER || pTarget->eUnitType == UNIT_MONSTER) && (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&sgptDataTable->pTxtSkills[eSkill] + 0x7) & (uint8_t)gadwBitMasks[1])) {
       return 0;
     }
 
     Ai::AiGeneral::GetMonsterNameAndAi(pTarget, &eSkill, (int*)&pTarget);
-    if (!pTarget && eSkill == pnParam[3]) {
+    if (!pTarget && eSkill == pnParam->nUnitGUID) {
       return 1;
     }
 
@@ -1263,7 +1262,7 @@ static void __stdcall UNITS_OnAlignmentChanged(int32_t nParam, int32_t pStatEx, 
 
 // Sets the alignment stat (good/neutral/evil, values 0-2) on a unit via the STATE_alignment stat list. Allocates and attaches the stat list if absent, stores the alignment value, toggles the alignment GFX state (0x69), and calls UNITS_OnAlignmentChanged with old and new values. Skips the change for revived units with alignment 0 (neutral). Certain monster class IDs (0x15F/0x160/0x161) always bypass the revive check. The alignment argument is a single byte: callers set only DL and the prologue does MOVZX EBX, DL, so the upper 24 bits of EDX are dead.
 void __fastcall SetAlignment(D2UnitStrc * pUnit, uint8_t nAlignment, int32_t nOldAlignment) {
-    bool _bIsRevive;
+    uint32_t _bIsRevive;
     bool bIsRevive;
     uint32_t nValue;
     uint32_t nValue_00 = (uint32_t)nAlignment;
@@ -1302,11 +1301,11 @@ void __fastcall SetAlignment(D2UnitStrc * pUnit, uint8_t nAlignment, int32_t nOl
 }
 
 // Applies or removes STATE_uninterruptable on pUnit (nParam=1 to set, 0 to clear). When clearing: if STATE_death_delay is active, it removes that state and immediately kills the unit (via SERVER_KillMonster if no killer, or SERVER_GetHitCalculation with the KILL result flag if a killer exists). Additionally triggers AITHINK for monster units to resume AI after the uninterruptable window closes.
-void __fastcall SetUninterruptableState(D2UnitStrc * pUnit, int32_t nParam) {
+void __fastcall SetUninterruptableState(D2UnitStrc * pUnit, int32_t bSet) {
     eD2States eDeathDelayState;
     D2UnitStrc* pKillerUnit;
     D2DamageStrc sDamage;
-    D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_uninterruptable, nParam);
+    D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_uninterruptable, bSet);
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa29);
       exit(-1);
@@ -1316,7 +1315,7 @@ void __fastcall SetUninterruptableState(D2UnitStrc * pUnit, int32_t nParam) {
     if (!pGame) {
       return;
     }
-    if (!nParam) {
+    if (!bSet) {
       eDeathDelayState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_death_delay);
       if (eDeathDelayState != STATE_none) {
         D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_death_delay, 0);
@@ -1398,7 +1397,7 @@ BOOL __fastcall SetDamageHitClass(D2DamageStrc * pEvent, uint32_t nParam) {
 
 // Server-side per-unit visibility reconciliation between two client sets (the unit's current room vs its target/destination room). Merge-walks both sorted client lists: clients only in the target room get SERVER_SendInitUnitPacket (unit becomes visible to them); clients only in the current room get SendRemoveObject (unit removed); the unit's own owning client is skipped. No-ops unless Units::NeedsRoomUpdate(pUnit). On completion clears the dynamic-path 0x02 (needs-update) flag. Halts on null client-list pointers.
 void __fastcall UNITS_UpdateRoomClientVisibility(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc * pRoom) {
-    bool _bNeedsRoomUpdate;
+    uint32_t _bNeedsRoomUpdate;
     bool bNeedsRoomUpdate;
     D2RoomStrc* pTargetRoom;
     D2ClientStrc* pClient;
@@ -1416,7 +1415,7 @@ void __fastcall UNITS_UpdateRoomClientVisibility(::SGAMEDATA * pGame, D2UnitStrc
         return;
       }
     }
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
       pUnit->pUnitData.pUnitDataPlayer->dwTradeState = 0;
     }
 
@@ -1706,7 +1705,7 @@ void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 int32_t __fastcall UNITS_ProcessUnitMovement(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool _bNeedsRoomUpdate;
+    uint32_t _bNeedsRoomUpdate;
     bool bNeedsRoomUpdate;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x72e);
@@ -1717,11 +1716,11 @@ int32_t __fastcall UNITS_ProcessUnitMovement(::SGAMEDATA * pGame, D2UnitStrc * p
     BOOL nAdvanceResult = D2Common::PATH::Path::PATH_AdvanceUnitAlongPath(pUnit, 0x400);
     _bNeedsRoomUpdate = D2Common::Units::NeedsRoomUpdate(pUnit);
     if (!_bNeedsRoomUpdate) {
-      return 2 - (uint32_t)(nAdvanceResult != 0);
+      return nAdvanceResult != 0 ? 0x1U : 0x2U;
     }
 
     UNITS_UpdateRoomClientVisibility(pGame, pUnit, nullptr);
-    return 2 - (uint32_t)(nAdvanceResult != 0);
+    return nAdvanceResult != 0 ? 0x1U : 0x2U;
 }
 
 D2UnitStrc * __fastcall GetInteractedNpc(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
@@ -1779,7 +1778,7 @@ uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Returns 1 if pUnit and pOther are allies (same unit = always ally). For monsters, resolves to owner player first. For two players, checks that both share the same party ID (via GetPartyIdFromUnit) and neither has party ID -1. Falls back to Path::IsAllyOf for non-player pairs. Used to gate friendly-fire vs. ally-targeted skill application.
 BOOL __fastcall SKILL_CanUnitTargetAlly(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pOther) {
-    bool _bIsAlly;
+    BOOL _bIsAlly;
     int16_t nUnitPartyId;
     int16_t nOtherPartyId;
     bool bIsAlly;
@@ -1845,61 +1844,38 @@ BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
       uint8_t bVar1;
       pCurrentRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       pDynamicPath = pUnit->pPath.pDynamicPath;
-      if (pDynamicPath) {
-        ptTarget.x = nX;
-        ptTarget.y = nY;
+      if (!pDynamicPath) {
+        pDynamicPath = 0;
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc25);
+        exit(-1);
+      }
+
+      ptTarget.x = nX;
+      ptTarget.y = nY;
+      if (!pRoom) {
+        pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(nullptr, nX, nY);
         if (!pRoom) {
-          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(nullptr, nX, nY);
+          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, ptTarget.x, ptTarget.y);
           if (!pRoom) {
-            pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pCurrentRoom, ptTarget.x, ptTarget.y);
-            if (!pRoom) {
-              return 0;
-            }
+            return 0;
           }
         }
-        if (!bFindFreeSpace) {
-          nCollisionMask = 0;
-          pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &ptTarget, D2Common::Units::GetUnitSizeX(pUnit), 0x1c09, nCollisionMask);
-        }
-        if (!pRoom) {
-          return 0;
-        }
+      }
+      if (!bFindFreeSpace) {
+        pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &ptTarget, D2Common::Units::GetUnitSizeX(pUnit), 0x1c09, 0);
+      }
+      if (!pRoom) {
+        return 0;
+      }
 
-        nCollisionMask = D2Common::PATH::Path::PATH_GetCollisionMaskAt(pDynamicPath, pUnit, pRoom, (uint16_t)ptTarget.x, (uint16_t)ptTarget.y);
-        if (!nCollisionMask) {
-          return 0;
-        }
-        if (pUnit->eUnitType == UNIT_PLAYER) {
-          pPlayerClient = SUNIT_GetClient(pUnit, ".\\UNIT\\SUnit.cpp", 0xc3c);
-          D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pPlayerClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)roomCoords.sTileRect.left, (uint16_t)roomCoords.sTileRect.top);
-          D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
-          if (nRelocMode) {
-            pUnit->eUnitFlagsEx |= 0x800;
-          } else {
-            pUnit->eUnitFlagsEx |= UNITFLAGEX_TELEPORTED;
-          }
-
-          UNITS_UpdateRoomClientVisibility(pGameLocal, pUnit, nullptr);
-          pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-          bVar1 = pPlayerData->nPosHistoryIndex;
-          pPlayerData->nRevealingMapRelated = ptTarget.x;
-          pPlayerData->nRevealingMapRelated2 = ptTarget.y;
-          dwTickCount = GetTickCount();
-          pGameSave = pGameLocal;
-          pPlayerData->dwPosHistoryTick = dwTickCount;
-          pPlayerData->aPosHistory[bVar1].nX = ptTarget.x;
-          pPlayerData->aPosHistory[bVar1].nY = ptTarget.y;
-          pPlayerData->nPosHistoryIndex += '\x01';
-          if (pPlayerData->nPosHistoryIndex >= 0x14) {
-            pPlayerData->nPosHistoryIndex = '\0';
-          }
-
-          GAME::Event::SetEventMapReveal(pGameLocal, pUnit, UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN, pGameLocal->dwGameFrame + 0x32, PLAYER_CancelMapReveal, 0, 0);
-          PLAYER::PlayerPets::PETS_ManagePetsByType(pGameSave, pUnit, (uint16_t)ptTarget.x, (uint16_t)ptTarget.y);
-          return 1;
-        }
-
+      nCollisionMask = D2Common::PATH::Path::PATH_GetCollisionMaskAt(pDynamicPath, pUnit, pRoom, (uint16_t)ptTarget.x, (uint16_t)ptTarget.y);
+      if (!nCollisionMask) {
+        return 0;
+      }
+      if (pUnit->eUnitType == UNIT_PLAYER) {
+        pPlayerClient = SUNIT_GetClient(pUnit, ".\\UNIT\\SUnit.cpp", 0xc3c);
+        D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pPlayerClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)roomCoords.sTileRect.left, (uint16_t)roomCoords.sTileRect.top);
         D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
         if (nRelocMode) {
           pUnit->eUnitFlagsEx |= 0x800;
@@ -1908,12 +1884,34 @@ BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
         }
 
         UNITS_UpdateRoomClientVisibility(pGameLocal, pUnit, nullptr);
+        pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+        bVar1 = pPlayerData->nPosHistoryIndex;
+        pPlayerData->nRevealingMapRelated = ptTarget.x;
+        pPlayerData->nRevealingMapRelated2 = ptTarget.y;
+        dwTickCount = GetTickCount();
+        pGameSave = pGameLocal;
+        pPlayerData->dwPosHistoryTick = dwTickCount;
+        pPlayerData->aPosHistory[bVar1].nX = ptTarget.x;
+        pPlayerData->aPosHistory[bVar1].nY = ptTarget.y;
+        pPlayerData->nPosHistoryIndex += '\x01';
+        if (pPlayerData->nPosHistoryIndex >= 0x14) {
+          pPlayerData->nPosHistoryIndex = '\0';
+        }
+
+        GAME::Event::SetEventMapReveal(pGameLocal, pUnit, UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN, pGameLocal->dwGameFrame + 0x32, PLAYER_CancelMapReveal, 0, 0);
+        PLAYER::PlayerPets::PETS_ManagePetsByType(pGameSave, pUnit, (uint16_t)ptTarget.x, (uint16_t)ptTarget.y);
         return 1;
       }
 
-      pDynamicPath = 0;
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc25);
-      exit(-1);
+      D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
+      if (nRelocMode) {
+        pUnit->eUnitFlagsEx |= 0x800;
+      } else {
+        pUnit->eUnitFlagsEx |= UNITFLAGEX_TELEPORTED;
+      }
+
+      UNITS_UpdateRoomClientVisibility(pGameLocal, pUnit, nullptr);
+      return 1;
     }
 }
 
@@ -1930,7 +1928,6 @@ void __fastcall TakeStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc *
     int bRelocOk;
     uint32_t nId;
     int nFinalX;
-    int32_t eCollisionFlag_00;
     D2SUnitStairs sD2SUnitStairs;
     eCollisionFlags eCollisionFlag;
     BOOL bAllowNeighboorRooms;
@@ -1967,10 +1964,7 @@ void __fastcall TakeStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc *
       exit(-1);
     }
 
-    bAllowNeighboorRooms = 1;
-    eCollisionFlag_00 = 0x1c09;
-    iVar1 = D2Common::Units::GetUnitSizeX(pUnit);
-    pFreeRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pDestRoom, (POINT*)&sD2SUnitStairs, iVar1, eCollisionFlag_00, bAllowNeighboorRooms);
+    pFreeRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pDestRoom, (POINT*)&sD2SUnitStairs, D2Common::Units::GetUnitSizeX(pUnit), 0x1c09, 1);
     if (!pFreeRoom) {
       return;
     }
@@ -2491,7 +2485,7 @@ void __fastcall UNITS_FreeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit
             eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pCarriedItem);
             nInvLocY = (uint32_t)nInvLocPackedXY >> 8;
             nInvLocPackedXY = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)nInvLocY << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eInvPage);
-            iVar1 = D2Common::Units::GetInventoryPage(pUnit, nInvLocPackedXY, pGame->bExpansion);
+            iVar1 = D2Common::Units::GetInventoryPage(pUnit, eInvPage, pGame->bExpansion);
             eItemUnitType = pCarriedItem->eUnitType;
             if (eItemUnitType == UNIT_OBJECT || (int)eItemUnitType > 3 && (int)eItemUnitType <= 5) {
               nItemPosY = pCarriedItem->pPath.pStaticPath->nPosY;
@@ -2533,6 +2527,10 @@ void __fastcall UNITS_FreeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     FreeServerUnit(pGame, pCurItem);
+}
+
+void StaticInit_6caf60() {
+    gnSeedCounter = GetTickCount();
 }
 
 } // namespace D2Game::UNIT::SUnit

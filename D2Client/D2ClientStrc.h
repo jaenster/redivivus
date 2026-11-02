@@ -113,7 +113,7 @@ struct D2ClientStrc {
     /* 0x3D4 */ int fClientFlags; // Bit0=loading,Bit3=saveReady,Bit5=unknown
     /* 0x3D8 */ int dwTimeOut; // GetTickCount()+180000 at creation
     /* 0x3DC */ D2ClientHotKeyStrc pHotKeys[16];
-    /* 0x45C */ bool bWeaponSwap; // Secondary weapon set active
+    /* 0x45C */ BYTE bWeaponSwap; // Secondary weapon set active
     /* 0x45D */ bool bUnused;
     /* 0x45E */ short wGuildFlags;
     /* 0x460 */ char szGuildTag[4];

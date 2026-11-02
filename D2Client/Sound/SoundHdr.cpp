@@ -58,18 +58,18 @@ namespace D2Client::Sound::SoundHdr {
 
 static float FLOAT_006d9108 = 400; D2_STATIC_GUARD(FLOAT_006d9108, "D2Client::Sound::SoundHdr::FLOAT_006d9108");
 
-static void SOUNDHDR_CompleteAsyncLoad(int32_t pSoundHdr) {
+static void SOUNDHDR_CompleteAsyncLoad(D2SoundsTxt * pSoundHdr) {
     void* nAddress;
-    if (*(int*)(pSoundHdr + 0x86) != 1) {
+    if (pSoundHdr->nLoadState != 1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x40);
       exit(-1);
     }
 
-    nAddress = Fog::Src::AsyncData::ASYNCDATA_GetResult(*(D2AsyncData_Line0x128**)(pSoundHdr + 0x82));
-    *(void**)(pSoundHdr + 0x6c) = (void*)nAddress;
-    size_t nReadSize = Fog::Src::AsyncData::ASYNCDATA_GetReadSize(*(D2AsyncData_Line0x128**)(pSoundHdr + 0x82));
-    *(size_t*)(pSoundHdr + 0x70) = nReadSize;
-    *(uint32_t*)(pSoundHdr + 0x86) = 2;
+    nAddress = Fog::Src::AsyncData::ASYNCDATA_GetResult((D2AsyncData_Line0x128*)pSoundHdr->pAsyncData);
+    pSoundHdr->pSoundDataBuffer = nAddress;
+    size_t nReadSize = Fog::Src::AsyncData::ASYNCDATA_GetReadSize((D2AsyncData_Line0x128*)pSoundHdr->pAsyncData);
+    pSoundHdr->nSoundDataBytes = nReadSize;
+    pSoundHdr->nLoadState = 2;
     GAME::Sound::SOUND_ParseStreamWavHeader(pSoundHdr);
     gnSoundAsyncLoadCount--;
 }
@@ -91,16 +91,8 @@ eD2LevelId __stdcall SOUND_GetCurrentLevelId() {
 
 uint32_t __stdcall GetSoundEnv() {
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    if (!pUnit) {
-      return 0;
-    }
-
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return 0;
-    }
-
-    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+    D2RoomStrc* pRoom = pUnit ? D2Common::Units::UNITS_GetRoom(pUnit) : nullptr;
+    eD2LevelId eLevel = pRoom ? D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom) : LEVEL_None;
     if (eLevel == LEVEL_None) {
       return 0;
     }
@@ -109,7 +101,7 @@ uint32_t __stdcall GetSoundEnv() {
     return (uint32_t)pLevelsTxt->SoundEnv;
 }
 
-uint32_t __stdcall SOUNDHDR_GetGlobal0() {
+int __stdcall SOUNDHDR_GetGlobal0() {
     return gpSoundHdrGlobal;
 }
 
@@ -200,249 +192,63 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
     uint8_t* pSoundRow;
     int nEnvRemaining;
     char szPath[260];
-    D2BinFieldInputStrc soundenviron[23];
-    D2BinFieldInputStrc sounds[24];
     uint32_t nGroupSize;
     uint32_t nFileSize;
     int32_t nLine;
     int nSong;
     uint32_t* pFileSize;
     char* szSourceFile;
-    sounds[8].eType = FIELDTYPE_SHORT;
-    sounds[9].eType = FIELDTYPE_SHORT;
-    sounds[0].szName = "Filename";
-    sounds[0].eType = FIELDTYPE_ASCII;
-    sounds[0].nSize = 0x3b;
-    sounds[0].nOffset = 0;
-    sounds[0].fpLinker = 0;
-    sounds[1].szName = "Volume";
-    sounds[1].eType = FIELDTYPE_CHAR;
-    sounds[1].nSize = 0;
-    sounds[1].nOffset = 0x3c;
-    sounds[1].fpLinker = 0;
-    sounds[2].szName = "Group Size";
-    sounds[2].eType = FIELDTYPE_CHAR;
-    sounds[2].nSize = 0;
-    sounds[2].nOffset = 0x3d;
-    sounds[2].fpLinker = 0;
-    sounds[3].szName = "Loop";
-    sounds[3].eType = FIELDTYPE_CHAR;
-    sounds[3].nSize = 0;
-    sounds[3].nOffset = 0x3e;
-    sounds[3].fpLinker = 0;
-    sounds[4].szName = "Fade In";
-    sounds[4].eType = FIELDTYPE_CHAR;
-    sounds[4].nSize = 0;
-    sounds[4].nOffset = 0x3f;
-    sounds[4].fpLinker = 0;
-    sounds[5].szName = "Fade Out";
-    sounds[5].eType = FIELDTYPE_CHAR;
-    sounds[5].nSize = 0;
-    sounds[5].nOffset = 0x40;
-    sounds[5].fpLinker = 0;
-    sounds[6].szName = "Defer Inst";
-    sounds[6].eType = FIELDTYPE_CHAR;
-    sounds[6].nSize = 0;
-    sounds[6].nOffset = 0x41;
-    sounds[6].fpLinker = 0;
-    sounds[7].szName = "Stop Inst";
-    sounds[7].eType = FIELDTYPE_CHAR;
-    sounds[7].nSize = 0;
-    sounds[7].nOffset = 0x42;
-    sounds[7].fpLinker = 0;
-    sounds[8].szName = "Duration";
-    sounds[8].nSize = 0;
-    sounds[8].nOffset = 0x43;
-    sounds[8].fpLinker = 0;
-    sounds[9].szName = "Compound";
-    sounds[9].nSize = 0;
-    sounds[9].nOffset = 0x45;
-    sounds[9].fpLinker = 0;
-    sounds[10].szName = "Falloff";
-    sounds[10].eType = FIELDTYPE_INT;
-    sounds[10].nSize = 0;
-    sounds[10].nOffset = 0x47;
-    sounds[10].fpLinker = 0;
-    sounds[0xb].szName = "Reverb";
-    sounds[0xb].eType = FIELDTYPE_CHAR;
-    sounds[0xb].nSize = 0;
-    sounds[0xb].nOffset = 0x4b;
-    sounds[0xb].fpLinker = 0;
-    sounds[0xc].szName = "Cache";
-    sounds[0xc].eType = FIELDTYPE_CHAR;
-    sounds[0xc].nSize = 0;
-    sounds[0xc].nOffset = 0x4c;
-    sounds[0xc].fpLinker = 0;
-    sounds[0xd].szName = "Async Only";
-    sounds[0xd].eType = FIELDTYPE_CHAR;
-    sounds[0xd].nSize = 0;
-    sounds[0xd].nOffset = 0x4d;
-    sounds[0xd].fpLinker = 0;
-    sounds[0xe].szName = "Priority";
-    sounds[0xe].eType = FIELDTYPE_CHAR;
-    sounds[0xe].nSize = 0;
-    sounds[0xe].nOffset = 0x4e;
-    sounds[0xe].fpLinker = 0;
-    sounds[0xf].szName = "Stream";
-    sounds[0xf].eType = FIELDTYPE_CHAR;
-    sounds[0xf].nSize = 0;
-    sounds[0xf].nOffset = 0x4f;
-    sounds[0xf].fpLinker = 0;
-    sounds[0x10].szName = "Stereo";
-    sounds[0x10].eType = FIELDTYPE_CHAR;
-    sounds[0x10].nSize = 0;
-    sounds[0x10].nOffset = 0x50;
-    sounds[0x10].fpLinker = 0;
-    sounds[0x11].szName = "Tracking";
-    sounds[0x11].eType = FIELDTYPE_CHAR;
-    sounds[0x11].nSize = 0;
-    sounds[0x11].nOffset = 0x51;
-    sounds[0x11].fpLinker = 0;
-    sounds[0x12].szName = "Solo";
-    sounds[0x12].eType = FIELDTYPE_CHAR;
-    sounds[0x12].nSize = 0;
-    sounds[0x12].nOffset = 0x52;
-    sounds[0x12].fpLinker = 0;
-    sounds[0x13].szName = "Music Vol";
-    sounds[0x13].eType = FIELDTYPE_CHAR;
-    sounds[0x13].nSize = 0;
-    sounds[0x13].nOffset = 0x53;
-    sounds[0x13].fpLinker = 0;
-    sounds[0x14].szName = "Block 1";
-    sounds[0x14].eType = FIELDTYPE_INT;
-    sounds[0x14].nSize = 0;
-    sounds[0x14].nOffset = 0x54;
-    sounds[0x14].fpLinker = 0;
-    sounds[0x15].szName = "Block 2";
-    sounds[0x15].eType = FIELDTYPE_INT;
-    sounds[0x15].nSize = 0;
-    sounds[0x15].nOffset = 0x58;
-    sounds[0x15].fpLinker = 0;
-    sounds[0x16].szName = "Block 3";
-    sounds[0x16].eType = FIELDTYPE_INT;
-    sounds[0x16].nSize = 0;
-    sounds[0x16].nOffset = 0x5c;
-    sounds[0x16].fpLinker = 0;
-    sounds[0x17].szName = "end";
-    sounds[0x17].eType = FIELDTYPE_END;
-    sounds[0x17].nSize = 0;
-    sounds[0x17].nOffset = 0;
-    sounds[0x17].fpLinker = 0;
-    soundenviron[0].szName = "Song";
-    soundenviron[0].eType = FIELDTYPE_INT;
-    soundenviron[0].nSize = 0;
-    soundenviron[0].nOffset = 0;
-    soundenviron[0].fpLinker = 0;
-    soundenviron[1].szName = "Day Ambience";
-    soundenviron[1].eType = FIELDTYPE_INT;
-    soundenviron[1].nSize = 0;
-    soundenviron[1].nOffset = 4;
-    soundenviron[1].fpLinker = 0;
-    soundenviron[2].szName = "Night Ambience";
-    soundenviron[2].eType = FIELDTYPE_INT;
-    soundenviron[2].nSize = 0;
-    soundenviron[2].nOffset = 8;
-    soundenviron[2].fpLinker = 0;
-    soundenviron[3].szName = "Day Event";
-    soundenviron[3].eType = FIELDTYPE_INT;
-    soundenviron[3].nSize = 0;
-    soundenviron[3].nOffset = 0xc;
-    soundenviron[3].fpLinker = 0;
-    soundenviron[4].szName = "Night Event";
-    soundenviron[4].eType = FIELDTYPE_INT;
-    soundenviron[4].nSize = 0;
-    soundenviron[4].nOffset = 0x10;
-    soundenviron[4].fpLinker = 0;
-    soundenviron[5].szName = "Event Delay";
-    soundenviron[5].eType = FIELDTYPE_INT;
-    soundenviron[5].nSize = 0;
-    soundenviron[5].nOffset = 0x14;
-    soundenviron[5].fpLinker = 0;
-    soundenviron[6].szName = "Indoors";
-    soundenviron[6].eType = FIELDTYPE_CHAR;
-    soundenviron[6].nSize = 0;
-    soundenviron[6].nOffset = 0x18;
-    soundenviron[6].fpLinker = 0;
-    soundenviron[7].szName = "Material 1";
-    soundenviron[7].eType = FIELDTYPE_INT;
-    soundenviron[7].nSize = 0;
-    soundenviron[7].nOffset = 0x1c;
-    soundenviron[7].fpLinker = 0;
-    soundenviron[8].szName = "Material 2";
-    soundenviron[8].eType = FIELDTYPE_INT;
-    soundenviron[8].nSize = 0;
-    soundenviron[8].nOffset = 0x20;
-    soundenviron[8].fpLinker = 0;
-    soundenviron[9].szName = "EAX Environ";
-    soundenviron[9].eType = FIELDTYPE_INT;
-    soundenviron[9].nSize = 0;
-    soundenviron[9].nOffset = 0x24;
-    soundenviron[9].fpLinker = 0;
-    soundenviron[10].szName = "EAX Env Size";
-    soundenviron[10].eType = FIELDTYPE_INT;
-    soundenviron[10].nSize = 0;
-    soundenviron[10].nOffset = 0x28;
-    soundenviron[10].fpLinker = 0;
-    soundenviron[0xb].szName = "EAX Env Diff";
-    soundenviron[0xb].eType = FIELDTYPE_INT;
-    soundenviron[0xb].nSize = 0;
-    soundenviron[0xb].nOffset = 0x2c;
-    soundenviron[0xb].fpLinker = 0;
-    soundenviron[0xc].szName = "EAX Room Vol";
-    soundenviron[0xc].eType = FIELDTYPE_INT;
-    soundenviron[0xc].nSize = 0;
-    soundenviron[0xc].nOffset = 0x30;
-    soundenviron[0xc].fpLinker = 0;
-    soundenviron[0xd].szName = "EAX Room HF";
-    soundenviron[0xd].eType = FIELDTYPE_INT;
-    soundenviron[0xd].nSize = 0;
-    soundenviron[0xd].nOffset = 0x34;
-    soundenviron[0xd].fpLinker = 0;
-    soundenviron[0xe].szName = "EAX Decay Time";
-    soundenviron[0xe].eType = FIELDTYPE_INT;
-    soundenviron[0xe].nSize = 0;
-    soundenviron[0xe].nOffset = 0x38;
-    soundenviron[0xe].fpLinker = 0;
-    soundenviron[0xf].szName = "EAX Decay HF";
-    soundenviron[0xf].eType = FIELDTYPE_INT;
-    soundenviron[0xf].nSize = 0;
-    soundenviron[0xf].nOffset = 0x3c;
-    soundenviron[0xf].fpLinker = 0;
-    soundenviron[0x10].szName = "EAX Reflect";
-    soundenviron[0x10].eType = FIELDTYPE_INT;
-    soundenviron[0x10].nSize = 0;
-    soundenviron[0x10].nOffset = 0x40;
-    soundenviron[0x10].fpLinker = 0;
-    soundenviron[0x11].szName = "EAX Reflect Delay";
-    soundenviron[0x11].eType = FIELDTYPE_INT;
-    soundenviron[0x11].nSize = 0;
-    soundenviron[0x11].nOffset = 0x44;
-    soundenviron[0x11].fpLinker = 0;
-    soundenviron[0x12].szName = "EAX Reverb";
-    soundenviron[0x12].eType = FIELDTYPE_INT;
-    soundenviron[0x12].nSize = 0;
-    soundenviron[0x12].nOffset = 0x48;
-    soundenviron[0x12].fpLinker = 0;
-    soundenviron[0x13].szName = "EAX Rev Delay";
-    soundenviron[0x13].eType = FIELDTYPE_INT;
-    soundenviron[0x13].nSize = 0;
-    soundenviron[0x13].nOffset = 0x4c;
-    soundenviron[0x13].fpLinker = 0;
-    soundenviron[0x14].szName = "EAX Room Roll";
-    soundenviron[0x14].eType = FIELDTYPE_INT;
-    soundenviron[0x14].nSize = 0;
-    soundenviron[0x14].nOffset = 0x50;
-    soundenviron[0x14].fpLinker = 0;
-    soundenviron[0x15].szName = "EAX Air Absorb";
-    soundenviron[0x15].eType = FIELDTYPE_INT;
-    soundenviron[0x15].nSize = 0;
-    soundenviron[0x15].nOffset = 0x54;
-    soundenviron[0x15].fpLinker = 0;
-    soundenviron[0x16].szName = "end";
-    soundenviron[0x16].eType = FIELDTYPE_END;
-    soundenviron[0x16].nSize = 0;
-    soundenviron[0x16].nOffset = 0;
-    soundenviron[0x16].fpLinker = 0;
+    D2BinFieldInputStrc sounds[24] = {
+      {"Filename", FIELDTYPE_ASCII, 0x3b, 0, 0},
+      {"Volume", FIELDTYPE_CHAR, 0, 0x3c, 0},
+      {"Group Size", FIELDTYPE_CHAR, 0, 0x3d, 0},
+      {"Loop", FIELDTYPE_CHAR, 0, 0x3e, 0},
+      {"Fade In", FIELDTYPE_CHAR, 0, 0x3f, 0},
+      {"Fade Out", FIELDTYPE_CHAR, 0, 0x40, 0},
+      {"Defer Inst", FIELDTYPE_CHAR, 0, 0x41, 0},
+      {"Stop Inst", FIELDTYPE_CHAR, 0, 0x42, 0},
+      {"Duration", FIELDTYPE_SHORT, 0, 0x43, 0},
+      {"Compound", FIELDTYPE_SHORT, 0, 0x45, 0},
+      {"Falloff", FIELDTYPE_INT, 0, 0x47, 0},
+      {"Reverb", FIELDTYPE_CHAR, 0, 0x4b, 0},
+      {"Cache", FIELDTYPE_CHAR, 0, 0x4c, 0},
+      {"Async Only", FIELDTYPE_CHAR, 0, 0x4d, 0},
+      {"Priority", FIELDTYPE_CHAR, 0, 0x4e, 0},
+      {"Stream", FIELDTYPE_CHAR, 0, 0x4f, 0},
+      {"Stereo", FIELDTYPE_CHAR, 0, 0x50, 0},
+      {"Tracking", FIELDTYPE_CHAR, 0, 0x51, 0},
+      {"Solo", FIELDTYPE_CHAR, 0, 0x52, 0},
+      {"Music Vol", FIELDTYPE_CHAR, 0, 0x53, 0},
+      {"Block 1", FIELDTYPE_INT, 0, 0x54, 0},
+      {"Block 2", FIELDTYPE_INT, 0, 0x58, 0},
+      {"Block 3", FIELDTYPE_INT, 0, 0x5c, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
+    D2BinFieldInputStrc soundenviron[23] = {
+      {"Song", FIELDTYPE_INT, 0, 0, 0},
+      {"Day Ambience", FIELDTYPE_INT, 0, 4, 0},
+      {"Night Ambience", FIELDTYPE_INT, 0, 8, 0},
+      {"Day Event", FIELDTYPE_INT, 0, 0xc, 0},
+      {"Night Event", FIELDTYPE_INT, 0, 0x10, 0},
+      {"Event Delay", FIELDTYPE_INT, 0, 0x14, 0},
+      {"Indoors", FIELDTYPE_CHAR, 0, 0x18, 0},
+      {"Material 1", FIELDTYPE_INT, 0, 0x1c, 0},
+      {"Material 2", FIELDTYPE_INT, 0, 0x20, 0},
+      {"EAX Environ", FIELDTYPE_INT, 0, 0x24, 0},
+      {"EAX Env Size", FIELDTYPE_INT, 0, 0x28, 0},
+      {"EAX Env Diff", FIELDTYPE_INT, 0, 0x2c, 0},
+      {"EAX Room Vol", FIELDTYPE_INT, 0, 0x30, 0},
+      {"EAX Room HF", FIELDTYPE_INT, 0, 0x34, 0},
+      {"EAX Decay Time", FIELDTYPE_INT, 0, 0x38, 0},
+      {"EAX Decay HF", FIELDTYPE_INT, 0, 0x3c, 0},
+      {"EAX Reflect", FIELDTYPE_INT, 0, 0x40, 0},
+      {"EAX Reflect Delay", FIELDTYPE_INT, 0, 0x44, 0},
+      {"EAX Reverb", FIELDTYPE_INT, 0, 0x48, 0},
+      {"EAX Rev Delay", FIELDTYPE_INT, 0, 0x4c, 0},
+      {"EAX Room Roll", FIELDTYPE_INT, 0, 0x50, 0},
+      {"EAX Air Absorb", FIELDTYPE_INT, 0, 0x54, 0},
+      {"end", FIELDTYPE_END, 0, 0, 0}
+    };
     if (pTxtSounds) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfc);
       exit(-1);
@@ -518,10 +324,10 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
     pEnvironRow = pTxtSoundEnviron;
     gpSoundHdrGlobal = nTxtSoundsSize;
     nEnvRemaining = nTxtSoundEnvironSize;
-    if (0 < nTxtSoundEnvironSize) {
+    if (nTxtSoundEnvironSize > 0) {
       do {
         nSong = pEnvironRow->Song;
-        if (0 < nSong) {
+        if (nSong > 0) {
           if (nSong < gpSoundHdrGlobal) {
             gpSoundHdrGlobal = nSong;
           }
@@ -561,11 +367,7 @@ void __fastcall SOUNDHDR_Init(uint32_t bBackgroundActive) {
 }
 
 void __fastcall SOUNDHDR_AdjustReferenceCount(int32_t nSoundId, int32_t nDelta) {
-    if (!(nSoundId && pTxtSounds && nSoundId >= 0 && nSoundId < nTxtSoundsSize)) {
-      return;
-    }
-
-    D2SoundsTxt* pSound = pTxtSounds + nSoundId;
+    D2SoundsTxt* pSound = nSoundId && pTxtSounds && nSoundId >= 0 && nSoundId < nTxtSoundsSize ? pTxtSounds + nSoundId : nullptr;
     if (!(pSound && (pSound->nRefCount || nDelta != -1))) {
       return;
     }
@@ -594,11 +396,7 @@ void __fastcall SOUNDHDR_AdjustReferenceCount(int32_t nSoundId, int32_t nDelta) 
 
 void __fastcall SOUNDHDR_ClearReferenceCounts(eD2Sounds eSound) {
     int nSoundsCount = nTxtSoundsSize;
-    if (!(eSound != SOUND_NONE && pTxtSounds && (int)eSound >= 0 && (int)eSound < nTxtSoundsSize)) {
-      return;
-    }
-
-    D2SoundsTxt* pSound = pTxtSounds + eSound;
+    D2SoundsTxt* pSound = eSound != SOUND_NONE && pTxtSounds && (int)eSound >= 0 && (int)eSound < nTxtSoundsSize ? pTxtSounds + eSound : nullptr;
     if (!pSound) {
       return;
     }
@@ -633,7 +431,7 @@ void __fastcall SOUNDHDR_FreeSoundBuffer(int32_t nSoundId) {
       return;
     }
 
-    int* pPlaying = GAME::Sound::SOUND_FindPlayingByIdSafe(nSoundId);
+    D2ClientSoundChannelStrc* pPlaying = GAME::Sound::SOUND_FindPlayingByIdSafe(nSoundId);
     if (pPlaying) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x259);
       exit(-1);
@@ -658,7 +456,7 @@ void __fastcall SOUNDHDR_FreeSoundBuffer(int32_t nSoundId) {
 BOOL __stdcall SOUNDHDR_EvictLeastRecentlyUsed(int32_t nBytesNeeded, int32_t bMultiPass, int32_t bRespectRecency) {
     int nId;
     D2SoundsTxt* pSound;
-    int* pPlaying;
+    D2ClientSoundChannelStrc* pPlaying;
     bool bFreedAny;
     int* pLRUNode;
     int nNowVolume = gnCurrentGameAudioVolume;
@@ -789,7 +587,7 @@ int32_t __fastcall SOUNDHDR_RandomizeSoundFromGroup(int32_t nSoundId) {
     return nSoundId;
 }
 
-void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, uint32_t * pszOutPath) {
+void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, char * pszOutPath) {
     D2SoundsTxt* pSound;
     char* pScanDwordEnd;
     char* pszDst;
@@ -800,18 +598,13 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, uint32_t * pszOutPath)
     } else {
       pSound = pTxtSounds + nSoundId;
     }
-    if (nSoundId - 0xb76U <= 0x6ba) {
-      *pszOutPath = 0x41544144;
-      memcpy((char*)(pszOutPath + 1), "\\LOC", 4);
-      *(uint16_t*)(pszOutPath + 2) = 0x4c41;
-      *(uint8_t*)((int)pszOutPath + 10) = 0;
+    if (nSoundId >= 0xb76 && nSoundId <= 0x1230) {
+      memcpy(pszOutPath, "DATA\\LOCAL", 0xb);
     } else {
-      *pszOutPath = 0x41544144;
-      memcpy((char*)(pszOutPath + 1), "\\GLO", 4);
-      memcpy((char*)(pszOutPath + 2), "BAL", 4);
+      memcpy(pszOutPath, "DATA\\GLOBAL", 0xc);
     }
-    if (nSoundId - 0x1231U <= 0x29) {
-      pszDst = (char*)((int)pszOutPath - 1);
+    if (nSoundId >= 0x1231 && nSoundId <= 0x125a) {
+      pszDst = pszOutPath - 1;
       do {
         pScanDwordEnd = pszDst;
         pszDst = pScanDwordEnd + 1;
@@ -819,7 +612,7 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, uint32_t * pszOutPath)
 
       memcpy(pScanDwordEnd + 1, "\\MUSIC\\", 8);
     } else {
-      pszDst = (char*)((int)pszOutPath - 1);
+      pszDst = pszOutPath - 1;
       do {
         pScanDwordEnd = pszDst;
         pszDst = pScanDwordEnd + 1;
@@ -828,7 +621,7 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, uint32_t * pszOutPath)
       memcpy(pScanDwordEnd + 1, "\\SFX\\", 6);
     }
 
-    pszDst = (char*)pszOutPath;
+    pszDst = pszOutPath;
     pszDst = pszDst + strlen(pszDst) + 1;
     D2SoundsTxt* pSoundScan = pSound;
     do {
@@ -837,7 +630,7 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, uint32_t * pszOutPath)
     } while (*pScanDwordEnd != '\0');
 
     D2SoundsTxt* pSoundCopy = pSound;
-    if (!(pszDst + (int)((int)pSoundScan + (-(int)(pSound->Filename + 1) - ((int)pszOutPath + 1))) < (char*)0x50)) {
+    if (!(pszDst + (int)((int)pSoundScan + (-(int)(pSound->Filename + 1) - (int)(pszOutPath + 1))) < (char*)0x50)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ab);
       exit(-1);
     }
@@ -851,7 +644,7 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, uint32_t * pszOutPath)
       } while (*pszDst != '\0');
 
       nFilenameLen = (int)(pScanDwordEnd + 1) - (int)pSound;
-      pszDst = (char*)((int)pszOutPath - 1);
+      pszDst = pszOutPath - 1;
       do {
         pScanDwordEnd = pszDst + 1;
         pszDst++;
@@ -889,12 +682,8 @@ void __stdcall SOUNDHDR_Shutdown() {
     }
     if (pTxtSounds) {
       int nSoundId;
-      nSoundId = 1;
-      if (1 < nTxtSoundsSize) {
-        do {
-          SOUNDHDR_FreeSoundBuffer(nSoundId);
-          nSoundId++;
-        } while (nSoundId < nTxtSoundsSize);
+      for (nSoundId = 1; nSoundId < nTxtSoundsSize; nSoundId++) {
+        SOUNDHDR_FreeSoundBuffer(nSoundId);
       }
 
       D2_FREE_AT(pTxtSounds, ".\\Sound\\SoundHdr.cpp", 0x18e);
@@ -949,7 +738,7 @@ void __fastcall SOUNDHDR_LoadSoundFile(int32_t nSoundId, int32_t bForceSync, int
         return;
       }
       if (true && bForceSync) {
-        SOUNDHDR_CompleteAsyncLoad((int32_t)pSound);
+        SOUNDHDR_CompleteAsyncLoad(pSound);
         return;
       }
     }
@@ -957,7 +746,7 @@ void __fastcall SOUNDHDR_LoadSoundFile(int32_t nSoundId, int32_t bForceSync, int
       return;
     }
 
-    SOUNDHDR_BuildSoundPath(nSoundId, (uint32_t*)szPath);
+    SOUNDHDR_BuildSoundPath(nSoundId, szPath);
     int32_t nResult = Fog::Source::SFile::ARCHIVE_OpenD2FileWrap(szPath, &pMpqFile);
     if (!nResult) {
       pSound->bFileNotFound = 1;
@@ -986,7 +775,7 @@ void __fastcall SOUNDHDR_LoadSoundFile(int32_t nSoundId, int32_t bForceSync, int
           gnSoundBufferBytesLoaded += nLoadStateOrBytes;
           SOUNDHDR_UpdateLRUTimestamp(nSoundId);
           pSound->nLoadState = 2;
-          GAME::Sound::SOUND_ParseStreamWavHeader((int32_t)pSound);
+          GAME::Sound::SOUND_ParseStreamWavHeader(pSound);
           return;
         }
       }
@@ -1012,29 +801,29 @@ void __fastcall SOUNDHDR_LoadSoundFile(int32_t nSoundId, int32_t bForceSync, int
 void __fastcall SOUNDHDR_ProcessAsyncLoads(int32_t dwTick) {
     int nRowIndex;
     int nRowOffset;
-    char* pSoundRow;
+    D2SoundsTxt* pSoundRow;
     uint32_t dwTickToStore = gdwLastSoundAsyncLoadTick;
     if (pTxtSounds && (!dwTick || dwTick - gdwLastSoundAsyncLoadTick >= 0x19)) {
       uint32_t bAsyncComplete;
       nRowIndex = 1;
       nRowOffset = 0x8e;
       do {
-        pSoundRow = pTxtSounds[nRowIndex].Filename;
-        if (!pTxtSounds[nRowIndex].nLoadState && (*(int*)(pSoundRow + 0x8a) || pSoundRow[0x4c])) {
+        pSoundRow = (D2SoundsTxt*)(pTxtSounds->Filename + nRowOffset);
+        if (!*(int*)((int)pTxtSounds->field_0x74 + nRowOffset + 0x12) && (pSoundRow->nRefCount || pSoundRow->Cache)) {
           if (!dwTick || gnSoundAsyncLoadCount < 0xf && (uint32_t)(dwTick - gnSoundEvictedAudioVolume) >= 0xfa) {
             SOUNDHDR_LoadSoundFile(nRowIndex, (uint32_t)!dwTick, 1);
-            if (*(int*)(pSoundRow + 0x86) == 1) {
-              bAsyncComplete = Fog::Src::AsyncData::ASYNCDATA_IsComplete(*(D2AsyncData_Line0x128**)(pSoundRow + 0x82));
+            if (pSoundRow->nLoadState == 1) {
+              bAsyncComplete = Fog::Src::AsyncData::ASYNCDATA_IsComplete((D2AsyncData_Line0x128*)pSoundRow->pAsyncData);
               if (bAsyncComplete) {
-                SOUNDHDR_CompleteAsyncLoad((int32_t)pSoundRow);
+                SOUNDHDR_CompleteAsyncLoad(pSoundRow);
               }
             }
           }
         } else {
-          if (*(int*)(pSoundRow + 0x86) == 1) {
-            bAsyncComplete = Fog::Src::AsyncData::ASYNCDATA_IsComplete(*(D2AsyncData_Line0x128**)(pSoundRow + 0x82));
+          if (pSoundRow->nLoadState == 1) {
+            bAsyncComplete = Fog::Src::AsyncData::ASYNCDATA_IsComplete((D2AsyncData_Line0x128*)pSoundRow->pAsyncData);
             if (bAsyncComplete) {
-              SOUNDHDR_CompleteAsyncLoad((int32_t)pSoundRow);
+              SOUNDHDR_CompleteAsyncLoad(pSoundRow);
             }
           }
         }
@@ -1064,39 +853,32 @@ void __stdcall DRAW_AfterDraw() {
 }
 
 void __fastcall SOUNDHDR_UpdateRegistryVersion(int32_t nSoundHeaderIndex) {
-    // Frame slots -20..-4 are ONE object: &nVersionMajor is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nVersionMajor;
-      int nVersionMinor;
-      int nVersionRevision;
-      uint32_t dwVersionBuild;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 16, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     uint8_t byRequiredVersionFlag;
     uint8_t byCurrentVersionFlag;
     char szVersionString[100];
+    int nVersionMinor;
+    int nVersionRevision;
     int dwRequiredVersion = gdwSoundHeaderCacheIndex[nSoundHeaderIndex].nCutsceneId;
-    __frame0.dwVersionBuild = 0x22;
+    uint32_t dwVersionBuild = 0x22;
     int32_t bReadOk = Storm::Source::SReg::SRegLoadString("Diablo II", "Aux Battle.net", 0, szVersionString, 100);
     if (bReadOk) {
-      sscanf(szVersionString, "%d.%d.%d.%d", &__frame0.nVersionMajor, &__frame0.nVersionMinor, &__frame0.nVersionRevision, (int*)&__frame0.dwVersionBuild);
-      if (__frame0.dwVersionBuild & 1) {
+      int nVersionMajor;
+      sscanf(szVersionString, "%d.%d.%d.%d", &nVersionMajor, &nVersionMinor, &nVersionRevision, (int*)&dwVersionBuild);
+      if (dwVersionBuild & 1) {
         byCurrentVersionFlag = 7;
       } else {
-        if ((char)__frame0.dwVersionBuild < '\0') {
+        if ((char)dwVersionBuild < '\0') {
           byCurrentVersionFlag = 6;
-        } else if (__frame0.dwVersionBuild & 0x10) {
+        } else if (dwVersionBuild & 0x10) {
           byCurrentVersionFlag = 5;
         } else {
-          if (__frame0.dwVersionBuild & 8) {
+          if (dwVersionBuild & 8) {
             byCurrentVersionFlag = 4;
           } else {
-            if (__frame0.dwVersionBuild & 0x40) {
+            if (dwVersionBuild & 0x40) {
               byCurrentVersionFlag = 3;
             } else {
-              byCurrentVersionFlag = ((__frame0.dwVersionBuild & 4) != 0) + 1;
+              byCurrentVersionFlag = (dwVersionBuild & 4) != 0 ? 2 : 1;
             }
           }
         }
@@ -1133,27 +915,27 @@ void __fastcall SOUNDHDR_UpdateRegistryVersion(int32_t nSoundHeaderIndex) {
 
     switch (byRequiredVersionFlag) {
       case 7:
-        __frame0.dwVersionBuild = 0x23;
+        dwVersionBuild = 0x23;
       break;
       case 5:
-        __frame0.dwVersionBuild = 0xb2;
+        dwVersionBuild = 0xb2;
       break;
       case 4:
-        __frame0.dwVersionBuild = 0x2a;
+        dwVersionBuild = 0x2a;
       break;
       case 3:
-        __frame0.dwVersionBuild = 0x62;
+        dwVersionBuild = 0x62;
       break;
       case 2:
-        __frame0.dwVersionBuild = 0x26;
+        dwVersionBuild = 0x26;
       break;
       default:
-        __frame0.dwVersionBuild = 0x22;
+        dwVersionBuild = 0x22;
       break;
     }
 
-    sprintf(szVersionString, "%d.%d.%d.%d", 0xd8, 0x94, 0xf6, __frame0.dwVersionBuild);
-    Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "Aux Battle.net", 0, szVersionString);
+    sprintf(szVersionString, "%d.%d.%d.%d", 0xd8, 0x94, 0xf6, dwVersionBuild);
+    Storm::Source::SReg::SRegSaveString("Diablo II", "Aux Battle.net", 0, szVersionString);
 }
 
 } // namespace D2Client::Sound::SoundHdr

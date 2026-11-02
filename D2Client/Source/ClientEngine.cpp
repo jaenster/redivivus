@@ -10,7 +10,6 @@
 #include "D2Client/GAME/SCmd.h"
 #include "D2Client/GAME/Wall2.h"
 #include "D2Client/SKILLS/Skills.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/Sound/Sound.h"
 #include "D2Client/UI/CmdTbl.h"
 #include "D2Client/UI/SkillDesc.h"
@@ -38,6 +37,7 @@
 #include "D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
 #include "D2Common/Drlg/D2DrlgStrc.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Skills.h"
@@ -56,7 +56,6 @@
 #include "Fog/Fog.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/LogManager.h"
-#include "Fog/Src/QServer/QServer.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/Unit.h"
@@ -800,13 +799,13 @@ void __fastcall CLIENT_BossDeath_Izual(D2UnitStrc * pUnit) {
     UNIT::Missile::MakeMissile(&sSkillArg);
 }
 
-void __fastcall CLIENT_StoreUnitGuidForQuestTracking(int32_t pUnit) {
+void __fastcall CLIENT_StoreUnitGuidForQuestTracking(D2UnitStrc * pUnit) {
     if (!pUnit) {
       gnQuestMonsterUnitId = -1;
       return;
     }
 
-    gnQuestMonsterUnitId = *(uint32_t*)(pUnit + 0xc);
+    gnQuestMonsterUnitId = pUnit->nUnitGUID;
 }
 
 void __stdcall CLIENT_BossDeath_Baal() {
@@ -870,7 +869,7 @@ int __stdcall CLIENT_GetDenOfEvilLightIntensity(uint8_t * pRed, uint8_t * pGreen
 int __fastcall ROOM_GetLevelLightColor(D2RoomStrc * pRoom, char * pRed, char * pGreen, char * pBlue) {
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     if (eLevelId != LEVEL_DenOfEvil) {
-      if ((uint32_t)(eLevelId - LEVEL_RiverOfFlame) <= 1) {
+      if (eLevelId >= LEVEL_RiverOfFlame && eLevelId <= LEVEL_RiverOfFlame + 0x1) {
         if (gnDiabloSpawnLightActive && gnDiabloSpawnLightTimer == -1) {
           *pRed = -1;
           *pGreen = 64;
@@ -940,7 +939,7 @@ void __fastcall CLIENT_CheckWorldstoneShake(D2RoomStrc * pRoom) {
     }
 
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if ((uint32_t)(eLevelId - LEVEL_ThroneOfDestruction) <= 1) {
+    if (eLevelId >= LEVEL_ThroneOfDestruction && eLevelId <= LEVEL_ThroneOfDestruction + 0x1) {
       D2UnitStrc* pPlayerUnit_lcl;
       if (!gbWorldstoneShakeFired && gbWorldstoneShouldShake) {
         pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_Net();
@@ -993,7 +992,8 @@ void __fastcall CLIENT_SpawnWorldstoneShakeParticle(D2UnitStrc * pUnit) {
     CLIENT_CheckWorldstoneShake(pRoom);
 }
 
-static void DRAW_Overlay_SecondsLeftToGame(D2QServerClientConnectionStrc * pQServerClientConnection) {
+// EBX is not an argument: the body never reads it.
+void DRAW_Overlay_SecondsLeftToGame() {
     int nClearCount;
     uint16_t wszText[256];
     int32_t nHighResTime = Fog::Src::LogManager::LOGMGR_GetHighResolutionTime();
@@ -1020,8 +1020,8 @@ static void DRAW_Overlay_SecondsLeftToGame(D2QServerClientConnectionStrc * pQSer
 }
 
 // JMP thunk
-void thunk_DRAW_Overlay_SecondsLeftToGame(D2QServerClientConnectionStrc * pQServerClientConnection) {
-    ::D2Client::Source::ClientEngine::DRAW_Overlay_SecondsLeftToGame(pQServerClientConnection);
+void thunk_DRAW_Overlay_SecondsLeftToGame() {
+    ::D2Client::Source::ClientEngine::DRAW_Overlay_SecondsLeftToGame();
 }
 
 uint32_t __fastcall GetSomeMonsterStatFlag(int32_t nMonsterClassId, uint32_t nStatBitIndex) {
@@ -1119,11 +1119,7 @@ void __fastcall CLIENT_SpawnMonstersAroundUnit(D2UnitStrc * pUnit, int32_t nMons
     }
 
     int nSpawnX = (int)sgptDataTable->pTxtMonStats[nMonsterClassId].MonStatsEx;
-    if (!(nSpawnX >= 0 && nSpawnX < sgptDataTable->nTxtMonStatsExSize)) {
-      return;
-    }
-
-    D2MonStats2Txt* pMonStats2 = sgptDataTable->pTxtMonStatsEx + nSpawnX;
+    D2MonStats2Txt* pMonStats2 = nSpawnX >= 0 && nSpawnX < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nSpawnX : nullptr;
     if (!pMonStats2) {
       return;
     }
@@ -1201,6 +1197,7 @@ int32_t __fastcall CLIENT_ForEachUnitInAdjacentRooms(D2UnitStrc * pUnit, D2UnitS
     int32_t nCallbackResult;
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nRoomCount;
+    uint32_t nRoomIndex;
     D2UnitStrc* pCurUnit;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
@@ -1208,21 +1205,14 @@ int32_t __fastcall CLIENT_ForEachUnitInAdjacentRooms(D2UnitStrc * pUnit, D2UnitS
     }
 
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nRoomCount);
-    uint32_t nRoomIndex = 0;
-    if (nRoomCount <= 0) {
-      return 0;
-    }
-
-    do {
+    for (nRoomIndex = 0; nRoomIndex < nRoomCount; nRoomIndex++) {
       for (pCurUnit = ppAdjacentRooms[nRoomIndex]->pUnitList; pCurUnit; pCurUnit = pCurUnit->pRoomNext) {
         nCallbackResult = (*pfnCallback)(pUnit, pCurUnit, ppBestUnit, pnBestValue);
         if (nCallbackResult) {
           return nCallbackResult;
         }
       }
-
-      nRoomIndex++;
-    } while (nRoomIndex < nRoomCount);
+    }
 
     return 0;
 }
@@ -1498,14 +1488,7 @@ static void __stdcall CLIENT_SendMonsterMoveToTargetMessage(int32_t nTargetX, in
 }
 
 static void CLIENT_SendMonsterAttackMessage(D2UnitStrc * pUnit) {
-    D2ServerMessageHandleStrc sMsg;
-    sMsg.nSkillId = 0;
-    sMsg.nItemId = 0;
-    sMsg.nTargetUnitType = 0;
-    sMsg.nTargetUnitId = 0;
-    sMsg.nSkillLvl = 0;
-    sMsg.nMaxDistance = 0;
-    sMsg.nTargetX = 0;
+    D2ServerMessageHandleStrc sMsg = {0};
     eD2UnitType eVar1 = pUnit->eUnitType;
     if (eVar1 == UNIT_OBJECT || (int)eVar1 > 3 && (int)eVar1 <= 5) {
       sMsg.nSkillId = pUnit->pPath.pStaticPath->nPosX;
@@ -1528,14 +1511,7 @@ static void CLIENT_SendMonsterAttackMessage(D2UnitStrc * pUnit) {
 }
 
 static void CLIENT_SendMonsterWanderMessage(D2UnitStrc * pUnit) {
-    D2ServerMessageHandleStrc sMsg;
-    sMsg.nSkillId = 0;
-    sMsg.nItemId = 0;
-    sMsg.nTargetUnitType = 0;
-    sMsg.nTargetUnitId = 0;
-    sMsg.nSkillLvl = 0;
-    sMsg.nMaxDistance = 0;
-    sMsg.nTargetX = 0;
+    D2ServerMessageHandleStrc sMsg = {0};
     eD2UnitType eVar1 = pUnit->eUnitType;
     if (eVar1 == UNIT_OBJECT || (int)eVar1 > 3 && (int)eVar1 <= 5) {
       sMsg.nSkillId = pUnit->pPath.pStaticPath->nPosX;
@@ -1631,7 +1607,7 @@ static void MONSTER_FindAndChaseNearestEnemy(D2UnitStrc * pUnit) {
     __frame0_t __frame0;
     int32_t* pnAiDelay;
     D2SeedStrc nRng;
-    if (!(pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral)) {
+    if ((pUnit ? pUnit->eAnimMode.ePlayerMode : Death) != eD2PlayerAnimMode_ns::Neutral) {
       return;
     }
 
@@ -1668,7 +1644,7 @@ static void MONSTER_FindAndChaseNearestEnemy(D2UnitStrc * pUnit) {
 }
 
 static void __stdcall CLIENT_MonsterAi_IdleWanderBehavior(D2UnitStrc * pTarget, uint32_t nTargetDistance, D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral)) {
+    if ((pUnit ? pUnit->eAnimMode.ePlayerMode : Death) != eD2PlayerAnimMode_ns::Neutral) {
       return;
     }
     if (nTargetDistance < 5) {
@@ -1693,7 +1669,7 @@ static void CLIENT_MonsterIdleApproach(D2UnitStrc * pUnit) {
     int iVar4;
     int local_c;
     int local_8;
-    if (!(pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral)) {
+    if ((pUnit ? pUnit->eAnimMode.ePlayerMode : Death) != eD2PlayerAnimMode_ns::Neutral) {
       return;
     }
 
@@ -1909,7 +1885,7 @@ static void __stdcall CLIENT_MonsterAi_BasicChaseBehavior(uint32_t nTargetDistan
       CLIENT_SendMonsterAttackMessage(pUnit);
       return;
     }
-    if (!(pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral)) {
+    if ((pUnit ? pUnit->eAnimMode.ePlayerMode : Death) != eD2PlayerAnimMode_ns::Neutral) {
       return;
     }
     if (nTargetDistance < 2) {
@@ -1944,7 +1920,7 @@ static void CLIENT_MonsterSeekCorpse(D2UnitStrc * pUnit) {
     int nY;
     int nX;
     uint32_t nRng;
-    if (!(pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral)) {
+    if ((pUnit ? pUnit->eAnimMode.ePlayerMode : Death) != eD2PlayerAnimMode_ns::Neutral) {
       return;
     }
 

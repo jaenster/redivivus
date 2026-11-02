@@ -8,7 +8,6 @@
 #include "D2Win/Src/D2Comp.h"
 #include "D2Win/Src/D2WinFont.h"
 #include "D2Win/Src/D2WinMain.h"
-#include "Storm/_unnamespaced.h"
 
 
 // =============================================================================
@@ -1744,6 +1743,12 @@ uint8_t gPaletteActNeutral[65536] = {}; D2_GLOBAL_GUARD(gPaletteActNeutral, "gPa
 
 D2FontCacheEntryStrc gaFontCache[14] = {}; D2_GLOBAL_GUARD(gaFontCache, "gaFontCache");
 
+D2TooltipTextStrc DisplayedTooltip = {}; D2_GLOBAL_GUARD(DisplayedTooltip, "DisplayedTooltip");
+
+uint16_t gnFontTableCharWidthCache[2] = {}; D2_GLOBAL_GUARD(gnFontTableCharWidthCache, "gnFontTableCharWidthCache");
+
+uint16_t gwFontHeightDefault[2] = {}; D2_GLOBAL_GUARD(gwFontHeightDefault, "gwFontHeightDefault");
+
 uint8_t gaGlideEmblemPrimaryColorTableEntries[12] = {}; D2_GLOBAL_GUARD(gaGlideEmblemPrimaryColorTableEntries, "gaGlideEmblemPrimaryColorTableEntries");
 
 D2CompCharacterCompositeItemStrc gaCompCharacterCompositeItems[255] = {}; D2_GLOBAL_GUARD(gaCompCharacterCompositeItems, "gaCompCharacterCompositeItems");
@@ -1790,7 +1795,7 @@ D2FogArchiveStrc * MPQ_d2music = 0; D2_GLOBAL_GUARD(MPQ_d2music, "MPQ_d2music");
 D2FogArchiveStrc * MPQ_d2Xvideo = 0; D2_GLOBAL_GUARD(MPQ_d2Xvideo, "MPQ_d2Xvideo");
 D2FogArchiveStrc * MPQ_patch_d2 = 0; D2_GLOBAL_GUARD(MPQ_patch_d2, "MPQ_patch_d2");
 D2FogArchiveStrc * MPQ_d2exp = 0; D2_GLOBAL_GUARD(MPQ_d2exp, "MPQ_d2exp");
-uint32_t gnPaletteGammaShiftState = 0; D2_GLOBAL_GUARD(gnPaletteGammaShiftState, "gnPaletteGammaShiftState");
+int gnPaletteGammaShiftState = 0; D2_GLOBAL_GUARD(gnPaletteGammaShiftState, "gnPaletteGammaShiftState");
 uint8_t gPaletteAct1[196608] = {}; D2_GLOBAL_GUARD(gPaletteAct1, "gPaletteAct1");
 uint32_t gbGammaShiftActive = 0; D2_GLOBAL_GUARD(gbGammaShiftActive, "gbGammaShiftActive");
 unsigned int gdwPaletteShiftStartTick = {}; D2_GLOBAL_GUARD(gdwPaletteShiftStartTick, "gdwPaletteShiftStartTick");
@@ -1939,9 +1944,9 @@ namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

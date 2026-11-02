@@ -63,17 +63,27 @@ Copy `build/d2.exe` next to `Game.exe` in your Diablo II folder and run `d2.exe 
 [`asm_matching/`](asm_matching/README.md) compiles the tree with Visual C++ 2005 SP1 and
 compares the machine code of each function with 1.14d. It is a check on the decompilation:
 where the code comes out identical, the decompiled function was read correctly.
-At this commit, generated from version 1778 of the Ghidra database:
+At this commit, generated from version 1810 of the Ghidra database:
 
 |Measure|Identical machine code|
 |-|-|
-|Functions|5,689 of 14,812 (38.4%)|
-|Code|393,360 of 2,555,443 bytes (15.39%)|
+|Functions|6,074 of 14,642 (41.5%)|
+|Code|491,512 of 2,602,915 bytes (18.88%)|
+|Instructions|1,747,147 of 2,602,915 bytes (67.1%), counting identical instructions in functions that still differ|
 
 These leave out the C runtime that Visual C++ 2005 linked in statically (libcmt): the
-rebuild links a runtime instead of reconstructing it. Over the whole binary, runtime
-included: 6,044 of 15,521 functions (38.9%), 444,355 of
-2,678,537 bytes (16.59%).
+rebuild links a runtime instead of reconstructing it. Code the compiler generates for C++
+exceptions is left out as well. Over the whole binary, runtime
+included: 6,631 of 15,711 functions (42.2%), 590,217 of
+2,748,975 bytes (21.47%).
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">
+  <img alt="The original's code split by how closely the rebuild matches it" src="asm_matching/msvc8/evidence/byte-match-light.svg">
+</picture>
+
+[BYTE-MATCHING.md](BYTE-MATCHING.md) explains what is compared, the kinds of match, and why
+whole matching functions are a strict measure next to identical instructions.
 
 ## Contributing
 
@@ -81,6 +91,9 @@ Changes are welcome as pull requests or patches against a release tag. Most of t
 is regenerated, so a fix that belongs in the reverse-engineering (a wrong type, a missing
 parameter) is best reported as an issue with the evidence; it will land upstream and
 survive the next regeneration.
+
+[CONTRIBUTING.md](CONTRIBUTING.md) has the detail: which paths are generated and which are
+hand-written, and which door a given finding goes through so that it survives.
 
 With an AI agent you can read the Ghidra databases behind the tree (1.14d Windows and Mac)
 through a read-only MCP server, and report such fixes with the evidence. In Claude Code:
@@ -103,6 +116,10 @@ checked against the databases, reviewed, and applied with you as the git author;
   difference classes it measures.
 - [D2MOO](https://github.com/ThePhrozenKeep/D2MOO) supplied many of the structure layouts
   this work started from in 2021, though it went another direction since.
+
+## License
+
+MIT, see [LICENSE](LICENSE). Code under `thirdparty/` keeps its own license.
 
 Diablo and Blizzard Entertainment are trademarks of Blizzard Entertainment, Inc. This
 project is not affiliated with or endorsed by Blizzard.

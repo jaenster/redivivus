@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
+#include "D2Common/D2WaypointStrc.h"
 
 // Forward declarations
 struct D2ClientStrc;
@@ -87,11 +88,35 @@ struct __attribute__((packed)) D2OldSaveHeaderStrc {
     /* 0x81 */ uint8_t byInitSeedByte;
 };
 
+struct __attribute__((packed)) D2SaveFileNpcStrc {
+    /* 0x00 */ short szMagic;
+    /* 0x02 */ short nSize;
+    /* 0x04 */ uint8_t pActNpcData[3][8];
+    /* 0x1C */ uint8_t pActNpcBitInfo[3][8];
+};
+
 struct __attribute__((packed)) D2SaveFileQuestsStrc {
     /* 0x00 */ int nMagic;
     /* 0x04 */ int nVersion;
     /* 0x08 */ short nSize;
     /* 0x0A */ char pActQuests[3][96];
+};
+
+struct __attribute__((packed)) D2SaveWaypointListEntryStrc {
+    /* 0x00 */ D2WaypointStrc pWaypoints;
+    /* 0x10 */ uint32_t field1_0x10;
+    /* 0x14 */ uint32_t field2_0x14;
+};
+
+struct D2SaveWaypointListStrc {
+    /* 0x00 */ D2SaveWaypointListEntryStrc pWaypoints[3];
+};
+
+struct __attribute__((packed)) D2SaveFileWaypointsStrc {
+    /* 0x00 */ short szMagic;
+    /* 0x02 */ int nVersion;
+    /* 0x06 */ short nSize;
+    /* 0x08 */ D2SaveWaypointListStrc pActWaypoints;
 };
 
 namespace D2Game::PLAYER::PlayerSave {
@@ -103,14 +128,16 @@ int __fastcall PLRSAVE_RestoreItemFromSaveData(::SGAMEDATA * pGame, struct D2Uni
 // Server-side: restores one saved item onto a player by its saved animMode (storage location), dispatching: Death/default=drop to ground at the item's path position (SERVER_ItemToInventory); Neutral=equip to its body-loc (SERVER_EquipItemToBodyLoc); Walk=place in belt (ITEM_TryPlaceInBelt at the item's X); GetHit=copy into player inventory and apply as a quest reward (ITEMMODE_ApplyQuestReward); TownWalk=nest into the container item identified by eBodyLocation (PutItemInItem, container GUID at +0xc). Run/TownNeutral and any mode > TownWalk fail. Returns 0 on success, 0xc on failure. Used during character load to repopulate a player's items.
 // @sourcefile .\PLAYER\PlrSave.cpp
 int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pSourceItem, int32_t eBodyLocation);
-int32_t __stdcall SAVE_SerializeItemIfValid(struct D2UnitStrc * pUnit, char * szText, size_t nSize, int32_t nParam1, int32_t nParam2, int32_t nParam3);
+// Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.
+int32_t __fastcall SAVE_SerializeItemIfValid(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, char * szText, size_t nSize, int32_t nParam1, int32_t nParam2, int32_t nParam3);
 // Serializes a player's inventory into the save buffer pBuffer (cap nBufSize). Writes magic 'JM' (0x4d4a), then a 16-bit carried-item count (GetCarriedItemsCount), then each item via SerializeItem/SAVE_SerializeItemIfValid into an 8KB scratch buffer. Handles equipped weapons and L/R-arm items specially (weapon-swap aware), skips arm items already counted in the equipped set, then iterates all carried items and finally the cursor item (only if UNIT_ITEM). Decrements the count for items that serialize to 0 bytes. Returns the total bytes written via the GuardStack tail (stdcall frame). Out: pBuffer filled; the count field is back-patched at the end.
-int __stdcall SAVE_SerializeInventoryItems(struct D2InventoryStrc * pInventory, uint16_t * pBuffer, int32_t nBufSize, int32_t nParam2, int32_t nParam3, int32_t nParam4);
+// Registers: pGame (ECX) and pUnit (EDX) are forwarded to SAVE_SerializeItemIfValid.
+int __fastcall SAVE_SerializeInventoryItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2InventoryStrc * pInventory, uint16_t * pBuffer, int32_t nBufSize, int32_t nParam2, int32_t nParam3, int32_t nParam4);
 struct D2InventoryStrc * __fastcall GetCopyInventory(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, uint16_t * pBuffer, int32_t nBufSize, int32_t bParam1, int32_t bParam2, int32_t bParam3);
 // Serializes a player's corpse into the save buffer. Writes magic word 0x4D4A then a has-corpse flag (uint16). If no live corpse unit exists, returns 4 (header-only bytes). Otherwise writes the corpse's world position (X/Y) and delegates to SAVE_SerializeInventoryItems to append the corpse inventory. Returns total bytes written (inventory size + 16) or halts with fatal error 0x97a/0x984 on buffer-overflow or inventory serialization failure.
 int32_t __fastcall PLRSAVE_SerializeCorpseData(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint16_t * pCorpseBuffer, int32_t nBufferSize, int32_t nParam);
 struct D2SaveFileHeaderStrc * __stdcall PLRSAVE_MakeSaveFileReturnBuffer(int32_t nPlayerId, int32_t nExperiencePoints, ::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2SaveFileHeaderStrc * pSaveFileHeader, int32_t nParam);
-int32_t __fastcall PLAYERSAVE_ByteToHexChar(uint8_t * pszHexOut, uint8_t nByteValue);
+void __fastcall PLAYERSAVE_ByteToHexChar(char * pszHexOut, uint8_t nByteValue);
 uint8_t * __fastcall PLAYERSAVE_ByteArrayToHexString(uint8_t * pParam, uint8_t * pbParam, int32_t nLength);
 // Computes a CRC32 over a D2MissilesTxt row for save-file integrity. For rows with packed flags > 0x5B, temporarily zeros out server-side function IDs (pSrvDoFunc/pSrvHitFunc), sub-missiles, sounds, and extra hit flags before hashing, then restores them — ensuring the CRC covers only data that is stable across patches.
 uint32_t __fastcall PLAYERSAVE_CRC32MissileTable(struct D2MissilesTxt * pMissilesTxt, int32_t nCrcSeed);
@@ -136,7 +163,7 @@ int __fastcall PLRSAVE_RestoreItemsFromStream(::SGAMEDATA * pGame, struct D2Unit
 // Deserializes a save-file item list from the bit stream and rebuilds the units. pItem must be the 'JM' list header (count follows); iterates nItemCount items, parsing each with ReadInfoFromStreamVersioned + ITEM_CreateFromSaveData (format eItemFormat), then attaching it to pUnit via PLRSAVE_RestoreItemToUnit or, when bUsePageHandler set, SetPageAndQuestHandler. For each item also reads its socketed/contained items (usedSockets) and attaches them to the parent. Frees units that fail to restore, and strips items whose runeword no longer validates. Writes bytes-consumed back through ppnShort. Returns 0 on success, 0xe on a parse/format error.
 int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, uint32_t eItemFormat, int32_t nStreamEnd, int32_t bUsePageHandler, short * * ppnShort);
 int __fastcall PLRSAVE_DispatchItemLoadByFormat(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pItemData, uint32_t eFormat, int32_t nStreamEnd, int32_t bUsePageHandler, short * * ppnShort);
-int32_t __fastcall _oldSaveGameLoadingPart7(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, short * param_1, uint32_t param_2, uint32_t nParam, uint32_t * pbParam);
+int32_t __fastcall _oldSaveGameLoadingPart7(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, short * param_1, uint32_t param_2, uint32_t nSize, uint32_t * pbParam);
 uint32_t __fastcall _oldSaveGameLoadingPart8_part1(int32_t nParam, uint16_t nParam2, uint32_t param_1);
 // Restores skill hotkeys and active left/right skill assignments from a legacy save stream. Reads up to 8 hotkey entries (indices 8-15) from pbParam, remapping raw skill byte values (0x9C-0xD8 range shifted +0x41, 0xFF → -1) via SetGotkeyInfo. If stream is long enough also restores shift-left/right skill slots. Outputs bytes consumed in *pnParam.
 // @sourcefile .\PLAYER\PlrSave.cpp

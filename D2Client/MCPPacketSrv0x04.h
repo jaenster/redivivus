@@ -12,8 +12,7 @@
 struct __attribute__((packed)) MCPPacketSrv0x04 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ short nRequestId;
-    /* 0x03 */ short nGameToken;
-    /* 0x05 */ short nUnkown;
+    /* 0x03 */ int nGameToken; // One dword: 0044ac24 MOV EDX,[EAX+3] stores it whole into D2GSGameToken (00798fb0)
     /* 0x07 */ int nGameIp;
     /* 0x0B */ int nGameHash;
     /* 0x0F */ int nResult;

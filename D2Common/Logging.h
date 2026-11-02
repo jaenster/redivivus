@@ -23,7 +23,7 @@ void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nPa
 bool __fastcall LOGGING_OpenLogFile(char * szLogFileName);
 void __stdcall CloseLogging();
 // Binary search for a stat entry by ID in a sorted stat array. Takes stat ID in EDI and pointer to stat array descriptor in EAX. Returns index on success, -1 if not found.
-long STATLIST_BinarySearchStatById(int32_t nParam, int * pnParam);
+long STATLIST_BinarySearchStatById(int32_t nStatKey, int * pnParam);
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Common::Logging

@@ -3,7 +3,6 @@
 #include "D2Game/UNIT/sunitproxy.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/UNIT/Monster.h"
@@ -23,6 +22,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
@@ -124,7 +124,7 @@ D2GameNpcStrc * __fastcall GetGameNpcByUnit(::SGAMEDATA * pGame, D2UnitStrc * pU
 // @sourcefile .\UNIT\sunitproxy.cpp
 void __fastcall SUNITPROXY_AddItemToNpcProxy(D2UnitStrc * pNpcUnit, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwTradeParam) {
     int nLookupNpcClassId;
-    D2UnitStrc* nNpcIndex = pNpcUnit;
+    D2UnitStrc* nNpcIndex;
     D2SUnitProxyStrc_Line0x85* pProxyEntry = D2_NEW_POOL_AT(pGame->pMemoryPool, D2SUnitProxyStrc_Line0x85, ".\\UNIT\\sunitproxy.cpp", 0x85);
     if (!pNpcUnit) {
       nLookupNpcClassId = -1;
@@ -146,21 +146,21 @@ void __fastcall SUNITPROXY_AddItemToNpcProxy(D2UnitStrc * pNpcUnit, ::SGAMEDATA 
 }
 
 // @sourcefile .\UNIT\sunitproxy.cpp
-static void SUNITPROXY_InitNpcTradeItems(int32_t nParam1, ::SGAMEDATA * pGame, void * * pParam) {
+static void SUNITPROXY_InitNpcTradeItems(int32_t nNpcTableIdx, ::SGAMEDATA * pGame, void * * pParam) {
     void* nNpcTradeIdx;
-    if (nParam1 >= 0x11) {
+    if (nNpcTableIdx >= 0x11) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa4);
       exit(-1);
     }
 
-    pParam[1] = (void*)gaNpcItemTables[nParam1].nTradeCount;
-    nNpcTradeIdx = D2_ALLOC_POOL_AT(pGame->pMemoryPool, gaNpcItemTables[nParam1].nTradeCount * 0xc, ".\\UNIT\\sunitproxy.cpp", 0xa8);
+    pParam[1] = (void*)gaNpcItemTables[nNpcTableIdx].nTradeCount;
+    nNpcTradeIdx = D2_ALLOC_POOL_AT(pGame->pMemoryPool, gaNpcItemTables[nNpcTableIdx].nTradeCount * 0xc, ".\\UNIT\\sunitproxy.cpp", 0xa8);
     *pParam = nNpcTradeIdx;
-    memcpy(nNpcTradeIdx, gaNpcItemTables[nParam1].pTradeItems, gaNpcItemTables[nParam1].nTradeCount * 0xc);
-    pParam[3] = (void*)gaNpcItemTables[nParam1].nQuestCount;
-    nNpcTradeIdx = D2_ALLOC_POOL_AT(pGame->pMemoryPool, gaNpcItemTables[nParam1].nQuestCount * 4, ".\\UNIT\\sunitproxy.cpp", 0xab);
+    memcpy(nNpcTradeIdx, gaNpcItemTables[nNpcTableIdx].pTradeItems, gaNpcItemTables[nNpcTableIdx].nTradeCount * 0xc);
+    pParam[3] = (void*)gaNpcItemTables[nNpcTableIdx].nQuestCount;
+    nNpcTradeIdx = D2_ALLOC_POOL_AT(pGame->pMemoryPool, gaNpcItemTables[nNpcTableIdx].nQuestCount * 4, ".\\UNIT\\sunitproxy.cpp", 0xab);
     pParam[2] = nNpcTradeIdx;
-    memcpy(nNpcTradeIdx, gaNpcItemTables[nParam1].pQuestItems, gaNpcItemTables[nParam1].nQuestCount * 4);
+    memcpy(nNpcTradeIdx, gaNpcItemTables[nNpcTableIdx].pQuestItems, gaNpcItemTables[nNpcTableIdx].nQuestCount * 4);
 }
 
 // Server-side init of the game's NPC control table. Allocates the D2GameNpcControlStrc and its 0x1100-byte NPC array from the game pool, seeds its RNG from the game seed, and iterates every monstats.txt row: for each monster flagged as an NPC (npc bit), allocates a player-style inventory, assigns a control-table slot (max 64, halts via ErrorManager if exceeded), and copies init data (flags/name) from the static gpNpcControlInitTable. For trade-enabled NPCs (flag==1) it dispatches on monster id to SUNITPROXY_InitNpcTradeItems with the per-vendor store index and marks the slot tradeable/repair. Stores the result in pGame->pNpcControl. __fastcall(pGame).
@@ -477,7 +477,6 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
     int32_t nTradeItemIdx;
     D2DataTableTxtStrc* pDataTable;
     PD2GameNpcProxyQueue pNpcEntry;
-    int nMonStatsByteOffset;
     int iVar1;
     int nNpcControlTableSize;
     bool bFoundInControlTable;
@@ -510,14 +509,13 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
     nNpcCount = 0;
     int nMonStatsIdx;
     nMonStatsIdx = 0;
-    if (0 < nMonStatsTotal) {
+    if (nMonStatsTotal > 0) {
       char* pMonStatsTxtEntry;
-      nMonStatsByteOffset = 0;
       pNpcEntry = &pNpcArray->pNpc[0].pProxyQueue;
       pDataTable = sgptDataTable;
       do {
         if (nMonStatsIdx >= 0 && nMonStatsIdx < pDataTable->nTxtMonStatsSize) {
-          pMonStatsTxtEntry = pDataTable->pTxtMonStats->Code + nMonStatsByteOffset - 0x10;
+          pMonStatsTxtEntry = (char*)&pDataTable->pTxtMonStats[nMonStatsIdx].Id;
           if (pMonStatsTxtEntry && (uint8_t)pMonStatsTxtEntry[0xd] & gadwBitMasks[1]) {
             ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->nMonStatsId = nMonStatsIdx;
             ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->bTrading = 0;
@@ -655,7 +653,6 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
           }
         }
 
-        nMonStatsByteOffset += 0x1a8;
         nMonStatsIdx++;
       } while (nMonStatsIdx < nMonStatsTotal);
     }
@@ -1113,7 +1110,7 @@ D2InventoryStrc * __fastcall SUNITPROXY_GetPlayerProxyInventory(::SGAMEDATA * pG
 }
 
 // Finds or creates this player's interaction node on an NPC proxy and RETURNS THE NODE. The node is the 12 bytes allocated at 00536cef with EDX = 0xc: player GUID at +0, a flag the trade path reads at +4, next at +8. On the found path the search loop at 00536cd0 jumps to the epilogue with the node still in EAX; on the allocate path the new node is in EAX and the code falls into the same epilogue, so both exits return it. It had been typed void, which left its caller SUNITNPC_OpenTradeScreen at 00579360 reading a declared-but-never-assigned local, taking the identified-item branch for the merchant's own unidentified stock and returning null - no vendor item ever reached the client.
-int32_t __fastcall SUNITPROXY_AddPlayerInteraction(::SGAMEDATA * pGame, D2GameNpcStrc * pNpcProxy, D2UnitStrc * pPlayerUnit) {
+D2NpcPlayerInteractionStrc * __fastcall SUNITPROXY_AddPlayerInteraction(::SGAMEDATA * pGame, D2GameNpcStrc * pNpcProxy, D2UnitStrc * pPlayerUnit) {
     int nPlayerGuid = !pPlayerUnit ? -1 : pPlayerUnit->nUnitGUID;
     D2NpcPlayerInteractionStrc* pInteractionEntry = pNpcProxy->pPlayerInteractions;
     while (true) {
@@ -1122,7 +1119,7 @@ int32_t __fastcall SUNITPROXY_AddPlayerInteraction(::SGAMEDATA * pGame, D2GameNp
         pInteractionEntry->nPlayerGUID = nPlayerGuid;
         pInteractionEntry->pNext = pNpcProxy->pPlayerInteractions;
         pNpcProxy->pPlayerInteractions = pInteractionEntry;
-        return (int32_t)pInteractionEntry;
+        return pInteractionEntry;
       }
       if (pInteractionEntry->nPlayerGUID == nPlayerGuid) {
         break;
@@ -1131,7 +1128,7 @@ int32_t __fastcall SUNITPROXY_AddPlayerInteraction(::SGAMEDATA * pGame, D2GameNp
       pInteractionEntry = pInteractionEntry->pNext;
     }
 
-    return (int32_t)pInteractionEntry;
+    return pInteractionEntry;
 }
 
 void __fastcall SUNITPROXY_ResetNpcProxy(::SGAMEDATA * pGame, D2GameNpcStrc * pNpcProxy, D2UnitStrc * pUnit) {
@@ -1517,9 +1514,9 @@ void __fastcall SERVER_InitClassicTowns(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
     SUNITPROXY_UpdateNpcProxiesForAct(pGame, nActByte, (uint32_t)!sArgs.nCount);
 }
 
-void __fastcall SUNITPROXY_SendProxyItemsToClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nNpcProxy, D2ClientStrc * pClient) {
+void __fastcall SUNITPROXY_SendProxyItemsToClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * nNpcProxy, D2ClientStrc * pClient) {
     SendUpdatedItemsToClient(pGame, pUnit, pClient, nullptr);
-    D2InventoryStrc* pInventory = SUNITPROXY_GetPlayerProxyInventory(pGame, (D2UnitStrc*)nNpcProxy, pUnit);
+    D2InventoryStrc* pInventory = SUNITPROXY_GetPlayerProxyInventory(pGame, nNpcProxy, pUnit);
     if (!pInventory) {
       return;
     }

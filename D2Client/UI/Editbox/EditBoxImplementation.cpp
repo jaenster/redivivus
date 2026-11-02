@@ -15,7 +15,7 @@
 #include "D2Win/Src/D2WinTextBox.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/Memory.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Dialog.h"
@@ -160,9 +160,7 @@ void __thiscall Draw(::EditBoxImplementation * pThis) {
           bShadow = 0;
           pThis->wszScratch[pThis->nCursorPos] = L'\0';
           nYOffset = pThis->nTextY;
-          nLinePixelWidth = 0;
-          nScrollCharOff = D2Win::Src::D2WinFont::DRAW_text0(pThis->wszScratch);
-          D2Win::Src::D2WinFont::DRAW_text(szCursorWchar, nScrollCharOff + pThis->nTextX, nYOffset, nLinePixelWidth, bShadow);
+          D2Win::Src::D2WinFont::DRAW_text(szCursorWchar, D2Win::Src::D2WinFont::DRAW_text0(pThis->wszScratch) + pThis->nTextX, nYOffset, 0, bShadow);
           return;
         }
 
@@ -235,10 +233,9 @@ void __thiscall SetNumber(::EditBoxImplementation * pThis, int nNumber) {
     char szNumBuf[20];
     char cCh;
     sprintf(szNumBuf, "%d", nNumber);
-    char* pszEnd = szNumBuf;
-    pszEnd = pszEnd + strlen(pszEnd) + 1;
+    int nLen = (int)strlen(szNumBuf);
     uint32_t nMaxLen = (uint32_t)pThis->nMaxLength;
-    if ((uint32_t)((int)pszEnd - (int)(szNumBuf + 1)) > nMaxLen) {
+    if ((uint32_t)nLen > nMaxLen) {
       ((uint8_t*)&szNumBuf - 1)[nMaxLen] = 0;
     }
 
@@ -287,12 +284,11 @@ int __thiscall OnMouseWheel(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * 
 }
 
 int __thiscall OnMouseUp(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
-    if (!pThis->bHasFocus) {
-      return 0;
+    if (pThis->bHasFocus) {
+      pThis->nBlinkTick = 0;
+      pThis->bHasFocus = 0;
     }
 
-    pThis->nBlinkTick = 0;
-    pThis->bHasFocus = 0;
     return 0;
 }
 
@@ -494,20 +490,18 @@ void __thiscall SetKeyRepeat(::EditBoxImplementation * pThis, BOOL bAllow) {
 }
 
 int __thiscall OnRightArrow(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
-    if (pThis->nCursorPos >= pThis->nTextLength) {
-      return 1;
+    if (pThis->nCursorPos < pThis->nTextLength) {
+      pThis->nCursorPos++;
     }
 
-    pThis->nCursorPos++;
     return 1;
 }
 
 int __thiscall OnLeftArrow(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
-    if (pThis->nCursorPos <= 0) {
-      return 1;
+    if (pThis->nCursorPos > 0) {
+      pThis->nCursorPos--;
     }
 
-    pThis->nCursorPos--;
     return 1;
 }
 
@@ -549,14 +543,14 @@ int __thiscall OnLeftArrow(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * p
     memset(wszZeroBuf, 0, 11 * sizeof(wszZeroBuf[0]));
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nFont);
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszZeroBuf, szZeroBuf, 0xb);
-    if (nWidth < 1) {
+    if (nWidth <= 0) {
       int32_t nTextWidth;
       nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszZeroBuf);
       pThis->nWidth = nTextWidth / 10 * (nMaxLength + 2);
     } else {
       pThis->nWidth = nWidth;
     }
-    if (nMaxLines < 1) {
+    if (nMaxLines <= 0) {
       pThis->nMaxLines = 1;
       pThis->bDrawFrame = 1;
     } else {
@@ -576,7 +570,7 @@ int __thiscall OnLeftArrow(::EditBoxImplementation * pThis, D2UIMouseMsgStrc * p
       return pThis;
     }
 
-    Storm::SMem::SMemFree(pThis, "delete", -1, 0);
+    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

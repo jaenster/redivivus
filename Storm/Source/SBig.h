@@ -407,7 +407,7 @@ void __stdcall SBigMulMod(struct BigData * pResult, struct BigData * pBigA, stru
 // @renamed-from SBIG_PowerModWrapper (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigPow -> 10099500, single bl .Pow__FR9BigBufferRC9BigBufferUiR8BigStack. 1.14d: 3-arg forwarder onto BigBuffer_Pow 00424640, a square-and-multiply over a SCALAR unsigned exponent with no modulus argument - so it cannot be PowMod.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
-void __stdcall SBigPow(struct BigData * pResult, struct BigData * pBigBase, uint32_t nParam);
+void __stdcall SBigPow(struct BigData * pResult, struct BigData * pBigBase, uint32_t nExponent);
 // @renamed-from SBIG_MontgomeryMulWrapper2 (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigRand -> 10099470, single bl .Rand__FR9BigBufferRC9BigBufferR9BigBufferR8BigStack (4 args -> 3-arg C API). 1.14d: 3-arg forwarder onto BigBuffer_Rand 00424700, whose callee set {Mul, Shr, Add, Shl, Div} is exactly .Rand's. Was SBIG_MontgomeryMulWrapper2.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
@@ -431,9 +431,7 @@ void __stdcall SBigIsPrime(struct BigData * pBigNum);
 // @renamed-from SBIG_GeneratePrimeWrapper (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigFindPrime -> 10099d20, single bl .FindPrime__FR9BigBufferUiRC9BigBufferRC9BigBufferR8BigStack (5 args -> 4-arg C API). 1.14d: 4-arg forwarder onto BigBuffer_FindPrime 004255e0, whose callee set matches .FindPrime's nine callees one for one.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
-void __stdcall SBigFindPrime(struct BigData * pResult, int32_t nParam2, struct BigData * pnParam1, struct BigData * pnParam2);
-void __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue);
-void __thiscall CRYPTO_ByteSwap64Array(uint16_t * pwIn, uint16_t * pwOut);
+void __stdcall SBigFindPrime(struct BigData * pResult, int32_t nBitLength, struct BigData * pnParam1, struct BigData * pnParam2);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9f88(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9fc1(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9ff0(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);

@@ -1,0 +1,253 @@
+name: vc8
+
+# Compile the reconstruction with the compiler that built the original.
+#
+# This is NOT the asm-matching oracle. The oracle lives in asm_matching/msvc8,
+# needs the reference Game.exe, and judges each function byte for byte; it runs
+# locally. What this job answers is narrower and still worth knowing on every
+# change: does the tree still compile under Visual C++ 2005 SP1 at all, with the
+# flags the oracle uses?
+#
+# That question used to be unanswerable in CI. The toolchain came from 4 GB of
+# retail ISOs fetched from archive.org and run under wine, which is not
+# something to put in a public pipeline. jaenster/setup-msvc fetches a pinned,
+# hash-verified community pack instead and runs cl.exe natively under WOW64 on
+# a Windows runner, and it verifies the compiler is 14.00.50727.762 rather than
+# trusting the label. RTM and SP1 both stamp 50727 in the Rich header, so that
+# check is the only thing standing between this and quietly using the wrong one.
+#
+# The tree is written for a C++17 compiler, so it is mirrored through the
+# oracle's own vc8_translate.py first, exactly as the oracle does. That is not
+# optional: d2_platform.h alone declares every Smacker and Bink import as
+# `extern "C" __stdcall void* f(...)`, which GCC accepts and VC8 rejects with
+# C2062, so without the translator nothing compiles at all.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md', '.recomp.json', 'progress/**']
+  pull_request:
+    paths-ignore: ['**.md', '.recomp.json', 'progress/**']
+  workflow_dispatch:
+    inputs:
+      sample:
+        description: 'How many translation units to compile (0 = all)'
+        required: false
+        default: '0'
+
+concurrency:
+  group: vc8-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compile:
+    name: Visual C++ 2005 SP1
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Visual C++ 2005 SP1
+        id: msvc
+        uses: jaenster/setup-msvc@v1
+        with:
+          version: '14.00.50727.762'
+          runner: native
+          cache: 'true'
+
+      - name: The compiler is the exact build the original was made with
+        shell: bash
+        run: |
+          echo "cl.exe: ${{ steps.msvc.outputs.version }}"
+          echo "can link: ${{ steps.msvc.outputs.can-link }}"
+          [ "${{ steps.msvc.outputs.version }}" = "14.00.50727.762" ] || {
+            echo "::error::expected 14.00.50727.762, the build asm_matching/msvc8/evidence/toolchain.md identifies"
+            exit 1
+          }
+
+      # The same rewrite the oracle applies: calling conventions moved after
+      # the return type, packed structs to pragma pack, `= default` removed,
+      # nested namespaces expanded. Python is the oracle's own, not something
+      # this job introduces.
+      - name: Translate the tree into a form VC8 accepts
+        shell: bash
+        run: |
+          python asm_matching/msvc8/scripts/vc8_translate.py . build/src
+          test -f build/src/d2_platform.h || { echo "::error::translator produced no tree"; exit 1; }
+          echo "translated d2_platform.h line 758:"
+          sed -n '758p' build/src/d2_platform.h
+
+      # Objects cached per unit, the way ccache's direct mode does it. Each unit
+      # keeps a manifest of the files it actually included (from /showIncludes),
+      # with their hashes, plus the hashes of the unit, the response file and the
+      # compiler build. It is compiled again only when one of those changed, so
+      # touching a header recompiles its includers and nothing else. Headers
+      # outside the workspace (the toolchain's own) are covered by the compiler
+      # version. A run saves under its own sha and restores the newest earlier one.
+      - name: Restore the object cache
+        uses: actions/cache@v4
+        with:
+          path: objcache
+          key: vc8-dep-${{ github.sha }}
+          restore-keys: vc8-dep-
+
+      - name: Compile the tree with the oracle's flags
+        shell: pwsh
+        env:
+          SAMPLE: ${{ github.event.inputs.sample || '0' }}
+          TOOLCHAIN: ${{ steps.msvc.outputs.version }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $clock = [Diagnostics.Stopwatch]::StartNew()
+          $oracle = "asm_matching/msvc8"
+          $root = "$PWD"
+
+          # The include set the oracle builds: every directory holding a header,
+          # plus its shim directory. See write_rsp() in asm_matching/msvc8/scripts/build.py.
+          $src = "$root\build\src"
+          $hdrDirs = Get-ChildItem -Path $src -Recurse -Filter *.h -File |
+                     Where-Object { $_.FullName -notmatch '\\(thirdparty|asm_matching)\\' } |
+                     ForEach-Object { $_.DirectoryName } | Sort-Object -Unique
+          $incs = @("$root\$oracle\shim_include", $src) + $hdrDirs
+          $forced = @("$root\$oracle\vc8_compat.h", "$src\d2_platform.h")
+          $rsp  = $incs | ForEach-Object { "/I`"$_`"" }
+          $rsp += $forced | ForEach-Object { "/FI`"$_`"" }
+          # DEFAULT_CFLAGS + TOOL_CFLAGS from asm_matching/msvc8/scripts/oracle_config.py
+          $rsp += "/c /nologo /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /Z7 /D WIN32 /D NDEBUG /D _WINDOWS"
+          Set-Content -Path cl.rsp -Value ($rsp -join "`n") -Encoding ascii
+          Write-Host "include directories: $($incs.Count)"
+
+          $all = Get-ChildItem -Path $src -Recurse -Filter *.cpp -File |
+                 Where-Object { $_.FullName -notmatch '\\(thirdparty|asm_matching|tools)\\' } |
+                 Sort-Object FullName
+          $n = [int]$env:SAMPLE
+          $tus = if ($n -gt 0) { $all | Select-Object -First $n } else { $all }
+          Write-Host "compiling $($tus.Count) of $($all.Count) translation units`n"
+
+          New-Item -ItemType Directory -Force -Path out, objcache | Out-Null
+          $sha = [Security.Cryptography.SHA256]::Create()
+          $hex = { param([byte[]]$b) -join ($sha.ComputeHash($b) | ForEach-Object { $_.ToString('x2') }) }
+          # Files do not change during the run, so each is hashed once.
+          $memo = @{}
+          $fileHash = {
+            param($p)
+            $k = $p.ToLowerInvariant()
+            if (-not $memo.ContainsKey($k)) {
+              $memo[$k] = if (Test-Path -LiteralPath $p -PathType Leaf) { & $hex ([IO.File]::ReadAllBytes($p)) } else { '' }
+            }
+            $memo[$k]
+          }
+          $rspHash = & $fileHash "$root\cl.rsp"
+
+          # Hits: the manifest's unit, flags, compiler and every included file
+          # still hash the same.
+          $hit = 0; $used = @{}; $todo = @()
+          foreach ($tu in $tus) {
+            $rel = [IO.Path]::GetRelativePath($src, $tu.FullName)
+            $id  = & $hex ([Text.Encoding]::UTF8.GetBytes($rel.ToLowerInvariant()))
+            # Unique per path: several units share a basename.
+            $obj = "$root\out\" + ($rel -replace '[\\/]', '__' -replace '\.cpp$', '') + ".obj"
+            $used["$id.json"] = $true; $used["$id.obj"] = $true
+            $man = "objcache/$id.json"
+            $fresh = $false
+            if ((Test-Path $man) -and (Test-Path "objcache/$id.obj")) {
+              $m = Get-Content $man -Raw | ConvertFrom-Json
+              $fresh = ($m.rel -eq $rel) -and ($m.toolchain -eq $env:TOOLCHAIN) -and
+                       ($m.rsp -eq $rspHash) -and ($m.tu -eq (& $fileHash $tu.FullName))
+              if ($fresh) {
+                foreach ($d in $m.deps) {
+                  if ((& $fileHash (Join-Path $root $d.p)) -ne $d.h) { $fresh = $false; break }
+                }
+              }
+            }
+            if ($fresh) { Copy-Item "objcache/$id.obj" $obj; $hit++ }
+            else { $todo += [pscustomobject]@{ Full = $tu.FullName; Rel = $rel; Id = $id; Obj = $obj } }
+          }
+          Write-Host "$hit from the cache, $($todo.Count) to compile on $([Environment]::ProcessorCount) cores"
+
+          # Misses in parallel. /Z7 keeps debug info in the object, so units
+          # share no PDB and need no lock.
+          $results = $todo | ForEach-Object -ThrottleLimit ([Environment]::ProcessorCount) -Parallel {
+            $rspPath = $using:root + '\cl.rsp'
+            $out = & cl.exe "@$rspPath" /showIncludes "/Fo$($_.Obj)" $_.Full 2>&1 | ForEach-Object { "$_" }
+            $code = $LASTEXITCODE
+            $includes = @(); $log = @()
+            foreach ($line in $out) {
+              if ($line -match '^Note: including file:\s*(.+?)\s*$') { $includes += $Matches[1] } else { $log += $line }
+            }
+            [pscustomobject]@{
+              Job = $_; Ok = ($code -eq 0 -and (Test-Path $_.Obj))
+              Includes = $includes; Log = $log
+            }
+          }
+
+          $ok = $hit; $fail = 0; $failed = @()
+          $rootSlash = $root.TrimEnd('\') + '\'
+          foreach ($r in $results) {
+            $j = $r.Job
+            if ($r.Ok) {
+              $ok++
+              # Only files inside the workspace go into the manifest; the
+              # toolchain's headers are keyed by its version.
+              $deps = @($r.Includes + $forced) |
+                ForEach-Object { [IO.Path]::GetFullPath($_) } |
+                Where-Object { $_.StartsWith($rootSlash, [StringComparison]::OrdinalIgnoreCase) } |
+                Sort-Object -Unique |
+                ForEach-Object { [pscustomobject]@{ p = $_.Substring($rootSlash.Length); h = (& $fileHash $_) } }
+              [pscustomobject]@{
+                rel = $j.Rel; tu = (& $fileHash $j.Full); rsp = $rspHash
+                toolchain = $env:TOOLCHAIN; deps = @($deps)
+              } | ConvertTo-Json -Depth 4 -Compress | Set-Content "objcache/$($j.Id).json" -Encoding utf8
+              Copy-Item $j.Obj "objcache/$($j.Id).obj"
+            } else {
+              $fail++
+              $first = ($r.Log | Where-Object { $_ -match ' (error|fatal error) C\d+' } | Select-Object -First 1)
+              $failed += [pscustomobject]@{ File = (Resolve-Path -Relative $j.Full); Error = "$first" }
+            }
+          }
+
+          # Drop entries this run did not use, so the cache does not grow forever.
+          Get-ChildItem objcache -File | Where-Object { -not $used.ContainsKey($_.Name) } | Remove-Item
+          $clock.Stop()
+          $wall = "{0:m\:ss}" -f $clock.Elapsed
+          Write-Host "`ncompiled $ok ($hit from the cache), failed $fail, of $($tus.Count), in $wall"
+          if ($failed.Count -gt 0) {
+            Write-Host "`nfirst error per failing unit (up to 20):"
+            $failed | Sort-Object File | Select-Object -First 20 | ForEach-Object {
+              Write-Host ("  {0}`n      {1}" -f $_.File, $_.Error.Trim())
+            }
+          }
+
+          # Written to the summary so the trend is visible without opening logs.
+          $pct = if ($tus.Count) { [math]::Round(100.0 * $ok / $tus.Count, 1) } else { 0 }
+          @"
+          ## Visual C++ 2005 SP1
+
+          Compiler ``$env:TOOLCHAIN``, the build identified in
+          ``asm_matching/msvc8/evidence/toolchain.md``.
+
+          | | |
+          |-|-|
+          | compiled | $ok |
+          | from the cache | $hit |
+          | failed | $fail |
+          | of | $($tus.Count) translation units |
+          | rate | $pct% |
+          | wall time | $wall on $([Environment]::ProcessorCount) cores |
+
+          Compiled from the tree as ``vc8_translate.py`` rewrites it, the same input
+          the oracle uses. This job judges nothing byte for byte.
+          "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+
+          if ($ok -eq 0) {
+            Write-Host "::error::nothing compiled at all, which means the toolchain or the flags are wrong rather than the source"
+            exit 1
+          }
+
+      - name: Keep the objects for inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vc8-objects
+          path: out/
+          retention-days: 7
+          if-no-files-found: ignore

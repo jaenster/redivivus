@@ -131,7 +131,7 @@ bool __fastcall OBJECT_ClientFn_Zoo(struct D2UnitStrc * pUnit);
 // Runs the object's client-side per-frame behaviour: looks up D2ObjectsTxt.ClientFn (+0x1b4) for the unit's class, halts if >= 0x13 (line 0x546), and for a non-zero value tail-calls gpObjectClientFunctionDispatchTable[ClientFn](pUnit), returning its result; ClientFn 0 returns TRUE.
 // Provenance: 1.14d asm 004bdf19-004bdf26 (MOV EAX,[EDX*4+0x7277f0]; MOV ECX,ESI; POP ESI; JMP EAX).
 bool __fastcall OBJECT_ExecuteClientFunction(struct D2UnitStrc * pUnit);
-void __fastcall WAYPOINT_HandleActivation(int32_t pMessage);
+void __fastcall WAYPOINT_HandleActivation(uint8_t * pMessage);
 // Returns the object unit's szOwnerName (D2UnitDataObjectStrc+0x28): the town-portal owner shown on hover when the roster has no name.
 char * __fastcall OBJECT_GetOwnerName(struct D2UnitStrc * pUnit);
 void __fastcall SetObjectDataOwnerName(struct D2UnitStrc * pUnit, char * szOwnerName);

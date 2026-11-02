@@ -3,7 +3,6 @@
 #include "D2Game/Quests/QUESTS/A5Q5.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/Units.h"
@@ -27,6 +26,7 @@
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Stats/StatsEx.h"
@@ -162,11 +162,11 @@ void __fastcall Q35_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // [A5Q5 = Rite of Passage] Q35_KillAndRemoveAncient: kills one Ancient super-unique (Talic/Korlic/Madawc) by GUID, runs its Dead lifecycle transition, and removes it from the room. Used by the arena reset path. No quest-state writes.
-static bool Q35_KillAndRemoveAncient(::SGAMEDATA * pGame, DWORD dwParam) {
+static bool Q35_KillAndRemoveAncient(::SGAMEDATA * pGame, DWORD nUnitGUID) {
     bool dwKillSuccess;
     bool bKillResult;
     D2MonsterKillStrc sMonsterKill;
-    D2UnitStrc* pAncientUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, dwParam);
+    D2UnitStrc* pAncientUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nUnitGUID);
     if (!pAncientUnit) {
       return false;
     }
@@ -184,7 +184,7 @@ static bool Q35_KillAndRemoveAncient(::SGAMEDATA * pGame, DWORD dwParam) {
     Monster::MonsterMode::SetCurrentSkill(pAncientUnit, eD2MonsterAnimMode_ns::Dead, &sMonsterKill);
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
     eD2UnitType eUnitType = UNIT_MONSTER;
-    D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pAncientUnit), eUnitType, dwParam);
+    D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pAncientUnit), eUnitType, nUnitGUID);
     D2Common::Units::RemoveCollision_Vector(pAncientUnit);
     D2Common::Unit::RemoveUnitFromRoom(pAncientUnit);
     return true;
@@ -1335,7 +1335,6 @@ BOOL __fastcall OBJOP_A5Q5_AncientsAltarActivate(D2ObjectOperateFnArg * pOperati
 
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_WorldstonePortalActivate: operate handler for the Worldstone Keep portal. Only opens (TakeStairs to next level) if RiteOfPassage is Completed or RewardAwaits AND the Ancients are dead; otherwise plays the locked sound. Read-only on quest record (GetQuestState only).
 BOOL __fastcall OBJOP_A5Q5_WorldstonePortalActivate(D2ObjectOperateFnArg * pOperation) {
-    D2RoomStrc* pRoom;
     eD2ObjectAnimMode eAnimMode;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_RiteOfPassage);
     if (!pQuestData) {
@@ -1372,9 +1371,7 @@ BOOL __fastcall OBJOP_A5Q5_WorldstonePortalActivate(D2ObjectOperateFnArg * pOper
       case eD2ObjectAnimMode_ns::Neutral:
         {
           D2Common::Units::SetupUpdateFlag(pUnit, 1);
-          bQuestState = 0;
-          pRoom = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
-          D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pRoom, bQuestState);
+          D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), 0);
           pGame = pOperation->sArg.pGame;
           GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjectTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
           break;
@@ -1382,9 +1379,7 @@ BOOL __fastcall OBJOP_A5Q5_WorldstonePortalActivate(D2ObjectOperateFnArg * pOper
       case Opened:
         {
           A2Q7::TakeStairs(pOperation);
-          bQuestState = 1;
-          pRoom = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
-          D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pRoom, bQuestState);
+          D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), 1);
           return 0;
         }
     }
@@ -1405,8 +1400,7 @@ BOOL __fastcall ResurrectAncients(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void 
     }
 
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RiteOfPassage);
-    int* piVar1 = &pQuestData->pQuestSpecificData.pA5Q5->nPlayersOnSummit;
-    (*piVar1)++;
+    pQuestData->pQuestSpecificData.pA5Q5->nPlayersOnSummit++;
     return 0;
 }
 
@@ -1445,7 +1439,7 @@ void __fastcall Q35_OnPlayerLeavesSummit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsQuestStateQuery: on altar operate, if quest is Completed but record Step0x04 not yet set, sends npc info packet 0x4ec9 (which makes Q35_Callback_11 write Step0x04). Read-only on records itself.
 BOOL __fastcall OBJOP_A5Q5_AncientsQuestStateQuery(D2ObjectOperateFnArg * pOperation) {
-    bool _bQuestCompleted;
+    BOOL _bQuestCompleted;
     bool bQuestCompleted;
     ::SGAMEDATA* pGame = pOperation->sArg.pGame;
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pOperation->pAttacker)->pQuestRecord[pGame->nDifficulty];

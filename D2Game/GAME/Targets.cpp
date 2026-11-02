@@ -203,15 +203,15 @@ void __fastcall MONSTER_FreeUnitNodes(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
         }
       }
 
-      if (pMemoryToFree != pHeadNode) {
-        pMemoryToFree->pNext->pPrev = pMemoryToFree->pPrev;
-        if (pMemoryToFree->pPrev) {
-          pMemoryToFree->pPrev->pNext = pMemoryToFree->pNext;
-        }
-      } else {
+      if (pMemoryToFree == pHeadNode) {
         pGame->pUnitNodes[nNodeTableIndex] = pMemoryToFree->pPrev;
         if (pMemoryToFree->pPrev) {
           pMemoryToFree->pPrev->pNext = 0;
+        }
+      } else {
+        pMemoryToFree->pNext->pPrev = pMemoryToFree->pPrev;
+        if (pMemoryToFree->pPrev) {
+          pMemoryToFree->pPrev->pNext = pMemoryToFree->pNext;
         }
       }
     }

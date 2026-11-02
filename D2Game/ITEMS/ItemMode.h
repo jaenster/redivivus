@@ -42,11 +42,11 @@ void __fastcall PacketUpdateForClient(struct D2UnitStrc * pUnit, struct D2Client
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall SERVER_ITEM_SendStackableUsagePackets(struct D2UnitStrc * pUnit, char * szFile, int32_t nLine);
 void __fastcall ITEMMODE_ApplyItemToOwner(struct D2UnitStrc * pOwner, struct D2UnitStrc * pItem);
-void __fastcall ITEMMODE_AddStatsList_ForMercSwap(uint32_t dwParam, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nParam);
+void __fastcall ITEMMODE_AddStatsList_ForMercSwap(uint32_t dwParam, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nApply);
 void __fastcall ITEMMODE_RemoveItemStates(struct D2UnitStrc * pOwner, struct D2UnitStrc * pItem);
 // Removes all stat contributions of an item being unequipped from its owner unit. Fires the periodic-stats timer trigger, handles set-item dequip logic, removes the stat list from the owner (unless broken and nEquipState==0), conditionally re-activates the off-hand weapon's stat list when dual-wielding, removes item states, and optionally updates resource stats (if nParam != 0). No-ops if either pointer is NULL or the item unit type is wrong.
 // @sourcefile .\ITEMS\ItemMode.cpp
-void __fastcall ITEMMODE_UnequipItemStats(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, int32_t nEquipState, int32_t nParam);
+void __fastcall ITEMMODE_UnequipItemStats(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, int32_t nEquipState, int32_t bUpdateResourceStats);
 uint32_t __fastcall ITEMMODE_CheckQuestItemCodePair(struct D2ItemsTxt * pItemsTxt1, struct D2ItemsTxt * pItemsTxt2, int32_t nCode1, int32_t nCode2);
 // Server-side rule check: can pUnit (player) pick up pItem in pGame? Returns 1 if pickable, 0 otherwise. Rejects: a duplicate carry1 unique quest item already held; quest items whose owning quest gate is not satisfied for this player/difficulty (special-cases by 4-char item code -- ass(Radament book) j43(Golden Bird), yxz, g33(Khalim parts/PrisonOfIce), tr2). Then via gaQuestItemPickupRules and per-act quest-completion lookups (GetQuestBitBuffer/GetQuestState) blocks re-picking quest items the player or any party corpse in the room already owns (ITEMMODE_CheckDuplicateQuestItem over the player inventory and each corpse owner's inventory). Non-quest items are always pickable.
 BOOL __fastcall SERVER_CheckIfPickable(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
@@ -99,7 +99,8 @@ BOOL __fastcall ITEMMODE_CheckEquipRestrictions(::SGAMEDATA * pGame, struct D2Un
 struct D2UnitStrc * __fastcall ITEMMODE_CanEquipOnBodyLoc(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pDefault, eD2BodyLocDWORD eBodyLoc);
 // Decides whether item pUnit2 can be equipped to body-loc *pdwParam on unit pUnit given up-to-two items (*ppConflict1/*ppConflict2) already occupying the slot/alt-slot. Normalizes which conflict is "the other hand" (swapping to the alternate body-loc via ITEMMODE_GetAlternateBodyLoc when needed). For arm slots (R/L/swapped R/L) it enforces missile-weapon rules: bow/xbow ("shoots") needs a matching-ammo conflict, quiver/arrows must match the other hand's shoots type, and two one-handed weapons may coexist only for dual-wield-capable units (monster, class 4 = Barbarian, or class 6 with two hand-to-hand weapons), rejecting illegal two-handed combos via IsTwoHanded/BARBARIAN_CheckItemData. Returns 1 if the equip is allowed, 0 otherwise. Note: pSwappedConflict is read before assignment (likely intended NULL) — minor decompiler artifact.
 uint32_t __fastcall ITEMMODE_ResolveEquipConflict(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2UnitStrc * * ppConflict1, struct D2UnitStrc * * ppConflict2, eD2BodyLocDWORD * pdwParam);
-void __stdcall ITEMMODE_ReturnZero3(uint32_t dwParam);
+// Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.
+void __fastcall ITEMMODE_ReturnZero3(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam);
 void __fastcall ITEMMODE_RecalcAllEquippedStats(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit);
 BOOL __fastcall ITEMMODE_HasSocketedItems(struct D2UnitStrc * pUnit, char * szFile, int32_t nLine);
 // For a scroll unit, searches the owner unit's inventory for a matching book. The second parameter is the OWNER UNIT, a whole pointer in EDX - typed from DL alone it was a truncated byte the body then used as an address, reaching for the inventory at +0x60 of a one-byte value.

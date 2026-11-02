@@ -164,7 +164,7 @@ uint32_t __fastcall inflatePrime(z_stream * pStream, int32_t nBits, uint32_t nVa
         nTotalBits = nOldBits + nBits;
         if (nTotalBits <= 0x20) {
           pState->bits = nTotalBits;
-          pState->hold += ((1 << ((uint8_t)nBits & 0x1f)) - 1U & nValue) << ((uint8_t)nOldBits & 0x1f);
+          pState->hold += ((1 << (uint8_t)nBits) - 1U & nValue) << ((uint8_t)nOldBits & 0x1f);
           return 0;
         }
 
@@ -282,13 +282,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
 
     inflate_state* pState;
     pState = (inflate_state*)pInflateStream->state;
-    if (!pState) {
-      return -2;
-    }
-    if (!pInflateStream->next_out) {
-      return -2;
-    }
-    if (!pInflateStream->next_in && pInflateStream->avail_in) {
+    if (!pState || !pInflateStream->next_out || !pInflateStream->next_in && pInflateStream->avail_in) {
       return -2;
     }
     if (pState->mode == 0xb) {
@@ -336,7 +330,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
               bVar5 = *pNextIn;
               nAvailIn--;
               pNextIn++;
-              nHold += (uint32_t)bVar5 << ((uint8_t)nBits & 0x1f);
+              nHold += (uint32_t)bVar5 << (uint8_t)nBits;
               pHere = nHold;
             }
 
@@ -400,7 +394,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
             bVar5 = *pNextIn;
             nAvailIn--;
             pNextIn++;
-            nHold += (uint32_t)bVar5 << ((uint8_t)nBits & 0x1f);
+            nHold += (uint32_t)bVar5 << (uint8_t)nBits;
             pHere = nHold;
           }
         pState->flags = nHold;
@@ -508,7 +502,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
               bVar5 = *pNextIn;
               nAvailIn--;
               pNextIn++;
-              nHold += (uint32_t)bVar5 << ((uint8_t)nBits & 0x1f);
+              nHold += (uint32_t)bVar5 << (uint8_t)nBits;
             }
 
             pState->length = nHold;
@@ -559,7 +553,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
                     bVar5 = *pNextIn;
                     nAvailIn--;
                     pNextIn++;
-                    nHold += (uint32_t)bVar5 << ((uint8_t)nBits & 0x1f);
+                    nHold += (uint32_t)bVar5 << (uint8_t)nBits;
                     pHere = nHold;
                   }
 
@@ -695,11 +689,11 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
           if ((nInConsumed || nAvailOutStart) && nFlush != 4) {
             return nRet;
           }
-          if (!nRet) {
-            return -5;
+          if (nRet) {
+            return nRet;
           }
 
-          return nRet;
+          return -5;
         }
 
         pState->mode = 0x1e;
@@ -719,7 +713,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
             bVar5 = *pNextIn;
             nAvailIn--;
             pNextIn++;
-            nHold += (uint32_t)bVar5 << ((uint8_t)nBits & 0x1f);
+            nHold += (uint32_t)bVar5 << (uint8_t)nBits;
             pHere = nHold;
           }
         nHold = ((nHold & 0xff00) + nHold * 0x10000) * 0x100 + (pHere >> 0x10 & 0xff) * 0x100 + (nHold >> 0x18);
@@ -762,7 +756,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
           bVar5 = *pNextIn;
           nAvailIn--;
           pNextIn++;
-          nHold += (uint32_t)bVar5 << ((uint8_t)nBits & 0x1f);
+          nHold += (uint32_t)bVar5 << (uint8_t)nBits;
         }
 
         pState->last = nHold & 1;
@@ -815,7 +809,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
           bVar5 = *pNextIn;
           nAvailIn--;
           pNextIn++;
-          nHold += (uint32_t)bVar5 << ((uint8_t)nBits & 0x1f);
+          nHold += (uint32_t)bVar5 << (uint8_t)nBits;
         }
 
         eState = nHold & 0xffff;
@@ -871,7 +865,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
             bVar5 = *pNextIn;
             nAvailIn--;
             pNextIn++;
-            nHold += (uint32_t)bVar5 << ((uint8_t)nBits & 0x1f);
+            nHold += (uint32_t)bVar5 << (uint8_t)nBits;
           }
         pState->nlen = (nHold & 0x1f) + 0x101;
         nScratch = nHold >> 10;
@@ -902,7 +896,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
             bVar5 = *pNextIn;
             nAvailIn--;
             pNextIn++;
-            nHold += (uint32_t)bVar5 << ((uint8_t)nBits & 0x1f);
+            nHold += (uint32_t)bVar5 << (uint8_t)nBits;
             pFrom = pNextIn;
           }
 
@@ -924,7 +918,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
         pState->next = pState->codes;
         pState->lencode = pState->codes;
         pState->lenbits = 7;
-        nRet = D2Client::Source::SSComp::ZLIB_InflateTable(0, (int32_t)pState->lens, 0x13, (int*)&pState->next, &pState->lenbits, pState->work);
+        nRet = D2Client::Source::SSComp::ZLIB_InflateTable(0, pState->lens, 0x13, (inflate_code**)&pState->next, &pState->lenbits, pState->work);
         if (!nRet) {
           pState->have = 0;
           pState->mode = 0x12;
@@ -1062,13 +1056,13 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
             pState->next = pState->codes;
             pState->lencode = pState->codes;
             pState->lenbits = 9;
-            nRet = D2Client::Source::SSComp::ZLIB_InflateTable(1, (int32_t)pState->lens, pState->nlen, (int*)&pState->next, &pState->lenbits, pState->work);
+            nRet = D2Client::Source::SSComp::ZLIB_InflateTable(1, pState->lens, pState->nlen, (inflate_code**)&pState->next, &pState->lenbits, pState->work);
             if (nRet) {
               pInflateStream->msg = "invalid literal/lengths set";
             } else {
               pState->distcode = pState->next;
               pState->distbits = 6;
-              nRet = D2Client::Source::SSComp::ZLIB_InflateTable(2, (int32_t)(pState->lens + pState->nlen), pState->ndist, (int*)&pState->next, &pState->distbits, pState->work);
+              nRet = D2Client::Source::SSComp::ZLIB_InflateTable(2, pState->lens + pState->nlen, pState->ndist, (inflate_code**)&pState->next, &pState->distbits, pState->work);
               if (!nRet) {
                 pState->mode = 0x13;
                 if (nFlush != 6) {
@@ -1351,7 +1345,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
               bVar5 = *pNextIn;
               nAvailIn--;
               pNextIn++;
-              nHold += (uint32_t)bVar5 << ((uint8_t)nBits & 0x1f);
+              nHold += (uint32_t)bVar5 << (uint8_t)nBits;
               pHere = nHold;
             }
 
@@ -1395,7 +1389,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
               bVar5 = *pNextIn;
               nAvailIn--;
               pNextIn++;
-              nHold += (uint32_t)bVar5 << ((uint8_t)nBits & 0x1f);
+              nHold += (uint32_t)bVar5 << (uint8_t)nBits;
               pHere = nHold;
             }
 

@@ -4,7 +4,6 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/RosterPets.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
@@ -27,6 +26,7 @@
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Skills.h"
@@ -499,7 +499,7 @@ static int32_t __stdcall AI_BAAL_CloneChooseAction(::SGAMEDATA * pGame, D2UnitSt
     } while (nBaseWeight);
 
     uint32_t nRandRoll = 0;
-    if (0 < (int)nTotalWeight) {
+    if ((int)nTotalWeight > 0) {
       uint64_t nSeedHigh;
       nRandRoll = pUnit2->sSeed.nSeedLow;
       nSeedHigh = (uint64_t)pUnit2->sSeed.nSeedHigh;
@@ -596,7 +596,7 @@ static int32_t __stdcall AI_BAAL_ThroneRoomChooseAction(::SGAMEDATA * pGame, D2U
     } while (nBaseWeight);
 
     uint32_t nRandRoll = 0;
-    if (0 < (int)nTotalWeight) {
+    if ((int)nTotalWeight > 0) {
       uint32_t dwSeedMulHi;
       nRandRoll = pUnit2->sSeed.nSeedLow;
       if (nTotalWeight & nTotalWeight - 1) {
@@ -768,8 +768,8 @@ static int32_t __stdcall AI_Baal_SelectActionWeighted(::SGAMEDATA * pGame, int32
 // Evaluates and returns the next combat action index for Baal's AI. When nCombatAiState==0 and no target (pUnit2 null): checks collision at Baal's current position and returns 4 if blocked, else 1 with 8% chance or 1. When a target is present: determines if the target's player-object is in the Throne Room within 75 units, measures distance to anchor point, tests melee range and wall collision, then delegates to AI_BAAL_CloneChooseAction (melee), AI_Baal_SelectActionWeighted (wall), or AI_BAAL_ThroneRoomChooseAction. Returns the chosen action index.
 static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t nParam1, int32_t nParam2, int32_t nParam3, int32_t nParam4, D2UnitStrc * pUnit2) {
     bool _bInThroneRoom;
-    bool _bVeryFarFromAnchor;
-    bool _bInMeleeRange;
+    uint32_t _bVeryFarFromAnchor;
+    BOOL _bInMeleeRange;
     bool bInMeleeRange;
     int32_t nAction;
     int32_t nDistToAnchorPt;
@@ -810,15 +810,14 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
 
       eCollisionFlag = 0x40;
       nCollisionWidth = COLLISION_PATTERN_BIG_UNIT_PRESENCE;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      nAction = D2Common::Collision::CheckCollision_BlockPlayer_Type(pRoom, nDistToAnchorPt, nAction, nCollisionWidth, eCollisionFlag);
+      nAction = D2Common::Collision::CheckCollision_BlockPlayer_Type(D2Common::Units::UNITS_GetRoom(pUnit), nDistToAnchorPt, nAction, nCollisionWidth, eCollisionFlag);
       if (nAction) {
         return 4;
       }
 
       DVar1 = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = DVar1;
-      return (uint32_t)((int)(DVar1.nSeedLow % 100) < 8) * 8 + 1;
+      return (int)(DVar1.nSeedLow % 100) < 8 ? 0x9U : 0x1U;
     }
     if (!pGame) {
       pGame = UNIT::SUnit::GetGamePointer(pUnit);
@@ -893,7 +892,6 @@ static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, int32_t nParam, D2
     D2DynamicPathStrc* pDynamicPath;
     int32_t nOwnerGuid;
     eD2UnitType eOwnerType;
-    int32_t nStatLayer;
     int nPosY;
     nPosY = 0;
     __frame1.nPowerfulSkillCount = 0;
@@ -997,12 +995,8 @@ static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, int32_t nParam, D2
     }
 
     Ai::AiGeneral::AssignMinionOwner(pGame, pTargetUnit, nOwnerGuid, eOwnerType, 1, 0);
-    nStatLayer = 0;
-    nOwnerGuid = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_maxhp, nOwnerGuid / 3, nStatLayer);
-    nOwnerGuid = 0;
-    nPosY = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_hitpoints, nPosY / 3, nOwnerGuid);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_maxhp, D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit) / 3, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) / 3, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_hpregen, 0, 0);
     D2Common::Units::StoreOwner(pTargetUnit, pUnit);
     D2Common::Units::StoreOwner(pUnit, pTargetUnit);
@@ -1039,14 +1033,7 @@ void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
       }
 
       nMonClassId = pUnit->nClassId;
-      if (nMonClassId < 0) {
-        return;
-      }
-      if (nMonClassId >= sgptDataTable->nTxtMonStatsSize) {
-        return;
-      }
-
-      pMonStats = sgptDataTable->pTxtMonStats + nMonClassId;
+      pMonStats = nMonClassId >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
       if (!pMonStats) {
         return;
       }

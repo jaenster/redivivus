@@ -10,6 +10,7 @@
 
 // Forward declarations
 struct D2GSPacketClt0x5D;
+struct D2GSPacketSrv0x50;
 struct D2UIMouseMsgStrc;
 struct DC6;
 
@@ -75,7 +76,7 @@ struct __attribute__((packed)) D2QuestLogStrc {
     /* 0x111 */ D2QuestLogEntryStrc aQuestLogEntries[6];
     /* 0xF8D */ int aQuestLogIconFrame[6];
     /* 0xFA5 */ int aQuestLogIconLastTick[6];
-    /* 0xFBD */ uint32_t nQuestLogActiveAct_b;
+    /* 0xFBD */ int32_t nQuestLogActiveAct_b;
     /* 0xFC1 */ uint32_t bQuestLogScreenOpen; // read and written as a dword tick count (QUESTLOG_ToggleQuestScreen compares it against 250 ms)
     /* 0xFC5 */ uint8_t bQuestLogLevelUpCinematicPlayed;
     /* 0xFC6 */ uint8_t bQuestLogBossCinematicPlayed;
@@ -94,11 +95,11 @@ void __stdcall QUESTLOG_ResetState();
 void __stdcall LoadQuestimages();
 void __stdcall FreeQuestImages();
 void __stdcall QUESTLOG_FreeQuestImages_Thunk();
-int __stdcall CloseQuestLogWeird(DWORD dwParam);
+int __stdcall CloseQuestLogWeird(DWORD bAdjustMouse);
 void __stdcall QUESTLOG_AcknowledgeNewQuests();
 int __fastcall QUESTLOG_ScrollCompleteCallback_ClearButton(void * pUserParam, uint32_t nReason, void * pDismissCallback);
 void __stdcall QUESTLOG_OnCloseClick(struct D2UIMouseMsgStrc * pMsg);
-void __fastcall QUESTLOG_HandleSpecialPacket(int32_t nParam);
+void __fastcall QUESTLOG_HandleSpecialPacket(struct D2GSPacketSrv0x50 * pPacket);
 void __stdcall QUESTLOG_CloseAndFreeImages();
 int __stdcall QUESTLOG_IsPointInQuestLog(int32_t nX, int32_t nY);
 void __stdcall QUESTLOG_OnQuestLogMouseDown(struct D2UIMouseMsgStrc * pMsg);
@@ -130,6 +131,8 @@ void __stdcall QUESTLOG_OnButtonMouseUp(struct D2UIMouseMsgStrc * pMsg);
 // Checks quest availability by index. Scans gQuestIconsPerActTable to map index to quest ID, validates quest state (not just completed, reward awaits, can complete). Returns 1 if quest is available for interaction.
 BOOL __fastcall QUESTLOG_IsQuestAvailableForInteraction(int32_t nQuestIconIndex);
 void __stdcall QUESTLOG_OnMouseUp(struct D2UIMouseMsgStrc * pMsg);
+void StaticInit_6cac30();
+void StaticInit_6cacd0();
 // 9 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::QuestLog

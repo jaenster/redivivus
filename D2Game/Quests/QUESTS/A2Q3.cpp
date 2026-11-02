@@ -21,6 +21,7 @@
 #include "D2Common/Text.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
+#include "D2Game/D2ObjectInitFnArg.h"
 #include "D2Game/D2ObjectOperateFnArg.h"
 #include "D2Game/D2QuestDataStrc.h"
 #include "D2Game/GAME/Clients.h"
@@ -28,6 +29,7 @@
 #include "D2Game/GAME/SCmd.h"
 #include "D2Game/GAME/Targets.h"
 #include "D2Game/ITEMS/Items/Drop.h"
+#include "D2Game/Objects/Objects.h"
 #include "D2Game/Objects/ObjectsMode.h"
 #include "D2Game/PLAYER/Player.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
@@ -149,7 +151,6 @@ BOOL __fastcall Q11_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUn
 // No quest-record access; pure client notification of the Tainted-Sun darkening.
 BOOL __fastcall Q11_SendDarknessPacket(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2GSPacketSrv0x53 sPacket53;
-    D2GSPacketSrv0x5D sPacket5D;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q3.cpp", 0x142);
     sPacket53.bEclipse = GAME::Clients::GetAct(pClient);
     if (sPacket53.bEclipse != 1) {
@@ -160,11 +161,10 @@ BOOL __fastcall Q11_SendDarknessPacket(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     sPacket53.nCycleIndex = 5;
     sPacket53.nTicks = 0;
     GAME::SCmd::NET_D2GS_SERVER_Send_0x53_ACTTIMEOFDAY(pClient, &sPacket53);
-    sPacket5D.nExtra = 0;
+    D2GSPacketSrv0x5D sPacket5D = {0};
     sPacket5D.nPacketId = ']';
     sPacket5D.nQuestId = '\n';
     sPacket5D.nAlertFlags = '\x10';
-    sPacket5D.nFilterStatus = '\0';
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &sPacket5D);
     return 0;
 }
@@ -200,11 +200,14 @@ bool __fastcall Q11_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
     /* GetQuestState(buf, nQuestIdReal=A2Q3, 1=RewardAwaits) - gossip enabled only
                          while reward pending */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
-    if (!(BVar1 == 1 && (nTargetClassId == 0xb0 || nTargetClassId == 0xaf || nTargetClassId == 0xc6 || nTargetClassId == 199 || nTargetClassId == 0xb1 || nTargetClassId == 0xca || nTargetClassId == 0xf4 || nTargetClassId == 0xd2 || nTargetClassId == 200 || nTargetClassId == 0xc9) || nTargetClassId == 0xb1 && pQuestData->nStateFlag == 1)) {
-      return false;
+    if (BVar1 == 1 && (nTargetClassId == 0xb0 || nTargetClassId == 0xaf || nTargetClassId == 0xc6 || nTargetClassId == 199 || nTargetClassId == 0xb1 || nTargetClassId == 0xca || nTargetClassId == 0xf4 || nTargetClassId == 0xd2 || nTargetClassId == 200 || nTargetClassId == 0xc9)) {
+      return true;
+    }
+    if (nTargetClassId == 0xb1 && pQuestData->nStateFlag == 1) {
+      return true;
     }
 
-    return true;
+    return false;
 }
 
 // A2Q3 - state-0 quest-event callback (fpQuestStateHandler[0], Q11_Callback_00): drives monster gossip
@@ -315,14 +318,14 @@ void __stdcall Q11_EndTaintedSun(int pQuestData, ::SGAMEDATA * pGame) {
 // GUID, and if the intro is done and stateFlag<2 kicks off Q11_BeginTaintedSun (darkening); sets pending vs
 // darkened flags by its result and advances stateFlag to 3. If no prior stateFlag, broadcasts display state 2
 // (via QUEST_SetStateAndBroadcast). Finally flags the unit for client update.
-void __fastcall Q11_OnViperAmuletInit(D2QuestDataStrc * pQuestData, D2UnitStrc * * nParam) {
+void __fastcall Q11_OnViperAmuletInit(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * pInitArg) {
     int32_t nViperAmuletGUID;
     D2QuestDataA2Q3Strc* pA2Q3Data = pQuestData->pQuestSpecificData.pA2Q3;
     pA2Q3Data->bViperAmuletInitialized = true;
-    if (!nParam[1]) {
+    if (!pInitArg->pObject) {
       nViperAmuletGUID = -1;
     } else {
-      nViperAmuletGUID = nParam[1]->nUnitGUID;
+      nViperAmuletGUID = pInitArg->pObject->nUnitGUID;
     }
 
     pA2Q3Data->nViperAmuletUnitGUID = nViperAmuletGUID;
@@ -345,7 +348,7 @@ void __fastcall Q11_OnViperAmuletInit(D2QuestDataStrc * pQuestData, D2UnitStrc *
       }
     }
 
-    D2Common::Units::SetupUpdateFlag(nParam[1], pA2Q3Data->nViperAmuletUpdateFlag);
+    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pA2Q3Data->nViperAmuletUpdateFlag);
 }
 
 // A2Q3 - fpSequenceFilter (Q11_SequenceFilter): chains to the next quest in the sequence. When this quest's
@@ -410,17 +413,15 @@ BOOL __fastcall Q11_UpdateQuestRecord(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 // Q11_BeginTaintedSun; if it deferred (act not loaded, returns 0) sets the pending flag and sends a 0x5D
 // quest-state packet (quest 10, flag 1) to the interacting client; otherwise sets the darkened flag.
 static void __stdcall Q11_OnPlayerInteract(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
-    D2GSPacketSrv0x5D abyQuestStatePacket;
     D2QuestDataA2Q3Strc* pA2Q3Data = pQuestData->pQuestSpecificData.pA2Q3;
     bool bTaintedSunStarted = (bool)Q11_BeginTaintedSun(pQuestData);
     if (!bTaintedSunStarted) {
       D2ClientStrc* pClient;
       pA2Q3Data->bViperAmuletInitPending = '\x01';
-      abyQuestStatePacket.nExtra = 0;
+      D2GSPacketSrv0x5D abyQuestStatePacket = {0};
       abyQuestStatePacket.nPacketId = ']';
       abyQuestStatePacket.nQuestId = '\n';
       abyQuestStatePacket.nAlertFlags = '\x01';
-      abyQuestStatePacket.nFilterStatus = '\0';
       pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q3.cpp", 0x2e0);
       GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &abyQuestStatePacket);
       return;
@@ -548,8 +549,7 @@ BOOL __fastcall Q11_OnStaffViperPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       return 0;
     }
 
-    int32_t* pnQuestItemCount = &pPlayerData->pQuestSpecificData.pA2Q3->nViperAmuletDropCount;
-    (*pnQuestItemCount)++;
+    pPlayerData->pQuestSpecificData.pA2Q3->nViperAmuletDropCount++;
     return 0;
 }
 
@@ -691,7 +691,7 @@ BOOL __fastcall OBJOP_A2Q3_ActivateHoradricStaffAltar(D2ObjectOperateFnArg * pOp
         pGame3 = (::SGAMEDATA*)D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
         pOperation->sArg.pVictim->dwDropItemCode = 0x20706976;
         nDroppedItemCount = 0;
-        if (0 < pDVar1->nViperAmuletDropCount) {
+        if (pDVar1->nViperAmuletDropCount > 0) {
           do {
             pPlayerData = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_PlayerBodyPart, (int32_t*)&pGame3, nullptr, -1, 0);
             if (pPlayerData) {
@@ -786,7 +786,7 @@ void __fastcall Q11_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     ::SGAMEDATA* pGame;
     uint32_t nMsgIndex = (uint32_t)pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     if (nMsgIndex != 0x15c) {
-      if (nMsgIndex - 0x16a <= 0xa) {
+      if (nMsgIndex >= 0x16a && nMsgIndex <= 0x174) {
         pGame = pQuestArgs->pGame;
         pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
         pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

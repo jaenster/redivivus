@@ -21,7 +21,6 @@
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/Items.h"
 #include "D2Game/UNIT/SUNITNPC.h"
-#include "Storm/_unnamespaced.h"
 
 
 // =============================================================================
@@ -6276,6 +6275,8 @@ D2UniqueNameTablesStrc gsTxtUniqueNameTables = {}; D2_GLOBAL_GUARD(gsTxtUniqueNa
 
 int sgCharTemplateLevelIndex[64] = {}; D2_GLOBAL_GUARD(sgCharTemplateLevelIndex, "sgCharTemplateLevelIndex");
 
+_RTL_CRITICAL_SECTION lpCriticalSection_0096d610 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0096d610, "lpCriticalSection_0096d610");
+
 // =============================================================================
 // Initialized scalars
 // =============================================================================
@@ -6318,7 +6319,7 @@ D2LvlSubTxt * sgpTxtLvlSub = 0; D2_GLOBAL_GUARD(sgpTxtLvlSub, "sgpTxtLvlSub");
 int nTxtLvlSubSize = 0; D2_GLOBAL_GUARD(nTxtLvlSubSize, "nTxtLvlSubSize");
 int * gpnLvlSubTypeToIndex = 0; D2_GLOBAL_GUARD(gpnLvlSubTypeToIndex, "gpnLvlSubTypeToIndex");
 D2ExpansionLvlTblsTxt * pExpansionLvlTbls = 0; D2_GLOBAL_GUARD(pExpansionLvlTbls, "pExpansionLvlTbls");
-D2LvlTblsTxt * pTxtLvlTbls = 0; D2_GLOBAL_GUARD(pTxtLvlTbls, "pTxtLvlTbls");
+D2DrlgFileStrc * * pTxtLvlTbls = 0; D2_GLOBAL_GUARD(pTxtLvlTbls, "pTxtLvlTbls");
 void * gpaDrlgLvlSubPresetFiles = 0; D2_GLOBAL_GUARD(gpaDrlgLvlSubPresetFiles, "gpaDrlgLvlSubPresetFiles");
 D2AutoMapLvlTbls * pAutoMapLvlTbls = 0; D2_GLOBAL_GUARD(pAutoMapLvlTbls, "pAutoMapLvlTbls");
 FILE * pLOGFILE = 0; D2_GLOBAL_GUARD(pLOGFILE, "pLOGFILE");
@@ -6502,9 +6503,9 @@ namespace Fog::_3rdparty::crashy {
 
 } // namespace Fog::_3rdparty::crashy
 
-namespace Storm::SFile {
+namespace Storm::Source::SFile {
 
-} // namespace Storm::SFile
+} // namespace Storm::Source::SFile
 
 namespace Class::FILEREC {
 

@@ -63,7 +63,7 @@ uint8_t * __fastcall GetMonUModList(struct D2UnitStrc * pUnit);
 uint16_t __fastcall GetNameSeed(struct D2UnitStrc * pUnit);
 // 2022.01.09 - dzik
 uint32_t __fastcall CheckMonsterType(struct D2UnitStrc * pUnit, uint16_t eMonsterType);
-void __fastcall MONSTER_SetMonsterDataFlags(int * pUnit, uint16_t nFlagMask, int32_t nFlagValue);
+void __fastcall MONSTER_SetMonsterDataFlags(struct D2UnitStrc * pUnit, uint16_t nFlagMask, int32_t nFlagValue);
 // 2022.01.09 - dzik
 int16_t __fastcall GetBossNo(struct D2UnitStrc * pUnit);
 void __fastcall MONSTER_SetMonsterDataField0x26(struct D2UnitStrc * pUnit, int16_t wParam);
@@ -72,7 +72,7 @@ int32_t __fastcall CountActiveUMods(uint8_t * pUModList);
 uint32_t __fastcall CheckMonUModList(struct D2UnitStrc * pUnit);
 int32_t __fastcall MONSTER_GetBossNo(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Rolls and assigns unique-modifier (UMod) enchantments to a newly spawned monster. If bResult is set, first rolls against the champion threshold (MonUMod.txt constants row 0) to potentially make the monster a champion instead; if champion, calls MONSTER_SelectChampionMod and returns. Otherwise rolls 1+difficulty extra UMod slots, calls MONUMOD_RollRandomModifier up to that count (avoiding already-assigned mods via a local dedup table), and appends each selected UMod ID to pUnitDataMonster->MonUModList. Guards against stack overflow via security cookie.
-void __thiscall MONSTER_RollAndAssignUMods(void * pThis, ::SGAMEDATA * pGame, BOOL bResult);
+void __thiscall MONSTER_RollAndAssignUMods(struct D2UnitStrc * pThis, ::SGAMEDATA * pGame, BOOL bResult);
 void __fastcall UMOD_DispatchInitFunction(struct D2UnitStrc * pUnit, int32_t nParam, BOOL bApply);
 // Applies the Amplify Damage curse (skill 0x42) from pUnit onto pAttacker. Validates attack eligibility and skill table bounds, then builds a D2StateExArgStrc with duration and stat values derived from skills.txt aura columns, calls SetStateWithExpiryTime to attach the state, and iterates remaining aura stats to add them to the resulting stat list.
 void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pAttacker, int32_t nDuration);
@@ -94,8 +94,8 @@ void __fastcall UMOD_AddBaseDamageBonus(uint32_t dwUnused1, struct D2UnitStrc * 
 void __fastcall MONSTER_ScaleMissileDamageByOwner(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
 // Spawns the Burning Dead Archer / Afflicted bug-lightning death-bolt salvo on unit death. Fires 4 directional pairs (8 total) of MISSILE_Buglightning using offsets from gaMissileOffsets_BugLightningX/Y, with SKILL_InitChargedBoltPath as the init callback. Level is taken from UNITSTAT_level; dwUnused1/dwUnused2 are ignored (death-event signature padding).
 void __fastcall MONSTER_BugLightningDeathBolts(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
-void __fastcall UMOD_SetRandomElementalDamage(int32_t nModifierLevel, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
-void __fastcall UMOD_SetRandomElementalForMissile(int32_t nModifierLevel, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
+void __fastcall UMOD_SetRandomElementalDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
+void __fastcall UMOD_SetRandomElementalForMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
 // Server-side tick handler: when bShouldTrigger is set, rolls the unit's seed for a chance (>29/100) to find a player target, picks the first occupied belt slot, clones the item via serialized data, finds a drop spot near the owner, drops the clone, then consumes and removes the original belt item and re-sorts the belt column.
 void __fastcall MONSTER_StealPotionFromBelt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
 // Routes a monster's death event to its boss-specific handler based on nClassId. Handles Bloodraven (ranged special), Radament (ring attack), Mephisto (death missile), Izual (melee skill), Andariel (ranged short), Overseer (ranged normal), Uber Mephisto/Baal/Diablo (loot drop check), and no-op uber variants. Only triggers the handler if the unit is actually in Death anim mode (except Overseer/Uber which check null too).
@@ -110,28 +110,28 @@ void __fastcall MONSTER_OnDeathTryScheduleRevive(::SGAMEDATA * pGame, struct D2U
 // AI callback that resurrects a monster that has just died via SKILL_SelfResurrect. Validates that the monster is dead, lacks a passive-state lock, is not a quest-flagged boss, is not Champion-aligned, and that its current tile is unblocked; if all checks pass, casts self-resurrection, clears the NOXP/NOTC flags, increments AI argument 1, and schedules the next think event.
 void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 35. On death (or no unit) sets STATE_shatter.
-void __fastcall FUN_005a3a80(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
+void __fastcall MONSTER_ShatterOnDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUModId, int32_t nParam2);
 void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
 // Initialises level and attack-rating stats for a monster unit spawned via a UMOD (unit-modifier) entry. Derives monster level from the room's level record and the game difficulty/expansion flags stored in the pUModEntry struct, clamped to minimum 1. Sets UNITSTAT_level and UNITSTAT_tohit (capped at 90). For specific monster class IDs 0x146-0x171 (elemental enchanted types), also adds elemental damage stats (fire, lightning, poison) scaled from the computed level. Halts with an internal error if pUnit is not a monster.
-void __fastcall UMOD_SetLevelAndAttackRating(int32_t pUModEntry, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
+void __fastcall UMOD_SetLevelAndAttackRating(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
 // Server-side monster skill handler that deals physical AoE damage centered on the casting monster. Reads El1MinD/El1MaxD from MonStatsTxt for the damage range, rolls a random value using the unit's RNG seed, scales by unit level and a difficulty-dependent multiplier from MonStatsTxt, then calls DAMAGE_ApplyAreaOfEffectDamage with zero magic damage flags. dwUnused1/dwUnused2 are not consumed.
 void __fastcall MONSTER_AoEPhysicalDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
 void __fastcall MONSTER_HandleModeTransition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2);
 // Trigger suicide monster explosion. Loads MonStats treasure class, rolls damage, chooses missile based on TC result (fire/corpse/ice), spawns missile at unit location and applies area damage.
 void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUnused1, uint32_t nUnused2);
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 40. On death (or no unit) spawns monster 0x227 and sets STATE_corpse_nodraw.
-void __fastcall FUN_005a4200(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
+void __fastcall MONSTER_SpawnWormOnDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUModId, int32_t nParam2);
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 41. While alive: MONSTERAI_TriggerMageThink, then event 7 in 75 frames.
-void __fastcall FUN_005a4230(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
+void __fastcall MONSTER_PeriodicMageThink(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUModId, int32_t nParam2);
 void __fastcall MONSTER_DispatchUModOnSpawn(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-void __fastcall MONSTER_DispatchUModOnDeath(::SGAMEDATA * pGame, int * pnParam);
+void __fastcall MONSTER_DispatchUModOnDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall MONSTER_DispatchUModOnHit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
-void __fastcall MONSTER_DispatchUModOnAttack(::SGAMEDATA * pGame, int * pnParam);
-void __fastcall MONSTER_DispatchUModOnSpecial(::SGAMEDATA * pGame, int * pnParam);
-void __fastcall MONSTER_DispatchUModOnSkill(::SGAMEDATA * pGame, int * pnParam, int32_t nSkillLevel);
+void __fastcall MONSTER_DispatchUModOnAttack(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall MONSTER_DispatchUModOnSpecial(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall MONSTER_DispatchUModOnSkill(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pMissile);
 struct D2UnitStrc * __fastcall SpawnUniquePack(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2RoomCoordListStrc * pCoordList, uint32_t nClassId, BOOL bMostOfTimesTrue, uint16_t nX, uint16_t nY, BOOL bSetOrNotUnknown);
 // Server-side monster spawn with modifiers. Creates the unit via SERVER_SpawnMonsterInternal, then sets champion/super-unique type flags, copies the 9-byte MonUMod enchantment list from mods into the monster data, applies enchantments (UMOD_ApplyEnchantmentsToMonster), seeds the name (nNameSeed), and applies AuraEnchanted if any mod is 0x1e (aura-enchanted). For super uniques, stores nBossNo and attaches the appropriate quest to the unit by SuperUnique id (Countess->ForgottenTower, Council->BlackenedTemple, Chaos bosses->TerrorsEnd, Cow King, Siege boss, Ancients, Nihlathak, etc.). Returns the spawned unit or NULL.
-struct D2UnitStrc * __fastcall SERVER_SpawnMonster(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nClassId, int32_t nGUID, int32_t nSeed, BOOL bIsChampion, BOOL bIsSuperUnique, eD2SuperUniqueId nSuperUniqueId, char * mods);
+struct D2UnitStrc * __fastcall SERVER_SpawnMonster(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nClassId, int32_t nGUID, uint16_t nSeed, BOOL bIsChampion, BOOL bIsSuperUnique, eD2SuperUniqueId nSuperUniqueId, char * mods);
 // Spawns a monster (class nClassId) at (nPosX,nPosY) in pRoom, retrying with alternate spawn flags and a random nearby position via SPAWN_FindRandomPositionForMonster if the first attempts fail; returns NULL if no spawn succeeds. Copies 9 unique-modifier ids from pUModListSrc into the monster's MonUModList, ORs the SuperUnique/champion bit (0x10) into eMonsterType, then runs the four base unique-modifier init callbacks (ids 1..4) followed by each of the 9 copied modifiers via the aUmodInitTable dispatch. Returns the spawned D2UnitStrc*.
 int * __fastcall MONSTER_SpawnWithUniqueModifiers(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, int32_t nClassId, int32_t nMode, uint8_t * pUModListSrc);
 void __fastcall InitUmods(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bInitType);
@@ -139,16 +139,16 @@ void __fastcall MONSTER_AddUniqueModifier(::SGAMEDATA * pGame, struct D2UnitStrc
 void __fastcall MONSTER_PromoteToUnique(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Server-side spawner for SuperUnique (named boss) monsters from the superuniques.txt entry nClassId. Bails if already spawned (boss-flag bitset in pGame->nBossFlagList) unless Stacks allows; applies AutoPos. Creates the base monster via SERVER_SpawnMonsterInternal, marks it superunique, sets boss flags, and rolls its UMod (monster modifier) list: copies the txt's fixed Mod entries (noting aura-enchant 0x1e), then rolls difficulty-scaled random mods via MONUMOD_RollRandomModifier, and applies them with UMOD_ApplyEnchantmentsToMonster and group min/max minion counts. A switch on the superunique's hardcoded index drives quest hooks and special minion spawns (e.g. Countess/ForgottenTower, Diablo, Baal-act bosses). Wraps return in Fog stack guard; returns the spawned unit or 0.
 struct D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, uint32_t nClassId);
-int32_t __fastcall MONSTER_IsMonsterUnit(int * pnParam);
+int32_t __fastcall MONSTER_IsMonsterUnit(struct D2UnitStrc * pnParam);
 void __fastcall SERVER_AwardKillExperience(struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim, ::SGAMEDATA * pGame);
-int32_t __fastcall MONSTER_CalculateCorpseBombDamage(int32_t nParam1, int32_t nParam2);
+int32_t __fastcall MONSTER_CalculateCorpseBombDamage(::SGAMEDATA * pGame, int32_t nPlayerCount);
 // Recomputes a monster unit's combat damage/to-hit stats and elemental on-hit damage from monstats.txt, scaling by monster level, difficulty, multiplayer player-count, and a scaling-mode selector (5/normal vs 6-8 vs default difficulty bands). Adds pet-skill damage bonuses, applies the classic (non-expansion) difficulty damage/to-hit penalty divisors, and an expansion corpse-bomb/playercount damage multiplier. Writes mindamage/maxdamage/tohit into the unit's flag-1 stat list, then iterates the three elemental damage slots (El1/El2/El3 mode/type/chance) rolling chance from the unit seed and adding the matching elemental min/max/length stats (fire, lightning, magic, cold, poison, drains, stun, burning). Server/common monster setup; no-op for non-monster units.
 void __fastcall MONSTER_RecalculateCombatStats(struct D2UnitStrc * pUnit, uint32_t nDifficultyScaling);
 void __fastcall MONSTER_CalculateHitCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nParam, uint32_t dwParam);
 void __fastcall MONSTER_AttackTarget(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
 void __stdcall MONSTER_CheckSpecialDeathFlag(struct D2UnitStrc * pUnit, struct D2DamageStrc * pDamage);
 // Rolls a critical-hit check for a monster attack using the monster's MonStats Crit percentage. If pnParam[0]==1, the class id in pnParam[1] is valid, and the RNG roll (stored in pnParam[8/9]) is below the Crit threshold, all damage fields in pEvent are doubled and the critical-hit overlay (0x36) is shown on pUnit.
-void __fastcall ApplyDamageCritical(int * pnParam, struct D2UnitStrc * pUnit, struct D2DamageStrc * pEvent);
+void __fastcall ApplyDamageCritical(struct D2UnitStrc * pnParam, struct D2UnitStrc * pUnit, struct D2DamageStrc * pEvent);
 uint8_t __fastcall MONSTER_GetHpPercent128(struct D2UnitStrc * pUnit);
 // 12 internal functions (defined in .cpp)
 

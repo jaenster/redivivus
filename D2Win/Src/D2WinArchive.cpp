@@ -25,11 +25,6 @@
 #endif
 
 
-#ifndef RECON_FPTD_fpRequiredUserAction
-#define RECON_FPTD_fpRequiredUserAction
-typedef BOOL (*fpRequiredUserAction)();
-#endif
-
 namespace D2Win::Src::D2WinArchive {
 
 static D2FogArchiveStrc * MPQ_d2kfixup_mpq = 0; D2_STATIC_GUARD(MPQ_d2kfixup_mpq, "D2Win::Src::D2WinArchive::MPQ_d2kfixup_mpq");
@@ -41,13 +36,7 @@ DC6 * __fastcall IMAGE_LoadDC6(char * szFilename, BOOL bUseDccExtension) {
     DC6* pOutDC6;
     char cByte;
     char* pDstEnd;
-    int nNegFilenameBase = -(int)szFilename;
-    do {
-      cByte = *szFilename;
-      szFilename[(int)(szFullPath + nNegFilenameBase)] = cByte;
-      szFilename++;
-    } while (cByte != '\0');
-
+    strcpy(szFullPath, szFilename);
     char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension(bUseDccExtension);
     char* szExtensionEnd = szExtension;
     szExtensionEnd = szExtensionEnd + strlen(szExtensionEnd) + 1;
@@ -81,13 +70,7 @@ int * __fastcall D2WINARCHIVE_LoadImageFromArchive(char * szText, uint32_t * pnS
     char* pSrcRead;
     char local_108[260];
     char cByte;
-    int nNegFilenameBase = -(int)szText;
-    do {
-      cByte = *szText;
-      szText[(int)(local_108 + nNegFilenameBase)] = cByte;
-      szText++;
-    } while (cByte != '\0');
-
+    strcpy(local_108, szText);
     char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension((int32_t)pDC6);
     char* szExtensionEnd = szExtension;
     szExtensionEnd = szExtensionEnd + strlen(szExtensionEnd) + 1;
@@ -199,12 +182,12 @@ BOOL __fastcall MPQ_LoadVideoMpqFiles(::fpRequiredUserAction nfpRequiredUserActi
       nfpRequiredUserAction = 0;
     }
     if (bExpansion) {
-      MPQ_d2Xvideo = Fog::Archive::ARCHIVE_LoadMPQ("d2Xvideo.mpq", nZero, (::fpRequiredUserAction)(bool (*)())nfpRequiredUserAction, 1000);
+      MPQ_d2Xvideo = Fog::Archive::ARCHIVE_LoadMPQ("d2Xvideo.mpq", nZero, nfpRequiredUserAction, 1000);
       if (!MPQ_d2Xvideo) {
         return 0;
       }
     } else {
-      MPQ_d2video = Fog::Archive::ARCHIVE_LoadMPQ("d2video.mpq", nZero, (::fpRequiredUserAction)(bool (*)())nfpRequiredUserAction, 1000);
+      MPQ_d2video = Fog::Archive::ARCHIVE_LoadMPQ("d2video.mpq", nZero, nfpRequiredUserAction, 1000);
       if (!MPQ_d2video) {
         return 0;
       }

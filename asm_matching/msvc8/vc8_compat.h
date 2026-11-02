@@ -79,23 +79,50 @@ inline bool isnan(double x) { return x != x; }
 
 // The tree's __thiscall free functions and pointer types reach VC8 as
 // `__fastcall (A1, int, ...)` (vc8_translate.py; the keyword is accepted on a
-// pointer type but not on a free function). A call goes through this cast to
-// the __thiscall pointer type instead of passing the unused int: same callee
-// (receiver in ECX, the rest on the stack, popped by the callee), and the
-// caller loads no EDX. The cast folds into a direct `call f` / `call reg`.
+// pointer type but not on a free function). A call goes through a plain C
+// cast to the __thiscall pointer type instead of passing the unused int:
+// same callee (receiver in ECX, the rest on the stack, popped by the callee),
+// and the caller loads no EDX. `vc8_thiscall(f)` is that cast,
+// `((R (__thiscall*)(A1, ...))(f))`, with the type worked out by the
+// compiler: VC8 has no decltype, so the type is deduced inside sizeof and
+// read back through a numbered nested class (the VC8 typeof technique Boost
+// used; vc8_tc::extract), each call site taking its own number from
+// __COUNTER__. A cast, not a call: through an inline function VC8 loads a
+// vtable slot into EAX where the original, and the cast, use EDX. Both
+// sizeof operands are unevaluated, so `f` is evaluated once, by the cast.
+// The second one checks that the recorded __fastcall type is f's own.
 #ifdef __cplusplus
-template<class R, class A1> __forceinline R (__thiscall* vc8_thiscall(R (__fastcall* f)(A1, int)))(A1) { return (R (__thiscall*)(A1))f; }
-template<class R, class A1, class A2> __forceinline R (__thiscall* vc8_thiscall(R (__fastcall* f)(A1, int, A2)))(A1, A2) { return (R (__thiscall*)(A1, A2))f; }
-template<class R, class A1, class A2, class A3> __forceinline R (__thiscall* vc8_thiscall(R (__fastcall* f)(A1, int, A2, A3)))(A1, A2, A3) { return (R (__thiscall*)(A1, A2, A3))f; }
-template<class R, class A1, class A2, class A3, class A4> __forceinline R (__thiscall* vc8_thiscall(R (__fastcall* f)(A1, int, A2, A3, A4)))(A1, A2, A3, A4) { return (R (__thiscall*)(A1, A2, A3, A4))f; }
-template<class R, class A1, class A2, class A3, class A4, class A5> __forceinline R (__thiscall* vc8_thiscall(R (__fastcall* f)(A1, int, A2, A3, A4, A5)))(A1, A2, A3, A4, A5) { return (R (__thiscall*)(A1, A2, A3, A4, A5))f; }
-template<class R, class A1, class A2, class A3, class A4, class A5, class A6> __forceinline R (__thiscall* vc8_thiscall(R (__fastcall* f)(A1, int, A2, A3, A4, A5, A6)))(A1, A2, A3, A4, A5, A6) { return (R (__thiscall*)(A1, A2, A3, A4, A5, A6))f; }
-template<class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7> __forceinline R (__thiscall* vc8_thiscall(R (__fastcall* f)(A1, int, A2, A3, A4, A5, A6, A7)))(A1, A2, A3, A4, A5, A6, A7) { return (R (__thiscall*)(A1, A2, A3, A4, A5, A6, A7))f; }
-template<class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> __forceinline R (__thiscall* vc8_thiscall(R (__fastcall* f)(A1, int, A2, A3, A4, A5, A6, A7, A8)))(A1, A2, A3, A4, A5, A6, A7, A8) { return (R (__thiscall*)(A1, A2, A3, A4, A5, A6, A7, A8))f; }
-template<class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9> __forceinline R (__thiscall* vc8_thiscall(R (__fastcall* f)(A1, int, A2, A3, A4, A5, A6, A7, A8, A9)))(A1, A2, A3, A4, A5, A6, A7, A8, A9) { return (R (__thiscall*)(A1, A2, A3, A4, A5, A6, A7, A8, A9))f; }
-template<class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10> __forceinline R (__thiscall* vc8_thiscall(R (__fastcall* f)(A1, int, A2, A3, A4, A5, A6, A7, A8, A9, A10)))(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10) { return (R (__thiscall*)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10))f; }
-template<class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11> __forceinline R (__thiscall* vc8_thiscall(R (__fastcall* f)(A1, int, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)))(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11) { return (R (__thiscall*)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11))f; }
-template<class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12> __forceinline R (__thiscall* vc8_thiscall(R (__fastcall* f)(A1, int, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)))(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12) { return (R (__thiscall*)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12))f; }
+namespace vc8_tc {
+template<int N> struct id {};
+struct none {};
+template<class ID, class T = none> struct extract;
+template<class ID> struct extract<ID, none> { template<bool> struct impl; typedef impl<true> type; };
+template<class ID, class T> struct extract : extract<ID, none> {
+    template<> struct impl<true> { typedef T type; };
+    template<bool> struct impl;
+    typedef impl<true> type;
+};
+template<class TC, class FC> struct sig { typedef TC tc; typedef FC fc; };
+template<int N, class T> struct reg : extract<id<N>, T> { typedef char (*sized)[N]; };
+template<int N> struct get { typedef typename extract<id<N> >::type::type::tc tc; typedef typename extract<id<N> >::type::type::fc fc; };
+template<class F> char same(F);
+template<int N, class R, class A1> typename reg<N, sig<R (__thiscall*)(A1), R (__fastcall*)(A1, int)> >::sized enc(R (__fastcall*)(A1, int));
+template<int N, class R, class A1, class A2> typename reg<N, sig<R (__thiscall*)(A1, A2), R (__fastcall*)(A1, int, A2)> >::sized enc(R (__fastcall*)(A1, int, A2));
+template<int N, class R, class A1, class A2, class A3> typename reg<N, sig<R (__thiscall*)(A1, A2, A3), R (__fastcall*)(A1, int, A2, A3)> >::sized enc(R (__fastcall*)(A1, int, A2, A3));
+template<int N, class R, class A1, class A2, class A3, class A4> typename reg<N, sig<R (__thiscall*)(A1, A2, A3, A4), R (__fastcall*)(A1, int, A2, A3, A4)> >::sized enc(R (__fastcall*)(A1, int, A2, A3, A4));
+template<int N, class R, class A1, class A2, class A3, class A4, class A5> typename reg<N, sig<R (__thiscall*)(A1, A2, A3, A4, A5), R (__fastcall*)(A1, int, A2, A3, A4, A5)> >::sized enc(R (__fastcall*)(A1, int, A2, A3, A4, A5));
+template<int N, class R, class A1, class A2, class A3, class A4, class A5, class A6> typename reg<N, sig<R (__thiscall*)(A1, A2, A3, A4, A5, A6), R (__fastcall*)(A1, int, A2, A3, A4, A5, A6)> >::sized enc(R (__fastcall*)(A1, int, A2, A3, A4, A5, A6));
+template<int N, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7> typename reg<N, sig<R (__thiscall*)(A1, A2, A3, A4, A5, A6, A7), R (__fastcall*)(A1, int, A2, A3, A4, A5, A6, A7)> >::sized enc(R (__fastcall*)(A1, int, A2, A3, A4, A5, A6, A7));
+template<int N, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> typename reg<N, sig<R (__thiscall*)(A1, A2, A3, A4, A5, A6, A7, A8), R (__fastcall*)(A1, int, A2, A3, A4, A5, A6, A7, A8)> >::sized enc(R (__fastcall*)(A1, int, A2, A3, A4, A5, A6, A7, A8));
+template<int N, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9> typename reg<N, sig<R (__thiscall*)(A1, A2, A3, A4, A5, A6, A7, A8, A9), R (__fastcall*)(A1, int, A2, A3, A4, A5, A6, A7, A8, A9)> >::sized enc(R (__fastcall*)(A1, int, A2, A3, A4, A5, A6, A7, A8, A9));
+template<int N, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10> typename reg<N, sig<R (__thiscall*)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10), R (__fastcall*)(A1, int, A2, A3, A4, A5, A6, A7, A8, A9, A10)> >::sized enc(R (__fastcall*)(A1, int, A2, A3, A4, A5, A6, A7, A8, A9, A10));
+template<int N, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11> typename reg<N, sig<R (__thiscall*)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11), R (__fastcall*)(A1, int, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)> >::sized enc(R (__fastcall*)(A1, int, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11));
+template<int N, class R, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12> typename reg<N, sig<R (__thiscall*)(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12), R (__fastcall*)(A1, int, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)> >::sized enc(R (__fastcall*)(A1, int, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12));
+}
+#define vc8_thiscall(f) vc8_thiscall_n_(f, __COUNTER__)
+#define vc8_thiscall_n_(f, n) vc8_thiscall_(f, (n) + 1)
+#define vc8_thiscall_(f, n) (sizeof(*::vc8_tc::enc<n>(f)), sizeof(::vc8_tc::same< ::vc8_tc::get<n>::fc>(f)), \
+    (::vc8_tc::get<n>::tc)(f))
 #endif
 
 // GCC's spelling of MSVC's _alloca intrinsic. malloc.h is included last, so

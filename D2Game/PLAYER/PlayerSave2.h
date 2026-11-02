@@ -8,7 +8,6 @@
 #include <cstdarg>
 #include "d2_platform.h"
 #include "Bnclient/net_sid.h"
-#include "D2Common/D2WaypointStrc.h"
 
 // Forward declarations
 struct D2ClientStrc;
@@ -18,31 +17,6 @@ struct D2SaveHotKeyStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2Skills;
-
-// Data types
-struct __attribute__((packed)) D2SaveFileNpcStrc {
-    /* 0x00 */ short szMagic;
-    /* 0x02 */ short nSize;
-    /* 0x04 */ uint8_t pActNpcData[3][8];
-    /* 0x1C */ uint8_t pActNpcBitInfo[3][8];
-};
-
-struct __attribute__((packed)) D2SaveWaypointListEntryStrc {
-    /* 0x00 */ D2WaypointStrc pWaypoints;
-    /* 0x10 */ uint32_t field1_0x10;
-    /* 0x14 */ uint32_t field2_0x14;
-};
-
-struct D2SaveWaypointListStrc {
-    /* 0x00 */ D2SaveWaypointListEntryStrc pWaypoints[3];
-};
-
-struct __attribute__((packed)) D2SaveFileWaypointsStrc {
-    /* 0x00 */ short szMagic;
-    /* 0x02 */ int nVersion;
-    /* 0x06 */ short nSize;
-    /* 0x08 */ D2SaveWaypointListStrc pActWaypoints;
-};
 
 namespace D2Game::PLAYER::PlayerSave2 {
 
@@ -94,19 +68,20 @@ void __fastcall PLRSAVE_SetSkillIfNonZero(uint32_t dwParam, struct D2UnitStrc * 
 // Deserialises hard skill allocations (magic 0x6669) from the save buffer and applies them to the unit via SetSkill for each non-zero entry. After loading, sends the 0x94 skills-list packet to the client and recomputes all passive and pet bonuses. Returns 0x13 on header mismatch or missing client.
 // @sourcefile .\PLAYER\PlrSave2.cpp
 int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwParam, uint32_t bParam);
-int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppItemList, int32_t nItemMode, uint32_t nParam, uint32_t dwParam, int * pnParam);
+int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppItemList, int32_t nItemMode, uint32_t nFormat, uint32_t dwParam, int * pnParam);
 // Deserializes the player's saved corpse(s) from the .d2s save stream during game/character load. ppCorpseList points at the current read cursor; validates the 'JM' (0x4D4A) corpse block header and a count <2 (at most one corpse). For each corpse: creates a UNIT_PLAYER unit of the loading player's class, clears CANBEATTACKED, binds the owning client, copies the char name, seeds it from the game seed, sets STATE_playerbody, links its inventory owner GUID to the player, then loads the corpse's items via PLRSAVE_LoadItemsFromBuffer. Registers an inventory notification and sends the 0x8E corpse-assign packet. Advances *ppCorpseList past the consumed bytes. Returns 0 on success or 0x15 on error; on error writes a granular error code (0x65-0x6A or the item-load error) into *pnParam when non-null.
 // @sourcefile .\PLAYER\PlrSave2.cpp
 int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppCorpseList, struct D2UnitStrc * pOwnerUnit, uint32_t nParam, int * pnParam);
 // Deserializes a mercenary from save data and recreates it as a live unit. Reads 8 dwords of merc save data (type, GUID, name index, experience), looks up the hireling text entry, creates the merc unit via CreateMerc, links it to the player via PETS_UpdatePetData, clamps experience to the minimum for its level, applies level stats, and ensures an inventory is allocated. Returns the new D2UnitStrc or null if the save data is empty or creation fails.
 struct D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2MercSaveDataStrc * pMercSaveData, uint32_t dwParam);
 // Loads a mercenary's equipped items from the save buffer into the given merc unit (expansion-only, magic 0x666a). Calls PLRSAVE_LoadItemsFromBuffer, then recalculates the merc's inventory stats and sets HP to max if the merc is alive. Skipped entirely in classic (non-expansion) games.
-int __thiscall LoadMerc2(void * pThis, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppUnit, struct D2UnitStrc * pUnit2, uint32_t nParam, int * pnParam);
+// Registers: pGame (ECX) and pPlayer (EDX) are passed by the caller but not read.
+int __fastcall LoadMerc2(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppUnit, struct D2UnitStrc * pUnit2, uint32_t nParam, int * pnParam);
 // Deserializes the Iron Golem item (and its socketed items) from the save stream. Reads the golem's base item via ITEM_CreateFromSaveData, then iterates usedSockets to read and socket each child item via PutItemInItem. Validates the runeword flag on completion. Returns 1 on success, 0 on any parse/create failure; advances *ppReadPos and writes *ppGolemItem.
 BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppGolemItem, uint8_t * * ppReadPos, int32_t nEndOffset, uint32_t nVersion);
 // Restores an Iron Golem from save (expansion-only, magic 0x666b). Reads the sacrificed item from the buffer via CreateItemIronGolemItem, equips it as the current skill, marks the golem for update, and registers its GUID on the client. If the golem byte is 0 (no golem), skips creation silently. Returns 0x17 on failure.
 // @sourcefile .\PLAYER\PlrSave2.cpp
-int __fastcall LoadGolem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, short * * ppReadPos, struct D2UnitStrc * pEndBuf, uint32_t nParam);
+int __fastcall LoadGolem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, short * * ppReadPos, struct D2UnitStrc * pEndBuf, uint32_t nVersion);
 // Body continues at 0056af31, the JNZ target of 0056af28 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'GetHotkeyItemOwner'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'GetHotkeyItemOwner':
 int32_t __fastcall HOTKEY_GetAssignedItemGUID(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nHotkeyIndex);

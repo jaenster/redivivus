@@ -40,7 +40,6 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Panel.h"
-#include "D2Common/D2MissilesTxt.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -261,7 +260,7 @@ void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel) {
     static uint32_t gnWeatherSplashMaxCount; D2_STATIC_GUARD_BSS(gnWeatherSplashMaxCount, "D2Client::Draw::Weather::MISC_PrepareWeatherOverlay::gnWeatherSplashMaxCount");
     static int gbWeatherInitialized; D2_STATIC_GUARD_BSS(gbWeatherInitialized, "D2Client::Draw::Weather::MISC_PrepareWeatherOverlay::gbWeatherInitialized");
 
-    uint8_t _byTintComp;
+    uint32_t _byTintComp;
     int32_t iVar1;
     uint8_t nRed;
     char szPath[260];
@@ -407,7 +406,8 @@ void __fastcall WEATHER_InitBlizzardState(int nSpellId) {
     gnBlizzardSoundPlayed = nSpellId;
 }
 
-void __stdcall WEATHER_UpdateSplashes() {
+// Registers: pSeed (ECX) is passed by WeatherEffects but not read.
+void __fastcall WEATHER_UpdateSplashes(D2SeedStrc * pSeed) {
     uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     short int* pSplashData = (short int*)pEnvironmentSplashes->pData;
     int nIndex = 0;
@@ -440,7 +440,8 @@ void __stdcall WEATHER_UpdateSplashes() {
     } while (nIndex <= pSplashArray->nHighestUsedIndex);
 }
 
-void __stdcall WEATHER_UpdateBubbles() {
+// Registers: pSeed (ECX) is passed by WeatherEffects but not read.
+void __fastcall WEATHER_UpdateBubbles(D2SeedStrc * pSeed) {
     uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     short int* pBubbleData = (short int*)pEnvironmentBubbles->pData;
     int nIndex = 0;
@@ -485,7 +486,7 @@ void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int
     }
 
     D2SeedStrc* pSeed = &pPlayer->sSeed;
-    uint32_t nSlot = Fog::Src::DataArrays::FOG_GetMissileField((D2MissilesTxt*)pEnvironmentSplashes);
+    uint32_t nSlot = Fog::Src::DataArrays::FOG_GetMissileField(pEnvironmentSplashes);
     if (nSlot == -1) {
       return;
     }
@@ -537,7 +538,7 @@ void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int
     }
 
     D2SeedStrc* pSeed = &pPlayer->sSeed;
-    uint32_t nSlot = Fog::Src::DataArrays::FOG_GetMissileField((D2MissilesTxt*)pEnvironmentBubbles);
+    uint32_t nSlot = Fog::Src::DataArrays::FOG_GetMissileField(pEnvironmentBubbles);
     if (nSlot == -1) {
       return;
     }
@@ -628,7 +629,7 @@ static void __stdcall WEATHER_GetLightingTint(uint8_t * pOutAlpha, int nIntensit
 static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
     bool bIsBlizzard;
     D2WeatherParticleStrc* pParticleSlot;
-    uint32_t nSlot = Fog::Src::DataArrays::FOG_GetMissileField((D2MissilesTxt*)pEnvironmentParticles);
+    uint32_t nSlot = Fog::Src::DataArrays::FOG_GetMissileField(pEnvironmentParticles);
     if (nSlot == -1) {
       return;
     }
@@ -852,7 +853,7 @@ void __stdcall WEATHER_DrawParticles() {
 
     D2WeatherParticleStrc* pParticleData = (D2WeatherParticleStrc*)pEnvironmentParticles->pData;
     int nIndex = 0;
-    if (-1 >= pEnvironmentParticles->nHighestUsedIndex) {
+    if (pEnvironmentParticles->nHighestUsedIndex < 0) {
       return;
     }
 
@@ -933,7 +934,7 @@ static int WEATHER_UpdateParticleCount(D2SeedStrc * pSeed) {
       WEATHER_SpawnParticle(pSeed);
     }
 
-    int nChangeRate = 2 - (uint32_t)(nWeatherParticleCountAct5 != 0);
+    int nChangeRate = nWeatherParticleCountAct5 != 0 ? 0x1U : 0x2U;
     if (gnWeatherRngParam < gnWeatherParticleOffsetYModulo) {
       gnWeatherParticleOffsetYModulo -= nChangeRate;
       if (gnWeatherRngParam > gnWeatherParticleOffsetYModulo) {
@@ -983,9 +984,11 @@ void __stdcall DRAW_Overlay_Weather() {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;
     int nClipLeft;
+    int32_t nPosX;
     int nYEnd;
     int nXStart;
     int32_t nLineOrCoord;
+    int32_t nSoundPosZ;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_Net();
     bool bVar2 = false;
     if (pPlayer) {
@@ -1017,7 +1020,10 @@ void __stdcall DRAW_Overlay_Weather() {
             nLineOrCoord = Seed::RollBetweenMinAndMax(pSeed, 0x19, 0x32);
             nClipLeft = Sound::SOUND_PlaySound(SOUND_ITEM_BOOTSCHAIN, nullptr, nLineOrCoord, 0, 0);
             if (nClipLeft) {
-              Sound::SOUND_PlayEnvironmentSound(nClipLeft, Seed::RollBetweenMinAndMax(pSeed, -200, 400), Seed::RollBetweenMinAndMax(pSeed, -200, 400), 0);
+              nSoundPosZ = 0;
+              nLineOrCoord = Seed::RollBetweenMinAndMax(pSeed, -200, 400);
+              nPosX = Seed::RollBetweenMinAndMax(pSeed, -200, 400);
+              Sound::SOUND_PlayEnvironmentSound(nClipLeft, nPosX, nLineOrCoord, nSoundPosZ);
             }
           } else {
             gnBlizzardSoundPlayed = 1;
@@ -1055,76 +1061,64 @@ void __stdcall DRAW_Overlay_Weather() {
 }
 
 void __fastcall WEATHER_DrawBubbles(D2DataArrayStrc * pBubbleArray, DC6 * * pDC6Table) {
-    // Frame slots -36..-4 are ONE object: &nScreenY is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int nScreenY;
-      uint32_t bPerspective;
-      int nMaxY;
-      int nScreenX;
-      int nIndex;
-      int nMaxX;
-      int nMinX;
-      D2DataArrayStrc* pBubbleArraySaved;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 32, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     BOOL nDrawResult;
     int nPositionX;
     D2GfxDataStrc sGfxData;
-    __frame0.pBubbleArraySaved = pBubbleArray;
-    __frame0.bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
+    int nScreenY;
+    int nScreenX;
+    D2DataArrayStrc* pBubbleArraySaved = pBubbleArray;
+    uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     int nScreenWidth = ScreenSizeX;
     int nXOffset = 0;
-    __frame0.nMinX = 0;
-    __frame0.nMaxX = ScreenSizeX;
+    int nMinX = 0;
+    int nMaxX = ScreenSizeX;
     uint32_t eBorderType = UI::Path::DRAW_GetTypeOfBorder();
     switch (eBorderType) {
       case 1:
         {
           nPositionX = ScreenSizeX / 4;
           nXOffset = -nPositionX;
-          __frame0.nMaxX = nScreenWidth + nPositionX * -2;
+          nMaxX = nScreenWidth + nPositionX * -2;
           break;
         }
       case 2:
         {
           nXOffset = ScreenSizeX / 4;
-          __frame0.nMinX = nXOffset * 2;
+          nMinX = nXOffset * 2;
           break;
         }
     }
 
     memset(&sGfxData, 0, 0x48);
-    D2WeatherBubbleStrc* pEntry = (D2WeatherBubbleStrc*)__frame0.pBubbleArraySaved->pData;
-    __frame0.nIndex = 0;
-    if (__frame0.pBubbleArraySaved->nHighestUsedIndex < 0) {
+    D2WeatherBubbleStrc* pEntry = (D2WeatherBubbleStrc*)pBubbleArraySaved->pData;
+    int nIndex = 0;
+    if (pBubbleArraySaved->nHighestUsedIndex < 0) {
       return;
     }
 
-    for (; __frame0.nIndex <= __frame0.pBubbleArraySaved->nHighestUsedIndex; __frame0.nIndex++ , pEntry++) {
-      __frame0.nMaxY = ScreenSizeY - 0x2f;
+    for (; nIndex <= pBubbleArraySaved->nHighestUsedIndex; nIndex++ , pEntry++) {
+      int nMaxY = ScreenSizeY - 0x2f;
       if (pEntry->nFlags) {
-        if (__frame0.bPerspective) {
+        if (bPerspective) {
           eBorderType = D2gfx::D2GFX::D2GFX_IsInPerspectiveBounds(pEntry->nPosX, pEntry->nPosY);
           if (eBorderType) {
-            D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(pEntry->nPosX, pEntry->nPosY, 0, &__frame0.nScreenX, &__frame0.nScreenY);
-            __frame0.nScreenX += nXOffset;
-            if (__frame0.nScreenX >= __frame0.nMinX && __frame0.nScreenX < __frame0.nMaxX && __frame0.nScreenY >= 0 && __frame0.nScreenY < __frame0.nMaxY) {
+            D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(pEntry->nPosX, pEntry->nPosY, 0, &nScreenX, &nScreenY);
+            nScreenX += nXOffset;
+            if (nScreenX >= nMinX && nScreenX < nMaxX && nScreenY >= 0 && nScreenY < nMaxY) {
               sGfxData.pDC6 = pDC6Table[pEntry->nDC6Index];
               sGfxData.nFrameNumber = pEntry->nFrameNumber;
-              nDrawResult = D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, __frame0.nScreenX, __frame0.nScreenY, -1, DRAW_LIGHTTRANSPARENT, nullptr);
+              nDrawResult = D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nScreenX, nScreenY, -1, DRAW_LIGHTTRANSPARENT, nullptr);
               if (nDrawResult) {
                 continue;
               }
             }
           }
 
-          Fog::Src::DataArrays::FOG_ArrayFreeAtIndex(__frame0.pBubbleArraySaved, __frame0.nIndex << 0x10);
+          Fog::Src::DataArrays::FOG_ArrayFreeAtIndex(pBubbleArraySaved, nIndex << 0x10);
         } else {
           nScreenWidth = pEntry->nPosY;
           nPositionX = pEntry->nPosX + nXOffset;
-          if (nPositionX >= __frame0.nMinX && nPositionX < __frame0.nMaxX && nScreenWidth >= 0 && nScreenWidth < __frame0.nMaxY) {
+          if (nPositionX >= nMinX && nPositionX < nMaxX && nScreenWidth >= 0 && nScreenWidth < nMaxY) {
             sGfxData.pDC6 = pDC6Table[pEntry->nDC6Index];
             sGfxData.nFrameNumber = pEntry->nFrameNumber;
             D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nScreenWidth, -1, DRAW_LIGHTTRANSPARENT, nullptr);
@@ -1353,7 +1347,7 @@ void __stdcall WeatherEffects() {
         WEATHER_UpdateParticles(pSeed);
       }
 
-      WEATHER_UpdateSplashes();
+      WEATHER_UpdateSplashes(pSeed);
       WEATHER_UpdateTransition(pSeed);
       WEATHER_UpdateParticleCount(pSeed);
     } else {
@@ -1363,7 +1357,7 @@ void __stdcall WeatherEffects() {
       return;
     }
 
-    WEATHER_UpdateBubbles();
+    WEATHER_UpdateBubbles(pSeed);
 }
 
 uint32_t __fastcall WEATHER_ApproximateDistance(uint32_t nDeltaX, uint32_t nDeltaY) {

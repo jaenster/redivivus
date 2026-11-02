@@ -9,7 +9,6 @@
 #include "D2Client/GAME/Roster.h"
 #include "D2Client/GAME/RosterPets.h"
 #include "D2Client/GAME/Select.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/CmdTbl.h"
 #include "D2Client/UI/EscMenu.h"
 #include "D2Client/UI/Path.h"
@@ -29,6 +28,7 @@
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
+#include "D2Common/Merc.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/UNIT/SUnit.h"
@@ -227,11 +227,7 @@ static void __stdcall DrawHirelingName(int32_t nX, int32_t nY, int32_t nColor, u
 
 static void __stdcall GetAndDrawHirelingName(int32_t nX, int32_t nY, int32_t nPetType) {
     uint16_t wszName[32];
-    if (!(nPetType >= 0 && nPetType < sgptDataTable->nTxtPetTypeSize)) {
-      return;
-    }
-
-    D2PetTypeTxt* pPetTypeTxt = sgptDataTable->pTxtPetType + nPetType;
+    D2PetTypeTxt* pPetTypeTxt = nPetType >= 0 && nPetType < sgptDataTable->nTxtPetTypeSize ? sgptDataTable->pTxtPetType + nPetType : nullptr;
     if (!(pPetTypeTxt && pPetTypeTxt->name > 0 && pPetTypeTxt->name != 0x1506)) {
       return;
     }
@@ -289,14 +285,7 @@ void __stdcall UI_DrawHirelingGoldCost(int nGoldCost, int32_t nDrawPositionX) {
 DC6 * __fastcall GetRosterIcon(D2UnitStrc * pUnit, int32_t nSkillId, int32_t * pRosterGUID, uint32_t * pFlagOut) {
     int nIconIndex;
     char szIconPath[256];
-    if (nSkillId < 0) {
-      return nullptr;
-    }
-    if (nSkillId >= sgptDataTable->nTxtPetTypeSize) {
-      return nullptr;
-    }
-
-    D2PetTypeTxt* pPetType = sgptDataTable->pTxtPetType + nSkillId;
+    D2PetTypeTxt* pPetType = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtPetTypeSize ? sgptDataTable->pTxtPetType + nSkillId : nullptr;
     if (!pPetType) {
       return nullptr;
     }
@@ -661,7 +650,7 @@ void __stdcall INPUT_HireableLongPress(D2UIMouseMsgStrc * pMsg) {
     uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     bool bNotCombatMode = gnHireDisplayMode != 2;
     pMsg->bHandled = 0;
-    if (bNotCombatMode && (int)uVar1 >= gpHireHoverUnit && (int)uVar1 <= gpHireHoverUnit + 0x2e && (uint32_t)(nMouseY - 0x18) <= 0x24) {
+    if (bNotCombatMode && (int)uVar1 >= gpHireHoverUnit && (int)uVar1 <= gpHireHoverUnit + 0x2e && nMouseY >= 0x18 && nMouseY <= 0x3c) {
       DWORD dwNow;
       if (!gnHireIconHoverIndex) {
         gnHireIconHoverIndex = GetTickCount();

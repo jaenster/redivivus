@@ -3,7 +3,6 @@
 #include "D2Game/Objects/ObjectsRgn.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
-#include "D2Client/SKILLS/SkillsPal.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Object.h"
@@ -23,6 +22,7 @@
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/Preset.h"
+#include "D2Common/Merc.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Units.h"
@@ -401,8 +401,7 @@ int32_t __fastcall OBJECTRGN_CheckPointsCapacity(::SGAMEDATA * pGame, eD2LevelId
 }
 
 void __fastcall OBJECT_IncrementLevelSpawnCount(::SGAMEDATA * pGame, eD2LevelId eLevel) {
-    int* pnSpawnCount = &pGame->pObjectControl->aLevelsRng[eLevel]->pad_0x10;
-    (*pnSpawnCount)++;
+    pGame->pObjectControl->aLevelsRng[eLevel]->pad_0x10++;
 }
 
 uint32_t __fastcall OBJECT_IsPositionNearSpawnPoint2(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {

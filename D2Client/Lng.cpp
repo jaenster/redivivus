@@ -31,7 +31,7 @@ BOOL __stdcall LNG_FormatErrorMessageWithFallback(DWORD dwErrorCode, char * szBu
 BOOL __stdcall CLIENT_LoadLNG() {
     if (lpLibFileName_007a0710[0] != '\0') {
       /* DWORD dwFlags for LoadLibraryExA */ /* HANDLE hFile for LoadLibraryExA */ /* LPCSTR lpLibFileName for LoadLibraryExA */ ghLngLibrary = LoadLibraryExA(lpLibFileName_007a0710, (HANDLE)0x0, 2);
-      Storm::Source::SReg::SRegSaveString((uint32_t*)"Diablo II", "LNG File", 0, lpLibFileName_007a0710);
+      Storm::Source::SReg::SRegSaveString("Diablo II", "LNG File", 0, lpLibFileName_007a0710);
     }
     if (!ghLngLibrary) {
       int32_t bRegRead;

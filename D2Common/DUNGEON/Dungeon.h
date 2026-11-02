@@ -9,6 +9,7 @@
 #include "d2_platform.h"
 
 // Forward declarations
+struct D2ClientStrc;
 struct D2CoordStrc;
 struct D2DrlgActStrc;
 struct D2DrlgCoordsStrc;
@@ -84,11 +85,11 @@ uint32_t __stdcall DoRoomsTouchOrOverlap(struct D2RoomStrc * pRoom, struct D2Roo
 BOOL __stdcall AreTileCoordinatesInsideRoom(struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 // Determines the shape/orientation of a room based on its tile coordinates. Returns 0 (invalid), 1 (zero width), 2 (mirrored width), 3 (zero height), or 4 (normal).
 int32_t __stdcall DRLGROOM_GetRoomShape(struct D2RoomStrc * pRoom, int32_t nMode);
-int32_t __stdcall FindRoomByTileCoordinates(struct D2DrlgActStrc * pDrlgAct, int32_t nX, int32_t nY);
-int32_t __stdcall GetAdjacentRoomByCoordinates(struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
+struct D2RoomStrc * __stdcall FindRoomByTileCoordinates(struct D2DrlgActStrc * pDrlgAct, int32_t nX, int32_t nY);
+struct D2RoomStrc * __stdcall GetAdjacentRoomByCoordinates(struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 void __stdcall CallRoomCallback(struct D2RoomStrc * pRoom, ROOMCALLBACKFN pfnRoomCallback, void * pArgs);
 // NOTE: Callee-saved register params inferred (medium confidence): param_ebx (EBX): DWORD
-int32_t * __stdcall DRLGROOM_GetMinimapRect(uint32_t nLine, struct D2RoomStrc * dwParam2, int32_t * dwParam3);
+int32_t * __stdcall DRLGROOM_GetMinimapRect(uint32_t nLine, struct D2RoomStrc * pRoom, int32_t * pRect);
 void __stdcall GetSubtileRect(struct D2RoomStrc * pRoom, RECT * pRect);
 void __stdcall GetRGB_IntensityFromRoom(struct D2RoomStrc * pRoom, char * nIntensity, char * nRed, char * nGreen, char * nBlue);
 struct D2RoomStrc * __stdcall FindRoomBySubtileCoordinates(struct D2DrlgActStrc * pDrlgAct, int32_t nX, int32_t nY);
@@ -133,9 +134,9 @@ int32_t __stdcall DRLGROOM_IsUnitInactiveProcessed(struct D2RoomStrc * pRoom);
 void __stdcall DRLGROOM_SetUnitInactiveProcessed(struct D2RoomStrc * pRoom, BOOL bSet);
 // Adds nClientId to the room's pClients array. Grows the array by 4 slots via ReAllocServerMemory when at capacity (nClientsMax). Appends the client ID, increments nClientsCount, then re-sorts the client list. Validates the room and client ID are non-null/non-zero before proceeding; halts on assertion failure. Called when a client enters a room's visibility range.
 // @sourcefile .\DUNGEON\Dungeon.cpp
-void __stdcall DRLGROOM_AddClientToRoom(struct D2RoomStrc * pRoom, int32_t nClientId);
+void __stdcall DRLGROOM_AddClientToRoom(struct D2RoomStrc * pRoom, struct D2ClientStrc * nClientId);
 // Removes nClientId from the room's pClients array by linear search. Fills the vacated slot with the last element, decrements nClientsCount, then re-sorts the client list. Halts if the room pointer is null, the client ID is zero, the client is not found (assertion 0x490), or validation fails. Each halt pushes its __LINE__ and enters the shared tail DRLGROOM_RemoveClientFromRoom_HaltTail.
-void __stdcall DRLGROOM_RemoveClientFromRoom(struct D2RoomStrc * pRoom, int32_t nClientId);
+void __stdcall DRLGROOM_RemoveClientFromRoom(struct D2RoomStrc * pRoom, struct D2ClientStrc * nClientId);
 void __stdcall DRLGROOM_RemoveClientFromRoom_HaltTail(int nLine);
 int32_t __stdcall DRLGROOM_GetIdleTicks(struct D2RoomStrc * pRoom);
 // Checks whether room2's client list contains any client ID not present in room1's list. Returns 1 if a unique client is found, 0 otherwise.
@@ -201,6 +202,8 @@ void __fastcall DUNGEON_ActivationHandler0_SetRoomExPriority0(struct D2RoomExStr
 void __fastcall DRLGROOMEX_ActivateRoomEx(struct D2RoomExStrc * pRoomEx);
 // Ensure tile data and monster presets are initialized for RoomEx. If fRoomStatus > 3, move room into activation list (decompiler omits args).
 void __fastcall DRLGROOMEX_InitTileDataAndPresets(struct D2RoomExStrc * pRoomEx);
+// Recursively activates nearby RoomEx neighbours up to depth 3. For each adjacent room within pRoomEx->ppDrlgRoomsExNear[], calls DRLGROOMEX_InitNearRoomsAndVisTiles if not yet populated, increments the room's reference count at the current priority level, and dispatches gaRoomExActivationHandlers[priority] when the room's fRoomStatus meets the recursion priority threshold.
+void __fastcall InitNearRooms(struct D2PoolManagerStrc * pMemory, struct D2RoomExStrc * pRoomEx, uint8_t nRecursion);
 void __fastcall DRLGROOMEX_RecalcPriority_Case4(struct D2RoomExStrc * pRoomEx);
 void __fastcall DRLGROOMEX_RecalcPriority_Case5(struct D2RoomExStrc * pRoomEx);
 void __fastcall DRLGROOMEX_RecalcPriority_Case6(struct D2RoomExStrc * pRoomEx);
@@ -239,6 +242,6 @@ void __fastcall DRLGROOMEX_DemoteIfReady(struct D2RoomExStrc * pRoomEx);
 void __fastcall thunk_DRLGROOMEX_ActivateRoomEx(struct D2RoomExStrc * pRoomEx);
 // Sets special RGB color values (0xF5, 0xF0, 0xFF) for the Arreat Summit level environment. Only applies when the level ID matches LEVEL_ArreatSummit.
 void __stdcall DRLGROOM_SetArreatSummitColors(struct D2DrlgEnvironmentStrc * pAmbientColorBytes, eD2LevelId nLevelId);
-// 8 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
 } // namespace D2Common::DUNGEON::Dungeon

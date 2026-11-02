@@ -15,8 +15,9 @@ struct D2QSSocketStrc;
 namespace Fog::Src::D2QSSocket {
 
 // Function declarations
+void __stdcall QSSOCKET_SetCallbackHandler1(struct D2QSSocketStrc * pQSSocket, void * fpCallback, void * pContext);
 int __fastcall NET_MCP_CLIENT_SendPacketToSafesocket(struct D2NetDataStrc * pSafesocket, char * pBytes, size_t nSize);
-bool __stdcall QSSOCKET_SendWithTimeout(struct D2QSSocketStrc * pQSSocket, char * pBuffer, uint16_t nLength);
+BOOL __stdcall QSSOCKET_SendWithTimeout(struct D2QSSocketStrc * pQSSocket, char * pBuffer, uint16_t nLength);
 int __stdcall ReadBytesFromSocket(struct D2QSSocketStrc * pMCPQSocket, char * pOutBuf, int nMaxBytes);
 void __stdcall QSSOCKET_SetCallbackHandler2(struct D2QSSocketStrc * pQSSocket, int nHeaderSize, int nSizeFieldOffset, int nUnknown0x120);
 // Socket receive loop, passed as thread proc to Fog::Safesock::Create_Flag0

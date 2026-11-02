@@ -237,6 +237,7 @@ void __fastcall PARTICLE_ClearLifetimeFlag(D2UnitStrc * pUnit) {
 }
 
 void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
+    uint8_t _bySpriteLayer;
     int* pX;
     int* pY;
     eD2UnitType eUnitType;
@@ -259,20 +260,19 @@ void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
       return;
     }
 
-    int iVar2;
-    iVar2 = pParticle->pOffsets[0].nOffsetX;
+    _bySpriteLayer = pParticle->pOffsets[0].nOffsetX;
     int iVar1;
     iVar1 = pParticle->pOffsets[1].nOffsetX;
-    pParticle->nPosX += iVar2;
+    pParticle->nPosX += _bySpriteLayer;
     nOffsetY0 = pParticle->pOffsets[0].nOffsetY;
     pParticle->nPosY += nOffsetY0;
     pX = &pParticle->nPosX;
-    pParticle->pOffsets[0].nOffsetX = iVar1 + iVar2;
-    iVar2 = pParticle->pOffsets[1].nOffsetY;
+    pParticle->pOffsets[0].nOffsetX = iVar1 + _bySpriteLayer;
+    _bySpriteLayer = pParticle->pOffsets[1].nOffsetY;
     iVar1 = pParticle->pOffsets[0].nOffsetZ;
     pParticle->nPosZ += iVar1;
     pY = &pParticle->nPosY;
-    pParticle->pOffsets[0].nOffsetY = iVar2 + nOffsetY0;
+    pParticle->pOffsets[0].nOffsetY = _bySpriteLayer + nOffsetY0;
     nOffsetX1 = iVar1 + pParticle->pOffsets[1].nOffsetZ;
     pParticle->pOffsets[0].nOffsetZ = nOffsetX1;
     if (nFlags & 2) {
@@ -308,7 +308,7 @@ void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
 
         nSpriteOffsetX = 0;
         nSpriteOffsetY = 0;
-        bySpriteLayer = '\b';
+        _bySpriteLayer = 8;
         if (!pUnit) {
           eUnitType = UNIT_COUNT;
         } else {
@@ -318,7 +318,7 @@ void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
         switch (eUnitType) {
           case UNIT_MONSTER:
             {
-              bySpriteLayer = '\x0e';
+              _bySpriteLayer = 0xe;
               break;
             }
           case UNIT_MISSILE:
@@ -334,12 +334,12 @@ void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
                 return;
               }
 
-              bySpriteLayer = '\x0e';
+              _bySpriteLayer = 0xe;
               break;
             }
         }
 
-        Gfx::GFX_GetUnitSpriteOffset(pOwner, bySpriteLayer, &nSpriteOffsetX, &nSpriteOffsetY);
+        Gfx::GFX_GetUnitSpriteOffset(pOwner, _bySpriteLayer, &nSpriteOffsetX, &nSpriteOffsetY);
         pParticle->nX = nSpriteOffsetX;
         pParticle->nScreenOffsetZ = nSpriteOffsetY;
         if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
@@ -356,13 +356,13 @@ void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
         pParticle->nPosZ = pParticle->nScreenOffsetZ * -0x800;
         goto project_to_screen;
       }
-      if ((nFlags & 0x20 || *pX >> 0xb > pParticle->pOffsets[2].nOffsetX || *pY >> 0xb > pParticle->pOffsets[2].nOffsetY || (iVar2 = pParticle->pOffsets[2].nOffsetZ , pParticle->nPosZ >> 0xb > iVar2)) && (!(nFlags & 0x20) || *pX >> 0xb < pParticle->pOffsets[2].nOffsetX || *pY >> 0xb < pParticle->pOffsets[2].nOffsetY || (iVar2 = pParticle->pOffsets[2].nOffsetZ , pParticle->nPosZ >> 0xb < iVar2))) {
+      if ((nFlags & 0x20 || *pX >> 0xb > pParticle->pOffsets[2].nOffsetX || *pY >> 0xb > pParticle->pOffsets[2].nOffsetY || (_bySpriteLayer = pParticle->pOffsets[2].nOffsetZ , _bySpriteLayer < pParticle->nPosZ >> 0xb)) && (!(nFlags & 0x20) || *pX >> 0xb < pParticle->pOffsets[2].nOffsetX || *pY >> 0xb < pParticle->pOffsets[2].nOffsetY || (_bySpriteLayer = pParticle->pOffsets[2].nOffsetZ , pParticle->nPosZ >> 0xb < _bySpriteLayer))) {
         goto project_to_screen;
       }
 
       *pX = pParticle->pOffsets[2].nOffsetX << 0xb;
       iVar1 = pParticle->pOffsets[2].nOffsetY;
-      pParticle->nPosZ = iVar2 << 0xb;
+      pParticle->nPosZ = _bySpriteLayer << 0xb;
       *pY = iVar1 << 0xb;
     }
 

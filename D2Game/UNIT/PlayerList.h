@@ -32,7 +32,7 @@ void __fastcall PLAYERLIST_AddPlayerEntry(::SGAMEDATA * pGame, struct D2UnitStrc
 // @sourcefile .\UNIT\PlayerList.cpp
 void __fastcall PLAYERLIST_RemoveFromList(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOtherPlayer);
 // Updates the relationship flags between pUnit and pTargetUnit in pUnit's player list, then sends packet 0x8C (RelationshipUpdate) to pTargetUnit's client. dwFlagMask selects which relationship bits to modify; nParam=0 clears them, non-zero sets them. No-op if the two units are the same or no list entry exists for pTargetUnit.
-void __fastcall SendRelationshipStatus(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit, uint32_t dwFlagMask, int32_t nParam);
+void __fastcall SendRelationshipStatus(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit, uint32_t dwFlagMask, int32_t bSet);
 uint32_t __fastcall PLAYERLIST_GetFlagsMasked(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, uint32_t nMaskFlags);
 uint32_t __fastcall PLAYERLIST_GetFlags(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 void __fastcall SetPlayerRelationship(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nRelationship);

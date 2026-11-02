@@ -4,7 +4,7 @@
 #include "D2Common/Chat/Ignorelist/IgnoreList.h"
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/Src/ErrorManager.h"
-#include "Storm/SMem.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Common/Chat.h"
@@ -93,28 +93,21 @@ void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, in
 }
 
 void __thiscall IGNORELIST_ParsePattern(::IgnoreList * pThis, char * szText1, char * szText2, int32_t nParam) {
-    // Frame slots -264..-8 are ONE object: &cPatternBuf is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      char cPatternBuf;
-      uint8_t aPatternRest[255];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 256, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    char cPatternBuf[256];
     if (!szText2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a0);
       exit(-1);
     }
 
     *szText2 = '\0';
-    __frame0.cPatternBuf = '\0';
-    memset(__frame0.aPatternRest, 0, 0xff);
-    IGNORELIST_ExtractSuffix(pThis, szText1, (uintptr_t)&__frame0.cPatternBuf, 0x100);
-    if (__frame0.cPatternBuf == '\0') {
-      IGNORELIST_ExtractPrefix(pThis, szText1, &__frame0.cPatternBuf, 0x100);
+    cPatternBuf[0] = '\0';
+    memset(cPatternBuf + 1, 0, 0xff);
+    IGNORELIST_ExtractSuffix(pThis, szText1, (int32_t)cPatternBuf, 0x100);
+    if (cPatternBuf[0] == '\0') {
+      IGNORELIST_ExtractPrefix(pThis, szText1, cPatternBuf, 0x100);
     }
 
-    Storm::Source::SSTR::SStrCopy(szText2, &__frame0.cPatternBuf, nParam);
+    Storm::Source::SSTR::SStrCopy(szText2, cPatternBuf, nParam);
 }
 
 // @sourcefile .\Chat\Ignorelist.cpp
@@ -123,7 +116,7 @@ void __stdcall MISC_InitIgnorelist() {
     pfnEHHandlerRoutine pExceptionLabel = __GSHandlerCheck_EH_6ca4b1;
     void* pPrevExceptionList = ExceptionList;
     ExceptionList = &pPrevExceptionList;
-    ::IgnoreList* ppIgnoreListVTable = (::IgnoreList*)Storm::SMem::SMemAlloc(0x188, ".\\Chat\\Ignorelist.cpp", 0x41, 0);
+    ::IgnoreList* ppIgnoreListVTable = (::IgnoreList*)Storm::Source::SMem::SMemAlloc(0x188, ".\\Chat\\Ignorelist.cpp", 0x41, 0);
     nSehState = 0;
     if (ppIgnoreListVTable) {
       gpIgnoreList = IgnoreList::Constructor(ppIgnoreListVTable);
@@ -149,7 +142,7 @@ void __stdcall MISC_InitIgnorelist() {
     ExceptionList = &pPrevExceptionList;
     if (!gpIgnoreList) {
       ::IgnoreList* pRawAlloc;
-      pRawAlloc = (::IgnoreList*)Storm::SMem::SMemAlloc(0x188, ".\\Chat\\Ignorelist.cpp", 0x48, 0);
+      pRawAlloc = (::IgnoreList*)Storm::Source::SMem::SMemAlloc(0x188, ".\\Chat\\Ignorelist.cpp", 0x48, 0);
       nSehState = 0;
       if (pRawAlloc) {
         pNewIgnoreList = IgnoreList::Constructor(pRawAlloc);

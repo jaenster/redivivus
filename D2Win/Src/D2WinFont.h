@@ -36,6 +36,15 @@ struct D2FontTableHeaderStrc {
     /* 0x0B */ uint8_t nUnverified0b;
 };
 
+struct __attribute__((packed)) D2TooltipTextStrc {
+    /* 0x000 */ uint16_t wszString[1024];
+    /* 0x800 */ int nX;
+    /* 0x804 */ int nY;
+    /* 0x808 */ int nColor;
+    /* 0x80C */ int nCenterFlag;
+    /* 0x810 */ int nLoadProgress;
+};
+
 namespace D2Win::Src::D2WinFont {
 
 // Function declarations
@@ -70,7 +79,7 @@ void __fastcall TEXT_CalcTextDimensions(uint16_t * szBuffer, int * nSizeX, int *
 BOOL __fastcall D2WINFONT_IsFontCharacterValid(uint8_t nCharCode);
 // Draws text with background rect offset by -4px horizontally. Calculates text height, clamps to screen, draws inset rectangle, renders text. Used for UI tooltips with padding.
 void __fastcall D2WINFONT_DrawTextWithOffsetBackground(uint16_t * wszText, int32_t nX, int32_t nY, int32_t nWidth, DWORD dwBackgroundColor, DRAWMODE eDrawMode, GLOBALPALLETE eGlobalPalette);
-void __fastcall IMAGE_DrawDC6ImageOnScreen(struct DC6 * pDC6, int32_t nPosX, int32_t nPoxY, int32_t nParam, DRAWMODE eDrawMode, GLOBALPALLETE nGlobalPaletteShift);
+void __fastcall IMAGE_DrawDC6ImageOnScreen(struct DC6 * pDC6, int32_t nPosX, int32_t nPoxY, int32_t nAlignment, DRAWMODE eDrawMode, GLOBALPALLETE nGlobalPaletteShift);
 // Draws text with background progress bar. If nProgressPercent is non-zero, draws filled portion in dark color. Calculates text dimensions, clamps to screen, draws layered rectangles (filled + unfilled), renders centered text.
 void __fastcall D2WINFONT_DrawTextWithProgressBar(uint16_t * wszText, uint32_t nX, int32_t nY, GLOBALPALLETE eGlobalPalette, uint32_t nAlignMode, int32_t nProgressPercent);
 // @sourcefile .\Src\D2WinFont.cpp
@@ -82,6 +91,9 @@ struct D2TextLineStrc * __fastcall D2WINFONT_WordWrapString(uint16_t * wszText, 
 void __stdcall D2WINFONT_InitFontSystem();
 int32_t __fastcall SetAndReturnLastFont(int32_t nFontId);
 void __stdcall Draw_UnitNameUnderCursor();
+void StaticInit_6cae20();
+void StaticInit_6cae40();
+void StaticInit_6cae50();
 // 9 internal functions (defined in .cpp)
 
 } // namespace D2Win::Src::D2WinFont

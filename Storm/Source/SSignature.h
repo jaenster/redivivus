@@ -61,7 +61,7 @@ void __fastcall SSIG_InitRSAPair(struct BigData * * pRSAPair);
 void __fastcall SSIG_FreeRSAPair(struct BigData * * pRSAPair);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SSIG_SignData. Storm export (PPC vector 100cdff4 -> 100a3570). Basis: PPC reads r3..r10 = 8 args == 8 params here (no other SSignature function takes 8). Callee set: PPC {Sha1::Initialize, Sha1::Append, Sha1::Finalize, BlockMoveData, SBigNew, Crypt::RSA::Prepare, Crypt::RSA::Process, SBigDel} == 1.14d {SSIG_HashData (= Init/Append/Finalize factored out), STORM_Memcpy, SSIG_InitRSAPair, CryptRSA_Prepare, CryptRSA_Process, SSIG_FreeRSAPair}. Both search for the "SIGN" magic 0x5349474e in the buffer first.
-int __fastcall SSignatureGenerate(int32_t pData, uint32_t * pnDataLen, void * pModulusBytes, int32_t nKeySize, void * pPrivateExponent, uint32_t nPrivateExponentLen, void * pPublicExponent, uint32_t nPublicExponentLen);
+int __fastcall SSignatureGenerate(uint8_t * pData, uint32_t * pnDataLen, void * pModulusBytes, int32_t nKeySize, void * pPrivateExponent, uint32_t nPrivateExponentLen, void * pPublicExponent, uint32_t nPublicExponentLen);
 // @sourcefile .\SOURCE\SSignature.cpp
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SSIG_VerifySignature. Storm export (PPC vector 100cdfdc -> 100a3960). Basis: exact callee-set fingerprint. PPC {Sha1::Finalize, BlockMoveData, SBigNew, Crypt::RSA::Prepare, Crypt::RSA::Process, SBigDel, SMemFree} == 1.14d {Sha1_Finalize, STORM_Memcpy, SSIG_InitRSAPair(SBigNew), CryptRSA_Prepare, CryptRSA_Process, SSIG_FreeRSAPair(SBigDel), SMemFree}. PPC reads r3,r4,r5 = 3 args == 3 params here. Both builds also test the little-endian "SIGN" magic 0x5349474e before verifying. It is the only SSignature function that frees the context, which is what makes it Finish rather than the one-shot Verify.
@@ -105,7 +105,7 @@ struct BigData * * __thiscall SSIGNATURE_RsaPowMod(struct BigData * * pnParam3, 
 void * __thiscall SSIGNATURE_RsaExportZeroPadded(struct BigData * * pnParam, void * pOutBuf, uint32_t nParam);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_LoadComponent. DESCRIPTIVE, not an oracle name - no PPC counterpart exists. Body is a single SBigFromBinary(this[0], bytes, len), i.e. one half of CryptRSA_Prepare. Zero callers in the whole program: an MSVC out-of-line COMDAT copy of a helper that was inlined at every use. Moved out of SBig into SSignature because that is the translation unit it belongs to.
-void __thiscall SSIGNATURE_RsaLoadComponent(struct BigData * * pnParam, void * pBytes, uint32_t nParam);
+void __thiscall SSIGNATURE_RsaLoadComponent(struct BigData * * pnParam, void * pBytes, uint32_t nByteCount);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_LoadKeyPair. Oracle: ".Prepare__Q25Crypt3RSAFPCvUlPCvUl" @100a2a50 = Crypt::RSA::Prepare(const void*, unsigned long, const void*, unsigned long). Basis: PPC body is exactly two bl .SBigFromBinary calls on this[0] and this[4], and reads r3..r7 = this+4 args; this function is byte-for-byte the same shape with this+4 params. So the object is a pair of BigBuffer handles at +0 and +4.
 // ppKey[0] is the modulus and ppKey[1] the exponent: CryptRSA_Process calls SBigPowMod(out, in, ppKey[1], ppKey[0]). SSignatureGenerate passes one modulus with its private then its public exponent, so neither pair is 'public' or 'private' as a whole.

@@ -30,9 +30,7 @@ namespace D2Common::Chat {
 // @sourcefile .\Chat\Chat.cpp
 D2HoverTextStrc * __stdcall Alloc(D2PoolManagerStrc * pMemory, char * szMessage, int32_t nDuration) {
     char cCurChar;
-    char* pcMsgEnd = szMessage;
-    pcMsgEnd = pcMsgEnd + strlen(pcMsgEnd) + 1;
-    int nMsgLen = (int)pcMsgEnd - (int)(szMessage + 1);
+    int nMsgLen = (int)strlen(szMessage);
     if (!nMsgLen) {
       return nullptr;
     }
@@ -71,10 +69,10 @@ int32_t __stdcall GetExpireFrame(D2HoverTextStrc * pHover) {
     return pHover->nExpireFrame;
 }
 
-void __stdcall TEXT_CopyHoverMessageString(D2HoverTextStrc * pHover, int32_t nParam) {
+void __stdcall TEXT_CopyHoverMessageString(D2HoverTextStrc * pHover, char * szMessageOut) {
     char cChar;
     char* pcSrc = pHover->szMessage;
-    int nDstOffset = nParam - (int)pcSrc;
+    int nDstOffset = (int)szMessageOut - (int)pcSrc;
     do {
       cChar = *pcSrc;
       pcSrc[nDstOffset] = cChar;
@@ -82,12 +80,12 @@ void __stdcall TEXT_CopyHoverMessageString(D2HoverTextStrc * pHover, int32_t nPa
     } while (cChar != '\0');
 }
 
-int32_t __stdcall HOVERTEXT_GetTextLineList(D2HoverTextStrc * pHover) {
-    return (int32_t)pHover->pTextLineList;
+void * __stdcall HOVERTEXT_GetTextLineList(D2HoverTextStrc * pHover) {
+    return pHover->pTextLineList;
 }
 
-void __stdcall HOVERTEXT_SetTextLineList(D2HoverTextStrc * pHoverText, int32_t pTextLineList) {
-    pHoverText->pTextLineList = (void*)pTextLineList;
+void __stdcall HOVERTEXT_SetTextLineList(D2HoverTextStrc * pHoverText, void * pTextLineList) {
+    pHoverText->pTextLineList = pTextLineList;
 }
 
 uint8_t __stdcall GetLanguageCode(D2HoverTextStrc * pHoverText) {
