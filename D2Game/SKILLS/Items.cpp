@@ -340,7 +340,8 @@ void __fastcall StaffMod(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemData) {
 }
 
 // Rolls one magic affix for items with wItemVersion 0 (pre-1.08 legacy items): counts eligible rows and picks one uniformly with RollBetweenMinAndMax on the item seed. Called by the version dispatchers 0x005c18e0/0x005c1940 and the rare/prefix rollers.
-uint32_t __stdcall ITEMMOD_RollMagicAffixLegacy(D2UnitStrc * pUnit, int32_t bIsSuffix, int bForceRoll, int32_t bApplyStats, int bIsPrefix, int nForcedAffix) {
+// bSpawnableOnly (argument 2) skips rows whose byte at legacy row+0x32 is 0 (005c13e8), the same filter as ITEMMOD_RollMagicAffix's spawnable test.
+uint32_t __stdcall ITEMMOD_RollMagicAffixLegacy(D2UnitStrc * pUnit, int32_t bSpawnableOnly, int bForceRoll, int32_t bApplyStats, int bIsPrefix, int nForcedAffix) {
     BOOL BVar1;
     D2MagicAffixTxt* pAffixEntry;
     int nAffixIdx;
@@ -407,7 +408,7 @@ uint32_t __stdcall ITEMMOD_RollMagicAffixLegacy(D2UnitStrc * pUnit, int32_t bIsS
     uint32_t nCandidatesFound;
     nCandidatesFound = nCandidateCount;
     do {
-      if ((!bIsSuffix || *(bool*)((int)pAffixTable + 0x32)) && (*(uint16_t*)pAffixTable < 100 || (uint16_t)nItemVersion >= 100) && *(int*)((int)pAffixTable + 0x36) <= bIsPrefix) {
+      if ((!bSpawnableOnly || *(bool*)((int)pAffixTable + 0x32)) && (*(uint16_t*)pAffixTable < 100 || (uint16_t)nItemVersion >= 100) && *(int*)((int)pAffixTable + 0x36) <= bIsPrefix) {
         pAffixEntry = (D2MagicAffixTxt*)((int)pAffixTable - 0x22);
         BVar1 = D2Common::ITEMS::ItemMods::ITEMMOD_CanApplyAutomod(pUnit, (int32_t)pAffixEntry);
         if (BVar1 && (int)nCandidatesFound < 0x1ff) {
@@ -511,7 +512,8 @@ static BOOL HasSufixOrPrefix(int32_t nGroupId, D2UnitStrc * pUnit) {
 // Rolls one magic prefix or suffix for an item using the magicprefix/magicsuffix txt tables. Advances the item's mod-seed RNG, computes an effective magic level (item level adjusted by the base item's magic_lvl), then walks the candidate affix range - filtering by suffix/prefix flag, level min/max, version, item type/class, quality, group exclusion and existing affixes - accumulating frequency weights into a scratch list, and picks one by weighted RNG. Returns the affix index + 1, or 0 on no roll.
 // bIsPrefix and nAutoMagicGroup select which sub-table range to walk: automagic when nAutoMagicGroup is set, prefix when bIsPrefix is set, suffix otherwise. nForcedAffix, when > 0, is a one-based row index that is taken directly.
 // The last five arguments are INTEGERS. They were typed D2ItemsTxt *, which is not merely cosmetic: the decompiler then wrote the loop counter's increment as `pBaseItemTxt->szFlippyFile + 1`, so the emitted C++ advanced it by offsetof(szFlippyFile)+1 instead of by 1, and the group compare became `&pExclude2[-1].pad422 + 1`. Every caller passes small literals - ITEMMOD_GenerateRareAffixes passes 1, 0, and a group id read out of the item's own affix table - which is what gave it away.
-int32_t __stdcall ITEMMOD_RollMagicAffix(D2UnitStrc * pItem, int32_t bIsSuffix, int32_t bForceRoll, int32_t bApplyAffixStats, int32_t bIsPrefix, int32_t nForcedAffix, int32_t nAutoMagicGroup) {
+// bSpawnableOnly (argument 2) skips rows whose spawnable byte is 0 (row+0x54, tested at 005c16d3); it is not a suffix selector.
+int32_t __stdcall ITEMMOD_RollMagicAffix(D2UnitStrc * pItem, int32_t bSpawnableOnly, int32_t bForceRoll, int32_t bApplyAffixStats, int32_t bIsPrefix, int32_t nForcedAffix, int32_t nAutoMagicGroup) {
     uint32_t nClassId;
     eD2PlayerClassIDDWORD eVar3;
     D2MagicAffixTxt* pDVar4;
@@ -619,7 +621,7 @@ int32_t __stdcall ITEMMOD_RollMagicAffix(D2UnitStrc * pItem, int32_t bIsSuffix, 
     for (pAffixEntry = &pDVar4->maxlevel; bForceRoll < (int)nTotalAffixes; bForceRoll++ , pAffixEntry += 0x24) {
       pDVar4 = (D2MagicAffixTxt*)(pAffixEntry - 0x18);
       pCurAffixTxt = pDVar4;
-      if (!bIsSuffix || *(bool*)(pAffixEntry - 3)) {
+      if (!bSpawnableOnly || *(bool*)(pAffixEntry - 3)) {
         pItemTxt = 0;
         if ((uint16_t)*(short int*)((int)pAffixEntry - 0x3e) < 100 || 99 < (uint16_t)nItemVersion) {
           pItemTxt = nForcedAffix;
