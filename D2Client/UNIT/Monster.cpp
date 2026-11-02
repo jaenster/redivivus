@@ -1900,18 +1900,23 @@ D2MonStats2Txt * __fastcall MONSTER_SpawnBloodParticles(D2UnitStrc * pUnit, D2Mo
 }
 
 static void MONSTER_PreloadSequenceAnimations(D2UnitStrc * pUnit) {
-    int i;
     uint32_t nFrameSpeed;
     uint32_t nFrameEnd;
     uint32_t nFrameStart;
     D2MonSeqTxt* pSeqTxt = D2Common::Merc::MERC_GetSequenceTxt(pUnit);
     int32_t nFrameCount = D2Common::Merc::GetCounter1(pUnit);
-    for (i = 0; i < nFrameCount >> 8; i++) {
+    int i = 0;
+    if (!(nFrameCount >> 8 > 0)) {
+      return;
+    }
+
+    do {
       uD2UnitMode nAnimMode;
       D2Common::Merc::ANIM_GetSequenceFrameInfo(pSeqTxt, i << 8, i << 8, &nAnimMode.ePlayerMode, &nFrameSpeed, &nFrameEnd, &nFrameStart);
       pUnit->eAnimMode = nAnimMode;
       Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
-    }
+      i++;
+    } while (i < nFrameCount >> 8);
 }
 
 // Returns nonzero when pModeEntry->bCheckMoveFlag is set, eMode < 0x10 and the monster's MonStats2 per-mode move bit (+0x104, bit eMode: A1mv/A2mv/SCmv/S1mv..S4mv) is set.

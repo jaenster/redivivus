@@ -631,15 +631,17 @@ uint16_t * __fastcall STRING_ConvertCharToWchar(uint16_t * pwszBuffer, char * ps
 }
 
 uint16_t * __fastcall STRING_CopyCharToWCharWithSetMaxSize(uint16_t * pDestination, char * szSource, int32_t nSize) {
-    int i;
-    for (i = 0; i < nSize; i++) {
-      if (!szSource[i]) {
-        break;
-      }
+    int i = 0;
+    if (nSize > 0) {
+      do {
+        if (!szSource[i]) {
+          break;
+        }
 
-      pDestination[i] = (uint16_t)(uint8_t)szSource[i];
+        pDestination[i] = (uint16_t)(uint8_t)szSource[i];
+        i++;
+      } while (i < nSize);
     }
-
     if (szSource[i] != '\0') {
       pDestination[i - 1] = L'\0';
       return pDestination;

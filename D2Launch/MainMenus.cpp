@@ -2455,8 +2455,7 @@ void __stdcall UIMENU_PleaseReadAfterCreatingAccount() {
     uint32_t nFontHeight = D2Win::Src::D2WinFont::D2WINFONT_GetCurrentFontHeight();
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
     D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x146c), 0, false, 0);
-    int nTextArg3 = (int)((uint64_t)((int64_t)(int)nFontHeight * -0x66666667) >> 0x20);
-    nTextArg3 = (nTextArg3 >> 2) - (nTextArg3 >> 0x1f);
+    int nTextArg3 = (int)nFontHeight / -10;
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLinePadding(pTextBox, nTextArg3, 0);
     pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0x61);
     D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x146d), 0, false, 0);

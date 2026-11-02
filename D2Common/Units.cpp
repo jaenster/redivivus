@@ -1943,8 +1943,7 @@ int32_t __stdcall GetDefense(D2UnitStrc * pUnit) {
     if (nBaseArmor > 0) {
       nDexBonus = nDexBonus * nBaseArmor / 100;
     } else {
-      nDexBonus = (int)((uint64_t)((int64_t)(nDexBonus * nBaseArmor) * -0x51eb851f) >> 0x20);
-      nDexBonus = (nDexBonus >> 5) - (nDexBonus >> 0x1f);
+      nDexBonus = nDexBonus * nBaseArmor / -100;
     }
 
     nSkillArmorPct = nBaseArmor + nDexBonus;

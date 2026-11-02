@@ -294,12 +294,16 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
             goto spawn_cave_entrance;
           }
 
-          for (nX = 0; nX < pWildData->nGridCoordsWidth; nX++) {
-            if (bColumnEmpty) {
-              break;
-            }
+          nX = 0;
+          if (pWildData->nGridCoordsWidth > 0) {
+            do {
+              if (bColumnEmpty) {
+                break;
+              }
 
-            bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(nX, nSpawnResult, pLevel);
+              bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(nX, nSpawnResult, pLevel);
+              nX++;
+            } while (nX < pWildData->nGridCoordsWidth);
           }
 
           nSpawnResult++;
@@ -316,12 +320,16 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
             goto spawn_cave_entrance;
           }
 
-          for (nSpawnResult = 0; nSpawnResult < pWildData->nGridCoordsWidth; nSpawnResult++) {
-            if (bColumnEmpty) {
-              break;
-            }
+          nSpawnResult = 0;
+          if (pWildData->nGridCoordsWidth > 0) {
+            do {
+              if (bColumnEmpty) {
+                break;
+              }
 
-            bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(nX, nSpawnResult, pLevel);
+              bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(nX, nSpawnResult, pLevel);
+              nSpawnResult++;
+            } while (nSpawnResult < pWildData->nGridCoordsWidth);
           }
 
           nX++;

@@ -526,20 +526,24 @@ static void DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets(D2DrlgLevelStrc *
         }
 
         nGridWidth = pLevelData->nGridCoordsWidth;
-        for (nXIter = 0; nXIter < nGridWidth; nXIter++) {
-          if (nPlacedCount >= 3) {
-            break;
-          }
+        nXIter = 0;
+        if (nGridWidth > 0) {
+          do {
+            if (nPlacedCount >= 3) {
+              break;
+            }
 
-          nGridWidth = (int)(nXIter + nStartX * 2) % nGridWidth;
-          nY = (int)(nAttempts + nStartY * 2) % pLevelData->nGridCoordsHeight;
-          iVar2 = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridWidth, nY);
-          if (iVar2 - 0x393U <= 7) {
-            Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridWidth, nY, iVar2 + 0x10, -1, 0);
-            nPlacedCount++;
-          }
+            nGridWidth = (int)(nXIter + nStartX * 2) % nGridWidth;
+            nY = (int)(nAttempts + nStartY * 2) % pLevelData->nGridCoordsHeight;
+            iVar2 = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridWidth, nY);
+            if (iVar2 - 0x393U <= 7) {
+              Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridWidth, nY, iVar2 + 0x10, -1, 0);
+              nPlacedCount++;
+            }
 
-          nGridWidth = pLevelData->nGridCoordsWidth;
+            nGridWidth = pLevelData->nGridCoordsWidth;
+            nXIter++;
+          } while (nXIter < nGridWidth);
         }
       }
 
