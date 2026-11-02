@@ -1072,7 +1072,7 @@ uint32_t __thiscall Q22_StatusFilter(int32_t pThis, uint32_t param_1, D2BitBuffe
 void __fastcall Q22_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, 0x3c);
     ::SGAMEDATA* pGame = pQuestData->pGame;
-    pQuestData->pNpcMessages = &A3Q5::aNpcGossipData;
+    pQuestData->pNpcMessages = A3Q5::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = Q22_Callback08_MonsterKilled;
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q22_Callback00_NpcActivate;

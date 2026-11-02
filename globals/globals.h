@@ -2179,7 +2179,7 @@ extern char gaQ33_Hell_PaladinScepterCodes[5][4];
 extern char gaQ33_Hell_BarbarianAxeCodes[5][4];
 extern char gaQ33_Hell_DruidHelmCodes[5][4];
 extern char gaQ33_Hell_AssassinClawCodes[7][4];
-extern uint8_t gbQuestA5Q2Unknown;
+extern D2NPCMessageTableStrc gbQuestA5Q2Unknown[6];
 extern D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43];
 extern char * gaLanguageNames_0073c6e0[15];
 extern D2MissileSrvDoFuncData gaMissileSrvDoFuncTable[9];
@@ -4787,13 +4787,13 @@ extern DC6 * gpDC6CursorIcon;
 
 namespace D2Game::Quests::QUESTS::Quest40 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[4];
 
 } // namespace D2Game::Quests::QUESTS::Quest40
 
 namespace D2Game::Quests::QUESTS::A5Q1 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[8];
 
 } // namespace D2Game::Quests::QUESTS::A5Q1
 
@@ -4811,7 +4811,7 @@ extern D2NPCMessageTableStrc aNpcGossipData[10];
 
 namespace D2Game::Quests::QUESTS::A5Q4 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[8];
 
 } // namespace D2Game::Quests::QUESTS::A5Q4
 
@@ -4823,37 +4823,37 @@ extern D2NPCMessageTableStrc aNpcGossipData[9];
 
 namespace D2Game::Quests::QUESTS::A5Q6 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[9];
 
 } // namespace D2Game::Quests::QUESTS::A5Q6
 
 namespace D2Game::Quests::QUESTS::Quest37 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[3];
 
 } // namespace D2Game::Quests::QUESTS::Quest37
 
 namespace D2Game::Quests::QUESTS::A1Q0 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[3];
 
 } // namespace D2Game::Quests::QUESTS::A1Q0
 
 namespace D2Game::Quests::QUESTS::A1Q1 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[8];
 
 } // namespace D2Game::Quests::QUESTS::A1Q1
 
 namespace D2Game::Quests::QUESTS::A1Q2 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[6];
 
 } // namespace D2Game::Quests::QUESTS::A1Q2
 
 namespace D2Game::Quests::QUESTS::A1Q3 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[6];
 
 } // namespace D2Game::Quests::QUESTS::A1Q3
 
@@ -4865,37 +4865,37 @@ extern D2NPCMessageTableStrc aNpcGossipData[11];
 
 namespace D2Game::Quests::QUESTS::A1Q5 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[5];
 
 } // namespace D2Game::Quests::QUESTS::A1Q5
 
 namespace D2Game::Quests::QUESTS::A1Q6 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[6];
 
 } // namespace D2Game::Quests::QUESTS::A1Q6
 
 namespace D2Game::Quests::QUESTS::A1Q7 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[6];
 
 } // namespace D2Game::Quests::QUESTS::A1Q7
 
 namespace D2Game::Quests::QUESTS::Quest38 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[3];
 
 } // namespace D2Game::Quests::QUESTS::Quest38
 
 namespace D2Game::Quests::QUESTS::A2Q0 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[3];
 
 } // namespace D2Game::Quests::QUESTS::A2Q0
 
 namespace D2Game::Quests::QUESTS::A2Q1 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[9];
 
 } // namespace D2Game::Quests::QUESTS::A2Q1
 
@@ -4907,7 +4907,7 @@ extern D2NPCMessageTableStrc aNpcGossipData[11];
 
 namespace D2Game::Quests::QUESTS::A2Q3 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[6];
 
 } // namespace D2Game::Quests::QUESTS::A2Q3
 
@@ -4919,25 +4919,25 @@ extern D2NPCMessageTableStrc aNpcGossipData[12];
 
 namespace D2Game::Quests::QUESTS::A2Q5 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[4];
 
 } // namespace D2Game::Quests::QUESTS::A2Q5
 
 namespace D2Game::Quests::QUESTS::A2Q6 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[8];
 
 } // namespace D2Game::Quests::QUESTS::A2Q6
 
 namespace D2Game::Quests::QUESTS::A2Q7 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[6];
 
 } // namespace D2Game::Quests::QUESTS::A2Q7
 
 namespace D2Game::Quests::QUESTS::A2Q8 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[2];
 
 } // namespace D2Game::Quests::QUESTS::A2Q8
 
@@ -4949,49 +4949,49 @@ extern fpUmodInit aUmodInitTable[43];
 
 namespace D2Game::Quests::QUESTS::A4Q0 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[2];
 
 } // namespace D2Game::Quests::QUESTS::A4Q0
 
 namespace D2Game::Quests::QUESTS::A4Q1 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[6];
 
 } // namespace D2Game::Quests::QUESTS::A4Q1
 
 namespace D2Game::Quests::QUESTS::A4Q2 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[7];
 
 } // namespace D2Game::Quests::QUESTS::A4Q2
 
 namespace D2Game::Quests::QUESTS::A4Q3 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[5];
 
 } // namespace D2Game::Quests::QUESTS::A4Q3
 
 namespace D2Game::Quests::QUESTS::A4Q4 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[3];
 
 } // namespace D2Game::Quests::QUESTS::A4Q4
 
 namespace D2Game::Quests::QUESTS::Quest39 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[3];
 
 } // namespace D2Game::Quests::QUESTS::Quest39
 
 namespace D2Game::Quests::QUESTS::A3Q0 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[3];
 
 } // namespace D2Game::Quests::QUESTS::A3Q0
 
 namespace D2Game::Quests::QUESTS::A3Q1 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[6];
 
 } // namespace D2Game::Quests::QUESTS::A3Q1
 
@@ -5003,7 +5003,7 @@ extern D2NPCMessageTableStrc aNpcGossipData[13];
 
 namespace D2Game::Quests::QUESTS::A3Q3 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[8];
 
 } // namespace D2Game::Quests::QUESTS::A3Q3
 
@@ -5015,13 +5015,13 @@ extern D2NPCMessageTableStrc aNpcGossipData[9];
 
 namespace D2Game::Quests::QUESTS::A3Q5 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[8];
 
 } // namespace D2Game::Quests::QUESTS::A3Q5
 
 namespace D2Game::Quests::QUESTS::A3Q6 {
 
-extern D2NPCMessageTableStrc aNpcGossipData;
+extern D2NPCMessageTableStrc aNpcGossipData[8];
 
 } // namespace D2Game::Quests::QUESTS::A3Q6
 

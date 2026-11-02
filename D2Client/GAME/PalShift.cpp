@@ -217,8 +217,8 @@ void __fastcall PALSHIFT_LoadMonsterPalShift(int32_t nMonsterId) {
       cCode1 = '\0';
     }
 
-    szMonsterCode[3] = 0;
-    szMonsterCode[2] = 0;
+    szMonsterCode[3] = '\0';
+    szMonsterCode[2] = '\0';
     memcpy(szFilePath, "Data\\Global\\Monsters\\", 0x16);
     strcat(szFilePath, szMonsterCode);
     char* pSrc = (char*)((uintptr_t)&iMonIdx + 3);

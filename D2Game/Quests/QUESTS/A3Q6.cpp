@@ -893,7 +893,7 @@ void __fastcall Q23_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 void __fastcall Q23_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, 0x3c);
     ::SGAMEDATA* pGame = pQuestData->pGame;
-    pQuestData->pNpcMessages = &A3Q6::aNpcGossipData;
+    pQuestData->pNpcMessages = A3Q6::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = Q23_Callback08_MonsterKilled;
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q23_Callback00_NpcActivate;

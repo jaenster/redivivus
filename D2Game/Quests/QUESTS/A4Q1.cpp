@@ -525,7 +525,7 @@ void __fastcall Q26_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 1;
     ::SGAMEDATA* pSVar1 = pQuestData->pGame;
-    pQuestData->pNpcMessages = &A4Q1::aNpcGossipData;
+    pQuestData->pNpcMessages = A4Q1::aNpcGossipData;
     pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q26_Callback10_PlayerLeavesGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q26_Callback03_ChangedLevel;
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = Q26_Callback08_MonsterKilled;

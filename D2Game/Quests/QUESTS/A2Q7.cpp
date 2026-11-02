@@ -796,7 +796,7 @@ void __fastcall Q15_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q15_Callback11_ScrollMessage;
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q15_Callback00_NpcActivate;
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = Q15_Callback08_MonsterKilled;
-    pQuestData->pNpcMessages = &A2Q7::aNpcGossipData;
+    pQuestData->pNpcMessages = A2Q7::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     pQuestData->nStateFlagPrev = 0;

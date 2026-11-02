@@ -147,7 +147,7 @@ void __fastcall Q39_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, 0x3c);
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q39_Callback00_NpcActivate;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q39_Callback11_ScrollMessage;
-    pQuestData->pNpcMessages = &Quest39::aNpcGossipData;
+    pQuestData->pNpcMessages = Quest39::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     pQuestData->nStateFlagPrev = 0;

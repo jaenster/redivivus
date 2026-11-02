@@ -1789,8 +1789,8 @@ void __fastcall crc32_combine(uint32_t dwCrc, uint32_t dwFinalXor, int32_t nExp)
     crc32_combine_(dwCrc, dwFinalXor, (int64_t)nExp);
 }
 
-void __fastcall crc32_combine64(uint32_t dwCrc, uint32_t dwFinalXor, int32_t nExpLo, int32_t nExpHi) {
-    crc32_combine_(dwCrc, dwFinalXor, (uint64_t)((uint64_t)(uint32_t)nExpHi << 32 | (uint64_t)(uint32_t)nExpLo));
+void __fastcall crc32_combine64(uint32_t dwCrc, uint32_t dwFinalXor, int64_t nLength) {
+    crc32_combine_(dwCrc, dwFinalXor, nLength);
 }
 
 uint32_t __fastcall crc32(uint32_t dwCrcSeed, uint8_t * pBuffer, uint32_t nLength) {

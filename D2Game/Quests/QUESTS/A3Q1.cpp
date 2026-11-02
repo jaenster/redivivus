@@ -789,7 +789,7 @@ bool __fastcall Q18_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
 void __fastcall Q18_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, 0x3c);
-    pQuestData->pNpcMessages = &A3Q1::aNpcGossipData;
+    pQuestData->pNpcMessages = A3Q1::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     pQuestData->nQuestIdReal = QUEST_LamEsensTome;

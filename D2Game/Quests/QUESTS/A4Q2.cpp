@@ -1007,7 +1007,7 @@ void __fastcall Q27_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q27_Callback11_ScrollMessage;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q27_Callback13_PlayerStartedGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xe] = Q27_Callback14_PlayerJoinedGame;
-    pQuestData->pNpcMessages = &A4Q2::aNpcGossipData;
+    pQuestData->pNpcMessages = A4Q2::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     pQuestData->nQuestIdReal = QUEST_TerrorsEnd;

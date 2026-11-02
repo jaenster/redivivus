@@ -849,7 +849,7 @@ void __fastcall Q36_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q36_Callback11_ScrollMessage;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q36_Callback13_PlayerStartedGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xe] = Q36_Callback14_PlayerJoinedGame;
-    pQuestData->pNpcMessages = &A5Q6::aNpcGossipData;
+    pQuestData->pNpcMessages = A5Q6::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     D2QuestDataA5Q6Strc* pQuestSpecificData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2QuestDataA5Q6Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q6.cpp", 0x329);

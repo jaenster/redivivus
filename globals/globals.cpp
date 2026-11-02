@@ -25,6 +25,7 @@
 #include "D2Common/Logging/ProfCore.h"
 #include "D2Common/Merc.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
+#include "D2Game/D2QuestDataStrc.h"
 #include "D2Win/D2WinAnimImage.h"
 #include "D2Win/Src/D2WinMain.h"
 #include "D2gfx/D2GFX.h"
@@ -37983,6 +37984,7 @@ char gDebugSpaceString = ' '; D2_GLOBAL_GUARD(gDebugSpaceString, "gDebugSpaceStr
 uint32_t gaScreenResolutionTableIndexArray = 0x40; D2_GLOBAL_GUARD(gaScreenResolutionTableIndexArray, "gaScreenResolutionTableIndexArray");
 uint32_t gaScreenResolutionModeArray = 0x1; D2_GLOBAL_GUARD(gaScreenResolutionModeArray, "gaScreenResolutionModeArray");
 uint32_t gnCursorInvTypeAutoOpenA = 0x5; D2_GLOBAL_GUARD(gnCursorInvTypeAutoOpenA, "gnCursorInvTypeAutoOpenA");
+D2NPCMessageTableStrc gbQuestA5Q2Unknown[6] = {}; D2_GLOBAL_GUARD(gbQuestA5Q2Unknown, "gbQuestA5Q2Unknown");
 D2DataTableTxtStrc * sgptDataTable = (D2DataTableTxtStrc *)&sgtDataTable; D2_GLOBAL_GUARD(sgptDataTable, "sgptDataTable");
 char * gaLanguageNames_0074430c_11[15] = {}; D2_GLOBAL_GUARD(gaLanguageNames_0074430c_11, "gaLanguageNames_0074430c_11");
 uint32_t DWORD_007467b0 = 0x5070000; D2_GLOBAL_GUARD(DWORD_007467b0, "DWORD_007467b0");
@@ -38167,7 +38169,6 @@ void * ResourceRetValue = (void *)0x00000000; D2_GLOBAL_GUARD(ResourceRetValue, 
 // Uninitialized data (BSS)
 // =============================================================================
 
-uint8_t gbQuestA5Q2Unknown; D2_GLOBAL_GUARD_BSS(gbQuestA5Q2Unknown, "gbQuestA5Q2Unknown");
 uint8_t gaMonSeqMonsterTblData_Unknown; D2_GLOBAL_GUARD_BSS(gaMonSeqMonsterTblData_Unknown, "gaMonSeqMonsterTblData_Unknown");
 uint8_t gaMonSeqAnimData; D2_GLOBAL_GUARD_BSS(gaMonSeqAnimData, "gaMonSeqAnimData");
 

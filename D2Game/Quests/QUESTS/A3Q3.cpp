@@ -828,7 +828,7 @@ void __fastcall Q20_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 void __fastcall Q20_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, 0x3c);
     ::SGAMEDATA* pSVar1 = pQuestData->pGame;
-    pQuestData->pNpcMessages = &A3Q3::aNpcGossipData;
+    pQuestData->pNpcMessages = A3Q3::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     pQuestData->nQuestIdReal = QUEST_BladeOfTheOldReligion;

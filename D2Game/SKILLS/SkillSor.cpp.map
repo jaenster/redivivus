@@ -275,6 +275,7 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
+        "eMissilesId",
         "int32_t"
       ]
     },

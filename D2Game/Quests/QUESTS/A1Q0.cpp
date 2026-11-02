@@ -94,7 +94,7 @@ void __fastcall Q00_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->pQuestSpecificData.pA1Q0 = 0;
     pQuestData->nQuestIdReal = QUEST_SpokeToWarriv;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q00_Callback11_ScrollMessage;
-    pQuestData->pNpcMessages = &A1Q0::aNpcGossipData;
+    pQuestData->pNpcMessages = A1Q0::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->fpStatusFilter = Q00_StatusFilter;
     pQuestData->fpActiveFilter = Q00_ActiveFilter;

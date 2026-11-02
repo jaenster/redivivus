@@ -692,7 +692,7 @@ void __fastcall Q03_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = Q03_Callback02_NpcDeactivate;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q03_Callback13_PlayerStartedGame;
     pQuestData->fpSequenceFilter = Q03_SequenceFilter;
-    pQuestData->pNpcMessages = &A1Q3::aNpcGossipData;
+    pQuestData->pNpcMessages = A1Q3::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nQuestIdReal = QUEST_ToolsOfTheTrade;
     D2QuestDataA1Q3Strc* pQuestSpecificData = D2_NEW_POOL_AT(pSVar1->pMemoryPool, D2QuestDataA1Q3Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q3.cpp", 0x3ae);

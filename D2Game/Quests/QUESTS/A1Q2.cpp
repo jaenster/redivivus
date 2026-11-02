@@ -617,7 +617,7 @@ void __fastcall Q02_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = Q02_Callback02_NpcDeactivate;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q02_Callback13_PlayerStartedGame;
     pQuestData->fpSequenceFilter = Q02_SequenceFilter;
-    pQuestData->pNpcMessages = &A1Q2::aNpcGossipData;
+    pQuestData->pNpcMessages = A1Q2::aNpcGossipData;
     pQuestData->nQuestIdReal = QUEST_SistersBurialGrounds;
     pQuestData->bIsActive = '\x01';
     D2QuestDataA1Q2Strc* pQuestSpecificData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2QuestDataA1Q2Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q2.cpp", 0x27f);

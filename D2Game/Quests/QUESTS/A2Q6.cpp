@@ -1058,7 +1058,7 @@ void __fastcall Q14_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q14_Callback13_PlayerStartedGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xe] = Q14_Callback14_PlayerJoinedGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = Q14_Callback08_MonsterKilled;
-    pQuestData->pNpcMessages = &A2Q6::aNpcGossipData;
+    pQuestData->pNpcMessages = A2Q6::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     D2QuestDataA2Q6Strc* pQuestSpecificData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2QuestDataA2Q6Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q6.cpp", 0x442);

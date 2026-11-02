@@ -37,7 +37,7 @@ namespace D2Sound::Src::D2SoundSmp {
 
 static int gnSoundFrequency_22kHz = 0x40000000; D2_STATIC_GUARD(gnSoundFrequency_22kHz, "D2Sound::Src::D2SoundSmp::gnSoundFrequency_22kHz");
 static long long gnSoundQuality_Low = 0x42c80000; D2_STATIC_GUARD(gnSoundQuality_Low, "D2Sound::Src::D2SoundSmp::gnSoundQuality_Low");
-static long long gnSoundAttenuation_Max = 0x3f1a36e2e0000000; D2_STATIC_GUARD(gnSoundAttenuation_Max, "D2Sound::Src::D2SoundSmp::gnSoundAttenuation_Max");
+static double gnSoundAttenuation_Max = 0.0000999999974737875; D2_STATIC_GUARD(gnSoundAttenuation_Max, "D2Sound::Src::D2SoundSmp::gnSoundAttenuation_Max");
 
 // @sourcefile .\Src\D2SoundSmp.cpp
 D2SoundSmpStrc * __fastcall CallSounds(uint32_t nSoundFlags, uint32_t dwSampleParam) {
@@ -764,12 +764,12 @@ float SOUNDSMP_LinearToLogNoParam(float fValue, float fValue2) {
 // No register arguments: EAX is first written by FNSTSW AX at 00516607 and only carries the x87 status word (1.14d asm).
 float __stdcall SOUNDSMP_ClampVolume(float fValue, float fMax, float fInput) {
     long double fVar1 = (long double)fInput;
-    if (fVar1 <= (long double)fValue + (long double)(double)0x3f1a36e2e0000000) {
+    if (fVar1 <= (long double)fValue + (long double)9.999999747378752e-05) {
       return -10000.0;
     }
 
     long double fUpper = (long double)fMax;
-    long double fThreshold = fUpper - (long double)(double)0x3f1a36e2e0000000;
+    long double fThreshold = fUpper - (long double)9.999999747378752e-05;
     if (fThreshold < fVar1 != (fThreshold == fVar1)) {
       return 0.0;
     }
@@ -780,19 +780,19 @@ float __stdcall SOUNDSMP_ClampVolume(float fValue, float fMax, float fInput) {
     }
 
     fVar1 = CRT_CILog10((fUpper + (long double)fValue) / fDivisor);
-    return (float)(fVar1 * (long double)(double)-0x3f60c00000000000);
+    return (float)(fVar1 * (long double)-2000.0);
 }
 
 float __stdcall SOUNDSMP_ClampAttenuation(float fMillibels) {
     long double fVar1 = (long double)fMillibels;
-    if ((long double)0.0 < fVar1 + (long double)(double)0x3f1a36e2e0000000) {
+    if ((long double)0.0 < fVar1 + (long double)9.999999747378752e-05) {
       return 1.0;
     }
-    if (fVar1 - (long double)(double)0x3f1a36e2e0000000 < (long double)(double)-0x3f3c780000000000) {
+    if (fVar1 - (long double)9.999999747378752e-05 < (long double)-10000.0) {
       return 0.0;
     }
 
-    long double fLinearGain = CRT_CIPow((long double)10.0, fVar1 / (long double)(double)0x409f400000000000);
+    long double fLinearGain = CRT_CIPow((long double)10.0, fVar1 / (long double)2000.0);
     return (float)fLinearGain;
 }
 

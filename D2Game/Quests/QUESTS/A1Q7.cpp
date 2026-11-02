@@ -135,7 +135,7 @@ void __fastcall Q07_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, 0x3c);
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q07_Callback00_NpcActivate;
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = Q07_Callback08_MonsterKilled;
-    pQuestData->pNpcMessages = &A1Q7::aNpcGossipData;
+    pQuestData->pNpcMessages = A1Q7::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     pQuestData->nStateFlagPrev = 0;

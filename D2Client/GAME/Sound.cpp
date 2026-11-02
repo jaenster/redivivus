@@ -12,6 +12,7 @@
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgStrc.h"
 #include "D2Common/Environment.h"
+#include "D2Direct3D/Renderer/Direct3D.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -399,6 +400,8 @@ int __fastcall SOUND_UpdateChannelParams(int * pSoundChannel) {
     uint32_t nBytesRemaining;
     uint8_t* pByteA;
     uint8_t* pByteB;
+    D2FloatIntUnion uFalloffMaxPan;
+    D2FloatIntUnion uFalloffMinVolume;
     int nSoundDescOffset;
     nSoundDescOffset = pSoundChannel[2];
     int* pChannelEntry;
@@ -412,10 +415,8 @@ int __fastcall SOUND_UpdateChannelParams(int * pSoundChannel) {
 
     D2SoundsTxt* pSoundsTxtLine;
     pSoundsTxtLine = D2Client::Sound::SoundHdr::TXT_sounds_GetLineBySoundId(*(int32_t*)(nSoundDescOffset + 4));
-    float fFalloffMin;
-    fFalloffMin = D2Client::Sound::SoundHdr::SOUNDHDR_GetFalloffMin(*(int32_t*)(nSoundDescOffset + 4));
-    float fFalloffMax;
-    fFalloffMax = D2Client::Sound::SoundHdr::SOUNDHDR_GetFalloffMax(*(int32_t*)(nSoundDescOffset + 4));
+    uFalloffMinVolume.fValue = D2Client::Sound::SoundHdr::SOUNDHDR_GetFalloffMin(*(int32_t*)(nSoundDescOffset + 4));
+    uFalloffMaxPan.fValue = D2Client::Sound::SoundHdr::SOUNDHDR_GetFalloffMax(*(int32_t*)(nSoundDescOffset + 4));
     int nTmpCalc;
     nTmpCalc = *(int*)(nSoundDescOffset + 0x1c);
     if (pSoundsTxtLine->Music_Vol) {
@@ -508,10 +509,10 @@ int __fastcall SOUND_UpdateChannelParams(int * pSoundChannel) {
 
     float fVar1 = _Utils::CalculateHypotenuse(*(float*)(nSoundDescSaved + 0xc), *(float*)(nSoundDescSaved + 0x10));
     nSoundDescOffset = (int)fVolume;
-    if (fFalloffMin < fVar1) {
-      fVar1 = fFalloffMax - fVar1;
-      fFalloffMax -= fFalloffMin;
-      nSoundDescOffset = (int)(fVar1 * (float)(int)fEaxObstruction / fFalloffMax);
+    if (uFalloffMinVolume.fValue < fVar1) {
+      fVar1 = uFalloffMaxPan.fValue - fVar1;
+      uFalloffMaxPan.fValue -= uFalloffMinVolume.fValue;
+      nSoundDescOffset = (int)(fVar1 * (float)(int)fEaxObstruction / uFalloffMaxPan.fValue);
     }
 
     nSoundDescOffset = (int)((uint32_t)pSoundsTxtLine->Volume * nSoundDescOffset) / 0xff;
@@ -519,9 +520,9 @@ int __fastcall SOUND_UpdateChannelParams(int * pSoundChannel) {
     pChannelEntry = (int*)d2_bits_of(*(float*)(nSoundDescSaved + 0x10) * 0.003125);
     pSoundsTxtLine = (D2SoundsTxt*)d2_bits_of(*(float*)(nSoundDescSaved + 0x14) * 0.003125);
     if (!pSoundChannel[1]) {
-      D2Sound::Src::D2SoundSmp::SOUNDSMP_CalculateVolumeAndPan((uint32_t*)&fFalloffMin, (uint32_t*)&fFalloffMax, fEaxObstruction, (float)d2_bits_to_float(pChannelEntry), (float)d2_bits_to_float(pSoundsTxtLine));
-      D2Sound::Src::D2SoundSmp::SOUNDSMP_SetPan((D2SoundSmpStrc*)*pSoundChannel, (int32_t)fFalloffMax);
-      nSoundDescOffset = (int)fFalloffMin * nSoundDescOffset / 0xff;
+      D2Sound::Src::D2SoundSmp::SOUNDSMP_CalculateVolumeAndPan((uint32_t*)&uFalloffMinVolume.nValue, (uint32_t*)&uFalloffMaxPan.nValue, fEaxObstruction, (float)d2_bits_to_float(pChannelEntry), (float)d2_bits_to_float(pSoundsTxtLine));
+      D2Sound::Src::D2SoundSmp::SOUNDSMP_SetPan((D2SoundSmpStrc*)*pSoundChannel, uFalloffMaxPan.nValue);
+      nSoundDescOffset = uFalloffMinVolume.nValue * nSoundDescOffset / 0xff;
     }
     if (*(uint8_t*)(pSoundChannel + 1) & 2) {
       D2Sound::Src::D2SoundSmp::SOUNDSMP_Set3DPosition((D2SoundSmpStrc*)*pSoundChannel, fEaxObstruction, (float)d2_bits_to_float(pChannelEntry), (float)d2_bits_to_float(pSoundsTxtLine));

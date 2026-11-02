@@ -437,7 +437,7 @@ void __fastcall Q13_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // A2Q5 "The Summoner" - quest init/registration (nInitNo=2). Allocates the A2Q5-specific data struct (0xc bytes), zeroes the state-function table, installs the Arcane Sanctuary NPC gossip message table, and wires the handlers: fpActiveFilter=Q13_ActiveFilter, fpQuestStateHandler[0]=Callback_00, [3]=Callback_03, [8]=Callback_08 (Summoner death), [0xa]=Callback_10 (participation tracking), [0xb]=Callback_11 (reward turn-in), [0xd]=Callback_13 (progress sync). Sets nQuestIdReal=TheSummoner (0xd), bIsActive, nStateFlag=0, and clears the per-quest kill/room fields. No GetQuestState/SetQuestState here.
 void __fastcall Q13_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, 0x3c);
-    pQuestData->pNpcMessages = &A2Q5::aNpcGossipData;
+    pQuestData->pNpcMessages = A2Q5::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     D2QuestDataA2Q5Strc* pQuestSpecificData = D2_NEW_POOL_AT(pQuestData->pGame->pMemoryPool, D2QuestDataA2Q5Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q5.cpp", 0x212);

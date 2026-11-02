@@ -130,7 +130,7 @@ void __fastcall Q16_InitData(D2QuestDataStrc * pQuestData) {
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q16_Callback11_ScrollMessage;
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q16_Callback00_NpcActivate;
-    pQuestData->pNpcMessages = &A2Q8::aNpcGossipData;
+    pQuestData->pNpcMessages = A2Q8::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     pQuestData->nStateFlagPrev = 0;

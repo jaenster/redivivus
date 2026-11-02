@@ -87,7 +87,7 @@ void __fastcall Q25_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, 0x3c);
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q25_Callback00_NpcActivate;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q25_Callback11_ScrollMessage;
-    pQuestData->pNpcMessages = &A4Q0::aNpcGossipData;
+    pQuestData->pNpcMessages = A4Q0::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     pQuestData->nStateFlagPrev = 0;

@@ -852,7 +852,7 @@ void __fastcall Q28_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->pQuestSpecificData.pA4Q3 = 0;
     pQuestData->nStateFlagPrev = 0;
     pQuestData->nStateFlag = 0;
-    pQuestData->pNpcMessages = &A4Q3::aNpcGossipData;
+    pQuestData->pNpcMessages = A4Q3::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->fpSequenceFilter = Q28_SequenceFilter;
     pQuestData->nSequenceQuestId = QUEST_AbleGoToAct4;

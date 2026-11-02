@@ -783,7 +783,7 @@ void __fastcall Q06_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q06_Callback13_PlayerStartedGame;
     pQuestData->fpSequenceFilter = Q06_SequenceFilter;
     pQuestData->nQuestIdReal = QUEST_SistersToTheSlaughter;
-    pQuestData->pNpcMessages = &A1Q6::aNpcGossipData;
+    pQuestData->pNpcMessages = A1Q6::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlagPrev = 0;
     pQuestData->nStateFlag = 0;

@@ -1040,7 +1040,7 @@ void __fastcall Q05_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = Q05_Callback08_MonsterKilled;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q05_Callback13_PlayerStartedGame;
     pQuestData->nQuestIdReal = QUEST_ForgottenTower;
-    pQuestData->pNpcMessages = &A1Q5::aNpcGossipData;
+    pQuestData->pNpcMessages = A1Q5::aNpcGossipData;
     pQuestData->nStateFlagPrev = 0;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;

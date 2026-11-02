@@ -241,6 +241,7 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "eD2Skills",
+        "eMissilesId",
         "int32_t"
       ]
     },
@@ -269,6 +270,7 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "eD2Skills",
+        "eMissilesId",
         "int32_t"
       ]
     },

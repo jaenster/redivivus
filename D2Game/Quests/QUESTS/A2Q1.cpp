@@ -584,7 +584,7 @@ void __fastcall Q09_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q09_Callback13_PlayerStartedGame;
     pQuestData->nSequenceQuestId = QUEST_TheSummoner;
     pQuestData->fpSequenceFilter = Q09_SequenceFilter;
-    pQuestData->pNpcMessages = &A2Q1::aNpcGossipData;
+    pQuestData->pNpcMessages = A2Q1::aNpcGossipData;
     D2QuestDataA2Q1Strc* pQuestSpecificData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2QuestDataA2Q1Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q1.cpp", 0x29e);
     pQuestData->pQuestSpecificData.pA2Q1 = pQuestSpecificData;
     pQuestData->nQuestIdReal = QUEST_RadamentsLair;

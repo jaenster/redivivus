@@ -600,7 +600,7 @@ void __fastcall Q01_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = Q01_Callback02_NpcDeactivate;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q01_Callback11_ScrollMessage;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q01_Callback13_PlayerStartedGame;
-    pQuestData->pNpcMessages = &A1Q1::aNpcGossipData;
+    pQuestData->pNpcMessages = A1Q1::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 1;
     D2QuestDataA1Q1Strc** pQuestSpecificData = (D2QuestDataA1Q1Strc**)D2_ALLOC_POOL_AT(pGame->pMemoryPool, 0x8c, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q1.cpp", 0x2ee);

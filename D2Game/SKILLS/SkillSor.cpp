@@ -383,6 +383,7 @@ void __fastcall SKILL_InitChargedBoltPath(D2UnitStrc * pUnit, int32_t nMissileId
 BOOL __fastcall Skills_SrvDoFunc_017_ChargedBolt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL _bGotTarget;
     bool bGotTarget;
+    int32_t nMissileCount;
     int nMissileLoopIdx;
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillTxtBase;
@@ -390,11 +391,11 @@ BOOL __fastcall Skills_SrvDoFunc_017_ChargedBolt(::SGAMEDATA * pGame, D2UnitStrc
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
     if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
-      int32_t nMissileCount;
+      eMissilesId eMissileId;
       pSkillTxtBase = sgptDataTable->pTxtSkills;
       if (pSkillTxtBase + eSkill) {
-        sSkillArg.nMissileTxtNo = SkillAss::SKILLASS_GetChargeUpMissile(pUnit, eSkill);
-        if ((int)sSkillArg.nMissileTxtNo >= 0 && (int)sSkillArg.nMissileTxtNo < sgptDataTable->nTxtMissilesSize) {
+        eMissileId = SkillAss::SKILLASS_GetChargeUpMissile(pUnit, eSkill);
+        if ((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
           nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase[eSkill].calc[0], eSkill, nSkillLvl);
           memset(&sSkillArg, 0, 0x5c);
           sSkillArg.nFlags = 0x21;
@@ -404,6 +405,7 @@ BOOL __fastcall Skills_SrvDoFunc_017_ChargedBolt(::SGAMEDATA * pGame, D2UnitStrc
           sSkillArg.eSkillNo = eSkill;
           nMissileLoopIdx = 0;
           sSkillArg.nSkillLevel = nSkillLvl;
+          sSkillArg.nMissileTxtNo = eMissileId;
           sSkillArg.fpFunction = SKILL_InitChargedBoltPath;
           if (nMissileCount > 0) {
             do {

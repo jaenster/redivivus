@@ -732,14 +732,15 @@ BOOL __fastcall Skills_SrvDoFunc_011_ChargedStrike(::SGAMEDATA * pGame, D2UnitSt
       nUnitY = 0;
     }
 
-    sSkillArg.nMissileTxtNo = SkillAss::SKILLASS_GetChargeUpMissile(pUnit, eSkill);
-    if ((int)sSkillArg.nMissileTxtNo >= 0 && (int)sSkillArg.nMissileTxtNo < sgptDataTable->nTxtMissilesSize) {
+    eMissilesId eMissileId = SkillAss::SKILLASS_GetChargeUpMissile(pUnit, eSkill);
+    if ((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
       int nBoltIdx;
       memset(&sSkillArg, 0, 0x5c);
       sSkillArg.nX = nX;
       sSkillArg.nY = nY;
       sSkillArg.nUnitY = nY * 2 - nUnitY;
       nBoltIdx = 0;
+      sSkillArg.nMissileTxtNo = eMissileId;
       sSkillArg.pOwner = pUnit;
       sSkillArg.nFlags = 0x21;
       sSkillArg.nUnitX = nX * 2 - nSrcX;

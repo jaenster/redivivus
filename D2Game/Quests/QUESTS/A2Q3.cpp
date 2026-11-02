@@ -879,7 +879,7 @@ void __fastcall Q11_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q11_Callback03_ChangedLevel;
     pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q11_Callback10_PlayerLeavesGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q11_Callback13_PlayerStartedGame;
-    pQuestData->pNpcMessages = &A2Q3::aNpcGossipData;
+    pQuestData->pNpcMessages = A2Q3::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     D2QuestDataA2Q3Strc* pQuestSpecificData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2QuestDataA2Q3Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q3.cpp", 0x323);

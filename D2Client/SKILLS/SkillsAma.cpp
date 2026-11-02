@@ -334,8 +334,8 @@ BOOL __fastcall Skills_CltDoFunc_Ama_GuidedArrow(D2UnitStrc * pUnit, eD2Skills e
       return 0;
     }
 
-    sSkillArg.nMissileTxtNo = SkillsAss::SKILLSASS_GetCltMissileByAuraLevel(pUnit, eSkill);
-    if ((int)sSkillArg.nMissileTxtNo >= 0 && (int)sSkillArg.nMissileTxtNo < sgptDataTable->nTxtMissilesSize) {
+    eMissilesId eMissileId = SkillsAss::SKILLSASS_GetCltMissileByAuraLevel(pUnit, eSkill);
+    if ((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
       D2UnitStrc* pTarget;
       pTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
       memset(&sSkillArg, 0, 0x5c);
@@ -350,6 +350,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_GuidedArrow(D2UnitStrc * pUnit, eD2Skills e
       sSkillArg.pOwner = pUnit;
       sSkillArg.pMissile = pUnit;
       sSkillArg.pTarget = pTarget;
+      sSkillArg.nMissileTxtNo = eMissileId;
       sSkillArg.eSkillNo = eSkill;
       pMissileUnit = UNIT::Missile::MakeMissile(&sSkillArg);
       if (pMissileUnit) {
@@ -389,8 +390,8 @@ BOOL __fastcall Skills_CltDoFunc_Ama_LinearMissileSpray(D2UnitStrc * pUnit, eD2S
       return 0;
     }
 
-    sSkillArg.nMissileTxtNo = SkillsAss::SKILLSASS_GetCltMissileByAuraLevel(pUnit, eSkill);
-    if ((int)sSkillArg.nMissileTxtNo >= 0 && (int)sSkillArg.nMissileTxtNo < sgptDataTable->nTxtMissilesSize) {
+    eMissilesId eMissileId = SkillsAss::SKILLSASS_GetCltMissileByAuraLevel(pUnit, eSkill);
+    if ((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
       int32_t nTargetX;
       nTargetX = Units::GetXPosFromDynamicPathUnit(pConfirmedTarget);
       nTargetPosY = Units::GetYPosFromDynamicPathUnit(pConfirmedTarget);
@@ -407,6 +408,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_LinearMissileSpray(D2UnitStrc * pUnit, eD2S
       sSkillArg.nUnitY = nTargetPosY * 2 - nOwnerPosX;
       sSkillArg.eSkillNo = eSkill;
       sSkillArg.nSkillLevel = nSkillLvl;
+      sSkillArg.nMissileTxtNo = eMissileId;
       sSkillArg.fpFunction = SkillsMon::SKILLSMON_SetMissilePathLinear;
       if (nMissileCount > 0) {
         do {

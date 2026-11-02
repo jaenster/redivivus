@@ -368,6 +368,7 @@
         "SOUNDSMP_SetVolume"
       ],
       "usedTypes": [
+        "D2FloatIntUnion",
         "D2SoundsTxt",
         "int32_t",
         "uint32_t",

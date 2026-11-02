@@ -161,7 +161,7 @@ void __fastcall Q08_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q08_Callback00_NpcActivate;
     pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q08_Callback10_PlayerLeavesGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q08_Callback13_PlayerStartedGame;
-    pQuestData->pNpcMessages = &A2Q0::aNpcGossipData;
+    pQuestData->pNpcMessages = A2Q0::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     pQuestData->nStateFlagPrev = 0;
