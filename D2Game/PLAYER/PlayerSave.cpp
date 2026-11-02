@@ -757,7 +757,7 @@ D2SaveFileHeaderStrc * __stdcall PLRSAVE_MakeSaveFileReturnBuffer(int32_t nPlaye
     return pSaveFileResult;
 }
 
-int32_t __fastcall PLAYERSAVE_ByteToHexChar(uint8_t * pszHexOut, uint8_t nByteValue) {
+void __fastcall PLAYERSAVE_ByteToHexChar(char * pszHexOut, uint8_t nByteValue) {
     int nGuardResult;
     uint8_t aHexDigits[16];
     uint32_t dwStackCookie;
@@ -777,10 +777,9 @@ int32_t __fastcall PLAYERSAVE_ByteToHexChar(uint8_t * pszHexOut, uint8_t nByteVa
     aHexDigits[0xd] = 100;
     aHexDigits[0xe] = 0x65;
     aHexDigits[0xf] = 0x66;
-    uint8_t byLowNibbleChar = aHexDigits[nByteValue & 0xf];
+    uint8_t uVar1 = aHexDigits[nByteValue & 0xf];
     *pszHexOut = aHexDigits[nByteValue >> 4];
-    pszHexOut[1] = byLowNibbleChar;
-    return (uint32_t)byLowNibbleChar;
+    pszHexOut[1] = uVar1;
 }
 
 uint8_t * __fastcall PLAYERSAVE_ByteArrayToHexString(uint8_t * pParam, uint8_t * pbParam, int32_t nLength) {
