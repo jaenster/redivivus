@@ -1063,10 +1063,10 @@ BOOL __fastcall InitPerspective(D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc
     pD2GFXRenderedDataStrc = pSettings;
     D2GfxRendereInitFunctionsStrc = pHelpers;
     D2ddDebugFont_Alloc();
-    if (!(gdwDDrawInitFlags & gadwBitMasks[0])) {
-      nResult = DirectDrawCreate(&gGlideOpenWindowConfig, &pWindowHandleBuffer, nullptr);
-    } else {
+    if (gdwDDrawInitFlags & gadwBitMasks[0]) {
       nResult = DirectDrawCreate(0, &pWindowHandleBuffer, nullptr);
+    } else {
+      nResult = DirectDrawCreate(&gGlideOpenWindowConfig, &pWindowHandleBuffer, nullptr);
     }
     if (nResult) {
       DirectDrawErrorHandler("DirectDrawCreate failed!", nResult);

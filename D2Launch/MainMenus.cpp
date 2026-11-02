@@ -2474,10 +2474,10 @@ void __stdcall IMAGE_LoadPredefinedImagesEx() {
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\FrontEnd\\MediumSelButtonBlank", "DATA\\GLOBAL");
     DC6_FrontEnd_MediumSelButtonBlank = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    if (!bIsExpansion) {
-      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\FrontEnd\\CharacterCreate", "DATA\\GLOBAL");
-    } else {
+    if (bIsExpansion) {
       wsprintfA(szPathBuffer, "%s\\ui\\FrontEnd\\charactercreationscreenEXP", "DATA\\GLOBAL");
+    } else {
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\FrontEnd\\CharacterCreate", "DATA\\GLOBAL");
     }
 
     DC6_FrontEnd_CharacterCreate_or_charactercreationscreenEXP = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);

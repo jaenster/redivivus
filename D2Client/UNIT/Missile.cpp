@@ -9025,10 +9025,10 @@ void __fastcall MISSILE_CltDoFn61_OverseerControl(D2UnitStrc * pUnit) {
       D2SeedStrc DVar1;
       DVar1 = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = DVar1;
-      if (!(DVar1.nSeedLow & 1)) {
-        MISSILE_CreateAtMonsterFacing(pOwner, MISSILE_CatapultMeteorBall, pUnit);
-      } else {
+      if (DVar1.nSeedLow & 1) {
         MISSILE_CreateAtMonsterFacing(pOwner, MISSILE_CatapultColdBall, pUnit);
+      } else {
+        MISSILE_CreateAtMonsterFacing(pOwner, MISSILE_CatapultMeteorBall, pUnit);
       }
 
       nRemainingFrames = D2Common::Units::Missile::GetRemainingFrames(pUnit);

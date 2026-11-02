@@ -15868,10 +15868,10 @@ void __fastcall AITHINK_Fn1_SandRaider(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       return;
     }
     if (nMulHighScratch < pMonsterAiGeneral->dwArg0) {
-      if (pMonStats->aip[5][pGame->nDifficulty] == 1) {
-        D2Common::DATATBLS::ItemStats::SetState(pUnitCopy, STATE_blue, 1);
-      } else {
+      if (pMonStats->aip[5][pGame->nDifficulty] != 1) {
         D2Common::DATATBLS::ItemStats::SetState(pUnitCopy, STATE_red, 1);
+      } else {
+        D2Common::DATATBLS::ItemStats::SetState(pUnitCopy, STATE_blue, 1);
       }
 
       pMonsterAiGeneral->dwArg1 = 1;

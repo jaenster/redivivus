@@ -80,10 +80,10 @@ void __stdcall LoadingsScreen() {
     ui::CleanupAfterLoadingAct();
     ui::PALETTE_LoadLoadingScreenPalette();
     uint32_t nLangCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
-    if (!nLangCode) {
-      sprintf(szPath, "%s\\UI\\Loading\\Loadingscreen", "DATA\\GLOBAL");
-    } else {
+    if (nLangCode) {
       sprintf(szPath, "%s\\UI\\LoadingScreen", "DATA\\LOCAL");
+    } else {
+      sprintf(szPath, "%s\\UI\\Loading\\Loadingscreen", "DATA\\GLOBAL");
     }
 
     gnLoadedActIndex = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);

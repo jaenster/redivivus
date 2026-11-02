@@ -1128,10 +1128,10 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
         UI::ui::SetUIFlag(UI_NODRAW, UI_SET, 0);
         dwResult = D2Win::D2GFX::BeginCutSceneAtResolutionMode0();
         if (dwResult) {
-          if (gbCutsceneActive == '\0') {
-            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING);
-          } else {
+          if (gbCutsceneActive != '\0') {
             D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, 0);
+          } else {
+            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING);
           }
 
           bCutscenePlayed = 1;

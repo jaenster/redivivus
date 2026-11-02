@@ -2755,10 +2755,10 @@ static void __stdcall SKILLDESC_FormatDamageRange(int32_t bPrefixSign, uint16_t 
         return;
       }
     }
-    if (!bPrefixSign) {
-      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d-%d", nMinDamage, nMaxDamage);
-    } else {
+    if (bPrefixSign) {
       wsprintfA(szBuf, "+%d-%d", nMinDamage, nMaxDamage);
+    } else {
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d-%d", nMinDamage, nMaxDamage);
     }
 
     D2Lang::UTF8_ConvertToWideChar(wszText, szBuf, 0x20);
@@ -2783,10 +2783,10 @@ uint32_t SKILLDESC_FormatDamageRangeWithCalc(int32_t bPrefixSign, int32_t nMinVa
 
 void __stdcall SKILLDESC_FormatDecimalRange(uint16_t * wszText, int32_t bPrefixSign) {
     char szBuf[32];
-    if (!bPrefixSign) {
-      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d.%d-%d.%d");
-    } else {
+    if (bPrefixSign) {
       wsprintfA(szBuf, "+%d.%d-%d.%d");
+    } else {
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d.%d-%d.%d");
     }
 
     D2Lang::UTF8_ConvertToWideChar(wszText, szBuf, 0x20);
@@ -3112,10 +3112,10 @@ static void __stdcall SKILLDESC_FormatMinMaxRange(int32_t nMinVal, int32_t nMaxV
       wszRangeStr[iFill] = L'\0';
     }
 
-    if (!bPrefixSign) {
-      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d-%d", nMinVal, nMaxVal);
-    } else {
+    if (bPrefixSign) {
       wsprintfA(szBuf, "+%d-%d", nMinVal, nMaxVal);
+    } else {
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d-%d", nMinVal, nMaxVal);
     }
 
     D2Lang::UTF8_ConvertToWideChar(wszRangeStr, szBuf, 0x20);
@@ -3146,10 +3146,10 @@ static void __stdcall SKILLDESC_FormatMinMaxRangeLabelsFirst(int32_t nMinVal, in
       wszRangeStr[iFill] = L'\0';
     }
 
-    if (!bPrefixSign) {
-      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d-%d", nMinVal, nMaxVal);
-    } else {
+    if (bPrefixSign) {
       wsprintfA(szBuf, "+%d-%d", nMinVal, nMaxVal);
+    } else {
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d-%d", nMinVal, nMaxVal);
     }
 
     D2Lang::UTF8_ConvertToWideChar(wszRangeStr, szBuf, 0x20);
@@ -3175,10 +3175,10 @@ static int __stdcall SKILLDESC_FormatDamageMinMax(int32_t nMinDmg, int32_t nMaxD
       wszMinMaxW[iFill] = L'\0';
     }
 
-    if (!bPrefixSign) {
-      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szMinMaxA, "%d-%d", nMinDmg, nMaxDmg);
-    } else {
+    if (bPrefixSign) {
       wsprintfA(szMinMaxA, "+%d-%d", nMinDmg, nMaxDmg);
+    } else {
+      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szMinMaxA, "%d-%d", nMinDmg, nMaxDmg);
     }
 
     D2Lang::UTF8_ConvertToWideChar(wszMinMaxW, szMinMaxA, 0x20);
@@ -5655,10 +5655,10 @@ static void __stdcall SKILLDESC_DescLine9_ElemDamage(D2UnitStrc * pUnit, uint16_
         return;
       }
     } else if (nMinFinal == iVar1) {
-      if (nMinFinal < 0) {
-        /* LPCSTR param_2 for wsprintfA */ wsprintfA(szFormattedA, "%d", nMinFinal);
-      } else {
+      if (nMinFinal >= 0) {
         wsprintfA(szFormattedA, "+%d", nMinFinal);
+      } else {
+        /* LPCSTR param_2 for wsprintfA */ wsprintfA(szFormattedA, "%d", nMinFinal);
       }
 
       goto append_damage_line;

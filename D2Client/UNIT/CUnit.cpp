@@ -1012,11 +1012,11 @@ void __fastcall UnitDoOverlay(D2UnitStrc * pUnit, eOverlayId eOverlay, uint32_t 
     if (!pUnit) {
       return;
     }
-    if ((int)nDuration <= 0) {
+    if ((int)nDuration > 0) {
+      Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay, 1, 0, nDuration, 0, 0, 0);
+    } else {
       nDuration = 0;
       Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay, 2, 0, nDuration, 0, 0, 0);
-    } else {
-      Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay, 1, 0, nDuration, 0, 0, 0);
     }
 
     switch (eOverlay) {

@@ -2516,14 +2516,14 @@ BOOL __fastcall InitPerspective(D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x687);
       exit(-1);
     }
-    if (!(gnD3DTextureCapFlags & gadwBitMasks[0])) {
-      pD2GFXRenderedDataStrc = pSettings;
-      D2GfxRendereInitFunctionsStrc = pHelpers;
-      DVar1 = DirectDrawCreate(&gsD3DAdapterGuid, &lpDD, nullptr);
-    } else {
+    if (gnD3DTextureCapFlags & gadwBitMasks[0]) {
       pD2GFXRenderedDataStrc = pSettings;
       D2GfxRendereInitFunctionsStrc = pHelpers;
       DVar1 = DirectDrawCreate(0, &lpDD, nullptr);
+    } else {
+      pD2GFXRenderedDataStrc = pSettings;
+      D2GfxRendereInitFunctionsStrc = pHelpers;
+      DVar1 = DirectDrawCreate(&gsD3DAdapterGuid, &lpDD, nullptr);
     }
     if (DVar1) {
       DIRECTD3D_LogError("DirectDrawCreate failed!", DVar1);
