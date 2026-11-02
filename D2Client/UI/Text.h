@@ -79,7 +79,7 @@ void __stdcall TEXT_FreeAllScreenMessages(struct D2ScreenMessageListStrc * pList
 void __fastcall TEXT_SetTextDisplayMode(int32_t nParam);
 void __fastcall TEXT_DrawTextBoxAtPosition(struct D2TextBoxStrc * pTextBox, int32_t nScreenX, int32_t nScreenY);
 void __stdcall TEXT_OnClickCloseNpcDialog(struct D2UIMouseMsgStrc * pMsg);
-void __fastcall TEXT_SetNpcMenuSelection(int32_t nParam);
+void __fastcall TEXT_SetNpcMenuSelection(struct D2UnitStrc * pUnit);
 void __stdcall TEXT_ClearNpcMenuSelection();
 struct ScreenMessage_t * __fastcall TEXT_AllocScreenMessage(uint16_t * * ppwszText);
 void __fastcall TEXT_InsertScreenMessage(uint16_t * * ppwszText);

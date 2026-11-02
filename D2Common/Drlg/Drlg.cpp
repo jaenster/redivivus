@@ -3209,15 +3209,15 @@ int32_t __fastcall PATH_FindPathTowardFallback(D2PathTypeArg * pPathTypeArg) {
     return nErrorLine;
 }
 
-void __fastcall DRLGGRID_OrFlagOnCellList(int32_t nGridPtr, int * pnParam, int32_t nFlag) {
-    int nCellY;
+void __fastcall DRLGGRID_OrFlagOnCellList(D2DrlgGridStrc * nGridPtr, int * pnParam, int32_t nFlag) {
+    int nCellX;
     while (pnParam) {
-      int nCellX;
+      int iVar1;
       nCellX = *pnParam;
-      nCellY = pnParam[1];
+      iVar1 = pnParam[1];
       pnParam = (int*)pnParam[4];
-      if (nCellX >= 0 && nCellX < *(int*)(nGridPtr + 8) && nCellY >= 0 && nCellY < *(int*)(nGridPtr + 0xc)) {
-        (*DrlgGrid::apFlagOperations[0])((int*)(*(int*)nGridPtr + (*(int*)(*(int*)(nGridPtr + 4) + nCellY * 4) + nCellX) * 4), nFlag);
+      if (nCellX >= 0 && nCellX < nGridPtr->nWidth && iVar1 >= 0 && iVar1 < nGridPtr->nHeight) {
+        (*DrlgGrid::apFlagOperations[0])((int*)(nGridPtr->pCellsFlags + nGridPtr->pCellsRowOffsets[iVar1] + nCellX), nFlag);
       }
     }
 }
@@ -4195,7 +4195,7 @@ void __fastcall DRLGOUTROOM_LinkOutdoorRoomExits(D2DrlgLevelStrc * pLevel) {
       BOOL bPathFound;
       bPathFound = DRLGOUTROOM_FindPathBetweenExits(pLevel, nIndex);
       if (bPathFound) {
-        DRLGGRID_OrFlagOnCellList((uintptr_t)&pWildData->sGridOutdoor, &(*pPathPtr)->nPosX, 0x80);
+        DRLGGRID_OrFlagOnCellList(&pWildData->sGridOutdoor, &(*pPathPtr)->nPosX, 0x80);
         DRLGOUTROOM_BuildVertexPathsWithJitter(pLevel, nIndex);
       }
 
@@ -4303,7 +4303,7 @@ static BOOL __stdcall DRLGOUTROOM_ValidatePathStep(int * pTargetCoords, int nX, 
 }
 
 // Core A* loop: expands nodes, computes f=g+h, uses 900-node pool.
-int * __stdcall DRLGOUTROOM_PathSearchStep(int * * ppNodeList, int32_t nMaxFCost, int32_t pLevelCtx, int * pnTargetPos) {
+int * __stdcall DRLGOUTROOM_PathSearchStep(int * * ppNodeList, int32_t nMaxFCost, D2DrlgLevelStrc * pLevelCtx, int * pnTargetPos) {
     char cDirHalfStep;
     int nMoveCost;
     int nFCost;
@@ -4326,7 +4326,7 @@ int * __stdcall DRLGOUTROOM_PathSearchStep(int * * ppNodeList, int32_t nMaxFCost
 
       nNextY = (int)(char)gaOutRoomPathDirectionDelta[*(uint8_t*)(pAdvancedNode + 7) + 0x10] + pAdvancedNode[4];
       nNextX = (int)(char)gaOutRoomPathDirectionDelta[*(uint8_t*)(pAdvancedNode + 7) + 0x14] + pAdvancedNode[3];
-      bStepValid2 = DRLGOUTROOM_ValidatePathStep(pnTargetPos, nNextX, nNextY, (int*)pLevelCtx, pAdvancedNode);
+      bStepValid2 = DRLGOUTROOM_ValidatePathStep(pnTargetPos, nNextX, nNextY, pLevelCtx, pAdvancedNode);
       if (bStepValid2) {
         if (pAdvancedNode[3] == nNextX || (nMoveCost = 3 , pAdvancedNode[4] == nNextY)) {
           nMoveCost = 2;
@@ -4493,7 +4493,7 @@ BOOL __fastcall DRLGOUTROOM_FindPathBetweenExits(D2DrlgLevelStrc * pLevel, int32
         pNodeIter++;
       }
 
-      pFoundNode = DRLGOUTROOM_PathSearchStep(&__frame0.pCurrentNode, nTargetGridYRaw, (int32_t)pLevel, aTargetPos);
+      pFoundNode = DRLGOUTROOM_PathSearchStep(&__frame0.pCurrentNode, nTargetGridYRaw, pLevel, aTargetPos);
       nTargetGridYRaw += 5;
       if (__frame0.aPathNodePool[9000] >= 900) {
         return 0;

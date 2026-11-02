@@ -100,7 +100,7 @@ void SetSelectedUnit_I(D2UnitStrc * pUnit) {
     if (uResult) {
       pLookupUnit = UI::Text::TEXT_GetOverheadSpeakerUnit();
       if (pLookupUnit == pUnit) {
-        UI::Text::TEXT_SetNpcMenuSelection((int32_t)pUnit);
+        UI::Text::TEXT_SetNpcMenuSelection(pUnit);
         return;
       }
     }
@@ -266,7 +266,7 @@ static BOOL SELECT_HandleMouseInput(int * pnMouseX, int * pnMouseY) {
       if (bScrollActive) {
         pUnit = UI::Text::TEXT_GetOverheadSpeakerUnit();
         if (!pUnit) {
-          UI::Text::TEXT_SetNpcMenuSelection(0);
+          UI::Text::TEXT_SetNpcMenuSelection(nullptr);
           return 1;
         }
       }

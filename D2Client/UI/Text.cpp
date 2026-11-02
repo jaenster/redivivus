@@ -506,9 +506,9 @@ void __stdcall TEXT_OnClickCloseNpcDialog(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
-void __fastcall TEXT_SetNpcMenuSelection(int32_t nParam) {
-    if (nParam) {
-      gnTextNpcMenuIndex = *(uint32_t*)(nParam + 0xc);
+void __fastcall TEXT_SetNpcMenuSelection(D2UnitStrc * pUnit) {
+    if (pUnit) {
+      gnTextNpcMenuIndex = pUnit->nUnitGUID;
       gbTextNpcMenuSelection = 1;
       return;
     }
