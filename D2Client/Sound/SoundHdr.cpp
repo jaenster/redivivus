@@ -587,7 +587,7 @@ int32_t __fastcall SOUNDHDR_RandomizeSoundFromGroup(int32_t nSoundId) {
     return nSoundId;
 }
 
-void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, uint32_t * pszOutPath) {
+void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, char * pszOutPath) {
     D2SoundsTxt* pSound;
     char* pScanDwordEnd;
     char* pszDst;
@@ -599,17 +599,12 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, uint32_t * pszOutPath)
       pSound = pTxtSounds + nSoundId;
     }
     if (nSoundId - 0xb76U <= 0x6ba) {
-      *pszOutPath = 0x41544144;
-      memcpy((char*)(pszOutPath + 1), "\\LOC", 4);
-      *(uint16_t*)(pszOutPath + 2) = 0x4c41;
-      *(uint8_t*)((int)pszOutPath + 10) = 0;
+      memcpy(pszOutPath, "DATA\\LOCAL", 0xb);
     } else {
-      *pszOutPath = 0x41544144;
-      memcpy((char*)(pszOutPath + 1), "\\GLO", 4);
-      memcpy((char*)(pszOutPath + 2), "BAL", 4);
+      memcpy(pszOutPath, "DATA\\GLOBAL", 0xc);
     }
     if (nSoundId - 0x1231U <= 0x29) {
-      pszDst = (char*)((int)pszOutPath - 1);
+      pszDst = pszOutPath - 1;
       do {
         pScanDwordEnd = pszDst;
         pszDst = pScanDwordEnd + 1;
@@ -617,7 +612,7 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, uint32_t * pszOutPath)
 
       memcpy(pScanDwordEnd + 1, "\\MUSIC\\", 8);
     } else {
-      pszDst = (char*)((int)pszOutPath - 1);
+      pszDst = pszOutPath - 1;
       do {
         pScanDwordEnd = pszDst;
         pszDst = pScanDwordEnd + 1;
@@ -626,7 +621,7 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, uint32_t * pszOutPath)
       memcpy(pScanDwordEnd + 1, "\\SFX\\", 6);
     }
 
-    pszDst = (char*)pszOutPath;
+    pszDst = pszOutPath;
     pszDst = pszDst + strlen(pszDst) + 1;
     D2SoundsTxt* pSoundScan = pSound;
     do {
@@ -635,7 +630,7 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, uint32_t * pszOutPath)
     } while (*pScanDwordEnd != '\0');
 
     D2SoundsTxt* pSoundCopy = pSound;
-    if (!(pszDst + (int)((int)pSoundScan + (-(int)(pSound->Filename + 1) - ((int)pszOutPath + 1))) < (char*)0x50)) {
+    if (!(pszDst + (int)((int)pSoundScan + (-(int)(pSound->Filename + 1) - (int)(pszOutPath + 1))) < (char*)0x50)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ab);
       exit(-1);
     }
@@ -649,7 +644,7 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, uint32_t * pszOutPath)
       } while (*pszDst != '\0');
 
       nFilenameLen = (int)(pScanDwordEnd + 1) - (int)pSound;
-      pszDst = (char*)((int)pszOutPath - 1);
+      pszDst = pszOutPath - 1;
       do {
         pScanDwordEnd = pszDst + 1;
         pszDst++;
@@ -755,7 +750,7 @@ void __fastcall SOUNDHDR_LoadSoundFile(int32_t nSoundId, int32_t bForceSync, int
       return;
     }
 
-    SOUNDHDR_BuildSoundPath(nSoundId, (uint32_t*)szPath);
+    SOUNDHDR_BuildSoundPath(nSoundId, szPath);
     int32_t nResult = Fog::Source::SFile::ARCHIVE_OpenD2FileWrap(szPath, &pMpqFile);
     if (!nResult) {
       pSound->bFileNotFound = 1;

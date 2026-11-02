@@ -100,7 +100,7 @@ void __fastcall SPRITECACHE_SetMaxSize(size_t nSize);
 void __stdcall SPRITECACHE_GetStats(size_t * pnSize, HANDLE * phHandle, ULONG_PTR * pnParam2, uint32_t * pnParam);
 void __stdcall SPRITECACHE_Lock();
 void __stdcall SPRITECACHE_Unlock();
-void __fastcall SPRITECACHE_TouchEntry(int32_t nParam);
+void __fastcall SPRITECACHE_TouchEntry(struct D2TileLibraryHeaderStrc * pTileLibrary);
 void __stdcall GFX_InitLRUCache(struct D2PoolManagerStrc * pMemory, struct D2PoolManagerStrc * pPoolManager);
 // Sprite-cache release callback: when gpfnSpriteCacheValidateCallback is set, calls it with the entry's descriptor (pHashEntry[8], halts at line 0xb5 if NULL), then unlinks the entry from gaGfxHashTable with GFX_UnlinkCacheEntry.
 // @provenance 1.14d asm 005fe170; formerly named SPRITECACHE_Validate.

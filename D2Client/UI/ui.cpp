@@ -6491,31 +6491,31 @@ int32_t __stdcall UI_BuildStatWindowDescriptions() {
     return wMonStatVal * nBlockRatio * 2 / (nMonIdx + wMonStatVal);
 }
 
-int __fastcall UI_AppendColorCodeToString(void * pWszString, void * pNextLineOut) {
-    *(uint32_t*)pNextLineOut = 0;
-    int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength((uint16_t*)pWszString);
-    short int wCurChar = *(short int*)pWszString;
+int __fastcall UI_AppendColorCodeToString(uint16_t * pWszString, uint16_t * * pNextLineOut) {
+    *pNextLineOut = 0;
+    int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pWszString);
+    uint16_t wCurChar = *pWszString;
     int nIdx = 0;
-    void* pCurChar = pWszString;
+    uint16_t* pCurChar = pWszString;
     while (true) {
-      if (!wCurChar) {
+      if (wCurChar == L'\0') {
         return 0;
       }
-      if (wCurChar == 10) {
+      if (wCurChar == L'\n') {
         break;
       }
 
-      wCurChar = *(short int*)((int)pCurChar + 2);
-      pCurChar = (void*)((int)pCurChar + 2);
+      wCurChar = pCurChar[1];
+      pCurChar++;
       nIdx++;
     }
 
-    *(uint16_t*)((int)pWszString + nIdx * 2) = 0;
+    pWszString[nIdx] = L'\0';
     if (nIdx >= nStrLen) {
       return 0;
     }
 
-    *(int*)pNextLineOut = (int)pCurChar + 2;
+    *pNextLineOut = pCurChar + 1;
     return 1;
 }
 

@@ -1571,21 +1571,21 @@ void __stdcall CELCMP_DrawCelFrame(D2GfxDataStrc * pGfxData, int32_t nDrawX, int
     exit(-1);
 }
 
-uint32_t __stdcall CELCMP_CopyCelDataToBuffer(int * pDC6, int32_t nDirection, int32_t nFrame, void * pDstBuffer) {
+uint32_t __stdcall CELCMP_CopyCelDataToBuffer(DC6 * pDC6, int32_t nDirection, int32_t nFrame, void * pDstBuffer) {
     uint32_t nDirFrameIndex;
-    if (*pDC6 != 6) {
+    if (pDC6->nVersion != 6) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a0);
       exit(-1);
     }
 
     int iVar1;
-    if (!(*(uint8_t*)(pDC6 + 1) & 4)) {
+    if (!(pDC6->nFlags & 4)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a1);
       exit(-1);
     }
 
-    nDirFrameIndex = CELCMP_GetDirectionFrameTableIndex(nDirection, pDC6[4]);
-    iVar1 = pDC6[nDirFrameIndex * pDC6[5] + nFrame + 6];
+    nDirFrameIndex = CELCMP_GetDirectionFrameTableIndex(nDirection, pDC6->nDirections);
+    iVar1 = *(int*)(pDC6[1].nTerm + (nDirFrameIndex * pDC6->nFrames + nFrame) * 4 - 0xc);
     memcpy(pDstBuffer, (void*)(iVar1 + 0x20), *(int*)(iVar1 + 8) * *(int*)(iVar1 + 4) * 3);
     return 1;
 }
@@ -1845,14 +1845,14 @@ void __stdcall DeleteCellFile(DC6 * pDC6) {
     }
 }
 
-uint32_t __stdcall CELCMP_GetDC6BlockPixelData(int32_t nParam) {
-    if (!nParam) {
+int __stdcall CELCMP_GetDC6BlockPixelData(DC6Block * pDC6Block) {
+    if (!pDC6Block) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x62a);
       exit(-1);
     }
 
-    return *(uint32_t*)(nParam + 0x18);
-    return *(uint32_t*)(nParam + 0x18);
+    return pDC6Block->nNextBlock;
+    return pDC6Block->nNextBlock;
 }
 
 uint32_t __stdcall CELCMP_RoundUpToMultiple(uint32_t nParam1, uint32_t nParam2) {

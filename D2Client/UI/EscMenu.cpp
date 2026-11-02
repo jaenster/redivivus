@@ -856,10 +856,9 @@ void __stdcall ESCMENU_Initialize() {
 }
 
 // Frees all DC6 images loaded for an escape menu table. Iterates through menu items and calls DC6_FreeAndDelete on main image and all sub-images, zeroing the pointers after freeing.
-void __fastcall ESCMENU_FreeLoadedImages(int * pnItemCount, void * pMenuTable) {
+void __fastcall ESCMENU_FreeLoadedImages(int * pnItemCount, D2EscMenuItemStrc * pMenuTable) {
     uint32_t nSubImageIndex;
-    uint32_t* ppSubImage;
-    uint32_t* pItemData;
+    DC6** ppSubImage;
     int nItemIndex;
     uint32_t nSubImageCount;
     if (!pnItemCount) {
@@ -872,34 +871,32 @@ void __fastcall ESCMENU_FreeLoadedImages(int * pnItemCount, void * pMenuTable) {
         return;
       }
 
-      pItemData = (uint32_t*)((int)pMenuTable + 0x120);
       do {
         nSubImageIndex = 0;
-        if ((DC6*)pItemData[0x107]) {
-          Core::Archive::DC6_FreeAndDelete((DC6*)pItemData[0x107]);
-          pItemData[0x107] = 0;
+        if (pMenuTable[nItemIndex].pDC6Main) {
+          Core::Archive::DC6_FreeAndDelete(pMenuTable[nItemIndex].pDC6Main);
+          *(int*)&pMenuTable[nItemIndex].pDC6Main = 0;
         }
-        if (pItemData[-0x48] == 1) {
-          nSubImageCount = *pItemData;
+        if (pMenuTable[nItemIndex].nMenuItemType == 1) {
+          nSubImageCount = pMenuTable[nItemIndex].nSubImageCount;
           if (!nSubImageCount || nSubImageCount > 4) {
             ESCMENU_FreeLoadedImages_HaltTail(0x565);
           }
           if (nSubImageCount) {
-            ppSubImage = pItemData + 0x108;
+            ppSubImage = pMenuTable[nItemIndex].pDC6SubImages;
             do {
-              if ((DC6*)*ppSubImage) {
-                Core::Archive::DC6_FreeAndDelete((DC6*)*ppSubImage);
+              if (*ppSubImage) {
+                Core::Archive::DC6_FreeAndDelete(*ppSubImage);
                 *ppSubImage = 0;
               }
 
               nSubImageIndex++;
               ppSubImage++;
-            } while (nSubImageIndex < *pItemData);
+            } while (nSubImageIndex < (uint32_t)pMenuTable[nItemIndex].nSubImageCount);
           }
         }
 
         nItemIndex++;
-        pItemData += 0x154;
       } while (nItemIndex < *pnItemCount);
 
       return;

@@ -170,27 +170,26 @@ void __stdcall SPRITECACHE_Unlock() {
     LRUCache::LRUCACHE_FreeAll(&gSpriteCacheLru);
 }
 
-void __fastcall SPRITECACHE_TouchEntry(int32_t nParam) {
-    D2LRUCacheNodeStrc* pMemory;
-    int nOffset = 0;
+void __fastcall SPRITECACHE_TouchEntry(D2TileLibraryHeaderStrc * pTileLibrary) {
+    uint8_t* pBVar1;
     int nEntryIdx = 0;
-    if (*(int*)(nParam + 0x10c) <= 0) {
+    if (pTileLibrary->nTiles <= 0) {
       return;
     }
 
     do {
-      int nEntryBase;
-      pMemory = *(D2LRUCacheNodeStrc**)(*(int*)(nParam + 0x110) + 0x5c + nOffset);
-      nEntryBase = *(int*)(nParam + 0x110) + nOffset;
-      if (pMemory) {
-        LRUCache::LRUCACHE_FreeEntry(&gSpriteCacheLru, pMemory);
-        *(uint32_t*)(nEntryBase + 0x54) = 0;
-        *(uint32_t*)(nEntryBase + 0x5c) = 0;
+      D2TileLibraryEntryStrc* pDVar2;
+      pDVar2 = pTileLibrary->pTiles;
+      if (pDVar2[nEntryIdx].pLruNode) {
+        LRUCache::LRUCACHE_FreeEntry(&gSpriteCacheLru, pDVar2[nEntryIdx].pLruNode);
+        pBVar1 = (uint8_t*)(unsigned char*)&pDVar2[nEntryIdx].pSubTiles;
+        memset(pBVar1, 0, 4 * sizeof(pBVar1[0]));
+        pBVar1 = (uint8_t*)(unsigned char*)&pDVar2[nEntryIdx].pLruNode;
+        memset(pBVar1, 0, 4 * sizeof(pBVar1[0]));
       }
 
       nEntryIdx++;
-      nOffset += 0x60;
-    } while (nEntryIdx < *(int*)(nParam + 0x10c));
+    } while (nEntryIdx < pTileLibrary->nTiles);
 }
 
 void __stdcall GFX_InitLRUCache(D2PoolManagerStrc * pMemory, D2PoolManagerStrc * pPoolManager) {

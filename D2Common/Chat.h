@@ -27,7 +27,7 @@ struct D2HoverTextStrc * __stdcall Alloc(struct D2PoolManagerStrc * pMemory, cha
 void __stdcall Free(struct D2PoolManagerStrc * pMemory, struct D2HoverTextStrc * pHoverText);
 uint32_t __stdcall CHAT_GetChatField(uint32_t * pdwParam);
 int32_t __stdcall GetExpireFrame(struct D2HoverTextStrc * pHover);
-void __stdcall TEXT_CopyHoverMessageString(struct D2HoverTextStrc * pHover, int32_t nParam);
+void __stdcall TEXT_CopyHoverMessageString(struct D2HoverTextStrc * pHover, char * szMessageOut);
 void * __stdcall HOVERTEXT_GetTextLineList(struct D2HoverTextStrc * pHover);
 void __stdcall HOVERTEXT_SetTextLineList(struct D2HoverTextStrc * pHoverText, void * pTextLineList);
 uint8_t __stdcall GetLanguageCode(struct D2HoverTextStrc * pHoverText);

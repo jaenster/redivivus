@@ -299,7 +299,7 @@ void __fastcall MonsterMessage(int32_t nParam, struct D2UnitStrc * pUnit, struct
 uint32_t __fastcall NPCMENU_ParseSpeechData(int * pnParam, uint8_t * pParam, int * pnSpeechResult);
 // Client-side initialization of a mercenary unit from a network packet. Sets ISMERC|TARGETABLE flags, reads the name/seed from the packet, rolls stats via RollMercStats using the current player's level and difficulty, then assigns skills (id, level, mode) from the HirelingTxt table, sets the localized name, and recalculates equipped item stats.
 void __fastcall MERC_InitializeFromPacket(struct D2UnitStrc * pUnit, struct D2MercInitArgStrc * pMercInit);
-int __fastcall MONSTER_CanBeConverted(void * pUnit);
+int __fastcall MONSTER_CanBeConverted(struct D2UnitStrc * pUnit);
 void __fastcall NPCMENU_HandleQuestUpdate(int32_t nParam);
 // Client-side monster animation tick / end-of-cycle event dispatcher. Fires MonsterMessage(9) when SplEndDeath is set and both target coords are zero at the end of the frame cycle. Then switches on mode (nParam+4): advances the frame, clears collision/size, sets a path-point flag, or resets size to 0x100 depending on mode 0-3.
 uint32_t __fastcall CLIENT_UpdateMonsterAnimByMode(struct D2DynamicPathStrc * pDynamicPath, int32_t nParam);

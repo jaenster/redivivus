@@ -64,12 +64,12 @@ uint32_t __fastcall SOUND_FileExists(char * szFileName) {
     return 1;
 }
 
-void SOUND_LocalizeSoundPath(char * szFormat, uint32_t * pszOutPath, char * pTmp) {
+void SOUND_LocalizeSoundPath(char * szFormat, char * pszOutPath, char * pTmp) {
     D2MPQFileStrc* pFile;
     char szLangAbbrev[4];
     D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbrev, 0);
-    sprintf((char*)pszOutPath, szFormat, "DATA\\LOCAL", szLangAbbrev, pTmp);
-    int bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, (char*)pszOutPath, 0, (void**)&pFile);
+    sprintf(pszOutPath, szFormat, "DATA\\LOCAL", szLangAbbrev, pTmp);
+    int bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile);
     if (bOpened) {
       Storm::Source::SFile::SFileCloseFile(pFile);
       return;
@@ -77,15 +77,15 @@ void SOUND_LocalizeSoundPath(char * szFormat, uint32_t * pszOutPath, char * pTmp
 
     uint32_t dwLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
     if (dwLanguageCode) {
-      sprintf((char*)pszOutPath, szFormat, "DATA\\LOCAL", "ENG", pTmp);
-      bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, (char*)pszOutPath, 0, (void**)&pFile);
+      sprintf(pszOutPath, szFormat, "DATA\\LOCAL", "ENG", pTmp);
+      bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile);
       if (bOpened) {
         Storm::Source::SFile::SFileCloseFile(pFile);
         return;
       }
     } else {
-      sprintf((char*)pszOutPath, szFormat, "DATA\\LOCAL", "CHI", pTmp);
-      bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, (char*)pszOutPath, 0, (void**)&pFile);
+      sprintf(pszOutPath, szFormat, "DATA\\LOCAL", "CHI", pTmp);
+      bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile);
       if (bOpened) {
         Storm::Source::SFile::SFileCloseFile(pFile);
       }

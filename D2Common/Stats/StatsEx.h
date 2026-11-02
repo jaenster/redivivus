@@ -84,7 +84,7 @@ int32_t __stdcall STATLIST_GetStatByState(struct D2StatListExStrc * pStatList, e
 void __stdcall STATLIST_SetUnitState(struct D2UnitStrc * pUnit, eD2States eState, int32_t bSet);
 eD2States __stdcall GetStateBitFlag(struct D2UnitStrc * pUnit, eD2States eState);
 int * __stdcall GetStateFlags(struct D2UnitStrc * pUnit);
-int32_t __stdcall STATLIST_GetUnitGfxFlags(struct D2UnitStrc * pUnit);
+int * __stdcall STATLIST_GetUnitGfxFlags(struct D2UnitStrc * pUnit);
 int32_t __stdcall STATLIST_CopyStatsToBuffer(struct D2UnitStrc * pUnit, struct D2StatStrc * pStatBuf, int32_t nParam);
 int32_t __stdcall CopyStatsToBuffer(struct D2StatListExStrc * pStatListEx, struct D2StatStrc * pOutput, int32_t nOutputSize);
 void __stdcall STATLIST_SetExpireFunction(struct D2StatListExStrc * pStatsEx, PFN_StatExpireCallback pParam);

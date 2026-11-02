@@ -5349,7 +5349,7 @@ void __fastcall TEXT_DrawMonsterHoverText(D2UnitStrc * pUnit) {
     ptScreenPos2.x += nXOffset;
     draw_if_on_screen:
     if (ptScreenPos2.y > 0 && ptScreenPos2.y < ScreenSizeY && ptScreenPos2.x > -100 && ptScreenPos2.x < ScreenSizeX + 100) {
-      D2Common::Chat::TEXT_CopyHoverMessageString(pHover, (int32_t)szMessage);
+      D2Common::Chat::TEXT_CopyHoverMessageString(pHover, szMessage);
       if (szMessage[0] == -1 && szMessage[1] == -1 && ((nStringId = atoi(szMessage + 2) , nStringId >= 0x42d && nStringId <= 0x50f) || nStringId >= 0x5587 && nStringId <= 0x5615 || nStringId == 0x2aa4 || nStringId == 0x5586)) {
         wszString = D2Lang::StrTable::strtable::GetLocaleString((uint16_t)nStringId);
         if (wszString) {
@@ -5423,7 +5423,7 @@ void __fastcall TEXT_DrawObjectHoverText(D2UnitStrc * pUnit) {
     ptScreenPos.x += nXOffset;
     draw_if_on_screen:
     if (ptScreenPos.y > 0 && ptScreenPos.y < ScreenSizeY && ptScreenPos.x > -100 && ptScreenPos.x < ScreenSizeX + 100) {
-      D2Common::Chat::TEXT_CopyHoverMessageString(pHoverText, (int32_t)szMessage);
+      D2Common::Chat::TEXT_CopyHoverMessageString(pHoverText, szMessage);
       nStringId = atoi(szMessage);
       if (nStringId - 1U <= 0xfffd) {
         wszString = D2Lang::StrTable::strtable::GetLocaleString((uint16_t)nStringId);

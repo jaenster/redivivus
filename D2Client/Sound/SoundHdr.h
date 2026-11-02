@@ -42,7 +42,7 @@ BOOL __stdcall SOUNDHDR_EvictLeastRecentlyUsed(int32_t nBytesNeeded, int32_t bMu
 float __fastcall SOUNDHDR_GetFalloffMin(int32_t nSoundId);
 float __fastcall SOUNDHDR_GetFalloffMax(int32_t nSoundId);
 int32_t __fastcall SOUNDHDR_RandomizeSoundFromGroup(int32_t nSoundId);
-void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, uint32_t * pszOutPath);
+void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, char * pszOutPath);
 void __fastcall SOUNDHDR_UpdateLRUTimestamp(int32_t nSoundId);
 // @sourcefile .\Sound\SoundHdr.cpp
 void __stdcall SOUNDHDR_Shutdown();

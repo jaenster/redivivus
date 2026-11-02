@@ -71,10 +71,10 @@ int32_t __stdcall GetExpireFrame(D2HoverTextStrc * pHover) {
     return pHover->nExpireFrame;
 }
 
-void __stdcall TEXT_CopyHoverMessageString(D2HoverTextStrc * pHover, int32_t nParam) {
+void __stdcall TEXT_CopyHoverMessageString(D2HoverTextStrc * pHover, char * szMessageOut) {
     char cChar;
     char* pcSrc = pHover->szMessage;
-    int nDstOffset = nParam - (int)pcSrc;
+    int nDstOffset = (int)szMessageOut - (int)pcSrc;
     do {
       cChar = *pcSrc;
       pcSrc[nDstOffset] = cChar;

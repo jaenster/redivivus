@@ -2407,8 +2407,8 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
       }
     }
 
-    int bInventoryFitOk = 0;
-    BOOL nCheckVal = D2Common::INVENTORY::Inventory::CreateCopyOfInventoryForTrading(pGame->pMemoryPool, pUnit2, pUnit, (bool*)&bInventoryFitOk);
+    BOOL bInventoryFitOk = 0;
+    BOOL nCheckVal = D2Common::INVENTORY::Inventory::CreateCopyOfInventoryForTrading(pGame->pMemoryPool, pUnit2, pUnit, &bInventoryFitOk);
     if (!nCheckVal) {
       pPlayerData1->pTradeCopyInventory->nTradeStatus = 0;
       pPlayerData2->pTradeCopyInventory->nTradeStatus = 0;

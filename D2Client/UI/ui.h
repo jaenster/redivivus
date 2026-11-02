@@ -229,7 +229,7 @@ void __fastcall UI_DrawTextCentered(int32_t nPositionXStart, int32_t nPositionY,
 // Retired notes from 'UI_FormatStatTooltip':
 int32_t __stdcall UI_GetStatValueForDisplay(int32_t nUnit);
 int32_t __stdcall UI_BuildStatWindowDescriptions();
-int __fastcall UI_AppendColorCodeToString(void * pWszString, void * pNextLineOut);
+int __fastcall UI_AppendColorCodeToString(uint16_t * pWszString, uint16_t * * pNextLineOut);
 void __stdcall INPUT_StatScreenMouseDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_StatScreenMouseUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall UI_ClearGoldStashMode();

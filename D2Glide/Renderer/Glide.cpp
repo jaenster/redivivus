@@ -969,7 +969,7 @@ static int32_t __stdcall RENDERER_GLIDE_UploadTextureToCache(GlideTexInfoStrc * 
       exit(-1);
     }
 
-    FxU32 nTexStartAddress = D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData((int32_t)nParam);
+    FxU32 nTexStartAddress = D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDC6Block);
     int32_t nTMUParamSaved = nMode;
     if (nMode == 4) {
       nMode = 1;

@@ -235,7 +235,7 @@ void __fastcall SOUND_ToggleSoundMixerBinary(struct D2EscMenuItemStrc * pItem, s
 BOOL __stdcall SOUND_IsEaxAvailable_ForEaxItem();
 void __fastcall SOUND_CycleSoundMixerMode(struct D2EscMenuItemStrc * pItem, struct D2UIMouseMsgStrc * pMsg);
 uint32_t __fastcall SOUND_FileExists(char * szFileName);
-void SOUND_LocalizeSoundPath(char * szFormat, uint32_t * pszOutPath, char * pTmp);
+void SOUND_LocalizeSoundPath(char * szFormat, char * pszOutPath, char * pTmp);
 float __stdcall SOUND_CalculateAngle1(float fParam1, float fParam2);
 float __stdcall SOUND_CalculateAngle2(float fParam1, float fParam2);
 float __stdcall SOUND_CalculatePanning(float fParam1, float fParam2, float fParam3);

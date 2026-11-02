@@ -49,7 +49,7 @@ bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pnParam);
 // Provenance: asm 00404f20..00404f3f; unreferenced in 1.14d (EnumerateAndDumpAllFunctions inlines the same chain at 00402f1f).
 bool __stdcall DEBUG_EnumerateModules(int * pModuleList);
 void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, int32_t pOptHeader);
-void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, int32_t pOptHeader);
+void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, IMAGE_OPTIONAL_HEADER32 * pOptHeader);
 // Unwinds stack frames for crash dumps. Walks EBP chain up to 128 frames, validates stack pointers, skips first N frames. Captures EIP, ESP, EBP for each frame. Handles current thread or remote thread via OpenThread/SuspendThread.
 int __thiscall DEBUG_UnwindStackFrames(CONTEXT * pContext, DWORD dwThreadId, struct D2CrashFrameStrc * pFrameArray, uint32_t nSkipFrames);
 bool __stdcall DEBUG_FormatAddressInfo(uint32_t nAddress, char * pOutput);

@@ -131,7 +131,7 @@ D2TileLibraryHeaderStrc * __stdcall Alloc(D2TileLibraryHashStrc * * ppHash, char
       D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, szFilename, &pFile, 0);
       D2FILE_ReadFile(nullptr, pFile, pTileBuffer, nFileSize);
       D2FILE_CloseFile(nullptr, pFile);
-      Tilecmp::TILECMP_FixupMinimalPointers(pTileBuffer, (int**)&pTileData, szFilename);
+      Tilecmp::TILECMP_FixupMinimalPointers(pTileBuffer, &pTileData, szFilename);
       pNewHash = Tilecmp::TILECMP_RegisterTilesForLookup(pTileData);
       pExistingNode = D2_NEW_AT(D2TileProjectStrc, ".\\SRC\\TileProjects.cpp", 0x7b);
       if (!pExistingNode) {

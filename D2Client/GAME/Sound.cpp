@@ -699,7 +699,7 @@ D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelS
     if (!pSoundTxt->Stream) {
       nResult = D2Sound::Src::D2SoundSmp::SOUNDSMP_Play(pPlayingChannel->pSoundSmp);
     } else {
-      D2Client::Sound::SoundHdr::SOUNDHDR_BuildSoundPath(pSoundDesc->nSoundId, (uint32_t*)szSoundPath);
+      D2Client::Sound::SoundHdr::SOUNDHDR_BuildSoundPath(pSoundDesc->nSoundId, szSoundPath);
       nResult = D2Sound::Src::D2SoundSmp::SOUNDSMP_OpenAndStreamFile((int**)pPlayingChannel->pSoundSmp, szSoundPath, pSoundDescBackup->nParam, (uint32_t)pSoundTxt->Loop);
     }
     if (!nResult) {

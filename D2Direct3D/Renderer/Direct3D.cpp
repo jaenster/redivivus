@@ -2672,7 +2672,7 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
       exit(-1);
     }
 
-    int pbSrcPixel = D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData((int32_t)nParam);
+    int pbSrcPixel = D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDC6Block);
     int nMipIdx = nMode;
     if (nMode == 4) {
       nMipIdx = 1;

@@ -2922,31 +2922,28 @@ void __fastcall MERC_InitializeFromPacket(D2UnitStrc * pUnit, D2MercInitArgStrc 
     ITEM_RecalcAllEquippedItems_ECX(pUnit);
 }
 
-int __fastcall MONSTER_CanBeConverted(void * pUnit) {
-    if (!pUnit) {
-      return 0;
-    }
-    if (*(int*)pUnit != 1) {
+int __fastcall MONSTER_CanBeConverted(D2UnitStrc * pUnit) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
-    BOOL bCanSwitch = D2Common::Units::CanSwitchAI(*(int32_t*)((int)pUnit + 4));
+    BOOL bCanSwitch = D2Common::Units::CanSwitchAI(pUnit->nClassId);
     if (!bCanSwitch) {
       return 0;
     }
-    if (*(int*)pUnit != 1) {
+    if (pUnit->eUnitType != UNIT_MONSTER) {
       return 1;
     }
 
-    bCanSwitch = MonUnique::CheckMonTypeForMonster((D2UnitStrc*)pUnit, 8);
+    bCanSwitch = MonUnique::CheckMonTypeForMonster(pUnit, 8);
     if (bCanSwitch) {
       return 0;
     }
-    if (*(int*)pUnit != 1) {
+    if (pUnit->eUnitType != UNIT_MONSTER) {
       return 1;
     }
 
-    bCanSwitch = MonUnique::CheckMonTypeForMonster((D2UnitStrc*)pUnit, 2);
+    bCanSwitch = MonUnique::CheckMonTypeForMonster(pUnit, 2);
     if (!bCanSwitch) {
       return 1;
     }

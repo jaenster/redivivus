@@ -505,13 +505,13 @@ void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA,
     *pnSize = nSize;
 }
 
-void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, int32_t pOptHeader) {
-    if (*(uint32_t*)(pOptHeader + 0x5c) <= 6) {
+void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, IMAGE_OPTIONAL_HEADER32 * pOptHeader) {
+    if (pOptHeader->NumberOfRvaAndSizes <= 6) {
       return;
     }
 
-    uint32_t nSize = *(uint32_t*)(pOptHeader + 0x94);
-    *pnRVA = *(uint32_t*)(pOptHeader + 0x90);
+    uint32_t nSize = pOptHeader->DataDirectory[6].Size;
+    *pnRVA = pOptHeader->DataDirectory[6].VirtualAddress;
     *pnSize = nSize;
 }
 

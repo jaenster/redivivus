@@ -124,7 +124,7 @@ void __stdcall ESCMENU_LoadLocalizedImages_HaltTail(int nLine);
 // Initializes escape menu system. Loads all DC6 images for 5 menu tables (main, options, help, and two save/exit variants for classic vs expansion). Loads widget decorations (OptBar progress bar, OptBarC colored bar, OptSkull slider marker). Measures rotating star cursor icon to determine maximum frame width for centering calculations. Sets gpEscMenuItemCount and gpEscMenuCurrentTable to main menu.
 void __stdcall ESCMENU_Initialize();
 // Frees all DC6 images loaded for an escape menu table. Iterates through menu items and calls DC6_FreeAndDelete on main image and all sub-images, zeroing the pointers after freeing.
-void __fastcall ESCMENU_FreeLoadedImages(int * pnItemCount, void * pMenuTable);
+void __fastcall ESCMENU_FreeLoadedImages(int * pnItemCount, struct D2EscMenuItemStrc * pMenuTable);
 // Shared fatal tail of ESCMENU_FreeLoadedImages: every failing check pushes its source line and enters here; reports ERROR_UnrecoverableInternalError_Halt("", ip, nLine) and exits.
 // Provenance: 1.14d asm 0047df15 (entered by fall-through from the first check and by JMP from 0047df38,0047dfc2).
 void __stdcall ESCMENU_FreeLoadedImages_HaltTail(int nLine);

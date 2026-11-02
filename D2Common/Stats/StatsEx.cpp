@@ -1027,18 +1027,18 @@ int * __stdcall GetStateFlags(D2UnitStrc * pUnit) {
     return pStatsEx->pStateFlags;
 }
 
-int32_t __stdcall STATLIST_GetUnitGfxFlags(D2UnitStrc * pUnit) {
+int * __stdcall STATLIST_GetUnitGfxFlags(D2UnitStrc * pUnit) {
     if (!pUnit) {
-      return 0;
+      return nullptr;
     }
 
     D2StatListExStrc* pStatsEx = pUnit->pStatsEx;
     if (!(pStatsEx && pStatsEx->sStatList.nFlags & 0x80000000U)) {
-      return 0;
+      return nullptr;
     }
 
     int nStatesSize = sgptDataTable->nTxtStatesSize + 0x1f;
-    return (int32_t)(pStatsEx->pStateFlags + nStatesSize / 32);
+    return pStatsEx->pStateFlags + nStatesSize / 32;
 }
 
 int32_t __stdcall STATLIST_CopyStatsToBuffer(D2UnitStrc * pUnit, D2StatStrc * pStatBuf, int32_t nParam) {

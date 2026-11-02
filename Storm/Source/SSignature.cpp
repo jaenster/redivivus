@@ -119,7 +119,7 @@ void __fastcall SSIG_FreeRSAPair(BigData * * pRSAPair) {
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SSIG_SignData. Storm export (PPC vector 100cdff4 -> 100a3570). Basis: PPC reads r3..r10 = 8 args == 8 params here (no other SSignature function takes 8). Callee set: PPC {Sha1::Initialize, Sha1::Append, Sha1::Finalize, BlockMoveData, SBigNew, Crypt::RSA::Prepare, Crypt::RSA::Process, SBigDel} == 1.14d {SSIG_HashData (= Init/Append/Finalize factored out), STORM_Memcpy, SSIG_InitRSAPair, CryptRSA_Prepare, CryptRSA_Process, SSIG_FreeRSAPair}. Both search for the "SIGN" magic 0x5349474e in the buffer first.
 // [override: replace]
-int __fastcall SSignatureGenerate(int32_t pData, uint32_t * pnDataLen, void * pModulusBytes, int32_t nKeySize, void * pPrivateExponent, uint32_t nPrivateExponentLen, void * pPublicExponent, uint32_t nPublicExponentLen) {
+int __fastcall SSignatureGenerate(uint8_t * pData, uint32_t * pnDataLen, void * pModulusBytes, int32_t nKeySize, void * pPrivateExponent, uint32_t nPrivateExponentLen, void * pPublicExponent, uint32_t nPublicExponentLen) {
     // Hand-supplied body. Ghidra address 0041d590.
     //
     // Same cause as SSignatureVerifyStream_Finish: three _alloca regions
@@ -160,7 +160,7 @@ int __fastcall SSignatureGenerate(int32_t pData, uint32_t * pnDataLen, void * pM
     uint8_t* pHash = (uint8_t*)__builtin_alloca(nKeySize);       // 0041d5c0-0041d5c7
     SSystem::SMemFill(pHash, nKeySize, 0xbb);              // 0041d5c9-0041d5d0
     pHash[nKeySize - 1] = 0x0b;                                  // 0041d5dc
-    SSIG_HashData((uint32_t)nMarkerOffset, pDataBytes, (int32_t)pHash); // 0041d5d5-0041d5e1
+    SSIG_HashData((uint32_t)nMarkerOffset, pDataBytes, pHash); // 0041d5d5-0041d5e1
 
     uint8_t* pSig1 = (uint8_t*)__builtin_alloca(nKeySize);       // 0041d5e6-0041d5ed
     SSystem::SMemCopy(pSig1, pHash, nKeySize);               // 0041d5ef-0041d5f2

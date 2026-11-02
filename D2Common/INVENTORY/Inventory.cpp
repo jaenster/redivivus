@@ -4885,7 +4885,7 @@ static BOOL __stdcall INVENTORY_CanTransferMercItems(D2UnitStrc * pUnit, D2Inven
 
 // Determines whether two units can complete a merc-item trade by making temporary inventory copies. Allocates two scratch inventories from pMemory, copies each unit's inventory into them, then calls INVENTORY_CanTransferMercItems in both directions to find which unit is the buyer. Sets *pbMercIsBuyer accordingly (false = pUnit2 buys, true = pUnit buys). Frees both scratch inventories before returning. Returns 1 if a valid transfer direction was found, 0 otherwise.
 // @sourcefile .\INVENTORY\Inventory.cpp
-BOOL __stdcall CreateCopyOfInventoryForTrading(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, bool * pbMercIsBuyer) {
+BOOL __stdcall CreateCopyOfInventoryForTrading(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, BOOL * pbMercIsBuyer) {
     bool _bSuccess;
     bool bSuccess;
     D2InventoryStrc* pInventory2;
@@ -4920,19 +4920,13 @@ BOOL __stdcall CreateCopyOfInventoryForTrading(D2PoolManagerStrc * pMemory, D2Un
           bOpResult = INVENTORY_CanTransferMercItems(pUnit2, pInventory, pUnit);
           if (!bOpResult) {
             if (pbMercIsBuyer) {
-              pbMercIsBuyer[0] = false;
-              pbMercIsBuyer[1] = false;
-              pbMercIsBuyer[2] = false;
-              pbMercIsBuyer[3] = false;
+              *pbMercIsBuyer = 0;
             }
           } else {
             bOpResult = INVENTORY_CanTransferMercItems(pUnit, pInventory2, pUnit2);
             if (!bOpResult) {
               if (pbMercIsBuyer) {
-                pbMercIsBuyer[0] = true;
-                pbMercIsBuyer[1] = false;
-                pbMercIsBuyer[2] = false;
-                pbMercIsBuyer[3] = false;
+                *pbMercIsBuyer = 1;
               }
             } else {
               _bSuccess = 1;

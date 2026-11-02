@@ -54,7 +54,7 @@ eD2States __stdcall UNIT_GetUnitState(D2UnitStrc * pUnit, eD2States eState) {
 }
 
 void __stdcall D2StatesTogglegfx(D2UnitStrc * pUnit, uint32_t nStateId, int32_t bSet) {
-    int32_t pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
+    int* pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
     if (!(pGfxFlags && (int)nStateId >= 0 && (int)nStateId < sgptDataTable->nTxtStatesSize)) {
       return;
     }
@@ -75,7 +75,7 @@ uint32_t __stdcall GetStateGfxFlag(D2UnitStrc * pUnit, eD2States eState) {
       return 0;
     }
 
-    int32_t nStateFlagsPtr = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
+    int* nStateFlagsPtr = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
     if (nStateFlagsPtr) {
       return *(uint32_t*)(nStateFlagsPtr + ((int)eState >> 5) * 4) & gadwBitMasks[eState & STATE_venomclaws];
     }
@@ -84,7 +84,7 @@ uint32_t __stdcall GetStateGfxFlag(D2UnitStrc * pUnit, eD2States eState) {
 }
 
 void __stdcall STATES_ClearGfxFlags(D2UnitStrc * pUnit) {
-    void* pGfxFlags = (void*)Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
+    int* pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
     if (!pGfxFlags) {
       return;
     }
@@ -94,7 +94,8 @@ void __stdcall STATES_ClearGfxFlags(D2UnitStrc * pUnit) {
 }
 
 BOOL __stdcall STATES_HasAnyGfxFlag(D2UnitStrc * pUnit) {
-    int32_t pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
+    int i;
+    int32_t pGfxFlags = (int32_t)Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
     if (!pGfxFlags) {
       return 0;
     }
@@ -117,15 +118,14 @@ BOOL __stdcall STATES_HasAnyGfxFlag(D2UnitStrc * pUnit) {
     return 0;
 }
 
-int32_t __stdcall STATES_AssertGetGfxFlags(D2UnitStrc * pUnit) {
-    int32_t nLine;
+int * __stdcall STATES_AssertGetGfxFlags(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x99);
       exit(-1);
     }
 
-    nLine = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
-    return nLine;
+    int* piVar1 = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
+    return piVar1;
 }
 
 // Splits a unit's active state bitmask into server-side and GFX-side halves based on context. Uses pSingleStateDataTbl[0xd] (player) or [0xe] (non-player) when nParam==0, and [0xf] when nParam!=0, masking the state flags array so only context-relevant states remain in the server copy while visual-only states are ORed into the GFX flags. Calls ROOM_LinkUnitToUpdateList after filtering (unless non-player with nParam==0).
@@ -134,7 +134,7 @@ void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t nParam) 
     int j;
     int nGfxOffset;
     uint32_t* pGfxWord;
-    int32_t pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
+    int* pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
     uint32_t* pStateFlags = (uint32_t*)Stats::StatsEx::GetStateFlags(pUnit);
     if (!(pGfxFlags && pStateFlags)) {
       return;
@@ -226,7 +226,7 @@ static BOOL STATES_HasMatchingStateFlag(D2UnitStrc * pUnit, D2StatesDataTbls * p
 void __stdcall STATES_MoveToGfxFlags(D2UnitStrc * pUnit, uint32_t * pMaskWords) {
     int nTxtStatesSize;
     uint32_t* pGfxWord;
-    int32_t pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
+    int* pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
     int* nStateOffset = Stats::StatsEx::GetStateFlags(pUnit);
     if (!(pGfxFlags && nStateOffset)) {
       return;

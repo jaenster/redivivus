@@ -46,7 +46,7 @@ void __stdcall CELCMP_FixupPointersAndPrepare(struct DC6 * pDC6, struct DC6 * * 
 void __stdcall CELCMP_FreeCelFileMemory(void * pCelFile);
 void __stdcall CELCMP_InvokeFormatSpecificCleanup(int32_t nParam, BYTE * pPaletteRemap);
 void __stdcall CELCMP_DrawCelFrame(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nDstHeight, uint32_t nDstPitch, BYTE * pRenderArg1, BYTE * pRenderArg2, BYTE * pPalette);
-uint32_t __stdcall CELCMP_CopyCelDataToBuffer(int * pDC6, int32_t nDirection, int32_t nFrame, void * pDstBuffer);
+uint32_t __stdcall CELCMP_CopyCelDataToBuffer(struct DC6 * pDC6, int32_t nDirection, int32_t nFrame, void * pDstBuffer);
 void __stdcall CELCMP_DrawCelFrameFromGfxData(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nViewportHeight, uint32_t nDstPitch, int32_t pLookupTable1, int32_t pBlendTable, int32_t nClipTop, int32_t nClipBottom, int32_t pLookupTable2);
 void __stdcall CELCMP_DrawCelFrameCentered(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nDstHeight, int32_t nDstPitch, BYTE * pBlendTable, uint8_t byBlendColor);
 uint32_t __stdcall CELCMP_ValidateGfxDataIndexInRange(uint32_t * pnParam);
@@ -61,7 +61,7 @@ int32_t __stdcall IMAGE_GetFramesCount(struct DC6 * pDC6);
 void __stdcall CELCMP_SetPixelDataFreeCallback(pfnCelPixelDataFree pfnFreeCallback);
 pfnCelPixelDataFree __stdcall CELCMP_GetPixelDataFreeCallback();
 void __stdcall DeleteCellFile(struct DC6 * pDC6);
-uint32_t __stdcall CELCMP_GetDC6BlockPixelData(int32_t nParam);
+int __stdcall CELCMP_GetDC6BlockPixelData(struct DC6Block * pDC6Block);
 uint32_t __stdcall CELCMP_RoundUpToMultiple(uint32_t nParam1, uint32_t nParam2);
 void __stdcall CELCMP_FreeCelFileAndData(struct DC6 * pDC6);
 void __stdcall CELCMP_AddCelFrameToCache(uint32_t nParam1, uint32_t * pdwParam, uint32_t nParam2, uint32_t nParam3, uint32_t nParam4, uint32_t nParam5, uint32_t nParam6, uint32_t nParam7);

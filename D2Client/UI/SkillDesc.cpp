@@ -6465,7 +6465,7 @@ void __fastcall SKILLDESC_DrawSkillInfo(D2UnitStrc * pPlayerUnit, D2SkillStrc * 
 
       D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(200, wszFormattedText, pwszFormatString, pwszLocalizedString);
       wszFormattedText[199] = L'\0';
-      bTextWrapped = ui::UI_AppendColorCodeToString(wszFormattedText, &nLayoutIndex);
+      bTextWrapped = ui::UI_AppendColorCodeToString(wszFormattedText, (uint16_t**)&nLayoutIndex);
       if (bTextWrapped) {
         ui::UI_DrawTextCentered(gaSkillDescLayoutPositions[nLayoutOff * 3] + gnPanelOffsetX, gnPanelOffsetY + ScreenSizeY - 0x1e4 + gaSkillDescLayoutPositions[nLayoutOff * 3 + 1], gaSkillDescLayoutPositions[nLayoutOff * 3 + 2] + gnPanelOffsetX, wszFormattedText, 0);
         pDrawXRight = gaSkillDescLayoutPositions[nLayoutOff * 3 + 2] + gnPanelOffsetX;
