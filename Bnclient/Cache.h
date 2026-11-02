@@ -11,7 +11,7 @@
 namespace Bnclient::Cache {
 
 // Function declarations
-void StaticInit_6caea0();
+void StaticInit_CriticalSection_00881894();
 void StaticFini_CriticalSection_00881894();
 
 } // namespace Bnclient::Cache

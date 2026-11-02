@@ -406,7 +406,7 @@
       ]
     },
     {
-      "name": "D2WINEDITBOX_Unused_Placeholder_7",
+      "name": "D2WINEDITBOX_FilterDigitChar",
       "address": "004fe770",
       "lines": [
         {
@@ -416,11 +416,11 @@
       ],
       "namespace": "D2Win::Src::D2WinEditBox",
       "calledFunctions": [
-        "D2WINEDITBOX_Unused_Placeholder_7"
+        "D2WINEDITBOX_FilterDigitChar"
       ]
     },
     {
-      "name": "D2WINEDITBOX_Unused_Placeholder_8",
+      "name": "D2WINEDITBOX_FilterLetterChar",
       "address": "004fe790",
       "lines": [
         {
@@ -430,7 +430,7 @@
       ],
       "namespace": "D2Win::Src::D2WinEditBox",
       "calledFunctions": [
-        "D2WINEDITBOX_Unused_Placeholder_8"
+        "D2WINEDITBOX_FilterLetterChar"
       ]
     },
     {

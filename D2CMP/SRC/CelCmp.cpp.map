@@ -919,7 +919,7 @@
       ]
     },
     {
-      "name": "StaticInit_6cafc0",
+      "name": "StaticInit_gCelCmpCacheHandler",
       "address": "006cafc0",
       "lines": [
         {
@@ -929,7 +929,7 @@
       ],
       "namespace": "D2CMP::SRC::CelCmp",
       "calledFunctions": [
-        "StaticInit_6cafc0",
+        "StaticInit_gCelCmpCacheHandler",
         "Constructor",
         "atexit"
       ]

@@ -279,7 +279,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
     uint16_t* pScan;
     int**** ppWalk;
     SMemHeapDetailsStrc sHeapDetails;
-    SMemBlockInfo sBlockInfo;
+    SMemBlockDetailsStrc sBlockInfo;
     int*** pNextLink;
     int*** pNextNode;
     HANDLE hFileTmp = CreateFileA("D2Mem.txt", 0x40000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 2, 0x80, (HANDLE)0x0);
@@ -415,7 +415,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
         __frame0.pListHead[1] = __frame0.pListPrev;
         return;
       }
-      if (sBlockInfo.nBlockSize > 0x220 && sBlockInfo.nBlockField40 && sBlockInfo.nBlockField44) {
+      if (sBlockInfo.nBlockSize > 0x220 && sBlockInfo.bValid && sBlockInfo.bAllocated) {
         for (pScan = pBlock; hFileTmp = hFile , pScan < (uint16_t*)(sBlockInfo.nBlockSize + (int)pBlock); pScan += 2) {
           if (*(int*)pScan == 0x4c4f4144 && *(int*)(pScan + 2) == 0x4655434b && *(int*)(pScan + 4) == 0x54484953 && *(int*)(pScan + 6) == 0x4e4f5720) {
             ARCHIVE_WriteFormattedText(hFile, "%8d\t%50s\t(%s:%d)\n", *(int*)(pScan + 10), pScan + 0x8e, pScan + 0xc, *(int*)(pScan + 8));

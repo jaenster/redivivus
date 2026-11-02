@@ -386,7 +386,7 @@
       ]
     },
     {
-      "name": "StaticInit_6caf70",
+      "name": "StaticInit_CriticalSection_0088caa8",
       "address": "006caf70",
       "lines": [
         {
@@ -396,12 +396,12 @@
       ],
       "namespace": "D2Game::GAME::Task",
       "calledFunctions": [
-        "StaticInit_6caf70",
+        "StaticInit_CriticalSection_0088caa8",
         "atexit"
       ]
     },
     {
-      "name": "StaticInit_6caf90",
+      "name": "StaticInit_aTaskQueueCriticalSections",
       "address": "006caf90",
       "lines": [
         {
@@ -411,7 +411,7 @@
       ],
       "namespace": "D2Game::GAME::Task",
       "calledFunctions": [
-        "StaticInit_6caf90",
+        "StaticInit_aTaskQueueCriticalSections",
         "atexit"
       ]
     },

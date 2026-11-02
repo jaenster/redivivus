@@ -1970,7 +1970,7 @@ D2NET_CLIENT_D2GS_ServerToClient NET_D2GS_CLIENT_INCOMING[175] = {
         /* .fpIncomingHandlerUnit = */ nullptr
     },
     {
-        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x77,
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x77,
         /* .nExpectedSize = */ 0x2,
         /* .fpIncomingHandlerUnit = */ nullptr
     },
@@ -2165,27 +2165,27 @@ D2NET_CLIENT_D2GS_ServerToClient NET_D2GS_CLIENT_INCOMING[175] = {
         /* .fpIncomingHandlerUnit = */ nullptr
     },
     {
-        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
         /* .nExpectedSize = */ 0x7,
         /* .fpIncomingHandlerUnit = */ nullptr
     },
     {
-        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
         /* .nExpectedSize = */ 0x8,
         /* .fpIncomingHandlerUnit = */ nullptr
     },
     {
-        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
         /* .nExpectedSize = */ 0xa,
         /* .fpIncomingHandlerUnit = */ nullptr
     },
     {
-        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
         /* .nExpectedSize = */ 0x7,
         /* .fpIncomingHandlerUnit = */ nullptr
     },
     {
-        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
         /* .nExpectedSize = */ 0x8,
         /* .fpIncomingHandlerUnit = */ nullptr
     },

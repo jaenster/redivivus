@@ -274,7 +274,7 @@ void __stdcall DRAW_AltItems() {
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(nullptr, 0, 0, 0, 0);
 }
 
-void StaticInit_6cadb0() {
+void StaticInit_gaGroundItemLabels() {
     int nRemaining = 0x1f;
     do {
       Fog::File::CONTAINER_InitializeBuffer(gaGroundItemLabels[-nRemaining + 31].wszName, 2, 0x80, D2Launch::MainMenus::STRING_ZeroOneWCHAR);

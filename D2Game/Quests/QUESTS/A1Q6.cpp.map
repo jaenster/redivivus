@@ -4,7 +4,7 @@
   "file": "D2Game/Quests/QUESTS/A1Q6.cpp",
   "functions": [
     {
-      "name": "Objects_InitFn04",
+      "name": "Objects_InitFn04_TowerTome",
       "address": "00595a00",
       "lines": [
         {
@@ -14,7 +14,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q6",
       "calledFunctions": [
-        "Objects_InitFn04",
+        "Objects_InitFn04_TowerTome",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag",
         "GetInstructionPointer",
@@ -28,7 +28,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn47",
+      "name": "Objects_InitFn47_CountessChest",
       "address": "00595a50",
       "lines": [
         {
@@ -38,7 +38,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q6",
       "calledFunctions": [
-        "Objects_InitFn47",
+        "Objects_InitFn47_CountessChest",
         "GetQuestDataByQuestNoInternal",
         "Q05_SpawnCountessDeathEffect",
         "SetEvent"

@@ -357,7 +357,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
     }
 
     D2Common::Units::Missile::SetSkill(pUnit, pArgs->eSkillNo);
-    D2Common::Units::Missile::SetLevel(pUnit, (int16_t)pArgs->nSkillLevel);
+    D2Common::Units::Missile::SetLevel(pUnit, pArgs->nSkillLevel);
     MISSILES_EvalDamageAndSetStats(pArgs->pMissile, pArgs->pOwner, pUnit, pArgs->nSkillLevel);
     D2Common::Units::StoreOwner(pUnit, pArgs->pOwner);
     pUnit->eUnitFlags &= ~UNITFLAG_ISVALIDTARGET;
@@ -376,7 +376,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
 }
 
 // Sends packet 0x73 (MissileData) to the given client for a missile unit, but only if the missile's txt-row has the network-visible flag (0x20) set. Packs classId, current position, optional target coords, animation frame, owner type/GUID, missile level, and pierce index into the packet buffer.
-void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t param_1) {
+void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nVelocity) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
       return;
     }
@@ -410,7 +410,7 @@ void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA *
     sPacket.nMissileClassId = (short int)nTmp;
     sPacket.nMissileX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
     sPacket.nMissileY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-    if (param_1) {
+    if (nVelocity) {
       sPacket.nTargetX = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
       sPacket.nTargetY = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
     }

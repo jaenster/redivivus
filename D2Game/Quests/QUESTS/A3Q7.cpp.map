@@ -4,7 +4,7 @@
   "file": "D2Game/Quests/QUESTS/A3Q7.cpp",
   "functions": [
     {
-      "name": "Objects_InitFn52",
+      "name": "Objects_InitFn52_NatalyaStart",
       "address": "005bce80",
       "lines": [
         {
@@ -14,7 +14,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q7",
       "calledFunctions": [
-        "Objects_InitFn52",
+        "Objects_InitFn52_NatalyaStart",
         "QUEST_GetQuestRecordState",
         "GetQuestDataByQuestNoInternal",
         "FindUnitFromTable",
@@ -161,7 +161,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn43",
+      "name": "Objects_InitFn43_DarkWanderer",
       "address": "005bd1f0",
       "lines": [
         {
@@ -171,7 +171,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q7",
       "calledFunctions": [
-        "Objects_InitFn43",
+        "Objects_InitFn43_DarkWanderer",
         "GetQuestDataByQuestNoInternal",
         "DRLGROOM_FindBetterNearbyRoom",
         "SpawnMonsterAtRoomPos"

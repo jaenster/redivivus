@@ -57,7 +57,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QuestDataA3Q7Strc) == 0x14, "D2_N
 namespace D2Game::Quests::QUESTS::A3Q7 {
 
 // A3Q7 (a3q7.cpp) = Act3 internal quest slot #20 QUESTINT_TheGuardian (= ext QUEST_TheGuardian, Mephisto/Durance). Act3 has 6 player quests; this "Q7" file is the engine's slot-20 logic + the Mephisto->Act4 transition (Dark Wanderer + red town portals). Objects_InitFn52: object init-fn for The Guardian. Lazily spawns/keeps a guardian-type monster (classId 0x129) and copies its DRLG map AI into quest-specific data. Guarded by: only runs while the quest is NOT already JustCompleted.
-void __fastcall Objects_InitFn52(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn52_NatalyaStart(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pGuardianQuest;
     int32_t iVar1;
     int nQuestDoneState = QUEST_GetQuestRecordState(pInitArg->pGame, QUEST_TheGuardian, 0xd);
@@ -250,7 +250,7 @@ BOOL __fastcall Q24_GetDarkWandererSpawnCoords(::SGAMEDATA * pGame, D2UnitStrc *
 // nDarkWandererX/Y (+4/+8), picks a room with DRLGROOM_FindBetterNearbyRoom and spawns monster
 // class 0x170 there with SpawnMonsterAtRoomPos. If the spawn succeeds it clears bQuestCompleted.
 // It always sets bHasSpawnCoords (+0) so that Q24_GetDarkWandererSpawnCoords can answer.
-void __fastcall Objects_InitFn43(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn43_DarkWanderer(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pSpawnedMonster;
     int32_t nSpawnY;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_UnknownDuplicate1);

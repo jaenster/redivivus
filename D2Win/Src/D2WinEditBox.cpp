@@ -801,7 +801,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     }
 }
 
-int __stdcall D2WINEDITBOX_Unused_Placeholder_7(uint32_t dwUnused1, uint32_t dwUnused2, char * szText) {
+int __stdcall D2WINEDITBOX_FilterDigitChar(uint32_t dwUnused1, uint32_t dwUnused2, char * szText) {
     if (*szText >= '0' && *szText <= '9') {
       return 1;
     }
@@ -809,7 +809,7 @@ int __stdcall D2WINEDITBOX_Unused_Placeholder_7(uint32_t dwUnused1, uint32_t dwU
     return 0;
 }
 
-uint32_t __stdcall D2WINEDITBOX_Unused_Placeholder_8(uint32_t dwUnused1, uint32_t dwUnused2, char * szText) {
+uint32_t __stdcall D2WINEDITBOX_FilterLetterChar(uint32_t dwUnused1, uint32_t dwUnused2, char * szText) {
     char cFirstChar = *szText;
     if (!((cFirstChar < 'a' || cFirstChar > 'z') && (cFirstChar < 'A' || cFirstChar > 'Z'))) {
       return 1;
@@ -1552,28 +1552,28 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyRelease(::D2WinEditBox * pEditBox, char cV
     return 1;
 }
 
-int __fastcall D2WINEDITBOX_SetTextWide(::D2WinEditBox * pnParam, uint16_t * wszText) {
+int __fastcall D2WINEDITBOX_SetTextWide(::D2WinEditBox * pEditBox, uint16_t * wszText) {
     int32_t nLine;
-    if (!pnParam) {
+    if (!pEditBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45e);
       exit(-1);
     } else {
-      if (pnParam->sControl.neD2FormType != FORM_EditBox) {
+      if (pEditBox->sControl.neD2FormType != FORM_EditBox) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x460);
         exit(-1);
       }
 
       nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
       if (nLine) {
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(pnParam->wszText, wszText);
+        D2Lang::Unicode::UNISYS::STRING_CopyWideString(pEditBox->wszText, wszText);
       } else {
-        pnParam->wszText[0] = L'\0';
+        pEditBox->wszText[0] = L'\0';
       }
 
-      pnParam->nCursorIndex = nLine;
-      D2WINEDITBOX_UpdateCursorPosition(pnParam);
-      if (pnParam->fpChangeCallback) {
-        pnParam->fpChangeCallback(nullptr);
+      pEditBox->nCursorIndex = nLine;
+      D2WINEDITBOX_UpdateCursorPosition(pEditBox);
+      if (pEditBox->fpChangeCallback) {
+        pEditBox->fpChangeCallback(nullptr);
       }
 
       return 1;

@@ -37,7 +37,7 @@ void __fastcall AllocPartyControl(::SGAMEDATA * pGame);
 // @sourcefile .\UNIT\Party.cpp
 void __fastcall FreePartyControl(::SGAMEDATA * pGame);
 // @sourcefile .\UNIT\Party.cpp
-int16_t __fastcall AllocPartyControlSub0x4(::SGAMEDATA * pGame);
+int16_t __fastcall PARTY_CreateParty(::SGAMEDATA * pGame);
 // Removes a party sub-record matching nPartyId from the game's party control linked list and frees its members. Walks the pSub chain, unlinks the matching entry by patching the predecessor's pPrev pointer (or updating pPartyControl->pSub for the head), then calls PARTY_FreePartyMembers. Halts with an internal error if pPartyControl is null.
 void __fastcall PARTY_DisbandParty(::SGAMEDATA * pGame, int16_t nPartyId);
 // Adds a player unit to an existing party slot identified by nPartyId. Searches pGame->pPartyControl->pSub for the matching party, allocates a new D2UnitPartyControlSubSub node with the unit's GUID, prepends it to the party's member list, broadcasts 0x8D (AssignPlayerToParty), and clears hostile relations between the newcomer and all existing members. Returns 1 on success. Halts with an internal error if the party control, party slot, or unit is invalid.

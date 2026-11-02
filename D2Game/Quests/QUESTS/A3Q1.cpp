@@ -70,7 +70,7 @@ namespace D2Game::Quests::QUESTS::A3Q1 {
 // Objects_InitFn49 — object-init for the QUEST_SpokeToHratli (Q17) helper monster, NOT Lam Esen.
 // NOTE: despite the A3Q1 namespace this whole file is Lam Esen's Tome (QUEST_LamEsensTome / publicly "A3Q2"); only the first few fns (InitFn49/50, Q17_*) belong to SpokeToHratli and merely share this TU.
 // Role: if SpokeToHratli quest data exists and its record state 0xd (JustCompleted) is NOT yet set, lazily spawn the unique Q17 monster (monstats 0xfd, Neutral) and cache its GUID in the quest-specific struct so it is only spawned once.
-void __fastcall Objects_InitFn49(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn49_HratliStart(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pSpawnedMonster;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_SpokeToHratli);
     if (!pQuestData) {
@@ -116,7 +116,7 @@ uint32_t __fastcall Q17_GetHratliCoords(::SGAMEDATA * pGame, int32_t * pnCoords)
 }
 
 // Objects_InitFn50 — (QUEST_SpokeToHratli helper, not Lam Esen). Second-stage init for the Q17 monster: records Charsi-notified flag + monster GUIDs, then — only if record state 0xd (JustCompleted) IS set and the monster was not yet taken — spawns the unique monster (monstats 0xfd), flags it ISRESURRECT|ISINIT, and transplants the DRLG preset map-AI file onto it. Reads SpokeToHratli record state; writes only the quest-specific struct, not the player quest record.
-void __fastcall Objects_InitFn50(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn50_HratliEnd(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pMonster;
     D2MapAIStrc** ppMonsterMapAi;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_SpokeToHratli);

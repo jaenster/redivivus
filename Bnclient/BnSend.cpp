@@ -174,14 +174,14 @@ int __fastcall NET_SID_CLIENT_Send_0x31_ChangePassword(char * szText1, char * sz
     __frame0.dwTickCount.dwServerToken = g_nBNetServerToken;
     _net_sid::XSHA1(&__frame0.dwTickCount.sHash, __frame0.szPasswordLower, nLen);
     Storm::Source::SSTR::SStrCopy(__frame0.szPasswordLower, szNewPassword, 0x100);
-    uint32_t uVar1 = Storm::Source::SSTR::SStrLen(__frame0.szPasswordLower);
-    /* DWORD cchLength for CharLowerBuffA */ /* LPSTR lpsz for CharLowerBuffA */ CharLowerBuffA(__frame0.szPasswordLower, uVar1);
+    uint32_t nStrLen = Storm::Source::SSTR::SStrLen(__frame0.szPasswordLower);
+    /* DWORD cchLength for CharLowerBuffA */ /* LPSTR lpsz for CharLowerBuffA */ CharLowerBuffA(__frame0.szPasswordLower, nStrLen);
     __frame0.dwClientToken = __frame0.dwTickCount.dwClientToken;
     __frame0.dwServerToken = __frame0.dwTickCount.dwServerToken;
     _net_sid::XSHA1(&__frame0.sha1OldCombined, (char*)&__frame0.dwTickCount, 0x1c);
-    _net_sid::XSHA1(&__frame0.sha1NewPassword, __frame0.szPasswordLower, uVar1);
-    uVar1 = Storm::Source::SSTR::SStrCopy(__frame0.szUsername, szText1, 0x100);
-    NET_SID_CLIENT_Send(0x31, (char*)&__frame0.dwClientToken, uVar1 + 0x31);
+    _net_sid::XSHA1(&__frame0.sha1NewPassword, __frame0.szPasswordLower, nStrLen);
+    nStrLen = Storm::Source::SSTR::SStrCopy(__frame0.szUsername, szText1, 0x100);
+    NET_SID_CLIENT_Send(0x31, (char*)&__frame0.dwClientToken, nStrLen + 0x31);
     return 1;
 }
 
@@ -311,10 +311,10 @@ void __stdcall BNSEND_FreeChannelListData() {
     g_pBNetChannelListData = 0;
 }
 
-int __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t nParam) {
+int __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t bIsExpansionChar) {
     uint32_t dwChannelFlags = 0;
     BOOL bIsExpansion = BnSend::D2CheckExpansionGame();
-    if (bIsExpansion && !nParam) {
+    if (bIsExpansion && !bIsExpansionChar) {
       dwChannelFlags |= 1;
     }
 
@@ -618,7 +618,7 @@ void * __fastcall NET_SID_CLIENT_Send_0x3E_LogonRealmEx(char * szRealmName, char
     static uint32_t gnBNetRealmClientToken; D2_STATIC_GUARD_BSS(gnBNetRealmClientToken, "Bnclient::BnSend::NET_SID_CLIENT_Send_0x3E_LogonRealmEx::gnBNetRealmClientToken");
 
     int32_t nSendLen;
-    void* pvVar2;
+    void* pUserData;
     char abPacketBuf[280];
     char abHashInput[28];
     char cPasswordCh;
@@ -639,8 +639,8 @@ void * __fastcall NET_SID_CLIENT_Send_0x3E_LogonRealmEx(char * szRealmName, char
       nSendLen = NET_SID_CLIENT_Send(0x3e, abPacketBuf, uVar1 + 0x19);
       if (nSendLen >= 0) {
         _net_sid::NET_SID_CLIENT_WaitForPacketId(0x3e);
-        pvVar2 = gpBNetWriteUserData;
-        return pvVar2;
+        pUserData = gpBNetWriteUserData;
+        return pUserData;
       }
     }
 
@@ -677,10 +677,10 @@ void __stdcall NET_SID_CLIENT_Send_0x12_LocaleInfo() {
     NET_SID_CLIENT_Send(0x12, (char*)&ftSystemTime, (size_t)(pszLocaleCursor + (0x20 - (int)ftSystemTime.szStrings)));
 }
 
-int __fastcall NET_SID_CLIENT_Send_0x16_ClickAd(uint32_t dwAdId, int32_t nParam) {
+int __fastcall NET_SID_CLIENT_Send_0x16_ClickAd(uint32_t dwAdId, int32_t bRequestType) {
     SID_C2S_ClickAd sPacket;
     sPacket.dwAdId = dwAdId;
-    sPacket.dwRequestType = (uint32_t)(nParam != 0);
+    sPacket.dwRequestType = (uint32_t)(bRequestType != 0);
     NET_SID_CLIENT_Send(0x16, (char*)&sPacket, 8);
     return 1;
 }
@@ -1013,19 +1013,19 @@ DWORD __stdcall GetDnsResults(void * lpThreadParam) {
 
     char** ppAddrList = pHostEnt->h_addr_list;
     nAddrCount = 0;
-    Debug::DEBUG_UnusedDebugFunction("");
-    Debug::DEBUG_UnusedDebugFunction("Original servlist:");
+    Debug::DEBUG_Trace("");
+    Debug::DEBUG_Trace("Original servlist:");
     _union_1226* pInAddr = (_union_1226*)*ppAddrList;
     while (pInAddr) {
       /* in_addr in for inet_ntoa */ szWriteCursor = inet_ntoa((in_addr)pInAddr->S_un_b);
-      Debug::DEBUG_UnusedDebugFunction("%d --> %s", nAddrCount, szWriteCursor);
+      Debug::DEBUG_Trace("%d --> %s", nAddrCount, szWriteCursor);
       nRandIdx = nAddrCount + 1;
       nAddrCount++;
       pInAddr = (_union_1226*)ppAddrList[nRandIdx];
     }
 
-    Debug::DEBUG_UnusedDebugFunction("");
-    Debug::DEBUG_UnusedDebugFunction("Scrambled servlist:");
+    Debug::DEBUG_Trace("");
+    Debug::DEBUG_Trace("Scrambled servlist:");
     DWORD dwTickCount = GetTickCount();
     srand(dwTickCount);
     int32_t nShuffleCount = nAddrCount - 1;
@@ -1040,7 +1040,7 @@ DWORD __stdcall GetDnsResults(void * lpThreadParam) {
           exit(-1);
         }
 
-        Debug::DEBUG_UnusedDebugFunction("%d <-> %d SWAP", nAddrCount, nRandIdx);
+        Debug::DEBUG_Trace("%d <-> %d SWAP", nAddrCount, nRandIdx);
         dwAddrSwapTmp = *(uint32_t*)ppAddrList[nAddrCount];
         nLpThreadParam = (int)(nLpThreadParam - 1);
         *(uint32_t*)ppAddrList[nAddrCount] = *(uint32_t*)ppAddrList[nRandIdx];
@@ -1049,7 +1049,7 @@ DWORD __stdcall GetDnsResults(void * lpThreadParam) {
       } while (nAddrCount < nShuffleCount);
     }
 
-    Debug::DEBUG_UnusedDebugFunction("");
+    Debug::DEBUG_Trace("");
     ppAddrList = pHostEnt->h_addr_list;
     pInAddr = (_union_1226*)*ppAddrList;
     szWriteCursor = szOutBuf;
@@ -1429,7 +1429,7 @@ char * __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, size_t
     } while (true);
 }
 
-void __stdcall BnetReadFunction(uint32_t dwParam) {
+void __stdcall BnetReadFunction(uint32_t dwThreadParam) {
     int32_t nBytesRead;
     DWORD dwCurrentTick;
     char chRecvBuf[8196];
@@ -1591,7 +1591,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     bool bTooManyTimeouts;
     char cChar;
     SOCKET hSock;
-    Debug::DEBUG_UnusedDebugFunction("sFastestConnect()");
+    Debug::DEBUG_Trace("sFastestConnect()");
     memset(__frame0.aCandidates, 0, 0x2100);
     BnDownload::BNDOWNLOAD_ResetState(0x66);
     if (!szServerList) {
@@ -1628,7 +1628,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
         if (dwCurrentTick - __frame0.dwBatchStartTick >= 5000) {
           __frame0.dwBatchStartTick = GetTickCount();
           if (pszToken && *pszToken != '\0' && __frame0.nCandidateCount < 0x20) {
-            Debug::DEBUG_UnusedDebugFunction("  Try to connect to %s", pszToken);
+            Debug::DEBUG_Trace("  Try to connect to %s", pszToken);
             pCandidateIter = __frame0.pCandidateSlotNext;
             iVar2 = (int)__frame0.pCandidateSlotNext - (int)pszToken;
             do {
@@ -1782,7 +1782,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     _net_sid::SID_GetState(&__frame0.nSIDState);
     BVar1 = _net_sid::SID_GetReadyFlag();
     /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ if (BVar1 || __frame0.nSIDState || (lInterlockedResult = (*pfnInterlocked)((LONG*)&g_pBNetSocketData, 0, 0) , !lInterlockedResult)) {
-      Debug::DEBUG_UnusedDebugFunction("  Error, not connected.");
+      Debug::DEBUG_Trace("  Error, not connected.");
       return;
     }
 
@@ -1803,7 +1803,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     __frame0.bProtocolByte = '\x01';
     bAuthInfoAccepted = Fog::Src::Safesock::WSASocket2_Send(pNetData, &__frame0.bProtocolByte, 1);
     if (bAuthInfoAccepted <= 0) {
-      Debug::DEBUG_UnusedDebugFunction("  Failed send.");
+      Debug::DEBUG_Trace("  Failed send.");
       return;
     }
 
@@ -1851,7 +1851,7 @@ int __stdcall BattleConnectFastest() {
     static char RealmDNS[256] = {}; D2_STATIC_GUARD(RealmDNS, "Bnclient::BnSend::BattleConnectFastest::RealmDNS");
     static char * EntireDnsRecordOfServers; D2_STATIC_GUARD_BSS(EntireDnsRecordOfServers, "Bnclient::BnSend::BattleConnectFastest::EntireDnsRecordOfServers");
 
-    Debug::DEBUG_UnusedDebugFunction("BattleConnectFastest()");
+    Debug::DEBUG_Trace("BattleConnectFastest()");
     LONG lInterlockedResult = InterlockedIncrement((LONG*)&Destination_00881c00);
     if (lInterlockedResult > 1) {
       /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881c00);
@@ -1860,7 +1860,7 @@ int __stdcall BattleConnectFastest() {
 
     BnDownload::BNDOWNLOAD_ResetState(0x66);
     GetBnetIp(RealmDNS, 0x100);
-    Debug::DEBUG_UnusedDebugFunction("   connect to: %s", RealmDNS);
+    Debug::DEBUG_Trace("   connect to: %s", RealmDNS);
     Bnet::BNET_LogIndent(2, 4);
     Bnet::BnetLog_WriteLine("querying gateway %s", RealmDNS);
     *(uint8_t*)(char*)&EntireDnsRecordOfServers = '\0';
@@ -1871,7 +1871,7 @@ int __stdcall BattleConnectFastest() {
     if ((char)(uintptr_t)EntireDnsRecordOfServers == '\0') {
       /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881c00);
       SID_SetStateFlag1(0xc);
-      Debug::DEBUG_UnusedDebugFunction("   failed to get server list");
+      Debug::DEBUG_Trace("   failed to get server list");
       Bnet::BNET_LogIndent(2, -4);
       return 0;
     }
@@ -1897,7 +1897,7 @@ HANDLE ConnectingToBattleNet() {
     Bnet::BnetLog_WriteLine("Connecting to Battle.net...");
     LONG lSocketData = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
     if (lSocketData) {
-      Debug::DEBUG_UnusedDebugFunction("   already connected");
+      Debug::DEBUG_Trace("   already connected");
     } else {
       BOOL bDisconnected;
       bDisconnected = BNSEND_Disconnect();
@@ -3074,7 +3074,7 @@ void __fastcall NET_SID_CLIENT_Send_0x33_GetFileTime(char * szText, uint32_t dwR
     NET_SID_CLIENT_Send(0x33, (char*)&dwFileTimeParam, (uintptr_t)&dwFileTimeParam + (nTextLen - (uintptr_t)&dwFileTimeParam) + 9);
 }
 
-void StaticInit_6caec0() {
+void StaticInit_gpBNetNewsCache() {
     atexit(StaticFini_gpBNetNewsCache);
 }
 

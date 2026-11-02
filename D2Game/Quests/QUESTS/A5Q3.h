@@ -129,13 +129,13 @@ void __fastcall Q33_InitData(struct D2QuestDataStrc * pQuestData);
 void __fastcall SpawnFrozenAnya(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Objects_InitFn67 (PrisonOfIce object init): records the frozen-Anya object GUID; if not yet spawned, schedules the
 // SpawnFrozenAnya timer event (+0x19 frames). Init hook for the ice-block object placement.
-void __fastcall Objects_InitFn67(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn67_DrehyaStartOutsideTown(struct D2ObjectInitFnArg * pInitArg);
 // Objects_InitFn68 (PrisonOfIce object init): records an object GUID and, once, spawns the Frozenstein/guard monster
 // (classId 0x202) near coords, taking over its DRLG map AI from the preset. Sets the spawned flag in pA5Q3.
-void __fastcall Objects_InitFn68(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn68_NihlathakStartInTown(struct D2ObjectInitFnArg * pInitArg);
 // Objects_InitFn69 (PrisonOfIce object init): once Anya-extra-state is set, spawns the SuperUnique boss (Frozenstein,
 // SuperUniques row 0x3c -> preset act value) via SpawnMonster, recording its GUID. Guards Anya's prison.
-void __fastcall Objects_InitFn69(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn69_SpawnFrozenstein(struct D2ObjectInitFnArg * pInitArg);
 // Q33_AnyaTimerCallback (PrisonOfIce): per-frame anim driver for the rescued Anya NPC walking to/within Harrogath.
 // Neutral->Walk; while Walk in Harrogath counts ticks until bAnyaCanRun (then Run), elsewhere waits for bAnyaReachable;
 // Run->GetHit. Re-arms itself each frame (+0x19). Animates Anya's escort back to town.
@@ -167,7 +167,7 @@ uint32_t __fastcall Q33_IsFrozenAnyaAlive(::SGAMEDATA * pGame);
 void __fastcall Q33_OnNpcNotifyPlayers(::SGAMEDATA * pGame);
 // Objects_InitFn74 (PrisonOfIce object init): records the (Anya prison/cave entrance) object GUID; if quest active and
 // prev<2, broadcasts stateFlag 2 (prison discovered) via Q33_NotifyQuestState.
-void __fastcall Objects_InitFn74(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn74_FrozenAnya(struct D2ObjectInitFnArg * pInitArg);
 // Q33_TransformFrozenAnya (PrisonOfIce, quest timer): two-step transform of the frozen-Anya OBJECT into the rescued-Anya
 // MONSTER (classId 0x20f). Step1: stop/derender the ice object. Step2: spawn the Anya monster at the object's coords, take
 // over its DRLG map AI, delete the ice object, store GUIDs, mark bShieldDropActive, re-run Q33_SequenceFilter. Plays the

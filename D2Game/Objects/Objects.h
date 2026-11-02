@@ -158,27 +158,27 @@ void __fastcall FrreeTimer(::SGAMEDATA * pGame, void * * ppTimerList);
 void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nAnimModeOrGUID, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 void __fastcall Objects_InitFn10(struct D2ObjectInitFnArg * pInitArg);
 // Init callback for gold-pile scatter objects (object class group 28). When the object is in its Death/default state, rolls a random count (1–9) from the room seed, then for each pile picks a random ±3-tile offset, checks the nearest room and collision via CheckCollision_Vector, and spawns a gold pile via DROP_SpawnGoldInRoom if the tile is clear.
-void __fastcall Objects_InitFn28(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn28_GoldPlaceholder(struct D2ObjectInitFnArg * pInitArg);
 // Shrine object initialization function (object init table entry 1). Reads the shrine-type param from ObjectsTxt; if 0, randomly rolls a shrine type from the Shrines table (up to 8 tries, filtered by dwLevelMin vs current level); if 1/2 rolls fixed shrine category 2/3; otherwise calls OBJECT_SelectRandomShrineType. Remaps certain shrine IDs (4→2, 5→3, 0x10→0x12), stores the result in the object's szCharName[4], and sets the ShrineTxt record pointer.
-void __fastcall Objects_InitFn01(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn22(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn24(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn02(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn27(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn01_Shrine(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn22_Fire(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn24_FloorTrap(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn02_Urn(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn27_GooPile(struct D2ObjectInitFnArg * pInitArg);
 // Init callback for lockable chest objects (group 03). Calls Objects_InitFn02 for base setup, then reads the chest's current flags. If the object's txt Lockable flag is set, rolls a seed value against (MonLvl/2 + 8) percent chance; if the roll passes the chest is flagged as locked (bit 0x80). Finally seeds the object's own RNG state with a derived value and writes back the flags.
-void __fastcall Objects_InitFn03(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn57(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn58(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn59(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn03_Chest(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn57_SparklyChest(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn58_Fissure(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn59_VileDogAfterglow(struct D2ObjectInitFnArg * pInitArg);
 // Object initialisation callback for waypoint-type objects (init-fn index 12). If the object is null or in Death mode, blocks collision and schedules an animation event. Then switches on the current room's level ID to write a level-specific frame byte into the object's data slot (szCharName[4]), controlling which waypoint frame/state is active. For FrigidHighlands, ArreatPlateau, and FrozenTundra it also fires event 0xB to trigger a frame-change if the stored value differs from the new one. Horadric Tomb level is determined dynamically via GetHoradricStaffTombLevelId.
-void __fastcall Objects_InitFn12(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn08(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn12_PermanentPortal(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn08_Torch(struct D2ObjectInitFnArg * pInitArg);
 void __fastcall Objects_InitFn14(struct D2ObjectInitFnArg * pInitArg);
 void __fastcall Objects_InitFn26(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn34(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn05(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn11(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn51(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn34_HellBrazier(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn05_Door(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn11_TownPortal(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn51_TrappedSoul(struct D2ObjectInitFnArg * pInitArg);
 // Spawns a game object of nObjClassId at a random collision-free tile within pRoom, respecting nXMargin/nYMargin insets. Uses the object control RNG seed (advanced via the 0x6AC690C5 LCG) to pick candidate coordinates up to 5 times, checking SPAWN_UNIT_COLLISION each attempt. Returns the spawned D2UnitStrc* on success, or null if the room is too small or all retries fail. Halts with an internal error if pRoom is null at spawn time.
 struct D2UnitStrc * __stdcall OBJECT_PlaceAtRandomPosition(::SGAMEDATA * pGame, int32_t nObjClassId, int32_t nXMargin, int32_t nYMargin, struct D2RoomStrc * pRoom);
 // Places a new object unit (UNIT_OBJECT) at a randomly chosen collision-free position within pRoom, subject to a caller-supplied acceptance callback. Reads room coordinates, retries up to 5 times picking random (X,Y) offsets inside the room boundary (excluding the 1-tile border), checks collision via CheckCollision_Vector, and calls pfnProc(X,Y) — only spawning if pfnProc returns non-zero and no collision. Returns the spawned D2UnitStrc* or null if all retries fail or the room is too small for nSizeX×nSizeY.
@@ -191,17 +191,17 @@ struct D2UnitStrc * __stdcall OBJECT_PlaceAtBiasedPosition(::SGAMEDATA * pGame, 
 struct D2UnitStrc * __fastcall Objects_PopulateFn1(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
 struct D2UnitStrc * __stdcall OBJECT_SpawnBonusChest(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // DRLG room object-population spawner (object placement function variant 7). Uses the per-game object-control seed (GetObjectControlSeed) so spawns are deterministic. Rolls nChancePercent to decide whether to spawn at all; if so, picks a random spawn-offset group, reads the target object's SizeX/SizeY from ObjectsTxt, and tries up to 8 random positions within the room rectangle (DRLGROOM_GetRoomCoordinates) checking ROOM_CheckSpawnCollision. On a clear position it iterates the chosen offset table and, per slot, creates a UNIT_OBJECT (random class 0x39/0x3a) via CreateUnit and seeds a bonus chest (OBJECT_SpawnBonusChest). Halts (ERROR) on null room. Side-effecting; no return.
-struct D2UnitStrc * __fastcall Objects_PopulateFn7(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
+struct D2UnitStrc * __fastcall Objects_PopulateFn7_CorpseOnStick(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
 struct D2UnitStrc * __fastcall Objects_PopulateFn3(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
 // Room-populate callback that places a density-scaled count of a specific object class at random positions. First rolls a percent chance against nChancePercent using the room seed; if it passes, iterates floor(roomArea * nDensity / 256) times calling OBJECT_PlaceAtRandomPosition and sets UNITFLAG_TARGETABLE according to the object's Selectable txt flag for the spawned mode. Halts if nDensity > 0x80.
-struct D2UnitStrc * __fastcall Objects_PopulateFn9(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
-struct D2UnitStrc * __fastcall Objects_PopulateFn6(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
+struct D2UnitStrc * __fastcall Objects_PopulateFn9_TrappedSoul(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
+struct D2UnitStrc * __fastcall Objects_PopulateFn6_Corpse(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
 // Room-population helper (populate function index 8). Skips the room if a level quest-status check fails or nDensity exceeds 0x80. Advances the room seed and bails if the seed mod 100 exceeds nChancePercent. Otherwise calls OBJECT_PlaceWithCallback to spawn the object (nObjectClassId) in the room using a 2*SizeX+1 by 2*SizeY+1 footprint, sets UNITFLAG_TARGETABLE based on the object's Selectable field, then registers the spawn position via AddPointsToLevelRngPoints2.
 struct D2UnitStrc * __fastcall Objects_PopulateFn8(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
 // Level-generation object populator (density-driven scatter spawner). For a given room, rolls nChancePercent against the object control seed to decide whether to populate at all, then derives a target spawn count from room area * nDensity. Repeatedly picks random tiles inside the room's DRLG coordinate bounds, checks placement via ROOM_CheckSpawnCollisionSimple using ObjectsTxt line 7's footprint, and CreateUnits UNIT_OBJECT clusters (base class ~0xb with a small random variant). Around each valid seed it grows a cluster (up to 8 objects) by stepping in 8 directions scaled by the object's XSpace/YSpace. Deterministic via GetObjectControlSeed so all clients generate identical object layout. Side effect: spawns objects into pRoom. (Cryptic — exact object set inferred from txt line 7.)
 struct D2UnitStrc * __fastcall Objects_PopulateFn4(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
 // DRLG room object-population routine (server-side, seeded). Rolls nChancePercent against the object-control RNG to decide whether to populate pRoom at all, then computes a target spawn count from room area * nDensity. Repeatedly picks random in-room cells, validates placement via ROOM_CheckSpawnCollisionSimple, and creates UNIT_OBJECT units (nObjectClassId, or a random pick from gaObjectSpawnChanceTbl when class==0x2e) with CreateUnit. Supports growing chains of adjacent objects (offset by Objects.txt XSpace/YSpace via direction tables) up to 8 spawned per cycle. Uses the deterministic LCG seed (0x6ac690c5) so all clients agree. No return.
-struct D2UnitStrc * __fastcall Objects_PopulateFn5(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
+struct D2UnitStrc * __fastcall Objects_PopulateFn5_Crate(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
 int32_t __fastcall OBJECT_AlwaysReturnOne(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2DrlgRoomCoordsStrc * pRoomCoords);
 // Fills a rectangular grid region (pGridBounds [xMin,yMin,xMax,yMax]) with barrel/urn objects on a 2-tile stride. For each cell, advances the object-control seed and selects object class 0x0b or 0x0f (3-in-4 vs 1-in-4 chance), then checks spawn collision; if clear, creates the unit at that position. Stops after 32 spawned objects. Always returns 1.
 int32_t __fastcall OBJECT_PopulateGridObjects(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2DrlgRoomCoordsStrc * pGridBounds);
@@ -220,13 +220,13 @@ int32_t __fastcall OBJECT_GetDoubledTxtSize(struct D2ObjectsTxt * pObjectsTxt);
 uint8_t __stdcall OBJECT_GetDefaultSize();
 void __fastcall OBJECTS_SetUnitIdInTimerArg(struct D2UnitStrc * pUnit, int32_t nUnitGUID);
 int32_t __fastcall GetUnitGUIDFromUnitTimerArg(struct D2UnitStrc * pUnit);
-void __fastcall Objects_InitFn16(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn16_Well(struct D2ObjectInitFnArg * pInitArg);
 // Server-side object spawner for one object class in a room. Reads ObjectsTxt for nObjectClassId (size/orientation/selectable), advances the room RNG seed, and decides whether to spawn: a density-region check (OBJECTRGN_CheckDensityThreshold) either forces placement (up to 30 retries) or gates it on nChancePercent vs the seed roll. On success calls OBJECT_PlaceAtBiasedPosition near a spawn point, sets/clears UNITFLAG_TARGETABLE from the Selectable column, and for density spawns remaps to a shrine (OBJECT_SelectRandomShrineType, ShrinesTxt line 2) and bumps the level spawn count. Finally records the placed object's X/Y into the level RNG point set via AddPointsToLevelRngPoints1.
-struct D2UnitStrc * __fastcall Objects_PopulateFn2(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
+struct D2UnitStrc * __fastcall Objects_PopulateFn2_WaypointShrine(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent);
 // Stores pCoordList (the spawn room's D2RoomCoordListStrc) at monster data +0x50 when pUnit is a monster with unit data.
 // Provenance: asm 00552d64..00552d70 (unit type 1, [unit+0x14]+0x50 = EDX); only caller CreateMonster (005b2e8f) passes the coord list from DRLGROOM_GetCoordListFromSubtilePos.
 void __fastcall MONSTER_SetSpawnCoordList(struct D2UnitStrc * pUnit, struct D2RoomCoordListStrc * pCoordList);
-void StaticInit_6caf30();
+void StaticInit_gaObjectSpawnOffsetTables();
 // 7 internal functions (defined in .cpp)
 
 } // namespace D2Game::Objects

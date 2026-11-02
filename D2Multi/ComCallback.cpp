@@ -52,7 +52,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2ChannelUserStrc) == 0xb4, "D2_NEW
 
 namespace D2Multi::ComCallback {
 
-int __stdcall EDITBOX_Cb_COMCALLBACK_ClearChannelUserList(void * pUnknown) {
+int __stdcall EDITBOX_Cb_COMCALLBACK_ClearChannelUserList(void * pUnused) {
     COMCALLBACK_ClearChannelUserList();
     return 1;
 }
@@ -1365,7 +1365,7 @@ BOOL __fastcall COMCALLBACK_HandleInfoRequest1(uint32_t dwCbArg1, uint32_t dwCbA
     return 1;
 }
 
-BOOL __fastcall COMCALLBACK_HandleInfoRequest2(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t dwParam1, char * szInfoArg) {
+BOOL __fastcall COMCALLBACK_HandleInfoRequest2(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t szUnused, char * szInfoArg) {
     int i;
     uint16_t* pStr;
     uint16_t wszText[576];
@@ -1925,12 +1925,12 @@ D2ChannelUserStrc * __stdcall COMCALLBACK_CreateChannelUserEntry(char * szUserna
     } while (true);
 }
 
-BOOL __fastcall COMCALLBACK_Unused1(uint32_t dwStatusFlags, uint32_t dwCbArg2, uint32_t * pszUsername, uint32_t * pCharData) {
+BOOL __fastcall COMCALLBACK_AddChannelUser(uint32_t dwStatusFlags, uint32_t dwCbArg2, uint32_t * pszUsername, uint32_t * pCharData) {
     COMCALLBACK_CreateChannelUserEntry((char*)pszUsername, pCharData, dwStatusFlags);
     return 1;
 }
 
-static void COMCALLBACK_Unused2(uint32_t * pCharData, uint32_t dwStatusFlags, uint32_t * pszUsername) {
+static void COMCALLBACK_OnChannelUserJoined(uint32_t * pCharData, uint32_t dwStatusFlags, uint32_t * pszUsername) {
     char szNotifyMsg[504];
     char cNameChar;
     D2ChannelUserStrc* pCreatedUser = COMCALLBACK_CreateChannelUserEntry((char*)pszUsername, pCharData, dwStatusFlags);
@@ -1949,7 +1949,7 @@ static void COMCALLBACK_Unused2(uint32_t * pCharData, uint32_t dwStatusFlags, ui
 }
 
 BOOL __fastcall COMCALLBACK_Unused3(uint32_t dwStatusFlags, uint32_t dwCbArg2, uint32_t * pCharData, uint32_t * pszUsername) {
-    COMCALLBACK_Unused2(pszUsername, dwStatusFlags, pCharData);
+    COMCALLBACK_OnChannelUserJoined(pszUsername, dwStatusFlags, pCharData);
     return 1;
 }
 
@@ -2076,7 +2076,7 @@ void __stdcall COMCALLBACK_ClearAllChannelUsers() {
     COMCALLBACK_ScrollChannelUserList(0);
 }
 
-BOOL __fastcall COMCALLBACK_Unused4(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t * pUnused, uint32_t dwUnused) {
+BOOL __fastcall COMCALLBACK_HandleChannelUserLeave(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t * pUnused, uint32_t dwUnused) {
     COMCALLBACK_RemoveChannelUser((char*)pUnused);
     return 1;
 }

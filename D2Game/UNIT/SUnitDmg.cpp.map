@@ -1240,7 +1240,7 @@
         "DAMAGE_CheckDefenseEvasion",
         "STATSEX_GetCurrentStat",
         "GetGamePointer",
-        "nullsub_4Arg",
+        "SUNITDMG_DebugTraceAvoidRoll",
         "DAMAGE_GetSkillDamageBonus",
         "COMPOSIT_GetWeaponClassWithTransform",
         "UNIT_GetModuloFromSeed"
@@ -1268,7 +1268,7 @@
         "GetBlockRate",
         "IsInMovingMode",
         "GetGamePointer",
-        "nullsub_4Arg"
+        "SUNITDMG_DebugTraceAvoidRoll"
       ],
       "usedTypes": [
         "D2UnitStrc",

@@ -4,7 +4,7 @@
   "file": "D2Game/Quests/QUESTS/A3Q1.cpp",
   "functions": [
     {
-      "name": "Objects_InitFn49",
+      "name": "Objects_InitFn49_HratliStart",
       "address": "005b70b0",
       "lines": [
         {
@@ -14,7 +14,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q1",
       "calledFunctions": [
-        "Objects_InitFn49",
+        "Objects_InitFn49_HratliStart",
         "GetQuestDataByQuestNoInternal",
         "QUEST_GetQuestRecordState",
         "FindUnitFromTable",
@@ -49,7 +49,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn50",
+      "name": "Objects_InitFn50_HratliEnd",
       "address": "005b7160",
       "lines": [
         {
@@ -59,7 +59,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q1",
       "calledFunctions": [
-        "Objects_InitFn50",
+        "Objects_InitFn50_HratliEnd",
         "GetQuestDataByQuestNoInternal",
         "QUEST_GetQuestRecordState",
         "FindUnitFromTable",

@@ -1007,17 +1007,17 @@ static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable) {
     int nRemaining = 0xff;
     uint16_t* pEntryCursor = &pTable->aEntries[0].guidPdb.Data3;
     do {
-      uint8_t* puVar1;
+      uint8_t* pbyGuidData4;
       pEntryBase->pImageBase = 0;
       *(uint32_t*)(pEntryCursor - 0x107) = 0;
       *(uint32_t*)(pEntryCursor - 5) = 0;
       ((GUID*)(pEntryCursor - 3))->Data1 = 0;
       pEntryCursor[-1] = 0;
       *pEntryCursor = 0;
-      puVar1 = (uint8_t*)(pEntryCursor + 1);
-      memset(puVar1, 0, 4 * sizeof(puVar1[0]));
-      puVar1 = (uint8_t*)(pEntryCursor + 3);
-      memset(puVar1, 0, 4 * sizeof(puVar1[0]));
+      pbyGuidData4 = (uint8_t*)(pEntryCursor + 1);
+      memset(pbyGuidData4, 0, 4 * sizeof(pbyGuidData4[0]));
+      pbyGuidData4 = (uint8_t*)(pEntryCursor + 3);
+      memset(pbyGuidData4, 0, 4 * sizeof(pbyGuidData4[0]));
       *(uint32_t*)(pEntryCursor + 5) = 0;
       *(uint32_t*)(pEntryCursor + 7) = 0;
       *(uint32_t*)(pEntryCursor + 9) = 0;
@@ -1183,7 +1183,7 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
     D2FogModuleNodeStrc* pModuleNode;
     D2FogModuleNodeStrc* pPrevModule;
     D2FogModuleNodeStrc* pSortedHead;
-    int iVar1;
+    int nModuleIdx;
     HMODULE ahModules[256];
     _MODULEINFO sModuleInfo;
     pfnGetModuleInformation pGetModuleInformation;
@@ -1226,24 +1226,24 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
       nModuleCount = nBytesNeeded >> 2;
       if ((int32_t)nModuleCount < 0x101) {
         Src::LogManager::LOGMANAGER_TraceToModuleLog("", "\nEnumerate modules...");
-        iVar1 = 0;
+        nModuleIdx = 0;
         if ((int)nModuleCount > 0) {
           do {
-            bCallOk = (*pFVar1)(hProcessLocal2, ahModules[iVar1], &sModuleInfo, 0xc);
+            bCallOk = (*pFVar1)(hProcessLocal2, ahModules[nModuleIdx], &sModuleInfo, 0xc);
             if (!bCallOk) {
               dwLastError = GetLastError();
               Src::LogManager::LOGMANAGER_TraceToModuleLog("", "ERROR: PSAPI GetModuleInformation (%d)", dwLastError);
               goto error;
             }
 
-            dwLastError = (*pGetModuleFileNameExA)(hProcessLocal2, ahModules[iVar1], szModulePath, 0x104);
+            dwLastError = (*pGetModuleFileNameExA)(hProcessLocal2, ahModules[nModuleIdx], szModulePath, 0x104);
             if (!dwLastError) {
               dwLastError = GetLastError();
               Src::LogManager::LOGMANAGER_TraceToModuleLog("", "ERROR: PSAPI GetModuleFileNameExA (%d)", dwLastError);
               goto error;
             }
 
-            dwLastError = (*pGetModuleBaseNameA)(hProcessLocal2, ahModules[iVar1], szModuleName, 0xff);
+            dwLastError = (*pGetModuleBaseNameA)(hProcessLocal2, ahModules[nModuleIdx], szModuleName, 0xff);
             if (!dwLastError) {
               dwLastError = GetLastError();
               Src::LogManager::LOGMANAGER_TraceToModuleLog("", "ERROR: PSAPI GetModuleBaseNameA (%d)", dwLastError);
@@ -1278,9 +1278,9 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
               pSortedHead = pModuleListHead;
             } while (pModuleNode);
 
-            iVar1++;
+            nModuleIdx++;
             hProcessLocal2 = hProcessLocal;
-          } while (iVar1 < (int)nModuleCount);
+          } while (nModuleIdx < (int)nModuleCount);
         }
 
         /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(hPsapi);
@@ -1351,10 +1351,10 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
     static_assert(sizeof(void*) != 4 || sizeof(__frame1_t) == 624, "frame group __frame1_t must reproduce the Ghidra frame layout");
     __frame1_t __frame1;
     D2FogModuleNodeStrc* pDVar1;
-    char* pcVar4;
+    char* pTmp;
     uint8_t* pEscapedStr;
     uint8_t byAscii;
-    int iVar2;
+    int nTmp;
     int nByteOffset;
     uint8_t* pAsciiOut;
     char chCur;
@@ -1381,12 +1381,12 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
       pBytesRemaining = "unknown";
     }
     if (pEipModule) {
-      pcVar4 = pEipModule->szModuleName;
+      pTmp = pEipModule->szModuleName;
     } else {
-      pcVar4 = "unknown";
+      pTmp = "unknown";
     }
 
-    Src::LogManager::LogWithCategoryVarArgs("", "\n                     // EIP = 0x%08X - %s - %s+%04X\n\n", nEip, pcVar4, pBytesRemaining, __frame1.nBytesRemaining);
+    Src::LogManager::LogWithCategoryVarArgs("", "\n                     // EIP = 0x%08X - %s - %s+%04X\n\n", nEip, pTmp, pBytesRemaining, __frame1.nBytesRemaining);
     int nLinesEmitted;
     nLinesEmitted = 0;
     __frame1.nBytesRemaining = 0x1000;
@@ -1403,7 +1403,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
       }
 
       /* UINT_PTR ucb for IsBadReadPtr */ pBytesRemaining = __frame1.pBytesToDump;
-      iVar2 = 0;
+      nTmp = 0;
       /* void * lp for IsBadReadPtr */ __frame1.szHexLine[0] = '\0';
       pEipModule = 0;
       bBadPtr = IsBadReadPtr(pStackPtr, (UINT_PTR)__frame1.pBytesToDump);
@@ -1413,26 +1413,26 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
       }
       if ((int)pBytesRemaining > 0) {
         do {
-          pcVar4 = __frame1.szHexLine;
-          pcVar4 = pcVar4 + strlen(pcVar4) + 1;
-          Storm::Source::SSTR::SStrPrintf(__frame1.szHexLine + ((int)pcVar4 - (int)(__frame1.szHexLine + 1)), 0x100 - ((int)pcVar4 - (int)(__frame1.szHexLine + 1)), " %02X%02X%02X%02X", (uint32_t)*(uint8_t*)((int)pStackPtr + iVar2), (uint32_t)*(uint8_t*)((int)pStackPtr + iVar2 + 1), (uint32_t)*(uint8_t*)((int)pStackPtr + iVar2 + 2), (uint32_t)*(uint8_t*)((int)pStackPtr + iVar2 + 3));
+          pTmp = __frame1.szHexLine;
+          pTmp = pTmp + strlen(pTmp) + 1;
+          Storm::Source::SSTR::SStrPrintf(__frame1.szHexLine + ((int)pTmp - (int)(__frame1.szHexLine + 1)), 0x100 - ((int)pTmp - (int)(__frame1.szHexLine + 1)), " %02X%02X%02X%02X", (uint32_t)*(uint8_t*)((int)pStackPtr + nTmp), (uint32_t)*(uint8_t*)((int)pStackPtr + nTmp + 1), (uint32_t)*(uint8_t*)((int)pStackPtr + nTmp + 2), (uint32_t)*(uint8_t*)((int)pStackPtr + nTmp + 3));
           for (pDVar1 = pModuleListIter; pDVar1; pDVar1 = pDVar1->pNext) {
-            if (*(uint8_t**)((int)pStackPtr + iVar2) >= pDVar1->dwBaseAddress && *(uint8_t**)((int)pStackPtr + iVar2) < pDVar1->dwBaseAddress + pDVar1->dwSize) {
+            if (*(uint8_t**)((int)pStackPtr + nTmp) >= pDVar1->dwBaseAddress && *(uint8_t**)((int)pStackPtr + nTmp) < pDVar1->dwBaseAddress + pDVar1->dwSize) {
               pEipModule = (D2FogModuleNodeStrc*)0x1;
-              iVar2 += 4;
+              nTmp += 4;
               goto emit_line;
             }
 
             pBytesRemaining = __frame1.pBytesToDump;
           }
 
-          iVar2 += 4;
-        } while (iVar2 < (int)pBytesRemaining);
+          nTmp += 4;
+        } while (nTmp < (int)pBytesRemaining);
       }
 
       emit_line:
-      nByteOffset = ((uint32_t)((0x10 - iVar2) * 9) >> 2) + 2;
-      __frame0.nValidBytes = iVar2;
+      nByteOffset = ((uint32_t)((0x10 - nTmp) * 9) >> 2) + 2;
+      __frame0.nValidBytes = nTmp;
       if (nByteOffset) {
         do {
           Storm::Source::SSTR::SStrPack(__frame1.szHexLine, " ", 0x100);
@@ -1444,7 +1444,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
       __frame1.pBytesToDump = __frame1.pBytesToDump + strlen(__frame1.pBytesToDump) + 1;
       __frame1.pBytesToDump += -(int)(__frame1.szHexLine + 1);
       nByteOffset = 0;
-      if (iVar2 > 0) {
+      if (nTmp > 0) {
         pAsciiOut = (uint8_t*)(__frame1.szHexLine + (int)__frame1.pBytesToDump);
         do {
           byAscii = *(uint8_t*)(nByteOffset + (int)pStackPtr);
@@ -1455,13 +1455,13 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
           *pAsciiOut = byAscii;
           nByteOffset++;
           pAsciiOut++;
-        } while (nByteOffset < iVar2);
+        } while (nByteOffset < nTmp);
       }
 
       __frame1.szHexLine[(int)(__frame1.pBytesToDump + nByteOffset)] = '\0';
       Src::LogManager::LogWithCategoryVarArgs("", "%s\n", __frame1.szHexLine);
       if (pEipModule) {
-        pAsciiOut = *(uint8_t**)(iVar2 - 4 + (int)pStackPtr);
+        pAsciiOut = *(uint8_t**)(nTmp - 4 + (int)pStackPtr);
         pDVar1 = pModuleListIter;
         while (true) {
           if (!pDVar1) {
@@ -1482,8 +1482,8 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
           __frame1.pBytesToDump = "unknown";
         }
 
-        iVar2 = _stricmp(__frame1.pBytesToDump, "`string\'");
-        if (!iVar2 && !__frame0.nSymDisplacement) {
+        nTmp = _stricmp(__frame1.pBytesToDump, "`string\'");
+        if (!nTmp && !__frame0.nSymDisplacement) {
           pEscapedStr = Src::String::FogString::SMemEscapeString(__frame1.aEscapedString, pAsciiOut, 0x50, 0);
           pBytesRemaining = "\n                           // 0x%08X - %s - %s=\'%s\'\n\n";
         } else {
@@ -1493,12 +1493,12 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
 
         Src::LogManager::LogWithCategoryVarArgs("", pBytesRemaining, pAsciiOut, pDVar1->szModuleName, __frame1.pBytesToDump, pEscapedStr);
         nLinesEmitted += 3;
-        iVar2 = __frame0.nValidBytes;
+        nTmp = __frame0.nValidBytes;
       }
 
       nLinesEmitted++;
-      __frame1.nBytesRemaining -= iVar2;
-      pStackPtr = (void*)((int)pStackPtr + iVar2);
+      __frame1.nBytesRemaining -= nTmp;
+      pStackPtr = (void*)((int)pStackPtr + nTmp);
     } while (__frame1.nBytesRemaining > 0);
 }
 

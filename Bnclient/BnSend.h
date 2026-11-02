@@ -157,7 +157,7 @@ int32_t __fastcall NET_SID_CLIENT_Send_0x41_QueryAdURL(uint32_t dwAdId);
 void * __stdcall NET_SID_CLIENT_Send_0x40_QueryRealms2();
 // @sourcefile .\BnSend.cpp
 void __stdcall BNSEND_FreeChannelListData();
-int __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t nParam);
+int __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t bIsExpansionChar);
 void __fastcall NET_SID_CLIENT_Send_0x0C_JoinChannel(char * szText, int32_t bForceJoin, int32_t nJoinType);
 uint32_t __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount);
 void __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * szText1, char * szText2, uint32_t dwProductCode);
@@ -180,7 +180,7 @@ void __fastcall BNSEND_StoreUserProfileData(uint8_t * pbProfileData, size_t nDat
 // SID_LOGONREALMEX (0x3E) client request sender. Computes double-SHA1 password hash for realm logon. Packet format: (DWORD)ClientToken, (BYTE[20])PasswordHash, (STRING)RealmName. Hash computed as SHA1(SHA1(ClientToken, ServerToken, Password)). Sends request, waits for 0x3E response containing MCP server connection info. Increments gnBNetRealmClientToken client token counter.
 void * __fastcall NET_SID_CLIENT_Send_0x3E_LogonRealmEx(char * szRealmName, char * szPassword);
 void __stdcall NET_SID_CLIENT_Send_0x12_LocaleInfo();
-int __fastcall NET_SID_CLIENT_Send_0x16_ClickAd(uint32_t dwAdId, int32_t nParam);
+int __fastcall NET_SID_CLIENT_Send_0x16_ClickAd(uint32_t dwAdId, int32_t bRequestType);
 // @sourcefile .\BnSend.cpp
 uint32_t __fastcall NET_SID_CLIENT_Send_0x27_WriteUserData(char * szAccount, uint32_t nCount, char * * pszKeys, char * * pszValues);
 // @sourcefile .\BnSend.cpp
@@ -222,7 +222,7 @@ void __fastcall BNCLIENT_ParseAndEnqueueChatMessages(char * szMessageText);
 // BATTLE.NET PACKET DISPATCH LOOP
 // Iterates over received network buffer, scanning for 0xFF packet start markers and dispatching complete packets to NET_SID_CLIENT_IncomingPacketHandler. For each packet: validates 4-byte header (0xFF, ID, size_lo, size_hi), checks if buffer contains full packet based on 2-byte little-endian size field, dispatches packet data (excluding 4-byte header) to handler, advances buffer pointer by packet size. Returns pointer to remaining unparsed buffer data for next iteration.
 char * __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, size_t nSize);
-void __stdcall BnetReadFunction(uint32_t dwParam);
+void __stdcall BnetReadFunction(uint32_t dwThreadParam);
 uint32_t __fastcall BNCLIENT_GetSocketPeerName(sockaddr * pSockAddr, int * pAddrLen);
 // Thread-safe wrapper around Fog::Safesock::GetSockNameDoesReturn. Returns local socket address info for Battle.net connection. Used by SID_AUTH_INFO sender.
 uint32_t __fastcall BNSEND_GetSocketAddress(sockaddr * pOutAddr, int * pOutAddrLen);
@@ -274,7 +274,7 @@ void __fastcall BNSEND_HashCDKeyByType(struct D2CDKeyHashStrc * pOutHash, uint32
 int __fastcall BNSEND_SendRawBytes(void * pBytes, size_t nSize);
 int __fastcall BNSEND_SendString(char * szString);
 void __fastcall NET_SID_CLIENT_Send_0x33_GetFileTime(char * szText, uint32_t dwRequestId);
-void StaticInit_6caec0();
+void StaticInit_gpBNetNewsCache();
 void StaticFini_gpBNetNewsCache();
 // 2 internal functions (defined in .cpp)
 

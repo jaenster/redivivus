@@ -458,7 +458,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn45",
+      "name": "Objects_InitFn45_MephistoBridge",
       "address": "005bcb90",
       "lines": [
         {
@@ -468,7 +468,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q6",
       "calledFunctions": [
-        "Objects_InitFn45",
+        "Objects_InitFn45_MephistoBridge",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag",
         "SetEvent"
@@ -479,7 +479,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn44",
+      "name": "Objects_InitFn44_HellGatePortal",
       "address": "005bcbf0",
       "lines": [
         {
@@ -489,7 +489,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q6",
       "calledFunctions": [
-        "Objects_InitFn44",
+        "Objects_InitFn44_HellGatePortal",
         "GetQuestDataByQuestNoInternal",
         "DRLGROOM_GetLevelIdFromRoom",
         "SetupUpdateFlag"

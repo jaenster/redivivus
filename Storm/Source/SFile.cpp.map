@@ -3093,7 +3093,7 @@
       ]
     },
     {
-      "name": "StaticInit_6ca7b0",
+      "name": "StaticInit_gMpqArchiveList",
       "address": "006ca7b0",
       "lines": [
         {
@@ -3103,12 +3103,12 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "StaticInit_6ca7b0",
+        "StaticInit_gMpqArchiveList",
         "atexit"
       ]
     },
     {
-      "name": "StaticInit_6ca7d0",
+      "name": "StaticInit_gSFileAsyncReqQueue",
       "address": "006ca7d0",
       "lines": [
         {
@@ -3118,12 +3118,12 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "StaticInit_6ca7d0",
+        "StaticInit_gSFileAsyncReqQueue",
         "atexit"
       ]
     },
     {
-      "name": "StaticInit_6ca7f0",
+      "name": "StaticInit_CriticalSection_00779068",
       "address": "006ca7f0",
       "lines": [
         {
@@ -3133,12 +3133,12 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "StaticInit_6ca7f0",
+        "StaticInit_CriticalSection_00779068",
         "atexit"
       ]
     },
     {
-      "name": "StaticInit_6ca810",
+      "name": "StaticInit_gSFileOpenFileList",
       "address": "006ca810",
       "lines": [
         {
@@ -3148,12 +3148,12 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "StaticInit_6ca810",
+        "StaticInit_gSFileOpenFileList",
         "atexit"
       ]
     },
     {
-      "name": "StaticInit_6ca830",
+      "name": "StaticInit_gSFileAudioStreamList",
       "address": "006ca830",
       "lines": [
         {
@@ -3163,12 +3163,12 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "StaticInit_6ca830",
+        "StaticInit_gSFileAudioStreamList",
         "atexit"
       ]
     },
     {
-      "name": "StaticInit_6ca850",
+      "name": "StaticInit_gSFileStreamRecordList",
       "address": "006ca850",
       "lines": [
         {
@@ -3178,12 +3178,12 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "StaticInit_6ca850",
+        "StaticInit_gSFileStreamRecordList",
         "atexit"
       ]
     },
     {
-      "name": "StaticInit_6ca870",
+      "name": "StaticInit_CriticalSection_00779080",
       "address": "006ca870",
       "lines": [
         {
@@ -3193,7 +3193,7 @@
       ],
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
-        "StaticInit_6ca870",
+        "StaticInit_CriticalSection_00779080",
         "atexit"
       ]
     },

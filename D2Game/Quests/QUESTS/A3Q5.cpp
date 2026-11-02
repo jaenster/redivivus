@@ -914,7 +914,7 @@ BOOL __fastcall OBJOP_A3Q5_NihlathakAltarLaunchOrb(D2ObjectOperateFnArg * pOpera
 }
 
 // Objects_InitFn53 (BLACKENED TEMPLE) — object InitFn for the Compelling Orb altar. If Jerhyn/Ormus AI is active (bJerhynAiActive in quest-specific data), sets the object's update flag 2 (post-completion appearance). No quest-record state calls.
-void __fastcall Objects_InitFn53(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn53_MephistoDoor(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheBlackenedTemple);
     if (!pQuestData->pQuestSpecificData.pA3Q5->bJerhynAiActive) {
       return;
@@ -924,7 +924,7 @@ void __fastcall Objects_InitFn53(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Objects_InitFn60 (BLACKENED TEMPLE) — object InitFn that spawns the Compelling-Orb amulet/guardian. If the in-memory init flag (field_0x0C) is set, marks the object updated. If the amulet hasn't been spawned yet (bHasViperAmulet false), spawns monster class 0x16e (the orb/amulet unit) Neutral, flags it, records its GUID, and marks bHasViperAmulet. No quest-record state calls.
-void __fastcall Objects_InitFn60(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn60_CompellingOrb(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheBlackenedTemple);
     D2QuestDataA2Q2Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA2Q2;
     if ((char)pQuestSpecificData->field_0x0C != '\0') {

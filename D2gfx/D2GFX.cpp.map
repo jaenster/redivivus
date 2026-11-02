@@ -851,7 +851,7 @@
       ]
     },
     {
-      "name": "D2GFX_GetGammaFloat_Unused",
+      "name": "D2GFX_GetPerformanceFrequency",
       "address": "004f6110",
       "lines": [
         {
@@ -861,7 +861,7 @@
       ],
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
-        "D2GFX_GetGammaFloat_Unused"
+        "D2GFX_GetPerformanceFrequency"
       ],
       "usedTypes": [
         "LARGE_INTEGER"
@@ -1672,7 +1672,7 @@
       ]
     },
     {
-      "name": "StaticInit_6cadf0",
+      "name": "StaticInit_gpszWindowClassName",
       "address": "006cadf0",
       "lines": [
         {
@@ -1682,11 +1682,11 @@
       ],
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
-        "StaticInit_6cadf0"
+        "StaticInit_gpszWindowClassName"
       ]
     },
     {
-      "name": "StaticInit_6cae00",
+      "name": "StaticInit_szWindowClassName",
       "address": "006cae00",
       "lines": [
         {
@@ -1696,11 +1696,11 @@
       ],
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
-        "StaticInit_6cae00"
+        "StaticInit_szWindowClassName"
       ]
     },
     {
-      "name": "StaticInit_6cae10",
+      "name": "StaticInit_gpszWindowTitle",
       "address": "006cae10",
       "lines": [
         {
@@ -1710,7 +1710,7 @@
       ],
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
-        "StaticInit_6cae10"
+        "StaticInit_gpszWindowTitle"
       ]
     }
   ]

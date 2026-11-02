@@ -2472,7 +2472,7 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCharSelExitButton, 1);
 }
 
-void StaticInit_6ca940() {
+void StaticInit_pBetaRealmNames() {
     int nCount = 0x380;
     uint16_t* pwCursor = pBetaRealmNames[0];
     for (; nCount; nCount--) {

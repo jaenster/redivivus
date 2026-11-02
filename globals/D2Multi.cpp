@@ -1740,9 +1740,9 @@ char gszOogMaxPlayersText[4] = { '4', '\x00', '\x00', '\x00' }; D2_GLOBAL_GUARD(
 
 pfnComCallback gaComCallbackDispatch[24] = {
     &D2Multi::ComCallback::COMCALLBACK_ReturnTrue,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_Unused1,
+    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_AddChannelUser,
     (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_Unused3,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_Unused4,
+    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_HandleChannelUserLeave,
     (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_HandleWhisperReply,
     &D2Multi::ComCallback::COMCALLBACK_HandleWhisperMessage,
     (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_AppendErrorMessage,

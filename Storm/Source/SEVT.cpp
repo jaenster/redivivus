@@ -913,12 +913,12 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey
     return bResult;
 }
 
-void StaticInit_6ca900() {
+void StaticInit_gSevtBreakCmdList() {
     gpSevtBreakCmdListHead.pNext = ~(uintptr_t)((char*)&gpSevtBreakCmdListHead + 4);
     atexit(StaticFini_gSevtBreakCmdList);
 }
 
-void StaticInit_6ca920() {
+void StaticInit_CriticalSection_0077930c() {
     InitializeCriticalSection(&lpCriticalSection_0077930c);
     atexit(StaticFini_CriticalSection_0077930c);
 }

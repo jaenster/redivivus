@@ -405,7 +405,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn30",
+      "name": "Objects_InitFn30_HaremBlocker",
       "address": "0059b7d0",
       "lines": [
         {
@@ -415,7 +415,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q4",
       "calledFunctions": [
-        "Objects_InitFn30",
+        "Objects_InitFn30_HaremBlocker",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag",
         "RemoveCollision_Vector"
@@ -537,7 +537,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn29",
+      "name": "Objects_InitFn29_ArcaneSanctuaryPortal",
       "address": "0059ba40",
       "lines": [
         {
@@ -547,7 +547,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q4",
       "calledFunctions": [
-        "Objects_InitFn29",
+        "Objects_InitFn29_ArcaneSanctuaryPortal",
         "GetQuestDataByQuestNoInternal",
         "DRLGROOM_GetLevelIdFromRoom",
         "SetupUpdateFlag",

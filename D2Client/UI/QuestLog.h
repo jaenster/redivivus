@@ -108,7 +108,7 @@ void __fastcall QUESTLOG_SelectQuestByIndex(int32_t nQuestId);
 void __fastcall QUESTLOG_ClearMissileFlagCb_Missile146(void * pUnit);
 void __fastcall QUESTLOG_ClearMissileFlagCb_Missile527(void * pUnit);
 // QuestLog.cpp - Client handler for 0x5D quest state packets, plays sounds and updates UI
-void __fastcall QUESTLOG_HandleQuestStatePacket(uint32_t dwParam, struct D2GSPacketClt0x5D * pPacket);
+void __fastcall QUESTLOG_HandleQuestStatePacket(uint32_t dwUnused, struct D2GSPacketClt0x5D * pPacket);
 void __stdcall QUESTLOG_ResetNpcDialogState();
 void __stdcall QUESTLOG_ResetQuestFilterArrays();
 void __stdcall QUESTLOG_ResetQuestSelections();
@@ -131,8 +131,8 @@ void __stdcall QUESTLOG_OnButtonMouseUp(struct D2UIMouseMsgStrc * pMsg);
 // Checks quest availability by index. Scans gQuestIconsPerActTable to map index to quest ID, validates quest state (not just completed, reward awaits, can complete). Returns 1 if quest is available for interaction.
 BOOL __fastcall QUESTLOG_IsQuestAvailableForInteraction(int32_t nQuestIconIndex);
 void __stdcall QUESTLOG_OnMouseUp(struct D2UIMouseMsgStrc * pMsg);
-void StaticInit_6cac30();
-void StaticInit_6cacd0();
+void StaticInit_gaQuestLogPanelRects();
+void StaticInit_gQuestLog();
 // 9 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::QuestLog

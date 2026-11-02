@@ -51,7 +51,7 @@
       ]
     },
     {
-      "name": "DEBUG_UnusedDebugFunction",
+      "name": "DEBUG_Trace",
       "address": "0051a480",
       "lines": [
         {
@@ -61,7 +61,7 @@
       ],
       "namespace": "Bnclient::Debug",
       "calledFunctions": [
-        "DEBUG_UnusedDebugFunction"
+        "DEBUG_Trace"
       ]
     }
   ]

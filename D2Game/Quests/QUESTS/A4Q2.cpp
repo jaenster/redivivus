@@ -1021,7 +1021,7 @@ void __fastcall Q27_InitData(D2QuestDataStrc * pQuestData) {
 }
 
 // [A4Q3 Terror's End] Object init-fn (seal object): records which seal/lever was touched into the A4Q2 struct; if all 5 seals + 3 bosses are accounted for, triggers Q27_ActivateAllSealsKillChaos and arms the spawn-Diablo timer (QuitGameAfterDia).
-void __fastcall Objects_InitFn55(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn55_DiabloStartPoint(D2ObjectInitFnArg * pInitArg) {
     int nSealObjectId;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TerrorsEnd);
     if (!pQuestData) {

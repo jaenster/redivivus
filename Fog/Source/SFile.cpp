@@ -513,9 +513,9 @@ void __fastcall SFILE_GregorianCalendarFromJulian(int32_t nJulianDay, int * pYea
     }
 
     nYearsSinceEpoch = (int)(((double)(nJulianDay - 0x2534ca) - 122.1) / 365.25 + 6680.0);
-    int iVar1 = (int)((double)(nYearsSinceEpoch * 0x16d) + (double)nYearsSinceEpoch * 0.25);
-    int nMonth = (int)((double)(nJulianDay + 0x5f4 - iVar1) / 30.6001);
-    *pDay = nJulianDay + 0x5f4 - (int)((double)nMonth * 30.6001) - iVar1;
+    int nDaysBeforeYear = (int)((double)(nYearsSinceEpoch * 0x16d) + (double)nYearsSinceEpoch * 0.25);
+    int nMonth = (int)((double)(nJulianDay + 0x5f4 - nDaysBeforeYear) / 30.6001);
+    *pDay = nJulianDay + 0x5f4 - (int)((double)nMonth * 30.6001) - nDaysBeforeYear;
     *pMonth = nMonth - 1;
     if (nMonth - 1 > 0xc) {
       *pMonth = nMonth - 0xd;

@@ -112,7 +112,7 @@
       ]
     },
     {
-      "name": "_unused",
+      "name": "COLLISION_FindNearbyUnitByCallback",
       "address": "006419f0",
       "lines": [
         {
@@ -122,7 +122,7 @@
       ],
       "namespace": "D2Common::Collision::Collision",
       "calledFunctions": [
-        "_unused",
+        "COLLISION_FindNearbyUnitByCallback",
         "GetUnitSizeX",
         "UNITS_GetRoom",
         "GetXPosFromDynamicPathUnit",

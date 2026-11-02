@@ -337,7 +337,7 @@ void __fastcall MONUMOD_ApplyFanatic(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_item_tohit_percent, nValue, 0);
 }
 
-void __fastcall MONUMOD_SetEventTimer(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
+void __fastcall MONUMOD_SetEventTimer(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnused) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
     }

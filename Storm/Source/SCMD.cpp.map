@@ -652,7 +652,7 @@
       ]
     },
     {
-      "name": "StaticInit_6cb030",
+      "name": "StaticInit_gStormCmdListBackslash",
       "address": "006cb030",
       "lines": [
         {
@@ -662,12 +662,12 @@
       ],
       "namespace": "Storm::Source::SCMD",
       "calledFunctions": [
-        "StaticInit_6cb030",
+        "StaticInit_gStormCmdListBackslash",
         "atexit"
       ]
     },
     {
-      "name": "StaticInit_6cb050",
+      "name": "StaticInit_gStormCmdListSlash",
       "address": "006cb050",
       "lines": [
         {
@@ -677,7 +677,7 @@
       ],
       "namespace": "Storm::Source::SCMD",
       "calledFunctions": [
-        "StaticInit_6cb050",
+        "StaticInit_gStormCmdListSlash",
         "atexit"
       ]
     },

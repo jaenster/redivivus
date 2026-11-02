@@ -577,12 +577,12 @@ void __fastcall TASK_Nop(D2UnitStrc * pItem) {
 
 }
 
-void StaticInit_6caf70() {
+void StaticInit_CriticalSection_0088caa8() {
     InitializeCriticalSection(&lpCriticalSection_0088caa8);
     atexit(StaticFini_CriticalSection_0088caa8);
 }
 
-void StaticInit_6caf90() {
+void StaticInit_aTaskQueueCriticalSections() {
     _eh_vector_constructor_iterator_(aTaskQueueCriticalSections, 0x18, 0x20, Fog::Src::LogManager::InitCriticalSection, Fog::THREADING_DeleteCriticalSection_Thunk);
     atexit(StaticFini_aTaskQueueCriticalSections);
 }

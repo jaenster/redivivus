@@ -77,7 +77,7 @@
       ]
     },
     {
-      "name": "StaticInit_6ca980",
+      "name": "StaticInit_gbChatLobbyInitialize",
       "address": "006ca980",
       "lines": [
         {
@@ -86,7 +86,7 @@
         }
       ],
       "calledFunctions": [
-        "StaticInit_6ca980",
+        "StaticInit_gbChatLobbyInitialize",
         "SStrHash"
       ]
     },

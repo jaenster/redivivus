@@ -74,17 +74,17 @@ void __fastcall D2CLIENT_SetExitVar1(BOOL bResult);
 // Client app-mode entry. Init memory/UI, load language + string tables, init TXT tables, then run pfModes[] loop. Returns to launcher based on quit/game type.
 int32_t __stdcall fAPPMODE_client_ReturnAppMode(HMODULE hModule, struct D2IniConfigStrc * D2IniData);
 void __fastcall CLIENT_SetScreenResolution(DWORD RequestedScreenModeMaybe);
-uint32_t __stdcall CLIENTMODE_Unused3(uint32_t dwUnused);
+uint32_t __stdcall CLIENTMODE_WaitForQServerConnection(uint32_t dwUnused);
 void __stdcall FreeQServer();
 int __stdcall CLIENTMODE_InitializeCallback();
 bool __stdcall GameLoopFuncInitGame(uint32_t dwUnused);
 // pfModes_StartServer: create/init QServer, connect to server, run MessageGameLoop for required user action; sets player count and globals.
 eD2ClientAppMode __stdcall NET_QServer_StartServer();
-uint32_t __stdcall CLIENTMODE_Unused4(uint32_t dwUnused);
+uint32_t __stdcall CLIENTMODE_WaitForServerShutdown(uint32_t dwUnused);
 // pfModes_ShutdownServer: run MessageGameLoop while shutting down, free QServer, send 0xB0 to clients.
 eD2ClientAppMode __stdcall NET_QServer_ShutdownServer();
-void StaticInit_6ca9a0();
-void StaticInit_6ca9b0();
+void StaticInit_gpszCmdLineCaptionStr();
+void StaticInit_gpszDiabloIICaptionCopy();
 void __stdcall QSERVER_InitGlobalGameState();
 void QSERVER_DestroyGlobalGameState();
 

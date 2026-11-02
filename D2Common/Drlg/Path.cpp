@@ -265,30 +265,30 @@ void __thiscall DRLGPATH_GetDirectionTripletPacked(uint32_t * pnDirOut, uint32_t
 // and checks for overshoot (velocity > remaining distance). Returns 0 if overshooting
 // (meaning the path would skip past the target), 1 otherwise.
 // Handles 0x200 flag for 6-bit direction wrapping (isometric adjustment).
-uint32_t __fastcall DRLGPATH_UpdatePathVelocityAndDirection(uint32_t * pnParam) {
+uint32_t __fastcall DRLGPATH_UpdatePathVelocityAndDirection(uint32_t * pPathData) {
     uint32_t nVelY;
     int nDistX;
     int nDistY;
     uint32_t* pnDirOut;
-    if ((short int)*pnParam == (short int)pnParam[1] && *(short int*)((int)pnParam + 2) == *(short int*)((int)pnParam + 6)) {
-      memset(pnParam + 2, 0, 5 * sizeof(pnParam[0]));
+    if ((short int)*pPathData == (short int)pPathData[1] && *(short int*)((int)pPathData + 2) == *(short int*)((int)pPathData + 6)) {
+      memset(pPathData + 2, 0, 5 * sizeof(pPathData[0]));
     } else {
       uint32_t nVelX;
-      PATH::Path::DRLGPATH_CalcPathDirection((POINT*)(pnParam + 2), (uint32_t*)&pnDirOut, *pnParam, pnParam[1]);
-      *(char*)(pnParam + 7) = (char)(uintptr_t)pnDirOut;
-      if (pnParam[8] & 0x200) {
-        *(uint8_t*)(pnParam + 7) = (char)(uintptr_t)pnDirOut - 0x20U & 0x3f;
+      PATH::Path::DRLGPATH_CalcPathDirection((POINT*)(pPathData + 2), (uint32_t*)&pnDirOut, *pPathData, pPathData[1]);
+      *(char*)(pPathData + 7) = (char)(uintptr_t)pnDirOut;
+      if (pPathData[8] & 0x200) {
+        *(uint8_t*)(pPathData + 7) = (char)(uintptr_t)pnDirOut - 0x20U & 0x3f;
       }
 
-      nVelX = (int)(((POINT*)(pnParam + 2))->x * pnParam[6]) >> 8;
-      nVelY = (int)(pnParam[3] * pnParam[6]) >> 8;
-      pnParam[4] = nVelX;
-      pnParam[5] = nVelY;
+      nVelX = (int)(((POINT*)(pPathData + 2))->x * pPathData[6]) >> 8;
+      nVelY = (int)(pPathData[3] * pPathData[6]) >> 8;
+      pPathData[4] = nVelX;
+      pPathData[5] = nVelY;
       if ((int)nVelX < 0) {
         nVelX = -nVelX;
       }
 
-      nDistX = (uint32_t)(uint16_t)*pnParam - (uint32_t)(uint16_t)pnParam[1];
+      nDistX = (uint32_t)(uint16_t)*pPathData - (uint32_t)(uint16_t)pPathData[1];
       if (nDistX < 0) {
         nDistX = -nDistX;
       }
@@ -296,7 +296,7 @@ uint32_t __fastcall DRLGPATH_UpdatePathVelocityAndDirection(uint32_t * pnParam) 
         nVelY = -nVelY;
       }
 
-      nDistY = (uint32_t)*(uint16_t*)((int)pnParam + 2) - (uint32_t)*(uint16_t*)((int)pnParam + 6);
+      nDistY = (uint32_t)*(uint16_t*)((int)pPathData + 2) - (uint32_t)*(uint16_t*)((int)pPathData + 6);
       if (nDistY < 0) {
         nDistY = -nDistY;
       }
@@ -312,37 +312,37 @@ uint32_t __fastcall DRLGPATH_UpdatePathVelocityAndDirection(uint32_t * pnParam) 
 // Repeatedly right-shifts both values until each fits within [-0x10000, 0x10000].
 // Used by DRLGPATH_StepPathWithCollisionCheck to keep velocity components in
 // a safe range for fixed-point iteration.
-void __fastcall DRLGPATH_NormalizeFixedPointPair(int * pnParam1, int * pnParam2) {
-    int nShiftCount = *pnParam1;
+void __fastcall DRLGPATH_NormalizeFixedPointPair(int * pnStepX, int * pnStepY) {
+    int nShiftCount = *pnStepX;
     if (nShiftCount >= 0) {
       while (nShiftCount > 0x10000) {
-        *pnParam1 >>= 1;
-        *pnParam2 >>= 1;
-        nShiftCount = *pnParam1;
+        *pnStepX >>= 1;
+        *pnStepY >>= 1;
+        nShiftCount = *pnStepX;
       }
     } else {
       while (nShiftCount < -0x10000) {
-        *pnParam1 >>= 1;
-        *pnParam2 >>= 1;
-        nShiftCount = *pnParam1;
+        *pnStepX >>= 1;
+        *pnStepY >>= 1;
+        nShiftCount = *pnStepX;
       }
     }
 
-    nShiftCount = *pnParam2;
+    nShiftCount = *pnStepY;
     if (nShiftCount >= 0) {
       if (nShiftCount > 0x10000) {
         do {
-          *pnParam1 >>= 1;
-          *pnParam2 >>= 1;
-        } while (*pnParam2 > 0x10000);
+          *pnStepX >>= 1;
+          *pnStepY >>= 1;
+        } while (*pnStepY > 0x10000);
 
         return;
       }
     } else {
       while (nShiftCount < -0x10000) {
-        *pnParam1 >>= 1;
-        *pnParam2 >>= 1;
-        nShiftCount = *pnParam2;
+        *pnStepX >>= 1;
+        *pnStepY >>= 1;
+        nShiftCount = *pnStepY;
       }
     }
 }

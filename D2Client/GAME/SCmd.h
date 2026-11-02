@@ -310,7 +310,7 @@ void __fastcall SCMD_Rcv0x66_Ignore(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x73_CreateMissile(struct D2GSPacketSrv0x73 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x74(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x75_UPDATEROSTER(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x77(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x77(uint8_t * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x78_TRADENAME(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x79_TRADEGOLD(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x7A_UPDATEPET(struct D2GSPacketSrv0x7A * pBytes);

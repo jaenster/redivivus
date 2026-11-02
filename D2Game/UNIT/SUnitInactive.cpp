@@ -1341,11 +1341,11 @@ void __fastcall SUNITINACTIVE_FreeAllInactiveLists(::SGAMEDATA * pGame) {
 
 // Removes a single inactive unit record from the per-act inactive list by unit type and class ID. For monsters (nUnitType==1) delegates to SUNITINACTIVE_RemoveInactiveMonsterByClassId; for other types walks the linked list and frees the matching D2InactiveUnitRecordStrc from the game memory pool.
 // @sourcefile .\UNIT\SUnitInactive.cpp
-void __fastcall SUNITINACTIVE_RemoveInactiveUnitByTypeAndId(::SGAMEDATA * pGame, uint16_t nUnitType, uint32_t nClassId, uint8_t byActNo) {
+void __fastcall SUNITINACTIVE_RemoveInactiveUnitByTypeAndId(::SGAMEDATA * pGame, uint16_t nUnitType, uint16_t nClassId, uint8_t byActNo) {
     D2InactiveUnitRecordStrc* pCurRecord;
     D2InactiveUnitRecordStrc* pNextRecord;
     if (nUnitType == 1) {
-      SUNITINACTIVE_RemoveInactiveMonsterByClassId(byActNo, pGame, (uint16_t)nClassId);
+      SUNITINACTIVE_RemoveInactiveMonsterByClassId(byActNo, pGame, nClassId);
       return;
     }
 
@@ -1361,7 +1361,7 @@ void __fastcall SUNITINACTIVE_RemoveInactiveUnitByTypeAndId(::SGAMEDATA * pGame,
         pNextRecord = pCurListNode->pInactiveUnits;
         do {
           pCurRecord = pNextRecord;
-          if (pCurRecord->eUnitType == (uint32_t)nUnitType && pCurRecord->nClassId == (uint16_t)nClassId) {
+          if (pCurRecord->eUnitType == (uint32_t)nUnitType && pCurRecord->nClassId == (uint32_t)nClassId) {
             if (pCurRecord == pCurListNode->pInactiveUnits) {
               pCurListNode->pInactiveUnits = pCurRecord->pNext;
             } else {
@@ -1491,7 +1491,7 @@ static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2
 }
 
 // Server-side inactive/dead unit processor. Dispatches by unit type: monsters go to UNITS_ProcessDeadOrInactiveMonster; players in body state get saved and deleted; objects are conditionally saved based on Restore/RestoreVirgins txt flags and sparkly-chest state; items and warps are always saved. Fires UNITEVENTCALLBACK_ENDANIM timer trigger for players and objects, then frees non-item units via FreeServerUnit.
-void __fastcall SERVER_GAME_UNIT_method(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall SUNITINACTIVE_SaveOrFreeUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2ObjectsTxt* pObjectTxt;
     eD2States eState;
     D2RoomStrc* pRoom;

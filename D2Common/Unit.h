@@ -24,13 +24,13 @@ struct D2PartyDataStrc;
 struct D2RoomStrc;
 struct D2SUnitEventStrc;
 struct D2ShrinesTxt;
+struct D2TradeRecordStrc;
 struct D2UnitDataPlayerArenaStrc;
 struct D2UnitDataPlayerInteractedNPCStrc;
 struct D2UnitDataPlayerPetsStrc;
 struct D2UnitPlayerListStrc;
 struct D2UnitQuestDataListStrc;
 struct D2UnitStrc;
-struct D2UnknownStructure0x18;
 struct D2WaypointStrc;
 struct SGAMEDATA;
 typedef int eD2ItemFlag;
@@ -200,7 +200,7 @@ struct D2UnitDataPlayerStrc {
     /* 0x050 */ int dwTradeState; // Trade state/action flags
     /* 0x054 */ uint32_t nAiState;
     /* 0x058 */ uint32_t nAcceptTradeTick; // Trade-accept timestamp/tick
-    /* 0x05C */ struct D2UnknownStructure0x18 * pTradeCopyInventory; // Trade snapshot copy
+    /* 0x05C */ struct D2TradeRecordStrc * pTradeCopyInventory; // Trade snapshot copy
     /* 0x060 */ struct D2UnitDataPlayerInteractedNPCStrc * pInteractedNPCs[3]; // struct D2UnitDataPlayerInteractedNPCStrc* per difficulty
     /* 0x06C */ int nInteractedNPCsRelated;
     /* 0x070 */ eD2Skills eRightSkillId; // Current right skill id

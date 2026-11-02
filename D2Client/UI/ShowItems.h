@@ -29,7 +29,7 @@ namespace D2Client::UI::ShowItems {
 // Function declarations
 // @sourcefile .\UI\showitems.cpp
 void __stdcall DRAW_AltItems();
-void StaticInit_6cadb0();
+void StaticInit_gaGroundItemLabels();
 void StaticInit_6cade0();
 void StaticFini_Empty_6cb400();
 

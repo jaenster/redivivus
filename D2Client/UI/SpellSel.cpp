@@ -1758,7 +1758,7 @@ void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
     int32_t nNewSkills;
     D2SkillsTxt* pSkillTxt;
     D2SkillDescTxt* pSkillDesc;
-    int32_t iVar1;
+    int32_t nClassSkillCount;
     D2SkillStrc* pSkill;
     int iSkillResult;
     int skillIdOfClass;
@@ -1864,8 +1864,8 @@ void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
             }
 
             skillIdOfClass++;
-            iVar1 = D2Common::Skills::AmountOfSkillsByClassId(classId);
-          } while (skillIdOfClass < iVar1);
+            nClassSkillCount = D2Common::Skills::AmountOfSkillsByClassId(classId);
+          } while (skillIdOfClass < nClassSkillCount);
         }
       }
 

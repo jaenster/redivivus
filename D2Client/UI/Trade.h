@@ -22,6 +22,6 @@ void __fastcall TRADE_HandleTradeGoldUpdate(uint8_t * pPacket);
 uint16_t * __stdcall TRADE_GetTradeWindowPtr();
 void __stdcall AcceptTrade();
 void __stdcall CancelTrade();
-void StaticInit_6cad80();
+void StaticInit_gwszTradePartnerName();
 
 } // namespace D2Client::UI::Trade

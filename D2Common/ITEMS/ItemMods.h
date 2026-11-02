@@ -42,7 +42,7 @@ namespace D2Common::ITEMS::ItemMods {
 // Returns pTxtLine + 0xc + nMod * 0x10 (nMod in EAX, the line in ECX); halts (ItemMods.cpp line 129, nMod < MAX_UNIQUE_ITEM_PROPERTIES && nMod >= 0) when nMod >= 12.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void * __stdcall TXT_UniqueItems_GetModEntry(void * pTxtLine, uint32_t nMod);
-void __stdcall ITEMMODS_GetQualityMinMax(uint32_t nPackedQuality, uint32_t * pnParam1, uint32_t * pnParam2);
+void __stdcall ITEMMODS_GetQualityMinMax(uint32_t nPackedQuality, uint32_t * pnSkillId, uint32_t * pnSkillLevel);
 void __stdcall ITEMMODS_GetQualityAllFields(uint32_t nPackedQuality, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3, uint32_t * pnParam4);
 // Searches an item unit's stat lists (flag 0x40) for a charged-skill stat matching nParam1 (skill ID) and nParam2 (charge slot). Recurses into socketed/carried items via inventory. On match, writes current charge count (low byte) to *pnParam and the stat list pointer to *ppStatList. Returns 1 if found, 0 otherwise.
 int __stdcall ITEMMOD_FindChargedSkill(struct D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLevel, uint32_t * pnCharges, struct D2StatListExStrc * * ppStatList);
@@ -50,10 +50,10 @@ int __stdcall ITEMMOD_FindChargedSkill(struct D2UnitStrc * pUnit, int32_t nSkill
 BOOL __stdcall ITEMMOD_SetChargedSkillCharges(struct D2UnitStrc * pUnit, int32_t nSkillId, uint32_t nChargeSlot, uint32_t nNewChargeCount);
 int32_t __stdcall ITEMMODS_CalculateRepairCost(uint32_t nPackedRepairData, uint32_t dwParam, int32_t nDurability, uint32_t * pnTimePeriod, int * pnMinValue, int * pnMaxValue);
 int32_t __stdcall ITEMMODS_GetQualityField1(int32_t nParam1, int32_t nParam2);
-void __stdcall ITEMMODS_GetQualityFields2_3_4(uint32_t nPackedQuality, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3);
+void __stdcall ITEMMODS_GetQualityFields2_3_4(uint32_t nPackedQuality, uint32_t * pnSkillId, uint32_t * pnSkillLevel, uint32_t * pnChance);
 int32_t __stdcall ITEMMODS_GetQualityField2(int32_t nParam1, int32_t nParam2, int32_t nParam3);
-void __stdcall ITEMMODS_GetQualityFields1_2_3(uint32_t nPackedQuality, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3);
-int32_t __stdcall ITEMMODS_GetQualityField3(int32_t nParam1, int32_t nParam2, int32_t nParam3);
+void __stdcall ITEMMODS_GetQualityFields1_2_3(uint32_t nPackedQuality, uint32_t * pnPlayerClass, uint32_t * pnSkillTab, uint32_t * pnSkillLevels);
+int32_t __stdcall ITEMMODS_GetQualityField3(int32_t nPlayerClass, int32_t nSkillTab, int32_t nSkillLevels);
 // Property-to-stat conversion with additional context parameter for situational stat application. Reads scaled value from pPropData+4, optionally maximizes enhanced-damage stats, gets or creates the stat list (using pUnit as context for ITEMMOD_GetOrCreateStatList), then adds or negates the stat value. Halts on stat list failure.
 int32_t __fastcall PropertyFunc_SimpleStatWithContext(int32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItemUnit, struct D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, int32_t nContext);
 // Property function wrapper - delegates to ITEMMOD_ApplyRandomStatValue (normal mode).

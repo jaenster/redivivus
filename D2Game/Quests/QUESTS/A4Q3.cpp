@@ -134,7 +134,7 @@ BOOL __fastcall Q27_IsClassicGameCompleted(::SGAMEDATA * pGame) {
 }
 
 // A4Q3 Hell's Forge — Objects_InitFn78: object init for an Act4 quest object keyed off TerrorsEnd (Diablo) quest data. First touch sets the object's per-quest marker to 2 and update-flag 1 (un-touched/active visual); subsequent touches set update-flag 2 (completed/depleted visual). State stored in pA4Q3 quest-specific GUID scratch, not in the QuestRecord bitfield.
-void __fastcall Objects_InitFn78(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn78_LastLastPortal(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TerrorsEnd);
     if (!pQuestData) {
       return;
@@ -235,7 +235,7 @@ BOOL __fastcall Q28_PlayerNotifyCompletedForge(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // A4Q3 Hell's Forge — Objects_InitFn48: init for the Hellforge object. No quest data / not yet introduced -> update-flag 3 (default/unstarted visual). Otherwise sets update-flag from cached pA4Q3 state word; if the prior state flag is not one of {0xd,2,3} (i.e. not already in/after the smash sequence) it resets eFlags and broadcasts state 2 (forge-active) via QUEST_SetStateAndBroadcast + Q28_PlayerNotifyCompletedForge.
-void __fastcall Objects_InitFn48(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn48_HellForge(D2ObjectInitFnArg * pInitArg) {
     uint16_t wForgeState;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_HellsForge);
     if (!pQuestData || pQuestData->bIsNotIntroduction == '\0') {

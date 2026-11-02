@@ -160,7 +160,7 @@ void __stdcall MAINMENU_UpdateIPAddressDisplay();
 BOOL __stdcall MAINMENU_OnPressUpdateIpAddressDisplay(struct D2ControlMsg * pControlMsg);
 void __stdcall UIMENU_TCPIPOptions();
 void __stdcall MAINMENU_DisableControlIfDataNonZero(int32_t pControlData);
-void __stdcall MAINMENU_DisableControlIfDataNonZero2(int32_t nParam);
+void __stdcall MAINMENU_DisableControlIfDataNonZero2(int32_t pControlData);
 // Shows BNet account creation UI. Clears gbPasswordChangeInProgress, creates form with username/password/confirmation fields. Entry point for new account flow from main menu.
 void __stdcall UIMENU_CreateBattleNetAccount();
 void __stdcall UIMENU_BackgroundAndExpansionText();
@@ -276,7 +276,7 @@ void __stdcall UIMENU_MainMenu();
 // @sourcefile .\Src\MainMenus.cpp
 BOOL __stdcall UIMENU_ShowTermsOfService();
 // Edit-box change callback installed via D2WINEDITBOX_SetInputMode @004fdb00 into D2WinEditBox+0x26c (fpChangeCallback, fpD2WinEditBoxChange). Signature proven by RET 0x4 (1 stack arg, callee cleans) and MOV EAX,1.
-int __stdcall EDITBOX_Cb_MAINMENU_ValidateCharacterNameCallback(void * pUnknown);
+int __stdcall EDITBOX_Cb_MAINMENU_ValidateCharacterNameCallback(void * pUnused);
 // Edit-box change callback installed via D2WINEDITBOX_SetInputMode @004fdb00 into D2WinEditBox+0x26c (fpChangeCallback). Signature proven by RET 0x4 (1 stack arg, callee cleans) and MOV EAX,1.
 int __stdcall EDITBOX_Cb_MAINMENU_ValidatePasswordChangeForm(void * pUnknown);
 int __stdcall ClickOnClassCreate(struct D2ControlMsg * pControlMsg);
@@ -285,15 +285,15 @@ void __stdcall MAINMENU_QueryAndBuildRealmList();
 BOOL __stdcall MAINMENU_OnPressCreditsEndCheck(struct D2ControlMsg * pControlMsg);
 BOOL fpInsertPlayCd();
 BOOL fpInsertExpansionCd();
-BOOL __stdcall MAINMENU_Unused1(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_Unused2(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_Unused3(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_Unused4(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_Unused5(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_Unused6(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_Unused7(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressPlayIntroCinematic(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressPlayAct2StartCinematic(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressPlayAct3StartCinematic(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressPlayAct4StartCinematic(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressPlayAct4EndCinematic(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressPlayExpansionIntroCinematic(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressPlayExpansionOutroCinematic(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressReloadMediaMpqAndReturnToMainMenu(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_Unused8(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressShowGatewaySelect(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall StorePreferedRealmAgain(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressDestroyListsAndReturnToMainMenu(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall UIMENU_ConnectToServerCallback(struct D2ControlStrc * pUnusedArg);
@@ -315,10 +315,10 @@ void __stdcall PlaysBlizzardNorthCutScene();
 void __stdcall UIMENU_MainMenuAgain();
 void __stdcall UIMENU_CreateHeroSinglePlayer();
 int32_t __fastcall fAPPMODE_launcher_ReturnAppMode_Caller(struct D2IniConfigStrc * pD2IniData);
-BOOL __stdcall MAINMENU_Unused9(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressSinglePlayer(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_Unused10(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_Unused11(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_Unused12(struct D2ControlMsg * pMsg);
+BOOL __stdcall MAINMENU_OnPressSelectBattleNet(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressRealmList(struct D2ControlMsg * pMsg);
 uint32_t __stdcall thunk_UIMENU_CreateHeroSinglePlayer(struct D2ControlMsg * pControlMsg);
 void __stdcall NET_MCP_CLIENT_HandleCharCreation();
 // BNet login submit handler. Reads account/password from gbPasswordChangeInProgress-related inputs, calls launcher authentication. On success, transitions to char select or creates hero.
@@ -330,8 +330,8 @@ BOOL __stdcall MAINMENU_OnPressCommitNewCharacterAndStartGame(struct D2ControlMs
 BOOL __stdcall MAINMENU_OnPressCreateHeroSinglePlayer(struct D2ControlMsg * pControlMsg);
 void __stdcall UIMENU_ConfirmCreateCharacter();
 // BNet account creation handler. Validates username/password from gbPasswordChangeInProgress inputs (2-15 chars, matching confirmation), shows please-read dialog on success or error popup on validation failure.
-BOOL __stdcall MAINMENU_Unused15(struct D2ControlStrc * pControl);
-BOOL __stdcall MAINMENU_Unused16(struct D2ControlStrc * pControl);
+BOOL __stdcall MAINMENU_OnSubmitCreateBattleNetAccount(struct D2ControlStrc * pControl);
+BOOL __stdcall MAINMENU_OnPressCreateCharacterOk(struct D2ControlStrc * pControl);
 void __stdcall MAINMENU_BnetConnectionProgress();
 BOOL __stdcall MAINMENU_OnPressConfirmSkipEmailPopup(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressAcceptEmailAddress(struct D2ControlMsg * pControlMsg);
@@ -361,11 +361,11 @@ void __stdcall UIMENU_ConnectinToBattleNetWitProgressDots();
 // so the slot has one and only one stored value and that value is an OnPress. Without a
 // declared variable the slot surfaces as an untyped pointer and renders as code *, which no
 // OnPress parameter will accept. Do not delete it to silence the warning.
-BOOL __stdcall MAINMENU_Unused19(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressSubmitEmailAddress(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressShowDisconnectedFromBattleNet2Alt2(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall thunk_UIMENU_YouWereDisconnectedFromBattleNet3(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_Unused20(int32_t bSubmit);
-BOOL __stdcall MAINMENU_Unused21(int32_t bSubmit);
+BOOL __stdcall MAINMENU_HandleEmailChange(int32_t bSubmit);
+BOOL __stdcall MAINMENU_OnSubmitResetPassword(int32_t bSubmit);
 // Returns __time32(pTime) with pTime passed in EAX.
 // Provenance: asm 004379c0..004379c9; unreferenced in 1.14d.
 __time32_t __stdcall MAINMENU_GetTime32(__time32_t * pTime);

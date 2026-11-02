@@ -1175,7 +1175,7 @@ int __fastcall LoadPlayerIntro(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, shor
 }
 
 // Deserializes the long-form stat bitstream from a character save buffer into a unit's stat list. Expects a 0x6667 magic header at *ppReadPos. Reads 9-bit stat IDs followed by optional sub-index (csvparam bits) and value (csvbits wide, signed or unsigned per ITEMSTATCOSTFLAG_CSVSIGNED) until stat ID >= 0x1FE (terminator). Applies each stat via STATLIST_SetUnitStat. Advances *ppReadPos past the stream on success; returns 0 on success, 0x12 on bad header or invalid stat.
-static int __fastcall ReadStatsLong(D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwParam) {
+static int __fastcall ReadStatsLong(D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t nFileVersion) {
     int32_t nSubIndexRaw;
     int32_t nBitStreamLen;
     uint32_t nStatSubIndex;
@@ -1291,7 +1291,7 @@ void __fastcall PLRSAVE_SetSkillIfNonZero(uint32_t dwParam, D2UnitStrc * pUnit, 
 
 // Deserialises hard skill allocations (magic 0x6669) from the save buffer and applies them to the unit via SetSkill for each non-zero entry. After loading, sends the 0x94 skills-list packet to the client and recomputes all passive and pet bonuses. Returns 0x13 on header mismatch or missing client.
 // @sourcefile .\PLAYER\PlrSave2.cpp
-int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwParam, uint32_t nSkillCount) {
+int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwFileVersion, uint32_t nSkillCount) {
     int32_t nTotalClassSkills;
     int32_t iSkill;
     short int* pSkillLevels = *ppReadPos + 1;

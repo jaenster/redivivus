@@ -163,7 +163,7 @@
       ]
     },
     {
-      "name": "nullsub_4Arg",
+      "name": "SUNITDMG_DebugTraceAvoidRoll",
       "address": "005347c0",
       "lines": [
         {
@@ -173,7 +173,7 @@
       ],
       "namespace": "D2Game",
       "calledFunctions": [
-        "nullsub_4Arg"
+        "SUNITDMG_DebugTraceAvoidRoll"
       ],
       "usedTypes": [
         "D2UnitStrc",
@@ -932,7 +932,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn56",
+      "name": "Objects_InitFn56_Seal",
       "address": "005b5620",
       "lines": [
         {
@@ -942,7 +942,7 @@
       ],
       "namespace": "D2Game",
       "calledFunctions": [
-        "Objects_InitFn56"
+        "Objects_InitFn56_Seal"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"

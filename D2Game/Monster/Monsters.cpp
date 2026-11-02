@@ -2283,7 +2283,7 @@ void __fastcall MONSTER_SpawnWormOnDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 41. While alive: MONSTERAI_TriggerMageThink, then event 7 in 75 frames.
-void __fastcall MONSTER_PeriodicMageThink(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nUModId, int32_t nParam2) {
+void __fastcall MONSTER_PeriodicMageThink(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nUModId, int32_t bUnique) {
     BOOL BVar1 = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (BVar1) {
       return;
@@ -3091,7 +3091,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
     } while (true);
 }
 
-void __fastcall MONSTER_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, uint32_t dwParam) {
+void __fastcall MONSTER_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, uint32_t dwUnused) {
     UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, nToHitBonusExtra, 0);
 }
 

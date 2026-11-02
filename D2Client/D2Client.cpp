@@ -3895,7 +3895,7 @@ void __thiscall WARDEN_RC4Init(D2RC4StateStrc * pRc4State, uint8_t * pKey, uint3
     } while (nNextIdx < 0x100);
 }
 
-void __fastcall SKILLSSOR_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t nParam) {
+void __fastcall SKILLSSOR_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t pStatListEx) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 

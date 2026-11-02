@@ -373,7 +373,7 @@ BOOL __stdcall INVENTORY_CheckDoItemBelongToInventory(D2InventoryStrc * pInvento
       return 0;
     }
 
-    D2UnknownStructure0x18** ppInventory = &pUnit->pUnitData.pUnitDataPlayer->pTradeCopyInventory;
+    D2TradeRecordStrc** ppInventory = &pUnit->pUnitData.pUnitDataPlayer->pTradeCopyInventory;
     if (!ppInventory) {
       return 0;
     }
@@ -528,7 +528,7 @@ static BOOL __stdcall INVENTORY_PlaceItemInGrid(int32_t nnX, int32_t nnY, int32_
       return 0;
     }
 
-    D2UnknownStructure0x18** ppItemDataPtr;
+    D2TradeRecordStrc** ppItemDataPtr;
     ppItemDataPtr = &pUnit->pUnitData.pUnitDataPlayer->pTradeCopyInventory;
     if (!ppItemDataPtr) {
       return 0;
@@ -4699,7 +4699,7 @@ int32_t __stdcall ITEM_GetItemData_eD2InventoryGridType(D2UnitStrc * pUnit) {
 
 D2UnitStrc * __stdcall INVENTORY_IsItemOwnedBy(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
     if (pInventory && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataPlayer) {
-      D2UnknownStructure0x18** ppTradeCopyInventory;
+      D2TradeRecordStrc** ppTradeCopyInventory;
       ppTradeCopyInventory = &pUnit->pUnitData.pUnitDataPlayer->pTradeCopyInventory;
       if (ppTradeCopyInventory) {
         return (D2UnitStrc*)(pInventory != (D2InventoryStrc*)*ppTradeCopyInventory ? 0 : (uint32_t)pUnit);

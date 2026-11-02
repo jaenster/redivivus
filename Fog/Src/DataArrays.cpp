@@ -35,9 +35,9 @@ D2DataArrayStrc * __fastcall FOG_CreateDataArray(char * pszName, int numObjects,
 }
 
 // @sourcefile .\Src\DataArrays.cpp
-void __fastcall FreeWeatherPointer(void * pParam) {
-    memset(pParam, 0, 0x120);
-    D2_FREE_AT(pParam, ".\\Src\\DataArrays.cpp", 0x4c);
+void __fastcall FreeWeatherPointer(void * pDataArray) {
+    memset(pDataArray, 0, 0x120);
+    D2_FREE_AT(pDataArray, ".\\Src\\DataArrays.cpp", 0x4c);
 }
 
 void __fastcall FOG_InitDataArray(D2DataArrayStrc * pDataArray) {
@@ -182,51 +182,51 @@ void __fastcall FOG_ArrayFreeAtIndex(D2DataArrayStrc * pDataArray, int nHandle) 
     pDataArray->nUsedCount--;
 }
 
-void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayData, double fParam, uint32_t * pdwParam, int nCount, int nMaxValue) {
+void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayData, double fParam, uint32_t * nElementSize, int nCount, int nMaxValue) {
     uint32_t* pByteOut;
     long double fParamF10;
     long double fHundredF10;
     long double fCountMinus1;
-    long double fVar1;
+    long double fLinearClamped;
     long double fLinearCandidate;
-    long double fVar2;
+    long double fTmp;
     double fTmp1;
     double dCountMinus1;
-    uint32_t* pElemSize = pdwParam;
-    if (pdwParam == (uint32_t*)0x1 || pdwParam == (uint32_t*)0x2 || pdwParam == (uint32_t*)0x4) {
+    uint32_t* pElemSize = nElementSize;
+    if (nElementSize == (uint32_t*)0x1 || nElementSize == (uint32_t*)0x2 || nElementSize == (uint32_t*)0x4) {
       int nOutValue;
       if (nArrayOffset < 0) {
         ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0xf);
         exit(-1);
       } else {
-        fVar2 = (long double)0;
+        fTmp = (long double)0;
         fParamF10 = (long double)fParam;
-        if (fVar2 <= fParamF10) {
+        if (fTmp <= fParamF10) {
           fHundredF10 = (long double)100.0;
           if (fParamF10 <= fHundredF10) {
             fCountMinus1 = (long double)nCount - (long double)1.0;
             dCountMinus1 = (double)fCountMinus1;
             pByteOut = pArrayData;
-            pdwParam = pArrayData;
-            if (fVar2 < fCountMinus1 == (fVar2 == fCountMinus1)) {
+            nElementSize = pArrayData;
+            if (fTmp < fCountMinus1 == (fTmp == fCountMinus1)) {
               return;
             }
 
             do {
-              fTmp1 = (double)fVar2;
-              fVar1 = (long double)nMaxValue;
-              fLinearCandidate = fVar2 * (long double)(double)((long double)nArrayOffset / fHundredF10) * fVar1 / fCountMinus1;
-              if (fLinearCandidate < fVar1) {
-                fVar1 = fLinearCandidate;
+              fTmp1 = (double)fTmp;
+              fLinearClamped = (long double)nMaxValue;
+              fLinearCandidate = fTmp * (long double)(double)((long double)nArrayOffset / fHundredF10) * fLinearClamped / fCountMinus1;
+              if (fLinearCandidate < fLinearClamped) {
+                fLinearClamped = fLinearCandidate;
               }
 
-              fVar2 = CRT_CIPow(fVar2 / fCountMinus1, (long double)(double)(fHundredF10 / (long double)nArrayOffset));
-              nOutValue = (int)(((long double)(double)fVar1 * (long double)fParam + fVar2 * (long double)nMaxValue * (long double)(double)(fHundredF10 - fParamF10)) / (long double)100.0);
+              fTmp = CRT_CIPow(fTmp / fCountMinus1, (long double)(double)(fHundredF10 / (long double)nArrayOffset));
+              nOutValue = (int)(((long double)(double)fLinearClamped * (long double)fParam + fTmp * (long double)nMaxValue * (long double)(double)(fHundredF10 - fParamF10)) / (long double)100.0);
               if (pElemSize != (uint32_t*)0x1) {
                 if (pElemSize != (uint32_t*)0x2) {
                   if (pElemSize == (uint32_t*)0x4) {
-                    *pdwParam = nOutValue;
-                    pdwParam++;
+                    *nElementSize = nOutValue;
+                    nElementSize++;
                   }
                 } else {
                   *(short int*)pArrayData = (short int)nOutValue;
@@ -237,9 +237,9 @@ void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayD
                 pByteOut = (uint32_t*)((int)pByteOut + 1);
               }
 
-              fVar2 = (long double)fTmp1 + (long double)1.0;
+              fTmp = (long double)fTmp1 + (long double)1.0;
               fCountMinus1 = (long double)dCountMinus1;
-            } while (fVar2 <= fCountMinus1);
+            } while (fTmp <= fCountMinus1);
 
             return;
           }

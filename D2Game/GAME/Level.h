@@ -18,7 +18,7 @@ namespace D2Game::GAME::Level {
 
 // Function declarations
 // Server-side act transition: warps a client's player unit to a destination act/level (e.g. waypoint/portal to another act). No-op in arena levels. Derives the target act from eLevel, lazily initializes the act's DRLG if absent, sets connection state, frees non-expansion pets, clears progressive states, spawns/finds a free room+coords (collision-checked with GetFreeCoordinates), then relinks the unit: clears old room, sends state command, sets client+unit act and pDrlgAct, tells the client to load the act, attaches the spawn room, sets the TELEPORTED flag, updates visibility, and re-manages pets at the new position. Halts via Fog::ErrorManager on failure paths.
-void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, eD2LevelId eLevel, int32_t param_1);
+void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, eD2LevelId eLevel, int32_t nSpawnTypeOrMode);
 // @sourcefile .\GAME\Level.cpp
 void __fastcall InitLevel(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2LevelId eLevel, int32_t nMasks);
 void __fastcall EnsureDrlgActLoaded(::SGAMEDATA * pGame, char nActNo);

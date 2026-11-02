@@ -184,7 +184,7 @@ void CONTROLCONFIG_RevertAndClose();
 void __stdcall CONTROLCONFIG_CalculateColumnBounds();
 void __stdcall CONTROLCONFIG_Initialize();
 void __stdcall CONTROLCONFIG_Cleanup();
-void __fastcall CONTROLCONFIG_OnToggleUI(int32_t nParam);
+void __fastcall CONTROLCONFIG_OnToggleUI(int32_t bClose);
 void __stdcall DRAW_ConfigControlsMenu();
 void __stdcall InitConfigUiFlags(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_SkillTreeScroll(struct D2UIMouseMsgStrc * pMsg);
@@ -255,12 +255,12 @@ void __fastcall UI_OpenHoradricCubeWithNpcInteraction(int nNpcShopTab);
 BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, int * pnBottom, int32_t nPlacementMode, int32_t nMaxX, int32_t nMinX);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca05c(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 void StaticInit_6caa10();
-void StaticInit_6caa30();
-void StaticInit_6caa50();
-void StaticInit_6caa70();
-void StaticInit_6caa90();
-void StaticInit_6caaa0();
-void StaticInit_6cace0();
+void StaticInit_gU16ImmunityStringBuffer1();
+void StaticInit_gU16ImmunityStringBuffer2();
+void StaticInit_gnMonsterHealthBarValue();
+void StaticInit_WindowSizeX();
+void StaticInit_WindowSizeY();
+void StaticInit_gnUICtrlConfigScrollPosition();
 // 26 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::ui

@@ -664,7 +664,7 @@
       ]
     },
     {
-      "name": "MONSTERTBLS_ReturnZero",
+      "name": "MONSTERTBLS_GetSuperUniquesTxtCount",
       "address": "00655710",
       "lines": [
         {
@@ -674,7 +674,7 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "MONSTERTBLS_ReturnZero"
+        "MONSTERTBLS_GetSuperUniquesTxtCount"
       ],
       "usedTypes": [
         "int32_t"

@@ -582,7 +582,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_AdvanceFrameMetrics2(D2UnitStrc * pUnit, eD
 
 // Client do-func that spawns a burst of missiles in an area around the target position. Uses skill cltmissilea as the missile type, aurarangecalc (minus 6, min 1) as the scatter radius, and cltcalc[0] as the missile count. Delegates to MISSILE_SpawnMissilesInArea. Sets UNITFLAG_SKSRVDOFUNC on pUnit.
 BOOL __fastcall Skills_CltDoFunc_Mon_SpawnMissilesInArea(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    uint32_t nMissileCount;
+    int32_t nMissileCount;
     int32_t nTargetX;
     int32_t nTargetY;
     D2UnitStrc* pUnitForCalc;
@@ -1679,8 +1679,8 @@ BOOL __fastcall Skills_CltDoFunc_Mon_CurseCenter_StreamRange(D2UnitStrc * pUnit,
       return 0;
     }
 
-    int32_t nStreamMissile = pSkillTxt->cltmissile[2];
-    if (!(nStreamMissile >= 0 && (int)nStreamMissile < sgptDataTable->nTxtMissilesSize)) {
+    int nStreamMissile = (int)pSkillTxt->cltmissile[2];
+    if (!(nStreamMissile >= 0 && nStreamMissile < sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
 

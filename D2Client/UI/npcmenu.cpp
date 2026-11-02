@@ -2052,7 +2052,7 @@ void __stdcall NPCMENU_CloseStashUI() {
     ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
 }
 
-int __stdcall NPCMENU_EmptyDrawCallback1() {
+int __stdcall NPCMENU_CloseGossipDialog() {
     if (gnNpcMenuActiveMode != '\0') {
       return 0;
     }
@@ -3175,7 +3175,7 @@ void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechId
     sDialogPos.x = 0;
     sDialogPos.y = 0;
     NPCMENU_CalculateDialogPosition(&sDialogPos);
-    Dialog::gpNpcGossipDialog = Dialog::AllocDialogStrc(sDialogPos.x, sDialogPos.y, NPCMENU_MercDrawCallback1, NPCMENU_EmptyDrawCallback1, 0, 0, 1, 0, 0, 0, 1);
+    Dialog::gpNpcGossipDialog = Dialog::AllocDialogStrc(sDialogPos.x, sDialogPos.y, NPCMENU_MercDrawCallback1, NPCMENU_CloseGossipDialog, 0, 0, 1, 0, 0, 0, 1);
     Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcGossipDialog, 1);
     Dialog::AddStringData(Dialog::gpNpcGossipDialog, D2Lang::StrTable::strtable::GetLocaleString(nTitleStringId), 0x15, 0, 4, 1, 0, 0);
     D2GSPacketSrv0x27_TextStrc* pMsgLog = Text::TEXT_GetOverheadGlobalPointer();
@@ -3296,7 +3296,6 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     uint32_t nDifficulty;
     int nLoopCounter;
     uint16_t* pszDialogPtr;
-    uint32_t uVar3;
     uint16_t wszGoldFmtBuf[300];
     uint16_t wszMercDesc2[150];
     uint16_t wszMercDesc[150];
@@ -3323,6 +3322,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     D2HirelingHireData* pHireData;
     ListBoxWrapperVtable* pListBoxVtbl;
     D2MercForHire* pMercForHire;
+    uint32_t pNullSentinel;
     void** ppvVar2 = &ExceptionList;
     int32_t nEHState = -1;
     pfnEHHandlerRoutine pSehHandler = __GSHandlerCheck_EH_6ca09b;
@@ -3491,9 +3491,9 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
         pszDialogPtr = D2Common::Merc::GetMercTypeString(nMercTypeDescIdx);
         if (pszDialogPtr) {
           Fog::File::CONTAINER_InitializeBuffer(wszMercTypeBuf, 2, 0x96, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-          uVar3 = 0;
+          pNullSentinel = 0;
           memcpy(wszFmtCode, L"a0:%0", 0xc);
-          Inv::wsprintf(wszMercTypeBuf, wszFmtCode, D2Common::Merc::GetMercTypeString(nMercTypeDescIdx), uVar3);
+          Inv::wsprintf(wszMercTypeBuf, wszFmtCode, D2Common::Merc::GetMercTypeString(nMercTypeDescIdx), pNullSentinel);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc2, wszMercTypeBuf);
         }
 
@@ -3712,7 +3712,7 @@ int __stdcall NPCMENU_EnableTyraelTravelToHarrogathOption() {
     return 1;
 }
 
-void __stdcall NPCMENU_HandleMenuSelection(int32_t nParam, D2UnitStrc * pUnit) {
+void __stdcall NPCMENU_HandleMenuSelection(int32_t bReopenMenu, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static uint32_t gNPCMenuSelectionPtrTable = 0x9; D2_STATIC_GUARD(gNPCMenuSelectionPtrTable, "D2Client::UI::npcmenu::NPCMENU_HandleMenuSelection::gNPCMenuSelectionPtrTable");
     static D2NpcQuestCallbackEntry gaNpcMenuQuestCallbackTable[9] = {
@@ -3807,7 +3807,7 @@ void __stdcall NPCMENU_HandleMenuSelection(int32_t nParam, D2UnitStrc * pUnit) {
     pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
     PLAYER_CurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pNpcUnit, eStat, wStatLayer);
     ui::UI_CloseActivePanels(0, 0);
-    if (!nParam) {
+    if (!bReopenMenu) {
       if (_Interaction::bInteractingWithNpc) {
         pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       } else {
@@ -3894,7 +3894,7 @@ void __stdcall NPCMENU_HandleMenuSelection(int32_t nParam, D2UnitStrc * pUnit) {
     }
 
     NPCMENU_OpenInteractionDialog();
-    if (nParam) {
+    if (bReopenMenu) {
       return;
     }
 
@@ -4116,7 +4116,7 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca09b(EHExceptionRecord * pException
     return ExceptionContinueSearch;
 }
 
-void StaticInit_6cad10() {
+void StaticInit_gNpcMenuConfirmDialogStrings() {
     for (int iFill = 0; iFill < 40; iFill++) {
       gNpcMenuConfirmDialogStrings[iFill] = L'\0';
     }

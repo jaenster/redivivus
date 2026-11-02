@@ -424,7 +424,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn62",
+      "name": "Objects_InitFn62_CagedWussie",
       "address": "005886a0",
       "lines": [
         {
@@ -434,7 +434,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q2",
       "calledFunctions": [
-        "Objects_InitFn62",
+        "Objects_InitFn62_CagedWussie",
         "GetQuestDataByQuestNoInternal",
         "QUEST_SetStateFlag",
         "QUEST_SetStateAndBroadcast",

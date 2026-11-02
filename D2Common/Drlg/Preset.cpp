@@ -268,7 +268,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
                     switch (byPresetType) {
                       case 0:
                         {
-                          nClassId = DATATBLS::MonsterTbls::MONSTERTBLS_ReturnZero();
+                          nClassId = DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
                           pBuffer = pBuffer + sgptDataTable->nTxtMonStatsSize + nClassId;
                           break;
                         }
@@ -1597,10 +1597,10 @@ void __fastcall DRLGPRESET_AddPresetUnitToDrlgMap(D2PoolManagerStrc * pMemory, D
             }
           }
         } else {
-          nMonExtraBase = DATATBLS::MonsterTbls::MONSTERTBLS_ReturnZero();
+          nMonExtraBase = DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
           if (pPresetUnit->nClassId - nTableSize >= nMonExtraBase) {
             nTableSize = sgptDataTable->nTxtMonStatsSize;
-            nMonExtraBase = DATATBLS::MonsterTbls::MONSTERTBLS_ReturnZero();
+            nMonExtraBase = DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
             nTableSize = pPresetUnit->nClassId - nTableSize - nMonExtraBase;
             if (nTableSize == 0x21) {
               goto roll_quarter_skip;
@@ -2182,7 +2182,7 @@ int32_t __stdcall DRLGPRESET_FindPresetTypeIndex(int32_t nLevelType, uint32_t nO
     } while (true);
 }
 
-void StaticInit_6cb010() {
+void StaticInit_CriticalSection_0096d610() {
     InitializeCriticalSection(&lpCriticalSection_0096d610);
     atexit(StaticFini_CriticalSection_0096d610);
 }

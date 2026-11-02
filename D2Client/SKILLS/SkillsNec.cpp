@@ -80,8 +80,8 @@ BOOL __fastcall Skills_CltDoFunc_Nec_CurseCenter_StreamMissile(D2UnitStrc * pUni
       return 0;
     }
 
-    int32_t nStreamMissile = pSkillTxt->cltmissile[1];
-    if (!(nStreamMissile >= 0 && (int)nStreamMissile < sgptDataTable->nTxtMissilesSize)) {
+    int nStreamMissile = (int)pSkillTxt->cltmissile[1];
+    if (!(nStreamMissile >= 0 && nStreamMissile < sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
     if (pUnit) {

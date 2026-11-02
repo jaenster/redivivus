@@ -840,7 +840,7 @@
       ]
     },
     {
-      "name": "StaticInit_6cae20",
+      "name": "StaticInit_DisplayedTooltip",
       "address": "006cae20",
       "lines": [
         {
@@ -850,11 +850,11 @@
       ],
       "namespace": "D2Win::Src::D2WinFont",
       "calledFunctions": [
-        "StaticInit_6cae20"
+        "StaticInit_DisplayedTooltip"
       ]
     },
     {
-      "name": "StaticInit_6cae40",
+      "name": "StaticInit_gwFontHeightDefault",
       "address": "006cae40",
       "lines": [
         {
@@ -864,11 +864,11 @@
       ],
       "namespace": "D2Win::Src::D2WinFont",
       "calledFunctions": [
-        "StaticInit_6cae40"
+        "StaticInit_gwFontHeightDefault"
       ]
     },
     {
-      "name": "StaticInit_6cae50",
+      "name": "StaticInit_gnFontTableCharWidthCache",
       "address": "006cae50",
       "lines": [
         {
@@ -878,7 +878,7 @@
       ],
       "namespace": "D2Win::Src::D2WinFont",
       "calledFunctions": [
-        "StaticInit_6cae50"
+        "StaticInit_gnFontTableCharWidthCache"
       ]
     }
   ]

@@ -20,9 +20,9 @@ namespace D2Game::Quests::QUESTS::A1Q6 {
 
 // Function declarations
 // A1Q6 (Sisters to the Slaughter) object init-fn 04. Marks the quest object (Andariel-related) as updatable while the Forgotten Tower quest is still in its intro phase (!bIsNotIntroduction). Halts if quest data missing. No quest-state transitions.
-void __fastcall Objects_InitFn04(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn04_TowerTome(struct D2ObjectInitFnArg * pInitArg);
 // A1Q6 object init-fn 47. Registers this object's GUID into the A1Q6 quest-specific GUID list (dedup, max 8 entries), bumps the count, runs A1Q5 Countess death-effect, then fires game event 7 (delayed +10 frames) if the recorded flags warrant it. List/event bookkeeping; no GetQuestState/SetQuestState.
-void __fastcall Objects_InitFn47(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn47_CountessChest(struct D2ObjectInitFnArg * pInitArg);
 // A1Q6 per-player notifier (IteratePlayerOrMonsterUnits callback). Reads the player's quest record: if quest is Completed-or-FinishedInPreviousGame AND not JustCompleted AND not CannotComplete, sends quest-update packet (quest idx 6) to that player; otherwise no-op. Pure read of quest-state flags to gate the client update.
 BOOL __fastcall Q06_NotifyQuestStateToPlayer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // A1Q6 state-callback 02 ("quest accepted"). When target is Cain (classId 0x109) and bQuestAccepted set: advances quest stateFlag to 1 via QUEST_SetStateAndBroadcast (broadcasts Q06_NotifyQuestStateToPlayer to all), clears bQuestAccepted, and unhooks itself (handler slot 2 = null) so it fires once.

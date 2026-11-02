@@ -14,5 +14,5 @@ uint32_t __stdcall FOG_ParseStringValue(char * szText, uint32_t nNumber);
 uint32_t __fastcall FOG_ParseFieldValue(char * szText, char * * ppszCursor, int * pnOut);
 char * __fastcall FOG_FindCharInString(char * szText, char cSearchChar);
 void StaticInit_6ca960();
-void StaticInit_6ca980();
+void StaticInit_gbChatLobbyInitialize();
 void StaticInit_6caab0();

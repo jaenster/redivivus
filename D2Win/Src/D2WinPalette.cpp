@@ -253,8 +253,8 @@ int __stdcall LoadPalette(char * szDatFile, char * szPl2File) {
     return 1;
 }
 
-void __fastcall D2WINPAL_SetGammaRamp(uint32_t dwParam) {
-    gbCompactLineSpacingMode = dwParam;
+void __fastcall D2WINPAL_SetGammaRamp(uint32_t bCompactLineSpacingMode) {
+    gbCompactLineSpacingMode = bCompactLineSpacingMode;
 }
 
 } // namespace D2Win::Src::D2WinPalette

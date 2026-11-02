@@ -547,8 +547,8 @@ void __fastcall FreeAndResetAiSub(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Uni
     } while (true);
 }
 
-void __fastcall NPC_BeginInteractionFromUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMonster, D2MonsterAiStrc * pMonsterAi, uint8_t bUnknown) {
-    NPC_BeginInteraction(pGame, pMonsterAi, bUnknown, pUnit, pMonster);
+void __fastcall NPC_BeginInteractionFromUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMonster, D2MonsterAiStrc * pMonsterAi, uint8_t nQuestActionType) {
+    NPC_BeginInteraction(pGame, pMonsterAi, nQuestActionType, pUnit, pMonster);
 }
 
 static BOOL __stdcall UnitHasSwitchAiSet(D2UnitStrc * pMonster) {
@@ -565,8 +565,8 @@ static BOOL __stdcall UnitHasSwitchAiSet(D2UnitStrc * pMonster) {
 }
 
 // nParam arrives in EDX, survives the UnitHasSwitchAiSet call (that callee clobbers only EAX/ECX) and is stored to nAiRelated2.
-BOOL __fastcall AI_SetSwitchAiTargetParams(D2UnitStrc * pUnit, int32_t nParam, uint32_t nTargetGUID) {
-    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && nParam < 5)) {
+BOOL __fastcall AI_SetSwitchAiTargetParams(D2UnitStrc * pUnit, int32_t nSwitchAiMode, uint32_t nTargetGUID) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && nSwitchAiMode < 5)) {
       return 0;
     }
 
@@ -575,7 +575,7 @@ BOOL __fastcall AI_SetSwitchAiTargetParams(D2UnitStrc * pUnit, int32_t nParam, u
       D2UnitDataMonsterStrc* pMonsterData;
       pMonsterData = pUnit->pUnitData.pUnitDataMonster;
       if (pMonsterData) {
-        pMonsterData->nAiRelated2 = nParam;
+        pMonsterData->nAiRelated2 = nSwitchAiMode;
         pMonsterData->nAiRelated1 = nTargetGUID;
         return 1;
       }

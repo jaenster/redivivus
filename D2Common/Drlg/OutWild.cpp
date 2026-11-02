@@ -43,12 +43,12 @@ static BOOL DRLGOUTROOM_IsGridColumnEmpty(D2DrlgLevelStrc * pLevel, int nX) {
 }
 
 // Returns a preset variant index from a grid cell's flags and preset type. For type 0, checks bit 0x100 to choose variant 0 or 3. For type 7 with flags matching 0x30000, returns variant 3. Otherwise indexes into the variant lookup table at data_006f2680, choosing between two columns based on the bAlternate stack arg.
-int __stdcall DRLGOUTROOM_GetPresetVariantFromGridCell(uint32_t nGridFlags, int nPresetType, int dwParam3) {
+int __stdcall DRLGOUTROOM_GetPresetVariantFromGridCell(uint32_t nGridFlags, int nPresetType, int bReturnPresetId) {
     if (nPresetType) {
       if (nPresetType == 7 && (nGridFlags & 0xf0000) == 0x30000) {
         return 3;
       }
-      if (dwParam3) {
+      if (bReturnPresetId) {
         return (&gaTombCanyonPresetOffsets.aTombEntries[7].nPresetId)[nPresetType * 2];
       }
 

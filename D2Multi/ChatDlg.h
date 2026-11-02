@@ -74,7 +74,7 @@ int __stdcall CHATDLG_UpdateButtonVisibility();
 // Stores the ladder filter byte (0070cd62) = nFilterMode and the selected rank (0070cd7c) = nRank.
 // Provenance: asm 0043ec50..0043ec5c; unreferenced in 1.14d.
 void __fastcall CHATDLG_SetLadderFilterAndRank(uint8_t nFilterMode, int nRank);
-void __fastcall CHATDLG_RequestLadderRank(char * szText, int32_t nParam, int32_t nLadderRequestMode);
+void __fastcall CHATDLG_RequestLadderRank(char * szText, int32_t bHardcore, int32_t nLadderRequestMode);
 // Scrolls the ladder board up one page: selected rank (0070cd7c) -= gnLadderScrollPageSize, clamped at 0; restores the filter byte 0070cd62 from 0070cd63; returns 1.
 // Provenance: asm 0043ece0 (RET 4); only pointer is the OnPress field of form 0070e610.
 BOOL __stdcall CHATDLG_OnPressLadderPageUp(struct D2ControlMsg * pControlMsg);

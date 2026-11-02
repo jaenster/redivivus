@@ -191,7 +191,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
 // RC4 key schedule: fills pRc4State's 256-byte S-box with 0..255, zeroes the i/j bytes at +0x100/+0x101, then swaps S[i] with S[j], j += S[i] + pKey[i % nKeyLength].
 // The only caller, WARDEN_DecryptAndLoadModule, passes a 0x10-byte key; 1.14d asm 004e09c0..004e0a1a.
 void __thiscall WARDEN_RC4Init(struct D2RC4StateStrc * pRc4State, uint8_t * pKey, uint32_t nKeyLength);
-void __fastcall SKILLSSOR_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+void __fastcall SKILLSSOR_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatListEx);
 int __fastcall SKILLSCLT_CheckSkillIsValid(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
 void __fastcall SKILLSASS_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
 void __stdcall BINK_RenderVideoFrame();

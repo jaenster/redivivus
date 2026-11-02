@@ -3797,7 +3797,7 @@ void __stdcall INV_InitNpcButtonsByClass() {
 }
 
 // Draws gold amount and coin icon in inventory UI for three contexts: stash (param=0), inventory (param=1), and trade (param=2). Retrieves player's gold from appropriate stat (UNITSTAT_goldbank for stash, UNITSTAT_gold for inventory), formats the number, renders text and animated coin icon at context-specific screen coordinates.
-void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nParam) {
+void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
     D2UnitStrc* pPlayerUnit_lcl;
     uint16_t* pwString;
     BOOL bIsExpansionGfx;
@@ -3824,8 +3824,8 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nParam) {
     sGfxData.nDirection = 0;
     uint16_t nLayer;
     nLayer = 0;
-    if (nParam) {
-      if (nParam != 1) {
+    if (nGoldPanelMode) {
+      if (nGoldPanelMode != 1) {
         eStatType = UNITSTAT_goldbank;
         pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
         nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, eStatType, nLayer);
@@ -3837,7 +3837,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nParam) {
         nCoinFrame = 0;
         nCoinX = 0;
         sGfxData.nFrameNumber = 0;
-        if (nParam == 3) {
+        if (nGoldPanelMode == 3) {
           goto draw_coin_or_label;
         }
       } else {
@@ -3895,7 +3895,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nParam) {
 
     Storm::Source::SSTR::SStrPrintf(szGoldAmountBuffer, 0x14, "%d", nGoldAmount);
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszGoldText, szGoldAmountBuffer, 0x13);
-    if (nParam == 2) {
+    if (nGoldPanelMode == 2) {
       iTmp = D2Win::Src::D2WinFont::DRAW_text0(wszGoldText);
       nGoldY = gnPanelOffsetX - iTmp + 0xc6;
     }
@@ -3904,14 +3904,14 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nParam) {
     nCoinX = nButtonX;
     sGfxData.nFrameNumber = nCoinFrame;
     draw_coin_or_label:
-    if (!nParam) {
+    if (!nGoldPanelMode) {
       if (gnInvStashGold) {
         nTextY++;
       }
 
       iTmp = nCoinX + 2;
     } else {
-      if (nParam != 1) {
+      if (nGoldPanelMode != 1) {
         bIsExpansionGfx = 0;
         iTmp = 0;
         nTextY = gnPanelOffsetX + 0x15;
@@ -9947,9 +9947,9 @@ uint32_t __fastcall EQUIP_ItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInvent
 }
 
 uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint32_t bodyLocation) {
-    int iVar1;
+    int bResult;
     int32_t nEquipAction;
-    eD2PlayerClassIDDWORD eVar2;
+    eD2PlayerClassIDDWORD eVar1;
     BOOL bInteractiveMode;
     eD2PlayerClassIDDWORD eUnitClass;
     int nItemGuid2;
@@ -9967,8 +9967,8 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
       if (pItem && pSlotItem) {
         bInteractiveMode = UNIT::PlayerIsUnInterruptable(pSlotItem);
         if (!bInteractiveMode) {
-          iVar1 = INV_CheckActionThrottle();
-          if (iVar1) {
+          bResult = INV_CheckActionThrottle();
+          if (bResult) {
             GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x27, pSlotItem->nUnitGUID, pItem->nUnitGUID);
             UNIT::ITEM_RemoveClientSide(pSlotItem);
             return 1;
@@ -9982,8 +9982,8 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
         if (pItem) {
           bInteractiveMode = UNIT::PlayerIsUnInterruptable(pItem);
           if (!bInteractiveMode) {
-            iVar1 = INV_CheckActionThrottle();
-            if (iVar1) {
+            bResult = INV_CheckActionThrottle();
+            if (bResult) {
               GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, pItem->nUnitGUID);
               UNIT::ITEM_RemoveClientSide(pItem);
               return 1;
@@ -9997,8 +9997,8 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
             if (pItem) {
               nEquipAction = D2Common::INVENTORY::Inventory::INVENTORY_GetEquipActionForBodySlot(pUnit, bodyLocation, pItem, 1);
               if (nEquipAction) {
-                eVar2 = D2Common::ITEMS::Items::TXT_ItemTypes_GetClass(pItem);
-                if (eVar2 == CLASS_COUNT) {
+                eVar1 = D2Common::ITEMS::Items::TXT_ItemTypes_GetClass(pItem);
+                if (eVar1 == CLASS_COUNT) {
                   UNIT::UnitSnd::UNITSND_PlayPlayerSound(pUnit, 0x14);
                   return 1;
                 }
@@ -10007,7 +10007,7 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
                 } else {
                   eUnitClass = pUnit->nClassId;
                 }
-                if (eVar2 == eUnitClass) {
+                if (eVar1 == eUnitClass) {
                   UNIT::UnitSnd::UNITSND_PlayPlayerSound(pUnit, 0x14);
                   return 1;
                 }
@@ -10019,8 +10019,8 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
           case 1:
             bInteractiveMode = UNIT::PlayerIsUnInterruptable(pItem);
           if (!bInteractiveMode) {
-            iVar1 = INV_CheckActionThrottle();
-            if (iVar1) {
+            bResult = INV_CheckActionThrottle();
+            if (bResult) {
               if (!pItem) {
                 nItemGuid = -1;
               } else {
@@ -10039,8 +10039,8 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
           case 3:
             bInteractiveMode = INV_IsInteractiveModeEx();
           if (bInteractiveMode) {
-            iVar1 = INV_CheckActionThrottle();
-            if (iVar1) {
+            bResult = INV_CheckActionThrottle();
+            if (bResult) {
               GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('\x1c', (short int)bodyLocation);
               DrawShopRelated = 1;
               return 1;
@@ -11283,7 +11283,7 @@ void __stdcall DrawMercInventory() {
     LoadItemDesc(pMercUnit, 0);
 }
 
-void StaticInit_6cabf0() {
+void StaticInit_gpInvRecipeScrollImage() {
     int nDwordsRemaining;
     uint8_t* pInvRecipeBuf;
     for (nDwordsRemaining = 0; nDwordsRemaining < 0x2000; nDwordsRemaining++) {

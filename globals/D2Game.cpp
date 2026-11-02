@@ -797,7 +797,7 @@ uint8_t BYTE_ARRAY_006e3138[80] = {
     0x18
 }; D2_GLOBAL_GUARD(BYTE_ARRAY_006e3138, "BYTE_ARRAY_006e3138");
 
-D2UnitIdToNameFunc PFN_UnitTypeCallbackTable[5] = { &D2Game::GAME::Server::_TableNullSub25, &D2Game::GAME::Server::MonsterIdToName, &D2Game::GAME::Server::ObjectIdToName, &D2Game::GAME::Server::ItemIdToName, &D2Game::GAME::Server::MissileIdToname }; D2_GLOBAL_GUARD(PFN_UnitTypeCallbackTable, "PFN_UnitTypeCallbackTable");
+D2UnitIdToNameFunc PFN_UnitTypeCallbackTable[5] = { &D2Game::GAME::Server::SERVER_GetPlayerClassName, &D2Game::GAME::Server::MonsterIdToName, &D2Game::GAME::Server::ObjectIdToName, &D2Game::GAME::Server::ItemIdToName, &D2Game::GAME::Server::MissileIdToname }; D2_GLOBAL_GUARD(PFN_UnitTypeCallbackTable, "PFN_UnitTypeCallbackTable");
 
 int NPCINTRO_ListAct1[6] = { 0x94, 0x9a, 0x96, 0x93, 0x9b, 0x109 }; D2_GLOBAL_GUARD(NPCINTRO_ListAct1, "NPCINTRO_ListAct1");
 
@@ -929,14 +929,14 @@ int gnDirectionYOffsets[8] = { -0x1, -0x1, -0x1, 0x0, 0x0, 0x1, 0x1, 0x1 }; D2_G
 D2ObjectPopulateFnFunc OBJECTSPOPULATEFN[10] = {
     nullptr,
     (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn1,
-    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn2,
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn2_WaypointShrine,
     (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn3,
     (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn4,
-    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn5,
-    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn6,
-    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn7,
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn5_Crate,
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn6_Corpse,
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn7_CorpseOnStick,
     (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn8,
-    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn9
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn9_TrappedSoul
 }; D2_GLOBAL_GUARD(OBJECTSPOPULATEFN, "OBJECTSPOPULATEFN");
 
 int gaObjectSpawnChanceTbl[5] = { 0x4, 0x9, 0x34, 0x5e, 0x5f }; D2_GLOBAL_GUARD(gaObjectSpawnChanceTbl, "gaObjectSpawnChanceTbl");
@@ -2179,7 +2179,7 @@ D2BattleNetEventCallbackTable * BattleNetServerService = 0; D2_GLOBAL_GUARD(Batt
 BOOL IsBattleNetServer = 0; D2_GLOBAL_GUARD(IsBattleNetServer, "IsBattleNetServer");
 uint32_t Frames_TimeBetweenFrames = 0; D2_GLOBAL_GUARD(Frames_TimeBetweenFrames, "Frames_TimeBetweenFrames");
 // also labelled: nCOMMAND_playersX
-uint32_t PlayerCountOverride = 0; D2_GLOBAL_GUARD(PlayerCountOverride, "PlayerCountOverride");
+int32_t PlayerCountOverride = 0; D2_GLOBAL_GUARD(PlayerCountOverride, "PlayerCountOverride");
 uint32_t gptItemCodeArmor = 0; D2_GLOBAL_GUARD(gptItemCodeArmor, "gptItemCodeArmor");
 uint32_t gptItemCodeSwordType = 0; D2_GLOBAL_GUARD(gptItemCodeSwordType, "gptItemCodeSwordType");
 int gQServerClientTablesInitialized = 0; D2_GLOBAL_GUARD(gQServerClientTablesInitialized, "gQServerClientTablesInitialized");
@@ -2274,7 +2274,7 @@ D2TimerTypeMethodsStrc pTimerMethods = {
         nullptr,
         nullptr,
         nullptr,
-        &D2Game::ITEMS::ItemMode::ITEMMODE_ReturnZero2,
+        &D2Game::ITEMS::ItemMode::ITEMMODE_RemoveExpiredStatLists,
         nullptr,
         nullptr
     }

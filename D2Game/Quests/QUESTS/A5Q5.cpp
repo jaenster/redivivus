@@ -238,7 +238,7 @@ static void __stdcall Q35_ResetAncientsArena(::SGAMEDATA * pGame, int32_t pQuest
           (*(int*)(pA5Q5Data + 0x40))--;
           (*(int*)(pA5Q5Data + 0x44))--;
         } else {
-          UNIT::SUnitInactive::SUNITINACTIVE_RemoveInactiveUnitByTypeAndId(pGame, 1, nAncientIdx + 0x21c, 4);
+          UNIT::SUnitInactive::SUNITINACTIVE_RemoveInactiveUnitByTypeAndId(pGame, 1, (short int)nAncientIdx + 0x21c, 4);
         }
 
         *(uint8_t*)(pA5Q5Data + 0x2c + nAncientIdx) = 0;
@@ -1171,7 +1171,7 @@ static void Q35_SetStatueAnimMode(uint32_t dwParam, D2QuestDataA5Q5Strc * pQuest
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn65: object init for one Ancient altar statue — records its GUID (slot 5) and applies its anim mode. No quest-state writes.
-void __fastcall Objects_InitFn65(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn65_AncientStatue2(D2ObjectInitFnArg * pInitArg) {
     uint32_t dwUnusedECX;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
@@ -1186,7 +1186,7 @@ void __fastcall Objects_InitFn65(D2ObjectInitFnArg * pInitArg) {
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn63: object init for one Ancient altar statue — records its GUID (slot 6) and applies its anim mode. No quest-state writes.
-void __fastcall Objects_InitFn63(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn63_AncientStatue3(D2ObjectInitFnArg * pInitArg) {
     uint32_t dwUnusedECX;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
@@ -1201,7 +1201,7 @@ void __fastcall Objects_InitFn63(D2ObjectInitFnArg * pInitArg) {
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn64: object init for one Ancient altar statue — records its GUID (slot 7) and applies its anim mode. No quest-state writes.
-void __fastcall Objects_InitFn64(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn64_AncientStatue1(D2ObjectInitFnArg * pInitArg) {
     uint32_t dwUnusedECX;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
@@ -1234,7 +1234,7 @@ BOOL __fastcall OBJOP_A5Q5_AncientsTriggerSound3(D2ObjectOperateFnArg * pOperati
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn72: object init for the Ancients altar (records GUID slot 0x14, applies stored anim flag). No quest-state writes.
-void __fastcall Objects_InitFn72(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn72_AncientsAltar(D2ObjectInitFnArg * pInitArg) {
     int nUnitGUID;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     if (!pQuestData) {
@@ -1251,7 +1251,7 @@ void __fastcall Objects_InitFn72(D2ObjectInitFnArg * pInitArg) {
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn73: object init for the Worldstone Keep entrance portal — shows it (anim 2) if field_0x4A (quest done) else hides (0). No quest-state writes.
-void __fastcall Objects_InitFn73(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn73_AncientsDoor(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     if (!pQuestData) {
       return;
@@ -1451,7 +1451,7 @@ BOOL __fastcall OBJOP_A5Q5_AncientsQuestStateQuery(D2ObjectOperateFnArg * pOpera
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn76: object init for the Worldstone Keep stair/portal — records GUID, sets the in-play flag (0x11), and applies its display mode based on whether the Ancients are defeated. No quest-state writes.
-void __fastcall Objects_InitFn76(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn76_SummitDoor(D2ObjectInitFnArg * pInitArg) {
     int nUnitGUID;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pA5Q5QuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;

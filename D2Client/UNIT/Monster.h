@@ -296,7 +296,7 @@ void __stdcall MONSTER_SpawnFetishMissileSpread(struct D2UnitStrc * pUnit, eMiss
 struct D2MonStats2Txt * __fastcall MONSTER_SpawnBloodParticles(struct D2UnitStrc * pUnit, struct D2MonStats2Txt * pD2MonStats2Txt, int nBloodDirSlot);
 // Central per-monster state/mode message dispatcher. Given a message type nParam (0..0x1d), a monster D2UnitStrc, and a server message handle, transitions the monster's path/anim mode: walk/run/move-to (0,1,4,5,etc.), got-hit (6,0x13), death (8) and dying/corpse (9), sequence/skill start (0x14,0x15,0x16), town-walk (0x12), etc. Restores collision and resets the 0x2000 path flag, sets target unit by type/GUID, calculates paths, applies per-classId special cases (unique death overlays/missiles/sounds, burrow transitions, special facing) keyed on the monster's base MonStats id, and updates UNITFLAG targetable/shadow/nodraw flags. Halts via Fog ErrorManager when a required pMessage is null. Tail applies velocity-percent stat changes and dispatches unique-mod walk callbacks. __fastcall (nParam in ECX, pUnit in EDX).
 void __fastcall MonsterMessage(int32_t nMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage);
-uint32_t __fastcall NPCMENU_ParseSpeechData(int * pnParam, uint8_t * pParam, int * pnSpeechResult);
+uint32_t __fastcall NPCMENU_ParseSpeechData(int * pUnit, uint8_t * pParam, int * pnSpeechResult);
 // Client-side initialization of a mercenary unit from a network packet. Sets ISMERC|TARGETABLE flags, reads the name/seed from the packet, rolls stats via RollMercStats using the current player's level and difficulty, then assigns skills (id, level, mode) from the HirelingTxt table, sets the localized name, and recalculates equipped item stats.
 void __fastcall MERC_InitializeFromPacket(struct D2UnitStrc * pUnit, struct D2MercInitArgStrc * pMercInit);
 int __fastcall MONSTER_CanBeConverted(struct D2UnitStrc * pUnit);
@@ -305,7 +305,7 @@ void __fastcall NPCMENU_HandleQuestUpdate(int32_t pPacket);
 uint32_t __fastcall CLIENT_UpdateMonsterAnimByMode(struct D2DynamicPathStrc * pDynamicPath, int32_t pAnimModeEntry);
 // Client-side per-frame update tick for a monster/NPC unit (param is the unit; aliased as D2DynamicPathStrc). Skips if frozen-and-inactive; reads the unit's animation-mode entry, advances path/trail-effect stepping for walk modes, resolves the client-side target unit from the server path, periodically recalculates pathing, and faces the player when nearby. Computes name-color and the per-anim-mode completion flag, casts queued skill missiles, dispatches unique-mod get-hit handlers, interpolates path direction, fires the skill-anim-end handler, may spawn missile 0x1de on a DOUPDATE object, runs damage-state skill effects, and updates SFX/footstep sounds.
 void __fastcall CLIENT_UpdateUnitNameplate(struct D2UnitStrc * pDynamicPath);
-void StaticInit_6cad00();
+void StaticInit_gnMonsterUniqueNameBuffer();
 // 11 internal functions (defined in .cpp)
 
 } // namespace D2Client::UNIT::Monster

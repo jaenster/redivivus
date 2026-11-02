@@ -62,7 +62,7 @@
         "memcpy",
         "UnloadBin",
         "TXT_SaveTableToBinFile",
-        "FillUpTxtLinkSub0x08",
+        "FOG_AddTxtLinkRecord",
         "memset"
       ],
       "usedTypes": [
@@ -992,7 +992,7 @@
         "TXT_AllocTxt_itemtypes",
         "STRUCT_CreateTxtLinkStrc",
         "CompileTxt",
-        "FillUpTxtLinkSub0x08",
+        "FOG_AddTxtLinkRecord",
         "AllocServerMemory",
         "memset",
         "ITEMTBLS_CheckItemTypeRecursive"

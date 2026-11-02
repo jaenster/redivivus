@@ -1541,7 +1541,7 @@ void __fastcall D2COMP_AllocTxt_Items(D2PoolManagerStrc * pMemory) {
 
     i = 0;
     do {
-      Fog::Src::Excel::FillUpTxtLinkSub0x08(pD2CompItemsLinker, *(char**)(i + 0x80 + (int)pD2CompItems));
+      Fog::Src::Excel::FOG_AddTxtLinkRecord(pD2CompItemsLinker, *(char**)(i + 0x80 + (int)pD2CompItems));
       nItemIdx++;
       i += 0x1a8;
     } while (nItemIdx < nD2CompItemsSize);

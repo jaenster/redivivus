@@ -232,7 +232,7 @@ void __stdcall DRLGROOMEX_UpdateClientRoomExActivation(struct D2DrlgStrc * pDrlg
 // eLevel in ESI: returns 0 when LEVEL_CheckIfLevelIsTown(eLevel), else eLevel != LEVEL_ArreatSummit (0x78).
 // Provenance: asm 0061ba10..0061ba26 (RET), aligned entry after padding; unreferenced in 1.14d.
 BOOL __stdcall LEVEL_IsNotTownAndNotArreatSummit(eD2LevelId eLevel);
-BOOL __fastcall RoomEx_method_0(struct D2RoomExStrc * pRoomEx);
+BOOL __fastcall DRLGROOMEX_TestCanUntile(struct D2RoomExStrc * pRoomEx);
 void __fastcall ToggleHasPortalFlag(struct D2RoomExStrc * pRoomEx, BOOL bReset);
 char __fastcall Get0x44FromRoomEx(struct D2RoomExStrc * pRoomEx);
 // Demotes a RoomEx to priority 2, then activates it if its init ref count is non-zero. Used to transition a RoomEx from a higher priority to the activation-ready state.

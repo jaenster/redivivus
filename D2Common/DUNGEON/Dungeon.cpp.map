@@ -1105,7 +1105,7 @@
       "namespace": "D2Common::DUNGEON::Dungeon",
       "calledFunctions": [
         "DRLGROOM_TestRoomCanUntile",
-        "RoomEx_method_0",
+        "DRLGROOMEX_TestCanUntile",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -2642,7 +2642,7 @@
       ]
     },
     {
-      "name": "RoomEx_method_0",
+      "name": "DRLGROOMEX_TestCanUntile",
       "address": "0061ba30",
       "lines": [
         {
@@ -2652,7 +2652,7 @@
       ],
       "namespace": "D2Common::DUNGEON::Dungeon",
       "calledFunctions": [
-        "RoomEx_method_0",
+        "DRLGROOMEX_TestCanUntile",
         "GetDrlgFromRoomEx",
         "DRLGACTMISC_CheckFlag0x1",
         "GetInstructionPointer",

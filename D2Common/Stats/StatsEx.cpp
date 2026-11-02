@@ -791,7 +791,7 @@ D2StatListExStrc * __stdcall GetStatList(D2UnitStrc * pUnit, eD2States eState, u
     return nullptr;
 }
 
-D2UnitStrc * __stdcall SEVER_ITEM_GetOwner(D2UnitStrc * pUnit, uint32_t * pnParam) {
+D2UnitStrc * __stdcall SEVER_ITEM_GetOwner(D2UnitStrc * pUnit, uint32_t * pbStatNotDynamic) {
     D2StatListExStrc* pStatsEx;
     if (pUnit) {
       D2StatListExStrc* pParentList;
@@ -799,16 +799,16 @@ D2UnitStrc * __stdcall SEVER_ITEM_GetOwner(D2UnitStrc * pUnit, uint32_t * pnPara
       if (pStatsEx) {
         pParentList = pStatsEx->sStatList.pParent;
         if (pParentList && pParentList->sStatList.nFlags & 0x80000000U) {
-          if (pnParam) {
-            *pnParam = ~((uint32_t)pStatsEx->sStatList.nFlags >> 0x1e) & 1;
+          if (pbStatNotDynamic) {
+            *pbStatNotDynamic = ~((uint32_t)pStatsEx->sStatList.nFlags >> 0x1e) & 1;
           }
 
           return pParentList->pOwner;
         }
       }
     }
-    if (pnParam) {
-      *pnParam = 0;
+    if (pbStatNotDynamic) {
+      *pbStatNotDynamic = 0;
     }
 
     return nullptr;
@@ -2153,7 +2153,7 @@ BOOL __stdcall D2AddStatToStatsListEx(D2StatListExStrc * pStatsEx, eD2UnitStat e
 }
 
 // Sets a stat value in the unit's base stat array by binary search on the packed (statId<<16|layer) key. Inserts a new entry if missing and value != 0; removes entry if value == 0; propagates the delta to all dependent stat lists via STATLIST_PropagateStatChange. Also enqueues a change notification for player-owned stat lists (flag 0x80000000). Returns 1 on change, 0 on no-op.
-void __stdcall STATLIST_SetStatValueInBaseArray(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer, D2UnitStrc * pUnit) {
+void __stdcall STATLIST_SetStatValueInBaseArray(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nLayer, D2UnitStrc * pUnit) {
     int32_t nSearchIdx;
     D2StatStrc* pStatEntry;
     int32_t nHi;
@@ -2162,7 +2162,7 @@ void __stdcall STATLIST_SetStatValueInBaseArray(D2StatListExStrc * pStatList, eD
       return;
     }
 
-    int32_t nShiftedStat = eUnitStat * 0x10000 + (nLayer & 0xffff);
+    int32_t nShiftedStat = eUnitStat * 0x10000 + (uint32_t)nLayer;
     D2StatInfoStrc* pStatInfo = &pStatList->sStatList.sBaseStats;
     long int nStatIdx = Logging::STATLIST_BinarySearchStatById(nShiftedStat, (int*)pStatInfo);
     if (nStatIdx < 0 || (pStatEntry = pStatInfo->pStatInfo + nStatIdx , !pStatEntry)) {
@@ -2197,7 +2197,7 @@ void __stdcall STATLIST_SetStatValueInBaseArraySafe(D2StatListExStrc * pStatList
       return;
     }
 
-    STATLIST_SetStatValueInBaseArray(pStatList, eUnitStat, nValue, nLayer, pUnit);
+    STATLIST_SetStatValueInBaseArray(pStatList, eUnitStat, nValue, (uint16_t)nLayer, pUnit);
 }
 
 void __stdcall thunk_STATLIST_SetStatValue(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer) {
@@ -2745,7 +2745,7 @@ int32_t __fastcall MATH_Min(int32_t nLeft, int32_t nRight, uint32_t dwParam1, ui
     return nLeft;
 }
 
-int32_t __fastcall MATH_Max(int32_t nLeft, int32_t nRight, uint32_t dwParam1, uint32_t dwParam2) {
+int32_t __fastcall MATH_Max(int32_t nLeft, int32_t nRight, uint32_t nOperand3, uint32_t pContext) {
     if (nLeft <= nRight) {
       nLeft = nRight;
     }

@@ -78,7 +78,7 @@
       "usedTypes": [
         "D2SeedStrc",
         "D2UnitStrc",
-        "uint32_t",
+        "int32_t",
         "uint64_t"
       ]
     },
@@ -97,8 +97,7 @@
         "RollRandomNumerUpToArgument"
       ],
       "usedTypes": [
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {
@@ -116,8 +115,7 @@
         "RollRandomNumerUpToArgument"
       ],
       "usedTypes": [
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {

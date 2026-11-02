@@ -1286,7 +1286,7 @@ void __stdcall TakeScreenshot() {
     D2_FREE_AT(pBuffer, ".\\Src\\D2WinMain.cpp", 0x6b4);
 }
 
-void __stdcall D2WIN_Unused_Placeholder_5(int32_t pMsg) {
+void __stdcall D2WIN_TakeScreenshotMsgHandler(int32_t pMsg) {
     TakeScreenshot();
     *(uint32_t*)(pMsg + 0x18) = 1;
     *(uint32_t*)(pMsg + 0x1c) = 0;

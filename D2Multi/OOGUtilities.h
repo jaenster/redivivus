@@ -143,7 +143,7 @@ int __stdcall OOGUTIL_JoinChannelFromInput(struct D2ControlStrc * dwUnused);
 int __stdcall OOGUTIL_JoinDefaultChannel(struct D2ControlMsg * pControlMsg);
 int __stdcall OOGUTIL_HandleChannelListDoubleClick(struct D2ControlMsg * pControlMsg);
 void __stdcall AbleToJoinGameOrBanned(int32_t bBanned);
-int __stdcall JoinOrCreateGame(DWORD dwParam);
+int __stdcall JoinOrCreateGame(DWORD dwUnused);
 // Attempts to restore MCP connection: displays connection message, creates thread if peer data exists, sends CharLogon packet. Returns 1 on success, 0 on failure.
 uint32_t __stdcall OOGMENU_RestoreMCPConnection();
 int __fastcall CHATDLG_RunChatLobbyScreen(struct D2IniConfigStrc * pD2IniConfig);
@@ -163,7 +163,7 @@ uint32_t __fastcall OOGUTIL_CheckCharacterLevel(uint8_t * pszLevelChars);
 // +0x2c -> gszLanGameListEntryDescription. Called once per incoming MCP 0x05 game packet from JoinOrCreateGame.
 void __fastcall OOGMENU_AddGameToCache(struct D2McpGameInfoStrc * pGameInfo);
 void __stdcall OOGMENU_RefreshGameListDisplay();
-void __fastcall OOGUTIL_Unused1(char * szText, uint16_t wRequestId);
+void __fastcall OOGUTIL_SetPendingJoinGame(char * szText, uint16_t wRequestId);
 void __stdcall OOGMENU_RequestGameInfo();
 // Displays game details in the lobby textbox. Shows game description, elapsed time (HH:MM:SS), level restrictions (single level or range), max players, and iterates through all players to display their names and levels with class-specific formatting (Amazon/Sorceress/Necromancer/Paladin/Barbarian/Druid/Assassin). All formatted strings are written to a 256-byte buffer before being added to the display.
 void __fastcall OOGMENU_DisplayGameDetails(struct D2McpGameInfoStrc * pGameInfo);
@@ -172,7 +172,7 @@ void __stdcall UIMENU_DestroyLobbyAndJoinGameForms();
 // Provenance: asm 004431b0..0044321f; called at 0044642b right after OOGUTIL_LoadLevelRestrictionSetting.
 void __stdcall OOGUTIL_LoadMaxPlayersSetting();
 void __stdcall OOGUTIL_UpdateGameListFilter();
-void __stdcall OOGUTIL_Unused3();
+void __stdcall OOGUTIL_ParseMaxPlayersEditBox();
 void __stdcall OOGUTIL_Unused4();
 // OnPress of the create-game max-players up button gUIGameListMaxPlayersUpButton: reads gUIGameListMaxPlayersEditBox, adds 1 while below 8 and writes it back through gszOogMaxPlayersText; returns 1.
 // Provenance: asm 004433c0 (RET 4); fpOnPressCallback of form record 0070de70.
@@ -187,12 +187,12 @@ BOOL __stdcall OOGUTIL_OnPressLevelRestrictionUp(struct D2ControlMsg * pControlM
 // Provenance: asm 004434e0 (RET 4); fpOnPressCallback of form record 0070df00.
 BOOL __stdcall OOGUTIL_OnPressLevelRestrictionDown(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall OOGUTIL_SendPasswordPacket(DWORD dwParam1, DWORD dwParam2, char * szText);
-BOOL __stdcall OOGUTIL_Unused9(DWORD dwParam1, DWORD dwParam2, char * szText);
-BOOL __stdcall OOGUTIL_Unused10(DWORD dwParam1, DWORD dwParam2, char * szText);
+BOOL __stdcall OOGUTIL_IsFirstCharPrintableAscii(DWORD dwParam1, DWORD dwParam2, char * szText);
+BOOL __stdcall OOGUTIL_FilterPrintableAsciiChar(DWORD dwParam1, DWORD dwParam2, char * szText);
 void __stdcall OOGUTIL_RefreshGameList();
 void __stdcall OOGUTIL_SetJoinGameError();
 int __stdcall OOGUTIL_Unused11(int nFrameIndex);
-int __stdcall UIMENU_TitleClickCallback(void * pParam);
+int __stdcall UIMENU_TitleClickCallback(void * pUnused);
 int __stdcall OOG_PollMCPJoinD2GSPump(int nFrameIndex);
 // OnPress handler of the wait-in-line dialog button (form record 0070eb30, FORM_Button, string 0x13ef, created by UIMENU_WaitInLine): restores the lobby buttons (CHATDLG_UpdateButtonVisibility), sends MCP 0x13 CancelGameCreate (CHATDLG_CancelGameCreate) and destroys the create-game/wait forms (OOGUTIL_UpdateGameListFilter); returns 1.
 // Provenance: 1.14d asm 004438c0..004438d4, RET 4.
@@ -268,7 +268,7 @@ void __stdcall UIMENU_JoinGame();
 // Opens the Battle.net CREATE GAME dialog (title string 0x141e): if isServerDown() returns -1 shows "Server Down" (0x1413) instead; if an MCP join is in progress runs UIMENU_WaitInLine instead. Otherwise creates the dialog forms (game name edit box, max players when HasPeerName(), level restriction, difficulty) and loads LVL_REST and MAX_PLAYER via OOGUTIL_LoadLevelRestrictionSetting and OOGUTIL_LoadMaxPlayersSetting.
 // Provenance: asm 00445ff0; called from CHATDLG_DestroyFormsAndOpenCreateGameDialog, the OnPress of the lobby CREATE button (gaPredefinedForms_b[6], string 0x14c0).
 void __stdcall OOGUTIL_OpenCreateGameDialog();
-char * OOGUTIL_Unused12(uint32_t * szString, int nChar);
+char * OOGUTIL_StrChr(uint32_t * szString, int nChar);
 // Returns the account part of a Battle.net user string "Character*Account": the text after '*', or szUserName itself when there is no '*' or nothing follows it.
 // Provenance: SStrChr(szUserName,'*') at 00446820; OOGUTIL_SendChatMessage whispers "/whisper *%s" with its result (00442905).
 char * __fastcall OOGUTIL_GetAccountName(char * szUserName);

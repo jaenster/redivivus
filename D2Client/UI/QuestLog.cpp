@@ -984,7 +984,7 @@ void __fastcall QUESTLOG_ClearMissileFlagCb_Missile527(void * pUnit) {
 }
 
 // QuestLog.cpp - Client handler for 0x5D quest state packets, plays sounds and updates UI
-void __fastcall QUESTLOG_HandleQuestStatePacket(uint32_t dwParam, D2GSPacketClt0x5D * pPacket) {
+void __fastcall QUESTLOG_HandleQuestStatePacket(uint32_t dwUnused, D2GSPacketClt0x5D * pPacket) {
     DWORD nSetFlagResult;
     D2BitBufferStrc* pBitBuffer;
     BOOL bQuestState;
@@ -2070,7 +2070,7 @@ void __stdcall QUESTLOG_OnMouseUp(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
-void StaticInit_6cac30() {
+void StaticInit_gaQuestLogPanelRects() {
     gaQuestLogPanelRects[0].nBottom = ScreenSizeY - 0x69;
     gaQuestLogPanelRects[1].nBottom = ScreenSizeY - 0x69;
     gaQuestLogPanelRects[0].nTop = ScreenSizeY - 0x8c;
@@ -2089,7 +2089,7 @@ void StaticInit_6cac30() {
     gaQuestLogPanelRects[3].nTextY = ScreenSizeY - 0xc6;
 }
 
-void StaticInit_6cacd0() {
+void StaticInit_gQuestLog() {
     SkillDesc::SKILLDESC_InitMissileBuffers(&gQuestLog);
 }
 

@@ -725,8 +725,7 @@
         "D2MissilesTxt",
         "D2UnitDataMissileStrc",
         "D2UnitStrc",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {
@@ -748,8 +747,7 @@
       "usedTypes": [
         "D2MissilesTxt",
         "D2UnitStrc",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {
@@ -789,8 +787,7 @@
       "usedTypes": [
         "D2MissilesTxt",
         "D2UnitStrc",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {
@@ -812,8 +809,7 @@
       "usedTypes": [
         "D2MissilesTxt",
         "D2UnitStrc",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {

@@ -12,22 +12,22 @@
 
 namespace D2Game::GAME::Server::ServerCmd {
 
-void __fastcall WriteValueBySize(D2BitBufferStrc * pBitBuffer, uint32_t nParam) {
-    if (nParam < 0x100) {
+void __fastcall WriteValueBySize(D2BitBufferStrc * pBitBuffer, uint32_t nValue) {
+    if (nValue < 0x100) {
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 0, 1);
-      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nParam, 8);
+      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nValue, 8);
       return;
     }
 
     Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 1, 1);
-    if (nParam < 0x10000) {
+    if (nValue < 0x10000) {
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 0, 1);
-      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nParam, 0x10);
+      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nValue, 0x10);
       return;
     }
 
     Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 1, 1);
-    Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nParam, 0x20);
+    Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nValue, 0x20);
 }
 
 void thunk_NET_D2GS_SERVER_SendPacketToClient(char * szText, size_t nSize) {

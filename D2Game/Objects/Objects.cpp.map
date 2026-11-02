@@ -266,7 +266,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn28",
+      "name": "Objects_InitFn28_GoldPlaceholder",
       "address": "0054f8c0",
       "lines": [
         {
@@ -276,7 +276,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn28",
+        "Objects_InitFn28_GoldPlaceholder",
         "SetupUpdateFlag",
         "DRLGROOM_FindBetterNearbyRoom",
         "CheckCollision_Vector",
@@ -292,7 +292,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn01",
+      "name": "Objects_InitFn01_Shrine",
       "address": "0054f9d0",
       "lines": [
         {
@@ -302,7 +302,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn01",
+        "Objects_InitFn01_Shrine",
         "DRLGROOM_GetLevelIdFromRoom",
         "GetShrinesSize",
         "TXT_Shrines_GetLine",
@@ -319,7 +319,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn22",
+      "name": "Objects_InitFn22_Fire",
       "address": "0054fb40",
       "lines": [
         {
@@ -329,7 +329,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn22",
+        "Objects_InitFn22_Fire",
         "SetupUpdateFlag",
         "SetEvent"
       ],
@@ -339,7 +339,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn24",
+      "name": "Objects_InitFn24_FloorTrap",
       "address": "0054fb90",
       "lines": [
         {
@@ -349,7 +349,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn24",
+        "Objects_InitFn24_FloorTrap",
         "SetEvent"
       ],
       "usedTypes": [
@@ -357,7 +357,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn02",
+      "name": "Objects_InitFn02_Urn",
       "address": "0054fbb0",
       "lines": [
         {
@@ -367,7 +367,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn02",
+        "Objects_InitFn02_Urn",
         "DRLGROOM_GetLevelIdFromRoom",
         "TXT_Levels_GetLine",
         "SEED_RollRange"
@@ -381,7 +381,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn27",
+      "name": "Objects_InitFn27_GooPile",
       "address": "0054fc50",
       "lines": [
         {
@@ -391,14 +391,14 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn27"
+        "Objects_InitFn27_GooPile"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
       ]
     },
     {
-      "name": "Objects_InitFn03",
+      "name": "Objects_InitFn03_Chest",
       "address": "0054fcb0",
       "lines": [
         {
@@ -408,8 +408,8 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn03",
-        "Objects_InitFn02",
+        "Objects_InitFn03_Chest",
+        "Objects_InitFn02_Urn",
         "DRLGROOM_GetLevelIdFromRoom",
         "TXT_Levels_GetLine",
         "InitSeed_Param_666"
@@ -423,7 +423,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn57",
+      "name": "Objects_InitFn57_SparklyChest",
       "address": "0054fd90",
       "lines": [
         {
@@ -433,8 +433,8 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn57",
-        "Objects_InitFn03",
+        "Objects_InitFn57_SparklyChest",
+        "Objects_InitFn03_Chest",
         "SetSparklyChestFlag"
       ],
       "usedTypes": [
@@ -442,7 +442,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn58",
+      "name": "Objects_InitFn58_Fissure",
       "address": "0054fdb0",
       "lines": [
         {
@@ -452,7 +452,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn58",
+        "Objects_InitFn58_Fissure",
         "GetObjectControlSeed",
         "SetEvent"
       ],
@@ -462,7 +462,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn59",
+      "name": "Objects_InitFn59_VileDogAfterglow",
       "address": "0054fe10",
       "lines": [
         {
@@ -472,7 +472,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn59",
+        "Objects_InitFn59_VileDogAfterglow",
         "SetupUpdateFlag",
         "SetEvent"
       ],
@@ -482,7 +482,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn12",
+      "name": "Objects_InitFn12_PermanentPortal",
       "address": "0054fe70",
       "lines": [
         {
@@ -492,7 +492,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn12",
+        "Objects_InitFn12_PermanentPortal",
         "DRLGROOM_GetLevelIdFromRoom",
         "SetupUpdateFlag",
         "BlockCollisionPath",
@@ -507,7 +507,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn08",
+      "name": "Objects_InitFn08_Torch",
       "address": "005500c0",
       "lines": [
         {
@@ -517,7 +517,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn08",
+        "Objects_InitFn08_Torch",
         "SetupUpdateFlag"
       ],
       "usedTypes": [
@@ -561,7 +561,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn34",
+      "name": "Objects_InitFn34_HellBrazier",
       "address": "005500f0",
       "lines": [
         {
@@ -571,7 +571,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn34",
+        "Objects_InitFn34_HellBrazier",
         "GetObjectControlSeed",
         "SetupUpdateFlag"
       ],
@@ -581,7 +581,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn05",
+      "name": "Objects_InitFn05_Door",
       "address": "00550130",
       "lines": [
         {
@@ -591,14 +591,14 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn05"
+        "Objects_InitFn05_Door"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
       ]
     },
     {
-      "name": "Objects_InitFn11",
+      "name": "Objects_InitFn11_TownPortal",
       "address": "00550140",
       "lines": [
         {
@@ -608,7 +608,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn11",
+        "Objects_InitFn11_TownPortal",
         "DRLGROOM_GetLevelIdFromRoom",
         "GetActNoFromLevelNumber",
         "GetTownLevelIdFromActNo",
@@ -626,7 +626,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn51",
+      "name": "Objects_InitFn51_TrappedSoul",
       "address": "005501f0",
       "lines": [
         {
@@ -636,7 +636,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn51",
+        "Objects_InitFn51_TrappedSoul",
         "SetEvent"
       ],
       "usedTypes": [
@@ -876,7 +876,7 @@
       ]
     },
     {
-      "name": "Objects_PopulateFn7",
+      "name": "Objects_PopulateFn7_CorpseOnStick",
       "address": "00551200",
       "lines": [
         {
@@ -886,7 +886,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_PopulateFn7",
+        "Objects_PopulateFn7_CorpseOnStick",
         "GetObjectControlSeed",
         "RANDOM_RandomNumberSelector",
         "TXT_Objects_GetLine",
@@ -944,7 +944,7 @@
       ]
     },
     {
-      "name": "Objects_PopulateFn9",
+      "name": "Objects_PopulateFn9_TrappedSoul",
       "address": "00551580",
       "lines": [
         {
@@ -954,7 +954,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_PopulateFn9",
+        "Objects_PopulateFn9_TrappedSoul",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -975,7 +975,7 @@
       ]
     },
     {
-      "name": "Objects_PopulateFn6",
+      "name": "Objects_PopulateFn6_Corpse",
       "address": "00551690",
       "lines": [
         {
@@ -985,7 +985,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_PopulateFn6",
+        "Objects_PopulateFn6_Corpse",
         "Objects_PopulateFn3",
         "OBJECT_SpawnBonusChest"
       ],
@@ -1075,7 +1075,7 @@
       ]
     },
     {
-      "name": "Objects_PopulateFn5",
+      "name": "Objects_PopulateFn5_Crate",
       "address": "00551c00",
       "lines": [
         {
@@ -1085,7 +1085,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_PopulateFn5",
+        "Objects_PopulateFn5_Crate",
         "TXT_Objects_GetLine",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
@@ -1541,7 +1541,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn16",
+      "name": "Objects_InitFn16_Well",
       "address": "00552b30",
       "lines": [
         {
@@ -1551,14 +1551,14 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_InitFn16"
+        "Objects_InitFn16_Well"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
       ]
     },
     {
-      "name": "Objects_PopulateFn2",
+      "name": "Objects_PopulateFn2_WaypointShrine",
       "address": "00552b50",
       "lines": [
         {
@@ -1568,7 +1568,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "Objects_PopulateFn2",
+        "Objects_PopulateFn2_WaypointShrine",
         "TXT_Objects_GetLine",
         "DRLGROOM_GetRoomCoordinates",
         "GetLevelIdFromPopulatedRoom",
@@ -1619,7 +1619,7 @@
       ]
     },
     {
-      "name": "StaticInit_6caf30",
+      "name": "StaticInit_gaObjectSpawnOffsetTables",
       "address": "006caf30",
       "lines": [
         {
@@ -1629,7 +1629,7 @@
       ],
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
-        "StaticInit_6caf30"
+        "StaticInit_gaObjectSpawnOffsetTables"
       ]
     }
   ]

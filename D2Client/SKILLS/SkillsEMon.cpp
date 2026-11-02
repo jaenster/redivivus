@@ -492,27 +492,27 @@ BOOL __fastcall Skills_CltStFunc_SetSrvDoFlagAndReviveGfx(D2UnitStrc * pUnit, eD
 }
 
 BOOL __fastcall Skills_CltDoFunc_EMon_ScreenShake(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int nParam2;
-    int nParam3;
-    int nParam4;
+    int nRampUpFrames;
+    int nHoldFrames;
+    int nRampDownFrames;
     int32_t nDuration = (int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill) ? 0 : sgptDataTable->pTxtSkills[eSkill].Param[0];
     if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
-      nParam2 = 0;
+      nRampUpFrames = 0;
     } else {
-      nParam2 = sgptDataTable->pTxtSkills[eSkill].Param[1];
+      nRampUpFrames = sgptDataTable->pTxtSkills[eSkill].Param[1];
     }
     if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
-      nParam3 = 0;
+      nHoldFrames = 0;
     } else {
-      nParam3 = sgptDataTable->pTxtSkills[eSkill].Param[2];
+      nHoldFrames = sgptDataTable->pTxtSkills[eSkill].Param[2];
     }
     if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
-      nParam4 = 0;
+      nRampDownFrames = 0;
     } else {
-      nParam4 = sgptDataTable->pTxtSkills[eSkill].Param[3];
+      nRampDownFrames = sgptDataTable->pTxtSkills[eSkill].Param[3];
     }
 
-    GAME::View::SetShake(nDuration, nParam2 * 1000 / 0x19, nParam3 * 1000 / 0x19, nParam4 * 1000 / 0x19);
+    GAME::View::SetShake(nDuration, nRampUpFrames * 1000 / 0x19, nHoldFrames * 1000 / 0x19, nRampDownFrames * 1000 / 0x19);
     return 1;
 }
 
@@ -654,9 +654,9 @@ BOOL __fastcall Skills_CltDoFunc_EMon_InfernoWithZ(D2UnitStrc * pUnit, eD2Skills
       return 0;
     }
 
-    uint32_t nParam1 = D2Common::Skills::SKILL_GetParam1(pSkill);
+    uint32_t nSkillParam1 = D2Common::Skills::SKILL_GetParam1(pSkill);
     uint32_t nEntryIndex = GAME::Game::GetEntryIndex();
-    if (nEntryIndex > nParam1) {
+    if (nEntryIndex > nSkillParam1) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 0);
     } else {
       D2UnitStrc* pInfernoMissile;

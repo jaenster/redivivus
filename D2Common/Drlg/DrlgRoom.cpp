@@ -744,7 +744,7 @@ void __fastcall DRLGROOMEX_AllocNodesForBothRoomEx(D2RoomExStrc * pRoomExA, D2Ro
 
 // Finds and removes a D2DrlgOrthStrc node from pRoomEx->pOrth linked list that has nType==1 and points to pDrlgRoomExTarget. Frees the removed node.
 // @sourcefile .\DRLG\DrlgRoom.cpp
-void __fastcall DRLGROOMEX_FindReplaceAndFreeSub00VsTargetRoomEx(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx, D2RoomExStrc * pDrlgRoomExTarget) {
+void __fastcall DRLGROOMEX_FreeOrthToRoomEx(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx, D2RoomExStrc * pDrlgRoomExTarget) {
     D2DrlgOrthStrc* pOrthCurrent = pRoomEx->pOrth;
     D2DrlgOrthStrc* pOrthNext = pOrthCurrent->pNext;
     if (pOrthCurrent->nType == 1 && pOrthCurrent->pLink.pRoomEx == pDrlgRoomExTarget) {
@@ -776,8 +776,8 @@ void __fastcall DRLGROOMEX_FindReplaceAndFreeSub00VsTargetRoomEx(D2PoolManagerSt
 }
 
 void __fastcall DRLGROOMEX_FindReplaceAndFreeSub00ForBothRoomEx(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx, D2RoomExStrc * pDrlgRoomExB) {
-    DRLGROOMEX_FindReplaceAndFreeSub00VsTargetRoomEx(pMemory, pRoomEx, pDrlgRoomExB);
-    DRLGROOMEX_FindReplaceAndFreeSub00VsTargetRoomEx(pMemory, pDrlgRoomExB, pRoomEx);
+    DRLGROOMEX_FreeOrthToRoomEx(pMemory, pRoomEx, pDrlgRoomExB);
+    DRLGROOMEX_FreeOrthToRoomEx(pMemory, pDrlgRoomExB, pRoomEx);
 }
 
 // Sorting comparator: compares orths by direction first, then by coordinate for that direction.
@@ -813,7 +813,7 @@ BOOL __fastcall DRLGORTH_CompareByDirectionAndCoord(D2DrlgOrthStrc * pOrth1, D2D
     return 0;
 }
 
-static void __stdcall DRLGROOMEX_ReplaceSub00(D2DrlgOrthStrc * * pRoomEx, D2DrlgOrthStrc * pOrth) {
+static void __stdcall DRLGORTH_InsertSorted(D2DrlgOrthStrc * * pRoomEx, D2DrlgOrthStrc * pOrth) {
     BOOL bShouldInsertBefore;
     D2DrlgOrthStrc* pOrthPrev = *pRoomEx;
     if (!pOrthPrev) {
@@ -858,7 +858,7 @@ void __fastcall AllocDrlgOrth(D2DrlgOrthStrc * * pRoomEx, D2DrlgLevelStrc * pLev
     pOrth->bIsDrlgTypePresetArea = bIsDrlgTypePresetArea;
     pOrth->nType = 0;
     pOrth->psCoordinatesAndSize = &pLevel->sCoordinatesAndSize;
-    DRLGROOMEX_ReplaceSub00(pRoomEx, pOrth);
+    DRLGORTH_InsertSorted(pRoomEx, pOrth);
 }
 
 BOOL __fastcall DRLGCOORDS_IsWithinDistance(D2DrlgCoordsStrc * pCoords, D2DrlgCoordsStrc * pCoords2, int32_t nSize, int * nX, int * nY) {
@@ -1442,8 +1442,8 @@ void __fastcall DRLGROOMEX_FreeDrlgRoomEx(D2RoomExStrc * pRoomEx) {
       pOrthIter = pOrthCurrent->pNext;
       if (pOrthCurrent->nType == 1) {
         pLinkedRoomEx = pOrthCurrent->pLink.pRoomEx;
-        DRLGROOMEX_FindReplaceAndFreeSub00VsTargetRoomEx(pMemory, pRoomEx, pLinkedRoomEx);
-        DRLGROOMEX_FindReplaceAndFreeSub00VsTargetRoomEx(pMemory, pLinkedRoomEx, pRoomEx);
+        DRLGROOMEX_FreeOrthToRoomEx(pMemory, pRoomEx, pLinkedRoomEx);
+        DRLGROOMEX_FreeOrthToRoomEx(pMemory, pLinkedRoomEx, pRoomEx);
       }
     }
 

@@ -24,7 +24,7 @@ void __fastcall MONUMOD_ApplyColdEnchant(struct D2UnitStrc * pUnit, int32_t nInd
 void __fastcall MONUMOD_ApplyBerserker(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique);
 void __fastcall MONUMOD_ApplyPossessed(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique);
 void __fastcall MONUMOD_ApplyFanatic(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique);
-void __fastcall MONUMOD_SetEventTimer(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown);
+void __fastcall MONUMOD_SetEventTimer(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnused);
 // Monster unique-modifier handler that grants resistances. For a monster unit (when bUnknown is set), dispatched by nIndex (modifier id): index 0x1c doubles armorclass and adds 0x32 to damageresist; 8 ("Stone Skin") and 0x1b raise cold/fire/light resist (+0x28 / +0x14) but bail once two or more resists are already capped (>99); single-element mods 9/0x12/0x11/0x17 add +0x4b to fire/cold/light/poison resist, 0x19 adds +0x14 magicresist. Modifies the unit's resist stats in place via STATLIST_SetUnitStat.
 void __fastcall MagicResist(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown);
 void __fastcall TeleHeal(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique);

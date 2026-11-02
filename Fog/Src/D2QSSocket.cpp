@@ -107,28 +107,28 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
     int iVar2;
     uint16_t wMsgSize;
     void* pMessage;
-    uint32_t uVar3;
+    uint32_t nPacketLen;
     size_t _Size;
     uint16_t wPacketSize;
-    void* pvVar4 = pBuffer;
+    void* pvVar3 = pBuffer;
     do {
       int iVar1;
-      wPacketSize = *(uint16_t*)(pQServerStrc->nSizeFieldOffset + (int)pvVar4);
-      uVar3 = (uint32_t)wPacketSize;
+      wPacketSize = *(uint16_t*)(pQServerStrc->nSizeFieldOffset + (int)pvVar3);
+      nPacketLen = (uint32_t)wPacketSize;
       iVar2 = pQServerStrc->nHeaderSize;
-      iVar1 = (int)pBuffer + (nBufferSize - (int)pvVar4);
-      if (iVar1 < iVar2 || iVar1 < (int)uVar3) {
-        _Size = (int)pBuffer + (nBufferSize - (int)pvVar4);
-        memcpy(pBuffer, pvVar4, _Size);
+      iVar1 = (int)pBuffer + (nBufferSize - (int)pvVar3);
+      if (iVar1 < iVar2 || iVar1 < (int)nPacketLen) {
+        _Size = (int)pBuffer + (nBufferSize - (int)pvVar3);
+        memcpy(pBuffer, pvVar3, _Size);
         return _Size;
       }
-      if (0x2063 < (int32_t)uVar3) {
+      if (0x2063 < (int32_t)nPacketLen) {
         ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0xfb);
         exit(-1);
       }
 
       wMsgSize = wPacketSize - (short int)iVar2;
-      pMessage = (void*)(iVar2 + (int)pvVar4);
+      pMessage = (void*)(iVar2 + (int)pvVar3);
       if (pQServerStrc->pfnPacketHandler) {
         /* FARPROC lpfn for IsBadCodePtr */ bBadHandlerPtr = IsBadCodePtr((FARPROC)pQServerStrc->pfnPacketHandler);
         if (bBadHandlerPtr) {
@@ -139,13 +139,13 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
         iVar2 = pQServerStrc->pfnPacketHandler(pQServerStrc->pHandlerContext);
         if (!iVar2) {
           if (pQServerStrc->nSizeFieldOffset > 0) {
-            pMessage = pvVar4;
+            pMessage = pvVar3;
             wMsgSize = wPacketSize;
           }
 
           D2QSQueue::FOG_EnqueueMessage(&pQServerStrc->aQueue, pMessage, wMsgSize);
           /* HANDLE hEvent for SetEvent */ SetEvent(pQServerStrc->pEvent);
-          pvVar4 = (void*)((int)pvVar4 + uVar3);
+          pvVar3 = (void*)((int)pvVar3 + nPacketLen);
           continue;
         }
       } else {
@@ -153,7 +153,7 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
         /* HANDLE hEvent for SetEvent */ SetEvent(pQServerStrc->pEvent);
       }
 
-      pvVar4 = (void*)((int)pvVar4 + uVar3);
+      pvVar3 = (void*)((int)pvVar3 + nPacketLen);
     } while (true);
 }
 
@@ -472,7 +472,7 @@ int32_t __stdcall NET_MCP_CLIENT_Send(D2QSSocketStrc * pQSocket, char * pBytes, 
       }
     }
 
-    int nSendResult = NET_MCP_CLIENT_SendPacketToQSocket(pQSocket, (char*)aSendBuf, (short int)nTotalSendSize);
+    int nSendResult = NET_MCP_CLIENT_SendPacketToQSocket(pQSocket, (char*)aSendBuf, (uint16_t)nTotalSendSize);
     return nSendResult + (_nDataSizeNoHeader - nTotalSendSize);
 }
 

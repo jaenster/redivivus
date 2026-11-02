@@ -242,7 +242,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn38",
+      "name": "Objects_InitFn38_TyraelsDoor",
       "address": "0059dad0",
       "lines": [
         {
@@ -252,7 +252,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q7",
       "calledFunctions": [
-        "Objects_InitFn38",
+        "Objects_InitFn38_TyraelsDoor",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag"
       ],
@@ -280,7 +280,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn21",
+      "name": "Objects_InitFn21_HoradricOrifice",
       "address": "0059db50",
       "lines": [
         {
@@ -290,7 +290,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q7",
       "calledFunctions": [
-        "Objects_InitFn21",
+        "Objects_InitFn21_HoradricOrifice",
         "GetQuestDataByQuestNoInternal",
         "AddQuestTimer",
         "SetupUpdateFlag"

@@ -1121,12 +1121,12 @@ void __stdcall SCmdProcessCommandLine(pfnSCmdUnknownArgCallback pfnUnknownCallba
     SCmdProcess(szCommandLine, bSkipFirstToken, pfnUnknownCallback, pfnErrorCallback);
 }
 
-void StaticInit_6cb030() {
+void StaticInit_gStormCmdListBackslash() {
     gStormCmdListHeadBackslash.pNext = ~(uintptr_t)((char*)&gStormCmdListHeadBackslash + 4);
     atexit(StaticFini_gStormCmdListBackslash);
 }
 
-void StaticInit_6cb050() {
+void StaticInit_gStormCmdListSlash() {
     gStormCmdListHeadSlash.pNext = ~(uintptr_t)((char*)&gStormCmdListHeadSlash + 4);
     atexit(StaticFini_gStormCmdListSlash);
 }

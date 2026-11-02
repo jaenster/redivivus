@@ -59,7 +59,7 @@ uint32_t __fastcall GFXUTIL_IsDC6BlockOnScreen(struct DC6Block * pDC6Block, int3
 // Returns 1 if the unit supports animation mode nMode (0–15), 0 otherwise. Accounts for shape-shift/transform GFX overrides via SKILLS_GetStateTransformGfx. For players, always accepts modes 0–4, 8, 9. For monsters, checks the MonStats2 bitmask (HD/TR/LG/RA/LA/RH/LH/SH flags). For objects, checks ObjectsTxt->Mode[nMode+0x12]. Items accept mode 1 only.
 // @sourcefile .\ENGINE\GfxUtil.cpp
 BOOL __fastcall GFXUTIL_UnitHasAnimMode(struct D2UnitStrc * pUnit, uint32_t nMode);
-void * __fastcall GFXUTIL_Identity(void * dwParam);
+void * __fastcall GFXUTIL_Identity(void * pData);
 uint32_t __fastcall GFXUTIL_GetCofFrameCount(uint8_t * pbCof, uint32_t nComponent);
 uint32_t __fastcall GFXUTIL_GetCofAnimSpeed(uint8_t * pbCof, uint32_t nComponent);
 uint32_t __fastcall GFXUTIL_GetCofDirection(uint8_t * pbCof, uint32_t nComponent);

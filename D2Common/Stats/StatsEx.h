@@ -69,7 +69,7 @@ struct D2StatListExStrc * __stdcall STATLIST_FindStatListWithFlags(struct D2Stat
 struct D2StatListExStrc * __stdcall GetStatsByFlags(struct D2UnitStrc * pUnit, uint32_t nStatListFlags);
 struct D2StatListExStrc * __stdcall GetStatListByStateOrFlagsIfNotExists(struct D2UnitStrc * pUnit, eD2States eState, uint32_t nStatListFlags);
 struct D2StatListExStrc * __stdcall GetStatList(struct D2UnitStrc * pUnit, eD2States eState, uint32_t eStatListFlags);
-struct D2UnitStrc * __stdcall SEVER_ITEM_GetOwner(struct D2UnitStrc * pUnit, uint32_t * pnParam);
+struct D2UnitStrc * __stdcall SEVER_ITEM_GetOwner(struct D2UnitStrc * pUnit, uint32_t * pbStatNotDynamic);
 // For a unit whose StatsEx has the root flag, binary-searches the changed-stat list for eUnitStat. If not found in the changed set, binary-searches the base stat array and invokes pParam as a callback(nStatValue, pUnit2) with the current unchanged stat value.
 void __stdcall STATLIST_DispatchUnchangedStatToCallback(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, eD2UnitStat eUnitStat, pfnStatChangedCb pfnCallback);
 // Iterates all changed-stat IDs in pUnit's StatsEx, binary-searches each into the base stat array to get the current value, and invokes pParam as a callback(nStatValue, pUnit2) for each. Only runs if pUnit has a root StatsEx with at least one changed stat.
@@ -128,7 +128,7 @@ void __stdcall STATLIST_AddStatValue(struct D2StatListExStrc * pStatsEx, eD2Unit
 BOOL __stdcall STATLIST_SetStatValue(struct D2StatListExStrc * pStatEx, eD2UnitStat eUnitStat, int32_t nValue, uint16_t low);
 BOOL __stdcall D2AddStatToStatsListEx(struct D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer);
 // Sets a stat value in the unit's base stat array by binary search on the packed (statId<<16|layer) key. Inserts a new entry if missing and value != 0; removes entry if value == 0; propagates the delta to all dependent stat lists via STATLIST_PropagateStatChange. Also enqueues a change notification for player-owned stat lists (flag 0x80000000). Returns 1 on change, 0 on no-op.
-void __stdcall STATLIST_SetStatValueInBaseArray(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer, struct D2UnitStrc * pUnit);
+void __stdcall STATLIST_SetStatValueInBaseArray(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nLayer, struct D2UnitStrc * pUnit);
 void __stdcall STATLIST_SetStatValueInBaseArraySafe(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer, struct D2UnitStrc * pUnit);
 void __stdcall thunk_STATLIST_SetStatValue(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer);
 void __stdcall STATLIST_SetUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nLayer);
@@ -168,7 +168,7 @@ BOOL __fastcall SKILLS_ValidateSkillDescIndex(int32_t nSkillId);
 // dispatcher been __stdcall(2) it would have pushed 8 bytes that this RET never removes.
 int __fastcall nullsub(int32_t nCalcCode, void * pContext);
 int32_t __fastcall MATH_Min(int32_t nLeft, int32_t nRight, uint32_t dwParam1, uint32_t dwParam2);
-int32_t __fastcall MATH_Max(int32_t nLeft, int32_t nRight, uint32_t dwParam1, uint32_t dwParam2);
+int32_t __fastcall MATH_Max(int32_t nLeft, int32_t nRight, uint32_t nOperand3, uint32_t pContext);
 int * __fastcall MATH_RandomRange(int * nMin, int32_t nMax, uint32_t nRangeMax, int * pSeed);
 int32_t __fastcall UNITS_GetStatValueByType(eD2UnitStat eUnitStat, int32_t nQueryMode, uint32_t dwContext, struct D2UnitStrc * * ppUnit);
 // 13 internal functions (defined in .cpp)

@@ -371,7 +371,7 @@
       ]
     },
     {
-      "name": "SSTR_Pow10Helper",
+      "name": "_Pow_int",
       "address": "00414220",
       "lines": [
         {
@@ -381,7 +381,7 @@
       ],
       "namespace": "Storm::Source::SSTR",
       "calledFunctions": [
-        "SSTR_Pow10Helper"
+        "_Pow_int"
       ],
       "usedTypes": [
         "uint32_t"

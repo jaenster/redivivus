@@ -43,6 +43,7 @@
 #include "D2Game/GAME/Targets.h"
 #include "D2Game/GAME/Task.h"
 #include "D2Game/ITEMS/ItemMode.h"
+#include "D2Game/ITEMS/Items/Drop.h"
 #include "D2Game/Monster/MonsterRegion.h"
 #include "D2Game/Monsters/Spawn.h"
 #include "D2Game/Objects/Objects.h"
@@ -76,7 +77,6 @@
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Game/D2Game.h"
-#include "D2Game/ITEMS/Items/Drop.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Launch/CharSel.h"
 
@@ -130,7 +130,7 @@ void __stdcall ServerClose_nullsub() {
 
 }
 
-void SRVLog(int32_t nParam, char * szText, ...) {
+void SRVLog(int32_t nLogCategory, char * szText, ...) {
 
 }
 
@@ -1034,13 +1034,13 @@ void __stdcall QSERVER_CleanupUnitChain(D2UnitStrc * * pUnitHead, ::SGAMEDATA * 
     while (pUnit) {
       D2UnitStrc* pDVar1;
       pDVar1 = pUnit->pRoomNext;
-      UNIT::SUnitInactive::SERVER_GAME_UNIT_method(pGame, pUnit);
+      UNIT::SUnitInactive::SUNITINACTIVE_SaveOrFreeUnit(pGame, pUnit);
       pUnit = pDVar1;
     }
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pRoomStrc (ESI): D2RoomStrc*, pGameStrc (EDI): SGAMEDATA*
-void __stdcall UnusedInitFunctions(D2RoomStrc * pRoomStrc, ::SGAMEDATA * pGameStrc) {
+void __stdcall SERVER_PopulateRoom(D2RoomStrc * pRoomStrc, ::SGAMEDATA * pGameStrc) {
     UNIT::SUnit::SUNIT_SpawnPresetUnitsForRoom(pGameStrc, pRoomStrc);
     UNIT::SUnitInactive::SUNITINACTIVE_RoomInit(pGameStrc, pRoomStrc);
     Objects::OBJECT_PopulateRoomObjects(pGameStrc, pRoomStrc);
@@ -1139,7 +1139,7 @@ void __stdcall CleanupIdleRooms(::SGAMEDATA * pGame) {
               pUnit = pRoom->pUnitList;
               while (pUnit) {
                 pUnitNext = pUnit->pRoomNext;
-                UNIT::SUnitInactive::SERVER_GAME_UNIT_method(pGame, pUnit);
+                UNIT::SUnitInactive::SUNITINACTIVE_SaveOrFreeUnit(pGame, pUnit);
                 pUnit = pUnitNext;
               }
 
@@ -1155,7 +1155,7 @@ void __stdcall CleanupIdleRooms(::SGAMEDATA * pGame) {
 }
 
 // Frees unused dropped items every 1500 frames (60 seconds at 25 FPS). When dwGameFrame is exact multiple of 0x5dc (1500), iterates all 5 acts and calls FreeUnusedItems + SUNITINACTIVE_FreeUnusedItems for each. Removes items that have been on ground too long or in inactive state. Prevents memory leaks from abandoned loot in long-running games. Returns frame counter / 1500.
-void FreeUnusedItems(::SGAMEDATA * pGamee) {
+static void GAME_FreeUnusedItemsPeriodic(::SGAMEDATA * pGamee) {
     if (pGamee->dwGameFrame % 0x5dc) {
       return;
     }
@@ -1455,7 +1455,7 @@ void __fastcall ServerGameLoop(::SGAMEDATA * pGame) {
       } while (nUpdateTickMode);
     }
 
-    /* Every 1500 frames (60 seconds) */ Server::FreeUnusedItems(pGame);
+    /* Every 1500 frames (60 seconds) */ GAME_FreeUnusedItemsPeriodic(pGame);
 }
 
 // Sends player vital stats (life/mana/stamina/position). The client arrives in ESI - 0052d982 MOV ECX,ESI reads it on entry. Modelled as a local, the reconstruction read it uninitialised and faulted on the server thread before the packet flush, so no 0x04 SCMD_STARTACT ever reached the client.
@@ -1539,7 +1539,7 @@ void __stdcall QSERVER_Unused_HaltLine4453() {
     exit(-1);
 }
 
-BOOL __stdcall Return1_GameSetup_0() {
+BOOL __stdcall SERVER_IsHostedGamesRequestAllowed() {
     return 1;
 }
 
@@ -1631,7 +1631,7 @@ static void __stdcall GAME_TrackGameStatistics(D2Game_Line0x13af * pStatRoot, in
 }
 
 // Writes the ASCII class name string for a given player class ID (eD2PlayerClassIDDWORD) into a caller-supplied 16-byte buffer via inline byte stores. Handles all 7 classes (Amazon, Sorceress, Necromancer, Paladin, Barbarian, Druid, Assassin); unknown class writes "Invalid Class". Used to produce human-readable class labels, e.g. for logging or save-file headers.
-void __fastcall _TableNullSub25(char * szText, int32_t nId) {
+void __fastcall SERVER_GetPlayerClassName(char * szText, int32_t nId) {
     switch (nId) {
       case 0:
         memcpy(szText, "Amazon", 7);
@@ -2417,7 +2417,7 @@ int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, void * pO
 }
 
 // Dead/unused server-side helper that resolves a game token from a global server table, locks the game, selects one of the five unit-type hash-bucket arrays (player/monster/object/missile/item) by nUnitId, iterates all 128 buckets tracking statistics via GAME_TrackGameStatistics, then invokes a per-unit-type callback from PFN_UnitTypeToName_ARRAY. Not reachable in shipping 1.14d; retained for reference.
-void __stdcall Unused_GetUnitList(D2UnitStrc * * ppUnitArray, int32_t nParam, int32_t nUnitId, int * pGameStats, int32_t nGameId) {
+void __stdcall Unused_GetUnitList(D2UnitStrc * * ppUnitArray, int32_t pStatRoot, int32_t nUnitId, int * pGameStats, int32_t nGameId) {
     D2UnitStrc* pUnit;
     int32_t* nListCursor;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
@@ -2454,7 +2454,7 @@ void __stdcall Unused_GetUnitList(D2UnitStrc * * ppUnitArray, int32_t nParam, in
     int nBucketIdx = 0;
     do {
       for (pUnit = ppUnitArray[nBucketIdx]; pUnit; pUnit = UNIT::SUnit::GetNextUnit(pUnit)) {
-        GAME_TrackGameStatistics((D2Game_Line0x13af*)nParam, 1, pUnit->nClassId);
+        GAME_TrackGameStatistics((D2Game_Line0x13af*)pStatRoot, 1, pUnit->nClassId);
       }
 
       nBucketIdx++;
@@ -2472,7 +2472,7 @@ void __stdcall Unused_GetUnitList(D2UnitStrc * * ppUnitArray, int32_t nParam, in
         exit(-1);
       }
 
-      for (nListCursor = *(int32_t**)(nParam + 0x8c); nListCursor; nListCursor = (int32_t*)nListCursor[0x23]) {
+      for (nListCursor = *(int32_t**)(pStatRoot + 0x8c); nListCursor; nListCursor = (int32_t*)nListCursor[0x23]) {
         (*PFN_UnitTypeCallbackTable[nUnitId])((char*)(nListCursor + 3), *nListCursor);
       }
 
@@ -3593,7 +3593,7 @@ void __fastcall SetStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValu
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nValue, 0);
 }
 
-void StaticInit_6caf10() {
+void StaticInit_Frames_TimeBetweenFrames() {
     Frames_TimeBetweenFrames = (int)(1000 / (int64_t)Frames_PerSecond);
 }
 

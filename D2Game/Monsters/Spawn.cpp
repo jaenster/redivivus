@@ -619,7 +619,7 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
     ::SGAMEDATA* pGameLocal = pGame;
     if (nMonCode >= sgptDataTable->nTxtMonStatsSize) {
       nSuperUniqueId = nMonCode - sgptDataTable->nTxtMonStatsSize;
-      nResolvedClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_ReturnZero();
+      nResolvedClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
       if ((int)nSuperUniqueId < nResolvedClassId) {
         pMonster = SPAWN_UniqueMonster(pGameLocal, pRoom, nX, nY, nSuperUniqueId);
         return pMonster;

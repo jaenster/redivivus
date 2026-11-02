@@ -710,7 +710,7 @@
         "NET_SID_CLIENT_Send_0x5D_ReportCrash",
         "SRegSaveData",
         "SID_SetStateFlag1",
-        "DEBUG_UnusedDebugFunction",
+        "DEBUG_Trace",
         "BNMESSQUEUE_SetStateIfZero",
         "SStrCopy",
         "BNSEND_SendRawBytes",
@@ -736,7 +736,7 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_AuthAccountCreate",
-        "DEBUG_UnusedDebugFunction"
+        "DEBUG_Trace"
       ]
     },
     {
@@ -751,7 +751,7 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_AuthAccountLogon",
-        "DEBUG_UnusedDebugFunction",
+        "DEBUG_Trace",
         "NET_SID_CLIENT_Send_0x54_AuthAccountLogonProof",
         "BNMESSQUEUE_SetStateIfZero",
         "NET_SID_CLIENT_Send_0x57_AuthAccountUpgrade"
@@ -769,7 +769,7 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_AuthAccountLogonProof",
-        "DEBUG_UnusedDebugFunction",
+        "DEBUG_Trace",
         "NET_SID_CLIENT_VerifyServerProof",
         "BNMESSQUEUE_SetStateIfZero"
       ],
@@ -789,7 +789,7 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_AuthAccountChange",
-        "DEBUG_UnusedDebugFunction",
+        "DEBUG_Trace",
         "NET_SID_CLIENT_Send_0x56_AuthAccountChangeProof",
         "BNMESSQUEUE_SetStateIfZero",
         "NET_SID_CLIENT_Send_0x57_AuthAccountUpgrade"
@@ -807,7 +807,7 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_AuthAccountChangeProof",
-        "DEBUG_UnusedDebugFunction",
+        "DEBUG_Trace",
         "NET_SID_ClearSrpPassword",
         "NET_SID_CLIENT_VerifyServerProof",
         "BNMESSQUEUE_SetStateIfZero"
@@ -828,7 +828,7 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_AuthAccountUpgrade",
-        "DEBUG_UnusedDebugFunction",
+        "DEBUG_Trace",
         "BNMESSQUEUE_SetStateIfZero",
         "NET_SID_CLIENT_Send_0x58_AuthAccountUpgradeProof"
       ]
@@ -845,7 +845,7 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_AuthAccountUpgradeProof",
-        "DEBUG_UnusedDebugFunction",
+        "DEBUG_Trace",
         "NET_SID_CLIENT_GetSIDFlag2",
         "NET_SID_CLIENT_Resend_0x53_AuthAccountLogon",
         "NET_SID_ClearSrpPassword",

@@ -193,7 +193,7 @@ static uint16_t PARTY_UpdateNextPartyId(::SGAMEDATA * pGame) {
 }
 
 // @sourcefile .\UNIT\Party.cpp
-int16_t __fastcall AllocPartyControlSub0x4(::SGAMEDATA * pGame) {
+int16_t __fastcall PARTY_CreateParty(::SGAMEDATA * pGame) {
     D2UnitPartyControlSub* pNewSub;
     D2UnitPartyControl* pPartyCtrl = pGame->pPartyControl;
     if (!pPartyCtrl) {

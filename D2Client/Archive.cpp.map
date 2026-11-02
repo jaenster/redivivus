@@ -240,7 +240,7 @@
         "ARCHIVE_ClearList"
       ],
       "usedTypes": [
-        "SMemBlockInfo",
+        "SMemBlockDetailsStrc",
         "SMemHeapDetailsStrc",
         "int * *",
         "int * * *",

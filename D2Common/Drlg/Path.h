@@ -164,12 +164,12 @@ void __thiscall DRLGPATH_GetDirectionTripletPacked(uint32_t * pnDirOut, uint32_t
 // and checks for overshoot (velocity > remaining distance). Returns 0 if overshooting
 // (meaning the path would skip past the target), 1 otherwise.
 // Handles 0x200 flag for 6-bit direction wrapping (isometric adjustment).
-uint32_t __fastcall DRLGPATH_UpdatePathVelocityAndDirection(uint32_t * pnParam);
+uint32_t __fastcall DRLGPATH_UpdatePathVelocityAndDirection(uint32_t * pPathData);
 // Normalizes a pair of fixed-point values to prevent overflow in subsequent math.
 // Repeatedly right-shifts both values until each fits within [-0x10000, 0x10000].
 // Used by DRLGPATH_StepPathWithCollisionCheck to keep velocity components in
 // a safe range for fixed-point iteration.
-void __fastcall DRLGPATH_NormalizeFixedPointPair(int * pnParam1, int * pnParam2);
+void __fastcall DRLGPATH_NormalizeFixedPointPair(int * pnStepX, int * pnStepY);
 // Steps a path forward with per-tile collision checking.
 // Computes velocity from DRLGPATH_UpdatePathVelocityAndDirection, normalizes it,
 // then iterates in fixed-point (16.16) increments from current position toward target.

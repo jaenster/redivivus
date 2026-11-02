@@ -15,7 +15,7 @@ namespace D2Common::Drlg::OutWild {
 
 // Function declarations
 // Returns a preset variant index from a grid cell's flags and preset type. For type 0, checks bit 0x100 to choose variant 0 or 3. For type 7 with flags matching 0x30000, returns variant 3. Otherwise indexes into the variant lookup table at data_006f2680, choosing between two columns based on the bAlternate stack arg.
-int __stdcall DRLGOUTROOM_GetPresetVariantFromGridCell(uint32_t nGridFlags, int nPresetType, int dwParam3);
+int __stdcall DRLGOUTROOM_GetPresetVariantFromGridCell(uint32_t nGridFlags, int nPresetType, int bReturnPresetId);
 // Spawns border column presets (0x1A and 0x1B) for two adjacent columns. Iterates all Y rows, determining the preset orientation from grid flags using lookup tables. If the level has road flags (0x14), also places a road transition preset. Called by FillBorderCornersAndPresets and SpawnTownTransitionsAndCaves.
 void __stdcall DRLGOUTROOM_SpawnVerticalBorderPresets(struct D2DrlgLevelStrc * pLevel, int32_t nColumn);
 // Outdoor DRLG finalization for a wilderness level (skips eD2LevelId 0x27). Driven by the level data's dwFlags: optionally spawns vertical border presets along the second-to-last grid column (if that column is empty); seed-randomly iterates the grid in row- or column-major order placing corner-fill presets (SpawnCornerFillPreset), halting via Fog ErrorManager if the grid loop completes without success; and finally (flags &0x1c, not &0x40) picks a seed-random edge position and spawns one outdoor level preset (SpawnOutdoorLevelPresetEx), then sets the 0x40 done-flag. Consumes pLevel->sSeed for randomness.

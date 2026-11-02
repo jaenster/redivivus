@@ -801,7 +801,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn65",
+      "name": "Objects_InitFn65_AncientStatue2",
       "address": "0058d110",
       "lines": [
         {
@@ -811,7 +811,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q5",
       "calledFunctions": [
-        "Objects_InitFn65",
+        "Objects_InitFn65_AncientStatue2",
         "GetQuestDataByQuestNoInternal",
         "Q35_SetStatueAnimMode"
       ],
@@ -823,7 +823,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn63",
+      "name": "Objects_InitFn63_AncientStatue3",
       "address": "0058d150",
       "lines": [
         {
@@ -833,7 +833,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q5",
       "calledFunctions": [
-        "Objects_InitFn63",
+        "Objects_InitFn63_AncientStatue3",
         "GetQuestDataByQuestNoInternal",
         "Q35_SetStatueAnimMode"
       ],
@@ -845,7 +845,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn64",
+      "name": "Objects_InitFn64_AncientStatue1",
       "address": "0058d190",
       "lines": [
         {
@@ -855,7 +855,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q5",
       "calledFunctions": [
-        "Objects_InitFn64",
+        "Objects_InitFn64_AncientStatue1",
         "GetQuestDataByQuestNoInternal",
         "Q35_SetStatueAnimMode"
       ],
@@ -921,7 +921,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn72",
+      "name": "Objects_InitFn72_AncientsAltar",
       "address": "0058d240",
       "lines": [
         {
@@ -931,7 +931,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q5",
       "calledFunctions": [
-        "Objects_InitFn72",
+        "Objects_InitFn72_AncientsAltar",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag"
       ],
@@ -941,7 +941,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn73",
+      "name": "Objects_InitFn73_AncientsDoor",
       "address": "0058d280",
       "lines": [
         {
@@ -951,7 +951,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q5",
       "calledFunctions": [
-        "Objects_InitFn73",
+        "Objects_InitFn73_AncientsDoor",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag"
       ],
@@ -1138,7 +1138,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn76",
+      "name": "Objects_InitFn76_SummitDoor",
       "address": "0058d640",
       "lines": [
         {
@@ -1148,7 +1148,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q5",
       "calledFunctions": [
-        "Objects_InitFn76",
+        "Objects_InitFn76_SummitDoor",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag"
       ],

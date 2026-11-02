@@ -51,8 +51,8 @@ uint32_t __stdcall CELCMP_GetDirectionFrameTableIndex(int32_t nFrameIndex, uint3
 
 uint32_t __stdcall CELCMP_GetPaletteShiftValue(uint32_t nPaletteIndex, uint32_t nBitsPerPixel, int32_t nSrcBitsPerPixel, int32_t bIsHigherPalette) {
     // Static local variables (originally global data)
-    static uint8_t BYTE_ARRAY_006e5da0[8] = { 0x1, 0x1, 0x3, 0x3, 0x5, 0x5, 0x7, 0x7 }; D2_STATIC_GUARD(BYTE_ARRAY_006e5da0, "D2CMP::SRC::CelCmp::CELCMP_GetPaletteShiftValue::BYTE_ARRAY_006e5da0");
-    static uint8_t BYTE_ARRAY_006e5da8[16] = {
+    static uint8_t gaCelCmpPaletteShift4To8bppLow[8] = { 0x1, 0x1, 0x3, 0x3, 0x5, 0x5, 0x7, 0x7 }; D2_STATIC_GUARD(gaCelCmpPaletteShift4To8bppLow, "D2CMP::SRC::CelCmp::CELCMP_GetPaletteShiftValue::gaCelCmpPaletteShift4To8bppLow");
+    static uint8_t gaCelCmpPaletteShift8To16bppLow[16] = {
     0x0,
     0x0,
     0x2,
@@ -69,9 +69,9 @@ uint32_t __stdcall CELCMP_GetPaletteShiftValue(uint32_t nPaletteIndex, uint32_t 
     0xc,
     0xe,
     0xe
-}; D2_STATIC_GUARD(BYTE_ARRAY_006e5da8, "D2CMP::SRC::CelCmp::CELCMP_GetPaletteShiftValue::BYTE_ARRAY_006e5da8");
-    static uint8_t BYTE_ARRAY_006e5db8[8] = { 0x3, 0x3, 0x5, 0x5, 0x7, 0x7, 0x1, 0x1 }; D2_STATIC_GUARD(BYTE_ARRAY_006e5db8, "D2CMP::SRC::CelCmp::CELCMP_GetPaletteShiftValue::BYTE_ARRAY_006e5db8");
-    static uint8_t BYTE_ARRAY_006e5dc0[16] = {
+}; D2_STATIC_GUARD(gaCelCmpPaletteShift8To16bppLow, "D2CMP::SRC::CelCmp::CELCMP_GetPaletteShiftValue::gaCelCmpPaletteShift8To16bppLow");
+    static uint8_t gaCelCmpPaletteShift4To8bppHigh[8] = { 0x3, 0x3, 0x5, 0x5, 0x7, 0x7, 0x1, 0x1 }; D2_STATIC_GUARD(gaCelCmpPaletteShift4To8bppHigh, "D2CMP::SRC::CelCmp::CELCMP_GetPaletteShiftValue::gaCelCmpPaletteShift4To8bppHigh");
+    static uint8_t gaCelCmpPaletteShift8To16bppHigh[16] = {
     0x2,
     0x2,
     0x4,
@@ -88,7 +88,7 @@ uint32_t __stdcall CELCMP_GetPaletteShiftValue(uint32_t nPaletteIndex, uint32_t 
     0xe,
     0x0,
     0x0
-}; D2_STATIC_GUARD(BYTE_ARRAY_006e5dc0, "D2CMP::SRC::CelCmp::CELCMP_GetPaletteShiftValue::BYTE_ARRAY_006e5dc0");
+}; D2_STATIC_GUARD(gaCelCmpPaletteShift8To16bppHigh, "D2CMP::SRC::CelCmp::CELCMP_GetPaletteShiftValue::gaCelCmpPaletteShift8To16bppHigh");
 
     if (nPaletteIndex >= nBitsPerPixel) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a0);
@@ -97,17 +97,17 @@ uint32_t __stdcall CELCMP_GetPaletteShiftValue(uint32_t nPaletteIndex, uint32_t 
     if (nBitsPerPixel == 8) {
       if (nSrcBitsPerPixel == 4) {
         if (bIsHigherPalette) {
-          return (uint32_t)BYTE_ARRAY_006e5db8[nPaletteIndex];
+          return (uint32_t)gaCelCmpPaletteShift4To8bppHigh[nPaletteIndex];
         }
 
-        return (uint32_t)BYTE_ARRAY_006e5da0[nPaletteIndex];
+        return (uint32_t)gaCelCmpPaletteShift4To8bppLow[nPaletteIndex];
       }
     } else if (nBitsPerPixel == 0x10 && nSrcBitsPerPixel == 8) {
       if (bIsHigherPalette) {
-        return (uint32_t)BYTE_ARRAY_006e5dc0[nPaletteIndex];
+        return (uint32_t)gaCelCmpPaletteShift8To16bppHigh[nPaletteIndex];
       }
 
-      return (uint32_t)BYTE_ARRAY_006e5da8[nPaletteIndex];
+      return (uint32_t)gaCelCmpPaletteShift8To16bppLow[nPaletteIndex];
     }
 
     return 0;
@@ -1679,7 +1679,7 @@ void __stdcall CELCMP_DrawCelFrameCentered(D2GfxDataStrc * pGfxData, int32_t nDr
       }
 
       nCenteredY = nDrawX + pFrameBlock->nOffsetX + nCenteredY - nClipRows;
-      FastCmp::FASTCMP_DecompressRLEWithAlpha((uint8_t*)pFrameBlock, pDstBits + nDrawYCentered * nDstPitch + nCenteredY, nCenteredY, nClipLeft, nClipRight, nDstPitch, nClipRows, nRowsToRender, pBlendTable, byBlendColor);
+      FastCmp::FASTCMP_DecompressRLEWithAlpha(pFrameBlock, pDstBits + nDrawYCentered * nDstPitch + nCenteredY, nCenteredY, nClipLeft, nClipRight, nDstPitch, nClipRows, nRowsToRender, pBlendTable, byBlendColor);
       return;
     }
 }
@@ -1847,12 +1847,12 @@ int __stdcall CELCMP_GetDC6BlockPixelData(DC6Block * pDC6Block) {
     return pDC6Block->nNextBlock;
 }
 
-uint32_t __stdcall CELCMP_RoundUpToMultiple(uint32_t nParam1, uint32_t nParam2) {
-    if (nParam1 % nParam2) {
-      nParam1 += nParam2 - nParam1 % nParam2;
+uint32_t __stdcall CELCMP_RoundUpToMultiple(uint32_t nValue, uint32_t nMultiple) {
+    if (nValue % nMultiple) {
+      nValue += nMultiple - nValue % nMultiple;
     }
 
-    return nParam1;
+    return nValue;
 }
 
 void __stdcall CELCMP_FreeCelFileAndData(DC6 * pDC6) {
@@ -2088,7 +2088,7 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca286(EHExceptionRecord * pException
     return ExceptionContinueSearch;
 }
 
-void StaticInit_6cafc0() {
+void StaticInit_gCelCmpCacheHandler() {
     gCelCmpCacheHandler.TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>::Constructor();
     gCelCmpCacheHandler.nSequence = 0xf71733f;
     gCelCmpCacheHandler.bWrapped = 0;

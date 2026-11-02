@@ -230,7 +230,7 @@
       ]
     },
     {
-      "name": "StaticInit_6cad80",
+      "name": "StaticInit_gwszTradePartnerName",
       "address": "006cad80",
       "lines": [
         {
@@ -240,7 +240,7 @@
       ],
       "namespace": "D2Client::UI::Trade",
       "calledFunctions": [
-        "StaticInit_6cad80"
+        "StaticInit_gwszTradePartnerName"
       ]
     }
   ]

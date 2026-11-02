@@ -188,7 +188,7 @@ void __fastcall SKILLS_ApplyAttackRateBuff(struct D2UnitStrc * pUnit, int32_t nA
 void __fastcall SKILLS_FreeMonsterMinions(struct D2UnitStrc * pUnit);
 int32_t __fastcall SKILLS_GetUnitWalkVelocity(struct D2UnitStrc * pUnit);
 int32_t __fastcall SKILLS_GetSummonMonsterClassId(struct D2UnitStrc * pUnit, int32_t bUseMonsterSpawnData, int32_t nSkillId, int32_t nSummonParam, int * pPtr, int * pnSpawnX, int * pnSpawnY);
-uint16_t __fastcall SKILLS_CalcToHitAndApply(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillId, int32_t nSkillLvl, struct D2DamageStrc * pDamage, int32_t nParam4);
+uint16_t __fastcall SKILLS_CalcToHitAndApply(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillId, int32_t nSkillLvl, struct D2DamageStrc * pDamage, int32_t nExtraRange);
 uint16_t __fastcall SKILLS_CalcMissileToHit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit2, struct D2UnitStrc * pUnit, uint32_t dwResultFlags, int32_t nToHitBonusExtra, uint32_t pDamage, int32_t nExtraRange);
 // Creates and queues a SUnitEvent for an aura skill proc on pUnit. Validates nItemEventFuncId is within the ITEMSTATCOST_ITEMEVENTFUNC table (max 0x32) and the entry is non-null, then calls SUNITEVENT_Alloc with the resolved function pointer. Returns the new event, or null on failure.
 struct D2SUnitEventStrc * __fastcall D2SetAuraEvent(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nUnitEvent, eD2Skills eSkill, int32_t nSkillLevel, uint32_t nItemEventFuncId, int32_t nQueueNo, int32_t nOwnerKey);
@@ -241,7 +241,7 @@ void __fastcall Server_SelectSkill(struct D2UnitStrc * pUnit, int32_t leftOrRigh
 void __fastcall ClearSkills(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Applies STATE_stunned to a non-boss, non-special monster unit. Skips if already STATE_uninterruptable. Allocates a stat list expiring in 100 game frames, attaches STATE_stunned state, schedules a game event, then interrupts the monster's current AI by calling SetCurrentSkill(Neutral) and MONSTERAI_ExecuteLifecycleTransition. Extends existing stun timeout if a stun statlist is already present.
 void __thiscall SKILL_ApplyStunState(void * pThis, struct D2UnitStrc * pUnit, eD2States eState);
-void __fastcall SKILL_StunExpireAndRestoreAi(struct D2UnitStrc * pUnit, eD2States eState, uint32_t dwParam);
+void __fastcall SKILL_StunExpireAndRestoreAi(struct D2UnitStrc * pUnit, eD2States eState, uint32_t pStatListEx);
 struct D2UnitStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit, eD2States eState, eD2Skills eSkill, int32_t nSkillLvl);
 // 8 internal functions (defined in .cpp)
 

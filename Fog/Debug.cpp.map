@@ -491,7 +491,8 @@
       "usedTypes": [
         "D2FogDebugModuleEntryStrc",
         "D2FogDebugModuleTableStrc",
-        "uint16_t"
+        "uint16_t",
+        "uint8_t"
       ]
     },
     {

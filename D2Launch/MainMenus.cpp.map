@@ -2786,7 +2786,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused1",
+      "name": "MAINMENU_OnPressPlayIntroCinematic",
       "address": "00434320",
       "lines": [
         {
@@ -2796,7 +2796,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused1",
+        "MAINMENU_OnPressPlayIntroCinematic",
         "MPQ_UnloadAllMediaMpqFiles",
         "MPQ_LoadVideoMpqFiles",
         "MPQ_LoadAllMediaMpqFiles",
@@ -2807,7 +2807,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused2",
+      "name": "MAINMENU_OnPressPlayAct2StartCinematic",
       "address": "00434380",
       "lines": [
         {
@@ -2817,7 +2817,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused2",
+        "MAINMENU_OnPressPlayAct2StartCinematic",
         "MPQ_UnloadAllMediaMpqFiles",
         "MPQ_LoadVideoMpqFiles",
         "MPQ_LoadAllMediaMpqFiles",
@@ -2828,7 +2828,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused3",
+      "name": "MAINMENU_OnPressPlayAct3StartCinematic",
       "address": "004343e0",
       "lines": [
         {
@@ -2838,7 +2838,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused3",
+        "MAINMENU_OnPressPlayAct3StartCinematic",
         "MPQ_UnloadAllMediaMpqFiles",
         "MPQ_LoadVideoMpqFiles",
         "MPQ_LoadAllMediaMpqFiles",
@@ -2849,7 +2849,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused4",
+      "name": "MAINMENU_OnPressPlayAct4StartCinematic",
       "address": "00434440",
       "lines": [
         {
@@ -2859,7 +2859,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused4",
+        "MAINMENU_OnPressPlayAct4StartCinematic",
         "MPQ_UnloadAllMediaMpqFiles",
         "MPQ_LoadVideoMpqFiles",
         "MPQ_LoadAllMediaMpqFiles",
@@ -2870,7 +2870,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused5",
+      "name": "MAINMENU_OnPressPlayAct4EndCinematic",
       "address": "004344a0",
       "lines": [
         {
@@ -2880,7 +2880,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused5",
+        "MAINMENU_OnPressPlayAct4EndCinematic",
         "MPQ_UnloadAllMediaMpqFiles",
         "MPQ_LoadVideoMpqFiles",
         "MPQ_LoadAllMediaMpqFiles",
@@ -2891,7 +2891,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused6",
+      "name": "MAINMENU_OnPressPlayExpansionIntroCinematic",
       "address": "00434500",
       "lines": [
         {
@@ -2901,7 +2901,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused6",
+        "MAINMENU_OnPressPlayExpansionIntroCinematic",
         "MPQ_UnloadAllMediaMpqFiles",
         "MPQ_LoadAllMediaMpqFiles",
         "UIMENU_PlayCutScene"
@@ -2911,7 +2911,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused7",
+      "name": "MAINMENU_OnPressPlayExpansionOutroCinematic",
       "address": "00434560",
       "lines": [
         {
@@ -2921,7 +2921,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused7",
+        "MAINMENU_OnPressPlayExpansionOutroCinematic",
         "MPQ_UnloadAllMediaMpqFiles",
         "MPQ_LoadAllMediaMpqFiles",
         "UIMENU_PlayCutScene"
@@ -2953,7 +2953,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused8",
+      "name": "MAINMENU_OnPressShowGatewaySelect",
       "address": "00434600",
       "lines": [
         {
@@ -2963,7 +2963,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused8",
+        "MAINMENU_OnPressShowGatewaySelect",
         "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
         "FORMS_CreateAnyFormFromListExEx",
         "GetLocaleString",
@@ -3510,7 +3510,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused9",
+      "name": "MAINMENU_OnPressSinglePlayer",
       "address": "00435cd0",
       "lines": [
         {
@@ -3520,7 +3520,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused9",
+        "MAINMENU_OnPressSinglePlayer",
         "SAVEFILE_FindAllSaveFiles",
         "SOUND_FadeOutAllSoundEffects",
         "FORMS_DestroyLists",
@@ -3550,7 +3550,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused11",
+      "name": "MAINMENU_OnPressSelectBattleNet",
       "address": "00435d30",
       "lines": [
         {
@@ -3560,7 +3560,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused11",
+        "MAINMENU_OnPressSelectBattleNet",
         "UIMENU_MainMenuAgain"
       ],
       "usedTypes": [
@@ -3568,7 +3568,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused12",
+      "name": "MAINMENU_OnPressRealmList",
       "address": "00435d50",
       "lines": [
         {
@@ -3578,7 +3578,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused12",
+        "MAINMENU_OnPressRealmList",
         "MAINMENU_DetectDoubleClick",
         "StorePreferedRealmAgain"
       ],
@@ -3817,7 +3817,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused15",
+      "name": "MAINMENU_OnSubmitCreateBattleNetAccount",
       "address": "00436910",
       "lines": [
         {
@@ -3827,7 +3827,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused15",
+        "MAINMENU_OnSubmitCreateBattleNetAccount",
         "UIMENU_MainMenuAgain",
         "MAINMENU_SaveAccountAndPasswordToINI",
         "FORMS_TextInput_GetValue",
@@ -3845,7 +3845,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused16",
+      "name": "MAINMENU_OnPressCreateCharacterOk",
       "address": "004369f0",
       "lines": [
         {
@@ -3855,7 +3855,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused16",
+        "MAINMENU_OnPressCreateCharacterOk",
         "D2WINMAIN_GetControlVisible",
         "GetAndCreateSavePath",
         "GetLocaleString",
@@ -3894,7 +3894,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused17",
+      "name": "MAINMENU_IsValidEmailAddress",
       "address": "00436c10",
       "lines": [
         {
@@ -3904,7 +3904,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused17",
+        "MAINMENU_IsValidEmailAddress",
         "SStrChr",
         "SStrLen"
       ],
@@ -4057,7 +4057,7 @@
         "FORMS_TextInput_GetValue",
         "STRING_GetWideStringLength",
         "WideCharToUTF8",
-        "MAINMENU_Unused17",
+        "MAINMENU_IsValidEmailAddress",
         "D2WINMAIN_SetControlVisible"
       ],
       "usedTypes": [
@@ -4205,7 +4205,7 @@
         "FORMS_TextInput_GetValue",
         "STRING_GetWideStringLength",
         "WideCharToUTF8",
-        "MAINMENU_Unused17",
+        "MAINMENU_IsValidEmailAddress",
         "D2WINMAIN_SetControlVisible"
       ],
       "usedTypes": [
@@ -4327,7 +4327,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused19",
+      "name": "MAINMENU_OnPressSubmitEmailAddress",
       "address": "00437620",
       "lines": [
         {
@@ -4337,13 +4337,13 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused19",
+        "MAINMENU_OnPressSubmitEmailAddress",
         "FORMS_TextInput_GetValue",
         "STRING_CompareWideStrings",
         "GetLocaleString",
         "MAINMENU_CreateMessageBox",
         "WideCharToUTF8",
-        "MAINMENU_Unused17",
+        "MAINMENU_IsValidEmailAddress",
         "D2WINMAIN_ClearMessageLoopFlag"
       ],
       "usedTypes": [
@@ -4391,7 +4391,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused20",
+      "name": "MAINMENU_HandleEmailChange",
       "address": "00437730",
       "lines": [
         {
@@ -4401,7 +4401,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused20",
+        "MAINMENU_HandleEmailChange",
         "UIMENU_YouWereDisconnectedFromBattleNet2",
         "D2WINMAIN_GetControlVisible",
         "FORMS_TextInput_GetValue",
@@ -4422,7 +4422,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused21",
+      "name": "MAINMENU_OnSubmitResetPassword",
       "address": "004378d0",
       "lines": [
         {
@@ -4432,7 +4432,7 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused21",
+        "MAINMENU_OnSubmitResetPassword",
         "UIMENU_YouWereDisconnectedFromBattleNet2",
         "D2WINMAIN_GetControlVisible",
         "FORMS_TextInput_GetValue",

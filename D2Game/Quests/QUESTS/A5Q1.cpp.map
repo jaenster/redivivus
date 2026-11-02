@@ -512,7 +512,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn71",
+      "name": "Objects_InitFn71_LarzukStandard",
       "address": "00587840",
       "lines": [
         {
@@ -522,7 +522,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q1",
       "calledFunctions": [
-        "Objects_InitFn71",
+        "Objects_InitFn71_LarzukStandard",
         "GetQuestDataByQuestNoInternal",
         "FindSpawnableLocation",
         "SpawnMonsterAtRoomPos",

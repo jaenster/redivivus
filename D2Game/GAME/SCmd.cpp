@@ -198,14 +198,14 @@ void __fastcall NET_D2GS_SERVER_Send_0x0C_UNITCHANGE(D2ClientStrc * pClient, uin
 }
 
 // Server-to-client object state update. Opcode 0x0E, 12 bytes.
-void __fastcall NET_D2GS_SERVER_Send_0x0E_UNITCHANGE_ID(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nObjectType, uint32_t dwUnitGUID, uint8_t nMessageType, uint8_t bParam2, uint32_t dwParam) {
+void __fastcall NET_D2GS_SERVER_Send_0x0E_UNITCHANGE_ID(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nObjectType, uint32_t dwUnitGUID, uint8_t nMessageType, uint8_t bIsTargetable, uint32_t nAnimMode) {
     D2GSPacketSrv0x0E aPacket;
     aPacket.nPacketId = nPacketId;
     aPacket.dwUnitGUID = dwUnitGUID;
     aPacket.nUnitType = nObjectType;
-    aPacket.nParam2 = bParam2;
+    aPacket.nParam2 = bIsTargetable;
     aPacket.nMessageType = nMessageType;
-    aPacket.dwParam = dwParam;
+    aPacket.dwParam = nAnimMode;
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 0xc, pClient);
 }
 
@@ -2589,7 +2589,7 @@ void __fastcall Send0x9DAllSocketedItems(D2ClientStrc * pClient, D2UnitStrc * pU
 }
 
 // Sends opcode 0x9C item-world packet to pClient. Fills D2GSPacketSrv0x9C with action, item GUID, container slot (relative to the client's player unit), then serialises the item into the bitstream with eItemFlag temporarily applied. Sends socketed children via Send0x9DItemInSocket. Halts if player unit is null or serialised size >= 0xFD.
-void __fastcall NET_D2GS_SERVER_Send_0x9C_ITEMEX(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint8_t nItemAction, eD2ItemFlag eItemFlag, uint32_t nParam) {
+void __fastcall NET_D2GS_SERVER_Send_0x9C_ITEMEX(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint8_t nItemAction, eD2ItemFlag eItemFlag, uint32_t bIsCrude) {
     D2GSPacketSrv0x9C sPacket;
     int32_t nLine;
     D2UnitStrc* pPlayerUnit_lcl = Clients::CLIENTS_GetControlUnit(pClient, 0);
@@ -2612,7 +2612,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x9C_ITEMEX(D2ClientStrc * pClient, D2UnitS
       eSavedItemFlags = D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(pUnit);
       D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, eItemFlag, 1);
       memset(sPacket.aBitStream, 0, 0xf4);
-      nLine = D2Common::ITEMS::Items::SerializeItem(pUnit, (uint8_t*)sPacket.aBitStream, 0xf4, nullptr, 0, nParam);
+      nLine = D2Common::ITEMS::Items::SerializeItem(pUnit, (uint8_t*)sPacket.aBitStream, 0xf4, nullptr, 0, bIsCrude);
       if (!(nLine + 8U <= 0xfc)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x78c);
         exit(-1);

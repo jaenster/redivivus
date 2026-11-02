@@ -1708,8 +1708,8 @@ int __stdcall GFX_GetGfxSystemFlags() {
     return gnGfxSystemFlags;
 }
 
-int32_t __fastcall GFX_GetModeStatusEntry(int32_t nParam) {
-    return (int32_t)(g_pMonsterSpriteCofStatusTable + nParam);
+int32_t __fastcall GFX_GetModeStatusEntry(int32_t nClassId) {
+    return (int32_t)(g_pMonsterSpriteCofStatusTable + nClassId);
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp

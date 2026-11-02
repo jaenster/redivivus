@@ -421,7 +421,7 @@ BOOL __fastcall SKILLMONST_SrvStFn46_AndrialSpray(::SGAMEDATA * pGame, D2UnitStr
 // Server-side skill do-func (index 088) that fires a missile from a monster's animated body part. Reads the target direction from the current skill's stored params or cursor position, maps animation frame+direction to a composite body-part offset via MONSTERS_GetCompositeDimensions and a lookup table, then launches the skill's srvmissilea missile from that world position.
 BOOL __fastcall Skills_SrvDoFunc_088_FireMissileFromBodyPart(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
-    static uint8_t BYTE_ARRAY_006e3188[8] = { 0x1d, 0x1c, 0x1b, 0x1a, 0x19, 0x18, 0x1f, 0x1e }; D2_STATIC_GUARD(BYTE_ARRAY_006e3188, "D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_088_FireMissileFromBodyPart::BYTE_ARRAY_006e3188");
+    static uint8_t gaBodyPartOffsetDir[8] = { 0x1d, 0x1c, 0x1b, 0x1a, 0x19, 0x18, 0x1f, 0x1e }; D2_STATIC_GUARD(gaBodyPartOffsetDir, "D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_088_FireMissileFromBodyPart::gaBodyPartOffsetDir");
 
     uint32_t _local_1c;
     BOOL nDirection;
@@ -457,7 +457,7 @@ BOOL __fastcall Skills_SrvDoFunc_088_FireMissileFromBodyPart(::SGAMEDATA * pGame
     uint8_t byBodyPartIdx = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2((uint8_t)iVar1);
     eSkill = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
     nOriginX = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-    D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(BYTE_ARRAY_006e3188[byBodyPartIdx & 7], &nOffsetX, &nOffsetY);
+    D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(gaBodyPartOffsetDir[byBodyPartIdx & 7], &nOffsetX, &nOffsetY);
     eSkill += nOffsetX;
     nOriginX += nOffsetY;
     D2Common::Units::GetShiftedFrameMetrics(pUnit, (int*)&nFrameIdx, &nAnimFrameCount);

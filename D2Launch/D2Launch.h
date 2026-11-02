@@ -30,7 +30,7 @@ BOOL __stdcall UIMENU_TCPIPAddressInput(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_DismissPopup(struct D2ControlStrc * pControl);
 BOOL __stdcall UIMENU_DisconnectAndReturnToMainMenu(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_ConnectViaTCPIPAndSelectChar(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_Unused18(struct D2ControlStrc * pControl);
+BOOL __stdcall MAINMENU_OnPressSkipEmailAddress(struct D2ControlStrc * pControl);
 BOOL __stdcall thunk_UIMENU_MainMenuAgain(struct D2ControlStrc * pControl);
 
 } // namespace D2Launch

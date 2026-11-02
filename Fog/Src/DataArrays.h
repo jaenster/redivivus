@@ -17,7 +17,7 @@ namespace Fog::Src::DataArrays {
 // @sourcefile .\Src\DataArrays.cpp
 struct D2DataArrayStrc * __fastcall FOG_CreateDataArray(char * pszName, int numObjects, int nObjectSize);
 // @sourcefile .\Src\DataArrays.cpp
-void __fastcall FreeWeatherPointer(void * pParam);
+void __fastcall FreeWeatherPointer(void * pDataArray);
 void __fastcall FOG_InitDataArray(struct D2DataArrayStrc * pDataArray);
 uint32_t __fastcall FOG_GetMissileField(struct D2DataArrayStrc * pMissilesTxt);
 // Returns the entry of pDataArray addressed by nHandle (high word = slot index, low word = the entry's 16-bit id; low word 0 matches any), or NULL for handle -1, an empty slot or an id mismatch. Halts (lines 219/222) on an index outside numObjects or an uninitialised array.
@@ -28,6 +28,6 @@ short * __fastcall FOG_GetDataArrayEntry(struct D2DataArrayStrc * pDataArray, in
 short * __fastcall FOG_GetDataArrayEntryOrHalt(struct D2DataArrayStrc * pDataArray, int nHandle);
 void __fastcall FOG_CloseDataArray(struct D2DataArrayStrc * pDataArray);
 void __fastcall FOG_ArrayFreeAtIndex(struct D2DataArrayStrc * pDataArray, int nHandle);
-void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayData, double fParam, uint32_t * pdwParam, int nCount, int nMaxValue);
+void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayData, double fParam, uint32_t * nElementSize, int nCount, int nMaxValue);
 
 } // namespace Fog::Src::DataArrays

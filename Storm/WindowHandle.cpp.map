@@ -658,7 +658,7 @@
       ]
     },
     {
-      "name": "StaticInit_6ca8e0",
+      "name": "StaticInit_gWndTrackingList",
       "address": "006ca8e0",
       "lines": [
         {
@@ -668,7 +668,7 @@
       ],
       "namespace": "Storm::WindowHandle",
       "calledFunctions": [
-        "StaticInit_6ca8e0",
+        "StaticInit_gWndTrackingList",
         "atexit"
       ]
     },

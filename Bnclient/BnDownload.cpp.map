@@ -294,7 +294,7 @@
         "BnetDownloadFile",
         "SMemAlloc",
         "SMemFree",
-        "DEBUG_UnusedDebugFunction",
+        "DEBUG_Trace",
         "CACHE_WriteData",
         "BNDOWNLOAD_WriteFileWithTimestamp"
       ],
@@ -416,7 +416,7 @@
         "exit",
         "SMemAlloc",
         "NET_RecvExact",
-        "DEBUG_UnusedDebugFunction",
+        "DEBUG_Trace",
         "BNDOWNLOAD_GetCachedFileSize",
         "BNDOWNLOAD_RecvFileFromSocket",
         "NET_BNFTP_CLIENT_ProcessFile",
@@ -471,7 +471,7 @@
       "namespace": "Bnclient::BnDownload",
       "calledFunctions": [
         "NET_BNFTP_CLIENT_ProcessFile",
-        "DEBUG_UnusedDebugFunction",
+        "DEBUG_Trace",
         "__security_check_cookie",
         "_stricmp",
         "AllocClientMemory",
@@ -540,7 +540,7 @@
       ]
     },
     {
-      "name": "StaticInit_6caed0",
+      "name": "StaticInit_CriticalSection_00881f64",
       "address": "006caed0",
       "lines": [
         {
@@ -550,7 +550,7 @@
       ],
       "namespace": "Bnclient::BnDownload",
       "calledFunctions": [
-        "StaticInit_6caed0",
+        "StaticInit_CriticalSection_00881f64",
         "atexit"
       ]
     },

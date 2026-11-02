@@ -1316,7 +1316,7 @@
       ]
     },
     {
-      "name": "StaticInit_6ca940",
+      "name": "StaticInit_pBetaRealmNames",
       "address": "006ca940",
       "lines": [
         {
@@ -1326,7 +1326,7 @@
       ],
       "namespace": "D2Launch::CharSel",
       "calledFunctions": [
-        "StaticInit_6ca940"
+        "StaticInit_pBetaRealmNames"
       ],
       "usedTypes": [
         "WCHAR"

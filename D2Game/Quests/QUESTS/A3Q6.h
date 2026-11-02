@@ -108,11 +108,11 @@ void __fastcall Q23_TimerCallback_MephistoApproach(struct D2QuestDataStrc * pQue
 // Durance bridge / portal object). Records its GUID into the A3Q6 quest-specific struct, sets its update
 // flag, and schedules an event (id 7) if not in final state. No quest-state record writes. (Field names
 // bSunDarkened/nViperAmuletUpdateFlag are union-alias artifacts; this is the Mephisto-quest object.)
-void __fastcall Objects_InitFn45(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn45_MephistoBridge(struct D2ObjectInitFnArg * pInitArg);
 // [The Guardian (Q23)] Object init fn (InitFn44): second scripted object for the Mephisto quest. If on
 // Outer Steppes just sets update flag 2; otherwise records the object GUID into the A3Q6 quest struct and
 // sets its update flag. No quest-state record writes. (bMalusTaken/nMalusGUID are union-alias artifacts.)
-void __fastcall Objects_InitFn44(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn44_HellGatePortal(struct D2ObjectInitFnArg * pInitArg);
 // [The Guardian (Q23)] fpSequenceFilter: when the player has the intro done (bIsNotIntroduction) but no
 // state flag yet, sets nStateFlag=1 and arms slot[2] (Q23_Callback_02). Bootstraps the acceptance step.
 bool __fastcall Q23_SequenceFilter(struct D2QuestDataStrc * pQuestData);

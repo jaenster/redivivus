@@ -3563,22 +3563,24 @@ void __fastcall Missiles_SrvDmgFunc_PhysToElementalByCalc1(::SGAMEDATA * pGame, 
     }
 
     uint32_t nCalcExpr = pMissilesTxt->DmgCalc1;
-    uint32_t uConversionPct = D2Common::Units::Missile::MISSILE_EvalMissileCalc(pUnit, UNIT::SUnit::GetOwnerUnit(pGame, pUnit), nCalcExpr, -1, -1);
-    if ((int)uConversionPct <= 0) {
+    int32_t nElemDamage = -1;
+    int32_t uConversionPct = -1;
+    uConversionPct = D2Common::Units::Missile::MISSILE_EvalMissileCalc(pUnit, UNIT::SUnit::GetOwnerUnit(pGame, pUnit), nCalcExpr, uConversionPct, nElemDamage);
+    if (uConversionPct <= 0) {
       return;
     }
-    if ((int)uConversionPct >= 100) {
+    if (uConversionPct >= 100) {
       uConversionPct = 100;
     }
 
-    int32_t nMaxDamage = pDamage->dwPhysDamage;
-    int32_t nElemDamage = D2Client::Stats::D2ApplyPercent(nMaxDamage, uConversionPct, 100);
-    if (nElemDamage >= nMaxDamage) {
-      nElemDamage = nMaxDamage;
+    nElemDamage = pDamage->dwPhysDamage;
+    uConversionPct = D2Client::Stats::D2ApplyPercent(nElemDamage, uConversionPct, 100);
+    if (uConversionPct >= nElemDamage) {
+      uConversionPct = nElemDamage;
     }
 
-    pDamage->dwPhysDamage = nMaxDamage - nElemDamage;
-    MISSILES_AddElementalDamageBonus(pGame, pUnit, pTarget, pDamage, nElemDamage);
+    pDamage->dwPhysDamage = nElemDamage - uConversionPct;
+    MISSILES_AddElementalDamageBonus(pGame, pUnit, pTarget, pDamage, uConversionPct);
 }
 
 void __fastcall Missiles_SrvDmgFunc_RecalcElementalWithClear(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage) {
@@ -3593,22 +3595,24 @@ void __fastcall Missiles_SrvDmgFunc_RecalcElementalWithClear(::SGAMEDATA * pGame
     }
 
     uint32_t nCalcExpression = pMissilesTxt->DmgCalc1;
-    uint32_t nCalcResult = D2Common::Units::Missile::MISSILE_EvalMissileCalc(pUnit, UNIT::SUnit::GetOwnerUnit(pGame, pUnit), nCalcExpression, -1, -1);
-    if ((int)nCalcResult <= 0) {
+    int32_t nElemDamage = -1;
+    int32_t nCalcResult = -1;
+    nCalcResult = D2Common::Units::Missile::MISSILE_EvalMissileCalc(pUnit, UNIT::SUnit::GetOwnerUnit(pGame, pUnit), nCalcExpression, nCalcResult, nElemDamage);
+    if (nCalcResult <= 0) {
       return;
     }
-    if ((int)nCalcResult >= 100) {
+    if (nCalcResult >= 100) {
       nCalcResult = 100;
     }
 
-    int32_t nScaledDamage = D2Client::Stats::D2ApplyPercent(pDamage->dwPhysDamage, nCalcResult, 100);
-    if (nScaledDamage >= pDamage->dwPhysDamage) {
-      nScaledDamage = pDamage->dwPhysDamage;
+    nCalcResult = D2Client::Stats::D2ApplyPercent(pDamage->dwPhysDamage, nCalcResult, 100);
+    if (nCalcResult >= pDamage->dwPhysDamage) {
+      nCalcResult = pDamage->dwPhysDamage;
     }
 
-    int32_t nElemDamage = MISSILES_CalculateElementalDamage(pGame, pUnit, pTarget, pDamage);
+    nElemDamage = MISSILES_CalculateElementalDamage(pGame, pUnit, pTarget, pDamage);
     MISSILES_ClearDamageStruct(pGame, pUnit, pDamage);
-    MISSILES_AddElementalDamageBonus(pGame, pUnit, pTarget, pDamage, nScaledDamage + nElemDamage);
+    MISSILES_AddElementalDamageBonus(pGame, pUnit, pTarget, pDamage, nCalcResult + nElemDamage);
 }
 
 // MISSILESSRVDMGFUNCS entry (Hits passes the D2DamageStrc that MISSILE_SetDamage filled). Sets pDamage->dwFrzLength (+0x34) to the unit's coldlength stat scaled by MissilesTxt dParam1 percent (negative treated as 0) and clears dwColdLength (+0x30).

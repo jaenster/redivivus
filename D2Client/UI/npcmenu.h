@@ -169,7 +169,7 @@ void __stdcall NPCMENU_CloseShopUI();
 void CloseNPCInteract();
 void __stdcall NPCMENU_CloseCubeUI();
 void __stdcall NPCMENU_CloseStashUI();
-int __stdcall NPCMENU_EmptyDrawCallback1();
+int __stdcall NPCMENU_CloseGossipDialog();
 // Returns 0 while gnNpcMenuActiveMode is set. Otherwise frees gpNpcActionConfirmDialog, sets the NPC UI state to none, resets inventory hover, closes the NPC interaction and resets UI_NPCMENU; returns 1. fpDialogFunc2 of the action-confirm dialog, also called by its OK handler.
 int __stdcall NPCMENU_CloseConfirmDialogAndInteraction();
 // A two-liner:
@@ -252,7 +252,7 @@ int __stdcall NPCMENU_EnableQualKehkHireOption();
 // Tyrael (monstats 367) menu row 21: if CLIENT_CheckExpansion, adds option string 22738 (Travel_To_Harrogath) with callback 004b5200. Always returns 1.
 // NPC quest table entry 8: quest 28, state flag 0.
 int __stdcall NPCMENU_EnableTyraelTravelToHarrogathOption();
-void __stdcall NPCMENU_HandleMenuSelection(int32_t nParam, struct D2UnitStrc * pUnit);
+void __stdcall NPCMENU_HandleMenuSelection(int32_t bReopenMenu, struct D2UnitStrc * pUnit);
 void __fastcall SetPlayersMercInfo(uint16_t wMercNameId, int32_t nReviveCost);
 void __stdcall NPCMENU_RefreshMenuDialog();
 int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nReason, int32_t nScrollState);
@@ -267,7 +267,7 @@ int __stdcall NPCMENU_AkaraRespecOptionCallback();
 // NPC quest table entry 4: quest 1, state flag 0 (Den of Evil).
 int __stdcall NPCMENU_EnableAkaraRespecOption();
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca09b(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
-void StaticInit_6cad10();
+void StaticInit_gNpcMenuConfirmDialogStrings();
 // 6 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::npcmenu

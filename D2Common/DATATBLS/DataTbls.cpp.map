@@ -245,7 +245,7 @@
       ],
       "usedTypes": [
         "D2DifficultyLevelsTxt",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {
@@ -755,7 +755,7 @@
       "calledFunctions": [
         "TXT_AllocTxt_skill_skilldesc",
         "STRUCT_CreateTxtLinkStrc",
-        "FillUpTxtLinkSub0x08",
+        "FOG_AddTxtLinkRecord",
         "CompileTxt",
         "STRUCT_FreeTxtLink",
         "UnloadBin",

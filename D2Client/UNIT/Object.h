@@ -63,7 +63,7 @@ namespace D2Client::UNIT::Object {
 
 // Function declarations
 // Initialises a newly-created object unit: allocates and zeroes a D2UnitDataObjectStrc, links the Objects.txt record, sets UNITFLAG_TARGETABLE/CANBEATTACKED/PREDRAW/DRAWSHADOW from txt flags for the initial anim mode, initialises the static collision path, adds the unit to the room, and sets up auto-lighting (or explicit RGB light from txt). Special-cases class 0x3B (town portal) and 0x3C (portal to Tristram/Stony Field) to store the destination level id.
-void __fastcall AllocObjectData(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nXPos, int32_t nYPos, int32_t nClassId, int32_t nInitMode);
+void __fastcall AllocObjectData(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nXPos, int32_t nYPos, int32_t nClassId, uint8_t nInitMode);
 // Adds a hardcoded visual overlay to specific object class IDs if the txt Overlay flag is set. Class 0x95 (Horadric Cube) in Neutral mode and 0x98 get OVERLAY_horadric_light; classes 0x162-0x164, 0x18D, 0x195-0x197, and 0x1C7 in Death mode get OVERLAY_multigleam. No-ops for all other classes or modes.
 void __fastcall OBJECT_AddVisualOverlay(struct D2UnitStrc * pUnit);
 void __fastcall FreeObjectData(struct D2UnitStrc * pUnit);

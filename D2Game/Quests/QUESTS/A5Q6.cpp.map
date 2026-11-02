@@ -609,7 +609,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn75",
+      "name": "Objects_InitFn75_BaalsPortal",
       "address": "0058e670",
       "lines": [
         {
@@ -619,7 +619,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q6",
       "calledFunctions": [
-        "Objects_InitFn75",
+        "Objects_InitFn75_BaalsPortal",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag"
       ],
@@ -654,7 +654,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn77",
+      "name": "Objects_InitFn77_LastPortal",
       "address": "0058e710",
       "lines": [
         {
@@ -664,7 +664,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q6",
       "calledFunctions": [
-        "Objects_InitFn77",
+        "Objects_InitFn77_LastPortal",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag"
       ],
@@ -709,7 +709,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn79",
+      "name": "Objects_InitFn79_Zoo",
       "address": "0058e830",
       "lines": [
         {
@@ -719,7 +719,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q6",
       "calledFunctions": [
-        "Objects_InitFn79",
+        "Objects_InitFn79_Zoo",
         "GetQuestDataByQuestNoInternal",
         "GetQuestControlSeed",
         "SEED_RollRange",

@@ -491,7 +491,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn25",
+      "name": "Objects_InitFn25_Gidbinn",
       "address": "005b9ae0",
       "lines": [
         {
@@ -501,7 +501,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q3",
       "calledFunctions": [
-        "Objects_InitFn25",
+        "Objects_InitFn25_Gidbinn",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag",
         "Q20_SpawnUniqueSerpent"
@@ -610,7 +610,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn39",
+      "name": "Objects_InitFn39_GidbinnAltar",
       "address": "005b9d40",
       "lines": [
         {
@@ -620,7 +620,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q3",
       "calledFunctions": [
-        "Objects_InitFn39",
+        "Objects_InitFn39_GidbinnAltar",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag"
       ],

@@ -118,9 +118,9 @@ static int32_t ITEMMOD_GetPropertyFromAffix(D2MagicAffixTxt * pMagicAffixLine, u
     }
 }
 
-void __stdcall ITEMMODS_GetQualityMinMax(uint32_t nPackedQuality, uint32_t * pnParam1, uint32_t * pnParam2) {
-    *pnParam1 = nPackedQuality & 0x1ff;
-    *pnParam2 = (int)nPackedQuality >> 9 & 0x1f;
+void __stdcall ITEMMODS_GetQualityMinMax(uint32_t nPackedQuality, uint32_t * pnSkillId, uint32_t * pnSkillLevel) {
+    *pnSkillId = nPackedQuality & 0x1ff;
+    *pnSkillLevel = (int)nPackedQuality >> 9 & 0x1f;
 }
 
 void __stdcall ITEMMODS_GetQualityAllFields(uint32_t nPackedQuality, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3, uint32_t * pnParam4) {
@@ -270,21 +270,21 @@ int32_t __stdcall ITEMMODS_GetQualityField1(int32_t nParam1, int32_t nParam2) {
     return nParam2 * 0x200 + nParam1;
 }
 
-void __stdcall ITEMMODS_GetQualityFields2_3_4(uint32_t nPackedQuality, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3) {
-    *pnParam1 = nPackedQuality & 0x1ff;
-    *pnParam2 = (int)nPackedQuality >> 9 & 0x1f;
-    *pnParam3 = (int)nPackedQuality >> 0xe & 0x7f;
+void __stdcall ITEMMODS_GetQualityFields2_3_4(uint32_t nPackedQuality, uint32_t * pnSkillId, uint32_t * pnSkillLevel, uint32_t * pnChance) {
+    *pnSkillId = nPackedQuality & 0x1ff;
+    *pnSkillLevel = (int)nPackedQuality >> 9 & 0x1f;
+    *pnChance = (int)nPackedQuality >> 0xe & 0x7f;
 }
 
 int32_t __stdcall ITEMMODS_GetQualityField2(int32_t nParam1, int32_t nParam2, int32_t nParam3) {
     return (nParam3 * 0x20 + nParam2) * 0x200 + nParam1;
 }
 
-void __stdcall ITEMMODS_GetQualityFields1_2_3(uint32_t nPackedQuality, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3) {
-    if (pnParam1 && pnParam2 && pnParam3) {
-      *pnParam1 = (nPackedQuality & 0x1f) / 3;
-      *pnParam2 = (nPackedQuality & 0x1f) % 3;
-      *pnParam3 = (int)nPackedQuality >> 5 & 0x1f;
+void __stdcall ITEMMODS_GetQualityFields1_2_3(uint32_t nPackedQuality, uint32_t * pnPlayerClass, uint32_t * pnSkillTab, uint32_t * pnSkillLevels) {
+    if (pnPlayerClass && pnSkillTab && pnSkillLevels) {
+      *pnPlayerClass = (nPackedQuality & 0x1f) / 3;
+      *pnSkillTab = (nPackedQuality & 0x1f) % 3;
+      *pnSkillLevels = (int)nPackedQuality >> 5 & 0x1f;
       return;
     }
 
@@ -292,8 +292,8 @@ void __stdcall ITEMMODS_GetQualityFields1_2_3(uint32_t nPackedQuality, uint32_t 
     exit(-1);
 }
 
-int32_t __stdcall ITEMMODS_GetQualityField3(int32_t nParam1, int32_t nParam2, int32_t nParam3) {
-    return nParam3 * 0x20 + nParam1 * 3 + nParam2;
+int32_t __stdcall ITEMMODS_GetQualityField3(int32_t nPlayerClass, int32_t nSkillTab, int32_t nSkillLevels) {
+    return nSkillLevels * 0x20 + nPlayerClass * 3 + nSkillTab;
 }
 
 // Returns an existing stat list on pUnit (or pUnitUnknown if non-null) matching nState+nFlags, creating and attaching one if absent. Allocates via AllocStatList using the unit's memory pool and GUID, sets the state, then halts unrecoverably if allocation fails.
@@ -405,7 +405,7 @@ static void __stdcall ITEMMOD_MaximizeStatForEnhanced(eD2UnitStat eEnhancedProp,
 }
 
 // Scales stat values by shifting left 8 bits for specific stat types (life, mana, stamina, resistances). Twenty-eight bytes: an ADD, a jump table and a shift through ECX, touching EDX not at all. PropertyFunc_MinMaxDamagePair loads the max-stat code into EDX before calling this and reads it back afterwards, so declaring EDX killed lost the code and every elemental and poison MAX damage value was scaled with garbage.
-static void __stdcall ITEMMOD_ScaleValueForStatType(int * pnParam, eD2UnitStat eStatType) {
+static void __stdcall ITEMMOD_ScaleValueForStatType(int * pnValue, eD2UnitStat eStatType) {
     switch (eStatType) {
       case UNITSTAT_hitpoints:
 
@@ -422,7 +422,7 @@ static void __stdcall ITEMMOD_ScaleValueForStatType(int * pnParam, eD2UnitStat e
       case UNITSTAT_item_hp_perlevel:
 
       case UNITSTAT_item_mana_perlevel:
-        *pnParam <<= 8;
+        *pnValue <<= 8;
     }
 }
 
@@ -508,16 +508,16 @@ static int32_t __stdcall ITEMMOD_ApplyRandomStatValue(D2UnitStrc * pUnit, int32_
 }
 
 // Core property-to-stat conversion. Applies stat value to unit, optionally maximizing enhanced stats and handling value removal.
-static int32_t __stdcall PropertyFunc_SimpleStat(int32_t nType, D2UnitStrc * pUnit, int32_t nParam2, int32_t bClearStat, int32_t bMaximize, int32_t nState, D2UnitStrc * pUnit2, eD2UnitStat eUnitStat, uint32_t dwStatListFlags) {
+static int32_t __stdcall PropertyFunc_SimpleStat(int32_t nType, D2UnitStrc * pUnit, int32_t nStatValue, int32_t bClearStat, int32_t bMaximize, int32_t nState, D2UnitStrc * pUnit2, eD2UnitStat eUnitStat, uint32_t dwStatListFlags) {
     int nBaseValue;
     if (bMaximize || nType == 1) {
       ITEMMOD_MaximizeStatForEnhanced(eUnitStat, pUnit2);
     }
-    if (!nParam2) {
+    if (!nStatValue) {
       return 0;
     }
 
-    ITEMMOD_ScaleValueForStatType(&nParam2, eUnitStat);
+    ITEMMOD_ScaleValueForStatType(&nStatValue, eUnitStat);
     D2StatListExStrc* pStatsEx = ITEMMOD_GetOrCreateStatList(pUnit2, nState, dwStatListFlags, pUnit);
     if (!pStatsEx) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c5);
@@ -529,7 +529,7 @@ static int32_t __stdcall PropertyFunc_SimpleStat(int32_t nType, D2UnitStrc * pUn
       return 1;
     }
 
-    Stats::StatsEx::STATLIST_AddStatValue(pStatsEx, eUnitStat, nParam2, 0);
+    Stats::StatsEx::STATLIST_AddStatValue(pStatsEx, eUnitStat, nStatValue, 0);
     return 1;
 }
 

@@ -1212,24 +1212,24 @@ void __fastcall CLIENT_SyncPathFromServer(D2UnitStrc * pDynamicPath) {
     uint32_t dwPathFlags;
     dwPathFlags = D2Common::PATH::DynamicPath::PATH_GetFlags0x20(pLocalPath);
     D2Common::PATH::DynamicPath::SetUnsetFlags0x20(pCurPath, dwPathFlags);
-    eD2PlayerAnimMode eVar1;
-    eVar1 = pDynamicPath->eAnimMode.ePlayerMode;
+    eD2PlayerAnimMode eCurrentMode;
+    eCurrentMode = pDynamicPath->eAnimMode.ePlayerMode;
     eD2PlayerAnimMode nAnimMode;
     nAnimMode = pUnit->eAnimMode.ePlayerMode;
-    if (eVar1 != nAnimMode) {
+    if (eCurrentMode != nAnimMode) {
       if (pDynamicPath->eUnitType != UNIT_PLAYER) {
         if (pDynamicPath->eUnitType != UNIT_MONSTER) {
           goto clear_path_flag;
         }
         if (nAnimMode != eD2PlayerAnimMode_ns::Neutral) {
           if (nAnimMode != Walk) {
-            if (nAnimMode != eD2PlayerAnimMode_ns::Skill3 || eVar1 != eD2PlayerAnimMode_ns::Neutral) {
+            if (nAnimMode != eD2PlayerAnimMode_ns::Skill3 || eCurrentMode != eD2PlayerAnimMode_ns::Neutral) {
               goto clear_path_flag;
             }
 
             nAnimMode = eD2PlayerAnimMode_ns::Skill3;
           } else {
-            switch (eVar1) {
+            switch (eCurrentMode) {
               default:
                 {
                   goto clear_path_flag;
@@ -1243,7 +1243,7 @@ void __fastcall CLIENT_SyncPathFromServer(D2UnitStrc * pDynamicPath) {
             }
           }
         } else {
-          switch (eVar1) {
+          switch (eCurrentMode) {
             default:
               {
                 goto clear_path_flag;
@@ -1262,7 +1262,7 @@ void __fastcall CLIENT_SyncPathFromServer(D2UnitStrc * pDynamicPath) {
           case Walk:
 
           case TownWalk:
-            if (eVar1 != eD2PlayerAnimMode_ns::Neutral && eVar1 != TownNeutral) {
+            if (eCurrentMode != eD2PlayerAnimMode_ns::Neutral && eCurrentMode != TownNeutral) {
               goto clear_path_flag;
             }
           pRoom = D2Common::Units::UNITS_GetRoom(pDynamicPath);
@@ -1274,7 +1274,7 @@ void __fastcall CLIENT_SyncPathFromServer(D2UnitStrc * pDynamicPath) {
           nAnimMode = TownWalk;
           break;
           case eD2PlayerAnimMode_ns::Run:
-            if (eVar1 != eD2PlayerAnimMode_ns::Neutral && eVar1 != eD2PlayerAnimMode_ns::Run && eVar1 != TownNeutral) {
+            if (eCurrentMode != eD2PlayerAnimMode_ns::Neutral && eCurrentMode != eD2PlayerAnimMode_ns::Run && eCurrentMode != TownNeutral) {
               goto clear_path_flag;
             }
           nAnimMode = eD2PlayerAnimMode_ns::Run;
@@ -1282,7 +1282,7 @@ void __fastcall CLIENT_SyncPathFromServer(D2UnitStrc * pDynamicPath) {
           case eD2PlayerAnimMode_ns::Neutral:
 
           case TownNeutral:
-            if (eVar1 < Walk || eVar1 > eD2PlayerAnimMode_ns::Run && eVar1 != TownWalk) {
+            if (eCurrentMode < Walk || eCurrentMode > eD2PlayerAnimMode_ns::Run && eCurrentMode != TownWalk) {
               goto clear_path_flag;
             }
           pRoom = D2Common::Units::UNITS_GetRoom(pDynamicPath);
@@ -1294,7 +1294,7 @@ void __fastcall CLIENT_SyncPathFromServer(D2UnitStrc * pDynamicPath) {
           nAnimMode = TownNeutral;
           break;
           default:
-            if (eVar1 != KnockBack) {
+            if (eCurrentMode != KnockBack) {
               pSkill = D2Common::Units::GetCurrentSkill(pDynamicPath);
               pUnitSkill = D2Common::Units::GetCurrentSkill(pUnit);
               if (pSkill && (!pUnitSkill || (nSkillFlagsLocal = D2Common::Skills::SKILL_GetFlags(pUnitSkill) , !(nSkillFlagsLocal & 1)) || (nSkillFlagsLocal = D2Common::Skills::SKILL_GetFlags(pUnitSkill) , (nSkillFlagsLocal & 2) != 0))) {
@@ -1982,7 +1982,7 @@ static D2UnitStrc * __stdcall InitCommonData(D2UnitStrc * pUnit, int32_t nUnitGU
       exit(-1);
       case UNIT_OBJECT:
         D2Common::Units::AllocStaticPath(pUnit);
-      Object::AllocObjectData(pUnit, pRoom, nX, nY, nClassId, nObjectAnimMode);
+      Object::AllocObjectData(pUnit, pRoom, nX, nY, nClassId, (uint8_t)nObjectAnimMode);
       break;
       case UNIT_ITEM:
         D2Common::Units::AllocStaticPath(pUnit);

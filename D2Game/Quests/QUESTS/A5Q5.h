@@ -81,11 +81,11 @@ struct D2UnitStrc * __fastcall Q35_FindAncientByClassId(::SGAMEDATA * pGame, int
 // [A5Q5 = Rite of Passage] Q35_CheckQuestNotStarted: predicate (returns BOOL in EAX) — true if quest is active but the Ancients fight hasn't been started yet. No quest-state writes.
 BOOL __fastcall Q35_CheckQuestNotStarted(::SGAMEDATA * pGame, struct D2UnitStrc * pUnitStrc, uint32_t dwParam);
 // [A5Q5 = Rite of Passage] Objects_InitFn65: object init for one Ancient altar statue — records its GUID (slot 5) and applies its anim mode. No quest-state writes.
-void __fastcall Objects_InitFn65(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn65_AncientStatue2(struct D2ObjectInitFnArg * pInitArg);
 // [A5Q5 = Rite of Passage] Objects_InitFn63: object init for one Ancient altar statue — records its GUID (slot 6) and applies its anim mode. No quest-state writes.
-void __fastcall Objects_InitFn63(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn63_AncientStatue3(struct D2ObjectInitFnArg * pInitArg);
 // [A5Q5 = Rite of Passage] Objects_InitFn64: object init for one Ancient altar statue — records its GUID (slot 7) and applies its anim mode. No quest-state writes.
-void __fastcall Objects_InitFn64(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn64_AncientStatue1(struct D2ObjectInitFnArg * pInitArg);
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsTriggerSound1: object-operate stub that plays the "locked" sound (event 0x13) on the altar. No quest-state writes.
 BOOL __fastcall OBJOP_A5Q5_AncientsTriggerSound1(struct D2ObjectOperateFnArg * pOperation);
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsTriggerSound2: object-operate stub that plays the "locked" sound (event 0x13). No quest-state writes.
@@ -93,9 +93,9 @@ BOOL __fastcall OBJOP_A5Q5_AncientsTriggerSound2(struct D2ObjectOperateFnArg * p
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsTriggerSound3: object-operate stub that plays the "locked" sound (event 0x13). No quest-state writes.
 BOOL __fastcall OBJOP_A5Q5_AncientsTriggerSound3(struct D2ObjectOperateFnArg * pOperation);
 // [A5Q5 = Rite of Passage] Objects_InitFn72: object init for the Ancients altar (records GUID slot 0x14, applies stored anim flag). No quest-state writes.
-void __fastcall Objects_InitFn72(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn72_AncientsAltar(struct D2ObjectInitFnArg * pInitArg);
 // [A5Q5 = Rite of Passage] Objects_InitFn73: object init for the Worldstone Keep entrance portal — shows it (anim 2) if field_0x4A (quest done) else hides (0). No quest-state writes.
-void __fastcall Objects_InitFn73(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn73_AncientsDoor(struct D2ObjectInitFnArg * pInitArg);
 // [A5Q5 = Rite of Passage] Q35_BootPlayerFromSummit: per-player callback — if the player is on the Arreat Summit, destroys their town-portal pair (kicks them out so they can't cheese the Ancients fight). No quest-state writes.
 BOOL __fastcall Q35_BootPlayerFromSummit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // [A5Q5 = Rite of Passage] Q35_BootAllPlayersFromSummit: iterates all players running Q35_BootPlayerFromSummit (clears everyone's portals to the summit). No quest-state writes.
@@ -112,7 +112,7 @@ void __fastcall Q35_OnPlayerLeavesSummit(::SGAMEDATA * pGame, struct D2UnitStrc 
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsQuestStateQuery: on altar operate, if quest is Completed but record Step0x04 not yet set, sends npc info packet 0x4ec9 (which makes Q35_Callback_11 write Step0x04). Read-only on records itself.
 BOOL __fastcall OBJOP_A5Q5_AncientsQuestStateQuery(struct D2ObjectOperateFnArg * pOperation);
 // [A5Q5 = Rite of Passage] Objects_InitFn76: object init for the Worldstone Keep stair/portal — records GUID, sets the in-play flag (0x11), and applies its display mode based on whether the Ancients are defeated. No quest-state writes.
-void __fastcall Objects_InitFn76(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn76_SummitDoor(struct D2ObjectInitFnArg * pInitArg);
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_WorldstoneStairPortal: operate handler for the Worldstone stairway. If the Ancients are dead (field_0x00) lets the player TakeStairs into the Worldstone Keep; otherwise plays the locked sound and keeps it sealed. No quest-record writes.
 BOOL __fastcall OBJOP_A5Q5_WorldstoneStairPortal(struct D2ObjectOperateFnArg * pOperation);
 // 5 internal functions (defined in .cpp)

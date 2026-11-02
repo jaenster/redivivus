@@ -127,16 +127,16 @@ void __fastcall CopySizeAndPosToBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * p
     *(uint32_t*)(pDest + 4) = pSizePosData[1];
 }
 
-void __fastcall PLAYERINTRO_CopyIntroData8Bytes(uint32_t * pdwParam1, uint32_t * pdwParam2) {
+void __fastcall PLAYERINTRO_CopyIntroData8Bytes(uint32_t * pdwParam1, uint32_t * pdwSrc) {
     uint32_t* pDstBuf = *(uint32_t**)*pdwParam1;
-    *pDstBuf = *pdwParam2;
-    pDstBuf[1] = pdwParam2[1];
+    *pDstBuf = *pdwSrc;
+    pDstBuf[1] = pdwSrc[1];
 }
 
-void __fastcall PLAYERINTRO_CopyIntroDataIndirect(int32_t pSrc, uint32_t * pdwParam) {
+void __fastcall PLAYERINTRO_CopyIntroDataIndirect(int32_t pSrc, uint32_t * pdwIntroData) {
     uint32_t* pDst = (uint32_t*)**(uint32_t**)(pSrc + 4);
-    *pDst = *pdwParam;
-    pDst[1] = pdwParam[1];
+    *pDst = *pdwIntroData;
+    pDst[1] = pdwIntroData[1];
 }
 
 // @sourcefile .\PLAYER\PlrIntro.cpp

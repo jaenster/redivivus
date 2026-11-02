@@ -205,7 +205,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn17",
+      "name": "Objects_InitFn17_Waypoint",
       "address": "00547210",
       "lines": [
         {
@@ -216,7 +216,7 @@
       "namespace": "D2Game::Objects::ObjectsRgn",
       "calledFunctions": [
         "SetupUpdateFlag",
-        "Objects_InitFn17",
+        "Objects_InitFn17_Waypoint",
         "TXT_Objects_GetLine",
         "SetEvent",
         "FreeServerMemory",

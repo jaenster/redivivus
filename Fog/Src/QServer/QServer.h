@@ -391,7 +391,7 @@ int __stdcall GetConnectedClients(struct D2QServerStrc * pQServer);
 uint32_t __stdcall IsSingleplayer(struct D2QServerStrc * pQServer);
 void __stdcall SetPerIpConnectionLimit(struct D2QServerStrc * pQServer, int nPerIpConnectionLimit);
 DWORD __stdcall WaitForEmptyEvent(struct D2QServerStrc * pQServer, DWORD dwTimeoutMs);
-struct FogCritSectLockStrc * __thiscall _unused_broken(struct FogCritSectLockStrc * pQServer, LPCRITICAL_SECTION pCriticalSection);
+struct FogCritSectLockStrc * __thiscall EnterCriticalSection_QServer(struct FogCritSectLockStrc * pQServer, LPCRITICAL_SECTION pCriticalSection);
 // Leaves the critical section a QServer frame local holds: LeaveCriticalSection(*ppCriticalSection). ECX = &local,
 // plain RET; reached from the EH unwind funclet Unwind_006ca540 (LEA ECX,[EBP-0x10]; JMP).
 // Provenance: 1.14d 006be530 MOV EAX,[ECX] / PUSH EAX / CALL [LeaveCriticalSection].

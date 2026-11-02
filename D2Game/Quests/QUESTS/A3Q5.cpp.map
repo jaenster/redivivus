@@ -506,7 +506,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn53",
+      "name": "Objects_InitFn53_MephistoDoor",
       "address": "005bbb70",
       "lines": [
         {
@@ -516,7 +516,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q5",
       "calledFunctions": [
-        "Objects_InitFn53",
+        "Objects_InitFn53_MephistoDoor",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag"
       ],
@@ -526,7 +526,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn60",
+      "name": "Objects_InitFn60_CompellingOrb",
       "address": "005bbba0",
       "lines": [
         {
@@ -536,7 +536,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q5",
       "calledFunctions": [
-        "Objects_InitFn60",
+        "Objects_InitFn60_CompellingOrb",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag",
         "SpawnMonsterAtRoomPosSimple"

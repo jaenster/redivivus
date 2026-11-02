@@ -3257,7 +3257,7 @@
       ]
     },
     {
-      "name": "MISSILE_CltDoFn12_Unused",
+      "name": "MISSILE_CltDoFn12_ScreenShake",
       "address": "004d3d30",
       "lines": [
         {
@@ -3267,7 +3267,7 @@
       ],
       "namespace": "D2Client::UNIT::Missile",
       "calledFunctions": [
-        "MISSILE_CltDoFn12_Unused",
+        "MISSILE_CltDoFn12_ScreenShake",
         "GetRemainingFrames",
         "SetShake",
         "MISSILE_CltDoFn01_BasicMissile",

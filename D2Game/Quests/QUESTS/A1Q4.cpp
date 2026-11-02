@@ -1243,7 +1243,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(D2ObjectOperateFnArg * pOperation
 }
 
 // A1Q4 (Search for Cain) object init/refresh callback for the Cairn-Stones portal object (classId 0x11). If the quest is active and the portal object has not yet been armed, stores the object GUID and schedules Q04_SpawnTristramPortal via AddQuestTimer. Calls SetupUpdateFlag on the object unit to trigger a rendering update. Guards against re-entry via flag bytes on the quest-specific data struct.
-void __fastcall Objects_InitFn06(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn06_CairnStone(D2ObjectInitFnArg * pInitArg) {
     uint32_t nPortalSpawned;
     D2QuestDataA1Q4Strc* pObject;
     D2QuestDataA1Q1Strc* pA1Q1Data;
@@ -1821,7 +1821,7 @@ int __fastcall Q04_GetPortalCreatedFlag(::SGAMEDATA * pGame) {
 // A1Q4 — Objects_InitFn09: init callback for a quest object (the Cairn-stones /
 // Cain-gibbet area object). When quest active, sets its anim/active sub-flags and
 // pushes the update flag so the object renders in the correct state. No quest transition.
-void __fastcall Objects_InitFn09(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn09_InifussTree(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheSearchForCain);
     if (pDVar2) {
       D2QuestDataA1Q4Strc* pDVar1;
@@ -1846,7 +1846,7 @@ void __fastcall Objects_InitFn09(D2ObjectInitFnArg * pInitArg) {
 // A1Q4 — Objects_InitFn13: init callback that attaches the spawned object to the
 // A1Q4 quest (QUEST_AttachToUnitByQuestId) so its OperateFn/events route to this quest;
 // otherwise sets a default render flag. No quest-state transition.
-void __fastcall Objects_InitFn13(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn13_InvisibleObject(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheSearchForCain);
     if (pQuestData) {
       QUEST_AttachToUnitByQuestId(pQuestData->pGame, pInitArg->pObject, QUESTINT_TheSearchForCain);
@@ -1896,7 +1896,7 @@ void __fastcall Q04_RemovePlayerFromList(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 // and the saved spawn coords into the quest sub-struct, sets the cage-present flag
 // (0x17), and — if the rescue flag (0x3e) is set and Cain not yet spawned — spawns
 // Deckard Cain via Q04_SpawnDeckardCainNpc. The init path that physically places Cain.
-void __fastcall Objects_InitFn54(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn54_CainStartPosition(D2ObjectInitFnArg * pInitArg) {
     int nObjectGUID;
     D2QuestDataStrc* pA1Q3Data = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheSearchForCain);
     if (!pA1Q3Data) {
@@ -1999,7 +1999,7 @@ BOOL __fastcall CUBE_SpecialOutput_Quest_Unused3(::SGAMEDATA * pGame, D2UnitStrc
 
 // A1Q4 — Objects_InitFn61: trivial object-init that schedules event 7 (anim/update)
 // shortly in the future for the object. No quest-state logic.
-void __fastcall Objects_InitFn61(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn61_CainPortal(D2ObjectInitFnArg * pInitArg) {
     D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 1);
     GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 7, pInitArg->pGame->dwGameFrame + 0x19, 0, 0);
 }
@@ -2189,7 +2189,7 @@ void __fastcall Q04_InitializeTristramObjects(::SGAMEDATA * pGame, D2UnitStrc * 
     sInitArgGame.pRoom = D2Common::Units::UNITS_GetRoom(pFoundUnit);
     sInitArgGame.nX = D2Client::Units::GetXPosFromDynamicPathUnit(pFoundUnit);
     sInitArgGame.nY = D2Client::Units::GetYPosFromDynamicPathUnit(pFoundUnit);
-    Objects_InitFn54(&sInitArgGame);
+    Objects_InitFn54_CainStartPosition(&sInitArgGame);
     if (pDVar1->sSub.bCairnMonsterSaved != '\x01') {
       return;
     }

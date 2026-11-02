@@ -1578,9 +1578,9 @@ void __stdcall PATH_RemoveCollision(D2UnitStrc * pUnit) {
     PATH_RemoveUnitCollision(pUnit, 1);
 }
 
-void __stdcall PATH_SetCorpseCollision(D2UnitStrc * pUnit, int32_t nParam) {
+void __stdcall PATH_SetCorpseCollision(D2UnitStrc * pUnit, int32_t bServer) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    if (!nParam && pUnit->eUnitType == UNIT_MONSTER) {
+    if (!bServer && pUnit->eUnitType == UNIT_MONSTER) {
       PATH_RemoveUnitCollision(pUnit, 1);
       pUnit->pPath.pDynamicPath->nUnitWidth = 5;
       PATH_ChangeCollisionType(pDynamicPath, 0x8000);

@@ -4116,8 +4116,8 @@ int32_t __stdcall DRLGOUTROOM_GetDirectionChangeCost(int * pint, int dwParam2, i
 }
 
 // Direction delta lookup from table based on (dir2-dir1)&3.
-static inline uint8_t * __stdcall DRLGOUTROOM_GetDirectionDeltaLookup(char cParam1, char cParam2) {
-    return gaOutRoomPathDirectionDelta + ((uint8_t)(cParam2 - cParam1) & 3) * 4;
+static inline uint8_t * __stdcall DRLGOUTROOM_GetDirectionDeltaLookup(char nDirection, char nParentDirection) {
+    return gaOutRoomPathDirectionDelta + ((uint8_t)(nParentDirection - nDirection) & 3) * 4;
 }
 
 // Advances pathfinding node direction counter and propagates.

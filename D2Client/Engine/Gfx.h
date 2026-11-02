@@ -7290,7 +7290,7 @@ void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFl
 int __stdcall GFX_GetCofCacheFlags();
 int __stdcall GFX_GetCofCacheMemUsage();
 int __stdcall GFX_GetGfxSystemFlags();
-int32_t __fastcall GFX_GetModeStatusEntry(int32_t nParam);
+int32_t __fastcall GFX_GetModeStatusEntry(int32_t nClassId);
 // @sourcefile .\ENGINE\Gfx.cpp
 struct D2GfxInfoUnkStrc * __fastcall GFX_EnsureUnitCofLoaded(struct D2UnitStrc * pUnit, int32_t nAnimMode, int nWeaponClass);
 // @sourcefile .\ENGINE\Gfx.cpp

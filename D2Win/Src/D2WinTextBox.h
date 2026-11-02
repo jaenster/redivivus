@@ -72,7 +72,7 @@ void __fastcall D2WINTEXTBOX_SetScrollbarStyle(::D2WinTextBox * pTextBox, int32_
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __fastcall D2WINTEXTBOX_GetScrollbarStyle(::D2WinTextBox * pTextBox);
 // @sourcefile .\Src\D2WinTextBox.cpp
-::D2WinTextBox * __fastcall D2WinTextBox(int32_t nPosX, int32_t nPosY, int32_t nWidth, int32_t nHeight, int32_t nParam3, int32_t nParam4, struct DC6 * pDC6, OnPress pOnPress, uint32_t dwStyleFlags, int * pnScrollSize, int * pnScrollbarRect);
+::D2WinTextBox * __fastcall D2WinTextBox(int32_t nPosX, int32_t nPosY, int32_t nWidth, int32_t nHeight, int32_t nFormType, int32_t pStyleDC6, struct DC6 * pDC6, OnPress pOnPress, uint32_t dwStyleFlags, int * pnScrollSize, int * pnScrollbarRect);
 void __fastcall FORMS_DestroyD2WinTextBox(::D2WinTextBox * pWinTextBox);
 // @sourcefile .\Src\D2WinTextBox.cpp
 BOOL __fastcall SetText(::D2WinTextBox * pTextBox, uint16_t * szText, int32_t nLineStyle, bool bIndent, int nAlignment);

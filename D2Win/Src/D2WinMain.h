@@ -146,7 +146,7 @@ void __stdcall MOUSE_CaptureMousePosition(HWND * phWnd);
 void __stdcall INPUT_FormTabKey(struct D2UIMouseMsgStrc * pMsg);
 // @sourcefile .\Src\D2WinMain.cpp
 void __stdcall TakeScreenshot();
-void __stdcall D2WIN_Unused_Placeholder_5(int32_t pMsg);
+void __stdcall D2WIN_TakeScreenshotMsgHandler(int32_t pMsg);
 void __stdcall INPUT_FormMouseHandler(struct D2UIMouseMsgStrc * pMsg);
 // 1 internal function (defined in .cpp)
 

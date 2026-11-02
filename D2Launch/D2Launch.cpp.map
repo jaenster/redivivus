@@ -158,7 +158,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused18",
+      "name": "MAINMENU_OnPressSkipEmailAddress",
       "address": "00436c70",
       "lines": [
         {
@@ -168,7 +168,7 @@
       ],
       "namespace": "D2Launch",
       "calledFunctions": [
-        "MAINMENU_Unused18",
+        "MAINMENU_OnPressSkipEmailAddress",
         "D2WINMAIN_ClearMessageLoopFlag"
       ],
       "usedTypes": [

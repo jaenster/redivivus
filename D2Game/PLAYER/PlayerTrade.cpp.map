@@ -417,9 +417,9 @@
       ],
       "usedTypes": [
         "D2InventoryStrc",
+        "D2TradeRecordStrc",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
-        "D2UnknownStructure0x18",
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
@@ -441,10 +441,10 @@
         "FreeServerMemory"
       ],
       "usedTypes": [
+        "D2TradeItemUidPairStrc",
+        "D2TradeRecordStrc",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
-        "D2UnknownStructure0x18",
-        "D2UnknownStructure0xc",
         "SGAMEDATA"
       ]
     },
@@ -494,9 +494,9 @@
         "exit"
       ],
       "usedTypes": [
+        "D2TradeRecordStrc",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
-        "D2UnknownStructure0x18",
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
@@ -732,10 +732,10 @@
         "AllocServerMemory"
       ],
       "usedTypes": [
+        "D2TradeItemUidPairStrc",
+        "D2TradeRecordStrc",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
-        "D2UnknownStructure0x18",
-        "D2UnknownStructure0xc",
         "SGAMEDATA",
         "uint32_t"
       ]
@@ -784,9 +784,9 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
+        "D2TradeRecordStrc",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
-        "D2UnknownStructure0x18",
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t",
@@ -809,9 +809,9 @@
         "memcpy"
       ],
       "usedTypes": [
+        "D2TradeRecordStrc",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
-        "D2UnknownStructure0x18",
         "int32_t",
         "uint8_t"
       ]
@@ -1025,9 +1025,9 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
+        "D2TradeRecordStrc",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
-        "D2UnknownStructure0x18",
         "SGAMEDATA",
         "uint32_t",
         "uint8_t"
@@ -1178,9 +1178,9 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
+        "D2TradeRecordStrc",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
-        "D2UnknownStructure0x18",
         "SGAMEDATA",
         "eD2TradeState",
         "eD2UnitType"

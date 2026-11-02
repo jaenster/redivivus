@@ -65,7 +65,7 @@
       ]
     },
     {
-      "name": "SUNITNPC_ReturnZero",
+      "name": "SUNITNPC_RepairAllItemCallback",
       "address": "005762b0",
       "lines": [
         {
@@ -75,7 +75,7 @@
       ],
       "namespace": "D2Game::UNIT::SUNITNPC",
       "calledFunctions": [
-        "SUNITNPC_ReturnZero",
+        "SUNITNPC_RepairAllItemCallback",
         "SUNITNPC_UpdateNpcInventory"
       ],
       "usedTypes": [
@@ -372,7 +372,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -676,7 +677,7 @@
       ]
     },
     {
-      "name": "SUNITNPC_ReturnZero2",
+      "name": "SUNITNPC_CloneItemFromSerialized",
       "address": "005776e0",
       "lines": [
         {
@@ -686,7 +687,7 @@
       ],
       "namespace": "D2Game::UNIT::SUNITNPC",
       "calledFunctions": [
-        "SUNITNPC_ReturnZero2",
+        "SUNITNPC_CloneItemFromSerialized",
         "ITEM_CloneFromSerializedData"
       ],
       "usedTypes": [

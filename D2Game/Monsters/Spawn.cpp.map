@@ -333,7 +333,7 @@
       "namespace": "D2Game::Monsters::Monsters::Spawn",
       "calledFunctions": [
         "SpawnMonster",
-        "MONSTERTBLS_ReturnZero",
+        "MONSTERTBLS_GetSuperUniquesTxtCount",
         "SPAWN_UniqueMonster",
         "DRLGROOM_GetLevelIdFromRoom",
         "CheckIntroductionFlagByInternalQuestId",

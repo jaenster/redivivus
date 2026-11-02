@@ -2520,7 +2520,7 @@ void __fastcall UNITS_FreeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     FreeServerUnit(pGame, pCurItem);
 }
 
-void StaticInit_6caf60() {
+void StaticInit_gnSeedCounter() {
     gnSeedCounter = GetTickCount();
 }
 

@@ -120,7 +120,7 @@ void __fastcall DRLGROOMEX_AllocNodesFromRoomExToRoomEx(struct D2RoomExStrc * pR
 void __fastcall DRLGROOMEX_AllocNodesForBothRoomEx(struct D2RoomExStrc * pRoomExA, struct D2RoomExStrc * pRoomExB, int32_t eDirection);
 // Finds and removes a D2DrlgOrthStrc node from pRoomEx->pOrth linked list that has nType==1 and points to pDrlgRoomExTarget. Frees the removed node.
 // @sourcefile .\DRLG\DrlgRoom.cpp
-void __fastcall DRLGROOMEX_FindReplaceAndFreeSub00VsTargetRoomEx(struct D2PoolManagerStrc * pMemory, struct D2RoomExStrc * pRoomEx, struct D2RoomExStrc * pDrlgRoomExTarget);
+void __fastcall DRLGROOMEX_FreeOrthToRoomEx(struct D2PoolManagerStrc * pMemory, struct D2RoomExStrc * pRoomEx, struct D2RoomExStrc * pDrlgRoomExTarget);
 void __fastcall DRLGROOMEX_FindReplaceAndFreeSub00ForBothRoomEx(struct D2PoolManagerStrc * pMemory, struct D2RoomExStrc * pRoomEx, struct D2RoomExStrc * pDrlgRoomExB);
 // Sorting comparator: compares orths by direction first, then by coordinate for that direction.
 BOOL __fastcall DRLGORTH_CompareByDirectionAndCoord(struct D2DrlgOrthStrc * pOrth1, struct D2DrlgOrthStrc * pOrth2);

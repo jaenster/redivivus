@@ -168,7 +168,7 @@ D2WinWndHandlerStrc gaUIWindowHandlers[33] = {
     {
         /* .nType = */ 0x2,
         /* .nMessage = */ 0x2c,
-        /* .pfnCallback = */ (D2WinWndHandlerFn)&D2Win::Src::D2WinMain::D2WIN_Unused_Placeholder_5
+        /* .pfnCallback = */ (D2WinWndHandlerFn)&D2Win::Src::D2WinMain::D2WIN_TakeScreenshotMsgHandler
     },
     {
         /* .nType = */ 0x2,

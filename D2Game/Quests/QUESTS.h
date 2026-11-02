@@ -208,14 +208,14 @@ void __fastcall QUEST_DispatchMonsterDeathToQ12(::SGAMEDATA * pGame, struct D2Ro
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 uint32_t __fastcall QUEST_GetSistersToTheSlaughterSpecificFlag(::SGAMEDATA * pGame);
 void __fastcall QUEST_HandleClientQuestMessage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nQuestItemCode);
-void __fastcall Objects_InitFn18(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn19(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn20(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn15(struct D2ObjectInitFnArg * pInitArg);
-void __fastcall Objects_InitFn07(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn18_JerhynPosition(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn19_JerhynPosition(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn20_TaintedSunAltar(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn15_Malus(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn07_CainGibbet(struct D2ObjectInitFnArg * pInitArg);
 // Quest dispatcher keyed on a unit's monster/object class id. Given pGame and the triggering pUnit, looks up the unit's nClassId and routes to the matching act-quest timer/callback (e.g. Khalim's Will compelling orb 0x16f, Cain/Tower 0xbd by level, Countess 0x173, Hell's Forge 0x178, Anya/Nihlathak act-5 0x1cb-0x1cd, Ancients 0x1da-0x1dc). Walks pGame->pQuestControl->pQuestData list to find the relevant quest record before invoking its handler. No return; pure side-effecting quest progression.
 void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-void __fastcall Objects_InitFn23(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn23_LamEsenTome(struct D2ObjectInitFnArg * pInitArg);
 void __fastcall QUEST_CheckGoldenBirdDrop(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // NOTE: Register param types inferred (medium confidence): pGameStrc (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
 void __fastcall QUEST_OnGoldenBirdCouncilKilled(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit);

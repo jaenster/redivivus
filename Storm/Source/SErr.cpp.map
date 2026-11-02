@@ -373,7 +373,7 @@
       ]
     },
     {
-      "name": "StaticInit_6ca8a0",
+      "name": "StaticInit_gStormErrorCallbackList",
       "address": "006ca8a0",
       "lines": [
         {
@@ -383,7 +383,7 @@
       ],
       "namespace": "Storm::Source::SErr",
       "calledFunctions": [
-        "StaticInit_6ca8a0",
+        "StaticInit_gStormErrorCallbackList",
         "atexit"
       ]
     },

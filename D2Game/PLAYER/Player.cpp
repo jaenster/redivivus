@@ -279,7 +279,7 @@ static BOOL __stdcall PLAYER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc 
     }
 }
 
-uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t nParam, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t bAutoPlace, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     uint32_t nXPos;
     BOOL bBeltPlaced;
     int32_t dwGUID;
@@ -295,8 +295,8 @@ uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t nParam, D
       }
 
       nItemGUID = pUnit2->nUnitGUID;
-      pnBeltSlot = &nParam;
-      dwGUID = nParam;
+      pnBeltSlot = &bAutoPlace;
+      dwGUID = bAutoPlace;
       nXPos = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit2);
       bBeltPlaced = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, nItemGUID, nXPos, dwGUID, (uint32_t*)pnBeltSlot);
       return (uint32_t)(bBeltPlaced != 0);
@@ -878,10 +878,10 @@ void __fastcall COMMAND_playersX(DWORD count) {
 }
 
 int32_t __fastcall SERVER_GAME_CountPlayers(::SGAMEDATA * pGame) {
-    DWORD PlayerCountFixed;
-    DWORD ModeZeroCount = 0;
+    int PlayerCountFixed;
+    int ModeZeroCount = 0;
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)CountModeZeroDeath, &ModeZeroCount);
-    if ((uint8_t)(pGame->nGameType - SGAMETYPE_OBNET_HOST) > 2 || (PlayerCountFixed = PlayerCountOverride , (int)PlayerCountOverride <= (int)ModeZeroCount)) {
+    if ((uint8_t)(pGame->nGameType - SGAMETYPE_OBNET_HOST) > 2 || (PlayerCountFixed = PlayerCountOverride , PlayerCountOverride <= ModeZeroCount)) {
       PlayerCountFixed = ModeZeroCount;
     }
 

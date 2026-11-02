@@ -837,10 +837,10 @@ void __fastcall UnitQueuePacket0x9E(D2UnitStrc * pUnit, uint16_t eUnitStat, uint
 
 // Allocates a 0x18-byte D2SUnitMsgStrc with packet id 0xA1 (stat change notification) and enqueues it on pUnit's message list only if nOldValue != nNewValue. Payload: unit GUID, nParam (1B), old value (4B), new value (4B). Asserts nParam <= 0xFE. Marks unit dirty via ROOM_LinkUnitToUpdateList.
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0xA1(D2UnitStrc * pUnit, uint16_t nParam, int32_t nOldValue, int32_t nNewValue) {
+void __fastcall UnitQueuePacket0xA1(D2UnitStrc * pUnit, uint16_t nStatId, int32_t nOldValue, int32_t nNewValue) {
     D2PoolManagerStrc* pMemory;
     int nUnitGUID;
-    if (nParam >= 0xff) {
+    if (nStatId >= 0xff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c0);
       exit(-1);
     }
@@ -863,7 +863,7 @@ void __fastcall UnitQueuePacket0xA1(D2UnitStrc * pUnit, uint16_t nParam, int32_t
     }
 
     pMsg->uArgs.sA1.nUnitGUID = nUnitGUID;
-    pMsg->uArgs.sA1.nStatId = (uint8_t)nParam;
+    pMsg->uArgs.sA1.nStatId = (uint8_t)nStatId;
     pMsg->uArgs.sA1.nOldValue = nOldValue;
     pMsg->uArgs.sA1.nNewValue = nNewValue;
     if (!pUnit->pMsgFirst) {

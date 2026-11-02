@@ -335,7 +335,7 @@ void __fastcall TXT_AllocTxt_items(D2PoolManagerStrc * pMemory) {
       if (gsItemsTable.nSize > 0) {
         nTxtByteOffset = 0;
         do {
-          Fog::Src::Excel::FillUpTxtLinkSub0x08(sgtDataTable.sTxtItemsLink, *(char**)(gsItemsTable.pItems->szSetInvFile + nTxtByteOffset + 0x20));
+          Fog::Src::Excel::FOG_AddTxtLinkRecord(sgtDataTable.sTxtItemsLink, *(char**)(gsItemsTable.pItems->szSetInvFile + nTxtByteOffset + 0x20));
           i++;
           nTxtByteOffset += 0x1a8;
         } while (i < gsItemsTable.nSize);
@@ -1873,7 +1873,7 @@ void __fastcall TXT_AllocTxt_itemtypes(D2PoolManagerStrc * pMemory) {
       nTypeCount = 0;
       if (sgtDataTable.nTxtItemTypesSize > 0) {
         do {
-          Fog::Src::Excel::FillUpTxtLinkSub0x08(sgtDataTable.pTxtItemTypesLink, *(char**)&sgtDataTable.pTxtItemTypes[nTypeCount].code[0]);
+          Fog::Src::Excel::FOG_AddTxtLinkRecord(sgtDataTable.pTxtItemTypesLink, *(char**)&sgtDataTable.pTxtItemTypes[nTypeCount].code[0]);
           nTypeCount++;
         } while (nTypeCount < sgtDataTable.nTxtItemTypesSize);
       }

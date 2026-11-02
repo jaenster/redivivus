@@ -21,7 +21,7 @@ namespace D2Client::UNIT::UnitMode {
 // @sourcefile .\UNIT\UnitMode.cpp
 void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID);
 // Registers: eModeAction in ECX; pUnit in EDX is passed by the caller but not read.
-void __fastcall ClickWithSkillOnUnitOrCoord(eD2UnitModeAction eModeAction, struct D2UnitStrc * pUnit, int32_t nTargetOrX, int32_t nParam, uint32_t dwUnused);
+void __fastcall ClickWithSkillOnUnitOrCoord(eD2UnitModeAction eModeAction, struct D2UnitStrc * pUnit, int32_t nTargetOrX, int32_t nUnitGUIDOrY, uint32_t dwUnused);
 // @sourcefile .\UNIT\UnitMode.cpp
 uint32_t UNITMODE_CanInterruptSkill(struct D2UnitStrc * pUnit);
 BOOL __fastcall HandleMessage(int32_t nMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage, int32_t eNeutralMode);

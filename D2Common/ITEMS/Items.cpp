@@ -2004,7 +2004,7 @@ BOOL __stdcall ITEM_ValidateItemQuantity(D2UnitStrc * pUnit) {
     return 1;
 }
 
-BOOL __stdcall ReturnFalse(D2UnitStrc * dwParam1, D2UnitStrc * dwParam2) {
+BOOL __stdcall ReturnFalse(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     return 0;
 }
 

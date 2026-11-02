@@ -230,7 +230,7 @@
       ]
     },
     {
-      "name": "SKILLS_Unused_Placeholder_2",
+      "name": "SKILLS_FindClosestTargetExcludingGUID",
       "address": "004c9d50",
       "lines": [
         {
@@ -240,7 +240,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsPal",
       "calledFunctions": [
-        "SKILLS_Unused_Placeholder_2",
+        "SKILLS_FindClosestTargetExcludingGUID",
         "SKILL_FindClosestTargetWithStats"
       ],
       "usedTypes": [

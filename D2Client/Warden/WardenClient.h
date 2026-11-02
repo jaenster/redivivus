@@ -138,7 +138,7 @@ void __fastcall WARDEN_Tick(uint32_t dwTickArg);
 void __stdcall WARDEN_Cleanup();
 void __fastcall WARDEN_Initialize(uint32_t dwModuleParam);
 void __fastcall WARDEN_SetGlobalFlag(uint32_t dwParam);
-void __fastcall WARDEN_FreeModuleLibraries(LPVOID * ppParam);
+void __fastcall WARDEN_FreeModuleLibraries(LPVOID * ppWardenModule);
 // 4 internal functions (defined in .cpp)
 
 } // namespace D2Client::Warden

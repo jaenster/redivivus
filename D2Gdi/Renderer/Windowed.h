@@ -115,7 +115,7 @@ void __fastcall DrawSolidRect(tagRECT * pRect, uint8_t nPaletteIndex);
 void __stdcall DrawSolidRect_HaltTail(int nLine);
 void __fastcall DrawSolidSquare(POINT * pPoint, BYTE nSize, BYTE nPaletteIndex);
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
-void __stdcall RENDERER_WINDOWED_ClearFramebuffer(int nParam);
+void __stdcall RENDERER_WINDOWED_ClearFramebuffer(int bPartial);
 void __fastcall ClearScreen(BOOL bPartial);
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
 void __thiscall RENDERER_WINDOWED_ClearScreen(int nParam, BYTE dwParam2, BYTE dwParam3);

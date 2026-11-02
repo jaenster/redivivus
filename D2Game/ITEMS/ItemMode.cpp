@@ -2657,7 +2657,7 @@ BOOL __fastcall StackItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGU
 }
 
 // Initializes a D2CharSelCompStrc item-creation context from a unit. Zeroes the struct, then populates item level, spawn position (X/Y from static or dynamic path), unit seed pointer, component transform flags, and mod seed. Called before spawning/creating an item on behalf of a unit.
-static void __stdcall ITEMMODE_InitItemCreateContext(int dwParam, D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext, ::SGAMEDATA * pGame) {
+static void __stdcall ITEMMODE_InitItemCreateContext(int nItemClassId, D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext, ::SGAMEDATA * pGame) {
     int32_t nPosY;
     int32_t nModSeed;
     memset(pItemGenContext, 0, 0x84);
@@ -2665,7 +2665,7 @@ static void __stdcall ITEMMODE_InitItemCreateContext(int dwParam, D2UnitStrc * p
     uint32_t nSpawnItemLevel = D2Common::ITEMS::Items::ITEM_GetItemData_nItemLevel(pUnit);
     pItemGenContext->nItemLevel = nSpawnItemLevel;
     pItemGenContext->wItemFormat = pGame->wItemFormat;
-    pItemGenContext->nItemClassid = dwParam;
+    pItemGenContext->nItemClassid = nItemClassId;
     pItemGenContext->dwMode = 4;
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -3063,7 +3063,7 @@ void __fastcall ITEMMODE_NullSub(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 }
 
-void __fastcall ITEMMODE_ReturnZero2(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall ITEMMODE_RemoveExpiredStatLists(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2Common::Stats::StatsEx::RemoveStatListAfterTimeout(pUnit, pGame->dwGameFrame);
 }
 
@@ -3628,7 +3628,7 @@ BOOL __fastcall ITEMMODE_ApplyQuestReward(::SGAMEDATA * pGameStrc, D2UnitStrc * 
 }
 
 // Randomly selects an item code from a weighted pickup table (pbParam encodes two pools: normal and good), using the unit's seed RNG. For the selected item, checks difficulty-based upgrade odds (UberCode / UltraCode from DifficultyLevels.txt) and potentially promotes the code to its uber or ultra variant. Returns the final item code string pointer.
-uint32_t __fastcall ITEMMODE_HandleItemPickup(int32_t nParam, uint8_t * pbParam, D2UnitStrc * pUnit, int32_t bPreferGood) {
+uint32_t __fastcall ITEMMODE_HandleItemPickup(int32_t nParam, uint8_t * pItemCodeTable, D2UnitStrc * pUnit, int32_t bPreferGood) {
     D2SeedStrc DVar1;
     D2DifficultyLevelsTxt* pDiffLevels;
     uint32_t nRand;
@@ -3637,7 +3637,7 @@ uint32_t __fastcall ITEMMODE_HandleItemPickup(int32_t nParam, uint8_t * pbParam,
     int nClassId;
     int64_t lRandMul;
     int nUnit;
-    uint32_t nRandIndex = (uint32_t)pbParam[0x7c] + (uint32_t)*pbParam;
+    uint32_t nRandIndex = (uint32_t)pItemCodeTable[0x7c] + (uint32_t)*pItemCodeTable;
     D2SeedStrc* pSeed = &pUnit->sSeed;
     if (!nRandIndex) {
       nRandIndex = 0;
@@ -3656,10 +3656,10 @@ uint32_t __fastcall ITEMMODE_HandleItemPickup(int32_t nParam, uint8_t * pbParam,
       pSeed->nSeedLow = DVar1.nSeedLow;
       nRandIndex = nRandIndex - 1 & DVar1.nSeedLow;
     }
-    if ((int)nRandIndex < (int)(uint32_t)*pbParam) {
-      dwItemCode = *(uint32_t*)(pbParam + nRandIndex * 4 + 4);
+    if ((int)nRandIndex < (int)(uint32_t)*pItemCodeTable) {
+      dwItemCode = *(uint32_t*)(pItemCodeTable + nRandIndex * 4 + 4);
     } else {
-      dwItemCode = *(uint32_t*)(pbParam + (nRandIndex - *pbParam) * 4 + 0x80);
+      dwItemCode = *(uint32_t*)(pItemCodeTable + (nRandIndex - *pItemCodeTable) * 4 + 0x80);
     }
 
     ::SGAMEDATA* pGame = (::SGAMEDATA*)nParam;
@@ -3783,7 +3783,7 @@ void __fastcall ITEMMODE_GetItemCursorMode(::SGAMEDATA * pGame, D2UnitStrc * pUn
     D2Common::Units::RefreshInventory(pOwner, 1);
 }
 
-void __fastcall ITEMMODE_IsItemOnCursor(int32_t nParam, D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
+void __fastcall ITEMMODE_IsItemOnCursor(int32_t pGame, D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
     ITEMMODE_AddStatsList(pUnit, pOwner, 0);
 }
 

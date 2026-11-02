@@ -4070,7 +4070,7 @@ extern int gbQServerSendPlayerPos;
 extern D2BattleNetEventCallbackTable * BattleNetServerService;
 extern BOOL IsBattleNetServer;
 extern uint32_t Frames_TimeBetweenFrames;
-extern uint32_t PlayerCountOverride;
+extern int32_t PlayerCountOverride;
 // 17 records of 16 bytes, one per NPC vendor store index. The count is pinned two ways: SUNITPROXY_FreeAllNpcItemTables walks from &record[0].pQuestItems to that address + 272, and 00883d78 + 17*16 lands exactly on gbaNpcItemTableBuilt at 00883e88. Ghidra had typed the four fields of record 0 as four separate globals (gpaNpcTradeItemTable, ganNpcTradeItemCounts, gpaNpcQuestItemTable, ganNpcTradeQuestItemCounts), so only vendor 0 had real storage and every other vendor's item pointers and counts were read from and written to unrelated .data - the shop never produced a valid item list.
 extern D2NpcItemTablesStrc gaNpcItemTables[17];
 // One byte per vendor store index, 17 of them - the 'item table already built' guard. Two stray interior labels at +1 and +8 had truncated it to a single byte.

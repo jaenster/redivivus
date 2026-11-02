@@ -1232,7 +1232,7 @@ int __fastcall D2WINTEXTBOX_GetScrollbarStyle(::D2WinTextBox * pTextBox) {
 }
 
 // @sourcefile .\Src\D2WinTextBox.cpp
-::D2WinTextBox * __fastcall D2WinTextBox(int32_t nPosX, int32_t nPosY, int32_t nWidth, int32_t nHeight, int32_t nParam3, int32_t nParam4, DC6 * pDC6, OnPress pOnPress, uint32_t dwStyleFlags, int * pnScrollSize, int * pnScrollbarRect) {
+::D2WinTextBox * __fastcall D2WinTextBox(int32_t nPosX, int32_t nPosY, int32_t nWidth, int32_t nHeight, int32_t nFormType, int32_t pStyleDC6, DC6 * pDC6, OnPress pOnPress, uint32_t dwStyleFlags, int * pnScrollSize, int * pnScrollbarRect) {
     uint32_t dwState;
     ::D2WinScrollbar* pScrollbar;
     int32_t nScrollPageSize;
@@ -1255,10 +1255,10 @@ int __fastcall D2WINTEXTBOX_GetScrollbarStyle(::D2WinTextBox * pTextBox) {
     pNew->sControl.dwState = dwState;
     pNew->sControl.dwPosY = nPosY;
     pNew->sControl.pDC6 = pDC6;
-    pNew->sStyleControl.neD2FormType = nParam3;
+    pNew->sStyleControl.neD2FormType = nFormType;
     pNew->sControl.dwSizeX = nWidth;
     pNew->sControl.fpOnPress = pOnPress;
-    pNew->sStyleControl.pDC6 = (DC6*)nParam4;
+    pNew->sStyleControl.pDC6 = (DC6*)pStyleDC6;
     pNew->sStyleControl.fpDraw = (::Draw)dwStyleFlags;
     pNew->sControl.fpDraw = (::Draw)(BOOL (__fastcall *)(::D2WinTextBox*))D2WinTextBox::Draw;
     pNew->sControl.fpPush = D2WinTextBox::Push;

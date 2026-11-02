@@ -571,7 +571,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
 }
 
 // @sourcefile .\COMPOSIT\Composit.cpp
-void __stdcall COMPOSIT_GetCofPathWithTransform(D2UnitStrc * pUnit, LPSTR szText, int * pnParam, int32_t bBuildFullPath, uint32_t bSpecialHandling, D2InventoryStrc * pInventory, uint32_t nModeOverride) {
+void __stdcall COMPOSIT_GetCofPathWithTransform(D2UnitStrc * pUnit, LPSTR szText, int * pnWeaponClass, int32_t bBuildFullPath, uint32_t bSpecialHandling, D2InventoryStrc * pInventory, uint32_t nModeOverride) {
     D2UnitStrc* pOrigUnit = pUnit;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x106);
@@ -587,7 +587,7 @@ void __stdcall COMPOSIT_GetCofPathWithTransform(D2UnitStrc * pUnit, LPSTR szText
       nEffectiveMode = (uint32_t)pUnit;
     }
 
-    COMPOSIT_BuildCofPath(pOrigUnit, nClassId, nEffectiveMode, eUnitType, pInventory, szText, pnParam, bBuildFullPath, bSpecialHandling);
+    COMPOSIT_BuildCofPath(pOrigUnit, nClassId, nEffectiveMode, eUnitType, pInventory, szText, pnWeaponClass, bBuildFullPath, bSpecialHandling);
 }
 
 } // namespace D2Common::COMPOSIT::Composit

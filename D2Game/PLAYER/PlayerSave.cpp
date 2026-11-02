@@ -1147,7 +1147,7 @@ static BOOL __stdcall SERVER_CreatePlayerUnit(::SGAMEDATA * pGameStrc, D2ClientS
 }
 
 // Parses and validates a legacy/single-player save-game character block when a client loads into the game, then instantiates the player unit. Copies the 0x82-byte save header from param_1_00, checks the magic (0xAA55AA55) and size, validates the char name matches the client's, and enforces expansion/hardcore/difficulty-progression rules (calling GuardStack with a distinct error code on each rejection). On success it applies guild tag/name/info and weapon-swap/class flags to the client, sets the act, restores the single-player init seed when applicable, creates the UNIT_PLAYER unit (CreateUnit + SERVER_InitPlayer) and sends the init-unit packet, then writes out skill-tab/skill-list counts, remaps the 8 hotkey + left/right skill-hotkey entries, and reports the skill list size via the out-params. *pdwParam signals a Battle.net redirect/abort path. Stack-guarded.
-int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, D2ClientStrc * pClient, int * pnSaveFile, D2UnitStrc * * ppPlayer, uint32_t * pdwParam, uint32_t * pnSaveVersion, uint32_t * pnParam2, uint32_t * pnSkillCount, uint32_t * pnParam4, uint32_t * pnParam5, uint32_t * pnParam6) {
+int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, D2ClientStrc * pClient, int * pnSaveFile, D2UnitStrc * * ppPlayer, uint32_t * pdwParam, uint32_t * pnSaveVersion, uint32_t * pnSkillTabCount, uint32_t * pnSkillCount, uint32_t * pnLeftSkillId, uint32_t * pnRightSkillId, uint32_t * pnSkillListSize) {
     uint16_t wDifficultyBits;
     eD2ArenaFlags eArenaFlags;
     D2UnitStrc* pUnit;
@@ -1166,7 +1166,7 @@ int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, D2ClientStrc * pClie
     uint16_t wCharFlags;
     D2UnitStrc** ppUnitOut = ppPlayer;
     uint32_t* pBnetFlagOut = pdwParam;
-    *pnParam6 = 0;
+    *pnSkillListSize = 0;
     D2OldSaveHeaderStrc* pDstBuf = &sOldSaveHeader;
     for (nCopyCount = 0x20; nCopyCount; nCopyCount--) {
       pDstBuf->saveDataBuf[0] = *pnSaveFile;
@@ -1294,13 +1294,13 @@ int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, D2ClientStrc * pClie
       SERVER_InitPlayer(pGameCopy, pUnit, pClient);
       pClient_00 = pClient;
       UNIT::SUnitMsg::SERVER_SendInitUnitPacket(GAME::Clients::CLIENT_GetGame(pClient), *ppUnitOut, pClient_00);
-      *pnParam2 = 0x10;
+      *pnSkillTabCount = 0x10;
       *pnSkillCount = sgptDataTable->nTxtSkillsCount;
       if (sOldSaveHeader.wSkillTabCount <= 0x10) {
         nSkillId = (uint32_t)sOldSaveHeader.wTxtSkillsCount;
         if ((int)nSkillId <= sgptDataTable->nTxtSkillsCount) {
           if (sOldSaveHeader.wSkillTabCount != 0x10) {
-            *pnParam2 = (uint32_t)sOldSaveHeader.wSkillTabCount;
+            *pnSkillTabCount = (uint32_t)sOldSaveHeader.wSkillTabCount;
           }
           if (nSkillId != sgptDataTable->nTxtSkillsCount) {
             *pnSkillCount = nSkillId;
@@ -1328,7 +1328,7 @@ int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, D2ClientStrc * pClie
             nSkillId = -1;
           }
 
-          *pnParam4 = nSkillId;
+          *pnLeftSkillId = nSkillId;
           nSkillId = (uint32_t)sOldSaveHeader.byRightSkillHotkey;
           if (nSkillId - 0x9c <= 0x3c) {
             nSkillId += 0x41;
@@ -1336,8 +1336,8 @@ int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, D2ClientStrc * pClie
             nSkillId = -1;
           }
 
-          *pnParam5 = nSkillId;
-          *pnParam6 = (uint32_t)sOldSaveHeader.wSkillListSize;
+          *pnRightSkillId = nSkillId;
+          *pnSkillListSize = (uint32_t)sOldSaveHeader.wSkillListSize;
           return 0;
         }
       }
@@ -1499,7 +1499,7 @@ void __stdcall PLAYERSAVE_RestoreSkillLevel(D2UnitStrc * pUnit, eD2Skills eSkill
 
 // Body continues at 00532eb7, the JZ target of 00532eaa - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named '_oldSaveGameLoadingPart6_part1'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from '_oldSaveGameLoadingPart6_part1':
-static int __stdcall _oldSaveGameLoadingPart6(D2UnitStrc * pUnit, short * pSkillSection, uint32_t dwParam2, uint32_t nFormat, uint32_t * pnBytesConsumed, D2ClientStrc * pClient) {
+int __fastcall _oldSaveGameLoadingPart6(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2UnitStrc * pUnit, short * pSkillSection, uint32_t dwParam2, uint32_t nFormat, uint32_t * pnBytesConsumed) {
     uint8_t bySkillLevel;
     *pnBytesConsumed = 0;
     if (*pSkillSection != 0x6669) {
@@ -2006,18 +2006,18 @@ static int32_t __stdcall _oldSaveGameLoadingPart7_part1(uint8_t * pCorpseData, u
     return nItemLoadResult;
 }
 
-int32_t __fastcall _oldSaveGameLoadingPart7(::SGAMEDATA * pGame, D2UnitStrc * pUnit, short * param_1, uint32_t nFormat, uint32_t nSize, uint32_t * pnBytesConsumed) {
+int32_t __fastcall _oldSaveGameLoadingPart7(::SGAMEDATA * pGame, D2UnitStrc * pUnit, short * pCorpseHeader, uint32_t nFormat, uint32_t nSize, uint32_t * pnBytesConsumed) {
     uint32_t pBytesPerCorpse;
     *pnBytesConsumed = 0;
     if (nFormat >= 0x47 && nFormat <= 0x60) {
-      if (*param_1 != 0x4d4a) {
+      if (*pCorpseHeader != 0x4d4a) {
         return 0xe;
       }
 
-      uint16_t nCorpseCount = param_1[1];
-      uint8_t* pCorpseData = (uint8_t*)(param_1 + 2);
+      uint16_t nCorpseCount = pCorpseHeader[1];
+      uint8_t* pCorpseData = (uint8_t*)(pCorpseHeader + 2);
       int nRemainingBytes = nSize - 4;
-      param_1 = (short int*)0x4;
+      pCorpseHeader = (short int*)0x4;
       nSize = 0;
       D2UnitStrc* pCurrentUnit = pUnit;
       if (nCorpseCount > 0) {
@@ -2028,14 +2028,14 @@ int32_t __fastcall _oldSaveGameLoadingPart7(::SGAMEDATA * pGame, D2UnitStrc * pU
             return nCorpseResult;
           }
 
-          param_1 = (short int*)((int)param_1 + pBytesPerCorpse);
+          pCorpseHeader = (short int*)((int)pCorpseHeader + pBytesPerCorpse);
           pCorpseData += pBytesPerCorpse;
           nRemainingBytes -= pBytesPerCorpse;
           nSize++;
         } while (nSize < nCorpseCount);
       }
 
-      *pnBytesConsumed = (uint32_t)param_1;
+      *pnBytesConsumed = (uint32_t)pCorpseHeader;
       return 0;
     }
 
@@ -2414,7 +2414,7 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
 
     pSkillsData = (short int*)((int)pSkillsData + (int)ppUnit);
     nBytesRemaining -= (int)ppUnit;
-    iVar1 = _oldSaveGameLoadingPart6(pUnit, pSkillsData, nSkillMax, nSavefileSize, (uint32_t*)&ppUnit, __frame0.pClientOrig);
+    iVar1 = _oldSaveGameLoadingPart6(__frame1.pGameLocal, __frame0.pClientOrig, pUnit, pSkillsData, nSkillMax, nSavefileSize, (uint32_t*)&ppUnit);
     if (!iVar1) {
       uint8_t bIsWeaponSwapped;
       PlayerSave2::PLAYERSAVE2_LoadOldSavegame_ReturnZero();
@@ -2472,7 +2472,7 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
     return iVar1;
 }
 
-int32_t __fastcall SERVER_LoadPlayerFromSaveFile(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2SaveFileHeaderStrc * pSavefile, uint32_t nSavefileSize, D2UnitStrc * * ppUnit, uint32_t dwParam6, uint32_t dwParam7, uint32_t dwParam8) {
+int32_t __fastcall SERVER_LoadPlayerFromSaveFile(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2SaveFileHeaderStrc * pSavefile, uint32_t nSavefileSize, D2UnitStrc * * ppUnit, uint32_t pRoom, uint32_t nSpawnX, uint32_t nSpawnY) {
     int32_t nResult;
     if (nSavefileSize < 8) {
       return 9;
@@ -2481,11 +2481,11 @@ int32_t __fastcall SERVER_LoadPlayerFromSaveFile(::SGAMEDATA * pGame, D2ClientSt
       return 9;
     }
     if (pSavefile->dwFileVersion < 0x5c) {
-      nResult = SEVER_loadFrom_Old_Savegame(pGame, pClient, pSavefile, nSavefileSize, ppUnit, dwParam6, dwParam7, dwParam8);
+      nResult = SEVER_loadFrom_Old_Savegame(pGame, pClient, pSavefile, nSavefileSize, ppUnit, pRoom, nSpawnX, nSpawnY);
       return nResult;
     }
 
-    nResult = PlayerSave2::PLAYERSAVE_LoadModernFormat(pGame, pClient, pSavefile, nSavefileSize, ppUnit, dwParam6, dwParam7, dwParam8);
+    nResult = PlayerSave2::PLAYERSAVE_LoadModernFormat(pGame, pClient, pSavefile, nSavefileSize, ppUnit, pRoom, nSpawnX, nSpawnY);
     return nResult;
 }
 

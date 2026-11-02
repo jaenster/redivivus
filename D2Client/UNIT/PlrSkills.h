@@ -34,12 +34,12 @@ void __fastcall PLRSKILLS_StateSetFn03_Blaze(struct D2UnitStrc * pUnit, eD2State
 void __fastcall PLRSKILLS_StateSetFn04_SourceUnit(struct D2UnitStrc * pUnit, eD2States eState);
 void __fastcall PLRSKILLS_StateRemFn02_SourceUnit(struct D2UnitStrc * pUnit, eD2States eState);
 void __fastcall PLRSKILLS_StateSetFn05_ChangeClass(struct D2UnitStrc * pUnit, eD2States eState);
-int32_t __stdcall STATES_CalcDamageSeverityTier(int32_t nParam1, int32_t nParam2);
+int32_t __stdcall STATES_CalcDamageSeverityTier(int32_t nMax, int32_t nValue);
 // State removal callback (index 03) invoked when a buff/state expires on a unit. Reads the castoverlay and all four overlay IDs from the D2StatesTxt entry for eState, then calls STATES_RemoveOverlayById three times each for castoverlay, overlay[0], overlay[1] (triple removal, likely for multi-layer overlays), and once each for overlay[2] and overlay[3]. Skips any overlay with a negative (invalid) ID.
 void __fastcall PLRSKILLS_StateRemFn03_BoneArmor(struct D2UnitStrc * pUnit, eD2States eState);
 // Bone Armor state update callback. Computes a 3-tier armor tier from current vs. max bone armor values (UNITSTAT_bonearmor/bonearmormax), stores the new tier in shortparam1, then adds or removes tier-keyed overlays via GFX_AddOverlayToUnit / STATES_RemoveOverlayById. Called each tick while Bone Armor state is active.
 void __fastcall PLRSKILLS_StateSetFn06_BoneArmor(struct D2UnitStrc * pUnit, eD2States eState);
-int32_t __stdcall PLRSKILLS_CalcDamageSeverityTier_Unreferenced(int32_t nParam1, int32_t nParam2);
+int32_t __stdcall PLRSKILLS_CalcDamageSeverityTier_Unreferenced(int32_t nMaxValue, int32_t nValue);
 // State-removal overlay cleanup: reads overlay[0..2] from the states.txt row for eState and removes each valid overlay (and overlay+1) from pUnit via STATES_RemoveOverlayById. Called as part of the state removal pipeline (RemFunc slot 5).
 void __fastcall PLRSKILLS_StateRemFn05_CycloneArmor(struct D2UnitStrc * pUnit, eD2States eState);
 // State set-callback for Bone Armor (and similar tiered-overlay states). Reads current bonearmor and bonearmormax stats from the state's stat list to compute a tier (1–3) based on remaining fraction. Compares to the previously stored tier (shortparam1). If tier increased, calls States_RemFunc05 then adds the appropriate overlay+lightning-overlay pairs via GFX_AddOverlayToUnit. If tier decreased, removes the no-longer-applicable overlays via STATES_RemoveOverlayById. Up to three overlay slots (pDVar1->overlay[0..2]) are supported.

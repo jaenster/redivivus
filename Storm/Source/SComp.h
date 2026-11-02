@@ -236,7 +236,7 @@ void PKWARE_CopyMemoryValue(uint32_t * pDst, uint32_t * pSrc, uint32_t nSize);
 void PKWARE_SetByteValue(uint32_t * pDst, uint8_t byFill, uint32_t nSize);
 void PKWARE_ProcessBuffer(struct TCmpStruct * pCmp);
 void PKWARE_CopyBufferData(struct TCmpStruct * pCmp, uint8_t * pbStart, uint8_t * pbEnd);
-void StaticInit_6ca8c0();
+void StaticInit_CriticalSection_00779214();
 void StaticFini_CriticalSection_00779214();
 // 7 internal functions (defined in .cpp)
 

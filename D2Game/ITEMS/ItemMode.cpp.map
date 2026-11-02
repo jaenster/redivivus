@@ -1592,7 +1592,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_ReturnZero2",
+      "name": "ITEMMODE_RemoveExpiredStatLists",
       "address": "0055f130",
       "lines": [
         {
@@ -1602,7 +1602,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_ReturnZero2",
+        "ITEMMODE_RemoveExpiredStatLists",
         "RemoveStatListAfterTimeout"
       ],
       "usedTypes": [

@@ -706,23 +706,23 @@ void __fastcall Objects_InitFn33(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Objects_InitFn32. Empty object init fn (no-op stub) for an A2Q2 quest object.
-void __fastcall Objects_InitFn32(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn32_HoradricScrollChest(D2ObjectInitFnArg * pInitArg) {
 
 }
 
 // Q10_GetQuestInfo. Quest-info query callback. Reads A2Q2 quest-specific data but
 // effectively always returns *pdwParam=0 and *pbInfoPresent=true. Read-only;
 // no QuestRecord access.
-void __fastcall Q10_GetQuestInfo(::SGAMEDATA * pGame, uint32_t * pdwParam, bool * pbInfoPresent) {
+void __fastcall Q10_GetQuestInfo(::SGAMEDATA * pGame, uint32_t * pdwBoxCount, bool * pbInfoPresent) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheHoradricStaff);
     if (pQuestData) {
-      *pdwParam = pQuestData->pQuestSpecificData.pA2Q2->nBoxCount;
-      *pdwParam = 0;
+      *pdwBoxCount = pQuestData->pQuestSpecificData.pA2Q2->nBoxCount;
+      *pdwBoxCount = 0;
       *pbInfoPresent = true;
       return;
     }
 
-    *pdwParam = 0;
+    *pdwBoxCount = 0;
     *pbInfoPresent = true;
 }
 

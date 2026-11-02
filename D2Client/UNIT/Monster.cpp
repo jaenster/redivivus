@@ -2819,12 +2819,12 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
     goto apply_death_mode;
 }
 
-uint32_t __fastcall NPCMENU_ParseSpeechData(int * pnParam, uint8_t * pParam, int * pnSpeechResult) {
+uint32_t __fastcall NPCMENU_ParseSpeechData(int * pUnit, uint8_t * pParam, int * pnSpeechResult) {
     *pParam = 1;
     *pnSpeechResult = -1;
-    if (*pnParam == 1 && pnParam[5]) {
+    if (*pUnit == 1 && pUnit[5]) {
       int nSpeechId;
-      nSpeechId = *(int*)(pnParam[5] + 0x3c);
+      nSpeechId = *(int*)(pUnit[5] + 0x3c);
       if (nSpeechId != -1) {
         *pnSpeechResult = nSpeechId;
         *pParam = 0;
@@ -3166,7 +3166,7 @@ void __fastcall CLIENT_UpdateUnitNameplate(D2UnitStrc * pDynamicPath) {
     UnitSnd::PlayUnitFootstepSound(pDynamicPath);
 }
 
-void StaticInit_6cad00() {
+void StaticInit_gnMonsterUniqueNameBuffer() {
     gnMonsterUniqueNameBuffer[0] = L'\0';
     gnMonsterUniqueNameBuffer[1] = L'\0';
 }

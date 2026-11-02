@@ -137,7 +137,7 @@ void __stdcall INPUT_TextClickHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_TextKeyHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_TextKeyFilter(struct D2UIMouseMsgStrc * pMsg);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca07b(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
-void StaticInit_6cac10();
+void StaticInit_gnTextBoxExclusionX();
 // 11 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Text

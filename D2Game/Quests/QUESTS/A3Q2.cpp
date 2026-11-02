@@ -416,7 +416,7 @@ void __fastcall Q19_UpdateCompellingOrbObject(D2QuestDataStrc * pQuestData, D2Un
 }
 
 // Objects_InitFn41 (Khalim's Will, InitFn41). Object init for the Compelling Orb: marks the orb-event flag set, records the object's GUID, and sets the object's update flag (2 during intro, else the tracked GUID). Initializes orb object state; no QuestRecord transitions.
-void __fastcall Objects_InitFn41(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn41_SewerStairs(D2ObjectInitFnArg * pInitArg) {
     int32_t nObjectGUID;
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_KhalimsWill);
     if (!pDVar2) {
@@ -441,7 +441,7 @@ void __fastcall Objects_InitFn41(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Objects_InitFn42 (Khalim's Will, InitFn42). Object init for a related quest object: while quest is still in intro state, sets the object update flag to 2. No QuestRecord transitions.
-void __fastcall Objects_InitFn42(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn42_SewerLever(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_KhalimsWill);
     if (!(pQuestData && pQuestData->bIsNotIntroduction == '\0')) {
       return;

@@ -170,9 +170,9 @@ extern volatile void* g_pHwbpTarget;
 // and its caller. Installed by swapping the pointer in the dispatch table, so no generated
 // code is touched. A caller passing an unexpected height is the one thing the hardware
 // watchpoint cannot rule out.
-static void (*g_pfnRealFillY)(void*, int, int, int) = nullptr;
+static void (__fastcall *g_pfnRealFillY)(void*, int, int, int) = nullptr;
 
-static void FillYTrampoline(void* ppvBits, int nWidth, int nHeight, int a4) {
+static void __fastcall FillYTrampoline(void* ppvBits, int nWidth, int nHeight, int a4) {
     void* pRet = __builtin_return_address(0);
     D2TraceFmt("FILLY caller=%08X bits=%08X w=%d h=%d a4=%d  clipYMin=%d clipBottom=%d",
                (unsigned)(uintptr_t)pRet, (unsigned)(uintptr_t)ppvBits, nWidth, nHeight, a4,
@@ -1177,8 +1177,8 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         D2GfxHelperStrc* pF = D2GfxRendereInitFunctionsStrc;
         if (!pF) { lstrcpynA(reply, "{\"err\":\"no table\"}", replyMax); return; }
         if (!g_pfnRealFillY) {
-            g_pfnRealFillY = (void (*)(void*, int, int, int))pF->nfpFillYBufferTable;
-            pF->nfpFillYBufferTable = (void (*)(void*, int, int, int))FillYTrampoline;
+            g_pfnRealFillY = (void (__fastcall *)(void*, int, int, int))pF->nfpFillYBufferTable;
+            pF->nfpFillYBufferTable = FillYTrampoline;
         }
         wsprintfA(reply, "{\"hooked\":1,\"real\":\"%08X\",\"tramp\":\"%08X\"}",
                   (unsigned)(uintptr_t)g_pfnRealFillY, (unsigned)(uintptr_t)FillYTrampoline);
@@ -1489,7 +1489,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         D2UnitStrc** ppTable = (D2UnitStrc**)((char*)ServerSideUnitHashTables + UNIT_PLAYER * 0x200);
         for (int nBucket = 0; nBucket < 128 && !pSrv; nBucket++)
             for (D2UnitStrc* pU = ppTable[nBucket]; pU; pU = pU->pListNext) { pSrv = pU; break; }
-        D2GameStrc* pGame = D2Game::GAME::Server::QSERVER_GetFirstActiveGame();
+        ::SGAMEDATA* pGame = D2Game::GAME::Server::QSERVER_GetFirstActiveGame();
         if (!pSrv || !pGame) { lstrcpynA(reply, "{\"err\":\"no server unit or game\"}", replyMax); return; }
         D2SkillStrc* pR = D2Common::Units::GetRightSkill(pSrv);
         int nMode = pR ? (int)D2Common::Skills::GetSkillMode(pSrv, pR) : -1;
@@ -2173,6 +2173,10 @@ static DWORD WINAPI ServerThread(LPVOID) {
             if (srv == INVALID_SOCKET) { Sleep(800); }
             continue;
         }
+        // One connection at a time, so a client that connects and then says nothing
+        // (a status poller holding its socket open) would park every later caller in
+        // the backlog forever. Three seconds of silence ends the turn.
+        { DWORD tmo = 3000; setsockopt(c, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tmo, sizeof(tmo)); }
         char buf[1024]; int used = 0;
         for (;;) {
             int n = recv(c, buf + used, (int)sizeof(buf) - 1 - used, 0);
@@ -2525,6 +2529,20 @@ extern "C" void D2CONTROL_Pump(void) {
         CloseHandle(CreateThread(0, 0, D2CONTROL_HangWatchdog, 0, 0, &dwWatchdogId));
     }
     long frame = InterlockedIncrement(&g_frames);
+    // The game-view write-watch, armed from a flag file when the control channel is
+    // not available: `test\watchview` beside the exe arms DR0 on D2GameView->pView.bottom
+    // the first frame a game view exists, on this thread (the writer's). One-shot.
+    {
+        static bool bViewWatchTried = false;
+        if (!bViewWatchTried && D2GameView != nullptr &&
+            GetFileAttributesA("test\\watchview") != INVALID_FILE_ATTRIBUTES) {
+            bViewWatchTried = true;
+            g_pHwbpTarget = (void*)((char*)D2GameView + 0x10);
+            D2TraceFmt("VIEWWATCH arming on %08X (D2GameView=%08X)", (unsigned)(uintptr_t)g_pHwbpTarget,
+                       (unsigned)(uintptr_t)D2GameView);
+            D2ProbeArmClipHwbpSelf();
+        }
+    }
     // NOT armed by default. D2TRACE_WatchWrite sets an x86 hardware write watchpoint, and the
     // trap handler writes a trace line from a vectored exception handler - on an address the
     // game writes every frame that is a guaranteed hang, and it took a whole build to diagnose

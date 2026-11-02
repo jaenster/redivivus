@@ -78,7 +78,7 @@ BOOL __fastcall Skills_SrvDoFunc_038_DragonTail_KickAoE(::SGAMEDATA * pGame, str
 BOOL __fastcall Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 void __fastcall SKILLASS_SetupMissilePath(struct D2UnitStrc * pUnit, int32_t nInitSeed);
 // Spawns a ring of missiles; skill-agnostic.
-void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwParam, struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, struct D2UnitStrc * pTarget, eMissilesId eMissileId, int32_t nTargetX, int32_t nTargetY, eD2Skills eSkill, int32_t nSkillLvl, int32_t nMissileStride);
+void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwUnused, struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, struct D2UnitStrc * pTarget, eMissilesId eMissileId, int32_t nTargetX, int32_t nTargetY, eD2Skills eSkill, int32_t nSkillLvl, int32_t nMissileStride);
 // Builds the spiral flight path for an Assassin missile unit (e.g. trap/blade projectiles). Clamps total frames to 0x4D, seeds the unit's PRNG from nParam (high word 0x29a), sets path type 10, and steps a turning angle around the unit's facing direction: each frame advances the direction by a seed-derived angle step (turn direction flips every gnSpiralMissileBaseOffset frames), looks up per-direction X/Y deltas via gnSkillAssTableIndexBySkill/OffsetBySkill, and writes the accumulated position into the dynamic path's PathPoints. Sets the final point count. Mutates pUnit->sSeed.
 void __fastcall SKILLASS_BuildSpiralMissilePath(struct D2UnitStrc * pUnit, int32_t nSeed);
 // Spawns a spiral ring of missiles; skill-agnostic.

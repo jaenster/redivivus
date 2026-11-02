@@ -1336,9 +1336,9 @@ static BOOL __stdcall PATH_TraceCollisionPath(int32_t nStartX, uint32_t nStartY,
     return 0;
 }
 
-static void PATH_UpdateVelocityWithAcceleration(int32_t nParam, D2DynamicPathStrc * pDynamicPath) {
-    if (nParam <= 0) {
-      nParam = 0x400;
+static void PATH_UpdateVelocityWithAcceleration(int32_t nStepScale, D2DynamicPathStrc * pDynamicPath) {
+    if (nStepScale <= 0) {
+      nStepScale = 0x400;
     }
     if (pDynamicPath->nAcceleration) {
       pDynamicPath->nAccelerationCounter++;
@@ -1355,7 +1355,7 @@ static void PATH_UpdateVelocityWithAcceleration(int32_t nParam, D2DynamicPathStr
       }
     }
 
-    int nVelocityScaled = pDynamicPath->dwVelocity * nParam >> 6;
+    int nVelocityScaled = pDynamicPath->dwVelocity * nStepScale >> 6;
     pDynamicPath->nVelocityX = pDynamicPath->nDirectionVectorX * nVelocityScaled >> 0xc;
     pDynamicPath->nVelocityY = pDynamicPath->nDirectionVectorY * nVelocityScaled >> 0xc;
 }
@@ -1544,14 +1544,14 @@ void __stdcall PATH_SetPathTarget(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) 
 
 // Advances a dynamic path one sub-tile step. Calls PATH_ComputeDirectMovementVector to get the delta, adds it to the current sub-tile position, then calls PATH_TraceCollisionPath if the integer tile cell changed. On collision: if a mover monster owns the path, calls PATH_RecalculatePath; otherwise snaps direction registers. Writes the new sub-tile X/Y into pnOutX[0]/[1]. Returns true if the path is still in motion, false if stopped or collided without rerouting.
 static bool __stdcall PATH_ComputeMovementStep(uint32_t * pnOutX, uint32_t * pnOutY, D2DynamicPathStrc * pSkillsTxt) {
-    bool bVar1;
     uint32_t nRecalcResult;
     D2CoordStrc sVelocity;
+    bool bRecalcOnCollision;
     D2UnitStrc* pUnit = pSkillsTxt->pOwner;
     pSkillsTxt->eCollisionFlag = 0;
     *pnOutY = 0;
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || (bVar1 = true , !(pSkillsTxt->nFlags & 0x10))) {
-      bVar1 = false;
+    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || (bRecalcOnCollision = true , !(pSkillsTxt->nFlags & 0x10))) {
+      bRecalcOnCollision = false;
     }
     if (!pSkillsTxt->nVelocityX && !pSkillsTxt->nVelocityY) {
       pSkillsTxt->dwPathPoints = 0;
@@ -1561,7 +1561,7 @@ static bool __stdcall PATH_ComputeMovementStep(uint32_t * pnOutX, uint32_t * pnO
       return false;
     }
 
-    BOOL BVar2 = PATH_ComputeDirectMovementVector(&sVelocity.nX, pSkillsTxt);
+    BOOL BVar1 = PATH_ComputeDirectMovementVector(&sVelocity.nX, pSkillsTxt);
     int nOldFixedY = pSkillsTxt->Coords.tFixed.y;
     int nOldFixedX = pSkillsTxt->Coords.tFixed.x;
     uint32_t nNewSubX = sVelocity.nX + nOldFixedX;
@@ -1574,7 +1574,7 @@ static bool __stdcall PATH_ComputeMovementStep(uint32_t * pnOutX, uint32_t * pnO
 
       bCollisionResult = PATH_TraceCollisionPath(sVelocity.nX, sVelocity.nY, pnOutX, pnOutY, pSkillsTxt);
       if (bCollisionResult) {
-        if (bVar1) {
+        if (bRecalcOnCollision) {
           nRecalcResult = PATH_RecalculatePath(pUnit, (uint32_t)(pSkillsTxt->pTargetUnit != 0));
           return (bool)(nRecalcResult != 0 ? 0 : 1);
         }
@@ -1586,7 +1586,7 @@ static bool __stdcall PATH_ComputeMovementStep(uint32_t * pnOutX, uint32_t * pnO
 
     *pnOutX = nNewSubX;
     pnOutX[1] = nNewSubY;
-    if (BVar2) {
+    if (BVar1) {
       pSkillsTxt->nPathPointIndex++;
       return true;
     }

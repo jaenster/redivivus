@@ -436,7 +436,7 @@
       ]
     },
     {
-      "name": "CLIENTMODE_Unused3",
+      "name": "CLIENTMODE_WaitForQServerConnection",
       "address": "0044bad0",
       "lines": [
         {
@@ -446,7 +446,7 @@
       ],
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
-        "CLIENTMODE_Unused3",
+        "CLIENTMODE_WaitForQServerConnection",
         "D2GFX_EndCutSceneReturnSceneState",
         "GetTickCount",
         "NET_CLIENT_GetConnectionTimeout",
@@ -537,7 +537,7 @@
       ]
     },
     {
-      "name": "CLIENTMODE_Unused4",
+      "name": "CLIENTMODE_WaitForServerShutdown",
       "address": "0044bd20",
       "lines": [
         {
@@ -547,7 +547,7 @@
       ],
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
-        "CLIENTMODE_Unused4",
+        "CLIENTMODE_WaitForServerShutdown",
         "D2GFX_EndCutSceneReturnSceneState",
         "NET_D2GS_SERVER_HandleAnyIncomingPacket",
         "NET_D2GS_CLIENT_ExtractPacketSize_from0xAE",
@@ -582,7 +582,7 @@
       ]
     },
     {
-      "name": "StaticInit_6ca9a0",
+      "name": "StaticInit_gpszCmdLineCaptionStr",
       "address": "006ca9a0",
       "lines": [
         {
@@ -592,11 +592,11 @@
       ],
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
-        "StaticInit_6ca9a0"
+        "StaticInit_gpszCmdLineCaptionStr"
       ]
     },
     {
-      "name": "StaticInit_6ca9b0",
+      "name": "StaticInit_gpszDiabloIICaptionCopy",
       "address": "006ca9b0",
       "lines": [
         {
@@ -606,7 +606,7 @@
       ],
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
-        "StaticInit_6ca9b0"
+        "StaticInit_gpszDiabloIICaptionCopy"
       ]
     },
     {

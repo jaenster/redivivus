@@ -942,7 +942,7 @@
       ]
     },
     {
-      "name": "StaticInit_6cac30",
+      "name": "StaticInit_gaQuestLogPanelRects",
       "address": "006cac30",
       "lines": [
         {
@@ -952,11 +952,11 @@
       ],
       "namespace": "D2Client::UI::QuestLog",
       "calledFunctions": [
-        "StaticInit_6cac30"
+        "StaticInit_gaQuestLogPanelRects"
       ]
     },
     {
-      "name": "StaticInit_6cacd0",
+      "name": "StaticInit_gQuestLog",
       "address": "006cacd0",
       "lines": [
         {
@@ -966,7 +966,7 @@
       ],
       "namespace": "D2Client::UI::QuestLog",
       "calledFunctions": [
-        "StaticInit_6cacd0",
+        "StaticInit_gQuestLog",
         "SKILLDESC_InitMissileBuffers"
       ]
     }

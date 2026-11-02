@@ -1442,7 +1442,7 @@
       ]
     },
     {
-      "name": "NPCMENU_EmptyDrawCallback1",
+      "name": "NPCMENU_CloseGossipDialog",
       "address": "004b4010",
       "lines": [
         {
@@ -1452,7 +1452,7 @@
       ],
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
-        "NPCMENU_EmptyDrawCallback1",
+        "NPCMENU_CloseGossipDialog",
         "FreeDialogStrc",
         "INV_ResetHoverAndContextState",
         "NPCMENU_CloseNpcInteraction",
@@ -2571,7 +2571,7 @@
       ]
     },
     {
-      "name": "StaticInit_6cad10",
+      "name": "StaticInit_gNpcMenuConfirmDialogStrings",
       "address": "006cad10",
       "lines": [
         {
@@ -2581,7 +2581,7 @@
       ],
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
-        "StaticInit_6cad10"
+        "StaticInit_gNpcMenuConfirmDialogStrings"
       ]
     }
   ]

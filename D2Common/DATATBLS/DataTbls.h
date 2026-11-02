@@ -41,7 +41,7 @@ int __fastcall DATATBLS_LookupCalcCode(char * szText, int * pOutHasResolvedToCon
 void __fastcall DATATBLS_CompileSkillCode(char * szText, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn);
 void __fastcall DATATBLS_CompileSkillDescCode(char * szText, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn);
 struct D2AnimDataStrc * __stdcall TXT_AnimTbls_Get();
-struct D2DifficultyLevelsTxt * __stdcall GetDifficultyLevels(uint32_t nDifficulty);
+struct D2DifficultyLevelsTxt * __stdcall GetDifficultyLevels(int32_t nDifficulty);
 void __fastcall DATATBLS_BuildStatesDataBitMask(struct D2StatesDataTbls * pStatesData, uint32_t nFlagBit);
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __fastcall DATATBLS_BuildStatesDataList(struct D2AllStatesDataTbl * * ppAllStatesData, short * pCounter, uint32_t nFlag);

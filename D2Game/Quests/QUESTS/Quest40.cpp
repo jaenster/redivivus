@@ -194,7 +194,7 @@ void __fastcall Q40_InitData(D2QuestDataStrc * pQuestData) {
 }
 
 // Object init callback for Quest 40 (Prison of Ice, A5Q3). Records the initialized object's GUID and coords into the A5Q3 quest-specific data. If the trigger count reaches 2, fires Q33_SequenceFilter; if the Tristram portal has not yet been initialized, spawns a monster near the object's coords and transfers its DRLG map AI file. Also fires a timed event if the BetrayalOfHaggorath quest completion flag is set.
-void __fastcall Objects_InitFn66(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn66_DrehyaStartInTown(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pSpawnedUnit;
     int32_t nObjectGUID;
     D2DrlgFileStrc* pDrlgFile;

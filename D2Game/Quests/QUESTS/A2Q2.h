@@ -100,11 +100,11 @@ void __fastcall Objects_InitFn31(struct D2ObjectInitFnArg * pInitArg);
 // Objects_InitFn33. Empty object init fn (no-op stub) for an A2Q2 quest object.
 void __fastcall Objects_InitFn33(struct D2ObjectInitFnArg * pInitArg);
 // Objects_InitFn32. Empty object init fn (no-op stub) for an A2Q2 quest object.
-void __fastcall Objects_InitFn32(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn32_HoradricScrollChest(struct D2ObjectInitFnArg * pInitArg);
 // Q10_GetQuestInfo. Quest-info query callback. Reads A2Q2 quest-specific data but
 // effectively always returns *pdwParam=0 and *pbInfoPresent=true. Read-only;
 // no QuestRecord access.
-void __fastcall Q10_GetQuestInfo(::SGAMEDATA * pGame, uint32_t * pdwParam, bool * pbInfoPresent);
+void __fastcall Q10_GetQuestInfo(::SGAMEDATA * pGame, uint32_t * pdwBoxCount, bool * pbInfoPresent);
 // Q10_OnStaffAssembledViaCube. Invoked from the Horadric Cube cubing-result code
 // when Staff of Kings + Amulet of the Viper combine into the Horadric Staff ('msf ').
 // Marks A2Q2 data bStaffAssembled, decrements viper/msf counts and increments staff

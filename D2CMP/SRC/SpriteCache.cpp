@@ -1881,7 +1881,7 @@ static BOOL __stdcall SPRITECACHE_LoadCelAndCache(D2CelFileCacheEntryStrc * pCel
     return 0;
 }
 
-static void __stdcall SPRITECACHE_LoadSpriteWithConversion(D2CelFileCacheEntryStrc * pCelEntry, D2GfxDataStrc * pGfxData, int32_t nFrameGroupIndex, uint32_t nFrameStep, char * szText, int32_t nParam2, LPSTR szText2) {
+static void __stdcall SPRITECACHE_LoadSpriteWithConversion(D2CelFileCacheEntryStrc * pCelEntry, D2GfxDataStrc * pGfxData, int32_t nFrameGroupIndex, uint32_t nFrameStep, char * szText, int32_t bLoadAsCel, LPSTR szText2) {
     uint32_t nPaletteShiftRatio;
     if (!(pCelEntry && pGfxData)) {
       return;
@@ -1927,7 +1927,7 @@ static void __stdcall SPRITECACHE_LoadSpriteWithConversion(D2CelFileCacheEntrySt
         return;
       }
     }
-    if (nParam2) {
+    if (bLoadAsCel) {
       SPRITECACHE_LoadCelAndCache(pCelEntry, nFrameGroupIndex, nFrameStep, szText2, pGfxData);
       return;
     }
@@ -1936,7 +1936,7 @@ static void __stdcall SPRITECACHE_LoadSpriteWithConversion(D2CelFileCacheEntrySt
     return;
 }
 
-int __stdcall SPRITECACHE_GetOrLoadSprite(D2GfxDataStrc * pGfxData, int32_t bCheckOnly, int32_t nParam2) {
+int __stdcall SPRITECACHE_GetOrLoadSprite(D2GfxDataStrc * pGfxData, int32_t bCheckOnly, int32_t bLoadAsCel) {
     // Static local variables (originally global data)
     static uint32_t gbSpriteCachePaletteReloadNeeded; D2_STATIC_GUARD_BSS(gbSpriteCachePaletteReloadNeeded, "D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite::gbSpriteCachePaletteReloadNeeded");
 
@@ -2040,7 +2040,7 @@ int __stdcall SPRITECACHE_GetOrLoadSprite(D2GfxDataStrc * pGfxData, int32_t bChe
         }
       }
     }
-    SPRITECACHE_LoadSpriteWithConversion(pCodecHeader, pGfxData, nDirections, nFrames, szCelName, nParam2, szSpritePath);
+    SPRITECACHE_LoadSpriteWithConversion(pCodecHeader, pGfxData, nDirections, nFrames, szCelName, bLoadAsCel, szSpritePath);
     return bLoadSuccess;
 }
 

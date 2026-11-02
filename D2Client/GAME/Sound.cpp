@@ -1038,7 +1038,6 @@ static D2NpcGreetingSoundsStrc gaNpcGreetingSounds[29] = {
 // Returns a greeting sound id from pUnit's class-id greeting set, or 0 when the class has none. nMode 2 returns nReturnSoundId directly; otherwise picks nGreetingSoundId, or nInactiveSoundId 1 in 2 when nMode is 0, or the time-of-day id (+0/+1/+2 by DRLGENV_GetCycleIndexFromAct), retrying up to 20 times to avoid repeating nLastSoundId, and records the pick.
 // Provenance: 1.14d asm 004e0590; callers pass nMode 1 (004b510e greeting, 004cc04d mercenary) or the greeting mode (004b691b).
 int32_t __fastcall SOUND_SelectNpcGreetingSound(D2UnitStrc * pUnit, int32_t nMode) {
-    uint32_t nRoll;
     int32_t nCycleIdx;
     D2NpcGreetingSoundsStrc* pGreetingSounds = SOUND_GetNpcGreetingSounds(pUnit);
     if (!pGreetingSounds) {
@@ -1053,12 +1052,12 @@ int32_t __fastcall SOUND_SelectNpcGreetingSound(D2UnitStrc * pUnit, int32_t nMod
       int nSoundId;
       nSoundId = pGreetingSounds->nGreetingSoundId;
       if (!nMode && pGreetingSounds->nInactiveSoundId) {
-        nRoll = _Utils::RollRandomNumerUpToArgument(2);
-        if (!nRoll) {
+        nCycleIdx = _Utils::RollRandomNumerUpToArgument(2);
+        if (!nCycleIdx) {
           nSoundId = pGreetingSounds->nInactiveSoundId;
         }
       }
-      if (pGreetingSounds->nTimeOfDaySoundId && (!nSoundId || (nRoll = _Utils::RollRandomNumerUpToArgument(3) , !nRoll))) {
+      if (pGreetingSounds->nTimeOfDaySoundId && (!nSoundId || (nCycleIdx = _Utils::RollRandomNumerUpToArgument(3) , !nCycleIdx))) {
         nCycleIdx = D2Common::Environment::DRLGENV_GetCycleIndexFromAct(sgpDrlgAct);
         nSoundId = pGreetingSounds->nTimeOfDaySoundId;
         if (nCycleIdx != 1) {

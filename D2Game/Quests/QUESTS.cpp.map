@@ -957,7 +957,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn18",
+      "name": "Objects_InitFn18_JerhynPosition",
       "address": "005448b0",
       "lines": [
         {
@@ -967,7 +967,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
-        "Objects_InitFn18",
+        "Objects_InitFn18_JerhynPosition",
         "PlaceJerhyn"
       ],
       "usedTypes": [
@@ -977,7 +977,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn19",
+      "name": "Objects_InitFn19_JerhynPosition",
       "address": "005448e0",
       "lines": [
         {
@@ -987,7 +987,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
-        "Objects_InitFn19",
+        "Objects_InitFn19_JerhynPosition",
         "PlaceGuardInFrontOfJerhyn"
       ],
       "usedTypes": [
@@ -997,7 +997,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn20",
+      "name": "Objects_InitFn20_TaintedSunAltar",
       "address": "00544910",
       "lines": [
         {
@@ -1007,7 +1007,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
-        "Objects_InitFn20",
+        "Objects_InitFn20_TaintedSunAltar",
         "Q11_OnViperAmuletInit",
         "SetupUpdateFlag"
       ],
@@ -1019,7 +1019,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn15",
+      "name": "Objects_InitFn15_Malus",
       "address": "00544950",
       "lines": [
         {
@@ -1029,7 +1029,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
-        "Objects_InitFn15",
+        "Objects_InitFn15_Malus",
         "Q04_UpdateCainNpcAnimState",
         "SetupUpdateFlag"
       ],
@@ -1041,7 +1041,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn07",
+      "name": "Objects_InitFn07_CainGibbet",
       "address": "00544990",
       "lines": [
         {
@@ -1051,7 +1051,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
-        "Objects_InitFn07",
+        "Objects_InitFn07_CainGibbet",
         "Q04_InitializeCainGibbetObject",
         "SetupUpdateFlag"
       ],
@@ -1105,7 +1105,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn23",
+      "name": "Objects_InitFn23_LamEsenTome",
       "address": "00544e30",
       "lines": [
         {
@@ -1115,7 +1115,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
-        "Objects_InitFn23",
+        "Objects_InitFn23_LamEsenTome",
         "Q18_InitObjectMode",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",

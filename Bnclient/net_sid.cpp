@@ -661,7 +661,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
         } while (nByteIndex < nPacketSize - 1);
 
         if (nNullCount) {
-          Debug::DEBUG_UnusedDebugFunction("INVALID: AuthCheck");
+          Debug::DEBUG_Trace("INVALID: AuthCheck");
           return 0;
         }
       }
@@ -684,14 +684,14 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
                 {
                   BNMESSQUEUE_SetStateIfZero(1);
                   g_SIDPacketResponseFlags[0x51] = 0;
-                  Debug::DEBUG_UnusedDebugFunction("User has unknown version");
+                  Debug::DEBUG_Trace("User has unknown version");
                   break;
                 }
               case 0:
                 {
                   g_SIDPacketResponseFlags[0x42] = 1;
                   g_SIDPacketResponseFlags[0x51] = 1;
-                  Debug::DEBUG_UnusedDebugFunction("User has latest version and a valid cdkey");
+                  Debug::DEBUG_Trace("User has latest version and a valid cdkey");
                   break;
                 }
               case 0x100:
@@ -704,19 +704,19 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
                   szAdditionalInfo.dwHighDateTime = 0;
                   BnDownload::BNDOWNLOAD_InitiateFileDownload((D2BnetDownloadStateStrc*)0x80000002, 2, 0, 0, &szAdditionalInfo, szPatchFilename, nullptr);
                   g_SIDPacketResponseFlags[0x51] = 0;
-                  Debug::DEBUG_UnusedDebugFunction("Downloading Upgrade");
+                  Debug::DEBUG_Trace("Downloading Upgrade");
                   break;
                 }
             }
           } else if (dwResultCode == 0x102) {
             BNMESSQUEUE_SetStateIfZero(1);
             g_SIDPacketResponseFlags[0x51] = 0;
-            Debug::DEBUG_UnusedDebugFunction("User must revert to an older version");
+            Debug::DEBUG_Trace("User must revert to an older version");
           }
         } else {
           nByteIndex = nByteIndex >> 4 & 0xf;
           SID_SetStateFlag1(nByteIndex != 0 ? 0x7U : 0x3U);
-          Debug::DEBUG_UnusedDebugFunction("User has an invalid cdkey (%ld)", nByteIndex);
+          Debug::DEBUG_Trace("User has an invalid cdkey (%ld)", nByteIndex);
         }
       } else {
         switch (dwResultCode) {
@@ -726,21 +726,21 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
               SID_SetStateFlag1(nByteIndex != 0 ? 0xaU : 0x6U);
               Storm::Source::SSTR::SStrCopy(gszCDKeyInUseByUsername, (char*)szAdditionalInfo.dwHighDateTime, 0x100);
               SID_SetStateFlag2((uint32_t)gszCDKeyInUseByUsername);
-              Debug::DEBUG_UnusedDebugFunction("CD Key is in use by %s (%ld)", gszCDKeyInUseByUsername, nByteIndex);
+              Debug::DEBUG_Trace("CD Key is in use by %s (%ld)", gszCDKeyInUseByUsername, nByteIndex);
               break;
             }
           case 0x202:
             {
               nByteIndex = nByteIndex >> 4 & 0xf;
               SID_SetStateFlag1(nByteIndex != 0 ? 0x8U : 0x4U);
-              Debug::DEBUG_UnusedDebugFunction("CD Key is disabled (%ld)", nByteIndex);
+              Debug::DEBUG_Trace("CD Key is disabled (%ld)", nByteIndex);
               break;
             }
           case 0x203:
             {
               nByteIndex = nByteIndex >> 4 & 0xf;
               SID_SetStateFlag1(nByteIndex != 0 ? 0x9U : 0x5U);
-              Debug::DEBUG_UnusedDebugFunction("CD Key is for another product (%ld)", nByteIndex);
+              Debug::DEBUG_Trace("CD Key is for another product (%ld)", nByteIndex);
               break;
             }
         }
@@ -749,7 +749,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
       return 1;
     }
 
-    Debug::DEBUG_UnusedDebugFunction("INVALID: AuthCheck");
+    Debug::DEBUG_Trace("INVALID: AuthCheck");
     return 0;
 }
 
@@ -763,7 +763,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
 BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountCreate(char * pPacketData, size_t nPacketSize) {
     char* szErrorMessage;
     if (nPacketSize < 4) {
-      Debug::DEBUG_UnusedDebugFunction("INVALID: AuthAccountCreate");
+      Debug::DEBUG_Trace("INVALID: AuthAccountCreate");
       return 0;
     }
 
@@ -806,7 +806,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountCreate(char * pPacketData, si
       break;
     }
 
-    Debug::DEBUG_UnusedDebugFunction(szErrorMessage);
+    Debug::DEBUG_Trace(szErrorMessage);
     g_SIDPacketResponseFlags[0x52] = 1;
     return 1;
 }
@@ -822,7 +822,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogon(char * pPacketData, siz
     BOOL dwStatusCode;
     int32_t iVar1;
     if (nPacketSize < 0x44) {
-      Debug::DEBUG_UnusedDebugFunction("INVALID: AuthAccountLogon");
+      Debug::DEBUG_Trace("INVALID: AuthAccountLogon");
       return 0;
     }
 
@@ -830,20 +830,20 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogon(char * pPacketData, siz
     switch (nLogonStatus) {
       case 0:
         {
-          Debug::DEBUG_UnusedDebugFunction("Logon requires proof");
+          Debug::DEBUG_Trace("Logon requires proof");
           iVar1 = NET_SID_CLIENT_Send_0x54_AuthAccountLogonProof(pPacketData + 4, pPacketData + 0x24);
           return iVar1;
         }
       case 1:
         {
-          Debug::DEBUG_UnusedDebugFunction("Logon failed: Account unknown");
+          Debug::DEBUG_Trace("Logon failed: Account unknown");
           BNMESSQUEUE_SetStateIfZero(0xd);
           g_nRealmLogonResult = 1;
           break;
         }
       case 5:
         {
-          Debug::DEBUG_UnusedDebugFunction("Logon requires upgrade");
+          Debug::DEBUG_Trace("Logon requires upgrade");
           dwStatusCode = NET_SID_CLIENT_Send_0x57_AuthAccountUpgrade(1);
           if (!dwStatusCode) {
             BNMESSQUEUE_SetStateIfZero(0x12);
@@ -854,7 +854,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogon(char * pPacketData, siz
         }
       default:
         {
-          Debug::DEBUG_UnusedDebugFunction("Logon failed: Unknown result");
+          Debug::DEBUG_Trace("Logon failed: Unknown result");
           BNMESSQUEUE_SetStateIfZero(0x12);
           return 0;
         }
@@ -872,28 +872,28 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogon(char * pPacketData, siz
 // On status 2, password was incorrect. Logon fails on proof mismatch or unknown status.
 BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogonProof(char * pPacketData, size_t nPacketSize) {
     if (nPacketSize < 0x18) {
-      Debug::DEBUG_UnusedDebugFunction("INVALID: AuthAccountLogonProof");
+      Debug::DEBUG_Trace("INVALID: AuthAccountLogonProof");
       return 0;
     }
     if (*(int*)pPacketData) {
       if (*(int*)pPacketData == 2) {
-        Debug::DEBUG_UnusedDebugFunction("Logon Proof failed: Invalid password");
+        Debug::DEBUG_Trace("Logon Proof failed: Invalid password");
         BNMESSQUEUE_SetStateIfZero(0xe);
         g_nRealmLogonResult = 2;
         return 1;
       }
 
-      Debug::DEBUG_UnusedDebugFunction("Logon Proof failed: Unknown result");
+      Debug::DEBUG_Trace("Logon Proof failed: Unknown result");
     } else {
       int32_t bProofValid;
       bProofValid = NET_SID_CLIENT_VerifyServerProof(pPacketData + 4);
       if (bProofValid) {
-        Debug::DEBUG_UnusedDebugFunction("Logon Proof success");
+        Debug::DEBUG_Trace("Logon Proof success");
         g_nRealmLogonResult = 0;
         return 1;
       }
 
-      Debug::DEBUG_UnusedDebugFunction("Logon Proof failed: Server didn\'t know our password but told us it did!");
+      Debug::DEBUG_Trace("Logon Proof failed: Server didn\'t know our password but told us it did!");
     }
 
     BNMESSQUEUE_SetStateIfZero(0x12);
@@ -911,7 +911,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChange(char * pPacketData, si
     BOOL bUpgradeSent;
     int32_t iVar1;
     if (nPacketSize < 0x44) {
-      Debug::DEBUG_UnusedDebugFunction("INVALID: AuthAccountChange");
+      Debug::DEBUG_Trace("INVALID: AuthAccountChange");
       return 0;
     }
 
@@ -919,25 +919,25 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChange(char * pPacketData, si
     switch (dwStatusCode) {
       case 0:
         {
-          Debug::DEBUG_UnusedDebugFunction("Change requires proof");
+          Debug::DEBUG_Trace("Change requires proof");
           iVar1 = NET_SID_CLIENT_Send_0x56_AuthAccountChangeProof(pPacketData + 4, pPacketData + 0x24);
           return iVar1;
         }
       case 1:
         {
-          Debug::DEBUG_UnusedDebugFunction("Change failed: Account unknown");
+          Debug::DEBUG_Trace("Change failed: Account unknown");
           BNMESSQUEUE_SetStateIfZero(0xd);
           return 1;
         }
       case 5:
         {
-          Debug::DEBUG_UnusedDebugFunction("Change requires upgrade");
+          Debug::DEBUG_Trace("Change requires upgrade");
           bUpgradeSent = NET_SID_CLIENT_Send_0x57_AuthAccountUpgrade(0);
           return bUpgradeSent;
         }
       default:
         {
-          Debug::DEBUG_UnusedDebugFunction("Change failed: Unknown result");
+          Debug::DEBUG_Trace("Change failed: Unknown result");
           BNMESSQUEUE_SetStateIfZero(0x12);
           return 0;
         }
@@ -955,7 +955,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChangeProof(char * pPacketDat
     int32_t bProofValid;
     char* szFailureMessage;
     if (nPacketSize < 0x18) {
-      Debug::DEBUG_UnusedDebugFunction("INVALID: AuthAccountChangeProof");
+      Debug::DEBUG_Trace("INVALID: AuthAccountChangeProof");
       return 0;
     }
 
@@ -966,7 +966,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChangeProof(char * pPacketDat
         {
           bProofValid = NET_SID_CLIENT_VerifyServerProof(pPacketData + 4);
           if (bProofValid) {
-            Debug::DEBUG_UnusedDebugFunction("Change Proof success");
+            Debug::DEBUG_Trace("Change Proof success");
             g_SIDPacketResponseFlags[0x55] = 1;
             return 1;
           }
@@ -976,7 +976,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChangeProof(char * pPacketDat
         }
       case 2:
         {
-          Debug::DEBUG_UnusedDebugFunction("Change Proof failed: Invalid password");
+          Debug::DEBUG_Trace("Change Proof failed: Invalid password");
           g_SIDPacketResponseFlags[0x55] = 1;
           BNMESSQUEUE_SetStateIfZero(0xe);
           return 1;
@@ -987,7 +987,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChangeProof(char * pPacketDat
         }
     }
 
-    Debug::DEBUG_UnusedDebugFunction(szFailureMessage);
+    Debug::DEBUG_Trace(szFailureMessage);
     BNMESSQUEUE_SetStateIfZero(0x12);
     return 0;
 }
@@ -1001,18 +1001,18 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChangeProof(char * pPacketDat
 // Non-zero status indicates upgrade request failed.
 BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountUpgrade(char * pPacketData, size_t nPacketSize) {
     if (nPacketSize < 8) {
-      Debug::DEBUG_UnusedDebugFunction("INVALID: AuthAccountUpgrade");
+      Debug::DEBUG_Trace("INVALID: AuthAccountUpgrade");
       return 0;
     }
 
     uint32_t nServerToken = *(uint32_t*)(pPacketData + 4);
     if (*(int*)pPacketData) {
-      Debug::DEBUG_UnusedDebugFunction("Upgrade Failed: Unknown result");
+      Debug::DEBUG_Trace("Upgrade Failed: Unknown result");
       BNMESSQUEUE_SetStateIfZero(0x12);
       return 0;
     }
 
-    Debug::DEBUG_UnusedDebugFunction("Upgrade requires proof");
+    Debug::DEBUG_Trace("Upgrade requires proof");
     NET_SID_CLIENT_Send_0x58_AuthAccountUpgradeProof(nServerToken);
     return 1;
 }
@@ -1027,26 +1027,26 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountUpgrade(char * pPacketData, s
 BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountUpgradeProof(char * pPacketData, size_t nPacketSize) {
     BOOL bIsLogonFlow;
     if (nPacketSize < 4) {
-      Debug::DEBUG_UnusedDebugFunction("INVALID: AuthAccountUpgradeProof");
+      Debug::DEBUG_Trace("INVALID: AuthAccountUpgradeProof");
       return 0;
     }
     if (*(int*)pPacketData) {
       if (*(int*)pPacketData != 2) {
-        Debug::DEBUG_UnusedDebugFunction("Upgrade Proof failed: Unknown Result");
+        Debug::DEBUG_Trace("Upgrade Proof failed: Unknown Result");
         BNMESSQUEUE_SetStateIfZero(0x12);
         return 0;
       }
 
       bIsLogonFlow = NET_SID_CLIENT_GetSIDFlag2();
       if (bIsLogonFlow) {
-        Debug::DEBUG_UnusedDebugFunction("Upgrade Proof Failed: Invalid password during logon");
+        Debug::DEBUG_Trace("Upgrade Proof Failed: Invalid password during logon");
         NET_SID_ClearSrpPassword();
         g_nRealmLogonResult = 2;
         BNMESSQUEUE_SetStateIfZero(0xe);
         return 1;
       }
 
-      Debug::DEBUG_UnusedDebugFunction("Upgrade Proof Failed: Invalid password during change");
+      Debug::DEBUG_Trace("Upgrade Proof Failed: Invalid password during change");
       NET_SID_ClearSrpPassword();
       g_nSIDResponseCount1 = 2;
       g_SIDPacketResponseFlags[0x55] = 1;
@@ -1057,12 +1057,12 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountUpgradeProof(char * pPacketDa
     int32_t iVar1;
     bIsLogonFlow = NET_SID_CLIENT_GetSIDFlag2();
     if (bIsLogonFlow) {
-      Debug::DEBUG_UnusedDebugFunction("Upgrade Proof success, logging in");
+      Debug::DEBUG_Trace("Upgrade Proof success, logging in");
       iVar1 = NET_SID_CLIENT_Resend_0x53_AuthAccountLogon();
       return iVar1;
     }
 
-    Debug::DEBUG_UnusedDebugFunction("Upgrade Proof success, password changed");
+    Debug::DEBUG_Trace("Upgrade Proof success, password changed");
     NET_SID_ClearSrpPassword();
     g_nSIDResponseCount1 = 0;
     g_SIDPacketResponseFlags[0x55] = 1;

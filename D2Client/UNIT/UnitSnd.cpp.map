@@ -1041,8 +1041,7 @@
         "D2MonSoundsTxt",
         "D2UnitStrc",
         "eD2UnitType",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {

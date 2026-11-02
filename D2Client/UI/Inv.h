@@ -134,7 +134,7 @@ void __stdcall INV_SetIdentifyMode();
 void __stdcall INV_ExitIdentifyMode();
 void __stdcall INV_InitNpcButtonsByClass();
 // Draws gold amount and coin icon in inventory UI for three contexts: stash (param=0), inventory (param=1), and trade (param=2). Retrieves player's gold from appropriate stat (UNITSTAT_goldbank for stash, UNITSTAT_gold for inventory), formats the number, renders text and animated coin icon at context-specific screen coordinates.
-void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nParam);
+void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode);
 void __stdcall DRAW_UI_Inventory_DrawShop();
 void __stdcall INV_DrawNpcButtonTooltip();
 BOOL __stdcall INV_CanReturnToShop();
@@ -245,7 +245,7 @@ void __stdcall INPUT_WeaponSwap(struct D2UIMouseMsgStrc * pMsg);
 // Input handler for cube left-click. Maps mouse coords to cube grid, calls INV_HandleCubeLeftClick. Clears gbInventoryDragInProgress on cancel, sets on drag start. Handles transmute button.
 void __stdcall INPUT_CubeLeftClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall DrawMercInventory();
-void StaticInit_6cabf0();
+void StaticInit_gpInvRecipeScrollImage();
 // 50 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Inv

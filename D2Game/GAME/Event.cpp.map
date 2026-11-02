@@ -4,7 +4,7 @@
   "file": "D2Game/GAME/Event.cpp",
   "functions": [
     {
-      "name": "_UnusedGetFromList",
+      "name": "EVENT_GetDispatchBucketForFrame",
       "address": "00540b70",
       "lines": [
         {
@@ -14,7 +14,7 @@
       ],
       "namespace": "D2Game::GAME::Event",
       "calledFunctions": [
-        "_UnusedGetFromList"
+        "EVENT_GetDispatchBucketForFrame"
       ],
       "usedTypes": [
         "D2TimerStrc *",

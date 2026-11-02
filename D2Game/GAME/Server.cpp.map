@@ -1043,7 +1043,7 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "QSERVER_CleanupUnitChain",
-        "SERVER_GAME_UNIT_method"
+        "SUNITINACTIVE_SaveOrFreeUnit"
       ],
       "usedTypes": [
         "D2UnitStrc *",
@@ -1051,7 +1051,7 @@
       ]
     },
     {
-      "name": "UnusedInitFunctions",
+      "name": "SERVER_PopulateRoom",
       "address": "0052d0c0",
       "lines": [
         {
@@ -1061,7 +1061,7 @@
       ],
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
-        "UnusedInitFunctions",
+        "SERVER_PopulateRoom",
         "SUNIT_SpawnPresetUnitsForRoom",
         "SUNITINACTIVE_RoomInit",
         "OBJECT_PopulateRoomObjects",
@@ -1145,7 +1145,7 @@
         "DRLGROOM_GetRoomFromAct",
         "DRLGROOM_GetIdleTicks",
         "DRLGROOM_TestRoomCanUntile",
-        "SERVER_GAME_UNIT_method",
+        "SUNITINACTIVE_SaveOrFreeUnit",
         "DRLGROOM_RemoveRoomFromAct"
       ],
       "usedTypes": [
@@ -1157,7 +1157,7 @@
       ]
     },
     {
-      "name": "FreeUnusedItems",
+      "name": "GAME_FreeUnusedItemsPeriodic",
       "address": "0052d310",
       "lines": [
         {
@@ -1167,6 +1167,7 @@
       ],
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
+        "GAME_FreeUnusedItemsPeriodic",
         "FreeUnusedItems",
         "SUNITINACTIVE_FreeUnusedItems"
       ],
@@ -1318,7 +1319,7 @@
         "QUEST_ProcessQuestTimers",
         "CleanupIdleRooms",
         "FreeDungeons",
-        "FreeUnusedItems"
+        "GAME_FreeUnusedItemsPeriodic"
       ],
       "usedTypes": [
         "D2DrlgActStrc *",
@@ -1419,7 +1420,7 @@
       ]
     },
     {
-      "name": "Return1_GameSetup_0",
+      "name": "SERVER_IsHostedGamesRequestAllowed",
       "address": "0052daf0",
       "lines": [
         {
@@ -1429,7 +1430,7 @@
       ],
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
-        "Return1_GameSetup_0"
+        "SERVER_IsHostedGamesRequestAllowed"
       ]
     },
     {
@@ -1558,7 +1559,7 @@
       ]
     },
     {
-      "name": "_TableNullSub25",
+      "name": "SERVER_GetPlayerClassName",
       "address": "0052dcf0",
       "lines": [
         {
@@ -1568,7 +1569,7 @@
       ],
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
-        "_TableNullSub25"
+        "SERVER_GetPlayerClassName"
       ],
       "usedTypes": [
         "int32_t"
@@ -3069,7 +3070,7 @@
       ]
     },
     {
-      "name": "StaticInit_6caf10",
+      "name": "StaticInit_Frames_TimeBetweenFrames",
       "address": "006caf10",
       "lines": [
         {
@@ -3079,7 +3080,7 @@
       ],
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
-        "StaticInit_6caf10"
+        "StaticInit_Frames_TimeBetweenFrames"
       ]
     }
   ]

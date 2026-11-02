@@ -1698,7 +1698,7 @@
       ]
     },
     {
-      "name": "StaticInit_6cac10",
+      "name": "StaticInit_gnTextBoxExclusionX",
       "address": "006cac10",
       "lines": [
         {
@@ -1708,7 +1708,7 @@
       ],
       "namespace": "D2Client::UI::Text",
       "calledFunctions": [
-        "StaticInit_6cac10"
+        "StaticInit_gnTextBoxExclusionX"
       ]
     }
   ]

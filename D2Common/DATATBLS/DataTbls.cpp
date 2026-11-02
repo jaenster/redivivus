@@ -357,8 +357,8 @@ D2AnimDataStrc * __stdcall TXT_AnimTbls_Get() {
     return sgtDataTable.pAnimTbls;
 }
 
-D2DifficultyLevelsTxt * __stdcall GetDifficultyLevels(uint32_t nDifficulty) {
-    DWORD nIndex = (int)nDifficulty <= 0 ? 0 : nDifficulty;
+D2DifficultyLevelsTxt * __stdcall GetDifficultyLevels(int32_t nDifficulty) {
+    DWORD nIndex = nDifficulty <= 0 ? 0 : nDifficulty;
     if ((int)nIndex >= (int)(sgtDataTable.nTxtDifficultyLevelsSize - 1U)) {
       nIndex = sgtDataTable.nTxtDifficultyLevelsSize - 1U;
     }
@@ -1596,11 +1596,11 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
     };
     if (sgtDataTable.bUseTxt) {
       __frame0.pSkillsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\DataTbls.cpp", 0x51f);
-      Fog::Src::Excel::FillUpTxtLinkSub0x08(__frame0.pSkillsLink, (char*)0x656e6f6e);
-      Fog::Src::Excel::FillUpTxtLinkSub0x08(__frame0.pSkillsLink, (char*)0x20683268);
-      Fog::Src::Excel::FillUpTxtLinkSub0x08(__frame0.pSkillsLink, (char*)0x20676e72);
-      Fog::Src::Excel::FillUpTxtLinkSub0x08(__frame0.pSkillsLink, (char*)0x68746f62);
-      Fog::Src::Excel::FillUpTxtLinkSub0x08(__frame0.pSkillsLink, (char*)0x20636f6c);
+      Fog::Src::Excel::FOG_AddTxtLinkRecord(__frame0.pSkillsLink, (char*)0x656e6f6e);
+      Fog::Src::Excel::FOG_AddTxtLinkRecord(__frame0.pSkillsLink, (char*)0x20683268);
+      Fog::Src::Excel::FOG_AddTxtLinkRecord(__frame0.pSkillsLink, (char*)0x20676e72);
+      Fog::Src::Excel::FOG_AddTxtLinkRecord(__frame0.pSkillsLink, (char*)0x68746f62);
+      Fog::Src::Excel::FOG_AddTxtLinkRecord(__frame0.pSkillsLink, (char*)0x20636f6c);
       D2BinFieldInputStrc monstats[2] = {
         {"Id", FIELDTYPE_NAME_I_WORD, 0, 0, &__frame0.pMonStatsLink},
         {"end", FIELDTYPE_END, 0, 0, 0}

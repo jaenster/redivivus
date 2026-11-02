@@ -1466,7 +1466,7 @@ D2SuperUniquesTxt * __stdcall TXT_SuperUniques_GetLine(int32_t nSuperUnique) {
     return sgtDataTable.pTxtSuperUniques + nSuperUnique;
 }
 
-int32_t __stdcall MONSTERTBLS_ReturnZero() {
+int32_t __stdcall MONSTERTBLS_GetSuperUniquesTxtCount() {
     return sgtDataTable.nTxtSuperUniquesSize;
 }
 
@@ -2360,7 +2360,7 @@ void __fastcall TXT_AllocTxt_monlvl(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtMonLvl = (D2MonLvlTxt*)DataTbls::CompileTxt(pMemory, "monlvl", aMonLvlFieldTable, &sgtDataTable.nTxtMonLvlSize, 0x78);
 }
 
-void __fastcall DATATBLS_LinkerMonsterPreset(char * pName, char * pRecord, int32_t nParam3, int32_t nParam4, int32_t nParam5, int32_t nParam6) {
+void __fastcall DATATBLS_LinkerMonsterPreset(char * pName, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
     if (!pRecord) {
       return;
     }
@@ -2469,19 +2469,19 @@ D2MonPresetTxt * __stdcall MONSTERTBLS_GetMonPresetRecord(uint32_t nAct, int * p
     return nullptr;
 }
 
-int32_t __stdcall MONSTERTBLS_GetPresetActValue(int32_t nParam1, int32_t nParam2) {
-    switch (nParam1) {
+int32_t __stdcall MONSTERTBLS_GetPresetActValue(int32_t nType, int32_t nSuperUniqueId) {
+    switch (nType) {
       case 0:
         {
-          nParam2 += sgtDataTable.nTxtSuperUniquesSize;
+          nSuperUniqueId += sgtDataTable.nTxtSuperUniquesSize;
         }
       case 2:
         {
-          return nParam2 + sgptDataTable->nTxtMonStatsSize;
+          return nSuperUniqueId + sgptDataTable->nTxtMonStatsSize;
         }
       default:
         {
-          return nParam2;
+          return nSuperUniqueId;
         }
     }
 }

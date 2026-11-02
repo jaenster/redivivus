@@ -91,9 +91,9 @@ struct D2TextLineStrc * __fastcall D2WINFONT_WordWrapString(uint16_t * wszText, 
 void __stdcall D2WINFONT_InitFontSystem();
 int32_t __fastcall SetAndReturnLastFont(int32_t nFontId);
 void __stdcall Draw_UnitNameUnderCursor();
-void StaticInit_6cae20();
-void StaticInit_6cae40();
-void StaticInit_6cae50();
+void StaticInit_DisplayedTooltip();
+void StaticInit_gwFontHeightDefault();
+void StaticInit_gnFontTableCharWidthCache();
 // 9 internal functions (defined in .cpp)
 
 } // namespace D2Win::Src::D2WinFont

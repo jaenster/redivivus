@@ -48,7 +48,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn78",
+      "name": "Objects_InitFn78_LastLastPortal",
       "address": "005b5840",
       "lines": [
         {
@@ -58,7 +58,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A4Q3",
       "calledFunctions": [
-        "Objects_InitFn78",
+        "Objects_InitFn78_LastLastPortal",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag"
       ],
@@ -132,7 +132,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn48",
+      "name": "Objects_InitFn48_HellForge",
       "address": "005b5a20",
       "lines": [
         {
@@ -142,7 +142,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A4Q3",
       "calledFunctions": [
-        "Objects_InitFn48",
+        "Objects_InitFn48_HellForge",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag",
         "QUEST_SetStateAndBroadcast"

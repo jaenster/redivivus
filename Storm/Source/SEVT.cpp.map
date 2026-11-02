@@ -488,7 +488,7 @@
       ]
     },
     {
-      "name": "StaticInit_6ca900",
+      "name": "StaticInit_gSevtBreakCmdList",
       "address": "006ca900",
       "lines": [
         {
@@ -498,12 +498,12 @@
       ],
       "namespace": "Storm::Source::SEVT",
       "calledFunctions": [
-        "StaticInit_6ca900",
+        "StaticInit_gSevtBreakCmdList",
         "atexit"
       ]
     },
     {
-      "name": "StaticInit_6ca920",
+      "name": "StaticInit_CriticalSection_0077930c",
       "address": "006ca920",
       "lines": [
         {
@@ -513,7 +513,7 @@
       ],
       "namespace": "Storm::Source::SEVT",
       "calledFunctions": [
-        "StaticInit_6ca920",
+        "StaticInit_CriticalSection_0077930c",
         "atexit"
       ]
     },

@@ -8,7 +8,7 @@
 
 namespace Bnclient::Cache {
 
-void StaticInit_6caea0() {
+void StaticInit_CriticalSection_00881894() {
     InitializeCriticalSection(&lpCriticalSection_00881894);
     atexit(StaticFini_CriticalSection_00881894);
 }

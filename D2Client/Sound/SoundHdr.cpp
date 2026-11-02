@@ -536,7 +536,7 @@ float __fastcall SOUNDHDR_GetFalloffMax(int32_t nSoundId) {
 }
 
 int32_t __fastcall SOUNDHDR_RandomizeSoundFromGroup(int32_t nSoundId) {
-    uint32_t nRoll;
+    int32_t nRoll;
     int nHistIdx;
     int32_t* pHistEntry;
     D2SoundsTxt* pSound;

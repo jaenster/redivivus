@@ -100,7 +100,7 @@ void __stdcall EndCutScene(int32_t nResolution);
 // Start render frame. Dispatches to backend (Glide/D3D/OpenGL/Rave) via vtable.
 // bClear=1 clears backbuffer. RGB sets clear color (level-specific darkness).
 BOOL __stdcall D2GFX_BeginScene(BOOL bClear, DWORD nRed, DWORD nGreen, DWORD nBlue);
-double __stdcall D2GFX_GetGammaFloat_Unused();
+double __stdcall D2GFX_GetPerformanceFrequency();
 double D2GFX_CalculateGammaRamp();
 // End render frame. Dispatches EndScene1/2 to backend, then Sleep() for frame pacing.
 // 5ms frame budget enforced - if frame took <5ms, sleeps remainder to throttle FPS.
@@ -149,8 +149,8 @@ void __stdcall D2GFX_InitializeLineBuffer();
 void __fastcall PALETTE_InitColorLookupTables(BYTE * * ppPaletteTable);
 void __stdcall D2GFX_InitializeWindowSize();
 BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode);
-void StaticInit_6cadf0();
-void StaticInit_6cae00();
-void StaticInit_6cae10();
+void StaticInit_gpszWindowClassName();
+void StaticInit_szWindowClassName();
+void StaticInit_gpszWindowTitle();
 
 } // namespace D2gfx::D2GFX

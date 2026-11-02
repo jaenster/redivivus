@@ -66,7 +66,7 @@ void __fastcall Q31_ClaimReward(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // A5Q1 object init fn 70: empty stub (no-op). Placeholder object initializer slot.
 void __fastcall Objects_InitFn70(struct D2ObjectInitFnArg * pInitArg);
 // A5Q1 object init fn 71: spawns Shenk the Overseer (monstats 0x1ff) once per quest at a valid location in the room, records his unit GUID + spawn-guard flags, and copies the preset DRLG map file for his AI. Guards via per-quest "already spawned" byte. No quest-record bit changes.
-void __fastcall Objects_InitFn71(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn71_LarzukStandard(struct D2ObjectInitFnArg * pInitArg);
 // A5Q1 death hook: when a monster dies, if it is boss 0x2a (Shenk the Overseer) and quest progress<2 with intro shown, broadcast state 2 (Shenk slain) which drives the state-8 completion fan-out.
 void __fastcall Q31_OnOverseerDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // A5Q1 preset-object load hook: when the Shenk preset object loads, copies its preset object list into the quest data; if Shenk was already spawned and his unit still exists, re-attaches the DRLG map file to his AI. No quest-record bit changes.

@@ -169,7 +169,7 @@
       ]
     },
     {
-      "name": "_unused_broken",
+      "name": "EnterCriticalSection_QServer",
       "address": "006be510",
       "lines": [
         {
@@ -179,7 +179,7 @@
       ],
       "namespace": "Fog::Src::QServer::QServer",
       "calledFunctions": [
-        "_unused_broken"
+        "EnterCriticalSection_QServer"
       ],
       "usedTypes": [
         "FogCritSectLockStrc",

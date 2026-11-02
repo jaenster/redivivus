@@ -296,7 +296,7 @@ uint8_t __stdcall MONSTERS_GetGfxOffsetTable3(uint8_t bParam) {
     return gaMonsterGfxOffsetTable1[bParam];
 }
 
-void __stdcall MONSTERS_GetCompositeDimensions(uint8_t bParam, int * pnParam1, int * pnParam2) {
+void __stdcall MONSTERS_GetCompositeDimensions(uint8_t nDirection, int * pnOffsetX, int * pnOffsetY) {
     // Static local variables (originally global data)
     static int8_t SBYTE_ARRAY_006ea978[32] = {
     -0x1,
@@ -367,8 +367,8 @@ void __stdcall MONSTERS_GetCompositeDimensions(uint8_t bParam, int * pnParam1, i
     0x3
 }; D2_STATIC_GUARD(SBYTE_ARRAY_006ea998, "D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions::SBYTE_ARRAY_006ea998");
 
-    *pnParam1 = (int)SBYTE_ARRAY_006ea998[bParam];
-    *pnParam2 = (int)SBYTE_ARRAY_006ea978[bParam];
+    *pnOffsetX = (int)SBYTE_ARRAY_006ea998[nDirection];
+    *pnOffsetY = (int)SBYTE_ARRAY_006ea978[nDirection];
 }
 
 void __fastcall SetSuperUniqueName(D2UnitStrc * pUnit, uint16_t * wszText) {

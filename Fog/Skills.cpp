@@ -510,7 +510,7 @@ char * __fastcall SKILLS_ParseSkillDescription(CalcGetKeyWordToNumber_t pFuncLoo
     int nCtype;
     int nLookupResult;
     char* pcTokenEnd;
-    int local_11c;
+    int bHasResolvedToConstant;
     char szTokenBuf[256];
     char* pcScan;
     *pnTokenValue = 0;
@@ -524,7 +524,7 @@ char * __fastcall SKILLS_ParseSkillDescription(CalcGetKeyWordToNumber_t pFuncLoo
     }
 
     nCtype = isdigit((int)*szToken);
-    int* piVar1 = pnValueOut;
+    int* pnTokenValueAlias = pnValueOut;
     if (nCtype) {
       *pTokenType = '\x10';
       *pnValueOut = *szToken - 0x30;
@@ -535,7 +535,7 @@ char * __fastcall SKILLS_ParseSkillDescription(CalcGetKeyWordToNumber_t pFuncLoo
           break;
         }
 
-        *piVar1 = *szToken - 0x30 + *piVar1 * 10;
+        *pnTokenValueAlias = *szToken - 0x30 + *pnTokenValueAlias * 10;
         nCtype = isdigit((int)szToken[1]);
       }
 
@@ -625,10 +625,10 @@ char * __fastcall SKILLS_ParseSkillDescription(CalcGetKeyWordToNumber_t pFuncLoo
         pcTokenEnd++;
       } while (true);
 
-      local_11c = 0;
-      nCtype = (*pfnGetLinkerIndex)(szTokenBuf, &local_11c, (uint32_t)*(uint8_t*)(*(int*)(nParserContext + 0x140) - 1 + nParserContext), *(uint32_t*)(nParserContext + 0x3c + *(int*)(nParserContext + 0x140) * 4));
+      bHasResolvedToConstant = 0;
+      nCtype = (*pfnGetLinkerIndex)(szTokenBuf, &bHasResolvedToConstant, (uint32_t)*(uint8_t*)(*(int*)(nParserContext + 0x140) - 1 + nParserContext), *(uint32_t*)(nParserContext + 0x3c + *(int*)(nParserContext + 0x140) * 4));
       if (nCtype >= 0) {
-        *local_10c = !local_11c + '\x10';
+        *local_10c = !bHasResolvedToConstant + '\x10';
         *pnValueOut = nCtype;
         return pcTokenEnd;
       }
@@ -770,7 +770,7 @@ static int __fastcall SKILLS_GetOpcodePrecedence(uint8_t opcode, CalcGetFunction
 // Shunting-yard step for compiling a skill calc (skills.txt formula) into RPN bytecode. Given the current output write pointer, an operator-stack/parser-state struct (count at +0x140, accumulated precedence at +0x144, op array at base, arg array at +0x40), the output buffer/size, and an incoming token (bToken) with its function/arg payload: pops higher-or-equal precedence operators from the stack into the output (respecting the INT_ARRAY_006fc874 precedence table and SKILLS_GetOpcodePrecedence) until a lower-precedence/paren/end is hit, then either pushes the new operator/operand or, for end-of-expression (token 0), terminates the output with a 0 byte. Returns the advanced write pointer, or NULL on buffer overflow / stack overflow (writing a 0 to the buffer start to mark failure).
 static uint8_t * __stdcall SKILLS_EmitFormulaBytecode(uint8_t * pWritePtr, uint8_t * pOperatorStack, uint8_t * pBuffer, int nBufferSize, uint8_t bToken, CalcGetFunctionParameterCount_t pFunction, uint32_t nFunctionArg) {
     // Static local variables (originally global data)
-    static uint8_t BYTE_ARRAY_006fc874[24] = {
+    static uint8_t gaCalcOpcodePrecedence[24] = {
     0x17,
     0x1,
     0x2,
@@ -795,7 +795,7 @@ static uint8_t * __stdcall SKILLS_EmitFormulaBytecode(uint8_t * pWritePtr, uint8
     0x15,
     0x16,
     0x0
-}; D2_STATIC_GUARD(BYTE_ARRAY_006fc874, "Fog::Skills::SKILLS_EmitFormulaBytecode::BYTE_ARRAY_006fc874");
+}; D2_STATIC_GUARD(gaCalcOpcodePrecedence, "Fog::Skills::SKILLS_EmitFormulaBytecode::gaCalcOpcodePrecedence");
 
     int nPrecedence;
     int nWriteOffset;
@@ -804,7 +804,7 @@ static uint8_t * __stdcall SKILLS_EmitFormulaBytecode(uint8_t * pWritePtr, uint8
       nWriteOffset = (int)pWritePtr - (int)pBuffer;
       do {
         opcode = pOperatorStack[*(int*)(pOperatorStack + 0x140) - 1];
-        if (opcode == 1 || bToken == 1 || opcode >= 0x17 || BYTE_ARRAY_006fc874[opcode] < bToken) {
+        if (opcode == 1 || bToken == 1 || opcode >= 0x17 || gaCalcOpcodePrecedence[opcode] < bToken) {
           break;
         }
 

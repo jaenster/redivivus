@@ -990,11 +990,11 @@ void __fastcall D2WINFONT_DrawTextWithProgressBar(uint16_t * wszText, uint32_t n
 // @sourcefile .\Src\D2WinFont.cpp
 void __fastcall D2WINFONT_FreeWordWrapList(void * * ppNodeList) {
     while (ppNodeList) {
-      void** ppvVar1;
-      ppvVar1 = (void**)ppNodeList[1];
+      void** ppNextNode;
+      ppNextNode = (void**)ppNodeList[1];
       D2_FREE_AT(*ppNodeList, ".\\Src\\D2WinFont.cpp", 0x579);
       D2_FREE_AT(ppNodeList, ".\\Src\\D2WinFont.cpp", 0x57a);
-      ppNodeList = ppvVar1;
+      ppNodeList = ppNextNode;
     }
 }
 
@@ -1428,7 +1428,7 @@ void __stdcall Draw_UnitNameUnderCursor() {
     SetAndReturnLastFont(pSavedFont);
 }
 
-void StaticInit_6cae20() {
+void StaticInit_DisplayedTooltip() {
     int i;
     D2TooltipTextStrc* pDVar1 = &DisplayedTooltip;
     for (i = 0x200; i; i--) {
@@ -1438,12 +1438,12 @@ void StaticInit_6cae20() {
     }
 }
 
-void StaticInit_6cae40() {
+void StaticInit_gwFontHeightDefault() {
     gwFontHeightDefault[0] = 0;
     gwFontHeightDefault[1] = 0;
 }
 
-void StaticInit_6cae50() {
+void StaticInit_gnFontTableCharWidthCache() {
     gnFontTableCharWidthCache[0] = 0;
     gnFontTableCharWidthCache[1] = 0;
 }

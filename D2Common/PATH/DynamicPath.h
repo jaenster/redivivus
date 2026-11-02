@@ -123,7 +123,7 @@ void __stdcall PATH_UpdateCollisionWidth(struct D2UnitStrc * pUnit);
 void __stdcall AllocDynamicPath(struct D2PoolManagerStrc * pMemory, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY, struct D2UnitStrc * pUnit, int32_t nParam);
 void __stdcall PATH_SetDirectionToTarget(struct D2DynamicPathStrc * pDynamicPath, int32_t nTargetX, int32_t nTargetY, int32_t bImmediate);
 void __stdcall PATH_RemoveCollision(struct D2UnitStrc * pUnit);
-void __stdcall PATH_SetCorpseCollision(struct D2UnitStrc * pUnit, int32_t nParam);
+void __stdcall PATH_SetCorpseCollision(struct D2UnitStrc * pUnit, int32_t bServer);
 // Restores a monster's collision footprint after it was temporarily suppressed (nCollisionFlag==0x8000). Recomputes the effective unit width via GetUnitSizeX/GetInteractSize, then overrides it to 5 for specific large-body monster classes (base IDs 0x26, 0x9D, 0x9E, 0x13F). Removes the old collision cell, updates nUnitWidth, changes the collision type back to COLLIDE_MONSTER, and re-adds the unit. No-ops if nParam!=0, unit is not a monster, or path is missing.
 void __stdcall PATH_RestoreMonsterCollision(struct D2UnitStrc * pUnit, int32_t bSkip);
 void __stdcall thunk_PATH_AddUnitCollision(struct D2UnitStrc * pUnit);

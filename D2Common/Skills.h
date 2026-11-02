@@ -39,12 +39,12 @@ int32_t __fastcall SKILLS_CalcSkillParam(eD2Skills eSkill, int32_t nSkillLevel);
 // Returns the passivestate field from D2SkillsTxt for the given skill ID. Returns 0 if invalid or no passive state.
 int __stdcall TXT_Skills_GetPassiveState(int nSkillId);
 int __fastcall SKILLS_Min(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4);
-int __fastcall SKILLS_Max(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4);
+int __fastcall SKILLS_Max(int nLeft, int nRight, uint32_t nOperand3, uint32_t pContext);
 int * __fastcall SKILLS_RandomRange(int * pnMinVal, int32_t nRange, uint32_t nUnused, int * pnSeed);
 int __fastcall SKILLS_GetMissileSpecialParam(int32_t nParamIndex, uint8_t bParamType, uint32_t nUnused, struct D2UnitStrc * * ppContext);
 int32_t __fastcall SKILLS_GetUnitStatValue(eD2UnitStat eUnitStat, int32_t nShiftCount, uint32_t nUnused, struct D2UnitStrc * * ppContext);
 int __stdcall GetSkillMode(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
-int32_t __stdcall SKILLS_GetSkillsTxtField0x14(int * pnParam);
+int32_t __stdcall SKILLS_GetSkillsTxtField0x14(int * pSkill);
 // @sourcefile .\SKILLS\Skills.cpp
 struct D2SkillListStrc * __stdcall STRUCT_CreateSkillsList(struct D2PoolManagerStrc * pMemory);
 struct D2SkillStrc * __stdcall GetNext(struct D2SkillStrc * pSkill);
@@ -118,7 +118,7 @@ int32_t __stdcall SKILLS_GetCharClassFromSkillId(int32_t eSkillId);
 uint32_t __stdcall SKILLS_GetCharClassFromSkillId_Validated(int32_t eSkillId, int * pOutCharClass);
 int32_t __stdcall SKILL_GetQuantity(struct D2SkillStrc * pSkill);
 void __stdcall SKILL_SetQuantity(struct D2SkillStrc * pSkill, int32_t nQuantity);
-uint32_t __stdcall SKILLS_GetAnimModeIndex(int32_t nParam1, int32_t nParam2);
+uint32_t __stdcall SKILLS_GetAnimModeIndex(int32_t nPlayerClass, int32_t nMonMode);
 // Validates that a monster supports a given animation mode, falling back to a supported substitute if not. Checks the monster's MonStats2 byModeFlags bitfield; if the requested mode is unsupported, maps it to a nearby fallback (e.g. modes 5/7→4, 6→3, 9-11→8, 15→2, default→1). Used before playing a skill animation on a monster to avoid unsupported mode crashes.
 int __stdcall SKILLS_ValidateAnimModeForMonster(int32_t eAnimMode, int32_t nMonId);
 // Resolves the visual transform imposed on a unit by its active transformation state (flag 0x08 on eUnitFlagsEx). Iterates the global transform-state list; for each active state with gfxtype==1 (monster form) or gfxtype==2 (player form), writes the target unit type and gfx class to the out-params, and remaps *pAnimMode for cross-type animation compatibility. Returns without writing if no transform state is active or the unit lacks the transform flag.
@@ -134,7 +134,7 @@ uint32_t __stdcall SKILL_CanReviveMonster(struct D2UnitStrc * pUnit);
 int __stdcall SKILLS_IsSelectableCorpse2(struct D2UnitStrc * pUnit);
 int __stdcall SKILLS_IsSelectableCorpse3(struct D2UnitStrc * pUnit);
 // Returns the best matching thrown-weapon bonus value for a unit's equipped throwable item and the given skill. Queries stats 0x159/0x15A/0x15B (min/max/bonus depending on nParam 0/1/2) via STATLIST_GetItemStatBonusValues, then iterates entries to find the highest value whose item type matches pUnit1. Returns 0 if the item is not throwable, the skill has no applicable range-2 throwable type, or nParam is out of range.
-int32_t __stdcall SKILL_GetThrownWeaponBonus(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit1, struct D2SkillStrc * pSkill, int32_t nParam, struct D2UnitStrc * pUnit2);
+int32_t __stdcall SKILL_GetThrownWeaponBonus(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit1, struct D2SkillStrc * pSkill, int32_t nThrowBonusType, struct D2UnitStrc * pUnit2);
 // Returns the highest item-type-specific bonus damage for the caster's active skill against a target item. Checks for a thrown weapon bonus first via SKILL_GetThrownWeaponBonus; if none, queries stat 0x156/0x157/0x158 (min/max/elemental bonus per item type) from the caster's stat list and finds the best matching entry where the item passes IsOfType. nDamageType selects min(0)/max(1)/elemental(2).
 int32_t __stdcall SKILLS_GetItemBonusDamage(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, struct D2SkillStrc * pSkill, int32_t nDamageType);
 // SKILLS_HasLineOfSight - Tests line-of-sight between two coordinate pairs by calling Collision::TestCollision. Returns 1 if the path is clear (no collision), 0 if blocked. Used by skill targeting and missile pathing.

@@ -160,7 +160,7 @@ void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID) {
 }
 
 // Registers: eModeAction in ECX; pUnit in EDX is passed by the caller but not read.
-void __fastcall ClickWithSkillOnUnitOrCoord(eD2UnitModeAction eModeAction, D2UnitStrc * pUnit, int32_t nTargetOrX, int32_t nParam, uint32_t dwUnused) {
+void __fastcall ClickWithSkillOnUnitOrCoord(eD2UnitModeAction eModeAction, D2UnitStrc * pUnit, int32_t nTargetOrX, int32_t nUnitGUIDOrY, uint32_t dwUnused) {
     if (eModeAction == UNITMODEACTION_ITEM_INTERACT) {
       return;
     }
@@ -185,11 +185,11 @@ void __fastcall ClickWithSkillOnUnitOrCoord(eD2UnitModeAction eModeAction, D2Uni
       case UNITMODEACTION_RIGHTSKILL_UNIT3:
 
       case UNITMODEACTION_RIGHTSKILL_UNIT4:
-        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT((uint8_t)eModeAction, nTargetOrX, nParam);
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT((uint8_t)eModeAction, nTargetOrX, nUnitGUIDOrY);
       return;
     }
 
-    GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT((uint8_t)eModeAction, (int16_t)nTargetOrX, (int16_t)nParam);
+    GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT((uint8_t)eModeAction, (int16_t)nTargetOrX, (int16_t)nUnitGUIDOrY);
 }
 
 // @sourcefile .\UNIT\UnitMode.cpp

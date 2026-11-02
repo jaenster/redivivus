@@ -163,7 +163,7 @@
       ]
     },
     {
-      "name": "FillUpTxtLinkSub0x08",
+      "name": "FOG_AddTxtLinkRecord",
       "address": "006bd230",
       "lines": [
         {
@@ -173,7 +173,7 @@
       ],
       "namespace": "Fog::Src::Excel::Excel",
       "calledFunctions": [
-        "FillUpTxtLinkSub0x08",
+        "FOG_AddTxtLinkRecord",
         "ReAllocServerMemory",
         "memset",
         "memmove",
@@ -356,7 +356,7 @@
       "calledFunctions": [
         "TXT_ParseDataAndPutIntoStructure",
         "FOG_ParseBinField",
-        "FillUpTxtLinkSub0x08",
+        "FOG_AddTxtLinkRecord",
         "FOG_ParseStringField",
         "FOG_ParseTxtLink",
         "__security_check_cookie",

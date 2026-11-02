@@ -887,7 +887,7 @@ static uint8_t __stdcall TEXT_FindNonOverlappingRect(int32_t nExistingRectCount,
     return 1;
 }
 
-static uint8_t TEXT_ConvertCharToWideWithLanguage(uint32_t dwParam, char * szText, uint32_t nLanguage, uint16_t * pwszDest) {
+static uint8_t TEXT_ConvertCharToWideWithLanguage(uint32_t dwUnused, char * szText, uint32_t nLanguage, uint16_t * pwszDest) {
     uint32_t nCurLanguage;
     if (nLanguage == 7 || nLanguage == 0xc || nLanguage == 6 || nLanguage == 9) {
       uint16_t uVar1;
@@ -5122,10 +5122,10 @@ void __stdcall TEXT_FreeEverything() {
     gpTextScrollBoxBuffer = 0;
 }
 
-static int __stdcall TEXT_UpdateScrollingText(int32_t bClose, void * pParam) {
+static int __stdcall TEXT_UpdateScrollingText(int32_t bClose, void * pTextBox) {
     int32_t nCount;
     if (bClose) {
-      *(uint32_t*)((int)pParam + 0x16) = 2;
+      *(uint32_t*)((int)pTextBox + 0x16) = 2;
       return 0;
     }
 
@@ -5139,7 +5139,7 @@ static int __stdcall TEXT_UpdateScrollingText(int32_t bClose, void * pParam) {
     }
 
     gpTextScrollBoxBuffer = 0;
-    BOOL BVar1 = TEXT_DrawScrollingTextBox((uint16_t**)pParam);
+    BOOL BVar1 = TEXT_DrawScrollingTextBox((uint16_t**)pTextBox);
     if (!BVar1) {
       return 1;
     }
@@ -5867,7 +5867,7 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca07b(EHExceptionRecord * pException
     return ExceptionContinueSearch;
 }
 
-void StaticInit_6cac10() {
+void StaticInit_gnTextBoxExclusionX() {
     gnTextBoxExclusionX = (ScreenSizeX - 0x145) / 2;
 }
 

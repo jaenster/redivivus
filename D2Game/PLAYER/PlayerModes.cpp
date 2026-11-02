@@ -945,7 +945,7 @@ void __fastcall PLRMODES_HandlePlayerDeath(::SGAMEDATA * pGame, D2UnitStrc * pUn
     UNIT::SUnit::UNITS_ClearAnimTimerEvents(pGame, pUnit);
 }
 
-void __fastcall PLRMODES_StartModeWithTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nAnimMode, int32_t dwParam1, int32_t dwParam2) {
+void __fastcall PLRMODES_StartModeWithTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nAnimMode, int32_t nPosX, int32_t nPosY) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x447);
       exit(-1);

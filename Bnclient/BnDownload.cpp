@@ -336,7 +336,7 @@ static BOOL __stdcall BnetDownloadFile(SOCKET hSocket, char * szText, FILETIME *
         if (nRecvResult == -1 || nRecvResult <= 0 || gbBnetDownloadCancelFlag) {
           Storm::Source::SMem::SMemFree(*ppOutBuffer, ".\\BnDownload.cpp", 0x38f, 0);
           *ppOutBuffer = 0;
-          Debug::DEBUG_UnusedDebugFunction("<ERROR: Failed to recv file  %s in DOWNLOADTOANY, filebytes = %ld, currpos = %ld, bytes = %d", szText, nFileSize, nBytesReceived, nRecvResult);
+          Debug::DEBUG_Trace("<ERROR: Failed to recv file  %s in DOWNLOADTOANY, filebytes = %ld, currpos = %ld, bytes = %d", szText, nFileSize, nBytesReceived, nRecvResult);
           return 0;
         }
 
@@ -748,12 +748,12 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
             BVar1 = NET_RecvExact(hSocket, (int)pServerResp + 4, __frame0.nResponseSize - 4);
             pDownloadCtxCopy = __frame0.pDownloadCtx;
             if (!BVar1) {
-              Debug::DEBUG_UnusedDebugFunction("ERROR: Failed recv from BNET for download.");
+              Debug::DEBUG_Trace("ERROR: Failed recv from BNET for download.");
               hSocket = hSocketCopy;
               break;
             }
             if (gbBnetDownloadCancelFlag) {
-              Debug::DEBUG_UnusedDebugFunction("Canceled download(2).");
+              Debug::DEBUG_Trace("Canceled download(2).");
               hSocket = hSocketCopy;
               break;
             }
@@ -767,7 +767,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
                 goto retry_with_new_socket;
               }
               if (gbBnetDownloadCancelFlag) {
-                Debug::DEBUG_UnusedDebugFunction("Canceled download(3).");
+                Debug::DEBUG_Trace("Canceled download(3).");
                 hSocket = hSocketCopy;
                 break;
               }
@@ -780,7 +780,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
                 break;
               }
               if (gbBnetDownloadCancelFlag) {
-                Debug::DEBUG_UnusedDebugFunction("ERROR: Cancelled download.");
+                Debug::DEBUG_Trace("ERROR: Cancelled download.");
                 hSocket = hSocketCopy;
                 break;
               }
@@ -789,7 +789,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
               Storm::Source::SMem::SMemFree(pServerResp, ".\\BnDownload.cpp", 0x331, 0);
               pcToken = "WARNING: Failed to save to disk.";
               __frame0.pResponseBuf = 0;
-              Debug::DEBUG_UnusedDebugFunction("WARNING: Failed to save to disk.");
+              Debug::DEBUG_Trace("WARNING: Failed to save to disk.");
             } else {
               BVar1 = BnetDownloadFile(hSocketCopy, (char*)((int)pServerResp + 0x18), (FILETIME*)((int)pServerResp + 0x10), pDownloadCtxCopy->nConnMode, (uint8_t)pDownloadCtxCopy->nFileType, &__frame0.pFileData, *(uint32_t*)((int)pServerResp + 4));
               if (BVar1) {
@@ -798,7 +798,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
                 break;
               }
               if (gbBnetDownloadCancelFlag) {
-                Debug::DEBUG_UnusedDebugFunction("ERROR: Cancelled download(2).");
+                Debug::DEBUG_Trace("ERROR: Cancelled download(2).");
                 hSocket = hSocketCopy;
                 break;
               }
@@ -807,7 +807,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
               Storm::Source::SMem::SMemFree(pServerResp, ".\\BnDownload.cpp", 0x34c, 0);
               pcToken = "ERROR: Failed to copy file.";
               __frame0.pResponseBuf = 0;
-              Debug::DEBUG_UnusedDebugFunction("ERROR: Failed to copy file.");
+              Debug::DEBUG_Trace("ERROR: Failed to copy file.");
             }
 
             goto retry_with_new_socket;
@@ -815,11 +815,11 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
         }
 
         request_failed:
-        Debug::DEBUG_UnusedDebugFunction("ERROR: Failed send to BNET for download.");
+        Debug::DEBUG_Trace("ERROR: Failed send to BNET for download.");
         break;
       }
       if (gbBnetDownloadCancelFlag || ((D2BnetDownloadStateStrc*)lpThreadParam)->nConnMode != -0x7ffffffe) {
-        Debug::DEBUG_UnusedDebugFunction("Canceled download.");
+        Debug::DEBUG_Trace("Canceled download.");
         break;
       }
 
@@ -827,12 +827,12 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
       __frame0.nRetryCount++;
       hSocketCopy = -1;
       if (__frame0.nRetryCount > 3) {
-        Debug::DEBUG_UnusedDebugFunction("ERROR: Failed recv from BNET for download.");
+        Debug::DEBUG_Trace("ERROR: Failed recv from BNET for download.");
         hSocket = hSocketCopy;
         break;
       }
 
-      Debug::DEBUG_UnusedDebugFunction("WARNING: Failed to connect to download port. Retrying...");
+      Debug::DEBUG_Trace("WARNING: Failed to connect to download port. Retrying...");
       /* DWORD dwMilliseconds for Sleep */ Sleep(1000);
       if (szDnsResult[0] != '\0') {
         if (!__frame0.pcCurrentIp) {
@@ -1077,7 +1077,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
 
       goto file_list_done;
       case -0x7fffffff:
-        Debug::DEBUG_UnusedDebugFunction("Processing Version file");
+        Debug::DEBUG_Trace("Processing Version file");
       bOpened = (int)lpFileName_00881c58 - (int)szDestPath;
       do {
         cStrChar = *szDestPath;
@@ -1098,7 +1098,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
           __frame1.archiveFileCtx = 0;
           __frame1.cTempDllPath[0] = '\0';
           memset(__frame1.cTempDllPath + 1, 0, 0x103);
-          Debug::DEBUG_UnusedDebugFunction("Processing ExtraWork file");
+          Debug::DEBUG_Trace("Processing ExtraWork file");
           bOpened = Storm::Source::SFile::SFileOpenArchive(szDestPath, nullptr, 0, &pArchiveHandle);
           if (!bOpened) {
             return;
@@ -1108,13 +1108,13 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
           if (!__frame0.dwAuthResult || __frame0.dwAuthResult >= 5) {
             BVar1 = NET_CopyDllFromArchive(pArchiveHandle, szDestPath, __frame1.cTempDllPath);
             if (!BVar1) {
-              Debug::DEBUG_UnusedDebugFunction("<ERROR: Failed to extract ExtraWork DLL!>");
+              Debug::DEBUG_Trace("<ERROR: Failed to extract ExtraWork DLL!>");
             } else {
               /* LPCSTR lpLibFileName for LoadLibraryA */ hModule = LoadLibraryA(__frame1.cTempDllPath);
               if (!hModule) {
                 pDestPtr = "<ERROR: Failed to load ExtraWork DLL!>";
                 log_extrawork_error:
-                Debug::DEBUG_UnusedDebugFunction(pDestPtr);
+                Debug::DEBUG_Trace(pDestPtr);
               } else {
                 /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pExtraWorkProc = GetProcAddress(hModule, "ExtraWork");
                 if (!pExtraWorkProc) {
@@ -1159,7 +1159,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
               }
             }
           } else {
-            Debug::DEBUG_UnusedDebugFunction("<ERROR: Failed ExtraWork archive authentication!>");
+            Debug::DEBUG_Trace("<ERROR: Failed ExtraWork archive authentication!>");
           }
           if (pArchiveHandle) {
             Storm::Source::SFile::SFileCloseArchive(pArchiveHandle);
@@ -1181,7 +1181,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
           return;
         }
       case -0x7ffffffc:
-        Debug::DEBUG_UnusedDebugFunction("Processing Bnserver.ini file");
+        Debug::DEBUG_Trace("Processing Bnserver.ini file");
       nIniLen = Storm::Source::SSTR::SStrLen((char*)nSize);
       pDestPtr = (char*)Storm::Source::SMem::SMemAlloc(nIniLen + 1, ".\\BnDownload.cpp", 0x23f, 0);
       Storm::Source::SSTR::SStrCopy(pDestPtr, (char*)__frame1.archiveFileCtx, nIniLen + 1);
@@ -1276,7 +1276,7 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, size_t 
     return nThreadHandle;
 }
 
-void StaticInit_6caed0() {
+void StaticInit_CriticalSection_00881f64() {
     InitializeCriticalSection(&lpCriticalSection_00881f64);
     atexit(StaticFini_CriticalSection_00881f64);
 }

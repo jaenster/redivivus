@@ -448,7 +448,7 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_StreamMissile(D2UnitStrc * pUnit,
     sSkillArg.eSkillNo = eSkill;
     D2UnitStrc* pMissileUnit = UNIT::Missile::MakeMissile(&sSkillArg);
     if (pMissileUnit) {
-      D2Common::Units::Missile::SetStreamMissile(pMissileUnit, pSkillTxt->cltmissile[2]);
+      D2Common::Units::Missile::SetStreamMissile(pMissileUnit, (int)pSkillTxt->cltmissile[2]);
       D2Common::Units::Missile::SetStreamRange(pMissileUnit, (int16_t)nAuraRange);
     }
 

@@ -166,7 +166,7 @@ int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBuff
         break;
       }
       if (!nBufferLeft) {
-        return nullptr;
+        return 0;
       }
 
       *pOut = byEntryLen;
@@ -175,7 +175,7 @@ int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBuff
       nBufferLeft--;
     }
 
-    return pOut - (int)pBuffer;
+    return (int)pOut - (int)pBuffer;
 }
 
 } // namespace Fog::Src::D2Net

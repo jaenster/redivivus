@@ -112,7 +112,7 @@ void __fastcall TXT_AllocTxt_monumod(struct D2PoolManagerStrc * pMemory);
 // Loads and compiles superuniques.txt into sgtDataTable. Declares the column schema (Superunique key, Name string-id, Class->MonStats link, hcIdx, MonSound link, Mod1-3, Min/MaxGrp, AutoPos, EClass, Stacks, Replaceable, Utrans/(N)/(H), TC/(N)/(H)->MonsterTbls links) and a TxtLink, then compiles via CompileTxt into pTxtSuperUniques (cap 0x200 rows). Builds the aTxtSuperUniquesHardcoded[] reverse-lookup array (init -1) mapping each row's hcIdx (<66) to its first row index, then asserts every hardcoded slot was filled (unrecoverable-halt at line 0x782 if any is still -1). Side effect: populates global superunique data table and hardcoded index map. Server-side D2Common DataTbls (MonsterTbls).
 void __fastcall TXT_AllocTxt_superuniques(struct D2PoolManagerStrc * pMemory);
 struct D2SuperUniquesTxt * __stdcall TXT_SuperUniques_GetLine(int32_t nSuperUnique);
-int32_t __stdcall MONSTERTBLS_ReturnZero();
+int32_t __stdcall MONSTERTBLS_GetSuperUniquesTxtCount();
 // Loads and compiles hireling.txt into sgtDataTable.pTxtHireling (record stride 0x118). Builds the column-binding descriptor (version/id/class/act/difficulty/seller/gold/level, namefirst/namelast, per-level stat-growth columns, 6 skill/mode/chance/level groups linked to the Skills table, hiredesc linked to the HireDesc table, equipment slots) and calls CompileTxt. Afterward initializes the nTxtHirelingIdLines lookup table to -1, resolves namefirst/namelast string-table ids, validates them on expansion games (error-halts on missing/ordering/range violations), and fills the (class,act-difficulty) -> row-index map. __fastcall(pMemory). Side effect: populates global hireling data table.
 void __fastcall TXT_AllocTxt_hireling(struct D2PoolManagerStrc * pMemory);
 void __stdcall MONSTERTBLS_FreeMonLvlTxt();
@@ -141,12 +141,12 @@ void __stdcall MONSTERTBLS_FreeMonPlaceTxt();
 void __fastcall TXT_AllocTxt_monprop(struct D2PoolManagerStrc * pMemory);
 // Builds the monlvl.txt field-binding table (AC/TH/HP/DM/XP normal+nightmare+hell columns and their per-level L- variants, each an INT field with a target struct offset) on the stack, then calls DataTbls::CompileTxt to parse data/global/excel/monlvl.txt into the sgtDataTable.pTxtMonLvl array (count in nTxtMonLvlSize). Holds per-area-level monster scaling stats used to compute monster AC/to-hit/HP/damage/experience by level. Uses the gTxtCompilationMemPool; takes the game memory pool via ECX.
 void __fastcall TXT_AllocTxt_monlvl(struct D2PoolManagerStrc * pMemory);
-void __fastcall DATATBLS_LinkerMonsterPreset(char * pName, char * pRecord, int32_t nParam3, int32_t nParam4, int32_t nParam5, int32_t nParam6);
+void __fastcall DATATBLS_LinkerMonsterPreset(char * pName, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn);
 // Parses monpreset.txt (Act/CHAR + Place/LINKER_BIT) via CompileTxt, then builds the per-act index arrays sgtDataTable.pTxtMonPresetPerAct[] and pTxtMonPresetPerActId[] so presets can be looked up by act number. Side-effects: sgtDataTable.pTxtMonPresetPlace, pTxtMonPresetPerAct, pTxtMonPresetPerActId.
 void __fastcall TXT_AllocTxt_monpreset(struct D2PoolManagerStrc * pMemory);
 void __stdcall MONSTERTBLS_FreeMonPresetTxt();
 struct D2MonPresetTxt * __stdcall MONSTERTBLS_GetMonPresetRecord(uint32_t nAct, int * pnRecordCount);
-int32_t __stdcall MONSTERTBLS_GetPresetActValue(int32_t nParam1, int32_t nParam2);
+int32_t __stdcall MONSTERTBLS_GetPresetActValue(int32_t nType, int32_t nSuperUniqueId);
 void __fastcall TXT_AllocTxt_sounds(struct D2PoolManagerStrc * pMemory);
 void __stdcall TXT_FreeTxt_sounds();
 // Loads and compiles the MonSeq.txt data table into sgtDataTable. Defines the six binary field descriptors (sequence, mode, frame, dir, event, end), compiles the TXT via CompileTxt, then builds the pMonSeqMonsterTbls lookup array indexed by sequence ID, setting each entry's pMonSeqTxt pointer and counting rows per sequence. Called once at startup during data-table initialization.

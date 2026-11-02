@@ -583,7 +583,6 @@
         "D2InactiveUnitRecordStrc",
         "SGAMEDATA",
         "uint16_t",
-        "uint32_t",
         "uint8_t"
       ]
     },
@@ -628,7 +627,7 @@
       ]
     },
     {
-      "name": "SERVER_GAME_UNIT_method",
+      "name": "SUNITINACTIVE_SaveOrFreeUnit",
       "address": "005433f0",
       "lines": [
         {
@@ -638,7 +637,7 @@
       ],
       "namespace": "D2Game::UNIT::SUnitInactive",
       "calledFunctions": [
-        "SERVER_GAME_UNIT_method",
+        "SUNITINACTIVE_SaveOrFreeUnit",
         "UNITS_GetRoom",
         "UNITS_ProcessDeadOrInactiveMonster",
         "DRLGROOM_GetLevelIdFromRoom",

@@ -326,7 +326,7 @@ void __fastcall Objects_InitFn37(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Q14 object InitFn (Objects_InitFn38): records this object's GUID into A2Q6 data and sets bAllPlayersLeft. Update mode = hidden(2) if quest not introduced, else field_0x18. No quest-record state change.
-void __fastcall Objects_InitFn38(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn38_TyraelsDoor(D2ObjectInitFnArg * pInitArg) {
     int nObjectGUID;
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheSevenTombs);
     if (!pDVar2) {
@@ -361,7 +361,7 @@ BOOL __fastcall Q14_IsPortalNotCreated(::SGAMEDATA * pGame) {
 }
 
 // Q14 object InitFn (Objects_InitFn21): orifice/Tal Rasha chamber object init. Records GUID, marks present. If the staff has been used (state byte [3]) but portal not yet created ([0xb]==0), schedules the Q14_TimerCreatePortal timer to spawn the portals and marks timer-armed. Sets object hidden(2). No quest-record state change.
-void __fastcall Objects_InitFn21(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn21_HoradricOrifice(D2ObjectInitFnArg * pInitArg) {
     int nStaffUsedFlag;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheSevenTombs);
     if (!pQuestData) {
@@ -631,8 +631,8 @@ BOOL __fastcall Q14_GetTyraelSpawnCoords(::SGAMEDATA * pGame, POINT * pPoint, D2
 }
 
 // Q14: set/clear the Izual(Tyrael) placement flag in A2Q6 data, only while the quest is introduced and field_0x0E unset. cParam==0 -> mark located (bIzualLocationSet=1) and set pIzualUnit sentinel (8 single-player / 9 multiplayer); cParam!=0 -> clear bIzualLocationSet. No quest-record state change.
-void __fastcall Q14_SetTyraelState(int nParam, char bClear) {
-    D2QuestDataStrc* pA4Q1Data = GetQuestDataByQuestNoInternal(*(::SGAMEDATA**)(nParam + 4), QUESTINT_TheSevenTombs);
+void __fastcall Q14_SetTyraelState(int pQuestData, char bClear) {
+    D2QuestDataStrc* pA4Q1Data = GetQuestDataByQuestNoInternal(*(::SGAMEDATA**)(pQuestData + 4), QUESTINT_TheSevenTombs);
     if (!(pA4Q1Data && pA4Q1Data->bIsNotIntroduction != '\0')) {
       return;
     }

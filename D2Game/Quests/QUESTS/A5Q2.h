@@ -131,7 +131,7 @@ int32_t __fastcall Q32_SpawnBarricadePrisoners(struct D2QuestDataStrc * pQuestDa
 // barricade (max 3 groups) by (game,object) pair, records the barricade object, then calls Q32_SpawnBarricadePrisoners
 // to populate that group with caged barbarians (field_0xA4 += spawned) and marks the group slot initialized.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q2.cpp
-void __fastcall Objects_InitFn62(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn62_CagedWussie(struct D2ObjectInitFnArg * pInitArg);
 // Q32_PropagateCompleteToParty (A5Q2 Rescue on Mount Arreat) -- iterated over players.
 // If this player's QuestRecord shows JustCompleted(0xd) for QUEST_RescueOnMountArreat and they're in a party,
 // runs Q32_SetCompleteForPartyMember for every party member -- spreading rescue completion + reward tier to the

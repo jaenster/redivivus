@@ -190,8 +190,8 @@
       ],
       "usedTypes": [
         "D2InventoryStrc",
-        "D2UnitStrc",
-        "D2UnknownStructure0x18 *"
+        "D2TradeRecordStrc *",
+        "D2UnitStrc"
       ]
     },
     {
@@ -313,8 +313,8 @@
         "D2InventorySizesStrc",
         "D2InventoryStrc",
         "D2RoomStrc",
+        "D2TradeRecordStrc *",
         "D2UnitStrc",
-        "D2UnknownStructure0x18 *",
         "eD2UnitType",
         "int32_t",
         "uint32_t",
@@ -2266,8 +2266,8 @@
       ],
       "usedTypes": [
         "D2InventoryStrc",
-        "D2UnitStrc",
-        "D2UnknownStructure0x18 *"
+        "D2TradeRecordStrc *",
+        "D2UnitStrc"
       ]
     },
     {

@@ -27,7 +27,7 @@ uint8_t __stdcall MONSTERS_GetGfxOffsetTable1(uint8_t bParam);
 uint8_t __stdcall MONSTERS_GetGfxOffsetTable2(uint8_t byDirection);
 // Returns the byte value at index bParam in gaMonsterGfxOffsetTable1 (the third monster graphics direction-offset table). Used to map an animation direction index to a table-specific graphics offset byte.
 uint8_t __stdcall MONSTERS_GetGfxOffsetTable3(uint8_t bParam);
-void __stdcall MONSTERS_GetCompositeDimensions(uint8_t bParam, int * pnParam1, int * pnParam2);
+void __stdcall MONSTERS_GetCompositeDimensions(uint8_t nDirection, int * pnOffsetX, int * pnOffsetY);
 void __fastcall SetSuperUniqueName(struct D2UnitStrc * pUnit, uint16_t * wszText);
 uint32_t __fastcall MONSTER_IsBossOrChampion(struct D2UnitStrc * pUnit);
 BOOL __stdcall MONSTER_IsAndarielNormal(struct D2UnitStrc * pUnit, int32_t nParam);

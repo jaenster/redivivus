@@ -2118,7 +2118,7 @@ void __fastcall SERVER_KillMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Un
 }
 
 // Determines the elemental damage type flag for a unit's current attack by round-robining through up to 4 elemental damage types (indexed via gnElementalDamageTypeCallCount mod 4). Checks nParam2 damage ranges; if none are positive falls back to a fire-type flag (0x10 if bit 0x2000 set) or default type 0xD. Returns combined flags ORed with nParam.
-static uint32_t DAMAGE_GetElementalDamageTypeFlags(uint32_t nParam, int32_t pDamage) {
+static uint32_t DAMAGE_GetElementalDamageTypeFlags(uint32_t dwHitClass, int32_t pDamage) {
     // Static local variables (originally global data)
     static int gaDamageTypeStatOffsets[16] = {
     0x24,
@@ -2167,11 +2167,11 @@ static uint32_t DAMAGE_GetElementalDamageTypeFlags(uint32_t nParam, int32_t pDam
       uDmgTypeIdx++;
     } while (true);
 
-    if (!nParam) {
-      nParam = 0xd;
+    if (!dwHitClass) {
+      dwHitClass = 0xd;
     }
 
-    return uDmgTypeFlags | nParam;
+    return uDmgTypeFlags | dwHitClass;
 }
 
 // Server-side post-hit reaction dispatcher: given the resolved D2DamageStrc result flags, drives the victim's response. Early-outs if the victim is in town (unless attacker is an inTown monster) or has STATE_uninterruptable (only setting death_delay if the hit was lethal). For players, maps result flags to dodge/avoid/evade/block/gethit/knockback: sets the corresponding state, plays the avoid/evade skill sound, and starts the matching player mode (PLRMODES_StartModeID/MoveToLocation), honoring faster-block-rate timing. For monsters, kills the victim on a lethal flag (SERVER_KillMonster), or dispatches Knockback/GetHit/Block/death-special transitions through the monster AI lifecycle (SetCurrentSkill + MONSTERAI_ExecuteLifecycleTransition) and flags HP-percent resync. __fastcall(pGame,pUnit attacker,pVictim,pDamage); no return value, all effects are side-effects on pVictim.
@@ -2635,10 +2635,10 @@ D2DamageStrc * __fastcall DAMAGE_FindCombatEntry(D2UnitStrc * pUnit, D2UnitStrc 
     return nullptr;
 }
 
-uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(int32_t pUnit, uint32_t * pnParam1, uint32_t * pnParam2) {
+uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(int32_t pUnit, uint32_t * pnMinDamage, uint32_t * pnMaxDamage) {
     uint64_t nSeedStateGeneral;
     int64_t nSeedStatePow2;
-    uint32_t nRangeRoll = *pnParam1;
+    uint32_t nRangeRoll = *pnMinDamage;
     if ((int)nRangeRoll <= 0) {
       nRangeRoll = 0;
     } else if (nRangeRoll & nRangeRoll - 1) {
@@ -2651,8 +2651,8 @@ uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(int32_t pUnit, uint32_t * pnPara
       nRangeRoll = nRangeRoll - 1 & (uint32_t)nSeedStatePow2;
     }
 
-    *pnParam1 = nRangeRoll;
-    nRangeRoll = *pnParam2;
+    *pnMinDamage = nRangeRoll;
+    nRangeRoll = *pnMaxDamage;
     if ((int)nRangeRoll <= 0) {
       nRangeRoll = 0;
     } else if (nRangeRoll & nRangeRoll - 1) {
@@ -2665,8 +2665,8 @@ uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(int32_t pUnit, uint32_t * pnPara
       nRangeRoll = nRangeRoll - 1 & (uint32_t)nSeedStatePow2;
     }
 
-    *pnParam2 = nRangeRoll;
-    return (uint32_t)((int)*pnParam1 >= (int)nRangeRoll);
+    *pnMaxDamage = nRangeRoll;
+    return (uint32_t)((int)*pnMinDamage >= (int)nRangeRoll);
 }
 
 // Gives a monster defender the prevent-heal state when a player attacker has item_preventheal (stat 0x75): STATE 0x34 for 120000 frames on armorclass, through SKILLS_SetStateWithExpiryTime with no expire callback. Classes 0x2C0-0x2C5 are exempt. Register arguments: pDefender in ESI, pAttacker in EDI; nothing is returned.
@@ -2998,7 +2998,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
           nAvoidChance = DVar1.nSeedLow % 100;
           nSeedMod = "evades";
           nParryBonus = bIsMissile;
-          nullsub_4Arg(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nParryBonus, nAvoidChance, (uint32_t)nSeedMod);
+          SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nParryBonus, nAvoidChance, (uint32_t)nSeedMod);
           nRandRoll = 8;
           if (nAvoidChance >= bIsMissile) {
             nRandRoll = nWeaponClass2;
@@ -3016,7 +3016,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
             pDVar3 = pUnit;
             iVar4 = nParryBonus;
             nWeaponClass3 = nRandRoll;
-            nullsub_4Arg(SUnit::GetGamePointer(pUnit2), pUnit2, pDVar3, iVar4, nRandRoll, nDebugAddr);
+            SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pDVar3, iVar4, nRandRoll, nDebugAddr);
             if ((int)nWeaponClass3 < nParryBonus) {
               return 0x10;
             }
@@ -3045,7 +3045,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
         pDVar3 = pUnit;
         iVar4 = nParryBonus;
         nWeaponClass2 = nRandRoll;
-        nullsub_4Arg(SUnit::GetGamePointer(pUnit2), pUnit2, pDVar3, iVar4, nRandRoll, (uint32_t)nSeedMod);
+        SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pDVar3, iVar4, nRandRoll, (uint32_t)nSeedMod);
         if ((int)nWeaponClass2 < nParryBonus) {
           return 0x10;
         }
@@ -3058,7 +3058,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
       if (nDodgeChance > 0) {
         nEvadeRoll = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
         nSeedMod = "dodges";
-        nullsub_4Arg(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nDodgeChance, nEvadeRoll, (uint32_t)nSeedMod);
+        SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nDodgeChance, nEvadeRoll, (uint32_t)nSeedMod);
         if ((int)nEvadeRoll < nDodgeChance) {
           return 4;
         }
@@ -3068,7 +3068,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
       if (nDodgeChance > 0) {
         nEvadeRoll = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
         nSeedMod = "avoids";
-        nullsub_4Arg(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nDodgeChance, nEvadeRoll, (uint32_t)nSeedMod);
+        SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nDodgeChance, nEvadeRoll, (uint32_t)nSeedMod);
         if ((int)nEvadeRoll < nDodgeChance) {
           return 2;
         }
@@ -3103,7 +3103,7 @@ uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, D2UnitStrc 
     int nSeedMod = DVar1.nSeedLow % 100;
     int32_t nDebugAddr = (int32_t)s_blocks_006e1738;
     D2UnitStrc* nRandRoll = pDefUnit;
-    nullsub_4Arg(SUnit::GetGamePointer(pUnit), pUnit, nRandRoll, nBlockRate, nSeedMod, nDebugAddr);
+    SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit), pUnit, nRandRoll, nBlockRate, nSeedMod, nDebugAddr);
     if (nSeedMod >= nBlockRate) {
       uBlockResult = DAMAGE_CheckDefenseEvasion(bIsMissile, pDefUnit, pUnit);
       return uBlockResult;

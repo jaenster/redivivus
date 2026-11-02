@@ -75,7 +75,7 @@ int __fastcall SOUNDSMP_GetVolume(struct D2SoundSmpStrc * pSoundSmp);
 void __fastcall SOUNDSMP_SetPan(struct D2SoundSmpStrc * ppSoundSmp, int32_t nPan);
 void __thiscall SOUNDSMP_Set3DPosition(struct D2SoundSmpStrc * pThis, float nSoundHandle, float fY, float pD2SoundsTxt);
 uint32_t __fastcall SOUNDSMP_GetStreamProgress(struct D2SoundSmpStrc * pSound);
-void __fastcall SOUNDSMP_SetFrequency(int32_t pSound, uint32_t dwParam);
+void __fastcall SOUNDSMP_SetFrequency(int32_t pSound, uint32_t bLoop);
 void __fastcall SOUNDSMP_SetMinDistance(struct D2SoundSmpStrc * pSound, uint32_t dwParam);
 void __fastcall SOUNDSMP_SetEaxObstruction(struct D2SoundSmpStrc * pSoundSmp, float fObstruction);
 // Set the EAX room-level obstruction on the 3D sound buffer; clamps to -10000 for DS3D or passes a float to the EAX property set

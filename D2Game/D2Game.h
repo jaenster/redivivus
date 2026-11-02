@@ -49,7 +49,7 @@ namespace D2Game {
 // Function declarations
 void __fastcall CLIENT_GetSaveCompleteClient(struct D2ClientStrc * pClient, uint32_t * pdwClientOut);
 // Callback for iterating active clients: if *pnParam is 0 (not yet assigned), writes nParam into *pnParam. Used as a visitor to capture the first active client slot index.
-void __fastcall CLIENT_GetFirstActiveClient(int nParam, int * pnParam);
+void __fastcall CLIENT_GetFirstActiveClient(int pClient, int * ppActiveClient);
 int __stdcall thunk_QSERVER_CountClientsWithStatusFlag0x20();
 // Sets the global DontNoSafeGameBool flag. When true, suppresses game-save on exit; used to mark games that should not persist (e.g. aborted/error states).
 void __fastcall GAME_SetNoSaveFlag(BOOL bResult);
@@ -59,11 +59,11 @@ struct D2DrlgActStrc * __stdcall QSERVER_GetActFromFirstActiveGame(int32_t nActI
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __stdcall QSERVER_CountMonstersInFirstActiveGame();
 struct D2RoomStrc * __stdcall QSERVER_FindRoomInFirstActiveGame(uint8_t byActIndex, int32_t nSubtileX, int32_t nSubtileY);
-void __stdcall nullsub(struct D2UnitStrc * dwUnused1, uint32_t dwUnused2, uint32_t dwParam3);
+void __stdcall nullsub(struct D2UnitStrc * dwUnused1, uint32_t dwUnused2, uint32_t dwUnused3);
 // @wasnamed nullsub - one name on two different functions.
 // @evidence RET 0x10 (c2 10 00) - four dword arguments.
 // Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.
-void __fastcall nullsub_4Arg(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4);
+void __fastcall SUNITDMG_DebugTraceAvoidRoll(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4);
 // @wasnamed nullsub - one name on two different functions.
 // @evidence RET 0x1C (c2 1c 00) - seven dword arguments.
 void __stdcall nullsub_7Arg(struct D2UnitStrc * pUnit, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4, uint32_t dwParam5, uint32_t dwParam6, uint32_t dwParam7);
@@ -114,7 +114,7 @@ BOOL __fastcall Q26_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, struct D2
 BOOL __fastcall Q26_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 void __fastcall Q26_PartyMember_SetCompleted(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 BOOL __fastcall Q26_PropagateCompletionToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-void __fastcall Objects_InitFn56(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn56_Seal(struct D2ObjectInitFnArg * pInitArg);
 BOOL __fastcall Q28_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 void __fastcall QUEST_StateHandler_PlayTomeHandInSound(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);

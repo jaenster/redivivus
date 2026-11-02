@@ -1380,7 +1380,7 @@
       ]
     },
     {
-      "name": "StaticInit_6ca700",
+      "name": "StaticInit_gLogMessageQueueCS",
       "address": "006ca700",
       "lines": [
         {
@@ -1390,12 +1390,12 @@
       ],
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
-        "StaticInit_6ca700",
+        "StaticInit_gLogMessageQueueCS",
         "atexit"
       ]
     },
     {
-      "name": "StaticInit_6ca720",
+      "name": "StaticInit_gLogFileCS",
       "address": "006ca720",
       "lines": [
         {
@@ -1405,7 +1405,7 @@
       ],
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
-        "StaticInit_6ca720",
+        "StaticInit_gLogFileCS",
         "atexit"
       ]
     },

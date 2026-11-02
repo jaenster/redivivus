@@ -3343,13 +3343,13 @@ static int __stdcall SKILLDESC_FormatSkillCalcValue(int32_t nCalcValue, uint16_t
     return 1;
 }
 
-static void __stdcall SKILLDESC_DescLine1_SkillParams(D2SkillsTxt * pSkillsTxt, uint16_t * wszText, int32_t nSkillId, int32_t nSkillLevel, int32_t nParam3, int32_t nParam4) {
+static void __stdcall SKILLDESC_DescLine1_SkillParams(D2SkillsTxt * pSkillsTxt, uint16_t * wszText, int32_t nSkillId, int32_t nSkillLevel, int32_t nCalcA, int32_t nCalcValue) {
     short int sManaCostBase = pSkillsTxt->mana;
     if (!sManaCostBase && !pSkillsTxt->lvlmana) {
       return;
     }
-    if (nParam4) {
-      SKILLDESC_FormatSkillCalcValue(nParam4, wszText);
+    if (nCalcValue) {
+      SKILLDESC_FormatSkillCalcValue(nCalcValue, wszText);
       return;
     }
 
@@ -3367,20 +3367,20 @@ static void __stdcall SKILLDESC_DescLine1_SkillParams(D2SkillsTxt * pSkillsTxt, 
     }
     if (pSkillsTxt->manashift != 8 && (int)pSkillsTxt->lvlmana << (byShift & 0x1f) <= 0x100 && (int)nManaCost <= 0x1900) {
       uint32_t nManaCostFrac;
-      if (nParam3 <= 0xa) {
+      if (nCalcA <= 0xa) {
         nManaCostFrac = (int)nManaCost % 256;
         SKILLDESC_FormatDecimalWithLabel((int)(nManaCostFrac * 10) / 256, wStrIdMana, (int)nManaCost / 256, 0, wszText);
         return;
       }
 
-      SKILLDESC_FormatDecimalWithStrings(wStrIdMana, 0x1506, nParam3, nManaCost, wszText, 0);
+      SKILLDESC_FormatDecimalWithStrings(wStrIdMana, 0x1506, nCalcA, nManaCost, wszText, 0);
       return;
     }
 
     SKILLDESC_FormatSignedValue((int)nManaCost >> 8, wStrIdMana, 0, wszText);
 }
 
-static void __stdcall SKILLDESC_CalcWeaponDamageRange(D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, int32_t * pnColor, int32_t nFlatDamageBonus, D2SkillStrc * pSkill, uint32_t nSrcDamage, D2UnitStrc * pUnit2, int32_t nParam2, int32_t nDamagePctBonus) {
+static void __stdcall SKILLDESC_CalcWeaponDamageRange(D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, int32_t * pnColor, int32_t nFlatDamageBonus, D2SkillStrc * pSkill, uint32_t nSrcDamage, D2UnitStrc * pUnit2, int32_t bUseWeaponStatList, int32_t nDamagePctBonus) {
     int nMinDmg;
     int nMaxDmg;
     int nAttrStat;
@@ -3404,7 +3404,7 @@ static void __stdcall SKILLDESC_CalcWeaponDamageRange(D2UnitStrc * pUnit, int * 
       nMaxDmg += 2;
     } else {
       D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pUnit2->nClassId);
-      if (nParam2) {
+      if (bUseWeaponStatList) {
         nMinDmg = D2Common::Stats::StatsEx::STATLIST_GetStatForDamageCalc(pUnit, pUnit2, UNITSTAT_mindamage);
         nMaxDmg = D2Common::Stats::StatsEx::STATLIST_GetStatForDamageCalc(pUnit, pUnit2, UNITSTAT_maxdamage);
       } else {
@@ -4059,8 +4059,8 @@ static void __stdcall SKILLDESC_CalcDualWieldDamage(int32_t * pdwParam1, int32_t
     (*pfnCalcWeaponDmg)(pUnit2, pdwParam1, (uint32_t*)pdwParam2, (uint32_t)dwParam1, dwParam3, (int32_t)nParam, pSkill, 0, pActiveWeapon);
 }
 
-void __stdcall SKILLDESC_CalcDualWieldDmg(D2SkillStrc * param_1, int32_t * param_2, D2UnitStrc * pUnit, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * pdwParam3, D2UnitStrc * pUnit2) {
-    SKILLDESC_CalcDualWieldDamage(pdwParam1, pdwParam2, nullptr, pdwParam3, param_2, nullptr, param_1, SKILLDESC_CalcAttackRateForWeapon, 0, pUnit2, pUnit);
+void __stdcall SKILLDESC_CalcDualWieldDmg(D2SkillStrc * pSkill, int32_t * param_1, D2UnitStrc * pUnit, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * pdwParam3, D2UnitStrc * pUnit2) {
+    SKILLDESC_CalcDualWieldDamage(pdwParam1, pdwParam2, nullptr, pdwParam3, param_1, nullptr, pSkill, SKILLDESC_CalcAttackRateForWeapon, 0, pUnit2, pUnit);
 }
 
 void __fastcall SKILLDESC_CalcDualWieldWithAR(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor) {

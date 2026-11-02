@@ -311,7 +311,7 @@ BOOL __stdcall FOG_GetTxtLinkRecord(D2TxtLinkStrc * pTxtLink, int nRecordId, voi
     return 0;
 }
 
-uint32_t __stdcall FillUpTxtLinkSub0x08(D2TxtLinkStrc * pTxtLink, char * nItemCode) {
+uint32_t __stdcall FOG_AddTxtLinkRecord(D2TxtLinkStrc * pTxtLink, char * nItemCode) {
     int nMidIndex;
     int nLowIndex;
     int nHighIndex;
@@ -766,7 +766,7 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
                       }
                     }
 
-                    nLinkIndex = FillUpTxtLinkSub0x08(*(D2TxtLinkStrc**)pBinFieldInput[nFieldMapIdx].fpLinker, (char*)dwCodePadded);
+                    nLinkIndex = FOG_AddTxtLinkRecord(*(D2TxtLinkStrc**)pBinFieldInput[nFieldMapIdx].fpLinker, (char*)dwCodePadded);
                     eFieldType3 = pBinFieldInput[nFieldMapIdx].eType;
                     switch (eFieldType3) {
                       case FIELDTYPE_CODE4:

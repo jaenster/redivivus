@@ -802,7 +802,7 @@ void __fastcall SKILLASS_SetupMissilePath(D2UnitStrc * pUnit, int32_t nInitSeed)
 }
 
 // Spawns a ring of missiles; skill-agnostic.
-void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwParam, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pTarget, eMissilesId eMissileId, int32_t nTargetX, int32_t nTargetY, eD2Skills eSkill, int32_t nSkillLvl, int32_t nMissileStride) {
+void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwUnused, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pTarget, eMissilesId eMissileId, int32_t nTargetX, int32_t nTargetY, eD2Skills eSkill, int32_t nSkillLvl, int32_t nMissileStride) {
     int32_t nRoyalStrikeParam;
     D2SkillArgStrc sSkillArg;
     int anXYOffsetTable[128];

@@ -648,7 +648,7 @@ void __fastcall Objects_InitFn70(D2ObjectInitFnArg * pInitArg) {
 }
 
 // A5Q1 object init fn 71: spawns Shenk the Overseer (monstats 0x1ff) once per quest at a valid location in the room, records his unit GUID + spawn-guard flags, and copies the preset DRLG map file for his AI. Guards via per-quest "already spawned" byte. No quest-record bit changes.
-void __fastcall Objects_InitFn71(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn71_LarzukStandard(D2ObjectInitFnArg * pInitArg) {
     D2MapAIStrc** pMonsterMapAi;
     POINT sSpawnPos;
     D2RoomStrc* pSpawnRoom;

@@ -13,13 +13,13 @@ struct D2BitBufferStrc;
 struct D2SeedStrc;
 
 // Data types
-struct SMemBlockInfo {
+struct SMemBlockDetailsStrc {
     /* 0x00 */ DWORD dwSize;
-    /* 0x04 */ uint32_t dwField04;
-    /* 0x08 */ uint32_t nBlockField44;
-    /* 0x0C */ uint32_t nBlockField40;
+    /* 0x04 */ uint32_t pBlock;
+    /* 0x08 */ uint32_t bAllocated;
+    /* 0x0C */ uint32_t bValid;
     /* 0x10 */ uint32_t nBlockSize;
-    /* 0x14 */ uint32_t dwField14;
+    /* 0x14 */ uint32_t nOverhead;
     /* 0x18 */ uint32_t dwField18;
 };
 

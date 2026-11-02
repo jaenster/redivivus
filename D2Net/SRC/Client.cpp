@@ -247,7 +247,6 @@ int __stdcall NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues() {
 DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
     int nSelectResult;
     BOOL BVar1;
-    uint8_t* pbRecvResult;
     uint8_t* pbDecompressResult;
     uint8_t* pCompressedConsumed;
     fd_set fdSetRead;
@@ -300,9 +299,9 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
 
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
       /* int flags for recv */ /* int len for recv */ if (bCompressedMode) {
-        /* char * buf for recv */ /* SOCKET s for recv */ pbRecvResult = (uint8_t*)recv(CLIENT_SocketToServer, (char*)(aCompressedBuf + (int)pCompressedRead), 0x5b4, 0);
-        if ((int)pbRecvResult > 0) {
-          pCompressedRead += (int)pbRecvResult;
+        /* char * buf for recv */ /* SOCKET s for recv */ nSelectResult = recv(CLIENT_SocketToServer, (char*)(aCompressedBuf + (int)pCompressedRead), 0x5b4, 0);
+        if (nSelectResult > 0) {
+          pCompressedRead += nSelectResult;
           while (true) {
             pCompressedEnd = pCompressedRead;
             if ((uint8_t*)0x1 >= pCompressedRead) {
@@ -320,12 +319,12 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
             }
 
             nSelectResult = pbDecompressResult < (uint8_t*)0xf0 ? 0x1U : 0x2U;
-            pbRecvResult = Fog::Src::D2Net::NET_D2GS_CLIENT_DecompressPacket(pD2PacketsClientBuffer->pBytes + pD2PacketsClientBuffer->nCount, 0x7b8 - pD2PacketsClientBuffer->nCount, (char*)(aCompressedBuf + (int)(pCompressedConsumed + nSelectResult)), (int)pbDecompressResult - nSelectResult);
+            nSelectResult = Fog::Src::D2Net::NET_D2GS_CLIENT_DecompressPacket(pD2PacketsClientBuffer->pBytes + pD2PacketsClientBuffer->nCount, 0x7b8 - pD2PacketsClientBuffer->nCount, (char*)(aCompressedBuf + (int)(pCompressedConsumed + nSelectResult)), (int)pbDecompressResult - nSelectResult);
             pCompressedEnd += -(int)pbDecompressResult;
             pCompressedConsumed += (int)pbDecompressResult;
             pCompressedRead = pCompressedEnd;
-            if ((int)pbRecvResult > 0) {
-              pD2PacketsClientBuffer->nCount = (int)(pbRecvResult + pD2PacketsClientBuffer->nCount);
+            if (nSelectResult > 0) {
+              pD2PacketsClientBuffer->nCount += nSelectResult;
               NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues();
               pCompressedRead = pCompressedEnd;
             }
@@ -336,15 +335,15 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
           }
         }
       } else {
-        /* char * buf for recv */ /* SOCKET s for recv */ pbRecvResult = (uint8_t*)recv(CLIENT_SocketToServer, pD2PacketsClientBuffer->pBytes + pD2PacketsClientBuffer->nCount, 0x5b4, 0);
-        if ((int)pbRecvResult > 0) {
-          pD2PacketsClientBuffer->nCount = (int)(pbRecvResult + pD2PacketsClientBuffer->nCount);
+        /* char * buf for recv */ /* SOCKET s for recv */ nSelectResult = recv(CLIENT_SocketToServer, pD2PacketsClientBuffer->pBytes + pD2PacketsClientBuffer->nCount, 0x5b4, 0);
+        if (nSelectResult > 0) {
+          pD2PacketsClientBuffer->nCount += nSelectResult;
           bCompressedMode = NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues();
         }
       }
 
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882ce8);
-      if (pbRecvResult == (uint8_t*)-1) {
+      if (nSelectResult == -1) {
         WSAGetLastError();
         BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
         if (!BVar1) {
@@ -356,7 +355,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
         lpOutputString = "Client thread close #5\n";
         goto exit_thread;
       }
-      if (!pbRecvResult) {
+      if (!nSelectResult) {
         BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
         if (!BVar1) {
           /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);

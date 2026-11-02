@@ -27,6 +27,6 @@ void __fastcall PALETTE_LoadFromFile(char * szPaletteName, int32_t nPaletteSet);
 void __stdcall PALETTE_InitItemPalettes();
 void __stdcall PALETTE_SetAct(int32_t nAct);
 uint8_t * __stdcall PALETTE_GetItemPalette(int32_t nPaletteSet, int32_t nRow);
-uint32_t __stdcall PALETTE_GetColorShiftIndex(int32_t nParam, uint32_t nParam2);
+uint32_t __stdcall PALETTE_GetColorShiftIndex(int32_t nIndex, uint32_t dwMask);
 
 } // namespace D2CMP::Pallete

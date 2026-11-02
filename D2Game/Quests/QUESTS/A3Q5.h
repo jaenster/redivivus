@@ -72,9 +72,9 @@ void __fastcall Q22_PlayerCompleteKhalimsWill(::SGAMEDATA * pGame, struct D2Unit
 // State flow: set Khalim's Will Completed+JustCompleted; if Blackened Temple Step0x04 -> Completed; party-wide Khalim completion.
 BOOL __fastcall OBJOP_A3Q5_NihlathakAltarLaunchOrb(struct D2ObjectOperateFnArg * pOperation);
 // Objects_InitFn53 (BLACKENED TEMPLE) — object InitFn for the Compelling Orb altar. If Jerhyn/Ormus AI is active (bJerhynAiActive in quest-specific data), sets the object's update flag 2 (post-completion appearance). No quest-record state calls.
-void __fastcall Objects_InitFn53(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn53_MephistoDoor(struct D2ObjectInitFnArg * pInitArg);
 // Objects_InitFn60 (BLACKENED TEMPLE) — object InitFn that spawns the Compelling-Orb amulet/guardian. If the in-memory init flag (field_0x0C) is set, marks the object updated. If the amulet hasn't been spawned yet (bHasViperAmulet false), spawns monster class 0x16e (the orb/amulet unit) Neutral, flags it, records its GUID, and marks bHasViperAmulet. No quest-record state calls.
-void __fastcall Objects_InitFn60(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn60_CompellingOrb(struct D2ObjectInitFnArg * pInitArg);
 // Q22_Callback_08 (BLACKENED TEMPLE) — quest-state[8] boss/Council-kill drop handler, installed by Q22_InitData. On killing a Council member (target != orb class 0x16e): first pass tallies how many players still need Khalim's Will items (Q22_PlayerCheckKhalimsWillItems), then on the appropriate kill drops the needed Khalim's Will body-part items (code "qf1") and bumps the Khalim's Will quest's orb count, or on the next kill drops the "box " (assembly box) as shields. Once all required drops are done and !intro: records the council-quest unit GUID, advances live nStateFlag to 6 (broadcast state 4) or 7 (broadcast state 0xd / done) depending on whether Khalim's Will is needed, propagates completion to the whole party (3 Iterate callbacks), and marks the shared Blackened Temple record JustCompleted. On the orb unit itself, sets the no-target-cursor flag.
 // State flow: drop Khalim items per player; nStateFlag -> 6/7, broadcast state 4/0xd; SetQuestRecordState JustCompleted.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q5.cpp

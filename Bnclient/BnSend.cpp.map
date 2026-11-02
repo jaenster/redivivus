@@ -998,7 +998,7 @@
         "isdigit",
         "WSAGetLastError",
         "BnetLog_WriteLine",
-        "DEBUG_UnusedDebugFunction",
+        "DEBUG_Trace",
         "GetTickCount",
         "srand",
         "rand",
@@ -1490,7 +1490,7 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "NET_SID_CLIENT_LogonSequence",
-        "DEBUG_UnusedDebugFunction",
+        "DEBUG_Trace",
         "memset",
         "BNDOWNLOAD_ResetState",
         "__security_check_cookie",
@@ -1536,7 +1536,7 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "BattleConnectFastest",
-        "DEBUG_UnusedDebugFunction",
+        "DEBUG_Trace",
         "BNDOWNLOAD_ResetState",
         "GetBnetIp",
         "BNET_LogIndent",
@@ -1564,7 +1564,7 @@
         "CACHE_Open",
         "SID_InitializeProtocolState",
         "NET_SID_CLIENT_InitializeSRP",
-        "DEBUG_UnusedDebugFunction"
+        "DEBUG_Trace"
       ]
     },
     {
@@ -2167,7 +2167,7 @@
       ]
     },
     {
-      "name": "StaticInit_6caec0",
+      "name": "StaticInit_gpBNetNewsCache",
       "address": "006caec0",
       "lines": [
         {
@@ -2177,7 +2177,7 @@
       ],
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
-        "StaticInit_6caec0",
+        "StaticInit_gpBNetNewsCache",
         "atexit"
       ]
     },

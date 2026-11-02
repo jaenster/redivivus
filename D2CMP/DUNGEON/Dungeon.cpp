@@ -114,13 +114,13 @@ int32_t __stdcall GetIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {
     return pTileLibraryEntry->nIndex;
 }
 
-uint32_t __stdcall TILEPROJECT_GetTileCount(int32_t nParam) {
-    if (!nParam) {
+uint32_t __stdcall TILEPROJECT_GetTileCount(int32_t pTileEntry) {
+    if (!pTileEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b);
       exit(-1);
     }
 
-    return (uint32_t)*(uint16_t*)(nParam + 6);
+    return (uint32_t)*(uint16_t*)(pTileEntry + 6);
 }
 
 uint32_t __stdcall TILEPROJECT_GetTileDataPtr(int32_t nParam) {
@@ -132,13 +132,13 @@ uint32_t __stdcall TILEPROJECT_GetTileDataPtr(int32_t nParam) {
     return *(uint32_t*)(nParam + 0xc);
 }
 
-uint32_t __stdcall TILEPROJECT_GetAnimatedTileDataPtr(int32_t nParam) {
-    if (!nParam) {
+uint32_t __stdcall TILEPROJECT_GetAnimatedTileDataPtr(int32_t pTileLibraryEntry) {
+    if (!pTileLibraryEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7d);
       exit(-1);
     }
 
-    return *(uint32_t*)(nParam + 0x20);
+    return *(uint32_t*)(pTileLibraryEntry + 0x20);
 }
 
 int32_t __stdcall GetSubIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {

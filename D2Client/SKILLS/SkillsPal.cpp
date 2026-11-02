@@ -506,7 +506,7 @@ BOOL __fastcall Skills_CltStFunc_SetupHolyChargeMovement(D2UnitStrc * pUnit, eD2
     return 1;
 }
 
-static inline D2UnitStrc * __stdcall SKILLS_Unused_Placeholder_2(D2UnitStrc * pUnit, int nExcludeGUID) {
+static inline D2UnitStrc * __stdcall SKILLS_FindClosestTargetExcludingGUID(D2UnitStrc * pUnit, int nExcludeGUID) {
     D2UnitStrc* pDVar1 = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, 3, 3, nExcludeGUID, nullptr);
     return pDVar1;
 }
@@ -566,7 +566,7 @@ BOOL __fastcall Skills_CltDoFunc_Pal_HolyBolt_Melee(D2UnitStrc * pUnit, eD2Skill
           }
         }
         if (nSkillFlags & 2) {
-          pFindResult = SKILLS_Unused_Placeholder_2(pUnit, pSavedTarget);
+          pFindResult = SKILLS_FindClosestTargetExcludingGUID(pUnit, pSavedTarget);
           if (pFindResult) {
             bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pFindResult, 0);
             if (bInMeleeRange) {

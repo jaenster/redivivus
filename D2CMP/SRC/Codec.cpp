@@ -70,7 +70,7 @@ uint32_t __stdcall CODEC_ReadBitsWithTransparency(uint32_t pCharSelComp, D2Codec
     return nBitsRead;
 }
 
-static BOOL CODEC_AdvanceFrameIterator(int * pIterState, int32_t nParam) {
+static BOOL CODEC_AdvanceFrameIterator(int * pIterState, int32_t pFrameBounds) {
     int nFrameEntry;
     int nFrameWidth;
     uint32_t nXRemainder;
@@ -101,7 +101,7 @@ static BOOL CODEC_AdvanceFrameIterator(int * pIterState, int32_t nParam) {
       pIterState[0xd] = nFrameWidth;
       pIterState[0xb] += pIterState[6] * pIterState[0xe];
       pIterState[0xc] = pIterState[0xb];
-      pIterState[7] += *(int*)(nParam + 0x28);
+      pIterState[7] += *(int*)(pFrameBounds + 0x28);
       pIterState[8] = pIterState[7];
       if (!(pIterState[10] + 5 >= nFrameEntry)) {
         pIterState[0xe] = 4;
@@ -115,12 +115,12 @@ static BOOL CODEC_AdvanceFrameIterator(int * pIterState, int32_t nParam) {
     uint32_t nYRemainder;
     (*pIterState)++;
     nFrameWidth = *pIterState;
-    nFrameEntry = nFrameWidth * 0x2c + *(int*)(nParam + 4);
-    while (nFrameWidth < *(int*)(nParam + 0x1c)) {
+    nFrameEntry = nFrameWidth * 0x2c + *(int*)(pFrameBounds + 4);
+    while (nFrameWidth < *(int*)(pFrameBounds + 0x1c)) {
       if (*(int*)(nFrameEntry + 4) && *(int*)(nFrameEntry + 8)) {
         pIterState[1] = *(int*)(nFrameEntry + 4);
         pIterState[2] = *(int*)(nFrameEntry + 8);
-        pIterState[3] = *(int*)(nFrameEntry + 0xc) - *(int*)(nParam + 8);
+        pIterState[3] = *(int*)(nFrameEntry + 0xc) - *(int*)(pFrameBounds + 8);
         if (*(int*)(nFrameEntry + 0x28)) {
           nFrameWidth = 0;
         } else {
@@ -128,11 +128,11 @@ static BOOL CODEC_AdvanceFrameIterator(int * pIterState, int32_t nParam) {
         }
 
         nXRemainder = pIterState[3];
-        nYRemainder = *(int*)(nFrameEntry + 0x10) - *(int*)(nParam + 0xc) - nFrameWidth;
+        nYRemainder = *(int*)(nFrameEntry + 0x10) - *(int*)(pFrameBounds + 0xc) - nFrameWidth;
         pIterState[4] = nYRemainder;
         pIterState[5] = *(int*)(nFrameEntry + 0x20);
         pIterState[6] = *(int*)(nFrameEntry + 0x24);
-        nFrameWidth = (int)nXRemainder / 4 + (int)nYRemainder / 4 * *(int*)(nParam + 0x28);
+        nFrameWidth = (int)nXRemainder / 4 + (int)nYRemainder / 4 * *(int*)(pFrameBounds + 0x28);
         pIterState[7] = nFrameWidth;
         pIterState[8] = nFrameWidth;
         memset(pIterState + 9, 0, 4 * sizeof(pIterState[0]));
@@ -169,24 +169,24 @@ static BOOL CODEC_AdvanceFrameIterator(int * pIterState, int32_t nParam) {
     return 0;
 }
 
-static void CODEC_InitializeFrameIterator(int32_t nParam) {
+static void CODEC_InitializeFrameIterator(int32_t pFrameBounds) {
     int iterState[15];
-    int nStride = *(int*)(nParam + 0x10) + 3;
-    int nHeightAligned = *(int*)(nParam + 0x14) + 3;
+    int nStride = *(int*)(pFrameBounds + 0x10) + 3;
+    int nHeightAligned = *(int*)(pFrameBounds + 0x14) + 3;
     nStride = nStride / 4;
-    *(int*)(nParam + 0x28) = nStride;
-    *(int*)(nParam + 0x24) = nHeightAligned / 4 * nStride;
-    *(uint32_t*)(nParam + 0x20) = 0;
-    if (!*(int*)(nParam + 0x1c)) {
+    *(int*)(pFrameBounds + 0x28) = nStride;
+    *(int*)(pFrameBounds + 0x24) = nHeightAligned / 4 * nStride;
+    *(uint32_t*)(pFrameBounds + 0x20) = 0;
+    if (!*(int*)(pFrameBounds + 0x1c)) {
       return;
     }
 
     memset(iterState, 0, 0x3c);
     iterState[0] = -1;
-    nStride = CODEC_AdvanceFrameIterator(iterState, nParam);
+    nStride = CODEC_AdvanceFrameIterator(iterState, pFrameBounds);
     while (nStride) {
-      (*(int*)(nParam + 0x20))++;
-      nStride = CODEC_AdvanceFrameIterator(iterState, nParam);
+      (*(int*)(pFrameBounds + 0x20))++;
+      nStride = CODEC_AdvanceFrameIterator(iterState, pFrameBounds);
     }
 }
 

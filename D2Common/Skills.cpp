@@ -164,7 +164,7 @@ int __fastcall SKILLS_Min(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwP
     return nLeft;
 }
 
-int __fastcall SKILLS_Max(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4) {
+int __fastcall SKILLS_Max(int nLeft, int nRight, uint32_t nOperand3, uint32_t pContext) {
     if (nLeft <= nRight) {
       nLeft = nRight;
     }
@@ -254,15 +254,15 @@ int __stdcall GetSkillMode(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     return 0;
 }
 
-int32_t __stdcall SKILLS_GetSkillsTxtField0x14(int * pnParam) {
-    if (!pnParam) {
+int32_t __stdcall SKILLS_GetSkillsTxtField0x14(int * pSkill) {
+    if (!pSkill) {
       return 0;
     }
-    if (!*pnParam) {
+    if (!*pSkill) {
       return 0;
     }
 
-    return (int)*(char*)(*pnParam + 0x14);
+    return (int)*(char*)(*pSkill + 0x14);
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
@@ -562,9 +562,9 @@ uint32_t __fastcall GetSequenceId(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
 }
 
 // Returns the item equipped in either the right arm (BODYLOC_R_ARM) or left arm (BODYLOC_L_ARM) slot from inventory, based on the hand parameter (5 = right, else left).
-static D2UnitStrc * __stdcall SKILLS_GetWeaponByHand(int32_t nParam, D2InventoryStrc * pInventory) {
+static D2UnitStrc * __stdcall SKILLS_GetWeaponByHand(int32_t nBodyLoc, D2InventoryStrc * pInventory) {
     D2UnitStrc* pWeapon;
-    if (nParam == 5) {
+    if (nBodyLoc == 5) {
       pWeapon = INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
       return pWeapon;
     }
@@ -1572,12 +1572,12 @@ void __stdcall SKILL_SetQuantity(D2SkillStrc * pSkill, int32_t nQuantity) {
     pSkill->nQuantity = nQuantity;
 }
 
-uint32_t __stdcall SKILLS_GetAnimModeIndex(int32_t nParam1, int32_t nParam2) {
-    if (nParam1 == 6 && nParam2 == 4) {
+uint32_t __stdcall SKILLS_GetAnimModeIndex(int32_t nPlayerClass, int32_t nMonMode) {
+    if (nPlayerClass == 6 && nMonMode == 4) {
       return 0xc;
     }
 
-    return INT_ARRAY_006eb308[nParam2];
+    return INT_ARRAY_006eb308[nMonMode];
 }
 
 // Validates that a monster supports a given animation mode, falling back to a supported substitute if not. Checks the monster's MonStats2 byModeFlags bitfield; if the requested mode is unsupported, maps it to a nearby fallback (e.g. modes 5/7→4, 6→3, 9-11→8, 15→2, default→1). Used before playing a skill animation on a monster to avoid unsupported mode crashes.
@@ -1899,7 +1899,7 @@ int __stdcall SKILLS_IsSelectableCorpse3(D2UnitStrc * pUnit) {
 }
 
 // Returns the best matching thrown-weapon bonus value for a unit's equipped throwable item and the given skill. Queries stats 0x159/0x15A/0x15B (min/max/bonus depending on nParam 0/1/2) via STATLIST_GetItemStatBonusValues, then iterates entries to find the highest value whose item type matches pUnit1. Returns 0 if the item is not throwable, the skill has no applicable range-2 throwable type, or nParam is out of range.
-int32_t __stdcall SKILL_GetThrownWeaponBonus(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2SkillStrc * pSkill, int32_t nParam, D2UnitStrc * pUnit2) {
+int32_t __stdcall SKILL_GetThrownWeaponBonus(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2SkillStrc * pSkill, int32_t nThrowBonusType, D2UnitStrc * pUnit2) {
     int32_t _bIsThrowable;
     bool bIsThrowable;
     int nIdx;
@@ -1929,7 +1929,7 @@ int32_t __stdcall SKILL_GetThrownWeaponBonus(D2UnitStrc * pUnit, D2UnitStrc * pU
       return 0;
     }
 
-    switch (nParam) {
+    switch (nThrowBonusType) {
       case 0:
         {
           uStatOrResult = 0x159;

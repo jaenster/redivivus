@@ -662,7 +662,7 @@
       ]
     },
     {
-      "name": "OOGUTIL_Unused1",
+      "name": "OOGUTIL_SetPendingJoinGame",
       "address": "00442dd0",
       "lines": [
         {
@@ -672,7 +672,7 @@
       ],
       "namespace": "D2Multi::OOGUtilities",
       "calledFunctions": [
-        "OOGUTIL_Unused1",
+        "OOGUTIL_SetPendingJoinGame",
         "strncpy"
       ],
       "usedTypes": [
@@ -695,7 +695,7 @@
       ]
     },
     {
-      "name": "OOGUTIL_Unused2",
+      "name": "OOGUTIL_ShowGameListEntryDetails",
       "address": "00442e30",
       "lines": [
         {
@@ -705,7 +705,7 @@
       ],
       "namespace": "D2Multi::OOGUtilities",
       "calledFunctions": [
-        "OOGUTIL_Unused2",
+        "OOGUTIL_ShowGameListEntryDetails",
         "D2WINTEXTBOX_ClearAllLines",
         "D2WINTEXTBOX_SetTextFromAnsiSimple",
         "D2WINTEXTBOX_ScrollToLine",
@@ -796,7 +796,7 @@
       ]
     },
     {
-      "name": "OOGUTIL_Unused3",
+      "name": "OOGUTIL_ParseMaxPlayersEditBox",
       "address": "00443360",
       "lines": [
         {
@@ -806,7 +806,7 @@
       ],
       "namespace": "D2Multi::OOGUtilities",
       "calledFunctions": [
-        "OOGUTIL_Unused3",
+        "OOGUTIL_ParseMaxPlayersEditBox",
         "FORMS_TextInput_GetValue",
         "WideCharToUTF8"
       ],
@@ -936,7 +936,7 @@
       ]
     },
     {
-      "name": "OOGUTIL_Unused9",
+      "name": "OOGUTIL_IsFirstCharPrintableAscii",
       "address": "004435d0",
       "lines": [
         {
@@ -946,11 +946,11 @@
       ],
       "namespace": "D2Multi::OOGUtilities",
       "calledFunctions": [
-        "OOGUTIL_Unused9"
+        "OOGUTIL_IsFirstCharPrintableAscii"
       ]
     },
     {
-      "name": "OOGUTIL_Unused10",
+      "name": "OOGUTIL_FilterPrintableAsciiChar",
       "address": "00443600",
       "lines": [
         {
@@ -960,7 +960,7 @@
       ],
       "namespace": "D2Multi::OOGUtilities",
       "calledFunctions": [
-        "OOGUTIL_Unused10"
+        "OOGUTIL_FilterPrintableAsciiChar"
       ]
     },
     {
@@ -1478,10 +1478,10 @@
         "GetTickCount",
         "OOGUTIL_ProcessGameListEntry",
         "HasPeerName",
-        "OOGUTIL_Unused2",
+        "OOGUTIL_ShowGameListEntryDetails",
         "D2WINTEXTBOX_GetSelectedLineText",
         "UNICODE_WideToMultiByte",
-        "OOGUTIL_Unused1",
+        "OOGUTIL_SetPendingJoinGame",
         "D2WINEDITBOX_SetTextWide",
         "D2WINMAIN_SetFocusedControl"
       ],
@@ -1842,7 +1842,7 @@
       ]
     },
     {
-      "name": "OOGUTIL_Unused12",
+      "name": "OOGUTIL_StrChr",
       "address": "00446810",
       "lines": [
         {
@@ -1852,7 +1852,7 @@
       ],
       "namespace": "D2Multi::OOGUtilities",
       "calledFunctions": [
-        "OOGUTIL_Unused12",
+        "OOGUTIL_StrChr",
         "strchr"
       ],
       "usedTypes": [

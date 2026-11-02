@@ -225,7 +225,7 @@ namespace D2Game::GAME::Server {
 // Function declarations
 void __stdcall ServerInit_nullsub();
 void __stdcall ServerClose_nullsub();
-void SRVLog(int32_t nParam, char * szText, ...);
+void SRVLog(int32_t nLogCategory, char * szText, ...);
 void __stdcall _TableNullSub0(uint32_t dwArg1, uint32_t dwArg2);
 void __stdcall _TableNullSub1(uint32_t dwArg1, uint32_t dwArg2, uint32_t dwArg3, uint32_t dwArg4, uint32_t dwArg5, uint32_t dwArg6, uint32_t dwArg7, uint32_t dwArg8, uint32_t dwArg9, uint32_t dwArg10, uint32_t dwArg11, uint32_t dwArg12, uint32_t dwArg13, uint32_t dwArg14, uint32_t dwArg15, uint32_t dwArg16, uint32_t dwArg17, uint32_t dwArg18);
 void __stdcall _TableNullSub2(uint32_t dwArg1, uint32_t dwArg2);
@@ -306,12 +306,10 @@ void NET_D2GS_SERVER_HandleAnyIncomingPacket();
 // NOTE: Callee-saved register params inferred (medium confidence): pGameStrc (EDI): SGAMEDATA*
 void __stdcall QSERVER_CleanupUnitChain(struct D2UnitStrc * * pUnitHead, ::SGAMEDATA * pGame);
 // NOTE: Callee-saved register params inferred (medium confidence): pRoomStrc (ESI): D2RoomStrc*, pGameStrc (EDI): SGAMEDATA*
-void __stdcall UnusedInitFunctions(struct D2RoomStrc * pRoomStrc, ::SGAMEDATA * pGameStrc);
+void __stdcall SERVER_PopulateRoom(struct D2RoomStrc * pRoomStrc, ::SGAMEDATA * pGameStrc);
 void __fastcall SetSomeRoomFlags(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom);
 // Frees idle rooms across all 5 acts to conserve memory. For each act, iterates active rooms and checks idle tick count via DRLGROOM_GetIdleTicks. Rooms idle for 10+ frames and passing TestRoomCanUntile (no players nearby) are candidates for cleanup. Moves all units in room to inactive lists via SERVER_GAME_UNIT_method, then removes room from act via RemoveRoomFromAct. Called every 12 frames from GAME_ServerGameLoop. Critical for dynamic memory management in large games.
 void __stdcall CleanupIdleRooms(::SGAMEDATA * pGame);
-// Frees unused dropped items every 1500 frames (60 seconds at 25 FPS). When dwGameFrame is exact multiple of 0x5dc (1500), iterates all 5 acts and calls FreeUnusedItems + SUNITINACTIVE_FreeUnusedItems for each. Removes items that have been on ground too long or in inactive state. Prevents memory leaks from abandoned loot in long-running games. Returns frame counter / 1500.
-void FreeUnusedItems(::SGAMEDATA * pGamee);
 // Checks all clients for connection timeouts. If timeout exceeded and client has file flag 0x4 set with 10+ heartbeat samples and 10+ seconds idle, OR 45+ seconds idle, OR forced timeout flag set, saves that player and disconnects them. Two timeout thresholds: strict (10 seconds with heartbeat monitoring) and lenient (45 seconds absolute). Sets *pnParam if any disconnects occur, triggering full game save. Only active when gnClientTimeoutCheckInterval enabled.
 void __stdcall CheckClientTimeouts(::SGAMEDATA * pGame, int * pbAnyDisconnected);
 // Updates day/night environment cycle for all 5 acts. For each act, checks if cycle index changed via DRLGENV_UpdateCycleIndex. When cycle changes, extracts new cycle index/tick count/eclipse flag, refreshes all player item states (charges/durability based on light level), and broadcasts 0x53 Darkness packet to all clients in that act. Environment cycles affect visibility, light radius, and missile behavior.
@@ -323,7 +321,7 @@ void __fastcall Unlock(::SGAMEDATA * pGame);
 // Body is only the halt at line 4453.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void __stdcall QSERVER_Unused_HaltLine4453();
-BOOL __stdcall Return1_GameSetup_0();
+BOOL __stdcall SERVER_IsHostedGamesRequestAllowed();
 BOOL __stdcall Return1_GameSetup_1();
 BOOL __fastcall CLIENT_ReceiveUploadedSave(uint32_t nClientId, struct D2GSMsg6CUploadSaveStrc * pMsg);
 void __stdcall QSERVER_GetMemoryUsage(uint32_t * pOutCurrent, uint32_t * pOutMax);
@@ -332,7 +330,7 @@ uint32_t __stdcall ReturnArgument(uint32_t dwParam);
 // Provenance: 1.14d asm 0052dc10 MOV EAX,[0x00731008]; RET, no code or data reference to 0052dc10 (byte scan).
 uint32_t __stdcall GAME_GetUnusedServerConstant();
 // Writes the ASCII class name string for a given player class ID (eD2PlayerClassIDDWORD) into a caller-supplied 16-byte buffer via inline byte stores. Handles all 7 classes (Amazon, Sorceress, Necromancer, Paladin, Barbarian, Druid, Assassin); unknown class writes "Invalid Class". Used to produce human-readable class labels, e.g. for logging or save-file headers.
-void __fastcall _TableNullSub25(char * szText, int32_t nId);
+void __fastcall SERVER_GetPlayerClassName(char * szText, int32_t nId);
 void __fastcall MonsterIdToName(char * szText, int32_t nId);
 void __fastcall ObjectIdToName(char * szText, int32_t nId);
 void __fastcall ItemIdToName(char * szText, int32_t nId);
@@ -371,7 +369,7 @@ int32_t __stdcall GetUnitCountByServerId(uint16_t nServerId);
 // Exports up to nMaxCount unit type+mode records into pOutBuffer from the game currently assigned to nServerId. Looks up the game token via DATA_LastGameServer[nServerId] under the global hash lock, locks the game, then iterates all 128 player-unit buckets calling GetTypeAndMode for each unit (output stride 0x34 bytes). Returns the number of units exported. Used by external server-management queries.
 int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, void * pOutBuffer, int32_t nMaxCount);
 // Dead/unused server-side helper that resolves a game token from a global server table, locks the game, selects one of the five unit-type hash-bucket arrays (player/monster/object/missile/item) by nUnitId, iterates all 128 buckets tracking statistics via GAME_TrackGameStatistics, then invokes a per-unit-type callback from PFN_UnitTypeToName_ARRAY. Not reachable in shipping 1.14d; retained for reference.
-void __stdcall Unused_GetUnitList(struct D2UnitStrc * * ppUnitArray, int32_t nParam, int32_t nUnitId, int * pGameStats, int32_t nGameId);
+void __stdcall Unused_GetUnitList(struct D2UnitStrc * * ppUnitArray, int32_t pStatRoot, int32_t nUnitId, int * pGameStats, int32_t nGameId);
 // Searches the game on nServerId for nCount specific units identified by (pClassIds[i], pOutBuffer[i]) pairs and exports their type+mode into pUnitTypes (stride 0xd). Uses FindUnitFromTable for each entry; non-player hits additionally call a PFN_UnitTypeToName_ARRAY dispatch. Returns the count of units found. Counterpart to QSERVER_ExportUnitListByServerId for targeted rather than bulk export.
 int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32_t nCount, eD2UnitType * pUnitTypes, uint32_t * pClassIds, void * pOutBuffer);
 // Aggregates unit statistics across all active games in the global token table. For each game, iterates all 128 unit buckets and counts: players (bucket-type 0, increments pBucketCountdown[3]) and objects/monsters at bucket offset 0x19 (increments pBucketCountdown[1]). Also increments pBucketCountdown[0] per game found. Used for server-capacity and monitoring queries.
@@ -434,7 +432,7 @@ uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePass
 // @sourcefile .\GAME\Game.cpp
 void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName, eD2HostGameType neD2HostGameType, eD2PlayerClassID ePlayerClass, char * szCharName, int32_t nArena, eD2ArenaFlags eArenaFlags, uint8_t nTemplate, uint8_t Unknown6, uint8_t Unknown7, uint8_t nDifficulty, uint8_t nLanguageCode, uint32_t arg11, uint32_t arg12);
 void __fastcall SetStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue);
-void StaticInit_6caf10();
-// 11 internal functions (defined in .cpp)
+void StaticInit_Frames_TimeBetweenFrames();
+// 12 internal functions (defined in .cpp)
 
 } // namespace D2Game::GAME::Server

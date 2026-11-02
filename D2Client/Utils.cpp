@@ -36,34 +36,34 @@ float thunk___CIsqrt(float fValue) {
     return (float)fVar1;
 }
 
-uint32_t __fastcall RollRandomNumerUpToArgument(uint32_t nNumber) {
+int32_t __fastcall RollRandomNumerUpToArgument(int32_t nNumber) {
     D2SeedStrc seedResult;
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     D2SeedStrc* pSeed = &pPlayerUnit_lcl->sSeed;
-    if ((int)nNumber <= 0) {
+    if (nNumber <= 0) {
       return 0;
     }
 
     uint64_t uSeedCalc = (uint64_t)pPlayerUnit_lcl->sSeed.nSeedHigh;
-    if (nNumber & nNumber - 1) {
+    if (nNumber & nNumber - 1U) {
       seedResult = D2_SEED_NEXT(*pSeed);
       pSeed->nSeedHigh = seedResult.nSeedHigh;
       pSeed->nSeedLow = seedResult.nSeedLow;
-      return (uint32_t)(seedResult.nSeedLow % nNumber);
+      return (int32_t)(seedResult.nSeedLow % (uint32_t)nNumber);
     }
 
     seedResult = D2_SEED_NEXT(*pSeed);
     *pSeed = seedResult;
-    return nNumber - 1 & seedResult.nSeedLow;
+    return nNumber - 1U & seedResult.nSeedLow;
 }
 
 int32_t __fastcall RollRandomNumber(int32_t nMin, int32_t nMax) {
-    uint32_t nRoll = RollRandomNumerUpToArgument(nMax - nMin + 1);
+    int32_t nRoll = RollRandomNumerUpToArgument(nMax - nMin + 1);
     return nRoll + nMin;
 }
 
 int32_t __fastcall RollRandomNumberTimesTwo(int32_t nRange) {
-    uint32_t nRoll = RollRandomNumerUpToArgument(nRange * 2 + 1);
+    int32_t nRoll = RollRandomNumerUpToArgument(nRange * 2 + 1);
     return nRoll - nRange;
 }
 

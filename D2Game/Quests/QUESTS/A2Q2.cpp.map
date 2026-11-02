@@ -491,7 +491,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn32",
+      "name": "Objects_InitFn32_HoradricScrollChest",
       "address": "00599f00",
       "lines": [
         {
@@ -501,7 +501,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q2",
       "calledFunctions": [
-        "Objects_InitFn32"
+        "Objects_InitFn32_HoradricScrollChest"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"

@@ -706,7 +706,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn55",
+      "name": "Objects_InitFn55_DiabloStartPoint",
       "address": "005b5590",
       "lines": [
         {
@@ -716,7 +716,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A4Q2",
       "calledFunctions": [
-        "Objects_InitFn55",
+        "Objects_InitFn55_DiabloStartPoint",
         "GetQuestDataByQuestNoInternal",
         "Q27_ActivateAllSealsKillChaos",
         "AddQuestTimer"

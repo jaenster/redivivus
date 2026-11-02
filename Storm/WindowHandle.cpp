@@ -567,7 +567,7 @@ int32_t __thiscall WND_EntryArray_AllocOrReuse(int32_t pThis, int32_t pReuseEntr
     return pReuseEntry;
 }
 
-void StaticInit_6ca8e0() {
+void StaticInit_gWndTrackingList() {
     gpWndTrackingListHead.pNext = ~(uintptr_t)((char*)&gpWndTrackingListHead + 4);
     atexit(StaticFini_gWndTrackingList);
 }

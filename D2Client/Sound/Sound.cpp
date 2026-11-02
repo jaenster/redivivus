@@ -1502,17 +1502,17 @@ void __fastcall SOUND_CycleSoundMixerMode(D2EscMenuItemStrc * pItem, D2UIMouseMs
     /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&lpAddend_007c8a74);
 }
 
-int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nParam1, uint32_t nParam2, uint32_t nModulus) {
+int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFrame, uint32_t nModulus) {
     int nMinDist;
     uint32_t nMod1;
     int nWrapDist;
     uint32_t nMod2 = nModulus - 1;
     if (!(nModulus & nMod2)) {
-      nMod1 = nMod2 & nParam1;
-      nMod2 &= nParam2;
+      nMod1 = nMod2 & nFrame;
+      nMod2 &= nFootstepFrame;
     } else {
-      nMod1 = (int)nParam1 % (int)nModulus;
-      nMod2 = (int)nParam2 % (int)nModulus;
+      nMod1 = (int)nFrame % (int)nModulus;
+      nMod2 = (int)nFootstepFrame % (int)nModulus;
     }
 
     int nDiff = nMod2 - nMod1;
@@ -1579,7 +1579,8 @@ void __stdcall SOUND_TogglePauseAll() {
 // @evidence Calls GetSoundEnvironLine, Day_/Night_Ambience and _Event,
 // WEATHER_CanHaveRain, SOUND_SetEaxEnvironment, Material_1/2. It touches no channel list at all.
 void __fastcall SOUND_UpdateEnvironmentAmbience(int32_t nTick) {
-    float fVar1;
+    int32_t nPanAngle;
+    float fVar2;
     bool bIsDayNightTransition;
     int nMaterial2;
     BOOL nCycleIndex;
@@ -1622,16 +1623,16 @@ void __fastcall SOUND_UpdateEnvironmentAmbience(int32_t nTick) {
     nRainVolumeClamped = bCanRain ? 0x40 : 0;
     bCanRain = Draw::Weather::WEATHER_CanHaveRain();
     if (bCanRain) {
-      fVar1 = Draw::Weather::WEATHER_FloatPassthrough();
-      if (fVar1 != 0.0) {
+      fVar2 = Draw::Weather::WEATHER_FloatPassthrough();
+      if (fVar2 != 0.0) {
         bCanRain = Draw::Weather::WEATHER_CanHaveRain();
         if (!bCanRain) {
-          fVar1 = 0.0;
+          fVar2 = 0.0;
         } else {
-          fVar1 = Draw::Weather::WEATHER_FloatPassthrough();
+          fVar2 = Draw::Weather::WEATHER_FloatPassthrough();
         }
 
-        nRainVolume = (int)(fVar1 * 255.0);
+        nRainVolume = (int)(fVar2 * 255.0);
       }
     }
 
@@ -1718,21 +1719,21 @@ void __fastcall SOUND_UpdateEnvironmentAmbience(int32_t nTick) {
     gnSoundChannelPlaybackState = nRainVolumeClamped;
     GAME::Sound::SOUND_SetEaxEnvironment(nSoundEnvIndex);
     if (nEventSoundId) {
-      int32_t nPanAngle;
+      int32_t iVar1;
       if (nEventSoundId != int32_t_007c8c90) {
         nDayCycleIndex = _Utils::RollRandomNumberTimesTwo((uint32_t)pSoundEnvLine->Event_Delay / 3);
         UINT_007c8c94 = nDayCycleIndex + pSoundEnvLine->Event_Delay;
-        nSoundEnvIndex = _Utils::RollRandomNumerUpToArgument(UINT_007c8c94);
-        int32_t_007c8c98 = nTick - nSoundEnvIndex;
+        nDayCycleIndex = _Utils::RollRandomNumerUpToArgument(UINT_007c8c94);
+        int32_t_007c8c98 = nTick - nDayCycleIndex;
         int32_t_007c8c90 = nEventSoundId;
       }
       if ((uint32_t)(nTick - int32_t_007c8c98) >= UINT_007c8c94) {
         nVolume = SOUND_PlaySound(int32_t_007c8c90, nullptr, 0, 0, 0);
         if (nVolume) {
-          nSoundEnvIndex = _Utils::RollRandomNumerUpToArgument(2);
-          nDayCycleIndex = _Utils::RollRandomNumber(0x1c2, 0x2ee);
+          nDayCycleIndex = _Utils::RollRandomNumerUpToArgument(2);
+          iVar1 = _Utils::RollRandomNumber(0x1c2, 0x2ee);
           nPanAngle = _Utils::RollRandomNumberTimesTwo(100);
-          SOUND_PlayEnvironmentSound(nVolume, nDayCycleIndex * (nSoundEnvIndex ? 0x1 : -0x1), nPanAngle, 0);
+          SOUND_PlayEnvironmentSound(nVolume, iVar1 * (nDayCycleIndex ? 0x1 : -0x1), nPanAngle, 0);
           int32_t_007c8c98 = nTick;
           nDayCycleIndex = _Utils::RollRandomNumberTimesTwo((uint32_t)pSoundEnvLine->Event_Delay / 3);
           UINT_007c8c94 = nDayCycleIndex + pSoundEnvLine->Event_Delay;

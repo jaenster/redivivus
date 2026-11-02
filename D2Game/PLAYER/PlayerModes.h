@@ -40,7 +40,7 @@ void __fastcall PLRMODES_PickupCorpse(::SGAMEDATA * pGame, struct D2UnitStrc * p
 // Server-side handler executed when a player's death animation completes. Creates the dead-body unit at the player's current position, frees all pets, sets the client's dead flag (bit 3), and saves the game (ladder games only). Then: forces anim mode 0x11 (dead), resets HP to 0, recalculates stats, filters active states, detaches unit type from client, enables corpse collision, and cancels all periodic skill/stat timer events.
 // @sourcefile .\PLAYER\PlrModes.cpp
 void __fastcall PLRMODES_HandlePlayerDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nModeIndex, int32_t dwParam2, int32_t dwParam3);
-void __fastcall PLRMODES_StartModeWithTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nAnimMode, int32_t dwParam1, int32_t dwParam2);
+void __fastcall PLRMODES_StartModeWithTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nAnimMode, int32_t nPosX, int32_t nPosY);
 int32_t __fastcall PLRMODES_ModeCallback_GetHitCast(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 void __fastcall PLRMODES_ChangeAnimModeAndResetSkill(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nAnimMode, int32_t dwParam1, int32_t dwParam2);
 void __fastcall PLRMODES_StartCastAtPosition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nAnimMode, int32_t nPosX, int32_t nPosY);

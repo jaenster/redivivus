@@ -9,7 +9,7 @@
 namespace Fog::Source::SSComp {
 
 void __fastcall COMPRESS_HeapSiftDown(int32_t * pArray, int32_t nCount, int32_t nIndex) {
-    int nChildIndex;
+    int nChildBase;
     int nSiftValue = pArray[nIndex];
     if (nIndex >= nCount / 2) {
       pArray[nIndex] = nSiftValue;
@@ -17,11 +17,11 @@ void __fastcall COMPRESS_HeapSiftDown(int32_t * pArray, int32_t nCount, int32_t 
     }
 
     while (true) {
-      int iVar1;
-      iVar1 = nIndex * 2;
-      nChildIndex = iVar1 + 1;
-      if (nChildIndex < nCount - 1 && pArray[nChildIndex] < pArray[iVar1 + 2]) {
-        nChildIndex = iVar1 + 2;
+      int nChildIndex;
+      nChildBase = nIndex * 2;
+      nChildIndex = nChildBase + 1;
+      if (nChildIndex < nCount - 1 && pArray[nChildIndex] < pArray[nChildBase + 2]) {
+        nChildIndex = nChildBase + 2;
       }
       if (nSiftValue > pArray[nChildIndex]) {
         break;

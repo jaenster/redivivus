@@ -369,85 +369,85 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     // Static local variables (originally global data)
     static D2ObjectsInitFnFunc OBJECTSINITFN[80] = {
     nullptr,
-    &D2Game::Objects::Objects_InitFn01,
-    &D2Game::Objects::Objects_InitFn02,
-    &D2Game::Objects::Objects_InitFn03,
-    &D2Game::Quests::QUESTS::A1Q6::Objects_InitFn04,
-    &D2Game::Objects::Objects_InitFn05,
-    &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn06,
-    &D2Game::Quests::QUESTS::Objects_InitFn07,
-    &D2Game::Objects::Objects_InitFn08,
-    &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn09,
+    &D2Game::Objects::Objects_InitFn01_Shrine,
+    &D2Game::Objects::Objects_InitFn02_Urn,
+    &D2Game::Objects::Objects_InitFn03_Chest,
+    &D2Game::Quests::QUESTS::A1Q6::Objects_InitFn04_TowerTome,
+    &D2Game::Objects::Objects_InitFn05_Door,
+    &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn06_CairnStone,
+    &D2Game::Quests::QUESTS::Objects_InitFn07_CainGibbet,
+    &D2Game::Objects::Objects_InitFn08_Torch,
+    &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn09_InifussTree,
     &D2Game::Objects::Objects_InitFn10,
-    &D2Game::Objects::Objects_InitFn11,
-    &D2Game::Objects::Objects_InitFn12,
-    &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn13,
+    &D2Game::Objects::Objects_InitFn11_TownPortal,
+    &D2Game::Objects::Objects_InitFn12_PermanentPortal,
+    &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn13_InvisibleObject,
     &D2Game::Objects::Objects_InitFn14,
-    &D2Game::Quests::QUESTS::Objects_InitFn15,
-    &D2Game::Objects::Objects_InitFn16,
-    &D2Game::Objects::ObjectsRgn::Objects_InitFn17,
-    &D2Game::Quests::QUESTS::Objects_InitFn18,
-    &D2Game::Quests::QUESTS::Objects_InitFn19,
-    &D2Game::Quests::QUESTS::Objects_InitFn20,
-    &D2Game::Quests::QUESTS::A2Q7::Objects_InitFn21,
-    &D2Game::Objects::Objects_InitFn22,
-    &D2Game::Quests::QUESTS::Objects_InitFn23,
-    &D2Game::Objects::Objects_InitFn24,
-    &D2Game::Quests::QUESTS::A3Q3::Objects_InitFn25,
+    &D2Game::Quests::QUESTS::Objects_InitFn15_Malus,
+    &D2Game::Objects::Objects_InitFn16_Well,
+    &D2Game::Objects::ObjectsRgn::Objects_InitFn17_Waypoint,
+    &D2Game::Quests::QUESTS::Objects_InitFn18_JerhynPosition,
+    &D2Game::Quests::QUESTS::Objects_InitFn19_JerhynPosition,
+    &D2Game::Quests::QUESTS::Objects_InitFn20_TaintedSunAltar,
+    &D2Game::Quests::QUESTS::A2Q7::Objects_InitFn21_HoradricOrifice,
+    &D2Game::Objects::Objects_InitFn22_Fire,
+    &D2Game::Quests::QUESTS::Objects_InitFn23_LamEsenTome,
+    &D2Game::Objects::Objects_InitFn24_FloorTrap,
+    &D2Game::Quests::QUESTS::A3Q3::Objects_InitFn25_Gidbinn,
     &D2Game::Objects::Objects_InitFn26,
-    &D2Game::Objects::Objects_InitFn27,
-    &D2Game::Objects::Objects_InitFn28,
-    &D2Game::Quests::QUESTS::A2Q4::Objects_InitFn29,
-    &D2Game::Quests::QUESTS::A2Q4::Objects_InitFn30,
+    &D2Game::Objects::Objects_InitFn27_GooPile,
+    &D2Game::Objects::Objects_InitFn28_GoldPlaceholder,
+    &D2Game::Quests::QUESTS::A2Q4::Objects_InitFn29_ArcaneSanctuaryPortal,
+    &D2Game::Quests::QUESTS::A2Q4::Objects_InitFn30_HaremBlocker,
     &D2Game::Quests::QUESTS::A2Q2::Objects_InitFn31,
-    &D2Game::Quests::QUESTS::A2Q2::Objects_InitFn32,
+    &D2Game::Quests::QUESTS::A2Q2::Objects_InitFn32_HoradricScrollChest,
     &D2Game::Quests::QUESTS::A2Q2::Objects_InitFn33,
-    &D2Game::Objects::Objects_InitFn34,
+    &D2Game::Objects::Objects_InitFn34_HellBrazier,
     nullptr,
     nullptr,
     &D2Game::Quests::QUESTS::A2Q7::Objects_InitFn37,
-    &D2Game::Quests::QUESTS::A2Q7::Objects_InitFn38,
-    &D2Game::Quests::QUESTS::A3Q3::Objects_InitFn39,
+    &D2Game::Quests::QUESTS::A2Q7::Objects_InitFn38_TyraelsDoor,
+    &D2Game::Quests::QUESTS::A3Q3::Objects_InitFn39_GidbinnAltar,
     nullptr,
-    &D2Game::Quests::QUESTS::A3Q2::Objects_InitFn41,
-    &D2Game::Quests::QUESTS::A3Q2::Objects_InitFn42,
-    &D2Game::Quests::QUESTS::A3Q7::Objects_InitFn43,
-    &D2Game::Quests::QUESTS::A3Q6::Objects_InitFn44,
-    &D2Game::Quests::QUESTS::A3Q6::Objects_InitFn45,
+    &D2Game::Quests::QUESTS::A3Q2::Objects_InitFn41_SewerStairs,
+    &D2Game::Quests::QUESTS::A3Q2::Objects_InitFn42_SewerLever,
+    &D2Game::Quests::QUESTS::A3Q7::Objects_InitFn43_DarkWanderer,
+    &D2Game::Quests::QUESTS::A3Q6::Objects_InitFn44_HellGatePortal,
+    &D2Game::Quests::QUESTS::A3Q6::Objects_InitFn45_MephistoBridge,
     &D2Game::Objects::Objects_InitFn46,
-    &D2Game::Quests::QUESTS::A1Q6::Objects_InitFn47,
-    &D2Game::Quests::QUESTS::A4Q3::Objects_InitFn48,
-    &D2Game::Quests::QUESTS::A3Q1::Objects_InitFn49,
-    &D2Game::Quests::QUESTS::A3Q1::Objects_InitFn50,
-    &D2Game::Objects::Objects_InitFn51,
-    &D2Game::Quests::QUESTS::A3Q7::Objects_InitFn52,
-    &D2Game::Quests::QUESTS::A3Q5::Objects_InitFn53,
-    &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn54,
-    &D2Game::Quests::QUESTS::A4Q2::Objects_InitFn55,
-    &D2Game::Objects_InitFn56,
-    &D2Game::Objects::Objects_InitFn57,
-    &D2Game::Objects::Objects_InitFn58,
-    &D2Game::Objects::Objects_InitFn59,
-    &D2Game::Quests::QUESTS::A3Q5::Objects_InitFn60,
-    &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn61,
-    &D2Game::Quests::QUESTS::A5Q2::Objects_InitFn62,
-    &D2Game::Quests::QUESTS::A5Q5::Objects_InitFn63,
-    &D2Game::Quests::QUESTS::A5Q5::Objects_InitFn64,
-    &D2Game::Quests::QUESTS::A5Q5::Objects_InitFn65,
-    &D2Game::Quests::QUESTS::Quest40::Objects_InitFn66,
-    &D2Game::Quests::QUESTS::A5Q3::Objects_InitFn67,
-    &D2Game::Quests::QUESTS::A5Q3::Objects_InitFn68,
-    &D2Game::Quests::QUESTS::A5Q3::Objects_InitFn69,
+    &D2Game::Quests::QUESTS::A1Q6::Objects_InitFn47_CountessChest,
+    &D2Game::Quests::QUESTS::A4Q3::Objects_InitFn48_HellForge,
+    &D2Game::Quests::QUESTS::A3Q1::Objects_InitFn49_HratliStart,
+    &D2Game::Quests::QUESTS::A3Q1::Objects_InitFn50_HratliEnd,
+    &D2Game::Objects::Objects_InitFn51_TrappedSoul,
+    &D2Game::Quests::QUESTS::A3Q7::Objects_InitFn52_NatalyaStart,
+    &D2Game::Quests::QUESTS::A3Q5::Objects_InitFn53_MephistoDoor,
+    &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn54_CainStartPosition,
+    &D2Game::Quests::QUESTS::A4Q2::Objects_InitFn55_DiabloStartPoint,
+    &D2Game::Objects_InitFn56_Seal,
+    &D2Game::Objects::Objects_InitFn57_SparklyChest,
+    &D2Game::Objects::Objects_InitFn58_Fissure,
+    &D2Game::Objects::Objects_InitFn59_VileDogAfterglow,
+    &D2Game::Quests::QUESTS::A3Q5::Objects_InitFn60_CompellingOrb,
+    &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn61_CainPortal,
+    &D2Game::Quests::QUESTS::A5Q2::Objects_InitFn62_CagedWussie,
+    &D2Game::Quests::QUESTS::A5Q5::Objects_InitFn63_AncientStatue3,
+    &D2Game::Quests::QUESTS::A5Q5::Objects_InitFn64_AncientStatue1,
+    &D2Game::Quests::QUESTS::A5Q5::Objects_InitFn65_AncientStatue2,
+    &D2Game::Quests::QUESTS::Quest40::Objects_InitFn66_DrehyaStartInTown,
+    &D2Game::Quests::QUESTS::A5Q3::Objects_InitFn67_DrehyaStartOutsideTown,
+    &D2Game::Quests::QUESTS::A5Q3::Objects_InitFn68_NihlathakStartInTown,
+    &D2Game::Quests::QUESTS::A5Q3::Objects_InitFn69_SpawnFrozenstein,
     &D2Game::Quests::QUESTS::A5Q1::Objects_InitFn70,
-    &D2Game::Quests::QUESTS::A5Q1::Objects_InitFn71,
-    &D2Game::Quests::QUESTS::A5Q5::Objects_InitFn72,
-    &D2Game::Quests::QUESTS::A5Q5::Objects_InitFn73,
-    &D2Game::Quests::QUESTS::A5Q3::Objects_InitFn74,
-    &D2Game::Quests::QUESTS::A5Q6::Objects_InitFn75,
-    &D2Game::Quests::QUESTS::A5Q5::Objects_InitFn76,
-    &D2Game::Quests::QUESTS::A5Q6::Objects_InitFn77,
-    &D2Game::Quests::QUESTS::A4Q3::Objects_InitFn78,
-    &D2Game::Quests::QUESTS::A5Q6::Objects_InitFn79
+    &D2Game::Quests::QUESTS::A5Q1::Objects_InitFn71_LarzukStandard,
+    &D2Game::Quests::QUESTS::A5Q5::Objects_InitFn72_AncientsAltar,
+    &D2Game::Quests::QUESTS::A5Q5::Objects_InitFn73_AncientsDoor,
+    &D2Game::Quests::QUESTS::A5Q3::Objects_InitFn74_FrozenAnya,
+    &D2Game::Quests::QUESTS::A5Q6::Objects_InitFn75_BaalsPortal,
+    &D2Game::Quests::QUESTS::A5Q5::Objects_InitFn76_SummitDoor,
+    &D2Game::Quests::QUESTS::A5Q6::Objects_InitFn77_LastPortal,
+    &D2Game::Quests::QUESTS::A4Q3::Objects_InitFn78_LastLastPortal,
+    &D2Game::Quests::QUESTS::A5Q6::Objects_InitFn79_Zoo
 }; D2_STATIC_GUARD(OBJECTSINITFN, "D2Game::Objects::OBJECT_InitializeObject::OBJECTSINITFN");
 
     BOOL bBadCodePtr;
@@ -588,7 +588,7 @@ void __fastcall Objects_InitFn10(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Init callback for gold-pile scatter objects (object class group 28). When the object is in its Death/default state, rolls a random count (1–9) from the room seed, then for each pile picks a random ±3-tile offset, checks the nearest room and collision via CheckCollision_Vector, and spawns a gold pile via DROP_SpawnGoldInRoom if the tile is clear.
-void __fastcall Objects_InitFn28(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn28_GoldPlaceholder(D2ObjectInitFnArg * pInitArg) {
     eCollisionFlags eCollision;
     uint32_t nRandOffX2;
     D2RoomStrc* pRoom;
@@ -636,7 +636,7 @@ void __fastcall Objects_InitFn28(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Shrine object initialization function (object init table entry 1). Reads the shrine-type param from ObjectsTxt; if 0, randomly rolls a shrine type from the Shrines table (up to 8 tries, filtered by dwLevelMin vs current level); if 1/2 rolls fixed shrine category 2/3; otherwise calls OBJECT_SelectRandomShrineType. Remaps certain shrine IDs (4→2, 5→3, 0x10→0x12), stores the result in the object's szCharName[4], and sets the ShrineTxt record pointer.
-void __fastcall Objects_InitFn01(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn01_Shrine(D2ObjectInitFnArg * pInitArg) {
     D2ShrinesTxt* pShrineLine;
     uint32_t nRandIdx;
     int nShrineTypeArg;
@@ -720,7 +720,7 @@ void __fastcall Objects_InitFn01(D2ObjectInitFnArg * pInitArg) {
     D2Common::Units::SetShrineTxtRecordInObjectData(pInitArg->pObject, pShrineLine);
 }
 
-void __fastcall Objects_InitFn22(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn22_Fire(D2ObjectInitFnArg * pInitArg) {
     if (pInitArg->pObjectTxt->Mode[2]) {
       D2UnitStrc* pUnit;
       pUnit = pInitArg->pObject;
@@ -732,11 +732,11 @@ void __fastcall Objects_InitFn22(D2ObjectInitFnArg * pInitArg) {
     GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 0, pInitArg->pGame->dwGameFrame + 0x19, 0, 0);
 }
 
-void __fastcall Objects_InitFn24(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn24_FloorTrap(D2ObjectInitFnArg * pInitArg) {
     GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 3, pInitArg->pGame->dwGameFrame + 0x19, 0, 0);
 }
 
-void __fastcall Objects_InitFn02(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn02_Urn(D2ObjectInitFnArg * pInitArg) {
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
     D2LevelsTxt* pLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevelId);
     D2SeedStrc* pObjSeed = pInitArg->pSeed;
@@ -752,7 +752,7 @@ void __fastcall Objects_InitFn02(D2ObjectInitFnArg * pInitArg) {
     pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = '\0';
 }
 
-void __fastcall Objects_InitFn27(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn27_GooPile(D2ObjectInitFnArg * pInitArg) {
     D2SeedStrc* pDVar1 = pInitArg->pSeed;
     D2SeedStrc DVar2 = D2_SEED_NEXT(*pDVar1);
     *pDVar1 = DVar2;
@@ -765,11 +765,11 @@ void __fastcall Objects_InitFn27(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Init callback for lockable chest objects (group 03). Calls Objects_InitFn02 for base setup, then reads the chest's current flags. If the object's txt Lockable flag is set, rolls a seed value against (MonLvl/2 + 8) percent chance; if the roll passes the chest is flagged as locked (bit 0x80). Finally seeds the object's own RNG state with a derived value and writes back the flags.
-void __fastcall Objects_InitFn03(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn03_Chest(D2ObjectInitFnArg * pInitArg) {
     D2SeedStrc* pDVar1;
     int nSeedHighDiv;
     D2SeedStrc seedRolled;
-    Objects_InitFn02(pInitArg);
+    Objects_InitFn02_Urn(pInitArg);
     uint8_t byChestFlags;
     byChestFlags = pInitArg->pObject->pUnitData.pUnitDataMonster->Components[0];
     eD2LevelId eLevelId;
@@ -796,19 +796,19 @@ void __fastcall Objects_InitFn03(D2ObjectInitFnArg * pInitArg) {
     pInitArg->pObject->pUnitData.pUnitDataMonster->Components[0] = byChestFlags;
 }
 
-void __fastcall Objects_InitFn57(D2ObjectInitFnArg * pInitArg) {
-    Objects_InitFn03(pInitArg);
+void __fastcall Objects_InitFn57_SparklyChest(D2ObjectInitFnArg * pInitArg) {
+    Objects_InitFn03_Chest(pInitArg);
     UNIT::SUnit::SetSparklyChestFlag(pInitArg->pObject, '\x01');
 }
 
-void __fastcall Objects_InitFn58(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn58_Fissure(D2ObjectInitFnArg * pInitArg) {
     D2SeedStrc* pCtrlSeed = ObjectsRgn::GetObjectControlSeed(pInitArg->pGame, pInitArg->pRoom);
     D2SeedStrc seedTmp = D2_SEED_NEXT(*pCtrlSeed);
     *pCtrlSeed = seedTmp;
     GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 8, pInitArg->pGame->dwGameFrame + (int)(seedTmp.nSeedLow / 0xfa) * -0xfa + 0x19 + seedTmp.nSeedLow, 0, 0);
 }
 
-void __fastcall Objects_InitFn59(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn59_VileDogAfterglow(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pUnit = pInitArg->pObject;
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == Death)) {
       return;
@@ -820,7 +820,7 @@ void __fastcall Objects_InitFn59(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Object initialisation callback for waypoint-type objects (init-fn index 12). If the object is null or in Death mode, blocks collision and schedules an animation event. Then switches on the current room's level ID to write a level-specific frame byte into the object's data slot (szCharName[4]), controlling which waypoint frame/state is active. For FrigidHighlands, ArreatPlateau, and FrozenTundra it also fires event 0xB to trigger a frame-change if the stored value differs from the new one. Horadric Tomb level is determined dynamically via GetHoradricStaffTombLevelId.
-void __fastcall Objects_InitFn12(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn12_PermanentPortal(D2ObjectInitFnArg * pInitArg) {
     D2UnitDataPlayerStrc* pUnitData;
     eD2LevelId eLevelId;
     eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
@@ -905,7 +905,7 @@ void __fastcall Objects_InitFn12(D2ObjectInitFnArg * pInitArg) {
     }
 }
 
-void __fastcall Objects_InitFn08(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn08_Torch(D2ObjectInitFnArg * pInitArg) {
     D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
 }
 
@@ -917,7 +917,7 @@ void __fastcall Objects_InitFn26(D2ObjectInitFnArg * pInitArg) {
     D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 1);
 }
 
-void __fastcall Objects_InitFn34(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn34_HellBrazier(D2ObjectInitFnArg * pInitArg) {
     D2SeedStrc* pCtrlSeed = ObjectsRgn::GetObjectControlSeed(pInitArg->pGame, pInitArg->pRoom);
     D2SeedStrc seedTmp = D2_SEED_NEXT(*pCtrlSeed);
     pCtrlSeed->nSeedHigh = seedTmp.nSeedHigh;
@@ -929,11 +929,11 @@ void __fastcall Objects_InitFn34(D2ObjectInitFnArg * pInitArg) {
     D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 1);
 }
 
-void __fastcall Objects_InitFn05(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn05_Door(D2ObjectInitFnArg * pInitArg) {
 
 }
 
-void __fastcall Objects_InitFn11(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn11_TownPortal(D2ObjectInitFnArg * pInitArg) {
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
     eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevelId);
     eLevelId = D2Common::DUNGEON::Dungeon::GetTownLevelIdFromActNo(eActNo);
@@ -951,7 +951,7 @@ void __fastcall Objects_InitFn11(D2ObjectInitFnArg * pInitArg) {
     GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 1, (pInitArg->pObjectTxt->FrameCnt[1] >> 8) + 1 + pInitArg->pGame->dwGameFrame, 0, 0);
 }
 
-void __fastcall Objects_InitFn51(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn51_TrappedSoul(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pUnit = pInitArg->pObject;
     if (!(pUnit && (pUnit->eAnimMode.ePlayerMode == Walk || pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral))) {
       return;
@@ -1687,9 +1687,9 @@ D2UnitStrc * __stdcall OBJECT_SpawnBonusChest(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // DRLG room object-population spawner (object placement function variant 7). Uses the per-game object-control seed (GetObjectControlSeed) so spawns are deterministic. Rolls nChancePercent to decide whether to spawn at all; if so, picks a random spawn-offset group, reads the target object's SizeX/SizeY from ObjectsTxt, and tries up to 8 random positions within the room rectangle (DRLGROOM_GetRoomCoordinates) checking ROOM_CheckSpawnCollision. On a clear position it iterates the chosen offset table and, per slot, creates a UNIT_OBJECT (random class 0x39/0x3a) via CreateUnit and seeds a bonus chest (OBJECT_SpawnBonusChest). Halts (ERROR) on null room. Side-effecting; no return.
-D2UnitStrc * __fastcall Objects_PopulateFn7(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
+D2UnitStrc * __fastcall Objects_PopulateFn7_CorpseOnStick(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
     // Static local variables (originally global data)
-    static uint32_t gnObjectSpawnGroupCount = 0x4; D2_STATIC_GUARD(gnObjectSpawnGroupCount, "D2Game::Objects::Objects_PopulateFn7::gnObjectSpawnGroupCount");
+    static uint32_t gnObjectSpawnGroupCount = 0x4; D2_STATIC_GUARD(gnObjectSpawnGroupCount, "D2Game::Objects::Objects_PopulateFn7_CorpseOnStick::gnObjectSpawnGroupCount");
 
     // Frame slots -44..-4 are ONE object: &nOffsetX is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -1851,7 +1851,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn3(::SGAMEDATA * pGame, D2RoomStrc * pR
 }
 
 // Room-populate callback that places a density-scaled count of a specific object class at random positions. First rolls a percent chance against nChancePercent using the room seed; if it passes, iterates floor(roomArea * nDensity / 256) times calling OBJECT_PlaceAtRandomPosition and sets UNITFLAG_TARGETABLE according to the object's Selectable txt flag for the spawned mode. Halts if nDensity > 0x80.
-D2UnitStrc * __fastcall Objects_PopulateFn9(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
+D2UnitStrc * __fastcall Objects_PopulateFn9_TrappedSoul(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
     D2UnitStrc* pSpawnedUnit;
     D2SeedStrc* pRoomSeed;
     int nSpawnTarget;
@@ -1894,7 +1894,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn9(::SGAMEDATA * pGame, D2RoomStrc * pR
     return nullptr;
 }
 
-D2UnitStrc * __fastcall Objects_PopulateFn6(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
+D2UnitStrc * __fastcall Objects_PopulateFn6_Corpse(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
     D2UnitStrc* pUnit = Objects_PopulateFn3(pGame, pRoom, nDensity, nObjectClassId, nChancePercent);
     if (pUnit) {
       OBJECT_SpawnBonusChest(pGame, pUnit);
@@ -2130,7 +2130,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn4(::SGAMEDATA * pGame, D2RoomStrc * pR
 }
 
 // DRLG room object-population routine (server-side, seeded). Rolls nChancePercent against the object-control RNG to decide whether to populate pRoom at all, then computes a target spawn count from room area * nDensity. Repeatedly picks random in-room cells, validates placement via ROOM_CheckSpawnCollisionSimple, and creates UNIT_OBJECT units (nObjectClassId, or a random pick from gaObjectSpawnChanceTbl when class==0x2e) with CreateUnit. Supports growing chains of adjacent objects (offset by Objects.txt XSpace/YSpace via direction tables) up to 8 spawned per cycle. Uses the deterministic LCG seed (0x6ac690c5) so all clients agree. No return.
-D2UnitStrc * __fastcall Objects_PopulateFn5(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
+D2UnitStrc * __fastcall Objects_PopulateFn5_Crate(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
     int32_t _nDensity;
     uint16_t _nChancePercent;
     BOOL nCollisionResult;
@@ -2444,14 +2444,14 @@ static void __stdcall Roll(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2DrlgRoomCo
     int iVar2 = (DVar1.nSeedLow & 1) + nRackType * 2;
     D2ObjectsTxt* pDVar3 = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(RackType[iVar2]);
     uint32_t nObjSizeX = pDVar3->SizeX;
-    int iVar5 = pDrlgCoords->dwXStart;
+    int nXStart = pDrlgCoords->dwXStart;
     int nYStart = pDrlgCoords->dwYStart;
     int nXEnd = pDrlgCoords->dwXSize - nObjSizeX;
     uint32_t nObjSizeY = pDVar3->SizeY;
     uint32_t uVar4 = pDrlgCoords->dwYSize - nObjSizeY + nYStart;
     if (!(DVar1.nSeedLow & 1)) {
       sSpawnCoord.nY = nYStart + 1;
-      for (uVar4 = pDrlgCoords->dwXStart + nObjSizeX; uVar4 < (uint32_t)(nXEnd + iVar5); uVar4 += nObjSizeX * 2) {
+      for (uVar4 = pDrlgCoords->dwXStart + nObjSizeX; uVar4 < (uint32_t)(nXEnd + nXStart); uVar4 += nObjSizeX * 2) {
         sSpawnCoord.nX = uVar4;
         nCollisionResultX = ROOM_CheckSpawnCollision(pRoom, pDVar3->SizeY, &sSpawnCoord.nX, nObjSizeX, &pDrlgCoords->dwXStart);
         if (nCollisionResultX == 1) {
@@ -2467,9 +2467,9 @@ static void __stdcall Roll(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2DrlgRoomCo
       }
     } else {
       uint32_t nCurY;
-      iVar5 = pDrlgCoords->dwXStart + 1;
+      nXStart = pDrlgCoords->dwXStart + 1;
       nCurY = nYStart + nObjSizeY;
-      sSpawnCoord.nX = iVar5;
+      sSpawnCoord.nX = nXStart;
       if (nCurY < uVar4) {
         do {
           sSpawnCoord.nY = nCurY;
@@ -2480,7 +2480,7 @@ static void __stdcall Roll(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2DrlgRoomCo
               exit(-1);
             }
 
-            UNIT::SUnit::CreateUnit(UNIT_OBJECT, RackType[iVar2], iVar5, nCurY, pGame, pRoom, 1, 0, nullptr);
+            UNIT::SUnit::CreateUnit(UNIT_OBJECT, RackType[iVar2], nXStart, nCurY, pGame, pRoom, 1, 0, nullptr);
           }
 
           nObjSizeY = pDVar3->SizeY;
@@ -2866,12 +2866,12 @@ int32_t __fastcall GetUnitGUIDFromUnitTimerArg(D2UnitStrc * pUnit) {
     return -1;
 }
 
-void __fastcall Objects_InitFn16(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn16_Well(D2ObjectInitFnArg * pInitArg) {
     pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = (char)pInitArg->pObjectTxt->Parm[2] * '\x02';
 }
 
 // Server-side object spawner for one object class in a room. Reads ObjectsTxt for nObjectClassId (size/orientation/selectable), advances the room RNG seed, and decides whether to spawn: a density-region check (OBJECTRGN_CheckDensityThreshold) either forces placement (up to 30 retries) or gates it on nChancePercent vs the seed roll. On success calls OBJECT_PlaceAtBiasedPosition near a spawn point, sets/clears UNITFLAG_TARGETABLE from the Selectable column, and for density spawns remaps to a shrine (OBJECT_SelectRandomShrineType, ShrinesTxt line 2) and bumps the level spawn count. Finally records the placed object's X/Y into the level RNG point set via AddPointsToLevelRngPoints1.
-D2UnitStrc * __fastcall Objects_PopulateFn2(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
+D2UnitStrc * __fastcall Objects_PopulateFn2_WaypointShrine(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
     bool bCapacityFull;
     D2UnitStrc* pUnit;
     D2ShrinesTxt* pShrinesTxt;
@@ -2988,7 +2988,7 @@ void __fastcall MONSTER_SetSpawnCoordList(D2UnitStrc * pUnit, D2RoomCoordListStr
     pUnit->pUnitData.pUnitDataMonster->pVision = (uint8_t*)pCoordList;
 }
 
-void StaticInit_6caf30() {
+void StaticInit_gaObjectSpawnOffsetTables() {
     gaObjectSpawnOffsetTables[0].nCount = gaObjectSpawnOffsetGroup0[0xc];
     gaObjectSpawnOffsetTables[1].nCount = gaObjectSpawnOffsetGroup0[0x17];
     gaObjectSpawnOffsetTables[2].nCount = gaObjectSpawnOffsetGroup0[0x22];

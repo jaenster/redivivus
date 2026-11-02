@@ -564,7 +564,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x5F_PortalFlags(struct D2ClientStrc * pCli
 // Server-to-client NPC health update. Opcode 0x0C, 9 bytes.
 void __fastcall NET_D2GS_SERVER_Send_0x0C_UNITCHANGE(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t nUnitGUID, uint8_t nMessageType, uint8_t nHitClass, uint8_t nHpPercent);
 // Server-to-client object state update. Opcode 0x0E, 12 bytes.
-void __fastcall NET_D2GS_SERVER_Send_0x0E_UNITCHANGE_ID(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nObjectType, uint32_t dwUnitGUID, uint8_t nMessageType, uint8_t bParam2, uint32_t dwParam);
+void __fastcall NET_D2GS_SERVER_Send_0x0E_UNITCHANGE_ID(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nObjectType, uint32_t dwUnitGUID, uint8_t nMessageType, uint8_t bIsTargetable, uint32_t nAnimMode);
 // Server-to-client player stop message. Opcode 0x0D, 13 bytes. Sent when player stops moving.
 void __fastcall NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t nUnitGUID, uint8_t nMessageType, uint16_t wX, uint16_t wY, uint8_t nHitClass, uint8_t nHpPercent);
 // Server-to-client character to object message. Opcode 0x10, 16 bytes.
@@ -776,7 +776,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA(str
 // server flag 8 and sends one 0x9D per item. 0053d330 sends exactly one.
 void __fastcall Send0x9DAllSocketedItems(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint32_t eItemFlags);
 // Sends opcode 0x9C item-world packet to pClient. Fills D2GSPacketSrv0x9C with action, item GUID, container slot (relative to the client's player unit), then serialises the item into the bitstream with eItemFlag temporarily applied. Sends socketed children via Send0x9DItemInSocket. Halts if player unit is null or serialised size >= 0xFD.
-void __fastcall NET_D2GS_SERVER_Send_0x9C_ITEMEX(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint8_t nItemAction, eD2ItemFlag eItemFlag, uint32_t nParam);
+void __fastcall NET_D2GS_SERVER_Send_0x9C_ITEMEX(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint8_t nItemAction, eD2ItemFlag eItemFlag, uint32_t bIsCrude);
 void __fastcall Send0x9CItemAddToGround(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, eD2ItemFlag eItemFlag);
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall Send0x9CItemPickedFromGround(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, eD2ItemFlag eItemFlags);

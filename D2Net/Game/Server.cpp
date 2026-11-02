@@ -54,7 +54,7 @@ int32_t __fastcall HandleIncomingPacketBuffer(D2QServerStrc * pQServer, char * p
 }
 
 // Validates an incoming client packet before dispatch. Returns 3 if buffer empty or size indeterminate, 4 if opcode is out-of-range or packet too large (> 0x204). On success, fills pnPacketSize, pnPacketClass (0=game-phase, 1=pre-game, 2=QServer-token-gated opcodes >= 0x71), and pnTimeoutMs (100 ms). QServer-gated packets additionally checked against the game token via QServer::MatchesGameTokenFilter.
-int32_t __fastcall NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect(uint8_t * pbPacket, size_t nSize, uint32_t * pnPacketSize, int * pnUnknown, int * pnPacketClass, int * pnTimeoutMs, uint32_t dwArg1, uint32_t dwArg2, uint32_t nParam) {
+int32_t __fastcall NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect(uint8_t * pbPacket, size_t nSize, uint32_t * pnPacketSize, int * pnUnknown, int * pnPacketClass, int * pnTimeoutMs, uint32_t dwArg1, uint32_t dwArg2, uint32_t dwClientIpAddress) {
     if (nSize < 1) {
       return 3;
     }
@@ -77,7 +77,7 @@ int32_t __fastcall NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect(uint8_t * pbPacket
       } else if (byOpcode < 0x71) {
         *pnPacketClass = 0;
       } else {
-        nTokenMatch = Fog::Src::MatchesGameTokenFilter_Thunk(pQServer, nParam);
+        nTokenMatch = Fog::Src::MatchesGameTokenFilter_Thunk(pQServer, dwClientIpAddress);
         if (!nTokenMatch) {
           return 4;
         }

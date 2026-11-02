@@ -869,7 +869,7 @@ BOOL __stdcall DRLGROOM_TestRoomCanUntile(D2DrlgActStrc * pDrlgAct, D2RoomStrc *
         exit(-1);
       }
 
-      BVar1 = RoomEx_method_0(pRoom->pRoomEx);
+      BVar1 = DRLGROOMEX_TestCanUntile(pRoom->pRoomEx);
       return BVar1;
     }
 }
@@ -2076,7 +2076,7 @@ BOOL __stdcall LEVEL_IsNotTownAndNotArreatSummit(eD2LevelId eLevel) {
     return (uint32_t)(eLevel != LEVEL_ArreatSummit);
 }
 
-BOOL __fastcall RoomEx_method_0(D2RoomExStrc * pRoomEx) {
+BOOL __fastcall DRLGROOMEX_TestCanUntile(D2RoomExStrc * pRoomEx) {
     D2RoomExStrc* pRoomExIter;
     if (pRoomEx->eRoomExFlags & 0x400000U) {
       return 0;

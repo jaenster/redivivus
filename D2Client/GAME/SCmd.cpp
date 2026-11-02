@@ -1821,7 +1821,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x75_UPDATEROSTER(char * pBytes) {
 }
 
 // JMP thunk
-void __fastcall NET_D2GS_CLIENT_Incoming0x77(char * pBytes) {
+void __fastcall NET_D2GS_CLIENT_Incoming0x77(uint8_t * pBytes) {
     ::D2Client::UI::Trade::NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(pBytes);
 }
 

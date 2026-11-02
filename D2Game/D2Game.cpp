@@ -76,12 +76,12 @@ void __fastcall CLIENT_GetSaveCompleteClient(D2ClientStrc * pClient, uint32_t * 
 }
 
 // Callback for iterating active clients: if *pnParam is 0 (not yet assigned), writes nParam into *pnParam. Used as a visitor to capture the first active client slot index.
-void __fastcall CLIENT_GetFirstActiveClient(int nParam, int * pnParam) {
-    if (*pnParam) {
+void __fastcall CLIENT_GetFirstActiveClient(int pClient, int * ppActiveClient) {
+    if (*ppActiveClient) {
       return;
     }
 
-    *pnParam = nParam;
+    *ppActiveClient = pClient;
 }
 
 // JMP thunk
@@ -155,14 +155,14 @@ D2RoomStrc * __stdcall QSERVER_FindRoomInFirstActiveGame(uint8_t byActIndex, int
     return pFoundRoom;
 }
 
-void __stdcall nullsub(D2UnitStrc * dwUnused1, uint32_t dwUnused2, uint32_t dwParam3) {
+void __stdcall nullsub(D2UnitStrc * dwUnused1, uint32_t dwUnused2, uint32_t dwUnused3) {
 
 }
 
 // @wasnamed nullsub - one name on two different functions.
 // @evidence RET 0x10 (c2 10 00) - four dword arguments.
 // Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.
-void __fastcall nullsub_4Arg(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4) {
+void __fastcall SUNITDMG_DebugTraceAvoidRoll(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4) {
 
 }
 
@@ -821,7 +821,7 @@ BOOL __fastcall Q26_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc *
     return 0;
 }
 
-void __fastcall Objects_InitFn56(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn56_Seal(D2ObjectInitFnArg * pInitArg) {
 
 }
 
@@ -973,7 +973,7 @@ BOOL __fastcall Q24_PartyMember_SetAbleGoToAct4(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 void __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(D2UnitStrc * pUnit, void * pSkillData) {
-    int32_t nParam;
+    int32_t nSwitchAiMode;
     uint32_t nTargetGUID;
     uint32_t bValidTarget = SKILLS::SkillNec::SKILLNEC_ValidateCorpseTarget(*(::SGAMEDATA**)pSkillData, *(D2UnitStrc**)((int)pSkillData + 4), pUnit);
     if (!bValidTarget) {
@@ -981,13 +981,13 @@ void __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(D2UnitStrc * pUni
     }
     if (*(char*)((int)pSkillData + 0x10) == '\0') {
       nTargetGUID = *(uint32_t*)((int)pSkillData + 0x14);
-      nParam = 1;
+      nSwitchAiMode = 1;
     } else {
       nTargetGUID = *(uint32_t*)((int)pSkillData + 0x14);
-      nParam = 2;
+      nSwitchAiMode = 2;
     }
 
-    Monster::MonsterAI::AI_SetSwitchAiTargetParams(pUnit, nParam, nTargetGUID);
+    Monster::MonsterAI::AI_SetSwitchAiTargetParams(pUnit, nSwitchAiMode, nTargetGUID);
     GAME::Event::SetEvent(*(::SGAMEDATA**)pSkillData, pUnit, 10, (*(::SGAMEDATA**)pSkillData)->dwGameFrame + *(int*)((int)pSkillData + 0x18), 0, 0);
 }
 

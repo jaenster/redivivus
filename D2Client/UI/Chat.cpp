@@ -1515,7 +1515,7 @@ void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
-void StaticInit_6caaf0() {
+void StaticInit_gwszChatInputText() {
     int nWordsRemaining;
     uint16_t* pChatInputBuf = gwszChatInputText;
     for (nWordsRemaining = 0x80; nWordsRemaining; nWordsRemaining--) {
@@ -1527,7 +1527,7 @@ void StaticInit_6caaf0() {
     *pChatInputBuf = L'\0';
 }
 
-void StaticInit_6cab10() {
+void StaticInit_gaChatHistoryBuffer() {
     int nDwordsRemaining;
     uint8_t* pChatHistoryBuf = gaChatHistoryBuffer;
     for (nDwordsRemaining = 0x404; nDwordsRemaining; nDwordsRemaining--) {
@@ -1536,13 +1536,13 @@ void StaticInit_6cab10() {
     }
 }
 
-void StaticInit_6cab30() {
+void StaticInit_gwcIMECompositionString() {
     for (int iFill = 0; iFill < 32; iFill++) {
       gwcIMECompositionString[iFill] = L'\0';
     }
 }
 
-void StaticInit_6cab90() {
+void StaticInit_gwcImeCompositionBuffer() {
     for (int iFill = 0; iFill < 32; iFill++) {
       gwcImeCompositionBuffer[iFill] = L'\0';
     }

@@ -59,11 +59,11 @@ void __fastcall D2WINEDITBOX_LinkTabOrder(::D2WinEditBox * pEditBox, ::D2WinEdit
 BOOL __stdcall Mouse(struct D2ControlMsg * pEditBox);
 BOOL __stdcall D2WINEDITBOX_CreateControl(struct D2ControlMsg * pControl, int eFormType, int pDC6);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
-int __stdcall D2WINEDITBOX_Unused_Placeholder_7(uint32_t dwUnused1, uint32_t dwUnused2, char * szText);
-uint32_t __stdcall D2WINEDITBOX_Unused_Placeholder_8(uint32_t dwUnused1, uint32_t dwUnused2, char * szText);
+int __stdcall D2WINEDITBOX_FilterDigitChar(uint32_t dwUnused1, uint32_t dwUnused2, char * szText);
+uint32_t __stdcall D2WINEDITBOX_FilterLetterChar(uint32_t dwUnused1, uint32_t dwUnused2, char * szText);
 BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t byKeyChar);
 BOOL __fastcall D2WINEDITBOX_HandleKeyRelease(::D2WinEditBox * pEditBox, char cVirtualKey);
-int __fastcall D2WINEDITBOX_SetTextWide(::D2WinEditBox * pnParam, uint16_t * wszText);
+int __fastcall D2WINEDITBOX_SetTextWide(::D2WinEditBox * pEditBox, uint16_t * wszText);
 BOOL __fastcall Draw(::D2WinEditBox * pEditBox);
 BOOL __stdcall PushFlag0x8(struct D2ControlMsg * pControlMsg);
 // Sets the text of a D2Win edit box from a narrow string: widens szText into a zeroed 256-WCHAR buffer (STRING_CopyCharToWCharWithSetMaxSize) and passes it to D2WINEDITBOX_SetTextWide.

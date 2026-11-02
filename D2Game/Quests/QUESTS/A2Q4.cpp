@@ -628,7 +628,7 @@ void __fastcall BlockHaremRoomForPlayerAccess(int32_t pQuestData, D2UnitStrc * p
 }
 
 // A2Q4 - Objects_InitFn30. Object init fn: syncs a quest object's visual/update flag to the portal substate (sSub.nPortalGUID), records its GUID, and removes its collision once the portal substate == 2 (portal active). No quest-record writes.
-void __fastcall Objects_InitFn30(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn30_HaremBlocker(D2ObjectInitFnArg * pInitArg) {
     int32_t nObjectGUID;
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheArcaneSanctuary);
     if (!pDVar2) {
@@ -759,7 +759,7 @@ BOOL __fastcall OBJOP_A2Q4_StaffOfKingsAltar(D2ObjectOperateFnArg * pOperation) 
 }
 
 // A2Q4 \"The Arcane Sanctuary\" — object init-fn for the Sanctuary portal and Palace Cellar Level 3 objects. Reads the A1Q4 quest-specific sSub to determine whether the object is in LEVEL_ArcaneSanctuary (syncs nPortalGUID[1] slot) or LEVEL_PalaceCellarLevel3 (syncs field_0x2C slot). Sets the object update flag and schedules its first activation event using the object's FrameCnt[1]. No quest-record state writes.
-void __fastcall Objects_InitFn29(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn29_ArcaneSanctuaryPortal(D2ObjectInitFnArg * pInitArg) {
     int32_t nClassId;
     D2UnitStrc* pObject;
     D2ObjectsTxt* pObjectsTxt;
@@ -810,20 +810,20 @@ void __fastcall Objects_InitFn29(D2ObjectInitFnArg * pInitArg) {
 }
 
 // A2Q4 - SetObjectOperateState. Toggles the two paired Sanctuary-portal substate fields when an object is operated. nParam 0x4a: if Cellar field unset, set it to 1 and mark portal substate 2. nParam 0x36: if portal substate unset, set portal 1 and Cellar field 2. Keeps the Cellar<->Sanctuary portal pair consistent. No quest-record writes.
-void __fastcall Q12_SetObjectOperateState(::SGAMEDATA * pGame, int32_t nParam) {
+void __fastcall Q12_SetObjectOperateState(::SGAMEDATA * pGame, int32_t nFromLevelId) {
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheArcaneSanctuary);
     if (!pDVar2) {
       return;
     }
 
     D2QuestDataA2Q4Strc* pDVar1 = pDVar2->pQuestSpecificData.pA2Q4;
-    if (nParam == 0x4a) {
+    if (nFromLevelId == 0x4a) {
       if (!pDVar1->nObjectOperateState2) {
         pDVar1->nObjectOperateState2 = 1;
         pDVar1->nObjectOperateState1 = 2;
         return;
       }
-    } else if (nParam == 0x36 && !pDVar1->nObjectOperateState1) {
+    } else if (nFromLevelId == 0x36 && !pDVar1->nObjectOperateState1) {
       pDVar1->nObjectOperateState1 = 1;
       pDVar1->nObjectOperateState2 = 2;
     }

@@ -790,7 +790,7 @@ BOOL __stdcall D2GFX_BeginScene(BOOL bClear, DWORD nRed, DWORD nGreen, DWORD nBl
     return bResult;
 }
 
-double __stdcall D2GFX_GetGammaFloat_Unused() {
+double __stdcall D2GFX_GetPerformanceFrequency() {
     LARGE_INTEGER liFrequency;
     /* LARGE_INTEGER * lpFrequency for QueryPerformanceFrequency */ QueryPerformanceFrequency(&liFrequency);
     return (double)liFrequency.QuadPart;
@@ -1551,18 +1551,18 @@ BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode) {
     return 1;
 }
 
-void StaticInit_6cadf0() {
+void StaticInit_gpszWindowClassName() {
     // Static local variables (originally global data)
-    static char * fnCursorVisibilityHook = s_Diablo_II_006cc8b8; D2_STATIC_GUARD(fnCursorVisibilityHook, "D2gfx::D2GFX::StaticInit_6cadf0::fnCursorVisibilityHook");
+    static char * fnCursorVisibilityHook = s_Diablo_II_006cc8b8; D2_STATIC_GUARD(fnCursorVisibilityHook, "D2gfx::D2GFX::StaticInit_gpszWindowClassName::fnCursorVisibilityHook");
 
     gpszWindowClassName = fnCursorVisibilityHook;
 }
 
-void StaticInit_6cae00() {
+void StaticInit_szWindowClassName() {
     szWindowClassName = gpszDiabloIIClassNameSource;
 }
 
-void StaticInit_6cae10() {
+void StaticInit_gpszWindowTitle() {
     gpszWindowTitle = gpszDiabloIIClassNameSource;
 }
 

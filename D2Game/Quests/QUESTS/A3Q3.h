@@ -135,7 +135,7 @@ uint8_t __fastcall Q20_QuestUpdate(::SGAMEDATA * pGame, struct D2QuestDataStrc *
 // or quest not in real play, flags the object hidden/disabled (SetupUpdateFlag 2). Otherwise records
 // the object's location/GUID into the A3Q3 state and, if the trigger already arrived but the drop
 // hasn't happened, spawns the unique serpent now.
-void __fastcall Objects_InitFn25(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn25_Gidbinn(struct D2ObjectInitFnArg * pInitArg);
 // A3Q3 "Khalim's Will" — object OPERATE fn (the Compelling-Orb / quest object trigger; name says
 // A3Q5 but it gates on QUEST_BladeOfTheOldReligion). Fires when the object's victim is null/dead.
 // Only proceeds if the attacker's quest is NOT Completed(0), NOT Step0x07, NOT Step0x08 (i.e. orb not
@@ -145,10 +145,10 @@ void __fastcall Objects_InitFn25(struct D2ObjectInitFnArg * pInitArg);
 BOOL __fastcall OBJOP_A3Q5_NihlathakPortalTrigger(struct D2ObjectOperateFnArg * pOperation);
 // A3Q3 "Khalim's Will" — accessor: returns the recorded serpent-killer/spawn GUID into *pnParam
 // (and true) when the quest is in real play and the relevant flag is set; else false. Read-only.
-uint32_t __fastcall Q20_GetSerpentKillerGUID(::SGAMEDATA * pGame, int * pnParam);
+uint32_t __fastcall Q20_GetSerpentKillerGUID(::SGAMEDATA * pGame, int * pnPlayerGUID);
 // A3Q3 "Khalim's Will" — accessor: when the serpent/orb-object "pending" flag (field_0x06) is set,
 // returns its location (field_0x10) and GUID into pdwParam[0..1] and 1; else 0. Read-only.
-BOOL __fastcall Q20_GetSerpentLocation(::SGAMEDATA * pGame, uint32_t * pdwParam);
+BOOL __fastcall Q20_GetSerpentLocation(::SGAMEDATA * pGame, uint32_t * pdwOut);
 // A3Q3 "Khalim's Will" — activates the serpent/orb object: clears its pending flag, finds the stored
 // object unit, flags it for update and schedules its open event, then marks it activated (state 2).
 // Drives the visible opening of the quest object. No quest-state bit writes.
@@ -156,7 +156,7 @@ void __fastcall Q20_ActivateSerpentObject(::SGAMEDATA * pGame);
 // A3Q3 "Khalim's Will" — object init fn (#39) for a second quest object. Records the object's GUID
 // and coordinates into the A3Q3 state struct and applies the stored update/visibility flag
 // (aPlayerGUID[0xb]) to the object so it shows in the correct state on (re)creation. No quest bits.
-void __fastcall Objects_InitFn39(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn39_GidbinnAltar(struct D2ObjectInitFnArg * pInitArg);
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Game::Quests::QUESTS::A3Q3

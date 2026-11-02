@@ -1363,7 +1363,7 @@ void __fastcall SpawnFrozenAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // Objects_InitFn67 (PrisonOfIce object init): records the frozen-Anya object GUID; if not yet spawned, schedules the
 // SpawnFrozenAnya timer event (+0x19 frames). Init hook for the ice-block object placement.
-void __fastcall Objects_InitFn67(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn67_DrehyaStartOutsideTown(D2ObjectInitFnArg * pInitArg) {
     int32_t nObjectGUID;
     int32_t nFrozenAnyaGUID;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_PrisonOfIce);
@@ -1388,7 +1388,7 @@ void __fastcall Objects_InitFn67(D2ObjectInitFnArg * pInitArg) {
 
 // Objects_InitFn68 (PrisonOfIce object init): records an object GUID and, once, spawns the Frozenstein/guard monster
 // (classId 0x202) near coords, taking over its DRLG map AI from the preset. Sets the spawned flag in pA5Q3.
-void __fastcall Objects_InitFn68(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn68_NihlathakStartInTown(D2ObjectInitFnArg * pInitArg) {
     int32_t nObjectGUID;
     D2QuestDataA5Q3Strc* pQuestSpecificData;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_PrisonOfIce);
@@ -1426,7 +1426,7 @@ void __fastcall Objects_InitFn68(D2ObjectInitFnArg * pInitArg) {
 
 // Objects_InitFn69 (PrisonOfIce object init): once Anya-extra-state is set, spawns the SuperUnique boss (Frozenstein,
 // SuperUniques row 0x3c -> preset act value) via SpawnMonster, recording its GUID. Guards Anya's prison.
-void __fastcall Objects_InitFn69(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn69_SpawnFrozenstein(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_PrisonOfIce);
     if (!pQuestData) {
       return;
@@ -1659,7 +1659,7 @@ void __fastcall Q33_OnNpcNotifyPlayers(::SGAMEDATA * pGame) {
 
 // Objects_InitFn74 (PrisonOfIce object init): records the (Anya prison/cave entrance) object GUID; if quest active and
 // prev<2, broadcasts stateFlag 2 (prison discovered) via Q33_NotifyQuestState.
-void __fastcall Objects_InitFn74(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn74_FrozenAnya(D2ObjectInitFnArg * pInitArg) {
     int32_t nObjectGUID;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_PrisonOfIce);
     if (!pQuestData) {

@@ -104,7 +104,7 @@ uint32_t __fastcall PALETTE_GetColorByIndex(int nPaletteIndex) {
     return g_Palette32Bit[nPaletteIndex];
 }
 
-void __fastcall RENDERER_D3D_ConvertPalettedTo16Bit(uint8_t * pSrc8Bit, uint16_t * pDest16Bit, int nWidth, int nHeight, int nDestPitchInPixels, uint32_t dwParam6) {
+void __fastcall RENDERER_D3D_ConvertPalettedTo16Bit(uint8_t * pSrc8Bit, uint16_t * pDest16Bit, int nWidth, int nHeight, int nDestPitchInPixels, uint32_t dwUnused) {
     uint8_t* pbSrcPixel;
     int nPixelsRemaining;
     if (nHeight <= 0) {

@@ -62,7 +62,7 @@ void __stdcall CELCMP_SetPixelDataFreeCallback(pfnCelPixelDataFree pfnFreeCallba
 pfnCelPixelDataFree __stdcall CELCMP_GetPixelDataFreeCallback();
 void __stdcall DeleteCellFile(struct DC6 * pDC6);
 int __stdcall CELCMP_GetDC6BlockPixelData(struct DC6Block * pDC6Block);
-uint32_t __stdcall CELCMP_RoundUpToMultiple(uint32_t nParam1, uint32_t nParam2);
+uint32_t __stdcall CELCMP_RoundUpToMultiple(uint32_t nValue, uint32_t nMultiple);
 void __stdcall CELCMP_FreeCelFileAndData(struct DC6 * pDC6);
 void __stdcall CELCMP_AddCelFrameToCache(uint32_t nCelListKey, uint32_t * pSrcPixels, uint32_t dwImageByteStride, uint32_t nHeight, uint32_t dwPixelWidth, uint32_t nOffsetX, uint32_t nOffsetY, uint32_t nParam7);
 void __stdcall CELCMP_FreeCachedCelFrame(uint32_t dwHashVal);
@@ -77,7 +77,7 @@ void __stdcall GFX_InitGlobalCriticalSection();
 void __stdcall GFX_DestroyGlobalCriticalSection();
 void __fastcall CELCMP_ApplyColorKeyToAllPixels(void * pFrameData, pfnTilecmpPixelCallback pfnPixelCallback, uint32_t dwColorKey);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca286(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
-void StaticInit_6cafc0();
+void StaticInit_gCelCmpCacheHandler();
 void StaticFini_gCelCmpCacheHandler();
 
 } // namespace D2CMP::SRC::CelCmp

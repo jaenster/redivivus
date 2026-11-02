@@ -957,7 +957,7 @@
       ]
     },
     {
-      "name": "D2WIN_Unused_Placeholder_5",
+      "name": "D2WIN_TakeScreenshotMsgHandler",
       "address": "004fa840",
       "lines": [
         {
@@ -967,7 +967,7 @@
       ],
       "namespace": "D2Win::Src::D2WinMain",
       "calledFunctions": [
-        "D2WIN_Unused_Placeholder_5",
+        "D2WIN_TakeScreenshotMsgHandler",
         "TakeScreenshot"
       ],
       "usedTypes": [

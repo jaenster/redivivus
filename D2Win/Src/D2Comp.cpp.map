@@ -674,7 +674,7 @@
         "FreeServerMemory",
         "memset",
         "STRUCT_CreateTxtLinkStrc",
-        "FillUpTxtLinkSub0x08"
+        "FOG_AddTxtLinkRecord"
       ],
       "usedTypes": [
         "D2BinFieldInputStrc",

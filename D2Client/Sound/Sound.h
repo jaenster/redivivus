@@ -277,7 +277,7 @@ void __stdcall SOUND_ShutdownSystem();
 void __stdcall SoundChaosDebug();
 BOOL __stdcall SOUND_IsDirectSoundAvailable();
 BOOL __stdcall SOUND_IsEaxAvailable();
-int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nParam1, uint32_t nParam2, uint32_t nModulus);
+int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFrame, uint32_t nModulus);
 void __stdcall SOUND_TogglePauseAll();
 // @wasnamed SOUND_UpdateAllChannels - one name on two different functions.
 // @evidence Calls GetSoundEnvironLine, Day_/Night_Ambience and _Event,

@@ -407,7 +407,7 @@ static BOOL CoordIsInRoom(D2RoomStrc * pRoom, int32_t nX, int32_t nSize, int32_t
 }
 
 // Collision/proximity scan (apparently unreferenced): finds the first unit adjacent to pUnit that satisfies a caller-supplied predicate. Bails unless pUnit's X-size is 1..3. Gets pUnit's room and dynamic-path X/Y, enumerates the adjacent-room list (DRLGROOM_GetAdjacentRoomsList), and for each candidate player/monster/missile (skipping dead/special anim modes) computes a size-pair-indexed range test (switch on candidateSizeX + unitSizeX*3 - 4) between the two units' positions. On a position match it invokes pfCallback (a __stdcall code pointer, dwCallbackParam appears unused in the call) and returns the candidate unit if the callback returns nonzero. Returns NULL if none match.
-D2UnitStrc * __stdcall _unused(D2UnitStrc * pUnit, pfnUnitProximityTest pfnCallback, void * pCallbackParam) {
+D2UnitStrc * __stdcall COLLISION_FindNearbyUnitByCallback(D2UnitStrc * pUnit, pfnUnitProximityTest pfnCallback, void * pCallbackParam) {
     BOOL _bCandidateInRoom;
     bool bCandidateInRoom;
     int32_t nCandidateSizeX;

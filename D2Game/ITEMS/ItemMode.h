@@ -92,7 +92,7 @@ BOOL __fastcall ToCursorItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, str
 // @sourcefile .\ITEMS\ItemMode.cpp
 BOOL __fastcall ITEM_InsertScrollIntoBook(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nScrollGUID, DWORD nBookGUID, uint32_t * pbBadParams);
 void __fastcall ITEMMODE_NullSub(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-void __fastcall ITEMMODE_ReturnZero2(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall ITEMMODE_RemoveExpiredStatLists(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Server-side: scans the unit's inventory for a key (ITEMTYPE_Key) in INVPAGE_INVENTORY. If found and quantity &gt; 1, decrements quantity by 1 and sends a 0x3E stat-update packet. If quantity reaches 1, destroys the key via ITEMMODE_ConsumeItem. Returns 1 if a key was consumed, 0 otherwise. Halts on null pGame/pUnit.
 // @sourcefile .\ITEMS\ItemMode.cpp
 BOOL __fastcall ITEMMODE_CheckEquipRestrictions(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
@@ -122,12 +122,12 @@ void __fastcall ITEMMODE_SetItemFlags(struct D2UnitStrc * pUnit, struct D2UnitSt
 void __fastcall ITEMMODE_CheckItemLevel(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit);
 BOOL __fastcall ITEMMODE_ApplyQuestReward(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
 // Randomly selects an item code from a weighted pickup table (pbParam encodes two pools: normal and good), using the unit's seed RNG. For the selected item, checks difficulty-based upgrade odds (UberCode / UltraCode from DifficultyLevels.txt) and potentially promotes the code to its uber or ultra variant. Returns the final item code string pointer.
-uint32_t __fastcall ITEMMODE_HandleItemPickup(int32_t nParam, uint8_t * pbParam, struct D2UnitStrc * pUnit, int32_t bPreferGood);
+uint32_t __fastcall ITEMMODE_HandleItemPickup(int32_t nParam, uint8_t * pItemCodeTable, struct D2UnitStrc * pUnit, int32_t bPreferGood);
 // Iterates all items in a player's inventory; for each item in a body-location grid slot (type 3) or an active-charm slot (type 1), unequips its stats (ITEMMODE_UnequipItemStats), swaps the primary weapon slot if needed, recalculates equipped item states, then frees all recursive inventory children after the loop. Halts with an internal error if the item pointer is inconsistent.
 void __fastcall ITEMMODE_ProcessItemDropLogic(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall UpdatePlayerItemState(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t connectionIsUp);
 void __fastcall ITEMMODE_GetItemCursorMode(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOwner);
-void __fastcall ITEMMODE_IsItemOnCursor(int32_t nParam, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOwner);
+void __fastcall ITEMMODE_IsItemOnCursor(int32_t pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOwner);
 // Recharges all charged-skill stats (stat 0xCC) on an item that are below their maximum charge count. For each under-charged skill, calls ITEMMOD_SetChargedSkillCharges and sends a 0x3E UpdateItemStats packet to the owning player's client. Returns 1 if any charge was restored, 0 otherwise.
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall ITEMMODE_HandleCursorItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);

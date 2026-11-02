@@ -2610,10 +2610,10 @@ int32_t __fastcall SKILLS_GetSummonMonsterClassId(D2UnitStrc * pUnit, int32_t bU
     return nMonsterClassId;
 }
 
-uint16_t __fastcall SKILLS_CalcToHitAndApply(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2SkillsTxt * pSkillsTxt, int32_t nSkillId, int32_t nSkillLvl, D2DamageStrc * pDamage, int32_t nParam4) {
+uint16_t __fastcall SKILLS_CalcToHitAndApply(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2SkillsTxt * pSkillsTxt, int32_t nSkillId, int32_t nSkillLvl, D2DamageStrc * pDamage, int32_t nExtraRange) {
     if (!(pSkillsTxt->ResultFlags & 1U)) {
       uint16_t nToHitFlags;
-      nToHitFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, nSkillId, nSkillLvl), nParam4);
+      nToHitFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, nSkillId, nSkillLvl), nExtraRange);
       pDamage->wResultFlags = nToHitFlags;
       if (nToHitFlags & 1) {
         nToHitFlags = pSkillsTxt->ResultFlags | nToHitFlags;
@@ -4147,7 +4147,7 @@ void __thiscall SKILL_ApplyStunState(void * pThis, D2UnitStrc * pUnit, eD2States
     pUnit->eUnitFlags &= ~UNITFLAG_DOUPDATE;
 }
 
-void __fastcall SKILL_StunExpireAndRestoreAi(D2UnitStrc * pUnit, eD2States eState, uint32_t dwParam) {
+void __fastcall SKILL_StunExpireAndRestoreAi(D2UnitStrc * pUnit, eD2States eState, uint32_t pStatListEx) {
     ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
     eD2States eUninterruptState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
     if (eUninterruptState != STATE_none) {
@@ -4158,7 +4158,7 @@ void __fastcall SKILL_StunExpireAndRestoreAi(D2UnitStrc * pUnit, eD2States eStat
       Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, pAiGeneral, 0);
     }
 
-    DefaultExpireFunction(pUnit, eState, dwParam);
+    DefaultExpireFunction(pUnit, eState, pStatListEx);
 }
 
 D2UnitStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, eD2States eState, eD2Skills eSkill, int32_t nSkillLvl) {

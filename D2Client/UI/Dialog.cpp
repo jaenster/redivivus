@@ -1037,7 +1037,7 @@ void __fastcall DIALOG_RecalculateLayout(D2DialogStrc * pDialog) {
     int32_t nFont;
     int nXOrigin;
     int32_t* piStringEntry;
-    int iVar1;
+    int nBackgroundWidth;
     int nLineCount;
     int nNonClickableCount;
     int i;
@@ -1072,10 +1072,10 @@ void __fastcall DIALOG_RecalculateLayout(D2DialogStrc * pDialog) {
         } while (nLineCount < pDialog->nSubCounter);
       }
 
-      iVar1 = nBoxWidth + 0x14;
+      nBackgroundWidth = nBoxWidth + 0x14;
       nHeight += 0xf;
       D2Win::Src::D2WinFont::SetAndReturnLastFont(nFont);
-      nXOrigin = pDialog->pCoords.x - iVar1 / 2;
+      nXOrigin = pDialog->pCoords.x - nBackgroundWidth / 2;
       nLayoutMode = pDialog->nLayoutMode;
       pDialog->pCoords2.x = nXOrigin;
       if (nLayoutMode) {
@@ -1085,7 +1085,7 @@ void __fastcall DIALOG_RecalculateLayout(D2DialogStrc * pDialog) {
       }
 
       pDialog->pCoords2.y = pDialog->pCoords.y - nNonClickableCount;
-      if (iVar1 > ScreenSizeX - 0x50) {
+      if (nBackgroundWidth > ScreenSizeX - 0x50) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d2);
         exit(-1);
       } else {
@@ -1093,8 +1093,8 @@ void __fastcall DIALOG_RecalculateLayout(D2DialogStrc * pDialog) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d7);
           exit(-1);
         }
-        if (nXOrigin + iVar1 > ScreenSizeX - 10) {
-          pDialog->pCoords2.x = ScreenSizeX - iVar1;
+        if (nXOrigin + nBackgroundWidth > ScreenSizeX - 10) {
+          pDialog->pCoords2.x = ScreenSizeX - nBackgroundWidth;
         }
         if (pDialog->pCoords2.y + nHeight > ScreenSizeY - 0x3a) {
           pDialog->pCoords2.y = ScreenSizeY - nHeight - 0x30;
@@ -1106,7 +1106,7 @@ void __fastcall DIALOG_RecalculateLayout(D2DialogStrc * pDialog) {
           pDialog->pCoords2.y = 10;
         }
 
-        pDialog->nBackgroundWidth = iVar1;
+        pDialog->nBackgroundWidth = nBackgroundWidth;
         i = 0;
         pDialog->nBackgroundHeight = nHeight;
         if (pDialog->nSubCounter <= 0) {

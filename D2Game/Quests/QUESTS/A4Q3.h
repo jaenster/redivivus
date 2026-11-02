@@ -25,14 +25,14 @@ void __fastcall Q35_SpawnAncientsWave(::SGAMEDATA * pGame, struct D2UnitStrc * p
 // A4Q3 Hell's Forge — Q27_IsClassicGameCompleted: returns 1 only in a CLASSIC (non-expansion) game once Terror's End (Diablo killed) is done, i.e. the game's victory condition for classic D2. Reads TerrorsEnd quest data field_0x14 (Diablo-killed flag). No quest-state writes; pure predicate.
 BOOL __fastcall Q27_IsClassicGameCompleted(::SGAMEDATA * pGame);
 // A4Q3 Hell's Forge — Objects_InitFn78: object init for an Act4 quest object keyed off TerrorsEnd (Diablo) quest data. First touch sets the object's per-quest marker to 2 and update-flag 1 (un-touched/active visual); subsequent touches set update-flag 2 (completed/depleted visual). State stored in pA4Q3 quest-specific GUID scratch, not in the QuestRecord bitfield.
-void __fastcall Objects_InitFn78(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn78_LastLastPortal(struct D2ObjectInitFnArg * pInitArg);
 // A4Q3 — OBJOP_A4Q2_PandemoniumFortressGate: operate handler for the Act4 Pandemonium Fortress gate to Act5. Gate is locked until Terror's End (QUEST_TerrorsEnd: Diablo dead) is Completed or JustCompleted; else plays the locked "can't" sound and returns. Once unlocked AND player is in Act IV: sets QUEST_AbleGoToAct5 Completed+JustCompleted (first time only), sends the 0x5D quest-state and 0x61 can-go-to-act packets, loads/portals the player to Harrogath (LEVEL_Harrogath, act 5), resyncs quest info, and unlocks the Harrogath waypoint. Expansion-only.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 BOOL __fastcall OBJOP_A4Q2_PandemoniumFortressGate(struct D2ObjectOperateFnArg * pOperation);
 // A4Q3 Hell's Forge — Q28_PlayerNotifyCompletedForge: per-player state-broadcast callback (passed to QUEST_SetStateAndBroadcast). Sends quest-update 0x18 to the player ONLY in the transition window: Hell's Forge is Completed-or-FinishedInPreviousGame AND NOT (JustCompleted or CannotCompleteQuestInGame). I.e. notifies players who finished it in a prior game when they re-enter, suppressing duplicate "just done" notifications.
 BOOL __fastcall Q28_PlayerNotifyCompletedForge(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // A4Q3 Hell's Forge — Objects_InitFn48: init for the Hellforge object. No quest data / not yet introduced -> update-flag 3 (default/unstarted visual). Otherwise sets update-flag from cached pA4Q3 state word; if the prior state flag is not one of {0xd,2,3} (i.e. not already in/after the smash sequence) it resets eFlags and broadcasts state 2 (forge-active) via QUEST_SetStateAndBroadcast + Q28_PlayerNotifyCompletedForge.
-void __fastcall Objects_InitFn48(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn48_HellForge(struct D2ObjectInitFnArg * pInitArg);
 // A4Q3 Hell's Forge — Q28_Callback_04 (state-handler slot 4): when the quest is neither Completed, JustCompleted nor RewardAwaits, and the quest is introduced, prior-state != 0xd, and current stateFlag == 0, bump the internal stateFlag to 1 (Hellforge-introduced/started). Drives the early "go smash the soulstone" progression. No QuestRecord writes (internal flag only).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q3.cpp
 void __fastcall Q28_Callback04_ItemPickedUp(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);

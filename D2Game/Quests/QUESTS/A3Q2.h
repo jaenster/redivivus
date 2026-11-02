@@ -48,9 +48,9 @@ BOOL __fastcall OBJOP_A3Q2_KhalimRelicPedestal(struct D2ObjectOperateFnArg * pOp
 // Registers: pQuestData in ECX; pMonster in EDX is passed by the caller but not read.
 void __fastcall Q19_UpdateCompellingOrbObject(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pMonster);
 // Objects_InitFn41 (Khalim's Will, InitFn41). Object init for the Compelling Orb: marks the orb-event flag set, records the object's GUID, and sets the object's update flag (2 during intro, else the tracked GUID). Initializes orb object state; no QuestRecord transitions.
-void __fastcall Objects_InitFn41(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn41_SewerStairs(struct D2ObjectInitFnArg * pInitArg);
 // Objects_InitFn42 (Khalim's Will, InitFn42). Object init for a related quest object: while quest is still in intro state, sets the object update flag to 2. No QuestRecord transitions.
-void __fastcall Objects_InitFn42(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn42_SewerLever(struct D2ObjectInitFnArg * pInitArg);
 // Q19_OnPlayerCubeKhalimsWill (Khalim's Will). Callback when a player has the assembled Khalim's Will (transmuting relics in the cube). Reads Completed (and RewardAwaits when not complete) and updates the quest GUID per-player counters tracking who has assembled the Will. State reads only; no SetQuestState.
 void __fastcall Q19_OnPlayerCubeKhalimsWill(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Q19_CheckPlayerHasKhalimsEye (Khalim's Will). Per-player iterator predicate: if player lacks Khalim's Eye (0x20796571) and lacks the assembled Will (0x20326671), increments the quest GUID eye-needed counter. Used by the Eye relic portal drop to decide how many to spawn.

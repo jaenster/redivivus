@@ -1815,7 +1815,7 @@
       ]
     },
     {
-      "name": "StaticInit_6caf60",
+      "name": "StaticInit_gnSeedCounter",
       "address": "006caf60",
       "lines": [
         {
@@ -1825,7 +1825,7 @@
       ],
       "namespace": "D2Game::UNIT::SUnit",
       "calledFunctions": [
-        "StaticInit_6caf60",
+        "StaticInit_gnSeedCounter",
         "GetTickCount"
       ]
     }

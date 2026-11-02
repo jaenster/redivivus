@@ -462,9 +462,9 @@ void __stdcall D3D_CreateSystemMemoryTexturesForTiles() {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x27);
       exit(-1);
     } else {
-      int32_t iVar1;
-      iVar1 = Renderer::RENDERER_D3D_CreateSystemMemoryTexture(&gpD3DSubtileSystemSurface, &gpD3DSubtileMemoryTexture, 0x20, 0x20);
-      if (!iVar1) {
+      int32_t bSubtileCreated;
+      bSubtileCreated = Renderer::RENDERER_D3D_CreateSystemMemoryTexture(&gpD3DSubtileSystemSurface, &gpD3DSubtileMemoryTexture, 0x20, 0x20);
+      if (!bSubtileCreated) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2a);
         exit(-1);
       }

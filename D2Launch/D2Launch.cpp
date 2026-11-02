@@ -123,7 +123,7 @@ BOOL __stdcall MAINMENU_ConnectViaTCPIPAndSelectChar(D2ControlMsg * pControlMsg)
     return 1;
 }
 
-BOOL __stdcall MAINMENU_Unused18(D2ControlStrc * pControl) {
+BOOL __stdcall MAINMENU_OnPressSkipEmailAddress(D2ControlStrc * pControl) {
     gpBNetCallbacks->pfnSendSetEmail("");
     D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;

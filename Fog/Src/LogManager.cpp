@@ -1062,7 +1062,7 @@ void __stdcall DeleteOldLogFiles() {
       if (hFindFile != (HANDLE)-1) {
         do {
           Storm::Source::SSTR::SStrPrintf(szFilePath, 0x104, "%s%s", szLogsFolder, findData.cFileName);
-          DeleteOldLogFile((uintptr_t)&ftCurrentTime, szFilePath);
+          DeleteOldLogFile(&ftCurrentTime, szFilePath);
           /* LPWIN32_FIND_DATAA lpFindFileData for FindNextFileA */ /* HANDLE hFindFile for FindNextFileA */ bFound = FindNextFileA(hFindFile, &findData);
         } while (bFound);
 
@@ -1847,12 +1847,12 @@ int SehHandler_6c9e6a(EHExceptionRecord * pExceptionRecord, EHRegistrationNode *
     return ExceptionContinueSearch;
 }
 
-void StaticInit_6ca700() {
+void StaticInit_gLogMessageQueueCS() {
     InitializeCriticalSection(&gLogMessageQueueCS);
     atexit(StaticFini_gLogMessageQueueCS);
 }
 
-void StaticInit_6ca720() {
+void StaticInit_gLogFileCS() {
     InitializeCriticalSection(&gLogFileCS);
     atexit(StaticFini_gLogFileCS);
 }

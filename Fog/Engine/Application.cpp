@@ -503,7 +503,7 @@ void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA,
     *pnSize = nSize;
 }
 
-void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, IMAGE_OPTIONAL_HEADER32 * pOptHeader) {
+void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwUnused, uint32_t * pnRVA, uint32_t * pnSize, IMAGE_OPTIONAL_HEADER32 * pOptHeader) {
     if (pOptHeader->NumberOfRvaAndSizes <= 6) {
       return;
     }
@@ -548,9 +548,9 @@ static uint8_t DEBUG_ParseRSDSDebugInfo(void * pDebugRecord, D2FogDebugModuleEnt
     strncpy_s(pModuleInfo->szImagePath, 0x100, (LPCSTR)((int)pDebugRecord + 0x18), -1);
     pModuleInfo->dwPdbAge = *(uint32_t*)((int)pDebugRecord + 0x14);
     pModuleInfo->guidPdb.Data1 = *(uint32_t*)((int)pDebugRecord + 4);
-    uint32_t uVar1 = *(uint32_t*)((int)pDebugRecord + 8);
-    pModuleInfo->guidPdb.Data2 = (short int)uVar1;
-    pModuleInfo->guidPdb.Data3 = (short int)((uint32_t)uVar1 >> 0x10);
+    uint32_t dwGuidData2Data3 = *(uint32_t*)((int)pDebugRecord + 8);
+    pModuleInfo->guidPdb.Data2 = (short int)dwGuidData2Data3;
+    pModuleInfo->guidPdb.Data3 = (short int)((uint32_t)dwGuidData2Data3 >> 0x10);
     *(uint32_t*)pModuleInfo->guidPdb.Data4 = *(uint32_t*)((int)pDebugRecord + 0xc);
     *(uint32_t*)(pModuleInfo->guidPdb.Data4 + 4) = *(uint32_t*)((int)pDebugRecord + 0x10);
     return 1;

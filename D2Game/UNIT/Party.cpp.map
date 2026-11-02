@@ -97,7 +97,7 @@
       ]
     },
     {
-      "name": "AllocPartyControlSub0x4",
+      "name": "PARTY_CreateParty",
       "address": "00540100",
       "lines": [
         {
@@ -107,7 +107,7 @@
       ],
       "namespace": "D2Game::UNIT::Party",
       "calledFunctions": [
-        "AllocPartyControlSub0x4",
+        "PARTY_CreateParty",
         "AllocServerMemory",
         "PARTY_UpdateNextPartyId",
         "GetInstructionPointer",

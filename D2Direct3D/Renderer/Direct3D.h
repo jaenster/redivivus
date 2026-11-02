@@ -1120,7 +1120,7 @@ namespace D2Direct3D::Renderer {
 HRESULT __stdcall D3D_EnumTextureFormatsCallback(void * lpDDPixFmt, DWORD * pnDeviceFlags);
 void ClearCaches();
 uint32_t __fastcall PALETTE_GetColorByIndex(int nPaletteIndex);
-void __fastcall RENDERER_D3D_ConvertPalettedTo16Bit(uint8_t * pSrc8Bit, uint16_t * pDest16Bit, int nWidth, int nHeight, int nDestPitchInPixels, uint32_t dwParam6);
+void __fastcall RENDERER_D3D_ConvertPalettedTo16Bit(uint8_t * pSrc8Bit, uint16_t * pDest16Bit, int nWidth, int nHeight, int nDestPitchInPixels, uint32_t dwUnused);
 void __fastcall RENDERER_D3D_SetBlendMode(int nBlendMode);
 // Sets Direct3D alpha blending mode. Mode 1=opaque, 2=additive, 3=modulate, 4=alpha blend. Caches current mode to avoid redundant state changes.
 void __fastcall SetBlendMode(int nBlendMode);

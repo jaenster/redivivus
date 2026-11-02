@@ -28,6 +28,6 @@ void __fastcall Q40_Callback11_ScrollMessage(struct D2QuestDataStrc * pQuestData
 // Quest-slot initializer for internal quest 40 (nQuestIdReal=QUEST_ActIntroduced, the "act intro" gossip pseudo-quest). Zeroes the 0x3C-byte state-function table on the D2QuestDataStrc, installs the gossip dispatch handlers (slot 0 = Q40_Callback_00, slot 0xB = Q40_Callback_11), points pNpcMessages at the act's aNpcGossipData, marks the quest active with cleared state flags, sets no per-game scratch (pQuestSpecificData=NULL), and registers the status/active filters (Q40_StatusFilter/Q40_ActiveFilter). No journal/reward; a dialog gate only.
 void __fastcall Q40_InitData(struct D2QuestDataStrc * pQuestData);
 // Object init callback for Quest 40 (Prison of Ice, A5Q3). Records the initialized object's GUID and coords into the A5Q3 quest-specific data. If the trigger count reaches 2, fires Q33_SequenceFilter; if the Tristram portal has not yet been initialized, spawns a monster near the object's coords and transfers its DRLG map AI file. Also fires a timed event if the BetrayalOfHaggorath quest completion flag is set.
-void __fastcall Objects_InitFn66(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn66_DrehyaStartInTown(struct D2ObjectInitFnArg * pInitArg);
 
 } // namespace D2Game::Quests::QUESTS::Quest40

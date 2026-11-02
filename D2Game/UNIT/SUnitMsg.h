@@ -162,7 +162,7 @@ void __fastcall UnitQueuePacket0x9A(struct D2UnitStrc * pUnit, uint16_t wSkillId
 void __fastcall UnitQueuePacket0x9E(struct D2UnitStrc * pUnit, uint16_t eUnitStat, uint32_t dwStatValue);
 // Allocates a 0x18-byte D2SUnitMsgStrc with packet id 0xA1 (stat change notification) and enqueues it on pUnit's message list only if nOldValue != nNewValue. Payload: unit GUID, nParam (1B), old value (4B), new value (4B). Asserts nParam <= 0xFE. Marks unit dirty via ROOM_LinkUnitToUpdateList.
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0xA1(struct D2UnitStrc * pUnit, uint16_t nParam, int32_t nOldValue, int32_t nNewValue);
+void __fastcall UnitQueuePacket0xA1(struct D2UnitStrc * pUnit, uint16_t nStatId, int32_t nOldValue, int32_t nNewValue);
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall UnitQueuePacket0xAB(struct D2UnitStrc * pUnit, uint8_t nHpPercent128);
 // Allocates one 0x28-byte D2SUnitMsgStrc from pUnit->pMemory with packet id 0xA3 (unit message) and enqueues it on pUnit's message list (pMsgFirst/pMsgLast, +0xEC/+0xF0). First block carries wArg1/wArg2/byParam and the source unit's type+GUID; second block carries dwParam1/dwParam2 and the target unit (pTarget) type+GUID, or GUID -1 when pTarget is NULL. Marks pUnit dirty via ROOM_LinkUnitToUpdateList.

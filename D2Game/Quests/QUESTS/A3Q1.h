@@ -23,11 +23,11 @@ namespace D2Game::Quests::QUESTS::A3Q1 {
 // Objects_InitFn49 — object-init for the QUEST_SpokeToHratli (Q17) helper monster, NOT Lam Esen.
 // NOTE: despite the A3Q1 namespace this whole file is Lam Esen's Tome (QUEST_LamEsensTome / publicly "A3Q2"); only the first few fns (InitFn49/50, Q17_*) belong to SpokeToHratli and merely share this TU.
 // Role: if SpokeToHratli quest data exists and its record state 0xd (JustCompleted) is NOT yet set, lazily spawn the unique Q17 monster (monstats 0xfd, Neutral) and cache its GUID in the quest-specific struct so it is only spawned once.
-void __fastcall Objects_InitFn49(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn49_HratliStart(struct D2ObjectInitFnArg * pInitArg);
 // Q17_GetHratliCoords — (QUEST_SpokeToHratli helper, not Lam Esen). Reads SpokeToHratli quest-specific data and, if the reward was given and the quest accepted, exports two values (notify-completion flag + cached monster/Blood-Raven GUID) through the out param. Returns 1 on success, 0 otherwise. Pure read; no quest-state mutation.
 uint32_t __fastcall Q17_GetHratliCoords(::SGAMEDATA * pGame, int32_t * pnCoords);
 // Objects_InitFn50 — (QUEST_SpokeToHratli helper, not Lam Esen). Second-stage init for the Q17 monster: records Charsi-notified flag + monster GUIDs, then — only if record state 0xd (JustCompleted) IS set and the monster was not yet taken — spawns the unique monster (monstats 0xfd), flags it ISRESURRECT|ISINIT, and transplants the DRLG preset map-AI file onto it. Reads SpokeToHratli record state; writes only the quest-specific struct, not the player quest record.
-void __fastcall Objects_InitFn50(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn50_HratliEnd(struct D2ObjectInitFnArg * pInitArg);
 // Q17_SetupHratliMapAi — (QUEST_SpokeToHratli helper, not Lam Esen). Stores a DRLG map pointer into the SpokeToHratli quest-specific data and, if Hratli's map-AI is flagged and his unit + map file are valid and not yet transplanted, moves the DRLG preset file onto Hratli's monster map-AI (one-shot via bDrlgMapTaken). No player quest-record state touched.
 void __thiscall Q17_SetupHratliMapAi(void * pThis, int32_t pMapAI);
 // Q18_ActiveFilter — Lam Esen's Tome (QUEST_LamEsensTome). Decides whether the quest is "active" for gossip on Alkor (target monstats 0xfe = Alkor). Returns true if: quest in-progress (nStateFlag==1) and the player's record shows the quest NOT Completed and NOT FinishedInPreviousGame; OR the player currently carries Lam Esen's Tome item (code 0x20626262). Read-only.

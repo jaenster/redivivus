@@ -296,7 +296,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn41",
+      "name": "Objects_InitFn41_SewerStairs",
       "address": "005b8660",
       "lines": [
         {
@@ -306,7 +306,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q2",
       "calledFunctions": [
-        "Objects_InitFn41",
+        "Objects_InitFn41_SewerStairs",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag"
       ],
@@ -316,7 +316,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn42",
+      "name": "Objects_InitFn42_SewerLever",
       "address": "005b86b0",
       "lines": [
         {
@@ -326,7 +326,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q2",
       "calledFunctions": [
-        "Objects_InitFn42",
+        "Objects_InitFn42_SewerLever",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag"
       ],

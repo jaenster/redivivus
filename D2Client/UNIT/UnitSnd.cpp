@@ -216,7 +216,7 @@ uint32_t __fastcall UNITSND_GetSkillStartSound(D2UnitStrc * pUnit, uint32_t nAni
 }
 
 // Maps a unit's animation/event flag word to a pair of sound ids. Resolves the unit's sound type; for monsters that are critters, returns no sound. The low nibble (nAnimFlags & 0xf) selects a base sound id into *pnSoundIdOut (0 if none); the high nibble (&0xf0) selects a secondary/param sound into *pnParam, with several cases branching on whether a base sound exists and whether the unit is a player/monster (gated by bExcludePlayerMonster). Both outputs default to 0. Halts via ErrorManager if pUnit is null.
-void __fastcall UNITSND_ResolveSoundFromFlags(D2UnitStrc * pUnit, uint32_t nAnimFlags, int32_t bExcludePlayerMonster, int * pnSoundIdOut, int * pnParam) {
+void __fastcall UNITSND_ResolveSoundFromFlags(D2UnitStrc * pUnit, uint32_t nAnimFlags, int32_t bExcludePlayerMonster, int * pnSoundIdOut, int * pnSecondarySoundIdOut) {
     DWORD nMonStatsId;
     BOOL bIsCritter;
     if (!pUnit) {
@@ -226,7 +226,7 @@ void __fastcall UNITSND_ResolveSoundFromFlags(D2UnitStrc * pUnit, uint32_t nAnim
 
     eD2UnitType eUnitType = GetSndUnitType(pUnit);
     *pnSoundIdOut = 0;
-    *pnParam = 0;
+    *pnSecondarySoundIdOut = 0;
     if (eUnitType == UNIT_MONSTER) {
       nMonStatsId = GetSndUnitClassId(pUnit);
       bIsCritter = Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nMonStatsId, TXTMonStats2Field0x04DWORD_ns::critter);
@@ -269,45 +269,45 @@ void __fastcall UNITSND_ResolveSoundFromFlags(D2UnitStrc * pUnit, uint32_t nAnim
 
     switch (nAnimFlags & 0xf0) {
       case 0x20:
-        *pnParam = *pnSoundIdOut ? 0x164 : 0x161;
+        *pnSecondarySoundIdOut = *pnSoundIdOut ? 0x164 : 0x161;
       return;
       case 0x30:
         if (!*pnSoundIdOut) {
-          *pnParam = 0x167;
+          *pnSecondarySoundIdOut = 0x167;
           return;
         }
       if (eUnitType != UNIT_PLAYER && eUnitType != UNIT_MONSTER || bExcludePlayerMonster) {
-        *pnParam = 0x16a;
+        *pnSecondarySoundIdOut = 0x16a;
         return;
       }
 
       break;
       case 0x40:
-        *pnParam = *pnSoundIdOut != 0 ? 0x174U : 0x170U;
+        *pnSecondarySoundIdOut = *pnSoundIdOut != 0 ? 0x174U : 0x170U;
       return;
       case 0x50:
         if (!*pnSoundIdOut || eUnitType != UNIT_PLAYER && eUnitType != UNIT_MONSTER || bExcludePlayerMonster) {
-          *pnParam = 0x178;
+          *pnSecondarySoundIdOut = 0x178;
           return;
         }
       break;
       case 0x10:
         if (*pnSoundIdOut) {
-          *pnParam = 0x17b;
+          *pnSecondarySoundIdOut = 0x17b;
           return;
         }
       break;
       case 0x60:
-        *pnParam = 0x17e;
+        *pnSecondarySoundIdOut = 0x17e;
       return;
       case 0x70:
-        *pnParam = 0x18b;
+        *pnSecondarySoundIdOut = 0x18b;
       return;
       case 0x80:
-        *pnParam = 0x956;
+        *pnSecondarySoundIdOut = 0x956;
       return;
       case 0xb0:
-        *pnParam = 0x187;
+        *pnSecondarySoundIdOut = 0x187;
     }
 }
 
@@ -748,11 +748,11 @@ int32_t __fastcall UNITSND_GetFootstepSound(D2UnitStrc * pUnit, int32_t bIsRunni
 // Plays a unit's footstep sound for the current animation frame. For monsters, gates on walk/run-like animation modes and MonStats class range. Computes the step interval from frame count, anim speed and footstep count (FsCnt, FootstepLayer/FsPrb/FsOff from MonSounds.txt for monsters), debounces against the last step tick (dwSfxStepTicks), and picks the loudest of three candidate frame offsets. Selects walk vs run footstep via UNITSND_GetFootstepSound, plays it with distance-scaled channel priority (quieter when not the local player), optionally plays the layered footstep sound by probability, and stamps dwSfxStepTicks. Client/sound side effect only.
 void __fastcall PlayUnitFootstepSound(D2UnitStrc * pUnit) {
     D2MonSoundsTxt* pDVar1;
-    uint32_t nFrameCount;
     int32_t nSoundChannelPrev;
     int32_t nSoundChannelNext;
     int32_t iVar2;
     D2UnitStrc* pLocalPlayer;
+    uint32_t nCurrentFrame;
     bool bIsRunOrRespawn;
     int32_t nRunCheck;
     eD2UnitType eUnitType;
@@ -783,9 +783,9 @@ void __fastcall PlayUnitFootstepSound(D2UnitStrc * pUnit) {
     }
 
     time_footstep:
-    nFrameCount = pUnit->nFrameCount;
-    uint32_t nCurrentFrame;
-    nCurrentFrame = pUnit->nGfxCurrentFrame;
+    nCurrentFrame = pUnit->nFrameCount;
+    uint32_t nFrame;
+    nFrame = pUnit->nGfxCurrentFrame;
     int nAnimSpeed;
     nAnimSpeed = (int)pUnit->nAnimSpeed;
     uint32_t nFsOffset;
@@ -817,17 +817,17 @@ void __fastcall PlayUnitFootstepSound(D2UnitStrc * pUnit) {
     uint32_t nRecordingIdx;
     nRecordingIdx = GAME::Game::gnRecordingIndex();
     uint32_t nStepInterval;
-    nStepInterval = nFrameCount / (nFsCount * nAnimSpeed);
+    nStepInterval = nCurrentFrame / (nFsCount * nAnimSpeed);
     uint32_t nElapsedTicks;
     nElapsedTicks = nRecordingIdx - pUnit->uSideData.pClientSide.dwSfxStepTicks;
     if (nFsCount > 1 && nElapsedTicks < nStepInterval * 2 / 3) {
       return;
     }
 
-    nFrameCount /= nFsCount;
-    nSoundChannelPrev = Sound::SOUND_PlayFootstepSound(nCurrentFrame, nFsOffset, nFrameCount);
-    nSoundChannelNext = Sound::SOUND_PlayFootstepSound(nCurrentFrame + nAnimSpeed, nFsOffset, nFrameCount);
-    iVar2 = Sound::SOUND_PlayFootstepSound(nCurrentFrame - nAnimSpeed, nFsOffset, nFrameCount);
+    nCurrentFrame /= nFsCount;
+    nSoundChannelPrev = Sound::SOUND_PlayFootstepSound(nFrame, nFsOffset, nCurrentFrame);
+    nSoundChannelNext = Sound::SOUND_PlayFootstepSound(nFrame + nAnimSpeed, nFsOffset, nCurrentFrame);
+    iVar2 = Sound::SOUND_PlayFootstepSound(nFrame - nAnimSpeed, nFsOffset, nCurrentFrame);
     if (nSoundChannelPrev >= nSoundChannelNext) {
       return;
     }
@@ -853,16 +853,16 @@ void __fastcall PlayUnitFootstepSound(D2UnitStrc * pUnit) {
     nRunCheck = 0;
     nAnimSpeed = Sound::SOUND_PlaySound(UNITSND_GetFootstepSound(pUnit, nSoundChannelPrev), pUnit, 0, 0, nRunCheck);
     if (nAnimSpeed) {
-      nFrameCount = 0xff;
+      nCurrentFrame = 0xff;
       pLocalPlayer = Player::GetPlayerUnit_UI();
       if (pUnit != pLocalPlayer) {
-        nFrameCount = 200;
+        nCurrentFrame = 200;
       }
       if (nElapsedTicks > nStepInterval * 3 >> 1) {
-        nFrameCount = nFrameCount * 0xa0 / 0xff;
+        nCurrentFrame = nCurrentFrame * 0xa0 / 0xff;
       }
 
-      Sound::SOUND_SetChannelPriority(nAnimSpeed, nFrameCount);
+      Sound::SOUND_SetChannelPriority(nAnimSpeed, nCurrentFrame);
     }
     if (eFootstepLayerSnd != SOUND_NONE) {
       nCurrentFrame = _Utils::RollRandomNumerUpToArgument(100);
@@ -1035,11 +1035,11 @@ static eD2Sounds UNITSND_GetSpecialSoundByMode(D2UnitStrc * pUnit, int32_t nMode
 // Client-side sound updater invoked when a unit's animation mode changes; plays the appropriate sfx and tracks the last-played sfx mode in the unit's client-side data. For OBJECT units, handles a special looping ambient (classId 0x1A, e.g. a fountain) when the local player is within 0x14 tiles, then plays the per-mode special/mode-change sounds (UNITSND_GetSpecialSoundByMode / UNITSND_GetModeChangeSound) unless already current, and caches nSfxMode/bUnitSfx. For MONSTER units in walk/run/death-type modes (or special-cased classes 0x6E/0x88), plays the monster's idle/neutral chatter (MonSounds.Neutral) subject to NeuTime/global cooldowns, not-in-town, within ~700 distance, and a 1-in-16 random roll, then reseeds the cooldown.
 void __fastcall UpdateUnitSfxOnModeChange(D2UnitStrc * pUnit) {
     D2UnitStrc* pLocalPlayer;
-    int32_t nSndOrResult;
     uint32_t nCurrentTick;
     eD2Sounds eSpecialSound;
     D2MonSoundsTxt* pMonSoundsLine;
     BOOL bIsInTown;
+    int32_t nRandRoll;
     eD2Sounds eNeutralSound;
     int32_t nUnitMode;
     nUnitMode = GetSndUnitMode(pUnit);
@@ -1052,8 +1052,8 @@ void __fastcall UpdateUnitSfxOnModeChange(D2UnitStrc * pUnit) {
         nCurrentTick = GetSfxAsyncTicks(pUnit);
         if (!nCurrentTick) {
           pLocalPlayer = Player::GetPlayerUnit_UI();
-          nSndOrResult = D2Common::Collision::GetCollisionDistance(pUnit, pLocalPlayer);
-          if (nSndOrResult < 0x14) {
+          nRandRoll = D2Common::Collision::GetCollisionDistance(pUnit, pLocalPlayer);
+          if (nRandRoll < 0x14) {
             Sound::SOUND_PlaySound(SOUND_MUSIC_QUEST_MEPHISTO | SOUND_EVENT_CAVE_8, pUnit, 0, 0, 0);
             nCurrentTick = GAME::Game::gnRecordingIndex();
             SetSfxAsyncTicks(nCurrentTick, (int32_t)pUnit);
@@ -1066,8 +1066,8 @@ void __fastcall UpdateUnitSfxOnModeChange(D2UnitStrc * pUnit) {
 
       eSpecialSound = UNITSND_GetSpecialSoundByMode(pUnit, nUnitMode);
       if (eSpecialSound != SOUND_NONE) {
-        nSndOrResult = UNITSND_GetMissileSound(pUnit, eSpecialSound);
-        if (!nSndOrResult) {
+        nRandRoll = UNITSND_GetMissileSound(pUnit, eSpecialSound);
+        if (!nRandRoll) {
           Sound::SOUND_PlaySound(eSpecialSound, pUnit, 0, 0, 0);
         }
       } else {
@@ -1133,18 +1133,18 @@ void __fastcall UpdateUnitSfxOnModeChange(D2UnitStrc * pUnit) {
       return;
     }
 
-    nSndOrResult = UNITSND_GetMissileSound(pUnit, eNeutralSound);
-    if (!(!nSndOrResult && nCurrentTick - gnSoundLastInitTick >= gnSoundInitCooldown)) {
+    nRandRoll = UNITSND_GetMissileSound(pUnit, eNeutralSound);
+    if (!(!nRandRoll && nCurrentTick - gnSoundLastInitTick >= gnSoundInitCooldown)) {
       return;
     }
 
-    uint32_t nRandRoll = GetSfxTicks((int32_t)pUnit);
-    if (!(nCurrentTick - nRandRoll >= nNeuTime)) {
+    uint32_t uVar1 = GetSfxTicks((int32_t)pUnit);
+    if (!(nCurrentTick - uVar1 >= nNeuTime)) {
       return;
     }
 
-    nRandRoll = GetSfxAsyncTicks(pUnit);
-    if (!(nCurrentTick - nRandRoll >= nNeuTime)) {
+    uVar1 = GetSfxAsyncTicks(pUnit);
+    if (!(nCurrentTick - uVar1 >= nNeuTime)) {
       return;
     }
 
@@ -1240,8 +1240,8 @@ void __fastcall UNITSND_PlayAttackSound(D2UnitStrc * pUnit, int32_t nAttackMode,
       }
     }
     if (bSoundValid) {
-      nHitClass = _Utils::RollRandomNumerUpToArgument(100);
-      if ((int)nHitClass < (int)bPlayDelayed) {
+      nErrorLine = _Utils::RollRandomNumerUpToArgument(100);
+      if (nErrorLine < (int)bPlayDelayed) {
         UNITSND_UpdateNeutralSound(pUnit, 1);
         Sound::SOUND_PlaySound(eAttackSound, pUnit, nAttackDelay, 0, 0);
         nHitClass = GAME::Game::gnRecordingIndex();
@@ -1358,14 +1358,14 @@ static void UNITSND_PlayFleeSound(D2UnitStrc * pUnit) {
       return;
     }
 
-    int32_t nRecordingIdx = GAME::Game::gnRecordingIndex();
-    if (!(nRecordingIdx - gdwSoundChannelIndex >= 4)) {
+    int32_t nFleeDelay = GAME::Game::gnRecordingIndex();
+    if (!(nFleeDelay - gdwSoundChannelIndex >= 4)) {
       return;
     }
 
     Sound::SOUND_PlaySound(pMonSoundsLine->Flee, pUnit, _Utils::RollRandomNumerUpToArgument(3) + 6, 0, 0);
-    uint32_t nFleeDelay = GAME::Game::gnRecordingIndex();
-    SetSfxTicks(nFleeDelay, pUnit);
+    uint32_t dwSfxTicks = GAME::Game::gnRecordingIndex();
+    SetSfxTicks(dwSfxTicks, pUnit);
     gdwSoundChannelIndex = GAME::Game::gnRecordingIndex();
 }
 

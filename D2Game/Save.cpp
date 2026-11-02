@@ -12,9 +12,9 @@ int __stdcall SAVEFILE_ReadEncodedInt14Bit(uint8_t * pBuffer) {
     return (pBuffer[1] & 0x7f) * 0x80 + (*pBuffer & 0x7f);
 }
 
-void __stdcall SAVEFILE_WriteEncodedInt14Bit(uint8_t * pBuffer, uint32_t nParam) {
-    *pBuffer = (uint8_t)nParam | 0x80;
-    pBuffer[1] = (uint8_t)(nParam >> 7) | 0x80;
+void __stdcall SAVEFILE_WriteEncodedInt14Bit(uint8_t * pBuffer, uint32_t nValue) {
+    *pBuffer = (uint8_t)nValue | 0x80;
+    pBuffer[1] = (uint8_t)(nValue >> 7) | 0x80;
 }
 
 int __stdcall SAVEFILE_ReadEncodedInt32Bit(uint8_t * pBuffer) {

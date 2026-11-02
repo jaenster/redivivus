@@ -3639,10 +3639,10 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
     nMaxWeight = 0;
     int nSymbol;
     nSymbol = 0;
-    int iVar2;
-    iVar2 = nSymbol;
+    int nTmp;
+    nTmp = nSymbol;
     do {
-      nSymbol = iVar2;
+      nSymbol = nTmp;
       nOffset = nMaxWeight;
       if (gaCompressHuffmanWeightTables[nSymbol + ((uint32_t)pTableSel & 0xff) * 0x102]) {
         pSortedNext = (D2CompressHuffNodeStrc*)pEncoder->ppFreeListTailLink;
@@ -3727,12 +3727,12 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
 
       nMaxWeight = nOffset;
       pSymbolSlot++;
-      iVar2 = nSymbol + 1;
-    } while (iVar2 < 0x100);
+      nTmp = nSymbol + 1;
+    } while (nTmp < 0x100);
 
-    if (iVar2 < 0x102) {
+    if (nTmp < 0x102) {
       pTableSel = (int**)(pEncoder->apSymbolNodes + nSymbol + 1);
-      nSymbol = iVar2;
+      nSymbol = nTmp;
       do {
         pSortedNext = (D2CompressHuffNodeStrc*)pEncoder->ppFreeListTailLink;
         if ((int)pSortedNext <= 0 || (nLinkOff = pSortedNext , !pSortedNext)) {
@@ -3763,15 +3763,15 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
         nLinkOff->pNext = (D2CompressHuffNodeStrc*)ppListSentinel;
         nLinkOff->nPrevOffset = pEncoder->pWeightedListHead;
         pNewNode = pEncoder->pWeightedListHead;
-        iVar2 = pEncoder->nFreeListLinkOff;
+        nTmp = pEncoder->nFreeListLinkOff;
         if ((int)pNewNode < 0) {
           pLinkTarget = (uint32_t*)~(uint32_t)pNewNode;
         } else {
-          if (iVar2 < 0) {
-            iVar2 = (int)ppListSentinel - (int)(*ppListSentinel)->nPrevOffset;
+          if (nTmp < 0) {
+            nTmp = (int)ppListSentinel - (int)(*ppListSentinel)->nPrevOffset;
           }
 
-          pLinkTarget = (uint32_t*)((uintptr_t)&pNewNode->pNext + iVar2);
+          pLinkTarget = (uint32_t*)((uintptr_t)&pNewNode->pNext + nTmp);
         }
 
         *pLinkTarget = (uint32_t)(uintptr_t)nLinkOff;
@@ -6353,7 +6353,7 @@ void PKWARE_CopyBufferData(TCmpStruct * pCmp, uint8_t * pbStart, uint8_t * pbEnd
     } while (pbStart <= pbScan);
 }
 
-void StaticInit_6ca8c0() {
+void StaticInit_CriticalSection_00779214() {
     InitializeCriticalSection(&lpCriticalSection_00779214);
     atexit(StaticFini_CriticalSection_00779214);
 }

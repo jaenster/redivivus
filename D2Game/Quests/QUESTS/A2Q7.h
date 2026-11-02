@@ -47,11 +47,11 @@ uint32_t __fastcall Q14_OperateStairsToTombs(struct D2ObjectOperateFnArg * pOper
 // Q14 object InitFn (Objects_InitFn37): on spawn of a Q14 quest object, records its GUID into A2Q6 data (field_0x28) and marks it present (field_0x6=1). Sets the object's client visibility/update mode: hidden(2) if quest not introduced or already-portal-created flag set, else visible(0). No quest-record state change.
 void __fastcall Objects_InitFn37(struct D2ObjectInitFnArg * pInitArg);
 // Q14 object InitFn (Objects_InitFn38): records this object's GUID into A2Q6 data and sets bAllPlayersLeft. Update mode = hidden(2) if quest not introduced, else field_0x18. No quest-record state change.
-void __fastcall Objects_InitFn38(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn38_TyraelsDoor(struct D2ObjectInitFnArg * pInitArg);
 // Q14 predicate: true if The Seven Tombs is introduced AND the Duriel/town portal has NOT yet been created (!field_0x0B). Inverse of Q14_GetPortalCreatedFlag.
 BOOL __fastcall Q14_IsPortalNotCreated(::SGAMEDATA * pGame);
 // Q14 object InitFn (Objects_InitFn21): orifice/Tal Rasha chamber object init. Records GUID, marks present. If the staff has been used (state byte [3]) but portal not yet created ([0xb]==0), schedules the Q14_TimerCreatePortal timer to spawn the portals and marks timer-armed. Sets object hidden(2). No quest-record state change.
-void __fastcall Objects_InitFn21(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn21_HoradricOrifice(struct D2ObjectInitFnArg * pInitArg);
 // Q14 per-party-member callback: completes The Horadric Staff quest record for one player if not already complete and the player is in Act II. Sets Completed+JustCompleted and (unless mid-trade) strips the 3 staff component quest items (hsu/vip/msf). Invoked for every party member when the staff is placed in the orifice.
 void __fastcall Q14_CompleteHoradricStaffOnPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // Q14 object OperateFn (OBJOP_A2Q7_OpenArcaneNpcTrade): player operates the Horadric orifice. If the object is closed (Death anim) and player not busy trading: if player holds the assembled Horadric Staff (item 'hsu '), set interact target + send packet 0x58 to open the staff-in-orifice UI; otherwise play the "can't do that" sound. Closes the interaction when the object returns to Neutral. No quest-record state change here (that happens in Q14_OnStaffUsedInOrifice).
@@ -71,7 +71,7 @@ bool __fastcall Q14_IsSevenTombsLessThanState4(::SGAMEDATA * pGame);
 // Q14: compute Tyrael's post-Duriel spawn coordinates. Only if the portal-spawn-in-progress flag is set: picks a spot in Lut Gholein (LEVEL_LutGholein) near object class 0xc, finds free WARP-collision coords, writes x/y into pPoint and the room into *pdwParam. Returns 1 on success, 0 otherwise.
 BOOL __fastcall Q14_GetTyraelSpawnCoords(::SGAMEDATA * pGame, POINT * pPoint, struct D2RoomStrc * * ppSpawnRoom);
 // Q14: set/clear the Izual(Tyrael) placement flag in A2Q6 data, only while the quest is introduced and field_0x0E unset. cParam==0 -> mark located (bIzualLocationSet=1) and set pIzualUnit sentinel (8 single-player / 9 multiplayer); cParam!=0 -> clear bIzualLocationSet. No quest-record state change.
-void __fastcall Q14_SetTyraelState(int nParam, char bClear);
+void __fastcall Q14_SetTyraelState(int pQuestData, char bClear);
 // Q15 (Act2Guard4Gossip / Jerhyn gossip pseudo-quest) state-2 handler. When the kill/target unit is Jerhyn (classId 0x179) and the one-shot bBloodRavenKilled-style flag is set, clears it and unhooks itself (handler[2]=null). One-time post-trigger cleanup; no quest-record write.
 void __fastcall Q15_Callback02_NpcDeactivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // Q15 (Act2Guard4Gossip / Jerhyn gossip) message-handler. On a dialog with Jerhyn (NPC 0x179): for the special intro lines 0x3b/0x3c set the gossip record to JustCompleted and arm the state-2 cleanup handler; for any other line set it to Completed. This records "player has spoken to Jerhyn" in the quest-record bitbuffer.

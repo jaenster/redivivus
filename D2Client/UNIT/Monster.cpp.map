@@ -1223,7 +1223,7 @@
       ]
     },
     {
-      "name": "StaticInit_6cad00",
+      "name": "StaticInit_gnMonsterUniqueNameBuffer",
       "address": "006cad00",
       "lines": [
         {
@@ -1233,7 +1233,7 @@
       ],
       "namespace": "D2Client::UNIT::Monster",
       "calledFunctions": [
-        "StaticInit_6cad00"
+        "StaticInit_gnMonsterUniqueNameBuffer"
       ]
     }
   ]

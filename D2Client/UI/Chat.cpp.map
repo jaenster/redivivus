@@ -661,7 +661,7 @@
       ]
     },
     {
-      "name": "StaticInit_6caaf0",
+      "name": "StaticInit_gwszChatInputText",
       "address": "006caaf0",
       "lines": [
         {
@@ -671,14 +671,14 @@
       ],
       "namespace": "D2Client::UI::Chat",
       "calledFunctions": [
-        "StaticInit_6caaf0"
+        "StaticInit_gwszChatInputText"
       ],
       "usedTypes": [
         "uint16_t"
       ]
     },
     {
-      "name": "StaticInit_6cab10",
+      "name": "StaticInit_gaChatHistoryBuffer",
       "address": "006cab10",
       "lines": [
         {
@@ -688,14 +688,14 @@
       ],
       "namespace": "D2Client::UI::Chat",
       "calledFunctions": [
-        "StaticInit_6cab10"
+        "StaticInit_gaChatHistoryBuffer"
       ],
       "usedTypes": [
         "uint8_t"
       ]
     },
     {
-      "name": "StaticInit_6cab30",
+      "name": "StaticInit_gwcIMECompositionString",
       "address": "006cab30",
       "lines": [
         {
@@ -705,11 +705,11 @@
       ],
       "namespace": "D2Client::UI::Chat",
       "calledFunctions": [
-        "StaticInit_6cab30"
+        "StaticInit_gwcIMECompositionString"
       ]
     },
     {
-      "name": "StaticInit_6cab90",
+      "name": "StaticInit_gwcImeCompositionBuffer",
       "address": "006cab90",
       "lines": [
         {
@@ -719,7 +719,7 @@
       ],
       "namespace": "D2Client::UI::Chat",
       "calledFunctions": [
-        "StaticInit_6cab90"
+        "StaticInit_gwcImeCompositionBuffer"
       ]
     }
   ]

@@ -99,12 +99,15 @@ static char cObjectDataPeriod[18] = {
 }; D2_STATIC_GUARD(cObjectDataPeriod, "D2Client::UNIT::Object::cObjectDataPeriod");
 
 // Initialises a newly-created object unit: allocates and zeroes a D2UnitDataObjectStrc, links the Objects.txt record, sets UNITFLAG_TARGETABLE/CANBEATTACKED/PREDRAW/DRAWSHADOW from txt flags for the initial anim mode, initialises the static collision path, adds the unit to the room, and sets up auto-lighting (or explicit RGB light from txt). Special-cases class 0x3B (town portal) and 0x3C (portal to Tristram/Stony Field) to store the destination level id.
-void __fastcall AllocObjectData(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nXPos, int32_t nYPos, int32_t nClassId, int32_t nInitMode) {
+void __fastcall AllocObjectData(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nXPos, int32_t nYPos, int32_t nClassId, uint8_t nInitMode) {
+    uD2UnitMode uVar1;
     bool bAutoLightResult;
     eD2LevelId eLevelId;
     BOOL nAutoLightResult;
+    d2_store24((char*)&uVar1.ePlayerMode + 1, 0);
+    *(uint8_t*)(char*)&uVar1.ePlayerMode = nInitMode;
     pUnit->uSideData.pClientSide.pLight = 0;
-    pUnit->eAnimMode.ePlayerMode = nInitMode & 0xff;
+    pUnit->eAnimMode = uVar1;
     D2UnitDataObjectStrc* pObjectData = D2_NEW_AT(D2UnitDataObjectStrc, ".\\UNIT\\Object.cpp", 0x76);
     pUnit->pUnitData.pUnitDataObject = pObjectData;
     memset(pObjectData, 0, 0x38);

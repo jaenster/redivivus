@@ -669,7 +669,7 @@ void __stdcall SErrReportResourceLeak(char * szMessage) {
     SErrReportNamedResourceLeak(szMessage, nullptr);
 }
 
-void StaticInit_6ca8a0() {
+void StaticInit_gStormErrorCallbackList() {
     gnStormErrorCallbackCount.pNext = ~(uintptr_t)((char*)&gnStormErrorCallbackCount + 4);
     atexit(StaticFini_gStormErrorCallbackList);
 }

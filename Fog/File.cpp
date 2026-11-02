@@ -479,13 +479,13 @@ uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, ui
 
 bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(char * szPath) {
     char* pEnd = szPath;
-    char* pcVar1 = pEnd + strlen(pEnd);
-    pEnd = pcVar1 + 1;
-    if (pcVar1 == szPath + 0x400) {
+    char* pTerminator = pEnd + strlen(pEnd);
+    pEnd = pTerminator + 1;
+    if (pTerminator == szPath + 0x400) {
       return false;
     }
-    if (pcVar1 != szPath && pcVar1[-1] != '/' && pcVar1[-1] != '\\') {
-      *pcVar1 = '\\';
+    if (pTerminator != szPath && pTerminator[-1] != '/' && pTerminator[-1] != '\\') {
+      *pTerminator = '\\';
     }
 
     pEnd = STRING_CopyStringBounded(0x400, szPath, "BlizzardError");

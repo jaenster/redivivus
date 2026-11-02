@@ -371,7 +371,7 @@ void __stdcall AbleToJoinGameOrBanned(int32_t bBanned) {
     }
 }
 
-int __stdcall JoinOrCreateGame(DWORD dwParam) {
+int __stdcall JoinOrCreateGame(DWORD dwUnused) {
     // Static local variables (originally global data)
     static unsigned int gdwLastGameInfoPollTick; D2_STATIC_GUARD_BSS(gdwLastGameInfoPollTick, "D2Multi::OOGUtilities::JoinOrCreateGame::gdwLastGameInfoPollTick");
     static uint32_t gdwLastNetworkHeartbeatTick; D2_STATIC_GUARD_BSS(gdwLastNetworkHeartbeatTick, "D2Multi::OOGUtilities::JoinOrCreateGame::gdwLastNetworkHeartbeatTick");
@@ -1396,7 +1396,7 @@ void __stdcall OOGMENU_RefreshGameListDisplay() {
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpOOGGameListTextBox, 0);
 }
 
-void __fastcall OOGUTIL_Unused1(char * szText, uint16_t wRequestId) {
+void __fastcall OOGUTIL_SetPendingJoinGame(char * szText, uint16_t wRequestId) {
     strncpy(gszOOGRequestedGameName, szText, 0x100);
     gnPendingGameInfoCharIndex = (uint32_t)wRequestId;
 }
@@ -1411,7 +1411,7 @@ void __stdcall OOGMENU_RequestGameInfo() {
     gnPendingGameInfoCharIndex = -1;
 }
 
-static void OOGUTIL_Unused2(int32_t nEntryIndex) {
+static void OOGUTIL_ShowGameListEntryDetails(int32_t nEntryIndex) {
     char byChar;
     if (!gpOogGameListDetailsPanelControl) {
       return;
@@ -1615,7 +1615,7 @@ void __stdcall OOGUTIL_UpdateGameListFilter() {
     Launcher::LAUNCHER_RestoreFocusToControl();
 }
 
-void __stdcall OOGUTIL_Unused3() {
+void __stdcall OOGUTIL_ParseMaxPlayersEditBox() {
     char szAscii[8];
     uint16_t* pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListMaxPlayersEditBox->sControl);
     D2Lang::WideCharToUTF8(szAscii, pwszValue, 5);
@@ -1719,7 +1719,7 @@ BOOL __stdcall OOGUTIL_SendPasswordPacket(DWORD dwParam1, DWORD dwParam2, char *
     return 0;
 }
 
-BOOL __stdcall OOGUTIL_Unused9(DWORD dwParam1, DWORD dwParam2, char * szText) {
+BOOL __stdcall OOGUTIL_IsFirstCharPrintableAscii(DWORD dwParam1, DWORD dwParam2, char * szText) {
     if (*szText >= ' ' && *szText <= '\x7f') {
       return 1;
     }
@@ -1727,7 +1727,7 @@ BOOL __stdcall OOGUTIL_Unused9(DWORD dwParam1, DWORD dwParam2, char * szText) {
     return 0;
 }
 
-BOOL __stdcall OOGUTIL_Unused10(DWORD dwParam1, DWORD dwParam2, char * szText) {
+BOOL __stdcall OOGUTIL_FilterPrintableAsciiChar(DWORD dwParam1, DWORD dwParam2, char * szText) {
     if (*szText >= ' ' && *szText <= '\x7f') {
       return 1;
     }
@@ -1842,7 +1842,7 @@ int __stdcall OOGUTIL_Unused11(int nFrameIndex) {
     return 1;
 }
 
-int __stdcall UIMENU_TitleClickCallback(void * pParam) {
+int __stdcall UIMENU_TitleClickCallback(void * pUnused) {
     gnMCPCreateGamePendingFlag = 1;
     return 1;
 }
@@ -2783,13 +2783,13 @@ int __stdcall OOGUTIL_HandleGameCreation(D2ControlMsg * pControlMsg) {
         } while (!wRequestId);
 
         CreateJoinGameRequestId = wRequestId;
-        OOGUTIL_Unused1(szLineText, wRequestId);
+        OOGUTIL_SetPendingJoinGame(szLineText, wRequestId);
         D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpOogGamePasswordEditControl, pwszLineText);
         D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
         return 0;
       }
     } else {
-      OOGUTIL_Unused2(pSelectedLine);
+      OOGUTIL_ShowGameListEntryDetails(pSelectedLine);
     }
 
     return 0;
@@ -3402,7 +3402,7 @@ void __stdcall UIMENU_JoinGame() {
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpOogGamePasswordEditControl, EDITBOX_Cb_OOGUTIL_SetJoinGameError);
     gpCtlGameListTop = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x30);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpCtlGameListTop, 0x10);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpCtlGameListTop, (fpD2WinEditBoxFilter)OOGUTIL_Unused10);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpCtlGameListTop, (fpD2WinEditBoxFilter)OOGUTIL_FilterPrintableAsciiChar);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_LinkTabOrder(gpOogGamePasswordEditControl, gpCtlGameListTop);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_LinkTabOrder(gpCtlGameListTop, gpOogGamePasswordEditControl);
     gpOOGGameListTextBox = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x31);
@@ -3472,10 +3472,10 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpOogGameNameEditControl, EDITBOX_Cb_OOGUTIL_RefreshGameList);
     gUIGameListGameNameEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x49);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gUIGameListGameNameEditBox, 0x10);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gUIGameListGameNameEditBox, (fpD2WinEditBoxFilter)OOGUTIL_Unused10);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gUIGameListGameNameEditBox, (fpD2WinEditBoxFilter)OOGUTIL_FilterPrintableAsciiChar);
     gUIGameListGamePasswordEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x4a);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gUIGameListGamePasswordEditBox, 0x20);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gUIGameListGamePasswordEditBox, (fpD2WinEditBoxFilter)OOGUTIL_Unused9);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gUIGameListGamePasswordEditBox, (fpD2WinEditBoxFilter)OOGUTIL_IsFirstCharPrintableAscii);
     sprintf(gszOogLevelRestrictionText, "%d", 4);
     sprintf(gszOogMaxPlayersText, "%d", 4);
     bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
@@ -3483,7 +3483,7 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
       gUIGameListMaxPlayersEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x4b);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gUIGameListMaxPlayersEditBox, gszOogMaxPlayersText);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gUIGameListMaxPlayersEditBox, 3);
-      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gUIGameListMaxPlayersEditBox, (fpD2WinEditBoxFilter)D2Win::Src::D2WinEditBox::D2WINEDITBOX_Unused_Placeholder_7);
+      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gUIGameListMaxPlayersEditBox, (fpD2WinEditBoxFilter)D2Win::Src::D2WinEditBox::D2WINEDITBOX_FilterDigitChar);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gUIGameListMaxPlayersEditBox, OOGUTILITIES_EditBoxInput_RefreshGameList_ForMaxPlayers);
       gUIGameListLevelRestrictionCheckbox = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x4e);
       D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListLevelRestrictionCheckbox, 1);
@@ -3491,7 +3491,7 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
       gUILevelRestrictionEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x4c);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gUILevelRestrictionEditBox, gszOogLevelRestrictionText);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gUILevelRestrictionEditBox, 3);
-      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gUILevelRestrictionEditBox, (fpD2WinEditBoxFilter)D2Win::Src::D2WinEditBox::D2WINEDITBOX_Unused_Placeholder_7);
+      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gUILevelRestrictionEditBox, (fpD2WinEditBoxFilter)D2Win::Src::D2WinEditBox::D2WINEDITBOX_FilterDigitChar);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gUILevelRestrictionEditBox, OOGUTILITIES_EditBoxInput_RefreshGameList_ForLevelRestriction);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUILevelRestrictionEditBox->sControl, 0);
       gUIGameListLevelRestrictionLabel = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x46);
@@ -3595,7 +3595,7 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
     OOGUTIL_OnPressLevelRestrictionCheckbox(nullptr);
 }
 
-char * OOGUTIL_Unused12(uint32_t * szString, int nChar) {
+char * OOGUTIL_StrChr(uint32_t * szString, int nChar) {
     char* pszFound = strchr((char*)szString, nChar);
     return pszFound;
 }

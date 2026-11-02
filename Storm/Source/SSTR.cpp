@@ -956,7 +956,7 @@ void __stdcall SStrLower(char * szText) {
     _strlwr(szText);
 }
 
-double __fastcall SSTR_Pow10Helper(uint32_t nValue, double dBase) {
+double __fastcall _Pow_int(uint32_t nValue, double dBase) {
     uint32_t nBits = nValue;
     if ((int)nValue < 0) {
       nBits = -nValue;
@@ -1206,15 +1206,13 @@ int64_t __stdcall SStrToInt64(char * pStr) {
 // "337-name TVector export table" and 1228 names; both were wrong.
 double __stdcall SStrToDouble(char * pStr) {
     uint32_t nExp;
-    uint32_t nAbsExp;
+    uint32_t fResult;
     uint32_t nTmp2;
-    uint32_t nExpAbs;
     int nTmp;
     char* pCursor;
     char* pNext;
     int nFracDigits;
     double dAccumSlot;
-    double dPow;
     double dScale;
     if (!pStr) {
       SErr::SErrSetLastError(0x57);
@@ -1235,6 +1233,7 @@ double __stdcall SStrToDouble(char * pStr) {
     int nCurDigit;
     nCurDigit = *pStr - 0x30;
     if ((uint32_t)nCurDigit < 10) {
+      double dPow;
       pCursor = pStr + 1;
       nExp = (int)pStr[1] - 0x30;
       if (nExp < 10) {
@@ -1244,10 +1243,10 @@ double __stdcall SStrToDouble(char * pStr) {
           nCurDigit = nExp + nCurDigit * 10;
           pCursor++;
           if ((uint32_t)nCurDigit >= 0x19999999) {
-            nAbsExp = (int)pCursor - (int)pStr;
-            nExp = nAbsExp;
-            if ((int)nAbsExp < 0) {
-              nExp = -nAbsExp;
+            fResult = (int)pCursor - (int)pStr;
+            nExp = fResult;
+            if ((int)fResult < 0) {
+              nExp = -fResult;
             }
 
             while (true) {
@@ -1262,7 +1261,7 @@ double __stdcall SStrToDouble(char * pStr) {
               nExp >>= 1;
             }
 
-            if ((int)nAbsExp < 0) {
+            if ((int)fResult < 0) {
               dScale = 1.0 / dScale;
             }
 
@@ -1308,15 +1307,15 @@ double __stdcall SStrToDouble(char * pStr) {
       nFracDigits = 0;
       if (nExp < 10) {
         nTmp = 0;
-        nAbsExp = -1;
+        fResult = -1;
         do {
           pCursor++;
           if (nFracDigits >= 0x14) {
-            nTmp2 = nAbsExp;
+            nTmp2 = fResult;
             dAccum = 10.0;
             dScale = 1.0;
-            if ((int)nAbsExp < 0) {
-              nTmp2 = -nAbsExp;
+            if ((int)fResult < 0) {
+              nTmp2 = -fResult;
             }
 
             while (true) {
@@ -1331,7 +1330,7 @@ double __stdcall SStrToDouble(char * pStr) {
               dAccum *= dAccum;
             }
 
-            if ((int)nAbsExp < 0) {
+            if ((int)fResult < 0) {
               dScale = 1.0 / dScale;
             }
 
@@ -1344,33 +1343,32 @@ double __stdcall SStrToDouble(char * pStr) {
           dAccumSlot = dAccum + dAccumSlot;
           nExp = (int)*pCursor - 0x30;
           nFracDigits++;
-          nAbsExp--;
+          fResult--;
           nTmp += 10;
         } while (nExp < 10);
       }
     }
     if (*pCursor == 'e' || *pCursor == 'E') {
-      uint32_t fResult;
       pNext = pCursor + 1;
       if (*pNext == '+') {
         pNext = pCursor + 2;
       }
 
       fResult = SStrToInt(pNext);
-      nExpAbs = fResult;
+      nExp = fResult;
       if ((int)fResult < 0) {
-        nExpAbs = -fResult;
+        nExp = -fResult;
       }
 
       dAccum = 1.0;
       dScale = 10.0;
       while (true) {
-        if (nExpAbs & 1) {
+        if (nExp & 1) {
           dAccum *= dScale;
         }
 
-        nExpAbs >>= 1;
-        if (!nExpAbs) {
+        nExp >>= 1;
+        if (!nExp) {
           break;
         }
 
@@ -1398,9 +1396,7 @@ double __stdcall SStrToDouble(char * pStr) {
 // returned in ST(0), never in EAX. That explicit 4-byte round-trip is also the evidence that its twin
 // SStrToDouble @004144c0, which has no such narrowing, returns a double.
 float __stdcall SStrToFloat(char * pStr) {
-    uint32_t nExp;
     uint32_t nAbsExp;
-    uint32_t nTmp2;
     uint32_t fExpScratch;
     int nTmp;
     char* pCursor;
@@ -1432,29 +1428,29 @@ float __stdcall SStrToFloat(char * pStr) {
     nCurDigit = *pStr - 0x30;
     if ((uint32_t)nCurDigit < 10) {
       pCursor = pStr + 1;
-      nExp = (int)pStr[1] - 0x30;
-      if (nExp < 10) {
+      fExpScratch = (int)pStr[1] - 0x30;
+      if (fExpScratch < 10) {
         do {
-          nCurDigit = nExp + nCurDigit * 10;
+          nCurDigit = fExpScratch + nCurDigit * 10;
           pCursor++;
           if ((uint32_t)nCurDigit >= 0x19999999) {
             nAbsExp = (int)pCursor - (int)pStr;
-            nExp = nAbsExp;
+            fExpScratch = nAbsExp;
             dScale = 1.0;
             dPow = 10.0;
             if ((int)nAbsExp < 0) {
-              nExp = -nAbsExp;
+              fExpScratch = -nAbsExp;
             }
 
             while (true) {
-              if (nExp & 1) {
+              if (fExpScratch & 1) {
                 dScale *= dPow;
               }
-              if (!(nExp >> 1)) {
+              if (!(fExpScratch >> 1)) {
                 break;
               }
 
-              nExp >>= 1;
+              fExpScratch >>= 1;
               dPow *= dPow;
             }
 
@@ -1472,8 +1468,8 @@ float __stdcall SStrToFloat(char * pStr) {
             pStr = pCursor;
           }
 
-          nExp = (int)*pCursor - 0x30;
-        } while (nExp < 10);
+          fExpScratch = (int)*pCursor - 0x30;
+        } while (fExpScratch < 10);
 
         if (dAccum != 0.0) {
           dScale = SSTR_PowDoubleInt(10.0, (int)pCursor - (int)pStr);
@@ -1499,11 +1495,12 @@ float __stdcall SStrToFloat(char * pStr) {
     parse_fraction:
     fPowBase = (long double)1;
     if (*pCursor == '.') {
+      uint32_t nTmp2;
       pNext = pCursor + 1;
       pCursor++;
-      nExp = (int)*pNext - 0x30;
+      fExpScratch = (int)*pNext - 0x30;
       nFracDigits = 0;
-      if (nExp < 10) {
+      if (fExpScratch < 10) {
         nTmp = 0;
         nAbsExp = -1;
         do {
@@ -1532,38 +1529,37 @@ float __stdcall SStrToFloat(char * pStr) {
               fScale = fPowBase / fScale;
             }
 
-            fFracTerm = (long double)(int)nExp;
-            if ((int)nExp < 0) {
+            fFracTerm = (long double)(int)fExpScratch;
+            if ((int)fExpScratch < 0) {
               fFracTerm += (long double)4294967296.0;
             }
 
             fFracTerm *= fScale;
           } else {
-            fFracTerm = (long double)gdPow10Table[nTmp + nExp];
+            fFracTerm = (long double)gdPow10Table[nTmp + fExpScratch];
           }
 
           fParsedValue = fFracTerm + fParsedValue;
-          nExp = (int)*pCursor - 0x30;
+          fExpScratch = (int)*pCursor - 0x30;
           nFracDigits++;
           nAbsExp--;
           nTmp += 10;
-        } while (nExp < 10);
+        } while (fExpScratch < 10);
       }
     }
 
     double dAccumSlot = (double)fParsedValue;
     if (*pCursor == 'e' || *pCursor == 'E') {
-      uint32_t nExponent;
       pNext = pCursor + 1;
       if (*pNext == '+') {
         pNext = pCursor + 2;
       }
 
-      nExponent = SStrToInt(pNext);
+      nAbsExp = SStrToInt(pNext);
       fPowBase = (long double)10.0;
-      fExpScratch = nExponent;
-      if ((int)nExponent < 0) {
-        fExpScratch = -nExponent;
+      fExpScratch = nAbsExp;
+      if ((int)nAbsExp < 0) {
+        fExpScratch = -nAbsExp;
       }
 
       fParsedValue = (long double)1;
@@ -1580,7 +1576,7 @@ float __stdcall SStrToFloat(char * pStr) {
         fPowBase *= fPowBase;
       }
 
-      if ((int)nExponent < 0) {
+      if ((int)nAbsExp < 0) {
         fParsedValue = (long double)1 / fParsedValue;
       }
 

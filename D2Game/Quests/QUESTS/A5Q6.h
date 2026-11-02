@@ -73,16 +73,16 @@ void __fastcall SetFlagToOpenedStairs(::SGAMEDATA * pGame);
 // A5Q6 Eve of Destruction. Returns 0 if the quest has been accepted (bAcceptedQuest) — i.e. Baal's lair entry is unlocked — else 1. Effectively "is Baal still gated / not yet reachable". Gate check for the Worldstone descent.
 BOOL __fastcall Q36_IsBaalAlive(::SGAMEDATA * pGame);
 // A5Q6 Eve of Destruction. Object init fn 75: tags the object with the quest's barricade-coord field then sets that field to 2 (one-time init flag). Worldstone-area quest object setup.
-void __fastcall Objects_InitFn75(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn75_BaalsPortal(struct D2ObjectInitFnArg * pInitArg);
 // A5Q6 Eve of Destruction. Operate-fn for the stairway between LEVEL_ThroneOfDestruction and LEVEL_TheWorldstoneChamber. In the Throne with quest accepted -> descend to the Worldstone Chamber (Baal's lair); otherwise -> go (back) up to the Throne of Destruction.
 BOOL __fastcall OBJOP_A5Q6_WorldstoneLevelTransition(struct D2ObjectOperateFnArg * pOperation);
 // A5Q6 Eve of Destruction. Object init fn 77: tags the object with the quest's item-count field then sets it to 2 (marks Tyrael's red end-portal as spawned/active). Pairs with OBJOP_A5Q6_TyraelPortalToEnd which only operates when count==2.
-void __fastcall Objects_InitFn77(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn77_LastPortal(struct D2ObjectInitFnArg * pInitArg);
 // A5Q6 Eve of Destruction. Operate-fn for Tyrael's red portal in the Worldstone Chamber (after Baal dies). Only active when quest-specific nQuestItemCount==2 (portal spawned). If the player has NOT yet JustCompleted -> just play attach-sound event 0x13. If JustCompleted -> warp the player to LEVEL_Harrogath (town), save char, clear interaction, send 0x61 CanGoToAct(7), and set Step0x10. This is the trip back to town that ends the game.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q6.cpp
 BOOL __fastcall OBJOP_A5Q6_TyraelPortalToEnd(struct D2ObjectOperateFnArg * pOperation);
 // A5Q6 Eve of Destruction object-init fn 79. One-time (guarded by init flag): rolls up to 10 times for a random MonStats id with zoo!=0 and stores it in the quest-specific struct as the quest's random monster seed; on failure falls back to id 0. After latching the init flag, broadcasts the quest-special packet to all players via Q36_SendQuestSpecialPacketCallback.
-void __fastcall Objects_InitFn79(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn79_Zoo(struct D2ObjectInitFnArg * pInitArg);
 // A5Q6 Eve of Destruction. Spawns Tyrael (monster class 0x209... note: 0x209 here is the spawned NPC) as a Neutral monster ~5 tiles from the given unit in the Worldstone Chamber. Tyrael appears after Baal's death to open the portal home.
 void __fastcall SpawnTyrael(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit);
 // 2 internal functions (defined in .cpp)

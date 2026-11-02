@@ -4415,7 +4415,7 @@
       ]
     },
     {
-      "name": "StaticInit_6cabf0",
+      "name": "StaticInit_gpInvRecipeScrollImage",
       "address": "006cabf0",
       "lines": [
         {
@@ -4425,7 +4425,7 @@
       ],
       "namespace": "D2Client::UI::Inv",
       "calledFunctions": [
-        "StaticInit_6cabf0"
+        "StaticInit_gpInvRecipeScrollImage"
       ],
       "usedTypes": [
         "uint8_t"

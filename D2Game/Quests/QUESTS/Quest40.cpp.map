@@ -123,7 +123,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn66",
+      "name": "Objects_InitFn66_DrehyaStartInTown",
       "address": "0058eac0",
       "lines": [
         {
@@ -133,7 +133,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::Quest40",
       "calledFunctions": [
-        "Objects_InitFn66",
+        "Objects_InitFn66_DrehyaStartInTown",
         "GetQuestDataByQuestNoInternal",
         "Q33_SequenceFilter",
         "QUEST_SpawnMonsterNearCoords",

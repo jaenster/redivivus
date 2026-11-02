@@ -59,7 +59,7 @@ void __fastcall Debug(::SGAMEDATA * pGame);
 void __fastcall AllocObjectControlSub0x1110(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom);
 // Object initializer for region-based objects (objrgn.cpp). Walks the pSub0x1110 linked list looking for an entry whose room matches pInitArg->pRoom (or whose coords fall inside that room). If found and the object is absent or dead, schedules a game event using the object's FrameCnt animation timing, then frees the entry. If not found and the room is a town room, calls SetupUpdateFlag(obj, 2).
 // @sourcefile .\OBJECTS\objrgn.cpp
-void __fastcall Objects_InitFn17(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn17_Waypoint(struct D2ObjectInitFnArg * pInitArg);
 int32_t __fastcall QUEST_GetLevelQuestStatus(::SGAMEDATA * pGame, eD2LevelId eLevel);
 uint8_t __fastcall OBJECTRGN_CheckDensityThreshold(::SGAMEDATA * pGame, eD2LevelId eLevel);
 int32_t __fastcall OBJECTRGN_CheckPointsCapacity(::SGAMEDATA * pGame, eD2LevelId eLevel);

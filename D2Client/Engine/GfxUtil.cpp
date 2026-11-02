@@ -636,8 +636,8 @@ static int32_t __stdcall GFXUTIL_GetNumDirectionsForUnit(D2UnitStrc * pUnit, eD2
     return nNumDirections;
 }
 
-void * __fastcall GFXUTIL_Identity(void * dwParam) {
-    return dwParam;
+void * __fastcall GFXUTIL_Identity(void * pData) {
+    return pData;
 }
 
 uint32_t __fastcall GFXUTIL_GetCofFrameCount(uint8_t * pbCof, uint32_t nComponent) {

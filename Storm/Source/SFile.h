@@ -561,13 +561,13 @@ void __fastcall CrcBuffer(uint8_t * pbData, int32_t nLength, uint32_t * pdwCrc, 
 uint32_t __fastcall CRC32_Calculate(uint8_t * pbData, int nLen);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9e98(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9ec8(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
-void StaticInit_6ca7b0();
-void StaticInit_6ca7d0();
-void StaticInit_6ca7f0();
-void StaticInit_6ca810();
-void StaticInit_6ca830();
-void StaticInit_6ca850();
-void StaticInit_6ca870();
+void StaticInit_gMpqArchiveList();
+void StaticInit_gSFileAsyncReqQueue();
+void StaticInit_CriticalSection_00779068();
+void StaticInit_gSFileOpenFileList();
+void StaticInit_gSFileAudioStreamList();
+void StaticInit_gSFileStreamRecordList();
+void StaticInit_CriticalSection_00779080();
 void StaticFini_CriticalSection_00779068();
 void StaticFini_CriticalSection_00779080();
 // Runs at exit: removes every element from the open MPQ archive list gMpqArchiveList, then unlinks the list head itself.

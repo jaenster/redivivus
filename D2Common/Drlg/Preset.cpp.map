@@ -19,7 +19,7 @@
         "SSTR_StringLength",
         "DRLGANIM_GetOrientationFromIndex",
         "MONSTERTBLS_GetMonPresetRecord",
-        "MONSTERTBLS_ReturnZero",
+        "MONSTERTBLS_GetSuperUniquesTxtCount",
         "CheckMonStatId",
         "strncpy",
         "tolower",
@@ -753,7 +753,7 @@
       "calledFunctions": [
         "DRLGPRESET_AddPresetUnitToDrlgMap",
         "CoordsRoomToWorld",
-        "MONSTERTBLS_ReturnZero",
+        "MONSTERTBLS_GetSuperUniquesTxtCount",
         "CopyPresetUnit"
       ],
       "usedTypes": [
@@ -977,7 +977,7 @@
       ]
     },
     {
-      "name": "StaticInit_6cb010",
+      "name": "StaticInit_CriticalSection_0096d610",
       "address": "006cb010",
       "lines": [
         {
@@ -987,7 +987,7 @@
       ],
       "namespace": "D2Common::Drlg::Preset",
       "calledFunctions": [
-        "StaticInit_6cb010",
+        "StaticInit_CriticalSection_0096d610",
         "atexit"
       ]
     },

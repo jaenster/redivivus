@@ -479,22 +479,22 @@ static void fill_window(deflate_state * pDeflateState) {
     int nWrapType;
     uint16_t* pPrevHead;
     z_stream* pZStream;
-    uint32_t uVar1 = pDeflateState->w_size;
+    uint32_t wsize = pDeflateState->w_size;
     while (true) {
       uint8_t* pWindowDst;
       nMore = pDeflateState->window_size - pDeflateState->lookahead - pDeflateState->strstart;
-      if (pDeflateState->strstart >= uVar1 - 0x106 + pDeflateState->w_size) {
-        memcpy(pDeflateState->window, pDeflateState->window + uVar1, uVar1);
+      if (pDeflateState->strstart >= wsize - 0x106 + pDeflateState->w_size) {
+        memcpy(pDeflateState->window, pDeflateState->window + wsize, wsize);
         nChecksum = pDeflateState->hash_size;
-        pDeflateState->match_start -= uVar1;
-        pDeflateState->strstart -= uVar1;
-        pDeflateState->block_start -= uVar1;
+        pDeflateState->match_start -= wsize;
+        pDeflateState->strstart -= wsize;
+        pDeflateState->block_start -= wsize;
         pHashEntry = pDeflateState->head + nChecksum;
         do {
           pPrevHead = pHashEntry - 1;
           pHashEntry--;
-          if (!(*pPrevHead < uVar1)) {
-            nNewHead = *pPrevHead - (short int)uVar1;
+          if (!(*pPrevHead < wsize)) {
+            nNewHead = *pPrevHead - (short int)wsize;
           } else {
             nNewHead = 0;
           }
@@ -503,13 +503,13 @@ static void fill_window(deflate_state * pDeflateState) {
           *pHashEntry = nNewHead;
         } while (nChecksum);
 
-        pHashEntry = pDeflateState->prev + uVar1;
-        nCurrPos = uVar1;
+        pHashEntry = pDeflateState->prev + wsize;
+        nCurrPos = wsize;
         do {
           pPrevHead = pHashEntry - 1;
           pHashEntry--;
-          if (!(*pPrevHead < uVar1)) {
-            nNewHead = *pPrevHead - (short int)uVar1;
+          if (!(*pPrevHead < wsize)) {
+            nNewHead = *pPrevHead - (short int)wsize;
           } else {
             nNewHead = 0;
           }
@@ -518,7 +518,7 @@ static void fill_window(deflate_state * pDeflateState) {
           *pHashEntry = nNewHead;
         } while (nCurrPos);
 
-        nMore += uVar1;
+        nMore += wsize;
       }
 
       pZStream = pDeflateState->strm;
@@ -574,14 +574,14 @@ static void fill_window(deflate_state * pDeflateState) {
       }
     }
 
-    uVar1 = pDeflateState->high_water;
+    wsize = pDeflateState->high_water;
     nCurrPos = pDeflateState->window_size;
-    if (uVar1 >= nCurrPos) {
+    if (wsize >= nCurrPos) {
       return;
     }
 
     nReadLen = pDeflateState->lookahead + pDeflateState->strstart;
-    if (uVar1 < nReadLen) {
+    if (wsize < nReadLen) {
       nCurrPos -= nReadLen;
       if (nCurrPos > 0x102) {
         nCurrPos = 0x102;
@@ -591,16 +591,16 @@ static void fill_window(deflate_state * pDeflateState) {
       pDeflateState->high_water = nCurrPos + nReadLen;
       return;
     }
-    if (!(uVar1 < nReadLen + 0x102)) {
+    if (!(wsize < nReadLen + 0x102)) {
       return;
     }
 
-    nReadLen = nReadLen - uVar1 + 0x102;
-    if (nReadLen > nCurrPos - uVar1) {
-      nReadLen = nCurrPos - uVar1;
+    nReadLen = nReadLen - wsize + 0x102;
+    if (nReadLen > nCurrPos - wsize) {
+      nReadLen = nCurrPos - wsize;
     }
 
-    memset(pDeflateState->window + uVar1, 0, nReadLen);
+    memset(pDeflateState->window + wsize, 0, nReadLen);
     pDeflateState->high_water += nReadLen;
 }
 

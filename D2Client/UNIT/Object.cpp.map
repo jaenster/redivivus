@@ -37,7 +37,8 @@
         "D2UnitDataObjectStrc",
         "D2UnitStrc",
         "eD2LevelId",
-        "int32_t"
+        "int32_t",
+        "uint8_t"
       ]
     },
     {

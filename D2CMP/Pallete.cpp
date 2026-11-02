@@ -136,7 +136,7 @@ uint8_t * __stdcall PALETTE_GetItemPalette(int32_t nPaletteSet, int32_t nRow) {
     return nullptr;
 }
 
-uint32_t __stdcall PALETTE_GetColorShiftIndex(int32_t nParam, uint32_t nParam2) {
+uint32_t __stdcall PALETTE_GetColorShiftIndex(int32_t nIndex, uint32_t dwMask) {
     // Static local variables (originally global data)
     static uint32_t gdwPaletteTableSize[736] = {
     0x0,
@@ -877,8 +877,8 @@ uint32_t __stdcall PALETTE_GetColorShiftIndex(int32_t nParam, uint32_t nParam2) 
     0x3f
 }; D2_STATIC_GUARD(gdwPaletteTableSize, "D2CMP::Pallete::PALETTE_GetColorShiftIndex::gdwPaletteTableSize");
 
-    int32_t nLowestBit = D2Hell::D2MEM_FindLowestSetBit(nParam2);
-    return gdwPaletteTableSize[nLowestBit * 0x20 + nParam];
+    int32_t nLowestBit = D2Hell::D2MEM_FindLowestSetBit(dwMask);
+    return gdwPaletteTableSize[nLowestBit * 0x20 + nIndex];
 }
 
 } // namespace D2CMP::Pallete

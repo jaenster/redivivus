@@ -122,7 +122,7 @@ void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, struct D2UnitStrc 
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 40. On death (or no unit) spawns monster 0x227 and sets STATE_corpse_nodraw.
 void __fastcall MONSTER_SpawnWormOnDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUModId, int32_t nParam2);
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 41. While alive: MONSTERAI_TriggerMageThink, then event 7 in 75 frames.
-void __fastcall MONSTER_PeriodicMageThink(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUModId, int32_t nParam2);
+void __fastcall MONSTER_PeriodicMageThink(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nUModId, int32_t bUnique);
 void __fastcall MONSTER_DispatchUModOnSpawn(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall MONSTER_DispatchUModOnDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall MONSTER_DispatchUModOnHit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
@@ -144,7 +144,7 @@ void __fastcall SERVER_AwardKillExperience(struct D2UnitStrc * pUnit, struct D2U
 int32_t __fastcall MONSTER_CalculateCorpseBombDamage(::SGAMEDATA * pGame, int32_t nPlayerCount);
 // Recomputes a monster unit's combat damage/to-hit stats and elemental on-hit damage from monstats.txt, scaling by monster level, difficulty, multiplayer player-count, and a scaling-mode selector (5/normal vs 6-8 vs default difficulty bands). Adds pet-skill damage bonuses, applies the classic (non-expansion) difficulty damage/to-hit penalty divisors, and an expansion corpse-bomb/playercount damage multiplier. Writes mindamage/maxdamage/tohit into the unit's flag-1 stat list, then iterates the three elemental damage slots (El1/El2/El3 mode/type/chance) rolling chance from the unit seed and adding the matching elemental min/max/length stats (fire, lightning, magic, cold, poison, drains, stun, burning). Server/common monster setup; no-op for non-monster units.
 void __fastcall MONSTER_RecalculateCombatStats(struct D2UnitStrc * pUnit, uint32_t nDifficultyScaling);
-void __fastcall MONSTER_CalculateHitCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, uint32_t dwParam);
+void __fastcall MONSTER_CalculateHitCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, uint32_t dwUnused);
 void __fastcall MONSTER_AttackTarget(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
 void __stdcall MONSTER_CheckSpecialDeathFlag(struct D2UnitStrc * pUnit, struct D2DamageStrc * pDamage);
 // Rolls a critical-hit check for a monster attack using the monster's MonStats Crit percentage. If pnParam[0]==1, the class id in pnParam[1] is valid, and the RNG roll (stored in pnParam[8/9]) is below the Crit threshold, all damage fields in pEvent are doubled and the critical-hit overlay (0x36) is shown on pUnit.

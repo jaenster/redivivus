@@ -688,7 +688,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn67",
+      "name": "Objects_InitFn67_DrehyaStartOutsideTown",
       "address": "0058a5b0",
       "lines": [
         {
@@ -698,7 +698,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q3",
       "calledFunctions": [
-        "Objects_InitFn67",
+        "Objects_InitFn67_DrehyaStartOutsideTown",
         "GetQuestDataByQuestNoInternal",
         "SetEvent"
       ],
@@ -710,7 +710,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn68",
+      "name": "Objects_InitFn68_NihlathakStartInTown",
       "address": "0058a610",
       "lines": [
         {
@@ -720,7 +720,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q3",
       "calledFunctions": [
-        "Objects_InitFn68",
+        "Objects_InitFn68_NihlathakStartInTown",
         "GetQuestDataByQuestNoInternal",
         "QUEST_SpawnMonsterNearCoords",
         "GetMonsterMapAi",
@@ -736,7 +736,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn69",
+      "name": "Objects_InitFn69_SpawnFrozenstein",
       "address": "0058a6c0",
       "lines": [
         {
@@ -746,7 +746,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q3",
       "calledFunctions": [
-        "Objects_InitFn69",
+        "Objects_InitFn69_SpawnFrozenstein",
         "GetQuestDataByQuestNoInternal",
         "MONSTERTBLS_GetPresetActValue",
         "SpawnMonster"
@@ -976,7 +976,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn74",
+      "name": "Objects_InitFn74_FrozenAnya",
       "address": "0058aa50",
       "lines": [
         {
@@ -986,7 +986,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q3",
       "calledFunctions": [
-        "Objects_InitFn74",
+        "Objects_InitFn74_FrozenAnya",
         "GetQuestDataByQuestNoInternal",
         "QUEST_SetStateAndBroadcast"
       ],

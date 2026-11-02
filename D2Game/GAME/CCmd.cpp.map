@@ -53,7 +53,7 @@
         "NET_D2GS_SERVER_SrvJoinGame",
         "NET_IsClientAllowedToLeave",
         "NET_D2GS_SERVER_LeaveServer",
-        "Return1_GameSetup_0",
+        "SERVER_IsHostedGamesRequestAllowed",
         "NET_RequestHostedGames",
         "NET_IsClientAllowedToJoin",
         "NET_D2GS_SERVER_SrvJoinAct",

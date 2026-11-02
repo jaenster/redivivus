@@ -184,18 +184,18 @@ static void RefreshPlayerStatus(D2UnitStrc * pUnit1, D2UnitStrc * pUnit2) {
 }
 
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall AssignPlayerToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t * pdwParam) {
+void __fastcall AssignPlayerToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t * pPartyJoinArgs) {
     D2UnitStrc* pOtherUnit;
     uint16_t nOldPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, (D2UnitStrc*)*pdwParam);
-    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, (D2UnitStrc*)*pdwParam, pUnit);
-    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, (D2UnitStrc*)pdwParam[1]);
-    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, (D2UnitStrc*)pdwParam[1], pUnit);
-    RefreshPlayerStatus(pUnit, (D2UnitStrc*)*pdwParam);
-    RefreshPlayerStatus(pUnit, (D2UnitStrc*)pdwParam[1]);
-    if (nOldPartyId == *(uint16_t*)(pdwParam + 2) && nOldPartyId != 0xffff) {
+    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, (D2UnitStrc*)*pPartyJoinArgs);
+    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, (D2UnitStrc*)*pPartyJoinArgs, pUnit);
+    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, (D2UnitStrc*)pPartyJoinArgs[1]);
+    UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, (D2UnitStrc*)pPartyJoinArgs[1], pUnit);
+    RefreshPlayerStatus(pUnit, (D2UnitStrc*)*pPartyJoinArgs);
+    RefreshPlayerStatus(pUnit, (D2UnitStrc*)pPartyJoinArgs[1]);
+    if (nOldPartyId == *(uint16_t*)(pPartyJoinArgs + 2) && nOldPartyId != 0xffff) {
       uint32_t pUnitGid;
-      pOtherUnit = (D2UnitStrc*)pdwParam[1];
+      pOtherUnit = (D2UnitStrc*)pPartyJoinArgs[1];
       if (pUnit != pOtherUnit) {
         if (!pOtherUnit) {
           pUnitGid = -1;
@@ -207,8 +207,8 @@ void __fastcall AssignPlayerToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uin
       }
     }
 
-    UNIT::PlayerList::Send0x8bRelationshipStatus(pUnit, (D2UnitStrc*)*pdwParam);
-    UNIT::PlayerList::Send0x8bRelationshipStatus(pUnit, (D2UnitStrc*)pdwParam[1]);
+    UNIT::PlayerList::Send0x8bRelationshipStatus(pUnit, (D2UnitStrc*)*pPartyJoinArgs);
+    UNIT::PlayerList::Send0x8bRelationshipStatus(pUnit, (D2UnitStrc*)pPartyJoinArgs[1]);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x8D_AssignPlayerToParty_Sender(pGame, pUnit);
 }
 
@@ -235,7 +235,7 @@ void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * 
       return;
     }
     if (nIsPartied == 0xffff) {
-      uVar1 = UNIT::Party::AllocPartyControlSub0x4(pGame);
+      uVar1 = UNIT::Party::PARTY_CreateParty(pGame);
       UNIT::Party::PARTY_AddUnitToParty(pGame, uVar1, pInvitee, (int32_t)pUnit);
       UNIT::Party::PARTY_AddUnitToParty(pGame, uVar1, pUnit, (int32_t)pUnit);
       PARTY_RefreshPlayerListRelationships(pGame, pInvitee);

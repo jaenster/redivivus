@@ -833,7 +833,7 @@ int32_t __fastcall Q32_SpawnBarricadePrisoners(D2QuestDataStrc * pQuestData, int
 // barricade (max 3 groups) by (game,object) pair, records the barricade object, then calls Q32_SpawnBarricadePrisoners
 // to populate that group with caged barbarians (field_0xA4 += spawned) and marks the group slot initialized.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q2.cpp
-void __fastcall Objects_InitFn62(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn62_CagedWussie(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RescueOnMountArreat);
     D2QuestDataA5Q2Strc* pA5Q2Data = pQuestData->pQuestSpecificData.pA5Q2;
     if (pQuestData->bIsNotIntroduction == '\0') {

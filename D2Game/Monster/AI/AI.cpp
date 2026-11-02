@@ -6895,7 +6895,7 @@ void __stdcall MONSTERAI_CheckAdjacentUnit(D2UnitStrc * pUnit, D2UnitStrc * * pp
 // Executes one of several "follow the owner" movement behaviours for a hireling/merc (or pet) relative to its owning player, dispatched by nAction (switch 0-5). Action 0: pick a free flank tile around the owner (via composite-dimension offset table) at the owner's grid and walk there. Action 1: walk to one of the owner's interacted-NPC stored coords, with combat-mode setup and AiThink retries, falling back to a random offset walk near the owner once the slot list (20 entries) is exhausted. Action 2: random short reposition near owner. Action 3: relocate the merc to a random valid monster spawn position in the owner's room (SUNIT_RelocateUnit, sets UNITFLAGEX_TELEPORTED) - used to teleport a stuck merc. Action 4: count adjacent pets and walk toward owner with an offset. Action 5: walk in a random offset around the owner. Returns 1 if an action was taken/movement issued, 0 on failure (e.g. relocate failed) or unknown action. Side effects: ApplyCombatAndMonStats, walk commands, AiThink timer triggers.
 int32_t __fastcall HirelingFollowOwnerAction(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pMerc, int32_t nAction, int32_t bRun, int32_t nVelocity, int32_t nWalkRadius) {
     // Static local variables (originally global data)
-    static uint8_t BYTE_ARRAY_006e34f0[8] = { 0x4, 0x3, 0x2, 0x1, 0x0, 0x7, 0x6, 0x5 }; D2_STATIC_GUARD(BYTE_ARRAY_006e34f0, "D2Game::Monster::AI::HirelingFollowOwnerAction::BYTE_ARRAY_006e34f0");
+    static uint8_t gaMirroredDirection[8] = { 0x4, 0x3, 0x2, 0x1, 0x0, 0x7, 0x6, 0x5 }; D2_STATIC_GUARD(gaMirroredDirection, "D2Game::Monster::AI::HirelingFollowOwnerAction::gaMirroredDirection");
 
     int nY_00;
     D2MonsterPathParamStrc* pPathParam;
@@ -6929,7 +6929,7 @@ int32_t __fastcall HirelingFollowOwnerAction(::SGAMEDATA * pGame, D2UnitStrc * p
       bWalked2 = D2Common::DUNGEON::Dungeon::GetGridIndex(D2Common::Units::UNITS_GetRoom(pOwner), D2Client::Units::GetXPosFromDynamicPathUnit(pOwner), bWalked2);
       pOwnerPlayerData = 0;
       do {
-        D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(BYTE_ARRAY_006e34f0[nWalkRadius & 0xff], &nCompositeDimW, &eAnimMode);
+        D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(gaMirroredDirection[nWalkRadius & 0xff], &nCompositeDimW, &eAnimMode);
         bWalked0 = nOwnerX + nCompositeDimW * 8;
         nY_00 = (int)pOwnerDynamicPath + eAnimMode * 8;
         nY = nY_00;
@@ -7113,7 +7113,7 @@ int32_t __fastcall HirelingFollowOwnerAction(::SGAMEDATA * pGame, D2UnitStrc * p
 // Execute pet AI movement behavior (6 modes). Mode 0: explore around unit. Mode 1: follow nearby NPCs. Mode 2: random wander. Mode 3: teleport to random loc. Mode 4: check adjacent units. Mode 5: random walk around player. Returns 1 if movement started, 0 if blocked/idle.
 int32_t __fastcall AI_Pet_ExecuteMovementBehavior(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pPet, int32_t nBehaviorMode, int32_t bRun, int32_t nVelocity, int32_t nWalkRadius) {
     // Static local variables (originally global data)
-    static uint8_t BYTE_ARRAY_006e34f8[8] = { 0x4, 0x3, 0x2, 0x1, 0x0, 0x7, 0x6, 0x5 }; D2_STATIC_GUARD(BYTE_ARRAY_006e34f8, "D2Game::Monster::AI::AI_Pet_ExecuteMovementBehavior::BYTE_ARRAY_006e34f8");
+    static uint8_t gaDirection8ToStepIndex[8] = { 0x4, 0x3, 0x2, 0x1, 0x0, 0x7, 0x6, 0x5 }; D2_STATIC_GUARD(gaDirection8ToStepIndex, "D2Game::Monster::AI::AI_Pet_ExecuteMovementBehavior::gaDirection8ToStepIndex");
 
     int32_t bWalkStarted0;
     int32_t bWalkStarted1;
@@ -7189,7 +7189,7 @@ int32_t __fastcall AI_Pet_ExecuteMovementBehavior(::SGAMEDATA * pGame, D2UnitStr
       bWalkStarted1 = D2Common::DUNGEON::Dungeon::GetGridIndex(D2Common::Units::UNITS_GetRoom(pOwner), D2Client::Units::GetXPosFromDynamicPathUnit(pOwner), bWalkStarted1);
       pPlayerData = 0;
       do {
-        D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(BYTE_ARRAY_006e34f8[nWalkRadius & 0xff], &nSpawnPosX, &nSpawnPosY);
+        D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(gaDirection8ToStepIndex[nWalkRadius & 0xff], &nSpawnPosX, &nSpawnPosY);
         pNPCInteract = nLoopIdx + nSpawnPosX * 8;
         bWalkStarted2 = pSpawnedRoom + nSpawnPosY * 8;
         bWalkStarted0 = D2Common::DUNGEON::Dungeon::GetGridIndex(D2Common::Units::UNITS_GetRoom(pUnitSelf), pNPCInteract, bWalkStarted2);
@@ -9213,19 +9213,19 @@ bool __fastcall AI_Monster_ExecuteAiCommands(::SGAMEDATA * pGame, D2UnitStrc * p
     return false;
 }
 
-bool __fastcall AI_Monster_WalkToStoredPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam, int32_t nParam) {
+bool __fastcall AI_Monster_WalkToStoredPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t pAiParam, int32_t pPathPos) {
     D2MonsterAiCmdStrc* pWalkCmd;
     if (pUnit) {
-      if (nParam && *(int*)(nParam + 4) && *(int*)(nParam + 8)) {
+      if (pPathPos && *(int*)(pPathPos + 4) && *(int*)(pPathPos + 8)) {
         int32_t nDistToStored;
-        nDistToStored = MONSTERAI_GetDistanceToCoords(pUnit, *(int*)(nParam + 4), *(int*)(nParam + 8));
+        nDistToStored = MONSTERAI_GetDistanceToCoords(pUnit, *(int*)(pPathPos + 4), *(int*)(pPathPos + 8));
         if ((uint32_t)nDistToStored > 0) {
           ApplyCombatAndMonStats(pUnit, 7, 0, '\0');
-          MONSTERAI_CommandWalkToCoordsImmediate(pGame, pUnit, *(int32_t*)(nParam + 4), *(int32_t*)(nParam + 8));
+          MONSTERAI_CommandWalkToCoordsImmediate(pGame, pUnit, *(int32_t*)(pPathPos + 4), *(int32_t*)(pPathPos + 8));
           pWalkCmd = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pUnit, 4, 0);
           if (pWalkCmd) {
-            pWalkCmd->nCmdArg[1] = *(int*)(nParam + 4);
-            pWalkCmd->nCmdArg[2] = *(int*)(nParam + 8);
+            pWalkCmd->nCmdArg[1] = *(int*)(pPathPos + 4);
+            pWalkCmd->nCmdArg[2] = *(int*)(pPathPos + 8);
             pWalkCmd->nCmdArg[3] = 0xc;
             pWalkCmd->nCmdArg[4] = 10;
           }
@@ -9575,7 +9575,7 @@ void __fastcall AI_Fn1_Towner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParam
 void __fastcall AITHINK_Fn1_JarJar(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nRandRoll2;
     int32_t nDistToNearest;
-    uint32_t uVar2;
+    uint32_t nRoll;
     D2CoordStrc sSummonerCoord;
     bool bVar1 = AI_Monster_InitializeHomePosition(pGame, pUnit, pAiParam);
     if (bVar1) {
@@ -9624,8 +9624,8 @@ void __fastcall AITHINK_Fn1_JarJar(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
       if (!bVar1 && pUnit2 && pUnit2 != pUnit) {
         if (pUnit2->eUnitType == UNIT_PLAYER) {
           if (nDistToNearest < 0xc) {
-            uVar2 = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 1000);
-            if ((int)uVar2 < 100) {
+            nRoll = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 1000);
+            if ((int)nRoll < 100) {
               WalkRandomOffsetAroundUnit(pGame, pUnit, pUnit2, 2);
             }
 
@@ -9636,8 +9636,8 @@ void __fastcall AITHINK_Fn1_JarJar(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
           PlanNextAiMove(pGame, pUnit, 0x14);
         }
 
-        uVar2 = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 1000);
-        if ((int)uVar2 < 0x32) {
+        nRoll = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 1000);
+        if ((int)nRoll < 0x32) {
           WalkRandomOffset(pGame, pUnit, 3);
         }
       }
@@ -12090,15 +12090,15 @@ BOOL __fastcall MONSTERAI_CanSummonPetType(::SGAMEDATA * pGameStrc, D2UnitStrc *
 }
 
 // Validates whether a monster may cast a given skill at a candidate target right now; returns 1 if allowed, 0 otherwise. nParam points to a scan/context record (+0x18 = a mode/phase flag, +0x8 = a secondary unit). Bounds-checks nSkillId against the SkillsTxt table, confirms the pet-summon limit via MONSTERAI_CanSummonPetType, then branches on SkillsTxt.aitype: enforces that aura/buff types (4,0xD) only run when the context flag matches, rejects aura-type-1 skills whose aurastate is already active on the target (UNIT_GetUnitState), and for aura-type-2 rejects when either the target's aurastate or the secondary unit's auratargetstate is set. Finally, for flagged skills it rejects if the target already has the aura at a stacked value (>2 via STATLIST_GetBaseStatValue). Pure predicate, no side effects. With no secondary unit (context +0x8 null) the jump table at 005eac93 rejects aitypes 2, 4, 5, 0xb, 0xc and 0xd (reject_skill, return 0); aitypes 3 and 6..0xa go on to the aura checks.
-int __fastcall MONSTERAI_ValidateSkillConditions(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, int32_t nSkillId, int32_t nParam) {
+int __fastcall MONSTERAI_ValidateSkillConditions(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, int32_t nSkillId, int32_t pAiParam) {
     eD2States eAuraActiveState;
     eD2States eAuraStateResult;
     D2StatListExStrc* pStatList;
     int nCooldownOrSummonFlag;
     D2SkillsTxt* pSkillTxt;
     char cAiType;
-    int nContextModeFlag = *(int*)(nParam + 0x18);
-    D2UnitStrc* pAuraStatList = *(D2UnitStrc**)(nParam + 8);
+    int nContextModeFlag = *(int*)(pAiParam + 0x18);
+    D2UnitStrc* pAuraStatList = *(D2UnitStrc**)(pAiParam + 8);
     pSkillTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (pSkillTxt) {
       BOOL bCanSummon;
@@ -12428,7 +12428,7 @@ void __fastcall AITHINK_Fn1_ShadowWarrior(::SGAMEDATA * pGame, D2UnitStrc * pUni
     PlanNextAiMove(pGame, pUnit, 0x19);
 }
 
-int32_t __stdcall MONSTERAI_CalcEffectiveSkillLevel(D2UnitStrc * pUnit, int32_t nBaseSkillLevel, eD2Skills eSkill) {
+int32_t __fastcall MONSTERAI_CalcEffectiveSkillLevel(::SGAMEDATA * pGame, D2UnitStrc * pAiUnit, D2UnitStrc * pUnit, int32_t nBaseSkillLevel, eD2Skills eSkill) {
     int nEffectiveLevel = 1;
     if (pUnit) {
       D2SkillStrc* pSkill;
@@ -12471,7 +12471,7 @@ void __fastcall AITHINK_Fn0_ShadowMaster(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       pAiGeneral->dwArg2 = nSkillLevel;
     }
 
-    int32_t nShadowMasterSkillLevel = pAiGeneral->dwArg2;
+    int32_t nBaseSkillLevel = pAiGeneral->dwArg2;
     pOwnerSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, SKILL_Attack, -1);
     if (!pOwnerSkill) {
       D2Common::Skills::AddSkill(pUnit, SKILL_Attack, 1, 0, ".\\Ai\\AiThink4.cpp", 0xbee);
@@ -12492,7 +12492,7 @@ void __fastcall AITHINK_Fn0_ShadowMaster(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       bCanSummonSkill = MONSTERAI_CanSummonPetType(pGame, pOwner, (D2PetStrc*)pUnit, eSkill);
       if (bCanSummonSkill) {
         D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
-        nClassSkillCount = MONSTERAI_CalcEffectiveSkillLevel(pOwner, nShadowMasterSkillLevel, eSkill);
+        nClassSkillCount = MONSTERAI_CalcEffectiveSkillLevel(pGame, pUnit, pOwner, nBaseSkillLevel, eSkill);
         D2Common::Skills::AddSkill(pUnit, eSkill, nClassSkillCount, 0, ".\\Ai\\AiThink4.cpp", 0xbfd);
       }
 
@@ -22017,12 +22017,12 @@ uint32_t __fastcall AI_Monster_ValidateSkillAtPosition(::SGAMEDATA * pGame, D2Un
     BOOL bTmp;
     int nY;
     int nX;
-    int32_t iVar1;
     POINT spawnPoint;
     int32_t nTargetY;
     int32_t nUnitSizeX;
     int32_t nTargetX;
     int32_t nCollision;
+    int32_t nCollMask;
     short int nSrvDoFunc;
     POINT* pSpawnPoint;
     if (!(nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount)) {
@@ -22067,13 +22067,13 @@ uint32_t __fastcall AI_Monster_ValidateSkillAtPosition(::SGAMEDATA * pGame, D2Un
           nTargetY = D2Client::Units::GetYPosFromDynamicPathUnit(pTargetUnit);
           bTmp = 0;
           nY = nTargetY * 2 - nUnitSize;
-          iVar1 = 0x3c01;
+          nCollMask = 0x3c01;
           spawnPoint.x = nX;
           spawnPoint.y = nY;
           nUnitSizeX = D2Common::Units::GetUnitSizeX(pUnit);
           pSpawnPoint = &spawnPoint;
           pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, pSpawnPoint, nUnitSizeX, iVar1, bTmp);
+          pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, pSpawnPoint, nUnitSizeX, nCollMask, bTmp);
           if (pRoom) {
             bTmp = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
             if (!bTmp) {

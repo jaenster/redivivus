@@ -53,20 +53,20 @@ eD2States __stdcall UNIT_GetUnitState(D2UnitStrc * pUnit, eD2States eState) {
     return STATE_none;
 }
 
-void __stdcall D2StatesTogglegfx(D2UnitStrc * pUnit, uint32_t nStateId, int32_t bSet) {
+void __stdcall D2StatesTogglegfx(D2UnitStrc * pUnit, int32_t nStateId, int32_t bSet) {
     int* pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
-    if (!(pGfxFlags && (int)nStateId >= 0 && (int)nStateId < sgptDataTable->nTxtStatesSize)) {
+    if (!(pGfxFlags && nStateId >= 0 && nStateId < sgptDataTable->nTxtStatesSize)) {
       return;
     }
 
-    uint32_t* pFlagWord = (uint32_t*)(pGfxFlags + ((int)nStateId >> 5));
+    uint32_t* pFlagWord = (uint32_t*)(pGfxFlags + (nStateId >> 5));
     if (bSet) {
-      *pFlagWord |= gadwBitMasks[nStateId & 0x1f];
+      *pFlagWord |= gadwBitMasks[nStateId & 0x1fU];
       Unit::ROOM_LinkUnitToUpdateList(pUnit);
       return;
     }
 
-    *pFlagWord &= gadwInvBitMasks[nStateId & 0x1f];
+    *pFlagWord &= gadwInvBitMasks[nStateId & 0x1fU];
     Unit::ROOM_LinkUnitToUpdateList(pUnit);
 }
 

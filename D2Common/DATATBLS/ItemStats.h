@@ -19,7 +19,7 @@ namespace D2Common::DATATBLS::ItemStats {
 void __stdcall SetState(struct D2UnitStrc * pUnit, eD2States eState, int32_t bSet);
 // No register arguments: ECX is loaded from pUnit [EBP+8] at 00639df3 before any use (1.14d asm).
 eD2States __stdcall UNIT_GetUnitState(struct D2UnitStrc * pUnit, eD2States eState);
-void __stdcall D2StatesTogglegfx(struct D2UnitStrc * pUnit, uint32_t nStateId, int32_t bSet);
+void __stdcall D2StatesTogglegfx(struct D2UnitStrc * pUnit, int32_t nStateId, int32_t bSet);
 uint32_t __stdcall GetStateGfxFlag(struct D2UnitStrc * pUnit, eD2States eState);
 void __stdcall STATES_ClearGfxFlags(struct D2UnitStrc * pUnit);
 BOOL __stdcall STATES_HasAnyGfxFlag(struct D2UnitStrc * pUnit);

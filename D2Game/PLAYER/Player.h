@@ -55,7 +55,7 @@ void __fastcall PLAYER_FreeAllResources(::SGAMEDATA * pGame, struct D2UnitStrc *
 void __fastcall FreePlayers(::SGAMEDATA * pGame);
 void __fastcall PLAYER_ClearTargetIfMatch(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 void __fastcall PLAYER_MoveToLocationWithTimeout(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY);
-uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t nParam, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
+uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t bAutoPlace, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // Server-side: grants a class's starting equipment loop from a starter-item template entry (pnParam: item code, body-loc, count byte at +5). For each of count copies it creates the item (PLAYER_CreateRewardItemFromTemplate), flags it ITEMFLAG_BEGINNER and sets its body-loc. Beltable items go to the belt (ITEM_TryPlaceInBelt, fallback to inventory). Non-beltable: if a body-loc is set it equips (PLAYER_EquipItemToBodyLoc, fallback inventory) else places in inventory; then seeds durability (or quantity 250 / charges 100 for bow-quiver ammo). Used during new-character creation. No return value.
 void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t eClassId, int32_t nDifficulty, uint32_t * pCharItem);
 void __fastcall PLAYER_CreateAllStarterItems(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint8_t byAct);

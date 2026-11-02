@@ -1812,7 +1812,7 @@
         "D2UnitStrc",
         "eD2UnitStat",
         "int32_t",
-        "uint32_t"
+        "uint16_t"
       ]
     },
     {

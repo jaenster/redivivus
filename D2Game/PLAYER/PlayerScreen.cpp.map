@@ -183,7 +183,7 @@
         "PLAYERLIST_AddPlayerEntry",
         "PLAYERLIST_IsPartied",
         "Send0x8bRelationshipStatus",
-        "AllocPartyControlSub0x4",
+        "PARTY_CreateParty",
         "PARTY_AddUnitToParty",
         "PARTY_RefreshPlayerListRelationships",
         "SUNIT_GetClient",

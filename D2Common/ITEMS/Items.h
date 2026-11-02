@@ -254,7 +254,7 @@ BOOL __stdcall ITEM_CheckItemData_eD2ItemFlag_Monster(struct D2UnitStrc * pUnit)
 uint8_t __stdcall ITEM_GetItemsTxt_bHitClass(struct D2UnitStrc * pUnit);
 int32_t __stdcall BARBARIAN_CheckItemData_b1or2Handed_isTrue(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
 BOOL __stdcall ITEM_ValidateItemQuantity(struct D2UnitStrc * pUnit);
-BOOL __stdcall ReturnFalse(struct D2UnitStrc * dwParam1, struct D2UnitStrc * dwParam2);
+BOOL __stdcall ReturnFalse(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
 // Returns a bitmask of which set-item slots (by setIndex) the player has equipped from the same set as pItem. Iterates all equipped/body-loc items; for each set-quality, non-disabled, non-broken item from the same set, sets bit (1 &lt;&lt; setIndex). Returns 0 if pItem is not a set item or unit has no inventory.
 // @sourcefile .\ITEMS\Items.cpp
 uint32_t __stdcall ITEMS_GetEquippedSetItemsMask(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, int32_t bIncludeItem);

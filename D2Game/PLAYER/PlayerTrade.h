@@ -21,13 +21,26 @@ struct SGAMEDATA;
 typedef uint32_t eD2ItemTypes;
 typedef uint32_t eD2ServerIncomingStatus;
 
-struct D2UnknownStructure0xc;
-
 // Data types
 struct D2CubeSetupEntryStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit1;
     /* 0x04 */ struct D2UnitStrc * pUnit2;
     /* 0x08 */ int32_t nItemLevel;
+};
+
+struct D2TradeItemUidPairStrc {
+    /* 0x00 */ int nUID; // CreateStructure0xc stores its nUID argument
+    /* 0x04 */ uint32_t nUIDOther;
+    /* 0x08 */ struct D2TradeItemUidPairStrc * pNext; // next node; SetUidOther and PLRTRADE_FreeTradeCopyInventory walk it
+};
+
+struct D2TradeRecordStrc {
+    /* 0x00 */ int32_t pCopyInventory;
+    /* 0x04 */ void * pSaveBuffer;
+    /* 0x08 */ struct D2TradeItemUidPairStrc * pUidPairList;
+    /* 0x0C */ uint32_t nTradeStatus;
+    /* 0x10 */ uint32_t nGold;
+    /* 0x14 */ uint32_t dwAcceptLockEndTick;
 };
 
 struct D2UnitDataPlayerArenaStrc {
@@ -47,21 +60,6 @@ struct D2UnitDataPlayerInteractedNPCStrc {
 
 struct D2UnitDataPlayerPetsStrc {
     /* 0x00 */ struct D2PetListStrc * pPetList; // Lists for each pet type
-};
-
-struct D2UnknownStructure0x18 {
-    /* 0x00 */ int32_t pCopyInventory;
-    /* 0x04 */ void * pSaveBuffer;
-    /* 0x08 */ struct D2UnknownStructure0xc * pUidPairList;
-    /* 0x0C */ uint32_t nTradeStatus;
-    /* 0x10 */ uint32_t nGold;
-    /* 0x14 */ uint32_t field5_0x14;
-};
-
-struct D2UnknownStructure0xc {
-    /* 0x00 */ int nUID; // CreateStructure0xc stores its nUID argument
-    /* 0x04 */ uint32_t nUIDOther;
-    /* 0x08 */ struct D2UnknownStructure0xc * pNext; // next node; SetUidOther and PLRTRADE_FreeTradeCopyInventory walk it
 };
 
 struct D2CubeSetupStrc {

@@ -626,22 +626,22 @@ void __fastcall CHATDLG_SetLadderFilterAndRank(uint8_t nFilterMode, int nRank) {
     gnLadderBoardSelectedRank = nRank;
 }
 
-void __fastcall CHATDLG_RequestLadderRank(char * szText, int32_t nParam, int32_t nLadderRequestMode) {
+void __fastcall CHATDLG_RequestLadderRank(char * szText, int32_t bHardcore, int32_t nLadderRequestMode) {
     if (!g_pLadderBoardTextBox) {
       return;
     }
 
     Storm::Source::SSTR::SStrCopy(gszLadderCharNameFilter, szText, 0x7fffffff);
     if (nLadderRequestMode) {
-      g_nLadderFilterMode = !nParam * '\b' + 0x13;
+      g_nLadderFilterMode = !bHardcore * '\b' + 0x13;
     } else {
-      g_nLadderFilterMode = nParam ? 0 : 0x9;
+      g_nLadderFilterMode = bHardcore ? 0 : 0x9;
     }
 
     gnLadderCurrentFilterMode = g_nLadderFilterMode;
     gnLadderBoardSelectedRank = -1;
     gnLadderRequestedCharIndex = -1;
-    D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x16_CharRank(szText, nParam, nLadderRequestMode);
+    D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x16_CharRank(szText, bHardcore, nLadderRequestMode);
     DWORD dwTickCount = GetTickCount();
     gdwLadderRankRequestTimeout = dwTickCount + 1000;
 }

@@ -702,7 +702,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn06",
+      "name": "Objects_InitFn06_CairnStone",
       "address": "005935e0",
       "lines": [
         {
@@ -712,7 +712,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
-        "Objects_InitFn06",
+        "Objects_InitFn06_CairnStone",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag",
         "AddQuestTimer"
@@ -1003,7 +1003,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn09",
+      "name": "Objects_InitFn09_InifussTree",
       "address": "00593fc0",
       "lines": [
         {
@@ -1013,7 +1013,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
-        "Objects_InitFn09",
+        "Objects_InitFn09_InifussTree",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateFlag"
       ],
@@ -1022,7 +1022,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn13",
+      "name": "Objects_InitFn13_InvisibleObject",
       "address": "00594020",
       "lines": [
         {
@@ -1032,7 +1032,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
-        "Objects_InitFn13",
+        "Objects_InitFn13_InvisibleObject",
         "GetQuestDataByQuestNoInternal",
         "QUEST_AttachToUnitByQuestId",
         "SetupUpdateFlag"
@@ -1083,7 +1083,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn54",
+      "name": "Objects_InitFn54_CainStartPosition",
       "address": "005940e0",
       "lines": [
         {
@@ -1093,7 +1093,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
-        "Objects_InitFn54",
+        "Objects_InitFn54_CainStartPosition",
         "GetQuestDataByQuestNoInternal",
         "Q04_SpawnDeckardCainNpc"
       ],
@@ -1172,7 +1172,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn61",
+      "name": "Objects_InitFn61_CainPortal",
       "address": "00594290",
       "lines": [
         {
@@ -1182,7 +1182,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
-        "Objects_InitFn61",
+        "Objects_InitFn61_CainPortal",
         "SetupUpdateFlag",
         "SetEvent"
       ],
@@ -1324,7 +1324,7 @@
         "UNITS_GetRoom",
         "GetXPosFromDynamicPathUnit",
         "GetYPosFromDynamicPathUnit",
-        "Objects_InitFn54",
+        "Objects_InitFn54_CainStartPosition",
         "GetCoords",
         "DRLGROOM_FindBetterNearbyRoom",
         "CreateUnit"

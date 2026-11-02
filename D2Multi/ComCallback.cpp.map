@@ -922,7 +922,7 @@
       ]
     },
     {
-      "name": "COMCALLBACK_Unused1",
+      "name": "COMCALLBACK_AddChannelUser",
       "address": "00449330",
       "lines": [
         {
@@ -932,7 +932,7 @@
       ],
       "namespace": "D2Multi::ComCallback",
       "calledFunctions": [
-        "COMCALLBACK_Unused1",
+        "COMCALLBACK_AddChannelUser",
         "COMCALLBACK_CreateChannelUserEntry"
       ],
       "usedTypes": [
@@ -940,7 +940,7 @@
       ]
     },
     {
-      "name": "COMCALLBACK_Unused2",
+      "name": "COMCALLBACK_OnChannelUserJoined",
       "address": "00449350",
       "lines": [
         {
@@ -950,7 +950,7 @@
       ],
       "namespace": "D2Multi::ComCallback",
       "calledFunctions": [
-        "COMCALLBACK_Unused2",
+        "COMCALLBACK_OnChannelUserJoined",
         "COMCALLBACK_CreateChannelUserEntry",
         "sprintf",
         "PrintChannelText"
@@ -972,7 +972,7 @@
       "namespace": "D2Multi::ComCallback",
       "calledFunctions": [
         "COMCALLBACK_Unused3",
-        "COMCALLBACK_Unused2"
+        "COMCALLBACK_OnChannelUserJoined"
       ],
       "usedTypes": [
         "uint32_t"
@@ -1034,7 +1034,7 @@
       ]
     },
     {
-      "name": "COMCALLBACK_Unused4",
+      "name": "COMCALLBACK_HandleChannelUserLeave",
       "address": "00449690",
       "lines": [
         {
@@ -1044,7 +1044,7 @@
       ],
       "namespace": "D2Multi::ComCallback",
       "calledFunctions": [
-        "COMCALLBACK_Unused4",
+        "COMCALLBACK_HandleChannelUserLeave",
         "COMCALLBACK_RemoveChannelUser"
       ],
       "usedTypes": [

@@ -654,6 +654,7 @@
       ],
       "usedTypes": [
         "D2UIKeyBindingSetStrc",
+        "uint16_t",
         "uint32_t"
       ]
     },
@@ -4549,7 +4550,7 @@
       ]
     },
     {
-      "name": "StaticInit_6caa30",
+      "name": "StaticInit_gU16ImmunityStringBuffer1",
       "address": "006caa30",
       "lines": [
         {
@@ -4559,14 +4560,14 @@
       ],
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
-        "StaticInit_6caa30"
+        "StaticInit_gU16ImmunityStringBuffer1"
       ],
       "usedTypes": [
         "uint16_t"
       ]
     },
     {
-      "name": "StaticInit_6caa50",
+      "name": "StaticInit_gU16ImmunityStringBuffer2",
       "address": "006caa50",
       "lines": [
         {
@@ -4576,14 +4577,14 @@
       ],
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
-        "StaticInit_6caa50"
+        "StaticInit_gU16ImmunityStringBuffer2"
       ],
       "usedTypes": [
         "uint16_t"
       ]
     },
     {
-      "name": "StaticInit_6caa70",
+      "name": "StaticInit_gnMonsterHealthBarValue",
       "address": "006caa70",
       "lines": [
         {
@@ -4593,14 +4594,14 @@
       ],
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
-        "StaticInit_6caa70"
+        "StaticInit_gnMonsterHealthBarValue"
       ],
       "usedTypes": [
         "uint16_t"
       ]
     },
     {
-      "name": "StaticInit_6caa90",
+      "name": "StaticInit_WindowSizeX",
       "address": "006caa90",
       "lines": [
         {
@@ -4610,11 +4611,11 @@
       ],
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
-        "StaticInit_6caa90"
+        "StaticInit_WindowSizeX"
       ]
     },
     {
-      "name": "StaticInit_6caaa0",
+      "name": "StaticInit_WindowSizeY",
       "address": "006caaa0",
       "lines": [
         {
@@ -4624,11 +4625,11 @@
       ],
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
-        "StaticInit_6caaa0"
+        "StaticInit_WindowSizeY"
       ]
     },
     {
-      "name": "StaticInit_6cace0",
+      "name": "StaticInit_gnUICtrlConfigScrollPosition",
       "address": "006cace0",
       "lines": [
         {
@@ -4638,7 +4639,7 @@
       ],
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
-        "StaticInit_6cace0"
+        "StaticInit_gnUICtrlConfigScrollPosition"
       ]
     }
   ]

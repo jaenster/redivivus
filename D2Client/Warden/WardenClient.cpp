@@ -950,25 +950,25 @@ void __fastcall WARDEN_SetGlobalFlag(uint32_t dwParam) {
     gnDialogDataInitialized = dwParam;
 }
 
-void __fastcall WARDEN_FreeModuleLibraries(LPVOID * ppParam) {
-    LPVOID pModuleBase = *ppParam;
+void __fastcall WARDEN_FreeModuleLibraries(LPVOID * ppWardenModule) {
+    LPVOID pModuleBase = *ppWardenModule;
     if (!pModuleBase) {
       return;
     }
 
     int nImportTableOffset = *(int*)((int)pModuleBase + 0x1c);
-    LPVOID nModuleCount = ppParam[2];
+    LPVOID nModuleCount = ppWardenModule[2];
     while ((int)nModuleCount > 0) {
       HMODULE hLibModule;
-      ppParam[2] = (LPVOID)((int)ppParam[2] - 1);
-      /* LPCSTR lpModuleName for GetModuleHandleA */ hLibModule = GetModuleHandleA((LPCSTR)(*(int*)((int)pModuleBase + (int)ppParam[2] * 8 + nImportTableOffset) + (int)*ppParam));
+      ppWardenModule[2] = (LPVOID)((int)ppWardenModule[2] - 1);
+      /* LPCSTR lpModuleName for GetModuleHandleA */ hLibModule = GetModuleHandleA((LPCSTR)(*(int*)((int)pModuleBase + (int)ppWardenModule[2] * 8 + nImportTableOffset) + (int)*ppWardenModule));
       /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(hLibModule);
-      nModuleCount = ppParam[2];
+      nModuleCount = ppWardenModule[2];
     }
 
-    /* DWORD dwFreeType for VirtualFree */ /* SIZE_T dwSize for VirtualFree */ /* LPVOID lpAddress for VirtualFree */ VirtualFree(*ppParam, 0, 0x8000);
-    *ppParam = (LPVOID)0x0;
-    ppParam[1] = (LPVOID)0x0;
+    /* DWORD dwFreeType for VirtualFree */ /* SIZE_T dwSize for VirtualFree */ /* LPVOID lpAddress for VirtualFree */ VirtualFree(*ppWardenModule, 0, 0x8000);
+    *ppWardenModule = (LPVOID)0x0;
+    ppWardenModule[1] = (LPVOID)0x0;
 }
 
 } // namespace D2Client::Warden

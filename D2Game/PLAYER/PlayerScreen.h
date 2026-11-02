@@ -23,7 +23,7 @@ void __fastcall PARTYSCREEN_SetCorpseLootPermission(::SGAMEDATA * pGame, struct 
 void __fastcall PARTYSCREEN_UpdateMuteRelation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bNewState, uint32_t pnError);
 void __fastcall PARTYSCREEN_UpdateSquelchRelation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bNewState, uint32_t pnError);
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall AssignPlayerToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t * pdwParam);
+void __fastcall AssignPlayerToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t * pPartyJoinArgs);
 // Processes acceptance of a party invite between pUnit (acceptor) and pInvitee (inviter). Allocates bidirectional player-list entries, checks PLAYERLIST_IsPartied result: if not fully partied sends 0x8B relationship packets and returns. Otherwise allocates a new party (if invitee has none) or joins the existing one via PARTY_AddUnitToParty, refreshes all relationship states, sends a join event (bParam=8) to acceptor's client, and iterates all units to assign them to the party.
 void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pInvitee, uint32_t dwUnused1, uint32_t dwUnused2);
 // @wasnamed PARTYSCREEN_AcceptPartyInvite - one name on two different functions.

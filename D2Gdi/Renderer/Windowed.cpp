@@ -1154,8 +1154,8 @@ void __fastcall DrawSolidSquare(POINT * pPoint, BYTE nSize, BYTE nPaletteIndex) 
 }
 
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
-void __stdcall RENDERER_WINDOWED_ClearFramebuffer(int nParam) {
-    if (nParam) {
+void __stdcall RENDERER_WINDOWED_ClearFramebuffer(int bPartial) {
+    if (bPartial) {
       memset(gpRenderBackBufferBits, 0, (RENDERER_nWindowHeight - 0x2f) * RENDERER_nWindowWidth);
       return;
     }
