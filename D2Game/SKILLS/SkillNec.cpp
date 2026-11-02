@@ -1297,13 +1297,13 @@ uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Sets the combat stats (level, AC, to-hit) on a corpse unit being revived by the Necromancer's Revive skill. If nLevel < 1, derives the minion level as 75% of the caster's level plus nParam2 (clamped to at least 1). Looks up the D2MonLvlTxt row for the final level, then adds the difficulty- and ladder-adjusted AC and TH values. Returns 1 on success, 0 if MonLvl data is out of range.
-void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpseUnit, int32_t nLevel, int32_t nParam2) {
+void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpseUnit, int32_t nLevel, int32_t nLevelOffset) {
     int nLevelClamped;
     uint32_t nDifficultyIndex;
     if (nLevel <= 0) {
       int nLevelScaled;
       nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-      nLevelScaled = nLevel * 3 / 4 + nParam2;
+      nLevelScaled = nLevel * 3 / 4 + nLevelOffset;
       nLevelClamped = nLevelScaled;
       if (nLevelScaled <= 1) {
         nLevelClamped = 1;

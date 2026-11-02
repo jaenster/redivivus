@@ -86,7 +86,7 @@ uint32_t __stdcall NET_SID_CLIENT_GetResponseCount2();
 uint32_t __stdcall NET_SID_CLIENT_GetResponseCount1();
 int __stdcall SID_InitializeProtocolState();
 BOOL __fastcall NET_SID_CLIENT_WaitForPacketId(uint8_t nPacketId);
-BOOL __fastcall NET_SID_CLIENT_GetRequiredAnswer(uint8_t bParam);
+BOOL __fastcall NET_SID_CLIENT_GetRequiredAnswer(uint8_t nPacketId);
 void __fastcall NET_SID_CLIENT_ResetRequireResponse(uint8_t nPacketId);
 uint32_t __fastcall SID_GetPacketResponseFlag(uint8_t nPacketId);
 BOOL __fastcall NET_SID_CLIENT_IncomingReturn(char * pBytes, size_t nSize);

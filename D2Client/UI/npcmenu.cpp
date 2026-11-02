@@ -2625,7 +2625,7 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
 
       nParam3 = 1;
       nParam2 = NPCMENU_GambleDrawCallback;
-      Dialog::AddStringData(Dialog::gpNpcInteractionDialog, D2Lang::StrTable::strtable::GetLocaleString(0x102e), 0xf, 0, 0, 1, nParam2, nParam3);
+      Dialog::AddStringData(Dialog::gpNpcInteractionDialog, D2Lang::StrTable::strtable::GetLocaleString(0x102e), 0xf, 0, 0, 1, nParam2, nCallbackParam);
     }
 }
 
@@ -3215,15 +3215,11 @@ void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechId
       nAddStringEnabled = 1;
       pcVar1 = (fpDialogFunc)NPCMENU_ShowCurrentGossipCallback;
       Dialog::AddStringData(Dialog::gpNpcGossipDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd43), 0xf, 0, 0, 1, pcVar1, nAddStringEnabled);
-      nMsgLoopIdx = 0;
-      if (nErrorLine > 0) {
-        do {
-          dwFontArg = D2Common::Text::TEXT_GetMessageByIndex(pMsgLog, nMsgLoopIdx);
-          nAddStringEnabled = 1;
-          pcVar2 = NPCMENU_ShowSelectedDialogOption;
-          Dialog::AddStringData(Dialog::gpNpcGossipDialog, Text::TEXT_LookupSoundStringIndex((uint16_t)dwFontArg), 0xf, 0, 0, 1, pcVar2, nAddStringEnabled);
-          nMsgLoopIdx++;
-        } while (nMsgLoopIdx < nErrorLine);
+      for (nMsgLoopIdx = 0; nMsgLoopIdx < nErrorLine; nMsgLoopIdx++) {
+        dwFontArg = D2Common::Text::TEXT_GetMessageByIndex(pMsgLog, nMsgLoopIdx);
+        nAddStringEnabled = 1;
+        pcVar2 = NPCMENU_ShowSelectedDialogOption;
+        Dialog::AddStringData(Dialog::gpNpcGossipDialog, Text::TEXT_LookupSoundStringIndex((uint16_t)dwFontArg), 0xf, 0, 0, 1, pcVar2, nAddStringEnabled);
       }
       if (_Interaction::nCurrentInteractedNpcClassId == 0xc9) {
         iVar1 = 1;

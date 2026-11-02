@@ -241,7 +241,7 @@ void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnit
 void __stdcall UI_ResetTradeGlobals();
 void __stdcall DRAW_UI_TradePrompt();
 void __stdcall UI_InitTradeState();
-void __fastcall UI_CloseTradeWindow(int32_t nParam);
+void __fastcall UI_CloseTradeWindow(int32_t bToggleInventory);
 int __stdcall TRADE_GetTradeStatus();
 void __stdcall UI_FreeHoradricCubeAssets();
 void __stdcall PACKET_SendUnitInteraction0x44(struct D2UIMouseMsgStrc * pMsg);

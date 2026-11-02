@@ -50,7 +50,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game::PLAYER::PlayerScreen {
 
 // Builds and sends a 0x5A event-message packet to a client. Zeroes a D2Packet0x5aEventStructure, fills packet ID 0x5A, message type 0x07, the target unit GID, and maps bParam (event subtype 1-11) to a color code. Dispatches via NET_D2GS_SERVER_Send_0x5A_EventMessages. Used for party/relationship notifications.
-void __thiscall SendPlayerEvent(void * pThis, uint32_t pUnitGid, uint8_t bParam) {
+void __thiscall SendPlayerEvent(void * pThis, uint32_t pUnitGid, uint8_t nPartyEventCode) {
     D2Packet0x5aEventStructure sEventPacket;
     memset(sEventPacket.szName1, 0, 16 * sizeof(sEventPacket.szName1[0]));
     memset(sEventPacket.szName2, 0, 16 * sizeof(sEventPacket.szName2[0]));
@@ -58,8 +58,8 @@ void __thiscall SendPlayerEvent(void * pThis, uint32_t pUnitGid, uint8_t bParam)
     sEventPacket.nPacketId = 'Z';
     sEventPacket.nMessageType = '\a';
     sEventPacket.nColor = '\x03';
-    sEventPacket.nArgTypes = bParam;
-    switch (bParam) {
+    sEventPacket.nArgTypes = nPartyEventCode;
+    switch (nPartyEventCode) {
       case '\x01':
 
       case '\x02':
@@ -126,7 +126,7 @@ void __fastcall PARTYSCREEN_TogglePlayerSquelch(::SGAMEDATA * pGame, D2UnitStrc 
       bIsConnected = pUnit->nUnitGUID;
     }
 
-    SendPlayerEvent(UNIT::SUnit::SUNIT_GetClient(pTarget, ".\\PLAYER\\PartyScreen.cpp", 0x65), bIsConnected, bParam);
+    SendPlayerEvent(UNIT::SUnit::SUNIT_GetClient(pTarget, ".\\PLAYER\\PartyScreen.cpp", 0x65), bIsConnected, nPartyEventCode);
 }
 
 void __fastcall PARTYSCREEN_UpdateMuteRelation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t bNewState, uint32_t dwParam) {

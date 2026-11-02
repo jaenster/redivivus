@@ -346,15 +346,15 @@ uint32_t __stdcall ITEMSTATS_CheckStateFlagArray12(uint32_t nParam) {
     return 0;
 }
 
-uint32_t __stdcall STATES_IsStateActive(D2UnitStrc * pUnit, uint32_t nParam) {
-    if ((int)nParam < 0 || (int)nParam >= sgptDataTable->nTxtStatesSize) {
+uint32_t __stdcall STATES_IsStateActive(D2UnitStrc * pUnit, uint32_t nStateId) {
+    if ((int)nStateId < 0 || (int)nStateId >= sgptDataTable->nTxtStatesSize) {
       return 0;
     }
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-      return sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[(int)nParam >> 5] & gadwBitMasks[nParam & 0x1f];
+      return sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[(int)nStateId >> 5] & gadwBitMasks[nStateId & 0x1f];
     }
 
-    return sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[(int)nParam >> 5] & gadwBitMasks[nParam & 0x1f];
+    return sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[(int)nStateId >> 5] & gadwBitMasks[nStateId & 0x1f];
 }
 
 BOOL __fastcall STATES_HasPoisonState(D2UnitStrc * pUnit) {

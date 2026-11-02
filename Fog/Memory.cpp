@@ -65,13 +65,13 @@ static int32_t ComputeSizeClassIndex(int32_t nParam) {
     return nBitIndex - 3;
 }
 
-int32_t __fastcall FindFirstFreeBit(uint32_t nParam) {
+int32_t __fastcall FindFirstFreeBit(uint32_t dwBits) {
     int nBitIndex = 0;
-    if (!~nParam) {
+    if (!~dwBits) {
       return nBitIndex;
     }
 
-    for (; !(~nParam >> nBitIndex & 1); nBitIndex++) {}
+    for (; !(~dwBits >> nBitIndex & 1); nBitIndex++) {}
 
     return nBitIndex;
 }

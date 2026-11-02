@@ -212,7 +212,7 @@ void __fastcall SKILLDRUID_OnShapeshiftExpire(D2UnitStrc * pUnit, eD2States eSta
 }
 
 // @sourcefile .\SKILLS\SkillDruid.cpp
-void __fastcall D2SetAurastatsFromSkills(D2UnitStrc * pUnit, D2StatListExStrc * pStatList, D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nParam) {
+void __fastcall D2SetAurastatsFromSkills(D2UnitStrc * pUnit, D2StatListExStrc * pStatList, D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nValue;
     if (!(pUnit && pStatList && (pSkillsTxt || (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && (pSkillsTxt = sgptDataTable->pTxtSkills + eSkill , pSkillsTxt != 0)))) {
       return;
@@ -226,7 +226,7 @@ void __fastcall D2SetAurastatsFromSkills(D2UnitStrc * pUnit, D2StatListExStrc * 
       eD2UnitStat eUnitStat;
       eUnitStat = (eD2UnitStat)*pAuraStatCursor;
       if ((int)eUnitStat >= 0 && (int)eUnitStat < pDataTable->nTxtItemStatCostSize && pDataTable->pTxtItemStatCost + eUnitStat) {
-        nValue = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraCalcCursor, eSkill, nParam);
+        nValue = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraCalcCursor, eSkill, nSkillLvl);
         pDataTable = sgptDataTable;
         if (nValue) {
           D2Common::Stats::StatsEx::STATLIST_SetStatValue(pStatList, eUnitStat, nValue, 0);

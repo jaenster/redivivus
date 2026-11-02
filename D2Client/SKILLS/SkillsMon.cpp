@@ -209,8 +209,8 @@ BOOL __fastcall Skills_CltStFunc_SetParamsFromTargetPosition(D2UnitStrc * pUnit,
     if (eTargetUnitType != UNIT_OBJECT && ((int)eTargetUnitType <= 3 || (int)eTargetUnitType > 5)) {
       int32_t nParam2;
       if (pTarget->pPath.pDynamicPath) {
-        nParam2 = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
-        D2Common::Skills::SKILL_SetParam2(pSkill, nParam2);
+        nPar2 = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
+        D2Common::Skills::SKILL_SetParam2(pSkill, nPar2);
         return 1;
       }
 

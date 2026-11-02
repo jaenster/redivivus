@@ -267,7 +267,7 @@ BOOL __fastcall SKILLAMA_SrvStFn08_Strafe(::SGAMEDATA * pGame, D2UnitStrc * pUni
       nParam3 = -1;
     }
 
-    D2Common::Skills::SKILL_SetParam3(pSkill, nParam3);
+    D2Common::Skills::SKILL_SetParam3(pSkill, nPar3);
     SkillsServer::RemoveQuanityOnUse(pGame, pUnit);
     return 1;
 }

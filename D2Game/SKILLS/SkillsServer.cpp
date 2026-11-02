@@ -2610,8 +2610,8 @@ int32_t __fastcall SKILLS_GetUnitWalkVelocity(D2UnitStrc * pnParam) {
     return 0x600;
 }
 
-int32_t __fastcall SKILLS_GetSummonMonsterClassId(D2UnitStrc * pUnit, int32_t nParam, int32_t nSummonMode, int32_t nSummonParam, int * pPtr, int * pnParam1, int * pnParam2) {
-    int32_t nMonsterClassId = D2Common::Monsters::MONSTERS::SummonOrSpawnMode(pUnit, nParam, nSummonMode, nSummonParam, pPtr, pnParam1, pnParam2);
+int32_t __fastcall SKILLS_GetSummonMonsterClassId(D2UnitStrc * pUnit, int32_t bUseMonsterSpawnData, int32_t nSummonMode, int32_t nSummonParam, int * pPtr, int * pnParam1, int * pnParam2) {
+    int32_t nMonsterClassId = D2Common::Monsters::MONSTERS::SummonOrSpawnMode(pUnit, bUseMonsterSpawnData, nSummonMode, nSummonParam, pPtr, pnParam1, pnParam2);
     if (!(nMonsterClassId < 0 || nMonsterClassId >= sgptDataTable->nTxtMonStatsSize)) {
       return nMonsterClassId;
     }
@@ -3009,7 +3009,7 @@ void __fastcall SKILLS_SetStateWithCurse(D2UnitStrc * pUnitStrc, D2UnitStrc * pA
 }
 
 // Server-side helper that builds a D2SkillArgStrc and spawns a single missile unit on behalf of pUnit. Resolves the launch position from the owner's dynamic or static path plus nParam1/nParam2 offsets; uses nParam3/nParam4 as the target tile or falls back to SKILLS_GetTargetOrCursorPos. For monsters with a tohit stat, copies it into nToHit and sets flag 0x1000. For players firing stackable ammo (nParam5 != 0), consumes one charge via RemoveQuanityOnUse. Returns the new missile unit or null on failure.
-D2UnitStrc * __fastcall CreatingAMissile(::SGAMEDATA * pGame, eMissilesId nSrvMissle, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, int32_t nParam1, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5) {
+D2UnitStrc * __fastcall CreatingAMissile(::SGAMEDATA * pGame, eMissilesId nSrvMissle, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, int32_t nOffsetX, int32_t nOffsetY, int32_t nTargetX, int32_t nTargetY, int32_t bConsumeAmmo) {
     int nOwnerCoord;
     int32_t nAmmoRemaining;
     D2SkillArgStrc sSkillArg;
@@ -3025,7 +3025,7 @@ D2UnitStrc * __fastcall CreatingAMissile(::SGAMEDATA * pGame, eMissilesId nSrvMi
       nOwnerCoord = 0;
     }
 
-    sSkillArg.nX = nOwnerCoord + nParam1;
+    sSkillArg.nX = nOwnerCoord + nOffsetX;
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nOwnerCoord = pUnit->pPath.pStaticPath->nPosY;
@@ -3035,19 +3035,19 @@ D2UnitStrc * __fastcall CreatingAMissile(::SGAMEDATA * pGame, eMissilesId nSrvMi
       nOwnerCoord = 0;
     }
 
-    sSkillArg.nY = nOwnerCoord + nParam2;
+    sSkillArg.nY = nOwnerCoord + nOffsetY;
     sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nMissileTxtNo = nSrvMissle;
-    if (!nParam3 || !nParam4) {
+    if (!nTargetX || !nTargetY) {
       BOOL BVar1;
       BVar1 = SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
       if (!BVar1) {
         return nullptr;
       }
     } else {
-      sSkillArg.nUnitX = nParam3;
-      sSkillArg.nUnitY = nParam4;
+      sSkillArg.nUnitX = nTargetX;
+      sSkillArg.nUnitY = nTargetY;
     }
     if (!(sSkillArg.nUnitX && sSkillArg.nUnitY)) {
       return nullptr;
@@ -3059,7 +3059,7 @@ D2UnitStrc * __fastcall CreatingAMissile(::SGAMEDATA * pGame, eMissilesId nSrvMi
         sSkillArg.nAttBonus = nOwnerCoord;
       }
     }
-    if (nParam5 && pUnit->eUnitType == UNIT_PLAYER) {
+    if (bConsumeAmmo && pUnit->eUnitType == UNIT_PLAYER) {
       nAmmoRemaining = RemoveQuanityOnUse(pGame, pUnit);
       if (nAmmoRemaining <= 0) {
         return nullptr;
@@ -3099,7 +3099,7 @@ D2UnitStrc * __fastcall SKILLS_CreateMissileAtTarget(::SGAMEDATA * pGame, D2Unit
 }
 
 // Initializes a D2SkillArgStrc from pUnit's position (plus nParam2/nParam3 offsets) and the given missile ID/skill, resolves the target via SKILLS_GetTargetOrCursorPos or explicit nParam4/nParam5 coords, optionally consumes one ammo charge (RemoveQuanityOnUse) when nParam6!=0 and unit is a player, then calls CreatingMissile to spawn the missile. Returns the new missile unit, or NULL if target resolution or ammo check fails.
-D2UnitStrc * __fastcall SKILLS_CreateMissileFromUnit(::SGAMEDATA * pGame, eMissilesId nMissileId, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nParam1, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5, int32_t nParam6) {
+D2UnitStrc * __fastcall SKILLS_CreateMissileFromUnit(::SGAMEDATA * pGame, eMissilesId nMissileId, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, int32_t nOffsetX, int32_t nOffsetY, int32_t nTargetX, int32_t nTargetY, int32_t bConsumeAmmo) {
     BOOL _bHasTarget;
     bool bHasTarget;
     D2UnitStrc* pMissile;
@@ -3110,7 +3110,7 @@ D2UnitStrc * __fastcall SKILLS_CreateMissileFromUnit(::SGAMEDATA * pGame, eMissi
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
     sSkillArg.eSkillNo = eSkill;
-    sSkillArg.nSkillLevel = nParam1;
+    sSkillArg.nSkillLevel = nSkillLvl;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       sSkillArg.nX = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
@@ -3119,7 +3119,7 @@ D2UnitStrc * __fastcall SKILLS_CreateMissileFromUnit(::SGAMEDATA * pGame, eMissi
       sSkillArg.nX = 0;
     }
 
-    sSkillArg.nX += nParam2;
+    sSkillArg.nX += nOffsetX;
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       sSkillArg.nY = pUnit->pPath.pStaticPath->nPosY;
@@ -3129,18 +3129,18 @@ D2UnitStrc * __fastcall SKILLS_CreateMissileFromUnit(::SGAMEDATA * pGame, eMissi
       sSkillArg.nY = 0;
     }
 
-    sSkillArg.nY += nParam3;
+    sSkillArg.nY += nOffsetY;
     sSkillArg.nMissileTxtNo = nMissileId;
-    if (!nParam4 || !nParam5) {
+    if (!nTargetX || !nTargetY) {
       _bHasTarget = SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
       if (!_bHasTarget) {
         return nullptr;
       }
     } else {
-      sSkillArg.nUnitX = nParam4;
-      sSkillArg.nUnitY = nParam5;
+      sSkillArg.nUnitX = nTargetX;
+      sSkillArg.nUnitY = nTargetY;
     }
-    if (nParam6 && pUnit->eUnitType == UNIT_PLAYER) {
+    if (bConsumeAmmo && pUnit->eUnitType == UNIT_PLAYER) {
       int32_t nAmmoRemaining;
       nAmmoRemaining = RemoveQuanityOnUse(pGame, pUnit);
       if (nAmmoRemaining <= 0) {

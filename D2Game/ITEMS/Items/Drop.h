@@ -146,7 +146,7 @@ void __fastcall DropItem(::SGAMEDATA * pGame, int32_t nParam, struct D2UnitStrc 
 void __fastcall FreeUnusedItems(::SGAMEDATA * pGame, int32_t nAct);
 void __fastcall ITEM_RemoveRuneword(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Deserialises a saved item into a live server unit. Validates game pointer and classId bounds, allocates a unit via CreateUnit, loads save-data blob via ITEM_LoadFromSaveData, sets SERVER/clears NEW flags, refreshes durability and quantity. Returns null on any failure and frees the partially-created unit.
-struct D2UnitStrc * __fastcall ITEM_CreateFromSaveData(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t * pSaveData, size_t nSaveDataSize, uint32_t nParam1, struct D2UnitDataItemDetailsStrc * pUnitDataItemDetails, int * pnParam, uint32_t nParam2);
+struct D2UnitStrc * __fastcall ITEM_CreateFromSaveData(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t * pSaveData, size_t nSaveDataSize, uint32_t bCheckItemHeader, struct D2UnitDataItemDetailsStrc * pUnitDataItemDetails, int * pnParam, uint32_t nParam2);
 // Low-level item instance creator. Allocates D2UnitStrc (type 4), initializes unit fields, sets item data fields (classId, flags, quality, graphic, colors), links to owner inventory. Does NOT apply affixes - just base structure.
 // @sourcefile .\ITEMS\Items.cpp
 struct D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, struct D2ItemGenContextStrc * pItemGenCtx, int32_t bFromCustomData);

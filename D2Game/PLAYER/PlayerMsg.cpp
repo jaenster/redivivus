@@ -4043,7 +4043,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x5F_SyncPosition(::SGAMEDATA * pGame, D
       eAnimMode = pUnit->eAnimMode.ePlayerMode;
     }
 
-    PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, (eAnimMode == eD2PlayerAnimMode_ns::Run) + 2, nX, nY, 0);
+    PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, eAnimMode == eD2PlayerAnimMode_ns::Run ? 3 : 2, nX, nY, 0);
     return SERVERSTATUS_OK;
 }
 

@@ -1901,15 +1901,13 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
           pItem = 0;
         }
 
-        nRestoreResult = 0;
-        if ((int)nUsedSockets > 0) {
-          do {
-            sVar1 = (int)pItemLocal + (nStreamEnd - (int)pStreamCursor);
-            D2Common::ITEMS::Items::ReadInfoFromStreamVersioned((uint8_t*)pStreamCursor, sVar1, 1, &itemDetails, eItemFormat);
-            pSocketItem = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, (uint8_t*)pStreamCursor, sVar1, 1, &itemDetails, &nBytesConsumed, eItemFormat);
-            if (!pSocketItem && nBytesConsumed <= 0) {
-              return 0xe;
-            }
+        for (nRestoreResult = 0; nRestoreResult < (int)nUsedSockets; nRestoreResult++) {
+          sVar1 = (int)pItemLocal + (nStreamEnd - (int)pStreamCursor);
+          D2Common::ITEMS::Items::ReadInfoFromStreamVersioned((uint8_t*)pStreamCursor, sVar1, 1, &itemDetails, eItemFormat);
+          pSocketItem = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, (uint8_t*)pStreamCursor, sVar1, 1, &itemDetails, &nBytesConsumed, eItemFormat);
+          if (!pSocketItem && nBytesConsumed <= 0) {
+            return 0xe;
+          }
 
             pStreamCursor = (int*)((int)pStreamCursor + nBytesConsumed);
             if (!pItem) {

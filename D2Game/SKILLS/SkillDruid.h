@@ -29,7 +29,7 @@ BOOL __fastcall Skills_SrvDoFunc_115_SummonPoisonCreeper(::SGAMEDATA * pGame, st
 int32_t __fastcall SKILLDRUID_GetTransformGfx(struct D2UnitStrc * pUnit, int32_t nParam);
 void __fastcall SKILLDRUID_OnShapeshiftExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * param_1);
 // @sourcefile .\SKILLS\SkillDruid.cpp
-void __fastcall D2SetAurastatsFromSkills(struct D2UnitStrc * pUnit, struct D2StatListExStrc * pStatList, struct D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nParam);
+void __fastcall D2SetAurastatsFromSkills(struct D2UnitStrc * pUnit, struct D2StatListExStrc * pStatList, struct D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nSkillLvl);
 // @sourcefile .\SKILLS\SkillDruid.cpp
 void __fastcall D2SetPassiveStatsFromSkills(struct D2UnitStrc * pUnit, struct D2StatListExStrc * pStatList, struct D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nParam);
 // Server do-function for Druid shapeshift skill 116 (Werewolf). If the aura state is already active, applies the skill delay and returns 0. Otherwise allocates a new stat list for the shapeshift duration (auralencalc frames), attaches SKILLDRUID_OnShapeshiftExpire, applies aura stats via D2SetAurastatsFromSkills, records the skill/level modifier stats, sets the skill's mode to 10, and schedules a timer event. Returns 1 on successful activation.

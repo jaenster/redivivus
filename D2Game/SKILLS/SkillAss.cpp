@@ -1783,7 +1783,7 @@ BOOL __fastcall Skills_SrvDoFunc_042_DragonTalon(::SGAMEDATA * pGame, D2UnitStrc
       return 0;
     }
 
-    D2Common::Skills::SKILL_SetParam1(pSkill, nParam1);
+    D2Common::Skills::SKILL_SetParam1(pSkill, nPar1);
     BOOL bKnockback;
     bKnockback = 0;
     if (nParam1 <= 0) {

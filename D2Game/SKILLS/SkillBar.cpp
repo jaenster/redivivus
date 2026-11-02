@@ -1035,7 +1035,7 @@ static int32_t __stdcall SKILLAMZ_CreatePlagueJavelinClouds(::SGAMEDATA * pGame,
       nParam4 = pGame->dwGameFrame + nAttackFrames;
     }
 
-    D2Common::Skills::SKILL_SetParam4(pSkill, nParam4);
+    D2Common::Skills::SKILL_SetParam4(pSkill, nPar4);
     return iVar2;
 }
 

@@ -1052,40 +1052,40 @@ int32_t __stdcall SKILL_GetParam4(D2SkillStrc * pSkill) {
     return pSkill->nPar4;
 }
 
-void __stdcall SKILL_SetParam1(D2SkillStrc * pSkill, int32_t nParam1) {
+void __stdcall SKILL_SetParam1(D2SkillStrc * pSkill, int32_t nPar1) {
     if (!pSkill) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa76);
       exit(-1);
     }
 
-    pSkill->nPar1 = nParam1;
+    pSkill->nPar1 = nPar1;
 }
 
-void __stdcall SKILL_SetParam2(D2SkillStrc * pSkill, int32_t nParam2) {
+void __stdcall SKILL_SetParam2(D2SkillStrc * pSkill, int32_t nPar2) {
     if (!pSkill) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa7f);
       exit(-1);
     }
 
-    pSkill->nPar2 = nParam2;
+    pSkill->nPar2 = nPar2;
 }
 
-void __stdcall SKILL_SetParam3(D2SkillStrc * pSkill, int32_t nParam3) {
+void __stdcall SKILL_SetParam3(D2SkillStrc * pSkill, int32_t nPar3) {
     if (!pSkill) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa88);
       exit(-1);
     }
 
-    pSkill->nPar3 = nParam3;
+    pSkill->nPar3 = nPar3;
 }
 
-void __stdcall SKILL_SetParam4(D2SkillStrc * pSkill, int32_t nParam4) {
+void __stdcall SKILL_SetParam4(D2SkillStrc * pSkill, int32_t nPar4) {
     if (!pSkill) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa91);
       exit(-1);
     }
 
-    pSkill->nPar4 = nParam4;
+    pSkill->nPar4 = nPar4;
 }
 
 void __stdcall SKILL_SetFlags(D2SkillStrc * pSkill, int32_t nFlags) {

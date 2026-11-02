@@ -1818,42 +1818,42 @@ int32_t __fastcall ITEMMOD_RollRandomValue(D2UnitStrc * pUnit, int32_t nMin, int
 }
 
 // Adds a stat to an item's stat list. Validates stat ID against ItemStatCost table, then calls ITEMMOD_GetOrCreateStatList to obtain or create the target stat list. Adds the shifted stat value via STATLIST_AddStatValue or D2AddStatToStatsListEx depending on nParam2. Special-cases poison (stat 0x3A) to also add/check UNITSTAT_poison_count. Returns nParam3 (the stat value) on success, 0 on invalid stat or missing stat list.
-int32_t __fastcall ITEMMOD_AddStatToItem(D2UnitStrc * pUnit2, uint32_t nParam22, D2UnitStrc * pUnit, int32_t nParam1, int32_t nParam2, int16_t nParam, uint32_t nParam12, int32_t nParam3, int32_t nParam4) {
+int32_t __fastcall ITEMMOD_AddStatToItem(D2UnitStrc * pUnit2, uint32_t dwFlags, D2UnitStrc * pUnit, int32_t nParam1, int32_t nParam2, int16_t nStatId, uint32_t nSubIndex, int32_t nValue, int32_t nState) {
     if (!nParam1) {
       return 0;
     }
-    if (!nParam3) {
+    if (!nValue) {
       return 0;
     }
 
-    eD2UnitStat eTargetStat = (eD2UnitStat)nParam;
+    eD2UnitStat eTargetStat = (eD2UnitStat)nStatId;
     D2ItemStatCostTxt* pItemStatCost = (int)eTargetStat >= 0 && (int)eTargetStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eTargetStat : nullptr;
     if (!pItemStatCost) {
       return 0;
     }
 
-    D2StatListExStrc* pStatsEx = ITEMMOD_GetOrCreateStatList(pUnit2, nParam4, nParam22, pUnit);
+    D2StatListExStrc* pStatsEx = ITEMMOD_GetOrCreateStatList(pUnit2, nState, dwFlags, pUnit);
     if (!pStatsEx) {
       return 0;
     }
     if (nParam2) {
       int nPoisonCount;
-      Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, eTargetStat, nParam3 << (pItemStatCost->valshift & 0x1fU), nParam12);
-      if (nParam == 0x3a) {
+      Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, eTargetStat, nValue << (pItemStatCost->valshift & 0x1fU), nSubIndex);
+      if (nStatId == 0x3a) {
         nPoisonCount = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatsEx, UNITSTAT_poison_count, 0);
         if (!nPoisonCount) {
           Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_poison_count, 1, 0);
-          return nParam3;
+          return nValue;
         }
       }
     } else {
-      Stats::StatsEx::STATLIST_AddStatValue(pStatsEx, eTargetStat, nParam3 << (pItemStatCost->valshift & 0x1fU), (uint16_t)nParam12);
-      if (nParam == 0x3a) {
+      Stats::StatsEx::STATLIST_AddStatValue(pStatsEx, eTargetStat, nValue << (pItemStatCost->valshift & 0x1fU), (uint16_t)nSubIndex);
+      if (nStatId == 0x3a) {
         Stats::StatsEx::STATLIST_AddStatValue(pStatsEx, UNITSTAT_poison_count, 1, 0);
       }
     }
 
-    return nParam3;
+    return nValue;
 }
 
 uint32_t __fastcall ITEMPROP_AddStat_EnhancedIfItem(int32_t nParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t nParam12, int32_t nParam2, int32_t nParam3, uint32_t dwParam1, uint32_t dwParam2, int32_t nParam4, uint32_t nParam22, uint32_t dwParam3) {
@@ -1864,8 +1864,8 @@ uint32_t __fastcall ITEMPROP_AddStat_EnhancedIfItem(int32_t nParam1, D2UnitStrc 
       ITEMMOD_MaximizeStatForEnhanced((int)(short int)nParam3, pUnit2);
     }
 
-    int32_t nParam3_00 = ITEMMOD_RollRandomValue(pUnit2, *(int32_t*)(nParam12 + 8), *(int32_t*)(nParam12 + 0xc));
-    uint32_t nResult = ITEMMOD_AddStatToItem(pUnit2, nParam22, pUnit, nParam12, nParam2, (short int)nParam3, 0, nParam3_00, nParam4);
+    int32_t nValue = ITEMMOD_RollRandomValue(pUnit2, *(int32_t*)(nParam12 + 8), *(int32_t*)(nParam12 + 0xc));
+    uint32_t nResult = ITEMMOD_AddStatToItem(pUnit2, nParam22, pUnit, nParam12, nParam2, (short int)nParam3, 0, nValue, nParam4);
     return nResult;
 }
 
@@ -1877,8 +1877,8 @@ uint32_t __fastcall ITEMPROP_AddStat_EnhancedAlways(uint32_t dwParam1, D2UnitStr
       ITEMMOD_MaximizeStatForEnhanced((int)(short int)nParam2, pUnit2);
     }
 
-    int32_t nParam3_00 = ITEMMOD_RollRandomValue(pUnit2, *(int32_t*)(nParam1 + 8), *(int32_t*)(nParam1 + 0xc));
-    uint32_t nResult = ITEMMOD_AddStatToItem(pUnit2, nParam4, pUnit, nParam1, nParam, (short int)nParam2, 0, nParam3_00, nParam3);
+    int32_t nValue = ITEMMOD_RollRandomValue(pUnit2, *(int32_t*)(nParam1 + 8), *(int32_t*)(nParam1 + 0xc));
+    uint32_t nResult = ITEMMOD_AddStatToItem(pUnit2, nParam4, pUnit, nParam1, nParam, (short int)nParam2, 0, nValue, nParam3);
     return nResult;
 }
 
@@ -2502,8 +2502,8 @@ uint32_t __fastcall ITEMPROP_AddStat_WithLayerFromParam7(uint32_t dwParam1, D2Un
       return 0;
     }
 
-    int32_t nParam3_00 = ITEMMOD_RollRandomValue(pUnit2, *(int32_t*)(nParam1 + 8), *(int32_t*)(nParam1 + 0xc));
-    uint32_t uRetVal = ITEMMOD_AddStatToItem(pUnit2, nParam22, pUnit, nParam1, nParam, (int16_t)nParam2, nParam12, nParam3_00, nParam3);
+    int32_t nValue = ITEMMOD_RollRandomValue(pUnit2, *(int32_t*)(nParam1 + 8), *(int32_t*)(nParam1 + 0xc));
+    uint32_t uRetVal = ITEMMOD_AddStatToItem(pUnit2, nParam22, pUnit, nParam1, nParam, (int16_t)nParam2, nParam12, nValue, nParam3);
     return uRetVal;
 }
 
@@ -2522,8 +2522,8 @@ uint32_t __fastcall ITEMPROP_AddStat_LayerFromParam4Lo(uint32_t dwParam1, D2Unit
       return 0;
     }
 
-    int32_t nParam3_00 = ITEMMOD_RollRandomValue(pUnit2, *(int32_t*)(nParam1 + 8), *(int32_t*)(nParam1 + 0xc));
-    uint32_t uRetVal = ITEMMOD_AddStatToItem(pUnit2, nParam4, pUnit, nParam1, nParam, (int16_t)nParam2, (uint32_t)*(uint16_t*)(nParam1 + 4), nParam3_00, nParam3);
+    int32_t nValue = ITEMMOD_RollRandomValue(pUnit2, *(int32_t*)(nParam1 + 8), *(int32_t*)(nParam1 + 0xc));
+    uint32_t uRetVal = ITEMMOD_AddStatToItem(pUnit2, nParam4, pUnit, nParam1, nParam, (int16_t)nParam2, (uint32_t)*(uint16_t*)(nParam1 + 4), nValue, nParam3);
     return uRetVal;
 }
 

@@ -4193,7 +4193,7 @@ static void __stdcall SKILLDESC_DrawDamageNumbers(int32_t nParam1, int32_t nPara
     ui::UI_DrawTextCentered(gnPanelOffsetX + nParam4, gnPanelOffsetY + ScreenSizeY - 0x1e0 + nYOffset, gnPanelOffsetX + nParam3, wszDmgTextW16, nColor);
 }
 
-void __fastcall SKILLDESC_DrawTwoLineText(uint16_t * wszText1, uint16_t * wszText2, int32_t nXLeft, int32_t nYBase, int32_t nParam1, int32_t nParam2, int32_t nParam3) {
+void __fastcall SKILLDESC_DrawTwoLineText(uint16_t * wszText1, uint16_t * wszText2, int32_t nXLeft, int32_t nYBase, int32_t nXRight, int32_t dwColor1, int32_t dwColor2) {
     // Static local variables (originally global data)
     static int32_t gnSkillDescLayoutPos_0072d8d0 = 0x2; D2_STATIC_GUARD(gnSkillDescLayoutPos_0072d8d0, "D2Client::UI::SkillDesc::SKILLDESC_DrawTwoLineText::gnSkillDescLayoutPos_0072d8d0");
     static int32_t gnSkillDescLayoutPos_0072d8d4 = -0x6; D2_STATIC_GUARD(gnSkillDescLayoutPos_0072d8d4, "D2Client::UI::SkillDesc::SKILLDESC_DrawTwoLineText::gnSkillDescLayoutPos_0072d8d4");
@@ -4216,8 +4216,8 @@ void __fastcall SKILLDESC_DrawTwoLineText(uint16_t * wszText1, uint16_t * wszTex
       gbSkillDescTwoLineFontAdjusted = '\x01';
     }
 
-    ui::UI_DrawTextCentered(gnPanelOffsetX + nXLeft, gnPanelOffsetY + ScreenSizeY + gnSkillDescLayoutPos_0072d8d4 - 0x1e0 + nYBase, gnPanelOffsetX + nParam1, wszText1, nParam2);
-    ui::UI_DrawTextCentered(gnPanelOffsetX + nXLeft, gnSkillDescLayoutPos_0072d8d0 + gnPanelOffsetY + ScreenSizeY - 0x1e0 + nYBase, gnPanelOffsetX + nParam1, wszText2, nParam3);
+    ui::UI_DrawTextCentered(gnPanelOffsetX + nXLeft, gnPanelOffsetY + ScreenSizeY + gnSkillDescLayoutPos_0072d8d4 - 0x1e0 + nYBase, gnPanelOffsetX + nXRight, wszText1, dwColor1);
+    ui::UI_DrawTextCentered(gnPanelOffsetX + nXLeft, gnSkillDescLayoutPos_0072d8d0 + gnPanelOffsetY + ScreenSizeY - 0x1e0 + nYBase, gnPanelOffsetX + nXRight, wszText2, dwColor2);
 }
 
 static void __stdcall SKILLDESC_DrawSingleNumber(int32_t nColorIdx, int32_t nScreenX, int32_t nScreenY, int32_t nScreenZ, int32_t nValue) {

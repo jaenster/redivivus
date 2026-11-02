@@ -876,7 +876,7 @@ void __fastcall D2WINFONT_DrawTextWithOffsetBackground(uint16_t * wszText, int32
     D2WINFONT_DrawWideString(wszText, nTextHeight, nYEnd - 2, 0, eGlobalPalette, 0);
 }
 
-void __fastcall IMAGE_DrawDC6ImageOnScreen(DC6 * pDC6, int32_t nPosX, int32_t nPoxY, int32_t nParam, DRAWMODE eDrawMode, GLOBALPALLETE nGlobalPaletteShift) {
+void __fastcall IMAGE_DrawDC6ImageOnScreen(DC6 * pDC6, int32_t nPosX, int32_t nPoxY, int32_t nAlignment, DRAWMODE eDrawMode, GLOBALPALLETE nGlobalPaletteShift) {
     int32_t nFrameWidthPx;
     uint32_t nFrameIdx;
     D2GfxDataStrc sGfxData;
@@ -886,7 +886,7 @@ void __fastcall IMAGE_DrawDC6ImageOnScreen(DC6 * pDC6, int32_t nPosX, int32_t nP
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = pDC6;
     sGfxData.nDirection = 0;
-    if (nParam == 1 || (nDrawX = nPosX , nParam == 2)) {
+    if (nAlignment == 1 || (nDrawX = nPosX , nAlignment == 2)) {
       DC6Block* pBlock;
       nFrameIdx = 0;
       if (nFrameCount > 0) {
@@ -898,7 +898,7 @@ void __fastcall IMAGE_DrawDC6ImageOnScreen(DC6 * pDC6, int32_t nPosX, int32_t nP
           nTotalWidth += nFrameWidthPx;
         } while (nFrameIdx < nFrameCount);
       }
-      if (nParam == 1) {
+      if (nAlignment == 1) {
         nDrawX = nPosX + (-1 - (nTotalWidth >> 1));
       } else {
         nDrawX = nPosX - nTotalWidth;

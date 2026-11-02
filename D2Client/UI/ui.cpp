@@ -7610,7 +7610,7 @@ void __stdcall UI_InitTradeState() {
     gbTradeWindowOpen = 1;
 }
 
-void __fastcall UI_CloseTradeWindow(int32_t nParam) {
+void __fastcall UI_CloseTradeWindow(int32_t bToggleInventory) {
     gbTradeWindowOpen = 0;
     if (Dialog::gpTradeCancelDialog) {
       Dialog::FreeDialogStrc(Dialog::gpTradeCancelDialog);
@@ -7631,7 +7631,7 @@ void __fastcall UI_CloseTradeWindow(int32_t nParam) {
       Inv::INV_ClearItemDescPending();
       Inv::INV_ResetInventoryState();
       bIsPlayerDead = UNIT::Player::IsPlayerDead();
-      if (!bIsPlayerDead && nParam) {
+      if (!bIsPlayerDead && bToggleInventory) {
         SetUIFlag(UI_INVENTORY, UI_TOGGLE, 0);
       }
 

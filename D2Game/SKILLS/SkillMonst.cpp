@@ -406,8 +406,8 @@ BOOL __fastcall SKILLMONST_SrvStFn46_AndrialSpray(::SGAMEDATA * pGame, D2UnitStr
     if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
       int32_t nParam2;
       if (pTarget->pPath.pDynamicPath) {
-        nParam2 = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
-        D2Common::Skills::SKILL_SetParam2(pSkill, nParam2);
+        nPar2 = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
+        D2Common::Skills::SKILL_SetParam2(pSkill, nPar2);
         return 1;
       }
 
@@ -554,7 +554,7 @@ BOOL __fastcall SKILLMONST_SrvStFn47_Jump(::SGAMEDATA * pGame, D2UnitStrc * pUni
       nParam4 = -1;
     }
 
-    D2Common::Skills::SKILL_SetParam4(pSkill, nParam4);
+    D2Common::Skills::SKILL_SetParam4(pSkill, nPar4);
     D2Common::Collision::AddCollision_Type(pRoom, nLeapX, nLeapY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x100);
     UNIT::SUnit::SetUninterruptableState(pUnit, 1);
     D2Common::Skills::SKILL_SetParam1(pSkill, nLeapX);

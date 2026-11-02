@@ -1823,7 +1823,7 @@ void __fastcall MONSTER_MissileSplitOnHit(::SGAMEDATA * pGame, D2UnitStrc * pUni
     int32_t nParam5 = 0;
     nOwnerDirSignX = nTargetY - nOwnerDirSignX;
     nDirSignX += nTargetX;
-    SKILLS::SkillsServer::CreatingAMissile(pGameLocal, eMissileId, pOwnerUnit, D2Common::Units::Missile::GetSkillId(pTarget), D2Common::Units::Missile::GetLevel(pMissileUnit), 0, 0, nDirSignX, nOwnerDirSignX, nParam5);
+    SKILLS::SkillsServer::CreatingAMissile(pGameLocal, eMissileId, pOwnerUnit, D2Common::Units::Missile::GetSkillId(pTarget), D2Common::Units::Missile::GetLevel(pMissileUnit), 0, 0, nDirSignX, nOwnerDirSignX, bConsumeAmmo);
     if (!(pOwnerUnit->eUnitType == UNIT_MONSTER && pOwnerUnit->pUnitData.pUnitDataMonster)) {
       return;
     }

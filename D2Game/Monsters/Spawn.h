@@ -21,9 +21,9 @@ typedef uint32_t eD2MonsterAnimMode;
 namespace D2Game::Monsters::Spawn {
 
 // Function declarations
-int32_t __fastcall MONSTER_GetMonsterClassByDifficulty(int32_t nMonstatId, int32_t nParam);
+int32_t __fastcall MONSTER_GetMonsterClassByDifficulty(int32_t nMonstatId, int32_t nDifficulty);
 // Tries up to 20 times (nTryCount &lt; 20) to find a valid spawn position for a monster in pRoom. Each attempt draws a random (nX, nY) from the room's seed within the room bounding box. If nParam!=0 it additionally validates the position via CheckWarpSpawnCoords. On success calls SpawnMonster at that location (optionally using pCoordList for grid-index matching), writes the position to *pX/*pY, and returns TRUE. Returns FALSE after 20 failed attempts.
-BOOL __fastcall SPAWN_FindRandomPositionForMonster(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2RoomCoordListStrc * pCoordList, uint32_t nClassId, int * pX, int * pY, int32_t nParam);
+BOOL __fastcall SPAWN_FindRandomPositionForMonster(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2RoomCoordListStrc * pCoordList, uint32_t nClassId, int * pX, int * pY, int32_t bCheckWarpDistance);
 // Spawns a group/pack of monsters at a random valid position within a room. Computes the room's spawnable corner bounds (GetRoomCorners), then uses the room's seed RNG to pick a random base (X,Y) inside those bounds. For each member in the group (count = *pnParam, with per-member offsets read from the pnParam offset list at +3/+4) it calls SpawnMonster with the given class id (Neutral alignment); when a coord-list is supplied it confirms each offset maps to the same grid cell. On any spawn failure it retries with a new random base up to 20 times. On success writes the chosen base position to *pOffsetX/*pOffsetY and returns 1; returns 0 if all retries fail.
 BOOL __stdcall SPAWN_SpawnMonsterGroupAtRandom(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2RoomCoordListStrc * pCoordList, int32_t nClassId, int * pnParam, int32_t * pOffsetX, int32_t * pOffsetY);
 uint32_t __stdcall MONSTER_SpawnUniquePackInRoom(struct D2RoomStrc * pRoom, ::SGAMEDATA * pGame, struct D2RoomCoordListStrc * pCoordList, uint32_t nClassId);

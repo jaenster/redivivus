@@ -1189,7 +1189,7 @@ void __fastcall SKILLDESC_CalcDualWieldWithAR(struct D2UnitStrc * pUnit, struct 
 void __fastcall SKILLDESC_CalcDualWieldWithARState(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 void __fastcall SKILLDESC_CalcDualWieldSimple(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 void __fastcall SKILLDESC_DrawDamageWithRange(struct D2UnitStrc * pUnit, int * pnParam, int * param_1, uint32_t * param_2, int32_t nParam1, int32_t nParam2, struct D2SkillStrc * pSkill, uint32_t nParam, struct D2UnitStrc * pUnit2);
-void __fastcall SKILLDESC_DrawTwoLineText(uint16_t * wszText1, uint16_t * wszText2, int32_t nXLeft, int32_t nYBase, int32_t nParam1, int32_t nParam2, int32_t nParam3);
+void __fastcall SKILLDESC_DrawTwoLineText(uint16_t * wszText1, uint16_t * wszText2, int32_t nXLeft, int32_t nYBase, int32_t nXRight, int32_t dwColor1, int32_t dwColor2);
 void __fastcall SKILLDESC_DrawSkillDmgElemental(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight);
 // @sourcefile .\UI\SkillDesc.cpp
 void __fastcall SKILLDESC_DrawSkillDmgWithElem(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight);

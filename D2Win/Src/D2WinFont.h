@@ -79,7 +79,7 @@ void __fastcall TEXT_CalcTextDimensions(uint16_t * szBuffer, int * nSizeX, int *
 BOOL __fastcall D2WINFONT_IsFontCharacterValid(uint8_t nCharCode);
 // Draws text with background rect offset by -4px horizontally. Calculates text height, clamps to screen, draws inset rectangle, renders text. Used for UI tooltips with padding.
 void __fastcall D2WINFONT_DrawTextWithOffsetBackground(uint16_t * wszText, int32_t nX, int32_t nY, int32_t nWidth, DWORD dwBackgroundColor, DRAWMODE eDrawMode, GLOBALPALLETE eGlobalPalette);
-void __fastcall IMAGE_DrawDC6ImageOnScreen(struct DC6 * pDC6, int32_t nPosX, int32_t nPoxY, int32_t nParam, DRAWMODE eDrawMode, GLOBALPALLETE nGlobalPaletteShift);
+void __fastcall IMAGE_DrawDC6ImageOnScreen(struct DC6 * pDC6, int32_t nPosX, int32_t nPoxY, int32_t nAlignment, DRAWMODE eDrawMode, GLOBALPALLETE nGlobalPaletteShift);
 // Draws text with background progress bar. If nProgressPercent is non-zero, draws filled portion in dark color. Calculates text dimensions, clamps to screen, draws layered rectangles (filled + unfilled), renders centered text.
 void __fastcall D2WINFONT_DrawTextWithProgressBar(uint16_t * wszText, uint32_t nX, int32_t nY, GLOBALPALLETE eGlobalPalette, uint32_t nAlignMode, int32_t nProgressPercent);
 // @sourcefile .\Src\D2WinFont.cpp

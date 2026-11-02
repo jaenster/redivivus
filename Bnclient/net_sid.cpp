@@ -268,8 +268,8 @@ BOOL __fastcall NET_SID_CLIENT_WaitForPacketId(uint8_t nPacketId) {
     return 0;
 }
 
-BOOL __fastcall NET_SID_CLIENT_GetRequiredAnswer(uint8_t bParam) {
-    return NET_SID_INCOMING_CLIENT_PacketRequireAnswer[bParam];
+BOOL __fastcall NET_SID_CLIENT_GetRequiredAnswer(uint8_t nPacketId) {
+    return NET_SID_INCOMING_CLIENT_PacketRequireAnswer[nPacketId];
 }
 
 void __fastcall NET_SID_CLIENT_ResetRequireResponse(uint8_t nPacketId) {

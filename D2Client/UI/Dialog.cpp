@@ -1141,7 +1141,7 @@ int __stdcall GetDialogCounter() {
     return gnDialogCounter_b;
 }
 
-void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint32_t param_1, uint32_t param_2, int32_t nParam1, uint32_t nParam, fpDialogFunc nParam2, int32_t nParam3) {
+void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint32_t param_1, uint32_t param_2, int32_t nLineType, uint32_t nFont, fpDialogFunc pfnOnClick, int32_t nCallbackParam) {
     RECT nDialogX;
     int32_t nErrLine;
     int nIndex = pDialog->nSubCounter;
@@ -1153,17 +1153,17 @@ void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint3
     size_t nStrLen;
     pDialog->nSubCounter = nIndex + 1;
     pDialog->aStringData[nIndex].nYPos = param_1;
-    pDialog->aStringData[nIndex].nFont = nParam;
+    pDialog->aStringData[nIndex].nFont = nFont;
     pDialog->aStringData[nIndex].nXOffset = 0;
     pDialog->aStringData[nIndex].nColor = param_2;
-    if (!(nParam1 != 3 || pDialog->nHighlightStyle != 1)) {
+    if (!(nLineType != 3 || pDialog->nHighlightStyle != 1)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x55e);
       exit(-1);
     }
 
-    pDialog->aStringData[nIndex].nLineType = nParam1;
-    pDialog->aStringData[nIndex].fpOnClick = nParam2;
-    pDialog->aStringData[nIndex].nCallbackParam = nParam3;
+    pDialog->aStringData[nIndex].nLineType = nLineType;
+    pDialog->aStringData[nIndex].fpOnClick = pfnOnClick;
+    pDialog->aStringData[nIndex].nCallbackParam = nCallbackParam;
     nErrLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(szString);
     nStrLen = nErrLine + 1;
     if ((int)nStrLen > 0x77) {
@@ -1172,7 +1172,7 @@ void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint3
 
     D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pDialog->aStringData[nIndex].szString, szString, nStrLen);
     pDialog->aStringData[nIndex].szString[nStrLen] = L'\0';
-    if (nParam3) {
+    if (nCallbackParam) {
       pDialog->nClickableCount++;
     }
     if (pDialog->nAutoLayout) {
@@ -1186,7 +1186,7 @@ void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint3
     nDialogX.bottom = pDialog->nBackgroundHeight + nDialogX.top;
     nDialogX.right = pDialog->nBackgroundWidth + nDialogX.left;
     GAME::Select::SELECT_SetExclusionRect(&nDialogX);
-    if (!(pDialog->nSelectedLine == -1 && nParam3)) {
+    if (!(pDialog->nSelectedLine == -1 && nCallbackParam)) {
       return;
     }
 

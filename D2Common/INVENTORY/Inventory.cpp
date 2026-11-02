@@ -2004,14 +2004,14 @@ int __stdcall INVENTORY_PlacePotionInBelt(D2InventoryStrc * pInventory, D2UnitSt
     return 0;
 }
 
-D2UnitStrc * __stdcall INVENTORY_GetItemInBeltSlot(D2InventoryStrc * pInventory, uint32_t nParam) {
+D2UnitStrc * __stdcall INVENTORY_GetItemInBeltSlot(D2InventoryStrc * pInventory, uint32_t nBeltSlot) {
     if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
       return nullptr;
     }
 
     D2InventoryGridInfoStrc* pGridInfo = ReinitializeInventoryGrid(pInventory, &g_InventorySizesDefaultConfig, 1);
-    if (pGridInfo && nParam <= 0xf) {
-      return pGridInfo->pGridCells[nParam];
+    if (pGridInfo && nBeltSlot <= 0xf) {
+      return pGridInfo->pGridCells[nBeltSlot];
     }
 
     return nullptr;
@@ -4612,7 +4612,7 @@ static uint32_t __stdcall INVENTORY_GetEquipSwapAction(D2UnitStrc * pUnit, D2Uni
 }
 
 // Returns the equip action code for placing pItem into body slot nParam on pUnit. First validates body location fit and equipment requirements. For arm slots (R_ARM/L_ARM and their swap pairs), retrieves both the current and paired slot items and delegates to INVENTORY_GetEquipSwapAction. For other slots, returns 1 (replace) if the slot is occupied or 1 if placing a new item; returns 3 (move to stash) if clearing an occupied slot. Returns 0 on null unit/inventory or failed fit/req check.
-int32_t __stdcall INVENTORY_GetEquipActionForBodySlot(D2UnitStrc * pUnit, eD2BodyLocDWORD nBodyLoc, D2UnitStrc * pItem, int nParam2) {
+int32_t __stdcall INVENTORY_GetEquipActionForBodySlot(D2UnitStrc * pUnit, eD2BodyLocDWORD nBodyLoc, D2UnitStrc * pItem, int bSkipRequirementsCheck) {
     BOOL nReqCheckResult;
     uint32_t nPairedBodyLoc;
     D2UnitStrc* pPairedSlotItem;
@@ -4630,7 +4630,7 @@ int32_t __stdcall INVENTORY_GetEquipActionForBodySlot(D2UnitStrc * pUnit, eD2Bod
     if (pItem) {
       int32_t nFitOrReqCheck;
       nFitOrReqCheck = ITEMS::Items::ITEMS_CheckBodyLocationFit(pItem, nBodyLoc);
-      if (!nFitOrReqCheck || !nParam2 && (nReqCheckResult = ITEMS::Items::ITEM_CheckEquipRequirements(pItem, pUnit, 1, nullptr, nullptr, nullptr) , !nReqCheckResult)) {
+      if (!nFitOrReqCheck || !bSkipRequirementsCheck && (nReqCheckResult = ITEMS::Items::ITEM_CheckEquipRequirements(pItem, pUnit, 1, nullptr, nullptr, nullptr) , !nReqCheckResult)) {
         return 0;
       }
     }
@@ -4641,7 +4641,7 @@ int32_t __stdcall INVENTORY_GetEquipActionForBodySlot(D2UnitStrc * pUnit, eD2Bod
       case BODYLOC_R_ARM:
 
       case BODYLOC_L_ARM:
-        uVar1 = (nBodyLoc != BODYLOC_L_ARM) + 4;
+        uVar1 = nBodyLoc != BODYLOC_L_ARM ? 5 : 4;
       pCurrentSlotItem = INVENTORY_GetItemByGridOffset(pInventory, nBodyLoc);
       pPairedSlotItem = INVENTORY_GetItemByGridOffset(pInventory, uVar1);
       uVar1 = INVENTORY_GetEquipSwapAction(pPairedSlotItem, pItem, pUnit, uVar1, pCurrentSlotItem);
@@ -4649,7 +4649,7 @@ int32_t __stdcall INVENTORY_GetEquipActionForBodySlot(D2UnitStrc * pUnit, eD2Bod
       case BODYLOC_SWAPPED_R_ARM:
 
       case BODYLOC_SWAPPED_L_ARM:
-        nPairedBodyLoc = (nBodyLoc != BODYLOC_SWAPPED_L_ARM) + 0xb;
+        nPairedBodyLoc = nBodyLoc != BODYLOC_SWAPPED_L_ARM ? 0xc : 0xb;
       pCurrentSlotItem = INVENTORY_GetItemByGridOffset(pInventory, nBodyLoc);
       pPairedSlotItem = INVENTORY_GetItemByGridOffset(pInventory, nPairedBodyLoc);
       uVar1 = INVENTORY_GetEquipSwapAction(pPairedSlotItem, pItem, pUnit, nPairedBodyLoc, pCurrentSlotItem);
@@ -4658,7 +4658,7 @@ int32_t __stdcall INVENTORY_GetEquipActionForBodySlot(D2UnitStrc * pUnit, eD2Bod
 
     pCurrentSlotItem = INVENTORY_GetItemByGridOffset(pInventory, nBodyLoc);
     if (pItem) {
-      return (uint32_t)(pCurrentSlotItem != 0) * 4 + 1;
+      return pCurrentSlotItem != 0 ? 0x5U : 0x1U;
     }
 
     return pCurrentSlotItem ? 3 : 0;

@@ -55,27 +55,21 @@
 
 namespace D2Game::Monsters::Spawn {
 
-int32_t __fastcall MONSTER_GetMonsterClassByDifficulty(int32_t nMonstatId, int32_t nParam) {
+int32_t __fastcall MONSTER_GetMonsterClassByDifficulty(int32_t nMonstatId, int32_t nDifficulty) {
+    int nDiffStep;
     D2MonStatsTxt* pMonStatLine = nMonstatId >= 0 && nMonstatId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonstatId : nullptr;
     if (!pMonStatLine) {
       return -1;
     }
 
     int32_t nClassId = (int32_t)pMonStatLine->BaseId;
-    int nDiffStep = 0;
-    if (nParam <= 0) {
-      return nClassId;
-    }
-
-    do {
+    for (nDiffStep = 0; nDiffStep < nDifficulty; nDiffStep++) {
       nClassId = (int32_t)pMonStatLine->NextInClass;
       pMonStatLine = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
       if (!pMonStatLine) {
         return nClassId;
       }
-
-      nDiffStep++;
-    } while (nDiffStep < nParam);
+    }
 
     return nClassId;
 }
@@ -157,7 +151,7 @@ static BOOL __stdcall CheckWarpSpawnCoords(D2RoomStrc * pRoom, ::SGAMEDATA * pGa
 }
 
 // Tries up to 20 times (nTryCount &lt; 20) to find a valid spawn position for a monster in pRoom. Each attempt draws a random (nX, nY) from the room's seed within the room bounding box. If nParam!=0 it additionally validates the position via CheckWarpSpawnCoords. On success calls SpawnMonster at that location (optionally using pCoordList for grid-index matching), writes the position to *pX/*pY, and returns TRUE. Returns FALSE after 20 failed attempts.
-BOOL __fastcall SPAWN_FindRandomPositionForMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2RoomCoordListStrc * pCoordList, uint32_t nClassId, int * pX, int * pY, int32_t nParam) {
+BOOL __fastcall SPAWN_FindRandomPositionForMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2RoomCoordListStrc * pCoordList, uint32_t nClassId, int * pX, int * pY, int32_t bCheckWarpDistance) {
     int32_t nGridIdx;
     D2UnitStrc* pSpawnedUnit;
     uint32_t nRand;
@@ -217,7 +211,7 @@ BOOL __fastcall SPAWN_FindRandomPositionForMonster(::SGAMEDATA * pGame, D2RoomSt
       }
 
       nY = nRand + nRoomHeight;
-      if (!nParam || (bWarpCheckOk = CheckWarpSpawnCoords(pRoomWork, pGameLocal, nX, nY) , !bWarpCheckOk)) {
+      if (!bCheckWarpDistance || (bWarpCheckOk = CheckWarpSpawnCoords(pRoomWork, pGameLocal, nX, nY) , !bWarpCheckOk)) {
         if (bUseCoordList) {
           nGridIdx = D2Common::DUNGEON::Dungeon::GetGridIndex(pRoomWork, nX, nY);
           if (nGridIdx != nCoordListIdx) {

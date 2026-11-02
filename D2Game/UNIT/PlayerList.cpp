@@ -161,7 +161,7 @@ void __fastcall PLAYERLIST_RemoveFromList(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Updates the relationship flags between pUnit and pTargetUnit in pUnit's player list, then sends packet 0x8C (RelationshipUpdate) to pTargetUnit's client. dwFlagMask selects which relationship bits to modify; nParam=0 clears them, non-zero sets them. No-op if the two units are the same or no list entry exists for pTargetUnit.
-void __fastcall SendRelationshipStatus(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, uint32_t dwFlagMask, int32_t nParam) {
+void __fastcall SendRelationshipStatus(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, uint32_t dwFlagMask, int32_t bSet) {
     D2UnitPlayerListStrc* pListEntry;
     uint32_t nOtherUnitGUID;
     int nOtherGUID;
@@ -183,7 +183,7 @@ void __fastcall SendRelationshipStatus(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     pListEntry = 0;
     lookup_done:
     if (pUnit != pTargetUnit && pListEntry) {
-      if (nParam) {
+      if (bSet) {
         pListEntry->nRelationshipFlags |= dwFlagMask;
       } else {
         pListEntry->nRelationshipFlags &= ~dwFlagMask;

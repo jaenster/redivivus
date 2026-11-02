@@ -168,7 +168,7 @@ BOOL __stdcall INVENTORY_CanAutoBeltItem(struct D2InventoryStrc * pInventory, st
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall INVENTORY_FindBeltSlotForPotion(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int * pnOutSlotIndex);
 int __stdcall INVENTORY_PlacePotionInBelt(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit);
-struct D2UnitStrc * __stdcall INVENTORY_GetItemInBeltSlot(struct D2InventoryStrc * pInventory, uint32_t nParam);
+struct D2UnitStrc * __stdcall INVENTORY_GetItemInBeltSlot(struct D2InventoryStrc * pInventory, uint32_t nBeltSlot);
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall INVENTORY_CheckBeltSlotAndGetItem(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItemUnit, uint32_t dwParam1, struct D2UnitStrc * * ppOutItem);
 // Returns true if a non-broken, non-disabled shield is equipped in either the primary (grid cell 4) or secondary (grid cell 5) weapon slot of the inventory. If ppUnit is non-null, writes the found shield unit pointer to *ppUnit. Returns false and leaves *ppUnit null if no shield is equipped.
@@ -223,7 +223,7 @@ struct D2RoomStrc * * __stdcall CORPSE_GetData(struct D2CorpseStrc * pRoom);
 void __stdcall INVENTORY_InitializeItemTypeTable();
 uint8_t __stdcall INVENTORY_CalculateSwapActionCode(int32_t nParam1, int32_t nParam2);
 // Returns the equip action code for placing pItem into body slot nParam on pUnit. First validates body location fit and equipment requirements. For arm slots (R_ARM/L_ARM and their swap pairs), retrieves both the current and paired slot items and delegates to INVENTORY_GetEquipSwapAction. For other slots, returns 1 (replace) if the slot is occupied or 1 if placing a new item; returns 3 (move to stash) if clearing an occupied slot. Returns 0 on null unit/inventory or failed fit/req check.
-int32_t __stdcall INVENTORY_GetEquipActionForBodySlot(struct D2UnitStrc * pUnit, eD2BodyLocDWORD nBodyLoc, struct D2UnitStrc * pItem, int nParam2);
+int32_t __stdcall INVENTORY_GetEquipActionForBodySlot(struct D2UnitStrc * pUnit, eD2BodyLocDWORD nBodyLoc, struct D2UnitStrc * pItem, int bSkipRequirementsCheck);
 struct D2UnitStrc * __stdcall INVENTORY_GetNextItem(struct D2UnitStrc * pUnit);
 // Returns the item unit if pUnit is of type ITEM (unitType == 4), otherwise returns null.
 struct D2UnitStrc * __stdcall GetCarriedItem(struct D2UnitStrc * pUnit);

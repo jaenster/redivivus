@@ -869,8 +869,8 @@ void __stdcall STATLIST_IterateChangedStats(D2UnitStrc * pUnit, D2UnitStrc * pUn
 
     do {
       D2StatStrc* pDVar1;
-      nParam = pDVar2->sChangedStats.pChangedStatIds[nChangedIdx];
-      lVar3 = Logging::STATLIST_BinarySearchStatById(nParam, (int*)&pDVar2->sStatList.sBaseStats);
+      nStatKey = pDVar2->sChangedStats.pChangedStatIds[nChangedIdx];
+      lVar3 = Logging::STATLIST_BinarySearchStatById(nStatKey, (int*)&pDVar2->sStatList.sBaseStats);
       if (lVar3 < 0 || (pDVar1 = pDVar2->sStatList.sBaseStats.pStatInfo + lVar3 , !pDVar1)) {
         nSearchLo = 0;
         nStatId = (uint16_t)((uint32_t)nParam >> 0x10);

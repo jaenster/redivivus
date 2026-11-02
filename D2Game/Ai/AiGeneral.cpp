@@ -306,14 +306,8 @@ void __fastcall AI_SetCurrentAiCommand(D2UnitStrc * pUnit, int32_t nParam, D2Mon
 }
 
 // Searches a monster's AI command ring for a node whose first arg (nCmdArg[0]) matches nParam. Starts from pCmdCurrent->pNext and wraps around. If bSetCurrent is non-zero, advances pCmdCurrent to the found node. Returns the matching D2MonsterAiCmdStrc* or NULL if not found or unit invalid.
-D2MonsterAiCmdStrc * __fastcall FindMonsterAiCmd(D2UnitStrc * pUnit, int nParam, int32_t bSetCurrent) {
-    if (!pUnit) {
-      return nullptr;
-    }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
-      return nullptr;
-    }
-    if (!pUnit->pUnitData.pUnitDataMonster) {
+D2MonsterAiCmdStrc * __fastcall FindMonsterAiCmd(D2UnitStrc * pUnit, int nCmdArg0, int32_t bSetCurrent) {
+    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster) {
       return nullptr;
     }
 
@@ -328,16 +322,16 @@ D2MonsterAiCmdStrc * __fastcall FindMonsterAiCmd(D2UnitStrc * pUnit, int nParam,
     }
 
     D2MonsterAiCmdStrc* pNext = pCurrent->pNext;
-    if (pNext->nCmdArg[0] != nParam) {
+    if (pNext->nCmdArg[0] != nCmdArg0) {
       do {
         if (pNext == pCurrent) {
           break;
         }
 
         pNext = pNext->pNext;
-      } while (pNext->nCmdArg[0] != nParam);
+      } while (pNext->nCmdArg[0] != nCmdArg0);
 
-      if (pNext->nCmdArg[0] != nParam) {
+      if (pNext->nCmdArg[0] != nCmdArg0) {
         return nullptr;
       }
     }

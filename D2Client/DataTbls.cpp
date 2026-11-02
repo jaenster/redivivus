@@ -18,9 +18,9 @@
 
 namespace D2Client::DataTbls {
 
-D2CharStatsTxt * __fastcall INV_GetCharStatsTxtLine(int32_t nParam) {
-    if (nParam >= 0 && nParam < sgptDataTable->nTxtCharStatsSize) {
-      return sgptDataTable->pTxtCharStats + nParam;
+D2CharStatsTxt * __fastcall INV_GetCharStatsTxtLine(int32_t nClassId) {
+    if (nClassId >= 0 && nClassId < sgptDataTable->nTxtCharStatsSize) {
+      return sgptDataTable->pTxtCharStats + nClassId;
     }
 
     return nullptr;
@@ -42,9 +42,9 @@ D2SetItemsTxt * __fastcall GetSetItemsLine(int32_t nSetItemId) {
     return nullptr;
 }
 
-D2UniqueItemsTxt * __fastcall INV_GetUniqueItemsTxtLine(int32_t nParam) {
-    if (nParam >= 0 && nParam < sgptDataTable->nTxtUniqueItemsSize) {
-      return sgptDataTable->pTxtUniqueItems + nParam;
+D2UniqueItemsTxt * __fastcall INV_GetUniqueItemsTxtLine(int32_t nFileIndex) {
+    if (nFileIndex >= 0 && nFileIndex < sgptDataTable->nTxtUniqueItemsSize) {
+      return sgptDataTable->pTxtUniqueItems + nFileIndex;
     }
 
     return nullptr;

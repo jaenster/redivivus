@@ -152,7 +152,7 @@ void __stdcall CloseLogging() {
 }
 
 // Binary search for a stat entry by ID in a sorted stat array. Takes stat ID in EDI and pointer to stat array descriptor in EAX. Returns index on success, -1 if not found.
-long STATLIST_BinarySearchStatById(int32_t nParam, int * pnParam) {
+long STATLIST_BinarySearchStatById(int32_t nStatKey, int * pnParam) {
     int nMid;
     int nCount = (int)(short int)pnParam[1];
     int nLo = 0;
@@ -164,10 +164,10 @@ long STATLIST_BinarySearchStatById(int32_t nParam, int * pnParam) {
       int nEntryKey;
       nMid = (nCount - nLo) / 2 + nLo;
       nEntryKey = *(int*)(*pnParam + nMid * 8);
-      if (nParam > nEntryKey) {
+      if (nStatKey > nEntryKey) {
         nLo = nMid + 1;
         nMid = nCount;
-      } else if (nEntryKey <= nParam) {
+      } else if (nEntryKey <= nStatKey) {
         return nMid;
       }
 

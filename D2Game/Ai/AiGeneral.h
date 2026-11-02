@@ -44,7 +44,7 @@ void __fastcall ResetAiGeneralStrc(::SGAMEDATA * pGame, struct D2UnitStrc * pUni
 struct D2MonsterAiCmdStrc * __fastcall GetAiCmd(struct D2UnitStrc * pUnit);
 void __fastcall AI_SetCurrentAiCommand(struct D2UnitStrc * pUnit, int32_t nParam, struct D2MonsterAiCmdStrc * pAiCmd);
 // Searches a monster's AI command ring for a node whose first arg (nCmdArg[0]) matches nParam. Starts from pCmdCurrent->pNext and wraps around. If bSetCurrent is non-zero, advances pCmdCurrent to the found node. Returns the matching D2MonsterAiCmdStrc* or NULL if not found or unit invalid.
-struct D2MonsterAiCmdStrc * __fastcall FindMonsterAiCmd(struct D2UnitStrc * pUnit, int nParam, int32_t bSetCurrent);
+struct D2MonsterAiCmdStrc * __fastcall FindMonsterAiCmd(struct D2UnitStrc * pUnit, int nCmdArg0, int32_t bSetCurrent);
 void __fastcall CreateAiCmdAndFill(::SGAMEDATA * pGame, struct D2UnitStrc * pmonster, struct D2AiCmdArgumentsStrc * pArgs);
 struct D2MonsterAiCmdStrc * __fastcall AI_CreateCmdIfNotExists(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int nId, int32_t nId2);
 struct D2MapAIStrc * * __stdcall GetMonsterMapAi(struct D2UnitStrc * pMonster);
