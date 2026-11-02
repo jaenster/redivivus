@@ -65,10 +65,10 @@
 #include "D2Common/Units.h"
 #include "D2DDraw/Renderer/DirectDraw.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
-#include "D2Game/D2UnitFindDataStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Targets.h"
 #include "D2Game/Objects/Objects.h"
+#include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitInactive.h"
@@ -192,23 +192,29 @@ int __fastcall SKILL_SelectProc_IsCorpseConsumableBasic(D2UnitStrc * pUnit, D2Un
 
 // SelectProc=3 handler: target must be a consumable corpse that can be converted and is not monsterId 0x4e (Bone Golem/special). Used for Raise Skeleton-type skills. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
 int __fastcall SKILL_SelectProc_IsConvertibleCorpse(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
-    int bCanBeConverted;
-    int32_t nMonStatsId;
-    if (pTargetUnit) {
-      uint32_t bIsConsumable;
-      bIsConsumable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTargetUnit, 0);
-      if (bIsConsumable) {
-        bCanBeConverted = UNIT::Monster::MONSTER_CanBeConverted(pTargetUnit);
-        if (bCanBeConverted && pTargetUnit->eUnitType == UNIT_MONSTER) {
-          nMonStatsId = UNIT::Player::TXT_MonStats_GetBaseId(pTargetUnit);
-          if (nMonStatsId < 0 || nMonStatsId >= sgptDataTable->nTxtMonStatsSize || nMonStatsId != 0x4e) {
-            return 1;
-          }
-        }
-      }
+    if (!pTargetUnit) {
+      return 0;
     }
 
-    return 0;
+    uint32_t bIsConsumable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTargetUnit, 0);
+    if (!bIsConsumable) {
+      return 0;
+    }
+
+    int bCanBeConverted = UNIT::Monster::MONSTER_CanBeConverted(pTargetUnit);
+    if (!bCanBeConverted) {
+      return 0;
+    }
+    if (pTargetUnit->eUnitType != UNIT_MONSTER) {
+      return 0;
+    }
+
+    int32_t nMonStatsId = UNIT::Player::TXT_MonStats_GetBaseId(pTargetUnit);
+    if (!(nMonStatsId < 0 || nMonStatsId >= sgptDataTable->nTxtMonStatsSize || nMonStatsId != 0x4e)) {
+      return 0;
+    }
+
+    return 1;
 }
 
 // SelectProc=4 handler: target must be a corpse valid for revive (Necromancer Revive). Thunk forwarding to SKILLS_IsCorpseValidForRevive. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.

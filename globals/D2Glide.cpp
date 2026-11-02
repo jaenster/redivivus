@@ -382,6 +382,8 @@ D2GlideVertexStrc gaGlideGroundTileVertices[36] = {}; D2_GLOBAL_GUARD(gaGlideGro
 
 void * gapGlideGroundStripVertexPtrs[60] = {}; D2_GLOBAL_GUARD(gapGlideGroundStripVertexPtrs, "gapGlideGroundStripVertexPtrs");
 
+D2GlideVertexStrc gaGlideSmackerVertices[4] = {}; D2_GLOBAL_GUARD(gaGlideSmackerVertices, "gaGlideSmackerVertices");
+
 // =============================================================================
 // Initialized scalars
 // =============================================================================

@@ -2143,7 +2143,7 @@ uint8_t __stdcall PLAYER_GetWeaponTypeForAnimation(D2UnitStrc * pPlayerUnit, D2U
     D2UnitStrc* pLeftArmItem;
     BOOL BVar1;
     D2InventoryStrc* pPlayerInventory;
-    eD2BodyLoc eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pUnit);
+    int32_t eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pUnit);
     if (eBodyLoc == BODYLOC_L_ARM || eBodyLoc == BODYLOC_R_ARM) {
       D2UnitStrc* pRightArmItem;
       pPlayerInventory = pPlayerUnit->pInventory;
@@ -2516,7 +2516,7 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
     D2RoomStrc* pRoom;
     bool bStepDone;
     bool bHasPathTarget;
-    uint8_t byActionFrame;
+    int32_t byActionFrame;
     eD2UnitType eUnitType;
     D2DynamicPathStrc* pDynPathAlt;
     D2UnitDataPlayerStrc* pPlayerData;
@@ -2773,10 +2773,11 @@ BOOL __fastcall TXT_MonStats_MonStats2_GetFlagsByBitOffset(int32_t nMonStatsId, 
 }
 
 int32_t __fastcall ValidateClassId(int32_t nClassId) {
-    if (nClassId < 0 || nClassId >= sgptDataTable->nTxtMonStatsSize) {
-      nClassId = -1;
+    if (!(nClassId < 0 || nClassId >= sgptDataTable->nTxtMonStatsSize)) {
+      return nClassId;
     }
 
+    nClassId = -1;
     return nClassId;
 }
 

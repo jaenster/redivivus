@@ -882,15 +882,17 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RingMissileSpray(D2UnitStrc * pUnit, eD2Ski
       } while (nSpreadOffset < 0x40);
 
       sSkillArg.nVelocityOverride = pMissileTxt->Param2 << 6;
-      if (nNumRings > 1) {
-        nSpreadOffset = 0;
-        do {
-          sSkillArg.nUnitX = *(int*)((int)gaSkillRingMissileSpreadConstY + nSpreadOffset + 4);
-          sSkillArg.nUnitY = *(int*)((int)gaSkillRingMissileSpreadConstZ + nSpreadOffset + 4);
-          UNIT::Missile::MakeMissile(&sSkillArg);
-          nSpreadOffset += nNumRings * 4;
-        } while (nSpreadOffset < 0x3c);
+      if (nNumRings <= 1) {
+        return 1;
       }
+
+      nSpreadOffset = 0;
+      do {
+        sSkillArg.nUnitX = *(int*)((int)gaSkillRingMissileSpreadConstY + nSpreadOffset + 4);
+        sSkillArg.nUnitY = *(int*)((int)gaSkillRingMissileSpreadConstZ + nSpreadOffset + 4);
+        UNIT::Missile::MakeMissile(&sSkillArg);
+        nSpreadOffset += nNumRings * 4;
+      } while (nSpreadOffset < 0x3c);
 
       return 1;
     }
@@ -1310,21 +1312,23 @@ BOOL __fastcall Skills_CltDoFunc_Mon_LineMissileSpread(D2UnitStrc * pUnit, eD2Sk
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 3;
     nMissileCountDown = nOriginY;
-    if (nOriginY > 0) {
-      do {
-        sSkillArg.pOwner = pUnitOrig;
-        sSkillArg.nX = nMissileCount / 6 + nSrcX;
-        sSkillArg.nSkillLevel = nSkillLvl;
-        sSkillArg.nUnitX = nMissileCount;
-        sSkillArg.nUnitY = nDirY;
-        sSkillArg.nY = nDirY / 6 + nSrcY;
-        sSkillArg.nMissileTxtNo = eMissileId;
-        UNIT::Missile::MakeMissile(&sSkillArg);
-        nMissileCount += nStepY;
-        nDirY += nStepX;
-        nMissileCountDown--;
-      } while (nMissileCountDown);
+    if (nOriginY <= 0) {
+      return 1;
     }
+
+    do {
+      sSkillArg.pOwner = pUnitOrig;
+      sSkillArg.nX = nMissileCount / 6 + nSrcX;
+      sSkillArg.nSkillLevel = nSkillLvl;
+      sSkillArg.nUnitX = nMissileCount;
+      sSkillArg.nUnitY = nDirY;
+      sSkillArg.nY = nDirY / 6 + nSrcY;
+      sSkillArg.nMissileTxtNo = eMissileId;
+      UNIT::Missile::MakeMissile(&sSkillArg);
+      nMissileCount += nStepY;
+      nDirY += nStepX;
+      nMissileCountDown--;
+    } while (nMissileCountDown);
 
     return 1;
 }

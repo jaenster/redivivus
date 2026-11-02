@@ -75,10 +75,11 @@ int32_t __stdcall DRLGPATH_GetApproxDistancePacked(uint32_t nPackedCoord1, uint3
     }
 
     int nMin = nDx;
-    if (nDx < nDy || (nResult = nDy + nDx * 2 , nMin = nDy , nDx <= nDy)) {
-      nResult = nMin + nDy * 2;
+    if (!(nDx < nDy || (nResult = nDy + nDx * 2 , nMin = nDy , nDx <= nDy))) {
+      return nResult;
     }
 
+    nResult = nMin + nDy * 2;
     return nResult;
 }
 
@@ -1607,10 +1608,11 @@ int32_t __stdcall DRLGPATH_GetSimpleDistancePacked(uint32_t nPackedPosA, uint32_
     }
 
     int nDY = nDX;
-    if (nDX < nMinDelta || (nResult = nMinDelta + nDX * 2 , nDY = nMinDelta , nDX <= nMinDelta)) {
-      nResult = nDY + nMinDelta * 2;
+    if (!(nDX < nMinDelta || (nResult = nMinDelta + nDX * 2 , nDY = nMinDelta , nDX <= nMinDelta))) {
+      return nResult;
     }
 
+    nResult = nDY + nMinDelta * 2;
     return nResult;
 }
 

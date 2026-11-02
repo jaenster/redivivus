@@ -783,24 +783,26 @@ int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestI
     if (g_pBNetReadUserData && *(int*)g_pBNetReadUserData == 1 && *(int*)((int)g_pBNetReadUserData + 4) == nKeyCount && *(int*)((int)g_pBNetReadUserData + 8) == nRequestId) {
       uint32_t pNextSrc;
       pszSrcData = (char*)((int)g_pBNetReadUserData + 0xc);
-      if ((uint32_t)nKeyCount > 0) {
-        nMaxLensOffset = pnMaxLens - (int)ppszOutBufs;
-        ppszOutBuf = ppszOutBufs;
-        ppszOutBufs = (char**)nKeyCount;
-        do {
-          if (*pszSrcData != '\0') {
-            strncpy(*ppszOutBuf, pszSrcData, *(size_t*)(nMaxLensOffset + (int)ppszOutBuf));
-            (*ppszOutBuf)[*(int*)(nMaxLensOffset + (int)ppszOutBuf)] = '\0';
-          } else {
-            **ppszOutBuf = '\0';
-          }
-
-          pNextSrc = Storm::Source::SSTR::SStrLen(pszSrcData);
-          ppszOutBuf++;
-          ppszOutBufs = (char**)((int)ppszOutBufs - 1);
-          pszSrcData = pszSrcData + pNextSrc + 1;
-        } while (ppszOutBufs);
+      if ((uint32_t)nKeyCount <= 0) {
+        return 1;
       }
+
+      nMaxLensOffset = pnMaxLens - (int)ppszOutBufs;
+      ppszOutBuf = ppszOutBufs;
+      ppszOutBufs = (char**)nKeyCount;
+      do {
+        if (*pszSrcData != '\0') {
+          strncpy(*ppszOutBuf, pszSrcData, *(size_t*)(nMaxLensOffset + (int)ppszOutBuf));
+          (*ppszOutBuf)[*(int*)(nMaxLensOffset + (int)ppszOutBuf)] = '\0';
+        } else {
+          **ppszOutBuf = '\0';
+        }
+
+        pNextSrc = Storm::Source::SSTR::SStrLen(pszSrcData);
+        ppszOutBuf++;
+        ppszOutBufs = (char**)((int)ppszOutBufs - 1);
+        pszSrcData = pszSrcData + pNextSrc + 1;
+      } while (ppszOutBufs);
 
       return 1;
     }
@@ -1053,37 +1055,38 @@ DWORD __stdcall GetDnsResults(void * lpThreadParam) {
     ppAddrList = pHostEnt->h_addr_list;
     pInAddr = (_union_1226*)*ppAddrList;
     szWriteCursor = szOutBuf;
-    if (pInAddr) {
-      do {
-        nErrorAddress = 0x7fffffff;
-        /* in_addr in for inet_ntoa */ szAddrStr = inet_ntoa((in_addr)pInAddr->S_un_b);
-        nAddrLen = Storm::Source::SSTR::SStrCopy(szWriteCursor, szAddrStr, nErrorAddress);
-        nSepLen = Storm::Source::SSTR::SStrCopy(szWriteCursor + nAddrLen, ";", 0x7fffffff);
-        ppAddrList++;
-        szWriteCursor = szWriteCursor + nAddrLen + nSepLen;
-        pInAddr = (_union_1226*)*ppAddrList;
-      } while (pInAddr);
+    if (!pInAddr) {
+      return 1;
+    }
 
-      if (szWriteCursor > szOutBuf) {
-        szWriteCursor[-1] = '\0';
-      }
+    do {
+      nErrorAddress = 0x7fffffff;
+      /* in_addr in for inet_ntoa */ szAddrStr = inet_ntoa((in_addr)pInAddr->S_un_b);
+      nAddrLen = Storm::Source::SSTR::SStrCopy(szWriteCursor, szAddrStr, nErrorAddress);
+      nSepLen = Storm::Source::SSTR::SStrCopy(szWriteCursor + nAddrLen, ";", 0x7fffffff);
+      ppAddrList++;
+      szWriteCursor = szWriteCursor + nAddrLen + nSepLen;
+      pInAddr = (_union_1226*)*ppAddrList;
+    } while (pInAddr);
+
+    if (szWriteCursor > szOutBuf) {
+      szWriteCursor[-1] = '\0';
     }
 
     return 1;
 }
 
-void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, int nDnsThreadParam2) {
+void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, char * nDnsThreadParam2) {
     // Static local variables (originally global data)
-    static LPVOID lpParameter_00881be8; D2_STATIC_GUARD_BSS(lpParameter_00881be8, "Bnclient::BnSend::GetDnsRecordSync::lpParameter_00881be8");
-    static int g_nDnsThreadParam2; D2_STATIC_GUARD_BSS(g_nDnsThreadParam2, "Bnclient::BnSend::GetDnsRecordSync::g_nDnsThreadParam2");
+    static D2DnsThreadParamStrc lpParameter_00881be8 = {}; D2_STATIC_GUARD(lpParameter_00881be8, "Bnclient::BnSend::GetDnsRecordSync::lpParameter_00881be8");
 
     /* DWORD dwMilliseconds for Sleep */ g_nBNetConnectionState = 1;
     char** dwThreadId = ppszDnsOutput;
     Sleep(10);
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ *(uint8_t*)ppszDnsOutput = 0;
     /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ dwThreadId = 0;
-    lpParameter_00881be8 = ppszDnsOutput;
-    g_nDnsThreadParam2 = nDnsThreadParam2;
+    lpParameter_00881be8.pszOut = (char*)ppszDnsOutput;
+    lpParameter_00881be8.pszHost = nDnsThreadParam2;
     HANDLE hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)GetDnsResults, &lpParameter_00881be8, 0, (LPDWORD)&dwThreadId);
     int nCancelFlag = InterlockedCompareExchange(&Target_00881bfc, 0, 0);
     /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ while (true) {
@@ -1849,7 +1852,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
 int __stdcall BattleConnectFastest() {
     // Static local variables (originally global data)
     static char RealmDNS[256] = {}; D2_STATIC_GUARD(RealmDNS, "Bnclient::BnSend::BattleConnectFastest::RealmDNS");
-    static char * EntireDnsRecordOfServers; D2_STATIC_GUARD_BSS(EntireDnsRecordOfServers, "Bnclient::BnSend::BattleConnectFastest::EntireDnsRecordOfServers");
+    static char EntireDnsRecordOfServers[512] = {}; D2_STATIC_GUARD(EntireDnsRecordOfServers, "Bnclient::BnSend::BattleConnectFastest::EntireDnsRecordOfServers");
 
     Debug::DEBUG_Trace("BattleConnectFastest()");
     LONG lInterlockedResult = InterlockedIncrement((LONG*)&Destination_00881c00);
@@ -1863,12 +1866,12 @@ int __stdcall BattleConnectFastest() {
     Debug::DEBUG_Trace("   connect to: %s", RealmDNS);
     Bnet::BNET_LogIndent(2, 4);
     Bnet::BnetLog_WriteLine("querying gateway %s", RealmDNS);
-    *(uint8_t*)(char*)&EntireDnsRecordOfServers = '\0';
+    EntireDnsRecordOfServers[0] = '\0';
     BOOL bWinsockOk = Fog::Src::Safesock::StartUp();
     if (bWinsockOk) {
-      GetDnsRecordSync(&EntireDnsRecordOfServers, (int)RealmDNS);
+      GetDnsRecordSync((char**)EntireDnsRecordOfServers, RealmDNS);
     }
-    if ((char)(uintptr_t)EntireDnsRecordOfServers == '\0') {
+    if (EntireDnsRecordOfServers[0] == '\0') {
       /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881c00);
       SID_SetStateFlag1(0xc);
       Debug::DEBUG_Trace("   failed to get server list");
@@ -1877,7 +1880,7 @@ int __stdcall BattleConnectFastest() {
     }
 
     SID_SetStateFlag1(0);
-    NET_SID_CLIENT_LogonSequence((char*)&EntireDnsRecordOfServers);
+    NET_SID_CLIENT_LogonSequence(EntireDnsRecordOfServers);
     Bnet::BNET_LogIndent(2, -4);
     /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lInterlockedResult = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
     if (!lInterlockedResult) {
@@ -3055,7 +3058,7 @@ void __fastcall BNSEND_HashCDKeyByType(D2CDKeyHashStrc * pOutHash, uint32_t nTok
 
 int __fastcall BNSEND_SendRawBytes(void * pBytes, size_t nSize) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00881f64);
-    Storm::Source::SMem::SMemCopy(&gbBnetFtpFileTransferActive, pBytes, nSize);
+    Storm::Source::SMem::SMemCopy(gbBnetFtpFileTransferActive, pBytes, nSize);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnNetworkSendState = 0;
     LeaveCriticalSection(&lpCriticalSection_00881f64);
     return 1;

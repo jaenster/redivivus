@@ -1753,10 +1753,11 @@ void __fastcall CLIENT_SetLadder(BOOL bLadder) {
 
 uint32_t __stdcall GAMEDATA_GetLadderOrGameType() {
     uint32_t bResult = gClientGameData.CLIENT_bLadder;
-    if ((uint32_t)(eD2GSGameType_007a0610 - GAMETYPE_BNET_BETA) > 1) {
-      bResult = 1;
+    if (!((uint32_t)(eD2GSGameType_007a0610 - GAMETYPE_BNET_BETA) > 1)) {
+      return bResult;
     }
 
+    bResult = 1;
     return bResult;
 }
 
@@ -2621,7 +2622,7 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
     static BOOL gbExitingGamePadding; D2_STATIC_GUARD_BSS(gbExitingGamePadding, "D2Client::GAME::Game::pfModes_EnterGame::gbExitingGamePadding");
 
     int nRecordResult;
-    uint8_t byPlayerStatus;
+    int32_t byPlayerStatus;
     tagMSG sMsg;
     if (!gLoadTimerDurationMs.dwDurationMs) {
       ClientModeInGame::D2CLIENT_SetExitVar1(1);

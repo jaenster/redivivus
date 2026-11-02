@@ -1383,30 +1383,25 @@ BOOL __stdcall MAINMENU_FreeRealmList() {
     int i;
     if (g_pBNetRealmList) {
       char* pMemoryToFree;
-      i = 0;
       pList = g_pBNetRealmList;
-      if (gnRealmListCount > 0) {
-        do {
-          if (pList[i]) {
-            pMemoryToFree = pList[i]->szDescription;
-            if (!pMemoryToFree) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1139);
-              exit(-1);
-            }
-
-            D2_FREE_AT(pMemoryToFree, ".\\Src\\MainMenus.cpp", 0x113a);
-            if (!g_pBNetRealmList[i]->szName) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x113b);
-              exit(-1);
-            }
-
-            D2_FREE_AT(g_pBNetRealmList[i]->szName, ".\\Src\\MainMenus.cpp", 0x113c);
-            D2_FREE_AT(g_pBNetRealmList[i], ".\\Src\\MainMenus.cpp", 0x113e);
-            pList = g_pBNetRealmList;
+      for (i = 0; i < gnRealmListCount; i++) {
+        if (pList[i]) {
+          pMemoryToFree = pList[i]->szDescription;
+          if (!pMemoryToFree) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1139);
+            exit(-1);
           }
 
-          i++;
-        } while (i < gnRealmListCount);
+          D2_FREE_AT(pMemoryToFree, ".\\Src\\MainMenus.cpp", 0x113a);
+          if (!g_pBNetRealmList[i]->szName) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x113b);
+            exit(-1);
+          }
+
+          D2_FREE_AT(g_pBNetRealmList[i]->szName, ".\\Src\\MainMenus.cpp", 0x113c);
+          D2_FREE_AT(g_pBNetRealmList[i], ".\\Src\\MainMenus.cpp", 0x113e);
+          pList = g_pBNetRealmList;
+        }
       }
 
       D2_FREE_AT(pList, ".\\Src\\MainMenus.cpp", 0x1141);
@@ -2672,21 +2667,23 @@ static int __stdcall MAINMENU_SetMultilineText(uint16_t * wszText, ::D2WinTextBo
 
     D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszBuffer, wszText, 0x400);
     uint16_t* pwszLineStart = wszBuffer;
-    if (wszBuffer[0] != L'\0') {
-      uint16_t* pwszCursor = pwszLineStart;
-      do {
-        if (*pwszCursor == L'\n') {
-          *pwszCursor = L'\0';
-          D2Win::Src::D2WinTextBox::SetText(pTextBox, pwszLineStart, nColor, (bool)bCentered, 0);
-          pwszLineStart = pwszCursor + 1;
-        }
+    uint16_t* pwszCursor = pwszLineStart;
+    if (wszBuffer[0] == L'\0') {
+      return 1;
+    }
 
-        pwszCursor++;
-      } while (*pwszCursor != L'\0');
-
-      if (pwszLineStart < pwszCursor) {
+    do {
+      if (*pwszCursor == L'\n') {
+        *pwszCursor = L'\0';
         D2Win::Src::D2WinTextBox::SetText(pTextBox, pwszLineStart, nColor, (bool)bCentered, 0);
+        pwszLineStart = pwszCursor + 1;
       }
+
+      pwszCursor++;
+    } while (*pwszCursor != L'\0');
+
+    if (pwszLineStart < pwszCursor) {
+      D2Win::Src::D2WinTextBox::SetText(pTextBox, pwszLineStart, nColor, (bool)bCentered, 0);
     }
 
     return 1;

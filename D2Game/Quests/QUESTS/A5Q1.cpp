@@ -301,44 +301,44 @@ void __fastcall Q31_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 
 // A5Q1: per-player "am I near Shenk's room?" check, run after Shenk dies. Skips if quest already Completed. Compares player's current room (and its adjacent rooms) against the saved Shenk-room GUID; if the player witnessed the kill, sets RewardAwaits(1) + JustCompleted(0xd) on their quest record so Larzuk will offer the socket reward. Iterator cb, returns 0.
 BOOL __fastcall Q31_CheckNearShenk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    D2QuestDataStrc* pQuestData;
-    uint32_t nAdjRoomIdx;
     D2RoomStrc** pAdjacentRooms;
     uint32_t nAdjRoomCount;
-    char bIsNearShenkRoom;
-    D2QuestDataA5Q1Strc* pA5Q1Data;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     /* GetQuestState Completed(0) on Q35/SiegeOnHarrogath: bail if reward already
-                         taken */ if (pRoom) {
-      BOOL bCompleted;
-      bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SiegeOnHaggorath, QUESTSTATE_Completed);
-      if (!bCompleted) {
-        pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_SiegeOnHaggorath);
-        pA5Q1Data = pQuestData->pQuestSpecificData.pA5Q1;
-        bIsNearShenkRoom = '\0';
-        if (pRoom == pA5Q1Data->pShenkRoom) {
-          bIsNearShenkRoom = '\x01';
-        } else {
-          D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &pAdjacentRooms, (int*)&nAdjRoomCount);
-          for (nAdjRoomIdx = 0; nAdjRoomIdx < nAdjRoomCount; nAdjRoomIdx++) {
-            if (pAdjacentRooms[nAdjRoomIdx] == pA5Q1Data->pShenkRoom) {
-              bIsNearShenkRoom = '\x01';
-              break;
-            }
-          }
-        }
+                         taken */ if (!pRoom) {
+      return 0;
+    }
 
-        pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-        pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-        if (bIsNearShenkRoom != '\0') {
-          /* SetQuestState RewardAwaits(1): player saw Shenk die near his room -> Larzuk
-                         reward unlocked */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_SiegeOnHaggorath, QUESTSTATE_RewardAwaits);
-          /* SetQuestState JustCompleted(0xd): triggers quest-complete jingle/journal self
-                         session */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_SiegeOnHaggorath, QUESTSTATE_JustCompleted);
+    BOOL bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SiegeOnHaggorath, QUESTSTATE_Completed);
+    if (bCompleted) {
+      return 0;
+    }
+
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_SiegeOnHaggorath);
+    D2QuestDataA5Q1Strc* pA5Q1Data = pQuestData->pQuestSpecificData.pA5Q1;
+    char bIsNearShenkRoom = '\0';
+    if (pRoom == pA5Q1Data->pShenkRoom) {
+      bIsNearShenkRoom = '\x01';
+    } else {
+      uint32_t nAdjRoomIdx;
+      D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &pAdjacentRooms, (int*)&nAdjRoomCount);
+      for (nAdjRoomIdx = 0; nAdjRoomIdx < nAdjRoomCount; nAdjRoomIdx++) {
+        if (pAdjacentRooms[nAdjRoomIdx] == pA5Q1Data->pShenkRoom) {
+          bIsNearShenkRoom = '\x01';
+          break;
         }
       }
+    }
+
+    pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    if (bIsNearShenkRoom != '\0') {
+      /* SetQuestState RewardAwaits(1): player saw Shenk die near his room -> Larzuk
+                         reward unlocked */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_SiegeOnHaggorath, QUESTSTATE_RewardAwaits);
+      /* SetQuestState JustCompleted(0xd): triggers quest-complete jingle/journal self
+                         session */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_SiegeOnHaggorath, QUESTSTATE_JustCompleted);
     }
 
     return 0;

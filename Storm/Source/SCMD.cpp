@@ -224,10 +224,11 @@ uint32_t __thiscall SCMD_GetListOffset(::SCMD * pThis, int nBaseOffset) {
 }
 
 ::SCMD * __thiscall SCMD_GetListHead(::SCMD * pThis, ::SCMD * pNode) {
-    if (!pNode) {
-      pNode = (::SCMD*)(pThis + 4);
+    if (pNode) {
+      return pNode;
     }
 
+    pNode = (::SCMD*)(pThis + 4);
     return pNode;
 }
 

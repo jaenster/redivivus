@@ -2060,18 +2060,20 @@ int __stdcall SFileAuthenticateArchive(D2ArchiveStrc * pArchive, uint32_t * pdwA
 }
 
 int __thiscall SFILE_AllocateFileRecord1(int32_t pThis, int32_t pLink) {
-    if (!pLink) {
-      pLink = pThis + 4;
+    if (pLink) {
+      return pLink;
     }
 
+    pLink = pThis + 4;
     return pLink;
 }
 
 int __thiscall SFILE_FreeFileRecord1(int32_t pThis, int32_t pLink) {
-    if (!pLink) {
-      pLink = pThis + 4;
+    if (pLink) {
+      return pLink;
     }
 
+    pLink = pThis + 4;
     return pLink;
 }
 
@@ -2142,10 +2144,11 @@ uint32_t __thiscall SFILE_CompareFileRecord1(int32_t pThis, int32_t pLink) {
 }
 
 int __thiscall SFILE_FreeFileRecord2(int32_t pThis, int32_t pLink) {
-    if (!pLink) {
-      pLink = pThis + 4;
+    if (pLink) {
+      return pLink;
     }
 
+    pLink = pThis + 4;
     return pLink;
 }
 
@@ -2209,10 +2212,11 @@ void __thiscall SFILE_InsertFileRecordIntoList2(D2StormListHead * ppListContaine
 }
 
 int __thiscall SFILE_FreeFileRecord3(int32_t pThis, int32_t pLink) {
-    if (!pLink) {
-      pLink = pThis + 4;
+    if (pLink) {
+      return pLink;
     }
 
+    pLink = pThis + 4;
     return pLink;
 }
 
@@ -2282,10 +2286,11 @@ uint32_t __thiscall SFILE_CompareFileRecord2(int32_t pThis, int32_t pLink) {
 }
 
 int __thiscall SFILE_FreeFileRecord4(int32_t pThis, int32_t pLink) {
-    if (!pLink) {
-      pLink = pThis + 4;
+    if (pLink) {
+      return pLink;
     }
 
+    pLink = pThis + 4;
     return pLink;
 }
 

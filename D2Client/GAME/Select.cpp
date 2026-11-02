@@ -37,12 +37,13 @@
 #include "D2Common/Monsters/MONSTERS.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Skills.h"
+#include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Common/Units/UnitFinds.h"
-#include "D2Game/D2UnitFindDataStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Targets.h"
 #include "D2Game/Objects/Objects.h"
+#include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitInactive.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -54,7 +55,6 @@
 #include "D2Client/D2Client.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/D2DynamicPathStrc.h"
-#include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
@@ -480,21 +480,16 @@ static D2UnitStrc * __stdcall SKILL_FindTargetInRange(D2SkillStrc * pSkill, D2Un
     D2Common::Units::UnitFinds::InitializeUnitFindData(nullptr, &sUnitFindData, UNIT::CUnit::GetCurrentRoom(), nX, nY, nRadius, nfpUnitTest, pFindArg);
     sUnitFindData.nFlags = nFindFlags;
     D2Common::Units::UnitFinds::UNITFINDS_FindCullRange(&sUnitFindData);
-    nFindFlags = 0;
     int nSkill = 0xa;
-    if (sUnitFindData.nCountedUnits > 0) {
+    for (nFindFlags = 0; nFindFlags < sUnitFindData.nCountedUnits; nFindFlags++) {
       int32_t nDistToUnit;
-      do {
-        pFoundUnit = sUnitFindData.pUnitsArray->aFoundUnitsList[nFindFlags];
-        nDistToUnit = D2Common::Collision::GetDistanceToXY(pFoundUnit, *pX, *pY);
-        bHitTest = UNIT::CUnit::HitTestScreen(pFoundUnit, 0, 0, nullptr);
-        if (bHitTest && nDistToUnit < nSkill) {
-          nSkill = nDistToUnit;
-          pUnit = pFoundUnit;
-        }
-
-        nFindFlags++;
-      } while (nFindFlags < sUnitFindData.nCountedUnits);
+      pFoundUnit = sUnitFindData.pUnitsArray->aFoundUnitsList[nFindFlags];
+      nDistToUnit = D2Common::Collision::GetDistanceToXY(pFoundUnit, *pX, *pY);
+      bHitTest = UNIT::CUnit::HitTestScreen(pFoundUnit, 0, 0, nullptr);
+      if (bHitTest && nDistToUnit < nSkill) {
+        nSkill = nDistToUnit;
+        pUnit = pFoundUnit;
+      }
     }
 
     D2Common::Units::UnitFinds::FreeUnitFindData(&sUnitFindData);

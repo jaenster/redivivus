@@ -526,148 +526,136 @@ BOOL __fastcall Q19_CheckPlayerHasKhalimsHeart(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Operate handler (OperateFn57) for a Khalim's Will relic super-chest/portal. On activation: spawns 0–4 seeded gold piles, sets dwDropItemCode to Khalim's Heart (0x20726871), counts players still missing the Heart via Q19_CheckPlayerHasKhalimsHeart, drops that many reward items, then rolls normal chest drops. No QuestRecord state transitions.
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOperation) {
-    D2SeedStrc* pControlSeed;
-    D2QuestDataStrc* pKhalimsWillQuestData;
     D2UnitStrc* pDroppedUnit;
-    int iVar2;
-    int iHeartDropIdx;
-    D2SeedStrc seedNext;
     D2ObjectOperateFnArg* pOperationArg = pOperation;
     BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
-    if (nGoldPiles) {
-      D2QuestDataA3Q2Strc* pDVar1;
-      pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-      iHeartDropIdx = 0;
-      seedNext = D2_SEED_NEXT(*pControlSeed);
-      *pControlSeed = seedNext;
-      iVar2 = seedNext.nSeedLow % 5 + 5;
-      if (iVar2 > 0) {
-        do {
-          Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-          iVar2--;
-        } while (iVar2);
-      }
-
-      pOperation->sArg.pVictim->dwDropItemCode = 0x20726871;
-      pKhalimsWillQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
-      if (pKhalimsWillQuestData) {
-        pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
-        pDVar1->nKhalimsEyeCount = 0;
-        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsHeart);
-        if (pDVar1->nKhalimsEyeCount > 0) {
-          do {
-            pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
-            if (pDroppedUnit) {
-              pDVar1->nKhalimsBrainCount++;
-              pDVar1->bKhalimsBrainDropped = 1;
-            }
-
-            iHeartDropIdx++;
-          } while (iHeartDropIdx < pDVar1->nKhalimsEyeCount);
-        }
-      }
-
-      Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
+    if (!nGoldPiles) {
+      return 0;
     }
 
+    D2SeedStrc* pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
+    int iHeartDropIdx = 0;
+    D2SeedStrc seedNext = D2_SEED_NEXT(*pControlSeed);
+    *pControlSeed = seedNext;
+    int iVar2 = seedNext.nSeedLow % 5 + 5;
+    if (iVar2 > 0) {
+      do {
+        Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
+        iVar2--;
+      } while (iVar2);
+    }
+
+    pOperation->sArg.pVictim->dwDropItemCode = 0x20726871;
+    D2QuestDataStrc* pKhalimsWillQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
+    if (pKhalimsWillQuestData) {
+      D2QuestDataA3Q2Strc* pDVar1;
+      pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
+      pDVar1->nKhalimsEyeCount = 0;
+      UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsHeart);
+      if (pDVar1->nKhalimsEyeCount > 0) {
+        do {
+          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
+          if (pDroppedUnit) {
+            pDVar1->nKhalimsBrainCount++;
+            pDVar1->bKhalimsBrainDropped = 1;
+          }
+
+          iHeartDropIdx++;
+        } while (iHeartDropIdx < pDVar1->nKhalimsEyeCount);
+      }
+    }
+
+    Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
     return 0;
 }
 
 // Operate handler (OperateFn58) for a Khalim's Will relic super-chest/portal. Same flow as Drop1 but drops Khalim's Eye (0x20796571), counting eligible players via Q19_CheckPlayerHasKhalimsEye. No QuestRecord state transitions.
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOperation) {
-    D2SeedStrc* pControlSeed;
-    D2QuestDataStrc* pKhalimsWillQuestData;
     D2UnitStrc* pDroppedUnit;
-    int iVar2;
-    int iEyeDropIdx;
-    D2SeedStrc seedNext;
     D2ObjectOperateFnArg* pOperationArg = pOperation;
     BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
-    if (nGoldPiles) {
-      D2QuestDataA3Q2Strc* pDVar1;
-      pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-      iEyeDropIdx = 0;
-      seedNext = D2_SEED_NEXT(*pControlSeed);
-      *pControlSeed = seedNext;
-      iVar2 = seedNext.nSeedLow % 5 + 5;
-      if (iVar2 > 0) {
-        do {
-          Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-          iVar2--;
-        } while (iVar2);
-      }
-
-      pOperation->sArg.pVictim->dwDropItemCode = 0x20796571;
-      pKhalimsWillQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
-      if (pKhalimsWillQuestData) {
-        pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
-        pDVar1->nKhalimsEyeCount = 0;
-        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsEye);
-        if (pDVar1->nKhalimsEyeCount > 0) {
-          do {
-            pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
-            if (pDroppedUnit) {
-              pDVar1->nKhalimsFlailCount++;
-              pDVar1->bKhalimsFlailDropped = 1;
-            }
-
-            iEyeDropIdx++;
-          } while (iEyeDropIdx < pDVar1->nKhalimsEyeCount);
-        }
-      }
-
-      Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
+    if (!nGoldPiles) {
+      return 0;
     }
 
+    D2SeedStrc* pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
+    int iEyeDropIdx = 0;
+    D2SeedStrc seedNext = D2_SEED_NEXT(*pControlSeed);
+    *pControlSeed = seedNext;
+    int iVar2 = seedNext.nSeedLow % 5 + 5;
+    if (iVar2 > 0) {
+      do {
+        Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
+        iVar2--;
+      } while (iVar2);
+    }
+
+    pOperation->sArg.pVictim->dwDropItemCode = 0x20796571;
+    D2QuestDataStrc* pKhalimsWillQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
+    if (pKhalimsWillQuestData) {
+      D2QuestDataA3Q2Strc* pDVar1;
+      pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
+      pDVar1->nKhalimsEyeCount = 0;
+      UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsEye);
+      if (pDVar1->nKhalimsEyeCount > 0) {
+        do {
+          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
+          if (pDroppedUnit) {
+            pDVar1->nKhalimsFlailCount++;
+            pDVar1->bKhalimsFlailDropped = 1;
+          }
+
+          iEyeDropIdx++;
+        } while (iEyeDropIdx < pDVar1->nKhalimsEyeCount);
+      }
+    }
+
+    Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
     return 0;
 }
 
 // Operate handler (OperateFn59) for a Khalim's Will relic super-chest/portal. Same flow as Drop1 but drops Khalim's Brain (0x20726271), counting eligible players via Q19_CheckPlayerHasKhalimsBrain. No QuestRecord state transitions.
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop3(D2ObjectOperateFnArg * pOperation) {
-    D2SeedStrc* pControlSeed;
-    D2QuestDataStrc* pKhalimsWillQuestData;
     D2UnitStrc* pDroppedUnit;
-    int iVar2;
-    int iBrainDropIdx;
-    D2SeedStrc seedNext;
     D2ObjectOperateFnArg* pOperationArg = pOperation;
     BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
-    if (nGoldPiles) {
-      D2QuestDataA3Q2Strc* pDVar1;
-      pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-      iBrainDropIdx = 0;
-      seedNext = D2_SEED_NEXT(*pControlSeed);
-      *pControlSeed = seedNext;
-      iVar2 = seedNext.nSeedLow % 5 + 5;
-      if (iVar2 > 0) {
-        do {
-          Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-          iVar2--;
-        } while (iVar2);
-      }
-
-      pOperation->sArg.pVictim->dwDropItemCode = 0x20726271;
-      pKhalimsWillQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
-      if (pKhalimsWillQuestData) {
-        pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
-        pDVar1->nKhalimsEyeCount = 0;
-        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsBrain);
-        if (pDVar1->nKhalimsEyeCount > 0) {
-          do {
-            pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
-            if (pDroppedUnit) {
-              pDVar1->nKhalimsHeartCount++;
-              pDVar1->bKhalimsHeartDropped = 1;
-            }
-
-            iBrainDropIdx++;
-          } while (iBrainDropIdx < pDVar1->nKhalimsEyeCount);
-        }
-      }
-
-      Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
+    if (!nGoldPiles) {
+      return 0;
     }
 
+    D2SeedStrc* pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
+    int iBrainDropIdx = 0;
+    D2SeedStrc seedNext = D2_SEED_NEXT(*pControlSeed);
+    *pControlSeed = seedNext;
+    int iVar2 = seedNext.nSeedLow % 5 + 5;
+    if (iVar2 > 0) {
+      do {
+        Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
+        iVar2--;
+      } while (iVar2);
+    }
+
+    pOperation->sArg.pVictim->dwDropItemCode = 0x20726271;
+    D2QuestDataStrc* pKhalimsWillQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
+    if (pKhalimsWillQuestData) {
+      D2QuestDataA3Q2Strc* pDVar1;
+      pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
+      pDVar1->nKhalimsEyeCount = 0;
+      UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsBrain);
+      if (pDVar1->nKhalimsEyeCount > 0) {
+        do {
+          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
+          if (pDroppedUnit) {
+            pDVar1->nKhalimsHeartCount++;
+            pDVar1->bKhalimsHeartDropped = 1;
+          }
+
+          iBrainDropIdx++;
+        } while (iBrainDropIdx < pDVar1->nKhalimsEyeCount);
+      }
+    }
+
+    Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
     return 0;
 }
 

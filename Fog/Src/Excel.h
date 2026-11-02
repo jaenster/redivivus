@@ -31,6 +31,11 @@ struct __attribute__((packed)) D2BinFieldInputStrc {
     /* 0x10 */ void * fpLinker; // by eType: struct D2TxtLinkStrc** (CODE*/NAME*), PFN_TxtKeyToWord* (KEY_WORD), PFN_TxtFieldLinker* (LINKER_*)
 };
 
+union D2TxtCodeBufUnion {
+    /* 0x00 */ uint32_t dwCode;
+    /* 0x00 */ char szCode[32];
+};
+
 namespace Fog::Src::Excel {
 
 // Function declarations

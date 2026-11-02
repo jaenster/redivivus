@@ -1188,6 +1188,7 @@
         "D2UnitFindDataStrc",
         "D2UnitStrc",
         "eD2UnitType",
+        "int32_t",
         "uint32_t"
       ]
     },

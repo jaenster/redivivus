@@ -1411,10 +1411,17 @@ void __stdcall INPUT_DispatchKeyCommand(D2UIMouseMsgStrc * pMsg) {
 
 void __fastcall CMD_ToggleKeyConfigMode(int32_t nEnable, int32_t bUpdateUIHandlers) {
     // Static local variables (originally global data)
-    static D2UIFlagInitStrc gUIFlagCmdTableInit = {
-    /* .eEventType = */ 0x0,
-    /* .nMessageOrKeyCode = */ 0x101,
-    /* .pfHandler = */ &D2Client::UI::CmdTbl::INPUT_DispatchKeyCommand
+    static D2UIFlagInitStrc gUIFlagCmdTableInit[2] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x101,
+        /* .pfHandler = */ &D2Client::UI::CmdTbl::INPUT_DispatchKeyCommand
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x105,
+        /* .pfHandler = */ &D2Client::UI::CmdTbl::INPUT_DispatchKeyCommand
+    }
 }; D2_STATIC_GUARD(gUIFlagCmdTableInit, "D2Client::UI::CmdTbl::CMD_ToggleKeyConfigMode::gUIFlagCmdTableInit");
     static unsigned int gbNormalUIHandlersRegistered; D2_STATIC_GUARD_BSS(gbNormalUIHandlersRegistered, "D2Client::UI::CmdTbl::CMD_ToggleKeyConfigMode::gbNormalUIHandlersRegistered");
 
@@ -1423,7 +1430,7 @@ void __fastcall CMD_ToggleKeyConfigMode(int32_t nEnable, int32_t bUpdateUIHandle
       if (!gbKeyConfigModeActive) {
         gbKeyConfigModeActive = 1;
         if (bUpdateUIHandlers && gbNormalUIHandlersRegistered) {
-          _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gUIFlagCmdTableInit, 2);
+          _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagCmdTableInit, 2);
           gbNormalUIHandlersRegistered = 0;
         }
 
@@ -1437,7 +1444,7 @@ void __fastcall CMD_ToggleKeyConfigMode(int32_t nEnable, int32_t bUpdateUIHandle
         gbKeyConfigModeActive = 0;
         _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUICmdTblFlagInit, nHandlerCount);
         if (bUpdateUIHandlers && !gbNormalUIHandlersRegistered) {
-          _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gUIFlagCmdTableInit, 2);
+          _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagCmdTableInit, 2);
           gbNormalUIHandlersRegistered = 1;
         }
       }

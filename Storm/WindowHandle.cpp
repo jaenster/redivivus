@@ -94,10 +94,11 @@ uint32_t __thiscall WND_ResolveListOffset(int * pNode, int * pBase) {
 }
 
 int32_t __thiscall WND_GetNodeOrDefault(int32_t pThis, int32_t pNode) {
-    if (!pNode) {
-      pNode = pThis + 4;
+    if (pNode) {
+      return pNode;
     }
 
+    pNode = pThis + 4;
     return pNode;
 }
 

@@ -667,39 +667,42 @@ static void __stdcall SMemShrinkBlock(void * pBlock, int32_t nOldSize, uint32_t 
 
 // @blizzard SMemDestroy (SMEM.CPP)
 uint32_t __stdcall SMemDestroy() {
-    int nCount;
     LPVOID pHeap;
     int nBucketOffset = 0;
-    if (g_SMemInitialized) {
-      LPVOID* ppHeapLink;
-      g_SMemInitialized = 0;
-      nCount = 0x100;
-      do {
-        /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&DebugMemoryCriticalSection[-nCount + 256]);
-        ppHeapLink = (LPVOID*)((int)g_SMemHeapBuckets + nBucketOffset);
-        *(uint32_t*)((int)g_SMemHeapCleanupFlags + nBucketOffset) = 0;
-        pHeap = *ppHeapLink;
-        while (pHeap) {
-          pHeap = *ppHeapLink;
-          if (*(int*)((int)pHeap + 0x14)) {
-            ppHeapLink = SMEM_DestroyHeap(ppHeapLink);
-          } else {
-            if (*(int*)((int)pHeap + 0x10) && 0x7fffffff < *(uint32_t*)((int)pHeap + 4)) {
-              SErr::SErrReportResourceLeak("HSHEAP");
-            }
+    if (!g_SMemInitialized) {
+      return 1;
+    }
 
-            SMEM_FreeHeap(ppHeapLink);
+    g_SMemInitialized = 0;
+    CRITICAL_SECTION* lpCriticalSection = DebugMemoryCriticalSection;
+    int nCount = 0x100;
+    do {
+      LPVOID* ppHeapLink;
+      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
+      ppHeapLink = (LPVOID*)((int)g_SMemHeapBuckets + nBucketOffset);
+      *(uint32_t*)((int)g_SMemHeapCleanupFlags + nBucketOffset) = 0;
+      pHeap = *ppHeapLink;
+      while (pHeap) {
+        pHeap = *ppHeapLink;
+        if (*(int*)((int)pHeap + 0x14)) {
+          ppHeapLink = SMEM_DestroyHeap(ppHeapLink);
+        } else {
+          if (*(int*)((int)pHeap + 0x10) && 0x7fffffff < *(uint32_t*)((int)pHeap + 4)) {
+            SErr::SErrReportResourceLeak("HSHEAP");
           }
 
-          pHeap = *ppHeapLink;
+          SMEM_FreeHeap(ppHeapLink);
         }
 
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&DebugMemoryCriticalSection[-nCount + 256]);
-        /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&DebugMemoryCriticalSection[-nCount + 256]);
-        nBucketOffset += 4;
-        nCount--;
-      } while (nCount);
-    }
+        pHeap = *ppHeapLink;
+      }
+
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
+      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(lpCriticalSection);
+      nBucketOffset += 4;
+      lpCriticalSection++;
+      nCount--;
+    } while (nCount);
 
     return 1;
 }

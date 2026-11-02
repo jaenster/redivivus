@@ -379,17 +379,20 @@ BOOL __fastcall SKILLDRUID_CastMultiMissile(::SGAMEDATA * pGame, D2UnitStrc * pU
     sSkillArg.nMissileTxtNo = pMissileId;
     sSkillArg.fpFunction = SkillSor::SKILL_InitChargedBoltPath;
     _bHasTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
-    if (_bHasTarget) {
-      int32_t nMissileIdx;
-      nMissileIdx = 0;
-      if (nMissileCount > 0) {
-        do {
-          sSkillArg.nFunctionParam = nMissileIdx;
-          MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-          nMissileIdx++;
-        } while (nMissileIdx < nMissileCount);
-      }
+    if (!_bHasTarget) {
+      return 1;
     }
+
+    int32_t nMissileIdx = 0;
+    if (nMissileCount <= 0) {
+      return 1;
+    }
+
+    do {
+      sSkillArg.nFunctionParam = nMissileIdx;
+      MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+      nMissileIdx++;
+    } while (nMissileIdx < nMissileCount);
 
     return 1;
 }
@@ -419,48 +422,54 @@ BOOL __fastcall Skills_SrvDoFunc_117_Firestorm(::SGAMEDATA * pGame, D2UnitStrc *
       int32_t nMissileIdx;
       SkillsServer::CreatingAMissile(pGame, nSrvMissle, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       nRemainingMissiles = nMissileCount - 1;
-      if (nRemainingMissiles > 0) {
-        memset(&sSkillArg, 0, 0x5c);
-        eUnitType = pUnit->eUnitType;
-        sSkillArg.nFlags = 0x21;
-        sSkillArg.pOwner = pUnit;
-        int nXValue;
-        if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-          nXValue = pUnit->pPath.pStaticPath->nPosX;
-        } else if (pUnit->pPath.pDynamicPath) {
-          nXValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-        } else {
-          nXValue = 0;
-        }
-
-        sSkillArg.nX = nXValue;
-        eUnitType = pUnit->eUnitType;
-        int nYValue;
-        if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-          nYValue = pUnit->pPath.pStaticPath->nPosY;
-        } else if (pUnit->pPath.pDynamicPath) {
-          nYValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-        } else {
-          nYValue = 0;
-        }
-
-        sSkillArg.nY = nYValue;
-        sSkillArg.nSkillLevel = nSkillLvl;
-        sSkillArg.eSkillNo = eSkill;
-        sSkillArg.nMissileTxtNo = nSrvMissle;
-        sSkillArg.fpFunction = SkillSor::SKILL_InitChargedBoltPath;
-        _bHasTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
-        if (_bHasTarget) {
-          nMissileIdx = 0;
-          if (nRemainingMissiles > 0) {
-            do {
-              sSkillArg.nFunctionParam = nMissileIdx;
-              MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-              nMissileIdx++;
-            } while (nMissileIdx < nRemainingMissiles);
-          }
-        }
+      if (nRemainingMissiles <= 0) {
+        return 1;
       }
+
+      memset(&sSkillArg, 0, 0x5c);
+      eUnitType = pUnit->eUnitType;
+      sSkillArg.nFlags = 0x21;
+      sSkillArg.pOwner = pUnit;
+      int nXValue;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nXValue = pUnit->pPath.pStaticPath->nPosX;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nXValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      } else {
+        nXValue = 0;
+      }
+
+      sSkillArg.nX = nXValue;
+      eUnitType = pUnit->eUnitType;
+      int nYValue;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nYValue = pUnit->pPath.pStaticPath->nPosY;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nYValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      } else {
+        nYValue = 0;
+      }
+
+      sSkillArg.nY = nYValue;
+      sSkillArg.nSkillLevel = nSkillLvl;
+      sSkillArg.eSkillNo = eSkill;
+      sSkillArg.nMissileTxtNo = nSrvMissle;
+      sSkillArg.fpFunction = SkillSor::SKILL_InitChargedBoltPath;
+      _bHasTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
+      if (!_bHasTarget) {
+        return 1;
+      }
+
+      nMissileIdx = 0;
+      if (nRemainingMissiles <= 0) {
+        return 1;
+      }
+
+      do {
+        sSkillArg.nFunctionParam = nMissileIdx;
+        MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+        nMissileIdx++;
+      } while (nMissileIdx < nRemainingMissiles);
 
       return 1;
     }

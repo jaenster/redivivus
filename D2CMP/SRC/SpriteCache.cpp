@@ -221,10 +221,11 @@ void __fastcall SPRITECACHE_ReleaseHashEntry(int * pHashEntry) {
 
 char * __stdcall IMAGE_ReturnImageExtension(int32_t bUseDcc) {
     char* pszExtension;
-    if (!bUseDcc || (pszExtension = (char*)gpszExtDcc , !bUseCompressedData)) {
-      pszExtension = (char*)gpszExtDc6;
+    if (!(!bUseDcc || (pszExtension = (char*)gpszExtDcc , !bUseCompressedData))) {
+      return pszExtension;
     }
 
+    pszExtension = (char*)gpszExtDc6;
     return pszExtension;
 }
 
@@ -787,6 +788,7 @@ static D2CelFileCacheEntryStrc * __stdcall SPRITECACHE_LoadDCC(char * szText, ch
 static DC6Block * __stdcall SPRITECACHE_FindFrameBlock(D2GfxDataStrc * pGfxData, uint8_t * pFrameData, D2CelDecodeStateStrc * pDecodeState) {
     uint32_t nDirIdx;
     int nFrameOffset;
+    int nFrameIdx;
     uint8_t byDirectionsPlus1;
     if (!pFrameData || !pDecodeState || (uint32_t)pGfxData->nFrameNumber >= (uint32_t)pDecodeState->nFramesPerDir) {
       return nullptr;
@@ -816,13 +818,8 @@ static DC6Block * __stdcall SPRITECACHE_FindFrameBlock(D2GfxDataStrc * pGfxData,
     if ((int)nDirIdx >= (int)(pDecodeState->nDirectionsPlus1 - 1) || (nFrameOffset = pDecodeState->aDirOffsets[nDirIdx] , nFrameOffset < 0)) {
       return nullptr;
     }
-    int nFrameIdx = 0;
     DC6Block* pFrameBlock = (DC6Block*)pFrameData;
-    if (pGfxData->nFrameNumber < 0) {
-      return pFrameBlock;
-    }
-
-    do {
+    for (nFrameIdx = 0; nFrameIdx <= pGfxData->nFrameNumber; nFrameIdx++) {
       pFrameBlock = (DC6Block*)(pFrameData + nFrameOffset);
       if (*(int*)(pFrameData + nFrameOffset)) {
         return nullptr;
@@ -838,9 +835,7 @@ static DC6Block * __stdcall SPRITECACHE_FindFrameBlock(D2GfxDataStrc * pGfxData,
       if (nFrameOffset < 0) {
         return nullptr;
       }
-
-      nFrameIdx++;
-    } while (nFrameIdx <= pGfxData->nFrameNumber);
+    }
 
     return pFrameBlock;
 }

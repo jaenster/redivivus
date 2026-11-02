@@ -520,12 +520,8 @@ void __fastcall EVENT_AllocTimerQueue(::SGAMEDATA * pGame) {
 
 // Main timer dispatch loop called every game frame at 25 FPS. Iterates all 5 unit types (missile→player→monster→object→item) and processes both immediate timers (pTimerListByType) and frame-scheduled timers (pActiveTimersByType bucket hash). Each unit type calls its type-specific dispatcher which invokes default callbacks or custom fpTimerFunction handlers.
 void __fastcall EVENT_DispatchAllTimers(::SGAMEDATA * pGame) {
-    uint32_t nFrameBucket = pGame->dwGameFrame & 0x8000003f;
+    uint32_t nFrameBucket = pGame->dwGameFrame % 64;
     D2TimerQueueStrc* pTimerQueue = pGame->pTimerQueue;
-    if ((int)nFrameBucket < 0) {
-      nFrameBucket = (nFrameBucket - 1 | -64) + 1;
-    }
-
     pTimerQueue->nIndex = nFrameBucket;
     EVENT_DispatchMissileTimers(pTimerQueue, pGame, pTimerQueue->pTimerListByType[2], 0);
     EVENT_DispatchMissileTimers(pTimerQueue, pGame, pTimerQueue->pActiveTimersByType[2][pTimerQueue->nIndex], 1);

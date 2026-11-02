@@ -149,10 +149,11 @@ uint16_t __fastcall DATATBLS_LookupStringId(char * szKey) {
     uint16_t* pwszResult = (uint16_t*)szKey;
     uint32_t nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)szKey, &pwszResult);
     uint16_t uVar1 = (uint16_t)nStringId;
-    if (!uVar1) {
-      uVar1 = 0x1506;
+    if (uVar1) {
+      return uVar1;
     }
 
+    uVar1 = 0x1506;
     return uVar1;
 }
 

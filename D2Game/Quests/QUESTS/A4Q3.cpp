@@ -122,15 +122,16 @@ void __fastcall Q35_SpawnAncientsWave(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // A4Q3 Hell's Forge — Q27_IsClassicGameCompleted: returns 1 only in a CLASSIC (non-expansion) game once Terror's End (Diablo killed) is done, i.e. the game's victory condition for classic D2. Reads TerrorsEnd quest data field_0x14 (Diablo-killed flag). No quest-state writes; pure predicate.
 BOOL __fastcall Q27_IsClassicGameCompleted(::SGAMEDATA * pGame) {
-    if (!pGame->bExpansion) {
-      D2QuestDataStrc* pQuestData;
-      pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TerrorsEnd);
-      if (!pQuestData || pQuestData->pQuestSpecificData.pA4Q2->bDiabloKilledBroadcast) {
-        return 1;
-      }
+    if (pGame->bExpansion) {
+      return 0;
     }
 
-    return 0;
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TerrorsEnd);
+    if (!(!pQuestData || pQuestData->pQuestSpecificData.pA4Q2->bDiabloKilledBroadcast)) {
+      return 0;
+    }
+
+    return 1;
 }
 
 // A4Q3 Hell's Forge — Objects_InitFn78: object init for an Act4 quest object keyed off TerrorsEnd (Diablo) quest data. First touch sets the object's per-quest marker to 2 and update-flag 1 (un-touched/active visual); subsequent touches set update-flag 2 (completed/depleted visual). State stored in pA4Q3 quest-specific GUID scratch, not in the QuestRecord bitfield.

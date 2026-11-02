@@ -616,6 +616,7 @@ void __fastcall CLIENT_SpawnTowerMistEffect(D2UnitStrc * pUnit) {
 }
 
 void __fastcall CLIENT_SpawnOrbMistEffect(D2UnitStrc * pUnit) {
+    int32_t nTargetY;
     D2SkillArgStrc sSkillArg;
     int nX;
     int32_t nClassId = 0x182;
@@ -634,16 +635,13 @@ void __fastcall CLIENT_SpawnOrbMistEffect(D2UnitStrc * pUnit) {
       }
 
       eFindType = pTarget->eUnitType;
-      int nUnitYValue;
       if (eFindType == UNIT_OBJECT || (int)eFindType > 3 && (int)eFindType <= 5) {
-        nUnitYValue = pTarget->pPath.pStaticPath->nPosY;
+        nTargetY = pTarget->pPath.pStaticPath->nPosY;
       } else if (pTarget->pPath.pDynamicPath) {
-        nUnitYValue = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
+        nTargetY = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
       } else {
-        nUnitYValue = 0;
+        nTargetY = 0;
       }
-
-      sSkillArg.nUnitY = nUnitYValue;
     } else {
       int nY;
       eFindType = pUnit->eUnitType;
@@ -665,7 +663,7 @@ void __fastcall CLIENT_SpawnOrbMistEffect(D2UnitStrc * pUnit) {
         nY = 0;
       }
 
-      sSkillArg.nUnitY = nY - 0xf;
+      nTargetY = nY - 0xf;
     }
 
     memset(&sSkillArg, 0, 0x5c);
@@ -674,6 +672,7 @@ void __fastcall CLIENT_SpawnOrbMistEffect(D2UnitStrc * pUnit) {
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
     sSkillArg.nUnitX = nX;
+    sSkillArg.nUnitY = nTargetY;
     sSkillArg.nSkillLevel = 1;
     D2UnitStrc* pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
     if (!(pMissile && pTarget)) {

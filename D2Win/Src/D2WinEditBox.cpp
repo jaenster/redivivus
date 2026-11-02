@@ -2044,125 +2044,127 @@ BOOL __fastcall DrawFlag0x8(::D2WinEditBox * pEditBox) {
       }
 
       nVisibleLen = pEditBox->sControl.dwState;
-      if (gadwBitMasks[2] & nVisibleLen && gadwBitMasks[0] & nVisibleLen) {
-        nGlobalState = D2WinMain::D2WINMAIN_GetWinMainState();
-        if (!nGlobalState) {
-          pEditBox->bPendingPush = 0;
-        }
-        if (pEditBox->bPendingPush) {
-          pPushEditBox.uMsg = 0x201;
-          pPushEditBox.pControl = &pEditBox->sControl;
-          PushFlag0x8(&pPushEditBox);
-        }
+      if (!(gadwBitMasks[2] & nVisibleLen && gadwBitMasks[0] & nVisibleLen)) {
+        return 1;
+      }
 
-        Fog::File::CONTAINER_InitializeBuffer(awszDisplayText, 2, 300, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-        pDC6Bg = pEditBox->sControl.pDC6;
-        if (pDC6Bg) {
-          memset(&sGfxData, 0, 0x48);
-          sGfxData.pDC6 = pDC6Bg;
-          sGfxData.nDirection = 0;
-          sGfxData.nFrameNumber = 0;
-          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pEditBox->sControl.dwPosX, pEditBox->sControl.dwPosY - 1, -1, DRAW_SOLID, nullptr);
-        }
+      nGlobalState = D2WinMain::D2WINMAIN_GetWinMainState();
+      if (!nGlobalState) {
+        pEditBox->bPendingPush = 0;
+      }
+      if (pEditBox->bPendingPush) {
+        pPushEditBox.uMsg = 0x201;
+        pPushEditBox.pControl = &pEditBox->sControl;
+        PushFlag0x8(&pPushEditBox);
+      }
 
-        D2WinFont::SetAndReturnLastFont(pEditBox->nFontId);
-        nTextDrawX = pEditBox->nInsetX + pEditBox->sControl.dwPosX;
-        nTextPosY = pEditBox->nInsetY - pEditBox->sControl.dwSizeY + 0x10 + pEditBox->sControl.dwPosY;
-        __frame0.local_10 = nTextDrawX;
-        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(awszDisplayText, pEditBox->wszText + pEditBox->nScrollStart, pEditBox->nScrollEnd - pEditBox->nScrollStart + 1);
-        nVisibleLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(awszDisplayText);
-        if (pEditBox->nFlags & 1) {
-          szOneCharBuf[0] = '*';
-          szOneCharBuf[1] = '\0';
-          Fog::File::CONTAINER_InitializeBuffer(&__frame0.local_c, 2, 2, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-          D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize((uint16_t*)&__frame0.local_c, szOneCharBuf, 2);
-          if ((int)nVisibleLen > 0) {
-            wMaskChar = (uint16_t)__frame0.local_c;
-            pwszMaskDst = awszDisplayText;
-            for (nMaskHalf = nVisibleLen >> 1; nMaskHalf; nMaskHalf--) {
-              *(uint32_t*)pwszMaskDst = (uint32_t)((uint32_t)(uint16_t)wMaskChar << 16 | (uint32_t)(uint16_t)wMaskChar);
-              pwszMaskDst += 2;
-            }
+      Fog::File::CONTAINER_InitializeBuffer(awszDisplayText, 2, 300, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      pDC6Bg = pEditBox->sControl.pDC6;
+      if (pDC6Bg) {
+        memset(&sGfxData, 0, 0x48);
+        sGfxData.pDC6 = pDC6Bg;
+        sGfxData.nDirection = 0;
+        sGfxData.nFrameNumber = 0;
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pEditBox->sControl.dwPosX, pEditBox->sControl.dwPosY - 1, -1, DRAW_SOLID, nullptr);
+      }
 
-            for (nVisibleLen = (uint32_t)((nVisibleLen & 1) != 0); nVisibleLen; nVisibleLen--) {
-              *pwszMaskDst = wMaskChar;
-              pwszMaskDst++;
-            }
+      D2WinFont::SetAndReturnLastFont(pEditBox->nFontId);
+      nTextDrawX = pEditBox->nInsetX + pEditBox->sControl.dwPosX;
+      nTextPosY = pEditBox->nInsetY - pEditBox->sControl.dwSizeY + 0x10 + pEditBox->sControl.dwPosY;
+      __frame0.local_10 = nTextDrawX;
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(awszDisplayText, pEditBox->wszText + pEditBox->nScrollStart, pEditBox->nScrollEnd - pEditBox->nScrollStart + 1);
+      nVisibleLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(awszDisplayText);
+      if (pEditBox->nFlags & 1) {
+        szOneCharBuf[0] = '*';
+        szOneCharBuf[1] = '\0';
+        Fog::File::CONTAINER_InitializeBuffer(&__frame0.local_c, 2, 2, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize((uint16_t*)&__frame0.local_c, szOneCharBuf, 2);
+        if ((int)nVisibleLen > 0) {
+          wMaskChar = (uint16_t)__frame0.local_c;
+          pwszMaskDst = awszDisplayText;
+          for (nMaskHalf = nVisibleLen >> 1; nMaskHalf; nMaskHalf--) {
+            *(uint32_t*)pwszMaskDst = (uint32_t)((uint32_t)(uint16_t)wMaskChar << 16 | (uint32_t)(uint16_t)wMaskChar);
+            pwszMaskDst += 2;
+          }
+
+          for (nVisibleLen = (uint32_t)((nVisibleLen & 1) != 0); nVisibleLen; nVisibleLen--) {
+            *pwszMaskDst = wMaskChar;
+            pwszMaskDst++;
           }
         }
+      }
 
-        nPreSelWidth = D2WINEDITBOX_HasSelection(pEditBox);
-        if (nPreSelWidth) {
-          byGreyIndex = D2WinPalette::D2GFX_GetColorFromCurrentPallete(0x40, 0x40, 0x40);
-          szOneCharBuf[1] = byGreyIndex;
-          Fog::File::CONTAINER_InitializeBuffer(awszPreSelText, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-          Fog::File::CONTAINER_InitializeBuffer(awszSelText, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-          Fog::File::CONTAINER_InitializeBuffer(awszPostSelText, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-          nTextDrawX = pEditBox->nSelAnchor;
-          nCursorPixelOffset = pEditBox->nSelCursor;
+      nPreSelWidth = D2WINEDITBOX_HasSelection(pEditBox);
+      if (nPreSelWidth) {
+        byGreyIndex = D2WinPalette::D2GFX_GetColorFromCurrentPallete(0x40, 0x40, 0x40);
+        szOneCharBuf[1] = byGreyIndex;
+        Fog::File::CONTAINER_InitializeBuffer(awszPreSelText, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(awszSelText, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        Fog::File::CONTAINER_InitializeBuffer(awszPostSelText, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        nTextDrawX = pEditBox->nSelAnchor;
+        nCursorPixelOffset = pEditBox->nSelCursor;
+        iVar2 = nTextDrawX;
+        if (nTextDrawX >= nCursorPixelOffset) {
+          iVar2 = nCursorPixelOffset;
+        }
+
+        nSelStartOffset = pEditBox->nScrollStart;
+        if (iVar2 - nSelStartOffset < 0) {
+          nSizeMaybe_00 = 0;
+        } else {
           iVar2 = nTextDrawX;
           if (nTextDrawX >= nCursorPixelOffset) {
             iVar2 = nCursorPixelOffset;
           }
 
-          nSelStartOffset = pEditBox->nScrollStart;
-          if (iVar2 - nSelStartOffset < 0) {
-            nSizeMaybe_00 = 0;
-          } else {
-            iVar2 = nTextDrawX;
-            if (nTextDrawX >= nCursorPixelOffset) {
-              iVar2 = nCursorPixelOffset;
-            }
-
-            nSizeMaybe_00 = iVar2 - nSelStartOffset;
-          }
-
-          iVar2 = nTextDrawX;
-          if (nTextDrawX <= nCursorPixelOffset) {
-            iVar2 = nCursorPixelOffset;
-          }
-          if ((int)(iVar2 - nSelStartOffset - nSizeMaybe_00) < 0) {
-            nSizeMaybe = 0;
-          } else {
-            if (nTextDrawX <= nCursorPixelOffset) {
-              nTextDrawX = nCursorPixelOffset;
-            }
-
-            nSizeMaybe = nTextDrawX - nSelStartOffset - nSizeMaybe_00;
-          }
-
-          D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(awszPreSelText, awszDisplayText, nSizeMaybe_00);
-          D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(awszSelText, awszDisplayText + nSizeMaybe_00, nSizeMaybe);
-          D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszPostSelText, awszDisplayText + nSizeMaybe + nSizeMaybe_00);
-          D2WinFont::TEXT_CalcTextDimensions(awszPreSelText, &__frame0.local_c, &nTextHeight);
-          D2WinFont::TEXT_CalcTextDimensions(awszSelText, &nSelTextWidth, &nTextHeight);
-          nCursorPixelOffset = nTextPosY;
-          __frame0.local_c += __frame0.local_10;
-          nTextDrawX = nSelTextWidth + __frame0.local_c;
-          D2WinFont::DRAW_text(awszPreSelText, __frame0.local_10, nTextPosY, pEditBox->nMaxValue, 0);
-          D2WinFont::D2WINFONT_DrawTextWithSimpleBackground(awszSelText, __frame0.local_c, nCursorPixelOffset, (uint32_t)(uint8_t)szOneCharBuf[1], DRAW_SOLID, pEditBox->nMaxValue);
-          D2WinFont::DRAW_text(awszPostSelText, nTextDrawX, nCursorPixelOffset, pEditBox->nMaxValue, 0);
-          nTextDrawX = __frame0.local_10;
-        } else {
-          D2WinFont::DRAW_text(awszDisplayText, nTextDrawX, nTextPosY, pEditBox->nMaxValue, 0);
+          nSizeMaybe_00 = iVar2 - nSelStartOffset;
         }
 
-        pFocusedEditBox = D2WinMain::FORMS_GetFormTextAndEditBox();
-        if (pFocusedEditBox == pEditBox) {
-          DVar1 = GetTickCount();
-          if (DVar1 / 0xfa & 1) {
-            szOneCharBuf[0] = '_';
-            szOneCharBuf[1] = '\0';
-            Fog::File::CONTAINER_InitializeBuffer(&__frame0.local_10, 2, 2, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-            D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize((uint16_t*)&__frame0.local_10, szOneCharBuf, 2);
-            nCursorPixelOffset = pEditBox->nCursorIndex - pEditBox->nScrollStart;
-            if (nCursorPixelOffset) {
-              dwTick = D2WinFont::D2WINFONT_GetStringPixelWidth(awszDisplayText, nCursorPixelOffset);
-              nTextDrawX += dwTick;
-            }
-
-            D2WinFont::DRAW_text((uint16_t*)&__frame0.local_10, nTextDrawX, nTextPosY, pEditBox->nMaxValue, 0);
+        iVar2 = nTextDrawX;
+        if (nTextDrawX <= nCursorPixelOffset) {
+          iVar2 = nCursorPixelOffset;
+        }
+        if ((int)(iVar2 - nSelStartOffset - nSizeMaybe_00) < 0) {
+          nSizeMaybe = 0;
+        } else {
+          if (nTextDrawX <= nCursorPixelOffset) {
+            nTextDrawX = nCursorPixelOffset;
           }
+
+          nSizeMaybe = nTextDrawX - nSelStartOffset - nSizeMaybe_00;
+        }
+
+        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(awszPreSelText, awszDisplayText, nSizeMaybe_00);
+        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(awszSelText, awszDisplayText + nSizeMaybe_00, nSizeMaybe);
+        D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszPostSelText, awszDisplayText + nSizeMaybe + nSizeMaybe_00);
+        D2WinFont::TEXT_CalcTextDimensions(awszPreSelText, &__frame0.local_c, &nTextHeight);
+        D2WinFont::TEXT_CalcTextDimensions(awszSelText, &nSelTextWidth, &nTextHeight);
+        nCursorPixelOffset = nTextPosY;
+        __frame0.local_c += __frame0.local_10;
+        nTextDrawX = nSelTextWidth + __frame0.local_c;
+        D2WinFont::DRAW_text(awszPreSelText, __frame0.local_10, nTextPosY, pEditBox->nMaxValue, 0);
+        D2WinFont::D2WINFONT_DrawTextWithSimpleBackground(awszSelText, __frame0.local_c, nCursorPixelOffset, (uint32_t)(uint8_t)szOneCharBuf[1], DRAW_SOLID, pEditBox->nMaxValue);
+        D2WinFont::DRAW_text(awszPostSelText, nTextDrawX, nCursorPixelOffset, pEditBox->nMaxValue, 0);
+        nTextDrawX = __frame0.local_10;
+      } else {
+        D2WinFont::DRAW_text(awszDisplayText, nTextDrawX, nTextPosY, pEditBox->nMaxValue, 0);
+      }
+
+      pFocusedEditBox = D2WinMain::FORMS_GetFormTextAndEditBox();
+      if (pFocusedEditBox == pEditBox) {
+        DVar1 = GetTickCount();
+        if (DVar1 / 0xfa & 1) {
+          szOneCharBuf[0] = '_';
+          szOneCharBuf[1] = '\0';
+          Fog::File::CONTAINER_InitializeBuffer(&__frame0.local_10, 2, 2, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize((uint16_t*)&__frame0.local_10, szOneCharBuf, 2);
+          nCursorPixelOffset = pEditBox->nCursorIndex - pEditBox->nScrollStart;
+          if (nCursorPixelOffset) {
+            dwTick = D2WinFont::D2WINFONT_GetStringPixelWidth(awszDisplayText, nCursorPixelOffset);
+            nTextDrawX += dwTick;
+          }
+
+          D2WinFont::DRAW_text((uint16_t*)&__frame0.local_10, nTextDrawX, nTextPosY, pEditBox->nMaxValue, 0);
         }
       }
 

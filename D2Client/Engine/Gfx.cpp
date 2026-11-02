@@ -3579,22 +3579,24 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
     nCoord = GfxUtil::GFXUTIL_CalcMaxSpriteHeight(pUnit, pCofIdentity, pCofData, &nMaxSpriteHeight, nDirection, nFrameMetricX);
     if (nCoord > 0) {
       nLayerIdx = 0;
-      if (*pCofIdentityBase > 0) {
-        do {
-          byLayerComponent = pCofData[nLayerIdx];
-          nCallResult = GfxUtil::GFXUTIL_GetUnitCofDirectionOnScreen(pUnit, (uint32_t)byLayerComponent);
-          if (nCallResult) {
-            memset(&sGfxData, 0, 0x48);
-            nCoord = GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, nDirection, nFrameMetricX, &nFrameResult, byLayerComponent, (D2UnitStrc*)-1);
-            if (nCoord) {
-              D2gfx::D2GFX::D2GFX_DrawImageColoredShape(&sGfxData, __frame0.nScreenX, __frame0.nScreenY, nHealthBarColor);
-            }
-          }
-
-          nLayerIdx++;
-          pCofData = pCofLayerData;
-        } while (nLayerIdx < *pCofIdentityBase);
+      if (*pCofIdentityBase <= 0) {
+        return 1;
       }
+
+      do {
+        byLayerComponent = pCofData[nLayerIdx];
+        nCallResult = GfxUtil::GFXUTIL_GetUnitCofDirectionOnScreen(pUnit, (uint32_t)byLayerComponent);
+        if (nCallResult) {
+          memset(&sGfxData, 0, 0x48);
+          nCoord = GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, nDirection, nFrameMetricX, &nFrameResult, byLayerComponent, (D2UnitStrc*)-1);
+          if (nCoord) {
+            D2gfx::D2GFX::D2GFX_DrawImageColoredShape(&sGfxData, __frame0.nScreenX, __frame0.nScreenY, nHealthBarColor);
+          }
+        }
+
+        nLayerIdx++;
+        pCofData = pCofLayerData;
+      } while (nLayerIdx < *pCofIdentityBase);
 
       return 1;
     }

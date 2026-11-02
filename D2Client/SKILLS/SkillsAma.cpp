@@ -297,16 +297,18 @@ BOOL __fastcall Skills_CltDoFunc_Ama_MultiShotArrows(D2UnitStrc * pUnit, eD2Skil
       sSkillArg.nSkillLevel = nSkillLvl;
       sSkillArg.nMissileTxtNo = eCltMissileId;
       sSkillArg.nActivateFrame = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
-      if (nArrowCount > 0) {
-        do {
-          sSkillArg.nUnitX = nTargetX;
-          sSkillArg.nUnitY = nTargetY;
-          UNIT::Missile::MakeMissile(&sSkillArg);
-          nTargetX += nDirX;
-          nTargetY += nDirY;
-          nArrowCount--;
-        } while (nArrowCount);
+      if (nArrowCount <= 0) {
+        return 1;
       }
+
+      do {
+        sSkillArg.nUnitX = nTargetX;
+        sSkillArg.nUnitY = nTargetY;
+        UNIT::Missile::MakeMissile(&sSkillArg);
+        nTargetX += nDirX;
+        nTargetY += nDirY;
+        nArrowCount--;
+      } while (nArrowCount);
 
       return 1;
     }
@@ -410,13 +412,15 @@ BOOL __fastcall Skills_CltDoFunc_Ama_LinearMissileSpray(D2UnitStrc * pUnit, eD2S
       sSkillArg.nSkillLevel = nSkillLvl;
       sSkillArg.nMissileTxtNo = eMissileId;
       sSkillArg.fpFunction = SkillsMon::SKILLSMON_SetMissilePathLinear;
-      if (nMissileCount > 0) {
-        do {
-          sSkillArg.nFunctionParam = nMissileIdx;
-          UNIT::Missile::MakeMissile(&sSkillArg);
-          nMissileIdx++;
-        } while (nMissileIdx < nMissileCount);
+      if (nMissileCount <= 0) {
+        return 1;
       }
+
+      do {
+        sSkillArg.nFunctionParam = nMissileIdx;
+        UNIT::Missile::MakeMissile(&sSkillArg);
+        nMissileIdx++;
+      } while (nMissileIdx < nMissileCount);
 
       return 1;
     }

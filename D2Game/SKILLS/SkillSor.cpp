@@ -112,6 +112,7 @@ BOOL __fastcall INFERNO_CastInfernoTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     BOOL _bHasTarget;
     bool bHasTarget;
     eD2States eInfernoState;
+    int32_t nTotalFrames;
     D2SkillArgStrc sSkillArg;
     int32_t nCalcDuration;
     uint32_t nTargetY;
@@ -131,9 +132,9 @@ BOOL __fastcall INFERNO_CastInfernoTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       int32_t nCalcFrames;
       nCalcFrames = D2Common::Skills::SKILL_GetParam1(pSkill);
       if (nCalcFrames) {
-        sSkillArg.nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase->calc[0], eSkill, nSkillLvl2);
-        if (sSkillArg.nTotalFrames < 1) {
-          sSkillArg.nTotalFrames = 1;
+        nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase->calc[0], eSkill, nSkillLvl2);
+        if (nTotalFrames < 1) {
+          nTotalFrames = 1;
         }
 
         memset(&sSkillArg, 0, 0x5c);
@@ -145,6 +146,7 @@ BOOL __fastcall INFERNO_CastInfernoTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
         sSkillArg.nUnitX = nTargetX;
         sSkillArg.pOwner = pUnit;
         sSkillArg.pMissile = pUnit;
+        sSkillArg.nTotalFrames = nTotalFrames;
         MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       }
 
@@ -407,17 +409,19 @@ BOOL __fastcall Skills_SrvDoFunc_017_ChargedBolt(::SGAMEDATA * pGame, D2UnitStrc
           sSkillArg.nSkillLevel = nSkillLvl;
           sSkillArg.nMissileTxtNo = eMissileId;
           sSkillArg.fpFunction = SKILL_InitChargedBoltPath;
-          if (nMissileCount > 0) {
-            do {
-              sSkillArg.nFunctionParam = nMissileLoopIdx;
-              _bGotTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
-              if (_bGotTarget && sSkillArg.nUnitX && sSkillArg.nUnitY) {
-                MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-              }
-
-              nMissileLoopIdx++;
-            } while (nMissileLoopIdx < nMissileCount);
+          if (nMissileCount <= 0) {
+            return 1;
           }
+
+          do {
+            sSkillArg.nFunctionParam = nMissileLoopIdx;
+            _bGotTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
+            if (_bGotTarget && sSkillArg.nUnitX && sSkillArg.nUnitY) {
+              MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+            }
+
+            nMissileLoopIdx++;
+          } while (nMissileLoopIdx < nMissileCount);
 
           return 1;
         }

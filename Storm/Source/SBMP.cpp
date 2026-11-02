@@ -1229,8 +1229,6 @@ static int __fastcall SBMP_DecodePcxFile(D2MPQFileStrc * hFile, uint8_t * pixels
 
 // @blizzard DecodePcxMem (SBMP.CPP)
 static int __thiscall SBMP_DecodePcxMem(uint32_t * pWidth, void * gifData, int dataSize, uint8_t * palette, uint8_t * pixels, int dstSize, int * pHeight, int * pBpp) {
-    uint8_t* pDstPalette;
-    uint8_t* pSrcPalette;
     uint32_t width = (uint32_t)*(uint16_t*)((int)gifData + 8) - (uint32_t)*(uint16_t*)((int)gifData + 4) + 1;
     int nBpp = (uint32_t)*(uint8_t*)((int)gifData + 3) * (uint32_t)*(uint8_t*)((int)gifData + 0x41);
     int nHeight = (uint32_t)*(uint16_t*)((int)gifData + 10) - (uint32_t)*(uint16_t*)((int)gifData + 6) + 1;
@@ -1252,20 +1250,22 @@ static int __thiscall SBMP_DecodePcxMem(uint32_t * pWidth, void * gifData, int d
 
       SBMP_UncompressPcxImage(dstSize_00, pixels, dataSize - (nBpp != 8 ? 0 : 0x301) - 0x80, (uint8_t*)((int)gifData + 0x80), width, (uint32_t)*(uint16_t*)((int)gifData + 0x42), (uint32_t)*(uint8_t*)((int)gifData + 0x41));
     }
-    if (palette && nBpp == 8) {
-      pSrcPalette = (uint8_t*)((int)gifData + dataSize - 0x2fe);
-      pDstPalette = palette + 2;
-      nHeight = 0x100;
-      do {
-        pDstPalette[-2] = pSrcPalette[-2];
-        pDstPalette[-1] = pSrcPalette[-1];
-        *pDstPalette = *pSrcPalette;
-        pDstPalette[1] = '\0';
-        pSrcPalette += 3;
-        pDstPalette += 4;
-        nHeight--;
-      } while (nHeight);
+    if (!(palette && nBpp == 8)) {
+      return 1;
     }
+
+    uint8_t* pSrcPalette = (uint8_t*)((int)gifData + dataSize - 0x2fe);
+    uint8_t* pDstPalette = palette + 2;
+    nHeight = 0x100;
+    do {
+      pDstPalette[-2] = pSrcPalette[-2];
+      pDstPalette[-1] = pSrcPalette[-1];
+      *pDstPalette = *pSrcPalette;
+      pDstPalette[1] = '\0';
+      pSrcPalette += 3;
+      pDstPalette += 4;
+      nHeight--;
+    } while (nHeight);
 
     return 1;
 }

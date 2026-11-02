@@ -225,7 +225,7 @@ void __stdcall InitializeSystemInfo() {
         fMajorVersionF += 4.2949673e+09;
       }
 
-      fGameVersion = (int)(fMajorVersionF + fMinorVersionFrac / 100.0);
+      fGameVersion = fMajorVersionF + fMinorVersionFrac / 100.0;
       if (osVersionInfo.dwPlatformId != 2) {
         g_eOSType = 0;
       } else {
@@ -304,10 +304,11 @@ char * __fastcall StripPathPrefixToRelative(char * szText) {
 
     pResult = Storm::Source::SSTR::SStrLen(szText);
     char* pszResult = szText + g_nPathStripOffset;
-    if (pResult <= g_nPathStripOffset) {
-      pszResult = szText;
+    if (pResult > g_nPathStripOffset) {
+      return pszResult;
     }
 
+    pszResult = szText;
     return pszResult;
 }
 

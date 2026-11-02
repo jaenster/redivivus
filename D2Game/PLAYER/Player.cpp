@@ -732,7 +732,7 @@ void __fastcall PLAYER_DestroyPortalPair(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 // Validates and executes a gold-drop request: confirms the requester matches the acting player, checks the requested amount against current gold and inventory gold limit, spawns gold pile units via DROP_SpawnGoldPiles, marks them owned by the player, and deducts each pile's value from the player's UNITSTAT_gold.
 BOOL __fastcall GOLD_DropGoldFromInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD dwRequesterId, uint32_t nGoldAmount) {
-    int nItemGold;
+    eD2UnitType eUnitType;
     int nPlayerGold;
     D2UnitStrc* pGoldPiles[32];
     POINT ptCoords;
@@ -751,33 +751,37 @@ BOOL __fastcall GOLD_DropGoldFromInventory(::SGAMEDATA * pGame, D2UnitStrc * pUn
     if ((int)nClampedGold > (int)nGoldLimit) {
       return 0;
     }
-    if (nClampedGold > 0) {
-      eD2UnitType eUnitType;
-      D2Common::Units::GetCoords(pUnit, &ptCoords);
-      if (nClampedGold > 2000000000) {
-        nClampedGold = 2000000000;
-      }
-
-      i = 0;
-      dwRequesterId = 0;
-      ITEMS::Items::Drop::DROP_SpawnGoldPiles(pGame, pUnit, nClampedGold, pGoldPiles, (int*)&dwRequesterId, 0x20);
-      if (dwRequesterId && (int)dwRequesterId > 0) {
-        do {
-          pRequester = pGoldPiles[i];
-          if (pUnit) {
-            eUnitType = D2Client::Units::GetType(pUnit);
-            if (eUnitType == UNIT_PLAYER) {
-              D2Common::Units::StoreOwner(pRequester, pUnit);
-            }
-          }
-
-          nItemGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pRequester, UNITSTAT_gold, 0);
-          nPlayerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-          GAME::Server::SetStat(pUnit, UNITSTAT_gold, nPlayerGold - nItemGold);
-          i++;
-        } while (i < (int)dwRequesterId);
-      }
+    if (nClampedGold <= 0) {
+      return 1;
     }
+
+    D2Common::Units::GetCoords(pUnit, &ptCoords);
+    if (nClampedGold > 2000000000) {
+      nClampedGold = 2000000000;
+    }
+
+    i = 0;
+    dwRequesterId = 0;
+    ITEMS::Items::Drop::DROP_SpawnGoldPiles(pGame, pUnit, nClampedGold, pGoldPiles, (int*)&dwRequesterId, 0x20);
+    if (!(dwRequesterId && (int)dwRequesterId > 0)) {
+      return 1;
+    }
+
+    do {
+      int nItemGold;
+      pRequester = pGoldPiles[i];
+      if (pUnit) {
+        eUnitType = D2Client::Units::GetType(pUnit);
+        if (eUnitType == UNIT_PLAYER) {
+          D2Common::Units::StoreOwner(pRequester, pUnit);
+        }
+      }
+
+      nItemGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pRequester, UNITSTAT_gold, 0);
+      nPlayerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
+      GAME::Server::SetStat(pUnit, UNITSTAT_gold, nPlayerGold - nItemGold);
+      i++;
+    } while (i < (int)dwRequesterId);
 
     return 1;
 }
@@ -881,10 +885,11 @@ int32_t __fastcall SERVER_GAME_CountPlayers(::SGAMEDATA * pGame) {
     int PlayerCountFixed;
     int ModeZeroCount = 0;
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)CountModeZeroDeath, &ModeZeroCount);
-    if ((uint8_t)(pGame->nGameType - SGAMETYPE_OBNET_HOST) > 2 || (PlayerCountFixed = PlayerCountOverride , PlayerCountOverride <= ModeZeroCount)) {
-      PlayerCountFixed = ModeZeroCount;
+    if (!((uint8_t)(pGame->nGameType - SGAMETYPE_OBNET_HOST) > 2 || (PlayerCountFixed = PlayerCountOverride , PlayerCountOverride <= ModeZeroCount))) {
+      return PlayerCountFixed;
     }
 
+    PlayerCountFixed = ModeZeroCount;
     return PlayerCountFixed;
 }
 

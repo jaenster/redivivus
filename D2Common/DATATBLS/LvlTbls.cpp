@@ -513,6 +513,7 @@ static void __fastcall LVLTBLS_FixPathSlashes(char * szText, char * szPathPrefix
 
 // Loads and compiles lvltypes.txt into the global pTxtLvlTypes / nTxtLvlTypesSize table. Builds a D2BinFieldInputStrc schema describing the row layout: 32 "File N" ASCII path fields (0x3b bytes each), plus Act (char) and Expansion (int), terminated by an END field; row stride 0x788. Calls CompileTxt to parse the txt via pMemory pool, then post-processes every row converting forward to back slashes in all 32 file-path strings via LVLTBLS_FixPathSlashes. Part of D2Common data-table init.
 void __fastcall TXT_AllocTxt_lvltypes(D2PoolManagerStrc * pMemory) {
+    int nRowIdx;
     int nFileIdx;
     D2BinFieldInputStrc lvltypes[35] = {
       {"File 1", FIELDTYPE_ASCII, 0x3b, 0, 0},
@@ -552,13 +553,8 @@ void __fastcall TXT_AllocTxt_lvltypes(D2PoolManagerStrc * pMemory) {
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
     pTxtLvlTypes = (D2LvlTypesTxt*)DataTbls::CompileTxt(pMemory, "lvltypes", lvltypes, &nTxtLvlTypesSize, 0x788);
-    int nRowIdx = 0;
     D2LvlTypesTxt* pCurrentRow = pTxtLvlTypes;
-    if (nTxtLvlTypesSize <= 0) {
-      return;
-    }
-
-    do {
+    for (nRowIdx = 0; nRowIdx < nTxtLvlTypesSize; nRowIdx++) {
       D2LvlTypesTxt* pFileEntry;
       nFileIdx = 0x20;
       pFileEntry = pCurrentRow;
@@ -569,8 +565,7 @@ void __fastcall TXT_AllocTxt_lvltypes(D2PoolManagerStrc * pMemory) {
       } while (nFileIdx);
 
       pCurrentRow++;
-      nRowIdx++;
-    } while (nRowIdx < nTxtLvlTypesSize);
+    }
 }
 
 void __stdcall thunk_UnloadBin_DataTbls() {
@@ -704,17 +699,12 @@ void __stdcall TXT_LvlTbls_Free() {
     int i;
     if (pTxtLvlTbls) {
       D2DrlgFileStrc** pMemoryToFree;
-      i = 0;
       pMemoryToFree = pTxtLvlTbls;
-      if (sgptDataTable->nTxtLvlPrestSize * 6 > 0) {
-        do {
-          if (pMemoryToFree[i]) {
-            Drlg::Preset::DRLGPRESET_ReleaseDrlgFile(pMemoryToFree + i);
-            pMemoryToFree = pTxtLvlTbls;
-          }
-
-          i++;
-        } while (i < sgptDataTable->nTxtLvlPrestSize * 6);
+      for (i = 0; i < sgptDataTable->nTxtLvlPrestSize * 6; i++) {
+        if (pMemoryToFree[i]) {
+          Drlg::Preset::DRLGPRESET_ReleaseDrlgFile(pMemoryToFree + i);
+          pMemoryToFree = pTxtLvlTbls;
+        }
       }
 
       D2_FREE_AT(pMemoryToFree, ".\\DATATBLS\\LvlTbls.cpp", 0x2d2);
@@ -952,17 +942,12 @@ void __stdcall TXT_FreeTxt_LvlSub() {
     int i;
     if (gpaDrlgLvlSubPresetFiles) {
       void* pMemoryToFree;
-      i = 0;
       pMemoryToFree = gpaDrlgLvlSubPresetFiles;
-      if (nTxtLvlSubSize > 0) {
-        do {
-          if (*(int*)((int)pMemoryToFree + i * 4)) {
-            Drlg::Preset::DRLGPRESET_ReleaseDrlgFile((D2DrlgFileStrc**)((int)pMemoryToFree + i * 4));
-            pMemoryToFree = gpaDrlgLvlSubPresetFiles;
-          }
-
-          i++;
-        } while (i < nTxtLvlSubSize);
+      for (i = 0; i < nTxtLvlSubSize; i++) {
+        if (*(int*)((int)pMemoryToFree + i * 4)) {
+          Drlg::Preset::DRLGPRESET_ReleaseDrlgFile((D2DrlgFileStrc**)((int)pMemoryToFree + i * 4));
+          pMemoryToFree = gpaDrlgLvlSubPresetFiles;
+        }
       }
 
       D2_FREE_AT(pMemoryToFree, ".\\DATATBLS\\LvlTbls.cpp", 0x3d8);

@@ -815,46 +815,51 @@ void __fastcall Q27_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
 // [A4Q3 Terror's End] Per-player: if QUEST_TerrorsEnd not Completed and the player's room is the room (or adjacent to the room) where Diablo died, and quest is not Completed/RewardAwaits, complete it via Q27_SetTerrorsEndCompleted. Credits the kill only to players near the corpse.
 BOOL __fastcall Q27_PlayerCheckNearDiablo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    D2RoomStrc* pRoom;
-    D2QuestDataStrc* pDVar3;
-    uint32_t i;
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nAdjacentRoomCount;
-    int bIsNearDiablo;
     D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pGame->nDifficulty];
     BOOL bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
-    if (bCompleted != 1) {
-      D2QuestDataA4Q2Strc* pDVar1;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      if (pRoom) {
-        pDVar3 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TerrorsEnd);
-        if (pDVar3) {
-          pDVar1 = pDVar3->pQuestSpecificData.pA4Q2;
-          bIsNearDiablo = 0;
-          if (pRoom == (D2RoomStrc*)pDVar1->pDiabloRoom) {
-            bIsNearDiablo = 1;
-          } else {
-            D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nAdjacentRoomCount);
-            for (i = 0; i < nAdjacentRoomCount; i++) {
-              if (ppAdjacentRooms[i] == (D2RoomStrc*)pDVar1->pDiabloRoom) {
-                bIsNearDiablo = 1;
-                break;
-              }
-            }
-          }
+    if (bCompleted == 1) {
+      return 0;
+    }
 
-          bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
-          if (!bCompleted) {
-            bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_RewardAwaits);
-            if (!bCompleted && bIsNearDiablo) {
-              Q27_SetTerrorsEndCompleted(pBitBuffer, pGame, pUnit);
-            }
-          }
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    if (!pRoom) {
+      return 0;
+    }
+
+    D2QuestDataStrc* pDVar3 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TerrorsEnd);
+    if (!pDVar3) {
+      return 0;
+    }
+
+    D2QuestDataA4Q2Strc* pDVar1 = pDVar3->pQuestSpecificData.pA4Q2;
+    int bIsNearDiablo = 0;
+    if (pRoom == (D2RoomStrc*)pDVar1->pDiabloRoom) {
+      bIsNearDiablo = 1;
+    } else {
+      uint32_t i;
+      D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nAdjacentRoomCount);
+      for (i = 0; i < nAdjacentRoomCount; i++) {
+        if (ppAdjacentRooms[i] == (D2RoomStrc*)pDVar1->pDiabloRoom) {
+          bIsNearDiablo = 1;
+          break;
         }
       }
     }
 
+    bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
+    if (bCompleted) {
+      return 0;
+    }
+
+    bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_RewardAwaits);
+    if (!(!bCompleted && bIsNearDiablo)) {
+      return 0;
+    }
+
+    Q27_SetTerrorsEndCompleted(pBitBuffer, pGame, pUnit);
     return 0;
 }
 
@@ -1117,17 +1122,20 @@ BOOL __fastcall OBJOP_A4Q2_DiabloSealActivateKillChaos(D2ObjectOperateFnArg * pO
       nSealClassId++;
     } while (nSealClassId < 5);
 
-    if (pQuestSpecificData->nSealBossKillCount == 3) {
-      Q27_ActivateAllSealsKillChaos((int*)pQuestSpecificData, pOperation->sArg.pGame);
-      if (!pQuestSpecificData->bDiabloSpawnStarted) {
-        pQuestSpecificData->nDiabloKillTick = 0;
-        pQuestSpecificData->bWaitingForDiabloSpawn = 1;
-        pQuestSpecificData->bDiabloKilled = 0;
-        pQuestSpecificData->bDiabloSpawnStarted = 1;
-        AddQuestTimer(pQuestData, QuitGameAfterDia, 1);
-      }
+    if (pQuestSpecificData->nSealBossKillCount != 3) {
+      return 0;
     }
 
+    Q27_ActivateAllSealsKillChaos((int*)pQuestSpecificData, pOperation->sArg.pGame);
+    if (pQuestSpecificData->bDiabloSpawnStarted) {
+      return 0;
+    }
+
+    pQuestSpecificData->nDiabloKillTick = 0;
+    pQuestSpecificData->bWaitingForDiabloSpawn = 1;
+    pQuestSpecificData->bDiabloKilled = 0;
+    pQuestSpecificData->bDiabloSpawnStarted = 1;
+    AddQuestTimer(pQuestData, QuitGameAfterDia, 1);
     return 0;
 }
 

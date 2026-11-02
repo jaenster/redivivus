@@ -1354,17 +1354,20 @@ uint32_t __fastcall SKILL_ExecuteClientDoFunc(D2UnitStrc * pUnit, eD2Skills eSki
     }
 
     nTargetX = D2Common::Skills::D2GetSkillCalc(pMissileUnit, pSkillTxt->delay, eSkillId, nSkillLevel);
-    if (nTargetX > 0) {
-      pTargetUnit = UNIT::Player::GetPlayerUnit_UI();
-      if (pTargetUnit == pMissileUnit) {
-        if (nTargetX > 0xc) {
-          nTargetX = 0xc;
-        }
-        if (pSkillTxt->anim != '\x12' || !(pMissileUnit->nSeqFrame & 0xffffff00U)) {
-          nTargetY = GAME::Game::GetEntryIndex();
-          GAME::Game::GAME_SetSkillDelayEndFrame(nTargetY + nTargetX);
-        }
-      }
+    if (nTargetX <= 0) {
+      return 1;
+    }
+
+    pTargetUnit = UNIT::Player::GetPlayerUnit_UI();
+    if (pTargetUnit != pMissileUnit) {
+      return 1;
+    }
+    if (nTargetX > 0xc) {
+      nTargetX = 0xc;
+    }
+    if (pSkillTxt->anim != '\x12' || !(pMissileUnit->nSeqFrame & 0xffffff00U)) {
+      nTargetY = GAME::Game::GetEntryIndex();
+      GAME::Game::GAME_SetSkillDelayEndFrame(nTargetY + nTargetX);
     }
 
     return 1;
@@ -2011,15 +2014,12 @@ void __fastcall SKILLS_ApplyDamageReduction(D2UnitStrc * pUnit, int32_t nReducti
 // Spawns nCount missiles at random positions within nRadius of the casting unit. Seeds the unit's RNG from its current map coordinates, then for each spawn picks a random (X,Y) offset within the diameter, rejects positions within 3 distance units of the caster, and calls MISSILE_CreateFromUnitWithOffset with the given missile ID array, skill, and skill level. Returns 1 on success, 0 if coordinates could not be retrieved.
 uint32_t __fastcall SKILL_SpawnRandomMissilesInArea(D2UnitStrc * pUnit, uint8_t * pMissileId, int32_t nCount, int32_t nRadius, eD2Skills eSkill, int32_t nSkillLevel) {
     uint32_t nDiameter;
-    D2UnitStrc* pUnitCur;
     int nBaseY;
-    int nCountdown;
     uint32_t nSpawnY;
     uint32_t nSpawnX;
     int32_t nBaseX;
     eD2UnitType eUnitType;
     int64_t llRandProduct;
-    uint32_t nDiameterRange;
     D2SeedStrc newSeed;
     D2UnitStrc* pUnitOrig = pUnit;
     BOOL bGotCoords = GetCooordinates(pUnit, &nBaseX, &nBaseY);
@@ -2029,76 +2029,78 @@ uint32_t __fastcall SKILL_SpawnRandomMissilesInArea(D2UnitStrc * pUnit, uint8_t 
 
     D2SeedStrc* pSeed = &pUnit->sSeed;
     D2Common::Seed::InitSeed_Param_666(pSeed, nBaseX);
-    if (nCount > 0) {
-      int32_t nDist;
-      nDiameterRange = nRadius * 2;
-      nCountdown = nCount;
-      pUnitCur = pUnit;
-      do {
-        if ((int)nDiameterRange <= 0) {
-          nDiameter = 0;
-        } else {
-          llRandProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-          nDiameter = pUnit->sSeed.nSeedHigh;
-          if (nDiameterRange & nDiameterRange - 1) {
-            newSeed = (D2SeedStrc)(llRandProduct + (uint64_t)nDiameter);
-            pSeed->nSeedHigh = newSeed.nSeedHigh;
-            pSeed->nSeedLow = newSeed.nSeedLow;
-            nDiameter = (uint32_t)(newSeed.nSeedLow % nDiameterRange);
-            pUnitCur = pUnitOrig;
-          } else {
-            newSeed = (D2SeedStrc)(llRandProduct + (uint64_t)nDiameter);
-            pSeed->nSeedHigh = newSeed.nSeedHigh;
-            pSeed->nSeedLow = newSeed.nSeedLow;
-            nDiameter = nDiameterRange - 1 & newSeed.nSeedLow;
-            pUnitCur = pUnitOrig;
-          }
-        }
+    if (nCount <= 0) {
+      return 1;
+    }
 
-        nSpawnY = nDiameter - nRadius + nBaseX;
-        if ((int)nDiameterRange <= 0) {
-          nDiameter = 0;
-        } else if (nDiameterRange & nDiameterRange - 1) {
-          newSeed = D2_SEED_NEXT(*pSeed);
+    uint32_t nDiameterRange = nRadius * 2;
+    int nCountdown = nCount;
+    D2UnitStrc* pUnitCur = pUnit;
+    do {
+      int32_t nDist;
+      if ((int)nDiameterRange <= 0) {
+        nDiameter = 0;
+      } else {
+        llRandProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
+        nDiameter = pUnit->sSeed.nSeedHigh;
+        if (nDiameterRange & nDiameterRange - 1) {
+          newSeed = (D2SeedStrc)(llRandProduct + (uint64_t)nDiameter);
           pSeed->nSeedHigh = newSeed.nSeedHigh;
           pSeed->nSeedLow = newSeed.nSeedLow;
           nDiameter = (uint32_t)(newSeed.nSeedLow % nDiameterRange);
           pUnitCur = pUnitOrig;
         } else {
-          newSeed = D2_SEED_NEXT(*pSeed);
+          newSeed = (D2SeedStrc)(llRandProduct + (uint64_t)nDiameter);
           pSeed->nSeedHigh = newSeed.nSeedHigh;
           pSeed->nSeedLow = newSeed.nSeedLow;
           nDiameter = nDiameterRange - 1 & newSeed.nSeedLow;
           pUnitCur = pUnitOrig;
         }
+      }
 
-        eUnitType = pUnitCur->eUnitType;
-        nSpawnX = nDiameter - nRadius + nBaseY;
-        if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-          nCount = pUnitCur->pPath.pStaticPath->nPosY;
-        } else if (pUnitCur->pPath.pDynamicPath) {
-          nCount = D2Common::PATH::DynamicPath::GetYPos(pUnitCur->pPath.pDynamicPath);
-        } else {
-          nCount = 0;
-        }
+      nSpawnY = nDiameter - nRadius + nBaseX;
+      if ((int)nDiameterRange <= 0) {
+        nDiameter = 0;
+      } else if (nDiameterRange & nDiameterRange - 1) {
+        newSeed = D2_SEED_NEXT(*pSeed);
+        pSeed->nSeedHigh = newSeed.nSeedHigh;
+        pSeed->nSeedLow = newSeed.nSeedLow;
+        nDiameter = (uint32_t)(newSeed.nSeedLow % nDiameterRange);
+        pUnitCur = pUnitOrig;
+      } else {
+        newSeed = D2_SEED_NEXT(*pSeed);
+        pSeed->nSeedHigh = newSeed.nSeedHigh;
+        pSeed->nSeedLow = newSeed.nSeedLow;
+        nDiameter = nDiameterRange - 1 & newSeed.nSeedLow;
+        pUnitCur = pUnitOrig;
+      }
 
-        eUnitType = pUnitCur->eUnitType;
-        if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-          nDist = pUnitCur->pPath.pStaticPath->nPosX;
-        } else if (pUnitCur->pPath.pDynamicPath) {
-          nDist = D2Common::PATH::DynamicPath::GetXPos(pUnitCur->pPath.pDynamicPath);
-        } else {
-          nDist = 0;
-        }
+      eUnitType = pUnitCur->eUnitType;
+      nSpawnX = nDiameter - nRadius + nBaseY;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nCount = pUnitCur->pPath.pStaticPath->nPosY;
+      } else if (pUnitCur->pPath.pDynamicPath) {
+        nCount = D2Common::PATH::DynamicPath::GetYPos(pUnitCur->pPath.pDynamicPath);
+      } else {
+        nCount = 0;
+      }
 
-        nDist = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nDist, nCount, nSpawnY, nSpawnX);
-        if (nDist >= 4) {
-          UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnitCur, (eMissilesId)pMissileId, 0, 0, nSpawnY, nSpawnX, eSkill, nSkillLevel, 0);
-        }
+      eUnitType = pUnitCur->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nDist = pUnitCur->pPath.pStaticPath->nPosX;
+      } else if (pUnitCur->pPath.pDynamicPath) {
+        nDist = D2Common::PATH::DynamicPath::GetXPos(pUnitCur->pPath.pDynamicPath);
+      } else {
+        nDist = 0;
+      }
 
-        nCountdown--;
-      } while (nCountdown);
-    }
+      nDist = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nDist, nCount, nSpawnY, nSpawnX);
+      if (nDist >= 4) {
+        UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnitCur, (eMissilesId)pMissileId, 0, 0, nSpawnY, nSpawnX, eSkill, nSkillLevel, 0);
+      }
+
+      nCountdown--;
+    } while (nCountdown);
 
     return 1;
 }

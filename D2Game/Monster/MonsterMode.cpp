@@ -1095,7 +1095,6 @@ BOOL __fastcall MONMODE_CompleteCastAndReset(::SGAMEDATA * pGame, D2MonsterKillS
 BOOL __fastcall PlanExecutionOfMonster(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
     BOOL _bTimerExists;
     bool bTimerExists;
-    uint32_t nFrame;
     uint8_t byAiDel;
     D2UnitStrc* pUnit = pMonsterKill->pVictim;
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 1);
@@ -1109,25 +1108,26 @@ BOOL __fastcall PlanExecutionOfMonster(::SGAMEDATA * pGame, D2MonsterKillStrc * 
       GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + 0x2d, 0, 0);
       return 1;
     }
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
-      D2MonStatsTxt* pDVar1;
-      pDVar1 = pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;
-      if (pDVar1) {
-        if (pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER) {
-          byAiDel = pDVar1->aidel[0];
-        } else {
-          byAiDel = pDVar1->aidel[pGame->nDifficulty];
-        }
-
-        nFrame = (uint32_t)byAiDel;
-        if (!nFrame) {
-          nFrame = 0xf;
-        }
-
-        GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + nFrame, 0, 0);
-      }
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
+      return 1;
     }
 
+    D2MonStatsTxt* pDVar1 = pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;
+    if (!pDVar1) {
+      return 1;
+    }
+    if (pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER) {
+      byAiDel = pDVar1->aidel[0];
+    } else {
+      byAiDel = pDVar1->aidel[pGame->nDifficulty];
+    }
+
+    uint32_t nFrame = (uint32_t)byAiDel;
+    if (!nFrame) {
+      nFrame = 0xf;
+    }
+
+    GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + nFrame, 0, 0);
     return 1;
 }
 

@@ -155,6 +155,7 @@ void __stdcall LoadClassIcons() {
 }
 
 void __stdcall FreeHireablesList() {
+    int nIconIdx;
     DC6** ppClassIcon = ClassIcons;
     do {
       if (*ppClassIcon) {
@@ -171,16 +172,11 @@ void __stdcall FreeHireablesList() {
 
     int nIconCount = sgptDataTable->nTxtPetTypeSize * 5;
     D2HireablesListStrc* pMemoryToFree = gpHireablesList;
-    if (nIconCount > 0) {
-      int nIconIdx = 0;
-      do {
-        if ((&pMemoryToFree->pIcon)[nIconIdx]) {
-          Core::Archive::DC6_FreeAndDelete((&pMemoryToFree->pIcon)[nIconIdx]);
-          pMemoryToFree = gpHireablesList;
-        }
-
-        nIconIdx++;
-      } while (nIconIdx < nIconCount);
+    for (nIconIdx = 0; nIconIdx < nIconCount; nIconIdx++) {
+      if ((&pMemoryToFree->pIcon)[nIconIdx]) {
+        Core::Archive::DC6_FreeAndDelete((&pMemoryToFree->pIcon)[nIconIdx]);
+        pMemoryToFree = gpHireablesList;
+      }
     }
 
     D2_FREE_POOL_AT(nullptr, pMemoryToFree, ".\\UI\\Hireables.cpp", 0xb7);

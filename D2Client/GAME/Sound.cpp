@@ -218,15 +218,16 @@ uint32_t __fastcall SOUND_GetStreamProgress(D2ClientSoundChannelStrc * pChannel)
 }
 
 BOOL __stdcall SOUND_Is3DMixerActive() {
-    if (pAudioMixerInterface) {
-      int nMixerMode;
-      nMixerMode = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
-      if (nMixerMode == 1 || nMixerMode == 2) {
-        return 1;
-      }
+    if (!pAudioMixerInterface) {
+      return 0;
     }
 
-    return 0;
+    int nMixerMode = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
+    if (!(nMixerMode == 1 || nMixerMode == 2)) {
+      return 0;
+    }
+
+    return 1;
 }
 
 uint32_t __stdcall SOUND_IsEaxMixerActive() {

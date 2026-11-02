@@ -380,6 +380,8 @@ D2BnNewsTableStrc g_nNewsMaxCacheSize = {}; D2_GLOBAL_GUARD(g_nNewsMaxCacheSize,
 
 char lpFileName_00881c58[260] = {}; D2_GLOBAL_GUARD(lpFileName_00881c58, "lpFileName_00881c58");
 
+char gbBnetFtpFileTransferActive[256] = {}; D2_GLOBAL_GUARD(gbBnetFtpFileTransferActive, "gbBnetFtpFileTransferActive");
+
 char gszBNetChatInputBuffer[260] = {}; D2_GLOBAL_GUARD(gszBNetChatInputBuffer, "gszBNetChatInputBuffer");
 
 _RTL_CRITICAL_SECTION lpCriticalSection_00881f64 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00881f64, "lpCriticalSection_00881f64");
@@ -446,8 +448,6 @@ uint32_t g_dwNewsTimestamp = 0; D2_GLOBAL_GUARD(g_dwNewsTimestamp, "g_dwNewsTime
 unsigned int gnNetworkSendState = {}; D2_GLOBAL_GUARD(gnNetworkSendState, "gnNetworkSendState");
 unsigned int gbBnetDownloadCancelFlag = {}; D2_GLOBAL_GUARD(gbBnetDownloadCancelFlag, "gbBnetDownloadCancelFlag");
 LONG * lpAddend_00881d5c = 0; D2_GLOBAL_GUARD(lpAddend_00881d5c, "lpAddend_00881d5c");
-uint8_t gbBnetFtpFileTransferActive = 0; D2_GLOBAL_GUARD(gbBnetFtpFileTransferActive, "gbBnetFtpFileTransferActive");
-uint8_t bBnetFtpDownloadActive = 0; D2_GLOBAL_GUARD(bBnetFtpDownloadActive, "bBnetFtpDownloadActive");
 uint32_t g_nBattleNetConnectionData = 0; D2_GLOBAL_GUARD(g_nBattleNetConnectionData, "g_nBattleNetConnectionData");
 uint32_t g_nBattleNetConnectionState = 0; D2_GLOBAL_GUARD(g_nBattleNetConnectionState, "g_nBattleNetConnectionState");
 BnMessQueue * nLobbyChatCurrentMessage = 0; D2_GLOBAL_GUARD(nLobbyChatCurrentMessage, "nLobbyChatCurrentMessage");

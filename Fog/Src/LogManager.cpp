@@ -987,10 +987,11 @@ void __fastcall UnlinkListNode(int * pNode) {
 }
 
 int32_t __thiscall NormalizeListNodePointer(int32_t pThis, int32_t pNodePtr) {
-    if (!pNodePtr) {
-      pNodePtr = pThis + 4;
+    if (pNodePtr) {
+      return pNodePtr;
     }
 
+    pNodePtr = pThis + 4;
     return pNodePtr;
 }
 

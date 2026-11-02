@@ -223,13 +223,16 @@ BOOL __stdcall LoadDataForGameAndSetupServer(D2IniConfigStrc * D2IniData) {
     }
 
     D2IniData = (D2IniConfigStrc*)0xf;
-    /* LPDWORD pcbBuffer for GetUserNameA */ /* LPSTR lpBuffer for GetUserNameA */ if (D2Game::Save::szSaveCharacterName[0] == '\0') {
-      gotUserName = GetUserNameA(D2Game::Save::szSaveCharacterName, (LPDWORD)&D2IniData);
-      if (!gotUserName) {
-        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(D2Game::Save::szSaveCharacterName, "%s", "noname");
-      }
+    /* LPDWORD pcbBuffer for GetUserNameA */ /* LPSTR lpBuffer for GetUserNameA */ if (D2Game::Save::szSaveCharacterName[0] != '\0') {
+      return 1;
     }
 
+    gotUserName = GetUserNameA(D2Game::Save::szSaveCharacterName, (LPDWORD)&D2IniData);
+    if (gotUserName) {
+      return 1;
+    }
+
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(D2Game::Save::szSaveCharacterName, "%s", "noname");
     return 1;
 }
 

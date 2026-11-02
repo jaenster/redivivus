@@ -650,10 +650,11 @@ int32_t __stdcall GetBaseExperience(int32_t nLevel, int32_t nExpPerLevel) {
 uint32_t __stdcall GetReviveCost(D2UnitStrc * pUnit) {
     int nLevel = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     uint32_t nCost = nLevel * nLevel / 2 * 0xf;
-    if (nCost > 50000) {
-      nCost = 50000;
+    if (nCost <= 50000) {
+      return nCost;
     }
 
+    nCost = 50000;
     return nCost;
 }
 

@@ -88,10 +88,11 @@ int32_t __fastcall MessageGameLoop(::fpGameLoopFunction nfpGameLoopFunction) {
           nCallbackResult = (*nfpGameLoopFunction)(tickIndex);
           tickIndex++;
           if (nCallbackResult) {
-            if (!getMessageResult) {
-              nCallbackResult = 1;
+            if (getMessageResult) {
+              return nCallbackResult;
             }
 
+            nCallbackResult = 1;
             return nCallbackResult;
           }
         }

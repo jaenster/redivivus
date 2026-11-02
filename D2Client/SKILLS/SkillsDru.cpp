@@ -124,23 +124,24 @@ BOOL __fastcall SKILLSDRU_CltCreateShapeShiftMissile(D2UnitStrc * pUnit, int32_t
     if (bClearPathFlag0x40) {
       sSkillArg.nFlags |= 0x2000;
     }
-    if (nCountdown > 0) {
-      int nMissileIdx;
-      nMissileIdx = 0;
-      do {
-        sSkillArg.nFunctionParam = nMissileIdx;
-        pLeadMissile = UNIT::Missile::MakeMissile(&sSkillArg);
-        if (pLeadMissile) {
-          if (bClearPathFlag0x40) {
-            D2Common::PATH::DynamicPath::SetUnsetFlags0x40(pLeadMissile->pPath.pDynamicPath, 0);
-          }
+    if (nCountdown <= 0) {
+      return 1;
+    }
 
-          D2Common::Units::SetAnimationSpeed(pLeadMissile, nAnimSpeed);
+    int nMissileIdx = 0;
+    do {
+      sSkillArg.nFunctionParam = nMissileIdx;
+      pLeadMissile = UNIT::Missile::MakeMissile(&sSkillArg);
+      if (pLeadMissile) {
+        if (bClearPathFlag0x40) {
+          D2Common::PATH::DynamicPath::SetUnsetFlags0x40(pLeadMissile->pPath.pDynamicPath, 0);
         }
 
-        nMissileIdx++;
-      } while (nMissileIdx < nMissileCount);
-    }
+        D2Common::Units::SetAnimationSpeed(pLeadMissile, nAnimSpeed);
+      }
+
+      nMissileIdx++;
+    } while (nMissileIdx < nMissileCount);
 
     return 1;
 }

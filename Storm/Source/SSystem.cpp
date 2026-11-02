@@ -171,10 +171,11 @@ uint32_t __thiscall SSYSTEM_ListOffsetToPointer(int * pNode, int * pBase) {
 }
 
 int32_t __thiscall SSYSTEM_ListGetPointer(int32_t pList, int32_t pNode) {
-    if (!pNode) {
-      pNode = pList + 4;
+    if (pNode) {
+      return pNode;
     }
 
+    pNode = pList + 4;
     return pNode;
 }
 
@@ -492,10 +493,11 @@ void __thiscall LINKEDLIST_InsertNode(StormLinkedListStrc * pList, void * pNewIt
 int32_t __thiscall LINKEDLIST_GetNodeAt(int * pList, int32_t nOffset) {
     StormLinkStrc* pListNode = LINKEDLIST_GetOffset((StormLinkedListStrc*)pList, (void*)nOffset);
     int nNodeValue = pListNode->pNext;
-    if (nNodeValue <= 0) {
-      nNodeValue = 0;
+    if (nNodeValue > 0) {
+      return nNodeValue;
     }
 
+    nNodeValue = 0;
     return nNodeValue;
 }
 

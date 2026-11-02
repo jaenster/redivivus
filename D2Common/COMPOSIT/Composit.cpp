@@ -120,8 +120,8 @@ int __stdcall COMPOSIT_GetItemTypeIndex(int32_t iItemType) {
 
 // Resolves a unit's weapon-class token - the hth/1hs/2hs four-character code that forms the last component of every COF and AnimData name. Returns the token itself and writes the matching weapon-class INDEX through pnParam. Monsters take BaseW from MonStats2, objects and unarmed units take hth, and a player's is resolved from the equipped weapons: dual-wield pairs for the Assassin and Barbarian get the 1js/1jt/1st/1ss/2ht combinations, everything else comes from the item's own WClass or 2HandedWClass by handedness. The two by-handedness returns save the token in EDX across the GetItemTypeIndex call, which is why this function needs its callee typed __stdcall_edxsafe.
 uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnitType, int32_t nClassIndex, int32_t nMode, D2InventoryStrc * pInventory, int32_t * pnWeaponClassIndex) {
-    int16_t nRightAnimClass;
-    int16_t nLeftAnimClass;
+    int32_t nRightAnimClass;
+    int32_t nLeftAnimClass;
     D2MonStats2Txt* pMonStats2;
     BOOL bItemValid;
     D2UnitStrc* pRightArmItem;

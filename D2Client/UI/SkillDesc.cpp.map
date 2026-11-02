@@ -772,8 +772,7 @@
       ],
       "usedTypes": [
         "WCHAR",
-        "int32_t",
-        "uint8_t"
+        "int32_t"
       ]
     },
     {

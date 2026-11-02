@@ -401,40 +401,42 @@ BOOL CHATDLG_HandleNotifyCommand(char * szCommand, char * szInput) {
     if (!nCmpResult && (szInput[(int)pcCmdEnd - (int)(szCommand + 1)] == ' ' || szInput[(int)pcCmdEnd - (int)(szCommand + 1)] == '\0')) {
       int i;
       nCmpResult = someStrCompare(szInput, szCommand);
-      if (!nCmpResult) {
-        gnNotifyEnabled = (uint32_t)!gnNotifyEnabled;
-        pwszZeroFill = wszMessage;
-        for (i = 0x80; i; i--) {
-          pwszZeroFill[0] = L'\0';
-          pwszZeroFill[1] = L'\0';
-          pwszZeroFill += 2;
+      if (nCmpResult) {
+        return 1;
+      }
+
+      gnNotifyEnabled = (uint32_t)!gnNotifyEnabled;
+      pwszZeroFill = wszMessage;
+      for (i = 0x80; i; i--) {
+        pwszZeroFill[0] = L'\0';
+        pwszZeroFill[1] = L'\0';
+        pwszZeroFill += 2;
+      }
+
+      if (gnNotifyEnabled) {
+        pcCmdEnd = "Player entering/leaving notifications are enabled.";
+        pszMsgDst = szMessage;
+        for (i = 0xc; i; i--) {
+          *(uint32_t*)pszMsgDst = *(uint32_t*)pcCmdEnd;
+          pcCmdEnd += 4;
+          pszMsgDst += 4;
         }
 
-        if (gnNotifyEnabled) {
-          pcCmdEnd = "Player entering/leaving notifications are enabled.";
-          pszMsgDst = szMessage;
-          for (i = 0xc; i; i--) {
-            *(uint32_t*)pszMsgDst = *(uint32_t*)pcCmdEnd;
-            pcCmdEnd += 4;
-            pszMsgDst += 4;
-          }
-
-          *(uint16_t*)pszMsgDst = *(uint16_t*)pcCmdEnd;
-          pszMsgDst[2] = pcCmdEnd[2];
-        } else {
-          pcCmdEnd = "Player entering/leaving notifications are disabled.";
-          pszMsgDst = szMessage;
-          for (i = 0xd; i; i--) {
-            *(uint32_t*)pszMsgDst = *(uint32_t*)pcCmdEnd;
-            pcCmdEnd += 4;
-            pszMsgDst += 4;
-          }
+        *(uint16_t*)pszMsgDst = *(uint16_t*)pcCmdEnd;
+        pszMsgDst[2] = pcCmdEnd[2];
+      } else {
+        pcCmdEnd = "Player entering/leaving notifications are disabled.";
+        pszMsgDst = szMessage;
+        for (i = 0xd; i; i--) {
+          *(uint32_t*)pszMsgDst = *(uint32_t*)pcCmdEnd;
+          pcCmdEnd += 4;
+          pszMsgDst += 4;
         }
+      }
 
-        D2Lang::UTF8_ConvertToWideChar(wszMessage, szMessage, 0x200);
-        if (gpChatMessagesTextBox) {
-          D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszMessage, 3, false, 1);
-        }
+      D2Lang::UTF8_ConvertToWideChar(wszMessage, szMessage, 0x200);
+      if (gpChatMessagesTextBox) {
+        D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszMessage, 3, false, 1);
       }
 
       return 1;
@@ -444,19 +446,15 @@ BOOL CHATDLG_HandleNotifyCommand(char * szCommand, char * szInput) {
 }
 
 BOOL __stdcall CHATDLG_FindSubstringMatch(int32_t nTargetHash, int32_t nWordLen, char * szText) {
+    int nStart;
     char cSaved;
     if (!nWordLen) {
       return 0;
     }
 
     int nStrLen = Storm::Source::SSTR::SStrLen(szText);
-    int nStart = 0;
     int nMaxStart = nStrLen - nWordLen;
-    if (nMaxStart < 0) {
-      return 0;
-    }
-
-    do {
+    for (nStart = 0; nStart <= nMaxStart; nStart++) {
       int nCmpTmp;
       if ((nStart <= 0 || (nCmpTmp = isalnum((int)szText[nStart - 1]) , !nCmpTmp)) && (nStart >= nMaxStart || (nCmpTmp = isalnum((int)szText[nWordLen + nStart]) , !nCmpTmp))) {
         cSaved = szText[nWordLen + nStart];
@@ -467,9 +465,7 @@ BOOL __stdcall CHATDLG_FindSubstringMatch(int32_t nTargetHash, int32_t nWordLen,
           return 1;
         }
       }
-
-      nStart++;
-    } while (nStart <= nMaxStart);
+    }
 
     return 0;
 }

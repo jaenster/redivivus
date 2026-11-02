@@ -2738,18 +2738,20 @@ int __fastcall nullsub(int32_t nCalcCode, void * pContext) {
 }
 
 int32_t __fastcall MATH_Min(int32_t nLeft, int32_t nRight, uint32_t dwParam1, uint32_t dwParam2) {
-    if (nLeft >= nRight) {
-      nLeft = nRight;
+    if (nLeft < nRight) {
+      return nLeft;
     }
 
+    nLeft = nRight;
     return nLeft;
 }
 
 int32_t __fastcall MATH_Max(int32_t nLeft, int32_t nRight, uint32_t nOperand3, uint32_t pContext) {
-    if (nLeft <= nRight) {
-      nLeft = nRight;
+    if (nLeft > nRight) {
+      return nLeft;
     }
 
+    nLeft = nRight;
     return nLeft;
 }
 

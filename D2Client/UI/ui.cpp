@@ -4369,7 +4369,7 @@ void __fastcall UI_ScrollConfigListVertical(int32_t nSteps) {
     int iVar1 = (int)lRowCount;
     nNewOffset = gnUICtrlConfigScrollOffset;
     if (nSteps < 0) {
-      if ((int32_t)gnUICtrlConfigScrollOffset > 0) {
+      if (gnUICtrlConfigScrollOffset > 0) {
         nNewOffset = gnUICtrlConfigScrollOffset - 1;
       }
       if (nNewOffset < 0) {
@@ -4504,10 +4504,11 @@ static int32_t UI_GetControlConfigRowAtY(int32_t nMouseY) {
     }
 
     i = gnUICtrlConfigTotalRows;
-    if (gnUICtrlConfigTotalRows >= 0) {
-      i = gnUICtrlConfigTotalRows - 1;
+    if (gnUICtrlConfigTotalRows < 0) {
+      return i;
     }
 
+    i = gnUICtrlConfigTotalRows - 1;
     return i;
 }
 
@@ -4734,7 +4735,7 @@ void __stdcall UI_UpdateConfigControlsState(int32_t nMouseXStack, int32_t nMouse
           gbUICtrlConfigPendingKey = GetTickCount();
           nMaxScrollRows = UI_GetControlConfigRowCount();
           nMouseInTopScroll = gnUICtrlConfigScrollOffset;
-          if ((int32_t)gnUICtrlConfigScrollOffset > 0) {
+          if (gnUICtrlConfigScrollOffset > 0) {
             nMouseInTopScroll = gnUICtrlConfigScrollOffset - 1;
           }
           if (nMouseInTopScroll >= 0) {
@@ -5323,7 +5324,7 @@ void __stdcall INPUT_ConfigCancel(D2UIMouseMsgStrc * pMsg) {
 void __stdcall UI_ConfigKeyBindModeEnable() {
     gbUICtrlConfigKeyBindMode = 1;
     UI_UnregisterHandlersForPanel(UI_CONFIG);
-    _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit0, 6);
+    _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIFlagInit0, 6);
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit1, 1);
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit2, 1);
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit3, 1);
@@ -5332,7 +5333,7 @@ void __stdcall UI_ConfigKeyBindModeEnable() {
 void __stdcall UI_ConfigKeyBindModeDisable(int32_t bRestoreDrawHandlers) {
     int32_t nHandlerCount = 6;
     HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, &gsUIFlagInit0, nHandlerCount);
+    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, gsUIFlagInit0, nHandlerCount);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit3, 1);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit2, 1);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit1, 1);
@@ -5349,7 +5350,7 @@ void __stdcall UI_ConfigKeyBindModeCancelAndRevert() {
       return;
     }
 
-    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit0, 6);
+    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIFlagInit0, 6);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit3, 1);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit2, 1);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit1, 1);
@@ -5435,7 +5436,7 @@ void __stdcall INPUT_ConfigScreenOpen(D2UIMouseMsgStrc * pMsg) {
     uint16_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
     int32_t nHandlerCount = 6;
     HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, &gsUIFlagInit0, nHandlerCount);
+    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, gsUIFlagInit0, nHandlerCount);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit3, 1);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit2, 1);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit1, 1);
@@ -5522,7 +5523,7 @@ void __fastcall UI_ConfigSetKeyBinding(uint16_t wKeyCode) {
     int nPendingKeyStrId = 0;
     BOOL nBindResult = CmdTbl::CMD_SetKeyBinding(gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex, nConfigControlSelected, (uint32_t)(uint32_t)(uint16_t)wKeyCode, (uint16_t*)&nPendingKeyStrId);
     if (nBindResult) {
-      _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit0, 6);
+      _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIFlagInit0, 6);
       _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit3, 1);
       _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit2, 1);
       _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit1, 1);
@@ -6371,10 +6372,11 @@ int32_t __stdcall UI_GetStatValueForDisplay(int32_t nUnit) {
     if (iVar3 < 5) {
       return 5;
     }
-    if (iVar3 > 0x5f) {
-      iVar3 = 0x5f;
+    if (iVar3 <= 0x5f) {
+      return iVar3;
     }
 
+    iVar3 = 0x5f;
     return iVar3;
 }
 
@@ -7766,7 +7768,7 @@ void __stdcall UI_ShowHoradricCubeTransmuteDialog() {
     UI_CloseActivePanels(0, 0);
     gnPlayerCashDisplay = 1;
     gnTextSystemInitFlag = GetTickCount();
-    _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gUIFlagMapInit, 8);
+    _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagMapInit, 8);
     Inv::INV_SetMercInventoryMode();
     DWORD bUIAlreadyOpen = SetUIFlag(UI_ANVIL, UI_SET, 0);
     if (bUIAlreadyOpen) {

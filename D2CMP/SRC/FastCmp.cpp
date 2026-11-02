@@ -1541,13 +1541,14 @@ void __fastcall FASTCMP_DecompressRLEDispatcher(uint8_t * pImageHeader, uint8_t 
 
 // Decompresses RLE-compressed image data with radial effect mapping for circular/radial patterns
 void __fastcall FASTCMP_DecompressRLEWithEffect(int32_t nStride) {
+    uint32_t uVar1;
+    int iVar2;
+    int iVar3;
     int nProjectedX;
     uint32_t nClampedX;
     uint32_t nClampedY;
     uint32_t nSqrtResultLow;
-    int* pEffectRow;
-    int nRadius;
-    uint32_t* pMaskRow;
+    uint32_t* pEffectRow;
     uint32_t nFloatLowBits;
     int32_t nSqrtArg;
     int nDeltaX;
@@ -1555,39 +1556,34 @@ void __fastcall FASTCMP_DecompressRLEWithEffect(int32_t nStride) {
     int32_t nFloatHighBits;
     int nDeltaY;
     long double fSqrtResult;
-    uint32_t aCircleMask[80];
-    uint32_t* pMaskBase;
-    int fRadiusHalf;
-    int fDistSq;
+    uint32_t aCircleMask[6400];
     int nColIndex;
     nColIndex = 0;
     int nRowOffset;
     nRowOffset = 0;
     uint32_t* pMaskColPtr;
     pMaskColPtr = aCircleMask;
-    int32_t nStrideLocal;
-    nStrideLocal = nStride;
     do {
+      uint32_t* pMaskBase;
       pMaskBase = pMaskColPtr;
       nDeltaX = -0x28;
       do {
         nDeltaY = nColIndex - 0x28;
-        fDistSq = nDeltaX * nDeltaX + nDeltaY * nDeltaY;
-        *pMaskBase = (uint32_t)(fDistSq < 0x640);
-        if (fDistSq < 0x640) {
-          fRadiusHalf = fDistSq * fDistSq / 0x640;
-          fSqrtResult = __CIsqrt((long double)fDistSq);
-          fDistSq = (int)fSqrtResult;
-          fSqrtResult = __CIsqrt((long double)fRadiusHalf);
-          nRadius = (int)fSqrtResult;
-          if ((int)fSqrtResult < fDistSq / 2) {
-            nRadius = fDistSq / 2;
+        iVar2 = nDeltaX * nDeltaX + nDeltaY * nDeltaY;
+        *pMaskBase = (uint32_t)(iVar2 < 0x640);
+        if (iVar2 < 0x640) {
+          fSqrtResult = __CIsqrt((long double)iVar2);
+          iVar3 = (int)fSqrtResult;
+          fSqrtResult = __CIsqrt((long double)(iVar2 * iVar2 / 0x640));
+          iVar2 = (int)fSqrtResult;
+          if ((int)fSqrtResult < iVar3 / 2) {
+            iVar2 = iVar3 / 2;
           }
 
           nProjectedX = nDeltaX;
-          if (fDistSq) {
-            nProjectedX = nDeltaX * nRadius / fDistSq;
-            nDeltaY = nRadius * nDeltaY / fDistSq;
+          if (iVar3) {
+            nProjectedX = nDeltaX * iVar2 / iVar3;
+            nDeltaY = iVar2 * nDeltaY / iVar3;
           }
 
           nClampedX = (int)(nProjectedX + 0x28U) <= 0 ? 0 : nProjectedX + 0x28U;
@@ -1600,13 +1596,13 @@ void __fastcall FASTCMP_DecompressRLEWithEffect(int32_t nStride) {
             nClampedY = 0x4f;
           }
 
-          gaFastCmpEffectPixelOffsetTable[nRowOffset + nDeltaX + 0x28] = (nClampedY - nColIndex) * nStrideLocal - (nDeltaX + 0x28) + nClampedX;
+          gaFastCmpEffectPixelOffsetTable[nRowOffset + nDeltaX + 0x28] = (nClampedY - nColIndex) * nStride - (nDeltaX + 0x28) + nClampedX;
         }
 
         pMaskBase += 0x50;
-        nDeltaY = nDeltaX + 0x29;
+        iVar2 = nDeltaX + 0x29;
         nDeltaX++;
-      } while (nDeltaY < 0x50);
+      } while (iVar2 < 0x50);
 
       nColIndex++;
       pMaskColPtr++;
@@ -1615,49 +1611,48 @@ void __fastcall FASTCMP_DecompressRLEWithEffect(int32_t nStride) {
 
     nDeltaX = 0;
     do {
-      int local_62e0[6320];
       gnFastCmpEffectMapMaxRow[nDeltaX] = 0;
       gnFastCmpEffectMapMinRow[nDeltaX] = 0;
-      nDeltaY = 0;
-      pEffectRow = local_62e0 + nDeltaX;
+      iVar2 = 0;
+      pEffectRow = aCircleMask + nDeltaX + 0x50;
       do {
         if (pEffectRow[-0x50]) {
           measure_column_span:
-          if (nDeltaY < 0x50) {
-            nRadius = nDeltaY * 0x50 + nDeltaX;
-            nClampedX = aCircleMask[nRadius];
-            pMaskRow = aCircleMask + nRadius;
-            gnFastCmpEffectMapMaxRow[nDeltaX] = nDeltaY;
-            while (nClampedX) {
-              pMaskRow += 0x50;
-              nDeltaY++;
-              nClampedX = *pMaskRow;
+          if (iVar2 < 0x50) {
+            nDeltaY = iVar2 * 0x50 + nDeltaX;
+            uVar1 = aCircleMask[nDeltaY];
+            pEffectRow = aCircleMask + nDeltaY;
+            gnFastCmpEffectMapMaxRow[nDeltaX] = iVar2;
+            while (uVar1) {
+              pEffectRow += 0x50;
+              iVar2++;
+              uVar1 = *pEffectRow;
             }
 
-            gnFastCmpEffectMapMinRow[nDeltaX] = nDeltaY;
+            gnFastCmpEffectMapMinRow[nDeltaX] = iVar2;
           }
           break;
         }
         if (*pEffectRow) {
-          nDeltaY++;
+          iVar2++;
           goto measure_column_span;
         }
         if (pEffectRow[0x50]) {
-          nDeltaY += 2;
+          iVar2 += 2;
           goto measure_column_span;
         }
         if (pEffectRow[0xa0]) {
-          nDeltaY += 3;
+          iVar2 += 3;
           goto measure_column_span;
         }
         if (pEffectRow[0xf0]) {
-          nDeltaY += 4;
+          iVar2 += 4;
           goto measure_column_span;
         }
 
-        nDeltaY += 5;
+        iVar2 += 5;
         pEffectRow += 400;
-      } while (nDeltaY < 0x50);
+      } while (iVar2 < 0x50);
 
       nDeltaX++;
       if (nDeltaX >= 0x50) {

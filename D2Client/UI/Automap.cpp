@@ -414,7 +414,7 @@ void __stdcall AUTOMAP_RebalanceTreeLeft(D2AutomapCellStrc * * ppCell) {
 // Source: .\\UI\\automap.cpp
 int32_t __fastcall AUTOMAP_InsertCellIntoTree(D2AutomapCellStrc * pAutomapCell1, D2AutomapCellStrc * * pAutomapCell2) {
     int32_t nInserted;
-    short int wWeight;
+    int32_t wWeight;
     D2AutomapCellStrc* pNode = *pAutomapCell2;
     if (pNode) {
       int nCompare = (int)pAutomapCell1->yPixel - (int)pNode->yPixel;

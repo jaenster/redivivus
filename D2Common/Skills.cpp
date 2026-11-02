@@ -62,7 +62,6 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2SeedStrc.h"
-#include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -157,18 +156,20 @@ int __stdcall TXT_Skills_GetPassiveState(int nSkillId) {
 }
 
 int __fastcall SKILLS_Min(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4) {
-    if (nLeft >= nRight) {
-      nLeft = nRight;
+    if (nLeft < nRight) {
+      return nLeft;
     }
 
+    nLeft = nRight;
     return nLeft;
 }
 
 int __fastcall SKILLS_Max(int nLeft, int nRight, uint32_t nOperand3, uint32_t pContext) {
-    if (nLeft <= nRight) {
-      nLeft = nRight;
+    if (nLeft > nRight) {
+      return nLeft;
     }
 
+    nLeft = nRight;
     return nLeft;
 }
 
@@ -541,7 +542,7 @@ uint32_t __fastcall GetSequenceId(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
       return (uint32_t)(uint8_t)pSkill->pRecord->seqnum;
     }
 
-    short int eSkillId = pSkill->pRecord->skill;
+    int32_t eSkillId = pSkill->pRecord->skill;
     if (eSkillId == SKILL_DiabPrison) {
       return 0;
     }
@@ -823,10 +824,11 @@ D2SkillsTxt * __fastcall GetSkillsTxt(D2SkillStrc * pSkill) {
 int32_t __stdcall GetShrineBonus(D2UnitStrc * pUnit) {
     eD2States eShrineSkillState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_shrine_skill);
     int32_t nBonus = 2;
-    if (eShrineSkillState == STATE_none) {
-      nBonus = 0;
+    if (eShrineSkillState != STATE_none) {
+      return nBonus;
     }
 
+    nBonus = 0;
     return nBonus;
 }
 
@@ -1532,10 +1534,11 @@ int32_t __stdcall SKILLS_GetElementalLength(D2UnitStrc * pUnit, int32_t eSkillId
 int32_t __stdcall SKILLS_GetCharClassFromSkillId(int32_t eSkillId) {
     int32_t nCharClass;
     char cCharClass;
-    if (eSkillId < 0 || eSkillId >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkillId) || (cCharClass = sgptDataTable->pTxtSkills[eSkillId].charclass , nCharClass = (int32_t)cCharClass , cCharClass < '\0')) {
-      nCharClass = 7;
+    if (!(eSkillId < 0 || eSkillId >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkillId) || (cCharClass = sgptDataTable->pTxtSkills[eSkillId].charclass , nCharClass = (int32_t)cCharClass , cCharClass < '\0'))) {
+      return nCharClass;
     }
 
+    nCharClass = 7;
     return nCharClass;
 }
 
@@ -2079,10 +2082,11 @@ int32_t __stdcall SKILLS_CalculateManaCostShifted(int32_t eSkillId, int32_t nSki
     }
 
     nLine = (int)pSkillsTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillsTxt->mana << ((uint8_t)pSkillsTxt->manashift & 0x1f) >> 8;
-    if (nLine < 0) {
-      nLine = 0;
+    if (nLine >= 0) {
+      return nLine;
     }
 
+    nLine = 0;
     return nLine;
 }
 
@@ -2106,10 +2110,11 @@ int32_t __fastcall SKILLS_CalculateSynergyValue_Recursive(int32_t nLevel, int32_
 
 int32_t __stdcall SKILLS_CalcDiminishingReturns(int32_t nLevel, int32_t nMinVal, int32_t nMaxVal) {
     int nResult = nLevel * 0x6e / (nLevel + 6) * (nMaxVal - nMinVal) / 100 + nMinVal;
-    if (nResult > nMaxVal) {
-      nResult = nMaxVal;
+    if (nResult <= nMaxVal) {
+      return nResult;
     }
 
+    nResult = nMaxVal;
     return nResult;
 }
 
@@ -2303,16 +2308,18 @@ int __stdcall SKILL_GetArrowModifierSkill(D2UnitStrc * pUnit, int * pnStatLevel)
             if (nExplosiveArrowLevel <= 0) {
               return 0x1f;
             }
-            if (pnStatLevel) {
-              *pnStatLevel = nExplosiveArrowLevel;
+            if (!pnStatLevel) {
+              return 0x29;
             }
 
+            *pnStatLevel = nExplosiveArrowLevel;
             return 0x29;
           }
-          if (pnStatLevel) {
-            *pnStatLevel = nStatLevel;
+          if (!pnStatLevel) {
+            return 0x1b;
           }
 
+          *pnStatLevel = nStatLevel;
           return 0x1b;
         }
 
@@ -2322,10 +2329,11 @@ int __stdcall SKILL_GetArrowModifierSkill(D2UnitStrc * pUnit, int * pnStatLevel)
 
     nStatLevel = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_magicarrow, 0);
     if (nStatLevel > 0) {
-      if (pnStatLevel) {
-        *pnStatLevel = nStatLevel;
+      if (!pnStatLevel) {
+        return 0x1b;
       }
 
+      *pnStatLevel = nStatLevel;
       return 0x1b;
     }
 
@@ -2333,10 +2341,11 @@ int __stdcall SKILL_GetArrowModifierSkill(D2UnitStrc * pUnit, int * pnStatLevel)
     if (nExplosiveArrowLevel <= 0) {
       return 0;
     }
-    if (pnStatLevel) {
-      *pnStatLevel = nExplosiveArrowLevel;
+    if (!pnStatLevel) {
+      return 0x29;
     }
 
+    *pnStatLevel = nExplosiveArrowLevel;
     return 0x29;
 }
 
@@ -2360,25 +2369,27 @@ BOOL __stdcall STATES_RemoveAllProgressiveStates(D2UnitStrc * pUnit) {
     }
 
     pUnit = 0;
-    if ((short int)sgptDataTable->nAllStatesDataTblFlag0x10Size > 0) {
-      eD2States eStateId;
-      do {
-        eState = (eD2States)sgptDataTable->pAllStatesDataTblFlag0x10[(int)pUnit].nStateId;
-        eStateId = DATATBLS::ItemStats::UNIT_GetUnitState(i, eState);
-        if (eStateId != STATE_none) {
-          pStatList = Stats::StatsEx::GetStatsByState(i, eState);
-          if (pStatList) {
-            Stats::StatsEx::STATLIST_RemoveAndRecalc(i, pStatList);
-            Stats::StatsEx::FreeStatList(&pStatList->sStatList);
-          }
+    if ((short int)sgptDataTable->nAllStatesDataTblFlag0x10Size <= 0) {
+      return 1;
+    }
 
-          DATATBLS::ItemStats::SetState(i, eState, 0);
+    do {
+      eD2States eStateId;
+      eState = (eD2States)sgptDataTable->pAllStatesDataTblFlag0x10[(int)pUnit].nStateId;
+      eStateId = DATATBLS::ItemStats::UNIT_GetUnitState(i, eState);
+      if (eStateId != STATE_none) {
+        pStatList = Stats::StatsEx::GetStatsByState(i, eState);
+        if (pStatList) {
+          Stats::StatsEx::STATLIST_RemoveAndRecalc(i, pStatList);
+          Stats::StatsEx::FreeStatList(&pStatList->sStatList);
         }
 
-        nStateCount = (int32_t)(short int)sgptDataTable->nAllStatesDataTblFlag0x10Size;
-        pUnit = (D2UnitStrc*)((uintptr_t)&pUnit->eUnitType + 1);
-      } while ((int)pUnit < nStateCount);
-    }
+        DATATBLS::ItemStats::SetState(i, eState, 0);
+      }
+
+      nStateCount = (int32_t)(short int)sgptDataTable->nAllStatesDataTblFlag0x10Size;
+      pUnit = (D2UnitStrc*)((uintptr_t)&pUnit->eUnitType + 1);
+    } while ((int)pUnit < nStateCount);
 
     return 1;
 }
@@ -2451,7 +2462,7 @@ int32_t __stdcall SKILL_GetConcentrationDamageBonus(D2UnitStrc * pUnit, int32_t 
 // Computes the kick (Assassin Dragon Talon etc.) damage range and bonus and accumulates it into the three out-params (min/max/bonus). Reads item_kickdamage stat, temporarily marks the equipped weapon and off-hand weapon item-stats active, then derives base min/max from the equipped boots' ItemsTxt nMinDam/nMaxDam plus strength/dexterity %-bonuses (D2ApplyPercent) and the damagepercent/maxdamage_percent stats. Clamps damage% to >= -90. Server-side; no return value, results written through pnParam1/2/3.
 void __stdcall SKILL_CalcKickDamage(D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, int * pnDamagePercent) {
     int16_t nDexBonus;
-    eD2BodyLoc eBodyLoc;
+    int32_t eBodyLoc;
     uint32_t bIsWeapon;
     bool bWeaponEnabled;
     D2UnitStrc* pWeaponOwner;
@@ -3034,14 +3045,10 @@ void __stdcall SKILLS_UpdateAllPassiveSkills(D2UnitStrc * pUnit) {
     D2SkillStrc* pSkillInst;
     eD2States ePassiveState;
     eD2Skills eSkill;
+    int32_t nPassiveSkillCount;
     int i = sgptDataTable->nPassiveSkillsCount;
-    int32_t nPassiveSkillCount = 0;
     D2DataTableTxtStrc* pDataTable = sgptDataTable;
-    if (i <= 0) {
-      return;
-    }
-
-    do {
+    for (nPassiveSkillCount = 0; nPassiveSkillCount < i; nPassiveSkillCount++) {
       short int nSkillId = nPassiveSkillCount < 0 || nPassiveSkillCount >= pDataTable->nPassiveSkillsCount ? -1 : pDataTable->pPassiveSkillsPerClassStrc[nPassiveSkillCount].nSkillId;
       eSkill = (eD2Skills)nSkillId;
       D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < pDataTable->nTxtSkillsCount ? pDataTable->pTxtSkills + eSkill : nullptr;
@@ -3059,9 +3066,7 @@ void __stdcall SKILLS_UpdateAllPassiveSkills(D2UnitStrc * pUnit) {
           }
         }
       }
-
-      nPassiveSkillCount++;
-    } while (nPassiveSkillCount < i);
+    }
 }
 
 // Removes a permanent skill entry from pUnit's skill list. Clears the associated passive state if any, deselects the skill from left/right/current slots if it was active, and either decrements the skill's level (when decrement flag is set and level remains >= 1) or fully unlinks and frees the D2SkillStrc node. Finishes by updating passive skill stats.

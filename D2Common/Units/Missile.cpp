@@ -973,18 +973,20 @@ int32_t __stdcall GetSpecialParamValue(D2UnitStrc * pUnit, D2UnitStrc * pOwner, 
 }
 
 int __fastcall MISSILE_Min(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4) {
-    if (nLeft >= nRight) {
-      nLeft = nRight;
+    if (nLeft < nRight) {
+      return nLeft;
     }
 
+    nLeft = nRight;
     return nLeft;
 }
 
 int __fastcall MISSILE_Max(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4) {
-    if (nLeft <= nRight) {
-      nLeft = nRight;
+    if (nLeft > nRight) {
+      return nLeft;
     }
 
+    nLeft = nRight;
     return nLeft;
 }
 

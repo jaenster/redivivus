@@ -1167,6 +1167,7 @@ BOOL __fastcall DrawImage(struct D2GfxDataStrc * pData, int nPosX, int nPosY, DW
 void __fastcall DrawShiftedImage(struct D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nGlobalPaletteShift);
 void __fastcall DrawVerticalCropImage(struct D2GfxDataStrc * pData, int nPosX, int nPosY, int nSkipLines, int nDrawLines, int nDrawMode);
 void __fastcall DrawClippedImage(struct D2GfxDataStrc * pData, int nPosX, int nPosY, void * pCropRect, int nDrawMode);
+// Draws the shadow sprite as one Direct3D quad through RENDERER_D3D_DrawShadowQuad, passing its D2D3DSpriteInfoStrc.
 void __fastcall DrawShadow(struct D2GfxDataStrc * pData, int nPosX, int nPosY);
 void __fastcall DrawImageFast(struct D2GfxDataStrc * pData, int nPosX, int nPosY, BYTE nPaletteIndex);
 void __fastcall DebugFillBackBuffer(int nPosX, int nPosY);

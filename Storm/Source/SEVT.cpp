@@ -520,10 +520,11 @@ uint32_t __fastcall LINKEDLIST_GetCount(int * pList) {
 
 // Returns the next node in the linked list, or the head node if the input is NULL. Used for iteration where NULL represents the start position. Adds 4-byte offset to get to the next link field.
 int32_t __thiscall LINKEDLIST_GetNextOrHead(int32_t pThis, int32_t nNode) {
-    if (!nNode) {
-      nNode = pThis + 4;
+    if (nNode) {
+      return nNode;
     }
 
+    nNode = pThis + 4;
     return nNode;
 }
 

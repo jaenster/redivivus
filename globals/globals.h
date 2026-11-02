@@ -834,6 +834,11 @@ struct D2D3DTileCornerStrc {
     /* 0x08 */ int32_t nZ;
 };
 
+struct D2DnsThreadParamStrc {
+    /* 0x00 */ char * pszOut;
+    /* 0x04 */ char * pszHost;
+};
+
 struct D2EndGameUiState {
     /* 0x00 */ BOOL showCongrats; // Show end-game congrats flow
     /* 0x04 */ BOOL showCutscene; // End-game cutscene/congrats active flag
@@ -1239,7 +1244,7 @@ extern char gszHeapTagOperatorNew[4];
 // lpDefault parameter of GetPrivateProfileStringA
 extern char lpDefault_006cc837[1];
 extern uint8_t gbChatDlgUpdateMarker;
-extern char gbCompressionDecoderMarker[2];
+extern char gszDot[2];
 extern char s_Dec_006ccb00[4];
 extern char s_Nov_006ccb04[4];
 extern char s_Oct_006ccb08[4];
@@ -1750,8 +1755,8 @@ extern eD2ArenaFlags CLIENT_ArenaFlags;
 extern eD2PlayerClassIDDWORD eD2PlayerClassIDDWORD_00712f00;
 extern int gnChatHistoryReadIndex;
 extern uint32_t gnChatHistoryWriteIndex;
-extern D2UIFlagInitStrc gUIFlagChatInit;
-extern D2UIFlagInitStrc g_UIFlagInitChatPanel;
+extern D2UIFlagInitStrc gUIFlagChatInit[4];
+extern D2UIFlagInitStrc g_UIFlagInitChatPanel[7];
 extern D2EscMenuHeaderStrc gEscMenuHeaderInitData;
 // 38 records of {nEnabled,nHideable,nSavedState}. Split into three labels, so opening the ESC menu wrote 456 bytes past a 4-byte object and read its per-flag config from garbage.
 extern D2EscMenuUIFlagStrc gaEscMenuUIFlags[38];
@@ -1848,7 +1853,7 @@ extern int nConfigControlSelected;
 extern D2UIConfigTabEntryStrc g_UIConfigTabTable[3];
 extern uint32_t gnConfigBindingFirstClick;
 extern D2UIFlagInitStrc gsUIFlagInit1;
-extern D2UIFlagInitStrc gsUIFlagInit0;
+extern D2UIFlagInitStrc gsUIFlagInit0[6];
 extern D2UIFlagInitStrc gsUIFlagInit2;
 extern D2UIFlagInitStrc gsUIFlagInit3;
 extern D2StatDescRowStrc gaStatDescRows[15];
@@ -1908,7 +1913,7 @@ extern int nCashDisplayItemCount;
 // @evidence u16 = 0x0FB1. Read at 004bfef3 as movzx word [piVar1-0x16] and passed
 // to GetLocaleString. A string id, not a Y bound. @wasnamed gnNpcCashTabBoundsY1 (3-way collision).
 extern D2NpcCashTabStrc gaNpcCashTabs[2];
-extern D2UIFlagInitStrc gUIFlagMapInit;
+extern D2UIFlagInitStrc gUIFlagMapInit[8];
 // Former interior labels: gnCursorInvTypeAutoOpenB=+0x4
 extern uint32_t gnCursorInvTypeAutoOpenC[5];
 extern uint32_t gnCursorInvTypeAutoOpenA;
@@ -2331,7 +2336,7 @@ extern char * g_szPrimaryAssignment;
 extern char * g_szAssignments;
 extern int gbSystemInfoInitialized;
 extern uint32_t g_eOSType;
-extern int fGameVersion;
+extern float fGameVersion;
 extern uint32_t g_dwTotalPhysicalMemory;
 // lpSystemInfo parameter of GetSystemInfo
 extern _SYSTEM_INFO gSystemInfo;
@@ -3838,6 +3843,7 @@ extern int gnGlidePerspectiveOriginY;
 extern void * gpPerspectiveLookupTable;
 extern uint8_t (*gpGlideSmackerTexBuf0)[32768];
 extern uint8_t (*gpGlideSmackerTexBuf1)[32768];
+extern D2GlideVertexStrc gaGlideSmackerVertices[4];
 extern uint32_t gnGlideSmackTex1StartAddr;
 extern uint32_t gnGlideSmackTex2StartAddr;
 extern uint8_t (*gpGlideSmackerTexBuf2)[32768];
@@ -3991,8 +3997,7 @@ extern char lpFileName_00881c58[260];
 // lpAddend parameter of InterlockedDecrement
 // lpAddend parameter of InterlockedIncrement
 extern LONG * lpAddend_00881d5c;
-extern uint8_t gbBnetFtpFileTransferActive;
-extern uint8_t bBnetFtpDownloadActive;
+extern char gbBnetFtpFileTransferActive[256];
 extern char gszBNetChatInputBuffer[260];
 // lpCriticalSection parameter of LeaveCriticalSection
 // lpCriticalSection parameter of EnterCriticalSection
@@ -4273,14 +4278,7 @@ extern void * gpD3DTextureSpritePoolMemory0;
 extern void * gpD3DTextureSpritePoolMemory1;
 extern IDirect3DVertexBuffer * g_pD3DSpriteQuadVB;
 extern int gd3dVertexBufferOffset;
-extern int gD3DFontVertex0;
-extern float gfD3DFontVertex0X;
-extern float gfD3DFontVertex0Z;
-extern float gfD3DFontVertex0Y;
-extern float gfD3DFontVertex2Y;
-extern float gfD3DFontVertex1Y;
-extern float gfD3DFontVertex2X;
-extern float gfD3DFontVertex3X;
+extern D2D3DVertexStrc gD3DFontVertex0[4];
 // lpBuffer parameter of GetCharWidthA
 extern void * g_pFontTextureBuffer[96];
 extern void * g_pFontTextureSurface[96];
@@ -4292,6 +4290,7 @@ extern D2D3DVertexStrc gaD3DPerspectiveStripVertices[15];
 // one: 006b80af does FST float with 0.0 into it, and the stride is a 32-byte D3DTLVERTEX (z=0.5 at
 // +8, rhw=1.0 at +0xc, tu/tv at +0x18/+0x1c). @wasnamed gpD3DPerspectiveVertexBuffer.
 extern D2D3DVertexStrc gaD3DPerspectiveVertices[4];
+extern uint16_t gpD3DGroundTileVertexBuffer[65];
 extern IDirect3DVertexBuffer * g_pD3DGroundTileVB;
 extern uint8_t GlobalGreen;
 extern uint8_t GlobalBlue;
@@ -4301,6 +4300,7 @@ extern int gnPerspectiveScaleY;
 extern int gnPerspectiveScaleZ;
 extern uint32_t g_aPerspectiveZDivisionTable[8192];
 extern uint32_t g_aSmackerSurfaceArray;
+extern D2D3DVertexStrc gaD3DSmackerVertices[4];
 extern void * pSmackerDecodeBuffer;
 extern IDirectDrawSurface7 * gpD3DSmackerSystemSurface0[2];
 extern IDirect3DTexture2 * gpD3DSmackerSystemTexture0[2];

@@ -605,7 +605,7 @@ void __stdcall LOGFILE_StoreGameStartupInfo() {
       break;
     }
 
-    Src::LogManager::LOGFILE_WriteStringToFile("%s running under %s (Version %.3f)", "Diablo II", szOsName, (double)(float)fGameVersion);
+    Src::LogManager::LOGFILE_WriteStringToFile("%s running under %s (Version %.3f)", "Diablo II", szOsName, (double)fGameVersion);
     Src::LogManager::LogCpuInfo();
     float fMemBytes = (float)g_dwTotalPhysicalMemory;
     if (g_dwTotalPhysicalMemory < 0) {

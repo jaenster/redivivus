@@ -271,7 +271,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
     uint32_t nScratch;
     uint32_t nFrom;
     uint32_t nCopy;
-    uint8_t byStrChar;
+    int32_t byStrChar;
     gz_header* pGzHead;
     uint8_t* pbExtra;
     if (!pInflateStream) {

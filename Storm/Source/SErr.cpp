@@ -107,10 +107,11 @@ static LPSTR * SERR_GetString(int32_t nErrorIndex) {
     HMODULE hInstance_lcl = SSystem::StormGetInstance();
     /* HINSTANCE hInstance for LoadStringA */ nLen = LoadStringA(hInstance_lcl, uID, szErrorString, nLen);
     szErrorString = gszErrorStringBuffer;
-    if (!nLen) {
-      szErrorString = gaSErrMessageStrings[nErrorIndex];
+    if (nLen) {
+      return (LPSTR*)szErrorString;
     }
 
+    szErrorString = gaSErrMessageStrings[nErrorIndex];
     return (LPSTR*)szErrorString;
 }
 

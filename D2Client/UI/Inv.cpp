@@ -4069,20 +4069,22 @@ void __stdcall INV_DrawNpcButtonTooltip() {
 }
 
 BOOL __stdcall INV_CanReturnToShop() {
-    int nItemType;
-    if (g_nCurrentInventoryPage == 1 || g_nCurrentInventoryPage == 2 || g_nCurrentInventoryPage == 4 || g_nCurrentInventoryPage == 3) {
-      D2UnitStrc* pCursorItem_lcl;
-      pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
-      pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
-      if (!pCursorItem_lcl) {
-        nItemType = ui::GetItemType();
-        if (nItemType == 7 || nItemType == 1 || nItemType == 4) {
-          return 1;
-        }
-      }
+    if (!(g_nCurrentInventoryPage == 1 || g_nCurrentInventoryPage == 2 || g_nCurrentInventoryPage == 4 || g_nCurrentInventoryPage == 3)) {
+      return 0;
     }
 
-    return 0;
+    D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
+    pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
+    if (pCursorItem_lcl) {
+      return 0;
+    }
+
+    int nItemType = ui::GetItemType();
+    if (!(nItemType == 7 || nItemType == 1 || nItemType == 4)) {
+      return 0;
+    }
+
+    return 1;
 }
 
 void __stdcall INV_HandleShopEscapeKey(D2UIMouseMsgStrc * pMsg) {

@@ -340,16 +340,13 @@ BOOL __fastcall Skills_SrvDoFunc_068_WarCry(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 BOOL __fastcall Skills_SrvDoFunc_070_DoubleSwing(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+    uint32_t nSeqFlags;
     D2UnitStrc* pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pTargetUnit) {
       return 0;
     }
 
-    uint32_t nSeqFlags = pUnit->nSeqFrame >> 8 & 0x80000001;
-    bool bIsFirstHit = !nSeqFlags;
-    if ((int)nSeqFlags < 0) {
-      bIsFirstHit = (nSeqFlags - 1 | -2) == -1;
-    }
+    bool bIsFirstHit = !((pUnit->nSeqFrame >> 8) % 2);
     if (!bIsFirstHit) {
       int32_t nMeleeRange;
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
@@ -370,21 +367,26 @@ BOOL __fastcall Skills_SrvDoFunc_070_DoubleSwing(::SGAMEDATA * pGame, D2UnitStrc
 BOOL __fastcall SKILL_CheckCorpseCanBeConsumed(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int eMonsterUnitType;
     uint32_t eMonsterQuestId;
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
-      BOOL bCorpseConsumed;
-      bCorpseConsumed = SkillsServer::D2CheckCorpseConsumed(pUnit, 0xc);
-      if (bCorpseConsumed) {
-        bCorpseConsumed = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-        if (!bCorpseConsumed) {
-          Ai::AiGeneral::GetMonsterNameAndAi(pUnit, &eMonsterQuestId, &eMonsterUnitType);
-          if (eMonsterQuestId == -1 || eMonsterUnitType) {
-            return 1;
-          }
-        }
-      }
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+      return 0;
     }
 
-    return 0;
+    BOOL bCorpseConsumed = SkillsServer::D2CheckCorpseConsumed(pUnit, 0xc);
+    if (!bCorpseConsumed) {
+      return 0;
+    }
+
+    bCorpseConsumed = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+    if (bCorpseConsumed) {
+      return 0;
+    }
+
+    Ai::AiGeneral::GetMonsterNameAndAi(pUnit, &eMonsterQuestId, &eMonsterUnitType);
+    if (!(eMonsterQuestId == -1 || eMonsterUnitType)) {
+      return 0;
+    }
+
+    return 1;
 }
 
 // Generic server-side handler for targeted necromancer curses (Lower Resist, Amplify Damage, Life Tap, Iron Maiden, Weaken, Terror, etc). Reads curse stats and state from skills.txt aurastat/aurastatcalc/auratargetstate, applies via SKILLNEC_ApplyCurseToUnit, then forces monster AI re-evaluation.
@@ -757,6 +759,7 @@ void __fastcall SKILLBAR_ApplyFrenzyStack(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 BOOL __fastcall Skills_SrvDoFunc_009_FrenzyMeleeHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+    uint32_t nSeqFlags;
     BOOL bHitResult;
     int32_t nMeleeRange;
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
@@ -764,11 +767,7 @@ BOOL __fastcall Skills_SrvDoFunc_009_FrenzyMeleeHit(::SGAMEDATA * pGame, D2UnitS
       return 0;
     }
 
-    uint32_t nSeqFlags = pUnit->nSeqFrame >> 8 & 0x80000001;
-    bool bIsFirstHit = !nSeqFlags;
-    if ((int)nSeqFlags < 0) {
-      bIsFirstHit = (nSeqFlags - 1 | -2) == -1;
-    }
+    bool bIsFirstHit = !((pUnit->nSeqFrame >> 8) % 2);
     if (bIsFirstHit) {
       UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
       UNIT::SUnitDmg::DAMAGE_RemoveDamageListEntry(pGame, pUnit, pTarget);

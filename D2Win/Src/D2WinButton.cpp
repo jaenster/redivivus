@@ -437,19 +437,20 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     if (!(pButton->nButtonFlags & 4U)) {
       D2Sound::Src::D2SoundFast::SOUND_PlaySoundEffect((uint8_t*)"data\\global\\sfx\\cursor\\button.wav");
     }
-    if (pButton->nButtonFlags & 3) {
-      OnPress pfnOnPress;
-      pfnOnPress = pButton->sControl.fpOnPress;
-      if (pfnOnPress) {
-        if (gnFormControlCount <= 0) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x221);
-          exit(-1);
-        }
-
-        (*pfnOnPress)(pControlMsg);
-      }
+    if (!(pButton->nButtonFlags & 3)) {
+      return 1;
     }
 
+    OnPress pfnOnPress = pButton->sControl.fpOnPress;
+    if (!pfnOnPress) {
+      return 1;
+    }
+    if (gnFormControlCount <= 0) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x221);
+      exit(-1);
+    }
+
+    (*pfnOnPress)(pControlMsg);
     return 1;
 }
 

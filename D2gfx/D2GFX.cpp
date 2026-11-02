@@ -498,10 +498,11 @@ void __stdcall UpdateOSCursorVisibilty(int32_t shouldHide) {
 
 uint32_t __stdcall IsFullscreen() {
     uint32_t bIsFullscreen = 0;
-    if (RENDERER_CurrentRenderedFunctions) {
-      bIsFullscreen = (uint32_t)!bD2GFX_Windowed;
+    if (!RENDERER_CurrentRenderedFunctions) {
+      return bIsFullscreen;
     }
 
+    bIsFullscreen = (uint32_t)!bD2GFX_Windowed;
     return bIsFullscreen;
 }
 

@@ -71,7 +71,6 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
-#include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Common/Waypoints.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Quests/QUESTS/Quest40.h"
@@ -1443,10 +1442,11 @@ BOOL __fastcall CheckIfObjectOrientationIs1(D2UnitStrc * pUnit) {
 
 BOOL __stdcall IsShrine(D2UnitStrc * pUnit) {
     BOOL bResult;
-    if (pUnit->eUnitType != UNIT_OBJECT || (bResult = 1 , !(pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->SubClass & 1U))) {
-      bResult = 0;
+    if (!(pUnit->eUnitType != UNIT_OBJECT || (bResult = 1 , !(pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->SubClass & 1U)))) {
+      return bResult;
     }
 
+    bResult = 0;
     return bResult;
 }
 
@@ -3356,7 +3356,7 @@ uint8_t __stdcall GetItemComponent(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     D2UnitStrc* pLeftArmItem;
     BOOL bNotBroken;
     D2InventoryStrc* pInventory;
-    eD2BodyLoc eBodyLoc = ITEMS::Items::GetBodyLocation(pItem);
+    int32_t eBodyLoc = ITEMS::Items::GetBodyLocation(pItem);
     if (eBodyLoc == BODYLOC_L_ARM || eBodyLoc == BODYLOC_R_ARM) {
       D2UnitStrc* pRightArmItem;
       pInventory = pUnit->pInventory;

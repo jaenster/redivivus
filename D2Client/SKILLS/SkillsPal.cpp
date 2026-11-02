@@ -110,7 +110,7 @@ BOOL __fastcall Skills_CltDoFunc_Pal_Zeal_DirOffsetMissile(D2UnitStrc * pUnit, e
       }
 
       nRandOffset = Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 3);
-      nDirIndex = nRandOffset - 1 + (nDirQuadrant + 4 & 0x80000007) & 7;
+      nDirIndex = nRandOffset - 1 + (int)(nDirQuadrant + 4) % 8 & 7;
       nVelocity = Units::GetXPosFromDynamicPathUnit(pUnit);
       nXOffset = gnPaladinSkillIndexTable[nDirIndex];
       nYOffset = Units::GetYPosFromDynamicPathUnit(pUnit);
@@ -252,26 +252,28 @@ BOOL __fastcall Skills_CltDoFunc_Pal_RandomRadiusMissileField(D2UnitStrc * pUnit
                 sSkillArg.pOwner = pUnit;
                 sSkillArg.nMissileTxtNo = eMissileId;
                 sSkillArg.eSkillNo = eSkill;
-                if (nCenterX > 0) {
-                  do {
-                    nRandSector = nRadius * 2 + 1;
-                    nRandY = Archive::RANDOM_RandomNumberSelector(pSeed, nRandSector);
-                    nOffsetX = nRandY - nRadius;
-                    nRandSector = Archive::RANDOM_RandomNumberSelector(pSeed, nRandSector);
-                    nCenterX = nRandSector - nRadius;
-                    if (nCenterX * nCenterX + nOffsetX * nOffsetX < nRadius * nRadius) {
-                      sSkillArg.nX = nOffsetX + 2 + nBaseRangeCalc;
-                      sSkillArg.nY = nCenterX + 2 + nBaseRadius;
-                      pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
-                      if (pMissile) {
-                        nRandSector = Archive::UNIT_GetModuloFromSeed(pSeed, 0x40);
-                        D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pMissile->pPath.pDynamicPath, (uint8_t)nRandSector);
-                      }
-                    }
-
-                    nSkillLvl--;
-                  } while (nSkillLvl);
+                if (nCenterX <= 0) {
+                  return 1;
                 }
+
+                do {
+                  nRandSector = nRadius * 2 + 1;
+                  nRandY = Archive::RANDOM_RandomNumberSelector(pSeed, nRandSector);
+                  nOffsetX = nRandY - nRadius;
+                  nRandSector = Archive::RANDOM_RandomNumberSelector(pSeed, nRandSector);
+                  nCenterX = nRandSector - nRadius;
+                  if (nCenterX * nCenterX + nOffsetX * nOffsetX < nRadius * nRadius) {
+                    sSkillArg.nX = nOffsetX + 2 + nBaseRangeCalc;
+                    sSkillArg.nY = nCenterX + 2 + nBaseRadius;
+                    pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
+                    if (pMissile) {
+                      nRandSector = Archive::UNIT_GetModuloFromSeed(pSeed, 0x40);
+                      D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pMissile->pPath.pDynamicPath, (uint8_t)nRandSector);
+                    }
+                  }
+
+                  nSkillLvl--;
+                } while (nSkillLvl);
 
                 return 1;
               }

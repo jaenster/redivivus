@@ -415,16 +415,19 @@ static int __stdcall SKILLSEMON_CltSetReviveGfx(eMissilesId eMissileId, eD2Skill
     if (!bGotCoords) {
       return 0;
     }
-    if (nMissileCount > 0) {
-      uint32_t nReviveCount = 0;
-      do {
-        sSkillArg.nUnitX = gnSkillGfxReviveTableOffset2[nReviveCount & 7];
-        sSkillArg.nUnitY = gnSkillGfxReviveTableOffset1[nReviveCount & 7];
-        sSkillArg.nFunctionParam = nReviveCount;
-        UNIT::Missile::MakeMissile(&sSkillArg);
-        nReviveCount++;
-      } while ((int)nReviveCount < nMissileCount);
+
+    uint32_t nReviveCount = 0;
+    if (nMissileCount <= 0) {
+      return 1;
     }
+
+    do {
+      sSkillArg.nUnitX = gnSkillGfxReviveTableOffset2[nReviveCount & 7];
+      sSkillArg.nUnitY = gnSkillGfxReviveTableOffset1[nReviveCount & 7];
+      sSkillArg.nFunctionParam = nReviveCount;
+      UNIT::Missile::MakeMissile(&sSkillArg);
+      nReviveCount++;
+    } while ((int)nReviveCount < nMissileCount);
 
     return 1;
 }

@@ -2024,19 +2024,16 @@ BOOL __stdcall CHARSEL_HandleCharListClick(D2ControlMsg * pControlMsg) {
     static unsigned int gdwLastCharListClickTick; D2_STATIC_GUARD_BSS(gdwLastCharListClickTick, "D2Launch::CharSel::CHARSEL_HandleCharListClick::gdwLastCharListClickTick");
 
     BOOL bIsExpansion;
+    int nSlotIndex;
     if (!gnCharSelSelectedIndex) {
-      int nSlotIndex = 0;
       ::D2WinTextBox* nClickedControlId = (::D2WinTextBox*)pControlMsg->pControl;
-      if (gnCharSelScreenSlotCount > 0) {
-        do {
-          bIsExpansion = Fog::D2CheckExpansionGame();
-          if (bIsExpansion && nClickedControlId == (::D2WinTextBox*)gaCharSelExpansionIconControls[nSlotIndex] || nClickedControlId == gaCharSelScreenSlotControls[nSlotIndex]) {
-            break;
-          }
-
-          nSlotIndex++;
-        } while (nSlotIndex < gnCharSelScreenSlotCount);
+      for (nSlotIndex = 0; nSlotIndex < gnCharSelScreenSlotCount; nSlotIndex++) {
+        bIsExpansion = Fog::D2CheckExpansionGame();
+        if (bIsExpansion && nClickedControlId == (::D2WinTextBox*)gaCharSelExpansionIconControls[nSlotIndex] || nClickedControlId == gaCharSelScreenSlotControls[nSlotIndex]) {
+          break;
+        }
       }
+
       if (D2Client::CharScreen::TotalCurrentChars < g_nCharSelNavigationIndex + nSlotIndex) {
         return 0;
       }

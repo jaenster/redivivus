@@ -1016,10 +1016,11 @@ void __stdcall SCOMP_DecompressSimple(uint32_t * pDst, uint32_t * pnDstSize, uin
 }
 
 int32_t __thiscall HUFFMAN_GetNextNodeOrDefault(int32_t pThis, int32_t nChildOrDefault) {
-    if (!nChildOrDefault) {
-      nChildOrDefault = pThis + 4;
+    if (nChildOrDefault) {
+      return nChildOrDefault;
     }
 
+    nChildOrDefault = pThis + 4;
     return nChildOrDefault;
 }
 
@@ -6191,10 +6192,11 @@ int PKWARE_ParseByteStream(TCmpStruct * pCmpState, uint8_t * pbSrcPos) {
       nHashIdx++;
       pbCandidateMatch = pCmpState->work_buff + *pChainLinkEntry;
       if (pbWindowLimit <= pbCandidateMatch) {
-        if (nBestLen < 2) {
-          nBestLen = 0;
+        if (nBestLen >= 2) {
+          return nBestLen;
         }
 
+        nBestLen = 0;
         return nBestLen;
       }
     } while (true);

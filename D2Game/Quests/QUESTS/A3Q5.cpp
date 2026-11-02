@@ -233,9 +233,6 @@ BOOL __fastcall Q22_PlayerUpdateBlackenedTempleState(::SGAMEDATA * pGame, D2Unit
 BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     bool _bSameOrAdjacentRoom;
     uint32_t nUnitGUID;
-    eAct neAct;
-    BOOL bQuestState;
-    eD2LevelId eLevel;
     D2QuestDataStrc* pQuestDataBlackenedTemple;
     D2UnitStrc* pCouncilUnit;
     D2RoomStrc* pTargetRoom;
@@ -250,59 +247,65 @@ BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * p
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     /* GetQuestState(Blackened Temple=0x15, Completed=0): bail if already finished
                           */ /* GetQuestState(Blackened Temple=0x15, Step0x04=4): bail if already advanced
-                         past council kill */ if (pRoom) {
+                         past council kill */ if (!pRoom) {
+      return 0;
+    }
+
+    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
+    if (bQuestState) {
+      return 0;
+    }
+
+    bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
+    if (bQuestState) {
+      return 0;
+    }
+
+    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+    eAct neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (neAct == ACT_III) {
       D2QuestDataA3Q5Strc* pDVar1;
-      bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
-      if (!bQuestState) {
-        bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
-        if (!bQuestState) {
-          eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-          neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-          if (neAct == ACT_III) {
-            pQuestDataBlackenedTemple = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheBlackenedTemple);
-            pDVar1 = pQuestDataBlackenedTemple->pQuestSpecificData.pA3Q5;
-            nUnitGUID = (uint32_t)((uint32_t)(uint8_t)pDVar1->bLastKilledCouncilByte0 | (uint32_t)(uint8_t)pDVar1->bCouncilMemberKillNotify << 8 | (uint32_t)(uint8_t)pDVar1->bCouncilMemberTracking << 16 | (uint32_t)(uint8_t)pDVar1->byLastKilledCouncilGUIDByte3 << 24);
-            pCouncilUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nUnitGUID);
-            if (pCouncilUnit) {
-              pTargetRoom = D2Common::Units::UNITS_GetRoom(pCouncilUnit);
-              if (pTargetRoom) {
-                _bSameOrAdjacentRoom = 0;
-                if (pRoom == pTargetRoom) {
-                  _bSameOrAdjacentRoom = 1;
-                } else {
-                  pRoom = D2Common::Units::UNITS_GetRoom(pPlayerUnit_lcl);
-                  if (!pRoom) {
-                    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdf);
-                    exit(-1);
-                  }
+      pQuestDataBlackenedTemple = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheBlackenedTemple);
+      pDVar1 = pQuestDataBlackenedTemple->pQuestSpecificData.pA3Q5;
+      nUnitGUID = (uint32_t)((uint32_t)(uint8_t)pDVar1->bLastKilledCouncilByte0 | (uint32_t)(uint8_t)pDVar1->bCouncilMemberKillNotify << 8 | (uint32_t)(uint8_t)pDVar1->bCouncilMemberTracking << 16 | (uint32_t)(uint8_t)pDVar1->byLastKilledCouncilGUIDByte3 << 24);
+      pCouncilUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nUnitGUID);
+      if (pCouncilUnit) {
+        pTargetRoom = D2Common::Units::UNITS_GetRoom(pCouncilUnit);
+        if (pTargetRoom) {
+          _bSameOrAdjacentRoom = 0;
+          if (pRoom == pTargetRoom) {
+            _bSameOrAdjacentRoom = 1;
+          } else {
+            pRoom = D2Common::Units::UNITS_GetRoom(pPlayerUnit_lcl);
+            if (!pRoom) {
+              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdf);
+              exit(-1);
+            }
 
-                  D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &pAdjRoomList, (int*)&nAdjRoomCount);
-                  for (iAdjRoomIdx = 0; iAdjRoomIdx < nAdjRoomCount; iAdjRoomIdx++) {
-                    if (pAdjRoomList[iAdjRoomIdx] == pTargetRoom) {
-                      _bSameOrAdjacentRoom = 1;
-                      break;
-                    }
-                  }
-                }
-
-                pPlayerData = D2Common::Units::GetPlayerData(pPlayerUnit_lcl);
-                pQuestBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-                if (_bSameOrAdjacentRoom) {
-                  /* GetQuestState(Khalim's Will=0x12, Completed=0): if Khalim's Will already
-                         done, jump straight to Completed; else only to Step0x04 */ bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Completed);
-                  if (bQuestState) {
-                    eQuestState = QUESTSTATE_Completed;
-                  } else {
-                    eQuestState = QUESTSTATE_Step0x04;
-                  }
-
-                  /* SetQuestState(Blackened Temple=0x15, => Completed=0 if Khalim's Will done,
-                         else Step0x04=4): record council kill */ D2Common::QuestRecord::SetQuestState(pQuestBitBuffer, QUEST_TheBlackenedTemple, eQuestState);
-                  /* SetQuestState(Blackened Temple=0x15, JustCompleted=0xd): trigger the in-game
-                         completion/log notification */ D2Common::QuestRecord::SetQuestState(pQuestBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
-                }
+            D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &pAdjRoomList, (int*)&nAdjRoomCount);
+            for (iAdjRoomIdx = 0; iAdjRoomIdx < nAdjRoomCount; iAdjRoomIdx++) {
+              if (pAdjRoomList[iAdjRoomIdx] == pTargetRoom) {
+                _bSameOrAdjacentRoom = 1;
+                break;
               }
             }
+          }
+
+          pPlayerData = D2Common::Units::GetPlayerData(pPlayerUnit_lcl);
+          pQuestBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+          if (_bSameOrAdjacentRoom) {
+            /* GetQuestState(Khalim's Will=0x12, Completed=0): if Khalim's Will already
+                         done, jump straight to Completed; else only to Step0x04 */ bQuestState = D2Common::QuestRecord::GetQuestState(pQuestBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Completed);
+            if (bQuestState) {
+              eQuestState = QUESTSTATE_Completed;
+            } else {
+              eQuestState = QUESTSTATE_Step0x04;
+            }
+
+            /* SetQuestState(Blackened Temple=0x15, => Completed=0 if Khalim's Will done,
+                         else Step0x04=4): record council kill */ D2Common::QuestRecord::SetQuestState(pQuestBitBuffer, QUEST_TheBlackenedTemple, eQuestState);
+            /* SetQuestState(Blackened Temple=0x15, JustCompleted=0xd): trigger the in-game
+                         completion/log notification */ D2Common::QuestRecord::SetQuestState(pQuestBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
           }
         }
       }
@@ -721,41 +724,44 @@ void __fastcall Q22_TrackCouncilKill(::SGAMEDATA * pGame, D2UnitStrc * pKillerUn
 
 // Q22_PlayerCheckKhalimsWillItems (BLACKENED TEMPLE) — per-player tally callback (IteratePlayerOrMonsterUnits). For Act III players whose Khalim's Will is not Completed and who lack the flail items "qf1"/"qf2", increments the Khalim's-Will-needed counter (field 0x3c); also increments a separate counter (0x40) for players missing the "box " (Khalim's Will assembly box). Drives how many quest items the council drop must spawn. Read-only quest-record probe.
 BOOL __fastcall Q22_PlayerCheckKhalimsWillItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    eD2LevelId eLevel;
-    D2QuestDataStrc* pFlailItem;
-    BOOL bQuestCompleted;
     D2UnitStrc* pPlayerData;
-    D2QuestDataA3Q5Strc* pA4Q2QuestData;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (pRoom) {
-      eAct neAct;
-      eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      if (eLevel != LEVEL_None) {
-        neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-        if (neAct == ACT_III) {
-          pFlailItem = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheBlackenedTemple);
-          if (pFlailItem) {
-            pA4Q2QuestData = pFlailItem->pQuestSpecificData.pA3Q5;
-            /* GetQuestState(Khalim's Will=0x12, Completed=0): only tally players who still
-                         need to do Khalim's Will */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
-            bQuestCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Completed);
-            if (!bQuestCompleted) {
-              pPlayerData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20316671);
-              if (!pPlayerData) {
-                pPlayerData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20326671);
-                if (!pPlayerData) {
-                  pA4Q2QuestData->nFlailDropPlayerCount++;
-                }
-              }
-            }
+    if (!pRoom) {
+      return 0;
+    }
 
-            pPlayerData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20786f62);
-            if (!pPlayerData) {
-              pA4Q2QuestData->nBoxDropPlayerCount++;
-            }
-          }
+    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+    if (eLevel == LEVEL_None) {
+      return 0;
+    }
+
+    eAct neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (neAct != ACT_III) {
+      return 0;
+    }
+
+    D2QuestDataStrc* pFlailItem = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheBlackenedTemple);
+    if (!pFlailItem) {
+      return 0;
+    }
+
+    D2QuestDataA3Q5Strc* pA4Q2QuestData = pFlailItem->pQuestSpecificData.pA3Q5;
+    /* GetQuestState(Khalim's Will=0x12, Completed=0): only tally players who still
+                         need to do Khalim's Will */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
+    BOOL bQuestCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Completed);
+    if (!bQuestCompleted) {
+      pPlayerData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20316671);
+      if (!pPlayerData) {
+        pPlayerData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20326671);
+        if (!pPlayerData) {
+          pA4Q2QuestData->nFlailDropPlayerCount++;
         }
       }
+    }
+
+    pPlayerData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20786f62);
+    if (!pPlayerData) {
+      pA4Q2QuestData->nBoxDropPlayerCount++;
     }
 
     return 0;

@@ -3605,10 +3605,11 @@ char * OOGUTIL_StrChr(uint32_t * szString, int nChar) {
 char * __fastcall OOGUTIL_GetAccountName(char * szUserName) {
     char* pszAccountName;
     char* pszSep = Storm::Source::SSTR::SStrChr(szUserName, '*');
-    if (!pszSep || (pszAccountName = pszSep + 1 , pszSep[1] == '\0')) {
-      pszAccountName = szUserName;
+    if (!(!pszSep || (pszAccountName = pszSep + 1 , pszSep[1] == '\0'))) {
+      return pszAccountName;
     }
 
+    pszAccountName = szUserName;
     return pszAccountName;
 }
 

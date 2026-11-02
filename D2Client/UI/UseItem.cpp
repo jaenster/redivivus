@@ -330,7 +330,7 @@ void __stdcall UI_CloseHoradricCubeWindow() {
     }
 
     ITEM_ToggleHandState(pCursorItem_lcl);
-    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gUIFlagMapInit, 8);
+    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagMapInit, 8);
     if (Dialog::gpHoradricCubeDialog) {
       Dialog::FreeDialogStrc(Dialog::gpHoradricCubeDialog);
       Dialog::gpHoradricCubeDialog = 0;

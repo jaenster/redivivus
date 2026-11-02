@@ -1770,10 +1770,10 @@ uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * 
 // Returns 1 if pUnit and pOther are allies (same unit = always ally). For monsters, resolves to owner player first. For two players, checks that both share the same party ID (via GetPartyIdFromUnit) and neither has party ID -1. Falls back to Path::IsAllyOf for non-player pairs. Used to gate friendly-fire vs. ally-targeted skill application.
 BOOL __fastcall SKILL_CanUnitTargetAlly(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pOther) {
     BOOL _bIsAlly;
+    int16_t nUnitPartyId;
     int16_t nOtherPartyId;
     bool bIsAlly;
     D2UnitStrc* pOwnerUnit;
-    ::SGAMEDATA* pOwnerGame;
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       pOwnerUnit = Ai::AiGeneral::GetOwnerUnit(pUnit);
       if (pOwnerUnit) {
@@ -1786,32 +1786,32 @@ BOOL __fastcall SKILL_CanUnitTargetAlly(::SGAMEDATA * pGameStrc, D2UnitStrc * pU
         pOther = pOwnerUnit;
       }
     }
-    if (pUnit != pOther) {
-      int16_t nUnitPartyId;
-      if (!pUnit || pUnit->eUnitType != UNIT_PLAYER || !pOther || pOther->eUnitType != UNIT_PLAYER) {
-        _bIsAlly = D2Common::PATH::Path::IsAllyOf(pUnit, pOther);
-        return _bIsAlly;
-      }
-
-      pOwnerGame = pUnit->uSideData.pServerSide.pGame;
-      if (!pOwnerGame || false) {
-        nUnitPartyId = -1;
-      } else {
-        nUnitPartyId = Party::GetPartyIdFromUnit(pOwnerGame, pUnit);
-      }
-
-      pOwnerGame = pOther->uSideData.pServerSide.pGame;
-      if (!pOwnerGame || pOther->eUnitType != UNIT_PLAYER) {
-        nOtherPartyId = -1;
-      } else {
-        nOtherPartyId = Party::GetPartyIdFromUnit(pOwnerGame, pOther);
-      }
-      if (nUnitPartyId != nOtherPartyId || nOtherPartyId == -1) {
-        return 0;
-      }
+    if (pUnit == pOther) {
+      return 1;
+    }
+    if (!pUnit || pUnit->eUnitType != UNIT_PLAYER || !pOther || pOther->eUnitType != UNIT_PLAYER) {
+      _bIsAlly = D2Common::PATH::Path::IsAllyOf(pUnit, pOther);
+      return _bIsAlly;
     }
 
-    return 1;
+    ::SGAMEDATA* pOwnerGame = pUnit->uSideData.pServerSide.pGame;
+    if (!pOwnerGame || false) {
+      nUnitPartyId = -1;
+    } else {
+      nUnitPartyId = Party::GetPartyIdFromUnit(pOwnerGame, pUnit);
+    }
+
+    pOwnerGame = pOther->uSideData.pServerSide.pGame;
+    if (!pOwnerGame || pOther->eUnitType != UNIT_PLAYER) {
+      nOtherPartyId = -1;
+    } else {
+      nOtherPartyId = Party::GetPartyIdFromUnit(pOwnerGame, pOther);
+    }
+    if (!(nUnitPartyId != nOtherPartyId || nOtherPartyId == -1)) {
+      return 1;
+    }
+
+    return 0;
 }
 
 // Server-side teleport/relocate of a unit to (nX,nY) in pRoom. Resolves a destination room (FindBetterNearbyRoom, or GetFreeCoordinates_WithNeighboorRooms when bFindFreeSpace==0), verifies the target tile is walkable via PATH_GetCollisionMaskAt, then re-links the unit to the room update list and sets UNITFLAGEX_TELEPORTED (nRelocMode==0) or flag 0x800. For players it also sends 0x07 MapReveal, records the reveal coords in player data (ring buffer of up to 0x14 entries), schedules a PLAYER_CancelMapReveal event (+0x32 frames) and updates pets. Returns 1 on success, 0 if no valid room/tile. Halts via ErrorManager on null pUnit/path.

@@ -106,6 +106,7 @@ BOOL __stdcall DRLGOUTROOM_SpawnPresetIfGridFlagged(int nY, int nX, D2DrlgLevelS
 void __stdcall DRLGOUTROOM_PlaceAct5BorderPresets(D2DrlgLevelStrc * pLevel) {
     uint32_t nGridFlags;
     int nXCur;
+    int nXIter;
     D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     for (nXCur = 0; nXCur < pWildData->nGridCoordsWidth; nXCur++) {
       nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nXCur, 0);
@@ -115,18 +116,13 @@ void __stdcall DRLGOUTROOM_PlaceAct5BorderPresets(D2DrlgLevelStrc * pLevel) {
       }
     }
 
-    int nXIter = 0;
     nXCur = pWildData->nGridCoordsHeight - 2;
-    if (pWildData->nGridCoordsWidth > 0) {
-      do {
-        nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nXIter, nXCur);
-        if (nGridFlags & 0x400) {
-          Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXIter, nXCur, 0x38c, pLevel->eD2LevelId == 0x6e ? 0x1U : 0xffffffff, 0);
-          break;
-        }
-
-        nXIter++;
-      } while (nXIter < pWildData->nGridCoordsWidth);
+    for (nXIter = 0; nXIter < pWildData->nGridCoordsWidth; nXIter++) {
+      nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nXIter, nXCur);
+      if (nGridFlags & 0x400) {
+        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXIter, nXCur, 0x38c, pLevel->eD2LevelId == 0x6e ? 0x1U : 0xffffffff, 0);
+        break;
+      }
     }
 
     for (nXCur = 0; nXCur < pWildData->nGridCoordsHeight; nXCur++) {

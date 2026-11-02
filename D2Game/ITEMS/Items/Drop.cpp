@@ -152,24 +152,25 @@ static BOOL __stdcall ITEMDROP_IsItemClassEligible(D2SeedStrc * pSeed, int32_t b
     if ((int)eLevel <= 0) {
       eLevel = LEVEL_RogueEncampment;
     }
-    if ((uint8_t)pItemsTxt->bSpawnable > '\0' && pItemsTxt->bQuest == '\0' && (int)(uint32_t)(uint8_t)pItemsTxt->nLevel <= (int)eLevel) {
+    if (!((uint8_t)pItemsTxt->bSpawnable > '\0' && pItemsTxt->bQuest == '\0' && (int)(uint32_t)(uint8_t)pItemsTxt->nLevel <= (int)eLevel)) {
+      return 0;
+    }
+    if (!bSkipRarityRoll) {
       eAct neAct;
-      if (!bSkipRarityRoll) {
-        neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-        nActDelta = (uint32_t)(uint8_t)pItemsTxt->nRarity - (uint32_t)neAct;
-        if ((int)nActDelta > 0) {
-          nActDelta = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, nActDelta);
-          if (nActDelta) {
-            return 0;
-          }
+      neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+      nActDelta = (uint32_t)(uint8_t)pItemsTxt->nRarity - (uint32_t)neAct;
+      if ((int)nActDelta > 0) {
+        nActDelta = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, nActDelta);
+        if (nActDelta) {
+          return 0;
         }
       }
-      if (nItemTypeFilter == -1 || pItemsTxt->wType == nItemTypeFilter) {
-        return 1;
-      }
+    }
+    if (!(nItemTypeFilter == -1 || pItemsTxt->wType == nItemTypeFilter)) {
+      return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 // Selects a random exceptional-tier item class index for a drop roll. Iterates the exceptional slice of the Items txt table (between the exceptional and elite size offsets), filters candidates via MONSTER_ShouldSpawnSuperUnique against level/TC constraints, respects the expansion flag, then picks one uniformly at random using the D2SeedStrc PRNG (power-of-two fast path or modulo). Returns the Items txt index of the chosen class, or -1 if none qualify.
@@ -398,11 +399,8 @@ static int32_t __stdcall ITEMDROP_RollItemClassByLevel(::SGAMEDATA * pGame, D2Se
       exit(-1);
     } else {
       nExceptionalChance = (int)nLevel >> 1;
-      nLevelOddBit = nLevel & 0x80000001;
+      nLevelOddBit = (int)nLevel % 2;
       nNormalChance = nExceptionalChance + 10;
-      if ((int)nLevelOddBit < 0) {
-        nLevelOddBit = (nLevelOddBit - 1 | -2) + 1;
-      }
       if (nLevelOddBit) {
         nNormalChance = nExceptionalChance + 0xb;
       }
@@ -1299,6 +1297,7 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
     D2SeedStrc* pSeed;
     uint32_t uVar2;
     uint32_t nAutoMagicAffixId;
+    D2MagicAffixTxt* pMagicAffixLine;
     uint32_t nSeedLowBackup;
     D2UnitStrc* pItem;
     pItem = *ppItem;
@@ -1551,32 +1550,33 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
     }
 
     wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(*ppItem);
-    if (wItemVersion >= 100) {
-      D2MagicAffixTxt* pMagicAffixLine;
-      nAffixLoopIdx = D2Common::ITEMS::Items::GetItemQuality(*ppItem);
-      switch (nAffixLoopIdx) {
-        case 1:
+    if (wItemVersion < 100) {
+      return 1;
+    }
 
-        case 2:
+    nAffixLoopIdx = D2Common::ITEMS::Items::GetItemQuality(*ppItem);
+    switch (nAffixLoopIdx) {
+      case 1:
 
-        case 3:
+      case 2:
 
-        case 4:
+      case 3:
 
-        case 6:
+      case 4:
 
-        case 8:
+      case 6:
 
-        case 9:
-          if ((uint16_t)pItemTxt->wAutoPrefix) {
-            nAutoMagicAffixId = SKILLS::Items::ITEMMOD_RollMagicAffixVersionedEx(*ppItem, 0, 1, 0, 1, 0, (uint32_t)(uint16_t)pItemTxt->wAutoPrefix);
-            if ((uint16_t)(short int)nAutoMagicAffixId > 0) {
-              D2Common::ITEMS::Items::SetAutoMagic(*ppItem, (short int)nAutoMagicAffixId);
-              pMagicAffixLine = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint16_t)nAutoMagicAffixId);
-              D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(0, nullptr, *ppItem, pMagicAffixLine, 0, 0);
-            }
+      case 8:
+
+      case 9:
+        if ((uint16_t)pItemTxt->wAutoPrefix) {
+          nAutoMagicAffixId = SKILLS::Items::ITEMMOD_RollMagicAffixVersionedEx(*ppItem, 0, 1, 0, 1, 0, (uint32_t)(uint16_t)pItemTxt->wAutoPrefix);
+          if ((uint16_t)(short int)nAutoMagicAffixId > 0) {
+            D2Common::ITEMS::Items::SetAutoMagic(*ppItem, (short int)nAutoMagicAffixId);
+            pMagicAffixLine = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint16_t)nAutoMagicAffixId);
+            D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(0, nullptr, *ppItem, pMagicAffixLine, 0, 0);
           }
-      }
+        }
     }
 
     return 1;
@@ -3588,14 +3588,9 @@ static D2UnitStrc * __stdcall ITEMGEN_CreateItemFromClassIdAndQuality(int32_t nI
     bUseBestSpot = 1;
     POINT* pSpawnPos;
     pSpawnPos = &ptSpawnPos;
-    D2RoomStrc* pSpawnRoom;
-    pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    // The original keeps the room in EDI and stores it into the context after the memset below
-    // (1.14d 0055a627). The decompiler folds EDI into the field and prints the store first, which
-    // the memset then wipes, so every ground drop was created without a room.
-    // Retire-When: the decompile of 0055a550 assigns sItemGenCtx.pDrlgRoom after the memset.
-    D2RoomStrc* pSpawnRoomFound = FindBestSpotToSpawnItem(pSpawnRoom, &ptUnitPos, pSpawnPos, bUseBestSpot, bCheckPassable);
-    if (!pSpawnRoomFound) {
+    D2RoomStrc* pItemRoom;
+    pItemRoom = FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &ptUnitPos, pSpawnPos, bUseBestSpot, bCheckPassable);
+    if (!pItemRoom) {
       return nullptr;
     }
 
@@ -3609,8 +3604,8 @@ static D2UnitStrc * __stdcall ITEMGEN_CreateItemFromClassIdAndQuality(int32_t nI
     sItemGenCtx.usually_one = 1;
     sItemGenCtx.eQuality = eItemType;
     sItemGenCtx.pUnit = pUnit;
-    sItemGenCtx.pDrlgRoom = pSpawnRoomFound;
     sItemGenCtx.nItemClassid = nItemClassId;
+    sItemGenCtx.pDrlgRoom = pItemRoom;
     if (pUnit) {
       D2RoomStrc* pSpawnRoom;
       if (pUnit->eUnitType == UNIT_MONSTER) {

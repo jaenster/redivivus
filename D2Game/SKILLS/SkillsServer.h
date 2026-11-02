@@ -20,7 +20,6 @@ struct D2SkillStrc;
 struct D2SkillsTxt;
 struct D2StatListExStrc;
 struct D2StateExArgStrc;
-struct D2UnitFindArgStrc;
 struct D2UnitFindDataStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
@@ -31,6 +30,7 @@ typedef uint32_t eD2States;
 typedef uint32_t eD2UnitStat;
 typedef uint32_t eMissilesId;
 typedef uint32_t eSkillEType;
+struct D2UnitFindArgStrc;
 #ifndef RECON_FPTD_PFN_AreaEffectCallback
 #define RECON_FPTD_PFN_AreaEffectCallback
 typedef uint32_t (__fastcall *PFN_AreaEffectCallback)(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pTargetUnit);
@@ -38,6 +38,10 @@ typedef uint32_t (__fastcall *PFN_AreaEffectCallback)(struct D2SkillCallbackCont
 #ifndef RECON_FPTD_PFN_StatExpireCallback
 #define RECON_FPTD_PFN_StatExpireCallback
 typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+#endif
+#ifndef RECON_FPTD_UNITFINDTEST
+#define RECON_FPTD_UNITFINDTEST
+typedef int (__fastcall *UNITFINDTEST)(struct D2UnitStrc * pUnit, struct D2UnitFindArgStrc * pUnitFindArg);
 #endif
 #ifndef RECON_FPTD_fnSkillUnitProc
 #define RECON_FPTD_fnSkillUnitProc
@@ -71,6 +75,23 @@ struct __attribute__((packed)) D2BaalWaveParamStrc {
     /* 0x18 */ int nSkillLevel;
     /* 0x1C */ int nCallbackArg;
     /* 0x20 */ BOOL (__fastcall *fpFunction)(::SGAMEDATA *, struct D2UnitStrc *, struct D2UnitStrc *, int, uint32_t);
+};
+
+struct D2UnitFindArgStrc {
+    /* 0x00 */ int nFlags;
+    /* 0x04 */ int nPad04; // Unused padding; zeroed by memset(0x38), never read/written by any consumer (TestUnit, callers).
+    /* 0x08 */ struct D2UnitStrc * pAttacker;
+    /* 0x0C */ int nX;
+    /* 0x10 */ int nY;
+    /* 0x14 */ int nDistance;
+    /* 0x18 */ int nMaxArrayEntries;
+    /* 0x1C */ int nIndex;
+    /* 0x20 */ POINT * pCoords;
+    /* 0x24 */ int (__fastcall *fpUnitTest)(struct D2UnitStrc *, struct D2UnitFindArgStrc *);
+    /* 0x28 */ int nReserved28; // Reserved/scratch; zeroed, never read or written by any unit-find consumer.
+    /* 0x2C */ int nReserved2c; // Reserved/scratch; zeroed, never read or written by any unit-find consumer.
+    /* 0x30 */ int nReserved30; // Reserved/scratch; zeroed, never read or written by any unit-find consumer.
+    /* 0x34 */ int nReserved34; // Reserved/scratch; zeroed, never read or written by any unit-find consumer.
 };
 
 namespace D2Game::SKILLS::SkillsServer {

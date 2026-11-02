@@ -188,12 +188,17 @@ BOOL __fastcall Q11_SendSunRestoredPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
 // or class 0xb1 with the quest's stateFlag set. Read-only on the quest record.
 bool __fastcall Q11_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
-    if (BVar1 != 1) {
-      /* GetQuestState(buf, nQuestIdReal=A2Q3, 1=RewardAwaits) - gossip enabled only
+    if (BVar1 == 1) {
+      return false;
+    }
+
+    /* GetQuestState(buf, nQuestIdReal=A2Q3, 1=RewardAwaits) - gossip enabled only
                          while reward pending */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
-      if (BVar1 == 1 && (nTargetClassId == 0xb0 || nTargetClassId == 0xaf || nTargetClassId == 0xc6 || nTargetClassId == 199 || nTargetClassId == 0xb1 || nTargetClassId == 0xca || nTargetClassId == 0xf4 || nTargetClassId == 0xd2 || nTargetClassId == 200 || nTargetClassId == 0xc9) || nTargetClassId == 0xb1 && pQuestData->nStateFlag == 1) {
-        return true;
-      }
+    if (BVar1 == 1 && (nTargetClassId == 0xb0 || nTargetClassId == 0xaf || nTargetClassId == 0xc6 || nTargetClassId == 199 || nTargetClassId == 0xb1 || nTargetClassId == 0xca || nTargetClassId == 0xf4 || nTargetClassId == 0xd2 || nTargetClassId == 200 || nTargetClassId == 0xc9)) {
+      return true;
+    }
+    if (nTargetClassId == 0xb1 && pQuestData->nStateFlag == 1) {
+      return true;
     }
 
     return false;

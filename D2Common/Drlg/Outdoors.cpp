@@ -1358,6 +1358,7 @@ static void DRLGOUTDOOR_CreateOutdoorRoomExGrid(D2DrlgLevelStrc * pLevel) {
     D2DrlgMapStrc* pDrlgMap;
     int floorFlags;
     int worldX;
+    int gridY;
     D2DrlgLevelDataWildernessLevel* pOutdoorsData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     int32_t outdoorRoomStyle = 0;
     switch (pLevel->nLevelType) {
@@ -1383,13 +1384,8 @@ static void DRLGOUTDOOR_CreateOutdoorRoomExGrid(D2DrlgLevelStrc * pLevel) {
     }
 
     int worldY = pLevel->sCoordinatesAndSize.WorldPosition.y;
-    int gridY = 0;
     D2DrlgLevelDataWildernessLevel* pOutdoorsDataStable = pOutdoorsData;
-    if (pOutdoorsData->nGridCoordsHeight <= 0) {
-      return;
-    }
-
-    do {
+    for (gridY = 0; gridY < pOutdoorsData->nGridCoordsHeight; gridY++) {
       int32_t nGridX;
       worldX = pLevel->sCoordinatesAndSize.WorldPosition.x;
       nGridX = 0;
@@ -1422,8 +1418,7 @@ static void DRLGOUTDOOR_CreateOutdoorRoomExGrid(D2DrlgLevelStrc * pLevel) {
       }
 
       worldY += 8;
-      gridY++;
-    } while (gridY < pOutdoorsData->nGridCoordsHeight);
+    }
 }
 
 void __fastcall AddAct124SecondaryBorder(D2DrlgLevelStrc * pLevel, int32_t nLvlSubId, int32_t nLevelPrestId) {

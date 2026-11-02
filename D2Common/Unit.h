@@ -21,6 +21,7 @@ struct D2LightMapStrc;
 struct D2MissileStreamStrc;
 struct D2MonStatsTxt;
 struct D2PartyDataStrc;
+struct D2PoolManagerStrc;
 struct D2RoomStrc;
 struct D2SUnitEventStrc;
 struct D2ShrinesTxt;
@@ -28,6 +29,7 @@ struct D2TradeRecordStrc;
 struct D2UnitDataPlayerArenaStrc;
 struct D2UnitDataPlayerInteractedNPCStrc;
 struct D2UnitDataPlayerPetsStrc;
+struct D2UnitFindArgStrc;
 struct D2UnitPlayerListStrc;
 struct D2UnitQuestDataListStrc;
 struct D2UnitStrc;
@@ -41,6 +43,12 @@ typedef uint32_t eD2UnitStat;
 typedef uint32_t eD2UnitType;
 typedef uint32_t eSkillEType;
 typedef uint8_t eInventoryPage;
+#ifndef RECON_FPTD_UNITFINDTEST
+#define RECON_FPTD_UNITFINDTEST
+typedef int (__fastcall *UNITFINDTEST)(struct D2UnitStrc * pUnit, struct D2UnitFindArgStrc * pUnitFindArg);
+#endif
+
+struct D2UnitFindsStrc;
 
 // Data types
 struct D2StaticPathStrc {
@@ -269,6 +277,24 @@ union D2UnitEvent {
 
     /* 0x00 */ struct D2CUnitEventStrc * pClientEvent;
     /* 0x00 */ struct D2SUnitEventStrc * pServerEvent;
+};
+
+struct D2UnitFindDataStrc {
+    /* 0x00 */ struct D2PoolManagerStrc * pMemory;
+    /* 0x04 */ struct D2UnitFindsStrc * pUnitsArray;
+    /* 0x08 */ struct D2RoomStrc * pRoom;
+    /* 0x0C */ int (__fastcall *fpUnitTest)(struct D2UnitStrc *, struct D2UnitFindArgStrc *);
+    /* 0x10 */ struct D2UnitFindArgStrc * pUnitFindArg;
+    /* 0x14 */ int nFlags;
+    /* 0x18 */ int nCountedUnits;
+    /* 0x1C */ int nUnitFindsSize;
+    /* 0x20 */ int nX;
+    /* 0x24 */ int nY;
+    /* 0x28 */ int nDistance;
+};
+
+struct D2UnitFindsStrc {
+    /* 0x00 */ struct D2UnitStrc * aFoundUnitsList[15];
 };
 
 struct __attribute__((packed)) D2UnitStatDiminishedEntryStrc {

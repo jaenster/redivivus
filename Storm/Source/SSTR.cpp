@@ -716,10 +716,11 @@ uint32_t __stdcall SStrHash(char * pszText, uint8_t bCaseSensitive, uint32_t nSe
         nChar = (uint32_t)(uint8_t)*pszText;
       }
     }
-    if (!nSeed) {
-      nSeed = 1;
+    if (nSeed) {
+      return nSeed;
     }
 
+    nSeed = 1;
     return nSeed;
 }
 

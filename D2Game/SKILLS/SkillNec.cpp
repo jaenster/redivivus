@@ -358,7 +358,7 @@ void __thiscall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, D2UnitStrc *
       return;
     }
 
-    short int sAuraTargetState = pSkillsTxt->auratargetstate;
+    int32_t sAuraTargetState = pSkillsTxt->auratargetstate;
     if (sAuraTargetState != 0x17) {
       if (sAuraTargetState != 0x1b) {
         nFunctionId = sAuraTargetState != 0x38 ? 0 : 0xb;
@@ -1909,41 +1909,45 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
       D2UnitStrc* pMissile;
       nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, sCastPetArgs.pSkillTxt->calc[1], eSkill, nSkillLvl);
       sCastPetArgs.pSkillTxt = (D2SkillsTxt*)(nRadius / 2);
-      if ((int)sCastPetArgs.pSkillTxt > 1) {
-        nSrvMissileId = pSkillsTxt->srvmissile[1];
-        if (nSrvMissileId >= 0 && (int)nSrvMissileId < sgptDataTable->nTxtMissilesSize) {
-          memset(&sSkillArg, 0, 0x5c);
-          sSkillArg.nX = nTargetX;
-          sSkillArg.eSkillNo = eSkill;
-          sSkillArg.nFlags = 0x21;
-          sSkillArg.nY = nCursorYRaw;
-          sSkillArg.nSkillLevel = nSkillLvl;
-          sSkillArg.nMissileTxtNo = (eMissilesId)pSkillsTxt->srvmissile[1];
-          sSkillArg.pOwner = pUnit;
-          nRadius = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-          iVar1 = nRadius - nTargetX;
-          nRadius = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-          nDirOffsetY = nRadius - nCursorYRaw;
-          if (!iVar1 && !nDirOffsetY) {
-            iVar1 = 1;
-          }
+      if ((int)sCastPetArgs.pSkillTxt <= 1) {
+        return 1;
+      }
 
-          sSkillArg.nUnitX = nTargetX - nDirOffsetY;
-          sSkillArg.nUnitY = iVar1 + nCursorYRaw;
-          pMissile = MISSILES::Missiles::CreatingMissile((::SGAMEDATA*)sCastPetArgs.nPetType, &sSkillArg);
-          if (pMissile) {
-            D2Common::Units::Missile::SetTargetX(pMissile, pGolem->nUnitGUID);
-            D2Common::Units::Missile::SetTargetY(pMissile, (int32_t)sCastPetArgs.pSkillTxt);
-          }
+      nSrvMissileId = pSkillsTxt->srvmissile[1];
+      if (!(nSrvMissileId >= 0 && (int)nSrvMissileId < sgptDataTable->nTxtMissilesSize)) {
+        return 1;
+      }
 
-          sSkillArg.nUnitX = nDirOffsetY + nTargetX;
-          sSkillArg.nUnitY = nCursorYRaw - iVar1;
-          pMissile = MISSILES::Missiles::CreatingMissile((::SGAMEDATA*)sCastPetArgs.nPetType, &sSkillArg);
-          if (pMissile) {
-            D2Common::Units::Missile::SetTargetX(pMissile, pGolem->nUnitGUID);
-            D2Common::Units::Missile::SetTargetY(pMissile, (int32_t)sCastPetArgs.pSkillTxt);
-          }
-        }
+      memset(&sSkillArg, 0, 0x5c);
+      sSkillArg.nX = nTargetX;
+      sSkillArg.eSkillNo = eSkill;
+      sSkillArg.nFlags = 0x21;
+      sSkillArg.nY = nCursorYRaw;
+      sSkillArg.nSkillLevel = nSkillLvl;
+      sSkillArg.nMissileTxtNo = (eMissilesId)pSkillsTxt->srvmissile[1];
+      sSkillArg.pOwner = pUnit;
+      nRadius = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+      iVar1 = nRadius - nTargetX;
+      nRadius = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+      nDirOffsetY = nRadius - nCursorYRaw;
+      if (!iVar1 && !nDirOffsetY) {
+        iVar1 = 1;
+      }
+
+      sSkillArg.nUnitX = nTargetX - nDirOffsetY;
+      sSkillArg.nUnitY = iVar1 + nCursorYRaw;
+      pMissile = MISSILES::Missiles::CreatingMissile((::SGAMEDATA*)sCastPetArgs.nPetType, &sSkillArg);
+      if (pMissile) {
+        D2Common::Units::Missile::SetTargetX(pMissile, pGolem->nUnitGUID);
+        D2Common::Units::Missile::SetTargetY(pMissile, (int32_t)sCastPetArgs.pSkillTxt);
+      }
+
+      sSkillArg.nUnitX = nDirOffsetY + nTargetX;
+      sSkillArg.nUnitY = nCursorYRaw - iVar1;
+      pMissile = MISSILES::Missiles::CreatingMissile((::SGAMEDATA*)sCastPetArgs.nPetType, &sSkillArg);
+      if (pMissile) {
+        D2Common::Units::Missile::SetTargetX(pMissile, pGolem->nUnitGUID);
+        D2Common::Units::Missile::SetTargetY(pMissile, (int32_t)sCastPetArgs.pSkillTxt);
       }
 
       return 1;
@@ -2199,46 +2203,59 @@ BOOL __fastcall ITEMEVENT_AuraThornsWithLifeSteal(::SGAMEDATA * pGame, uint32_t 
           sDamage.dwHitClass = pSkillTxt->HitClass;
           UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pTarget, pUnit, 1, &sDamage);
           UNIT::SUnitDmg::SERVER_GetHitCalculation(pGame, pTarget, pUnit, &sDamage);
-          if (pTarget->eUnitType == UNIT_MONSTER && pTarget->nClassId == 0x122) {
-            byLifeStealPctMon = 100;
-            pMonData = ITEMS::ItemMode::GetMonsterData(pTarget);
-            if (pMonData) {
-              byLifeStealPctMon = pMonData->aDrain[pGame->nDifficulty];
-              if (byLifeStealPctMon > 0) {
-                nThornsCalc = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pTarget);
-                if (!nThornsCalc) {
-                  nThornsOrCalcIdx = sDamage.dwPhysDamage;
-                  if (byLifeStealPctMon != 100) {
-                    nThornsOrCalcIdx = D2Client::Stats::D2ApplyPercent(sDamage.dwPhysDamage, (uint32_t)byLifeStealPctMon, 100);
-                  }
+          if (!(pTarget->eUnitType == UNIT_MONSTER && pTarget->nClassId == 0x122)) {
+            return 1;
+          }
 
-                  pOwnerUnit = Ai::AiGeneral::GetOwnerUnit(pUnit);
-                  if (!pOwnerUnit || (bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pOwnerUnit) , !bIsDead)) {
-                    bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-                    if (!bIsDead) {
-                      nThornsCalc = D2Client::Stats::D2ApplyPercent(nThornsOrCalcIdx, 0x14, 100);
-                      if (nThornsCalc > 0) {
-                        if (pOwnerUnit) {
-                          nHealAmt = D2Client::Stats::D2ApplyPercent(nThornsCalc, 0x32, 100);
-                          nHealAmt = SKILLNEC_AddHitpoints(pOwnerUnit, nHealAmt);
-                          nThornsCalc -= nHealAmt;
-                        }
+          byLifeStealPctMon = 100;
+          pMonData = ITEMS::ItemMode::GetMonsterData(pTarget);
+          if (!pMonData) {
+            return 1;
+          }
 
-                        nHealAmt = SKILLNEC_AddHitpoints(pUnit, nThornsCalc);
-                        if (pOwnerUnit && nThornsCalc - nHealAmt > 0) {
-                          SKILLNEC_AddHitpoints(pOwnerUnit, nThornsCalc - nHealAmt);
-                        }
+          byLifeStealPctMon = pMonData->aDrain[pGame->nDifficulty];
+          if (byLifeStealPctMon <= 0) {
+            return 1;
+          }
 
-                        D2Common::Units::SetOverlay(pUnit, 0x97, 0);
-                        if (pOwnerUnit) {
-                          D2Common::Units::SetOverlay(pOwnerUnit, 0x97, 0);
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
+          nThornsCalc = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pTarget);
+          if (nThornsCalc) {
+            return 1;
+          }
+
+          nThornsOrCalcIdx = sDamage.dwPhysDamage;
+          if (byLifeStealPctMon != 100) {
+            nThornsOrCalcIdx = D2Client::Stats::D2ApplyPercent(sDamage.dwPhysDamage, (uint32_t)byLifeStealPctMon, 100);
+          }
+
+          pOwnerUnit = Ai::AiGeneral::GetOwnerUnit(pUnit);
+          if (!(!pOwnerUnit || (bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pOwnerUnit) , !bIsDead))) {
+            return 1;
+          }
+
+          bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+          if (bIsDead) {
+            return 1;
+          }
+
+          nThornsCalc = D2Client::Stats::D2ApplyPercent(nThornsOrCalcIdx, 0x14, 100);
+          if (nThornsCalc <= 0) {
+            return 1;
+          }
+          if (pOwnerUnit) {
+            nHealAmt = D2Client::Stats::D2ApplyPercent(nThornsCalc, 0x32, 100);
+            nHealAmt = SKILLNEC_AddHitpoints(pOwnerUnit, nHealAmt);
+            nThornsCalc -= nHealAmt;
+          }
+
+          nHealAmt = SKILLNEC_AddHitpoints(pUnit, nThornsCalc);
+          if (pOwnerUnit && nThornsCalc - nHealAmt > 0) {
+            SKILLNEC_AddHitpoints(pOwnerUnit, nThornsCalc - nHealAmt);
+          }
+
+          D2Common::Units::SetOverlay(pUnit, 0x97, 0);
+          if (pOwnerUnit) {
+            D2Common::Units::SetOverlay(pOwnerUnit, 0x97, 0);
           }
 
           return 1;

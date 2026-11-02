@@ -281,14 +281,16 @@ void __fastcall TakeStairs(D2ObjectOperateFnArg * pOperateArg) {
 // Q14 object OperateFn: stairs/warp into the Tal Rasha tombs. Allows traversal only if The Seven Tombs isn't introduced yet OR the Duriel-area portal has already been created (field_0x0B), and the warp object is in Walk (open) anim. Calls TakeStairs. No quest-state transition.
 uint32_t __fastcall Q14_OperateStairsToTombs(D2ObjectOperateFnArg * pOperateArg) {
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pOperateArg->sArg.pGame, QUESTINT_TheSevenTombs);
-    if (!pDVar2 || pDVar2->bIsNotIntroduction != '\x01' || pDVar2->pQuestSpecificData.pA2Q6->bPortalCreated) {
-      D2UnitStrc* pDVar1;
-      pDVar1 = pOperateArg->sArg.pVictim;
-      if (pDVar1 && pDVar1->eAnimMode.ePlayerMode == Walk) {
-        A2Q7::TakeStairs(pOperateArg);
-      }
+    if (!(!pDVar2 || pDVar2->bIsNotIntroduction != '\x01' || pDVar2->pQuestSpecificData.pA2Q6->bPortalCreated)) {
+      return 0;
     }
 
+    D2UnitStrc* pDVar1 = pOperateArg->sArg.pVictim;
+    if (!(pDVar1 && pDVar1->eAnimMode.ePlayerMode == Walk)) {
+      return 0;
+    }
+
+    A2Q7::TakeStairs(pOperateArg);
     return 0;
 }
 

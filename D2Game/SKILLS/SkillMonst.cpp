@@ -43,7 +43,6 @@
 #include "D2Common/Units/Missile.h"
 #include "D2Game/D2DamageStrc.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
-#include "D2Game/D2UnitFindDataStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Event/Dispatch/Monster.h"
 #include "D2Game/GAME/Targets.h"
@@ -362,7 +361,7 @@ BOOL __fastcall Skills_SrvDoFunc_087_SpawnBehindTarget(::SGAMEDATA * pGame, D2Un
     int32_t nTargetY = D2Client::Units::GetYPosFromDynamicPathUnit(pTargetUnit);
     int nSpawnX = D2Common::Units::GetDirectionToCoords(pUnit, D2Client::Units::GetXPosFromDynamicPathUnit(pTargetUnit), nTargetY);
     uint8_t bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2((uint8_t)nSpawnX);
-    uint32_t nGfxDirMasked = bVar1 & 0x80000007;
+    uint32_t nGfxDirMasked = (int)bVar1 % 8;
     D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(BYTE_ARRAY_006e3138[(uint8_t)nGfxDirMasked], &nSkillLvl, &nOffsetY);
     nTargetY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
     nSpawnX = nTargetY + nSkillLvl;
@@ -1463,15 +1462,17 @@ BOOL __fastcall Skills_SrvDoFunc_099_FireMissileRing8Dir(::SGAMEDATA * pGame, D2
       } while (nDirIndex < 0x40);
 
       sSkillArg.nVelocityOverride = pMissileTxt->Param2 << 6;
-      if (nMissileCount > 1) {
-        nDirIndex = 0;
-        do {
-          sSkillArg.nUnitX = *(int*)((int)gnSkillMissileCount_FireRing + nDirIndex + 4);
-          sSkillArg.nUnitY = *(int*)((int)gnSkillMissileCount_FireOrb + nDirIndex + 4);
-          MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-          nDirIndex += nMissileCount * 4;
-        } while (nDirIndex < 0x3c);
+      if (nMissileCount <= 1) {
+        return 1;
       }
+
+      nDirIndex = 0;
+      do {
+        sSkillArg.nUnitX = *(int*)((int)gnSkillMissileCount_FireRing + nDirIndex + 4);
+        sSkillArg.nUnitY = *(int*)((int)gnSkillMissileCount_FireOrb + nDirIndex + 4);
+        MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+        nDirIndex += nMissileCount * 4;
+      } while (nDirIndex < 0x3c);
 
       return 1;
     }
@@ -1917,21 +1918,23 @@ BOOL __fastcall Skills_SrvDoFunc_105_FireParallelMissileVolley(::SGAMEDATA * pGa
     iVar1 -= (int)eSkill / 2 * nPerpOffset;
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 3;
-    if ((int)eSkill > 0) {
-      do {
-        sSkillArg.pOwner = pUnitSaved;
-        sSkillArg.nX = iVar1 / 6 + nSrcX;
-        sSkillArg.nY = iVar1 / 6 + nSrcY;
-        sSkillArg.nMissileTxtNo = eMissileId;
-        sSkillArg.nUnitX = iVar1;
-        sSkillArg.nUnitY = nDeltaY;
-        sSkillArg.nSkillLevel = nSkillLvl;
-        MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-        iVar1 += nPerpOffset;
-        nDeltaY += nDeltaX;
-        eSkill -= SKILL_Kick;
-      } while (eSkill != SKILL_Attack);
+    if ((int)eSkill <= 0) {
+      return 1;
     }
+
+    do {
+      sSkillArg.pOwner = pUnitSaved;
+      sSkillArg.nX = iVar1 / 6 + nSrcX;
+      sSkillArg.nY = iVar1 / 6 + nSrcY;
+      sSkillArg.nMissileTxtNo = eMissileId;
+      sSkillArg.nUnitX = iVar1;
+      sSkillArg.nUnitY = nDeltaY;
+      sSkillArg.nSkillLevel = nSkillLvl;
+      MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+      iVar1 += nPerpOffset;
+      nDeltaY += nDeltaX;
+      eSkill -= SKILL_Kick;
+    } while (eSkill != SKILL_Attack);
 
     return 1;
 }

@@ -2615,10 +2615,11 @@ char * __stdcall NET_SID_CLIENT_GetCdKeyOwner() {
 
 char * __fastcall NET_SID_CLIENT_GetCdKeyByType(int32_t nProductType) {
     char* pKey = D2Client::_CdKey::KeyExpansion;
-    if (!nProductType) {
-      pKey = D2Client::_CdKey::KeyClassic;
+    if (nProductType) {
+      return pKey;
     }
 
+    pKey = D2Client::_CdKey::KeyClassic;
     return pKey;
 }
 

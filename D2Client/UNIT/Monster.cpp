@@ -1587,7 +1587,7 @@ static void MONSTER_ProcessSkillAnimation(D2UnitStrc * pUnit) {
       }
     }
 
-    uint8_t nActionFrame = pUnit->nActionFrame;
+    int32_t nActionFrame = pUnit->nActionFrame;
     if (nActionFrame == 4 || bCastHandled && (bResult = CheckFlags(pUnit, UNITFLAG_SKSRVDOFUNC) , !bResult) && (nActionFrame == 1 || nActionFrame == 2 || nActionFrame == 3)) {
       SKILLS::Skills::SKILLS_CltSetSkillFromCurrent(pUnit);
     } else {
@@ -2578,7 +2578,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
             case 0x1c5:
               nDirection = D2Common::Units::GetDirection(pUnit);
             nDirection = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2(nDirection);
-            uVar1 = nDirection & 0x80000003;
+            uVar1 = (int)nDirection % 4;
             switch (uVar1) {
               case 0:
                 Sound::SOUND_PlaySound(SOUND_SKELETON_DEATH_4, pUnit, 0, 0, 0);

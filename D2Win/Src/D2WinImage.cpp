@@ -182,44 +182,48 @@ BOOL __fastcall Draw(::D2WinImage * pImage) {
 
     uint32_t uVar1 = pImage->sControl.dwState;
     if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
-      if (pImage->sControl.pDC6) {
-        nPositionX = pImage->sControl.dwPosX;
-        nStartY = pImage->sControl.dwPosY;
-        nTileRowY = pImage->sControl.dwSizeY;
-        nTilesY = (nTileRowY + 0xff >> 8) - 1;
-        nTilesX = pImage->sControl.dwSizeX + 0xff >> 8;
-        memset(&sGfxData, 0, 0x48);
-        sGfxData.pDC6 = pImage->sControl.pDC6;
-        sGfxData.nFrameNumber = pImage->nFrame;
-        sGfxData.nDirection = 0;
-        if (nTilesY > 0) {
-          nTileDrawY = nStartY - nTileRowY + 0x101;
-          nTileRowCount = nTilesY;
-          do {
-            nTileColCount = nTilesX;
-            nTileDrawX = nPositionX;
-            if (nTilesX > 0) {
-              do {
-                D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nTileDrawX, nTileDrawY, -1, pImage->eDrawMode, nullptr);
-                sGfxData.nFrameNumber++;
-                nTileDrawX += 256;
-                nTileColCount--;
-              } while (nTileColCount);
-            }
-
-            nTileDrawY += 256;
-            nTileRowCount--;
-          } while (nTileRowCount);
-        }
-        if (-1 < nTilesY && nTilesX > 0) {
-          do {
-            D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, pImage->sControl.dwPosY, -1, pImage->eDrawMode, nullptr);
-            sGfxData.nFrameNumber++;
-            nPositionX += 256;
-            nTilesX--;
-          } while (nTilesX);
-        }
+      if (!pImage->sControl.pDC6) {
+        return 1;
       }
+
+      nPositionX = pImage->sControl.dwPosX;
+      nStartY = pImage->sControl.dwPosY;
+      nTileRowY = pImage->sControl.dwSizeY;
+      nTilesY = (nTileRowY + 0xff >> 8) - 1;
+      nTilesX = pImage->sControl.dwSizeX + 0xff >> 8;
+      memset(&sGfxData, 0, 0x48);
+      sGfxData.pDC6 = pImage->sControl.pDC6;
+      sGfxData.nFrameNumber = pImage->nFrame;
+      sGfxData.nDirection = 0;
+      if (nTilesY > 0) {
+        nTileDrawY = nStartY - nTileRowY + 0x101;
+        nTileRowCount = nTilesY;
+        do {
+          nTileColCount = nTilesX;
+          nTileDrawX = nPositionX;
+          if (nTilesX > 0) {
+            do {
+              D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nTileDrawX, nTileDrawY, -1, pImage->eDrawMode, nullptr);
+              sGfxData.nFrameNumber++;
+              nTileDrawX += 256;
+              nTileColCount--;
+            } while (nTileColCount);
+          }
+
+          nTileDrawY += 256;
+          nTileRowCount--;
+        } while (nTileRowCount);
+      }
+      if (!(-1 < nTilesY && nTilesX > 0)) {
+        return 1;
+      }
+
+      do {
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, pImage->sControl.dwPosY, -1, pImage->eDrawMode, nullptr);
+        sGfxData.nFrameNumber++;
+        nPositionX += 256;
+        nTilesX--;
+      } while (nTilesX);
 
       return 1;
     }

@@ -228,7 +228,7 @@ void __stdcall CHAT_InitIME() {
     nEventCount = 4;
     HWND hWnd;
     hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_RegisterEventHandlerBatch(hWnd, &gUIFlagChatInit, nEventCount);
+    _Message::MESSAGE_RegisterEventHandlerBatch(hWnd, gUIFlagChatInit, nEventCount);
     gaIMECompositionBuffer = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
     if (gaIMECompositionBuffer != 6 && gaIMECompositionBuffer != 9 && gaIMECompositionBuffer != 8 && gaIMECompositionBuffer != 7 && gaIMECompositionBuffer != 0xc) {
       return;
@@ -259,7 +259,7 @@ void __stdcall CHAT_InitIME() {
           if (langId == 0x411) {
             nEventCount = 7;
             gbChatInputEnabled = 1;
-            _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &g_UIFlagInitChatPanel, nEventCount);
+            _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitChatPanel, nEventCount);
             /* BOOL param_2 for ImmSetOpenStatus */ /* HIMC param_1 for ImmSetOpenStatus */ bResult = ImmSetOpenStatus(hIMC, 1);
             if (bResult) {
               /* HIMC param_2 for ImmReleaseContext */ gaChatInputBuffer = '\x01';
@@ -322,7 +322,7 @@ void __stdcall CHAT_InitIME() {
         break;
       }
 
-      _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &g_UIFlagInitChatPanel, 7);
+      _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitChatPanel, 7);
     }
 
     release_ime_context:
@@ -335,14 +335,14 @@ void __stdcall CHAT_ShutdownIME() {
     DWORD dwSentenceMode;
     int32_t nEventCount = 4;
     HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, &gUIFlagChatInit, nEventCount);
+    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, gUIFlagChatInit, nEventCount);
     if (!gbChatInputEnabled) {
       return;
     }
 
     nEventCount = 7;
     hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, &g_UIFlagInitChatPanel, nEventCount);
+    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, g_UIFlagInitChatPanel, nEventCount);
     hWnd = D2gfx::D2GFX::GetHwnd();
     HIMC hIMC = ImmGetContext(hWnd);
     if (hIMC) {
@@ -837,20 +837,14 @@ void __stdcall INPUT_HandleChatScroll(D2UIMouseMsgStrc * pMsg) {
 }
 
 int32_t __fastcall CHAT_IsWideStringASCII(uint16_t * wszText) {
+    int i;
     int32_t nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
-    int i = 0;
     uint32_t uHighBits = (uint32_t)((uint32_t)nLength >> 8) & 0xffffffu;
-    if (nLength <= 0) {
-      return (uint32_t)((uint32_t)((uint32_t)uHighBits & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
-    }
-
-    do {
+    for (i = 0; i < nLength; i++) {
       if ((uint16_t)wszText[nLength] > 0xff) {
         return (uint32_t)uHighBits << 8;
       }
-
-      i++;
-    } while (i < nLength);
+    }
 
     return (uint32_t)((uint32_t)((uint32_t)uHighBits & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
 }
@@ -866,10 +860,11 @@ void __stdcall CHAT_InitHistoryIndices() {
 static char * CHAT_ExtractWhisperTarget(char * szText) {
     char* pszWhisperName;
     char* pszStarPos = Storm::Source::SSTR::SStrChr(szText, '*');
-    if (!pszStarPos || (pszWhisperName = pszStarPos + 1 , pszStarPos[1] == '\0')) {
-      pszWhisperName = szText;
+    if (!(!pszStarPos || (pszWhisperName = pszStarPos + 1 , pszStarPos[1] == '\0'))) {
+      return pszWhisperName;
     }
 
+    pszWhisperName = szText;
     return pszWhisperName;
 }
 

@@ -484,7 +484,7 @@ BOOL __fastcall MONSTER_UpdateSkillCastAnimation(::SGAMEDATA * pGame, D2UnitStrc
       }
     }
 
-    uint8_t byCurrentActionFrame = pUnit->nActionFrame;
+    int32_t byCurrentActionFrame = pUnit->nActionFrame;
     if (byCurrentActionFrame == 4 || bShouldSpawnSkill && !(pUnit->eUnitFlags >> 6 & 1) && (byCurrentActionFrame == 1 || byCurrentActionFrame == 2)) {
       SKILLS::SkillsServer::SKILLS_PeriodicSkillSpawnAndTimer(pGame, pUnit);
     }

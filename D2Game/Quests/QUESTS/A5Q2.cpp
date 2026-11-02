@@ -546,28 +546,23 @@ void __fastcall Q32_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
       pBarricadeRoom = D2Common::Units::UNITS_GetRoom(pQuestArgs->pTarget);
       if (pBarricadeRoom) {
         D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pBarricadeRoom, &pAdjacentRooms, (int*)&nAdjacentCount);
-        nRoomIdx = 0;
         pQuestData = pQuestData2;
-        if (nAdjacentCount > 0) {
-          do {
-            pQuestData = pQuestData2;
-            pQuestArgs = pQuestArgs2;
-            for (pPrisoner = pAdjacentRooms[nRoomIdx]->pUnitList; pQuestData2 = pQuestData , pQuestArgs2 = pQuestArgs , pPrisoner != 0; pPrisoner = pPrisoner->pRoomNext) {
-              if (pPrisoner->eUnitType == UNIT_MONSTER && pPrisoner->nClassId == 0x216 && pPrisoner->eAnimMode.ePlayerMode != Kick && pPrisoner->eAnimMode.ePlayerMode != Death) {
-                nBarricadeGroup = D2Common::Collision::GetCollisionDistance(pPrisoner, pQuestArgs->pTarget);
-                if (nBarricadeGroup < 0xf) {
-                  pQuestSpecificData->anWussieMonsterGUIDs[pQuestSpecificData->nWussieMonsterCount] = pPrisoner->nUnitGUID;
-                  pQuestSpecificData->nWussieMonsterCount++;
-                  pQuestSpecificData->nPrisonersFreed++;
-                }
+        for (nRoomIdx = 0; nRoomIdx < nAdjacentCount; nRoomIdx++) {
+          pQuestData = pQuestData2;
+          pQuestArgs = pQuestArgs2;
+          for (pPrisoner = pAdjacentRooms[nRoomIdx]->pUnitList; pQuestData2 = pQuestData , pQuestArgs2 = pQuestArgs , pPrisoner != 0; pPrisoner = pPrisoner->pRoomNext) {
+            if (pPrisoner->eUnitType == UNIT_MONSTER && pPrisoner->nClassId == 0x216 && pPrisoner->eAnimMode.ePlayerMode != Kick && pPrisoner->eAnimMode.ePlayerMode != Death) {
+              nBarricadeGroup = D2Common::Collision::GetCollisionDistance(pPrisoner, pQuestArgs->pTarget);
+              if (nBarricadeGroup < 0xf) {
+                pQuestSpecificData->anWussieMonsterGUIDs[pQuestSpecificData->nWussieMonsterCount] = pPrisoner->nUnitGUID;
+                pQuestSpecificData->nWussieMonsterCount++;
+                pQuestSpecificData->nPrisonersFreed++;
               }
-
-              pQuestData = pQuestData2;
-              pQuestArgs = pQuestArgs2;
             }
 
-            nRoomIdx++;
-          } while (nRoomIdx < nAdjacentCount);
+            pQuestData = pQuestData2;
+            pQuestArgs = pQuestArgs2;
+          }
         }
       }
     }
@@ -1140,10 +1135,11 @@ int32_t __fastcall Q32_GetRemainingPrisonersCount(D2QuestDataStrc * pQuestData) 
     }
 
     int32_t nRemainingTotal = nCount + (pSpecificData->nTotalPrisonersToFree - pSpecificData->nPrisonersFreed - pSpecificData->nPrisonersKilledByMonsters);
-    if (nRemainingTotal < 0) {
-      nRemainingTotal = 0;
+    if (nRemainingTotal >= 0) {
+      return nRemainingTotal;
     }
 
+    nRemainingTotal = 0;
     return nRemainingTotal;
 }
 

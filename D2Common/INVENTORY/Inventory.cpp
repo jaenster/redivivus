@@ -832,10 +832,11 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemWidth, 
     } else {
       nScore += byItemHeight;
     }
-    if ((int)nScore >= (int)((byItemHeight + nItemWidth) * 2)) {
-      nScore = 0xff;
+    if ((int)nScore < (int)((byItemHeight + nItemWidth) * 2)) {
+      return nScore;
     }
 
+    nScore = 0xff;
     return nScore;
 }
 
@@ -1491,7 +1492,7 @@ D2UnitStrc * __stdcall GetPrimaryWeapon(D2InventoryStrc * pInventory) {
 // Searches all equipped body slots (11 slots, stride 4) for an item matching nItemType. For weapon-animation-class items (anim 2, 3, or 0xC), type 6 returns the non-primary weapon and type 5 returns the primary weapon. For other items, matches via ITEM_GetItemsTxt_bComponent against nItemType. Returns the first matching D2UnitStrc* or NULL. Used to locate worn items by visual/functional category (e.g. right-arm vs left-arm weapon).
 D2UnitStrc * __stdcall INVENTORY_FindWornItemByType(D2InventoryStrc * pInventory, uint32_t nItemType) {
     uint8_t bMatchesType;
-    int16_t nAnimClass;
+    int32_t nAnimClass;
     bool bVar1;
     if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
       return nullptr;
@@ -2810,7 +2811,7 @@ void __stdcall INVENTORY_SwapPrimaryWeaponOnRemoval(D2InventoryStrc * pInventory
       pInventory->dwPrimaryWeaponGUID = -1;
     }
 
-    eD2BodyLoc eOtherArmLoc = ITEMS::Items::GetBodyLocation(pUnit);
+    int32_t eOtherArmLoc = ITEMS::Items::GetBodyLocation(pUnit);
     if (eOtherArmLoc == BODYLOC_R_ARM) {
       nGridOffset = 5;
     } else {

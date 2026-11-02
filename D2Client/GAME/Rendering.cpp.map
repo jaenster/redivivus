@@ -137,6 +137,7 @@
         "D2GFX_GetRenderStatistics"
       ],
       "usedTypes": [
+        "D2FloatIntUnion",
         "ULONG_PTR",
         "uint32_t"
       ]

@@ -519,32 +519,37 @@ BOOL __fastcall Q36_SendCompletionNotification(::SGAMEDATA * pGame, D2UnitStrc *
 BOOL __fastcall Q36_CheckWorldstoneChamber(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     BOOL _bQuestState;
     bool bQuestState;
-    D2UnitDataPlayerStrc* pPlayerData2;
-    eD2LevelId eLevelId;
-    D2BitBufferStrc* pBitBuffer;
     /* GetQuestState(QUEST_EveOfDestruction, 0=Completed) — bail if already
                          complete */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     _bQuestState = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_EveOfDestruction, QUESTSTATE_Completed);
-    if (_bQuestState != 1) {
-      D2RoomStrc* pRoom;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      if (pRoom) {
-        pPlayerData2 = D2Common::Units::GetPlayerData(pUnit);
-        pBitBuffer = pPlayerData2->pQuestRecord[pGame->nDifficulty];
-        eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-        /* GetQuestState(QUEST_EveOfDestruction, 0=Completed) — re-check in Worldstone
-                         Chamber (lvl 0x84) before crediting */ if (eLevelId == LEVEL_TheWorldstoneChamber) {
-          _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Completed);
-          if (!_bQuestState) {
-            _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_RewardAwaits);
-            if (!_bQuestState) {
-              Q36_CompleteQuestAndSetStatus(pUnit, pBitBuffer, pGame);
-            }
-          }
-        }
-      }
+    if (_bQuestState == 1) {
+      return 0;
     }
 
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    if (!pRoom) {
+      return 0;
+    }
+
+    D2UnitDataPlayerStrc* pPlayerData2 = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData2->pQuestRecord[pGame->nDifficulty];
+    eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+    /* GetQuestState(QUEST_EveOfDestruction, 0=Completed) — re-check in Worldstone
+                         Chamber (lvl 0x84) before crediting */ if (eLevelId != LEVEL_TheWorldstoneChamber) {
+      return 0;
+    }
+
+    _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Completed);
+    if (_bQuestState) {
+      return 0;
+    }
+
+    _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_RewardAwaits);
+    if (_bQuestState) {
+      return 0;
+    }
+
+    Q36_CompleteQuestAndSetStatus(pUnit, pBitBuffer, pGame);
     return 0;
 }
 

@@ -121,7 +121,7 @@ void __fastcall PLRSKILLS_CheckSkillWhipAndLeap(D2UnitStrc * pUnit, uint32_t nGa
       return;
     }
 
-    short int sSrvDoFunc = pSkillsTxt->srvdofunc;
+    int32_t sSrvDoFunc = pSkillsTxt->srvdofunc;
     if (sSrvDoFunc != 0x43) {
       if (sSrvDoFunc == 0x4c) {
         SKILLS::SkillsBar::SKILL_DrawUnitAtRotatedAngle(pUnit, nGamma, 1);
@@ -161,7 +161,7 @@ void __fastcall PLRSKILLS_DrawSkillTrail_Secondary(D2UnitStrc * pUnit, uint32_t 
       return;
     }
 
-    short int sSrvDoFunc = pSkillsTxt->srvdofunc;
+    int32_t sSrvDoFunc = pSkillsTxt->srvdofunc;
     if (sSrvDoFunc != 0x43) {
       if (sSrvDoFunc == 0x4c) {
         SKILLS::SkillsBar::SKILL_DrawUnitAtRotatedAngle(pUnit, nGamma, 0);

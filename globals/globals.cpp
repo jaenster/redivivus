@@ -324,8 +324,8 @@ char gszHeapTagOperatorNew[4] = { "new" }; D2_GLOBAL_GUARD(gszHeapTagOperatorNew
 
 char lpDefault_006cc837[1] = { '\x00' }; D2_GLOBAL_GUARD(lpDefault_006cc837, "lpDefault_006cc837");
 
-// also labelled: gszDot
-char gbCompressionDecoderMarker[2] = { "." }; D2_GLOBAL_GUARD(gbCompressionDecoderMarker, "gbCompressionDecoderMarker");
+// also labelled: gbCompressionDecoderMarker
+char gszDot[2] = { "." }; D2_GLOBAL_GUARD(gszDot, "gszDot");
 
 char s_Dec_006ccb00[4] = { 'D', 'e', 'c', '\x00' }; D2_GLOBAL_GUARD(s_Dec_006ccb00, "s_Dec_006ccb00");
 
@@ -37942,7 +37942,7 @@ void * Instrumentation[9] = {
     nullptr
 }; D2_GLOBAL_GUARD(Instrumentation, "Instrumentation");
 
-GUID ActivityId = {} /* 00000000-0000-0000-0000-000000000000 */; D2_GLOBAL_GUARD(ActivityId, "ActivityId");
+GUID ActivityId = {0x00000000, 0x0000, 0x0000, {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}} /* 00000000-0000-0000-0000-000000000000 */; D2_GLOBAL_GUARD(ActivityId, "ActivityId");
 
 // =============================================================================
 // Initialized scalars

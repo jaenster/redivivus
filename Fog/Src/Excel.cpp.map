@@ -371,6 +371,7 @@
       "usedTypes": [
         "D2BinFieldExcelStrc",
         "D2BinFieldInputStrc",
+        "D2TxtCodeBufUnion",
         "PFN_TxtFieldLinker",
         "PFN_TxtKeyToWord",
         "eD2BinFieldInputType",

@@ -179,10 +179,11 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
     }
 
     nPhysRes = (int)((nLifePercent >= 0x14 ? 0 : 0x64) * 3 + (nColdRes + nLightRes + (nPhysRes + nMagicRes * 2) * 4 + nFireRes) / 0xf + (nAnchorBonus + nMeleeScore) * 5 + (nSkillThreatScore / 4 + (eUnitState != STATE_none ? 100 : 0) * 2 + ((nPoisonMaxDam >> 8) + nColdMaxDam + nMagicMaxDam + nLightMaxDam + nFireMaxDam + nTotalMaxDam) / 2) * 2) / 0x16;
-    if (!nPhysRes) {
-      nPhysRes = 1;
+    if (nPhysRes) {
+      return nPhysRes;
     }
 
+    nPhysRes = 1;
     return nPhysRes;
 }
 

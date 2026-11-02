@@ -2714,16 +2714,65 @@ eD2ArenaFlags CLIENT_ArenaFlags = ARENAFLAG_ClientUpdate; D2_GLOBAL_GUARD(CLIENT
 
 eD2PlayerClassIDDWORD eD2PlayerClassIDDWORD_00712f00 = CLASS_SORCERESS; D2_GLOBAL_GUARD(eD2PlayerClassIDDWORD_00712f00, "eD2PlayerClassIDDWORD_00712f00");
 
-D2UIFlagInitStrc gUIFlagChatInit = {
-    /* .eEventType = */ 0x0,
-    /* .nMessageOrKeyCode = */ 0x102,
-    /* .pfHandler = */ &D2Client::UI::Chat::INPUT_HandleChatCharInput
+D2UIFlagInitStrc gUIFlagChatInit[4] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x102,
+        /* .pfHandler = */ &D2Client::UI::Chat::INPUT_HandleChatCharInput
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x26,
+        /* .pfHandler = */ &D2Client::UI::Chat::INPUT_HandleChatScroll
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x28,
+        /* .pfHandler = */ &D2Client::UI::Chat::INPUT_HandleChatScroll
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ (fnD2InitUIFlagFunction)&D2Client::UI::Chat::CHAT_CheckChatboxBounds
+    }
 }; D2_GLOBAL_GUARD(gUIFlagChatInit, "gUIFlagChatInit");
 
-D2UIFlagInitStrc g_UIFlagInitChatPanel = {
-    /* .eEventType = */ 0x0,
-    /* .nMessageOrKeyCode = */ 0x282,
-    /* .pfHandler = */ &D2Client::UI::Chat::INPUT_HandleIMENotify
+D2UIFlagInitStrc g_UIFlagInitChatPanel[7] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x282,
+        /* .pfHandler = */ &D2Client::UI::Chat::INPUT_HandleIMENotify
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x10f,
+        /* .pfHandler = */ &D2Client::INPUT_HandleIMEComposition
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x10d,
+        /* .pfHandler = */ &D2Client::INPUT_HandleIMEStartComposition
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x10e,
+        /* .pfHandler = */ &D2Client::INPUT_HandleIMEEndComposition
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x284,
+        /* .pfHandler = */ (fnD2InitUIFlagFunction)&D2Client::UI::Chat::CHAT_ResetIMEState
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x285,
+        /* .pfHandler = */ (fnD2InitUIFlagFunction)&D2Client::UI::Chat::CHAT_ResetIMEState
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x283,
+        /* .pfHandler = */ (fnD2InitUIFlagFunction)&D2Client::UI::Chat::CHAT_ResetIMEState
+    }
 }; D2_GLOBAL_GUARD(g_UIFlagInitChatPanel, "g_UIFlagInitChatPanel");
 
 D2EscMenuHeaderStrc gEscMenuHeaderInitData = {
@@ -42459,10 +42508,37 @@ D2UIFlagInitStrc gsUIFlagInit1 = {
     /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigMouseClick
 }; D2_GLOBAL_GUARD(gsUIFlagInit1, "gsUIFlagInit1");
 
-D2UIFlagInitStrc gsUIFlagInit0 = {
-    /* .eEventType = */ 0x0,
-    /* .nMessageOrKeyCode = */ 0x201,
-    /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigScreenOpen
+D2UIFlagInitStrc gsUIFlagInit0[6] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigScreenOpen
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigScreenOpen
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x100,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigKeyBind
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x104,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigKeyBind
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x101,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigKeyBindAlternate
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x105,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigKeyBindAlternate
+    }
 }; D2_GLOBAL_GUARD(gsUIFlagInit0, "gsUIFlagInit0");
 
 D2UIFlagInitStrc gsUIFlagInit2 = {
@@ -43456,10 +43532,47 @@ D2NpcCashTabStrc gaNpcCashTabs[2] = {
     }
 }; D2_GLOBAL_GUARD(gaNpcCashTabs, "gaNpcCashTabs");
 
-D2UIFlagInitStrc gUIFlagMapInit = {
-    /* .eEventType = */ 0x0,
-    /* .nMessageOrKeyCode = */ 0x202,
-    /* .pfHandler = */ &D2Client::UI::ui::INPUT_GambleRepairClick
+D2UIFlagInitStrc gUIFlagMapInit[8] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_GambleRepairClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::UseItem::INPUT_UseItemClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::UseItem::INPUT_UseItemClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x205,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_GambleRepairClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x200,
+        /* .pfHandler = */ &D2Client::TEXT_SetUnknownFlag
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::ui::PACKET_SendUnitInteraction0x44
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x20,
+        /* .pfHandler = */ &D2Client::UI::ui::PACKET_SendUnitInteraction0x44
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x102,
+        /* .pfHandler = */ &D2Client::UI::UseItem::INPUT_UseItemPassthrough
+    }
 }; D2_GLOBAL_GUARD(gUIFlagMapInit, "gUIFlagMapInit");
 
 D2SkillCltDoFunc SKILLCLTDOFUNCS[130] = {

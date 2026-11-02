@@ -627,6 +627,7 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
     int nLinkCodeLen;
     int nRawCodeLen;
     int nClassCodeLen;
+    D2TxtCodeBufUnion* pDVar2;
     char* pParseBufCursor;
     int nScanColIndex;
     char* pFieldCursor;
@@ -639,8 +640,7 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
     uint32_t dwCodePadded;
     uint16_t aColumnFieldMap[280];
     char aFieldParseBuf[288];
-    uint32_t dwCodeBuf;
-    char cLinkNameTerm;
+    D2TxtCodeBufUnion uCodeBuf;
     PFN_TxtFieldLinker pfnLinker;
     PFN_TxtFieldLinker pfnDefaultLinker;
     eD2BinFieldInputType eFieldType3;
@@ -720,19 +720,19 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
                     case FIELDTYPE_CODE1:
 
                     case FIELDTYPE_CODE2:
-                      dwCodeBuf = 0;
+                      uCodeBuf.dwCode = 0;
                     cCurChar = *pCurDataPos;
                     nLinkCodeLen = 0;
-                    dwCode = dwCodeBuf;
+                    dwCode = uCodeBuf.dwCode;
                     read_link_code_char:
-                    dwCodeBuf = dwCode;
+                    uCodeBuf.dwCode = dwCode;
                     if (cCurChar != '\0') {
                       if (nLinkCodeLen < 4) {
                         pCurDataPos++;
-                        *(char*)((uintptr_t)&dwCodeBuf + nLinkCodeLen) = cCurChar;
+                        uCodeBuf.szCode[nLinkCodeLen] = cCurChar;
                         cCurChar = *pCurDataPos;
                         nLinkCodeLen++;
-                        dwCode = dwCodeBuf;
+                        dwCode = uCodeBuf.dwCode;
                         goto read_link_code_char;
                       }
 
@@ -746,21 +746,21 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
                     pCurDataPos++;
                     if ((char)dwCode == '\0') {
                       dwCodePadded = 0x20202020;
-                    } else if ((char)(dwCode >> 8) == '\0') {
+                    } else if ((char)((uint32_t)dwCode >> 8) == '\0') {
                       *(uint16_t*)(char*)&dwCodePadded = (uint16_t)((uint16_t)(uint8_t)0x20 << 8 | (uint16_t)(uint8_t)(char)dwCode);
                       d2_store24((char*)&dwCodePadded, (uint32_t)((uint32_t)((uint32_t)(uint8_t)0x20 << 16 | (uint32_t)(uint16_t)dwCodePadded) & 0xffffffu));
                       dwCodePadded = (uint32_t)((uint32_t)(uint8_t)0x20 << 24 | (uint32_t)((uint32_t)dwCodePadded & 0xffffffu));
                     } else {
-                      *(uint8_t*)((char*)&dwCodeBuf + 2) = (char)(dwCode >> 0x10);
+                      uCodeBuf.szCode[2] = (char)((uint32_t)dwCode >> 0x10);
                       *(uint16_t*)(char*)&dwCodePadded = (uint16_t)dwCode;
-                      if (*(uint8_t*)((char*)&dwCodeBuf + 2) == '\0') {
+                      if (uCodeBuf.szCode[2] == '\0') {
                         d2_store24((char*)&dwCodePadded, (uint32_t)((uint32_t)((uint32_t)(uint8_t)0x20 << 16 | (uint32_t)(uint16_t)dwCodePadded) & 0xffffffu));
                         dwCodePadded = (uint32_t)((uint32_t)(uint8_t)0x20 << 24 | (uint32_t)((uint32_t)dwCodePadded & 0xffffffu));
                       } else {
                         d2_store24((char*)&dwCodePadded, (uint32_t)dwCode & 0xffffffu);
                         dwCodePadded = (uint32_t)((uint32_t)(uint8_t)0x20 << 24 | (uint32_t)((uint32_t)dwCodePadded & 0xffffffu));
-                        *(uint8_t*)((char*)&dwCodeBuf + 3) = (char)(dwCode >> 0x18);
-                        if (*(uint8_t*)((char*)&dwCodeBuf + 3) != '\0') {
+                        uCodeBuf.szCode[3] = (char)((uint32_t)dwCode >> 0x18);
+                        if (uCodeBuf.szCode[3] != '\0') {
                           dwCodePadded = dwCode;
                         }
                       }
@@ -967,18 +967,18 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
                   break;
                   case 2:
                     nRawCodeLen = 0;
-                  dwCodeBuf = 0;
+                  uCodeBuf.dwCode = 0;
                   cCurChar = *pCurDataPos;
-                  dwCode = dwCodeBuf;
+                  dwCode = uCodeBuf.dwCode;
                   read_raw_code_char:
-                  dwCodeBuf = dwCode;
+                  uCodeBuf.dwCode = dwCode;
                   if (cCurChar != '\0') {
                     if (nRawCodeLen < 4) {
                       pCurDataPos++;
-                      *(char*)((uintptr_t)&dwCodeBuf + nRawCodeLen) = cCurChar;
+                      uCodeBuf.szCode[nRawCodeLen] = cCurChar;
                       cCurChar = *pCurDataPos;
                       nRawCodeLen++;
-                      dwCode = dwCodeBuf;
+                      dwCode = uCodeBuf.dwCode;
                       goto read_raw_code_char;
                     }
 
@@ -989,30 +989,30 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
                     }
                   }
 
-                  *(uint8_t*)(char*)&dwCodeBuf = (char)dwCode;
+                  uCodeBuf.szCode[0] = (char)dwCode;
                   pDstChar = pCurDataPos + 1;
-                  if ((char)dwCodeBuf == '\0') {
+                  if (uCodeBuf.szCode[0] == '\0') {
                     memcpy(pRecord + nOffset, "    ", 4);
                   } else {
-                    *pFieldCursor = (char)dwCodeBuf;
-                    cCurChar = (char)(dwCode >> 8);
+                    *pFieldCursor = uCodeBuf.szCode[0];
+                    cCurChar = (char)((uint32_t)dwCode >> 8);
                     if (cCurChar == '\0') {
                       pFieldCursor[1] = ' ';
                       pFieldCursor[2] = ' ';
                       pFieldCursor[3] = ' ';
                     } else {
                       pFieldCursor[1] = cCurChar;
-                      *(uint8_t*)((char*)&dwCodeBuf + 2) = (char)(dwCode >> 0x10);
-                      if (*(uint8_t*)((char*)&dwCodeBuf + 2) == '\0') {
+                      uCodeBuf.szCode[2] = (char)((uint32_t)dwCode >> 0x10);
+                      if (uCodeBuf.szCode[2] == '\0') {
                         pFieldCursor[2] = ' ';
                         pFieldCursor[3] = ' ';
                       } else {
-                        pFieldCursor[2] = *(uint8_t*)((char*)&dwCodeBuf + 2);
-                        *(uint8_t*)((char*)&dwCodeBuf + 3) = (char)(dwCode >> 0x18);
-                        if (*(uint8_t*)((char*)&dwCodeBuf + 3) == '\0') {
+                        pFieldCursor[2] = uCodeBuf.szCode[2];
+                        uCodeBuf.szCode[3] = (char)((uint32_t)dwCode >> 0x18);
+                        if (uCodeBuf.szCode[3] == '\0') {
                           pFieldCursor[3] = ' ';
                         } else {
-                          pFieldCursor[3] = *(uint8_t*)((char*)&dwCodeBuf + 3);
+                          pFieldCursor[3] = uCodeBuf.szCode[3];
                         }
                       }
                     }
@@ -1029,14 +1029,14 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
                   pDstChar = pCurDataPos + 1;
                   break;
                   case 4:
-                    dwCodeBuf = 0;
+                    uCodeBuf.dwCode = 0;
                   cCurChar = *pCurDataPos;
                   nClassCodeLen = 0;
                   if (cCurChar != '\0') {
                     read_lookup_code_char:
                     if (nClassCodeLen < 4) {
                       pCurDataPos++;
-                      *(char*)((uintptr_t)&dwCodeBuf + nClassCodeLen) = cCurChar;
+                      uCodeBuf.szCode[nClassCodeLen] = cCurChar;
                       cCurChar = *pCurDataPos;
                       nClassCodeLen++;
                       if (cCurChar == '\0') {
@@ -1054,22 +1054,22 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
 
                   pad_and_lookup_code:
                   pDstChar = pCurDataPos + 1;
-                  if ((char)dwCodeBuf == '\0') {
+                  if ((char)uCodeBuf.dwCode == '\0') {
                     dwCodePadded = 0x20202020;
-                  } else if ((char)(dwCodeBuf >> 8) == '\0') {
-                    *(uint16_t*)(char*)&dwCodePadded = (uint16_t)((uint16_t)(uint8_t)0x20 << 8 | (uint16_t)(uint8_t)(char)dwCodeBuf);
+                  } else if ((char)((uint32_t)*(uint32_t*)(char*)&uCodeBuf >> 8) == '\0') {
+                    *(uint16_t*)(char*)&dwCodePadded = (uint16_t)((uint16_t)(uint8_t)0x20 << 8 | (uint16_t)(uint8_t)(char)uCodeBuf.dwCode);
                     d2_store24((char*)&dwCodePadded, (uint32_t)((uint32_t)((uint32_t)(uint8_t)0x20 << 16 | (uint32_t)(uint16_t)dwCodePadded) & 0xffffffu));
                     dwCodePadded = (uint32_t)((uint32_t)(uint8_t)0x20 << 24 | (uint32_t)((uint32_t)dwCodePadded & 0xffffffu));
                   } else {
-                    *(uint16_t*)(char*)&dwCodePadded = (uint16_t)dwCodeBuf;
-                    if (*(uint8_t*)((char*)&dwCodeBuf + 2) == '\0') {
+                    *(uint16_t*)(char*)&dwCodePadded = (uint16_t)uCodeBuf.dwCode;
+                    if (uCodeBuf.szCode[2] == '\0') {
                       d2_store24((char*)&dwCodePadded, (uint32_t)((uint32_t)((uint32_t)(uint8_t)0x20 << 16 | (uint32_t)(uint16_t)dwCodePadded) & 0xffffffu));
                       dwCodePadded = (uint32_t)((uint32_t)(uint8_t)0x20 << 24 | (uint32_t)((uint32_t)dwCodePadded & 0xffffffu));
                     } else {
-                      d2_store24((char*)&dwCodePadded, (uint32_t)dwCodeBuf & 0xffffffu);
+                      d2_store24((char*)&dwCodePadded, (uint32_t)uCodeBuf.dwCode & 0xffffffu);
                       dwCodePadded = (uint32_t)((uint32_t)(uint8_t)0x20 << 24 | (uint32_t)((uint32_t)dwCodePadded & 0xffffffu));
-                      if (*(uint8_t*)((char*)&dwCodeBuf + 3) != '\0') {
-                        dwCodePadded = dwCodeBuf;
+                      if (uCodeBuf.szCode[3] != '\0') {
+                        dwCodePadded = uCodeBuf.dwCode;
                       }
                     }
                   }
@@ -1097,13 +1097,13 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
                   break;
                   case 5:
                     cCurChar = *pCurDataPos;
-                  for (pDstChar = (char*)&dwCodeBuf; cCurChar != '\0' && pDstChar < &cLinkNameTerm; pDstChar++) {
+                  for (pDVar2 = &uCodeBuf; cCurChar != '\0' && pDVar2 < (D2TxtCodeBufUnion*)(uCodeBuf.szCode + 0x1f); pDVar2 = (D2TxtCodeBufUnion*)(pDVar2->szCode + 1)) {
                     pCurDataPos++;
-                    *pDstChar = cCurChar;
+                    pDVar2->szCode[0] = cCurChar;
                     cCurChar = *pCurDataPos;
                   }
 
-                  *pDstChar = '\0';
+                  pDVar2->szCode[0] = '\0';
                   cCurChar = *pCurDataPos;
                   while (cCurChar != '\0') {
                     pCurDataPos++;
@@ -1111,7 +1111,7 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
                   }
 
                   pDstChar = pCurDataPos + 1;
-                  nFieldValue = GetLinkNodeIndex(*(D2TxtLinkStrc**)pBinFieldInput[nFieldMapIdx].fpLinker, (char*)&dwCodeBuf, 1);
+                  nFieldValue = GetLinkNodeIndex(*(D2TxtLinkStrc**)pBinFieldInput[nFieldMapIdx].fpLinker, uCodeBuf.szCode, 1);
                   eFieldType = pBinFieldInput[nFieldMapIdx].eType;
                   switch (eFieldType) {
                     case FIELDTYPE_NAME_INT:

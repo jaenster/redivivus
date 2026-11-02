@@ -620,12 +620,10 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     int nCloudIdx;
     uint32_t nFrameIdx;
     char* pStrSrc;
-    D2SeedStrc* pAncientsCloudSeed;
     char* pStrDst;
     uint32_t nTileFrame3;
     char szFilePath[260];
     D2GfxDataStrc sGfxData;
-    DC6* pSummitDC6;
     D2SeedStrc ullSeedValue;
     if (D2CLIENT_ExitVar3) {
       return;
@@ -653,11 +651,7 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
       }
     }
 
-    nCloudFrame &= 0x80000003;
-    if ((int)nCloudFrame < 0) {
-      nCloudFrame = (nCloudFrame - 1 | -4) + 1;
-    }
-
+    nCloudFrame = (int)nCloudFrame % 4;
     nScrollOffset = -nTileFrameX;
     if (!gpAncientsBgDC6) {
       memcpy(szFilePath, "data\\global\\ui\\summit01", 0x18);
@@ -677,7 +671,7 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
       gnDrawBackgroundRenderOffset = Core::Archive::IMAGE_LoadDC6Ex(szFilePath, 0);
     }
 
-    pSummitDC6 = gpAncientsBgDC6;
+    DC6* pSummitDC6 = gpAncientsBgDC6;
     memset(&sGfxData, 0, 0x48);
     if (pSummitDC6) {
       sGfxData.pDC6 = pSummitDC6;
@@ -730,7 +724,7 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
       return;
     }
 
-    pAncientsCloudSeed = gpAncientsCloudSeed;
+    D2SeedStrc* pAncientsCloudSeed = gpAncientsCloudSeed;
     if (gbAncientsCloudInitialized == '\0') {
       uint32_t nCloudSeedVal;
       D2Common::Seed::SEED_InitDefault(gpAncientsCloudSeed);

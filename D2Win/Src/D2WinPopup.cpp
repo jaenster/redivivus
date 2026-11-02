@@ -173,16 +173,18 @@ BOOL __fastcall Draw(::D2WinPopup * pPopup) {
       D2gfx::D2GFX::D2GFX_DrawSolidRectEx(sPopupRect.left, sPopupRect.bottom, sPopupRect.right, sPopupRect.top, dwFillColor, DRAW_LESSTRANSPARENT);
       D2WinFont::SetAndReturnLastFont(1);
       nMsgIdx = pPopup->nMessageCount;
-      if (nMsgIdx > 0) {
-        wMessage = pPopup->wszMessages;
-        nMsgCount = 0;
-        do {
-          D2WinFont::DRAW_text(wMessage->wszText, pPopup->sControl.dwPosX, pPopup->sControl.dwPosY + (nMsgCount - nMsgIdx + 1) * 0x14, nMsgCount != pPopup->bCentered ? 0 : 0x3, 0);
-          nMsgIdx = pPopup->nMessageCount;
-          nMsgCount++;
-          wMessage++;
-        } while (nMsgCount < nMsgIdx);
+      if (nMsgIdx <= 0) {
+        return 1;
       }
+
+      wMessage = pPopup->wszMessages;
+      nMsgCount = 0;
+      do {
+        D2WinFont::DRAW_text(wMessage->wszText, pPopup->sControl.dwPosX, pPopup->sControl.dwPosY + (nMsgCount - nMsgIdx + 1) * 0x14, nMsgCount != pPopup->bCentered ? 0 : 0x3, 0);
+        nMsgIdx = pPopup->nMessageCount;
+        nMsgCount++;
+        wMessage++;
+      } while (nMsgCount < nMsgIdx);
 
       return 1;
     }

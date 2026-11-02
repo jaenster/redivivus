@@ -43,7 +43,6 @@
 #include "D2Game/D2DamageStrc.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/D2StateExArgStrc.h"
-#include "D2Game/D2UnitFindDataStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Event/Dispatch/Monster.h"
 #include "D2Game/GAME/Targets.h"
@@ -1008,41 +1007,43 @@ BOOL __fastcall Skills_SrvDoFunc_138_FirePerpendicularMissileLine(::SGAMEDATA * 
       eMissileId = (eMissilesId)pSkillRecord->srvmissile[1];
       if ((int)eMissileId > 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
         bGotTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nCursorX, &nCursorY);
-        if (bGotTargetPos) {
-          nUnitPosX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-          nDirX = nCursorX - nUnitPosX;
-          nLineCount = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-          nDirY = nCursorY - nLineCount;
-          SkillsServer::SKILLS_NormalizeDirectionMin(&nDirX, &nDirY);
-          SkillsServer::SKILLS_NormalizeDirectionPerp(&nDirX, &nDirY);
-          nLineCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[0], eSkill, nSkillLvl);
-          nCursorX -= nLineCount * nDirX / 2;
-          nCursorY -= nLineCount * nDirY / 2;
-          nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
-          memset(&sSkillArg, 0, 0x5c);
-          sSkillArg.nFlags = 0x20;
-          sSkillArg.pOwner = pUnit;
-          sSkillArg.pMissile = pUnit;
-          sSkillArg.eSkillNo = eSkill;
-          sSkillArg.nSkillLevel = nSkillLvl;
-          sSkillArg.nMissileTxtNo = eMissileId;
-          sSkillArg.nTotalFrames = nTotalFrames;
-          if (nLineCount > 0) {
-            do {
-              sSkillArg.nUnitX = nCursorX;
-              sSkillArg.nUnitY = nCursorY;
-              MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-              nCursorX += nDirX;
-              nCursorY += nDirY;
-              nLineCount--;
-            } while (nLineCount);
-          }
+        if (!bGotTargetPos) {
+          return 1;
+        }
 
-          eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-          if (eUnitState != STATE_none) {
-            D2Common::Units::SetSequenceFrame(pUnit, 8);
-            pUnit->nFrameCount = 0x600;
-          }
+        nUnitPosX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+        nDirX = nCursorX - nUnitPosX;
+        nLineCount = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+        nDirY = nCursorY - nLineCount;
+        SkillsServer::SKILLS_NormalizeDirectionMin(&nDirX, &nDirY);
+        SkillsServer::SKILLS_NormalizeDirectionPerp(&nDirX, &nDirY);
+        nLineCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[0], eSkill, nSkillLvl);
+        nCursorX -= nLineCount * nDirX / 2;
+        nCursorY -= nLineCount * nDirY / 2;
+        nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
+        memset(&sSkillArg, 0, 0x5c);
+        sSkillArg.nFlags = 0x20;
+        sSkillArg.pOwner = pUnit;
+        sSkillArg.pMissile = pUnit;
+        sSkillArg.eSkillNo = eSkill;
+        sSkillArg.nSkillLevel = nSkillLvl;
+        sSkillArg.nMissileTxtNo = eMissileId;
+        sSkillArg.nTotalFrames = nTotalFrames;
+        if (nLineCount > 0) {
+          do {
+            sSkillArg.nUnitX = nCursorX;
+            sSkillArg.nUnitY = nCursorY;
+            MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+            nCursorX += nDirX;
+            nCursorY += nDirY;
+            nLineCount--;
+          } while (nLineCount);
+        }
+
+        eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+        if (eUnitState != STATE_none) {
+          D2Common::Units::SetSequenceFrame(pUnit, 8);
+          pUnit->nFrameCount = 0x600;
         }
 
         return 1;
@@ -1247,31 +1248,33 @@ BOOL __fastcall Skills_SrvDoFunc_140_BaalTentacle(::SGAMEDATA * pGame, D2UnitStr
         nSpawnY = D2Common::PATH::DynamicPath::GetYPos(pSpawnedMinion->pPath.pDynamicPath);
       }
     }
-    if (nSpawnCount > 0) {
-      D2RoomStrc* pSpawnRoom;
-      do {
-        uSeedRoll = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
-        nOffsetX = (int)uSeedRoll + (int)((uSeedRoll & 0xffffffff) / 0x12) * -0x12 - 9 + nBaseX;
-        sNewSeed = D2_SEED_NEXT_VAL(uSeedRoll);
-        pUnit->sSeed = sNewSeed;
-        nSpawnYOffset = sNewSeed.nSeedLow % 0x12 - 9 + nSpawnY;
-        nOffsetY = nSpawnYOffset;
-        pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-        pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, nOffsetX, nSpawnYOffset);
-        if (pSpawnRoom) {
-          nSpawnYOffset = nOffsetY;
-          D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nOffsetX, nSpawnYOffset);
-          pSpawnedMinion = Monster::Create::SpawnMonsterAtRoomPos(pGameLocal, pSpawnRoom, nOffsetX, nOffsetY, nMonStatsId, eSpawnAnimMode, -1, 0);
-          if (pSpawnedMinion) {
-            pSpawnedMinion->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC;
-            Monster::AI::RestartAiThink(pGameLocal, pSpawnedMinion, 0xf);
-            D2Common::Units::StoreOwner(pSpawnedMinion, pUnit);
-          }
-        }
-
-        nSpawnCount--;
-      } while (nSpawnCount);
+    if (nSpawnCount <= 0) {
+      return 1;
     }
+
+    do {
+      D2RoomStrc* pSpawnRoom;
+      uSeedRoll = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
+      nOffsetX = (int)uSeedRoll + (int)((uSeedRoll & 0xffffffff) / 0x12) * -0x12 - 9 + nBaseX;
+      sNewSeed = D2_SEED_NEXT_VAL(uSeedRoll);
+      pUnit->sSeed = sNewSeed;
+      nSpawnYOffset = sNewSeed.nSeedLow % 0x12 - 9 + nSpawnY;
+      nOffsetY = nSpawnYOffset;
+      pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+      pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, nOffsetX, nSpawnYOffset);
+      if (pSpawnRoom) {
+        nSpawnYOffset = nOffsetY;
+        D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nOffsetX, nSpawnYOffset);
+        pSpawnedMinion = Monster::Create::SpawnMonsterAtRoomPos(pGameLocal, pSpawnRoom, nOffsetX, nOffsetY, nMonStatsId, eSpawnAnimMode, -1, 0);
+        if (pSpawnedMinion) {
+          pSpawnedMinion->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC;
+          Monster::AI::RestartAiThink(pGameLocal, pSpawnedMinion, 0xf);
+          D2Common::Units::StoreOwner(pSpawnedMinion, pUnit);
+        }
+      }
+
+      nSpawnCount--;
+    } while (nSpawnCount);
 
     return 1;
 }
@@ -1334,6 +1337,7 @@ D2UnitStrc * __fastcall SKILLEMONST_FindNearbyCorpse(::SGAMEDATA * pGame, D2Unit
     bool bIsCorpseUseable;
     bool bCanAttack;
     int nX;
+    int32_t nPosY;
     int32_t nCandidateIdx;
     D2UnitFindArgStrc sUnitFindArg;
     D2UnitFindDataStrc sUnitFindData;
@@ -1349,22 +1353,21 @@ D2UnitStrc * __fastcall SKILLEMONST_FindNearbyCorpse(::SGAMEDATA * pGame, D2Unit
     }
 
     eUnitType = pUnit->eUnitType;
-    int nYValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nYValue = pUnit->pPath.pStaticPath->nPosY;
+      nPosY = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
-      nYValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
     } else {
-      nYValue = 0;
+      nPosY = 0;
     }
 
-    sUnitFindArg.nY = nYValue;
     memset(&sUnitFindArg, 0, 0x38);
     sUnitFindArg.nDistance = nSearchRadius;
     sUnitFindArg.nFlags = 0x1002;
     sUnitFindArg.pAttacker = pUnit;
     sUnitFindArg.nX = nX;
-    D2Common::Units::UnitFinds::InitializeUnitFindData(pGameLocal->pMemoryPool, &sUnitFindData, pCurrentRoom, nX, sUnitFindArg.nY, nSearchRadius, nullptr, &sUnitFindArg);
+    sUnitFindArg.nY = nPosY;
+    D2Common::Units::UnitFinds::InitializeUnitFindData(pGameLocal->pMemoryPool, &sUnitFindData, pCurrentRoom, nX, nPosY, nSearchRadius, nullptr, &sUnitFindArg);
     D2Common::Units::UnitFinds::UNITFINDS_FindCullRange(&sUnitFindData);
     for (nCandidateIdx = 0; nCandidateIdx < sUnitFindData.nCountedUnits; nCandidateIdx++) {
       D2UnitStrc* pCandidate;

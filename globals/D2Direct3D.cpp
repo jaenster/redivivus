@@ -359,6 +359,8 @@ uint16_t g_OriginalGammaRamp[3][256] = {}; D2_GLOBAL_GUARD(g_OriginalGammaRamp, 
 
 D3DTextureCacheSetStrc gD3DGenericTextureCache = {}; D2_GLOBAL_GUARD(gD3DGenericTextureCache, "gD3DGenericTextureCache");
 
+D2D3DVertexStrc gD3DFontVertex0[4] = {}; D2_GLOBAL_GUARD(gD3DFontVertex0, "gD3DFontVertex0");
+
 void * g_pFontTextureBuffer[96] = {}; D2_GLOBAL_GUARD(g_pFontTextureBuffer, "g_pFontTextureBuffer");
 
 void * g_pFontTextureSurface[96] = {}; D2_GLOBAL_GUARD(g_pFontTextureSurface, "g_pFontTextureSurface");
@@ -369,9 +371,13 @@ D2D3DVertexStrc gaD3DPerspectiveStripVertices[15] = {}; D2_GLOBAL_GUARD(gaD3DPer
 
 D2D3DVertexStrc gaD3DPerspectiveVertices[4] = {}; D2_GLOBAL_GUARD(gaD3DPerspectiveVertices, "gaD3DPerspectiveVertices");
 
+uint16_t gpD3DGroundTileVertexBuffer[65] = {}; D2_GLOBAL_GUARD(gpD3DGroundTileVertexBuffer, "gpD3DGroundTileVertexBuffer");
+
 uint8_t g_aLightingTable[65536] = {}; D2_GLOBAL_GUARD(g_aLightingTable, "g_aLightingTable");
 
 uint32_t g_aPerspectiveZDivisionTable[8192] = {}; D2_GLOBAL_GUARD(g_aPerspectiveZDivisionTable, "g_aPerspectiveZDivisionTable");
+
+D2D3DVertexStrc gaD3DSmackerVertices[4] = {}; D2_GLOBAL_GUARD(gaD3DSmackerVertices, "gaD3DSmackerVertices");
 
 IDirectDrawSurface7 * gpD3DSmackerSystemSurface0[2] = {}; D2_GLOBAL_GUARD(gpD3DSmackerSystemSurface0, "gpD3DSmackerSystemSurface0");
 
@@ -411,14 +417,6 @@ void * gpD3DTextureSpritePoolMemory0 = 0; D2_GLOBAL_GUARD(gpD3DTextureSpritePool
 void * gpD3DTextureSpritePoolMemory1 = 0; D2_GLOBAL_GUARD(gpD3DTextureSpritePoolMemory1, "gpD3DTextureSpritePoolMemory1");
 IDirect3DVertexBuffer * g_pD3DSpriteQuadVB = 0; D2_GLOBAL_GUARD(g_pD3DSpriteQuadVB, "g_pD3DSpriteQuadVB");
 int gd3dVertexBufferOffset = 0; D2_GLOBAL_GUARD(gd3dVertexBufferOffset, "gd3dVertexBufferOffset");
-int gD3DFontVertex0 = 0; D2_GLOBAL_GUARD(gD3DFontVertex0, "gD3DFontVertex0");
-float gfD3DFontVertex0X = 0; D2_GLOBAL_GUARD(gfD3DFontVertex0X, "gfD3DFontVertex0X");
-float gfD3DFontVertex0Z = 0; D2_GLOBAL_GUARD(gfD3DFontVertex0Z, "gfD3DFontVertex0Z");
-float gfD3DFontVertex0Y = 0; D2_GLOBAL_GUARD(gfD3DFontVertex0Y, "gfD3DFontVertex0Y");
-float gfD3DFontVertex2Y = 0; D2_GLOBAL_GUARD(gfD3DFontVertex2Y, "gfD3DFontVertex2Y");
-float gfD3DFontVertex1Y = 0; D2_GLOBAL_GUARD(gfD3DFontVertex1Y, "gfD3DFontVertex1Y");
-float gfD3DFontVertex2X = 0; D2_GLOBAL_GUARD(gfD3DFontVertex2X, "gfD3DFontVertex2X");
-float gfD3DFontVertex3X = 0; D2_GLOBAL_GUARD(gfD3DFontVertex3X, "gfD3DFontVertex3X");
 IDirect3DVertexBuffer * g_pD3DGroundTileVB = 0; D2_GLOBAL_GUARD(g_pD3DGroundTileVB, "g_pD3DGroundTileVB");
 uint8_t GlobalGreen = 0; D2_GLOBAL_GUARD(GlobalGreen, "GlobalGreen");
 uint8_t GlobalBlue = 0; D2_GLOBAL_GUARD(GlobalBlue, "GlobalBlue");

@@ -300,8 +300,8 @@ void __fastcall BNDOWNLOAD_UpdateProgressPercent(uint32_t dwUnused, int32_t nByt
 
 void __fastcall BNDOWNLOAD_ResetState(uint32_t nResetValue) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00881f64);
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gbBnetFtpFileTransferActive = 0;
-    bBnetFtpDownloadActive = '\0';
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gbBnetFtpFileTransferActive[0] = '\0';
+    gbBnetFtpFileTransferActive[1] = '\0';
     gnNetworkSendState = nResetValue;
     LeaveCriticalSection(&lpCriticalSection_00881f64);
 }
@@ -677,7 +677,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
     nSockResult = BnSend::BNCLIENT_GetSocketPeerName(&sSockAddr, &__frame0.nSockAddrLen);
     if (!nSockResult) {
       BnSend::GetBnetIp(BnetIp, 0x100);
-      BnSend::GetDnsRecordSync((char**)szDnsResult, (int)BnetIp);
+      BnSend::GetDnsRecordSync((char**)szDnsResult, BnetIp);
       pcToken = strtok(szDnsResult, " ,;");
       memset(sSockAddr.sa_data + 2, 0, 12 * sizeof(sSockAddr.sa_data[0]));
       sSockAddr.sa_family = 2;
@@ -870,8 +870,8 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
     Storm::Source::SMem::SMemFree(pDownloadCtxCopy, ".\\BnDownload.cpp", 0x368, 0);
     if (nConnResult == -0x7ffffffe && gnNetworkSendState < 100) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00881f64);
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gbBnetFtpFileTransferActive = 0;
-      bBnetFtpDownloadActive = '\0';
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gbBnetFtpFileTransferActive[0] = '\0';
+      gbBnetFtpFileTransferActive[1] = '\0';
       gnNetworkSendState = 0x65;
       LeaveCriticalSection(&lpCriticalSection_00881f64);
     }
@@ -978,19 +978,17 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
     char* pDestPtr;
     uint32_t* puPoolCursor;
     void* _Dst;
-    uint8_t* pbFtpEntryEnd;
+    char* pbFtpEntryEnd;
     int bOpened;
     BOOL BVar1;
     HMODULE hModule;
     FARPROC pExtraWorkProc;
     int32_t nOpenResult;
     uint32_t nIniLen;
-    uint8_t* _Str1;
     FILETIME FStack_1224;
     D2ArchiveStrc* pArchiveHandle;
-    uint8_t byScanChar;
-    char cStrChar;
-    uint8_t* pbStrCursor;
+    char byScanChar;
+    char* pbStrCursor;
     uint32_t uPoolChar;
     LPCSTR szDestPathSave;
     szDestPathSave = szDestPath;
@@ -1007,10 +1005,10 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
         __frame0.dwStackPad3 = (char*)D2_ALLOC_AT((size_t)(pDestPtr + (1 - (int)(szDestPath + 1))), ".\\BnDownload.cpp", 0x179);
         bOpened = (int)__frame0.dwStackPad3 - (int)szDestPath;
         do {
-          cStrChar = *szDestPath;
-          szDestPath[bOpened] = cStrChar;
+          byScanChar = *szDestPath;
+          szDestPath[bOpened] = byScanChar;
           szDestPath++;
-        } while (cStrChar != '\0');
+        } while (byScanChar != '\0');
       }
       if (pPoolMgr) {
         puPoolCursor = pPoolMgr;
@@ -1055,23 +1053,23 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
       return;
       case -0x7ffffffe:
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00881f64);
-      _Str1 = &gbBnetFtpFileTransferActive;
-      byScanChar = gbBnetFtpFileTransferActive;
-      while (byScanChar) {
-        bOpened = _stricmp((char*)_Str1, szDestPath);
+      pDestPtr = gbBnetFtpFileTransferActive;
+      byScanChar = gbBnetFtpFileTransferActive[0];
+      while (byScanChar != '\0') {
+        bOpened = _stricmp(pDestPtr, szDestPath);
         if (!bOpened) {
-          pbFtpEntryEnd = _Str1;
-          if (*_Str1) {
+          pbFtpEntryEnd = pDestPtr;
+          if (*pDestPtr != '\0') {
             goto download_next_file;
           }
 
           break;
         }
 
-        pbFtpEntryEnd = _Str1;
-        pbFtpEntryEnd = pbFtpEntryEnd + strlen((char*)pbFtpEntryEnd) + 1;
-        pbStrCursor = _Str1 + (int)(pbFtpEntryEnd + (1 - (int)(_Str1 + 1)));
-        _Str1 += (int)(pbFtpEntryEnd + (1 - (int)(_Str1 + 1)));
+        pbFtpEntryEnd = pDestPtr;
+        pbFtpEntryEnd = pbFtpEntryEnd + strlen(pbFtpEntryEnd) + 1;
+        pbStrCursor = pDestPtr + (int)(pbFtpEntryEnd + (1 - (int)(pDestPtr + 1)));
+        pDestPtr += (int)(pbFtpEntryEnd + (1 - (int)(pDestPtr + 1)));
         byScanChar = *pbStrCursor;
       }
 
@@ -1080,10 +1078,10 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
         Debug::DEBUG_Trace("Processing Version file");
       bOpened = (int)lpFileName_00881c58 - (int)szDestPath;
       do {
-        cStrChar = *szDestPath;
-        szDestPath[bOpened] = cStrChar;
+        byScanChar = *szDestPath;
+        szDestPath[bOpened] = byScanChar;
         szDestPath++;
-      } while (cStrChar != '\0');
+      } while (byScanChar != '\0');
 
       return;
       case -0x7ffffffb:
@@ -1195,12 +1193,12 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
     do {
       byScanChar = *pbFtpEntryEnd;
       pbFtpEntryEnd++;
-    } while (byScanChar);
-    if (*pbFtpEntryEnd) {
-      _Str1 = _Str1 + strlen((char*)_Str1) + 1;
+    } while (byScanChar != '\0');
+    if (*pbFtpEntryEnd != '\0') {
+      pDestPtr = pDestPtr + strlen(pDestPtr) + 1;
       FStack_1224.dwLowDateTime = 0;
       FStack_1224.dwHighDateTime = 0;
-      BNDOWNLOAD_InitiateFileDownload((D2BnetDownloadStateStrc*)0x80000002, 2, 0, 0, &FStack_1224, (char*)_Str1, nullptr);
+      BNDOWNLOAD_InitiateFileDownload((D2BnetDownloadStateStrc*)0x80000002, 2, 0, 0, &FStack_1224, pDestPtr, nullptr);
     } else {
       file_list_done:
       BNDOWNLOAD_ResetState(0x65);
@@ -1223,7 +1221,7 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, size_t 
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ gnNetworkSendState = 0;
     EnterCriticalSection(&lpCriticalSection_00881f64);
-    Storm::Source::SMem::SMemCopy(&gbBnetFtpFileTransferActive, pPatchList, nSize);
+    Storm::Source::SMem::SMemCopy(gbBnetFtpFileTransferActive, pPatchList, nSize);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnNetworkSendState = 0;
     LeaveCriticalSection(&lpCriticalSection_00881f64);
     Storm::Source::SReg::SRegSaveData("Patch", "Patches", 0x82, pPatchList, nSize + 1);

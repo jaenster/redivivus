@@ -48,7 +48,6 @@
 #include "D2Game/D2Game.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/D2StateExArgStrc.h"
-#include "D2Game/D2UnitFindDataStrc.h"
 #include "D2Game/GAME/Arena.h"
 #include "D2Game/GAME/Clients.h"
 #include "D2Game/GAME/Event.h"
@@ -746,6 +745,7 @@ static void DAMAGE_ApplyUndeadBonusDamage(int32_t pDamage, D2UnitStrc * pUnit, D
 }
 
 static void __stdcall DAMAGE_ApplyMonsterTypeBonusDamage(D2UnitStrc * pUnit, D2DamageStrc * pDamage, D2UnitStrc * pTarget) {
+    int i;
     D2StatStrc anBonusValues[128];
     if ((pTarget ? pTarget->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
@@ -764,22 +764,15 @@ static void __stdcall DAMAGE_ApplyMonsterTypeBonusDamage(D2UnitStrc * pUnit, D2D
 
     nMonTypeCount = (int)nMonTypeCountShort;
     int32_t nBonusCount = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0xb4, anBonusValues, 0x80);
-    int i = 0;
     D2DataTableTxtStrc* pDataTbl = sgptDataTable;
-    if (nBonusCount <= 0) {
-      return;
-    }
-
-    do {
+    for (i = 0; i < nBonusCount; i++) {
       uint32_t nMonTypeId;
       nMonTypeId = (uint32_t)(uint16_t)anBonusValues[i].wSubIndex;
       if (nMonTypeId && (int)nMonTypeId < pDataTbl->nTxtMonTypeSize && nMonTypeCount > 0 && nMonTypeCount < pDataTbl->nTxtMonTypeSize && *(uint32_t*)((uint8_t*)pDataTbl->pTxtMonTypeUnknown + (pDataTbl->nMonTypeEquivRowDwords * nMonTypeCount + ((int)nMonTypeId >> 5)) * 4) & gadwBitMasks[nMonTypeId & 0x1f]) {
         pDamage->dwEnDmgPct += anBonusValues[i].nStatValue;
         pDataTbl = sgptDataTable;
       }
-
-      i++;
-    } while (i < nBonusCount);
+    }
 }
 
 // Server-side computation of a unit's full outgoing attack damage into pDmgStrc. Recalcs dual-wield/equipped weapon stats for weapon slot nParam, then accumulates: target-AC penetration and demon/undead/monster-type bonus vs monster targets; physical damage with crit/deadly-strike/critical-strike rolls (doubles phys, sets wResultFlags 0x2000); per-element (fire/light/cold/magic) rolls scaled by the bParam attack-rating-percent (0x80=100%); life/mana/stamina leech, poison (+length), cold/stun/burn lengths; and damage-conversion (nConvType) reallocating phys into an element. Dispatches the on-attack unit event and applies monster crit. bParam defaults to 0x80 if 0.
@@ -2141,7 +2134,7 @@ static uint32_t DAMAGE_GetElementalDamageTypeFlags(uint32_t dwHitClass, int32_t 
     static uint8_t gnElementalDamageTypeCallCount; D2_STATIC_GUARD_BSS(gnElementalDamageTypeCallCount, "D2Game::UNIT::SUnitDmg::DAMAGE_GetElementalDamageTypeFlags::gnElementalDamageTypeCallCount");
 
     uint32_t uDmgTypeFlags = 0;
-    uint32_t uDmgTypeIdx = gnElementalDamageTypeCallCount & 0x80000003;
+    uint32_t uDmgTypeIdx = (int)gnElementalDamageTypeCallCount % 4;
     gnElementalDamageTypeCallCount++;
     int nDmgTypeMax = uDmgTypeIdx + 4;
     do {

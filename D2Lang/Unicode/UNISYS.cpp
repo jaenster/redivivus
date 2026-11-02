@@ -664,7 +664,6 @@ char * __fastcall UNICODE_WideToMultiByte(char * pszDst, uint16_t * pwszSrc, int
 }
 
 bool __thiscall UNICODE_CheckTrailingPunctuation(char * szSourceFile, uint16_t * pwChar) {
-    uint32_t nGuardRetVal;
     uint16_t wszTable[20];
     int i = 0;
     for (int iFill = 0; iFill < 20; iFill++) {
@@ -705,21 +704,18 @@ bool __thiscall UNICODE_CheckTrailingPunctuation(char * szSourceFile, uint16_t *
     } while (i < 0x14);
 
     if (szSourceFile[i] != '\0') {
-      *(uint16_t*)((uintptr_t)&nGuardRetVal + i * 2 + 2) = 0;
+      wszTable[i - 1] = L'\0';
     } else {
       wszTable[i] = L'\0';
     }
 
-    nGuardRetVal = 0x52714e;
     int32_t nPunctTableLen = STRING_GetWideStringLength(wszTable);
     for (i = 0; i < nPunctTableLen; i++) {
       if (*pwChar == wszTable[i]) {
-        nGuardRetVal = 0x52718c;
         return true;
       }
     }
 
-    nGuardRetVal = 0x52717a;
     return false;
 }
 

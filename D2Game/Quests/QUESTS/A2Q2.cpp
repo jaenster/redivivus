@@ -584,12 +584,14 @@ BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2(D2ObjectOperateFnArg * 
       D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
       *pSeed = sNewSeed;
       nDropCount = sNewSeed.nSeedLow % 5 + 5;
-      if (nDropCount > 0) {
-        do {
-          Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-          nDropCount--;
-        } while (nDropCount);
+      if (nDropCount <= 0) {
+        return 0;
       }
+
+      do {
+        Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
+        nDropCount--;
+      } while (nDropCount);
 
       return 0;
     }
@@ -634,12 +636,14 @@ BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3(D2ObjectOperateFnArg * 
       D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
       *pSeed = sNewSeed;
       int nGoldDropsLeft = sNewSeed.nSeedLow % 5 + 5;
-      if (nGoldDropsLeft > 0) {
-        do {
-          Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-          nGoldDropsLeft--;
-        } while (nGoldDropsLeft);
+      if (nGoldDropsLeft <= 0) {
+        return 0;
       }
+
+      do {
+        Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
+        nGoldDropsLeft--;
+      } while (nGoldDropsLeft);
 
       return 0;
     }
@@ -682,12 +686,14 @@ BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop1(D2ObjectOperateFnArg * 
       D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
       *pSeed = sNewSeed;
       int nGoldDropsLeft = sNewSeed.nSeedLow % 5 + 5;
-      if (nGoldDropsLeft > 0) {
-        do {
-          Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-          nGoldDropsLeft--;
-        } while (nGoldDropsLeft);
+      if (nGoldDropsLeft <= 0) {
+        return 0;
       }
+
+      do {
+        Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
+        nGoldDropsLeft--;
+      } while (nGoldDropsLeft);
 
       return 0;
     }

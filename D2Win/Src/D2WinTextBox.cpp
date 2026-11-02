@@ -1091,14 +1091,16 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     if (nLineCount > nVisibleLines && uNewScrollTop != (::DrawEx)pTextBox->sStyleControl.dwSizeY) {
       D2WINTEXTBOX_ScrollToLine((::D2WinTextBox*)pControlMsg->pControl, (int32_t)uNewScrollTop);
     }
-    if (uCurSel != pDVar1) {
-      OnPress pOVar2;
-      pOVar2 = pTextBox->sControl.fpOnPress;
-      if (pOVar2) {
-        (*pOVar2)(pControlMsg);
-      }
+    if (uCurSel == pDVar1) {
+      return 0;
     }
 
+    OnPress pOVar2 = pTextBox->sControl.fpOnPress;
+    if (!pOVar2) {
+      return 0;
+    }
+
+    (*pOVar2)(pControlMsg);
     return 0;
 }
 

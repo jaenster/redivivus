@@ -5,6 +5,7 @@
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/Sound/SoundHdr.h"
+#include "D2Direct3D/Renderer/Direct3D.h"
 #include "D2gfx/D2GFX.h"
 #include "Fog/Fog.h"
 #include "Fog/SMem.h"
@@ -59,13 +60,13 @@ void __stdcall DrawRenderStats() {
     uint32_t nPercentUtilized;
     HANDLE nMisses;
     ULONG_PTR nAccesses;
-    float fValue;
+    D2FloatIntUnion fValue;
     float fKilobytes;
     D2CMP::SRC::SpriteCache::SPRITECACHE_GetStats(&nCacheSize, &nMisses, &nAccesses, &nPercentUtilized);
     if ((int)nAccesses > 0) {
-      fValue = (float)(int)nMisses * 100.0 / (float)(int)nAccesses;
+      fValue.fValue = (float)(int)nMisses * 100.0 / (float)(int)nAccesses;
       fKilobytes = (float)nCacheSize;
-      sprintf(szStatLine, "Tile Cache: (%.2fK) %3.2f%%, Misses: %d, %d percent utilized\n", (double)(fKilobytes * 0.0009765625), (double)fValue, (int)nMisses, nPercentUtilized);
+      sprintf(szStatLine, "Tile Cache: (%.2fK) %3.2f%%, Misses: %d, %d percent utilized\n", (double)(fKilobytes * 0.0009765625), (double)fValue.fValue, (int)nMisses, nPercentUtilized);
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x30, szStatLine);
     }
 
@@ -74,10 +75,10 @@ void __stdcall DrawRenderStats() {
       return;
     }
 
-    fValue = (float)*pRenderStats;
-    if (fValue != 0.0) {
-      fKilobytes = (float)(int)fValue;
-      if ((int)fValue < 0) {
+    fValue.nValue = *pRenderStats;
+    if (fValue.nValue) {
+      fKilobytes = (float)fValue.nValue;
+      if (fValue.nValue < 0) {
         fKilobytes += 4.2949673e+09;
       }
 
@@ -85,10 +86,10 @@ void __stdcall DrawRenderStats() {
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x3c, szStatLine);
     }
 
-    fValue = (float)pRenderStats[3];
-    if (fValue != 0.0) {
-      fKilobytes = (float)(int)fValue;
-      if ((int)fValue < 0) {
+    fValue = d2_bits_as<D2FloatIntUnion>(((D2FloatIntUnion*)(pRenderStats + 3))->nValue);
+    if (fValue.nValue) {
+      fKilobytes = (float)fValue.nValue;
+      if (fValue.nValue < 0) {
         fKilobytes += 4.2949673e+09;
       }
 
@@ -96,10 +97,10 @@ void __stdcall DrawRenderStats() {
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x48, szStatLine);
     }
 
-    fValue = (float)pRenderStats[6];
-    if (fValue != 0.0) {
-      fKilobytes = (float)(int)fValue;
-      if ((int)fValue < 0) {
+    fValue = d2_bits_as<D2FloatIntUnion>(((D2FloatIntUnion*)(pRenderStats + 6))->nValue);
+    if (fValue.nValue) {
+      fKilobytes = (float)fValue.nValue;
+      if (fValue.nValue < 0) {
         fKilobytes += 4.2949673e+09;
       }
 
@@ -107,10 +108,10 @@ void __stdcall DrawRenderStats() {
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x54, szStatLine);
     }
 
-    fValue = (float)pRenderStats[7];
-    if (fValue != 0.0) {
-      fKilobytes = (float)(int)fValue;
-      if ((int)fValue < 0) {
+    fValue = d2_bits_as<D2FloatIntUnion>(((D2FloatIntUnion*)(pRenderStats + 7))->nValue);
+    if (fValue.nValue) {
+      fKilobytes = (float)fValue.nValue;
+      if (fValue.nValue < 0) {
         fKilobytes += 4.2949673e+09;
       }
 
@@ -118,13 +119,13 @@ void __stdcall DrawRenderStats() {
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x60, szStatLine);
     }
 
-    fValue = (float)pRenderStats[8];
-    if (fValue == 0.0) {
+    fValue = d2_bits_as<D2FloatIntUnion>(((D2FloatIntUnion*)(pRenderStats + 8))->nValue);
+    if (!fValue.nValue) {
       return;
     }
 
-    fKilobytes = (float)(int)fValue;
-    if ((int)fValue < 0) {
+    fKilobytes = (float)fValue.nValue;
+    if (fValue.nValue < 0) {
       fKilobytes += 4.2949673e+09;
     }
 

@@ -37,10 +37,11 @@ uint32_t __thiscall ARCHIVE_ComputeAddress(int * pNode, int32_t nBaseAddr) {
 }
 
 int32_t __thiscall ARCHIVE_GetNodeOrDefault(int32_t pThis, int32_t nNode) {
-    if (!nNode) {
-      nNode = pThis + 4;
+    if (nNode) {
+      return nNode;
     }
 
+    nNode = pThis + 4;
     return nNode;
 }
 

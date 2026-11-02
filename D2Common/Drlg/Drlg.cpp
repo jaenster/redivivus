@@ -4098,20 +4098,22 @@ int __stdcall DRLGOUTROOM_EstimatePathDistance(int nX1, int nY1, int nX2, int nY
     }
 
     int nMin = nDx;
-    if (nDx < nDy || (nDist = nDy + nDx * 2 , nMin = nDy , nDx <= nDy)) {
-      nDist = nMin + nDy * 2;
+    if (!(nDx < nDy || (nDist = nDy + nDx * 2 , nMin = nDy , nDx <= nDy))) {
+      return nDist;
     }
 
+    nDist = nMin + nDy * 2;
     return nDist;
 }
 
 // NOTE: Register params: pint (EAX): int *
 int32_t __stdcall DRLGOUTROOM_GetDirectionChangeCost(int * pint, int dwParam2, int dwParam3) {
     int32_t nCost;
-    if (pint[3] == dwParam2 || (nCost = 3 , pint[4] == dwParam3)) {
-      nCost = 2;
+    if (!(pint[3] == dwParam2 || (nCost = 3 , pint[4] == dwParam3))) {
+      return nCost;
     }
 
+    nCost = 2;
     return nCost;
 }
 

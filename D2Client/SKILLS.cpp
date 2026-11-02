@@ -40,12 +40,13 @@
 #include "D2Common/Seed.h"
 #include "D2Common/Skills.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Common/Units/Missile.h"
 #include "D2Common/Units/UnitFinds.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
-#include "D2Game/D2UnitFindDataStrc.h"
 #include "D2Game/GAME/Event.h"
+#include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -53,7 +54,6 @@
 #include "D2Win/DC6Block.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "globals/globals.h"
-#include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
@@ -359,14 +359,16 @@ BOOL __fastcall Skills_CltDoFunc_MultiMissileDirected(D2UnitStrc * pUnit, eD2Ski
 
     spawn_missile_rounds:
     nSkillLvl = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->cltcalc[0], eSkill, nSkillLvl);
-    if (nSkillLvl > 0) {
-      do {
-        SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
-        SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
-        SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
-        nSkillLvl--;
-      } while (nSkillLvl);
+    if (nSkillLvl <= 0) {
+      return 1;
     }
+
+    do {
+      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
+      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
+      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
+      nSkillLvl--;
+    } while (nSkillLvl);
 
     return 1;
 }
@@ -468,15 +470,18 @@ BOOL __fastcall Skills_CltDoFunc_DualMissileAtCoords(D2UnitStrc * pUnit, eD2Skil
         UNIT::Missile::MakeMissile(&sSkillArg);
       }
     }
-    if (pSkillTxt->cltmissile[2] >= 0) {
-      D2UnitStrc* pUnit_00;
-      sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[2];
-      if ((int)sSkillArg.nMissileTxtNo < sgptDataTable->nTxtMissilesSize) {
-        pUnit_00 = UNIT::Missile::MakeMissile(&sSkillArg);
-        if (pUnit_00) {
-          D2Common::Units::Missile::SetTargetX(pUnit_00, pUnit->nInitSeed);
-        }
-      }
+    if (pSkillTxt->cltmissile[2] < 0) {
+      return 1;
+    }
+
+    sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[2];
+    if ((int)sSkillArg.nMissileTxtNo >= sgptDataTable->nTxtMissilesSize) {
+      return 1;
+    }
+
+    D2UnitStrc* pUnit_00 = UNIT::Missile::MakeMissile(&sSkillArg);
+    if (pUnit_00) {
+      D2Common::Units::Missile::SetTargetX(pUnit_00, pUnit->nInitSeed);
     }
 
     return 1;

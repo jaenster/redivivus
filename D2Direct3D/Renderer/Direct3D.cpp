@@ -78,8 +78,6 @@ typedef HRESULT (__stdcall *D3DVB_Lock)(void * This, DWORD dwFlags, void * * lpl
 
 namespace D2Direct3D::Renderer {
 
-static unsigned int gpD3DGroundTileVertexBuffer = {}; D2_STATIC_GUARD(gpD3DGroundTileVertexBuffer, "D2Direct3D::Renderer::gpD3DGroundTileVertexBuffer");
-
 // Not a CRT/unit function: its ONLY xref is the
 // PUSH at 006b4aff feeding IDirect3DDevice3::EnumTextureFormats in Direct3DCallBack, so it is the
 // D3DEnumPixelFormatsCallback. Parameter 1 is an LPDDPIXELFORMAT; parameter 2 is the device-caps flag word, and the 0x200 bit
@@ -2696,10 +2694,11 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
     if (*pnCacheNodeIdx && (*(uint8_t**)(*pnCacheNodeIdx * 0x20 - 0x14 + ((int*)((uint8_t*)&gD3DGenericTextureCache - 0x4))[iMipLevel * 7]) == pPalette || nMode == 4)) {
       d3dTextureCache::D3DTEXCACHE_InvalidateByIndex(pCache, *pnCacheNodeIdx);
       dwHResult = g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, *(void**)(*pnCacheNodeIdx * 0x20 + ((int*)((uint8_t*)&gD3DGenericTextureCache - 0x4))[iMipLevel * 7] - 0xc));
-      if (dwHResult) {
-        RENDERER_DIRECT3D_ErrorLog("Failed to set texture", dwHResult);
+      if (!dwHResult) {
+        return 1;
       }
 
+      RENDERER_DIRECT3D_ErrorLog("Failed to set texture", dwHResult);
       return 1;
     }
 
@@ -2822,10 +2821,11 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
           }
 
           dwHResult = g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, *(void**)(iMipLevel + 0x14));
-          if (dwHResult) {
-            RENDERER_DIRECT3D_ErrorLog("Failed to set texture", dwHResult);
+          if (!dwHResult) {
+            return 1;
           }
 
+          RENDERER_DIRECT3D_ErrorLog("Failed to set texture", dwHResult);
           return 1;
         }
       } else {
@@ -2838,25 +2838,25 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
     }
 }
 
-static void __stdcall RENDERER_D3D_DrawShadowQuad(int * pTextureInfo, int nPosX, int nPosY, uint8_t nAlpha) {
+static void __stdcall RENDERER_D3D_DrawShadowQuad(D2D3DSpriteInfoStrc * pTextureInfo, int nPosX, int nPosY, uint8_t nAlpha) {
     int nQuadWidth;
     HRESULT nLockResult;
     int nTopYOffset;
     int nCenterX;
     int nHalfHeight;
-    float* pVertices;
+    D2D3DVertexStrc* pVertices;
     float fQuadBottomY;
     float fQuadTopY;
-    float fU0 = (float)pTextureInfo[8];
-    float fU1 = (float)pTextureInfo[9];
-    float fV0 = (float)pTextureInfo[10];
-    float fV1 = (float)pTextureInfo[0xb];
+    float fU0 = pTextureInfo->fU0;
+    float fU1 = pTextureInfo->fU1;
+    float fV0 = pTextureInfo->fV0;
+    float fV1 = pTextureInfo->fV1;
     BOOL bPerspectiveEnabled = RENDERER_D3D_IsPerspectiveEnabled();
-    pTextureInfo[4] >>= 1;
-    nQuadWidth = pTextureInfo[5];
-    nHalfHeight = pTextureInfo[6] >> 1;
-    nCenterX = pTextureInfo[3] + pTextureInfo[4];
-    nTopYOffset = pTextureInfo[4] - nHalfHeight;
+    pTextureInfo->nOffsetY >>= 1;
+    nQuadWidth = pTextureInfo->nTexWidth;
+    nHalfHeight = pTextureInfo->nTexHeight >> 1;
+    nCenterX = pTextureInfo->nOffsetX + pTextureInfo->nOffsetY;
+    nTopYOffset = pTextureInfo->nOffsetY - nHalfHeight;
     if (bPerspectiveEnabled && g_aSmackerSurfaceArray != 0x100) {
       nCenterX = (int)(g_aSmackerSurfaceArray * nCenterX + (g_aSmackerSurfaceArray * nCenterX >> 0x1f & 0xffU)) >> 8;
       nTopYOffset = (int)(g_aSmackerSurfaceArray * nTopYOffset + (g_aSmackerSurfaceArray * nTopYOffset >> 0x1f & 0xffU)) >> 8;
@@ -2872,35 +2872,35 @@ static void __stdcall RENDERER_D3D_DrawShadowQuad(int * pTextureInfo, int nPosX,
       return;
     }
 
-    pVertices += gd3dVertexBufferOffset * 8;
-    *pVertices = (float)(nCenterX - nHalfHeight);
-    pVertices[1] = fQuadTopY;
-    pVertices[2] = 0.5;
-    pVertices[3] = 1.0;
-    pVertices[6] = fU0;
-    pVertices[7] = fV0;
-    pVertices[8] = (float)nCenterX;
-    pVertices[9] = fQuadBottomY;
-    pVertices[10] = 0.5;
-    pVertices[0xb] = 1.0;
-    pVertices[0xe] = fU0;
-    pVertices[0xf] = fV1;
-    pVertices[0x10] = (float)(nCenterX + nQuadWidth);
-    pVertices[0x11] = fQuadBottomY;
-    pVertices[0x12] = 0.5;
-    pVertices[0x13] = 1.0;
-    pVertices[0x16] = fU1;
-    pVertices[0x17] = fV1;
-    pVertices[0x18] = (float)(nCenterX - nHalfHeight + nQuadWidth);
-    pVertices[0x19] = fQuadTopY;
-    pVertices[0x1a] = 0.5;
-    pVertices[0x1b] = 1.0;
-    pVertices[0x1e] = fU1;
-    pVertices[0x1f] = fV0;
-    pVertices[4] = (float)((uint32_t)nAlpha << 0x18);
-    pVertices[0xc] = pVertices[4];
-    pVertices[0x14] = pVertices[0xc];
-    pVertices[0x1c] = pVertices[0x14];
+    pVertices += gd3dVertexBufferOffset;
+    pVertices->fX = (float)(nCenterX - nHalfHeight);
+    pVertices->fY = fQuadTopY;
+    pVertices->fZ = 0.5;
+    pVertices->fRHW = 1.0;
+    pVertices->fU = fU0;
+    pVertices->fV = fV0;
+    pVertices[1].fX = (float)nCenterX;
+    pVertices[1].fY = fQuadBottomY;
+    pVertices[1].fZ = 0.5;
+    pVertices[1].fRHW = 1.0;
+    pVertices[1].fU = fU0;
+    pVertices[1].fV = fV1;
+    pVertices[2].fX = (float)(nCenterX + nQuadWidth);
+    pVertices[2].fY = fQuadBottomY;
+    pVertices[2].fZ = 0.5;
+    pVertices[2].fRHW = 1.0;
+    pVertices[2].fU = fU1;
+    pVertices[2].fV = fV1;
+    pVertices[3].fX = (float)(nCenterX - nHalfHeight + nQuadWidth);
+    pVertices[3].fY = fQuadTopY;
+    pVertices[3].fZ = 0.5;
+    pVertices[3].fRHW = 1.0;
+    pVertices[3].fU = fU1;
+    pVertices[3].fV = fV0;
+    pVertices->dwDiffuse = (uint32_t)nAlpha << 0x18;
+    pVertices[1].dwDiffuse = pVertices->dwDiffuse;
+    pVertices[2].dwDiffuse = pVertices[1].dwDiffuse;
+    pVertices[3].dwDiffuse = pVertices[2].dwDiffuse;
     g_pD3DSpriteQuadVB->lpVtbl->Unlock(g_pD3DSpriteQuadVB);
     g_pD3DDevice->lpVtbl->DrawPrimitiveVB(g_pD3DDevice, 6, g_pD3DSpriteQuadVB, gd3dVertexBufferOffset, 4, 0x1c);
     gd3dVertexBufferOffset += 4;
@@ -2913,7 +2913,7 @@ static void __stdcall RENDERER_D3D_DrawShadowQuad(int * pTextureInfo, int nPosX,
 
 // Direct3D renderer: draws a textured quad with palette or solid color fill. Looks up RGB color from gpPaletteTable+0x114 palette based on nParam4 index.
 static void __stdcall RENDERER_DIRECT3D_DrawPalettedQuad(D2D3DSpriteInfoStrc * pTextureInfo, int nPosX, int nPosY, uint32_t nColor, int nPaletteIndex, uint8_t nAlpha, int nParam6) {
-    float* pVertexData;
+    D2D3DVertexStrc* pVertexData;
     RENDERER_D3D_SetBlendMode(1);
     RENDERER_D3D_SetTextureFilterMode(1);
     float fTexU0 = pTextureInfo->fU0;
@@ -2941,42 +2941,42 @@ static void __stdcall RENDERER_DIRECT3D_DrawPalettedQuad(D2D3DSpriteInfoStrc * p
       return;
     }
 
-    pVertexData += gd3dVertexBufferOffset * 8;
+    pVertexData += gd3dVertexBufferOffset;
     if (!nPaletteIndex && !nParam6) {
       RENDERER_D3D_SetTextureStageColor(pVertexData, nColor, nAlpha);
     } else {
       uint8_t* pPaletteEntry;
       pPaletteEntry = gpPaletteTable[0x45] + nPaletteIndex * 3;
-      pVertexData[4] = (float)(uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)nAlpha << 8 | (uint16_t)(uint8_t)*pPaletteEntry) << 8 | (uint32_t)(uint8_t)gpPaletteTable[0x45][nPaletteIndex * 3 + 1]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pPaletteEntry[2]);
+      pVertexData->dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)nAlpha << 8 | (uint16_t)(uint8_t)*pPaletteEntry) << 8 | (uint32_t)(uint8_t)gpPaletteTable[0x45][nPaletteIndex * 3 + 1]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pPaletteEntry[2]);
     }
 
-    pVertexData[0xc] = pVertexData[4];
-    pVertexData[0x14] = pVertexData[0xc];
-    pVertexData[0x1c] = pVertexData[0x14];
-    *pVertexData = fQuadLeftX;
-    pVertexData[1] = fQuadTopY;
-    pVertexData[2] = 0.5;
-    pVertexData[3] = 1.0;
-    pVertexData[6] = fTexU0;
-    pVertexData[7] = fTexV0;
-    pVertexData[8] = fQuadLeftX;
-    pVertexData[9] = fQuadBottomY;
-    pVertexData[10] = 0.5;
-    pVertexData[0xb] = 1.0;
-    pVertexData[0xe] = fTexU0;
-    pVertexData[0xf] = fTexV1;
-    pVertexData[0x10] = fQuadRightX;
-    pVertexData[0x11] = fQuadBottomY;
-    pVertexData[0x12] = 0.5;
-    pVertexData[0x13] = 1.0;
-    pVertexData[0x16] = fTexU1;
-    pVertexData[0x17] = fTexV1;
-    pVertexData[0x18] = fQuadRightX;
-    pVertexData[0x19] = fQuadTopY;
-    pVertexData[0x1a] = 0.5;
-    pVertexData[0x1b] = 1.0;
-    pVertexData[0x1e] = fTexU1;
-    pVertexData[0x1f] = fTexV0;
+    pVertexData[1].dwDiffuse = pVertexData->dwDiffuse;
+    pVertexData[2].dwDiffuse = pVertexData[1].dwDiffuse;
+    pVertexData[3].dwDiffuse = pVertexData[2].dwDiffuse;
+    pVertexData->fX = fQuadLeftX;
+    pVertexData->fY = fQuadTopY;
+    pVertexData->fZ = 0.5;
+    pVertexData->fRHW = 1.0;
+    pVertexData->fU = fTexU0;
+    pVertexData->fV = fTexV0;
+    pVertexData[1].fX = fQuadLeftX;
+    pVertexData[1].fY = fQuadBottomY;
+    pVertexData[1].fZ = 0.5;
+    pVertexData[1].fRHW = 1.0;
+    pVertexData[1].fU = fTexU0;
+    pVertexData[1].fV = fTexV1;
+    pVertexData[2].fX = fQuadRightX;
+    pVertexData[2].fY = fQuadBottomY;
+    pVertexData[2].fZ = 0.5;
+    pVertexData[2].fRHW = 1.0;
+    pVertexData[2].fU = fTexU1;
+    pVertexData[2].fV = fTexV1;
+    pVertexData[3].fX = fQuadRightX;
+    pVertexData[3].fY = fQuadTopY;
+    pVertexData[3].fZ = 0.5;
+    pVertexData[3].fRHW = 1.0;
+    pVertexData[3].fU = fTexU1;
+    pVertexData[3].fV = fTexV0;
     g_pD3DSpriteQuadVB->lpVtbl->Unlock(g_pD3DSpriteQuadVB);
     g_pD3DDevice->lpVtbl->DrawPrimitiveVB(g_pD3DDevice, 6, g_pD3DSpriteQuadVB, gd3dVertexBufferOffset, 4, 0x1c);
     gd3dVertexBufferOffset += 4;
@@ -3012,10 +3012,11 @@ static uint8_t __stdcall SetDrawModeAndGetAlpha(int nDrawMode) {
     }
 
     uint8_t uVar1 = 0xc0;
-    if (nDrawMode != 2) {
-      uVar1 = 0xff;
+    if (nDrawMode == 2) {
+      return uVar1;
     }
 
+    uVar1 = 0xff;
     return uVar1;
 }
 
@@ -3303,6 +3304,7 @@ void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int nPosX, int nPosY, vo
     RENDERER_DIRECT3D_DrawPalettedQuad(&spriteInfo, nPosX, nPosY, -1, 0, nAlpha, 0);
 }
 
+// Draws the shadow sprite as one Direct3D quad through RENDERER_D3D_DrawShadowQuad, passing its D2D3DSpriteInfoStrc.
 void __fastcall DrawShadow(D2GfxDataStrc * pData, int nPosX, int nPosY) {
     D2D3DSpriteInfoStrc spriteInfo;
     uint8_t byAlpha = 0xff;
@@ -3327,7 +3329,7 @@ void __fastcall DrawShadow(D2GfxDataStrc * pData, int nPosX, int nPosY) {
     }
 
     RENDERER_D3D_SetTextureFilterMode(1);
-    RENDERER_D3D_DrawShadowQuad((int*)&spriteInfo, nPosX, nPosY, byAlpha);
+    RENDERER_D3D_DrawShadowQuad(&spriteInfo, nPosX, nPosY, byAlpha);
 }
 
 void __fastcall DrawImageFast(D2GfxDataStrc * pData, int nPosX, int nPosY, BYTE nPaletteIndex) {
@@ -3540,16 +3542,16 @@ static int __stdcall RENDERER_D3D_DrawGlyph(char cGlyph, int nPosX, int nPosY) {
       return (int)g_pFontTextureBuffer[cGlyph];
     }
     if ((uint8_t)(cGlyph - 0x20U) <= 0x5f) {
-      gD3DFontVertex0 = (int)(float)nPosX;
-      gfD3DFontVertex0X = (float)nPosY;
-      gfD3DFontVertex0Z = (float)gD3DFontVertex0;
-      gfD3DFontVertex0Y = (float)(nPosY + 0x10);
-      gfD3DFontVertex2Y = (float)(nPosX + 8);
-      gfD3DFontVertex2X = gfD3DFontVertex2Y;
-      gfD3DFontVertex1Y = gfD3DFontVertex0Y;
-      gfD3DFontVertex3X = gfD3DFontVertex0X;
+      gD3DFontVertex0[0].fX = (float)nPosX;
+      gD3DFontVertex0[0].fY = (float)nPosY;
+      gD3DFontVertex0[1].fY = (float)(nPosY + 0x10);
+      gD3DFontVertex0[2].fX = (float)(nPosX + 8);
+      gD3DFontVertex0[1].fX = gD3DFontVertex0[0].fX;
+      gD3DFontVertex0[2].fY = gD3DFontVertex0[1].fY;
+      gD3DFontVertex0[3].fX = gD3DFontVertex0[2].fX;
+      gD3DFontVertex0[3].fY = gD3DFontVertex0[0].fY;
       g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, g_pFontTextureHandle[(char)(cGlyph - 0x20)]);
-      g_pD3DDevice->lpVtbl->DrawPrimitive(g_pD3DDevice, 6, 0x1c4, &gD3DFontVertex0, 4, 0x1c);
+      g_pD3DDevice->lpVtbl->DrawPrimitive(g_pD3DDevice, 6, 0x1c4, gD3DFontVertex0, 4, 0x1c);
       return (int)g_pFontTextureBuffer[(char)(cGlyph - 0x20)];
     }
 
@@ -3557,18 +3559,14 @@ static int __stdcall RENDERER_D3D_DrawGlyph(char cGlyph, int nPosX, int nPosY) {
 }
 
 void __fastcall DrawString(int nPosX, int nPosY, char * szFormat, va_list va) {
+    int iChar;
     char szText[512];
     int nCharCount = wvsprintfA(szText, szFormat, va);
     RENDERER_D3D_SetBlendMode(1);
     SetBlendMode(1);
     RENDERER_D3D_SetTextureFilterMode(1);
-    int iChar = 0;
     int nCurPosX = nPosX;
-    if (nCharCount <= 0) {
-      return;
-    }
-
-    do {
+    for (iChar = 0; iChar < nCharCount; iChar++) {
       int nGlyphAdvance;
       nGlyphAdvance = RENDERER_D3D_DrawGlyph(szText[iChar], nCurPosX, nPosY);
       nCurPosX += nGlyphAdvance;
@@ -3576,9 +3574,7 @@ void __fastcall DrawString(int nPosX, int nPosY, char * szFormat, va_list va) {
         nPosY += 0xc;
         nCurPosX = nPosX;
       }
-
-      iChar++;
-    } while (iChar < nCharCount);
+    }
 }
 
 void __fastcall DrawLight(DWORD * pLight, DWORD * pPlayerLight, int nPosX, int nPosY) {
@@ -3586,57 +3582,35 @@ void __fastcall DrawLight(DWORD * pLight, DWORD * pPlayerLight, int nPosX, int n
 }
 
 int __fastcall RENDERER_D3D_InitializeFontSystem(int nBaseOffset) {
-    // Static local variables (originally global data)
-    static float gfD3DFontVertex0W; D2_STATIC_GUARD_BSS(gfD3DFontVertex0W, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex0W");
-    static float gfD3DFontVertex0RHW; D2_STATIC_GUARD_BSS(gfD3DFontVertex0RHW, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex0RHW");
-    static unsigned int gnD3DFontVertex0Diffuse; D2_STATIC_GUARD_BSS(gnD3DFontVertex0Diffuse, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gnD3DFontVertex0Diffuse");
-    static float gfD3DFontVertex0U; D2_STATIC_GUARD_BSS(gfD3DFontVertex0U, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex0U");
-    static float gfD3DFontVertex0V; D2_STATIC_GUARD_BSS(gfD3DFontVertex0V, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex0V");
-    static float gfD3DFontVertex1Z; D2_STATIC_GUARD_BSS(gfD3DFontVertex1Z, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex1Z");
-    static float gfD3DFontVertex1RHW; D2_STATIC_GUARD_BSS(gfD3DFontVertex1RHW, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex1RHW");
-    static unsigned int gnD3DFontVertex1Diffuse; D2_STATIC_GUARD_BSS(gnD3DFontVertex1Diffuse, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gnD3DFontVertex1Diffuse");
-    static float gfD3DFontVertex1X; D2_STATIC_GUARD_BSS(gfD3DFontVertex1X, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex1X");
-    static float gfD3DFontVertex1U; D2_STATIC_GUARD_BSS(gfD3DFontVertex1U, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex1U");
-    static float gfD3DFontVertex2Z; D2_STATIC_GUARD_BSS(gfD3DFontVertex2Z, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex2Z");
-    static float gfD3DFontVertex2RHW; D2_STATIC_GUARD_BSS(gfD3DFontVertex2RHW, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex2RHW");
-    static unsigned int gnD3DFontVertex2Diffuse; D2_STATIC_GUARD_BSS(gnD3DFontVertex2Diffuse, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gnD3DFontVertex2Diffuse");
-    static float gfD3DFontVertex2U; D2_STATIC_GUARD_BSS(gfD3DFontVertex2U, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex2U");
-    static float gfD3DFontVertex2V; D2_STATIC_GUARD_BSS(gfD3DFontVertex2V, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex2V");
-    static float gfD3DFontVertex3Z; D2_STATIC_GUARD_BSS(gfD3DFontVertex3Z, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex3Z");
-    static float gfD3DFontVertex3RHW; D2_STATIC_GUARD_BSS(gfD3DFontVertex3RHW, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex3RHW");
-    static unsigned int gnD3DFontVertex3Diffuse; D2_STATIC_GUARD_BSS(gnD3DFontVertex3Diffuse, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gnD3DFontVertex3Diffuse");
-    static float gfD3DFontVertex3U; D2_STATIC_GUARD_BSS(gfD3DFontVertex3U, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex3U");
-    static float gfD3DFontVertex3V; D2_STATIC_GUARD_BSS(gfD3DFontVertex3V, "D2Direct3D::Renderer::RENDERER_D3D_InitializeFontSystem::gfD3DFontVertex3V");
-
     RENDERER_D3D_CreateFontTextures();
-    gD3DFontVertex0 = 0;
-    gfD3DFontVertex0X = 0.0;
-    gnD3DFontVertex0Diffuse = -1;
-    gnD3DFontVertex1Diffuse = -1;
-    gfD3DFontVertex0W = 0.5;
-    gnD3DFontVertex2Diffuse = -1;
-    gnD3DFontVertex3Diffuse = -1;
-    gfD3DFontVertex0RHW = 1.0;
-    gfD3DFontVertex1RHW = 1.0;
-    gfD3DFontVertex1U = 1.0;
-    gfD3DFontVertex2RHW = 1.0;
-    gfD3DFontVertex2U = 1.0;
-    gfD3DFontVertex2V = 1.0;
-    gfD3DFontVertex3RHW = 1.0;
-    gfD3DFontVertex3U = 1.0;
-    gfD3DFontVertex0U = 0.0;
-    gfD3DFontVertex0V = 0.0;
-    gfD3DFontVertex0Z = 0.0;
-    gfD3DFontVertex0Y = 0.0;
-    gfD3DFontVertex1X = 0.0;
-    gfD3DFontVertex2Y = 0.0;
-    gfD3DFontVertex1Y = 0.0;
-    gfD3DFontVertex2X = 0.0;
-    gfD3DFontVertex3X = 0.0;
-    gfD3DFontVertex3V = 0.0;
-    gfD3DFontVertex1Z = 0.5;
-    gfD3DFontVertex2Z = 0.5;
-    gfD3DFontVertex3Z = 0.5;
+    gD3DFontVertex0[0].fX = 0.0;
+    gD3DFontVertex0[0].fY = 0.0;
+    gD3DFontVertex0[0].dwDiffuse = -1;
+    gD3DFontVertex0[1].dwDiffuse = -1;
+    gD3DFontVertex0[0].fZ = 0.5;
+    gD3DFontVertex0[2].dwDiffuse = -1;
+    gD3DFontVertex0[3].dwDiffuse = -1;
+    gD3DFontVertex0[0].fRHW = 1.0;
+    gD3DFontVertex0[1].fRHW = 1.0;
+    gD3DFontVertex0[1].fV = 1.0;
+    gD3DFontVertex0[2].fRHW = 1.0;
+    gD3DFontVertex0[2].fU = 1.0;
+    gD3DFontVertex0[2].fV = 1.0;
+    gD3DFontVertex0[3].fRHW = 1.0;
+    gD3DFontVertex0[3].fU = 1.0;
+    gD3DFontVertex0[0].fU = 0.0;
+    gD3DFontVertex0[0].fV = 0.0;
+    gD3DFontVertex0[1].fX = 0.0;
+    gD3DFontVertex0[1].fY = 0.0;
+    gD3DFontVertex0[1].fU = 0.0;
+    gD3DFontVertex0[2].fX = 0.0;
+    gD3DFontVertex0[2].fY = 0.0;
+    gD3DFontVertex0[3].fX = 0.0;
+    gD3DFontVertex0[3].fY = 0.0;
+    gD3DFontVertex0[3].fV = 0.0;
+    gD3DFontVertex0[1].fZ = 0.5;
+    gD3DFontVertex0[2].fZ = 0.5;
+    gD3DFontVertex0[3].fZ = 0.5;
     return nBaseOffset + 0x6000;
 }
 
@@ -4494,9 +4468,6 @@ BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nPos
 
 // Creates ground tile vertex buffer (6x6 grid = 36 vertices) and index buffer (60 indices for 5x5 tile strips) for perspective tile rendering. Calculates texture coordinates based on window dimensions (gnD3DTextureCacheBlockSize, gnD3DTextureCacheCount). Each vertex has position adjustment flags at corners (±1 in X/Y) for isometric diamond shape. Index buffer stored at gaD3DGroundTileIndexBuffer.
 void __stdcall RENDERER_D3D_InitGroundTileCache() {
-    // Static local variables (originally global data)
-    static unsigned short gaD3DGroundTileIndexBuffer; D2_STATIC_GUARD_BSS(gaD3DGroundTileIndexBuffer, "D2Direct3D::Renderer::RENDERER_D3D_InitGroundTileCache::gaD3DGroundTileIndexBuffer");
-
     // Frame slots -12..-4 are ONE object: &pLockedVB is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -4591,7 +4562,7 @@ void __stdcall RENDERER_D3D_InitGroundTileCache() {
         iRow++;
       } while (iRow < 5);
 
-      puDestIndex = &gaD3DGroundTileIndexBuffer;
+      puDestIndex = gpD3DGroundTileVertexBuffer + 0xc;
       psIndexBuf = aStripIndices;
       iRow = 5;
       do {
@@ -4624,7 +4595,7 @@ void __stdcall RENDERER_D3D_ReleaseGroundTileCache() {
 
 void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc * pLight, int nPosX, int nPosY, int nWorldXpos, int nWorldYpos, uint32_t nAlpha, int nScreenPanels, void * pTileData) {
     // Static local variables (originally global data)
-    static uint32_t gdwRendererMode = 0x50000; D2_STATIC_GUARD(gdwRendererMode, "D2Direct3D::Renderer::DrawGroundTile::gdwRendererMode");
+    static uint16_t gdwRendererMode[4] = { 0x0, 0x5, 0x23, 0x1e }; D2_STATIC_GUARD(gdwRendererMode, "D2Direct3D::Renderer::DrawGroundTile::gdwRendererMode");
 
     DWORD DVar2;
     uint32_t* lpwIndices;
@@ -4686,7 +4657,7 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
       }
 
       dwIndexCount = 4;
-      lpwIndices = &gdwRendererMode;
+      lpwIndices = (uint32_t*)&gdwRendererMode;
       DVar2 = 6;
     } else {
       uint8_t* pLightCursor;
@@ -4746,7 +4717,7 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
 
       dwIndexCount = 0x41;
       DVar2 = 5;
-      lpwIndices = &gpD3DGroundTileVertexBuffer;
+      lpwIndices = (uint32_t*)&gpD3DGroundTileVertexBuffer;
     }
 
     g_pD3DDevice->lpVtbl->DrawIndexedPrimitiveVB(g_pD3DDevice, DVar2, g_pD3DGroundTileVB, (WORD*)lpwIndices, dwIndexCount, 0x1c);
@@ -4859,16 +4830,10 @@ void SetDefaultPerspectiveFactor() {
 
 // Initializes Smacker video subsystem. Allocates 64KB decode buffer at pSmackerDecodeBuffer, clears it to zero. Sets 4 corner vertex colors to 0xFFFFFFFF (white with full alpha) at offsets 0x00989760, 0x00989780, 0x009897a0, 0x009897c0.
 void __stdcall RENDERER_D3D_InitSmackerVertexBuffer() {
-    // Static local variables (originally global data)
-    static unsigned int gdwD3DSmackerVertex1Color; D2_STATIC_GUARD_BSS(gdwD3DSmackerVertex1Color, "D2Direct3D::Renderer::RENDERER_D3D_InitSmackerVertexBuffer::gdwD3DSmackerVertex1Color");
-    static unsigned int gdwD3DSmackerVertex2Color; D2_STATIC_GUARD_BSS(gdwD3DSmackerVertex2Color, "D2Direct3D::Renderer::RENDERER_D3D_InitSmackerVertexBuffer::gdwD3DSmackerVertex2Color");
-    static unsigned int gdwD3DSmackerVertex3Color; D2_STATIC_GUARD_BSS(gdwD3DSmackerVertex3Color, "D2Direct3D::Renderer::RENDERER_D3D_InitSmackerVertexBuffer::gdwD3DSmackerVertex3Color");
-    static unsigned int gdwD3DSmackerVertex4Color; D2_STATIC_GUARD_BSS(gdwD3DSmackerVertex4Color, "D2Direct3D::Renderer::RENDERER_D3D_InitSmackerVertexBuffer::gdwD3DSmackerVertex4Color");
-
-    gdwD3DSmackerVertex1Color = -1;
-    gdwD3DSmackerVertex2Color = -1;
-    gdwD3DSmackerVertex3Color = -1;
-    gdwD3DSmackerVertex4Color = -1;
+    gaD3DSmackerVertices[0].dwDiffuse = -1;
+    gaD3DSmackerVertices[1].dwDiffuse = -1;
+    gaD3DSmackerVertices[2].dwDiffuse = -1;
+    gaD3DSmackerVertices[3].dwDiffuse = -1;
     pSmackerDecodeBuffer = D2_ALLOC_AT(0x10000, ".\\Src\\d3dSmack.cpp", 0x38);
     memset(pSmackerDecodeBuffer, 0, 0x10000);
 }
@@ -4977,91 +4942,65 @@ void __stdcall RENDERER_D3D_ResetSmackerSurfaces() {
 
 // Blits decoded Smacker video frame to screen. Renders two textured quads: top 256x256 section uses first texture pair (gpD3DSmackerVideoTexture0), bottom section (256 to nHeight) uses second pair (gpD3DSmackerVideoTexture1). Texture V coordinate for bottom quad calculated as (nHeight-256)/256 for proper scaling. Sets blend mode 1, enables lighting and texture stage 0 before rendering.
 static void __thiscall RENDERER_D3D_BlitSmackerFrame(int nHeight, D2SmackerContextStrc * pSurface, int nOffset) {
-    // Static local variables (originally global data)
-    static int gaD3DSmackerVertices; D2_STATIC_GUARD_BSS(gaD3DSmackerVertices, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gaD3DSmackerVertices");
-    static float gfD3DSmackerVertex0Y; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex0Y, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex0Y");
-    static float gfD3DSmackerVertex0V; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex0V, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex0V");
-    static float gfD3DSmackerVertex1W_a; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex1W_a, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex1W_a");
-    static float gfD3DSmackerVertex1U; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex1U, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex1U");
-    static float gfD3DSmackerVertex1V; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex1V, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex1V");
-    static float gfD3DSmackerVertex1X_b; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex1X_b, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex1X_b");
-    static float gfD3DSmackerVertex1Y_b; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex1Y_b, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex1Y_b");
-    static float gfD3DSmackerVertex1Z; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex1Z, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex1Z");
-    static float gfD3DSmackerVertex1W; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex1W, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex1W");
-    static float gfD3DSmackerVertex2W_b; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex2W_b, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex2W_b");
-    static float gfD3DSmackerVertex2Z_b; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex2Z_b, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex2Z_b");
-    static float gfD3DSmackerVertex2X; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex2X, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex2X");
-    static float gfD3DSmackerVertex2Y; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex2Y, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex2Y");
-    static float gfD3DSmackerVertex2U; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex2U, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex2U");
-    static float gfD3DSmackerVertex2W_a; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex2W_a, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex2W_a");
-    static float gfD3DSmackerVertex2V; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex2V, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex2V");
-    static float gfD3DSmackerVertex2W; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex2W, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex2W");
-    static float gfD3DSmackerVertex1X_quad2; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex1X_quad2, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex1X_quad2");
-    static float gfD3DSmackerVertex1Y_quad2; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex1Y_quad2, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex1Y_quad2");
-    static float gfD3DSmackerVertex1Z_quad2; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex1Z_quad2, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex1Z_quad2");
-    static float gfD3DSmackerVertex1U_quad2; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex1U_quad2, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex1U_quad2");
-    static int gnD3DSmackerVertex2V_bottom; D2_STATIC_GUARD_BSS(gnD3DSmackerVertex2V_bottom, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gnD3DSmackerVertex2V_bottom");
-    static float gfD3DSmackerVertex2Rhw; D2_STATIC_GUARD_BSS(gfD3DSmackerVertex2Rhw, "D2Direct3D::Renderer::RENDERER_D3D_BlitSmackerFrame::gfD3DSmackerVertex2Rhw");
-
     int nSurfaceY = pSurface->nY;
     RENDERER_D3D_SetBlendMode(1);
     SetBlendMode(1);
     RENDERER_D3D_SetTextureFilterMode(1);
     int nSurfaceX = pSurface->nX;
-    gaD3DSmackerVertices = (int)(float)nSurfaceX;
+    gaD3DSmackerVertices[0].fX = (float)nSurfaceX;
     float fVertexTopY = (float)(nSurfaceY - nOffset);
-    gfD3DSmackerVertex0V = 0.5;
-    gfD3DSmackerVertex1W_a = 1.0;
-    gfD3DSmackerVertex1U = 0.0;
-    gfD3DSmackerVertex1V = 0.0;
+    gaD3DSmackerVertices[0].fZ = 0.5;
+    gaD3DSmackerVertices[0].fRHW = 1.0;
+    gaD3DSmackerVertices[0].fU = 0.0;
+    gaD3DSmackerVertices[0].fV = 0.0;
     float fVertexBottomY = (float)nSurfaceY;
-    gfD3DSmackerVertex1Z = 0.5;
-    gfD3DSmackerVertex1W = 1.0;
-    gfD3DSmackerVertex2Z_b = 1.0;
-    gfD3DSmackerVertex2W_b = 0.0;
-    gfD3DSmackerVertex2X = (float)(nSurfaceX + 0x100);
-    gfD3DSmackerVertex2U = 0.5;
-    gfD3DSmackerVertex1Z_quad2 = 0.5;
-    gfD3DSmackerVertex2W_a = 1.0;
-    gfD3DSmackerVertex2V = 1.0;
-    gfD3DSmackerVertex2W = 1.0;
-    gfD3DSmackerVertex1U_quad2 = 1.0;
-    gnD3DSmackerVertex2V_bottom = 0x3f800000;
-    gfD3DSmackerVertex2Rhw = 0.0;
-    gfD3DSmackerVertex0Y = fVertexTopY;
-    gfD3DSmackerVertex1X_b = (float)gaD3DSmackerVertices;
-    gfD3DSmackerVertex1Y_b = fVertexBottomY;
-    gfD3DSmackerVertex2Y = fVertexBottomY;
-    gfD3DSmackerVertex1X_quad2 = gfD3DSmackerVertex2X;
-    gfD3DSmackerVertex1Y_quad2 = fVertexTopY;
+    gaD3DSmackerVertices[1].fZ = 0.5;
+    gaD3DSmackerVertices[1].fRHW = 1.0;
+    gaD3DSmackerVertices[1].fV = 1.0;
+    gaD3DSmackerVertices[1].fU = 0.0;
+    gaD3DSmackerVertices[2].fX = (float)(nSurfaceX + 0x100);
+    gaD3DSmackerVertices[2].fZ = 0.5;
+    gaD3DSmackerVertices[3].fZ = 0.5;
+    gaD3DSmackerVertices[2].fRHW = 1.0;
+    gaD3DSmackerVertices[2].fU = 1.0;
+    gaD3DSmackerVertices[2].fV = 1.0;
+    gaD3DSmackerVertices[3].fRHW = 1.0;
+    gaD3DSmackerVertices[3].fU = 1.0;
+    gaD3DSmackerVertices[3].fV = 0.0;
+    gaD3DSmackerVertices[0].fY = fVertexTopY;
+    gaD3DSmackerVertices[1].fX = gaD3DSmackerVertices[0].fX;
+    gaD3DSmackerVertices[1].fY = fVertexBottomY;
+    gaD3DSmackerVertices[2].fY = fVertexBottomY;
+    gaD3DSmackerVertices[3].fX = gaD3DSmackerVertices[2].fX;
+    gaD3DSmackerVertices[3].fY = fVertexTopY;
     g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, gpD3DSmackerVideoTexture0[0]);
-    g_pD3DDevice->lpVtbl->DrawPrimitive(g_pD3DDevice, 6, 0x1c4, &gaD3DSmackerVertices, 4, 0x1c);
-    gfD3DSmackerVertex2V = (float)(nHeight - 0x100) * 0.00390625;
-    gaD3DSmackerVertices = (int)(float)(nSurfaceX + 0x100);
-    gfD3DSmackerVertex0V = 0.5;
-    gfD3DSmackerVertex1W_a = 1.0;
-    gfD3DSmackerVertex1U = 0.0;
-    gfD3DSmackerVertex1V = 0.0;
-    gfD3DSmackerVertex1Z = 0.5;
-    gfD3DSmackerVertex1W = 1.0;
-    gfD3DSmackerVertex2Z_b = 1.0;
-    gfD3DSmackerVertex2W_b = 0.0;
-    gfD3DSmackerVertex2X = (float)(nSurfaceX + nHeight);
-    gfD3DSmackerVertex2U = 0.5;
-    gfD3DSmackerVertex2W_a = 1.0;
-    gfD3DSmackerVertex2W = 1.0;
-    gfD3DSmackerVertex1U_quad2 = 1.0;
-    gfD3DSmackerVertex1Z_quad2 = 0.5;
-    gfD3DSmackerVertex2Rhw = 0.0;
-    gfD3DSmackerVertex0Y = fVertexTopY;
-    gfD3DSmackerVertex1X_b = (float)gaD3DSmackerVertices;
-    gfD3DSmackerVertex1Y_b = fVertexBottomY;
-    gfD3DSmackerVertex2Y = fVertexBottomY;
-    gfD3DSmackerVertex1X_quad2 = gfD3DSmackerVertex2X;
-    gfD3DSmackerVertex1Y_quad2 = fVertexTopY;
-    gnD3DSmackerVertex2V_bottom = (int)gfD3DSmackerVertex2V;
+    g_pD3DDevice->lpVtbl->DrawPrimitive(g_pD3DDevice, 6, 0x1c4, gaD3DSmackerVertices, 4, 0x1c);
+    gaD3DSmackerVertices[2].fU = (float)(nHeight - 0x100) * 0.00390625;
+    gaD3DSmackerVertices[0].fX = (float)(nSurfaceX + 0x100);
+    gaD3DSmackerVertices[0].fZ = 0.5;
+    gaD3DSmackerVertices[0].fRHW = 1.0;
+    gaD3DSmackerVertices[0].fU = 0.0;
+    gaD3DSmackerVertices[0].fV = 0.0;
+    gaD3DSmackerVertices[1].fZ = 0.5;
+    gaD3DSmackerVertices[1].fRHW = 1.0;
+    gaD3DSmackerVertices[1].fV = 1.0;
+    gaD3DSmackerVertices[1].fU = 0.0;
+    gaD3DSmackerVertices[2].fX = (float)(nSurfaceX + nHeight);
+    gaD3DSmackerVertices[2].fZ = 0.5;
+    gaD3DSmackerVertices[2].fRHW = 1.0;
+    gaD3DSmackerVertices[2].fV = 1.0;
+    gaD3DSmackerVertices[3].fRHW = 1.0;
+    gaD3DSmackerVertices[3].fZ = 0.5;
+    gaD3DSmackerVertices[3].fV = 0.0;
+    gaD3DSmackerVertices[0].fY = fVertexTopY;
+    gaD3DSmackerVertices[1].fX = gaD3DSmackerVertices[0].fX;
+    gaD3DSmackerVertices[1].fY = fVertexBottomY;
+    gaD3DSmackerVertices[2].fY = fVertexBottomY;
+    gaD3DSmackerVertices[3].fX = gaD3DSmackerVertices[2].fX;
+    gaD3DSmackerVertices[3].fY = fVertexTopY;
+    gaD3DSmackerVertices[3].fU = gaD3DSmackerVertices[2].fU;
     g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, gpD3DSmackerVideoTexture0[1]);
-    g_pD3DDevice->lpVtbl->DrawPrimitive(g_pD3DDevice, 6, 0x1c4, &gaD3DSmackerVertices, 4, 0x1c);
+    g_pD3DDevice->lpVtbl->DrawPrimitive(g_pD3DDevice, 6, 0x1c4, gaD3DSmackerVertices, 4, 0x1c);
 }
 
 static void __thiscall RENDERER_D3D_CopySmackerRowWithAlpha(void * pDest, void * pSrc, int nPitch) {

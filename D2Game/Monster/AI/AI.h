@@ -7,6 +7,8 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
+#include "D2Common/Unit.h"
+#include "D2Game/SKILLS/SkillsServer.h"
 
 // Forward declarations
 struct D2AiGeneralStrc;
@@ -16,7 +18,6 @@ struct D2PetStrc;
 struct D2RoomStrc;
 struct D2SkillStrc;
 struct D2UnitDataPlayerInteractedNPCStrc;
-struct D2UnitFindArgStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2Skills;
@@ -100,6 +101,16 @@ struct D2MonsterAiParameterStruct {
     /* 0x1C */ uint32_t nInRangeCount; // Count of attackable enemies within dist<0x401 of Baal
     /* 0x20 */ uint32_t nMinionCount; // Count of Baal minions (baseId 0x19a-0x1a0) in range
     /* 0x24 */ struct D2UnitStrc * pResurrectTarget; // Best valid resurrection target found by callback
+};
+
+struct __attribute__((packed)) D2UnitFindArgDataStrc {
+    /* 0x00 */ D2UnitFindArgStrc sUnitFindArg;
+    /* 0x38 */ D2UnitFindDataStrc sUnitFindData;
+};
+
+union D2WispFindScratchUnion {
+    /* 0x00 */ D2UnitFindArgDataStrc s;
+    /* 0x00 */ int anStrikeOffsets[25];
 };
 
 namespace D2Game::Monster::AI {

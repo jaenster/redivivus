@@ -492,32 +492,33 @@ BOOL __stdcall RENDERER_GLIDE_InitTextureMemory() {
 
 BOOL __stdcall RENDERER_GLIDE_DestroyWindow() {
     int nCloseAttempt;
-    if (ghGlideWindow) {
-      FxBool bCloseResult;
-      ghGlideWindow = 0;
-      (*GLIDEDLL_grFinish_0)();
-      if (gbGlidePerspectiveMode) {
-        glFloorCache::GLFLOOR_Destroy(&gGlideFloorTextureCache.dwEntrySize, (GlFloorCacheStrc*)0x1);
-        glSubtileCache::GLSUBTILE_Destroy(&gGlideSubtileTextureCache.dwEntrySize, (GlSubtileCacheStrc*)0x1);
-      } else {
-        GLSMACK_DestroyNoop();
-      }
-
-      glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache, (GlTextureCacheStrc*)0x1);
-      glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache + 1, (GlTextureCacheStrc*)0x1);
-      glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache + 2, (GlTextureCacheStrc*)0x1);
-      RENDERER_GLIDE_FreeSpriteBuffers();
-      for (nCloseAttempt = 0; nCloseAttempt < 100; nCloseAttempt++) {
-        bCloseResult = (*_GLIDEDLL_grSstWinClose_4)(ghGlideSstWindow);
-        if (bCloseResult == 1) {
-          break;
-        }
-      }
-
-      RENDERER_GLIDE_FreeDebugFont();
-      gnGlideWindowHandle = 0;
+    if (!ghGlideWindow) {
+      return 1;
     }
 
+    ghGlideWindow = 0;
+    (*GLIDEDLL_grFinish_0)();
+    if (gbGlidePerspectiveMode) {
+      glFloorCache::GLFLOOR_Destroy(&gGlideFloorTextureCache.dwEntrySize, (GlFloorCacheStrc*)0x1);
+      glSubtileCache::GLSUBTILE_Destroy(&gGlideSubtileTextureCache.dwEntrySize, (GlSubtileCacheStrc*)0x1);
+    } else {
+      GLSMACK_DestroyNoop();
+    }
+
+    glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache, (GlTextureCacheStrc*)0x1);
+    glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache + 1, (GlTextureCacheStrc*)0x1);
+    glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache + 2, (GlTextureCacheStrc*)0x1);
+    RENDERER_GLIDE_FreeSpriteBuffers();
+    for (nCloseAttempt = 0; nCloseAttempt < 100; nCloseAttempt++) {
+      FxBool bCloseResult;
+      bCloseResult = (*_GLIDEDLL_grSstWinClose_4)(ghGlideSstWindow);
+      if (bCloseResult == 1) {
+        break;
+      }
+    }
+
+    RENDERER_GLIDE_FreeDebugFont();
+    gnGlideWindowHandle = 0;
     return 1;
 }
 
@@ -1857,19 +1858,15 @@ static LPINT __stdcall RENDERER_GLIDE_DrawDebugChar(int32_t nPosX, int32_t nPosY
 }
 
 void __fastcall DrawString(int32_t nPosX, int32_t nPosY, char * szFormat, va_list va) {
+    int nCharIdx;
     char szBuf[512];
     int nStrLen = wvsprintfA(szBuf, szFormat, va);
     RENDERER_GLIDE_SetColorCombine(1);
     RENDERER_GLIDE_SetAlphaBlendMode(1);
     RENDERER_GLIDE_SetTextureFiltering(1);
     RENDERER_GLIDE_SetTextureMode(gnGlideDebugFontTMU);
-    int nCharIdx = 0;
     int nCurX = nPosX;
-    if (nStrLen <= 0) {
-      return;
-    }
-
-    do {
+    for (nCharIdx = 0; nCharIdx < nStrLen; nCharIdx++) {
       LPINT nCharAdvance;
       nCharAdvance = RENDERER_GLIDE_DrawDebugChar(nCurX, nPosY, szBuf[nCharIdx]);
       nCurX += (int)nCharAdvance;
@@ -1877,9 +1874,7 @@ void __fastcall DrawString(int32_t nPosX, int32_t nPosY, char * szFormat, va_lis
         nPosY += 0xc;
         nCurX = nPosX;
       }
-
-      nCharIdx++;
-    } while (nCharIdx < nStrLen);
+    }
 }
 
 static void RENDERER_GLIDE_DrawLightRadialPoints(int32_t nPosX, GrColor_t nColor, int32_t nPosY) {
@@ -3108,16 +3103,10 @@ void SetDefaultPerspectiveFactor() {
 
 // @sourcefile .\Src\glSmack.cpp
 void __stdcall GLSMACK_AllocBuffers() {
-    // Static local variables (originally global data)
-    static unsigned int gfGlideSmackerVertex0Oow; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex0Oow, "D2Glide::Renderer::Glide::GLSMACK_AllocBuffers::gfGlideSmackerVertex0Oow");
-    static unsigned int gfGlideSmackerVertex1Oow; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex1Oow, "D2Glide::Renderer::Glide::GLSMACK_AllocBuffers::gfGlideSmackerVertex1Oow");
-    static unsigned int gfGlideSmackerVertex2Oow; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex2Oow, "D2Glide::Renderer::Glide::GLSMACK_AllocBuffers::gfGlideSmackerVertex2Oow");
-    static unsigned int gfGlideSmackerVertex3Oow; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex3Oow, "D2Glide::Renderer::Glide::GLSMACK_AllocBuffers::gfGlideSmackerVertex3Oow");
-
-    gfGlideSmackerVertex0Oow = -1;
-    gfGlideSmackerVertex1Oow = -1;
-    gfGlideSmackerVertex2Oow = -1;
-    gfGlideSmackerVertex3Oow = -1;
+    gaGlideSmackerVertices[0].dwColor = -1;
+    gaGlideSmackerVertices[1].dwColor = -1;
+    gaGlideSmackerVertices[2].dwColor = -1;
+    gaGlideSmackerVertices[3].dwColor = -1;
     gpGlideSmackerTexBuf0 = (D2Row_uint8_t_32768*)D2_ALLOC_AT(0x8000, ".\\Src\\glSmack.cpp", 0x47);
     gpGlideSmackerTexBuf1 = (D2Row_uint8_t_32768*)D2_ALLOC_AT(0x8000, ".\\Src\\glSmack.cpp", 0x48);
     gpGlideSmackerTexBuf2 = (D2Row_uint8_t_32768*)D2_ALLOC_AT(0x8000, ".\\Src\\glSmack.cpp", 0x49);
@@ -3222,28 +3211,6 @@ void __stdcall GLSMACK_UploadTextures() {
 }
 
 static void __stdcall GLSMACK_DrawSmackerQuad(D2SmackerContextStrc * pSmackerData, int32_t nOffsetY, int32_t nAlpha) {
-    // Static local variables (originally global data)
-    static int gaGlideSmackerVertices; D2_STATIC_GUARD_BSS(gaGlideSmackerVertices, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gaGlideSmackerVertices");
-    static float gfGlideSmackerVertex1Y; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex1Y, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex1Y");
-    static float gfGlideSmackerVertex0W; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex0W, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex0W");
-    static float gfGlideSmackerVertex1X2; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex1X2, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex1X2");
-    static double gfGlideSmackerVertex1Oow2 = 0; D2_STATIC_GUARD(gfGlideSmackerVertex1Oow2, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex1Oow2");
-    static float gfGlideSmackerVertex1Y_b; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex1Y_b, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex1Y_b");
-    static float gfGlideSmackerVertex3X; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex3X, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex3X");
-    static float gfGlideSmackerVertex1Alpha; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex1Alpha, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex1Alpha");
-    static float gfGlideSmackerVertex1Oow_b; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex1Oow_b, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex1Oow_b");
-    static double gfGlideSmackerVertex2Y = 0; D2_STATIC_GUARD(gfGlideSmackerVertex2Y, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex2Y");
-    static float gfGlideSmackerVertex2X; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex2X, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex2X");
-    static float gfGlideSmackerVertex3Y; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex3Y, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex3Y");
-    static float gfGlideSmackerVertex2Oow_b; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex2Oow_b, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex2Oow_b");
-    static float gfGlideSmackerVertex2Alpha; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex2Alpha, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex2Alpha");
-    static double gfGlideSmackerVertex3Alpha = 0; D2_STATIC_GUARD(gfGlideSmackerVertex3Alpha, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex3Alpha");
-    static float gfGlideSmackerVertex4Y; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex4Y, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex4Y");
-    static float gfGlideSmackerVertex4X; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex4X, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex4X");
-    static float gfGlideSmackerVertex3Oow_b; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex3Oow_b, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex3Oow_b");
-    static float gfGlideSmackerVertex4Alpha; D2_STATIC_GUARD_BSS(gfGlideSmackerVertex4Alpha, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex4Alpha");
-    static double gfGlideSmackerVertex4Oow = 0; D2_STATIC_GUARD(gfGlideSmackerVertex4Oow, "D2Glide::Renderer::Glide::GLSMACK_DrawSmackerQuad::gfGlideSmackerVertex4Oow");
-
     RENDERER_GLIDE_SetColorCombine(1);
     RENDERER_GLIDE_SetAlphaBlendMode(1);
     RENDERER_GLIDE_SetTextureFiltering(2);
@@ -3257,52 +3224,52 @@ static void __stdcall GLSMACK_DrawSmackerQuad(D2SmackerContextStrc * pSmackerDat
       nAlphaClamped = nAlpha;
     }
 
-    gaGlideSmackerVertices = (int)(float)nSmackWidth;
+    gaGlideSmackerVertices[0].fX = (float)nSmackWidth;
     float fSmackTop = (float)(nSmackHeight - nOffsetY);
-    gfGlideSmackerVertex0W = 1.0;
-    gfGlideSmackerVertex1X2 = 0.0;
-    *(uint32_t*)(char*)&gfGlideSmackerVertex1Oow2 = 0;
+    gaGlideSmackerVertices[0].fOOW = 1.0;
+    gaGlideSmackerVertices[0].fS = 0.0;
+    gaGlideSmackerVertices[0].fT = 0.0;
     float fSmackBottom = (float)nSmackHeight;
-    gfGlideSmackerVertex1Alpha = 1.0;
-    gfGlideSmackerVertex1Oow_b = 0.0;
+    gaGlideSmackerVertices[1].fOOW = 1.0;
+    gaGlideSmackerVertices[1].fS = 0.0;
     float fSmackLeft = (float)nOffsetY;
-    gfGlideSmackerVertex2X = (float)(nSmackWidth + 0x100);
-    gfGlideSmackerVertex2Oow_b = 1.0;
-    gfGlideSmackerVertex2Alpha = (float)nAlphaClamped;
-    gfGlideSmackerVertex3Oow_b = 1.0;
-    *(uint32_t*)(char*)&gfGlideSmackerVertex4Oow = 0;
-    gfGlideSmackerVertex1Y = fSmackTop;
-    gfGlideSmackerVertex1Y_b = (float)gaGlideSmackerVertices;
-    gfGlideSmackerVertex3X = fSmackBottom;
-    *(uint32_t*)(char*)&gfGlideSmackerVertex2Y = fSmackLeft;
-    gfGlideSmackerVertex3Y = fSmackBottom;
-    *(uint32_t*)(char*)&gfGlideSmackerVertex3Alpha = fSmackLeft;
-    gfGlideSmackerVertex4Y = gfGlideSmackerVertex2X;
-    gfGlideSmackerVertex4X = fSmackTop;
-    gfGlideSmackerVertex4Alpha = gfGlideSmackerVertex2Alpha;
-    (*GLIDEDLL_grDrawVertexArrayContiguous_16)(5, 4, &gaGlideSmackerVertices, 0x1c);
+    gaGlideSmackerVertices[2].fX = (float)(nSmackWidth + 0x100);
+    gaGlideSmackerVertices[2].fOOW = 1.0;
+    gaGlideSmackerVertices[2].fS = (float)nAlphaClamped;
+    gaGlideSmackerVertices[3].fOOW = 1.0;
+    gaGlideSmackerVertices[3].fT = 0.0;
+    gaGlideSmackerVertices[0].fY = fSmackTop;
+    gaGlideSmackerVertices[1].fX = gaGlideSmackerVertices[0].fX;
+    gaGlideSmackerVertices[1].fY = fSmackBottom;
+    gaGlideSmackerVertices[1].fT = fSmackLeft;
+    gaGlideSmackerVertices[2].fY = fSmackBottom;
+    gaGlideSmackerVertices[2].fT = fSmackLeft;
+    gaGlideSmackerVertices[3].fX = gaGlideSmackerVertices[2].fX;
+    gaGlideSmackerVertices[3].fY = fSmackTop;
+    gaGlideSmackerVertices[3].fS = gaGlideSmackerVertices[2].fS;
+    (*GLIDEDLL_grDrawVertexArrayContiguous_16)(5, 4, gaGlideSmackerVertices, 0x1c);
     (*GLIDEDLL_grTexSource_16)(gnGlideTMUHandle, gnGlideSmackTex2StartAddr, 3, &gTexInfoBlocks1Glide);
-    gaGlideSmackerVertices = (int)(float)(nSmackWidth + 0x100);
-    gfGlideSmackerVertex0W = 1.0;
-    gfGlideSmackerVertex1X2 = 0.0;
-    *(uint32_t*)(char*)&gfGlideSmackerVertex1Oow2 = 0;
-    gfGlideSmackerVertex1Alpha = 1.0;
-    gfGlideSmackerVertex1Oow_b = 0.0;
-    gfGlideSmackerVertex2X = (float)(nSmackWidth + nAlpha);
-    gfGlideSmackerVertex2Oow_b = 1.0;
-    gfGlideSmackerVertex2Alpha = (float)(nAlpha - 0x100);
-    gfGlideSmackerVertex3Oow_b = 1.0;
-    *(uint32_t*)(char*)&gfGlideSmackerVertex4Oow = 0;
-    gfGlideSmackerVertex1Y = fSmackTop;
-    gfGlideSmackerVertex1Y_b = (float)gaGlideSmackerVertices;
-    gfGlideSmackerVertex3X = fSmackBottom;
-    *(uint32_t*)(char*)&gfGlideSmackerVertex2Y = fSmackLeft;
-    gfGlideSmackerVertex3Y = fSmackBottom;
-    *(uint32_t*)(char*)&gfGlideSmackerVertex3Alpha = fSmackLeft;
-    gfGlideSmackerVertex4Y = gfGlideSmackerVertex2X;
-    gfGlideSmackerVertex4X = fSmackTop;
-    gfGlideSmackerVertex4Alpha = gfGlideSmackerVertex2Alpha;
-    (*GLIDEDLL_grDrawVertexArrayContiguous_16)(5, 4, &gaGlideSmackerVertices, 0x1c);
+    gaGlideSmackerVertices[0].fX = (float)(nSmackWidth + 0x100);
+    gaGlideSmackerVertices[0].fOOW = 1.0;
+    gaGlideSmackerVertices[0].fS = 0.0;
+    gaGlideSmackerVertices[0].fT = 0.0;
+    gaGlideSmackerVertices[1].fOOW = 1.0;
+    gaGlideSmackerVertices[1].fS = 0.0;
+    gaGlideSmackerVertices[2].fX = (float)(nSmackWidth + nAlpha);
+    gaGlideSmackerVertices[2].fOOW = 1.0;
+    gaGlideSmackerVertices[2].fS = (float)(nAlpha - 0x100);
+    gaGlideSmackerVertices[3].fOOW = 1.0;
+    gaGlideSmackerVertices[3].fT = 0.0;
+    gaGlideSmackerVertices[0].fY = fSmackTop;
+    gaGlideSmackerVertices[1].fX = gaGlideSmackerVertices[0].fX;
+    gaGlideSmackerVertices[1].fY = fSmackBottom;
+    gaGlideSmackerVertices[1].fT = fSmackLeft;
+    gaGlideSmackerVertices[2].fY = fSmackBottom;
+    gaGlideSmackerVertices[2].fT = fSmackLeft;
+    gaGlideSmackerVertices[3].fX = gaGlideSmackerVertices[2].fX;
+    gaGlideSmackerVertices[3].fY = fSmackTop;
+    gaGlideSmackerVertices[3].fS = gaGlideSmackerVertices[2].fS;
+    (*GLIDEDLL_grDrawVertexArrayContiguous_16)(5, 4, gaGlideSmackerVertices, 0x1c);
     (*GLIDEDLL_grChromakeyMode_4)(1);
 }
 

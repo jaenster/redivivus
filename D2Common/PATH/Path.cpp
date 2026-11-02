@@ -1486,20 +1486,21 @@ uint32_t __fastcall PATH_CheckPathCollision(D2UnitStrc * pUnit, D2DynamicPathStr
 
 BOOL __stdcall PATH_HasReachedTarget(D2UnitStrc * pUnit) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    if (pDynamicPath) {
+    if (!pDynamicPath) {
+      return 1;
+    }
+    if (pDynamicPath->pTargetUnit) {
       int32_t nDistance;
-      if (pDynamicPath->pTargetUnit) {
-        nDistance = Collision::GetDistanceBetweenUnits(pDynamicPath->pTargetUnit, pUnit);
-        if (nDistance <= (int)(uint32_t)pDynamicPath->nStepNum) {
-          return 1;
-        }
-      }
-      if (pDynamicPath->Coords.tSubtile.nPosX != pDynamicPath->nTargetX || pDynamicPath->Coords.tSubtile.nPosY != pDynamicPath->nTargetY) {
-        return 0;
+      nDistance = Collision::GetDistanceBetweenUnits(pDynamicPath->pTargetUnit, pUnit);
+      if (nDistance <= (int)(uint32_t)pDynamicPath->nStepNum) {
+        return 1;
       }
     }
+    if (!(pDynamicPath->Coords.tSubtile.nPosX != pDynamicPath->nTargetX || pDynamicPath->Coords.tSubtile.nPosY != pDynamicPath->nTargetY)) {
+      return 1;
+    }
 
-    return 1;
+    return 0;
 }
 
 void __stdcall PATH_SnapPositionToTile(D2DynamicPathStrc * pDynamicPath) {

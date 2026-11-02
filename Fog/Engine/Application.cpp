@@ -1318,7 +1318,7 @@ int32_t __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lp
 
 uint32_t __stdcall PATH_GetKnownFolderPath(LPSTR szOutPath, int32_t nBufferSize) {
     // Static local variables (originally global data)
-    static GUID GUID_006cca6c = {} /* 4c5c32ff-bb9d-43b0-b5b4-2d72e54eaaa4 */; D2_STATIC_GUARD(GUID_006cca6c, "Fog::Engine::Application::PATH_GetKnownFolderPath::GUID_006cca6c");
+    static GUID GUID_006cca6c = {0x4c5c32ff, 0xbb9d, 0x43b0, {0xb5, 0xb4, 0x2d, 0x72, 0xe5, 0x4e, 0xaa, 0xa4}} /* 4c5c32ff-bb9d-43b0-b5b4-2d72e54eaaa4 */; D2_STATIC_GUARD(GUID_006cca6c, "Fog::Engine::Application::PATH_GetKnownFolderPath::GUID_006cca6c");
 
     LPWSTR pwszKnownPath;
     HMODULE hModule = GetModuleHandleA("Shell32.dll");

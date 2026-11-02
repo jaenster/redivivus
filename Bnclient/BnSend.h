@@ -203,7 +203,7 @@ void BNCLIENT_InterlockedCompareExchange(long * pDestination, LONG nExchange, LO
 BOOL __stdcall D2CheckExpansionGame();
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall GetDnsResults(void * lpThreadParam);
-void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, int nDnsThreadParam2);
+void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, char * nDnsThreadParam2);
 struct D2BNetGatewayAccessStr * __stdcall BnetLoadAndReturn();
 void __fastcall GetBnetIp(char * szText, int32_t nBufferOutputLength);
 // Returns current Battle.net connection state into output parameter. Validates param is non-null.

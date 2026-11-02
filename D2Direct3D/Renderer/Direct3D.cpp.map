@@ -870,6 +870,8 @@
         "RENDERER_D3D_IsPerspectiveEnabled"
       ],
       "usedTypes": [
+        "D2D3DSpriteInfoStrc",
+        "D2D3DVertexStrc",
         "uint8_t"
       ]
     },
@@ -892,6 +894,7 @@
       ],
       "usedTypes": [
         "D2D3DSpriteInfoStrc",
+        "D2D3DVertexStrc",
         "uint32_t",
         "uint8_t"
       ]

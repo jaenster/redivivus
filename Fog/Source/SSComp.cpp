@@ -79,29 +79,24 @@ void __fastcall COMPRESS_BuildHuffmanTree(int * pWeights, int32_t nCount) {
     *pWeights += pWeights[1];
     nReadIndex = 0;
     nTailIndex = nCount - 1;
-    nWriteIndex = 1;
     nScanIndex = 2;
-    if (1 < nTailIndex) {
-      do {
-        if (nScanIndex < nCount && pWeights[nReadIndex] >= pWeights[nScanIndex]) {
-          pWeights[nWriteIndex] = pWeights[nScanIndex];
-          nScanIndex++;
-        } else {
-          pWeights[nWriteIndex] = pWeights[nReadIndex];
-          pWeights[nReadIndex] = nWriteIndex;
-          nReadIndex++;
-        }
-        if (nScanIndex < nCount && (nReadIndex >= nWriteIndex || pWeights[nReadIndex] >= pWeights[nScanIndex])) {
-          pWeights[nWriteIndex] += pWeights[nScanIndex];
-          nScanIndex++;
-        } else {
-          pWeights[nWriteIndex] += pWeights[nReadIndex];
-          pWeights[nReadIndex] = nWriteIndex;
-          nReadIndex++;
-        }
-
-        nWriteIndex++;
-      } while (nWriteIndex < nTailIndex);
+    for (nWriteIndex = 1; nWriteIndex < nTailIndex; nWriteIndex++) {
+      if (nScanIndex < nCount && pWeights[nReadIndex] >= pWeights[nScanIndex]) {
+        pWeights[nWriteIndex] = pWeights[nScanIndex];
+        nScanIndex++;
+      } else {
+        pWeights[nWriteIndex] = pWeights[nReadIndex];
+        pWeights[nReadIndex] = nWriteIndex;
+        nReadIndex++;
+      }
+      if (nScanIndex < nCount && (nReadIndex >= nWriteIndex || pWeights[nReadIndex] >= pWeights[nScanIndex])) {
+        pWeights[nWriteIndex] += pWeights[nScanIndex];
+        nScanIndex++;
+      } else {
+        pWeights[nWriteIndex] += pWeights[nReadIndex];
+        pWeights[nReadIndex] = nWriteIndex;
+        nReadIndex++;
+      }
     }
 
     nScanIndex = nCount - 2;

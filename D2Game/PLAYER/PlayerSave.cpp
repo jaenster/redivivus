@@ -2018,21 +2018,17 @@ int32_t __fastcall _oldSaveGameLoadingPart7(::SGAMEDATA * pGame, D2UnitStrc * pU
       uint8_t* pCorpseData = (uint8_t*)(pCorpseHeader + 2);
       int nRemainingBytes = nSize - 4;
       pCorpseHeader = (short int*)0x4;
-      nSize = 0;
       D2UnitStrc* pCurrentUnit = pUnit;
-      if (nCorpseCount > 0) {
+      for (nSize = 0; nSize < nCorpseCount; nSize++) {
         int32_t nCorpseResult;
-        do {
-          nCorpseResult = _oldSaveGameLoadingPart7_part1(pCorpseData, nFormat, nRemainingBytes, &pBytesPerCorpse, pCurrentUnit, pGame);
-          if (nCorpseResult) {
-            return nCorpseResult;
-          }
+        nCorpseResult = _oldSaveGameLoadingPart7_part1(pCorpseData, nFormat, nRemainingBytes, &pBytesPerCorpse, pCurrentUnit, pGame);
+        if (nCorpseResult) {
+          return nCorpseResult;
+        }
 
-          pCorpseHeader = (short int*)((int)pCorpseHeader + pBytesPerCorpse);
-          pCorpseData += pBytesPerCorpse;
-          nRemainingBytes -= pBytesPerCorpse;
-          nSize++;
-        } while (nSize < nCorpseCount);
+        pCorpseHeader = (short int*)((int)pCorpseHeader + pBytesPerCorpse);
+        pCorpseData += pBytesPerCorpse;
+        nRemainingBytes -= pBytesPerCorpse;
       }
 
       *pnBytesConsumed = (uint32_t)pCorpseHeader;
@@ -2139,10 +2135,11 @@ uint32_t __fastcall _oldSaveGameLoadingPart8_part1(int32_t pGame, uint16_t wHire
     }
 
     D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(*(int32_t*)(pGame + 0x70), (uint32_t)wHirelingId, nMercLevel);
-    if (!pHirelingTxt || (nExpThreshold = D2Common::Merc::GetBaseExperience(nMercLevel, pHirelingTxt->expPerLvl) , nExpThreshold <= dwExperience)) {
-      nExpThreshold = dwExperience;
+    if (!(!pHirelingTxt || (nExpThreshold = D2Common::Merc::GetBaseExperience(nMercLevel, pHirelingTxt->expPerLvl) , nExpThreshold <= dwExperience))) {
+      return nExpThreshold;
     }
 
+    nExpThreshold = dwExperience;
     return nExpThreshold;
 }
 
@@ -2274,37 +2271,39 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint32_t *
 // Restores skill hotkeys and active left/right skill assignments from a legacy save stream. Reads up to 8 hotkey entries (indices 8-15) from pbParam, remapping raw skill byte values (0x9C-0xD8 range shifted +0x41, 0xFF → -1) via SetGotkeyInfo. If stream is long enough also restores shift-left/right skill slots. Outputs bytes consumed in *pnParam.
 // @sourcefile .\PLAYER\PlrSave.cpp
 int __stdcall _oldSaveGameLoadingPart9(D2UnitStrc * pUnit, uint8_t * pbParam, uint32_t nParam, int * pnBytesConsumed) {
-    int nHotkeyIndex;
-    uint8_t* pHotkeyEntry;
     eD2Skills eSkill;
     *pnBytesConsumed = 0;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave.cpp", 0x16a1);
-    if (pClient) {
+    if (!pClient) {
+      return 0;
+    }
+
+    *pnBytesConsumed = 0x30;
+    if (nParam <= 0x48) {
+      return 0;
+    }
+
+    int nHotkeyIndex = 8;
+    uint8_t* pHotkeyEntry = pbParam;
+    do {
       uint32_t nRawSkillId;
-      *pnBytesConsumed = 0x30;
-      if (nParam > 0x48) {
-        nHotkeyIndex = 8;
-        pHotkeyEntry = pbParam;
-        do {
-          nRawSkillId = (uint32_t)*pHotkeyEntry;
-          if (nRawSkillId >= 0x9c && nRawSkillId <= 0xd8) {
-            nRawSkillId += 0x41;
-          } else if (nRawSkillId == 0xff) {
-            nRawSkillId = -1;
-          }
-
-          GAME::Clients::SetGotkeyInfo(pClient, nHotkeyIndex, (uint16_t)nRawSkillId, pHotkeyEntry[1], -1);
-          nHotkeyIndex++;
-          pHotkeyEntry += 6;
-        } while (nHotkeyIndex < 0x10);
-
-        if (nParam > 0x51) {
-          eSkill = *(eD2Skills*)((int)(pbParam + *pnBytesConsumed) + 4);
-          D2Common::Units::SetShiftLeftSkillData(pUnit, *(eD2Skills*)(pbParam + *pnBytesConsumed), -1);
-          D2Common::Units::SetShiftRightSkillData(pUnit, eSkill, -1);
-          *pnBytesConsumed += 8;
-        }
+      nRawSkillId = (uint32_t)*pHotkeyEntry;
+      if (nRawSkillId >= 0x9c && nRawSkillId <= 0xd8) {
+        nRawSkillId += 0x41;
+      } else if (nRawSkillId == 0xff) {
+        nRawSkillId = -1;
       }
+
+      GAME::Clients::SetGotkeyInfo(pClient, nHotkeyIndex, (uint16_t)nRawSkillId, pHotkeyEntry[1], -1);
+      nHotkeyIndex++;
+      pHotkeyEntry += 6;
+    } while (nHotkeyIndex < 0x10);
+
+    if (nParam > 0x51) {
+      eSkill = *(eD2Skills*)((int)(pbParam + *pnBytesConsumed) + 4);
+      D2Common::Units::SetShiftLeftSkillData(pUnit, *(eD2Skills*)(pbParam + *pnBytesConsumed), -1);
+      D2Common::Units::SetShiftRightSkillData(pUnit, eSkill, -1);
+      *pnBytesConsumed += 8;
     }
 
     return 0;

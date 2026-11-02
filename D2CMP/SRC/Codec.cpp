@@ -136,16 +136,8 @@ static BOOL CODEC_AdvanceFrameIterator(int * pIterState, int32_t pFrameBounds) {
         pIterState[7] = nFrameWidth;
         pIterState[8] = nFrameWidth;
         memset(pIterState + 9, 0, 4 * sizeof(pIterState[0]));
-        nXRemainder &= 0x80000003;
-        if ((int)nXRemainder < 0) {
-          nXRemainder = (nXRemainder - 1 | -4) + 1;
-        }
-
-        nYRemainder &= 0x80000003;
-        if ((int)nYRemainder < 0) {
-          nYRemainder = (nYRemainder - 1 | -4) + 1;
-        }
-
+        nXRemainder = (int)nXRemainder % 4;
+        nYRemainder = (int)nYRemainder % 4;
         nFrameWidth = pIterState[1];
         if ((int)(-nXRemainder + 5) < nFrameWidth) {
           nFrameWidth = -nXRemainder + 4;
