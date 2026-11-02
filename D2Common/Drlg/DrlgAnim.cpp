@@ -133,15 +133,10 @@ static void AnimateTile(D2RoomExStrc * pRoomEx) {
 }
 
 void __fastcall AnimateTiles(D2RoomExStrc * pRoomEx) {
-    int nIndex = 0;
-    if (pRoomEx->nDrlgRoomsExNearCount <= 0) {
-      return;
-    }
-
-    do {
+    int nIndex;
+    for (nIndex = 0; nIndex < pRoomEx->nDrlgRoomsExNearCount; nIndex++) {
       AnimateTile(pRoomEx->ppDrlgRoomsExNear[nIndex]);
-      nIndex++;
-    } while (nIndex < pRoomEx->nDrlgRoomsExNearCount);
+    }
 }
 
 // Builds the animated-tile frame chains for a generated room. Scans the room's tile-entry array (stride 0x30 (0xc dwords)) for tiles flagged animated (TILEPROJECT_GetTileCount bit 0x100), looks up all project tile variants into a 40-entry result buffer, allocates a D2DrlgAnimTileGridStrc from the DRLG memory pool plus a per-frame ppTileData array, and creates floor/shadow/wall tile data for each animation frame (selecting CreateFloor/Shadow/WallTileData by entry type), tagging each with flag 8. Links the new anim-tile grid onto the room's pRoomTiles->pAnimTiles list. Halts on frame-count inconsistencies. Stack-guarded.

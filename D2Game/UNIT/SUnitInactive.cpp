@@ -551,7 +551,8 @@ static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc
 // @sourcefile .\UNIT\SUnitInactive.cpp
 static void __stdcall SUNITINACTIVE_DeactivateMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     eD2States nAiCmdType;
-    int16_t nBossNo;
+    D2StatListExStrc* pStateStatList;
+    int nTmpVal;
     D2AiGeneralStrc* pAiGeneral;
     D2DrlgRoomCoordsStrc local_3c;
     BOOL bIsSlave;
@@ -565,22 +566,16 @@ static void __stdcall SUNITINACTIVE_DeactivateMonster(::SGAMEDATA * pGame, D2Uni
       return;
     }
 
-    int nTmpVal = 0;
-    if ((short int)sgptDataTable->nAllStatesDataTblFlag0x0BSize > 0) {
-      D2StatListExStrc* pStateStatList;
-      do {
-        nStateId = sgptDataTable->pAllStatesDataTblFlag0x0B[nTmpVal].nStateId;
-        nAiCmdType = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nStateId);
-        if (nAiCmdType != STATE_none) {
-          pStateStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)nStateId);
-          if (pStateStatList) {
-            D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStateStatList);
-            D2Common::Stats::StatsEx::FreeStatList(&pStateStatList->sStatList);
-          }
+    for (nTmpVal = 0; nTmpVal < (short int)sgptDataTable->nAllStatesDataTblFlag0x0BSize; nTmpVal++) {
+      nStateId = sgptDataTable->pAllStatesDataTblFlag0x0B[nTmpVal].nStateId;
+      nAiCmdType = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nStateId);
+      if (nAiCmdType != STATE_none) {
+        pStateStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)nStateId);
+        if (pStateStatList) {
+          D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStateStatList);
+          D2Common::Stats::StatsEx::FreeStatList(&pStateStatList->sStatList);
         }
-
-        nTmpVal++;
-      } while (nTmpVal < (short int)sgptDataTable->nAllStatesDataTblFlag0x0BSize);
+      }
     }
 
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
@@ -627,6 +622,7 @@ static void __stdcall SUNITINACTIVE_DeactivateMonster(::SGAMEDATA * pGame, D2Uni
 
     uint32_t nTmpUint = Monsters::CheckMonsterType(pUnit, 2);
     if (nTmpUint) {
+      int16_t nBossNo;
       pInactiveRec->nTypeFlags |= 0x800;
       nBossNo = Monsters::GetBossNo(pUnit);
       pInactiveRec->nBossNo = nBossNo;

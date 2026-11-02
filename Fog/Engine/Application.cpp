@@ -986,57 +986,44 @@ void __stdcall CloseDiablo() {
 }
 
 void __thiscall MISC_ParseCommandLineAndPutIntoD2IniData(char * szText, D2IniConfigStrc * pD2IniData) {
-    char* pcVar4;
     long int nConfigIdx;
     int nDstOffset;
+    int nPos;
     uint8_t szArgName[256];
     char szArgValue[256];
     uint8_t bVar2;
-    char cChar;
     char* pCmdEnd = szText;
     pCmdEnd = pCmdEnd + strlen(pCmdEnd) + 1;
     int iVar1 = (int)pCmdEnd - (int)(szText + 1);
-    int nPos = 0;
-    if (iVar1 > 0) {
-      do {
-        if (szText[nPos] == '-') {
-          nPos++;
-          if (nPos < iVar1) {
-            nDstOffset = INI_ParseCommandLineArg(szArgName, szText + nPos, szArgValue);
-            if (nDstOffset != -1) {
-              bVar2 = D2IniConfigValues[nDstOffset].nType;
-              pCmdEnd = pD2IniData->bD2ExpMpqExistsOrLanugageCode + D2IniConfigValues[nDstOffset].nOffset;
-              switch (bVar2) {
-                case 0:
-                  {
-                    *pCmdEnd = '\x01';
-                    break;
-                  }
-                case 1:
-                  {
-                    nConfigIdx = atoi(szArgValue);
-                    *(long int*)pCmdEnd = nConfigIdx;
-                    break;
-                  }
-                case 2:
-                  {
-                    pcVar4 = szArgValue;
-                    nDstOffset = (int)pCmdEnd - (int)pcVar4;
-                    do {
-                      cChar = *pcVar4;
-                      pcVar4[nDstOffset] = cChar;
-                      pcVar4++;
-                    } while (cChar != '\0');
-
-                    break;
-                  }
-              }
+    for (nPos = 0; nPos < iVar1; nPos++) {
+      if (szText[nPos] == '-') {
+        nPos++;
+        if (nPos < iVar1) {
+          nDstOffset = INI_ParseCommandLineArg(szArgName, szText + nPos, szArgValue);
+          if (nDstOffset != -1) {
+            bVar2 = D2IniConfigValues[nDstOffset].nType;
+            pCmdEnd = pD2IniData->bD2ExpMpqExistsOrLanugageCode + D2IniConfigValues[nDstOffset].nOffset;
+            switch (bVar2) {
+              case 0:
+                {
+                  *pCmdEnd = '\x01';
+                  break;
+                }
+              case 1:
+                {
+                  nConfigIdx = atoi(szArgValue);
+                  *(long int*)pCmdEnd = nConfigIdx;
+                  break;
+                }
+              case 2:
+                {
+                  strcpy(pCmdEnd, szArgValue);
+                  break;
+                }
             }
           }
         }
-
-        nPos++;
-      } while (nPos < iVar1);
+      }
     }
 }
 
@@ -1214,7 +1201,6 @@ static int __stdcall CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgum
     // Static local variables (originally global data)
     static char * gApplicationModeCommandLineArgumentArray[6] = { s_modstate0_006cc928, s_client_006cc920, s_server_006cc918, s_multiplayer_006cc90c, s_launcher_006cc900, s_expand_006cc8f8 }; D2_STATIC_GUARD(gApplicationModeCommandLineArgumentArray, "Fog::Engine::Application::CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument::gApplicationModeCommandLineArgumentArray");
 
-    char* pszModeStrEnd;
     int nStrCmp;
     char cChar;
     char* pszModeStr;
@@ -1228,9 +1214,8 @@ static int __stdcall CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgum
       eMode = APPMODE_mode0;
       do {
         pszModeStr = gApplicationModeCommandLineArgumentArray[eMode];
-        pszModeStrEnd = pszModeStr;
-        pszModeStrEnd = pszModeStrEnd + strlen(pszModeStrEnd) + 1;
-        nStrCmp = strncmp(pszCmdToken, pszModeStr, (int)pszModeStrEnd - (int)(pszModeStr + 1));
+        int nLen = (int)strlen(pszModeStr);
+        nStrCmp = strncmp(pszCmdToken, pszModeStr, nLen);
         if (!nStrCmp && eMode != APPMODE_client) {
           *eAppMode = eMode;
         }

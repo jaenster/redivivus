@@ -900,21 +900,17 @@ static void __stdcall SKILLDESC_BuildStatListDesc(D2UnitStrc * pUnit, D2StatList
 }
 
 static int32_t __stdcall SKILLDESC_CalcStatGroupValue(D2UnitStrc * pUnit, eD2UnitStat eStat, int32_t nStatValue, D2ItemStatCostTxt * pItemStatCostTxt) {
-    D2UnitStrc* pPlayerUnit_lcl;
     int nRawStatValue;
     D2ItemStatCostTxt* pStatCostLine;
-    uint16_t nLayer;
     if (pItemStatCostTxt->op >= 2 && pItemStatCostTxt->op <= 5) {
       eD2UnitStat eUnitStat;
       eUnitStat = (eD2UnitStat)pItemStatCostTxt->opBase;
-      pStatCostLine = (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
+      pStatCostLine = !false && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
       if (!pStatCostLine) {
         return 0;
       }
 
-      nLayer = 0;
-      pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-      nRawStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, eUnitStat, nLayer);
+      nRawStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, 0);
       nStatValue = (nRawStatValue >> (pStatCostLine->valshift & 0x1fU)) * nStatValue >> (pItemStatCostTxt->opParam & 0x1f);
     }
 
@@ -996,10 +992,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
     char szValueBuffer[12];
     uint16_t wszValueFormatted[10];
     *wszOutputBuffer = L'\0';
-    if (nStatId < 0) {
-      return 0;
-    }
-    if (nStatId >= sgptDataTable->nTxtItemStatCostSize) {
+    if (nStatId < 0 || nStatId >= sgptDataTable->nTxtItemStatCostSize) {
       return 0;
     }
 
@@ -2562,6 +2555,7 @@ int32_t __stdcall SKILLDESC_GetAuraBonusDamage() {
     int nAuraDmgVal;
     int32_t nAuraStatValue;
     D2SkillsTxt* pDVar3;
+    int nStateIdx;
     short int nAuraStat;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     if (!pUnit) {
@@ -2569,12 +2563,7 @@ int32_t __stdcall SKILLDESC_GetAuraBonusDamage() {
     }
 
     int nTotalDmg = 0;
-    int nStateIdx = 0;
-    if ((short int)sgptDataTable->nAllStatesDataTblFlag0x04Size <= 0) {
-      return nTotalDmg;
-    }
-
-    do {
+    for (nStateIdx = 0; nStateIdx < (short int)sgptDataTable->nAllStatesDataTblFlag0x04Size; nStateIdx++) {
       eD2States eState;
       eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)sgptDataTable->pAllStatesDataTblFlag0x04[nStateIdx].nStateId);
       if (eState != STATE_none) {
@@ -2597,9 +2586,7 @@ int32_t __stdcall SKILLDESC_GetAuraBonusDamage() {
           }
         }
       }
-
-      nStateIdx++;
-    } while (nStateIdx < (short int)sgptDataTable->nAllStatesDataTblFlag0x04Size);
+    }
 
     return nTotalDmg;
 }
@@ -2612,15 +2599,11 @@ int __stdcall SKILLDESC_AccumulateAuraBonusDmg(D2UnitStrc * pUnit, int * pnMinDm
     D2SkillDescTxt* pSkillDesc;
     int32_t nCalcMin;
     uint32_t nCalcResult;
+    int nStateIdx;
     uint8_t byElemType;
     short int nAuraStat;
     D2SkillsTxt* pSkillsTxt;
-    int nStateIdx = 0;
-    if ((short int)sgptDataTable->nAllStatesDataTblFlag0x04Size <= 0) {
-      return 1;
-    }
-
-    do {
+    for (nStateIdx = 0; nStateIdx < (short int)sgptDataTable->nAllStatesDataTblFlag0x04Size; nStateIdx++) {
       eD2States eState;
       eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)sgptDataTable->pAllStatesDataTblFlag0x04[nStateIdx].nStateId);
       if (eState != STATE_none) {
@@ -2668,9 +2651,7 @@ int __stdcall SKILLDESC_AccumulateAuraBonusDmg(D2UnitStrc * pUnit, int * pnMinDm
           }
         }
       }
-
-      nStateIdx++;
-    } while (nStateIdx < (short int)sgptDataTable->nAllStatesDataTblFlag0x04Size);
+    }
 
     return 1;
 }
@@ -2866,20 +2847,12 @@ static int __stdcall SKILLDESC_FormatRangeDivided(uint16_t * wszText, uint16_t n
     int nMaxInt;
     nMaxInt = (int)nMaxValue / 256;
     uint32_t nFrac;
-    nFrac = nMaxValue & 0x800000ff;
-    if ((int)nFrac < 0) {
-      nFrac = (nFrac - 1 | -256) + 1;
-    }
-
+    nFrac = (int)nMaxValue % 256;
     int nMaxFrac;
     nMaxFrac = (int)(nFrac * nDivisor) / 256;
     int nMinInt;
     nMinInt = (int)nMinValue / 256;
-    nFrac = nMinValue & 0x800000ff;
-    if ((int)nFrac < 0) {
-      nFrac = (nFrac - 1 | -256) + 1;
-    }
-
+    nFrac = (int)nMinValue % 256;
     int nMinFrac;
     nMinFrac = (int)(nFrac * nDivisor) / 256;
     if (!nMaxInt && !nMinInt) {
@@ -2969,11 +2942,7 @@ static void __stdcall SKILLDESC_FormatDecimalWithStrings(uint16_t nPrefixLabelId
       return;
     }
 
-    uint32_t nFracRem = nRawValue & 0x800000ff;
-    if ((int)nFracRem < 0) {
-      nFracRem = (nFracRem - 1 | -256) + 1;
-    }
-
+    uint32_t nFracRem = (int)nRawValue % 256;
     int nFracPart = (int)(nFracRem * nDivisor) / 256;
     int nIntPart = (int)nRawValue / 256;
     if (!nIntPart) {
@@ -3399,11 +3368,7 @@ static void __stdcall SKILLDESC_DescLine1_SkillParams(D2SkillsTxt * pSkillsTxt, 
     if (pSkillsTxt->manashift != 8 && (int)pSkillsTxt->lvlmana << (byShift & 0x1f) <= 0x100 && (int)nManaCost <= 0x1900) {
       uint32_t nManaCostFrac;
       if (nParam3 <= 0xa) {
-        nManaCostFrac = nManaCost & 0x800000ff;
-        if ((int)nManaCostFrac < 0) {
-          nManaCostFrac = (nManaCostFrac - 1 | -256) + 1;
-        }
-
+        nManaCostFrac = (int)nManaCost % 256;
         SKILLDESC_FormatDecimalWithLabel((int)(nManaCostFrac * 10) / 256, wStrIdMana, (int)nManaCost / 256, 0, wszText);
         return;
       }
@@ -3965,7 +3930,7 @@ static D2UnitStrc * SKILLDESC_GetPrimaryWeapon(D2UnitStrc * pUnit) {
     }
 
     eD2BodyLoc eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pEquippedWeapon);
-    D2UnitStrc* pOffhandWeapon = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, (eBodyLoc == BODYLOC_R_ARM) + 4);
+    D2UnitStrc* pOffhandWeapon = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, eBodyLoc == BODYLOC_R_ARM ? 5 : 4);
     if (!(pOffhandWeapon && pOffhandWeapon != pEquippedWeapon)) {
       return nullptr;
     }
@@ -4017,7 +3982,7 @@ static D2UnitStrc * SKILLDESC_GetSecondaryWeapon(D2UnitStrc * pUnit) {
     }
 
     eD2BodyLoc eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pEquippedWeapon);
-    D2UnitStrc* pOffhandWeapon = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, (eBodyLoc == BODYLOC_R_ARM) + 4);
+    D2UnitStrc* pOffhandWeapon = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, eBodyLoc == BODYLOC_R_ARM ? 5 : 4);
     if (pOffhandWeapon && pOffhandWeapon != pEquippedWeapon) {
       uint32_t bIsWeaponType;
       bIsWeaponType = D2Common::ITEMS::Items::ITEMS_IsA(pOffhandWeapon, ITEMTYPE_Weapon);
@@ -4587,10 +4552,7 @@ void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDam
     int* pnMaxDamageAlias;
     *pnMinDamage = 0;
     *pnMaxDamage = 0;
-    if (!pSkill) {
-      return;
-    }
-    if (!pUnit2 && (!pUnit->pInventory || (pUnit2 = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pUnit->pInventory) , !pUnit2))) {
+    if (!pSkill || !pUnit2 && (!pUnit->pInventory || (pUnit2 = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pUnit->pInventory) , !pUnit2))) {
       return;
     }
 
@@ -5404,7 +5366,7 @@ void __fastcall SKILLDESC_DrawSkillDmgSummon(D2UnitStrc * pUnit, D2SkillStrc * p
       pUnit2 = 0;
       if (pPrimaryWeapon) {
         eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pPrimaryWeapon);
-        pUnit2 = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInvSaved, (eBodyLoc == BODYLOC_R_ARM) + 4);
+        pUnit2 = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInvSaved, eBodyLoc == BODYLOC_R_ARM ? 5 : 4);
       }
 
       uIsWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pPrimaryWeapon, ITEMTYPE_Weapon);
@@ -6003,10 +5965,7 @@ static void __stdcall SKILLDESC_DescLine27_SkillElemCalc(D2UnitStrc * pUnit, uin
     int32_t iVar2;
     D2MonStatsInitStrc sMonStats;
     int nMonStatIdx = (int)pSkillsTxt->summon;
-    if (nMonStatIdx < 0) {
-      return;
-    }
-    if (nMonStatIdx >= sgptDataTable->nTxtMonStatsSize) {
+    if (nMonStatIdx < 0 || nMonStatIdx >= sgptDataTable->nTxtMonStatsSize) {
       return;
     }
 
@@ -6183,10 +6142,7 @@ void __stdcall SKILLDESC_DescLine22_SkillSynergies(D2UnitStrc * pUnit, uint16_t 
     int32_t iVar2;
     D2MonStatsInitStrc sMonStats;
     int nMonStatIdx = (int)nParam[0x5e];
-    if (nMonStatIdx < 0) {
-      return;
-    }
-    if (nMonStatIdx >= sgptDataTable->nTxtMonStatsSize) {
+    if (nMonStatIdx < 0 || nMonStatIdx >= sgptDataTable->nTxtMonStatsSize) {
       return;
     }
 

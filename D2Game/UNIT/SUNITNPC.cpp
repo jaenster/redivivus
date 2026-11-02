@@ -1294,7 +1294,6 @@ BOOL __fastcall SUNITNPC_BuyItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2Un
     D2InventoryStrc* pInventory;
     D2UnitStrc* pCursorItem;
     BOOL bCanAfford;
-    D2BitBufferStrc* pBitBuffer;
     D2ClientStrc* pClient;
     uint8_t nErrorCode;
     int32_t nErrorLine;
@@ -1402,9 +1401,7 @@ BOOL __fastcall SUNITNPC_BuyItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2Un
               nGoldValue = pBoughtItem->nClassId;
             }
 
-            nErrorLine = 0;
-            pBitBuffer = Quests::QUESTS::GetQuestBitBuffer(pGame, pPlayer);
-            __frame0.nRepairFillCount = D2Common::ITEMS::Items::CalculateTransactionCost_Thunk(pPlayer, pClonedItem, (uint32_t)pGame->nDifficulty, pBitBuffer, nGoldValue, nErrorLine);
+            __frame0.nRepairFillCount = D2Common::ITEMS::Items::CalculateTransactionCost_Thunk(pPlayer, pClonedItem, (uint32_t)pGame->nDifficulty, Quests::QUESTS::GetQuestBitBuffer(pGame, pPlayer), nGoldValue, 0);
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pClonedItem, UNITSTAT_quantity, nNpcId, 0);
             __frame0.nDifficulty = __frame0.nTotalGold / __frame0.nRepairFillCount;
             __frame0.pScrollSocketItem = (uint32_t)SUNITNPC_FindExistingStackInInventory(pGame, pPlayer, pClonedItem, (int*)&nNpcId);
@@ -2741,6 +2738,7 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
     eInventoryPage ePage;
     uint16_t uVar2;
     D2ClientStrc* pClient;
+    D2BitBufferStrc* pQuestBuf;
     int eVar9;
     D2LowQualityItemsTxt* pLowQualityName;
     D2BooksTxt* pBooksTxt;
@@ -2810,10 +2808,7 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
     }
 
     eVar9 = pDVar5->nClassId;
-    iVar17 = 1;
-    D2BitBufferStrc* pQuestBuf;
-    pQuestBuf = Quests::QUESTS::GetQuestBitBuffer(pGame, pPlayer);
-    pInteractedNpc = (D2UnitStrc*)D2Common::ITEMS::Items::CalculateTransactionCost_Thunk(pPlayer, pClonedItem, (uint32_t)pGame->nDifficulty, pQuestBuf, eVar9, iVar17);
+    pInteractedNpc = (D2UnitStrc*)D2Common::ITEMS::Items::CalculateTransactionCost_Thunk(pPlayer, pClonedItem, (uint32_t)pGame->nDifficulty, Quests::QUESTS::GetQuestBitBuffer(pGame, pPlayer), eVar9, 1);
     int32_t bCanRepurchase;
     bCanRepurchase = 1;
     eVar9 = D2Common::ITEMS::Items::GetItemQuality(pClonedItem);
@@ -3160,12 +3155,10 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
     D2UnitStrc* pItemToPersonalize;
     D2UnitDataPlayerStrc* pCustomName;
     uint32_t nNpcClassId;
-    char* pDstName;
     POINT ptUnitPos;
     int16_t awWaypointId[3];
     POINT PStack_108;
     POINT sUseMenuPkt;
-    char cVar1;
     eD2ItemFlag eD2ItemFlag2;
     eD2LevelId eLevel;
     eD2Quests eQuestId;
@@ -3296,13 +3289,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
         if (nSockOrEtherFlag) {
           bVar1 = true;
           pSrcName = D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pItem);
-          pDstName = __frame0.szPlayerName;
-          do {
-            cVar1 = *pSrcName;
-            *pDstName = cVar1;
-            pSrcName++;
-            pDstName++;
-          } while (cVar1 != '\0');
+          strcpy(__frame0.szPlayerName, pSrcName);
         }
 
         bQuestState = ITEMS::ItemMode::ToCursorItem(pGame, pUnit, pItem);

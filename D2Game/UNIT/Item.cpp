@@ -306,27 +306,18 @@ void __fastcall ITEM_ClearFlagsAndCommands(::SGAMEDATA * pGameStrc, D2UnitStrc *
 }; D2_STATIC_GUARD(gaItemClearCommandTable, "D2Game::UNIT::ITEM_ClearFlagsAndCommands::gaItemClearCommandTable");
     static uint32_t gnItemClearCommandCount = 0x15; D2_STATIC_GUARD(gnItemClearCommandCount, "D2Game::UNIT::ITEM_ClearFlagsAndCommands::gnItemClearCommandCount");
 
+    uint32_t nIdx;
     if (pUnit) {
       pUnit->eUnitFlagsEx &= ~(UNITFLAGEX_ITEMINIT | UNITFLAGEX_ISVENDORITEM);
     }
 
-    uint32_t nIdx = 0;
-    if (gnItemClearCommandCount > 0) {
-      do {
-        D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pUnit, gaItemClearCommandTable[nIdx], 0);
-        nIdx++;
-      } while (nIdx < gnItemClearCommandCount);
+    for (nIdx = 0; nIdx < gnItemClearCommandCount; nIdx++) {
+      D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pUnit, gaItemClearCommandTable[nIdx], 0);
     }
 
-    nIdx = 0;
-    if (gnItemClearFlagCount <= 0) {
-      return;
-    }
-
-    do {
+    for (nIdx = 0; nIdx < gnItemClearFlagCount; nIdx++) {
       D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, gaItemClearFlagTable[nIdx], 0);
-      nIdx++;
-    } while (nIdx < gnItemClearFlagCount);
+    }
 }
 
 BOOL __fastcall ITEM_HasPendingInventoryUpdates(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {

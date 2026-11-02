@@ -57,7 +57,6 @@ D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_STA
     char nNoDelayOpt[4];
     WSADATA wsaData;
     uint8_t sockNameBuf[16];
-    sockaddr_in connectAddr;
     char cIpChar;
     LPVOID pThreadParamLocal = pThreadParam;
     LPTHREAD_START_ROUTINE pThreadProcLocal = pThreadProc;
@@ -112,10 +111,8 @@ D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_STA
     }
 
     pSafesockStrc->bInit = 1;
-    /* u_short netshort for ntohs */ connectAddr.sin_addr = 0;
-    memset(connectAddr.sin_zero, 0, 8 * sizeof(connectAddr.sin_zero[0]));
+    sockaddr_in connectAddr = {0};
     connectAddr.sin_family = 2;
-    connectAddr.sin_port = 0;
     u_short nPortBE = ntohs(nPort);
     connectAddr.sin_port = nPortBE;
     /* char * cp for inet_addr */ connectAddr.sin_addr = inet_addr(szHostNameOrSockLen);

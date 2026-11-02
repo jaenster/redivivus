@@ -109,7 +109,7 @@ void __fastcall Q23_NotifyGuardianStateToPlayers(::SGAMEDATA * pGame, char cPara
       nPrevStateFlag = pQuestData->pQuestSpecificData.pA3Q6->nPrevStateFlagPrev;
     } else {
       pQuestData->pQuestSpecificData.pA3Q6->nPrevStateFlagPrev = (uint32_t)pQuestData->nStateFlagPrev;
-      nPrevStateFlag = (pQuestData->pGame->nGameType != SGAMETYPE_SINGLEPLAYER) + 6;
+      nPrevStateFlag = pQuestData->pGame->nGameType != SGAMETYPE_SINGLEPLAYER ? 7 : 6;
     }
 
     QUEST_SetStateAndBroadcast(pQuestData, nPrevStateFlag, nullptr, (::fpExecuteOnUnitFunction)A3Q6::Q23_PlayerNotifyCompleted, pQuestData->nStateFlag > 0);

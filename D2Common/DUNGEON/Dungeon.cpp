@@ -395,7 +395,7 @@ int32_t __stdcall DRLGROOM_GetRoomShape(D2RoomStrc * pRoom, int32_t nMode) {
       return 2;
     }
 
-    return (nTop != nTopPlusHeight) + 3;
+    return nTop != nTopPlusHeight ? 4 : 3;
 }
 
 D2RoomStrc * __stdcall FindRoomByTileCoordinates(D2DrlgActStrc * pDrlgAct, int32_t nX, int32_t nY) {
@@ -421,18 +421,14 @@ D2RoomStrc * __stdcall FindRoomByTileCoordinates(D2DrlgActStrc * pDrlgAct, int32
 }
 
 D2RoomStrc * __stdcall GetAdjacentRoomByCoordinates(D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
+    uint32_t nRoomIdx;
     D2RoomStrc* pAdjacentRoom;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1af);
       exit(-1);
     }
 
-    uint32_t nRoomIdx = 0;
-    if (pRoom->nRoomListCount <= 0) {
-      return nullptr;
-    }
-
-    do {
+    for (nRoomIdx = 0; nRoomIdx < pRoom->nRoomListCount; nRoomIdx++) {
       BOOL bInsideRoom;
       pAdjacentRoom = pRoom->ppRoomList[nRoomIdx];
       if (!pAdjacentRoom) {
@@ -444,9 +440,7 @@ D2RoomStrc * __stdcall GetAdjacentRoomByCoordinates(D2RoomStrc * pRoom, int32_t 
       if (bInsideRoom) {
         return pAdjacentRoom;
       }
-
-      nRoomIdx++;
-    } while (nRoomIdx < pRoom->nRoomListCount);
+    }
 
     return nullptr;
 }
@@ -464,19 +458,12 @@ void __stdcall CallRoomCallback(D2RoomStrc * pRoom, ROOMCALLBACKFN pfnRoomCallba
         exit(-1);
       }
 
-      nRoomIdx = 0;
-      if (pRoom->nRoomListCount <= 0) {
-        return;
-      }
-
-      do {
+      for (nRoomIdx = 0; nRoomIdx < pRoom->nRoomListCount; nRoomIdx++) {
         bBadCodePtr = (*pfnRoomCallback)(pRoom->ppRoomList[nRoomIdx], pArgs);
         if (!bBadCodePtr) {
           return;
         }
-
-        nRoomIdx++;
-      } while (nRoomIdx < pRoom->nRoomListCount);
+      }
 
       return;
     }
@@ -1895,12 +1882,8 @@ void __fastcall ClearRoomExIfFlag0x01(D2RoomExStrc * pRoomEx) {
 
 // Recursively decrements reference counts on all near RoomEx nodes for a given priority level. Propagates to higher priority levels (nPriority+1) up to priority 3. Used during room deactivation.
 void __fastcall DRLGROOMEX_PropagateDecRefCount(D2RoomExStrc * pRoomEx, uint8_t nPriority) {
-    int nIndex = 0;
-    if (pRoomEx->nDrlgRoomsExNearCount <= 0) {
-      return;
-    }
-
-    do {
+    int nIndex;
+    for (nIndex = 0; nIndex < pRoomEx->nDrlgRoomsExNearCount; nIndex++) {
       D2RoomExStrc* pRoomEx_00;
       pRoomEx_00 = pRoomEx->ppDrlgRoomsExNear[nIndex];
       if (pRoomEx_00) {
@@ -1910,9 +1893,7 @@ void __fastcall DRLGROOMEX_PropagateDecRefCount(D2RoomExStrc * pRoomEx, uint8_t 
           DRLGROOMEX_PropagateDecRefCount(pRoomEx_00, nPriority + 1);
         }
       }
-
-      nIndex++;
-    } while (nIndex < pRoomEx->nDrlgRoomsExNearCount);
+    }
 }
 
 void __fastcall AddRoomDataPrepare(D2DrlgStrc * pDrlg, int32_t eLevelId, int32_t nX, int32_t nY, D2RoomExStrc * pRoomExCache) {

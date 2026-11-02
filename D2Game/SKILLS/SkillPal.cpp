@@ -102,10 +102,9 @@ BOOL __fastcall SKILLPAL_SrvStFn29_Sacrifice(::SGAMEDATA * pGame, D2UnitStrc * p
     }
 
     memset(&sDamage, 0, 0x70);
-    int32_t nConvPct = 0;
-    uint32_t nToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nToHit, nConvPct);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
     if (sDamage.wResultFlags & 1U) {
+      int32_t nConvPct;
       nConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
       sDamage.dwPhysDamage = UNIT::SUnitDmg::DAMAGE_CalculatePhysicalDamage(pUnit, 1, nullptr, 0, 0, nConvPct, 0, pSkillsTxt->SrcDam);
       if (pSkillsTxt->EType != ELEMENTAL_NONE) {
@@ -282,6 +281,7 @@ BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2Unit
     int32_t nNewPoisonExpire;
     int32_t nNewCurseExpire;
     eD2States eState;
+    int nCurseStateIdx;
     int nGameFrame;
     BOOL bReduced = 0;
     eD2States ePoisonState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_poison);
@@ -299,12 +299,7 @@ BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2Unit
       }
     }
 
-    int nCurseStateIdx = 0;
-    if ((short int)sgptDataTable->nAllStatesDataTblFlag0x0BSize <= 0) {
-      return bReduced;
-    }
-
-    do {
+    for (nCurseStateIdx = 0; nCurseStateIdx < (short int)sgptDataTable->nAllStatesDataTblFlag0x0BSize; nCurseStateIdx++) {
       eState = (eD2States)sgptDataTable->pAllStatesDataTblFlag0x0B[nCurseStateIdx].nStateId;
       ePoisonState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
       if (ePoisonState != STATE_none) {
@@ -323,9 +318,7 @@ BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2Unit
           bReduced = 1;
         }
       }
-
-      nCurseStateIdx++;
-    } while (nCurseStateIdx < (short int)sgptDataTable->nAllStatesDataTblFlag0x0BSize);
+    }
 
     return bReduced;
 }
@@ -339,18 +332,16 @@ int __fastcall SKILLPAL_ApplyAuraStateToTarget(D2SkillCallbackContextStrc * pCon
     ::SGAMEDATA* pGame;
     int32_t nDiffResistPenalty;
     int nStatMaxCap;
-    D2StateExArgStrc sAuraArg;
     int nCurStatValue;
     D2ItemStatCostTxt* pItemStatCostTxt;
     eD2UnitStat eUnitStat;
     D2SkillAuraArgStrc* pAuraArgs = (D2SkillAuraArgStrc*)pContext->pCallbackArg;
-    sAuraArg.pFunction = 0;
+    D2StateExArgStrc sAuraArg = {0};
     sAuraArg.pUnit = pContext->pUnit;
     sAuraArg.eSkill = pAuraArgs->eSkill;
     sAuraArg.nSkillLvl = pAuraArgs->nSkillLvl;
     sAuraArg.nDurationInFrames = pAuraArgs->nDelayFrame;
     sAuraArg.eStat = ~UNITSTAT_strength;
-    sAuraArg.nSkillCalc = 0;
     sAuraArg.eAuraState = pAuraArgs->nAuraState;
     PFN_StatExpireCallback pOnExpire = (PFN_StatExpireCallback)pAuraArgs->pExtra;
     if (!pAuraArgs->pExtra) {
@@ -812,24 +803,18 @@ BOOL __fastcall SKILPAL_SrvStFn31_Charge(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 int32_t __fastcall SKILLPAL_GetAttackFrameIndex(D2UnitStrc * pUnit) {
+    int nFrameIdx;
     D2MonSeqTxt* pSeqTxt = D2Common::Merc::MERC_GetSequenceTxt(pUnit);
     if (!pSeqTxt) {
       return 7;
     }
 
     int32_t nCounter = D2Common::Merc::GetCounter2(pUnit);
-    int nFrameIdx = 0;
-    if (nCounter <= 0) {
-      return 7;
-    }
-
-    do {
+    for (nFrameIdx = 0; nFrameIdx < nCounter; nFrameIdx++) {
       if (!pSeqTxt->event) {
         return nFrameIdx - 1;
       }
-
-      nFrameIdx++;
-    } while (nFrameIdx < nCounter);
+    }
 
     return 7;
 }
@@ -1052,6 +1037,7 @@ BOOL __fastcall SKILPAL_SrvStFn35_Vengeance(::SGAMEDATA * pGame, D2UnitStrc * pU
     int nMasteryBonus;
     int32_t nFireCalcPct;
     D2DamageStrc sDamage;
+    int32_t nRandDmg;
     eD2Skills eSkill_00 = eSkill;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -1069,9 +1055,7 @@ BOOL __fastcall SKILPAL_SrvStFn35_Vengeance(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     memset(&sDamage, 0, 0x70);
-    int32_t nRandDmg = 0;
-    uint32_t nToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, nToHit, nRandDmg);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
     if (sDamage.wResultFlags & 1U) {
       int32_t nMasteryCalc;
       sDamage.dwPhysDamage = UNIT::SUnitDmg::DAMAGE_CalculatePhysicalDamage(pUnit, 1, nullptr, 0, 0, 0, 0, pSkillsTxt->SrcDam);
@@ -1188,9 +1172,7 @@ BOOL __fastcall Skills_SrvDoFunc_073_BlessedHammer(::SGAMEDATA * pGame, D2UnitSt
     int32_t nConcentrationBonus = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_magicmindam, 0);
     nConcentrationBonus = D2Client::Stats::D2ApplyPercent(nConcentrationBonus, nConcentrationBonusPct + 100, nPctBase);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_magicmindam, nConcentrationBonus, 0);
-    nPctBase = 100;
-    nConcentrationBonus = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_magicmaxdam, 0);
-    nConcentrationBonusPct = D2Client::Stats::D2ApplyPercent(nConcentrationBonus, nConcentrationBonusPct + 100, nPctBase);
+    nConcentrationBonusPct = D2Client::Stats::D2ApplyPercent(D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_magicmaxdam, 0), nConcentrationBonusPct + 100, 100);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_magicmaxdam, nConcentrationBonusPct, 0);
     return 1;
 }
@@ -1245,10 +1227,7 @@ static BOOL __stdcall SKILLPAL_CanConvertTarget(D2UnitStrc * pUnit, int32_t nSki
     }
 
     uint32_t nAlignment = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit2);
-    if (nAlignment || !pUnit2) {
-      return 0;
-    }
-    if (pUnit2->eUnitType != UNIT_MONSTER) {
+    if (nAlignment || !pUnit2 || pUnit2->eUnitType != UNIT_MONSTER) {
       return 0;
     }
 

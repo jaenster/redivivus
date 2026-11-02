@@ -50,36 +50,25 @@ namespace D2Common::Drlg::DrlgLogic {
 // Iterates grid cells, builds coord entries for each non-flagged cell.
 static void DRLGLOGIC_PopulateGridCoordIndices(int * pnParam) {
     uint32_t nCellFlags;
+    int nGridY;
+    int nGridX;
     int nWidth = *(int*)(*pnParam + 0x3c);
     int nHeight = *(int*)(*pnParam + 0x40);
-    int nGridY = 0;
-    if (nHeight < 0) {
-      return;
-    }
-
-    do {
-      int nGridX;
-      nGridX = 0;
-      if (nWidth >= 0) {
-        do {
-          nCellFlags = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)pnParam[1], nGridX, nGridY);
-          if (!(nCellFlags & 0x10000000)) {
-            pnParam[6]++;
-            pnParam[7] = pnParam[6] & 0xfffffffU | 0x10000000;
-            nCellFlags = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)pnParam[4], nGridX, nGridY);
-            if ((nCellFlags & 0x1e0ff00) == 0x1e00000 || (int)nCellFlags < 0) {
-              pnParam[7] |= 0x20000000;
-            }
-
-            DrlgGrid::DRLGGRID_FloodFillGridCoords(pnParam, nGridX, nGridY, -1);
+    for (nGridY = 0; nGridY <= nHeight; nGridY++) {
+      for (nGridX = 0; nGridX <= nWidth; nGridX++) {
+        nCellFlags = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)pnParam[1], nGridX, nGridY);
+        if (!(nCellFlags & 0x10000000)) {
+          pnParam[6]++;
+          pnParam[7] = pnParam[6] & 0xfffffffU | 0x10000000;
+          nCellFlags = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)pnParam[4], nGridX, nGridY);
+          if ((nCellFlags & 0x1e0ff00) == 0x1e00000 || (int)nCellFlags < 0) {
+            pnParam[7] |= 0x20000000;
           }
 
-          nGridX++;
-        } while (nGridX <= nWidth);
+          DrlgGrid::DRLGGRID_FloodFillGridCoords(pnParam, nGridX, nGridY, -1);
+        }
       }
-
-      nGridY++;
-    } while (nGridY <= nHeight);
+    }
 }
 
 // Gets the grid cell flags for a room at world coordinates. If the room has a valid coordinate list structure (offset 0x64), reads the grid flags at the relative position (worldX - roomX, worldY - roomY) and stores the result. From DrlgLogic.cpp area.
@@ -201,6 +190,7 @@ void __stdcall DRLGLOGIC_SetGridWallFlags(D2RoomExStrc * pRoomEx, D2DrlgGridStrc
     uint32_t bIsInsideRoom;
     int nTileByteOffset;
     int nWorldX;
+    uint32_t nNearIndex;
     D2DrlgTileLinkStrc* pMapLink;
     D2RoomExStrc* pNearRoomEx;
     D2DrlgTileDataStrc* pTileEntry;
@@ -221,12 +211,7 @@ void __stdcall DRLGLOGIC_SetGridWallFlags(D2RoomExStrc * pRoomEx, D2DrlgGridStrc
       } while (nTileIndex < (uint32_t)pRoomTiles->sRoomTiles.nWallTilesCount);
     }
 
-    uint32_t nNearIndex = 0;
-    if ((uint32_t)pRoomEx->nDrlgRoomsExNearCount <= 0) {
-      return;
-    }
-
-    do {
+    for (nNearIndex = 0; nNearIndex < (uint32_t)pRoomEx->nDrlgRoomsExNearCount; nNearIndex++) {
       pNearRoomEx = pRoomEx->ppDrlgRoomsExNear[nNearIndex];
       if (pNearRoomEx != pRoomEx && pNearRoomEx->pRoomTiles) {
         for (pMapLink = pNearRoomEx->pRoomTiles->pMapLinks; pMapLink; pMapLink = pMapLink->pNext) {
@@ -244,9 +229,7 @@ void __stdcall DRLGLOGIC_SetGridWallFlags(D2RoomExStrc * pRoomEx, D2DrlgGridStrc
           }
         }
       }
-
-      nNearIndex++;
-    } while (nNearIndex < (uint32_t)pRoomEx->nDrlgRoomsExNearCount);
+    }
 }
 
 // Reads grid flags at each tile position and stores in tile entry offset +0x10.
@@ -286,123 +269,107 @@ void __stdcall DRLGLOGIC_BuildCoordRegions(D2RoomExStrc * pRoomEx, D2DrlgCoordLi
     D2RoomCoordListStrc* _Dst;
     int nColX;
     int iScanX;
+    int nCellY;
+    int iCellX;
     bool bRowBreak;
     D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
     DrlgGrid::DRLGGRID_InitGridCells(pMemory, &pCoordList->sCoordIndexGrid, pRoomEx->sCoords.WorldSize.x + 1, pRoomEx->sCoords.WorldSize.y + 1);
     int nGridHeight = pRoomEx->sCoords.WorldSize.y + 1;
     int nGridWidth = pRoomEx->sCoords.WorldSize.x + 1;
-    int nCellY = 0;
-    if (nGridHeight <= 0) {
-      return;
-    }
-
-    do {
-      int iCellX;
-      iCellX = 0;
-      if (nGridWidth > 0) {
-        do {
-          nOrientFlags = DrlgGrid::GetGridFlags(&pCoordList->sOrientationGrid, iCellX, nCellY);
-          nOrientFlagsLow = nOrientFlags & 0xfffffff;
-          nRowY = DrlgGrid::GetGridFlags(&pCoordList->sCoordIndexGrid, iCellX, nCellY);
-          if (!nRowY) {
-            _Dst = D2_NEW_POOL_AT(pMemory, D2RoomCoordListStrc, ".\\DRLG\\DrlgLogic.cpp", 0x201);
-            memset(_Dst, 0, 0x30);
-            _Dst->nIndex = nOrientFlagsLow;
-            _Dst->bNode = (uint32_t)((nOrientFlags & 0x20000000) == 0x20000000);
-            _Dst->pNext = pCoordList->pCoord;
-            pCoordList->pCoord = _Dst;
-            _Dst->pBox.nPosX = iCellX;
-            _Dst->pBox.nPosY = nCellY;
-            nRowY = iCellX;
-            while (true) {
-              if (nRowY >= nGridWidth) {
-                break;
-              }
-
-              nOrientFlags = DrlgGrid::GetGridFlags(&pCoordList->sOrientationGrid, nRowY, nCellY);
-              if (nOrientFlagsLow != (nOrientFlags & 0xfffffff)) {
-                break;
-              }
-
-              nColX = DrlgGrid::GetGridFlags(&pCoordList->sCoordIndexGrid, nRowY, nCellY);
-              if (nColX) {
-                break;
-              }
-
-              nRowY++;
+    for (nCellY = 0; nCellY < nGridHeight; nCellY++) {
+      for (iCellX = 0; iCellX < nGridWidth; iCellX++) {
+        nOrientFlags = DrlgGrid::GetGridFlags(&pCoordList->sOrientationGrid, iCellX, nCellY);
+        nOrientFlagsLow = nOrientFlags & 0xfffffff;
+        nRowY = DrlgGrid::GetGridFlags(&pCoordList->sCoordIndexGrid, iCellX, nCellY);
+        if (!nRowY) {
+          _Dst = D2_NEW_POOL_AT(pMemory, D2RoomCoordListStrc, ".\\DRLG\\DrlgLogic.cpp", 0x201);
+          memset(_Dst, 0, 0x30);
+          _Dst->nIndex = nOrientFlagsLow;
+          _Dst->bNode = (uint32_t)((nOrientFlags & 0x20000000) == 0x20000000);
+          _Dst->pNext = pCoordList->pCoord;
+          pCoordList->pCoord = _Dst;
+          _Dst->pBox.nPosX = iCellX;
+          _Dst->pBox.nPosY = nCellY;
+          nRowY = iCellX;
+          while (true) {
+            if (nRowY >= nGridWidth) {
+              break;
             }
 
-            _Dst->pBox.nWidth = nRowY;
-            bRowBreak = false;
-            nRowY = nCellY;
-            do {
-              if (nRowY >= nGridHeight) {
-                break;
-              }
-
-              iScanX = iCellX;
-              if (iCellX < _Dst->pBox.nWidth) {
-                do {
-                  nOrientFlags = DrlgGrid::GetGridFlags(&pCoordList->sOrientationGrid, iScanX, nRowY);
-                  if (nOrientFlagsLow != (nOrientFlags & 0xfffffff) || (nColX = DrlgGrid::GetGridFlags(&pCoordList->sCoordIndexGrid, iScanX, nRowY) , nColX != 0)) {
-                    bRowBreak = true;
-                    nRowY--;
-                    break;
-                  }
-
-                  iScanX++;
-                } while (iScanX < _Dst->pBox.nWidth);
-              }
-
-              nRowY++;
-            } while (!bRowBreak);
-
-            _Dst->pBox.nHeight = nRowY;
-            nRowY = _Dst->pBox.nPosY;
-            while (nRowY < _Dst->pBox.nHeight) {
-              nColX = _Dst->pBox.nPosX;
-              while (nColX < _Dst->pBox.nWidth) {
-                DrlgGrid::AlterGridFlag(&pCoordList->sCoordIndexGrid, nColX, nRowY, (int32_t)_Dst, 3);
-                nColX++;
-              }
-
-              nRowY++;
+            nOrientFlags = DrlgGrid::GetGridFlags(&pCoordList->sOrientationGrid, nRowY, nCellY);
+            if (nOrientFlagsLow != (nOrientFlags & 0xfffffff)) {
+              break;
             }
 
-            _Dst->pBox.nPosY += pRoomEx->sCoords.WorldPosition.y;
-            _Dst->pBox.nHeight += pRoomEx->sCoords.WorldPosition.y;
-            _Dst->pBox.nPosX += pRoomEx->sCoords.WorldPosition.x;
-            _Dst->pBox.nWidth += pRoomEx->sCoords.WorldPosition.x;
-            nRowY = _Dst->pBox.nPosY;
-            _Dst->pRect.left = _Dst->pBox.nPosX;
-            nColX = _Dst->pBox.nWidth;
-            _Dst->pRect.top = nRowY;
-            nRowY = _Dst->pBox.nHeight;
-            _Dst->pRect.right = nColX;
-            _Dst->pRect.bottom = nRowY;
-            nRowY = pRoomEx->sCoords.WorldPosition.x + pRoomEx->sCoords.WorldSize.x;
-            if (_Dst->pRect.right >= nRowY) {
-              _Dst->pRect.right = nRowY;
+            nColX = DrlgGrid::GetGridFlags(&pCoordList->sCoordIndexGrid, nRowY, nCellY);
+            if (nColX) {
+              break;
             }
 
-            nRowY = pRoomEx->sCoords.WorldSize.y + pRoomEx->sCoords.WorldPosition.y;
-            if (_Dst->pRect.bottom >= nRowY) {
-              _Dst->pRect.bottom = nRowY;
-            }
-            if (_Dst->pRect.left >= pRoomEx->sCoords.WorldSize.x + pRoomEx->sCoords.WorldPosition.x || _Dst->pRect.top >= pRoomEx->sCoords.WorldPosition.y + pRoomEx->sCoords.WorldSize.y) {
-              _Dst->pRect.left = 0;
-              _Dst->pRect.top = 0;
-              _Dst->pRect.right = 0;
-              _Dst->pRect.bottom = 0;
-            }
+            nRowY++;
           }
 
-          iCellX++;
-        } while (iCellX < nGridWidth);
-      }
+          _Dst->pBox.nWidth = nRowY;
+          bRowBreak = false;
+          nRowY = nCellY;
+          do {
+            if (nRowY >= nGridHeight) {
+              break;
+            }
 
-      nCellY++;
-    } while (nCellY < nGridHeight);
+            for (iScanX = iCellX; iScanX < _Dst->pBox.nWidth; iScanX++) {
+              nOrientFlags = DrlgGrid::GetGridFlags(&pCoordList->sOrientationGrid, iScanX, nRowY);
+              if (nOrientFlagsLow != (nOrientFlags & 0xfffffff) || (nColX = DrlgGrid::GetGridFlags(&pCoordList->sCoordIndexGrid, iScanX, nRowY) , nColX != 0)) {
+                bRowBreak = true;
+                nRowY--;
+                break;
+              }
+            }
+
+            nRowY++;
+          } while (!bRowBreak);
+
+          _Dst->pBox.nHeight = nRowY;
+          nRowY = _Dst->pBox.nPosY;
+          while (nRowY < _Dst->pBox.nHeight) {
+            nColX = _Dst->pBox.nPosX;
+            while (nColX < _Dst->pBox.nWidth) {
+              DrlgGrid::AlterGridFlag(&pCoordList->sCoordIndexGrid, nColX, nRowY, (int32_t)_Dst, 3);
+              nColX++;
+            }
+
+            nRowY++;
+          }
+
+          _Dst->pBox.nPosY += pRoomEx->sCoords.WorldPosition.y;
+          _Dst->pBox.nHeight += pRoomEx->sCoords.WorldPosition.y;
+          _Dst->pBox.nPosX += pRoomEx->sCoords.WorldPosition.x;
+          _Dst->pBox.nWidth += pRoomEx->sCoords.WorldPosition.x;
+          nRowY = _Dst->pBox.nPosY;
+          _Dst->pRect.left = _Dst->pBox.nPosX;
+          nColX = _Dst->pBox.nWidth;
+          _Dst->pRect.top = nRowY;
+          nRowY = _Dst->pBox.nHeight;
+          _Dst->pRect.right = nColX;
+          _Dst->pRect.bottom = nRowY;
+          nRowY = pRoomEx->sCoords.WorldPosition.x + pRoomEx->sCoords.WorldSize.x;
+          if (_Dst->pRect.right >= nRowY) {
+            _Dst->pRect.right = nRowY;
+          }
+
+          nRowY = pRoomEx->sCoords.WorldSize.y + pRoomEx->sCoords.WorldPosition.y;
+          if (_Dst->pRect.bottom >= nRowY) {
+            _Dst->pRect.bottom = nRowY;
+          }
+          if (_Dst->pRect.left >= pRoomEx->sCoords.WorldSize.x + pRoomEx->sCoords.WorldPosition.x || _Dst->pRect.top >= pRoomEx->sCoords.WorldPosition.y + pRoomEx->sCoords.WorldSize.y) {
+            _Dst->pRect.left = 0;
+            _Dst->pRect.top = 0;
+            _Dst->pRect.right = 0;
+            _Dst->pRect.bottom = 0;
+          }
+        }
+      }
+    }
 }
 
 // @sourcefile .\DRLG\DrlgLogic.cpp
@@ -569,12 +536,8 @@ static void __stdcall DRLGLOGIC_LinkCoordListEntry(int32_t nY, int32_t nX, D2Roo
 // Links coord lists at boundaries between this room and its near rooms.
 static void DRLGLOGIC_LinkBorderCoordLists(D2RoomExStrc * pRoomEx) {
     int nCoordValue;
-    int nNearIndex = 0;
-    if (pRoomEx->nDrlgRoomsExNearCount <= 0) {
-      return;
-    }
-
-    do {
+    int nNearIndex;
+    for (nNearIndex = 0; nNearIndex < pRoomEx->nDrlgRoomsExNearCount; nNearIndex++) {
       D2RoomExStrc* pSrcRoom;
       pSrcRoom = pRoomEx->ppDrlgRoomsExNear[nNearIndex];
       if (pSrcRoom != pRoomEx && pSrcRoom->pDrlgCoordList) {
@@ -599,9 +562,7 @@ static void DRLGLOGIC_LinkBorderCoordLists(D2RoomExStrc * pRoomEx) {
           }
         }
       }
-
-      nNearIndex++;
-    } while (nNearIndex < pRoomEx->nDrlgRoomsExNearCount);
+    }
 }
 
 // Allocates D2DrlgCoordListStrc, builds grid, populates coord list.
@@ -613,7 +574,6 @@ void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, int nOrient
     int local_448[256];
     D2DrlgGridStrc sLocalGrid;
     int nCoordIndexStart;
-    D2DrlgCoordIndexCtxStrc sCoordCtx;
     D2DrlgLevelStrc* pLevel = pRoomEx->pLevel;
     D2PoolManagerStrc* pPoolManagerStrc = pLevel->pDrlg->pMemoryPool;
     D2DrlgGridStrc* nOrientGridFlagsSave = (D2DrlgGridStrc*)nOrientGridFlags;
@@ -632,7 +592,7 @@ void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, int nOrient
     nCoordIndexStart = nCoordCount;
     DrlgGrid::FillGrid(&sLocalGrid, pRoomEx->sCoords.WorldSize.x + 1, pRoomEx->sCoords.WorldSize.y + 1, local_1448, local_448);
     DRLGLOGIC_SetGridWallFlags(pRoomEx, &sLocalGrid);
-    sCoordCtx.dwCoordFlags = 0;
+    D2DrlgCoordIndexCtxStrc sCoordCtx = {0};
     sCoordCtx.pCoordGrid = &pCoordListStrc->sOrientationGrid;
     sCoordCtx.pOrientGrid = nOrientGridFlagsSave;
     sCoordCtx.pFloorGrid = &sLocalGrid;

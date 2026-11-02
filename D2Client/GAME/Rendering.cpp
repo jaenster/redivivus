@@ -64,11 +64,7 @@ void __stdcall DrawRenderStats() {
     D2CMP::SRC::SpriteCache::SPRITECACHE_GetStats(&nCacheSize, &nMisses, &nAccesses, &nPercentUtilized);
     if ((int)nAccesses > 0) {
       fValue = (float)(int)nMisses * 100.0 / (float)(int)nAccesses;
-      fKilobytes = (float)(int)nCacheSize;
-      if ((int)nCacheSize < 0) {
-        fKilobytes += 4.2949673e+09;
-      }
-
+      fKilobytes = (float)nCacheSize;
       sprintf(szStatLine, "Tile Cache: (%.2fK) %3.2f%%, Misses: %d, %d percent utilized\n", (double)(fKilobytes * 0.0009765625), (double)fValue, (int)nMisses, nPercentUtilized);
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x30, szStatLine);
     }

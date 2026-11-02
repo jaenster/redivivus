@@ -969,11 +969,7 @@ void __stdcall GenerateWolrdstoneAndTombs(D2DrlgLevelStrc * pLevel) {
         DRLGMAZE_PickRoomPreset(pNew, 1);
       }
 
-      nRollValue = nRollValue + 1 & 0x80000003;
-      if ((int)nRollValue < 0) {
-        nRollValue = (nRollValue - 1 | -4) + 1;
-      }
-
+      nRollValue = (int)(nRollValue + 1) % 4;
       nLoopCount--;
     } while (nLoopCount);
 
@@ -1050,11 +1046,7 @@ void __fastcall RollArcaneTypePath(D2DrlgLevelStrc * pLevel) {
       }
 
       ppRoomPtrs[1] = pAllocRoom;
-      nDirWrapped = nArmIndex + 3 & 0x80000003;
-      if ((int)nDirWrapped < 0) {
-        nDirWrapped = (nDirWrapped - 1 | -4) + 1;
-      }
-
+      nDirWrapped = (int)(nArmIndex + 3) % 4;
       pNewRoom = ppRoomPtrs[1];
       pAllocRoom = DrlgRoom::DRLGROOMEX_AllocRoomEx(pNewRoom->pLevel, 2);
       pLvlMazeTxtArm = pAllocRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
@@ -1145,11 +1137,7 @@ void __fastcall RollArcaneTypePath(D2DrlgLevelStrc * pLevel) {
       }
 
       ppRoomPtrs[6] = pAllocRoom;
-      nDirection_00 = nArmIndex + 1 & 0x80000003;
-      if ((int)nDirection_00 < 0) {
-        nDirection_00 = (nDirection_00 - 1 | -4) + 1;
-      }
-
+      nDirection_00 = (int)(nArmIndex + 1) % 4;
       pNewRoom = ppRoomPtrs[6];
       pAllocRoom = DrlgRoom::DRLGROOMEX_AllocRoomEx(pNewRoom->pLevel, 2);
       pLvlMazeTxtArm = pAllocRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
@@ -1202,11 +1190,7 @@ void __fastcall RollArcaneTypePath(D2DrlgLevelStrc * pLevel) {
       }
 
       ppRoomPtrs[9] = pAllocRoom;
-      nDirection = nArmIndex + 2 & 0x80000003;
-      if ((int)nDirection < 0) {
-        nDirection = (nDirection - 1 | -4) + 1;
-      }
-
+      nDirection = (int)(nArmIndex + 2) % 4;
       pNewRoom = ppRoomPtrs[9];
       pAllocRoom = DrlgRoom::DRLGROOMEX_AllocRoomEx(pNewRoom->pLevel, 2);
       pLvlMazeTxtArm = pAllocRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
@@ -1473,11 +1457,7 @@ uint32_t * __stdcall ReplaceRoom(D2DrlgReplaceRoomStrc * pDrlgReplaceRoom, D2Drl
       return pRoll;
     }
 
-    uint32_t nNextRoll = *pRoll + 1 & 0x80000003;
-    if ((int)nNextRoll < 0) {
-      nNextRoll = (nNextRoll - 1 | -4) + 1;
-    }
-
+    uint32_t nNextRoll = (int)(*pRoll + 1) % 4;
     *pRoll = nNextRoll;
     return pRoll;
 }
@@ -3471,7 +3451,7 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc * pLevel) {
             nVariant = D2Client::Archive::UNIT_GetModuloFromSeed(&pRoomEx->pLevel->sSeed, 2);
             pFrozenRiverRoomData = pLevel->pRoomExFirst->pRoomExData.pRoomExDataPreset;
             pFrozenRiverRoomData->nFlags |= 2;
-            pFrozenRiverRoomData->nLevelPrest = 0x40f - (uint32_t)(nVariant != 0);
+            pFrozenRiverRoomData->nLevelPrest = nVariant != 0 ? 0x40eU : 0x40fU;
             pFrozenRiverRoomData->nPickedFile = -1;
             break;
           }

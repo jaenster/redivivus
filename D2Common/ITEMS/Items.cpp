@@ -839,6 +839,7 @@ BOOL __stdcall ITEM_CheckIfBothItemsAreSameTypeOfPotions(D2UnitStrc * pUnit, D2U
     static uint32_t gadwHealingPotionCodes[5] = { 0x20317068, 0x20327068, 0x20337068, 0x20347068, 0x20357068 }; D2_STATIC_GUARD(gadwHealingPotionCodes, "D2Common::ITEMS::Items::ITEM_CheckIfBothItemsAreSameTypeOfPotions::gadwHealingPotionCodes");
     static uint32_t gnHealingPotionCodeCount = 0x5; D2_STATIC_GUARD(gnHealingPotionCodeCount, "D2Common::ITEMS::Items::ITEM_CheckIfBothItemsAreSameTypeOfPotions::gnHealingPotionCodeCount");
 
+    uint32_t nIdx;
     if (!pUnit || !pItemEx) {
       return 0;
     }
@@ -852,50 +853,35 @@ BOOL __stdcall ITEM_CheckIfBothItemsAreSameTypeOfPotions(D2UnitStrc * pUnit, D2U
     D2ItemsTxt* pItemsTxtItemEx = DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
     bool bMatchUnit = false;
     bool bMatchItemEx = false;
-    uint32_t nIdx = 0;
-    if (gnHealingPotionCodeCount > 0) {
-      do {
-        if (!bMatchUnit && pItemsTxtUnit->dwCode == gadwHealingPotionCodes[nIdx]) {
-          bMatchUnit = true;
-        }
-        if (!bMatchItemEx && pItemsTxtItemEx->dwCode == gadwHealingPotionCodes[nIdx]) {
-          bMatchItemEx = true;
-        }
-        if (bMatchUnit && bMatchItemEx) {
-          return 1;
-        }
-
-        nIdx++;
-      } while (nIdx < gnHealingPotionCodeCount);
+    for (nIdx = 0; nIdx < gnHealingPotionCodeCount; nIdx++) {
+      if (!bMatchUnit && pItemsTxtUnit->dwCode == gadwHealingPotionCodes[nIdx]) {
+        bMatchUnit = true;
+      }
+      if (!bMatchItemEx && pItemsTxtItemEx->dwCode == gadwHealingPotionCodes[nIdx]) {
+        bMatchItemEx = true;
+      }
+      if (bMatchUnit && bMatchItemEx) {
+        return 1;
+      }
     }
 
     bMatchUnit = false;
     bMatchItemEx = false;
-    nIdx = 0;
-    if (gnManaPotionCodeCount > 0) {
-      do {
-        if (!bMatchUnit && pItemsTxtUnit->dwCode == gadwManaPotionCodes[nIdx]) {
-          bMatchUnit = true;
-        }
-        if (!bMatchItemEx && pItemsTxtItemEx->dwCode == gadwManaPotionCodes[nIdx]) {
-          bMatchItemEx = true;
-        }
-        if (bMatchUnit && bMatchItemEx) {
-          return 1;
-        }
-
-        nIdx++;
-      } while (nIdx < gnManaPotionCodeCount);
+    for (nIdx = 0; nIdx < gnManaPotionCodeCount; nIdx++) {
+      if (!bMatchUnit && pItemsTxtUnit->dwCode == gadwManaPotionCodes[nIdx]) {
+        bMatchUnit = true;
+      }
+      if (!bMatchItemEx && pItemsTxtItemEx->dwCode == gadwManaPotionCodes[nIdx]) {
+        bMatchItemEx = true;
+      }
+      if (bMatchUnit && bMatchItemEx) {
+        return 1;
+      }
     }
 
     bMatchUnit = false;
     bMatchItemEx = false;
-    nIdx = 0;
-    if (gnRejuvPotionCodeCount <= 0) {
-      return 0;
-    }
-
-    do {
+    for (nIdx = 0; nIdx < gnRejuvPotionCodeCount; nIdx++) {
       if (!bMatchUnit && pItemsTxtUnit->dwCode == gadwRejuvPotionCodes[nIdx]) {
         bMatchUnit = true;
       }
@@ -905,9 +891,7 @@ BOOL __stdcall ITEM_CheckIfBothItemsAreSameTypeOfPotions(D2UnitStrc * pUnit, D2U
       if (bMatchUnit && bMatchItemEx) {
         return 1;
       }
-
-      nIdx++;
-    } while (nIdx < gnRejuvPotionCodeCount);
+    }
 
     return 0;
 }
@@ -3265,40 +3249,30 @@ uint32_t __fastcall ITEM_CalcRequiredLevel(D2UnitStrc * pUnit, D2UnitStrc * pUni
     }
 
     nSkillOnItemCount = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0x6b, anSkillOnItemBuf, 0x40);
-    nIdx = 0;
-    if (nSkillOnItemCount > 0) {
-      do {
-        if ((int)(uint32_t)(uint16_t)anSkillOnItemBuf[nIdx].wSubIndex < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + (uint16_t)anSkillOnItemBuf[nIdx].wSubIndex) {
-          nCandidateLvlReq = (int)sgptDataTable->pTxtSkills[(uint16_t)anSkillOnItemBuf[nIdx].wSubIndex].reqlevel;
-          if (nCandidateLvlReq > nMaxLvlReq) {
-            nMaxLvlReq = nCandidateLvlReq;
-          }
+    for (nIdx = 0; nIdx < nSkillOnItemCount; nIdx++) {
+      if ((int)(uint32_t)(uint16_t)anSkillOnItemBuf[nIdx].wSubIndex < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + (uint16_t)anSkillOnItemBuf[nIdx].wSubIndex) {
+        nCandidateLvlReq = (int)sgptDataTable->pTxtSkills[(uint16_t)anSkillOnItemBuf[nIdx].wSubIndex].reqlevel;
+        if (nCandidateLvlReq > nMaxLvlReq) {
+          nMaxLvlReq = nCandidateLvlReq;
         }
-
-        nIdx++;
-      } while (nIdx < nSkillOnItemCount);
+      }
     }
 
     nSkillOnItemCount = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0x61, anSkillOnItemBuf, 0x40);
-    nAffixByteOffset = 0;
-    if (nSkillOnItemCount > 0) {
-      do {
-        if ((int)(uint32_t)(uint16_t)anSkillOnItemBuf[nAffixByteOffset].wSubIndex < sgptDataTable->nTxtSkillsCount) {
-          pSkillTxt = sgptDataTable->pTxtSkills + (uint16_t)anSkillOnItemBuf[nAffixByteOffset].wSubIndex;
-          if (pSkillTxt) {
-            if (!pUnit2 || (eUnitType = D2Client::Units::GetType(pUnit2) , eUnitType != UNIT_PLAYER) || (cCharClass = pSkillTxt->charclass , cCharClass < '\0' || cCharClass >= 7 || (uAffixIdx = D2Client::UNIT::GetClassId(pUnit2) , (uint8_t)uAffixIdx != (int)cCharClass))) {
-              nClassId = (int)pSkillTxt->reqlevel + 6;
-            } else {
-              nClassId = (uint32_t)pSkillTxt->reqlevel;
-            }
-            if ((int)nClassId > nMaxLvlReq) {
-              nMaxLvlReq = nClassId;
-            }
+    for (nAffixByteOffset = 0; nAffixByteOffset < nSkillOnItemCount; nAffixByteOffset++) {
+      if ((int)(uint32_t)(uint16_t)anSkillOnItemBuf[nAffixByteOffset].wSubIndex < sgptDataTable->nTxtSkillsCount) {
+        pSkillTxt = sgptDataTable->pTxtSkills + (uint16_t)anSkillOnItemBuf[nAffixByteOffset].wSubIndex;
+        if (pSkillTxt) {
+          if (!pUnit2 || (eUnitType = D2Client::Units::GetType(pUnit2) , eUnitType != UNIT_PLAYER) || (cCharClass = pSkillTxt->charclass , cCharClass < '\0' || cCharClass >= 7 || (uAffixIdx = D2Client::UNIT::GetClassId(pUnit2) , (uint8_t)uAffixIdx != (int)cCharClass))) {
+            nClassId = (int)pSkillTxt->reqlevel + 6;
+          } else {
+            nClassId = (uint32_t)pSkillTxt->reqlevel;
+          }
+          if ((int)nClassId > nMaxLvlReq) {
+            nMaxLvlReq = nClassId;
           }
         }
-
-        nAffixByteOffset++;
-      } while (nAffixByteOffset < nSkillOnItemCount);
+      }
     }
 
     nIdx = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_levelreq, 0);
@@ -4350,7 +4324,6 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
     uint32_t nTmpVal2;
     int nStatVal;
     D2StatListExStrc* pStatsEx;
-    D2PoolManagerStrc* pMemory;
     eD2UnitStat eUnitStat;
     int nSkillClassVal;
     D2SetItemsTxt** ppSetItems;
@@ -5042,8 +5015,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
         if (!pStatsEx) {
           nClassId = D2Client::UNIT::GetGUID(pUnit);
           eQualityType = QUALITY_MAGIC;
-          pMemory = D2Client::UNIT::CUnitEvent::GetMemPool(pUnit);
-          pStatsEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(pMemory, nParam1, (int32_t)pStatsEx, eQualityType, nClassId);
+          pStatsEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(D2Client::UNIT::CUnitEvent::GetMemPool(pUnit), nParam1, (int32_t)pStatsEx, eQualityType, nClassId);
           Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
           Stats::StatsEx::SetState(pStatsEx, (eD2States)pItemStatCostTxt);
         }
@@ -5981,8 +5953,10 @@ int32_t __stdcall ITEMS_CheckBodyLocationFit(D2UnitStrc * pItem, uint32_t eBodyL
 
 // Adjusts buy/sell/repair prices in-place for items whose type has a staffmods class restriction. Iterates the item's skill-bonus stat list (stat 0x6b), and for each qualifying skill entry scales the price deltas using the skill's costmult/costadd fields and the skill level (2*lvl-1). The accumulated deltas are divided by nDivisor before being added to *pBuy, *pSell, and *pRepair. No-ops if pItem is null, not an item unit, or the item type has no staffmods class.
 static void __stdcall ITEMS_CalcStaffModsPriceModifier(int * pBuy, int * pSell, int * pRepair, uint32_t nDivisor, D2UnitStrc * pItem) {
+    D2SkillsTxt* pSkillTxt;
     int nCostMult;
     D2StatStrc aSkillBonusBuf[64];
+    int i;
     int nCostAdd;
     int nSkillCostMult;
     int nSkillLvlMult;
@@ -5999,34 +5973,28 @@ static void __stdcall ITEMS_CalcStaffModsPriceModifier(int * pBuy, int * pSell, 
     uint32_t nSellDeltaAccum = 0;
     uint32_t nRepairDeltaAccum = 0;
     int32_t iVar1 = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pItem, 0x6b, aSkillBonusBuf, 0x40);
-    int i = 0;
-    if (iVar1 > 0) {
-      D2SkillsTxt* pSkillTxt;
-      do {
-        if ((int)(uint32_t)(uint16_t)aSkillBonusBuf[i].wSubIndex < sgptDataTable->nTxtSkillsCount) {
-          pSkillTxt = sgptDataTable->pTxtSkills + (uint16_t)aSkillBonusBuf[i].wSubIndex;
-          if (pSkillTxt) {
-            nSkillLvlMult = aSkillBonusBuf[i].nStatValue * 2 - 1;
-            if (*pBuy <= 0xffff || !pSkillTxt->costmult) {
-              nSkillCostMult = pSkillTxt->costmult;
-              nCostAdd = pSkillTxt->costadd;
-              nCostMult = nSkillCostMult * *pBuy;
-              nBuyDelta += (nCostMult / 1024 + nCostAdd) * nSkillLvlMult;
-              nSellDeltaAccum += (*pSell * nSkillCostMult / 4096 + nCostAdd) * nSkillLvlMult;
-              nRepairDeltaAccum += (*pRepair * nSkillCostMult / 1024 + nCostAdd) * nSkillLvlMult;
-            } else {
-              nSkillCostMult = pSkillTxt->costmult;
-              nCostAdd = pSkillTxt->costadd;
-              nCostMult = nSkillCostMult / 1024;
-              nBuyDelta += (nCostMult * *pBuy + nCostAdd) * nSkillLvlMult;
-              nSellDeltaAccum += (nSkillCostMult / 4096 * *pSell + nCostAdd) * nSkillLvlMult;
-              nRepairDeltaAccum += (*pRepair * nCostMult + nCostAdd) * nSkillLvlMult;
-            }
+    for (i = 0; i < iVar1; i++) {
+      if ((int)(uint32_t)(uint16_t)aSkillBonusBuf[i].wSubIndex < sgptDataTable->nTxtSkillsCount) {
+        pSkillTxt = sgptDataTable->pTxtSkills + (uint16_t)aSkillBonusBuf[i].wSubIndex;
+        if (pSkillTxt) {
+          nSkillLvlMult = aSkillBonusBuf[i].nStatValue * 2 - 1;
+          if (*pBuy <= 0xffff || !pSkillTxt->costmult) {
+            nSkillCostMult = pSkillTxt->costmult;
+            nCostAdd = pSkillTxt->costadd;
+            nCostMult = nSkillCostMult * *pBuy;
+            nBuyDelta += (nCostMult / 1024 + nCostAdd) * nSkillLvlMult;
+            nSellDeltaAccum += (*pSell * nSkillCostMult / 4096 + nCostAdd) * nSkillLvlMult;
+            nRepairDeltaAccum += (*pRepair * nSkillCostMult / 1024 + nCostAdd) * nSkillLvlMult;
+          } else {
+            nSkillCostMult = pSkillTxt->costmult;
+            nCostAdd = pSkillTxt->costadd;
+            nCostMult = nSkillCostMult / 1024;
+            nBuyDelta += (nCostMult * *pBuy + nCostAdd) * nSkillLvlMult;
+            nSellDeltaAccum += (nSkillCostMult / 4096 * *pSell + nCostAdd) * nSkillLvlMult;
+            nRepairDeltaAccum += (*pRepair * nCostMult + nCostAdd) * nSkillLvlMult;
           }
         }
-
-        i++;
-      } while (i < iVar1);
+      }
     }
 
     *pBuy += nBuyDelta / nDivisor;
@@ -6710,6 +6678,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
     D2StatStrc aStat[511];
     int anStatSeenValues[511];
     int i;
+    int nSetListIdx;
     char cCurChar;
     eD2States eState;
     eD2UnitType eUnitType;
@@ -7485,13 +7454,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       nRunewordFlag = 1;
     }
 
-    int nSetListIdx;
-    nSetListIdx = -1;
-    if (-1 >= (int)bIncludeNorm) {
-      return;
-    }
-
-    do {
+    for (nSetListIdx = -1; nSetListIdx < (int)bIncludeNorm; nSetListIdx++) {
       if (nSetListIdx < 0) {
         eState = STATE_none;
         get_plain_stat_list:
@@ -7681,9 +7644,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       if (nSetListIdx < 0 || pStatListEx || nRunewordFlag) {
         Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 0x1ff, 9);
       }
-
-      nSetListIdx++;
-    } while (nSetListIdx < (int)bIncludeNorm);
+    }
 }
 
 // Serializes a single item unit to a bit buffer for network/save transmission. Writes the 0x4d4a item header (if pStatListEx present), item flags word, then delegates to SerializeComplexItem or SerializeSimpleItem based on COMPACT flag. Recursively serializes socketed child items when bAllItems is set. bIsCrude forces the CRUDE flag.

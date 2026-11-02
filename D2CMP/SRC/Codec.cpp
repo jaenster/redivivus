@@ -93,11 +93,7 @@ static BOOL CODEC_AdvanceFrameIterator(int * pnParam, int32_t nParam) {
     pnParam[10] += pnParam[0xe];
     nFrameEntry = pnParam[2];
     if (!(pnParam[10] >= nFrameEntry)) {
-      nXRemainder = pnParam[3] & 0x80000003;
-      if ((int)nXRemainder < 0) {
-        nXRemainder = (nXRemainder - 1 | -4) + 1;
-      }
-
+      nXRemainder = pnParam[3] % 4;
       pnParam[9] = 0;
       if ((int)(-nXRemainder + 5) < nFrameWidth) {
         nFrameWidth = -nXRemainder + 4;
@@ -341,14 +337,10 @@ static void __stdcall CODEC_DecodeFramePixels(uint8_t * * pbParam, int32_t nPara
         if (pnParam[4] > 0) {
           iRow = pnParam[3];
           do {
-            iCol = 0;
-            if (iRow > 0) {
-              do {
-                nSkipBit = CODEC_ReadBits((D2CodecBitStateStrc*)nBitStream2, nCodeWidth);
-                *(uint8_t*)(iCol + (int)pOutRow) = (*pbParam)[nSkipBit];
-                iRow = pnParam[3];
-                iCol++;
-              } while (iCol < iRow);
+            for (iCol = 0; iCol < iRow; iCol++) {
+              nSkipBit = CODEC_ReadBits((D2CodecBitStateStrc*)nBitStream2, nCodeWidth);
+              *(uint8_t*)(iCol + (int)pOutRow) = (*pbParam)[nSkipBit];
+              iRow = pnParam[3];
             }
 
             pOutRow = (uint8_t*)((int)pOutRow + pnParam[2]);
@@ -1150,13 +1142,10 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pnParam, D2PoolManagerStr
         local_318 += (uint32_t)pbVar9 & 0x1f;
         local_328.pCurWord += (int)(local_318 + ((int)local_318 >> 0x1f & 0x1f)) >> 5;
         uVar10 = (uint32_t)local_318 & 0x1f;
-        iVar6 = 0;
-        if (__frame0.nRemapByteCount > 0) {
-          do {
-            __frame0.pRemapOutputBuf[iVar6] = aInversePaletteLUT[__frame0.pRemapOutputBuf[iVar6]];
-            iVar6++;
-          } while (iVar6 < __frame0.nRemapByteCount);
+        for (iVar6 = 0; iVar6 < __frame0.nRemapByteCount; iVar6++) {
+          __frame0.pRemapOutputBuf[iVar6] = aInversePaletteLUT[__frame0.pRemapOutputBuf[iVar6]];
         }
+
         if ((void*)gCodecFrameWorkBuffer < __frame0.pComponentTableEnd) {
           puVar8 = &gCodecFrameWorkBuffer[0].nStride;
           iVar6 = ((int)__frame0.pComponentTableEnd - ((uintptr_t)&gCodecFrameWorkBuffer[0].nXOffset + 1)) / 0x2c + 1;

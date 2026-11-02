@@ -121,7 +121,7 @@ D2TileLibraryHeaderStrc * __stdcall Alloc(D2TileLibraryHashStrc * * ppHash, char
     }
 
     size_t nFileSize = SpriteCache::SPRITECACHE_LoadFromFile(szFilename);
-    int* pTileBuffer = (int*)D2_ALLOC_AT(nFileSize, ".\\SRC\\TileProjects.cpp", 0x6b);
+    D2TileLibraryHeaderStrc* pTileBuffer = (D2TileLibraryHeaderStrc*)D2_ALLOC_AT(nFileSize, ".\\SRC\\TileProjects.cpp", 0x6b);
     if (!pTileBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6c);
       exit(-1);

@@ -175,8 +175,7 @@ bool __fastcall Q19_SequenceFilter(D2QuestDataStrc * pQuestData) {
 // Q19_SendQuestStatePacket (Khalim's Will). Builds and sends the 0x5D quest-state packet to the player's client conveying which Khalim's Will sub-stage/relic message to display. No QuestRecord transitions; pure client notification.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q2.cpp
 static void __fastcall Q19_SendQuestStatePacket(uint8_t bStateByte, D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2GSPacketSrv0x5D aPacketFrame;
-    aPacketFrame.nExtra = 0;
+    D2GSPacketSrv0x5D aPacketFrame = {0};
     aPacketFrame.nFilterStatus = bStateByte;
     aPacketFrame.nAlertFlags = pQuestData->nQuestPacketFlags;
     aPacketFrame.nPacketId = ']';

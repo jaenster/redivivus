@@ -679,15 +679,10 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2It
           if (nRarityWeight > 0) {
             if ((int)nChosenUniqueIdx < 0) {
               nRollResult = D2Client::Seed::RollBetweenMinAndMax(D2Common::ITEMS::Items::GetItemSeed(pUnit), 0, nTotalRarityWeight);
-              nWeightAccum = 1;
-              if (1 < nRarityWeight) {
-                do {
-                  if (nRollResult < gUniqueCandidatePool.aCandidates[nWeightAccum].nCumulativeWeight) {
-                    break;
-                  }
-
-                  nWeightAccum++;
-                } while (nWeightAccum < nRarityWeight);
+              for (nWeightAccum = 1; nWeightAccum < nRarityWeight; nWeightAccum++) {
+                if (nRollResult < gUniqueCandidatePool.aCandidates[nWeightAccum].nCumulativeWeight) {
+                  break;
+                }
               }
 
               nChosenUniqueIdx = gUniqueCandidatePool.aCandidates[nWeightAccum - 1].nUniqueIdx;
@@ -2410,7 +2405,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     }
 
     nRoll = D2Client::Archive::RANDOM_RandomNumberSelector(&pGame->sSeed, nRoll);
-    return (nRoll < 0x80) + 1;
+    return nRoll < 0x80 ? 2 : 1;
 }
 
 static void ITEM_ApplyGoldBonus(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
@@ -3501,7 +3496,6 @@ D2UnitStrc * __fastcall ITEM_CloneFromSerializedData(::SGAMEDATA * pGame, D2Unit
     BOOL _bPutItemSuccess;
     bool bPutItemSuccess;
     D2UnitStrc* pSocketedGem;
-    DWORD dwOwnerGUID;
     int iVar1;
     D2UnitDataItemDetailsStrc stItemDetails;
     int32_t nSocketPosY;
@@ -3539,8 +3533,7 @@ D2UnitStrc * __fastcall ITEM_CloneFromSerializedData(::SGAMEDATA * pGame, D2Unit
             nSocketSlot = 1;
             nSocketIdx = 0;
             pInventoryBuf = &__frame0.stInventoryBuf;
-            dwOwnerGUID = D2Client::UNIT::GetGUID(pClonedItem);
-            _bPutItemSuccess = ItemMode::PutItemInItem(__frame0.pGameSaved, pClonedItem, pSocketedGem->nUnitGUID, dwOwnerGUID, pInventoryBuf, nSocketIdx, nSocketSlot, nSocketPosX, nSocketPosY);
+            _bPutItemSuccess = ItemMode::PutItemInItem(__frame0.pGameSaved, pClonedItem, pSocketedGem->nUnitGUID, D2Client::UNIT::GetGUID(pClonedItem), pInventoryBuf, nSocketIdx, nSocketSlot, nSocketPosX, nSocketPosY);
             if (!_bPutItemSuccess) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdd4);
               exit(-1);
@@ -3582,6 +3575,7 @@ D2UnitStrc * __fastcall ITEM_CloneFromSerializedData(::SGAMEDATA * pGame, D2Unit
 
 // Three explicit GuardStack tails: GuardStack(0) on two early-out failure paths, GuardStack((int)pNewItem) on success. Matches its own doc comment: "Returns D2UnitStrc* or NULL on failure."
 static D2UnitStrc * __stdcall ITEMGEN_CreateItemFromClassIdAndQuality(int32_t nItemClassId, eD2ItemTypes eD2ItemType, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t eItemType, int32_t dwFileIndex, int32_t nFlags) {
+    eD2LevelId eLevelId;
     ::SGAMEDATA* pUnitGame;
     D2UnitStrc* pNewItem;
     POINT ptUnitPos;
@@ -3624,7 +3618,7 @@ static D2UnitStrc * __stdcall ITEMGEN_CreateItemFromClassIdAndQuality(int32_t nI
     sItemGenCtx.pDrlgRoom = pSpawnRoomFound;
     sItemGenCtx.nItemClassid = nItemClassId;
     if (pUnit) {
-      eD2LevelId eLevelId;
+      D2RoomStrc* pSpawnRoom;
       if (pUnit->eUnitType == UNIT_MONSTER) {
         sItemGenCtx.nItemLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
       } else if (pUnit->eUnitType == UNIT_PLAYER) {

@@ -79,10 +79,8 @@ static int32_t __stdcall SKILLITEMS_ApplyPercentWithMinimum(int32_t nValue, int3
 // Rolls 1-3 staff mod skills. Classic: tier-based (5 skills per tier). Expansion: type-restricted (skill.itypea1 must match item). Skill level: [1, 3]. Applies via STATLIST_AddStatValue(UNITSTAT_item_singleskill).
 eD2Skills __stdcall ITEMMOD_RollStaffModSkills(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillBaseId) {
     int32_t dwUnitGUID;
-    D2PoolManagerStrc* pMemory;
     uint32_t nPickedSkillId;
     uint32_t anSkillIds[4];
-    int32_t nStatListFlags;
     eD2UnitType eUnitType;
     anSkillIds[0] = -1;
     anSkillIds[1] = -1;
@@ -172,9 +170,7 @@ eD2Skills __stdcall ITEMMOD_RollStaffModSkills(D2UnitStrc * pUnit, eD2Skills eSk
       if (!pStatsEx) {
         dwUnitGUID = D2Client::UNIT::GetGUID(pUnit);
         eUnitType = UNIT_ITEM;
-        nStatListFlags = 0x40;
-        pMemory = D2Client::UNIT::CUnitEvent::GetMemPool(pUnit);
-        pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pMemory, nStatListFlags, (int32_t)pStatsEx, eUnitType, dwUnitGUID);
+        pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(D2Client::UNIT::CUnitEvent::GetMemPool(pUnit), 0x40, (int32_t)pStatsEx, eUnitType, dwUnitGUID);
         D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
         if (pStatsEx) {
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_item_singleskill, eSkill, nPickedSkillId);
@@ -195,14 +191,11 @@ void __stdcall STAFFMOD_RollStaffModSkills(D2UnitStrc * pUnit, int32_t nSkillId,
     uint16_t wItemVersion;
     uint32_t bIsOfType;
     int32_t dwUnitGUID;
-    D2PoolManagerStrc* pMemory;
     int32_t nSkillLevel;
     uint32_t nLayer;
     uint32_t anSkillIds[4];
     int nRetryCount;
     eD2UnitType eUnitType;
-    int32_t nStatListFlags;
-    int32_t nExpireFrame;
     short int wITypeA1;
     anSkillIds[0] = -1;
     anSkillIds[1] = -1;
@@ -310,10 +303,7 @@ void __stdcall STAFFMOD_RollStaffModSkills(D2UnitStrc * pUnit, int32_t nSkillId,
       if (!pStatsEx) {
         dwUnitGUID = D2Client::UNIT::GetGUID(pUnit);
         eUnitType = UNIT_ITEM;
-        nExpireFrame = 0;
-        nStatListFlags = 0x40;
-        pMemory = D2Client::UNIT::CUnitEvent::GetMemPool(pUnit);
-        pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pMemory, nStatListFlags, nExpireFrame, eUnitType, dwUnitGUID);
+        pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(D2Client::UNIT::CUnitEvent::GetMemPool(pUnit), 0x40, 0, eUnitType, dwUnitGUID);
         D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
         if (pStatsEx) {
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_item_singleskill, nSkillLevel, nLayer);

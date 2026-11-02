@@ -849,7 +849,7 @@ void __stdcall STATLIST_DispatchUnchangedStatToCallback(D2UnitStrc * pUnit, D2Un
 
 // Iterates all changed-stat IDs in pUnit's StatsEx, binary-searches each into the base stat array to get the current value, and invokes pParam as a callback(nStatValue, pUnit2) for each. Only runs if pUnit has a root StatsEx with at least one changed stat.
 void __stdcall STATLIST_IterateChangedStats(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, pfnStatChangedCb pfnCallback) {
-    int32_t nParam;
+    int32_t nStatKey;
     long int lVar3;
     uint16_t nStatId;
     uint32_t nSearchLo;
@@ -873,7 +873,7 @@ void __stdcall STATLIST_IterateChangedStats(D2UnitStrc * pUnit, D2UnitStrc * pUn
       lVar3 = Logging::STATLIST_BinarySearchStatById(nStatKey, (int*)&pDVar2->sStatList.sBaseStats);
       if (lVar3 < 0 || (pDVar1 = pDVar2->sStatList.sBaseStats.pStatInfo + lVar3 , !pDVar1)) {
         nSearchLo = 0;
-        nStatId = (uint16_t)((uint32_t)nParam >> 0x10);
+        nStatId = (uint16_t)((uint32_t)nStatKey >> 0x10);
       } else {
         nSearchLo = pDVar1->nStatValue;
         nStatId = pDVar1->wStatIndex;
@@ -1371,7 +1371,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
     eD2UnitStat eStatType;
     eStatType = nStatShifted >> 0x10 & 0xffff;
     D2ItemStatCostTxt* pItemStatCostLine;
-    pItemStatCostLine = (int)eStatType < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eStatType : nullptr;
+    pItemStatCostLine = !false && (int)eStatType < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eStatType : nullptr;
     if (!pItemStatCostLine) {
       return 0;
     }
@@ -1825,16 +1825,11 @@ void __stdcall STATLIST_DetachAndRecalc(D2StatListExStrc * pStatListEx) {
           }
         }
 
-        nOp45Count = 0;
-        if ((int)pStatListEx > 0) {
-          do {
-            eStatIdx = anOp45Stats[nOp45Count] >> 0x10 & 0xffff;
-            if (true && (int)eStatIdx < sgptDataTable->nTxtItemStatCostSize && sgptDataTable->pTxtItemStatCost + eStatIdx) {
-              STATLIST_ApplyComplexStatFormula(pStatList, anOp45Stats[nOp45Count], &sgptDataTable->pTxtItemStatCost[eStatIdx].stat, nullptr);
-            }
-
-            nOp45Count++;
-          } while (nOp45Count < (int)pStatListEx);
+        for (nOp45Count = 0; nOp45Count < (int)pStatListEx; nOp45Count++) {
+          eStatIdx = anOp45Stats[nOp45Count] >> 0x10 & 0xffff;
+          if (true && (int)eStatIdx < sgptDataTable->nTxtItemStatCostSize && sgptDataTable->pTxtItemStatCost + eStatIdx) {
+            STATLIST_ApplyComplexStatFormula(pStatList, anOp45Stats[nOp45Count], &sgptDataTable->pTxtItemStatCost[eStatIdx].stat, nullptr);
+          }
         }
       }
     }
@@ -2041,17 +2036,12 @@ void __stdcall STATLIST_AttachStatListToUnit(D2UnitStrc * pOp45Owner, D2StatList
           }
         }
 
-        nOp45Idx = 0;
-        if ((int)pOp45Owner > 0) {
-          do {
-            nOp45Count = anOp45Stats[nOp45Idx];
-            pItemStatCostLine = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(nOp45Count >> 0x10 & 0xffff);
-            if (pItemStatCostLine) {
-              STATLIST_ApplyComplexStatFormula(pChildStatsEx, nOp45Count, &pItemStatCostLine->stat, nullptr);
-            }
-
-            nOp45Idx++;
-          } while (nOp45Idx < (int)pOp45Owner);
+        for (nOp45Idx = 0; nOp45Idx < (int)pOp45Owner; nOp45Idx++) {
+          nOp45Count = anOp45Stats[nOp45Idx];
+          pItemStatCostLine = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(nOp45Count >> 0x10 & 0xffff);
+          if (pItemStatCostLine) {
+            STATLIST_ApplyComplexStatFormula(pChildStatsEx, nOp45Count, &pItemStatCostLine->stat, nullptr);
+          }
         }
       }
     }

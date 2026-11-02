@@ -104,10 +104,7 @@ void __stdcall SOUND_InitDirectSound() {
 
     char* szErrorMsg;
     BOOL BVar2;
-    DSBUFFERDESC tEaxBufferDesc;
-    DSBUFFERDESC tPrimaryBufferDesc;
     WAVEFORMATEX tSecondaryFormat;
-    WAVEFORMATEX tPrimaryFormat;
     uint8_t aEAXSupportCaps[4];
     if (gnDSoundPrimaryBufferDelay && gbDirectSoundDelayWorkaround) {
       return;
@@ -138,7 +135,7 @@ void __stdcall SOUND_InitDirectSound() {
       return;
     }
 
-    tPrimaryBufferDesc.dwReserved = 0;
+    DSBUFFERDESC tPrimaryBufferDesc = {0};
     tPrimaryBufferDesc.dwSize = 0x14;
     tPrimaryBufferDesc.dwFlags = 1;
     if (gnDSoundPrimaryBufferDelay) {
@@ -169,7 +166,7 @@ void __stdcall SOUND_InitDirectSound() {
       return;
     }
 
-    tPrimaryFormat.cbSize = 0;
+    WAVEFORMATEX tPrimaryFormat = {0};
     tPrimaryFormat.wFormatTag = 1;
     tPrimaryFormat.nChannels = 2;
     tPrimaryFormat.nSamplesPerSec = 0x5622;
@@ -188,7 +185,7 @@ void __stdcall SOUND_InitDirectSound() {
     gnSoundQualityMode = 0;
     if (gnSound3DLoudness) {
       Src::D2SoundSmp::SOUNDSMP_InitWaveFormat(&tSecondaryFormat, 1);
-      tEaxBufferDesc.dwReserved = 0;
+      DSBUFFERDESC tEaxBufferDesc = {0};
       tEaxBufferDesc.lpwfxFormat = &tSecondaryFormat;
       tEaxBufferDesc.dwSize = 0x14;
       tEaxBufferDesc.dwBufferBytes = 0x400;

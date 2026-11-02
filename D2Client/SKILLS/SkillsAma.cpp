@@ -581,11 +581,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_PiercingShot(D2UnitStrc * pUnit, eD2Skills 
 
     int32_t nSearchRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
     int nExcludeGUID = pConfirmedTarget->nUnitGUID;
-    uint32_t* pNullOut = 0;
-    uint32_t nSearchFlags = 3;
-    int32_t nConfirmedTargetY = Units::GetYPosFromDynamicPathUnit(pConfirmedTarget);
-    int32_t nConfirmedTargetX = Units::GetXPosFromDynamicPathUnit(pConfirmedTarget);
-    D2UnitStrc* pSecondaryTarget = Skills::SKILL_FindClosestTargetWithStats(pUnit, nConfirmedTargetX, nConfirmedTargetY, nSearchRange, nSearchFlags, nExcludeGUID, pNullOut);
+    D2UnitStrc* pSecondaryTarget = Skills::SKILL_FindClosestTargetWithStats(pUnit, Units::GetXPosFromDynamicPathUnit(pConfirmedTarget), Units::GetYPosFromDynamicPathUnit(pConfirmedTarget), nSearchRange, 3, nExcludeGUID, 0);
     if (!pSecondaryTarget) {
       return 0;
     }

@@ -311,16 +311,11 @@ BOOL __fastcall Q02_SetRewardForNearbyPlayers(::SGAMEDATA * pGame, D2UnitStrc * 
       }
 
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pUnitRoom, &pAdjacentRooms, (int*)&nAdjacentRoomCount);
-      nRoomIdx = 0;
-      if (nAdjacentRoomCount > 0) {
-        do {
-          if (pAdjacentRooms[nRoomIdx] == pBloodRavenRoom) {
-            bIsNearBloodRaven = 1;
-            break;
-          }
-
-          nRoomIdx++;
-        } while (nRoomIdx < nAdjacentRoomCount);
+      for (nRoomIdx = 0; nRoomIdx < nAdjacentRoomCount; nRoomIdx++) {
+        if (pAdjacentRooms[nRoomIdx] == pBloodRavenRoom) {
+          bIsNearBloodRaven = 1;
+          break;
+        }
       }
     }
 

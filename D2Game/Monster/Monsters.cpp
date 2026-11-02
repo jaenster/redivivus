@@ -931,7 +931,6 @@ static void __stdcall MONSTER_SetElementalDamageFromLevel(D2UnitStrc * pUnit, eD
 // Applies the Amplify Damage curse (skill 0x42) from pUnit onto pAttacker. Validates attack eligibility and skill table bounds, then builds a D2StateExArgStrc with duration and stat values derived from skills.txt aura columns, calls SetStateWithExpiryTime to attach the state, and iterates remaining aura stats to add them to the resulting stat list.
 void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, int32_t nDuration) {
     int32_t nValue;
-    D2StateExArgStrc sStateArg;
     uint32_t bCanAttackTarget = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pAttacker);
     if (!(bCanAttackTarget && 0x42 < sgptDataTable->nTxtSkillsCount)) {
       return;
@@ -942,12 +941,8 @@ void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc 
       return;
     }
 
+    D2StateExArgStrc sStateArg = {0};
     sStateArg.pTarget = pAttacker;
-    sStateArg.nDurationInFrames = 0;
-    sStateArg.eStat = UNITSTAT_strength;
-    sStateArg.nSkillCalc = 0;
-    sStateArg.eAuraState = STATE_none;
-    sStateArg.pFunction = 0;
     sStateArg.eSkill = SKILL_AmplifyDamage;
     sStateArg.nSkillLvl = nDuration;
     sStateArg.pUnit = pUnit;
@@ -1584,8 +1579,7 @@ void __fastcall MONSTER_StealPotionFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
     uint8_t bFoundSpot = 1;
     nBeltSlotIdx = 1;
     POINT* pDropPos = &ptDropPos;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pTargetPlayer);
-    pGameTemp = (::SGAMEDATA*)ITEMS::Items::Drop::FindBestSpotToSpawnItem(pRoom, &ptOwnerPos, pDropPos, nBeltSlotIdx, bFoundSpot);
+    pGameTemp = (::SGAMEDATA*)ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pTargetPlayer), &ptOwnerPos, pDropPos, nBeltSlotIdx, bFoundSpot);
     if (!pGameTemp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xaca);
       exit(-1);
@@ -1820,7 +1814,7 @@ void __fastcall MONSTER_MissileSplitOnHit(::SGAMEDATA * pGame, D2UnitStrc * pUni
     int nSpawn1X = nTargetX - nDirSignX;
     SKILLS::SkillsServer::CreatingAMissile(pGameLocal, eMissileId, pOwnerUnit, D2Common::Units::Missile::GetSkillId(pMissileUnit), D2Common::Units::Missile::GetLevel(pMissileUnit), 0, 0, nSpawn1X, nSpawn1Y, nMissileFlags);
     pTarget = pMissileUnit;
-    int32_t nParam5 = 0;
+    int32_t bConsumeAmmo = 0;
     nOwnerDirSignX = nTargetY - nOwnerDirSignX;
     nDirSignX += nTargetX;
     SKILLS::SkillsServer::CreatingAMissile(pGameLocal, eMissileId, pOwnerUnit, D2Common::Units::Missile::GetSkillId(pTarget), D2Common::Units::Missile::GetLevel(pMissileUnit), 0, 0, nDirSignX, nOwnerDirSignX, bConsumeAmmo);

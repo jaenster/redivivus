@@ -64,7 +64,7 @@ int __fastcall DATATBLS_CalcExpr_ParseTokenType(char * szKey) {
 }
 
 int __fastcall DATATBLS_CalcExpr_GetArgCount(int nFunctionIndex) {
-    return (nFunctionIndex == 6) + 2;
+    return nFunctionIndex == 6 ? 3 : 2;
 }
 
 // Sets eRoomExFlags from a lookup table indexed by nDrlgRoomsExNearCount. Appears to set initialization flags based on the number of neighboring RoomEx entries.

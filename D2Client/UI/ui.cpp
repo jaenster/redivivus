@@ -200,17 +200,13 @@ void * __fastcall MoveArgumentToEAX(void * pParam) {
 }
 
 void __fastcall UI_TranslateWideCharacterLookup(uint16_t * wszText) {
+    int i;
     if (!wszText) {
       return;
     }
 
     int32_t nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
-    int i = 0;
-    if (nLength <= 0) {
-      return;
-    }
-
-    do {
+    for (i = 0; i < nLength; i++) {
       uint16_t wChar;
       wChar = wszText[i];
       if ((uint16_t)wChar < 0x100) {
@@ -218,8 +214,7 @@ void __fastcall UI_TranslateWideCharacterLookup(uint16_t * wszText) {
       }
 
       wszText[i] = wChar;
-      i++;
-    } while (i < nLength);
+    }
 }
 
 uint16_t * __fastcall AppendAsWideChar(uint16_t * wszText, int cParam) {
@@ -1097,6 +1092,7 @@ void __stdcall UI_DrawPlayerStateOverlays() {
     D2StatesTxt* pStateTxt;
     int nStatValue;
     eD2States eState;
+    int i;
     short int nStatId;
     if (!sgpDrlgAct) {
       return;
@@ -1121,12 +1117,7 @@ void __stdcall UI_DrawPlayerStateOverlays() {
     }
 
     pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_Net();
-    int i = 0;
-    if ((short int)sgptDataTable->nAllStatesDataTblFlag0x04Size <= 0) {
-      return;
-    }
-
-    do {
+    for (i = 0; i < (short int)sgptDataTable->nAllStatesDataTblFlag0x04Size; i++) {
       eD2States nActiveState;
       eState = (eD2States)sgptDataTable->pAllStatesDataTblFlag0x04[i].nStateId;
       nActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayerUnit_lcl, eState);
@@ -1146,9 +1137,7 @@ void __stdcall UI_DrawPlayerStateOverlays() {
           }
         }
       }
-
-      i++;
-    } while (i < (short int)sgptDataTable->nAllStatesDataTblFlag0x04Size);
+    }
 }
 
 void __stdcall UI_SetButtonKeyBinding(int32_t pButtonContainer, uint16_t nDefaultKey, int32_t nCommandId, int32_t nButtonIndex, int32_t nCmdCategory) {
@@ -1831,8 +1820,7 @@ void __fastcall UI_ShowGoldTransactionDialog(int32_t nTransactionType) {
             nGoldBank = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eGoldStatType, nStatLayer);
             nStatLayer = 0;
             eGoldStatType = UNITSTAT_gold;
-            pPlayer = UNIT::Player::GetPlayerUnit_UI();
-            nGoldInventory = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, eGoldStatType, nStatLayer);
+            nGoldInventory = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eGoldStatType, nStatLayer);
             nGoldBank += nGoldInventory;
             D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszPromptText, D2Lang::StrTable::strtable::GetLocaleString(wPromptLocaleId), nGoldBank);
             nTransactionType = (int32_t)pAllocCtx;
@@ -1956,14 +1944,8 @@ void * __fastcall UI_LoadFileToMemory(LPCSTR szFilename, size_t * pSize) {
     char szNameCopy[260];
     DWORD dwBytesRead;
     char cChar;
-    LPCSTR pSrcName = szFilename;
     size_t* pSizeOut = pSize;
-    do {
-      cChar = (char)*pSrcName;
-      ((char*)pSrcName)[(int)(szNameCopy - (int)szFilename)] = cChar;
-      pSrcName++;
-    } while (cChar != '\0');
-
+    strcpy(szNameCopy, szFilename);
     char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension(0);
     char* pExtEnd = szExtension;
     pExtEnd = pExtEnd + strlen(pExtEnd) + 1;
@@ -3535,7 +3517,7 @@ void __fastcall UI_SetCursorToSpecialIcon(int32_t nAnimFrame, int32_t bAltIcon) 
     pCursorItem = 0;
     Cursor::nCursorDataIndex = 6;
     gCursorAnimationFrame = nAnimFrame;
-    ItemTypeOnHand = (bAltIcon != 0) + 7;
+    ItemTypeOnHand = bAltIcon != 0 ? 8 : 7;
 }
 
 void __fastcall ITEM_SetItemOnHand(D2UnitStrc * pUnit) {
@@ -4901,7 +4883,7 @@ static int32_t UI_GetConfigControlTextColor(int32_t nColumn, int32_t nRow) {
     }
 
     bIsBound = CmdTbl::CMD_IsCommandBound(gpStatDescriptorTable[nRow].nCmdIndex, nColumn);
-    return 5 - (uint32_t)(bIsBound != 0);
+    return bIsBound != 0 ? 0x4U : 0x5U;
 }
 
 void UIAction_ResetKeyBindingsToDefaults() {
@@ -5618,7 +5600,7 @@ void __stdcall INPUT_ConfigMouseWheelScroll(D2UIMouseMsgStrc * pMsg) {
     nScrollTicks = nScrollTicks / 0x78 + iVar1;
     if (nScrollTicks != iVar1) {
       pMsg = 0;
-      bExitFlag = CmdTbl::CMD_SetKeyBinding(gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex, nConfigControlSelected, (nScrollTicks - iVar1 < 0) + 0x103, (uint16_t*)&pMsg);
+      bExitFlag = CmdTbl::CMD_SetKeyBinding(gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex, nConfigControlSelected, nScrollTicks - iVar1 < 0 ? 0x104 : 0x103, (uint16_t*)&pMsg);
       if (bExitFlag) {
         UI_ConfigKeyBindModeDisable(1);
       } else {
@@ -6888,7 +6870,6 @@ void __stdcall DRAW_UI_StatWindow_I() {
     int32_t iVar8;
     int nWidth;
     int nDrawY;
-    char* pNameEnd;
     uint32_t nStatVal;
     D2UnitStrc* pUnit;
     D2DifficultyLevelsTxt* pDVar4;
@@ -7070,7 +7051,7 @@ void __stdcall DRAW_UI_StatWindow_I() {
     DRAW_UI_StatWindow_III(nMouseXCast, iVar3, pExpTxtNextLevel);
     D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
     sGfxData.pDC6 = GetBuySellBtnDC6();
-    sGfxData.nFrameNumber = (gbUIStatScreenMouseDown != 0) + 10;
+    sGfxData.nFrameNumber = gbUIStatScreenMouseDown != 0 ? 11 : 10;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + 0x80, gnPanelOffsetY - 0x3c + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     for (nMouseXCast = 0; nMouseXCast < 0x80; nMouseXCast++) {
       wszTextBuf[nMouseXCast] = L'\0';
@@ -7095,9 +7076,8 @@ void __stdcall DRAW_UI_StatWindow_I() {
 
       D2Win::Src::D2WinFont::DRAW_text(pCharStatsTxtOrFont->wszClass, nMouseXCast, iVar3, 0, 0);
       pRosterName = GAME::Roster::GetPlayerRosterName(pUnit_00);
-      pNameEnd = pRosterName;
-      pNameEnd = pNameEnd + strlen(pNameEnd) + 1;
-      iVar8 = D2Lang::UTF8_GetStringLength(pRosterName, (int)pNameEnd - (int)(pRosterName + 1));
+      int nLen = (int)strlen(pRosterName);
+      iVar8 = D2Lang::UTF8_GetStringLength(pRosterName, nLen);
       if (iVar8 + 1U > 0xb) {
         if (iVar8 + 1U >= 0xe) {
           iVar8 = 6;
@@ -7839,24 +7819,21 @@ BOOL __stdcall thunk_NPCSHOP_IsRepairTabActive() {
 }
 
 static BOOL NPCSHOP_GetActiveTabIndex(int32_t nMouseY, int32_t nMouseX) {
+    int nTabIdx;
     BOOL bHandled = 0;
-    int nTabIdx = 0;
-    if (nCashDisplayItemCount > 0) {
-      do {
-        if (gaNpcCashTabs[nTabIdx].bVisible && nMouseX >= gaNpcCashTabs[nTabIdx].nHitBoxX1 && nMouseX <= gaNpcCashTabs[nTabIdx].nHitBoxX2 && nMouseY >= gaNpcCashTabs[nTabIdx].nHitBoxY1 && nMouseY <= gaNpcCashTabs[nTabIdx].nHitBoxY2) {
-          Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
-          if (!nTabIdx) {
-            UseItem::TEXT_HandleMouseMove();
-          } else {
-            NPCSHOP_IsRepairTabActive();
-          }
-
-          bHandled = 1;
+    for (nTabIdx = 0; nTabIdx < nCashDisplayItemCount; nTabIdx++) {
+      if (gaNpcCashTabs[nTabIdx].bVisible && nMouseX >= gaNpcCashTabs[nTabIdx].nHitBoxX1 && nMouseX <= gaNpcCashTabs[nTabIdx].nHitBoxX2 && nMouseY >= gaNpcCashTabs[nTabIdx].nHitBoxY1 && nMouseY <= gaNpcCashTabs[nTabIdx].nHitBoxY2) {
+        Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
+        if (!nTabIdx) {
+          UseItem::TEXT_HandleMouseMove();
+        } else {
+          NPCSHOP_IsRepairTabActive();
         }
 
-        nTabIdx++;
-      } while (nTabIdx < nCashDisplayItemCount);
+        bHandled = 1;
+      }
     }
+
     if (nCashDisplayItemCount <= 0) {
       return bHandled;
     }

@@ -1005,11 +1005,7 @@ int __stdcall CHARSEL_UpdateSelectionExpansion() {
       bDisabled = 0;
     } else {
       uint32_t nColumnParity;
-      nColumnParity = nSlotIndex & 0x80000001;
-      if ((int)nColumnParity < 0) {
-        nColumnParity = (nColumnParity - 1 | -2) + 1;
-      }
-
+      nColumnParity = (int)nSlotIndex % 2;
       D2Win::Src::D2WinImage::D2WINIMAGE_SetPosition(gpaCharSelCharacterList, nColumnParity ? 0x135 : 0x25, gnCharSlotYPositions[nSlotIndex]);
       bDisabled = 1;
     }
@@ -1145,7 +1141,7 @@ BOOL __stdcall CHARSEL_UpdateSelectedCharDisplay() {
         if (pCharSelCopy->nCharacterFlags & 4) {
           if (pCharSelCopy->nCharacterFlags & 8) {
             bControlState = CHARSEL_ClassHasAlternateDeath((uint32_t)ePlayerClass);
-            ePlayerClass = (bControlState != 0) + 8;
+            ePlayerClass = bControlState != 0 ? 9 : 8;
           } else {
             bControlState = Fog::D2CheckExpansionGame();
             pCharSelCopy = gpCharSelPendingEntry;
@@ -2323,11 +2319,7 @@ void __stdcall CHARSEL_InitCharSelScreen() {
     uint32_t nExtraChars = D2Client::CharScreen::TotalCurrentChars - gnCharSelScreenSlotCount;
     if ((int)nExtraChars > 0) {
       uint32_t nOddRemainder;
-      nOddRemainder = nExtraChars & 0x80000001;
-      if ((int)nOddRemainder < 0) {
-        nOddRemainder = (nOddRemainder - 1 | -2) + 1;
-      }
-
+      nOddRemainder = (int)nExtraChars % 2;
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarMaxRange(gpCtlCharSelScrollbar, (uint32_t)(nOddRemainder != 0) + (int)nExtraChars / 2);
     }
 

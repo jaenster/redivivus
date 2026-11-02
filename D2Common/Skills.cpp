@@ -1669,10 +1669,7 @@ void __stdcall SKILLS_GetStateTransformGfx(D2UnitStrc * pUnit, eD2UnitType * pUn
     int nValidatedAnimMode;
     eD2States eTransformState;
     short int sGfxClass;
-    if (!pUnit) {
-      return;
-    }
-    if (!(pUnit->eUnitFlagsEx >> 3 & 1)) {
+    if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1)) {
       return;
     }
 
@@ -1784,7 +1781,7 @@ int32_t __stdcall SKILLS_GetSkillWeaponClass(D2UnitStrc * pUnit, D2SkillStrc * p
     }
 
     BOOL bHasWeaponDrawn = COMPOSIT::Composit::COMPOSIT_HasWeaponDrawn(pUnit);
-    nRange = (bHasWeaponDrawn != 0) + 1;
+    nRange = bHasWeaponDrawn != 0 ? 2 : 1;
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && nRange != 1)) {
       return nRange;
     }
@@ -1935,6 +1932,7 @@ int __stdcall SKILLS_IsSelectableCorpse3(D2UnitStrc * pUnit) {
 int32_t __stdcall SKILL_GetThrownWeaponBonus(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2SkillStrc * pSkill, int32_t nParam, D2UnitStrc * pUnit2) {
     int32_t _bIsThrowable;
     bool bIsThrowable;
+    int nIdx;
     D2StatStrc aBonusEntries[32];
     if (pUnit2) {
       pUnit2->eUnitType = UNIT_PLAYER;
@@ -1985,17 +1983,13 @@ int32_t __stdcall SKILL_GetThrownWeaponBonus(D2UnitStrc * pUnit, D2UnitStrc * pU
 
     _bIsThrowable = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, uStatOrResult, aBonusEntries, 0x20);
     int nBestThrowBonus = 0;
-    if (0 < _bIsThrowable) {
-      int nIdx = 0;
-      do {
-        uStatOrResult = ITEMS::Items::ITEMS_IsA(pUnit1, (eD2ItemTypes)(uint16_t)aBonusEntries[nIdx].wSubIndex);
-        if (uStatOrResult && aBonusEntries[nIdx].nStatValue > nBestThrowBonus) {
-          nBestThrowBonus = aBonusEntries[nIdx].nStatValue;
-        }
-
-        nIdx++;
-      } while (nIdx < _bIsThrowable);
+    for (nIdx = 0; nIdx < _bIsThrowable; nIdx++) {
+      uStatOrResult = ITEMS::Items::ITEMS_IsA(pUnit1, (eD2ItemTypes)(uint16_t)aBonusEntries[nIdx].wSubIndex);
+      if (uStatOrResult && aBonusEntries[nIdx].nStatValue > nBestThrowBonus) {
+        nBestThrowBonus = aBonusEntries[nIdx].nStatValue;
+      }
     }
+
     if (!pUnit2) {
       return nBestThrowBonus;
     }
@@ -2007,6 +2001,7 @@ int32_t __stdcall SKILL_GetThrownWeaponBonus(D2UnitStrc * pUnit, D2UnitStrc * pU
 // Returns the highest item-type-specific bonus damage for the caster's active skill against a target item. Checks for a thrown weapon bonus first via SKILL_GetThrownWeaponBonus; if none, queries stat 0x156/0x157/0x158 (min/max/elemental bonus per item type) from the caster's stat list and finds the best matching entry where the item passes IsOfType. nDamageType selects min(0)/max(1)/elemental(2).
 int32_t __stdcall SKILLS_GetItemBonusDamage(D2UnitStrc * pUnit, D2UnitStrc * pItem, D2SkillStrc * pSkill, int32_t nDamageType) {
     uint32_t uStatId;
+    int nIdx;
     D2StatStrc aBonusEntries[32];
     D2UnitStrc* pThrownWeaponTypeUnit = pItem;
     D2UnitStrc* pCaster = pUnit;
@@ -2050,19 +2045,12 @@ int32_t __stdcall SKILLS_GetItemBonusDamage(D2UnitStrc * pUnit, D2UnitStrc * pIt
 
     nBonusCount = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pCaster, uStatId, aBonusEntries, 0x20);
     int nBestBonus = 0;
-    int nIdx = 0;
-    if (nBonusCount <= 0) {
-      return nBestBonus;
-    }
-
-    do {
+    for (nIdx = 0; nIdx < nBonusCount; nIdx++) {
       uStatId = ITEMS::Items::ITEMS_IsA(pItem, (eD2ItemTypes)(uint16_t)aBonusEntries[nIdx].wSubIndex);
       if (uStatId && aBonusEntries[nIdx].nStatValue > nBestBonus) {
         nBestBonus = aBonusEntries[nIdx].nStatValue;
       }
-
-      nIdx++;
-    } while (nIdx < nBonusCount);
+    }
 
     return nBestBonus;
 }
@@ -2292,8 +2280,7 @@ uint32_t __stdcall SKILL_FindTeleportPosition(D2UnitStrc * pUnit, D2UnitStrc * p
       eCollisionFlag = 0x1c09;
       ptFreeCoord.x = ptFreeCoord.y;
       ptFreeCoord.y = nRawTargetY;
-      iVar1 = Units::GetUnitSizeX(pCaster);
-      pUnit = (D2UnitStrc*)Collision::GetFreeCoordinates_WithNeighboorRooms((D2RoomStrc*)pUnit, &ptFreeCoord, iVar1, eCollisionFlag, _bInMeleeRange);
+      pUnit = (D2UnitStrc*)Collision::GetFreeCoordinates_WithNeighboorRooms((D2RoomStrc*)pUnit, &ptFreeCoord, Units::GetUnitSizeX(pCaster), eCollisionFlag, _bInMeleeRange);
       nDestY = ptFreeCoord.y;
       nX = ptFreeCoord.x;
       if (!pUnit) {
@@ -2534,7 +2521,7 @@ void __stdcall SKILL_CalcKickDamage(D2UnitStrc * pUnit, int * pnParam1, int * pn
     pOffHandWeapon = 0;
     if (pBootItem) {
       eBodyLoc = ITEMS::Items::GetBodyLocation(pBootItem);
-      pOffHandWeapon = INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, (eBodyLoc == BODYLOC_R_ARM) + 4);
+      pOffHandWeapon = INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, eBodyLoc == BODYLOC_R_ARM ? 5 : 4);
     }
 
     bIsWeapon = ITEMS::Items::ITEMS_IsA(pBootItem, ITEMTYPE_Weapon);
@@ -2566,9 +2553,7 @@ void __stdcall SKILL_CalcKickDamage(D2UnitStrc * pUnit, int * pnParam1, int * pn
         nTotalDamageBonus = 0;
         nStrBonus = ITEMS::Items::ITEM_GetItemsTxt_wStrBonus(pOffHandWeapon);
         if (nStrBonus) {
-          bIsWeaponType = 100;
-          nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_strength, 0);
-          nTotalDamageBonus = D2Client::Stats::D2ApplyPercent(nStatValue, (int)nStrBonus, bIsWeaponType);
+          nTotalDamageBonus = D2Client::Stats::D2ApplyPercent(Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_strength, 0), (int)nStrBonus, 100);
         }
 
         nDexBonus = ITEMS::Items::ITEM_GetItemsTxt_wDexBonus(pOffHandWeapon);
@@ -3883,10 +3868,7 @@ int32_t __stdcall SKILL_CalcMaxDamage(D2UnitStrc * pUnit, int32_t nSkillId, int3
 // Evaluates a passive skill's elemental calc value for a specific element type (0=min fire/0x156, 1=min cold/0x157, 2=min lightning/0x158). Searches the skill's passivestat array for the matching stat ID, then calls D2GetSkillCalc on the corresponding passivecalc slot. Returns 0 if the skill/level is invalid or the element type is not found in passivestat.
 uint32_t __stdcall SKILL_GetPassiveElementCalc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nElementType) {
     int nMinStatId;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 

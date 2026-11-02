@@ -336,9 +336,8 @@ static void __stdcall FormatDebugOutput(uint8_t bFlags, va_list vaArgs, char * s
       snprintf(szOutputBuffer, 0x1000, "%02d:%02d:%02d.%03d    ", (uint32_t)sLocalTime.wHour, (uint32_t)sLocalTime.wMinute, (uint32_t)sLocalTime.wSecond, (uint32_t)sLocalTime.wMilliseconds);
     }
 
-    char* pScan = szOutputBuffer;
-    pScan = pScan + strlen(pScan) + 1;
-    vsnprintf(szOutputBuffer + ((int)pScan - (int)(szOutputBuffer + 1)), 0x1000 - ((int)pScan - (int)(szOutputBuffer + 1)), szText, vaArgs);
+    int nLen = (int)strlen(szOutputBuffer);
+    vsnprintf(szOutputBuffer + nLen, 0x1000 - nLen, szText, vaArgs);
     szOutputBuffer[0xfff] = '\0';
     if (!(bFlags & 2)) {
       /* LPCSTR lpOutputString for OutputDebugStringA */ OutputDebugStringA(szOutputBuffer);

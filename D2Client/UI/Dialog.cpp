@@ -229,10 +229,8 @@ void __stdcall INPUT_DialogMouseDown(D2UIMouseMsgStrc * pMsg) {
     D2DialogSubStrc* pDVar1;
     ::UIWidget* self;
     int iResult;
-    uint32_t dwBorderType;
     int32_t nMouseX;
     int32_t nMouseY;
-    int32_t nMouseXStat;
     D2DialogStrc* pDialog;
     pDialog = gpDialogActual;
     if (!gpDialogActual) {
@@ -282,9 +280,7 @@ void __stdcall INPUT_DialogMouseDown(D2UIMouseMsgStrc * pMsg) {
 
           bMiniPanelFlag = ui::GetUIFlag(UI_NEWSTATS);
           if (bMiniPanelFlag) {
-            nMouseXStat = nMouseX;
-            dwBorderType = Path::DRAW_GetTypeOfBorder();
-            bMiniPanelFlag = ui::UI_IsMouseOnStatButton(dwBorderType, nMouseY, nMouseXStat);
+            bMiniPanelFlag = ui::UI_IsMouseOnStatButton(Path::DRAW_GetTypeOfBorder(), nMouseY, nMouseX);
             if (bMiniPanelFlag) {
               pMsg->bHandled = 1;
               pMsg->dwResult = 0;

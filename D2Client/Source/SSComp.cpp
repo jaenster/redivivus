@@ -598,6 +598,7 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
     uint8_t byCurBits;
     uint32_t nLenIndex;
     char byCurLength;
+    uint32_t nCurLength;
     uint16_t* pCountEntry;
     bool bTableSizeOk;
     bool bTableSizeExact;
@@ -647,17 +648,12 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
       return 0;
     }
 
-    uint32_t nCurLength;
-    nCurLength = 1;
-    if (1 < nMaxBits) {
-      do {
-        if (aCount[nCurLength]) {
-          break;
-        }
-
-        nCurLength++;
-      } while (nCurLength < nMaxBits);
+    for (nCurLength = 1; nCurLength < nMaxBits; nCurLength++) {
+      if (aCount[nCurLength]) {
+        break;
+      }
     }
+
     if (nRootBits < nCurLength) {
       nRootBits = nCurLength;
     }
@@ -687,17 +683,13 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
       nLoopIdx = nFillIdx;
     } while (nFillIdx < 0x1e);
 
-    nLoopIdx = 0;
-    if (nNumCodes > 0) {
-      do {
-        if (pBitLengths[nLoopIdx]) {
-          aOutCodes[aOffset[pBitLengths[nLoopIdx]]] = (uint16_t)nLoopIdx;
-          aOffset[pBitLengths[nLoopIdx]]++;
-        }
-
-        nLoopIdx++;
-      } while (nLoopIdx < nNumCodes);
+    for (nLoopIdx = 0; nLoopIdx < nNumCodes; nLoopIdx++) {
+      if (pBitLengths[nLoopIdx]) {
+        aOutCodes[aOffset[pBitLengths[nLoopIdx]]] = (uint16_t)nLoopIdx;
+        aOffset[pBitLengths[nLoopIdx]]++;
+      }
     }
+
     if (nTableType) {
       if (nTableType != 1) {
         pBaseTable = gaZlibDistBaseTable;

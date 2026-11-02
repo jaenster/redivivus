@@ -18,9 +18,8 @@ void __stdcall SMEM_TitleCaseString(char * pMcpData) {
     }
 
     int nIndex = 0;
-    char* pScan = pMcpData;
-    pScan = pScan + strlen(pScan) + 1;
-    if (!((int)pScan - (int)(pMcpData + 1) > 0)) {
+    int nLen = (int)strlen(pMcpData);
+    if (nLen <= 0) {
       return;
     }
 
@@ -48,7 +47,7 @@ void __stdcall SMEM_TitleCaseString(char * pMcpData) {
       }
 
       nIndex++;
-    } while (nIndex < (int)pScan - (int)(pMcpData + 1));
+    } while (nIndex < nLen);
 }
 
 void __fastcall SMemStringToUppercase(char * szText, int32_t nMaxLen) {

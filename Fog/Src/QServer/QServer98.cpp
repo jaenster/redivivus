@@ -75,7 +75,6 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
     timeval tvSelectTimeout;
     LPCRITICAL_SECTION pClientLock;
     uint32_t nSelectResult;
-    sockaddr_in sClientAddr;
     char aRecvBuf[1460];
     char szErrBuf[100];
     D2QServerStrc* pQServerCopy;
@@ -200,15 +199,12 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
       }
 
       /* timeval * timeout for select */ /* fd_set * exceptfds for select */ /* fd_set * writefds for select */ /* fd_set * readfds for select */ /* int nfds for select */ nSelectResult = select(0x40, &fsset0, nullptr, &fsset1, &tvSelectTimeout);
-      nClientIdx = 0;
-      if (__frame0.nClientCount > 0) {
-        do {
-          pClientIter = (D2QServerClientConnectionStrc*)aScannedClientPtrs[nClientIdx];
-          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pClientIter->clientLock);
-          RemoveClientAndClearLog((D2QServerStrc*)lpThreadParam, pClientIter);
-          nClientIdx++;
-        } while (nClientIdx < __frame0.nClientCount);
+      for (nClientIdx = 0; nClientIdx < __frame0.nClientCount; nClientIdx++) {
+        pClientIter = (D2QServerClientConnectionStrc*)aScannedClientPtrs[nClientIdx];
+        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pClientIter->clientLock);
+        RemoveClientAndClearLog((D2QServerStrc*)lpThreadParam, pClientIter);
       }
+
       if (!nSelectResult) {
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&((D2QServerStrc*)lpThreadParam)->csClientLifecycle);
         nClientIdx = ((D2QServerStrc*)lpThreadParam)->aAcceptThreadStopFlags[0];
@@ -234,10 +230,7 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
             if (nClientIdx) {
               if (socketCur == ((D2QServerStrc*)lpThreadParam)->aListenSockets[0]) {
                 __frame0.nAddrLen = 0x10;
-                sClientAddr.sin_family = 0;
-                sClientAddr.sin_port = 0;
-                sClientAddr.sin_addr = 0;
-                memset(sClientAddr.sin_zero, 0, 8 * sizeof(sClientAddr.sin_zero[0]));
+                sockaddr_in sClientAddr = {0};
                 nSelectResult = 0;
                 while (true) {
                   /* int iError for WSASetLastError */ _Wrappers::WSASetLastError(0);

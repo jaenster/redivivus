@@ -1093,7 +1093,6 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
     char szTargetName[256];
     D2ChatPacketBuildStrc sWhisperPacket;
     char cScanChar;
-    int nTokenCopyBase;
     char* pScan;
     pScan = szCommandName;
     pScan = pScan + strlen(pScan) + 1;
@@ -1118,21 +1117,10 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
       do {
         nTokenCount++;
         if (nTokenCount == 2) {
-          nTokenCopyBase = -(int)pScan;
-          do {
-            cScanChar = *pScan;
-            pScan[(int)(szTargetName + nTokenCopyBase)] = cScanChar;
-            pScan++;
-          } while (cScanChar != '\0');
+          strcpy(szTargetName, pScan);
         } else if (nTokenCount == 3) {
           pScan = pScan + (uintptr_t)&sWhisperPacket + (0x10 - (int)szInput);
-          nTokenCount = -(int)pScan;
-          do {
-            cScanChar = *pScan;
-            pScan[(int)(szMessageText + nTokenCount)] = cScanChar;
-            pScan++;
-          } while (cScanChar != '\0');
-
+          strcpy(szMessageText, pScan);
           goto send_whisper;
         }
 

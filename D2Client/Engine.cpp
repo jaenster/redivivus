@@ -497,6 +497,7 @@ void __stdcall CLIENT_SetAnimModeAndMoveToCurrentPos(eD2PlayerAnimMode nAnimMode
 
 void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
     eD2States eState;
+    uint32_t nCount;
     D2RoomStrc** pAdjacentRooms;
     uint32_t nRoomCount;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_Net();
@@ -510,12 +511,7 @@ void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
     }
 
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &pAdjacentRooms, (int*)&nRoomCount);
-    uint32_t nCount = 0;
-    if (nRoomCount <= 0) {
-      return;
-    }
-
-    do {
+    for (nCount = 0; nCount < nRoomCount; nCount++) {
       for (pUnit = pAdjacentRooms[nCount]->pUnitList; pUnit; pUnit = pUnit->pRoomNext) {
         if (pUnit->eUnitType == UNIT_MONSTER) {
           eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_dopplezon);
@@ -524,9 +520,7 @@ void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
           }
         }
       }
-
-      nCount++;
-    } while (nCount < nRoomCount);
+    }
 }
 
 void __fastcall CLIENT_UpdateUnitLightRadius(D2UnitStrc * pUnit, int32_t nRadiusBonus) {

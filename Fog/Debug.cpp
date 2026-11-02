@@ -412,7 +412,6 @@ bool __stdcall GetSourceLineForAddress(uint32_t dwQueryAddr, char * szFileName, 
     __frame0_t __frame0;
     int uInitSymbolsResult;
     BOOL bGotLine;
-    IMAGEHLP_LINE64 sLineInfo;
     uint32_t nSehState;
     nSehState = -1;
     pfnEHHandlerRoutine pSehHandlerFunc;
@@ -437,9 +436,7 @@ bool __stdcall GetSourceLineForAddress(uint32_t dwQueryAddr, char * szFileName, 
       }
     }
     if (pSymGetLineFromAddr64) {
-      sLineInfo.Key = 0;
-      sLineInfo.LineNumber = 0;
-      sLineInfo.FileName = 0;
+      IMAGEHLP_LINE64 sLineInfo = {0};
       *(uint32_t*)(char*)&sLineInfo.Address = 0;
       *(uint32_t*)((char*)&sLineInfo.Address + 4) = 0;
       sLineInfo.SizeOfStruct = 0x18;
@@ -1094,7 +1091,6 @@ void __fastcall FOG_FreeModuleList(D2FogModuleNodeStrc * pModuleList) {
 
 // @sourcefile .\Src\Exceptions.cpp
 D2FogModuleNodeStrc * __stdcall EnumerateModulesToolhelp32(uint32_t dwProcessId) {
-    char* pszCopySrc;
     D2FogModuleNodeStrc* pDVar1;
     D2FogModuleNodeStrc* pPrevModule;
     char* aszLibNames[2];
@@ -1102,7 +1098,6 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesToolhelp32(uint32_t dwProcessId)
     MODULEENTRY32 tModuleEntry;
     D2FogModuleNodeStrc* pSortedHead;
     D2FogModuleNodeStrc* pCurModule;
-    char chCopy;
     pfnCreateToolhelp32Snapshot pfnCreateSnapshot = 0;
     D2FogModuleNodeStrc* pModuleListHead = 0;
     pfnModule32First pModule32First = 0;
@@ -1151,22 +1146,8 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesToolhelp32(uint32_t dwProcessId)
 
       pModuleNode = D2_NEW_AT(D2FogModuleNodeStrc, ".\\Src\\Exceptions.cpp", 0x253);
       memset(pModuleNode, 0, 0x210);
-      pszCopySrc = tModuleEntry.szExePath;
-      bHasMore = (int)pModuleNode - (int)pszCopySrc;
-      do {
-        chCopy = *pszCopySrc;
-        pszCopySrc[bHasMore] = chCopy;
-        pszCopySrc++;
-      } while (chCopy != '\0');
-
-      pszCopySrc = tModuleEntry.szModule;
-      bHasMore = 0x104 - (int)pszCopySrc;
-      do {
-        chCopy = *pszCopySrc;
-        pszCopySrc[(int)pModuleNode + bHasMore] = chCopy;
-        pszCopySrc++;
-      } while (chCopy != '\0');
-
+      strcpy(pModuleNode->szModulePath, tModuleEntry.szExePath);
+      strcpy(pModuleNode->szModuleName, tModuleEntry.szModule);
       pModuleNode->dwBaseAddress = tModuleEntry.modBaseAddr;
       pModuleNode->pNext = pModuleListHead;
       pModuleNode->dwSize = tModuleEntry.modBaseSize;
@@ -1200,7 +1181,6 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
     DWORD dwLastError;
     BOOL bCallOk;
     D2FogModuleNodeStrc* pModuleNode;
-    int nCopyOffset;
     D2FogModuleNodeStrc* pPrevModule;
     D2FogModuleNodeStrc* pSortedHead;
     int iVar1;
@@ -1212,7 +1192,6 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
     char szModuleName[256];
     char szModulePath[260];
     D2FogModuleNodeStrc* pCurModule;
-    char chCopy;
     char* pszCopySrc;
     HANDLE hProcessLocal;
     hProcessLocal = hProcess;
@@ -1273,22 +1252,8 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
 
             pModuleNode = D2_NEW_AT(D2FogModuleNodeStrc, ".\\Src\\Exceptions.cpp", 0x2d3);
             memset(pModuleNode, 0, 0x210);
-            pszCopySrc = szModulePath;
-            nCopyOffset = (int)pModuleNode - (int)pszCopySrc;
-            do {
-              chCopy = *pszCopySrc;
-              pszCopySrc[nCopyOffset] = chCopy;
-              pszCopySrc++;
-            } while (chCopy != '\0');
-
-            pszCopySrc = szModuleName;
-            nCopyOffset = 0x104 - (int)pszCopySrc;
-            do {
-              chCopy = *pszCopySrc;
-              pszCopySrc[(int)pModuleNode + nCopyOffset] = chCopy;
-              pszCopySrc++;
-            } while (chCopy != '\0');
-
+            strcpy(pModuleNode->szModulePath, szModulePath);
+            strcpy(pModuleNode->szModuleName, szModuleName);
             pModuleNode->dwBaseAddress = (BYTE*)sModuleInfo.lpBaseOfDll;
             pModuleNode->pNext = pModuleListHead;
             pModuleNode->dwSize = sModuleInfo.SizeOfImage;
@@ -1541,7 +1506,6 @@ static D2FogModuleNodeStrc * __stdcall LoadSymbolsForAllModules(HANDLE hProcess,
     // Static local variables (originally global data)
     static uint32_t gnSymbolLoadState; D2_STATIC_GUARD_BSS(gnSymbolLoadState, "Fog::Debug::LoadSymbolsForAllModules::gnSymbolLoadState");
 
-    int iVar1;
     D2FogModuleNodeStrc* pszCopySrc;
     char* pcVar2;
     DWORD dwLastError;
@@ -1563,14 +1527,7 @@ static D2FogModuleNodeStrc * __stdcall LoadSymbolsForAllModules(HANDLE hProcess,
           pszCopySrc = (D2FogModuleNodeStrc*)(pszCopySrc->szModulePath + 1);
         } while (chCopy != '\0');
 
-        pcVar2 = pCurModule->szModuleName;
-        iVar1 = -(int)pcVar2;
-        do {
-          chCopy = *pcVar2;
-          pcVar2[(int)(szModuleName + iVar1)] = chCopy;
-          pcVar2++;
-        } while (chCopy != '\0');
-
+        strcpy(szModuleName, pCurModule->szModuleName);
         dwLastError = (*pSymLoadModule)(hProcess, (HANDLE)0x0, szModulePath, szModuleName, (DWORD)pCurModule->dwBaseAddress, pCurModule->dwSize);
         if (!gnSymbolLoadState) {
           if (!dwLastError) {
@@ -1679,10 +1636,9 @@ static int BuildSymbolSearchPath(char * szSearchPath) {
       strcat(szSearchPath, ";");
     }
 
-    char* pszAppendDst = szSearchPath;
-    pszAppendDst = pszAppendDst + strlen(pszAppendDst) + 1;
-    if ((int)pszAppendDst - (int)(szSearchPath + 1)) {
-      szSearchPath[(int)pszAppendDst - (int)(szSearchPath + 1) - 1] = '\0';
+    int nLen2 = (int)strlen(szSearchPath);
+    if (nLen2) {
+      szSearchPath[nLen2 - 1] = '\0';
       Src::LogManager::LOGMANAGER_TraceToModuleLog("", "User defined symbols path: %s", szSearchPath);
     } else {
       Src::LogManager::LOGMANAGER_TraceToModuleLog("", "Unable to generate symbols search path");

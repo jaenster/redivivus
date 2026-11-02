@@ -615,6 +615,7 @@ static int32_t CalculateMasteryBonus(D2UnitStrc * pUnit, eD2ElementalDamageTypeD
 // Writes all damage stats from a D2MissileDamageDataStrc onto a missile unit via STATLIST_SetUnitStat. Covers physical, fire, lightning, magic, cold, poison, life/mana/stamina drain, stun, burning, demon/undead damage%, target-AC, and bypass flags. Also copies damage-vs-montype bonus layers from the caster (pUnit) to the missile if pUnit is non-null.
 void __stdcall SetDamageStats(D2UnitStrc * pUnit, D2UnitStrc * pMissile, D2MissileDamageDataStrc * pMissileDamageData, int32_t nLevel) {
     uint32_t dwMissileFlags;
+    int iBonusLayer;
     D2StatStrc awBonusLayers[128];
     if ((pMissile ? pMissile->eUnitType : UNIT_COUNT) != UNIT_MISSILE) {
       return;
@@ -682,15 +683,9 @@ void __stdcall SetDamageStats(D2UnitStrc * pUnit, D2UnitStrc * pMissile, D2Missi
     }
 
     int32_t nBonusCount = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0xb4, awBonusLayers, 0x80);
-    int iBonusLayer = 0;
-    if (nBonusCount <= 0) {
-      return;
-    }
-
-    do {
+    for (iBonusLayer = 0; iBonusLayer < nBonusCount; iBonusLayer++) {
       Stats::StatsEx::STATLIST_SetUnitStat(pMissile, UNITSTAT_damage_vs_montype, awBonusLayers[iBonusLayer].nStatValue, awBonusLayers[iBonusLayer].wSubIndex);
-      iBonusLayer++;
-    } while (iBonusLayer < nBonusCount);
+    }
 }
 
 // Returns the minimum physical damage for a missile at a given level. Resolves nMissileId and nLevel from the pUnit missile if not provided. Looks up D2MissilesTxt base MinDamage + level breakpoint bonus (MinLevDam1), optionally scales by DmgSymPerCalc calc expression, then shifts result left by HitShift. Returns 0 for non-missile units or invalid missile IDs.

@@ -157,44 +157,39 @@ BOOL __fastcall Skills_CltDoFunc_BaalCorpseExplosion(D2UnitStrc * pUnit, eD2Skil
     D2Common::Units::UnitFinds::InitializeUnitFindData(nullptr, &local_3c, D2Common::Units::UNITS_GetRoom(pUnit), nCorpsePosY, nPosY, nExplosionRadius, fpUnitTest, pUnitFindArg);
     local_3c.nFlags = sUnitFindArg.nFlags;
     D2Common::Units::UnitFinds::UNITFINDS_FindCullRange(&local_3c);
-    nCorpseIdx = 0;
-    if (local_3c.nCountedUnits > 0) {
+    for (nCorpseIdx = 0; nCorpseIdx < local_3c.nCountedUnits; nCorpseIdx = nPosY + 1) {
       int32_t nCorpsePosX;
-      do {
+      nPosY = nCorpseIdx;
+      pCorpse = local_3c.pUnitsArray->aFoundUnitsList[nCorpseIdx];
+      eUnitTypeTmp = pCorpse->eUnitType;
+      if (eUnitTypeTmp == UNIT_OBJECT || (int)eUnitTypeTmp > 3 && (int)eUnitTypeTmp <= 5) {
+        nCorpsePosY = pCorpse->pPath.pStaticPath->nPosY;
+      } else if (pCorpse->pPath.pDynamicPath) {
+        nCorpsePosY = D2Common::PATH::DynamicPath::GetYPos(pCorpse->pPath.pDynamicPath);
+      } else {
+        nCorpsePosY = 0;
+      }
+
+      pCorpse = local_3c.pUnitsArray->aFoundUnitsList[nPosY];
+      eUnitTypeTmp = pCorpse->eUnitType;
+      if (eUnitTypeTmp == UNIT_OBJECT || (int)eUnitTypeTmp > 3 && (int)eUnitTypeTmp <= 5) {
+        nCorpsePosX = pCorpse->pPath.pStaticPath->nPosX;
+      } else if (pCorpse->pPath.pDynamicPath) {
+        nCorpsePosX = D2Common::PATH::DynamicPath::GetXPos(pCorpse->pPath.pDynamicPath);
+      } else {
+        nCorpsePosX = 0;
+      }
+
+      pCorpse = UNIT::Missile::CastAttack(pUnit, MISSILE_Baalcorpseexplodedelay, nCorpsePosX, nCorpsePosY, eSavedSkillNo, nSkillLvl);
+      if (pCorpse) {
+        nCorpseMissileFrames = D2Common::Units::Missile::GetTotalFrames(pCorpse);
+        seedNext = D2_SEED_NEXT(pUnit->sSeed);
+        pUnit->sSeed = seedNext;
+        nExplosionRadius = nCorpseMissileFrames - 10 + seedNext.nSeedLow + (int)(seedNext.nSeedLow / 0x14) * -0x14;
+        D2Common::Units::Missile::SetTotalFrames(pCorpse, nExplosionRadius);
+        D2Common::Units::Missile::SetCurrentFrame(pCorpse, nExplosionRadius);
         nPosY = nCorpseIdx;
-        pCorpse = local_3c.pUnitsArray->aFoundUnitsList[nCorpseIdx];
-        eUnitTypeTmp = pCorpse->eUnitType;
-        if (eUnitTypeTmp == UNIT_OBJECT || (int)eUnitTypeTmp > 3 && (int)eUnitTypeTmp <= 5) {
-          nCorpsePosY = pCorpse->pPath.pStaticPath->nPosY;
-        } else if (pCorpse->pPath.pDynamicPath) {
-          nCorpsePosY = D2Common::PATH::DynamicPath::GetYPos(pCorpse->pPath.pDynamicPath);
-        } else {
-          nCorpsePosY = 0;
-        }
-
-        pCorpse = local_3c.pUnitsArray->aFoundUnitsList[nPosY];
-        eUnitTypeTmp = pCorpse->eUnitType;
-        if (eUnitTypeTmp == UNIT_OBJECT || (int)eUnitTypeTmp > 3 && (int)eUnitTypeTmp <= 5) {
-          nCorpsePosX = pCorpse->pPath.pStaticPath->nPosX;
-        } else if (pCorpse->pPath.pDynamicPath) {
-          nCorpsePosX = D2Common::PATH::DynamicPath::GetXPos(pCorpse->pPath.pDynamicPath);
-        } else {
-          nCorpsePosX = 0;
-        }
-
-        pCorpse = UNIT::Missile::CastAttack(pUnit, MISSILE_Baalcorpseexplodedelay, nCorpsePosX, nCorpsePosY, eSavedSkillNo, nSkillLvl);
-        if (pCorpse) {
-          nCorpseMissileFrames = D2Common::Units::Missile::GetTotalFrames(pCorpse);
-          seedNext = D2_SEED_NEXT(pUnit->sSeed);
-          pUnit->sSeed = seedNext;
-          nExplosionRadius = nCorpseMissileFrames - 10 + seedNext.nSeedLow + (int)(seedNext.nSeedLow / 0x14) * -0x14;
-          D2Common::Units::Missile::SetTotalFrames(pCorpse, nExplosionRadius);
-          D2Common::Units::Missile::SetCurrentFrame(pCorpse, nExplosionRadius);
-          nPosY = nCorpseIdx;
-        }
-
-        nCorpseIdx = nPosY + 1;
-      } while (nCorpseIdx < local_3c.nCountedUnits);
+      }
     }
 
     D2Common::Units::UnitFinds::FreeUnitFindData(&local_3c);
@@ -854,25 +849,20 @@ void __fastcall SKILLSCLT_SetMissilePathExtended(D2UnitStrc * pUnit, int32_t nIn
     sSeedNext = D2_SEED_NEXT_VAL(ullSeedTemp);
     *pSeed = sSeedNext;
     nSerpentineAmp = sSeedNext.nSeedLow % 3 + gnSkillDescLayoutPos_0072d990;
-    nPathFrameIdx = 0;
-    if (nTotalFrames > 0) {
+    for (nPathFrameIdx = 0; nPathFrameIdx < nTotalFrames; nPathFrameIdx++) {
       uint8_t bVar1;
-      do {
-        nCurDir += nSerpentineAmp * nSerpentineSign;
-        bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2((uint8_t)nCurDir & 0x3f);
-        nCurX += gnSkillSynergiesTableIndex[bVar1];
-        nCurY += gnSkillSynergiesTableOffset[bVar1];
-        pPathPoints[nPathFrameIdx].nX = (uint16_t)nCurX;
-        pPathPoints[nPathFrameIdx].nY = (uint16_t)nCurY;
-        if (!(nPathFrameIdx % gnSkillDescLayoutPos_0072d98c)) {
-          nSerpentineSign = -nSerpentineSign;
-          sSeedNext = D2_SEED_NEXT(*pSeed);
-          *pSeed = sSeedNext;
-          nSerpentineAmp = sSeedNext.nSeedLow % 3 + gnSkillDescLayoutPos_0072d990;
-        }
-
-        nPathFrameIdx++;
-      } while (nPathFrameIdx < nTotalFrames);
+      nCurDir += nSerpentineAmp * nSerpentineSign;
+      bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2((uint8_t)nCurDir & 0x3f);
+      nCurX += gnSkillSynergiesTableIndex[bVar1];
+      nCurY += gnSkillSynergiesTableOffset[bVar1];
+      pPathPoints[nPathFrameIdx].nX = (uint16_t)nCurX;
+      pPathPoints[nPathFrameIdx].nY = (uint16_t)nCurY;
+      if (!(nPathFrameIdx % gnSkillDescLayoutPos_0072d98c)) {
+        nSerpentineSign = -nSerpentineSign;
+        sSeedNext = D2_SEED_NEXT(*pSeed);
+        *pSeed = sSeedNext;
+        nSerpentineAmp = sSeedNext.nSeedLow % 3 + gnSkillDescLayoutPos_0072d990;
+      }
     }
 
     D2Common::PATH::DynamicPath::SetPathPointsSize(pDynamicPath, nTotalFrames);

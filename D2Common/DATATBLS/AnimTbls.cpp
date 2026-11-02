@@ -190,19 +190,15 @@ void __stdcall ANIMDATA_SetAnimSpeedForUnit(D2UnitStrc * pUnit, int32_t nParam) 
 // per-frame event array (up to 0x90 bytes). Returns 1 on success, 0 on
 // fallback to default record.
 BOOL __stdcall ANIMDATA_GetFramesSpeedAndTrigger(char * pszName, uint32_t * pnFrameCount, int * pnAnimSpeed, uint32_t * pnTriggerFrame) {
+    uint32_t nFrameIndex;
     int* pRecord = ANIMDATA_GetRecordByNameHash(pszName);
     if (pRecord) {
       *pnFrameCount = pRecord[2];
       *pnAnimSpeed = pRecord[3];
-      uint32_t nFrameIndex = 0;
-      if ((uint32_t)pRecord[2] > 0) {
-        do {
-          if (nFrameIndex >= 0x90 || *(char*)(nFrameIndex + 0x10 + (int)pRecord) != '\0') {
-            break;
-          }
-
-          nFrameIndex++;
-        } while (nFrameIndex < (uint32_t)pRecord[2]);
+      for (nFrameIndex = 0; nFrameIndex < (uint32_t)pRecord[2]; nFrameIndex++) {
+        if (nFrameIndex >= 0x90 || *(char*)(nFrameIndex + 0x10 + (int)pRecord) != '\0') {
+          break;
+        }
       }
 
       *pnTriggerFrame = nFrameIndex;

@@ -276,7 +276,6 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion(D2UnitStrc * pUni
 
 // Resolves a valid teleport/move-skill landing tile for pUnit toward the requested destination (*pnParam1,*pnParam2). Clamps the destination to the skill's aurarangecalc max range, then probes up to 3 candidate tiles (the clamped point and two offsets), each requiring: a free collision coordinate in the room/neighbors, no blocking collision, line-of-sight from the unit, and distance within range. On success writes the accepted tile back into *pnParam1/*pnParam2 and returns 1. On failure plays the player's "cannot move there" sound (0x13) and returns 0. eSkill passed in EAX.
 static BOOL __stdcall SKILL_ValidateTeleportDestination(D2UnitStrc * pUnit, int32_t nParam, int * pnParam1, int * pnParam2, eD2Skills eSkill) {
-    eD2CollisionShapeType nUnitSize;
     uint16_t nCollisionHigh;
     uint32_t bHasLOS;
     POINT ptCandidatePos;
@@ -353,9 +352,7 @@ static BOOL __stdcall SKILL_ValidateTeleportDestination(D2UnitStrc * pUnit, int3
       nCandidateY = ptCandidatePos.y;
       nCandidateX = ptCandidatePos.x;
       if (pRoom) {
-        nRangeCalc = 0x1c09;
-        nUnitSize = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
-        nCollisionHigh = D2Common::Collision::CheckCollision_BlockPlayer_Type(pRoom, nCandidateX, nCandidateY, nUnitSize, nRangeCalc);
+        nCollisionHigh = D2Common::Collision::CheckCollision_BlockPlayer_Type(pRoom, nCandidateX, nCandidateY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x1c09);
         if (!nCollisionHigh) {
           bHasLOS = D2Common::Skills::SKILLS_HasLineOfSight(nUnitY, nUnitX, nCandidateX, nCandidateY, pRoom, 0x804);
           if (bHasLOS) {

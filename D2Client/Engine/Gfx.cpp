@@ -135,9 +135,8 @@ D2InventoryStrc * __fastcall CLIENT_GetEffectiveInventory(D2UnitStrc * pUnit, in
 
 static uint32_t GFX_HashTextureName(char * pArchive) {
     char DVar1;
-    char* pEnd = pArchive;
-    pEnd = pEnd + strlen(pEnd) + 1;
-    if ((uint32_t)((int)pEnd - (int)(pArchive + 1)) >= 8) {
+    int nLen = (int)strlen(pArchive);
+    if ((uint32_t)nLen >= 8) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x79);
       exit(-1);
     }
@@ -1208,7 +1207,7 @@ uint32_t __fastcall DrawItemGfx(D2UnitStrc * pUnit, int32_t nHeight, int32_t nWi
         if (nGoldAmount < 500) {
           nDC6Height = 1;
         } else {
-          nDC6Height = 3 - (uint32_t)(nGoldAmount < 5000);
+          nDC6Height = nGoldAmount < 5000 ? 0x2U : 0x3U;
         }
       }
     }
@@ -1502,6 +1501,7 @@ static void __stdcall GFX_BuildMonsterCofPath(uint32_t nModeId, LPSTR szOutputPa
 }; D2_STATIC_GUARD(gnMonsterCofPathBuildTotalItems, "D2Client::Engine::Gfx::GFX_BuildMonsterCofPath::gnMonsterCofPathBuildTotalItems");
     static uint32_t gnMonsterCofPathCount = 0x1; D2_STATIC_GUARD(gnMonsterCofPathCount, "D2Client::Engine::Gfx::GFX_BuildMonsterCofPath::gnMonsterCofPathCount");
 
+    uint32_t nPathIndex;
     char szMonStatsCode[4];
     char szAnimToken[4];
     char szCompToken[4];
@@ -1536,15 +1536,10 @@ static void __stdcall GFX_BuildMonsterCofPath(uint32_t nModeId, LPSTR szOutputPa
       *pnComponentCode = pMonStatsEx->BaseW;
     }
 
-    uint32_t nPathIndex = 0;
-    if (gnMonsterCofPathCount > 0) {
-      do {
-        if (nModeId == gnMonsterCofPathBuildTotalItems[nPathIndex].nMode) {
-          dwTokenChars = gnMonsterCofPathBuildTotalItems[nPathIndex].dwToken;
-        }
-
-        nPathIndex++;
-      } while (nPathIndex < gnMonsterCofPathCount);
+    for (nPathIndex = 0; nPathIndex < gnMonsterCofPathCount; nPathIndex++) {
+      if (nModeId == gnMonsterCofPathBuildTotalItems[nPathIndex].nMode) {
+        dwTokenChars = gnMonsterCofPathBuildTotalItems[nPathIndex].dwToken;
+      }
     }
 
     szCompToken[3] = '\0';
@@ -2033,6 +2028,7 @@ static void Gfx_UpdateNearbyUnitGfx(int32_t bShowLoadingUi) {
     uint32_t nIdx;
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nRoomCount;
+    uint32_t nRoomIdx;
     int nSeqMode;
     int nClassId;
     eD2UnitType eUnitType;
@@ -2047,13 +2043,7 @@ static void Gfx_UpdateNearbyUnitGfx(int32_t bShowLoadingUi) {
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pPlayerRoom, &ppAdjacentRooms, (int*)&nRoomCount);
     uint32_t nLoadUiCounter;
     nLoadUiCounter = 0;
-    uint32_t nRoomIdx;
-    nRoomIdx = 0;
-    if (nRoomCount <= 0) {
-      return;
-    }
-
-    do {
+    for (nRoomIdx = 0; nRoomIdx < nRoomCount; nRoomIdx = nIdx + 1) {
       nIdx = nRoomIdx;
       if (gnGfxThrottleUpdateFrameCountDynamic) {
         if (!bShowLoadingUi || gnGfxDirectionCountCache) {
@@ -2090,12 +2080,8 @@ static void Gfx_UpdateNearbyUnitGfx(int32_t bShowLoadingUi) {
             bShowLoadingUi = 0;
           }
 
-          nIdx = 0;
-          if (gnNearbyPlayerCofCount > 0) {
-            do {
-              GFX_AsyncLoadPlayerSprites(bShowLoadingUi, gaNearbyPlayerCofUpdateQueue[nIdx], pUnit);
-              nIdx++;
-            } while (nIdx < gnNearbyPlayerCofCount);
+          for (nIdx = 0; nIdx < gnNearbyPlayerCofCount; nIdx++) {
+            GFX_AsyncLoadPlayerSprites(bShowLoadingUi, gaNearbyPlayerCofUpdateQueue[nIdx], pUnit);
           }
         }
         if (!gnGfxThrottleUpdateFrameCountDynamic) {
@@ -2107,9 +2093,7 @@ static void Gfx_UpdateNearbyUnitGfx(int32_t bShowLoadingUi) {
 
         nIdx = nRoomIdx;
       }
-
-      nRoomIdx = nIdx + 1;
-    } while (nRoomIdx < nRoomCount);
+    }
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
@@ -3725,7 +3709,7 @@ BOOL __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t 
         } else if (nDirOrGoldTier < 500) {
           nDirOrGoldTier = 1;
         } else {
-          nDirOrGoldTier = 3 - (nDirOrGoldTier < 5000);
+          nDirOrGoldTier = nDirOrGoldTier < 5000 ? 2 : 3;
         }
       }
     }

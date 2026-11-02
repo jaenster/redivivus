@@ -368,25 +368,25 @@ int __stdcall PARTY_AddUnitToParty(::SGAMEDATA * pGame, int16_t nPartyId, D2Unit
           }
 
           pNewSubSub = D2_NEW_POOL_AT(pGame->pMemoryPool, D2UnitPartyControlSubSub, ".\\UNIT\\Party.cpp", 0x108);
-          if (pNewSubSub) {
-            pNewSubSub->pNext = 0;
-            pNewSubSub->nUnitGUID = nUnitGUID;
-            pNewSubSub->pNext = pFoundSub->pSub;
-            pFoundSub->pSub = pNewSubSub;
-            GAME::SCmd::NET_D2GS_SERVER_Send_0x8D_AssignPlayerToParty_Sender(pGame, pUnit);
-            for (pNewSubSub = pNewSubSub->pNext; pNewSubSub; pNewSubSub = pNewSubSub->pNext) {
-              pExistingMember = SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, pNewSubSub->nUnitGUID);
-              if (pExistingMember) {
-                PLAYER::PlayerScreen::PARTYSCREEN_ClearHostileRelation(pGame, pUnit, pExistingMember);
-                PLAYER::PlayerScreen::PARTYSCREEN_ClearHostileRelation(pGame, pExistingMember, pUnit);
-              }
-            }
-
-            return 1;
-          } else {
+          if (!pNewSubSub) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x109);
             exit(-1);
           }
+
+          pNewSubSub->pNext = 0;
+          pNewSubSub->nUnitGUID = nUnitGUID;
+          pNewSubSub->pNext = pFoundSub->pSub;
+          pFoundSub->pSub = pNewSubSub;
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x8D_AssignPlayerToParty_Sender(pGame, pUnit);
+          for (pNewSubSub = pNewSubSub->pNext; pNewSubSub; pNewSubSub = pNewSubSub->pNext) {
+            pExistingMember = SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, pNewSubSub->nUnitGUID);
+            if (pExistingMember) {
+              PLAYER::PlayerScreen::PARTYSCREEN_ClearHostileRelation(pGame, pUnit, pExistingMember);
+              PLAYER::PlayerScreen::PARTYSCREEN_ClearHostileRelation(pGame, pExistingMember, pUnit);
+            }
+          }
+
+          return 1;
         }
       } else {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfe);

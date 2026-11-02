@@ -1303,7 +1303,7 @@ int32_t __fastcall PLRMODES_ModeCallback_AttackSkill(::SGAMEDATA * pGame, D2Unit
     if (!(nSkillFlags & 1)) {
       if (pUnit && pUnit->eUnitFlags >> 6 & 1 || nModeArg != 1 && nModeArg != 2) {
         bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-        return (bIsDead != 0) + 1;
+        return bIsDead != 0 ? 2 : 1;
       }
     } else {
       int32_t nMoveResult;
@@ -1312,7 +1312,7 @@ int32_t __fastcall PLRMODES_ModeCallback_AttackSkill(::SGAMEDATA * pGame, D2Unit
       if (nMoveResult != 2) {
         if (pUnit && pUnit->eUnitFlags >> 6 & 1 || nModeArg != 1 && nModeArg != 2) {
           bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-          return (bIsDead != 0) + 1;
+          return bIsDead != 0 ? 2 : 1;
         }
       } else {
         D2Common::Skills::SKILL_SetFlags(pSkill, nSkillFlags | 2);
@@ -1321,7 +1321,7 @@ int32_t __fastcall PLRMODES_ModeCallback_AttackSkill(::SGAMEDATA * pGame, D2Unit
 
     SKILLS::SkillsServer::SKILLS_PeriodicSkillSpawnAndTimer(pGame, pUnit);
     bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-    return (bIsDead != 0) + 1;
+    return bIsDead != 0 ? 2 : 1;
 }
 
 // Ticks stamina recovery for a player unit each game loop. Reads current stamina and UNITSTAT_staminarecoverybonus; recovery shift is 8 (standing/town-walk) or 9 (walking). Applies bonus percentage, clamps to max stamina, then writes back via STATLIST_SetUnitStat. Returns early if already at max or if in a non-recovery anim mode (e.g. attacking).

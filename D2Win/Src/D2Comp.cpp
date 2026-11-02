@@ -1415,18 +1415,12 @@ BOOL __fastcall D2COMP_SetAnimationMode(D2CharSelCompStrc * pCompUnit, int32_t n
 // Returns the code index (1..13) paired with the four-character weapon-class code nWeaponClassCode ('bow '..'ht2 ') in gaCompWeaponClassCodeMap, or 0 when the code is not in the map; the index selects gaCompWeaponClassByCodeIndex.
 // Provenance: 1.14d asm 00504370 (pair scan over gnCompWeaponClassCodeMapCount entries); no callers, the same scan is inlined in D2COMP_AllocTxt_EverythingItems.
 int __stdcall D2COMP_GetWeaponClassCodeIndex(int32_t nWeaponClassCode) {
-    uint32_t nIndex = 0;
-    if (gnCompWeaponClassCodeMapCount <= 0) {
-      return 0;
-    }
-
-    do {
+    uint32_t nIndex;
+    for (nIndex = 0; nIndex < gnCompWeaponClassCodeMapCount; nIndex++) {
       if (nWeaponClassCode == gaCompWeaponClassCodeMap[nIndex * 2]) {
         return gaCompWeaponClassCodeMap[nIndex * 2 + 1];
       }
-
-      nIndex++;
-    } while (nIndex < gnCompWeaponClassCodeMapCount);
+    }
 
     return 0;
 }

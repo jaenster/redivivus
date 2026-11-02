@@ -207,7 +207,7 @@ BOOL __fastcall Skills_CltStFunc_SetParamsFromTargetPosition(D2UnitStrc * pUnit,
     D2Common::Skills::SKILL_SetParam1(pSkill, nTargetX);
     eTargetUnitType = pTarget->eUnitType;
     if (eTargetUnitType != UNIT_OBJECT && ((int)eTargetUnitType <= 3 || (int)eTargetUnitType > 5)) {
-      int32_t nParam2;
+      int32_t nPar2;
       if (pTarget->pPath.pDynamicPath) {
         nPar2 = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
         D2Common::Skills::SKILL_SetParam2(pSkill, nPar2);
@@ -254,13 +254,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_CompositeDirMissile(D2UnitStrc * pUnit, eD2
     int nOffsetY;
     int nOffsetX;
     uint32_t nAdjFrame;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-    if (!(sgptDataTable->pTxtSkills + eSkill)) {
+    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
 
@@ -488,13 +482,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_JumpMissileTowardTarget(D2UnitStrc * pUnit,
 }; D2_STATIC_GUARD(gaSkillJumpMissileData1, "D2Client::SKILLS::SkillsMon::Skills_CltDoFunc_Mon_JumpMissileTowardTarget::gaSkillJumpMissileData1");
 
     D2SkillArgStrc sSkillArg;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-    if (!(sgptDataTable->pTxtSkills + eSkill)) {
+    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
 
@@ -1123,16 +1111,10 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RandomScatterMissiles(D2UnitStrc * pUnit, e
     BOOL bGotCoords = Skills::GetCooordinates(pUnit, &sSkillArg.nUnitX, &sSkillArg.nUnitY);
     if (bGotCoords) {
       int nMissileIdx;
-      nMissileIdx = 0;
-      if (nMissileCount <= 0) {
-        return 1;
-      }
-
-      do {
+      for (nMissileIdx = 0; nMissileIdx < nMissileCount; nMissileIdx++) {
         sSkillArg.nFunctionParam = nMissileIdx;
         UNIT::Missile::MakeMissile(&sSkillArg);
-        nMissileIdx++;
-      } while (nMissileIdx < nMissileCount);
+      }
 
       return 1;
     }
@@ -1235,10 +1217,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_LineMissileSpread(D2UnitStrc * pUnit, eD2Sk
     int nRelY;
     int nRelX;
     int nStepY;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 

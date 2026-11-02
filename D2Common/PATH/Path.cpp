@@ -1579,7 +1579,7 @@ static bool __stdcall PATH_ComputeMovementStep(uint32_t * pnOutX, uint32_t * pnO
       if (bCollisionResult) {
         if (bVar3) {
           nRecalcResult = PATH_RecalculatePath(pUnit, (uint32_t)(pSkillsTxt->pTargetUnit != 0));
-          return (bool)('\x01' - (nRecalcResult != 0));
+          return (bool)(nRecalcResult != 0 ? 0 : 1);
         }
 
         pSkillsTxt->nPathPointIndex = pSkillsTxt->dwPathPoints;

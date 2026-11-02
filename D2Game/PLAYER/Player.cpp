@@ -871,8 +871,7 @@ void __fastcall PLAYER_CountLivingPlayerInLevelCallback(::SGAMEDATA * pGame, D2U
 // PLAYER_CountLivingPlayerInLevelCallback and returns nCount.
 // No references in 1.14d. It counts; it finds no unit.
 int32_t __fastcall PLAYER_CountLivingPlayersInLevel(::SGAMEDATA * pGame, eD2LevelId eLevelId) {
-    D2LevelPlayerCountArgStrc sArgs;
-    sArgs.nCount = 0;
+    D2LevelPlayerCountArgStrc sArgs = {0};
     sArgs.eLevelId = eLevelId;
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYER_CountLivingPlayerInLevelCallback, &sArgs);
     return sArgs.nCount;
@@ -1095,8 +1094,7 @@ void __fastcall PLAYER_CheckIsHostileToPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
 
 DWORD __fastcall PLAYER_CountPlayersWithFilter(::SGAMEDATA * pGame, D2UnitStrc * pnFilter) {
     if (pGame && pnFilter && pnFilter->eUnitType == UNIT_PLAYER) {
-      D2PlayerHostileCheckArgStrc sHostileArgs;
-      sHostileArgs.bHostile = 0;
+      D2PlayerHostileCheckArgStrc sHostileArgs = {0};
       sHostileArgs.pPlayer = pnFilter;
       UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYER_CheckIsHostileToPlayer, &sHostileArgs);
       return sHostileArgs.bHostile;
@@ -1116,8 +1114,7 @@ void __fastcall PLAYER_CheckPlayerIsHostileToThis(::SGAMEDATA * pGame, D2UnitStr
 
 DWORD __fastcall PLAYER_CountPlayersWithFilter2(::SGAMEDATA * pGame, D2UnitStrc * pnFilter) {
     if (pGame && pnFilter && pnFilter->eUnitType == UNIT_PLAYER) {
-      D2PlayerHostileCheckArgStrc sHostileArgs;
-      sHostileArgs.bHostile = 0;
+      D2PlayerHostileCheckArgStrc sHostileArgs = {0};
       sHostileArgs.pPlayer = pnFilter;
       UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYER_CheckPlayerIsHostileToThis, &sHostileArgs);
       return sHostileArgs.bHostile;

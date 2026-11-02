@@ -377,7 +377,6 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
 
 // Sends packet 0x73 (MissileData) to the given client for a missile unit, but only if the missile's txt-row has the network-visible flag (0x20) set. Packs classId, current position, optional target coords, animation frame, owner type/GUID, missile level, and pierce index into the packet buffer.
 void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t param_1) {
-    D2GSPacketSrv0x73 sPacket;
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
       return;
     }
@@ -392,6 +391,7 @@ void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA *
       return;
     }
 
+    D2GSPacketSrv0x73 sPacket = {0};
     *(uint8_t*)((char*)&sPacket.nUnused + 3) = 0;
     sPacket.nMissileClassId = 0;
     sPacket.nMissileX = 0;

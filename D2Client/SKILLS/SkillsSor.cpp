@@ -86,16 +86,10 @@ BOOL __fastcall Skills_CltDoFunc_Sor_LinearMissileCount(D2UnitStrc * pUnit, eD2S
     BOOL bGotCoords = Skills::GetCooordinates(pUnit, &sSkillArg.nUnitX, &sSkillArg.nUnitY);
     if (bGotCoords) {
       int nMissileIter;
-      nMissileIter = 0;
-      if (nMissileCount <= 0) {
-        return 1;
-      }
-
-      do {
+      for (nMissileIter = 0; nMissileIter < nMissileCount; nMissileIter++) {
         sSkillArg.nFunctionParam = nMissileIter;
         UNIT::Missile::MakeMissile(&sSkillArg);
-        nMissileIter++;
-      } while (nMissileIter < nMissileCount);
+      }
 
       return 1;
     }

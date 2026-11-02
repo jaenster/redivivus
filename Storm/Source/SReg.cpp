@@ -164,7 +164,7 @@ static int __stdcall SREG_InternalSaveEntry(char * pszSubKey, LPCSTR szValueName
 
     SSTR::SStrPack(szKeyPath, pszSubKey, 0x104);
     DWORD dwErrCode;
-    dwErrCode = RegCreateKeyExA((HKEY)(((byFlags & 4) != 0) + 0x80000001), szKeyPath, 0, (LPSTR)0x0, 0, 0x20006, (LPSECURITY_ATTRIBUTES)0x0, &hKey, &dwDisposition);
+    dwErrCode = RegCreateKeyExA((HKEY)((byFlags & 4) != 0 ? 0x80000002 : 0x80000001), szKeyPath, 0, (LPSTR)0x0, 0, 0x20006, (LPSECURITY_ATTRIBUTES)0x0, &hKey, &dwDisposition);
     if (!dwErrCode) {
       /* DWORD cbData for RegSetValueExA */ /* BYTE * lpData for RegSetValueExA */ /* DWORD dwType for RegSetValueExA */ /* DWORD Reserved for RegSetValueExA */ /* LPCSTR lpValueName for RegSetValueExA */ /* HKEY hKey for RegSetValueExA */ dwErrCode = RegSetValueExA(hKey, szValueName, 0, dwType, pbDataLocal, dwDataLen);
       if (!dwErrCode) {

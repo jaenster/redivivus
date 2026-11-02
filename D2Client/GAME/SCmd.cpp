@@ -554,13 +554,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x0B_UNITCTRL(char * pBytes) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x0C_UNITCHANGE(D2UnitStrc * pUnit, char * pBytes) {
-    D2ServerMessageHandleStrc msg;
+    D2ServerMessageHandleStrc msg = {0};
     msg.nItemId = (uint32_t)(uint8_t)pBytes[8];
-    msg.nTargetUnitType = 0;
-    msg.nTargetUnitId = 0;
-    msg.nSkillLvl = 0;
-    msg.nMaxDistance = 0;
-    msg.nTargetX = 0;
     msg.nSkillId = (uint32_t)(uint8_t)pBytes[7];
     UNIT::UnitMode::HandleMessage((uint32_t)(uint8_t)pBytes[6], pUnit, &msg, 1);
 }
@@ -2314,7 +2309,6 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAC(char * pPacketData) {
     uint32_t nNameId;
     uint32_t nTmpBit;
     uint32_t bIsGhostly;
-    eD2UnitType eUnitType;
     char* pNameWrite;
     uint16_t wMonsterFlagBits;
     int nComponentIdx;
@@ -2517,8 +2511,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAC(char * pPacketData) {
       }
       if (!pStatList && (pStatList = D2Common::Stats::StatsEx::GetStatList(pUnit, STATE_none, 0x40) , !pStatList)) {
         nSignedBits = UNIT::GetGUID(pUnit);
-        eUnitType = Units::GetType(pUnit);
-        pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 0x40, 0, eUnitType, nSignedBits);
+        pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 0x40, 0, Units::GetType(pUnit), nSignedBits);
         D2Common::Stats::StatsEx::SetState(pStatList, STATE_none);
         D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
         if (pStatList) {
@@ -2748,6 +2741,7 @@ void __fastcall FreeServerCmd(D2UnitStrc * pUnit) {
 // Drains the per-unit incoming packet queue (D2ServerCmdStrc). For each buffered packet: determines its size via NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize, validates opcode (≤0xAE), checks the expected size from the dispatch table, asserts the handler pointer is non-null, then calls the handler (NET_D2GS_CLIENT_INCOMING[opcode].fpIncomingHandlerUnit). After all packets are dispatched, zeroes the buffer and resets nUsedBuffersCount.
 void __fastcall SCMD_ProcessIncomingPacketBuffer(D2UnitStrc * pUnit) {
     size_t nPacketSize;
+    int nBufferIndex;
     uint8_t* pBytes;
     uint16_t nVariableSize[2];
     D2ServerCmdStrc* pServerCmd = UNIT::CUnit::GetServerCmd(pUnit);
@@ -2759,34 +2753,31 @@ void __fastcall SCMD_ProcessIncomingPacketBuffer(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    int nBufferIndex = 0;
-    if (pServerCmd->nUsedBuffersCount > 0) {
+    for (nBufferIndex = 0; nBufferIndex < pServerCmd->nUsedBuffersCount; nBufferIndex++) {
       uint8_t bVar1;
-      do {
-        pBytes = (uint8_t*)(pServerCmd->aBuffers + nD2PacketsClientBufferSize * nBufferIndex);
-        nPacketSize = D2Net::Game::Server::NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize((char*)pBytes, nD2PacketsClientBufferSize, (uint32_t*)nVariableSize);
-        if (!nPacketSize) {
-          return;
-        }
+      pBytes = (uint8_t*)(pServerCmd->aBuffers + nD2PacketsClientBufferSize * nBufferIndex);
+      nPacketSize = D2Net::Game::Server::NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize((char*)pBytes, nD2PacketsClientBufferSize, (uint32_t*)nVariableSize);
+      if (!nPacketSize) {
+        return;
+      }
 
-        bVar1 = *pBytes;
-        if (bVar1 >= 0xaf) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1531);
-          exit(-1);
-        }
-        if (NET_D2GS_CLIENT_INCOMING[bVar1].nExpectedSize != -1 && (uint32_t)nVariableSize[0] != NET_D2GS_CLIENT_INCOMING[bVar1].nExpectedSize) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1534);
-          exit(-1);
-        }
-        if (!NET_D2GS_CLIENT_INCOMING[bVar1].fpIncomingHandlerUnit) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1536);
-          exit(-1);
-        }
+      bVar1 = *pBytes;
+      if (bVar1 >= 0xaf) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1531);
+        exit(-1);
+      }
+      if (NET_D2GS_CLIENT_INCOMING[bVar1].nExpectedSize != -1 && (uint32_t)nVariableSize[0] != NET_D2GS_CLIENT_INCOMING[bVar1].nExpectedSize) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1534);
+        exit(-1);
+      }
+      if (!NET_D2GS_CLIENT_INCOMING[bVar1].fpIncomingHandlerUnit) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1536);
+        exit(-1);
+      }
 
-        NET_D2GS_CLIENT_INCOMING[bVar1].fpIncomingHandlerUnit(pUnit, (char*)pBytes);
-        nBufferIndex++;
-      } while (nBufferIndex < pServerCmd->nUsedBuffersCount);
+      NET_D2GS_CLIENT_INCOMING[bVar1].fpIncomingHandlerUnit(pUnit, (char*)pBytes);
     }
+
     if (pServerCmd->nUsedBuffersCount) {
       memset(pServerCmd->aBuffers, 0, pServerCmd->nUsedBuffersCount * nD2PacketsClientBufferSize);
     }

@@ -290,16 +290,11 @@ BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * p
       }
 
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &pAdjRoomList, (int*)&nAdjRoomCount);
-      iAdjRoomIdx = 0;
-      if (nAdjRoomCount > 0) {
-        do {
-          if (pAdjRoomList[iAdjRoomIdx] == pTargetRoom) {
-            _bSameOrAdjacentRoom = 1;
-            break;
-          }
-
-          iAdjRoomIdx++;
-        } while (iAdjRoomIdx < nAdjRoomCount);
+      for (iAdjRoomIdx = 0; iAdjRoomIdx < nAdjRoomCount; iAdjRoomIdx++) {
+        if (pAdjRoomList[iAdjRoomIdx] == pTargetRoom) {
+          _bSameOrAdjacentRoom = 1;
+          break;
+        }
       }
     }
 
@@ -840,7 +835,6 @@ BOOL __fastcall OBJOP_A3Q5_NihlathakAltarLaunchOrb(D2ObjectOperateFnArg * pOpera
     int32_t nItemCode;
     D2QuestDataStrc* pQuestData;
     D2UnitDataPlayerStrc* pAttackerPlayerData;
-    D2BitBufferStrc* pQuestBitBuffer;
     eD2QuestState eQuestState_00;
     int32_t nClassId;
     D2ObjectsTxt* pObjectsTxt;
@@ -882,14 +876,12 @@ BOOL __fastcall OBJOP_A3Q5_NihlathakAltarLaunchOrb(D2ObjectOperateFnArg * pOpera
         if (_bQuestState) {
           eQuestState = QUESTSTATE_Completed;
           eQuestId = QUEST_TheBlackenedTemple;
-          pQuestBitBuffer = GetQuestBitBuffer(pOperation->sArg.pGame, pOperation->pAttacker);
           /* GetQuestState(Blackened Temple=0x15, Completed=0): guard to avoid
-                         re-completing */ eQuestState_00 = D2Common::QuestRecord::GetQuestState(pQuestBitBuffer, eQuestId, eQuestState);
+                         re-completing */ eQuestState_00 = D2Common::QuestRecord::GetQuestState(GetQuestBitBuffer(pOperation->sArg.pGame, pOperation->pAttacker), eQuestId, eQuestState);
           if (eQuestState_00 == QUESTSTATE_Completed) {
             nQuestId = QUEST_TheBlackenedTemple;
-            pQuestBitBuffer = GetQuestBitBuffer(pOperation->sArg.pGame, pOperation->pAttacker);
             /* SetQuestState(Blackened Temple=0x15, Completed=0): finish the temple quest
-                         (council + Khalim's Will both done) */ D2Common::QuestRecord::SetQuestState(pQuestBitBuffer, nQuestId, eQuestState_00);
+                         (council + Khalim's Will both done) */ D2Common::QuestRecord::SetQuestState(GetQuestBitBuffer(pOperation->sArg.pGame, pOperation->pAttacker), nQuestId, eQuestState_00);
           }
         }
 
@@ -1012,12 +1004,8 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
       } else if (!pDVar1->bBoxDropped) {
         pDVar1->bBoxDropped = true;
         pQuestArgs->pTarget->dwDropItemCode = 0x20786f62;
-        nDropLoop = 0;
-        if (pDVar1->nBoxDropPlayerCount > 0) {
-          do {
-            ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nRewardItemGUID, nullptr, -1, 0);
-            nDropLoop++;
-          } while (nDropLoop < pDVar1->nBoxDropPlayerCount);
+        for (nDropLoop = 0; nDropLoop < pDVar1->nBoxDropPlayerCount; nDropLoop++) {
+          ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nRewardItemGUID, nullptr, -1, 0);
         }
       }
       if (pQuestData->bIsNotIntroduction != '\0' && pDVar1->nCouncilKillsRemaining > 0) {
@@ -1072,7 +1060,7 @@ uint32_t __thiscall Q22_StatusFilter(int32_t pThis, uint32_t param_1, D2BitBuffe
     if (bQuestState) {
       /* GetQuestState(Blackened Temple=0x15, JustCompleted=0xd): bumps completed
                          status byte 0xb -> 0xd */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
-      *szText = (bQuestState != 0) * '\x02' + '\v';
+      *szText = bQuestState != 0 ? 13 : 11;
       return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)bQuestState >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     }
 

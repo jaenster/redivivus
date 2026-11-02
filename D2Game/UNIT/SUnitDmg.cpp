@@ -2567,7 +2567,7 @@ void __fastcall DAMAGE_ProcessCombatQueueEntry(::SGAMEDATA * pGame, D2UnitStrc *
       pDstDmgData = (D2DamageStrc*)&pDstDmgData->wResultFlags;
     }
 
-    _bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pVictim, (uint32_t)(eEntryAttackerType == UNIT_MONSTER) * 2 + 1);
+    _bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pVictim, eEntryAttackerType == UNIT_MONSTER ? 0x3U : 0x1U);
     ::SGAMEDATA* pGameLocal = pGameCopy;
     if (_bInMeleeRange) {
       uint32_t nHitClass;
@@ -3494,20 +3494,14 @@ static void __stdcall SERVER_PartyShareExperience(int32_t nBaseExperience, D2Uni
     }
 
     int nXpAdj = (sParty.nPlayers - 1) * nBaseExperience * 0x59;
-    nAttackerLevel = 0;
-    if (0 >= sParty.nPlayers) {
-      return;
-    }
-
-    do {
+    for (nAttackerLevel = 0; nAttackerLevel < sParty.nPlayers; nAttackerLevel++) {
       int32_t nPlayerLevel;
       nPlayerLevel = sParty.nPlayerLevels[nAttackerLevel];
       pPartyPlayer = sParty.pPlayers[nAttackerLevel];
       /* This returns a variable in 2 registers, as its 8 bytes long. This is bugging
                          ghidra */ nXpForPlayer = SERVER_CalculateExperienceForUnit(pGame, nVictimLevel, (int)((float)nPlayerLevel * ((float)(nXpAdj / 256 + nBaseExperience) / (float)sParty.nPlayerLevelSum)), pPartyPlayer, nPlayerLevel);
       SERVER_PlayerUpdateExperience(pGame, nPlayerLevel, nXpForPlayer, pPartyPlayer);
-      nAttackerLevel++;
-    } while (nAttackerLevel < sParty.nPlayers);
+    }
 }
 
 // Resolves the player owner responsible for a kill, for XP/credit attribution. Returns pAttacker directly if it is a player. For monsters, walks the ownership chain (GetOwnerUnit) and checks curse stat lists (flag 0x800) on both attacker and victim to find a cursing player owner. Returns null if no player owner is found.
@@ -3750,7 +3744,7 @@ uint16_t __fastcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * p
     }
 
     int32_t nRangeCheck;
-    nRangeCheck = (uint32_t)(pUnit->eUnitType == UNIT_MONSTER) * 2 + 1;
+    nRangeCheck = pUnit->eUnitType == UNIT_MONSTER ? 0x3U : 0x1U;
     if (nExtraRange) {
       nMeleeRange = D2Common::Units::GetMeleeRange(pUnit);
       nRangeCheck -= nMeleeRange + nExtraRange;

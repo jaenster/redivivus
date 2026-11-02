@@ -547,12 +547,10 @@ static void __stdcall QuestStartDebugNotify(D2QuestDataStrc * pQuestData) {
 // (opcode 0x5d, quest 4) to a single unit's client. Pure network notify, no state change.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
 void __fastcall Q04_SendQuestStatePacket(D2UnitStrc * pUnit) {
-    D2GSPacketSrv0x5D abyPacketBuf;
-    abyPacketBuf.nExtra = 0;
+    D2GSPacketSrv0x5D abyPacketBuf = {0};
     abyPacketBuf.nPacketId = ']';
     abyPacketBuf.nQuestId = '\x04';
     abyPacketBuf.nAlertFlags = '\x01';
-    abyPacketBuf.nFilterStatus = '\0';
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q4.cpp", 0x265);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &abyPacketBuf);
 }
@@ -807,7 +805,6 @@ void __fastcall Q04_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 uint8_t __fastcall Q04_SpawnTristramPortal(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     int nStonesY;
     int nStonesX;
-    D2RoomStrc* pRoom;
     D2QuestDataA4Q2Strc* pDVar1 = pQuestData->pQuestSpecificData.pA4Q2;
     D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pDVar1->nLastPortalObjectMode);
     if (pUnit) {
@@ -835,8 +832,7 @@ uint8_t __fastcall Q04_SpawnTristramPortal(::SGAMEDATA * pGame, D2QuestDataStrc 
       eD2LevelId eLevel = LEVEL_Tristram;
       nStonesY += 4;
       nStonesX += 4;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      bIgnoreSpawnLoc = SKILLS::SkillsServer::SERVER_SpawnPortal(pGame, nullptr, pRoom, nStonesX, nStonesY, eLevel, ppPortalUnitOut, nClassId, bIgnoreSpawnLoc);
+      bIgnoreSpawnLoc = SKILLS::SkillsServer::SERVER_SpawnPortal(pGame, nullptr, D2Common::Units::UNITS_GetRoom(pUnit), nStonesX, nStonesY, eLevel, ppPortalUnitOut, nClassId, bIgnoreSpawnLoc);
       if (bIgnoreSpawnLoc) {
         pDVar1->bPortalSpawned = 1;
         pDVar1->bExpansionPortalCheck = 0;

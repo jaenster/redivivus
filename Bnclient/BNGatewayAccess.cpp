@@ -700,16 +700,16 @@ static void CACHE_DecryptBlock(uint32_t dwKey, uint32_t * pdwData, uint32_t nByt
     }
 }
 
-static void CACHE_EncryptBlock(uint32_t nParam1, uint32_t nParam2, uint32_t * pnParam) {
+static void CACHE_EncryptBlock(uint32_t dwKey, uint32_t nByteLen, uint32_t * pnParam) {
     uint32_t nDwordCount;
     void* pCryptTableBase = g_pCacheCryptTable;
     int nEncSeed = -0x11111112;
-    for (nDwordCount = nParam2 >> 2; nDwordCount; nDwordCount--) {
+    for (nDwordCount = nByteLen >> 2; nDwordCount; nDwordCount--) {
       uint32_t dwPlainDword;
-      nEncSeed += *(int*)((int)pCryptTableBase + (nParam1 & 0xff) * 4 + 0x1000);
+      nEncSeed += *(int*)((int)pCryptTableBase + (dwKey & 0xff) * 4 + 0x1000);
       dwPlainDword = *pnParam;
-      *pnParam = nEncSeed + nParam1 ^ dwPlainDword;
-      nParam1 = nParam1 >> 0xb | ~nParam1 * 0x200000 + 0x11111111;
+      *pnParam = nEncSeed + dwKey ^ dwPlainDword;
+      dwKey = dwKey >> 0xb | ~dwKey * 0x200000 + 0x11111111;
       pnParam++;
       nEncSeed = nEncSeed * 0x21 + 3 + dwPlainDword;
     }

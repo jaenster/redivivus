@@ -106,7 +106,7 @@ static void __stdcall SendPlayerInfo(uint16_t wRelationFlag, uint32_t nRelationS
 // @sourcefile .\PLAYER\PartyScreen.cpp
 void __fastcall PARTYSCREEN_TogglePlayerSquelch(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t bNewState, uint32_t dwParam) {
     uint32_t bIsConnected;
-    uint8_t bParam;
+    uint8_t nPartyEventCode;
     uint8_t bEventType;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PartyScreen.cpp", 0x4a);
     uint32_t bIsConnectedFlag = GAME::Clients::CLIENT_TestFileFlags(pClient, 4);
@@ -116,9 +116,9 @@ void __fastcall PARTYSCREEN_TogglePlayerSquelch(::SGAMEDATA * pGame, D2UnitStrc 
 
     SendPlayerInfo(1, bNewState, pUnit, pGame, pTarget);
     if (!pUnit || (uint32_t)pUnit->nClassId > 1 && pUnit->nClassId != 6) {
-      bParam = bNewState ? 0x101 : 0xa;
+      nPartyEventCode = bNewState ? 0x101 : 0xa;
     } else {
-      bParam = bNewState ? 0x102 : 0xb;
+      nPartyEventCode = bNewState ? 0x102 : 0xb;
     }
     if (!pUnit) {
       bIsConnected = -1;

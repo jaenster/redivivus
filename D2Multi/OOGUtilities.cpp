@@ -921,7 +921,6 @@ static uint32_t OOGUTIL_HandleReplyCommand(char * szText1, char * szText2) {
     char szTokenBuffer[256];
     char szMessageBuffer[260];
     char szDelimiter[4];
-    char cVar1;
     char* pcScan = szText1;
     pcScan = pcScan + strlen(pcScan) + 1;
     int32_t nCmdCmp = ChatDlg::someStrCompare(szText2, szText1);
@@ -941,13 +940,7 @@ static uint32_t OOGUTIL_HandleReplyCommand(char * szText1, char * szText2) {
         sprintf(szMessageBuffer, "Nobody to reply to!");
       } else {
         sprintf(szCommandBuffer, "%s ", szText1);
-        pcScan = szText2;
-        do {
-          cVar1 = *pcScan;
-          pcScan[(int)(szTokenBuffer - (int)szText2)] = cVar1;
-          pcScan++;
-        } while (cVar1 != '\0');
-
+        strcpy(szTokenBuffer, szText2);
         szDelimiter[0] = ' ';
         szDelimiter[1] = '\0';
         pcScan = strtok(szTokenBuffer, szDelimiter);

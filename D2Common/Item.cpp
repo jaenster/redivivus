@@ -134,13 +134,10 @@ void __fastcall ITEM_UpdateSetItemStates(D2UnitStrc * pUnit, uint32_t nEquippedM
         }
 
         nQuality--;
-        nBonusIdx = 0;
-        if (nQuality > 0) {
-          do {
-            Stats::StatsEx::STATLIST_ToggleStateDisabled(pUnit, gaSetItemBonusStates[nBonusIdx], 0);
-            nBonusIdx++;
-          } while (nBonusIdx < nQuality);
+        for (nBonusIdx = 0; nBonusIdx < nQuality; nBonusIdx++) {
+          Stats::StatsEx::STATLIST_ToggleStateDisabled(pUnit, gaSetItemBonusStates[nBonusIdx], 0);
         }
+
         if (nQuality < 5) {
           pStateEntry = (eD2States*)(gaSetItemBonusStates + nQuality);
           do {

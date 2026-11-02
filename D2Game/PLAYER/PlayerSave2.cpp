@@ -1294,6 +1294,7 @@ void __fastcall PLRSAVE_SetSkillIfNonZero(uint32_t dwParam, D2UnitStrc * pUnit, 
 // @sourcefile .\PLAYER\PlrSave2.cpp
 int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwParam, uint32_t bParam) {
     int32_t nTotalClassSkills;
+    int32_t iSkill;
     short int* psVar1 = *ppReadPos + 1;
     if (psVar1 > pEndBuf) {
       return 0x13;
@@ -1308,21 +1309,16 @@ int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short
     }
 
     uint32_t nClassId = GAME::Clients::GetPlayerClassId(pClient);
-    int32_t iSkill = 0;
-    if ((int)bParam > 0) {
+    for (iSkill = 0; iSkill < (int)bParam; iSkill++) {
       eD2Skills eSkill;
-      do {
-        eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, iSkill);
-        nTotalClassSkills = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
-        if (iSkill > nTotalClassSkills) {
-          break;
-        }
-        if (*(uint8_t*)(iSkill + (int)psVar1)) {
-          SKILLS::SkillsServer::SetSkill(pUnit, eSkill, (uint32_t)*(uint8_t*)(iSkill + (int)psVar1), 1);
-        }
-
-        iSkill++;
-      } while (iSkill < (int)bParam);
+      eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, iSkill);
+      nTotalClassSkills = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
+      if (iSkill > nTotalClassSkills) {
+        break;
+      }
+      if (*(uint8_t*)(iSkill + (int)psVar1)) {
+        SKILLS::SkillsServer::SetSkill(pUnit, eSkill, (uint32_t)*(uint8_t*)(iSkill + (int)psVar1), 1);
+      }
     }
 
     GAME::SCmd::NET_D2GS_SERVER_Send_0x94_SETALLSKILLS(pClient, pUnit);

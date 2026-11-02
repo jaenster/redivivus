@@ -1494,7 +1494,7 @@ void __fastcall SOUND_CycleSoundMixerMode(D2EscMenuItemStrc * pItem, D2UIMouseMs
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_007c8a74);
     int nParam = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
     D2Sound::Src::D2SoundSmp::CleanupSoundBuffer(0xb4);
-    BOOL BVar1 = GAME::Sound::SOUND_SetSoundMixer((nParam != 2) + 1);
+    BOOL BVar1 = GAME::Sound::SOUND_SetSoundMixer(nParam != 2 ? 2 : 1);
     if (!BVar1) {
       GAME::Sound::SOUND_SetSoundMixer(nParam);
     }

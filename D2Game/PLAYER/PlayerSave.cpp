@@ -1798,28 +1798,23 @@ int __fastcall PLRSAVE_RestoreItemsFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
         }
       }
 
-      nSubItemIndex = 0;
-      if ((int)nBytesAfterItem > 0) {
-        do {
-          memset(&sGfxData, 0, 0x48);
-          if (*pStreamPos != 0x4d4a) {
-            return 0xe;
-          }
+      for (nSubItemIndex = 0; nSubItemIndex < (int)nBytesAfterItem; nSubItemIndex++) {
+        memset(&sGfxData, 0, 0x48);
+        if (*pStreamPos != 0x4d4a) {
+          return 0xe;
+        }
 
-          nItemBytesRead = PLAYERSAVE_ParseItemFromBuffer((D2UnknownItemRelatedStruct*)&sGfxData, (char*)(pStreamPos + 1));
-          pStreamPos = (short int*)((int)(pStreamPos + 1) + nItemBytesRead);
-          nTotalBytesRead = nTotalBytesRead + 2 + nItemBytesRead;
-          if (nItemMode) {
-            nSubSocketIdx = PLRSAVE_RestoreEquippedItem(pGameLocal, (D2UnknownItemRelatedStruct*)&sGfxData, &pLastItem, &nSubSocketCount, pUnit);
-          } else {
-            nSubSocketIdx = PLRSAVE_RestoreItemFromSaveData(pGameLocal, pUnit, (D2UnknownItemRelatedStruct*)&sGfxData, &pLastItem, &nSubSocketCount);
-          }
-          if (nSubSocketIdx) {
-            return nSubSocketIdx;
-          }
-
-          nSubItemIndex++;
-        } while (nSubItemIndex < (int)nBytesAfterItem);
+        nItemBytesRead = PLAYERSAVE_ParseItemFromBuffer((D2UnknownItemRelatedStruct*)&sGfxData, (char*)(pStreamPos + 1));
+        pStreamPos = (short int*)((int)(pStreamPos + 1) + nItemBytesRead);
+        nTotalBytesRead = nTotalBytesRead + 2 + nItemBytesRead;
+        if (nItemMode) {
+          nSubSocketIdx = PLRSAVE_RestoreEquippedItem(pGameLocal, (D2UnknownItemRelatedStruct*)&sGfxData, &pLastItem, &nSubSocketCount, pUnit);
+        } else {
+          nSubSocketIdx = PLRSAVE_RestoreItemFromSaveData(pGameLocal, pUnit, (D2UnknownItemRelatedStruct*)&sGfxData, &pLastItem, &nSubSocketCount);
+        }
+        if (nSubSocketIdx) {
+          return nSubSocketIdx;
+        }
       }
 
       next_item:
@@ -1909,23 +1904,21 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
             return 0xe;
           }
 
-            pStreamCursor = (int*)((int)pStreamCursor + nBytesConsumed);
-            if (!pItem) {
-              if (pSocketItem) {
-                UNIT::SUnit::FreeServerUnit(pGame, pSocketItem);
-              }
-            } else if (pSocketItem) {
-              GAME::Task::TASK_Nop(pSocketItem);
-              if (bUsePageHandler) {
-                PLRSAVE_RestoreItemToBodyLoc(pSocketItem, pGame, pCurrentUnit, pItem);
-              } else {
-                PLRSAVE_RestoreItemToUnit(pGame, pCurrentUnit, pSocketItem, (int32_t)pItem);
-              }
+          pStreamCursor = (int*)((int)pStreamCursor + nBytesConsumed);
+          if (!pItem) {
+            if (pSocketItem) {
+              UNIT::SUnit::FreeServerUnit(pGame, pSocketItem);
             }
-
-            nRestoreResult++;
-          } while (nRestoreResult < (int)nUsedSockets);
+          } else if (pSocketItem) {
+            GAME::Task::TASK_Nop(pSocketItem);
+            if (bUsePageHandler) {
+              PLRSAVE_RestoreItemToBodyLoc(pSocketItem, pGame, pCurrentUnit, pItem);
+            } else {
+              PLRSAVE_RestoreItemToUnit(pGame, pCurrentUnit, pSocketItem, (int32_t)pItem);
+            }
+          }
         }
+
         if (pItem) {
           eItemFlags = D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(pItem);
           if ((eItemFlags & ITEMFLAG_RUNEWORD) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {

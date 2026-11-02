@@ -331,8 +331,7 @@ int32_t __stdcall fAPPMODE_client_ReturnAppMode(HMODULE hModule, D2IniConfigStrc
     D2Win::D2GFX::UI_Init();
     D2GFX::INIT_SetWndProcBGlobalPointer((::WndProcB)_Message::WndProcB);
     bIsExpansion = Fog::D2CheckExpansionGame();
-    D2PoolManagerStrc* pArchive = D2Win::Src::D2WinArchive::ReturnZero();
-    int bStringsLoaded = D2Lang::StrTable::strtable::TABLES_LoadStrings(pArchive, nullptr, bIsExpansion);
+    int bStringsLoaded = D2Lang::StrTable::strtable::TABLES_LoadStrings(D2Win::Src::D2WinArchive::ReturnZero(), nullptr, bIsExpansion);
     if (!bStringsLoaded) {
       return 0;
     }

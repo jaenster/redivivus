@@ -14,6 +14,7 @@ struct D2GfxDataStrc;
 struct D2GfxMemoryStrc;
 struct D2PoolManagerStrc;
 struct D2TileLibraryEntryStrc;
+struct D2TileLibraryHeaderStrc;
 struct DC6Block;
 typedef uint32_t eD2UnitType;
 struct D2SpriteDecodeRequestStrc;

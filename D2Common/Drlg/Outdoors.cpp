@@ -80,68 +80,57 @@ static int __stdcall DRLGOUTDOOR_ValidateSubTilePlacement(D2UnkOutdoorStrc * pOu
     int nX;
     uint32_t floorFlag;
     uint32_t wallFlag;
-    int nGridStride = pSubLvl->GridSize;
-    int dy = 0;
-    if (pSubRect->nHeight <= 0) {
-      return 1;
-    }
+    int dy;
+    int dx;
+    for (dy = 0; dy < pSubRect->nHeight; dy++) {
+      int nGridStride = pSubLvl->GridSize;
+      for (dx = 0; dx < pSubRect->nWidth; dx++) {
+        if (pSubLvl->pDrlgFile->nFloorLayers) {
+          floorFlag = DrlgGrid::GetGridFlags(&pSubLvl->pFloorGrid, pSubRect->nPosX + dx, pSubRect->nPosY + dy);
+        } else {
+          floorFlag = 0;
+        }
+        if (pSubLvl->pDrlgFile->nWallLayers) {
+          wallFlag = DrlgGrid::GetGridFlags(pSubLvl->pWallGrid, pSubRect->nPosX + dx, pSubRect->nPosY + dy);
+        } else {
+          wallFlag = 0;
+        }
 
-    do {
-      int dx;
-      dx = 0;
-      if (pSubRect->nWidth > 0) {
-        do {
-          if (pSubLvl->pDrlgFile->nFloorLayers) {
-            floorFlag = DrlgGrid::GetGridFlags(&pSubLvl->pFloorGrid, pSubRect->nPosX + dx, pSubRect->nPosY + dy);
-          } else {
-            floorFlag = 0;
-          }
-          if (pSubLvl->pDrlgFile->nWallLayers) {
-            wallFlag = DrlgGrid::GetGridFlags(pSubLvl->pWallGrid, pSubRect->nPosX + dx, pSubRect->nPosY + dy);
-          } else {
-            wallFlag = 0;
-          }
-
-          nGridIndex = pSubLvl->GridSize * dy + (pBaseGridY - pBaseGridY % nGridStride);
-          nX = pSubLvl->GridSize * dx + (pBaseGridX - pBaseGridX % nGridStride);
-          nSubTileFlags = DrlgGrid::GetGridFlags(pOutdoorCtx->pPrimaryFloorGrid, nX, nGridIndex);
-          pfnValidator = pOutdoorCtx->pfnValidateBorderCell;
-          if (!pfnValidator) {
-            if (wallFlag & 1) {
-              nCallbackResult = (wallFlag >> 8 & 0xff) - 1;
-              if (nCallbackResult != pOutdoorCtx->nPrevBorderPresetId && pOutdoorCtx->nLevelPrestId + nCallbackResult != nSubTileFlags) {
-                return 0;
-              }
-
-              nGridIndex = pOutdoorCtx->pfnIsPresetFree(pOutdoorCtx->pLevel, nX, nGridIndex);
-              if (!nGridIndex) {
-                return 0;
-              }
-            } else {
-              if (floorFlag & 2) {
-                pfnValidator = (fpDrlgOutdoorValidateBorderCell)pOutdoorCtx->pfnTestPreset;
-                wallFlag = 0;
-                floorFlag = 0;
-                nSubTileFlags = 0;
-                nGridIndex = (*pfnValidator)(pOutdoorCtx->pLevel, nX, nGridIndex, nSubTileFlags, floorFlag, wallFlag);
-                if (!nGridIndex) {
-                  return 0;
-                }
-              }
+        nGridIndex = pSubLvl->GridSize * dy + (pBaseGridY - pBaseGridY % nGridStride);
+        nX = pSubLvl->GridSize * dx + (pBaseGridX - pBaseGridX % nGridStride);
+        nSubTileFlags = DrlgGrid::GetGridFlags(pOutdoorCtx->pPrimaryFloorGrid, nX, nGridIndex);
+        pfnValidator = pOutdoorCtx->pfnValidateBorderCell;
+        if (!pfnValidator) {
+          if (wallFlag & 1) {
+            nCallbackResult = (wallFlag >> 8 & 0xff) - 1;
+            if (nCallbackResult != pOutdoorCtx->nPrevBorderPresetId && pOutdoorCtx->nLevelPrestId + nCallbackResult != nSubTileFlags) {
+              return 0;
             }
-          } else {
-            nGridIndex = (*pfnValidator)(pOutdoorCtx->pLevel, nX, nGridIndex, nSubTileFlags, floorFlag, wallFlag);
+
+            nGridIndex = pOutdoorCtx->pfnIsPresetFree(pOutdoorCtx->pLevel, nX, nGridIndex);
             if (!nGridIndex) {
               return 0;
             }
+          } else {
+            if (floorFlag & 2) {
+              pfnValidator = (fpDrlgOutdoorValidateBorderCell)pOutdoorCtx->pfnTestPreset;
+              wallFlag = 0;
+              floorFlag = 0;
+              nSubTileFlags = 0;
+              nGridIndex = (*pfnValidator)(pOutdoorCtx->pLevel, nX, nGridIndex, nSubTileFlags, floorFlag, wallFlag);
+              if (!nGridIndex) {
+                return 0;
+              }
+            }
           }
-
-          dx++;
-        } while (dx < pSubRect->nWidth);
+        } else {
+          nGridIndex = (*pfnValidator)(pOutdoorCtx->pLevel, nX, nGridIndex, nSubTileFlags, floorFlag, wallFlag);
+          if (!nGridIndex) {
+            return 0;
+          }
+        }
       }
-
-      dy++;
-    } while (dy < pSubRect->nHeight);
+    }
 
     return 1;
 }
@@ -151,8 +140,8 @@ int __stdcall DRLGOUTDOOR_ApplySubTileToGrid(int nBaseX, int nBaseY, D2UnkOutdoo
     uint32_t uFloorFlags;
     int nPresetId;
     int nX;
+    int nCol;
     int nWallMainIndex;
-    D2DrlgLevelStrc* pDrlgLevel = pOutdoorCtx->pLevel;
     int nWorldX = pCoords->nPosX + nOffset;
     int nWorldY = pCoords->nPosY;
     int iVar1 = pLvlSub->GridSize;
@@ -163,44 +152,39 @@ int __stdcall DRLGOUTDOOR_ApplySubTileToGrid(int nBaseX, int nBaseY, D2UnkOutdoo
     }
 
     do {
-      int nCol;
-      nCol = 0;
-      if (pCoords->nWidth > 0) {
-        do {
-          if (pLvlSub->pDrlgFile->nWallLayers) {
-            uWallFlags = DrlgGrid::GetGridFlags(pLvlSub->pWallGrid, nCol + nWorldX, nOffset + nWorldY);
-          } else {
-            uWallFlags = 0;
-          }
-          if (pLvlSub->pDrlgFile->nFloorLayers) {
-            uFloorFlags = DrlgGrid::GetGridFlags(&pLvlSub->pFloorGrid, nCol + nWorldX, nOffset + nWorldY);
-          } else {
-            uFloorFlags = 0;
-          }
+      D2DrlgLevelStrc* pDrlgLevel = pOutdoorCtx->pLevel;
+      for (nCol = 0; nCol < pCoords->nWidth; nCol++) {
+        if (pLvlSub->pDrlgFile->nWallLayers) {
+          uWallFlags = DrlgGrid::GetGridFlags(pLvlSub->pWallGrid, nCol + nWorldX, nOffset + nWorldY);
+        } else {
+          uWallFlags = 0;
+        }
+        if (pLvlSub->pDrlgFile->nFloorLayers) {
+          uFloorFlags = DrlgGrid::GetGridFlags(&pLvlSub->pFloorGrid, nCol + nWorldX, nOffset + nWorldY);
+        } else {
+          uFloorFlags = 0;
+        }
 
-          nResult = pLvlSub->GridSize * nOffset + (nBaseY - nBaseY % iVar1);
-          nX = pLvlSub->GridSize * nCol + (nBaseX - nBaseX % iVar1);
-          if (uWallFlags & 1) {
-            uFloorFlags = uWallFlags >> 8 & 0xff;
-            nWallMainIndex = uFloorFlags - 1;
-            if (pOutdoorCtx->pfnGetBorderPreset) {
-              nPresetId = pOutdoorCtx->pfnGetBorderPreset(pDrlgLevel, uWallFlags >> 0x14 & 0x3f, uFloorFlags);
-            } else {
-              nPresetId = pOutdoorCtx->nLevelPrestId + nWallMainIndex;
-            }
-            if (nPresetId != -5 && nWallMainIndex != pOutdoorCtx->nPrevBorderPresetId) {
-              pOutdoorCtx->pfnSpawnPreset(pDrlgLevel, nX, nResult, nPresetId, 0, 1);
-            }
+        nResult = pLvlSub->GridSize * nOffset + (nBaseY - nBaseY % iVar1);
+        nX = pLvlSub->GridSize * nCol + (nBaseX - nBaseX % iVar1);
+        if (uWallFlags & 1) {
+          uFloorFlags = uWallFlags >> 8 & 0xff;
+          nWallMainIndex = uFloorFlags - 1;
+          if (pOutdoorCtx->pfnGetBorderPreset) {
+            nPresetId = pOutdoorCtx->pfnGetBorderPreset(pDrlgLevel, uWallFlags >> 0x14 & 0x3f, uFloorFlags);
           } else {
-            if (uFloorFlags & 2) {
-              pOutdoorCtx->pfnAlterAdjacentCells(pDrlgLevel, nX, nResult);
-            } else {
-              pOutdoorCtx->pfnSetBlankCell(pDrlgLevel, nX, nResult);
-            }
+            nPresetId = pOutdoorCtx->nLevelPrestId + nWallMainIndex;
           }
-
-          nCol++;
-        } while (nCol < pCoords->nWidth);
+          if (nPresetId != -5 && nWallMainIndex != pOutdoorCtx->nPrevBorderPresetId) {
+            pOutdoorCtx->pfnSpawnPreset(pDrlgLevel, nX, nResult, nPresetId, 0, 1);
+          }
+        } else {
+          if (uFloorFlags & 2) {
+            pOutdoorCtx->pfnAlterAdjacentCells(pDrlgLevel, nX, nResult);
+          } else {
+            pOutdoorCtx->pfnSetBlankCell(pDrlgLevel, nX, nResult);
+          }
+        }
       }
 
       nResult = nOffset + 1;
@@ -308,12 +292,7 @@ BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(D2UnkOutdoorStrc * pOutdoor
       }
     }
 
-    posIter = 0;
-    if ((int)totalPositions <= 0) {
-      return 0;
-    }
-
-    do {
+    for (posIter = 0; posIter < (int)totalPositions; posIter++) {
       if (!strictCornerLimit || aPositions[posIter * 2] != 2 || aPositions[posIter * 2 + 1] != 2) {
         posIndex = DRLGOUTDOOR_ValidateSubTilePlacement(pOutdoorCtx, aPositions[posIter * 2], aPositions[posIter * 2 + 1], (D2DrlgCoordStrc*)pRect, pLevelPtr);
         if (posIndex) {
@@ -341,9 +320,7 @@ BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(D2UnkOutdoorStrc * pOutdoor
           }
         }
       }
-
-      posIter++;
-    } while (posIter < (int)totalPositions);
+    }
 
     return 0;
 }
@@ -381,48 +358,37 @@ void __stdcall DRLGOUTDOOR_CopyPresetUnitsFromSubTxt(int32_t roomX, int32_t room
 BOOL __stdcall DRLGOUTDOOR_CheckSubTileOverlap(int32_t nParam1, int32_t nParam2, D2DrlgWallLayerGridsStrc * pDrlgUnkn, int * pnParam, D2LvlSubTxt * pLvlSubTxt) {
     uint32_t uFlags;
     int nWallLayerIter;
+    int dy;
+    int dx;
     D2DrlgGridStrc** ppWallGrid;
-    int nWallLayerCount = pDrlgUnkn->nWallLayerCount;
-    int dy = 0;
-    if (pnParam[3] <= 0) {
-      return 1;
-    }
-
-    do {
-      int dx;
-      dx = 0;
-      if (pnParam[2] > 0) {
-        do {
-          uFlags = DrlgGrid::GetGridFlags(&pLvlSubTxt->pFloorGrid, *pnParam + dx, pnParam[1] + dy);
-          if (uFlags & 2 || pLvlSubTxt->pWallGrid[0].nWidth && (uFlags = DrlgGrid::GetGridFlags(pLvlSubTxt->pWallGrid, *pnParam + dx, pnParam[1] + dy) , (uFlags & 1) != 0)) {
-            uFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->pFloorGrid, dx + nParam1, dy + nParam2);
-            if (uFlags & 0x3f0ff00 || !(uFlags & 2)) {
-              return 0;
-            }
-
-            nWallLayerIter = 0;
-            if (nWallLayerCount > 0) {
-              ppWallGrid = pDrlgUnkn->apWallGrids;
-              do {
-                if (*ppWallGrid) {
-                  uFlags = DrlgGrid::GetGridFlags(*ppWallGrid, dx + nParam1, dy + nParam2);
-                  if (uFlags & 1) {
-                    return 0;
-                  }
-                }
-
-                ppWallGrid++;
-                nWallLayerIter++;
-              } while (nWallLayerIter < nWallLayerCount);
-            }
+    for (dy = 0; dy < pnParam[3]; dy++) {
+      int nWallLayerCount = pDrlgUnkn->nWallLayerCount;
+      for (dx = 0; dx < pnParam[2]; dx++) {
+        uFlags = DrlgGrid::GetGridFlags(&pLvlSubTxt->pFloorGrid, *pnParam + dx, pnParam[1] + dy);
+        if (uFlags & 2 || pLvlSubTxt->pWallGrid[0].nWidth && (uFlags = DrlgGrid::GetGridFlags(pLvlSubTxt->pWallGrid, *pnParam + dx, pnParam[1] + dy) , (uFlags & 1) != 0)) {
+          uFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->pFloorGrid, dx + nParam1, dy + nParam2);
+          if (uFlags & 0x3f0ff00 || !(uFlags & 2)) {
+            return 0;
           }
 
-          dx++;
-        } while (dx < pnParam[2]);
-      }
+          nWallLayerIter = 0;
+          if (nWallLayerCount > 0) {
+            ppWallGrid = pDrlgUnkn->apWallGrids;
+            do {
+              if (*ppWallGrid) {
+                uFlags = DrlgGrid::GetGridFlags(*ppWallGrid, dx + nParam1, dy + nParam2);
+                if (uFlags & 1) {
+                  return 0;
+                }
+              }
 
-      dy++;
-    } while (dy < pnParam[3]);
+              ppWallGrid++;
+              nWallLayerIter++;
+            } while (nWallLayerIter < nWallLayerCount);
+          }
+        }
+      }
+    }
 
     return 1;
 }
@@ -434,13 +400,9 @@ BOOL __stdcall DRLGOUTDOOR_MatchSubTileTypes(int32_t nParam1, int32_t nParam2, D
     uint32_t uSubFlags;
     uint32_t uRoomFlags;
     uint32_t floorFlag;
+    int row;
     int nY;
-    int row = 0;
-    if (pnParam[3] <= 0) {
-      return 1;
-    }
-
-    do {
+    for (row = 0; row < pnParam[3]; row++) {
       int nCol;
       nCol = 0;
       if (pnParam[2] > 0) {
@@ -483,9 +445,7 @@ BOOL __stdcall DRLGOUTDOOR_MatchSubTileTypes(int32_t nParam1, int32_t nParam2, D
           nCol++;
         } while (nCol < pnParam[2]);
       }
-
-      row++;
-    } while (row < pnParam[3]);
+    }
 
     return 1;
 }
@@ -1351,11 +1311,7 @@ void __fastcall SpawnAct12Shrines(D2DrlgLevelStrc * pLevel, int32_t nShrines) {
       if (!(nRandIdxA & 0x1b81)) {
         DrlgGrid::AlterGridFlag(&pLevelData->sGridLink, nGridX, nGridY, gnOutdoorsGridWidthByLevel[nShrineStyleIdx], 0);
         DrlgGrid::AlterGridFlag(&pLevelData->sGridOutdoor, nGridX, nGridY, 0x1000, 0);
-        nShrineStyleIdx = nShrineStyleIdx + 1 & 0x80000003;
-        if ((int)nShrineStyleIdx < 0) {
-          nShrineStyleIdx = (nShrineStyleIdx - 1 | -4) + 1;
-        }
-
+        nShrineStyleIdx = (int)(nShrineStyleIdx + 1) % 4;
         nShrinesLeft--;
       }
 

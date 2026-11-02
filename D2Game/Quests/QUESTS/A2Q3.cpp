@@ -151,7 +151,6 @@ BOOL __fastcall Q11_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUn
 // No quest-record access; pure client notification of the Tainted-Sun darkening.
 BOOL __fastcall Q11_SendDarknessPacket(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2GSPacketSrv0x53 sPacket53;
-    D2GSPacketSrv0x5D sPacket5D;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q3.cpp", 0x142);
     sPacket53.bEclipse = GAME::Clients::GetAct(pClient);
     if (sPacket53.bEclipse != 1) {
@@ -162,11 +161,10 @@ BOOL __fastcall Q11_SendDarknessPacket(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     sPacket53.nCycleIndex = 5;
     sPacket53.nTicks = 0;
     GAME::SCmd::NET_D2GS_SERVER_Send_0x53_ACTTIMEOFDAY(pClient, &sPacket53);
-    sPacket5D.nExtra = 0;
+    D2GSPacketSrv0x5D sPacket5D = {0};
     sPacket5D.nPacketId = ']';
     sPacket5D.nQuestId = '\n';
     sPacket5D.nAlertFlags = '\x10';
-    sPacket5D.nFilterStatus = '\0';
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &sPacket5D);
     return 0;
 }
@@ -415,17 +413,15 @@ BOOL __fastcall Q11_UpdateQuestRecord(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 // Q11_BeginTaintedSun; if it deferred (act not loaded, returns 0) sets the pending flag and sends a 0x5D
 // quest-state packet (quest 10, flag 1) to the interacting client; otherwise sets the darkened flag.
 static void __stdcall Q11_OnPlayerInteract(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
-    D2GSPacketSrv0x5D abyQuestStatePacket;
     D2QuestDataA2Q3Strc* pA2Q3Data = pQuestData->pQuestSpecificData.pA2Q3;
     bool bTaintedSunStarted = (bool)Q11_BeginTaintedSun(pQuestData);
     if (!bTaintedSunStarted) {
       D2ClientStrc* pClient;
       pA2Q3Data->bViperAmuletInitPending = '\x01';
-      abyQuestStatePacket.nExtra = 0;
+      D2GSPacketSrv0x5D abyQuestStatePacket = {0};
       abyQuestStatePacket.nPacketId = ']';
       abyQuestStatePacket.nQuestId = '\n';
       abyQuestStatePacket.nAlertFlags = '\x01';
-      abyQuestStatePacket.nFilterStatus = '\0';
       pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q3.cpp", 0x2e0);
       GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &abyQuestStatePacket);
       return;

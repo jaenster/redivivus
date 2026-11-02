@@ -340,17 +340,15 @@ void __stdcall D2QSSOCKET_BlockSocketIfValid(D2QSSocketStrc * pQSSocket) {
 
 // @sourcefile .\Src\D2QSSocket.cpp
 D2QSSocketStrc * __stdcall STRUCT_D2QSSocket_Init(char * szIpAddress, int nPort, char * szName) {
-    D2QSSocketStrc* pD2QSSocket;
     char cCurChar;
     int32_t dwErrorCode;
     if (!szIpAddress) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x242);
       exit(-1);
     } else {
-      char* pszScan;
-      pszScan = szIpAddress;
-      pszScan = pszScan + strlen(pszScan) + 1;
-      if (!((uint32_t)((int)pszScan - (int)(szIpAddress + 1)) < 0x103)) {
+      D2QSSocketStrc* pD2QSSocket;
+      int nLen = (int)strlen(szIpAddress);
+      if (!((uint32_t)nLen < 0x103)) {
         ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x243);
         exit(-1);
       }

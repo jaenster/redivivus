@@ -1297,22 +1297,17 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
       bHasOutput++;
     } while (bHasOutput < 3);
 
-    bApplyMods = 0;
-    if (nExtractedItemCount > 0) {
-      do {
-        pClonedOutput = (D2UnitStrc*)apExtractedItems[bApplyMods];
-        if (pClonedOutput) {
-          D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedOutput, INVPAGE_CUBE);
-          nAffixIdx = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\PlrTrade.cpp", 0x57c, pGameTmp, pDVar2, pClonedOutput->nUnitGUID, 0, 0, 1, 1, nullptr);
-          if (!nAffixIdx) {
-            UNIT::SUnit::FreeServerUnit(pGameTmp, pClonedOutput);
-          } else {
-            D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pClonedOutput, ITEMFLAG_IDENTIFIED, 1);
-          }
+    for (bApplyMods = 0; bApplyMods < nExtractedItemCount; bApplyMods++) {
+      pClonedOutput = (D2UnitStrc*)apExtractedItems[bApplyMods];
+      if (pClonedOutput) {
+        D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedOutput, INVPAGE_CUBE);
+        nAffixIdx = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\PlrTrade.cpp", 0x57c, pGameTmp, pDVar2, pClonedOutput->nUnitGUID, 0, 0, 1, 1, nullptr);
+        if (!nAffixIdx) {
+          UNIT::SUnit::FreeServerUnit(pGameTmp, pClonedOutput);
+        } else {
+          D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pClonedOutput, ITEMFLAG_IDENTIFIED, 1);
         }
-
-        bApplyMods++;
-      } while (bApplyMods < nExtractedItemCount);
+      }
     }
 }
 

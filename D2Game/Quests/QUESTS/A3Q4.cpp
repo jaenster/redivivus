@@ -283,7 +283,7 @@ bool __fastcall Q21_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     if (BVar1) {
       /* GetQuestState JustCompleted(0xd) -> out = 0xb + 2*set (0xd if just-completed
                          cinematic) */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheGoldenBird, QUESTSTATE_JustCompleted);
-      *nUnknown = (BVar1 != 0) * '\x02' + '\v';
+      *nUnknown = BVar1 != 0 ? 13 : 11;
       return true;
     }
 
@@ -293,20 +293,20 @@ bool __fastcall Q21_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     if (pGoldenBirdItem) {
       /* GetQuestState Step0x04(4) -- holds Golden Bird: out = 3 + set (3=have bird,
                          4=shown to Meshif) */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheGoldenBird, QUESTSTATE_Step0x04);
-      *nUnknown = (BVar1 != 0) + '\x03';
+      *nUnknown = BVar1 != 0 ? 4 : 3;
       return true;
     }
     if (pJadeItem) {
       /* GetQuestState Step0x02(2) -- holds Jade: out = 1 + set (1=have jade, 2=traded
                          to Meshif) */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheGoldenBird, QUESTSTATE_Step0x02);
-      *nUnknown = (BVar1 != 0) + '\x01';
+      *nUnknown = BVar1 != 0 ? 2 : 1;
       return true;
     }
     if (pQuestData->bIsNotIntroduction == '\0') {
       return true;
     }
     if (pQuestData->nStateFlagPrev >= 6) {
-      *nUnknown = (pQuestData->pGame->nGameType != SGAMETYPE_SINGLEPLAYER) + '\x06';
+      *nUnknown = pQuestData->pGame->nGameType != SGAMETYPE_SINGLEPLAYER ? 7 : 6;
       return true;
     }
 

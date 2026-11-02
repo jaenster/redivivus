@@ -320,7 +320,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
               break;
             }
 
-            nSelectResult = 2 - (uint32_t)(pbDecompressResult < (uint8_t*)0xf0);
+            nSelectResult = pbDecompressResult < (uint8_t*)0xf0 ? 0x1U : 0x2U;
             pbRecvResult = Fog::Src::D2Net::NET_D2GS_CLIENT_DecompressPacket(pD2PacketsClientBuffer->pBytes + pD2PacketsClientBuffer->nCount, 0x7b8 - pD2PacketsClientBuffer->nCount, (char*)(aCompressedBuf + (int)(pCompressedConsumed + nSelectResult)), (int)pbDecompressResult - nSelectResult);
             pCompressedEnd += -(int)pbDecompressResult;
             pCompressedConsumed += (int)pbDecompressResult;

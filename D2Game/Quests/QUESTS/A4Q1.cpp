@@ -358,16 +358,11 @@ BOOL __fastcall Q26_PlayerCheckNearIzual(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       }
 
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pPlayerRoom, &pAdjacentRooms, (int*)&nAdjacentRoomCount);
-      nRoomIdx = 0;
-      if (nAdjacentRoomCount > 0) {
-        do {
-          if (pAdjacentRooms[nRoomIdx] == pQuestData) {
-            bIsNearIzual = 1;
-            break;
-          }
-
-          nRoomIdx++;
-        } while (nRoomIdx < nAdjacentRoomCount);
+      for (nRoomIdx = 0; nRoomIdx < nAdjacentRoomCount; nRoomIdx++) {
+        if (pAdjacentRooms[nRoomIdx] == pQuestData) {
+          bIsNearIzual = 1;
+          break;
+        }
       }
     }
 

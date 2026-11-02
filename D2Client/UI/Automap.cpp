@@ -509,11 +509,7 @@ D2AutomapCellStrc * __stdcall AUTOMAP_AllocCell() {
     int nBlockCount;
     nBlockCount = nAutomapCellListSize + ((int)nAutomapCellListSize >> 0x1f & 0x1ffU);
     uint32_t nSlotIndex;
-    nSlotIndex = nAutomapCellListSize & 0x800001ff;
-    if ((int)nSlotIndex < 0) {
-      nSlotIndex = (nSlotIndex - 1 | -512) + 1;
-    }
-
+    nSlotIndex = (int)nAutomapCellListSize % 512;
     int nBlockIndex;
     nBlockIndex = 0;
     nAutomapCellListSize++;
@@ -713,11 +709,7 @@ HANDLE __stdcall AUTOMAP_GetMapFileHandle() {
         goto open_slot_file;
       }
 
-      uVar1 = sSeedHeader.nSlotCursor + 1 & 0x80000003;
-      if ((int)uVar1 < 0) {
-        uVar1 = (uVar1 - 1 | -4) + 1;
-      }
-
+      uVar1 = (int)(sSeedHeader.nSlotCursor + 1) % 4;
       sSeedHeader.anSeedSlots[sSeedHeader.nSlotCursor] = D2GameGame0x546->nInitSeed;
       sSeedHeader.nSlotCursor = uVar1;
       sprintf(szFileName, "%s%s.ma%d", szSavePath, D2Game::Save::szSaveCharacterName, nCurrentSlot);
@@ -1432,20 +1424,13 @@ void __stdcall AUTOMAP_Update() {
       pLevelDefs = D2Common::DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(eLevelId);
       nErrorLine = pLevelDefs->Layer;
       pAutomapLayer = AUTOMAP_AddLayer(nErrorLine);
-      i = 0;
-      if (nRoomCount <= 0) {
-        return;
-      }
-
-      do {
+      for (i = 0; i < nRoomCount; i++) {
         eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(papRooms[i]);
         pLevelDefs = D2Common::DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(eLevelId);
         if (nErrorLine == pLevelDefs->Layer) {
           AUTOMAP_RevealRoom(papRooms[i], 0, pAutomapLayer);
         }
-
-        i++;
-      } while (i < nRoomCount);
+      }
 
       return;
     }
@@ -1687,7 +1672,7 @@ void __fastcall AUTOMAP_DrawCellTree(D2AutomapCellStrc * pCell, D2AutomapDrawCtx
                       nScreenY2 /= 2;
                       if (nScreenY2 < 0x96) {
                         eFade = AUTOMAP_GetFade();
-                        nDrawMode = (eFade != 2) + 1;
+                        nDrawMode = eFade != 2 ? 2 : 1;
                         if (nScreenY2 < 100) {
                           nDrawMode = 1;
                           if (nScreenY2 < 0x32) {

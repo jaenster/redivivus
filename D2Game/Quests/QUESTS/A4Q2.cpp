@@ -449,7 +449,6 @@ BOOL __fastcall Q27_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStr
 // [A4Q3 Terror's End] Per-player: if QUEST_TerrorsEnd is JustCompleted, send 0x5D quest-state update (quest 0x17, state 2) to that client and queue the completion sound/event. nParam is the SGAMEDATA (nDifficulty at +0x6d).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 BOOL __fastcall Q27_PlayerCheckCompletionSendState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    D2GSPacketSrv0x5D aQuestStatePacket;
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TerrorsEnd, QUESTSTATE_JustCompleted);
     if (!bJustCompleted) {
@@ -457,11 +456,10 @@ BOOL __fastcall Q27_PlayerCheckCompletionSendState(::SGAMEDATA * pGame, D2UnitSt
     }
 
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q2.cpp", 0x1a4);
-    aQuestStatePacket.nExtra = 0;
+    D2GSPacketSrv0x5D aQuestStatePacket = {0};
     aQuestStatePacket.nPacketId = ']';
     aQuestStatePacket.nQuestId = '\x17';
     aQuestStatePacket.nAlertFlags = '\x02';
-    aQuestStatePacket.nFilterStatus = '\0';
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &aQuestStatePacket);
     UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x4b, pUnit);
     return 0;
@@ -470,14 +468,12 @@ BOOL __fastcall Q27_PlayerCheckCompletionSendState(::SGAMEDATA * pGame, D2UnitSt
 // [A4Q3 Terror's End — expansion] Warp player into the Pandemonium Fortress (LEVEL_ThePandemoniumFortress) and send 0x5D quest-state packet (quest 0x17, state 1). Standalone variant of the JustCompleted branch in Q27_PlayerEnterGame.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 void __fastcall Q27_InitPandemoniumAndSendState(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    D2GSPacketSrv0x5D aQuestStatePacket;
     GAME::Level::InitLevel(pGame, pUnit, LEVEL_ThePandemoniumFortress, 0);
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q2.cpp", 0x1b8);
-    aQuestStatePacket.nExtra = 0;
+    D2GSPacketSrv0x5D aQuestStatePacket = {0};
     aQuestStatePacket.nPacketId = ']';
     aQuestStatePacket.nQuestId = '\x17';
     aQuestStatePacket.nAlertFlags = '\x01';
-    aQuestStatePacket.nFilterStatus = '\0';
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &aQuestStatePacket);
 }
 
@@ -494,14 +490,12 @@ BOOL __fastcall Q27_PlayerEnterGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
     pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_TerrorsEnd, QUESTSTATE_JustCompleted);
     if (bJustCompleted) {
-      D2GSPacketSrv0x5D sPacket5D;
       GAME::Level::InitLevel(pGame, pUnit, LEVEL_ThePandemoniumFortress, 0);
       pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q2.cpp", 0x1b8);
-      sPacket5D.nExtra = 0;
+      D2GSPacketSrv0x5D sPacket5D = {0};
       sPacket5D.nPacketId = ']';
       sPacket5D.nQuestId = '\x17';
       sPacket5D.nAlertFlags = '\x01';
-      sPacket5D.nFilterStatus = '\0';
       GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &sPacket5D);
       return 0;
     }
@@ -849,16 +843,11 @@ BOOL __fastcall Q27_PlayerCheckNearDiablo(::SGAMEDATA * pGame, D2UnitStrc * pUni
     } else {
       uint32_t i;
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nAdjacentRoomCount);
-      i = 0;
-      if (nAdjacentRoomCount > 0) {
-        do {
-          if (ppAdjacentRooms[i] == (D2RoomStrc*)pDVar1->pDiabloRoom) {
-            bIsNearDiablo = 1;
-            break;
-          }
-
-          i++;
-        } while (i < nAdjacentRoomCount);
+      for (i = 0; i < nAdjacentRoomCount; i++) {
+        if (ppAdjacentRooms[i] == (D2RoomStrc*)pDVar1->pDiabloRoom) {
+          bIsNearDiablo = 1;
+          break;
+        }
       }
     }
 

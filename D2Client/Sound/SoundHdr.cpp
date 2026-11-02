@@ -682,12 +682,8 @@ void __stdcall SOUNDHDR_Shutdown() {
     }
     if (pTxtSounds) {
       int nSoundId;
-      nSoundId = 1;
-      if (1 < nTxtSoundsSize) {
-        do {
-          SOUNDHDR_FreeSoundBuffer(nSoundId);
-          nSoundId++;
-        } while (nSoundId < nTxtSoundsSize);
+      for (nSoundId = 1; nSoundId < nTxtSoundsSize; nSoundId++) {
+        SOUNDHDR_FreeSoundBuffer(nSoundId);
       }
 
       D2_FREE_AT(pTxtSounds, ".\\Sound\\SoundHdr.cpp", 0x18e);
@@ -882,7 +878,7 @@ void __fastcall SOUNDHDR_UpdateRegistryVersion(int32_t nSoundHeaderIndex) {
             if (dwVersionBuild & 0x40) {
               byCurrentVersionFlag = 3;
             } else {
-              byCurrentVersionFlag = ((dwVersionBuild & 4) != 0) + 1;
+              byCurrentVersionFlag = (dwVersionBuild & 4) != 0 ? 2 : 1;
             }
           }
         }

@@ -2039,14 +2039,7 @@ void __stdcall GAMEDATA_DrawCharacterPortrait() {
       awcName[nTitleIndex] = L'\0';
     }
 
-    char* pSrcChar = pIniData->szNAME;
-    nTitleIndex = (uintptr_t)&sText - (int)pSrcChar;
-    do {
-      cChar = *pSrcChar;
-      pSrcChar[nTitleIndex] = cChar;
-      pSrcChar++;
-    } while (cChar != '\0');
-
+    strcpy(sText.szName, pIniData->szNAME);
     D2Lang::UTF8_ConvertToWideChar(awcName, sText.szName, 0x40);
     int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(awcName);
     D2Win::Src::D2WinFont::DRAW_text(awcName, ScreenSizeX / 2 - nTextWidth / 2, 0xbb, 4, 0);
@@ -2057,12 +2050,12 @@ void __stdcall GAMEDATA_DrawCharacterPortrait() {
 
     uint32_t nHardcoreFlag = ePlayerStatus & 4;
     if (CLIENT_nDifficulty == '\0') {
-      nTitleIndex = ((ePlayerStatus & PLAYERSTATUS_Expansion) != 0) + 4;
+      nTitleIndex = (ePlayerStatus & PLAYERSTATUS_Expansion) != 0 ? 5 : 4;
       if (!(ePlayerStatus & PLAYERSTATUS_Hardcore)) {
         nHardcoreFlag = 0;
       }
     } else if (CLIENT_nDifficulty == '\x01') {
-      nTitleIndex = (uint32_t)((ePlayerStatus & PLAYERSTATUS_Expansion) != 0) * 2 + 8;
+      nTitleIndex = (ePlayerStatus & PLAYERSTATUS_Expansion) != 0 ? 0xaU : 0x8U;
       if (!(ePlayerStatus & PLAYERSTATUS_Hardcore)) {
         nHardcoreFlag = 0;
       }
@@ -2077,7 +2070,7 @@ void __stdcall GAMEDATA_DrawCharacterPortrait() {
       }
     }
 
-    pSrcChar = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)nD2PlayerClassID, nTitleIndex, nHardcoreFlag, ePlayerStatus & 0x20);
+    char* pSrcChar = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)nD2PlayerClassID, nTitleIndex, nHardcoreFlag, ePlayerStatus & 0x20);
     if (!pSrcChar) {
       return;
     }

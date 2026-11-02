@@ -24,7 +24,7 @@
 
 template<> void TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::SyncEnterLock(int32_t * pLockedHandle, int32_t bForWriting) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&this->tSync.m_critsect);
-    *pLockedHandle = (uint32_t)(bForWriting != 0) * 2 - 1;
+    *pLockedHandle = bForWriting != 0 ? 0x1U : 0xffffffff;
 }
 
 template<> TSLink<::CELLIST>* TSLink<CELLIST>::NextLink(int32_t nLinkOffset) {

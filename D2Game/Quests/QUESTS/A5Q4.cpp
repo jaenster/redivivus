@@ -110,7 +110,7 @@ bool __fastcall Q34_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     }
 
     BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_BetrayalOfHaggorath, QUESTSTATE_Step0x04);
-    *nUnknown = (BVar1 != 0) + '\x04';
+    *nUnknown = BVar1 != 0 ? 5 : 4;
     return true;
 }
 
@@ -441,16 +441,11 @@ BOOL __fastcall Q34_CheckNearNihlathak(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     } else {
       uint32_t nAdjacentIdx;
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nAdjacentRoomCount);
-      nAdjacentIdx = 0;
-      if (nAdjacentRoomCount > 0) {
-        do {
-          if (ppAdjacentRooms[nAdjacentIdx] == (D2RoomStrc*)pBetrayalQuest->pRoomTarget) {
-            bIsNearNihlathak = '\x01';
-            break;
-          }
-
-          nAdjacentIdx++;
-        } while (nAdjacentIdx < nAdjacentRoomCount);
+      for (nAdjacentIdx = 0; nAdjacentIdx < nAdjacentRoomCount; nAdjacentIdx++) {
+        if (ppAdjacentRooms[nAdjacentIdx] == (D2RoomStrc*)pBetrayalQuest->pRoomTarget) {
+          bIsNearNihlathak = '\x01';
+          break;
+        }
       }
     }
 
@@ -839,8 +834,7 @@ void __fastcall Q34_NpcSpawnPortalInAct5(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     eLevelId = LEVEL_NihlathaksTemple;
     int nPortalY = nUnitPosY + 5;
     nUnitPosX += 10;
-    pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    bIgnoreSpawnLocation = SKILLS::SkillsServer::SERVER_SpawnPortal(pGame, nullptr, pRoom, nUnitPosX, nPortalY, eLevelId, ppPortalOut, nClassId, bIgnoreSpawnLocation);
+    bIgnoreSpawnLocation = SKILLS::SkillsServer::SERVER_SpawnPortal(pGame, nullptr, D2Common::Units::UNITS_GetRoom(pUnit), nUnitPosX, nPortalY, eLevelId, ppPortalOut, nClassId, bIgnoreSpawnLocation);
     if (!bIgnoreSpawnLocation) {
       return;
     }

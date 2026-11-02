@@ -704,7 +704,7 @@ void __fastcall QUEST_GetQuestLogDisplayState(D2QuestDataStrc * pQuestData, uint
       }
       if (pQuestData->nQuestNoInternal != QUESTINT_TheSearchForCain || !bCannotComplete) {
         if (pQuestData->nQuestNoInternal == QUESTINT_TheTaintedSun) {
-          *pQuestData2 = (pQuestData->nStateFlagPrev != 4) * '\b' + 4;
+          *pQuestData2 = pQuestData->nStateFlagPrev != 4 ? 12 : 4;
           return;
         }
 
@@ -796,7 +796,6 @@ void __fastcall QUEST_SendQuestUpdateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
     BOOL bBadPtr;
     uint32_t nMonstersLeft;
     int32_t iVar1;
-    D2GSPacketSrv0x5D sPacket;
     if (!pGame->pQuestControl) {
       return;
     }
@@ -829,11 +828,10 @@ void __fastcall QUEST_SendQuestUpdateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
       return;
     }
 
-    sPacket.nExtra = 0;
+    D2GSPacketSrv0x5D sPacket = {0};
     sPacket.nQuestId = (uint8_t)nInternalQuestNo;
     sPacket.nPacketId = ']';
     sPacket.nAlertFlags = pQuestData->nQuestPacketFlags;
-    sPacket.nFilterStatus = '\0';
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBufferEx = pPlayerData->pQuestRecord[pGame->nDifficulty];
     if (!pQuestData->fpStatusFilter) {
@@ -1496,17 +1494,12 @@ void __fastcall QUEST_OnGoldenBirdCouncilKilled(::SGAMEDATA * pGameStrc, D2UnitS
 }
 
 void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t pNpcIdArray, D2UnitStrc * pUnit, int32_t nNpcIdCount) {
+    int i;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    int i = 0;
-    if (nNpcIdCount <= 0) {
-      return;
-    }
-
-    do {
+    for (i = 0; i < nNpcIdCount; i++) {
       D2UnitDataPlayerInteractedNPCStrc* pInteractedNPCs = pPlayerData->pInteractedNPCs[pGame->nDifficulty];
       PLAYER::PlayerIntro::INTRONPC_SetSpokenWithNPC_Intro2(pInteractedNPCs, *(int32_t*)(pNpcIdArray + i * 4));
-      i++;
-    } while (i < nNpcIdCount);
+    }
 }
 
 // Marks all NPCs in the destination act as already-introduced (spoken-with) for pUnit when an act transition occurs. Switches on eActNo (ACT_I through ACT_V; ACT_IV is a no-op) and iterates the corresponding NPCINTRO_ListActN table, calling INTRONPC_SetSpokenWithNPC_Intro2 for each entry. Ensures the player does not see first-meeting NPC intros upon entering the new act.
@@ -1998,7 +1991,6 @@ void __fastcall SendQuestState(D2UnitStrc * pUnit, int32_t nQuestId) {
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall QUEST_SendQuestStatePacket(D2UnitStrc * pUnit, int bQuestId, uint8_t bReasoned) {
     eD2LevelId eLevel;
-    D2GSPacketSrv0x5D aPacketBuf;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (pRoom) {
       eAct eActNo;
@@ -2013,10 +2005,9 @@ void __fastcall QUEST_SendQuestStatePacket(D2UnitStrc * pUnit, int bQuestId, uin
       }
     }
 
-    aPacketBuf.nExtra = 0;
+    D2GSPacketSrv0x5D aPacketBuf = {0};
     aPacketBuf.nQuestId = (uint8_t)bQuestId;
     aPacketBuf.nPacketId = ']';
-    aPacketBuf.nAlertFlags = '\0';
     aPacketBuf.nFilterStatus = '\f';
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xd82);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &aPacketBuf);
@@ -2659,82 +2650,82 @@ void __fastcall QUEST_OnPlayerJoinGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     pQuestDataIter = 0;
     run_den_of_evil_filter:
     /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pQuestDataIter->fpSequenceFilter);
-    if (!bBadCodePtr) {
-      pQuestDataIter->fpSequenceFilter(pQuestDataIter);
-      pGame = uSavedGameOrPacket0x89.pGameSaved;
-      if (uSavedGameOrPacket0x89.pGameSaved->pQuestControl) {
-        for (pQuestDataIter = uSavedGameOrPacket0x89.pGameSaved->pQuestControl->pQuestData; pQuestDataIter; pQuestDataIter = pQuestDataIter->pPrev) {
-          if (pQuestDataIter->nQuestNoInternal == QUESTINT_RadamentsLair) {
-            goto run_radament_filter;
-          }
-        }
-      }
-
-      pQuestDataIter = 0;
-      run_radament_filter:
-      /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pQuestDataIter->fpSequenceFilter);
-      if (!bBadCodePtr) {
-        pQuestDataIter->fpSequenceFilter(pQuestDataIter);
-        if (pGame->pQuestControl) {
-          for (pQuestDataIter = pGame->pQuestControl->pQuestData; pQuestDataIter; pQuestDataIter = pQuestDataIter->pPrev) {
-            if (pQuestDataIter->nQuestNoInternal == QUESTINT_TheGoldenBird) {
-              goto run_golden_bird_filter;
-            }
-          }
-        }
-
-        pQuestDataIter = 0;
-        run_golden_bird_filter:
-        /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pQuestDataIter->fpSequenceFilter);
-        if (!bBadCodePtr) {
-          pQuestDataIter->fpSequenceFilter(pQuestDataIter);
-          if (pGame->pQuestControl) {
-            for (pQuestDataIter = pGame->pQuestControl->pQuestData; pQuestDataIter; pQuestDataIter = pQuestDataIter->pPrev) {
-              if (pQuestDataIter->nQuestNoInternal == QUESTINT_TheFallenAngel) {
-                goto run_fallen_angel_filter;
-              }
-            }
-          }
-
-          pQuestDataIter = 0;
-          run_fallen_angel_filter:
-          /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pQuestDataIter->fpSequenceFilter);
-          if (!bBadCodePtr) {
-            pQuestDataIter->fpSequenceFilter(pQuestDataIter);
-            if (pGame->pQuestControl) {
-              for (pQuestDataIter = pGame->pQuestControl->pQuestData; pQuestDataIter; pQuestDataIter = pQuestDataIter->pPrev) {
-                if (pQuestDataIter->nQuestNoInternal == QUESTINT_SiegeOnHaggorath) {
-                  goto run_siege_filter;
-                }
-              }
-            }
-
-            pQuestDataIter = 0;
-            run_siege_filter:
-            /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pQuestDataIter->fpSequenceFilter);
-            if (bBadCodePtr) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x65a);
-              exit(-1);
-            }
-
-            pQuestDataIter->fpSequenceFilter(pQuestDataIter);
-            goto send_quest_state;
-          } else {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x656);
-            exit(-1);
-          }
-        } else {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x653);
-          exit(-1);
-        }
-      } else {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x650);
-        exit(-1);
-      }
-    } else {
+    if (bBadCodePtr) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x64d);
       exit(-1);
     }
+
+    pQuestDataIter->fpSequenceFilter(pQuestDataIter);
+    pGame = uSavedGameOrPacket0x89.pGameSaved;
+    if (uSavedGameOrPacket0x89.pGameSaved->pQuestControl) {
+      for (pQuestDataIter = uSavedGameOrPacket0x89.pGameSaved->pQuestControl->pQuestData; pQuestDataIter; pQuestDataIter = pQuestDataIter->pPrev) {
+        if (pQuestDataIter->nQuestNoInternal == QUESTINT_RadamentsLair) {
+          goto run_radament_filter;
+        }
+      }
+    }
+
+    pQuestDataIter = 0;
+    run_radament_filter:
+    /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pQuestDataIter->fpSequenceFilter);
+    if (bBadCodePtr) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x650);
+      exit(-1);
+    }
+
+    pQuestDataIter->fpSequenceFilter(pQuestDataIter);
+    if (pGame->pQuestControl) {
+      for (pQuestDataIter = pGame->pQuestControl->pQuestData; pQuestDataIter; pQuestDataIter = pQuestDataIter->pPrev) {
+        if (pQuestDataIter->nQuestNoInternal == QUESTINT_TheGoldenBird) {
+          goto run_golden_bird_filter;
+        }
+      }
+    }
+
+    pQuestDataIter = 0;
+    run_golden_bird_filter:
+    /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pQuestDataIter->fpSequenceFilter);
+    if (bBadCodePtr) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x653);
+      exit(-1);
+    }
+
+    pQuestDataIter->fpSequenceFilter(pQuestDataIter);
+    if (pGame->pQuestControl) {
+      for (pQuestDataIter = pGame->pQuestControl->pQuestData; pQuestDataIter; pQuestDataIter = pQuestDataIter->pPrev) {
+        if (pQuestDataIter->nQuestNoInternal == QUESTINT_TheFallenAngel) {
+          goto run_fallen_angel_filter;
+        }
+      }
+    }
+
+    pQuestDataIter = 0;
+    run_fallen_angel_filter:
+    /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pQuestDataIter->fpSequenceFilter);
+    if (bBadCodePtr) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x656);
+      exit(-1);
+    }
+
+    pQuestDataIter->fpSequenceFilter(pQuestDataIter);
+    if (pGame->pQuestControl) {
+      for (pQuestDataIter = pGame->pQuestControl->pQuestData; pQuestDataIter; pQuestDataIter = pQuestDataIter->pPrev) {
+        if (pQuestDataIter->nQuestNoInternal == QUESTINT_SiegeOnHaggorath) {
+          goto run_siege_filter;
+        }
+      }
+    }
+
+    pQuestDataIter = 0;
+    run_siege_filter:
+    /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pQuestDataIter->fpSequenceFilter);
+    if (bBadCodePtr) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x65a);
+      exit(-1);
+    }
+
+    pQuestDataIter->fpSequenceFilter(pQuestDataIter);
+    goto send_quest_state;
 }
 
 // Quest reward delivery: creates an item from a 4-char item code at the given level and quality, sets full durability, and attempts to place it directly into the player's inventory. If inventory is full and bMustDrop is set, finds a nearby spawnable floor tile and drops it there instead; otherwise deletes the item. Returns the created item unit, or null on failure.
@@ -2983,6 +2974,7 @@ void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStr
 
 BOOL __fastcall Q32_CheckNearbyPrisoners(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnitFallback) {
     D2ClientStrc* pClient;
+    uint32_t nRoomIndex;
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nRoomCount;
     D2UnitStrc* pIterUnit;
@@ -2996,20 +2988,13 @@ BOOL __fastcall Q32_CheckNearbyPrisoners(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nRoomCount);
-    uint32_t nRoomIndex = 0;
-    if (nRoomCount <= 0) {
-      return 0;
-    }
-
-    do {
+    for (nRoomIndex = 0; nRoomIndex < nRoomCount; nRoomIndex++) {
       for (pIterUnit = ppAdjacentRooms[nRoomIndex]->pUnitList; pIterUnit; pIterUnit = pIterUnit->pRoomNext) {
         if (pIterUnit->eUnitType == UNIT_MONSTER && pIterUnit->nClassId == 0x1b2 && pIterUnit->eAnimMode.ePlayerMode == Kick) {
           return 1;
         }
       }
-
-      nRoomIndex++;
-    } while (nRoomIndex < nRoomCount);
+    }
 
     return 0;
 }
@@ -3417,7 +3402,7 @@ static void CreateSealGlow(D2ObjectOperateFnArg * pOperateArg, POINT * pPoint, i
     if (nParam == 1) {
       nCollisionMask = 0xd;
     } else {
-      nCollisionMask = (nParam != 3) + 0xe;
+      nCollisionMask = nParam != 3 ? 0xf : 0xe;
     }
 
     FindSpawnableLocation(pVictimRoom, pPoint, 3, 0x3f11, &pSpawnRoom, nCollisionMask, 100);

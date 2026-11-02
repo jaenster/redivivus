@@ -734,10 +734,7 @@ uint16_t * __fastcall MONSTER_GetRandomUniqueAppelation(D2UnitStrc * pUnit) {
 
 D2ParsedTreasureClassStrc * __fastcall TC_ExtendTreasureClassSize(char * szText) {
     Fog::Src::Excel::FOG_ParseStringField(sgtDataTable.pTxtMonsterTblsLink, szText);
-    uint32_t nAllocMask = sgtDataTable.nParsedTreasureClassSize & 0x8000000f;
-    if ((int)nAllocMask < 0) {
-      nAllocMask = (nAllocMask - 1 | -16) + 1;
-    }
+    uint32_t nAllocMask = sgtDataTable.nParsedTreasureClassSize % 16;
     if (!nAllocMask) {
       sgtDataTable.pParsedTreasureClass = (D2ParsedTreasureClassStrc*)D2_REALLOC_POOL_AT(nullptr, sgtDataTable.pParsedTreasureClass, (sgtDataTable.nParsedTreasureClassSize + 0x10) * 0x2c, ".\\DATATBLS\\MonsterTbls.cpp", 0x3a2);
     }
@@ -971,10 +968,9 @@ static void __stdcall TC_ParseTreasureClassEntry(D2ParsedTreasureClassStrc * pPa
       pScanPtr++;
     }
 
-    char* pCodeEndPtr;
-    pCodeEndPtr = szItemCode;
-    pCodeEndPtr = pCodeEndPtr + strlen(pCodeEndPtr) + 1;
-    if ((uint32_t)((int)pCodeEndPtr - (int)(szItemCode + 1)) <= 4) {
+    int nLen;
+    nLen = (int)strlen(szItemCode);
+    if ((uint32_t)nLen <= 4) {
       D2ItemsTxt* pItemsTxt;
       FilterNameString(szItemCode, (char*)&nItemClassId);
       pItemsTxt = ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nItemClassId, &nItemClassId);
@@ -1865,7 +1861,6 @@ D2MonSoundsTxt * __stdcall MONSTERTBLS_GetMonSoundsTxtRecord(int32_t nParam) {
 
 // Parses one comma-separated component-code field of a MonSeq/monster txt row into the row's compiled code table. For sequence slot nSeqSlot (<0x10) it clears the slot's count byte and three code entries, strips surrounding quotes, then tokenizes the input string on commas; each <=4-char token is packed into a 4-char code (space-padded), resolved to a class id via Excel GetClassIdFromName against pTxtCompCodeLink, and stored as a byte. Writes the resolved code count back to offset 0x15+nSeqSlot (max 12 codes). On the final slot (0xf) it sums frame counts across the parsed component groups and stores the clamped (<=0xfe) total at offset 0x25. Pure table-build side effects; no return.
 void __fastcall MONSTERTBLS_ParseMonSeqField(char * szText, char * pRecord, uint32_t nSeqSlot, int32_t nLinkerCtx1, int32_t nLinkerCtx2, int32_t nLinkerCtx3) {
-    char* pTokenEnd;
     int32_t nClassId;
     uint32_t dwCodeBuf;
     char cChar2;
@@ -1922,9 +1917,8 @@ void __fastcall MONSTERTBLS_ParseMonSeqField(char * szText, char * pRecord, uint
         break;
       }
 
-      pTokenEnd = szText;
-      pTokenEnd = pTokenEnd + strlen(pTokenEnd) + 1;
-      if ((uint32_t)((int)pTokenEnd - (int)(szText + 1)) > 4) {
+      int nLen = (int)strlen(szText);
+      if ((uint32_t)nLen > 4) {
         break;
       }
       if (szText[1] == '\0') {

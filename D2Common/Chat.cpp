@@ -30,9 +30,7 @@ namespace D2Common::Chat {
 // @sourcefile .\Chat\Chat.cpp
 D2HoverTextStrc * __stdcall Alloc(D2PoolManagerStrc * pMemory, char * szMessage, int32_t nDuration) {
     char cCurChar;
-    char* pcMsgEnd = szMessage;
-    pcMsgEnd = pcMsgEnd + strlen(pcMsgEnd) + 1;
-    int nMsgLen = (int)pcMsgEnd - (int)(szMessage + 1);
+    int nMsgLen = (int)strlen(szMessage);
     if (!nMsgLen) {
       return nullptr;
     }

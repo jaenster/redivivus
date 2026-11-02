@@ -169,9 +169,7 @@ void __fastcall D2WINEDITBOX_ValidateInput(char * szText) {
     }
 
     EmptyClipboard();
-    char* pszEnd = szText;
-    pszEnd = pszEnd + strlen(pszEnd) + 1;
-    size_t _Size = (int)pszEnd - (int)(szText + 1);
+    size_t _Size = (int)strlen(szText);
     /* SIZE_T dwBytes for GlobalAlloc */ /* UINT uFlags for GlobalAlloc */ ghClipboardMem = GlobalAlloc(0x2000, _Size + 1);
     if (!ghClipboardMem) {
       CloseClipboard();
@@ -1161,15 +1159,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
       }
 
       pbClipEnd = __frame0.szFilteredClipText;
-      if (pEditBox->nFlags & 8) {
-        nHasText2 = (int)pbClipEnd - (int)__frame0.pbClipBuf;
-        pbClipEnd = __frame0.pbClipBuf;
-        do {
-          byCurChar = *pbClipEnd;
-          pbClipEnd[nHasText2] = byCurChar;
-          pbClipEnd++;
-        } while (byCurChar);
-      } else {
+      if (!(pEditBox->nFlags & 8)) {
         byCurChar = *__frame0.pbClipBuf;
         pbClipSrc = __frame0.pbClipBuf;
         while (byCurChar) {
@@ -1184,6 +1174,8 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
         }
 
         *pbClipEnd = 0;
+      } else {
+        strcpy((char*)__frame0.szFilteredClipText, (char*)__frame0.pbClipBuf);
       }
 
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(__frame0.awszPreSelText, __frame0.awszEditBuffer, nSelStart);

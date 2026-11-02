@@ -564,7 +564,7 @@ int32_t __fastcall GetCollisionType(D2UnitStrc * pUnit) {
             return 0x8000;
           }
 
-          return (uint32_t)(pObjectsTxt->BlockMissile != '\0') * 4 + 0x400;
+          return pObjectsTxt->BlockMissile != '\0' ? 0x404U : 0x400U;
         }
       case UNIT_ITEM:
         {
@@ -887,7 +887,7 @@ int32_t __stdcall GetInventoryPage(D2UnitStrc * pUnit, uint8_t nInvPage, BOOL bL
             case '\x02':
               return 7;
             case '\x04':
-              /* Lod/Classic inventory sizes decide */ return (uint32_t)(bLoD != 0) * 4 + 8;
+              /* Lod/Classic inventory sizes decide */ return bLoD != 0 ? 0xcU : 0x8U;
             case '\x03':
               return 9;
           }
@@ -1988,6 +1988,7 @@ BOOL __fastcall HasShield(D2UnitStrc * pUnit) {
 
     uint8_t byComponent;
     eD2MonsterClassId nClassId;
+    uint32_t nComponentIdx;
     D2UnitStrc* pShieldItem;
     if (!pUnit || (nClassId = pUnit->nClassId , (int)nClassId < 0) || (int)nClassId >= sgptDataTable->nTxtMonStatsSize) {
       nClassId = ~MonsterUnitSkeleton1;
@@ -2014,15 +2015,11 @@ BOOL __fastcall HasShield(D2UnitStrc * pUnit) {
     if (!pOverlayCode) {
       return 0;
     }
-    if (UINT_00744584 > 0) {
-      uint32_t nComponentIdx = 0;
-      do {
-        if (pOverlayCode == gaHasShieldItemCodes[nComponentIdx]) {
-          return 0;
-        }
 
-        nComponentIdx++;
-      } while (nComponentIdx < UINT_00744584);
+    for (nComponentIdx = 0; nComponentIdx < UINT_00744584; nComponentIdx++) {
+      if (pOverlayCode == gaHasShieldItemCodes[nComponentIdx]) {
+        return 0;
+      }
     }
 
     D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(pOverlayCode, (int*)&pShieldItem);
@@ -3072,10 +3069,7 @@ D2UnitStrc * __stdcall GetWeaponBySkill(D2UnitStrc * pUnit, int32_t nParam) {
           dwSkillFlags = pUnit->nSeqFrame >> 8;
         bIsWeaponType = D2Client::UNIT::Player::CheckFlagWithMask(pUnit, 0x4000000);
         if (bIsWeaponType) {
-          nWeaponSlot = dwSkillFlags & 0x80000001;
-          if ((int)nWeaponSlot < 0) {
-            nWeaponSlot = (nWeaponSlot - 1 | -2) + 1;
-          }
+          nWeaponSlot = (int)dwSkillFlags % 2;
         } else {
           nWeaponSlot = (uint32_t)((int)dwSkillFlags > 5);
         }

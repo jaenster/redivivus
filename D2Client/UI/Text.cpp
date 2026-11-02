@@ -830,42 +830,37 @@ static uint8_t __stdcall TEXT_FindNonOverlappingRect(int32_t nExistingRectCount,
           do {
             pExistingRect = (RECT*)0x23;
             do {
-              nDirIdx = 0;
-              if (gnTextNonOverlapRectCount > 0) {
-                do {
-                  rcCandidate.left = pRect->left + gaTextNonOverlapRects[nDirIdx] * nDistX;
-                  rcCandidate.top = pRect->top + gaTextNonOverlapRects[nDirIdx] * (int)pExistingRect;
-                  rcCandidate.right = rcCandidate.left + 400;
-                  rcCandidate.bottom = rcCandidate.top + 0x118;
-                  if (rcCandidate.left >= 0 && rcCandidate.right <= ScreenSizeX && rcCandidate.top >= 0 && rcCandidate.bottom <= ScreenSizeY) {
-                    bOverlaps = '\0';
-                    pCheckRect = gnTextBoxExclusionLeft;
-                    nRemaining = nExistingRectCount;
-                    do {
-                      /* RECT * lprcSrc2 for IntersectRect */ /* RECT * lprcSrc1 for IntersectRect */ /* LPRECT lprcDst for IntersectRect */ bIntersects = IntersectRect(&rcIntersect2, pCheckRect, &rcCandidate);
-                      if (bIntersects) {
-                        bOverlaps = '\x01';
-                      }
-
-                      pCheckRect++;
-                      nRemaining--;
-                    } while (nRemaining);
-
-                    if (bOverlaps == '\0') {
-                      gnTextBoxExclusionLeft[nExistingRectCount].left = rcCandidate.left;
-                      gnTextBoxExclusionLeft[nExistingRectCount].top = rcCandidate.top;
-                      gnTextBoxExclusionLeft[nExistingRectCount].right = rcCandidate.right;
-                      gnTextBoxExclusionLeft[nExistingRectCount].bottom = rcCandidate.bottom;
-                      pRect->left = rcCandidate.left;
-                      pRect->top = rcCandidate.top;
-                      pRect->right = rcCandidate.right;
-                      pRect->bottom = rcCandidate.bottom;
-                      return 1;
+              for (nDirIdx = 0; nDirIdx < gnTextNonOverlapRectCount; nDirIdx++) {
+                rcCandidate.left = pRect->left + gaTextNonOverlapRects[nDirIdx] * nDistX;
+                rcCandidate.top = pRect->top + gaTextNonOverlapRects[nDirIdx] * (int)pExistingRect;
+                rcCandidate.right = rcCandidate.left + 400;
+                rcCandidate.bottom = rcCandidate.top + 0x118;
+                if (rcCandidate.left >= 0 && rcCandidate.right <= ScreenSizeX && rcCandidate.top >= 0 && rcCandidate.bottom <= ScreenSizeY) {
+                  bOverlaps = '\0';
+                  pCheckRect = gnTextBoxExclusionLeft;
+                  nRemaining = nExistingRectCount;
+                  do {
+                    /* RECT * lprcSrc2 for IntersectRect */ /* RECT * lprcSrc1 for IntersectRect */ /* LPRECT lprcDst for IntersectRect */ bIntersects = IntersectRect(&rcIntersect2, pCheckRect, &rcCandidate);
+                    if (bIntersects) {
+                      bOverlaps = '\x01';
                     }
-                  }
 
-                  nDirIdx++;
-                } while (nDirIdx < gnTextNonOverlapRectCount);
+                    pCheckRect++;
+                    nRemaining--;
+                  } while (nRemaining);
+
+                  if (bOverlaps == '\0') {
+                    gnTextBoxExclusionLeft[nExistingRectCount].left = rcCandidate.left;
+                    gnTextBoxExclusionLeft[nExistingRectCount].top = rcCandidate.top;
+                    gnTextBoxExclusionLeft[nExistingRectCount].right = rcCandidate.right;
+                    gnTextBoxExclusionLeft[nExistingRectCount].bottom = rcCandidate.bottom;
+                    pRect->left = rcCandidate.left;
+                    pRect->top = rcCandidate.top;
+                    pRect->right = rcCandidate.right;
+                    pRect->bottom = rcCandidate.bottom;
+                    return 1;
+                  }
+                }
               }
 
               pExistingRect = (RECT*)((int)pExistingRect + 0x23);
@@ -1195,10 +1190,8 @@ D2UnitStrc * __stdcall TEXT_GetOverheadSpeakerUnit() {
 static BOOL TEXT_FormatEventMessage(int32_t pEventData, uint16_t * wszText) {
     uint16_t* pwszLocale;
     uint16_t nStrId;
-    char* pszDst;
     uint16_t awszPlayerName[16];
     char szRosterName[16];
-    char cNameCh;
     uint16_t* pwszArg;
     D2RosterStrc* pRoster;
     pRoster = GAME::Roster::GetRosterByGUID(*(int32_t*)(pEventData + 3));
@@ -1208,13 +1201,7 @@ static BOOL TEXT_FormatEventMessage(int32_t pEventData, uint16_t * wszText) {
     if (pRoster) {
       char* pszSrc;
       pszSrc = GAME::Roster::GetRosterName(pRoster);
-      pszDst = szRosterName;
-      do {
-        cNameCh = *pszSrc;
-        *pszDst = cNameCh;
-        pszSrc++;
-        pszDst++;
-      } while (cNameCh != '\0');
+      strcpy(szRosterName, pszSrc);
     } else {
       szRosterName[0] = '\0';
     }
@@ -5537,9 +5524,7 @@ void __fastcall TEXT_DrawMessageLogAndOverhead(D2GameViewStrc * pGameView) {
 
 void __fastcall TEXT_ShowNpcDialog(D2UnitStrc * pUnit, uint16_t nParam, uint32_t dwUnused) {
     D2UnitStrc* pNpcUnit;
-    int32_t nVolume;
     RECT nExclusionXOff;
-    int32_t nHandlers;
     gnTextScrollBoxHeight = 0;
     gnScrollingTextBoxTopY = 0xc;
     gnTextBoxExclusionX = (ScreenSizeX - 0x145) / 2;
@@ -5613,11 +5598,7 @@ void __fastcall TEXT_ShowNpcDialog(D2UnitStrc * pUnit, uint16_t nParam, uint32_t
     eD2Sounds nSoundId = UI_GetDialogLineCount(nParam);
     if (nSoundId != SOUND_NONE) {
       UNIT::UnitSnd::UNITSND_StopAllSkillSounds(pUnit);
-      nHandlers = 0;
-      nVolume = 0;
-      nPrevFont = 5;
-      pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
-      gpTextScrollBoxBuffer = Sound::SOUND_PlaySound(nSoundId, pNpcUnit, nPrevFont, nVolume, nHandlers);
+      gpTextScrollBoxBuffer = Sound::SOUND_PlaySound(nSoundId, UNIT::Player::GetPlayerUnit_UI(), 5, 0, 0);
       gpTextScrollBoxDC6 = nSoundId;
     }
 
@@ -5634,10 +5615,7 @@ void __fastcall TEXT_ShowNpcDialog(D2UnitStrc * pUnit, uint16_t nParam, uint32_t
 }
 
 void __fastcall TEXT_ShowScrollingText(uint16_t nParam, int32_t nParam2, int32_t bShowImage) {
-    D2UnitStrc* pUnit;
-    int32_t nVolume;
     RECT nExclusionLeft;
-    int32_t nHandlers;
     if (!nParam2) {
       gnTextBoxExclusionX = (ScreenSizeX - 0x145) / 2;
       gnScrollingTextBoxTopY = 0xc;
@@ -5697,11 +5675,7 @@ void __fastcall TEXT_ShowScrollingText(uint16_t nParam, int32_t nParam2, int32_t
 
     eD2Sounds nSoundId = UI_GetDialogLineCount(nParam);
     if (nSoundId != SOUND_NONE) {
-      nHandlers = 0;
-      nVolume = 0;
-      nPrevFont = 5;
-      pUnit = UNIT::Player::GetPlayerUnit_UI();
-      gpTextScrollBoxBuffer = Sound::SOUND_PlaySound(nSoundId, pUnit, nPrevFont, nVolume, nHandlers);
+      gpTextScrollBoxBuffer = Sound::SOUND_PlaySound(nSoundId, UNIT::Player::GetPlayerUnit_UI(), 5, 0, 0);
       gpTextScrollBoxDC6 = nSoundId;
     }
     if (!((nParam == 0x7f || nParam == 0x4e22 || nParam == 0x4ec9 || nParam == 0x4ea3 || nParam == 0x18c) && bShowImage)) {

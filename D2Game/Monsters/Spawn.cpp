@@ -105,6 +105,7 @@ static BOOL __stdcall CheckWarpSpawnCoords(D2RoomStrc * pRoom, ::SGAMEDATA * pGa
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     int nDY;
+    int i;
     if (!pRoom) {
       return 0;
     }
@@ -121,18 +122,13 @@ static BOOL __stdcall CheckWarpSpawnCoords(D2RoomStrc * pRoom, ::SGAMEDATA * pGa
 
     D2LevelsTxt* pLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
     int nWarpDistSq = pLevelsTxt->WarpDist;
-    int i = 0;
-    if (pWarpCoords->nEntriesCount > 0) {
+    for (i = 0; i < pWarpCoords->nEntriesCount; i++) {
       int nDX;
-      do {
-        nDX = nX - pWarpCoords->anX[i];
-        nDY = nY - pWarpCoords->anY[i];
-        if (nDY * nDY + nDX * nDX < nWarpDistSq) {
-          return 1;
-        }
-
-        i++;
-      } while (i < pWarpCoords->nEntriesCount);
+      nDX = nX - pWarpCoords->anX[i];
+      nDY = nY - pWarpCoords->anY[i];
+      if (nDY * nDY + nDX * nDX < nWarpDistSq) {
+        return 1;
+      }
     }
 
     int* pActSpawnY = &__frame0.nActSpawnY;

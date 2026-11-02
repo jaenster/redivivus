@@ -663,9 +663,7 @@ void __stdcall STRTABLE_FormatInt64(uint16_t * wszText, int32_t nParam1, int32_t
     }
 
     _i64toa((uint64_t)((uint64_t)(uint32_t)nParam2 << 32 | (uint64_t)(uint32_t)nParam1), szDigitBuf, 10);
-    char* pcDigit = szDigitBuf;
-    pcDigit = pcDigit + strlen(pcDigit) + 1;
-    int nDigitCount = (int)pcDigit - (int)(szDigitBuf + 1);
+    int nDigitCount = (int)strlen(szDigitBuf);
     if (nDigitCount) {
       int iVar1;
       nOutPos = (nDigitCount - 1) / 3 + nDigitCount;
@@ -717,11 +715,8 @@ void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwPa
     }
 
     _ui64toa((uint64_t)((uint64_t)(uint32_t)dwParam2 << 32 | (uint64_t)(uint32_t)dwParam1), szDigitBuf, 10);
-    char* pcDigit;
-    pcDigit = szDigitBuf;
-    pcDigit = pcDigit + strlen(pcDigit) + 1;
     int nDigitCount;
-    nDigitCount = (int)pcDigit - (int)(szDigitBuf + 1);
+    nDigitCount = (int)strlen(szDigitBuf);
     if (!nDigitCount) {
       write_placeholder:
       wszFallback[0] = L'\0';
@@ -890,7 +885,6 @@ static uint16_t * __fastcall STRTABLE_LoadStringTableFile(char * szFileName) {
 
 // @sourcefile .\StrTable\strtable.cpp
 int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szText, int32_t isXpac) {
-    int i;
     int32_t pszUtf8Chars;
     uint32_t dwEcxOut;
     uint32_t dwEcxOut2;
@@ -902,23 +896,17 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
     char szPathBuf[260];
     char szFormatBuf[260];
     char szFontDir[32];
-    char cCurChar;
     if (gpStringTableBase) {
       gnStringTableRefCount++;
       return 1;
     }
-    if (szText) {
-      i = -(int)szText;
-      do {
-        cCurChar = *szText;
-        szText[(int)(l + i)] = cCurChar;
-        szText++;
-      } while (cCurChar != '\0');
-    } else {
+    if (!szText) {
       TABLES_GetLangAbbreviation(l, 0);
+    } else {
+      strcpy(l, szText);
     }
 
-    i = _stricmp(l, "JPN");
+    int i = _stricmp(l, "JPN");
     if (!i) {
       memcpy(szFontDir, "JPN", 4);
     } else {

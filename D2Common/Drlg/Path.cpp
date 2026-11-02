@@ -2162,14 +2162,14 @@ static int32_t * DRLGPATH_PopBestNodeFromOpenList(D2DrlgPathSearchCtxStrc * nOpe
 }
 
 // Propagates improved path costs through the A* node graph. When a shorter path is found to a node, updates its g-cost and recursively updates all 8 directional neighbors that could benefit from the shorter path.
-static void DRLGPATH_PropagateNodeCosts(D2DrlgPathNodeStrc * pStartNode, int32_t nParam) {
+static void DRLGPATH_PropagateNodeCosts(D2DrlgPathNodeStrc * pStartNode, D2DrlgPathSearchCtxStrc * pSearchCtx) {
     short int nEdgeCost;
     int nChildIdx;
     D2DrlgPathNodeStrc* pNeighborNode;
     D2DrlgPathNodeStrc* pCurNode;
     D2DrlgPathNodeStrc* pNeighborNode2;
-    *(D2DrlgPathNodeStrc**)(nParam + 0x2fc8 + *(int*)(nParam + 0x32e8) * 4) = (D2DrlgPathNodeStrc*)pStartNode;
-    int* pQueueCount = (int*)(nParam + 0x32e8);
+    pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount] = pStartNode;
+    int32_t* pQueueCount = &pSearchCtx->nPropagateCount;
     (*pQueueCount)++;
     int nQueueCount = *pQueueCount;
     do {
@@ -2178,8 +2178,8 @@ static void DRLGPATH_PropagateNodeCosts(D2DrlgPathNodeStrc * pStartNode, int32_t
         return;
       }
 
-      (*(int*)(nParam + 0x32e8))--;
-      pCurNode = *(D2DrlgPathNodeStrc**)(nParam + 0x2fc8 + *(int*)(nParam + 0x32e8) * 4);
+      pSearchCtx->nPropagateCount--;
+      pCurNode = (D2DrlgPathNodeStrc*)pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount];
       nChildIdx = 0;
       pChildPtr = pCurNode->pChildren + 1;
       do {
@@ -2196,8 +2196,8 @@ static void DRLGPATH_PropagateNodeCosts(D2DrlgPathNodeStrc * pStartNode, int32_t
           pNeighborNode->pParent = pCurNode;
           pNeighborNode->nGCost = nEdgeCost;
           pNeighborNode->nFCost = pNeighborNode->nHCost + nEdgeCost;
-          *(D2DrlgPathNodeStrc**)(nParam + 0x2fc8 + *(int*)(nParam + 0x32e8) * 4) = (D2DrlgPathNodeStrc*)pNeighborNode;
-          (*(int*)(nParam + 0x32e8))++;
+          pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount] = pNeighborNode;
+          pSearchCtx->nPropagateCount++;
         }
 
         pNeighborNode2 = *pChildPtr;
@@ -2213,8 +2213,8 @@ static void DRLGPATH_PropagateNodeCosts(D2DrlgPathNodeStrc * pStartNode, int32_t
           pNeighborNode2->pParent = pCurNode;
           pNeighborNode2->nGCost = nEdgeCost;
           pNeighborNode2->nFCost = pNeighborNode2->nHCost + nEdgeCost;
-          *(D2DrlgPathNodeStrc**)(nParam + 0x2fc8 + *(int*)(nParam + 0x32e8) * 4) = (D2DrlgPathNodeStrc*)pNeighborNode2;
-          (*(int*)(nParam + 0x32e8))++;
+          pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount] = pNeighborNode2;
+          pSearchCtx->nPropagateCount++;
         }
 
         pNeighborNode2 = pChildPtr[1];
@@ -2230,8 +2230,8 @@ static void DRLGPATH_PropagateNodeCosts(D2DrlgPathNodeStrc * pStartNode, int32_t
           pNeighborNode2->pParent = pCurNode;
           pNeighborNode2->nGCost = nEdgeCost;
           pNeighborNode2->nFCost = pNeighborNode2->nHCost + nEdgeCost;
-          *(D2DrlgPathNodeStrc**)(nParam + 0x2fc8 + *(int*)(nParam + 0x32e8) * 4) = (D2DrlgPathNodeStrc*)pNeighborNode2;
-          (*(int*)(nParam + 0x32e8))++;
+          pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount] = pNeighborNode2;
+          pSearchCtx->nPropagateCount++;
         }
 
         pNeighborNode2 = pChildPtr[2];
@@ -2247,15 +2247,15 @@ static void DRLGPATH_PropagateNodeCosts(D2DrlgPathNodeStrc * pStartNode, int32_t
           pNeighborNode2->pParent = pCurNode;
           pNeighborNode2->nGCost = nEdgeCost;
           pNeighborNode2->nFCost = pNeighborNode2->nHCost + nEdgeCost;
-          *(D2DrlgPathNodeStrc**)(nParam + 0x2fc8 + *(int*)(nParam + 0x32e8) * 4) = (D2DrlgPathNodeStrc*)pNeighborNode2;
-          (*(int*)(nParam + 0x32e8))++;
+          pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount] = pNeighborNode2;
+          pSearchCtx->nPropagateCount++;
         }
 
         nChildIdx += 4;
         pChildPtr += 4;
       } while (nChildIdx < 8);
 
-      nQueueCount = *(int*)(nParam + 0x32e8);
+      nQueueCount = pSearchCtx->nPropagateCount;
     } while (true);
 }
 
@@ -2331,7 +2331,7 @@ static BOOL __stdcall DRLGPATH_TryExpandNeighborNode(int32_t nOpenList, uint32_t
           pClosedNode->nFCost = pClosedNode->nHCost + nEdgeCost;
           pClosedNode->pParent = pParentNode;
           pClosedNode->nGCost = nEdgeCost;
-          DRLGPATH_PropagateNodeCosts(pClosedNode, nOpenList);
+          DRLGPATH_PropagateNodeCosts(pClosedNode, (D2DrlgPathSearchCtxStrc*)nOpenList);
           return 1;
         }
       } else {
@@ -2471,12 +2471,11 @@ static BOOL __stdcall DRLGPATH_ExpandAllNeighbors(uint16_t * pCurNodeCoords, int
 }
 
 // Extracts a path from the A* grid search result by walking parent pointers. Similar to ExtractPathFromResult but used by the grid-based A* (PathTypeFunc_01). Returns the number of waypoints (max 77).
-static int32_t DRLGPATH_ExtractPathFromResult2(int32_t nParam, void * * pCurNode) {
+static int32_t DRLGPATH_ExtractPathFromResult2(D2PathTypeArg * pPathTypeArg, D2DrlgPathNodeStrc * pCurNode) {
+    int iVar1;
     int nDeltaY;
     D2PathExtractFrameStrc sFrame;
-    uint16_t wCurX;
-    uint16_t wParentX;
-    sFrame.pWaypointDst = (void*)(*(int*)(nParam + 0x30) + 0x9c);
+    sFrame.pWaypointDst = pPathTypeArg->pDynamicPath->PathPoints;
     int nWaypointCount = 0;
     int nPrevDeltaX = -2;
     sFrame.nPrevDeltaY = -2;
@@ -2490,22 +2489,21 @@ static int32_t DRLGPATH_ExtractPathFromResult2(int32_t nParam, void * * pCurNode
         break;
       }
 
-      sFrame.pParentNode = (void**)pCurNode[3];
-      if (sFrame.pParentNode) {
-        wCurX = *(uint16_t*)sFrame.pParentNode;
-        wParentX = *(uint16_t*)pCurNode;
-        nDeltaY = (uint32_t)*(uint16_t*)((int)pCurNode + 2) - (uint32_t)*(uint16_t*)((int)sFrame.pParentNode + 2);
-        if ((uint32_t)wParentX - (uint32_t)wCurX != nPrevDeltaX || nDeltaY != sFrame.nPrevDeltaY) {
-          *sFrame.pWritePtr = (uint32_t)*pCurNode;
+      sFrame.pParentNode = (void**)pCurNode->pParent;
+      if ((D2DrlgPathNodeStrc*)sFrame.pParentNode) {
+        iVar1 = (uint32_t)(uint16_t)pCurNode->nX - (uint32_t)(uint16_t)((D2DrlgPathNodeStrc*)sFrame.pParentNode)->nX;
+        nDeltaY = (uint32_t)(uint16_t)pCurNode->nY - (uint32_t)(uint16_t)((D2DrlgPathNodeStrc*)sFrame.pParentNode)->nY;
+        if (iVar1 != nPrevDeltaX || nDeltaY != sFrame.nPrevDeltaY) {
+          *sFrame.pWritePtr = *(uint32_t*)pCurNode;
           nWaypointCount++;
           sFrame.pWritePtr--;
-          nPrevDeltaX = (uint32_t)wParentX - (uint32_t)wCurX;
+          nPrevDeltaX = iVar1;
           sFrame.nPrevDeltaY = nDeltaY;
         }
       }
 
-      pCurNode = sFrame.pParentNode;
-    } while (sFrame.pParentNode);
+      pCurNode = (D2DrlgPathNodeStrc*)sFrame.pParentNode;
+    } while ((D2DrlgPathNodeStrc*)sFrame.pParentNode);
 
     if (nWaypointCount - 1U <= 0x4c) {
       memcpy(sFrame.pWaypointDst, (void*)((uintptr_t)&sFrame + nWaypointCount * -4 + 0x138), nWaypointCount * 4);
@@ -2578,7 +2576,7 @@ int32_t __fastcall PATH_FindPathAStarLocalPool(D2PathTypeArg * pPathTypeArg) {
       return 0;
     }
 
-    D2DrlgPathNodeStrc* pNewNode = 0;
+    D2DrlgPathNodeStrc* pClosestNode = 0;
     abyOpenList.nPoolCount = 0;
     abyOpenList.pSortedHead = 0;
     abyOpenList.nPropagateCount = 0;
@@ -2587,13 +2585,13 @@ int32_t __fastcall PATH_FindPathAStarLocalPool(D2PathTypeArg * pPathTypeArg) {
     uint32_t nPackedSrc = (uint32_t)((uint32_t)(uint16_t)pPathTypeArg->pCoords.nOffsetX | (uint32_t)(uint16_t)pPathTypeArg->pCoords.nPosX << 16);
     uint32_t nUnusedParam = (uint32_t)((uint32_t)(uint16_t)pPathTypeArg->pCoords.nOffsetY | (uint32_t)(uint16_t)pPathTypeArg->pCoords.nPosY << 16);
     if (abyOpenList.nPoolCount != 200) {
-      pNewNode = abyOpenList.aNodePool + abyOpenList.nPoolCount;
+      pClosestNode = abyOpenList.aNodePool + abyOpenList.nPoolCount;
       abyOpenList.nPoolCount++;
-      memset(pNewNode, 0, 0x38);
+      memset(pClosestNode, 0, 0x38);
     }
 
     int32_t nDeltaX = (uint16_t)nPackedSrc - (uint16_t)nUnusedParam;
-    pNewNode->nGCost = 0;
+    pClosestNode->nGCost = 0;
     if (nDeltaX < 0) {
       nDeltaX = -nDeltaX;
     }
@@ -2608,20 +2606,20 @@ int32_t __fastcall PATH_FindPathAStarLocalPool(D2PathTypeArg * pPathTypeArg) {
       nHeuristic = (short int)nDeltaX + (short int)nDeltaY * 2;
     }
 
-    pNewNode->nX = (uint16_t)nPackedSrc;
-    pNewNode->nY = (uint16_t)((uint32_t)nPackedSrc >> 16);
-    pNewNode->nHCost = nHeuristic;
-    pNewNode->nFCost = nHeuristic;
-    DRLGPATH_InsertNodeSorted(&abyOpenList, pNewNode);
-    void** pClosestNode = 0;
-    void** pBestNodeOut = (void**)DRLGPATH_PopBestNodeFromOpenList(&abyOpenList);
+    pClosestNode->nX = (uint16_t)nPackedSrc;
+    pClosestNode->nY = (uint16_t)((uint32_t)nPackedSrc >> 16);
+    pClosestNode->nHCost = nHeuristic;
+    pClosestNode->nFCost = nHeuristic;
+    DRLGPATH_InsertNodeSorted(&abyOpenList, pClosestNode);
+    pClosestNode = 0;
+    D2DrlgPathNodeStrc* pBestNodeOut = (D2DrlgPathNodeStrc*)DRLGPATH_PopBestNodeFromOpenList(&abyOpenList);
     if (pBestNodeOut) {
       BOOL bExpandedAny;
       do {
-        if (!pClosestNode || (short int)*(uint16_t*)((int)pBestNodeOut + 6) < (short int)*(uint16_t*)((int)pClosestNode + 6) || *(uint16_t*)((int)pBestNodeOut + 6) == *(uint16_t*)((int)pClosestNode + 6) && (int)(short int)*(uint16_t*)(pBestNodeOut + 2) > *(short int*)(pClosestNode + 2) + 5) {
+        if (!pClosestNode || pBestNodeOut->nHCost < pClosestNode->nHCost || pBestNodeOut->nHCost == pClosestNode->nHCost && (int)pBestNodeOut->nGCost > pClosestNode->nGCost + 5) {
           pClosestNode = pBestNodeOut;
         }
-        if (!*(uint16_t*)((int)pBestNodeOut + 6)) {
+        if (!pBestNodeOut->nHCost) {
           break;
         }
 
@@ -2630,11 +2628,11 @@ int32_t __fastcall PATH_FindPathAStarLocalPool(D2PathTypeArg * pPathTypeArg) {
           break;
         }
 
-        pBestNodeOut = (void**)DRLGPATH_PopBestNodeFromOpenList(&abyOpenList);
+        pBestNodeOut = (D2DrlgPathNodeStrc*)DRLGPATH_PopBestNodeFromOpenList(&abyOpenList);
       } while (pBestNodeOut);
 
       if (pClosestNode) {
-        nExtractResult = DRLGPATH_ExtractPathFromResult2((int32_t)pPathTypeArg, pClosestNode);
+        nExtractResult = DRLGPATH_ExtractPathFromResult2(pPathTypeArg, pClosestNode);
         return nExtractResult;
       }
     }
@@ -2695,7 +2693,7 @@ int32_t __stdcall DRLGPATH_BuildBresenhamPointList(uint32_t nSrcPacked, uint32_t
       nCurX = nSrcPacked & 0xffff;
       nCurY = (uint32_t)*(uint16_t*)((char*)&nSrcPacked + 2);
       if (!nDeltaY) {
-        *pnInitDir = (uint32_t)((int)nDstPacked <= 0) * 2 + 1;
+        *pnInitDir = (int)nDstPacked <= 0 ? 0x3U : 0x1U;
         if (nDeltaX <= nMaxStepsM1) {
           do {
             nCurX += nDstPacked;
@@ -2709,7 +2707,7 @@ int32_t __stdcall DRLGPATH_BuildBresenhamPointList(uint32_t nSrcPacked, uint32_t
           return nPointCount;
         }
       } else if (!(nDeltaX < (int)nDeltaY)) {
-        *pnInitDir = (uint32_t)((int)nDstPacked <= 0) * 2 + 1;
+        *pnInitDir = (int)nDstPacked <= 0 ? 0x3U : 0x1U;
         if (nDeltaX <= nMaxStepsM1) {
           nSrcPacked = 0;
           nMaxSteps = nDeltaX;

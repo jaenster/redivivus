@@ -714,11 +714,7 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, LPPALETTEEN
     uint32_t nTableIdx = 0;
     LPPALETTEENTRY pHSLSrcEntry = pPalette + 0x14d40;
     do {
-      dVar1 = (double)(int)nTableIdx;
-      if ((int)nTableIdx < 0) {
-        dVar1 += 4294967296.0;
-      }
-
+      dVar1 = (double)nTableIdx;
       dVar1 *= 15.0;
       pHSLLoopPtr = ahslBuffer + 1;
       nHSLSrcOffset = 0x40;
@@ -793,11 +789,7 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, LPPALETTEEN
     uint32_t nHueShift = 0;
     pHSLSrcEntry = pPalette + 0x15340;
     do {
-      fHueFloat = (float)(int)nHueShift;
-      if ((int)nHueShift < 0) {
-        fHueFloat += 4.2949673e+09;
-      }
-
+      fHueFloat = (float)nHueShift;
       pHSLLoopPtr = ahslBuffer;
       nEntryCount = 0x100;
       do {
@@ -839,11 +831,7 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, LPPALETTEEN
     LPPALETTEENTRY pTempDestTable = pPalette + 0x15940;
     nHueShift = 0;
     do {
-      fHueFloat = (float)(int)nHueShift;
-      if ((int)nHueShift < 0) {
-        fHueFloat += 4.2949673e+09;
-      }
-
+      fHueFloat = (float)nHueShift;
       pHSLLoopPtr = ahslBuffer;
       nEntryCount = 0x100;
       do {
@@ -1029,11 +1017,7 @@ void __stdcall DRAW_BuildHSLTransformTables(LPPALETTEENTRY pPalette, LPPALETTEEN
     pDestEntry = pPalette + 0x16600;
     do {
       D2HSLColorStrc* pHSLEntry;
-      fHueFloat = (float)(int)nHueShift;
-      if ((int)nHueShift < 0) {
-        fHueFloat += 4.2949673e+09;
-      }
-
+      fHueFloat = (float)nHueShift;
       nEntryCount = 0x100;
       pHSLEntry = ahslBuffer;
       do {

@@ -1493,10 +1493,7 @@ static void GAME_SendNearbyUnitPositions(D2ClientStrc * pClient) {
     }
 
     D2UnitStrc* pPlayerUnit_lcl = Clients::CLIENTS_GetControlUnit(pClient, 0);
-    if (!pPlayerUnit_lcl) {
-      return;
-    }
-    if (pClient->dwRoomTicker < 10) {
+    if (!pPlayerUnit_lcl || pClient->dwRoomTicker < 10) {
       return;
     }
     if (pPlayerUnit_lcl->eUnitType != UNIT_PLAYER) {
@@ -1799,7 +1796,7 @@ void __fastcall RemoveObjects(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
 
 void __thiscall SERVER_EnterCriticalSection(int32_t pThis, int * pCriticalSection, int32_t nParam) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)(pThis + 0x50));
-    *pCriticalSection = (uint32_t)(nParam != 0) * 2 - 1;
+    *pCriticalSection = nParam != 0 ? 0x1U : 0xffffffff;
 }
 
 uint32_t __stdcall ParamIsOne(int32_t nParam) {
@@ -2592,7 +2589,6 @@ void __stdcall QSERVER_CountObjectsAndPlayersAllGames(int32_t * pBucketCountdown
 // Iterates every token slot in the game-server token table and, for each live game, sends a message to all connected clients. nMsgType==1 sends a structured 0x5A event packet (category 4, event 0xF, payload dwEventPayload) via BroadcastEventMessage. Any other type sends the raw pszMessage string via CHAT_BroadcastMessageToAllClients, truncating to 255 bytes if needed. Locks and unlocks each game around the send.
 void __stdcall QSERVER_BroadcastPlayerMessage(int32_t nMsgType, uint32_t dwEventPayload, char * pszMessage) {
     ::SGAMEDATA* pGame;
-    char* pszMsgEnd;
     D2Packet0x5aEventStructure sEvent;
     uint32_t dwStackCookie;
     char cCurrent;
@@ -2624,9 +2620,8 @@ void __stdcall QSERVER_BroadcastPlayerMessage(int32_t nMsgType, uint32_t dwEvent
             }
           default:
             {
-              pszMsgEnd = pszMessage;
-              pszMsgEnd = pszMsgEnd + strlen(pszMsgEnd) + 1;
-              if ((uint32_t)((int)pszMsgEnd - (int)(pszMessage + 1)) > 0xff) {
+              int nLen = (int)strlen(pszMessage);
+              if ((uint32_t)nLen > 0xff) {
                 strncpy(szMessage, pszMessage, 0xff);
                 szMessage[0xff] = '\0';
                 PLAYER::PlayerMsg::CHAT_BroadcastMessageToAllClients(pGame, (uint32_t*)szMessage, 1);
@@ -2829,9 +2824,7 @@ void __fastcall SetGameName(::SGAMEDATA * pGame, char * szGameName, uint32_t dwF
       return;
     }
 
-    char* pszCopied = szGameName;
-    pszCopied = pszCopied + strlen(pszCopied) + 1;
-    size_t nBaseNameLen = (int)pszCopied - (int)(szGameName + 1);
+    size_t nBaseNameLen = (int)strlen(szGameName);
     if (0xf - nBaseNameLen < 3) {
       nBaseNameLen = 0xb;
     }

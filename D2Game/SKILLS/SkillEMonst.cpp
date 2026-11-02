@@ -473,13 +473,7 @@ BOOL __fastcall Skills_SrvDoFunc_129_AttachOrDetachFromHost(::SGAMEDATA * pGame,
     bool bRelocated;
     BOOL bIsDead;
     uint32_t nTargetY;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-    if (!(sgptDataTable->pTxtSkills + eSkill)) {
+    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
 
@@ -539,6 +533,7 @@ static int __stdcall SKILLSOR_GetMeteorSubMissileCount(eMissilesId pParam, eD2Sk
 
     BOOL _bGotTargetPos;
     bool bGotTargetPos;
+    int32_t nMissileCount;
     D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.eSkillNo = eSkill;
@@ -552,18 +547,12 @@ static int __stdcall SKILLSOR_GetMeteorSubMissileCount(eMissilesId pParam, eD2Sk
       return 0;
     }
 
-    int32_t nMissileCount = 0;
-    if (nCount <= 0) {
-      return 1;
-    }
-
-    do {
+    for (nMissileCount = 0; nMissileCount < nCount; nMissileCount++) {
       sSkillArg.nUnitX = gnSkillOffset_Sorceress_Fireball[nMissileCount & 3U];
       sSkillArg.nUnitY = gnSkillOffset_Sorceress_Meteor[nMissileCount & 3U];
       sSkillArg.nFunctionParam = nMissileCount;
       MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-      nMissileCount++;
-    } while (nMissileCount < nCount);
+    }
 
     return 1;
 }
@@ -807,7 +796,6 @@ void __fastcall SKILLEMONST_OnDeathSpawnExpire(D2UnitStrc * pUnit, eD2States eSt
 BOOL __fastcall Skills_SrvDoFunc_133_SetDeathSpawnState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL _bCanSpawn;
     bool bCanSpawn;
-    D2StateExArgStrc sStateArg;
     if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
@@ -815,6 +803,7 @@ BOOL __fastcall Skills_SrvDoFunc_133_SetDeathSpawnState(::SGAMEDATA * pGame, D2U
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
+    D2StateExArgStrc sStateArg = {0};
     sStateArg.pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!sStateArg.pTarget) {
       return 0;
@@ -1348,6 +1337,7 @@ D2UnitStrc * __fastcall SKILLEMONST_FindNearbyCorpse(::SGAMEDATA * pGame, D2Unit
     bool bIsCorpseUseable;
     bool bCanAttack;
     int nX;
+    int32_t nCandidateIdx;
     D2UnitFindArgStrc sUnitFindArg;
     D2UnitFindDataStrc sUnitFindData;
     ::SGAMEDATA* pGameLocal = pGame;
@@ -1377,22 +1367,17 @@ D2UnitStrc * __fastcall SKILLEMONST_FindNearbyCorpse(::SGAMEDATA * pGame, D2Unit
     sUnitFindArg.nX = nX;
     D2Common::Units::UnitFinds::InitializeUnitFindData(pGameLocal->pMemoryPool, &sUnitFindData, pCurrentRoom, nX, sUnitFindArg.nY, nSearchRadius, nullptr, &sUnitFindArg);
     D2Common::Units::UnitFinds::UNITFINDS_FindCullRange(&sUnitFindData);
-    int32_t nCandidateIdx = 0;
-    if (sUnitFindData.nCountedUnits > 0) {
+    for (nCandidateIdx = 0; nCandidateIdx < sUnitFindData.nCountedUnits; nCandidateIdx++) {
       D2UnitStrc* pCandidate;
-      do {
-        pCandidate = sUnitFindData.pUnitsArray->aFoundUnitsList[nCandidateIdx];
-        _bIsCorpseUseable = D2Common::Units::IsCorpseUseable(pCandidate);
-        if (_bIsCorpseUseable) {
-          _bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGameLocal, pUnit, pCandidate);
-          if (_bCanAttack) {
-            D2Common::Units::UnitFinds::FreeUnitFindData(&sUnitFindData);
-            return pCandidate;
-          }
+      pCandidate = sUnitFindData.pUnitsArray->aFoundUnitsList[nCandidateIdx];
+      _bIsCorpseUseable = D2Common::Units::IsCorpseUseable(pCandidate);
+      if (_bIsCorpseUseable) {
+        _bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGameLocal, pUnit, pCandidate);
+        if (_bCanAttack) {
+          D2Common::Units::UnitFinds::FreeUnitFindData(&sUnitFindData);
+          return pCandidate;
         }
-
-        nCandidateIdx++;
-      } while (nCandidateIdx < sUnitFindData.nCountedUnits);
+      }
     }
 
     D2Common::Units::UnitFinds::FreeUnitFindData(&sUnitFindData);

@@ -1719,26 +1719,18 @@ BOOL __stdcall COMCALLBACK_HandleUserListClick(int * pnClickMsg) {
 uint32_t __stdcall COMCALLBACK_HandleGameListError1(D2ControlMsg * pControlMsg) {
     char szSquelchCommand[256];
     char szUsername[256];
-    char ch;
     if (!gpCurrentChatRoomContext) {
       return 1;
     }
 
-    char* pchScan = (char*)((int)gpCurrentChatRoomContext + 4);
-    int iVar1 = -(int)pchScan;
-    do {
-      ch = *pchScan;
-      pchScan[(int)(szUsername + iVar1)] = ch;
-      pchScan++;
-    } while (ch != '\0');
-
+    strcpy(szUsername, (char*)((int)gpCurrentChatRoomContext + 4));
     DWORD dwTick = GetTickCount();
     if (!(dwTick >= gdwLastChatSendTick + 1000)) {
       return 1;
     }
 
     gdwLastChatSendTick = dwTick;
-    pchScan = Storm::Source::SSTR::SStrChr(szUsername, '*');
+    char* pchScan = Storm::Source::SSTR::SStrChr(szUsername, '*');
     if (!pchScan || (pchScan++ , *pchScan == '\0')) {
       pchScan = szUsername;
     }
@@ -1773,26 +1765,18 @@ uint32_t __stdcall COMCALLBACK_HandleGameListError1(D2ControlMsg * pControlMsg) 
 uint32_t __stdcall COMCALLBACK_HandleGameListError2(D2ControlMsg * pControlMsg) {
     uint8_t szSquelchCommand[256];
     char szUsername[256];
-    char ch;
     if (!gpCurrentChatRoomContext) {
       return 1;
     }
 
-    char* pchScan = (char*)((int)gpCurrentChatRoomContext + 4);
-    int iVar1 = -(int)pchScan;
-    do {
-      ch = *pchScan;
-      pchScan[(int)(szUsername + iVar1)] = ch;
-      pchScan++;
-    } while (ch != '\0');
-
+    strcpy(szUsername, (char*)((int)gpCurrentChatRoomContext + 4));
     DWORD dwTick = GetTickCount();
     if (!(dwTick >= gdwLastChatSendTick + 1000)) {
       return 1;
     }
 
     gdwLastChatSendTick = dwTick;
-    pchScan = Storm::Source::SSTR::SStrChr(szUsername, '*');
+    char* pchScan = Storm::Source::SSTR::SStrChr(szUsername, '*');
     if (!pchScan || (pchScan++ , *pchScan == '\0')) {
       pchScan = szUsername;
     }
@@ -2196,20 +2180,14 @@ void __fastcall COMCALLBACK_RemoveUserFromList(int32_t nStrBase, uint32_t * pnCa
 
 BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * pnKeyHi, uint32_t * pnKeyLo) {
     uint8_t byChar;
+    int nVal;
     int nDelta;
     uint8_t abKeyBuf[20];
     char szKeyLoHex[8];
     uint32_t nChecksum;
-    char ch;
     *pnKeyHi = 0;
     *pnKeyLo = 0;
-    int nVal = -(int)szChatText;
-    do {
-      ch = *szChatText;
-      szChatText[(int)(abKeyBuf + nVal)] = ch;
-      szChatText++;
-    } while (ch != '\0');
-
+    strcpy((char*)abKeyBuf, szChatText);
     uint8_t* pbScan = abKeyBuf;
     while (abKeyBuf[0]) {
       byChar = *pbScan;

@@ -753,7 +753,7 @@ bool __fastcall Q18_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     if (bQuestState) {
       /* GetQuestState(LamEsensTome, state 0xd=JustCompleted) — adds 2 to log byte
                          (0xb -> 0xd) when freshly done */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_LamEsensTome, QUESTSTATE_JustCompleted);
-      *nUnknown = (bQuestState != 0) * '\x02' + '\v';
+      *nUnknown = bQuestState != 0 ? 13 : 11;
       return true;
     }
 
@@ -780,7 +780,7 @@ bool __fastcall Q18_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     if (pQuestData->nStateFlag < 4) {
       *nUnknown = '\x01';
       if (pLamEsenData->bNotifiedPlayers == '\x01' && !pLamEsenData->nPlayersInArea) {
-        *nUnknown = (pQuestData->pGame->nGameType != SGAMETYPE_SINGLEPLAYER) + '\b';
+        *nUnknown = pQuestData->pGame->nGameType != SGAMETYPE_SINGLEPLAYER ? 9 : 8;
         return true;
       }
     } else {

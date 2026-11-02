@@ -226,7 +226,7 @@ void __stdcall DrawSellBtn() {
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
     sGfxData.nDirection = 0;
-    sGfxData.nFrameNumber = (gpHelpCloseButton != 0) + 10;
+    sGfxData.nFrameNumber = gpHelpCloseButton != 0 ? 11 : 10;
     DWORD eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode == 2) {
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x2ad, 0x38, -1, DRAW_SOLID, nullptr);

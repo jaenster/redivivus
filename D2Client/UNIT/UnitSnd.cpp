@@ -288,7 +288,7 @@ void __fastcall UNITSND_ResolveSoundFromFlags(D2UnitStrc * pUnit, uint32_t nAnim
 
       break;
       case 0x40:
-        *pnParam = (uint32_t)(*pnSoundIdOut != 0) * 4 + 0x170;
+        *pnParam = *pnSoundIdOut != 0 ? 0x174U : 0x170U;
       return;
       case 0x50:
         if (!*pnSoundIdOut || eUnitType != UNIT_PLAYER && eUnitType != UNIT_MONSTER || bExcludePlayerMonster) {

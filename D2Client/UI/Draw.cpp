@@ -709,11 +709,7 @@ void __fastcall CLIENT_AdjustMemoryBudget(D2PoolManagerStrc * pMemory, int32_t b
     uint32_t dwPhysMemBytes;
     dwPhysMemBytes = *(uint32_t*)(pStormGlobal + 0xc);
     if (dwPhysMemBytes < 0x167d000) {
-      fPhysMemMB = (float)(int)dwPhysMemBytes;
-      if ((int)dwPhysMemBytes < 0) {
-        fPhysMemMB += 4.2949673e+09;
-      }
-
+      fPhysMemMB = (float)dwPhysMemBytes;
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("This machine doesn\'t have enough physical memory (> %.2f MB) for minimal performance!", (double)(fPhysMemMB * 9.536743e-07));
       exit(-1);
     }

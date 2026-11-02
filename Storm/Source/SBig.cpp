@@ -252,6 +252,7 @@ uint32_t __stdcall TSGrowableArray_Uc_RoundToChunk(uint32_t nValue, uint32_t nMu
 // TSFixedArray<unsigned char>::ReallocData: sets pBuffer->nCapacity = nNewSize and SMemReAllocs the byte data in place (flag 0x10); if that fails, SMemAllocs a new block, copies min(nLen, nNewSize) bytes and frees the old one.
 // Provenance: 1.14d asm 004211c0 (SMem tag 0x708880); PPC Storm 1.10b .ReallocData__31TSFixedArray<...>FUi has the same shape.
 void __thiscall TSFixedArray_Uc_ReallocData(TSGrowableArray_Uc * pBuffer, uint32_t nNewSize) {
+    uint32_t uCopyIdx;
     uint8_t* pOldBuffer = pBuffer->pData;
     pBuffer->nCapacity = nNewSize;
     uint8_t* pReallocated = (uint8_t*)SMem::SMemReAlloc((uint32_t*)pOldBuffer, nNewSize, s__E_00708880, -2, 0x10);
@@ -268,15 +269,11 @@ void __thiscall TSFixedArray_Uc_ReallocData(TSGrowableArray_Uc * pBuffer, uint32
     if (nNewSize >= pBuffer->nLen) {
       nNewSize = pBuffer->nLen;
     }
-    if (nNewSize > 0) {
-      uint32_t uCopyIdx = 0;
-      do {
-        if (pBuffer->pData + uCopyIdx) {
-          pBuffer->pData[uCopyIdx] = pOldBuffer[uCopyIdx];
-        }
 
-        uCopyIdx++;
-      } while (uCopyIdx < nNewSize);
+    for (uCopyIdx = 0; uCopyIdx < nNewSize; uCopyIdx++) {
+      if (pBuffer->pData + uCopyIdx) {
+        pBuffer->pData[uCopyIdx] = pOldBuffer[uCopyIdx];
+      }
     }
 
     SMem::SMemFree(pOldBuffer, s__E_00708880, -2, 0);
@@ -614,6 +611,7 @@ void __thiscall SBIG_ArrayByteAltSetCapacity(int * pArray, int32_t nCapacity) {
 // @oracle-method CONFIRMED. n*4 sizing, SMemReAlloc flag 0x10 with the alloc/copy/free fallback. Matches the block the oracle inlines into .SetCount__29TSGrowableArray<Ui,8TSCD<Ui>>FUi @1009b120. Dword instantiation, SMem tag 0x708874.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void __thiscall TSFixedArray_Ui_ReallocData(uint32_t * pArray, uint32_t nCapacity) {
+    uint32_t nIndex;
     uint32_t* pOldBuffer = (uint32_t*)pArray[2];
     *pArray = nCapacity;
     uint32_t* pNewBuffer = SMem::SMemReAlloc(pOldBuffer, nCapacity * 4, s__I_00708874, -2, 0x10);
@@ -630,16 +628,12 @@ void __thiscall TSFixedArray_Ui_ReallocData(uint32_t * pArray, uint32_t nCapacit
     if (nCapacity >= pArray[1]) {
       nCapacity = pArray[1];
     }
-    if (nCapacity > 0) {
-      uint32_t nIndex = 0;
-      do {
-        pNewBuffer = (uint32_t*)(pArray[2] + nIndex * 4);
-        if (pNewBuffer) {
-          *pNewBuffer = pOldBuffer[nIndex];
-        }
 
-        nIndex++;
-      } while (nIndex < nCapacity);
+    for (nIndex = 0; nIndex < nCapacity; nIndex++) {
+      pNewBuffer = (uint32_t*)(pArray[2] + nIndex * 4);
+      if (pNewBuffer) {
+        *pNewBuffer = pOldBuffer[nIndex];
+      }
     }
 
     SMem::SMemFree(pOldBuffer, s__I_00708874, -2, 0);
@@ -650,6 +644,7 @@ void __thiscall TSFixedArray_Ui_ReallocData(uint32_t * pArray, uint32_t nCapacit
 // @oracle-method CONFIRMED. Identical to TSFixedArray_Uc_ReallocData 004211c0; second byte instantiation, SMem tag 0x70888c.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void __thiscall TSFixedArray_UcAlt_ReallocData(uint32_t * pArray, uint32_t nCapacity) {
+    uint32_t nIndex;
     uint32_t* pOldBuffer = (uint32_t*)pArray[2];
     *pArray = nCapacity;
     uint32_t* pNewBuffer = SMem::SMemReAlloc(pOldBuffer, nCapacity, s__D_0070888c, -2, 0x10);
@@ -666,15 +661,11 @@ void __thiscall TSFixedArray_UcAlt_ReallocData(uint32_t * pArray, uint32_t nCapa
     if (nCapacity >= pArray[1]) {
       nCapacity = pArray[1];
     }
-    if (nCapacity > 0) {
-      uint32_t nIndex = 0;
-      do {
-        if ((uint8_t*)(pArray[2] + nIndex)) {
-          *(uint8_t*)(pArray[2] + nIndex) = *(uint8_t*)(nIndex + (int)pOldBuffer);
-        }
 
-        nIndex++;
-      } while (nIndex < nCapacity);
+    for (nIndex = 0; nIndex < nCapacity; nIndex++) {
+      if ((uint8_t*)(pArray[2] + nIndex)) {
+        *(uint8_t*)(pArray[2] + nIndex) = *(uint8_t*)(nIndex + (int)pOldBuffer);
+      }
     }
 
     SMem::SMemFree(pOldBuffer, s__D_0070888c, -2, 0);

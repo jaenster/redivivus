@@ -71,6 +71,7 @@ void __stdcall AllocPalShift_GreenBlood() {
 
 // @sourcefile .\GAME\PalShift.cpp
 void __stdcall InitPal() {
+    int i;
     D2MPQFileStrc* pGreenBloodFile;
     D2MPQFileStrc* pRandTransformFile;
     size_t nAllocSize = sgptDataTable->nTxtMonStatsSize * 8;
@@ -78,12 +79,8 @@ void __stdcall InitPal() {
     gpMonsterPalShiftList = pPalShiftList;
     memset(pPalShiftList, 0, nAllocSize);
     int nMonStatsCount = sgptDataTable->nTxtMonStatsSize;
-    if (nMonStatsCount > 0) {
-      int i = 0;
-      do {
-        *(int*)((int)pPalShiftList + i * 8) = i;
-        i++;
-      } while (i < nMonStatsCount);
+    for (i = 0; i < nMonStatsCount; i++) {
+      *(int*)((int)pPalShiftList + i * 8) = i;
     }
 
     gpPalShiftEntryListHead = 0;
@@ -263,6 +260,7 @@ void __fastcall PALSHIFT_LoadMonsterPalShift(int32_t nMonsterId) {
 
 // @sourcefile .\GAME\PalShift.cpp
 void __stdcall PALSHIFT_InitPalShiftTable() {
+    int i;
     void* pPalShiftList;
     while (gpPalShiftEntryListHead) {
       pPalShiftList = *(void**)((int)gpPalShiftEntryListHead + 0x1004);
@@ -277,12 +275,8 @@ void __stdcall PALSHIFT_InitPalShiftTable() {
 
     pPalShiftList = gpMonsterPalShiftList;
     memset(gpMonsterPalShiftList, 0, nTxtMonStatsCount * 8);
-    if (nTxtMonStatsCount > 0) {
-      int i = 0;
-      do {
-        *(int*)((int)pPalShiftList + i * 8) = i;
-        i++;
-      } while (i < nTxtMonStatsCount);
+    for (i = 0; i < nTxtMonStatsCount; i++) {
+      *(int*)((int)pPalShiftList + i * 8) = i;
     }
 
     PALSHIFT_LoadMonsterPalShift(0x16b);

@@ -238,16 +238,11 @@ BOOL __fastcall Q13_CheckSummonerKillAndReward(::SGAMEDATA * pGame, D2UnitStrc *
       }
 
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pDVar3, &ppAdjacentRooms, (int*)&nAdjacentRoomCount);
-      iAdjacentRoom = 0;
-      if (nAdjacentRoomCount > 0) {
-        do {
-          if (ppAdjacentRooms[iAdjacentRoom] == pDVar1->pSummonerRoom) {
-            bPlayerNearSummoner = 1;
-            break;
-          }
-
-          iAdjacentRoom++;
-        } while (iAdjacentRoom < nAdjacentRoomCount);
+      for (iAdjacentRoom = 0; iAdjacentRoom < nAdjacentRoomCount; iAdjacentRoom++) {
+        if (ppAdjacentRooms[iAdjacentRoom] == pDVar1->pSummonerRoom) {
+          bPlayerNearSummoner = 1;
+          break;
+        }
       }
     }
 

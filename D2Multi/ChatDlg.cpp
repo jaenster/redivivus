@@ -276,7 +276,7 @@ void __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, int32_t ps
       return;
     }
 
-    FILETIME utcFileTime = d2_bits_as<FILETIME>(_allmul(nUnixTime + 0xb6109100, (0x49ef6eff < nUnixTime) + 2, 10000000, 0));
+    FILETIME utcFileTime = d2_bits_as<FILETIME>(_allmul(nUnixTime + 0xb6109100, 0x49ef6eff < nUnixTime ? 3 : 2, 10000000, 0));
     /* LPFILETIME lpLocalFileTime for FileTimeToLocalFileTime */ /* FILETIME * lpFileTime for FileTimeToLocalFileTime */ FileTimeToLocalFileTime(&utcFileTime, &localFileTime);
     CHATDLG_FormatFileTimeToDate(&localFileTime, 0x40, szDateStr);
     StoreData((LPRECT)0x0, 0, szDateStr);
@@ -1036,8 +1036,6 @@ void __stdcall CHATDLG_RefreshGameNameDisplay() {
     uint16_t awszGameNames[512];
     char aszGameNames[512];
     char cCurrent;
-    int nUsedLen;
-    nUsedLen = 0;
     for (nClearCount = 0; nClearCount < 0x200; nClearCount++) {
       awszGameNames[nClearCount] = L'\0';
     }
@@ -1050,17 +1048,16 @@ void __stdcall CHATDLG_RefreshGameNameDisplay() {
     char* pszNameNode;
     pszNameNode = (char*)gpChatPlayerNameListHead;
     if (gpChatPlayerNameListHead) {
-      char* pszCursor;
+      int nUsedLen = 0;
       do {
         if (nUsedLen >= 0x200) {
           break;
         }
 
         strncat(aszGameNames, pszNameNode, 0x200 - nUsedLen);
-        pszCursor = aszGameNames;
-        pszCursor = pszCursor + strlen(pszCursor) + 1;
+        int nLen = (int)strlen(aszGameNames);
         pszNameNode = *(char**)(pszNameNode + 0x204);
-        nUsedLen = (int)pszCursor - (int)(aszGameNames + 1);
+        nUsedLen = nLen;
       } while (pszNameNode);
 
       if (aszGameNames[0] != '\0') {

@@ -312,7 +312,7 @@ int __fastcall SFILE_MoveDirectoryRecursive(LPCSTR szSrcRoot, LPCSTR szDstRoot) 
     DWORD dwAttributes = GetFileAttributesA(szSrcRoot);
     if (dwAttributes == -1) {
       dwAttributes = GetLastError();
-      return 2 - (uint32_t)(dwAttributes != 2);
+      return dwAttributes != 2 ? 0x1U : 0x2U;
     }
     /* LPCSTR lpFileName for GetFileAttributesA */ if (dwAttributes & 0x10) {
       uint32_t uVar1;

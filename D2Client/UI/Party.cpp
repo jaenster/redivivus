@@ -362,9 +362,8 @@ void __stdcall UI_DrawPlayerNameInParty() {
       return;
     }
 
-    char* pszScan = pszName;
-    pszScan = pszScan + strlen(pszScan) + 1;
-    int32_t nLen = D2Lang::UTF8_GetStringLength(pszName, (int)pszScan - (int)(pszName + 1));
+    int nLen2 = (int)strlen(pszName);
+    int32_t nLen = D2Lang::UTF8_GetStringLength(pszName, nLen2);
     uint32_t nLenPlus1 = nLen + 1;
     if (nLenPlus1 > 0xb) {
       if (nLenPlus1 >= 0xe) {
@@ -519,7 +518,7 @@ void __stdcall UI_DrawPartyAcceptButton() {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
-    sGfxData.nFrameNumber = (gpPartyAcceptButton != 0) + 10;
+    sGfxData.nFrameNumber = gpPartyAcceptButton != 0 ? 11 : 10;
     sGfxData.nDirection = 0;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + 0x116, 0x1a5 - gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
 }

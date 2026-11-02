@@ -1716,11 +1716,11 @@ int32_t __fastcall UNITS_ProcessUnitMovement(::SGAMEDATA * pGame, D2UnitStrc * p
     BOOL nAdvanceResult = D2Common::PATH::Path::PATH_AdvanceUnitAlongPath(pUnit, 0x400);
     _bNeedsRoomUpdate = D2Common::Units::NeedsRoomUpdate(pUnit);
     if (!_bNeedsRoomUpdate) {
-      return 2 - (uint32_t)(nAdvanceResult != 0);
+      return nAdvanceResult != 0 ? 0x1U : 0x2U;
     }
 
     UNITS_UpdateRoomClientVisibility(pGame, pUnit, nullptr);
-    return 2 - (uint32_t)(nAdvanceResult != 0);
+    return nAdvanceResult != 0 ? 0x1U : 0x2U;
 }
 
 D2UnitStrc * __fastcall GetInteractedNpc(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {

@@ -1269,10 +1269,7 @@ uint32_t __fastcall SKILL_ExecuteClientDoFunc(D2UnitStrc * pUnit, eD2Skills eSki
     int32_t nTargetCoordY;
     uint32_t nOffsetX;
     uint32_t nOffsetY;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 
@@ -1954,10 +1951,7 @@ void __fastcall SKILLS_CreateMissileScatter(D2UnitStrc * pUnit, D2SkillArgStrc *
         nOffsetY = 0;
       }
 
-      nQuadrantTmp = nQuadrantTmp + 1 & 0x80000003;
-      if ((int)nQuadrantTmp < 0) {
-        nQuadrantTmp = (nQuadrantTmp - 1 | -4) + 1;
-      }
+      nQuadrantTmp = (int)(nQuadrantTmp + 1) % 4;
       if ((int)nRandRange > 0) {
         nRandOffsetX = pUnit->sSeed.nSeedLow;
         if (nRandRange & nRandRange - 1) {
@@ -2006,11 +2000,8 @@ void __fastcall SKILLS_CreateMissileScatter(D2UnitStrc * pUnit, D2SkillArgStrc *
 }
 
 BOOL __fastcall CLIENT_HandleUnitMessage0x16(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
-    D2ServerMessageHandleStrc nMsgHandle;
+    D2ServerMessageHandleStrc nMsgHandle = {0};
     nMsgHandle.nTargetUnitType = UNIT_COUNT;
-    nMsgHandle.nMaxDistance = 0;
-    nMsgHandle.nTargetX = 0;
-    nMsgHandle.nSkillId = 0;
     nMsgHandle.nItemId = -1;
     if (pTargetUnit) {
       nMsgHandle.nTargetUnitType = pTargetUnit->eUnitType;

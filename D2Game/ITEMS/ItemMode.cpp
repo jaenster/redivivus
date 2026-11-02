@@ -3796,6 +3796,7 @@ void __fastcall ITEMMODE_HandleCursorItem(::SGAMEDATA * pGame, D2UnitStrc * pUni
     uint32_t nSkillId;
     D2StatStrc aStatBonusData[64];
     int32_t bRechargedAny;
+    int nChargedStatIdx;
     if (!(pGame && pItem && pItem->eUnitType == UNIT_ITEM)) {
       return;
     }
@@ -3806,12 +3807,7 @@ void __fastcall ITEMMODE_HandleCursorItem(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
 
     int32_t iVar1 = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pItem, 0xcc, aStatBonusData, 0x40);
-    int nChargedStatIdx = 0;
-    if (iVar1 <= 0) {
-      return;
-    }
-
-    do {
+    for (nChargedStatIdx = 0; nChargedStatIdx < iVar1; nChargedStatIdx++) {
       uint32_t nMaxCharges;
       nSkillId = sgptDataTable->dwChargedSkillLevelMask & (uint32_t)(uint16_t)aStatBonusData[nChargedStatIdx].wSubIndex;
       nMaxCharges = aStatBonusData[nChargedStatIdx].nStatValue >> 8;
@@ -3822,9 +3818,7 @@ void __fastcall ITEMMODE_HandleCursorItem(::SGAMEDATA * pGame, D2UnitStrc * pUni
           GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItem, '\x01', 0xcc, (uint8_t)nMaxCharges + nMaxCharges * 0x100, (short int)(nLevel << ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f)) + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nSkillId));
         }
       }
-
-      nChargedStatIdx++;
-    } while (nChargedStatIdx < iVar1);
+    }
 }
 
 static BOOL ITEMMODE_ValidateInventorySlot(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t pScrollItem) {
@@ -4320,7 +4314,6 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
     BOOL pGridSlot;
     uint32_t bIsActiveCharm;
     uint32_t uVar1;
-    D2RoomStrc* pRoom;
     eD2ItemFlag eItemFlag;
     POINT ptDropOrigin;
     POINT ptDropSpot;
@@ -4462,8 +4455,7 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
         bSparseDrop = 1;
         uVar1 = 1;
         pDropSpotOut = &ptDropSpot;
-        pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-        pBestDropRoom = Items::Drop::FindBestSpotToSpawnItem(pRoom, &ptDropOrigin, pDropSpotOut, uVar1, bSparseDrop);
+        pBestDropRoom = Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &ptDropOrigin, pDropSpotOut, uVar1, bSparseDrop);
         pGameDrop = pGameSaved;
         if (pBestDropRoom) {
           ITEMMODE_UnequipItemStats(pGameSaved, pUnit_00, pUnit, 0, 1);

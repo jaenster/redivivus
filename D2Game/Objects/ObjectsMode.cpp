@@ -1002,8 +1002,7 @@ static void OBJMODE_SpawnMonsterAtObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     LONG nX = ptCoords.x;
     LONG nY = ptCoords.y;
     uint32_t nMonClassId = nClassId;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    D2UnitStrc* bSpawnedAtExact = Monster::Create::SpawnMonsterAtRoomPosSimple(pGame, pRoom, nX, nY, nMonClassId, eSpawnAnimMode, wSpawnMode);
+    D2UnitStrc* bSpawnedAtExact = Monster::Create::SpawnMonsterAtRoomPosSimple(pGame, D2Common::Units::UNITS_GetRoom(pUnit), nX, nY, nMonClassId, eSpawnAnimMode, wSpawnMode);
     if (bSpawnedAtExact) {
       return;
     }
@@ -1305,8 +1304,7 @@ static BOOL __stdcall Shrines_GemShrine_SpawnGem(int32_t nItemClassId, D2UnitStr
     uint8_t bSearchNeighbors = 1;
     uint32_t uSearchFlag = 1;
     POINT* pNewPosition = &ptSpawnPos;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
-    D2UnitStrc* pSpawnedItem = (D2UnitStrc*)ITEMS::Items::Drop::FindBestSpotToSpawnItem(pRoom, &ptUnitCoords, pNewPosition, uSearchFlag, bSearchNeighbors);
+    D2UnitStrc* pSpawnedItem = (D2UnitStrc*)ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit2), &ptUnitCoords, pNewPosition, uSearchFlag, bSearchNeighbors);
     if (pSpawnedItem) {
       eInventoryPage ePreviousPage;
       memset(&sItemGenCtx, 0, 0x84);
@@ -1428,8 +1426,8 @@ void __fastcall Shrines_GemShrineFunction(D2ObjectOperateFnArg * pArguments, D2S
 
 // Server-side activation effect for a Storm/Tempest shrine (operate handler, D2ObjectOperateFnArg + ShrinesTxt). Two-phase: (1) finds all alive units within ShrinesTxt.dwArg1 tiles of the operating unit via InitializeUnitFindData/FindAllMatchingUnitsInNeighboredRooms and drains a percentage (dwArg0-based, ~ /100) of each monster/player target's hitpoints via STATLIST_AddUnitStat; (2) spawns a 5x5 ring/grid of MISSILE_Fireball missiles around the unit (offsets -5..+25 step 5, alternating sides), owned by pAttacker, with missile level capped 1..8 from the owner's level/5. No return.
 void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
+    BOOL bIsDead;
     int nHpReduction;
-    bool bAltSide;
     int nUnitIdx;
     D2UnitFindArgStrc sUnitFindArg;
     D2SkillArgStrc sSkillArg;
@@ -1464,22 +1462,16 @@ void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D
     sUnitFindArg.nX = nUnitIdx;
     D2Common::Units::UnitFinds::InitializeUnitFindData(pArguments->sArg.pGame->pMemoryPool, &unitFindData, pRoom, nUnitIdx, sUnitFindArg.nY, sUnitFindArg.nDistance, (UNITFINDTEST)UNIT_IsAlive, &sUnitFindArg);
     D2Common::Units::UnitFinds::UNITFINDS_FindCullRange(&unitFindData);
-    nUnitIdx = 0;
-    if (unitFindData.nCountedUnits > 0) {
-      BOOL bIsDead;
-      do {
-        pTargetUnit = unitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx];
-        if (pTargetUnit && (pTargetUnit->eUnitType == UNIT_MONSTER || pTargetUnit->eUnitType == UNIT_PLAYER)) {
-          bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pTargetUnit);
-          if (!bIsDead) {
-            nHpReduction = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_hitpoints, 0);
-            nHpReduction = (int)((uint64_t)((int64_t)(int)(pTxtShrinesLocal->dwArg0 * (nHpReduction >> 8)) * -0x51eb851f) >> 0x20);
-            D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pTargetUnit, UNITSTAT_hitpoints, ((nHpReduction >> 5) - (nHpReduction >> 0x1f)) * 0x100, 0);
-          }
+    for (nUnitIdx = 0; nUnitIdx < unitFindData.nCountedUnits; nUnitIdx++) {
+      pTargetUnit = unitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx];
+      if (pTargetUnit && (pTargetUnit->eUnitType == UNIT_MONSTER || pTargetUnit->eUnitType == UNIT_PLAYER)) {
+        bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pTargetUnit);
+        if (!bIsDead) {
+          nHpReduction = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_hitpoints, 0);
+          nHpReduction = (int)((uint64_t)((int64_t)(int)(pTxtShrinesLocal->dwArg0 * (nHpReduction >> 8)) * -0x51eb851f) >> 0x20);
+          D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pTargetUnit, UNITSTAT_hitpoints, ((nHpReduction >> 5) - (nHpReduction >> 0x1f)) * 0x100, 0);
         }
-
-        nUnitIdx++;
-      } while (nUnitIdx < unitFindData.nCountedUnits);
+      }
     }
 
     D2Common::Units::UnitFinds::FreeUnitFindData(&unitFindData);
@@ -1487,6 +1479,7 @@ void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D
     pTxtShrinesLocal = (D2ShrinesTxt*)-5;
     pRoom = (D2RoomStrc*)0x5;
     do {
+      bool bAltSide;
       bAltSide = true;
       nRowParity = nRingRow & 1;
       nNegColOffset = -5;
@@ -1585,6 +1578,7 @@ void __fastcall Shrines_ExplodingShrineFunction(D2ObjectOperateFnArg * pArgument
     POINT ptAttackerCoords;
     int aMissileOffsets[13];
     POINT ptSpawnPos;
+    int nPotionSpawnIdx;
     D2ItemGenContextStrc sItemGenCtx;
     uint8_t bSearchNeighbors;
     eD2UnitType eUnitType;
@@ -1613,47 +1607,42 @@ void __fastcall Shrines_ExplodingShrineFunction(D2ObjectOperateFnArg * pArgument
     }
 
     aMissileOffsets[0xc] = pTxtShrines->dwArg0 + uSeedHigh;
-    int nPotionSpawnIdx = 0;
-    if (aMissileOffsets[0xc] > 0) {
+    for (nPotionSpawnIdx = 0; nPotionSpawnIdx < aMissileOffsets[0xc]; nPotionSpawnIdx++) {
       int32_t nItemClassId;
-      do {
-        nItemClassId = D2Common::DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId(0x206d706f);
-        if (nItemClassId == -1) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8b2);
-          exit(-1);
-        }
+      nItemClassId = D2Common::DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId(0x206d706f);
+      if (nItemClassId == -1) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8b2);
+        exit(-1);
+      }
 
-        D2Common::Units::GetCoords(pArguments->pAttacker, &ptAttackerCoords);
-        bSearchNeighbors = 1;
-        nCollisionMask = 1;
-        pNewPosition = &ptSpawnPos;
-        pSpawnRoom = D2Common::Units::UNITS_GetRoom(pArguments->pAttacker);
-        pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pSpawnRoom, &ptAttackerCoords, pNewPosition, nCollisionMask, bSearchNeighbors);
-        if (pSpawnRoom) {
-          memset(&sItemGenCtx, 0, 0x84);
-          sItemGenCtx.pGame = pArguments->sArg.pGame;
-          sItemGenCtx.pUnit = 0;
-          sItemGenCtx.pSeed = 0;
-          sItemGenCtx.nPosY = ptSpawnPos.y;
-          sItemGenCtx.eQuality = QUALITY_INVALID;
-          sItemGenCtx.dwMode = 3;
-          sItemGenCtx.nPosX = ptSpawnPos.x;
-          sItemGenCtx.wItemFormat = sItemGenCtx.pGame->wItemFormat;
-          sItemGenCtx.usually_one = 1;
-          sItemGenCtx.nItemClassid = nItemClassId;
-          sItemGenCtx.pDrlgRoom = pSpawnRoom;
-          sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pArguments->pAttacker, LEVEL_None);
-          sItemGenCtx.nPresetQuantity = 1;
-          pCreatedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pArguments->sArg.pGame, &sItemGenCtx, 0);
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pCreatedItem, UNITSTAT_quantity, 1, 0);
-          D2Common::Unit::ROOM_LinkUnitToUpdateList(pCreatedItem);
-          if (pCreatedItem) {
-            pCreatedItem->eUnitFlags |= UNITFLAG_DOUPDATE;
-          }
+      D2Common::Units::GetCoords(pArguments->pAttacker, &ptAttackerCoords);
+      bSearchNeighbors = 1;
+      nCollisionMask = 1;
+      pNewPosition = &ptSpawnPos;
+      pSpawnRoom = D2Common::Units::UNITS_GetRoom(pArguments->pAttacker);
+      pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pSpawnRoom, &ptAttackerCoords, pNewPosition, nCollisionMask, bSearchNeighbors);
+      if (pSpawnRoom) {
+        memset(&sItemGenCtx, 0, 0x84);
+        sItemGenCtx.pGame = pArguments->sArg.pGame;
+        sItemGenCtx.pUnit = 0;
+        sItemGenCtx.pSeed = 0;
+        sItemGenCtx.nPosY = ptSpawnPos.y;
+        sItemGenCtx.eQuality = QUALITY_INVALID;
+        sItemGenCtx.dwMode = 3;
+        sItemGenCtx.nPosX = ptSpawnPos.x;
+        sItemGenCtx.wItemFormat = sItemGenCtx.pGame->wItemFormat;
+        sItemGenCtx.usually_one = 1;
+        sItemGenCtx.nItemClassid = nItemClassId;
+        sItemGenCtx.pDrlgRoom = pSpawnRoom;
+        sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pArguments->pAttacker, LEVEL_None);
+        sItemGenCtx.nPresetQuantity = 1;
+        pCreatedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pArguments->sArg.pGame, &sItemGenCtx, 0);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pCreatedItem, UNITSTAT_quantity, 1, 0);
+        D2Common::Unit::ROOM_LinkUnitToUpdateList(pCreatedItem);
+        if (pCreatedItem) {
+          pCreatedItem->eUnitFlags |= UNITFLAG_DOUPDATE;
         }
-
-        nPotionSpawnIdx++;
-      } while (nPotionSpawnIdx < aMissileOffsets[0xc]);
+      }
     }
 
     int iMissileIdx = 0;
@@ -1720,6 +1709,7 @@ void __fastcall Shrines_PoisonShrineFunction(D2ObjectOperateFnArg * pArguments, 
     POINT ptAttackerCoords;
     int aMissileOffsets[13];
     POINT ptSpawnPos;
+    int nPotionSpawnIdx;
     D2ItemGenContextStrc sItemGenCtx;
     uint8_t bSearchNeighbors;
     eD2UnitType eUnitType;
@@ -1748,47 +1738,42 @@ void __fastcall Shrines_PoisonShrineFunction(D2ObjectOperateFnArg * pArguments, 
     }
 
     aMissileOffsets[0xc] = pTxtShrines->dwArg0 + uSeedHigh;
-    int nPotionSpawnIdx = 0;
-    if (aMissileOffsets[0xc] > 0) {
+    for (nPotionSpawnIdx = 0; nPotionSpawnIdx < aMissileOffsets[0xc]; nPotionSpawnIdx++) {
       int32_t nItemClassId;
-      do {
-        nItemClassId = D2Common::DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId(0x206d7067);
-        if (nItemClassId == -1) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8f4);
-          exit(-1);
-        }
+      nItemClassId = D2Common::DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId(0x206d7067);
+      if (nItemClassId == -1) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8f4);
+        exit(-1);
+      }
 
-        D2Common::Units::GetCoords(pArguments->pAttacker, &ptAttackerCoords);
-        bSearchNeighbors = 1;
-        nCollisionMask = 1;
-        pNewPosition = &ptSpawnPos;
-        pSpawnRoom = D2Common::Units::UNITS_GetRoom(pArguments->pAttacker);
-        pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pSpawnRoom, &ptAttackerCoords, pNewPosition, nCollisionMask, bSearchNeighbors);
-        if (pSpawnRoom) {
-          memset(&sItemGenCtx, 0, 0x84);
-          sItemGenCtx.pGame = pArguments->sArg.pGame;
-          sItemGenCtx.pUnit = 0;
-          sItemGenCtx.pSeed = 0;
-          sItemGenCtx.nPosY = ptSpawnPos.y;
-          sItemGenCtx.eQuality = QUALITY_INVALID;
-          sItemGenCtx.dwMode = 3;
-          sItemGenCtx.nPosX = ptSpawnPos.x;
-          sItemGenCtx.wItemFormat = sItemGenCtx.pGame->wItemFormat;
-          sItemGenCtx.usually_one = 1;
-          sItemGenCtx.nItemClassid = nItemClassId;
-          sItemGenCtx.pDrlgRoom = pSpawnRoom;
-          sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pArguments->pAttacker, LEVEL_None);
-          sItemGenCtx.nPresetQuantity = 1;
-          pCreatedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pArguments->sArg.pGame, &sItemGenCtx, 0);
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pCreatedItem, UNITSTAT_quantity, 1, 0);
-          D2Common::Unit::ROOM_LinkUnitToUpdateList(pCreatedItem);
-          if (pCreatedItem) {
-            pCreatedItem->eUnitFlags |= UNITFLAG_DOUPDATE;
-          }
+      D2Common::Units::GetCoords(pArguments->pAttacker, &ptAttackerCoords);
+      bSearchNeighbors = 1;
+      nCollisionMask = 1;
+      pNewPosition = &ptSpawnPos;
+      pSpawnRoom = D2Common::Units::UNITS_GetRoom(pArguments->pAttacker);
+      pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pSpawnRoom, &ptAttackerCoords, pNewPosition, nCollisionMask, bSearchNeighbors);
+      if (pSpawnRoom) {
+        memset(&sItemGenCtx, 0, 0x84);
+        sItemGenCtx.pGame = pArguments->sArg.pGame;
+        sItemGenCtx.pUnit = 0;
+        sItemGenCtx.pSeed = 0;
+        sItemGenCtx.nPosY = ptSpawnPos.y;
+        sItemGenCtx.eQuality = QUALITY_INVALID;
+        sItemGenCtx.dwMode = 3;
+        sItemGenCtx.nPosX = ptSpawnPos.x;
+        sItemGenCtx.wItemFormat = sItemGenCtx.pGame->wItemFormat;
+        sItemGenCtx.usually_one = 1;
+        sItemGenCtx.nItemClassid = nItemClassId;
+        sItemGenCtx.pDrlgRoom = pSpawnRoom;
+        sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pArguments->pAttacker, LEVEL_None);
+        sItemGenCtx.nPresetQuantity = 1;
+        pCreatedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pArguments->sArg.pGame, &sItemGenCtx, 0);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pCreatedItem, UNITSTAT_quantity, 1, 0);
+        D2Common::Unit::ROOM_LinkUnitToUpdateList(pCreatedItem);
+        if (pCreatedItem) {
+          pCreatedItem->eUnitFlags |= UNITFLAG_DOUPDATE;
         }
-
-        nPotionSpawnIdx++;
-      } while (nPotionSpawnIdx < aMissileOffsets[0xc]);
+      }
     }
 
     int iMissileIdx = 0;
@@ -1995,12 +1980,9 @@ void __fastcall SHRINE_OnSkillExpire(D2UnitStrc * pUnit, eD2States eState, int32
 }
 
 void __fastcall Shrines_SkillBoostFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
-    D2StateExArgStrc stateArg;
+    D2StateExArgStrc stateArg = {0};
     stateArg.pUnit = pArguments->sArg.pVictim;
     stateArg.pTarget = pArguments->pAttacker;
-    stateArg.eSkill = SKILL_Attack;
-    stateArg.nSkillLvl = 0;
-    stateArg.nSkillCalc = 0;
     stateArg.nDurationInFrames = pTxtShrines->dwDurationInFrames;
     stateArg.eAuraState = OBJECTSHRINEFUNCTION[pTxtShrines->nCode].nState;
     stateArg.eStat = UNITSTAT_maxstamina;
@@ -3540,8 +3522,7 @@ void __fastcall OBJMODE_DropItemAtPosition(int32_t nParam, D2UnitStrc * pUnit, i
     uint8_t bCheckNeighbors = 1;
     uint32_t nSearchRadius = 1;
     POINT* pNewPosition = &ptSpawnPos;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    sItemGenCtx.pDrlgRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(pRoom, &ptUnitPos, pNewPosition, nSearchRadius, bCheckNeighbors);
+    sItemGenCtx.pDrlgRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &ptUnitPos, pNewPosition, nSearchRadius, bCheckNeighbors);
     if (!sItemGenCtx.pDrlgRoom) {
       return;
     }
@@ -3628,7 +3609,7 @@ D2UnitStrc * * __fastcall RollChestDrops(D2ObjectOperateFnArg * pUnitKill, eD2It
         if (__frame0.nMonLvl < nVictimLevel + nActMonLvlMin) {
           nVictimLevel = 0;
         } else {
-          nVictimLevel = (__frame0.nMonLvl >= nActMonLvlMin + nVictimLevel * 2) + 1;
+          nVictimLevel = __frame0.nMonLvl >= nActMonLvlMin + nVictimLevel * 2 ? 2 : 1;
         }
 
         pTreasure = D2Common::DATATBLS::MonsterTbls::RollTreasureClass((uint32_t)pGame->nDifficulty, nAct, nVictimLevel);

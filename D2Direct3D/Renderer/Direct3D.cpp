@@ -2666,8 +2666,8 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
     char cPixel;
     int iMipLevel;
     void* pMemPool;
-    DC6Block* nParam = pTexInfo->pSprite->pDC6Block;
-    if (!nParam) {
+    DC6Block* pDC6Block = pTexInfo->pSprite->pDC6Block;
+    if (!pDC6Block) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11e);
       exit(-1);
     }

@@ -21,11 +21,7 @@ namespace D2Net::SRC::D2Net {
 
 // Gets local IP address as string. Calls getsockname on CLIENT_SocketToServer, converts sockaddr to string via inet_ntoa, copies to output buffer.
 void __stdcall NET_GetLocalIPAddressString(char * szIpAddressOut) {
-    sockaddr_in sSockAddr;
-    sSockAddr.sin_family = 0;
-    sSockAddr.sin_port = 0;
-    sSockAddr.sin_addr = 0;
-    memset(sSockAddr.sin_zero, 0, 8 * sizeof(sSockAddr.sin_zero[0]));
+    sockaddr_in sSockAddr = {0};
     int nAddrLen = 0x10;
     getsockname(CLIENT_SocketToServer, (sockaddr*)&sSockAddr, &nAddrLen);
     char* szInetNtoaResult = inet_ntoa((in_addr)sSockAddr.sin_addr);

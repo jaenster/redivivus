@@ -648,7 +648,7 @@ static BOOL __stdcall INVENTORY_PlaceItemInGrid(int32_t nnX, int32_t nnY, int32_
     switch (nParam1) {
       case 0:
         {
-          *(char*)((int)ppItemDataPtr + 0xd) = (nnX >= 11) + '\x03';
+          *(char*)((int)ppItemDataPtr + 0xd) = nnX >= 11 ? 4 : 3;
           return 1;
         }
       case 1:
@@ -4275,15 +4275,10 @@ void __stdcall INVENTORY_InitializeItemTypeTable() {
           bIsEquippable = false;
         }
 
-        nTableSlot = 0;
-        if (nTableCount > 0) {
-          do {
-            if (gaItemTypeBaseIdTable[nTableSlot * 2] == nBaseTypeId) {
-              goto next_item;
-            }
-
-            nTableSlot++;
-          } while (nTableSlot < nTableCount);
+        for (nTableSlot = 0; nTableSlot < nTableCount; nTableSlot++) {
+          if (gaItemTypeBaseIdTable[nTableSlot * 2] == nBaseTypeId) {
+            goto next_item;
+          }
         }
 
         nTableSlot = nTableCount;
@@ -4442,7 +4437,7 @@ static void __stdcall INVENTORY_SetEquippedItemAppearance(D2UnitStrc * pUnit, ch
 
 uint8_t __stdcall INVENTORY_CalculateSwapActionCode(int32_t nParam1, int32_t nParam2) {
     if (nParam1) {
-      return (nParam2 != 0) * '\x04' + 1;
+      return nParam2 != 0 ? 5 : 1;
     }
 
     return nParam2 ? 3 : 0;
@@ -4591,7 +4586,7 @@ static uint32_t __stdcall INVENTORY_GetEquipSwapAction(D2UnitStrc * pUnit, D2Uni
       }
       if (pUnit) {
         bIsSocketable = INVENTORY_CanDualWieldItems(pUnit, pNewItem, pUnit1);
-        return 2 - (bIsSocketable != 0);
+        return bIsSocketable != 0 ? 1 : 2;
       }
 
       return 1;
@@ -4816,12 +4811,7 @@ static BOOL __stdcall INVENTORY_ReserveGridCells(D2InventoryStrc * pInventory, D
       int pnColEnd;
       nColIter = (uint32_t)*(uint8_t*)((char*)&pUnit + 3) + pnColStart;
       if (nColIter <= (int)(uint32_t)pInvGridInfo->bWidth && (int)pUnit2 >= 0 && (int)(pUnit2->unk0x19 + (byItemHeight - 0x19)) <= (int)(uint32_t)pInvGridInfo->bHeight) {
-        pRowIter = pUnit2;
-        if ((int)pUnit2 >= (int)(pUnit2->unk0x19 + (byItemHeight - 0x19))) {
-          return 1;
-        }
-
-        do {
+        for (pRowIter = pUnit2; (int)pRowIter < (int)(pUnit2->unk0x19 + (byItemHeight - 0x19)); pRowIter = (D2UnitStrc*)((uintptr_t)&pRowIter->eUnitType + 1)) {
           pnColEnd = pnColStart;
           if (pnColStart < nColIter) {
             do {
@@ -4830,9 +4820,7 @@ static BOOL __stdcall INVENTORY_ReserveGridCells(D2InventoryStrc * pInventory, D
               nColIter = (uint32_t)*(uint8_t*)((char*)&pUnit + 3) + pnColStart;
             } while (pnColEnd < nColIter);
           }
-
-          pRowIter = (D2UnitStrc*)((uintptr_t)&pRowIter->eUnitType + 1);
-        } while ((int)pRowIter < (int)(pUnit2->unk0x19 + (byItemHeight - 0x19)));
+        }
 
         return 1;
       }

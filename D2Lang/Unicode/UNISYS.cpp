@@ -631,17 +631,15 @@ uint16_t * __fastcall STRING_ConvertCharToWchar(uint16_t * pwszBuffer, char * ps
 }
 
 uint16_t * __fastcall STRING_CopyCharToWCharWithSetMaxSize(uint16_t * pDestination, char * szSource, int32_t nSize) {
-    int i = 0;
-    if (nSize > 0) {
-      do {
-        if (!szSource[i]) {
-          break;
-        }
+    int i;
+    for (i = 0; i < nSize; i++) {
+      if (!szSource[i]) {
+        break;
+      }
 
-        pDestination[i] = (uint16_t)(uint8_t)szSource[i];
-        i++;
-      } while (i < nSize);
+      pDestination[i] = (uint16_t)(uint8_t)szSource[i];
     }
+
     if (szSource[i] != '\0') {
       pDestination[i - 1] = L'\0';
       return pDestination;
@@ -712,16 +710,11 @@ bool __thiscall UNICODE_CheckTrailingPunctuation(char * szSourceFile, uint16_t *
 
     nGuardRetVal = 0x52714e;
     int32_t nPunctTableLen = STRING_GetWideStringLength(wszTable);
-    i = 0;
-    if (nPunctTableLen > 0) {
-      do {
-        if (*pwChar == wszTable[i]) {
-          nGuardRetVal = 0x52718c;
-          return true;
-        }
-
-        i++;
-      } while (i < nPunctTableLen);
+    for (i = 0; i < nPunctTableLen; i++) {
+      if (*pwChar == wszTable[i]) {
+        nGuardRetVal = 0x52718c;
+        return true;
+      }
     }
 
     nGuardRetVal = 0x52717a;
@@ -776,15 +769,10 @@ static bool UNICODE_CheckLeadingPunctuation(char * pszTable, uint16_t * wszText)
 
     int32_t nPunctTableLen = STRING_GetWideStringLength(wszTable + 1);
     int32_t nWideLen = STRING_GetWideStringLength(wszText);
-    i = 0;
-    if (nPunctTableLen > 0) {
-      do {
-        if (wszText[nWideLen - 1] == wszTable[i + 1]) {
-          return true;
-        }
-
-        i++;
-      } while (i < nPunctTableLen);
+    for (i = 0; i < nPunctTableLen; i++) {
+      if (wszText[nWideLen - 1] == wszTable[i + 1]) {
+        return true;
+      }
     }
 
     return false;
@@ -1300,6 +1288,7 @@ int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nParam
     int32_t nByteLen;
     uint16_t* pFoundEntry;
     int32_t nIsControl;
+    int i;
     uint16_t wChar;
     if (!gpUnicodeKamapToCodeTable) {
       nByteLen = STRING_GetWideStringLength(wszText);
@@ -1307,13 +1296,7 @@ int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nParam
     }
 
     nByteLen = 0;
-    int i;
-    i = 0;
-    if (nParam <= 0) {
-      return nByteLen;
-    }
-
-    do {
+    for (i = 0; i < nParam; i++) {
       uint16_t awSearchKey[2];
       wChar = wszText[i];
       if (wChar == L'\0') {
@@ -1336,9 +1319,7 @@ int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nParam
           }
         }
       }
-
-      i++;
-    } while (i < nParam);
+    }
 
     return nByteLen;
 }

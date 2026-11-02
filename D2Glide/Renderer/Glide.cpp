@@ -848,7 +848,7 @@ static void RENDERER_GLIDE_CalculateTextureSize(GlideTexInfoStrc * pTexInfo) {
           if (nLodLevel > 0x10) {
             nTexWidthPow2 = 0x20;
           } else {
-            nTexWidthPow2 = (uint32_t)(nLodLevel > 8) * 8 + 8;
+            nTexWidthPow2 = nLodLevel > 8 ? 0x10U : 0x8U;
           }
         }
       }
@@ -868,7 +868,7 @@ static void RENDERER_GLIDE_CalculateTextureSize(GlideTexInfoStrc * pTexInfo) {
           if (nLodLevel > 0x10) {
             nTexHeightPow2 = 0x20;
           } else {
-            nTexHeightPow2 = (uint32_t)(nLodLevel > 8) * 8 + 8;
+            nTexHeightPow2 = nLodLevel > 8 ? 0x10U : 0x8U;
           }
         }
       }
@@ -900,7 +900,7 @@ static void RENDERER_GLIDE_CalculateTextureSize(GlideTexInfoStrc * pTexInfo) {
           }
         default:
           {
-            nLodLevel = (nMaxDimPow2 == 0x10) + 3;
+            nLodLevel = nMaxDimPow2 == 0x10 ? 4 : 3;
           }
       }
     }
@@ -963,8 +963,8 @@ static int32_t __stdcall RENDERER_GLIDE_UploadTextureToCache(GlideTexInfoStrc * 
     GrTexInfo grTexInfo;
     char byPixel;
     int32_t iVar2 = nMode;
-    DC6Block* nParam = pTexInfo->pSprite->pDC6Block;
-    if (!nParam) {
+    DC6Block* pDC6Block = pTexInfo->pSprite->pDC6Block;
+    if (!pDC6Block) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x12d);
       exit(-1);
     }

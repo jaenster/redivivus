@@ -182,20 +182,15 @@ void __fastcall PLRSKILLS_DrawChargeTrailIfSecondary(D2UnitStrc * pUnit, uint32_
 }
 
 static void __stdcall STATES_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nOverlayId) {
+    int i;
     if (nOverlayId == -1) {
       return;
     }
 
     int32_t nOverlayCount = D2Common::DATATBLS::OverlayTbls::OVERLAYTBLS_Get1ofN(nOverlayId);
-    int i = 0;
-    if (nOverlayCount <= 0) {
-      return;
-    }
-
-    do {
+    for (i = 0; i < nOverlayCount; i++) {
       Engine::Gfx::GFX_RemoveOverlayById(pUnit, 0, i + nOverlayId);
-      i++;
-    } while (i < nOverlayCount);
+    }
 }
 
 void __fastcall PLRSKILLS_StateSetFn01_ProgressiveCharge(D2UnitStrc * pUnit, eD2States eState) {

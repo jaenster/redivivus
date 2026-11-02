@@ -118,6 +118,7 @@ void __fastcall DRAW_DrawRoomUnits(D2RoomStrc * pRoom) {
     int nYStart;
     int32_t iVar4;
     int nYEnd;
+    uint32_t i;
     int nScreenX;
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nRoomCount;
@@ -127,12 +128,7 @@ void __fastcall DRAW_DrawRoomUnits(D2RoomStrc * pRoom) {
     D2UnitStrc* pUnit;
     D2RoomStrc* pRoomSaved = pRoom;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nRoomCount);
-    uint32_t i = 0;
-    if (nRoomCount <= 0) {
-      return;
-    }
-
-    do {
+    for (i = 0; i < nRoomCount; i++) {
       for (pUnit = pRoom->pUnitList; pUnit; pUnit = pUnit->pRoomNext) {
         iVar4 = D2Common::Units::GetTargetX(pUnit);
         nScreenX = iVar4 - MouseXOffset;
@@ -153,9 +149,7 @@ void __fastcall DRAW_DrawRoomUnits(D2RoomStrc * pRoom) {
 
         pRoom = pRoomSaved;
       }
-
-      i++;
-    } while (i < nRoomCount);
+    }
 }
 
 void __fastcall DEBUG_DrawRoomBoundsRect(int32_t nX, int32_t nY, BYTE bColor) {
@@ -241,6 +235,7 @@ void __stdcall DEBUG_DrawUnitShadowBounds(D2UnitStrc * pUnit) {
 }
 
 void __stdcall DEBUG_DrawWarpUnitBounds() {
+    uint32_t i;
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nRoomCount;
     D2UnitStrc* pUnit;
@@ -250,20 +245,13 @@ void __stdcall DEBUG_DrawWarpUnitBounds() {
     }
 
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nRoomCount);
-    uint32_t i = 0;
-    if (nRoomCount <= 0) {
-      return;
-    }
-
-    do {
+    for (i = 0; i < nRoomCount; i++) {
       for (pUnit = pRoom->pUnitList; pUnit; pUnit = pUnit->pRoomNext) {
         if (pUnit->eUnitType == UNIT_WARP) {
           DEBUG_DrawUnitShadowBounds(pUnit);
         }
       }
-
-      i++;
-    } while (i < nRoomCount);
+    }
 }
 
 void __stdcall DRAW_UpdateMouseWorldOffsets() {

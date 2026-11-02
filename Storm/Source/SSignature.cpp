@@ -28,21 +28,21 @@ void __fastcall SSIG_FreeBigNum(void * * pBigNum) {
     SBig::SBigDel((BigData*)*pBigNum);
 }
 
-static BOOL __stdcall SSIG_FindSignatureMarker(int32_t nOffset, uint32_t nTotalSize, int32_t pBuffer, int * pnFoundOffset) {
+static BOOL __stdcall SSIG_FindSignatureMarker(int32_t nOffset, uint32_t nTotalSize, uint8_t * pBuffer, int * pnFoundOffset) {
     int nMarkerOffset = nTotalSize - nOffset - 4;
     *pnFoundOffset = nMarkerOffset;
-    if (nTotalSize >= nOffset + 4U && *(int*)(nMarkerOffset + pBuffer) == 0x5349474e) {
+    if (nTotalSize >= nOffset + 4U && *(int*)(pBuffer + nMarkerOffset) == 0x5349474e) {
       return 1;
     }
 
     return 0;
 }
 
-static void __stdcall SSIG_HashData(uint32_t nDataLen, uint8_t * pData, int32_t pDigestOut) {
+static void __stdcall SSIG_HashData(uint32_t nDataLen, uint8_t * pData, uint8_t * pDigestOut) {
     D2Sha1ContextStrc shaContext;
     Fog::Source::SSignature::Sha1_Initialize(&shaContext);
     Sha1_Append(&shaContext, pData, nDataLen);
-    Sha1_Finalize(&shaContext, (uint8_t*)pDigestOut);
+    Sha1_Finalize(&shaContext, pDigestOut);
 }
 
 // @sourcefile .\SOURCE\SSignature.cpp

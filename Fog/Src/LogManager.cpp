@@ -764,19 +764,15 @@ void __fastcall WriteHexDumpLogEntry(int32_t pLogRecord) {
         if (bBadPtr) {
           Storm::Source::SSTR::SStrCopy(__frame0.szLineBuf, "<unreadable>", 0x7fffffff);
         } else {
-          nColumn = 0;
-          if (nChunkLen > 0) {
-            do {
-              pLineCursor = __frame0.szLineBuf;
-              pLineCursor = pLineCursor + strlen(pLineCursor) + 1;
-              pRecordBody = "%02X";
-              if (!(nColumn & 3)) {
-                pRecordBody = " %02X";
-              }
+          for (nColumn = 0; nColumn < nChunkLen; nColumn++) {
+            pLineCursor = __frame0.szLineBuf;
+            pLineCursor = pLineCursor + strlen(pLineCursor) + 1;
+            pRecordBody = "%02X";
+            if (!(nColumn & 3)) {
+              pRecordBody = " %02X";
+            }
 
-              Storm::Source::SSTR::SStrPrintf(__frame0.szLineBuf + ((int)pLineCursor - (int)(__frame0.szLineBuf + 1)), 0x100 - ((int)pLineCursor - (int)(__frame0.szLineBuf + 1)), pRecordBody, (uint32_t)pbVar2[nColumn]);
-              nColumn++;
-            } while (nColumn < nChunkLen);
+            Storm::Source::SSTR::SStrPrintf(__frame0.szLineBuf + ((int)pLineCursor - (int)(__frame0.szLineBuf + 1)), 0x100 - ((int)pLineCursor - (int)(__frame0.szLineBuf + 1)), pRecordBody, (uint32_t)pbVar2[nColumn]);
           }
 
           pDumpHeader = __frame0.pDumpHeaderSaved;
@@ -834,7 +830,6 @@ void __stdcall CloseStaleLogFileHandles() {
 }
 
 void __fastcall DeleteOldLogFile(int32_t pRefFileTime, char * szFileName) {
-    SYSTEMTIME sysTimeHead;
     _FILETIME fileTime;
     uint16_t nDay[2];
     WORD nMonth[2];
@@ -845,10 +840,7 @@ void __fastcall DeleteOldLogFile(int32_t pRefFileTime, char * szFileName) {
     }
 
     sscanf(szFileName + (nNameLen - 10), "%2d%2d%2d", &nYear, (int*)nMonth, (int*)nDay);
-    sysTimeHead.wHour = 0;
-    sysTimeHead.wMinute = 0;
-    sysTimeHead.wSecond = 0;
-    sysTimeHead.wMilliseconds = 0;
+    SYSTEMTIME sysTimeHead = {0};
     if (nYear > 0x5a) {
       sysTimeHead.wYear = (short int)nYear + 0x76c;
     } else {

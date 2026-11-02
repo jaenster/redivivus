@@ -912,7 +912,6 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2MonsterKillStrc *
     int nClassId;
     D2UnitStrc* pUnit_00;
     D2DifficultyLevelsTxt* pDifficultyLvl;
-    int nMonsterLevel;
     uint32_t nCEDamageScaled;
     uint32_t nRandCEOffset;
     int64_t nMulResult;
@@ -924,7 +923,6 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2MonsterKillStrc *
     D2MonsterKillStrc* pMonsterKillSaved;
     eD2UnitType eUnitType;
     ::SGAMEDATA* pGameCE;
-    uint32_t bRandDmgFlag;
     int* pScaledStatsOut;
     D2UnitStrc* pUnit;
     int32_t nVictimClassIdForStats;
@@ -992,9 +990,7 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2MonsterKillStrc *
           memset(&sMonStats, 0, 0x38);
           nVictimClassIdForStats = pVictim->nClassId;
           pScaledStatsOut = &sMonStats.nMinHP;
-          bRandDmgFlag = 1;
-          nMonsterLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictim, UNITSTAT_level, 0);
-          D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nVictimClassIdForStats, pGame->eGameType, (uint32_t)pGame->nDifficulty, nMonsterLevel, bRandDmgFlag, (D2MonStatsInitStrc*)pScaledStatsOut);
+          D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nVictimClassIdForStats, pGame->eGameType, (uint32_t)pGame->nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictim, UNITSTAT_level, 0), 1, (D2MonStatsInitStrc*)pScaledStatsOut);
           nCEDamageScaled = D2Client::Stats::D2ApplyPercent(sMonStats.nMaxHP, pDifficultyLvl->MonsterCEDamagePercent, 100);
           if ((int)nCEDamageScaled > 0x100000) {
             if ((int)(nCEDamageScaled & -16) < 0x640) {
@@ -1563,7 +1559,6 @@ D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32
 }
 
 static void __stdcall MONSTER_InitiateDefaultDeath(::SGAMEDATA * pGame, eD2MonsterAnimMode eAnimMode, D2UnitStrc * pUnit) {
-    D2MonsterKillStrc sMonsterKill;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
     if (eAnimMode != Death && eAnimMode != eD2MonsterAnimMode_ns::Dead) {
       BOOL bIsModeZeroDeath;
@@ -1573,15 +1568,7 @@ static void __stdcall MONSTER_InitiateDefaultDeath(::SGAMEDATA * pGame, eD2Monst
       }
     }
 
-    sMonsterKill.pAttacker = 0;
-    sMonsterKill.nTargetX = 0;
-    sMonsterKill.nTargetY = 0;
-    sMonsterKill.nAnimatedMode1 = '\0';
-    sMonsterKill.nAnimatedMode2 = '\0';
-    sMonsterKill.nUnknown1 = '\0';
-    sMonsterKill.nUnknown2 = '\0';
-    sMonsterKill.nMonType1 = 0;
-    sMonsterKill.nMonType2 = 0;
+    D2MonsterKillStrc sMonsterKill = {0};
     sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Neutral;
     sMonsterKill.pVictim = pUnit;
     PlanExecutionOfMonster(pGame, &sMonsterKill);

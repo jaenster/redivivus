@@ -66,7 +66,6 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
-#include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/MiniPanel.h"
 #include "D2Common/Collision.h"
@@ -84,10 +83,6 @@ typedef int (__stdcall *D2NpcMenuOptionFunc)();
 #ifndef RECON_FPTD_fpDialogFunc
 #define RECON_FPTD_fpDialogFunc
 typedef int (__stdcall *fpDialogFunc)();
-#endif
-#ifndef RECON_FPTD_pfnItemTransactionCb
-#define RECON_FPTD_pfnItemTransactionCb
-typedef void (__fastcall *pfnItemTransactionCb)(::SGAMEDATA * pGame, D2UnitStrc * pItem, D2UnitStrc * pPlayer);
 #endif
 #ifndef RECON_FPTD_pfnTextScrollComplete
 #define RECON_FPTD_pfnTextScrollComplete
@@ -231,15 +226,11 @@ uint16_t __fastcall NPCMENU_FindNextUnhandledMessage(int16_t nMsgTypeToFind) {
     static uint16_t gNPCMenuMouseWheelOffsetY[6] = { 0x7b, 0x7e, 0x109, 0x0, 0x7d, 0x7e }; D2_STATIC_GUARD(gNPCMenuMouseWheelOffsetY, "D2Client::UI::npcmenu::NPCMENU_FindNextUnhandledMessage::gNPCMenuMouseWheelOffsetY");
 
     int nScrollQueueIdx;
-    int nIndex = 0;
-    if (gnNpcDialogOptionData_725c04 > 0) {
-      do {
-        if (gNPCMenuMouseWheelOffsetY[nIndex * 4] == nMsgTypeToFind) {
-          return gNPCMenuMouseWheelOffsetY[nIndex * 4 + 1];
-        }
-
-        nIndex++;
-      } while (nIndex < gnNpcDialogOptionData_725c04);
+    int nIndex;
+    for (nIndex = 0; nIndex < gnNpcDialogOptionData_725c04; nIndex++) {
+      if (gNPCMenuMouseWheelOffsetY[nIndex * 4] == nMsgTypeToFind) {
+        return gNPCMenuMouseWheelOffsetY[nIndex * 4 + 1];
+      }
     }
 
     D2GSPacketSrv0x27_TextStrc* pOverheadText = Text::TEXT_GetOverheadGlobalPointer();
@@ -1678,7 +1669,6 @@ int __fastcall ShopAction(D2UnitStrc * pUnit, D2UnitStrc * pItem, DWORD dwSell, 
     uint32_t uVar2;
     int32_t nTransactionMode;
     D2BitBufferStrc* pBitBuffer;
-    pfnItemTransactionCb pOutputBitBuffer;
     if (!_Interaction::bInteractingWithNpc) {
       return 0;
     }
@@ -1715,10 +1705,7 @@ int __fastcall ShopAction(D2UnitStrc * pUnit, D2UnitStrc * pItem, DWORD dwSell, 
         return 1;
       }
 
-      pOutputBitBuffer = 0;
-      pBitBuffer = gpNpcMenuBitBuffer;
-      bVar1 = GAME::Game::GetDificulity();
-      nTransactionCost = D2Common::ITEMS::Items::ITEMS_CalculateRepairAllCost(nullptr, pUnit, nNpcId, (uint32_t)bVar1, pBitBuffer, pOutputBitBuffer);
+      nTransactionCost = D2Common::ITEMS::Items::ITEMS_CalculateRepairAllCost(nullptr, pUnit, nNpcId, (uint32_t)GAME::Game::GetDificulity(), gpNpcMenuBitBuffer, 0);
       gnNpcMenuTransactionType = 3;
       gbNpcMenuTransactionPending = 1;
       gnNpcMenuTransactionItemGUID = 0;
@@ -2439,7 +2426,7 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
     uint16_t nOptionStringId;
     int iVar1;
     short int* pnOptionStringId;
-    int32_t nParam3;
+    int32_t nCallbackParam;
     uint16_t wszOptionText[512];
     uint16_t wszNpcName[80];
     char szIdentifyCountAnsi[12];
@@ -2623,7 +2610,7 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
         } while (nOptionLoopIdx < NPC::D2NpcMenuOptions[nMenuEntryIdx].nOptionsCount - 1);
       }
 
-      nParam3 = 1;
+      nCallbackParam = 1;
       nParam2 = NPCMENU_GambleDrawCallback;
       Dialog::AddStringData(Dialog::gpNpcInteractionDialog, D2Lang::StrTable::strtable::GetLocaleString(0x102e), 0xf, 0, 0, 1, nParam2, nCallbackParam);
     }
@@ -2668,17 +2655,13 @@ void __stdcall NPCMENU_ShowMainMenuDialog() {
         pszDialogPtr = UNIT::CUnit::GetName(pNpcUnit);
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszNpcName, pszDialogPtr);
         bOptionEnabled = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszNpcName);
-        nCharIdx = 0;
-        if (bOptionEnabled > 0) {
-          do {
-            wCurChar = wszNpcName[nCharIdx];
-            if ((uint16_t)wCurChar < 0x100) {
-              wCurChar = gnNpcMenuQuestIdTable[(uint16_t)wCurChar];
-            }
+        for (nCharIdx = 0; nCharIdx < bOptionEnabled; nCharIdx++) {
+          wCurChar = wszNpcName[nCharIdx];
+          if ((uint16_t)wCurChar < 0x100) {
+            wCurChar = gnNpcMenuQuestIdTable[(uint16_t)wCurChar];
+          }
 
-            wszNpcName[nCharIdx] = wCurChar;
-            nCharIdx++;
-          } while (nCharIdx < bOptionEnabled);
+          wszNpcName[nCharIdx] = wCurChar;
         }
 
         Dialog::AddStringData(Dialog::gpNpcMainMenuDialog, wszNpcName, 0x15, 0, 4, 1, nullptr, 0);
@@ -2731,8 +2714,7 @@ void __stdcall NPCMENU_OpenInteraction(D2UnitStrc * pUnit) {
     eD2UnitStat eUnitStat = UNITSTAT_gold;
     _Interaction::geNpcUiState = NPCUI_MENU;
     gnNpcMenuTransactionType = 0;
-    pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    PLAYER_CurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, eUnitStat, wStatLayer);
+    PLAYER_CurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, wStatLayer);
     ui::UI_CloseActivePanels(0, 0);
     GAME::Game::UI_ResetInputState();
     if (_Interaction::bInteractingWithNpc) {
@@ -3221,6 +3203,7 @@ void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechId
         pcVar2 = NPCMENU_ShowSelectedDialogOption;
         Dialog::AddStringData(Dialog::gpNpcGossipDialog, Text::TEXT_LookupSoundStringIndex((uint16_t)dwFontArg), 0xf, 0, 0, 1, pcVar2, nAddStringEnabled);
       }
+
       if (_Interaction::nCurrentInteractedNpcClassId == 0xc9) {
         iVar1 = 1;
         pcVar3 = NPCMENU_ShowGossipDialog;
@@ -3810,8 +3793,6 @@ void __stdcall NPCMENU_HandleMenuSelection(int32_t nParam, D2UnitStrc * pUnit) {
     int nSpeechLoopIdx;
     eD2Sounds nSoundId;
     int nNpcClassId;
-    int32_t nSoundLoopCount;
-    int32_t nSoundLoopFlag;
     GAME::Game::UI_ResetInputState();
     int nGreetingMode;
     nGreetingMode = 0;
@@ -3953,11 +3934,7 @@ void __stdcall NPCMENU_HandleMenuSelection(int32_t nParam, D2UnitStrc * pUnit) {
     }
 
     UNIT::UnitSnd::UNITSND_StopAllSkillSounds(pUnit);
-    nSoundLoopFlag = 0;
-    nSoundLoopCount = 1;
-    nMenuEntryIdx = 0;
-    pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
-    gnNpcMenuNpcClassId = Sound::SOUND_PlaySound(nSoundId, pNpcUnit, nMenuEntryIdx, nSoundLoopCount, nSoundLoopFlag);
+    gnNpcMenuNpcClassId = Sound::SOUND_PlaySound(nSoundId, UNIT::Player::GetPlayerUnit_UI(), 0, 1, 0);
     if (nGreetingMode == 2) {
       GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('M', (short int)nNpcClassId);
       gnNpcMenuNpcSoundIndex = 1;

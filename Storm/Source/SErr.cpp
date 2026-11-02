@@ -523,7 +523,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
     }
 
     iVar1 = 7;
-    __frame0.nMsgBoxFlags = (uint32_t)(nMessageFlags != 0) * 2 + 1 | 0x52010;
+    __frame0.nMsgBoxFlags = (nMessageFlags != 0 ? 0x3U : 0x1U) | 0x52010;
     for (pCallbackNode = (StormSErrHandlerNode*)(gnStormErrorCallbackCount.pNext <= 0 ? 0 : gnStormErrorCallbackCount.pNext); 0 < (int)pCallbackNode; pCallbackNode = pCallbackNode->pNext) {
       pCustomMsgArg = __frame0.pCustomMsgPtr;
       if (!__frame0.pCustomMsgPtr) {

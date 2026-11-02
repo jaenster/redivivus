@@ -245,30 +245,21 @@ void __fastcall AlterAllGridFlags(D2DrlgGridStrc * pDrlgGrid, int32_t nFlag, int
 }
 
 void __fastcall FlagOperations(D2DrlgGridStrc * pGrid, int32_t nOpIndex, int32_t nCount) {
+    int nColIdx;
     int32_t nOpIndexOrig = nCount;
+    eD2GridCellFlags* pTopRowCell = pGrid->pCellsFlags + *pGrid->pCellsRowOffsets;
     eD2GridCellFlags* pBottomRowCell = pGrid->pCellsFlags + pGrid->pCellsRowOffsets[pGrid->nHeight - 1];
-    int nColIdx = 0;
-    if (0 < pGrid->nWidth) {
-      eD2GridCellFlags* pTopRowCell = pGrid->pCellsFlags + *pGrid->pCellsRowOffsets;
-      do {
-        (*apFlagOperations[nCount])((int*)pTopRowCell, nOpIndex);
-        pTopRowCell++;
-        (*apFlagOperations[nCount])((int*)pBottomRowCell, nOpIndex);
-        pBottomRowCell++;
-        nColIdx++;
-      } while (nColIdx < pGrid->nWidth);
+    for (nColIdx = 0; nColIdx < pGrid->nWidth; nColIdx++) {
+      (*apFlagOperations[nCount])((int*)pTopRowCell, nOpIndex);
+      pTopRowCell++;
+      (*apFlagOperations[nCount])((int*)pBottomRowCell, nOpIndex);
+      pBottomRowCell++;
     }
 
-    nCount = 1;
-    if (1 >= pGrid->nHeight) {
-      return;
-    }
-
-    do {
+    for (nCount = 1; nCount < pGrid->nHeight; nCount++) {
       (*apFlagOperations[nOpIndexOrig])((int*)(pGrid->pCellsFlags + pGrid->pCellsRowOffsets[nCount]), nOpIndex);
       (*apFlagOperations[nOpIndexOrig])((int*)(DRLGGRID_GetCellAddress(pGrid, nCount, pGrid->nWidth) - 1), nOpIndex);
-      nCount++;
-    } while (nCount < pGrid->nHeight);
+    }
 }
 
 // Applies a flag operation to all cells along the border edges of a DrlgGrid. First iterates the last row (bottom edge), then iterates the last column (right edge). Uses apFlagOperations function pointer table. Custom calling convention (ECX=grid, EDX=param).
@@ -283,15 +274,9 @@ void __fastcall DRLGGRID_ApplyFlagToBorderCells(D2DrlgGridStrc * pDrlgGrid, int 
       } while (nIndex < pDrlgGrid->nWidth - 1);
     }
 
-    nIndex = 0;
-    if (pDrlgGrid->nHeight <= 0) {
-      return;
-    }
-
-    do {
+    for (nIndex = 0; nIndex < pDrlgGrid->nHeight; nIndex++) {
       (*apFlagOperations[eOperation])((int*)(DRLGGRID_GetCellAddress(pDrlgGrid, nIndex, pDrlgGrid->nWidth) - 1), nFlag);
-      nIndex++;
-    } while (nIndex < pDrlgGrid->nHeight);
+    }
 }
 
 // Bresenham-like walk between vertices applying flags to each grid cell.
@@ -409,16 +394,11 @@ void __fastcall DRLGGRID_SetLineFlagsWithWidth(D2DrlgGridStrc * pDrlgGrid, D2Drl
 
           nX = pDrlgCoords->WorldPosition.x;
           nGridX = pDrlgCoords->WorldPosition.y;
-          nWidthIndex = 0;
-          if (nLineWidth > 0) {
-            do {
-              _bInside = DrlgRoom::AreXYInsideCoordinates(pDrlgCoords, nWidthIndex + nGridOffsetX, nY);
-              if (_bInside) {
-                (*apFlagOperations[eOperation])((int*)(pDrlgGrid->pCellsFlags + pDrlgGrid->pCellsRowOffsets[nY - nGridX] + nWidthIndex + (nGridOffsetX - nX)), nFlag);
-              }
-
-              nWidthIndex++;
-            } while (nWidthIndex < nLineWidth);
+          for (nWidthIndex = 0; nWidthIndex < nLineWidth; nWidthIndex++) {
+            _bInside = DrlgRoom::AreXYInsideCoordinates(pDrlgCoords, nWidthIndex + nGridOffsetX, nY);
+            if (_bInside) {
+              (*apFlagOperations[eOperation])((int*)(pDrlgGrid->pCellsFlags + pDrlgGrid->pCellsRowOffsets[nY - nGridX] + nWidthIndex + (nGridOffsetX - nX)), nFlag);
+            }
           }
 
           nRemainingY--;
@@ -474,6 +454,7 @@ void __fastcall DRLGGRID_SetLineFlagsWithWidth(D2DrlgGridStrc * pDrlgGrid, D2Drl
 
 // @sourcefile .\DRLG\DrlgGrid.cpp
 void __fastcall DRLGGRID_InitGridCells(D2PoolManagerStrc * pMemory, D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHeight) {
+    int nRow;
     pDrlgGrid->nWidth = nWidth;
     size_t nAllocSize = (nWidth + 1) * nHeight * 4;
     pDrlgGrid->nHeight = nHeight;
@@ -481,14 +462,10 @@ void __fastcall DRLGGRID_InitGridCells(D2PoolManagerStrc * pMemory, D2DrlgGridSt
     pDrlgGrid->pCellsRowOffsets = pRowOffsets;
     memset(pRowOffsets, 0, nAllocSize);
     pDrlgGrid->pCellsFlags = (eD2GridCellFlags*)(pDrlgGrid->pCellsRowOffsets + nHeight);
-    int nRow = 0;
-    if (nHeight > 0) {
-      int nOffset = 0;
-      do {
-        pDrlgGrid->pCellsRowOffsets[nRow] = nOffset;
-        nOffset += nWidth;
-        nRow++;
-      } while (nRow < nHeight);
+    int nOffset = 0;
+    for (nRow = 0; nRow < nHeight; nRow++) {
+      pDrlgGrid->pCellsRowOffsets[nRow] = nOffset;
+      nOffset += nWidth;
     }
 
     pDrlgGrid->bIsSubGrid = 0;

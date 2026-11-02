@@ -408,8 +408,9 @@ void __fastcall SKILL_DrawChargeTrail(D2UnitStrc * pUnit, uint32_t nParticleType
 
 // Client-side skill start-function (StFunc) for the Paladin Charge-type movement skill. Validates the unit's current skill matches eSkill and (for the local player) that the skill is flagged active and has a dynamic path. If a target is already in melee range, hands off to CLIENT_HandleUnitMessage0x16 and returns. Otherwise plays the skill's start sound (player dosounda, or a monster charge variant), sets skill Param1/Param2 to the target's type+GUID (or 6/0 if target is uninterruptable/none), Param4=7 (or 0xF for class 0xD3), computes charge velocity from char/monstats Run velocity scaled by velocitypercent and the skill mana-cost multiplier, applies it to the path, calculates the path, faces the target, sets skill flags 0x1001, and creates the active-skill stat list. Returns TRUE on setup.
 BOOL __fastcall Skills_CltStFunc_SetupHolyChargeMovement(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+    eD2Skills eCurrentSkillId;
     D2UnitStrc* pPlayerUnit_lcl;
-    BOOL bInMeleeRange;
+    uint32_t nSkillFlags;
     eD2States eUnitState;
     D2CharStatsTxt* pCharStatsTxt;
     D2MonStatsTxt* pMonStatsTxt;
@@ -425,21 +426,8 @@ BOOL __fastcall Skills_CltStFunc_SetupHolyChargeMovement(D2UnitStrc * pUnit, eD2
 
     D2SkillsTxt* pSkillsTxt;
     pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pSkillsTxt) {
+    if (!pSkillsTxt || (eCurrentSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\SkillsPal.cpp", 0x176) , eCurrentSkillId == eSkill && (pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI() , pUnit == pPlayerUnit_lcl)) && (nSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill) , (nSkillFlags & 1) != 0)) {
       return 0;
-    }
-
-    eD2Skills eCurrentSkillId;
-    eCurrentSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\SkillsPal.cpp", 0x176);
-    if (eCurrentSkillId == eSkill) {
-      uint32_t nSkillFlags;
-      pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-      if (pUnit == pPlayerUnit_lcl) {
-        nSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
-        if (nSkillFlags & 1) {
-          return 0;
-        }
-      }
     }
 
     D2DynamicPathStrc* pDynamicPath;
@@ -450,6 +438,7 @@ BOOL __fastcall Skills_CltStFunc_SetupHolyChargeMovement(D2UnitStrc * pUnit, eD2
 
     pPlayerUnit_lcl = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (pUnit->eUnitType == UNIT_PLAYER && pPlayerUnit_lcl) {
+      BOOL bInMeleeRange;
       bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pPlayerUnit_lcl, 0);
       if (bInMeleeRange) {
         bInMeleeRange = Skills::CLIENT_HandleUnitMessage0x16(pUnit, pPlayerUnit_lcl);
@@ -525,24 +514,18 @@ static inline D2UnitStrc * __stdcall SKILLS_Unused_Placeholder_2(D2UnitStrc * pU
 }
 
 int32_t __fastcall SKILL_GetSequenceEventFrame(D2UnitStrc * pUnit) {
+    int nFrameIdx;
     D2MonSeqTxt* pSeqTxt = D2Common::Merc::MERC_GetSequenceTxt(pUnit);
     if (!pSeqTxt) {
       return 7;
     }
 
     int32_t nSeqLen = D2Common::Merc::GetCounter2(pUnit);
-    int nFrameIdx = 0;
-    if (nSeqLen <= 0) {
-      return 7;
-    }
-
-    do {
+    for (nFrameIdx = 0; nFrameIdx < nSeqLen; nFrameIdx++) {
       if (!pSeqTxt->event) {
         return nFrameIdx - 1;
       }
-
-      nFrameIdx++;
-    } while (nFrameIdx < nSeqLen);
+    }
 
     return 7;
 }

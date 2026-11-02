@@ -75,7 +75,6 @@ static char gaAutomapTileNames[20][8] = {
 
 // Builds the 142-column field-descriptor table for Levels.txt (palette/act/teleport flags, monster levels and densities per difficulty, object groups/probabilities, the mon/nmon/umon/cmon spawn lists and their counts, themes, sound env, waypoint, and the LevelName/LevelWarp/EntryFile strings) and compiles it into sgtDataTable.pTxtLevels via CompileTxt (row stride 0x220). Halts via Fog ErrorManager if more than 0x3ff levels. Post-compile per level row: converts LevelName/LevelWarp keys to wide strings via the string table, and counts the populated entries in the mon/nmon/umon lists (terminated by a negative id, max 0x19), storing the three counts in bytes preceding the mon array. __fastcall, pMemory = data-table pool. Called once at data-table load.
 void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
-    uint16_t* pwszLevelWarpStr;
     uint16_t* pWVar2;
     int nMonCount;
     short int* pMonEntry;
@@ -242,9 +241,7 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
       /* Convert string to widestring */ pWVar2 = (uint16_t*)&sgtDataTable.pTxtLevels[i].wszLevelName[0];
       memset(pWVar2, 0, 0x50);
       memset((void*)&pDVar1[i].wszLevelWarp[0], 0, 0x50);
-      nWideCharBufLen = 0x28;
-      pwszLevelWarpStr = D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)&pDVar1[i].LevelName[0]);
-      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pWVar2, pwszLevelWarpStr, nWideCharBufLen);
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pWVar2, D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)&pDVar1[i].LevelName[0]), 0x28);
       nWideCharBufLen = 0x28;
       pDVar1[i].wszLevelName[39] = 0;
       pWVar2 = D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)&pDVar1[i].LevelWarp[0]);
@@ -493,7 +490,6 @@ D2LevelDefsTxt * __fastcall TXT_LevelDefs_GetLine(eD2LevelId eLevel) {
 static void __fastcall LVLTBLS_FixPathSlashes(char * szText, char * szPathPrefix) {
     int i;
     char szFormatBuf[60];
-    char cCurrent;
     char* pcScan = szText;
     pcScan = pcScan + strlen(pcScan) + 1;
     int pcSrc = (int)pcScan - (int)(szText + 1);
@@ -511,13 +507,7 @@ static void __fastcall LVLTBLS_FixPathSlashes(char * szText, char * szPathPrefix
     }
     if (pcSrc > 1) {
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFormatBuf, "%s\\%s", szPathPrefix, szText);
-      pcScan = szFormatBuf;
-      pcSrc = (int)szText - (int)pcScan;
-      do {
-        cCurrent = *pcScan;
-        pcScan[pcSrc] = cCurrent;
-        pcScan++;
-      } while (cCurrent != '\0');
+      strcpy(szText, szFormatBuf);
     }
 }
 
@@ -1881,12 +1871,12 @@ void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
         gpaAutoMapRelated[nIndex].nCount = nAutoMapRow;
       } while (nAutoMapRow < nTxtAutomapSize);
     }
-    if (nAutoMapRow <= nTxtAutomapSize) {
-      return;
-    } else {
+    if (!(nAutoMapRow <= nTxtAutomapSize)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x528);
       exit(-1);
     }
+
+    return;
 }
 
 int32_t __fastcall GetRandomCellNo(int32_t nLevelType, int32_t nOrientation, int32_t nIndex, int32_t nSubIndex) {

@@ -94,7 +94,7 @@ int32_t __fastcall NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect(uint8_t * pbPacket
         return 1;
       }
 
-      return (nTokenMatch != 2) + 1;
+      return nTokenMatch != 2 ? 2 : 1;
     }
 
     return 3;

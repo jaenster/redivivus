@@ -118,7 +118,7 @@ bool __stdcall MISSILE_CheckLineOfSight(int32_t nDeltaX, D2RoomStrc * pRoom, int
     ptSource.x = nSourceX;
     ptTarget.x = nSourceX + nDeltaX;
     BOOL bCollision = D2Common::Collision::TestCollision(pRoom, &ptSource, &ptTarget, 4);
-    return (bool)('\x01' - (bCollision != 0));
+    return (bool)(bCollision != 0 ? 0 : 1);
 }
 
 void __fastcall MISSILE_InitializeVisual(D2UnitStrc * pUnit, int32_t nParam) {
@@ -268,13 +268,7 @@ static BOOL MISSILE_RetargetClosest(D2UnitStrc * pUnit) {
     }
 
     int nSearchRadius = pUnit->nClassId;
-    if (nSearchRadius < 0) {
-      return 1;
-    }
-    if (nSearchRadius >= sgptDataTable->nTxtMissilesSize) {
-      return 1;
-    }
-    if (!(sgptDataTable->pTxtMissiles + nSearchRadius)) {
+    if (nSearchRadius < 0 || nSearchRadius >= sgptDataTable->nTxtMissilesSize || !(sgptDataTable->pTxtMissiles + nSearchRadius)) {
       return 1;
     }
 
@@ -1974,6 +1968,7 @@ void __fastcall MISSILE_CreateDirectionalSub(D2UnitStrc * pUnit, eMissilesId nMi
 // Spawns copies of a missile in a filled circular area of radius nRadius centered at (nCenterX, nCenterY), sampling every nStep tiles. Each candidate cell within the circle's bounding box is tested with the Euclidean circle equation; a probabilistic nChance filter (power-of-2 optimised RNG on pUnit->sSeed) skips a fraction of hits. For surviving cells, optionally randomises the missile start frame from pTxtMissiles, finds the nearest valid room via DRLGROOM_FindBetterNearbyRoom, and calls MakeMissile. Used by area-of-effect skills (e.g. Blizzard, Meteor splash).
 void __fastcall MISSILE_SpawnMissilesInArea(D2UnitStrc * pUnit, int32_t nCenterX, int32_t nCenterY, int32_t nRadius, eMissilesId nMissileId, eD2Skills eSkill, int32_t nSkillLevel, uint32_t nChance, int32_t nStep) {
     D2RoomStrc* pRoom;
+    int iOffsetYCur;
     uint32_t nRandResult;
     int iOffsetXCur;
     D2SkillArgStrc sSkillArg;
@@ -1997,12 +1992,7 @@ void __fastcall MISSILE_SpawnMissilesInArea(D2UnitStrc * pUnit, int32_t nCenterX
     int iOffsetY = -nRadius;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nMissileTxtNo = nMissileTxtIdOrig;
-    int iOffsetYCur = iOffsetY;
-    if (iOffsetY > nRadius) {
-      return;
-    }
-
-    do {
+    for (iOffsetYCur = iOffsetY; iOffsetYCur <= nRadius; iOffsetYCur += nStep) {
       for (iOffsetXCur = iOffsetY; iOffsetXCur <= nRadius; iOffsetXCur += nStep) {
         if (iOffsetXCur * iOffsetXCur + iOffsetYCur * iOffsetYCur <= nRadius * nRadius) {
           if ((int)nChance > 0) {
@@ -2053,9 +2043,7 @@ void __fastcall MISSILE_SpawnMissilesInArea(D2UnitStrc * pUnit, int32_t nCenterX
           }
         }
       }
-
-      iOffsetYCur += nStep;
-    } while (iOffsetYCur <= nRadius);
+    }
 }
 
 void __fastcall MISSILE_CreatePatternAtUnitPos(D2UnitStrc * pUnit, int32_t nRadius, eMissilesId nMissileId, eD2Skills eSkill, int32_t nSkillLevel, uint32_t nChance, int32_t nStep) {
@@ -5792,22 +5780,17 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
       if (pDVar2->ClientCol != '\0' && (short int)nCollidePathSteps) {
         nCollidePathSteps = D2Common::PATH::DynamicPath::GetInitCoords(pCurDynPath, &sPathPoint);
         pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-        nClassId = 0;
-        if ((int)nCollidePathSteps > 0) {
-          do {
-            pDVar1 = sPathPoint + nClassId;
-            nCurFrame = D2Common::Units::GetUnitSizeX(pUnit);
-            pOwner = D2Common::Collision::CallCollisionFunction(pRoom, (uint32_t)pDVar1->nX, (uint32_t)pDVar1->nY, MISSILECLTCOLLIDEFUNCS[eAnimMode].pFunction, &sCollideCtx, nCurFrame);
-            if (pOwner) {
-              _bIsActive = CUnit::IsActive(pOwner);
-              if (!_bIsActive) {
-                MISSILE_ClientHitExplode(pUnit, pOwner, 0);
-                return;
-              }
+        for (nClassId = 0; nClassId < (int)nCollidePathSteps; nClassId++) {
+          pDVar1 = sPathPoint + nClassId;
+          nCurFrame = D2Common::Units::GetUnitSizeX(pUnit);
+          pOwner = D2Common::Collision::CallCollisionFunction(pRoom, (uint32_t)pDVar1->nX, (uint32_t)pDVar1->nY, MISSILECLTCOLLIDEFUNCS[eAnimMode].pFunction, &sCollideCtx, nCurFrame);
+          if (pOwner) {
+            _bIsActive = CUnit::IsActive(pOwner);
+            if (!_bIsActive) {
+              MISSILE_ClientHitExplode(pUnit, pOwner, 0);
+              return;
             }
-
-            nClassId++;
-          } while (nClassId < (int)nCollidePathSteps);
+          }
         }
       }
       if (!bIsLocalPlayer) {
@@ -6647,7 +6630,7 @@ void __fastcall MISSILE_CltDoFn17_CurseCenter(D2UnitStrc * pUnit) {
                     nInnerRange = (int)nStreamRange / 2;
                   }
 
-                  nDensity = ((int)nStreamRange > 4) + 1;
+                  nDensity = (int)nStreamRange > 4 ? 2 : 1;
                   MISSILE_CreatePatternAtUnitPos(pUnit, nStreamRange, eStreamMissile, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit), nInnerRange, nDensity);
                 }
               }
@@ -8698,42 +8681,37 @@ void __fastcall MISSILE_CltDoFn33_TaintedSunControl(D2UnitStrc * pUnit) {
       D2Common::Units::Missile::GetSkillId(pUnit);
       sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
       sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-      nMissileCount = 0;
-      if (gaMissile033AngleLookupTableY[nSpreadIdx * 3 + 2] > 0) {
-        do {
-          DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-          nRandOffsetX = DVar1.nSeedLow % 10 - 5;
-          pUnit->sSeed.nSeedHigh = DVar1.nSeedHigh;
-          pUnit->sSeed.nSeedLow = DVar1.nSeedLow;
-          nAbsOffset = nRandOffsetX;
-          if (nRandOffsetX < 0) {
-            nAbsOffset = -nRandOffsetX;
-          }
-          if (nAbsOffset < 2) {
-            nRandOffsetX = 5;
-          }
+      for (nMissileCount = 0; nMissileCount < gaMissile033AngleLookupTableY[nSpreadIdx * 3 + 2]; nMissileCount++) {
+        DVar1 = D2_SEED_NEXT(pUnit->sSeed);
+        nRandOffsetX = DVar1.nSeedLow % 10 - 5;
+        pUnit->sSeed.nSeedHigh = DVar1.nSeedHigh;
+        pUnit->sSeed.nSeedLow = DVar1.nSeedLow;
+        nAbsOffset = nRandOffsetX;
+        if (nRandOffsetX < 0) {
+          nAbsOffset = -nRandOffsetX;
+        }
+        if (nAbsOffset < 2) {
+          nRandOffsetX = 5;
+        }
 
-          DVar1 = D2_SEED_NEXT_VAL(DVar1);
-          pUnit->sSeed = DVar1;
-          nRandOffsetY = DVar1.nSeedLow % 10 - 5;
-          nAbsOffsetY = nRandOffsetY;
-          if (nRandOffsetY < 0) {
-            nAbsOffsetY = -nRandOffsetY;
-          }
-          if (nAbsOffsetY < 2) {
-            nRandOffsetY = 5;
-          }
+        DVar1 = D2_SEED_NEXT_VAL(DVar1);
+        pUnit->sSeed = DVar1;
+        nRandOffsetY = DVar1.nSeedLow % 10 - 5;
+        nAbsOffsetY = nRandOffsetY;
+        if (nRandOffsetY < 0) {
+          nAbsOffsetY = -nRandOffsetY;
+        }
+        if (nAbsOffsetY < 2) {
+          nRandOffsetY = 5;
+        }
 
-          sSkillArg.nY = nPosY + nRandOffsetY * 2;
-          sSkillArg.nX = nPosX + nRandOffsetX * 2;
-          pNewMissile = Missile::MakeMissile(&sSkillArg);
-          if (pNewMissile) {
-            nParentGUID = GetGUID(pUnit);
-            D2Common::Units::Missile::SetTargetX(pNewMissile, nParentGUID);
-          }
-
-          nMissileCount++;
-        } while (nMissileCount < gaMissile033AngleLookupTableY[nSpreadIdx * 3 + 2]);
+        sSkillArg.nY = nPosY + nRandOffsetY * 2;
+        sSkillArg.nX = nPosX + nRandOffsetX * 2;
+        pNewMissile = Missile::MakeMissile(&sSkillArg);
+        if (pNewMissile) {
+          nParentGUID = GetGUID(pUnit);
+          D2Common::Units::Missile::SetTargetX(pNewMissile, nParentGUID);
+        }
       }
     }
     if (nCurrentFrame < 0x19) {
@@ -9538,7 +9516,7 @@ void __fastcall MISSILE_CltDoFn54_AnyaCenter(D2UnitStrc * pUnit) {
       } else if (nRemainingFrames < 0x32) {
         nSpawnIter = 8;
       } else {
-        nSpawnIter = (uint32_t)(nRemainingFrames < 0x50) * 4 + 1;
+        nSpawnIter = nRemainingFrames < 0x50 ? 0x5U : 0x1U;
       }
 
       for (; nSpawnIter; nSpawnIter--) {

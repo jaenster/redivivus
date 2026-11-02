@@ -252,7 +252,7 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
           }
           if (pEntry->eQuestId == 0x26) {
             bStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_Step0x04);
-            bQuestDone = (bStateResult != 0) + '\x04';
+            bQuestDone = bStateResult != 0 ? 5 : 4;
           }
 
           pEntry->bQuestActive = bQuestDone;
@@ -265,7 +265,7 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
               pEntry->wDescStringId = pQuestDataTbl[nQuestStepIdx * 2 + 2];
               gQuestLog.abQuestUnknownArray2[nActIndex] = (bool)bQuestDone;
               pEntry->bHasDescription = '\x01';
-              pEntry->nDisplayState = (uint32_t)(pEntry->eQuestId != 0x1b) * 2 + 1;
+              pEntry->nDisplayState = pEntry->eQuestId != 0x1b ? 0x3U : 0x1U;
               return;
             }
           }
@@ -336,7 +336,7 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
     if (*pQuestDataTbl != 0xe82) {
       pEntry->wTitleStringId = *pQuestDataTbl;
       if (!*(uint32_t*)(char*)&szNumberString && !bStateResult && (bStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, gaQuestInfoTable[nActIndex].nQuestId, QUESTSTATE_RewardAwaits) , !bStateResult) && pBitBuffer_00 && (bStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer_00, gaQuestInfoTable[nActIndex].nQuestId, QUESTSTATE_JustCompleted) , bStateResult != 0) && pEntry->eQuestId != 0x13 || (bStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, gaQuestInfoTable[nActIndex].nQuestId, QUESTSTATE_CannotCompleteQuestInGame) , bStateResult != 0)) {
-        *(uint32_t*)(char*)&szNumberString = (eD2GSGameType_007a0610 != GAMETYPE_SINGLEPLAYER) + 0xe91;
+        *(uint32_t*)(char*)&szNumberString = eD2GSGameType_007a0610 != GAMETYPE_SINGLEPLAYER ? 0xe92 : 0xe91;
       } else {
         *(uint32_t*)(char*)&szNumberString = (uint32_t)(uint16_t)pQuestDataTbl[(uint32_t)bQuestActive * 2 + 1];
         if (pQuestDataTbl[(uint32_t)bQuestActive * 2 + 1] == 0xe8f && eD2GSGameType_007a0610 == GAMETYPE_SINGLEPLAYER) {
@@ -424,7 +424,6 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
 }
 
 static void QUESTLOG_SetActiveAct(int32_t nActIndex) {
-    D2BitBufferStrc* pQuestRecord;
     BOOL bQuestCompleted;
     eD2Quests eQuestId;
     eD2QuestState eQuestState;
@@ -440,8 +439,7 @@ static void QUESTLOG_SetActiveAct(int32_t nActIndex) {
       case 4:
         eQuestState = QUESTSTATE_Completed;
       eQuestId = QUEST_TerrorsEnd;
-      pQuestRecord = npcmenu::GetQuestInfo();
-      bQuestCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, eQuestId, eQuestState);
+      bQuestCompleted = D2Common::QuestRecord::GetQuestState(npcmenu::GetQuestInfo(), eQuestId, eQuestState);
       if (!bQuestCompleted) {
         nActIndex = 3;
       }
@@ -449,8 +447,7 @@ static void QUESTLOG_SetActiveAct(int32_t nActIndex) {
       case 3:
         eQuestState = QUESTSTATE_Completed;
       eQuestId = QUEST_AbleGoToAct4;
-      pQuestRecord = npcmenu::GetQuestInfo();
-      bQuestCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, eQuestId, eQuestState);
+      bQuestCompleted = D2Common::QuestRecord::GetQuestState(npcmenu::GetQuestInfo(), eQuestId, eQuestState);
       if (!bQuestCompleted) {
         nActIndex = 2;
       }
@@ -477,8 +474,7 @@ static void QUESTLOG_SetActiveAct(int32_t nActIndex) {
 
     eQuestState = QUESTSTATE_Completed;
     eQuestId = QUEST_AbleGoToAct3;
-    pQuestRecord = npcmenu::GetQuestInfo();
-    bQuestCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, eQuestId, eQuestState);
+    bQuestCompleted = D2Common::QuestRecord::GetQuestState(npcmenu::GetQuestInfo(), eQuestId, eQuestState);
     if (!bQuestCompleted) {
       nActIndex = 1;
     }
@@ -486,8 +482,7 @@ static void QUESTLOG_SetActiveAct(int32_t nActIndex) {
     check_act2_access:
     eQuestState = QUESTSTATE_Completed;
     eQuestId = QUEST_AbleGoToAct2;
-    pQuestRecord = npcmenu::GetQuestInfo();
-    bQuestCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, eQuestId, eQuestState);
+    bQuestCompleted = D2Common::QuestRecord::GetQuestState(npcmenu::GetQuestInfo(), eQuestId, eQuestState);
     if (bQuestCompleted) {
       gQuestLog.nQuestLogActiveAct = -1;
       gQuestLog.nQuestLogSelectedIcon = -1;
@@ -827,7 +822,7 @@ static uint32_t QUESTLOG_GetDrawPosition(int32_t nBorderType) {
           return nResolutionMode_lcl != 2 ? 2 : 0;
         }
 
-        return (uint32_t)(nResolutionMode_lcl != 2) * 2 + 1;
+        return nResolutionMode_lcl != 2 ? 0x3U : 0x1U;
       }
     }
 
@@ -1244,11 +1239,7 @@ void __fastcall QUESTLOG_SpawnZooDummyMonsters(int32_t nSpawnX, int32_t nSpawnY)
 
     do {
       uint32_t nSpawnOffset;
-      nSpawnOffset = i & 0x80000001;
-      if ((int)nSpawnOffset < 0) {
-        nSpawnOffset = (nSpawnOffset - 1 | -2) + 1;
-      }
-
+      nSpawnOffset = (int)i % 2;
       pPlayer = UNIT::CUnit::CreateMissileOrMonster(0x95, nSpawnX + nSpawnOffset, nSpawnOffset + nSpawnY, UNIT_MONSTER, 1);
       if (!pPlayer) {
         gQuestLog.nZooMonsterGUID = -1;
@@ -1752,7 +1743,7 @@ void __stdcall DRAW_UI_Quest() {
     }
 
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
-    sGfxData.nFrameNumber = (gQuestLog.bQuestLogOpenBtnPressed != '\0') + 10;
+    sGfxData.nFrameNumber = gQuestLog.bQuestLogOpenBtnPressed != '\0' ? 11 : 10;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + 0x116, gnPanelOffsetY - 0x3a + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     nActIndex = ui::GetMouseX();
     nQuestSlot = ui::GetMouseY();

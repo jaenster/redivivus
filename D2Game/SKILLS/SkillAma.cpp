@@ -176,9 +176,7 @@ BOOL __fastcall SKILLAMA_SrvStFn07_Impale(::SGAMEDATA * pGame, D2UnitStrc * pUni
     if (nHitResult) {
       D2UnitStrc* pWeapon;
       memset(&sDamage, 0, 0x70);
-      nCalcVal = 0;
-      nHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-      sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nHitResult, nCalcVal);
+      sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
       if (sDamage.wResultFlags & 1U) {
         nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
         sDamage.dwPhysDamage = UNIT::SUnitDmg::DAMAGE_CalculatePhysicalDamage(pUnit, 1, nullptr, 0, 0, nCalcVal, 0, pSkillsTxt->SrcDam);
@@ -215,7 +213,7 @@ BOOL __fastcall SKILLAMA_SrvStFn08_Strafe(::SGAMEDATA * pGame, D2UnitStrc * pUni
     int32_t nCalcMax;
     int32_t nCalcMin;
     int32_t nHitCount;
-    int nParam3;
+    int nPar3;
     int32_t nAreaHitCount;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -261,10 +259,10 @@ BOOL __fastcall SKILLAMA_SrvStFn08_Strafe(::SGAMEDATA * pGame, D2UnitStrc * pUni
     D2Common::Skills::SKILL_SetParam1(pSkill, nAreaHitCount);
     if (pTarget) {
       D2Common::Skills::SKILL_SetParam2(pSkill, pTarget->eUnitType);
-      nParam3 = pTarget->nUnitGUID;
+      nPar3 = pTarget->nUnitGUID;
     } else {
       D2Common::Skills::SKILL_SetParam2(pSkill, 1);
-      nParam3 = -1;
+      nPar3 = -1;
     }
 
     D2Common::Skills::SKILL_SetParam3(pSkill, nPar3);
@@ -396,8 +394,7 @@ BOOL __fastcall SKILLAMA_SrvStFn10_LightningStrike(::SGAMEDATA * pGame, D2UnitSt
 }
 
 uint32_t __fastcall SKILL_GetPhoenixBoltCount(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pTargetUnit) {
-    D2StateExArgStrc sStateArg;
-    sStateArg.pFunction = 0;
+    D2StateExArgStrc sStateArg = {0};
     sStateArg.pUnit = pContext->pUnit;
     eD2Skills* pSkillParamArr = (eD2Skills*)pContext->pCallbackArg;
     sStateArg.eSkill = *pSkillParamArr;
@@ -850,6 +847,7 @@ BOOL __fastcall Skills_SrvDoFunc_012_StrafeContinue(::SGAMEDATA * pGame, D2UnitS
 // Server-side hit handler for Amazon Impale/Fend multi-hit sequence. Locates the current target (by stored GUID or by melee-range area search), performs a to-hit/damage calculation with optional elemental conversion, decrements the remaining hit counter (skill param1), then searches for the next target in melee range and updates skill params 2/3 accordingly, scheduling the next swing via SKILLS_SetupAnimTimerPercent. Always returns 0 (result communicated via damage queue).
 BOOL __fastcall Skills_SrvDoFunc_013_MultiHitAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bInMeleeRange;
+    uint32_t nHitResult;
     D2DamageStrc sDamage;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -869,9 +867,7 @@ BOOL __fastcall Skills_SrvDoFunc_013_MultiHitAttack(::SGAMEDATA * pGame, D2UnitS
     }
 
     memset(&sDamage, 0, 0x70);
-    int32_t nHitsLeft = 0;
-    uint32_t nHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pNextTarget, nHitResult, nHitsLeft);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pNextTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
     if (sDamage.wResultFlags & 1U) {
       sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
       if (pSkillTxt->EType != ELEMENTAL_NONE) {
@@ -891,7 +887,7 @@ BOOL __fastcall Skills_SrvDoFunc_013_MultiHitAttack(::SGAMEDATA * pGame, D2UnitS
 
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pNextTarget, &sDamage, (uint8_t)nSkillLvl);
     UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pNextTarget, 4);
-    nHitsLeft = D2Common::Skills::SKILL_GetParam1(pSkill);
+    int32_t nHitsLeft = D2Common::Skills::SKILL_GetParam1(pSkill);
     D2Common::Skills::SKILL_SetParam1(pSkill, nHitsLeft - 1);
     if (!(nHitsLeft - 1 > 0)) {
       return 0;

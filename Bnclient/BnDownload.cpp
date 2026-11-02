@@ -105,20 +105,14 @@ uint32_t __stdcall BNDOWNLOAD_HasActiveDownloads() {
 }
 
 static BOOL __stdcall NET_RecvExact(SOCKET hSocket, int32_t pBuffer, uint32_t nLen) {
-    uint32_t nBytesReceived = 0;
-    if (nLen <= 0) {
-      return 1;
-    }
-
-    do {
-      int nRecvResult;
+    int nRecvResult;
+    uint32_t nBytesReceived;
+    for (nBytesReceived = 0; nLen > nBytesReceived; nBytesReceived += nRecvResult) {
       /* int flags for recv */ /* int len for recv */ /* char * buf for recv */ /* SOCKET s for recv */ nRecvResult = recv(hSocket, (char*)(nBytesReceived + pBuffer), nLen - nBytesReceived, 0);
       if (nRecvResult == -1 || nRecvResult <= 0) {
         return 0;
       }
-
-      nBytesReceived += nRecvResult;
-    } while (nLen > nBytesReceived);
+    }
 
     return 1;
 }

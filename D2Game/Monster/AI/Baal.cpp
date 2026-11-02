@@ -817,7 +817,7 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
 
       DVar1 = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = DVar1;
-      return (uint32_t)((int)(DVar1.nSeedLow % 100) < 8) * 8 + 1;
+      return (int)(DVar1.nSeedLow % 100) < 8 ? 0x9U : 0x1U;
     }
     if (!pGame) {
       pGame = UNIT::SUnit::GetGamePointer(pUnit);

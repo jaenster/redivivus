@@ -253,20 +253,15 @@ char * __stdcall SUBTILE_ConvertRGBToIndexed(char * pSrcRGBData, uint32_t nRGBDa
 }
 
 static BOOL SUBTILE_CheckIfIsometricEmpty(int32_t pSubTileData) {
+    int iCol;
     int iRow = 0;
     int nXOff = 0xe;
     int nRowWidth = 4;
     do {
-      int iCol;
-      iCol = 0;
-      if (nRowWidth > 0) {
-        do {
-          if (*(char*)(nXOff + pSubTileData + iCol) == '\0') {
-            return 1;
-          }
-
-          iCol++;
-        } while (iCol < nRowWidth);
+      for (iCol = 0; iCol < nRowWidth; iCol++) {
+        if (*(char*)(nXOff + pSubTileData + iCol) == '\0') {
+          return 1;
+        }
       }
 
       pSubTileData += 0x20;

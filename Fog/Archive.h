@@ -9,6 +9,7 @@
 #include "d2_platform.h"
 
 // Forward declarations
+struct D2ArchiveStrc;
 struct D2FogArchiveStrc;
 struct D2PoolManagerStrc;
 #ifndef RECON_FPTD_fpRequiredUserAction

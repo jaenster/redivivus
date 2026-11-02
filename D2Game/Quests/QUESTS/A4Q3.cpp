@@ -153,7 +153,6 @@ void __fastcall Objects_InitFn78(D2ObjectInitFnArg * pInitArg) {
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 BOOL __fastcall OBJOP_A4Q2_PandemoniumFortressGate(D2ObjectOperateFnArg * pOperation) {
     int32_t nTradeTick;
-    D2GSPacketSrv0x5D aQuestStatePacket;
     ::SGAMEDATA* pGame = pOperation->sArg.pGame;
     if (!pGame->bExpansion) {
       return 0;
@@ -196,11 +195,10 @@ BOOL __fastcall OBJOP_A4Q2_PandemoniumFortressGate(D2ObjectOperateFnArg * pOpera
         if (!nTradeTick) {
           UNIT::SUnit::ClearInteractInfo(pOperation->pAttacker);
           pPlayerData->dwTradeTick = 1;
-          aQuestStatePacket.nExtra = 0;
+          D2GSPacketSrv0x5D aQuestStatePacket = {0};
           aQuestStatePacket.nPacketId = ']';
           aQuestStatePacket.nQuestId = '\x17';
           aQuestStatePacket.nAlertFlags = '\x02';
-          aQuestStatePacket.nFilterStatus = '\0';
           GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pPlayerClient, &aQuestStatePacket);
           GAME::SCmd::NET_D2GS_SERVER_Send_0x61_CanGoToAct(pPlayerClient, 5);
         }

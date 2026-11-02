@@ -421,6 +421,7 @@ D2UnitStrc * __stdcall _unused(D2UnitStrc * pUnit, pfnUnitProximityTest pfnCallb
     bool bSignedLessOrEqual;
     int32_t nAdjacentRoomCount;
     D2RoomStrc** ppAdjacentRooms;
+    int nAdjRoomIdx;
     eD2UnitType eUnitType;
     D2UnitStrc* pCandidate;
     int32_t nUnitSizeX;
@@ -440,13 +441,7 @@ D2UnitStrc * __stdcall _unused(D2UnitStrc * pUnit, pfnUnitProximityTest pfnCallb
     int32_t nPosY;
     nPosY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
     DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pUnitRoom, &ppAdjacentRooms, &nAdjacentRoomCount);
-    int nAdjRoomIdx;
-    nAdjRoomIdx = 0;
-    if (nAdjacentRoomCount <= 0) {
-      return nullptr;
-    }
-
-    do {
+    for (nAdjRoomIdx = 0; nAdjRoomIdx < nAdjacentRoomCount; nAdjRoomIdx++) {
       iVar1 = nAdjRoomIdx;
       _bCandidateInRoom = CoordIsInRoom(ppAdjacentRooms[nAdjRoomIdx], nPosX, 2, nPosY);
       if (_bCandidateInRoom) {
@@ -578,9 +573,7 @@ D2UnitStrc * __stdcall _unused(D2UnitStrc * pUnit, pfnUnitProximityTest pfnCallb
 
         }
       }
-
-      nAdjRoomIdx++;
-    } while (nAdjRoomIdx < nAdjacentRoomCount);
+    }
 
     return nullptr;
 }
@@ -596,6 +589,7 @@ D2UnitStrc * __stdcall CallCollisionFunction(D2RoomStrc * pRoom, int32_t nX, int
     int iVar2;
     bool bSignedLessOrEqual;
     int32_t nAdjacentRoomCount;
+    int nAdjRoomIdx;
     eD2UnitType eUnitType;
     D2UnitStrc* pUnit;
     if (!pRoom || nWidth - 1U > 2) {
@@ -604,13 +598,7 @@ D2UnitStrc * __stdcall CallCollisionFunction(D2RoomStrc * pRoom, int32_t nX, int
 
     nWidth = nWidth * 3 - 3;
     DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, (D2RoomStrc***)&pRoom, &nAdjacentRoomCount);
-    int nAdjRoomIdx;
-    nAdjRoomIdx = 0;
-    if (nAdjacentRoomCount <= 0) {
-      return nullptr;
-    }
-
-    do {
+    for (nAdjRoomIdx = 0; nAdjRoomIdx < nAdjacentRoomCount; nAdjRoomIdx = iVar1 + 1) {
       iVar1 = nAdjRoomIdx;
       _bCandidateInRoom = CoordIsInRoom((D2RoomStrc*)pRoom->nLastDeadGUIDs[nAdjRoomIdx - 0xe], nX, 2, nY);
       if (_bCandidateInRoom) {
@@ -745,9 +733,7 @@ D2UnitStrc * __stdcall CallCollisionFunction(D2RoomStrc * pRoom, int32_t nX, int
           iVar1 = nAdjRoomIdx;
         }
       }
-
-      nAdjRoomIdx = iVar1 + 1;
-    } while (nAdjRoomIdx < nAdjacentRoomCount);
+    }
 
     return nullptr;
 }
@@ -980,12 +966,7 @@ void __fastcall AllocRoomCollisionGrid(D2PoolManagerStrc * pMemPool, D2RoomStrc 
     pCollisionMapNew->pMapStart = pCollisionMapNew->aMap;
     memset(pCollisionMapNew->aMap, 0, nRoomCoordsCount * 2);
     DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoomAdj, &pRoomsNear, &nAdjacentRoomsCount);
-    nRoomsNearIndex = 0;
-    if (nAdjacentRoomsCount <= 0) {
-      return;
-    }
-
-    do {
+    for (nRoomsNearIndex = 0; nRoomsNearIndex < nAdjacentRoomsCount; nRoomsNearIndex++) {
       D2RoomCollisionGridStrc* pCollisionMapCurrent;
       pCollisionMapCurrent = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoomsNear[nRoomsNearIndex]);
       pTileData = DUNGEON::Dungeon::DRLGROOM_GetFloorTilesFromRoom(pRoomsNear[nRoomsNearIndex], &nTilesSize);
@@ -994,8 +975,7 @@ void __fastcall AllocRoomCollisionGrid(D2PoolManagerStrc * pMemPool, D2RoomStrc 
       TileLibrary_SetupCollision(pTileData, nTilesSize, pCollisionMapNew, pCollisionMapCurrent, 0);
       pTileData = DUNGEON::Dungeon::DRLGROOM_GetRoofTilesFromRoom(pRoomsNear[nRoomsNearIndex], &nTilesSize);
       TileLibrary_SetupCollision(pTileData, nTilesSize, pCollisionMapNew, pCollisionMapCurrent, 0);
-      nRoomsNearIndex++;
-    } while (nRoomsNearIndex < nAdjacentRoomsCount);
+    }
 }
 
 // @sourcefile .\COLLISN\Collisn.cpp
@@ -1195,10 +1175,7 @@ static void __stdcall CollisionGrid_AddCollision_BoundingBox(D2RoomCollisionGrid
 static int32_t __stdcall BoundnigBox_AdaptBoundingBoxToGrid(D2RoomStrc * pRoom, D2BoundingBoxStrc * pBoundingBox, D2BoundingBoxStrc * pBoundingBoxes) {
     int* pBoundingBoxSrc;
     int* pBoundingBoxDst;
-    if (pBoundingBoxes->nBottom > pBoundingBoxes->nTop) {
-      return 0;
-    }
-    if (pBoundingBoxes->nLeft > pBoundingBoxes->nRight) {
+    if (pBoundingBoxes->nBottom > pBoundingBoxes->nTop || pBoundingBoxes->nLeft > pBoundingBoxes->nRight) {
       return 0;
     }
 

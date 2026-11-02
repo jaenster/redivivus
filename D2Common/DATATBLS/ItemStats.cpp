@@ -59,7 +59,7 @@ void __stdcall D2StatesTogglegfx(D2UnitStrc * pUnit, uint32_t nStateId, int32_t 
       return;
     }
 
-    uint32_t* pFlagWord = (uint32_t*)(pGfxFlags + ((int)nStateId >> 5) * 4);
+    uint32_t* pFlagWord = (uint32_t*)(pGfxFlags + ((int)nStateId >> 5));
     if (bSet) {
       *pFlagWord |= gadwBitMasks[nStateId & 0x1f];
       Unit::ROOM_LinkUnitToUpdateList(pUnit);
@@ -77,7 +77,7 @@ uint32_t __stdcall GetStateGfxFlag(D2UnitStrc * pUnit, eD2States eState) {
 
     int* nStateFlagsPtr = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
     if (nStateFlagsPtr) {
-      return *(uint32_t*)(nStateFlagsPtr + ((int)eState >> 5) * 4) & gadwBitMasks[eState & STATE_venomclaws];
+      return nStateFlagsPtr[(int)eState >> 5] & gadwBitMasks[eState & STATE_venomclaws];
     }
 
     return 0;
@@ -102,18 +102,11 @@ BOOL __stdcall STATES_HasAnyGfxFlag(D2UnitStrc * pUnit) {
 
     int nDwordCount = sgptDataTable->nTxtStatesSize + 0x1f;
     nDwordCount = nDwordCount / 32;
-    int i = 0;
-    if (nDwordCount <= 0) {
-      return 0;
-    }
-
-    do {
+    for (i = 0; i < nDwordCount; i++) {
       if (*(int*)(pGfxFlags + i * 4)) {
         return 1;
       }
-
-      i++;
-    } while (i < nDwordCount);
+    }
 
     return 0;
 }
@@ -144,7 +137,7 @@ void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t nParam) 
     nDwordCount = nDwordCount / 32;
     if (nParam) {
       if (nDwordCount > 0) {
-        nGfxOffset = pGfxFlags - (int)pStateFlags;
+        nGfxOffset = (int)pGfxFlags - (int)pStateFlags;
         j = 0;
         do {
           i = j + 1;
@@ -161,7 +154,7 @@ void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t nParam) 
     } else {
       if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
         if (nDwordCount > 0) {
-          nGfxOffset = pGfxFlags - (int)pStateFlags;
+          nGfxOffset = (int)pGfxFlags - (int)pStateFlags;
           j = 0;
           do {
             i = j + 1;
@@ -173,7 +166,7 @@ void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t nParam) 
           } while (i < nDwordCount);
         }
       } else if (nDwordCount > 0) {
-        nGfxOffset = pGfxFlags - (int)pStateFlags;
+        nGfxOffset = (int)pGfxFlags - (int)pStateFlags;
         j = 0;
         do {
           i = j + 1;
@@ -236,7 +229,7 @@ void __stdcall STATES_MoveToGfxFlags(D2UnitStrc * pUnit, uint32_t * pMaskWords) 
     int i = 0;
     if (nGfxOffset / 32 > 0) {
       int iVar1;
-      iVar1 = pGfxFlags - (int)pMaskWords;
+      iVar1 = (int)pGfxFlags - (int)pMaskWords;
       nGfxOffset = (int)nStateOffset - (int)pMaskWords;
       do {
         i++;

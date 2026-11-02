@@ -714,7 +714,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
           }
         } else {
           nByteIndex = nByteIndex >> 4 & 0xf;
-          SID_SetStateFlag1((uint32_t)(nByteIndex != 0) * 4 + 3);
+          SID_SetStateFlag1(nByteIndex != 0 ? 0x7U : 0x3U);
           Debug::DEBUG_UnusedDebugFunction("User has an invalid cdkey (%ld)", nByteIndex);
         }
       } else {
@@ -722,7 +722,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
           case 0x201:
             {
               nByteIndex = nByteIndex >> 4 & 0xf;
-              SID_SetStateFlag1((uint32_t)(nByteIndex != 0) * 4 + 6);
+              SID_SetStateFlag1(nByteIndex != 0 ? 0xaU : 0x6U);
               Storm::Source::SSTR::SStrCopy(gszCDKeyInUseByUsername, (char*)szAdditionalInfo.dwHighDateTime, 0x100);
               SID_SetStateFlag2((uint32_t)gszCDKeyInUseByUsername);
               Debug::DEBUG_UnusedDebugFunction("CD Key is in use by %s (%ld)", gszCDKeyInUseByUsername, nByteIndex);
@@ -731,14 +731,14 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
           case 0x202:
             {
               nByteIndex = nByteIndex >> 4 & 0xf;
-              SID_SetStateFlag1((uint32_t)(nByteIndex != 0) * 4 + 4);
+              SID_SetStateFlag1(nByteIndex != 0 ? 0x8U : 0x4U);
               Debug::DEBUG_UnusedDebugFunction("CD Key is disabled (%ld)", nByteIndex);
               break;
             }
           case 0x203:
             {
               nByteIndex = nByteIndex >> 4 & 0xf;
-              SID_SetStateFlag1((uint32_t)(nByteIndex != 0) * 4 + 5);
+              SID_SetStateFlag1(nByteIndex != 0 ? 0x9U : 0x5U);
               Debug::DEBUG_UnusedDebugFunction("CD Key is for another product (%ld)", nByteIndex);
               break;
             }

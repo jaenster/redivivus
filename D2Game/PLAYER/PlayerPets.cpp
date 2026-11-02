@@ -409,7 +409,6 @@ int32_t __fastcall GetOwnersPetType(D2UnitStrc * pUnit, int32_t nUnitGUID) {
 void __fastcall PETS_ResummonPetByUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pPetUnit) {
     D2PetStrc* pPetListEntry;
     int32_t nPetUnitGUID;
-    D2PetArgStrc sPetArgs;
     D2PetStrc* pPetEntry;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     if (!pPlayerData) {
@@ -436,8 +435,8 @@ void __fastcall PETS_ResummonPetByUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
             nPetUnitGUID = D2Client::UNIT::GetGUID(pPetUnit);
             if (pPetEntry->nPetGUID == nPetUnitGUID) {
               *(uint32_t*)pPetEntry &= -2;
+              D2PetArgStrc sPetArgs = {0};
               sPetArgs.nPetGUID = pPetEntry->nPetGUID;
-              sPetArgs.nUnused18 = 0;
               if (!pPetUnit) {
                 sPetArgs.nPetClassId = 0xffff;
               } else {
@@ -1162,6 +1161,7 @@ void __fastcall PETS_RecalculateAllPetLimits(::SGAMEDATA * pGame, D2UnitStrc * p
     int32_t nSkillCalc;
     D2PetTypeTxt* pTxtPetType;
     D2SkillsTxt* pTxtSkill;
+    int nPetId;
     int nPetMaxByType[256];
     D2SkillStrc* pNextSkillIter;
     char nPetTypeIdx;
@@ -1215,21 +1215,14 @@ void __fastcall PETS_RecalculateAllPetLimits(::SGAMEDATA * pGame, D2UnitStrc * p
       }
     }
 
-    int nPetId = 0;
-    if (sgptDataTable->nTxtPetTypeSize <= 0) {
-      return;
-    }
-
-    do {
+    for (nPetId = 0; nPetId < sgptDataTable->nTxtPetTypeSize; nPetId++) {
       if (nPetMaxByType[nPetId] <= 0) {
         pTxtPetType = D2Client::GAME::RosterPets::GetPetTypeTxtById(nPetId);
         if (pTxtPetType) {
           PETS_SetMaxAndTrimExcess(pGameSaved, pUnit, nPetId, (int)pTxtPetType->basemax);
         }
       }
-
-      nPetId++;
-    } while (nPetId < sgptDataTable->nTxtPetTypeSize);
+    }
 }
 
 void __fastcall PETS_ResetAllPetLimitsToBase(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
@@ -1390,7 +1383,6 @@ static BOOL __stdcall KillPetOnRecast(D2UnitStrc * pUnit, D2UnitStrc * pMinion, 
 
 // Handles re-cast of a summoning skill onto an existing pet unit (pPet may be null for a fresh summon). Removes conflicting pets by group, trims excess via PETS_SetMaxAndTrimExcess, checks for valid recast via KillPetOnRecast, then iterates all units calling SummonAndAssign to bind the new/existing minion to the owner. pPet==null summons a fresh minion; non-null re-assigns the specified monster.
 void __fastcall SKILL_ResummonPet(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pPet, int32_t nPetTypeId, int32_t nSkillCalc) {
-    D2PetArgStrc sPetArgs;
     D2PetArguments petArgs;
     if (!(pOwner && pOwner->eUnitType == UNIT_PLAYER && nPetTypeId > 0 && nPetTypeId < sgptDataTable->nTxtPetTypeSize)) {
       return;
@@ -1416,9 +1408,7 @@ void __fastcall SKILL_ResummonPet(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2Un
       return;
     }
 
-    sPetArgs.nSeed = 0;
-    sPetArgs.nNameId = 0;
-    sPetArgs.nUnused18 = 0;
+    D2PetArgStrc sPetArgs = {0};
     sPetArgs.nPetType = nPetTypeId;
     if (!pPet) {
       sPetArgs.nPetGUID = -1;
@@ -1436,7 +1426,6 @@ void __fastcall SKILL_ResummonPet(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2Un
 // Re-summons a pet of nPetType for pPlayer, replacing the existing pPet. Validates player data and pet list bounds, calls KillPetOnRecast to despawn the old pet, then iterates all units via IterateAllUnits/SummonAndAssign to spawn and register the new minion with the saved seed/nameId/type arguments from pPetArgs. Aborts with a fatal error if pPlayerData is null.
 void __fastcall RecastPetAndAssign(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pPet, int32_t nPetType, D2PetDataStrc * pPetArgs) {
     BOOL bRecastOk;
-    D2PetArgStrc sPetArgs;
     D2PetDataStrc sPetData;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pPlayer);
     if (!pPlayerData) {
@@ -1462,7 +1451,7 @@ void __fastcall RecastPetAndAssign(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2
       return;
     }
 
-    sPetArgs.nUnused18 = 0;
+    D2PetArgStrc sPetArgs = {0};
     sPetArgs.nPetType = nPetType;
     if (!pPet) {
       sPetArgs.nPetGUID = -1;

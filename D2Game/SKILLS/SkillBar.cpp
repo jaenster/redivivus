@@ -101,9 +101,7 @@ BOOL __fastcall SKILLBAR_SrvStFn32_StrikeWithAuraState(::SGAMEDATA * pGame, D2Un
     int32_t nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[2], eSkill, nSkillLvl);
     SkillsServer::SKILLS_ApplyAttackRateBuff(pUnit, nCalcVal);
     memset(&sDamage, 0, 0x70);
-    nCalcVal = 0;
-    uint32_t nHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nHitResult, nCalcVal);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
     if (sDamage.wResultFlags & 1U) {
       sDamage.wResultFlags |= pSkillsTxt->ResultFlags;
       sDamage.dwHitFlags |= pSkillsTxt->HitFlags;
@@ -277,10 +275,7 @@ BOOL __fastcall Skills_SrvDoFunc_069_FindPotion(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Applies a War Cry aura buff to pUnit from pCaster. Computes duration via auralencalc, allocates or reuses the aura stat list keyed on aurastate, sets its expiry frame and expire callback (DefaultExpireFunction), attaches it to pUnit, toggles state GFX, schedules a game event (0xC) for expiry, populates aura stats via D2SetAurastatsFromSkills, and refreshes passives/pets.
 void __fastcall SKILLBAR_ApplyWarCryBuff(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCaster, eD2Skills eSkill, int32_t nParam) {
-    if ((int)eSkill < 0) {
-      return;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
       return;
     }
 
@@ -405,10 +400,7 @@ BOOL __fastcall Skills_SrvDoFunc_071_IronMaiden_GenericCurse(::SGAMEDATA * pGame
     D2AiGeneralStrc* pMonsterAi;
     D2NecroSkillArgStrc sCurseArgs;
     short int eStatId;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 
@@ -712,10 +704,7 @@ BOOL __fastcall SKILLBAR_SkillMeleeAttack(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
 // Server-side Frenzy skill stack accumulator. Each hit: allocates or retrieves the aura state stat list, resets its expiry timer (auralencalc frames from now), fires a game event, increments UNITSTAT_skill_frenzy capped at nSkillLvl, then recalculates aura stats via D2SetAurastatsFromSkills. No-ops if skill has no param1 or aurastate is invalid.
 void __fastcall SKILLBAR_ApplyFrenzyStack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if ((int)eSkill < 0) {
-      return;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
       return;
     }
 
@@ -1020,7 +1009,7 @@ static int32_t __stdcall SKILLAMZ_CreatePlagueJavelinClouds(::SGAMEDATA * pGame,
       } else if (nAttackFrames < 0x17) {
         nAttackFrames = 0xc;
       } else {
-        nAttackFrames = (uint32_t)(nAttackFrames >= 0x1a) * 2 + 0xe;
+        nAttackFrames = nAttackFrames >= 0x1a ? 0x10U : 0xeU;
       }
     }
 
@@ -1030,9 +1019,9 @@ static int32_t __stdcall SKILLAMZ_CreatePlagueJavelinClouds(::SGAMEDATA * pGame,
       iVar2 = 1;
     }
 
-    int nParam4 = nLastCloudFrame + nAttackFrames;
-    if (nParam4 < pGame->dwGameFrame) {
-      nParam4 = pGame->dwGameFrame + nAttackFrames;
+    int nPar4 = nLastCloudFrame + nAttackFrames;
+    if (nPar4 < pGame->dwGameFrame) {
+      nPar4 = pGame->dwGameFrame + nAttackFrames;
     }
 
     D2Common::Skills::SKILL_SetParam4(pSkill, nPar4);
@@ -1082,7 +1071,6 @@ BOOL __fastcall Skills_SrvDoFunc_076_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc *
     uint8_t bVar1;
     BOOL bIsAlive;
     D2UnitStrc* pHitTarget;
-    uint32_t nHitResult;
     D2DamageStrc sDamage;
     int nCloudHitIdx;
     int32_t nCloudHitCount;
@@ -1120,12 +1108,7 @@ BOOL __fastcall Skills_SrvDoFunc_076_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc *
           }
 
           nCloudHitCount = SKILLAMZ_CreatePlagueJavelinClouds(pGame, pSkill, pUnit);
-          nCloudHitIdx = 0;
-          if (nCloudHitCount <= 0) {
-            return 1;
-          }
-
-          do {
+          for (nCloudHitIdx = 0; nCloudHitIdx < nCloudHitCount; nCloudHitIdx++) {
             nPrevTargetGUID = D2Common::Skills::SKILL_GetParam3(pSkill);
             pHitTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, 5, 3, nPrevTargetGUID, nullptr);
             if (!pHitTarget) {
@@ -1134,9 +1117,7 @@ BOOL __fastcall Skills_SrvDoFunc_076_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc *
             } else {
               D2Common::Skills::SKILL_SetParam3(pSkill, pHitTarget->nUnitGUID);
               memset(&sDamage, 0, 0x70);
-              iVar1 = 0;
-              nHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-              sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pHitTarget, nHitResult, iVar1);
+              sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pHitTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
               if (sDamage.wResultFlags & 1U) {
                 sDamage.wResultFlags |= pSkillsTxt->ResultFlags;
                 sDamage.dwHitFlags |= pSkillsTxt->HitFlags;
@@ -1165,8 +1146,7 @@ BOOL __fastcall Skills_SrvDoFunc_076_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc *
             }
 
             D2Common::Skills::SKILL_SetFlags(pSkill, nSkillFlags);
-            nCloudHitIdx++;
-          } while (nCloudHitIdx < nCloudHitCount);
+          }
 
           return 1;
         }
@@ -1180,10 +1160,7 @@ BOOL __fastcall Skills_SrvDoFunc_076_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc *
 BOOL __fastcall SKILLBAR_SrvStFn39_Berserk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     int32_t nExpireGameFrame;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 
@@ -1198,9 +1175,7 @@ BOOL __fastcall SKILLBAR_SrvStFn39_Berserk(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 
     memset(&sDamage, 0, 0x70);
-    int32_t nDurationFrames = 0;
-    uint32_t nHitResult = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, nHitResult, nDurationFrames);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
     if (sDamage.wResultFlags & 1U) {
       sDamage.wResultFlags |= pSkillsTxt->ResultFlags;
       sDamage.dwHitFlags |= pSkillsTxt->HitFlags;
@@ -1230,7 +1205,7 @@ BOOL __fastcall SKILLBAR_SrvStFn39_Berserk(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 
     int nGameFrame = pGame->dwGameFrame;
-    nDurationFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl);
+    int32_t nDurationFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl);
     nExpireGameFrame = nDurationFrames + nGameFrame;
     if (nExpireGameFrame <= nGameFrame) {
       nExpireGameFrame = nGameFrame + 10;

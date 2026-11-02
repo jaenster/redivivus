@@ -289,12 +289,10 @@ int __fastcall ShowOogErrorDialog(D2OogErrorDataStrc * pErrorData) {
     int nTitleStrId;
     int nPopupType;
     uint16_t nBodyStrId;
-    uint16_t* pwszClearCursor;
     uint16_t awszCharName[512];
     uint16_t awszFooter[512];
     uint16_t awszTitle[512];
     uint16_t awszBody[512];
-    size_t cchBufferSize;
     eOogErrorCode eVar1 = pErrorData->eErrorCode;
     for (nTitleStrId = 0; nTitleStrId < 0x200; nTitleStrId++) {
       awszBody[nTitleStrId] = L'\0';
@@ -358,9 +356,7 @@ int __fastcall ShowOogErrorDialog(D2OogErrorDataStrc * pErrorData) {
 
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszCharName, (char*)pErrorData->pCustomData, 0x200);
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(awszTitle, D2Lang::StrTable::strtable::GetLocaleString(0x147f), 0x200);
-      cchBufferSize = 0x200;
-      pwszClearCursor = D2Lang::StrTable::strtable::GetLocaleString(pErrorData->eErrorCode != OOG_ERROR_CHAR_NAME_DIALOG ? 0x2aa2 : 0x1450);
-      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(awszBody, pwszClearCursor, cchBufferSize);
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(awszBody, D2Lang::StrTable::strtable::GetLocaleString(pErrorData->eErrorCode != OOG_ERROR_CHAR_NAME_DIALOG ? 0x2aa2 : 0x1450), 0x200);
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(awszFooter, D2Lang::StrTable::strtable::GetLocaleString(0x1451), 0x200);
       MainMenus::UIMENU_CrashingCantTestIt(awszTitle, awszBody, awszCharName, awszFooter, MainMenus::UIMENU_MainMenu);
       return 0;

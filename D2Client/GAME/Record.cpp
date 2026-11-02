@@ -143,6 +143,8 @@ void __stdcall SaveGameRecordToFile() {
 // Loads a game recording from "Record.dr1": opens the file, reads the header (size + 0x14-byte context block), validates the magic word (must equal 0x00000001), then reads gnGameRecordCount blocks of up to 500 entries each into a linked list of D2GameRecordStrc buffers allocated from Fog heap. On magic mismatch, clears IsRecording/IsPlaybackActive and closes the file.
 // @sourcefile .\GAME\Record.cpp
 void __stdcall LoadGameRecordFromFile() {
+    D2GameRecordStrc* pBlock;
+    int nBlockIndex;
     uint32_t dwHeaderSize;
     DWORD dwBytesRead;
     HANDLE hFile = CreateFileA("Record.dr1", 0x80000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x80, (HANDLE)0x0);
@@ -155,31 +157,26 @@ void __stdcall LoadGameRecordFromFile() {
       return;
     }
 
-    int nBlockIndex = 0;
-    if (lpBuffer_007a2768.nBlockCount > 0) {
-      D2GameRecordStrc* pBlock;
-      do {
-        if (nBlockIndex) {
-          pBlock = D2_NEW_AT(D2GameRecordStrc, ".\\GAME\\Record.cpp", 0x35);
-          pBlock->nEntrySize = 0;
-          pBlock->nPlaybackIndex = 0;
-          gpCurrentGameRecord->pNext = pBlock;
-          pBlock->pNext = 0;
-          gpCurrentGameRecord = pBlock;
+    for (nBlockIndex = 0; nBlockIndex < lpBuffer_007a2768.nBlockCount; nBlockIndex++) {
+      if (nBlockIndex) {
+        pBlock = D2_NEW_AT(D2GameRecordStrc, ".\\GAME\\Record.cpp", 0x35);
+        pBlock->nEntrySize = 0;
+        pBlock->nPlaybackIndex = 0;
+        gpCurrentGameRecord->pNext = pBlock;
+        pBlock->pNext = 0;
+        gpCurrentGameRecord = pBlock;
+      }
+      if (lpBuffer_007a2768.nLastBlockEntries <= 0x1f4) {
+        gsGameRecordContext.nEntrySize = lpBuffer_007a2768.nLastBlockEntries;
+        if (nBlockIndex + 1 != lpBuffer_007a2768.nBlockCount) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x100);
+          exit(-1);
         }
-        if (lpBuffer_007a2768.nLastBlockEntries <= 0x1f4) {
-          gsGameRecordContext.nEntrySize = lpBuffer_007a2768.nLastBlockEntries;
-          if (nBlockIndex + 1 != lpBuffer_007a2768.nBlockCount) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x100);
-            exit(-1);
-          }
-        } else {
-          gsGameRecordContext.nEntrySize = 500;
-        }
+      } else {
+        gsGameRecordContext.nEntrySize = 500;
+      }
 
-        /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, gpCurrentGameRecord, gsGameRecordContext.nEntrySize << 4, &dwBytesRead, (LPOVERLAPPED)0x0);
-        nBlockIndex++;
-      } while (nBlockIndex < lpBuffer_007a2768.nBlockCount);
+      /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, gpCurrentGameRecord, gsGameRecordContext.nEntrySize << 4, &dwBytesRead, (LPOVERLAPPED)0x0);
     }
 
     /* HANDLE hObject for CloseHandle */ gpCurrentGameRecord = &gsGameRecordContext;

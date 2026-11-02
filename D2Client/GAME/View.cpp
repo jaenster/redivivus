@@ -642,11 +642,7 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     gnAncientsScrollDelta = nTargetX - gnAncientsScrollBaseX;
     int nScrollOffset = gnAncientsScrollDelta + (gnAncientsScrollDelta >> 0x1f & 7U);
     uint32_t nCloudFrame = nScrollOffset >> 3;
-    uint32_t nTileFrameX = nCloudFrame & 0x800000ff;
-    if ((int)nTileFrameX < 0) {
-      nTileFrameX = (nTileFrameX - 1 | -256) + 1;
-    }
-
+    uint32_t nTileFrameX = (int)nCloudFrame % 256;
     nCloudFrame = (int)(nCloudFrame + (nScrollOffset >> 0x1f & 0xffU)) >> 8 & 0x80000003;
     if ((int)nCloudFrame < 0) {
       nFrameIdx = nCloudFrame - 1 | -4;
@@ -686,25 +682,13 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
       sGfxData.pDC6 = pSummitDC6;
       sGfxData.nFrameNumber = nCloudFrame;
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nScrollOffset, 0x100, -1, DRAW_SOLID, nullptr);
-      nTileFrameX = nCloudFrame + 1 & 0x80000003;
-      if ((int)nTileFrameX < 0) {
-        nTileFrameX = (nTileFrameX - 1 | -4) + 1;
-      }
-
+      nTileFrameX = (int)(nCloudFrame + 1) % 4;
       sGfxData.nFrameNumber = nTileFrameX;
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nScrollOffset + 0x100, 0x100, -1, DRAW_SOLID, nullptr);
-      nFrameIdx = nCloudFrame + 2 & 0x80000003;
-      if ((int)nFrameIdx < 0) {
-        nFrameIdx = (nFrameIdx - 1 | -4) + 1;
-      }
-
+      nFrameIdx = (int)(nCloudFrame + 2) % 4;
       sGfxData.nFrameNumber = nFrameIdx;
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nScrollOffset + 0x200, 0x100, -1, DRAW_SOLID, nullptr);
-      nTileFrame3 = nCloudFrame + 3 & 0x80000003;
-      if ((int)nTileFrame3 < 0) {
-        nTileFrame3 = (nTileFrame3 - 1 | -4) + 1;
-      }
-
+      nTileFrame3 = (int)(nCloudFrame + 3) % 4;
       sGfxData.nFrameNumber = nTileFrame3;
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nScrollOffset + 0x300, 0x100, -1, DRAW_SOLID, nullptr);
       if (nScrollOffset > 0) {

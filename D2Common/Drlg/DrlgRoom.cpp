@@ -1124,24 +1124,19 @@ char * __fastcall GetPickedLevelPrestFilePathFromRoomEx(D2RoomExStrc * pRoomEx) 
 }
 
 static void ReorderNearRoomList(int nRoomCount, D2RoomStrc * * ppRoomList) {
+    int nIndex;
     int nPassRemaining;
     D2RoomStrc* pRoomCurrent;
     D2RoomStrc* pRoomNext;
     int nListCount = nRoomCount - 1;
     for (nPassRemaining = nListCount; nPassRemaining > 0; nPassRemaining--) {
-      int nIndex;
-      nIndex = 0;
-      if (nListCount > 0) {
-        do {
-          pRoomNext = ppRoomList[nIndex + 1];
-          pRoomCurrent = ppRoomList[nIndex];
-          if (pRoomCurrent->eFlags >= (int)(pRoomNext->nLastDeadGUIDs[1] + pRoomNext->eFlags) || (int)pRoomCurrent->nLastDeadGUIDs[0] >= (int)(pRoomNext->nLastDeadGUIDs[2] + pRoomNext->nLastDeadGUIDs[0])) {
-            ppRoomList[nIndex] = pRoomNext;
-            ppRoomList[nIndex + 1] = pRoomCurrent;
-          }
-
-          nIndex++;
-        } while (nIndex < nListCount);
+      for (nIndex = 0; nIndex < nListCount; nIndex++) {
+        pRoomNext = ppRoomList[nIndex + 1];
+        pRoomCurrent = ppRoomList[nIndex];
+        if (pRoomCurrent->eFlags >= (int)(pRoomNext->nLastDeadGUIDs[1] + pRoomNext->eFlags) || (int)pRoomCurrent->nLastDeadGUIDs[0] >= (int)(pRoomNext->nLastDeadGUIDs[2] + pRoomNext->nLastDeadGUIDs[0])) {
+          ppRoomList[nIndex] = pRoomNext;
+          ppRoomList[nIndex + 1] = pRoomCurrent;
+        }
       }
     }
 }
@@ -1185,15 +1180,9 @@ static void __stdcall DefineRoomsNear(D2PoolManagerStrc * pMemory, D2RoomExStrc 
     ReorderNearRoomList(nGapX, apNearRoomExList);
     D2RoomExStrc** ppNearRooms = (D2RoomExStrc**)D2_ALLOC_POOL_AT(pMemory, nGapX * 4, ".\\DRLG\\DrlgRoom.cpp", 0x2cb);
     pRoomEx->ppDrlgRoomsExNear = ppNearRooms;
-    nGapX = 0;
-    if (pRoomEx->nDrlgRoomsExNearCount <= 0) {
-      return;
-    }
-
-    do {
+    for (nGapX = 0; nGapX < pRoomEx->nDrlgRoomsExNearCount; nGapX++) {
       pRoomEx->ppDrlgRoomsExNear[nGapX] = (D2RoomExStrc*)apNearRoomExList[nGapX];
-      nGapX++;
-    } while (nGapX < pRoomEx->nDrlgRoomsExNearCount);
+    }
 }
 
 int32_t __fastcall GetRoomsNearCount(D2RoomExStrc * pRoomEx) {
@@ -1201,30 +1190,21 @@ int32_t __fastcall GetRoomsNearCount(D2RoomExStrc * pRoomEx) {
 }
 
 int32_t __fastcall GetRealRoomsNearCount(D2RoomExStrc * pRoomEx, D2RoomStrc * * ppRoomList) {
+    int32_t iNullFill;
+    int nIndex;
     int32_t nRealCount = 0;
-    int nIndex = 0;
-    if (pRoomEx->nDrlgRoomsExNearCount > 0) {
+    for (nIndex = 0; nIndex < pRoomEx->nDrlgRoomsExNearCount; nIndex++) {
       D2RoomStrc* pRoom;
-      do {
-        pRoom = pRoomEx->ppDrlgRoomsExNear[nIndex]->pRoom;
-        if (pRoom) {
-          ppRoomList[nRealCount] = pRoom;
-          nRealCount++;
-        }
-
-        nIndex++;
-      } while (nIndex < pRoomEx->nDrlgRoomsExNearCount);
+      pRoom = pRoomEx->ppDrlgRoomsExNear[nIndex]->pRoom;
+      if (pRoom) {
+        ppRoomList[nRealCount] = pRoom;
+        nRealCount++;
+      }
     }
 
-    int32_t iNullFill = nRealCount;
-    if (nRealCount >= pRoomEx->nDrlgRoomsExNearCount) {
-      return nRealCount;
-    }
-
-    do {
+    for (iNullFill = nRealCount; iNullFill < pRoomEx->nDrlgRoomsExNearCount; iNullFill++) {
       ppRoomList[iNullFill] = 0;
-      iNullFill++;
-    } while (iNullFill < pRoomEx->nDrlgRoomsExNearCount);
+    }
 
     return nRealCount;
 }

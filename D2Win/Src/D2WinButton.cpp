@@ -373,7 +373,7 @@ BOOL __fastcall Draw(::D2WinButton * pButton) {
         if (nFrameOffset == 0x20) {
           nFrameOffset = 3;
         } else {
-          nFrameOffset = (nFrameOffset > 0x14) + 1;
+          nFrameOffset = nFrameOffset > 0x14 ? 2 : 1;
         }
       }
 

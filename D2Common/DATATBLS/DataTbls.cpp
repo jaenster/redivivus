@@ -606,7 +606,6 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
     size_t nBinAllocSize;
     char szTableNameBuf[256];
     uint32_t dwStackCookie;
-    char cChar;
     int32_t nErrorLine;
     uint32_t nSize = 0;
     if (sgtDataTable.bUseTxt) {
@@ -633,13 +632,7 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
       memset(pDataTable, 0, nBinAllocSize);
       Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinField, pBinFieldInput, (char*)pDataTable, sVar5, nEndOffset);
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinField);
-      szEffectiveName = szTableName;
-      do {
-        cChar = *szEffectiveName;
-        szEffectiveName[(int)(szTableNameBuf - (int)szTableName)] = cChar;
-        szEffectiveName++;
-      } while (cChar != '\0');
-
+      strcpy(szTableNameBuf, szTableName);
       szEffectiveName = (char*)((uintptr_t)&nSize + 3);
       do {
         pNameEnd = szEffectiveName;

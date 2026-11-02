@@ -36,13 +36,7 @@ DC6 * __fastcall IMAGE_LoadDC6(char * szFilename, BOOL bUseDccExtension) {
     DC6* pOutDC6;
     char cByte;
     char* pDstEnd;
-    int nNegFilenameBase = -(int)szFilename;
-    do {
-      cByte = *szFilename;
-      szFilename[(int)(szFullPath + nNegFilenameBase)] = cByte;
-      szFilename++;
-    } while (cByte != '\0');
-
+    strcpy(szFullPath, szFilename);
     char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension(bUseDccExtension);
     char* szExtensionEnd = szExtension;
     szExtensionEnd = szExtensionEnd + strlen(szExtensionEnd) + 1;
@@ -76,13 +70,7 @@ int * __fastcall D2WINARCHIVE_LoadImageFromArchive(char * szText, uint32_t * pnS
     char* pSrcRead;
     char local_108[260];
     char cByte;
-    int nNegFilenameBase = -(int)szText;
-    do {
-      cByte = *szText;
-      szText[(int)(local_108 + nNegFilenameBase)] = cByte;
-      szText++;
-    } while (cByte != '\0');
-
+    strcpy(local_108, szText);
     char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension((int32_t)pDC6);
     char* szExtensionEnd = szExtension;
     szExtensionEnd = szExtensionEnd + strlen(szExtensionEnd) + 1;

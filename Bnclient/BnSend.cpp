@@ -618,20 +618,18 @@ void * __fastcall NET_SID_CLIENT_Send_0x3E_LogonRealmEx(char * szRealmName, char
     // Static local variables (originally global data)
     static uint32_t gnBNetRealmClientToken; D2_STATIC_GUARD_BSS(gnBNetRealmClientToken, "Bnclient::BnSend::NET_SID_CLIENT_Send_0x3E_LogonRealmEx::gnBNetRealmClientToken");
 
-    uint32_t uVar1;
     int32_t nSendLen;
     void* pvVar2;
     char abPacketBuf[280];
     char abHashInput[28];
     char cPasswordCh;
     if (szRealmName) {
-      char* pszEnd;
+      uint32_t uVar1;
       gnBNetRealmClientToken++;
       *(uint32_t*)((char*)&abHashInput + 4) = g_nBNetServerToken;
-      pszEnd = szPassword;
-      pszEnd = pszEnd + strlen(pszEnd) + 1;
+      int nLen = (int)strlen(szPassword);
       *(uint32_t*)(char*)&abHashInput = gnBNetRealmClientToken;
-      _net_sid::SHA1((D2SHA1*)(abHashInput + 8), szPassword, (int)pszEnd - (int)(szPassword + 1));
+      _net_sid::SHA1((D2SHA1*)(abHashInput + 8), szPassword, nLen);
       abPacketBuf[0] = (uint8_t)gnBNetRealmClientToken;
       abPacketBuf[1] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 1);
       abPacketBuf[2] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 2);
@@ -715,22 +713,14 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x27_WriteUserData(char * szAccount, uin
     *(uint32_t*)(pPacketBuf + 4) = nCount;
     nLen = Storm::Source::SSTR::SStrCopy(pPacketBuf + 8, szAccount, 0x7fffffff);
     char* szBufferOutput = pPacketBuf + nLen + 9;
-    nIdx = 0;
-    if (nCount > 0) {
-      do {
-        nLen = Storm::Source::SSTR::SStrCopy(szBufferOutput, pszKeys[nIdx], 0x7fffffff);
-        szBufferOutput = szBufferOutput + nLen + 1;
-        nIdx++;
-      } while (nIdx < nCount);
+    for (nIdx = 0; nIdx < nCount; nIdx++) {
+      nLen = Storm::Source::SSTR::SStrCopy(szBufferOutput, pszKeys[nIdx], 0x7fffffff);
+      szBufferOutput = szBufferOutput + nLen + 1;
     }
 
-    nIdx = 0;
-    if (nCount > 0) {
-      do {
-        nLen = Storm::Source::SSTR::SStrCopy(szBufferOutput, pszValues[nIdx], 0x7fffffff);
-        szBufferOutput = szBufferOutput + nLen + 1;
-        nIdx++;
-      } while (nIdx < nCount);
+    for (nIdx = 0; nIdx < nCount; nIdx++) {
+      nLen = Storm::Source::SSTR::SStrCopy(szBufferOutput, pszValues[nIdx], 0x7fffffff);
+      szBufferOutput = szBufferOutput + nLen + 1;
     }
 
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x27);
@@ -771,13 +761,9 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x26_ReadUserData(char * szAccount, uint
     *(uint32_t*)(pPacketBuf + 8) = nRequestId;
     nLen = Storm::Source::SSTR::SStrCopy(pPacketBuf + 0xc, szAccount, 0x7fffffff);
     char* szBufferOutput = pPacketBuf + nLen + 0xd;
-    nRequestId = 0;
-    if (nCount > 0) {
-      do {
-        nLen = Storm::Source::SSTR::SStrCopy(szBufferOutput, pszKeys[nRequestId], 0x7fffffff);
-        szBufferOutput = szBufferOutput + nLen + 1;
-        nRequestId++;
-      } while (nRequestId < nCount);
+    for (nRequestId = 0; nRequestId < nCount; nRequestId++) {
+      nLen = Storm::Source::SSTR::SStrCopy(szBufferOutput, pszKeys[nRequestId], 0x7fffffff);
+      szBufferOutput = szBufferOutput + nLen + 1;
     }
 
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x26);

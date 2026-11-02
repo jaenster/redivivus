@@ -633,34 +633,34 @@ static void __stdcall DRLGROOMTILE_InitWarpCacheTiles(uint32_t nPackedTileFlags,
 }
 
 // Searches a room's tile links for a tile at the given X/Y position matching the specified floor/wall type and orientation flags.
-static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_FindTileAtPosition(int nFlags, int dwParam2, int dwParam3, int32_t dwParam4, int dwParam5) {
+static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_FindTileAtPosition(int nFlags, D2RoomExStrc * pRoomEx, int dwParam3, int32_t dwParam4, int dwParam5) {
     D2DrlgTileDataStrc* pTileData;
-    if (!*(int*)(dwParam2 + 0x54)) {
+    if (!pRoomEx->pRoomTiles) {
       return nullptr;
     }
 
     uint32_t bInside;
-    bInside = DrlgRoom::DRLGCOORDS_IsPointInside((D2DrlgCoordsStrc*)(dwParam2 + 0x34), dwParam4, dwParam5);
+    bInside = DrlgRoom::DRLGCOORDS_IsPointInside(&pRoomEx->sCoords, dwParam4, dwParam5);
     if (!bInside) {
       return nullptr;
     }
 
-    int* pTileLink;
-    pTileLink = (int*)**(uint32_t**)(dwParam2 + 0x54);
+    D2DrlgTileLinkStrc* pTileLink;
+    pTileLink = pRoomEx->pRoomTiles->pMapLinks;
     do {
       if (!pTileLink) {
         return nullptr;
       }
 
-      pTileData = (D2DrlgTileDataStrc*)pTileLink[1];
-      if (!*pTileLink) {
+      pTileData = pTileLink->pTileData;
+      if (!*(int*)pTileLink) {
         if (!dwParam3) {
           goto scan_tile_list;
         }
       } else if (dwParam3) {
         scan_tile_list:
         while (pTileData) {
-          if (pTileData->nPosX + *(int*)(dwParam2 + 0x34) == dwParam4 && *(int*)(dwParam2 + 0x38) + pTileData->nPosY == dwParam5 && pTileData->nTileType != 4 && (pTileData->nTileType == 0xd || !(nFlags & 0x8000000U))) {
+          if (pTileData->nPosX + pRoomEx->sCoords.WorldPosition.x == dwParam4 && pRoomEx->sCoords.WorldPosition.y + pTileData->nPosY == dwParam5 && pTileData->nTileType != 4 && (pTileData->nTileType == 0xd || !(nFlags & 0x8000000U))) {
             if (!(pTileData->nFlags & 0x1c000U)) {
               return pTileData;
             }
@@ -673,7 +673,7 @@ static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_FindTileAtPosition(int nFlags
         }
       }
 
-      pTileLink = (int*)pTileLink[2];
+      pTileLink = pTileLink->pNext;
     } while (true);
 }
 
@@ -683,7 +683,7 @@ static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_FindTileInNearRooms(int nFlag
     int nIndex;
     for (nIndex = 0; nIndex < pRoomEx->nDrlgRoomsExNearCount; nIndex++) {
       if (pRoomEx->ppDrlgRoomsExNear[nIndex] != pRoomEx) {
-        pFoundTile = DRLGROOMTILE_FindTileAtPosition(nFlags, (int)pRoomEx->ppDrlgRoomsExNear[nIndex], dwParam3, dwParam4, dwParam5);
+        pFoundTile = DRLGROOMTILE_FindTileAtPosition(nFlags, pRoomEx->ppDrlgRoomsExNear[nIndex], dwParam3, dwParam4, dwParam5);
         if (pFoundTile) {
           *dwParam6 = pRoomEx->ppDrlgRoomsExNear[nIndex];
           return pFoundTile;
@@ -1020,7 +1020,7 @@ static void __stdcall DRLGROOMTILE_ProcessTile(eD2GridCellFlags nFlags, D2RoomEx
 void __fastcall InitRoomTiles(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pGrid, D2DrlgGridStrc * pOtherGrid, int32_t nTileParam, int32_t nY, int32_t nSizeMaybe) {
     eD2GridCellFlags nFlags;
     eD2GridCellFlags nCellFlags;
-    D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
+    int nColIdx;
     int nXOffset = pRoomEx->sCoords.WorldPosition.x;
     int nXMax = (uint32_t)!nY + pRoomEx->sCoords.WorldSize.x;
     int nYOffset = pRoomEx->sCoords.WorldPosition.y;
@@ -1031,20 +1031,16 @@ void __fastcall InitRoomTiles(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pGrid, D2
     }
 
     do {
-      int nColIdx;
-      nColIdx = 0;
-      if (nXMax > 0) {
-        do {
-          nFlags = DrlgGrid::GetGridFlags(pGrid, nColIdx, nY);
-          if (pOtherGrid) {
-            nCellFlags = DrlgGrid::GetGridFlags(pOtherGrid, nColIdx, nY);
-          } else {
-            nCellFlags = CELLFLAGS_NONE;
-          }
+      D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
+      for (nColIdx = 0; nColIdx < nXMax; nColIdx++) {
+        nFlags = DrlgGrid::GetGridFlags(pGrid, nColIdx, nY);
+        if (pOtherGrid) {
+          nCellFlags = DrlgGrid::GetGridFlags(pOtherGrid, nColIdx, nY);
+        } else {
+          nCellFlags = CELLFLAGS_NONE;
+        }
 
-          DRLGROOMTILE_ProcessTile(nFlags, pRoomEx, pMemory, nColIdx + nXOffset, nY + nYOffset, nTileParam, nCellFlags);
-          nColIdx++;
-        } while (nColIdx < nXMax);
+        DRLGROOMTILE_ProcessTile(nFlags, pRoomEx, pMemory, nColIdx + nXOffset, nY + nYOffset, nTileParam, nCellFlags);
       }
 
       nY++;
@@ -1092,6 +1088,7 @@ void __fastcall DRLGROOMTILE_CountTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGr
 // Secondary counting pass for specific wall/shadow flag combos.
 void __fastcall DRLGROOMTILE_CountWallTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pFloorGrid, D2DrlgGridStrc * pOrientGrid, int bKillEdgeX, int bKillEdgeY) {
     int nTileType;
+    int nColIdx;
     D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
     int nWidth = (uint32_t)!bKillEdgeX + pRoomEx->sCoords.WorldSize.x;
     int nY = 0;
@@ -1101,24 +1098,18 @@ void __fastcall DRLGROOMTILE_CountWallTilesFromGrid(D2RoomExStrc * pRoomEx, D2Dr
     }
 
     do {
-      int nColIdx;
-      nColIdx = 0;
-      if (nWidth > 0) {
-        do {
-          nTileType = DrlgGrid::GetGridFlags(pOrientGrid, nColIdx, nY);
-          if (nTileType == 3) {
+      for (nColIdx = 0; nColIdx < nWidth; nColIdx++) {
+        nTileType = DrlgGrid::GetGridFlags(pOrientGrid, nColIdx, nY);
+        if (nTileType == 3) {
+          pTileGrid->sRoomTiles.nWallTilesCount++;
+        } else if (nTileType - 10U <= 1) {
+          nTileType = DrlgGrid::GetGridFlags(pFloorGrid, nColIdx, nY);
+          if (nTileType >= 0) {
             pTileGrid->sRoomTiles.nWallTilesCount++;
-          } else if (nTileType - 10U <= 1) {
-            nTileType = DrlgGrid::GetGridFlags(pFloorGrid, nColIdx, nY);
-            if (nTileType >= 0) {
-              pTileGrid->sRoomTiles.nWallTilesCount++;
-            } else {
-              pTileGrid->sRoomTiles.nFloorTilesCount += 6;
-            }
+          } else {
+            pTileGrid->sRoomTiles.nFloorTilesCount += 6;
           }
-
-          nColIdx++;
-        } while (nColIdx < nWidth);
+        }
       }
 
       nY++;

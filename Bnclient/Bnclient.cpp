@@ -39,7 +39,7 @@ char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText) {
       cVar2 = '\0';
       if (bVar1) {
         iVar3 = _strnicmp(szSignerOrg, gnFileSignatureResult, 0x200);
-        cVar2 = '\x01' - (iVar3 != 0);
+        cVar2 = iVar3 != 0 ? 0 : 1;
       }
     }
 
@@ -98,7 +98,7 @@ int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {
           }
         } else {
           dwLastError = GetLastError();
-          nVerifyResult = (dwLastError != 0x800b0100) + 1;
+          nVerifyResult = dwLastError != 0x800b0100 ? 2 : 1;
         }
 
         Fog::Engine::Application::MISC_OperatorDeleteShim(pWideStr);

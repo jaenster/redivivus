@@ -26,13 +26,7 @@ DC6 * __fastcall IMAGE_LoadDC6Ex(char * szFilename, BOOL bUseDccExtension) {
     char* pszExtSrc;
     char aFullName[260];
     char cChar;
-    int nSrcOffset = -(int)szFilename;
-    do {
-      cChar = *szFilename;
-      szFilename[(int)(aFullName + nSrcOffset)] = cChar;
-      szFilename++;
-    } while (cChar != '\0');
-
+    strcpy(aFullName, szFilename);
     char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension(bUseDccExtension);
     char* pszExtTail = szExtension;
     pszExtTail = pszExtTail + strlen(pszExtTail) + 1;
@@ -70,13 +64,7 @@ DC6 * __fastcall IMAGE_LoadWeatherDC6ToPointer(char * szFilename, uint32_t * pnS
     char* pszExtSrc;
     char aFullName[260];
     char cChar;
-    int nSrcOffset = -(int)szFilename;
-    do {
-      cChar = *szFilename;
-      szFilename[(int)(aFullName + nSrcOffset)] = cChar;
-      szFilename++;
-    } while (cChar != '\0');
-
+    strcpy(aFullName, szFilename);
     char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension((int32_t)pDC6);
     char* pszExtTail = szExtension;
     pszExtTail = pszExtTail + strlen(pszExtTail) + 1;

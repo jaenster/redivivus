@@ -1197,6 +1197,7 @@ int32_t __fastcall CLIENT_ForEachUnitInAdjacentRooms(D2UnitStrc * pUnit, D2UnitS
     int32_t nCallbackResult;
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nRoomCount;
+    uint32_t nRoomIndex;
     D2UnitStrc* pCurUnit;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
@@ -1204,21 +1205,14 @@ int32_t __fastcall CLIENT_ForEachUnitInAdjacentRooms(D2UnitStrc * pUnit, D2UnitS
     }
 
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nRoomCount);
-    uint32_t nRoomIndex = 0;
-    if (nRoomCount <= 0) {
-      return 0;
-    }
-
-    do {
+    for (nRoomIndex = 0; nRoomIndex < nRoomCount; nRoomIndex++) {
       for (pCurUnit = ppAdjacentRooms[nRoomIndex]->pUnitList; pCurUnit; pCurUnit = pCurUnit->pRoomNext) {
         nCallbackResult = (*pfnCallback)(pUnit, pCurUnit, ppBestUnit, pnBestValue);
         if (nCallbackResult) {
           return nCallbackResult;
         }
       }
-
-      nRoomIndex++;
-    } while (nRoomIndex < nRoomCount);
+    }
 
     return 0;
 }

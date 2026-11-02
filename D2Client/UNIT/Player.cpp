@@ -526,8 +526,6 @@ static void CLIENT_ResolvePlayerCollision(D2UnitStrc * pUnit) {
     eCollisionFlags eCollideResult;
     eD2PlayerAnimMode eAnimMode;
     D2RoomStrc* pRoom;
-    int32_t nUnitWidth;
-    int32_t iVar1;
     POINT sTilePos;
     eD2UnitType eUnitType;
     if (!pUnit) {
@@ -560,9 +558,7 @@ static void CLIENT_ResolvePlayerCollision(D2UnitStrc * pUnit) {
 
             pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
             if (pRoom) {
-              iVar1 = 0xc01;
-              nUnitWidth = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
-              eCollideResult = D2Common::Collision::CheckCollision_BlockAll_Type(pRoom, sTilePos.x, sTilePos.y, nUnitWidth, iVar1);
+              eCollideResult = D2Common::Collision::CheckCollision_BlockAll_Type(pRoom, sTilePos.x, sTilePos.y, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0xc01);
               if (eCollideResult != COLLIDE_NONE) {
                 D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &sTilePos, D2Common::Units::GetUnitSizeX(pUnit), 0xc01, 1);
                 CUnit::CLIENT_TeleportUnitToPosition(pUnit, sTilePos.x, sTilePos.y, 0);
@@ -1842,7 +1838,7 @@ BOOL __fastcall IsUnitNotMoving(D2UnderMouseStrc * pUnderMouse) {
     } else {
       eD2PlayerAnimMode ePlayerAnimMode;
       if (dwFlags & 4) {
-        gnUnitClickState = (pUnderMouse->pTarget != 0) + 1;
+        gnUnitClickState = pUnderMouse->pTarget != 0 ? 2 : 1;
         return 1;
       }
       if (!(dwFlags & 8) || gnUnitClickState && (!pUnderMouse->pTarget || (eTargetUnitType = pUnderMouse->pTarget->eUnitType , (int)eTargetUnitType >= 0 && ((int)eTargetUnitType <= 1 || eTargetUnitType == UNIT_WARP)) && (!pUnderMouse->pPlayer || (ePlayerAnimMode = pUnderMouse->pPlayer->eAnimMode.ePlayerMode , ePlayerAnimMode != Walk && ePlayerAnimMode != eD2PlayerAnimMode_ns::Run) && ePlayerAnimMode != TownWalk))) {

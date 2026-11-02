@@ -282,13 +282,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
 
     inflate_state* pState;
     pState = (inflate_state*)pInflateStream->state;
-    if (!pState) {
-      return -2;
-    }
-    if (!pInflateStream->next_out) {
-      return -2;
-    }
-    if (!pInflateStream->next_in && pInflateStream->avail_in) {
+    if (!pState || !pInflateStream->next_out || !pInflateStream->next_in && pInflateStream->avail_in) {
       return -2;
     }
     if (pState->mode == 0xb) {
@@ -1508,23 +1502,19 @@ int __fastcall inflateGetHeader(z_stream * pStream, gz_header * pHead) {
 }
 
 static uint32_t __stdcall syncsearch(uint32_t * pnMatchState, uint32_t nLen, uint8_t * pBuf) {
+    uint32_t i;
     uint32_t nGot = *pnMatchState;
-    uint32_t i = 0;
-    if (nLen > 0) {
-      do {
-        if (nGot >= 4) {
-          break;
-        }
-        if ((uint32_t)pBuf[i] == (nGot < 2 ? -255 : 0) + 0xff) {
-          nGot++;
-        } else if (pBuf[i]) {
-          nGot = 0;
-        } else {
-          nGot = 4 - nGot;
-        }
-
-        i++;
-      } while (i < nLen);
+    for (i = 0; i < nLen; i++) {
+      if (nGot >= 4) {
+        break;
+      }
+      if ((uint32_t)pBuf[i] == (nGot < 2 ? -255 : 0) + 0xff) {
+        nGot++;
+      } else if (pBuf[i]) {
+        nGot = 0;
+      } else {
+        nGot = 4 - nGot;
+      }
     }
 
     *pnMatchState = nGot;

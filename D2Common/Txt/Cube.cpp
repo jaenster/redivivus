@@ -147,10 +147,9 @@ static void __stdcall CUBE_ParseInputItem(char * pszField, D2CubeInputStrc * pIn
       pszFlagsCursor = 0;
     }
 
-    char* pszFlagsBlock;
-    pszFlagsBlock = pszField;
-    pszFlagsBlock = pszFlagsBlock + strlen(pszFlagsBlock) + 1;
-    if ((uint32_t)((int)pszFlagsBlock - (int)(pszField + 1)) <= 4) {
+    int nLen;
+    nLen = (int)strlen(pszField);
+    if ((uint32_t)nLen <= 4) {
       int nCmpResult;
       nCmpResult = _stricmp(pszField, (char*)&gaCubeRecipeItemTypeFlags_8);
       if (!nCmpResult) {

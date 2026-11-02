@@ -82,7 +82,6 @@ void __fastcall CRASH_FormatStackTrace(DWORD dwThreadId, D2CrashFrameStrc * aFra
     __frame0_t __frame0;
     int nWritten;
     int nChunkLen;
-    char* pszScan;
     uint32_t nLineLen;
     void* pThreadStackBase;
     LPCVOID pThreadEsp;
@@ -116,9 +115,7 @@ void __fastcall CRASH_FormatStackTrace(DWORD dwThreadId, D2CrashFrameStrc * aFra
       }
 
       Debug::FormatAddressDebugString(&aFrameAddrs->dwReturnAddr, __frame0.szAddressInfo, __frame0.szLineBuffer);
-      pszScan = __frame0.szLineBuffer;
-      pszScan = pszScan + strlen(pszScan) + 1;
-      nLineLen = (int)pszScan - (int)(__frame0.szLineBuffer + 1);
+      nLineLen = (int)strlen(__frame0.szLineBuffer);
       if (nLineLen >= 0x3ff) {
         __frame0.szLineBuffer[0x3fe] = '\n';
         __frame0.szLineBuffer[0x3ff] = '\0';
@@ -375,7 +372,7 @@ LONG __stdcall ERRORMANAGER_UnhandledExceptionFilter(_EXCEPTION_POINTERS * pExce
       sCrashReport.nSkipFrames = 0;
       nFilterResult = (*gpCurrentExceptionFilter)(&sCrashReport, gpCurrentExceptionContext);
       if (nFilterResult) {
-        return (uint32_t)(nFilterResult != 1) * 2 - 1;
+        return nFilterResult != 1 ? 0x1U : 0xffffffff;
       }
     }
 

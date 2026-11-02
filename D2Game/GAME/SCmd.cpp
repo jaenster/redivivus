@@ -265,15 +265,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS(D2ClientStrc * pClien
 // Server-to-client monster move to entity message. Opcode 0x68, 21 bytes.
 void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH(D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nTargetType, uint8_t nTargetUnitType, uint32_t dwTargetGUID, uint8_t bParam2) {
     int32_t nUnitCoord;
-    D2GSPacketSrv0x68 uStack_1c;
-    uStack_1c.wX = 0;
-    uStack_1c.wY = 0;
+    D2GSPacketSrv0x68 uStack_1c = {0};
     uStack_1c.nMode = nTargetType;
-    uStack_1c.nParam1 = '\0';
-    uStack_1c.nReserved = '\0';
-    uStack_1c.nParam2 = '\0';
-    uStack_1c.wParam = 0;
-    uStack_1c.nParam3 = '\0';
     uStack_1c.dwTargetGUID = dwTargetGUID;
     d2_store24((char*)&uStack_1c.dwMonsterGUID, (uint32_t)nMonsterGUID & 0xffffffu);
     uStack_1c.nPacketId = nPacketId;
@@ -332,13 +325,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH(D2ClientStrc 
 
 // Server-to-client monster move message. Opcode 0x67, 16 bytes.
 void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH(D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nMoveType, uint16_t wX, uint16_t wY, uint8_t bParam) {
-    D2GSPacketSrv0x67 uStack_14;
+    D2GSPacketSrv0x67 uStack_14 = {0};
     uStack_14.nMoveType = nMoveType;
-    uStack_14.nParam3 = '\0';
-    uStack_14.wParam = 0;
-    uStack_14.nParam4 = '\0';
-    uStack_14.nParam1 = '\0';
-    uStack_14.nParam2 = '\0';
     uStack_14.wY = wY;
     d2_store24((char*)&uStack_14.dwMonsterGUID, (uint32_t)nMonsterGUID & 0xffffffu);
     uStack_14.nPacketId = nPacketId;
@@ -388,15 +376,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH(D2ClientStrc 
 // Sends S→C packet 0x68 (NPC move-to-entity, extended form) to one client. Looks up the monster unit by GUID, reads its current X/Y position (dynamic path for monsters/players, static path for objects/missiles), reads path type (remapping 0x08→0x0B) and clamped velocity-percent stat. Packs all fields into a 0x15-byte stack buffer and delivers via NET_D2GS_SERVER_SendPacket_Helper. No-ops silently if the unit is not found.
 void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH_Ex(D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nTargetType, uint8_t nTargetUnitType, uint32_t dwTargetGUID, uint8_t bParam2, uint8_t bParam3, uint8_t bParam) {
     int32_t nUnitCoord;
-    D2GSPacketSrv0x68 bStack_1c;
-    bStack_1c.wX = 0;
-    bStack_1c.wY = 0;
+    D2GSPacketSrv0x68 bStack_1c = {0};
     bStack_1c.nMode = nTargetType;
-    bStack_1c.nParam1 = '\0';
-    bStack_1c.nReserved = '\0';
-    bStack_1c.nParam2 = '\0';
-    bStack_1c.wParam = 0;
-    bStack_1c.nParam3 = '\0';
     bStack_1c.dwTargetGUID = dwTargetGUID;
     d2_store24((char*)&bStack_1c.dwMonsterGUID, (uint32_t)nMonsterGUID & 0xffffffu);
     bStack_1c.nPacketId = nPacketId;
@@ -455,13 +436,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH_Ex(D2ClientSt
 
 // Extended variant of 0x67 NPC move. Looks up the monster by GUID, reads its dynamic path type and velocity percent stat, then sends a 16-byte move packet to pClient. Unlike the basic variant, accepts three extra flag bytes (bParam1/2/3) packed into the destination-Y/flags field. Path types 5-6 are overridden to type 1 (walk-to-last-waypoint); type 8 becomes 0xB.
 void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH_Ex(D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nMoveType, uint16_t wDestXParam, uint16_t wDestY, uint8_t bParam1, uint8_t bParam2, uint8_t bParam3) {
-    D2GSPacketSrv0x67 byPacketBuf;
+    D2GSPacketSrv0x67 byPacketBuf = {0};
     byPacketBuf.nMoveType = nMoveType;
-    byPacketBuf.nParam3 = '\0';
-    byPacketBuf.wParam = 0;
-    byPacketBuf.nParam4 = '\0';
-    byPacketBuf.nParam1 = '\0';
-    byPacketBuf.nParam2 = '\0';
     byPacketBuf.wY = wDestY;
     d2_store24((char*)&byPacketBuf.dwMonsterGUID, (uint32_t)nMonsterGUID & 0xffffffu);
     byPacketBuf.nPacketId = nPacketId;
@@ -1057,9 +1033,8 @@ void __fastcall NET_D2GS_SERVER_SendSkillTabBonusDelta(D2ClientStrc * pClient, u
 void __fastcall NET_D2GS_SERVER_Send_0x26_CHATSTART(D2ClientStrc * pClient, D2GSPacketSrv0x26 * pPacket) {
     D2GSPacketSrv0x26 sPacket;
     char cCur;
-    char* pSrcScan = pPacket->szMessage;
-    pSrcScan = pSrcScan + strlen(pSrcScan) + 1;
-    if ((uint32_t)((int)pSrcScan - (int)(pPacket->szMessage + 1)) >= 0x100) {
+    int nLen = (int)strlen(pPacket->szMessage);
+    if ((uint32_t)nLen >= 0x100) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5ba);
       exit(-1);
     }
@@ -1083,9 +1058,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG(D2ClientStrc * pClient, D2Pa
     int nCopyCount;
     uint8_t pktBuf[40];
     char cCur;
-    char* pszNameEnd = pEventPacket->szName1;
-    pszNameEnd = pszNameEnd + strlen(pszNameEnd) + 1;
-    if ((uint32_t)((int)pszNameEnd - (int)(pEventPacket->szName1 + 1)) >= 0x10) {
+    int nLen = (int)strlen(pEventPacket->szName1);
+    if ((uint32_t)nLen >= 0x10) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5da);
       exit(-1);
     }
@@ -1416,8 +1390,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x7F_AllyPartyInfo_0x90_PartyAutoMapInfo(D2
     eD2LevelId eLevel = (uint16_t)eLevelRaw;
     *(uint8_t*)(char*)&aPacket.p7F.nAreaID = (uint8_t)eLevelRaw;
     *(uint8_t*)((char*)&aPacket.p7F.nAreaID + 1) = (uint8_t)(eLevelRaw >> 8);
-    D2UnitStrc* pPlayer = Clients::CLIENTS_GetControlUnit(pClient, 0);
-    BOOL bPartyDataChanged = SCMD_DispatchUnitPartyData(pPlayer, nErrLineOrAddr, eLevel, pUnit);
+    BOOL bPartyDataChanged = SCMD_DispatchUnitPartyData(Clients::CLIENTS_GetControlUnit(pClient, 0), nErrLineOrAddr, eLevel, pUnit);
     if (bPartyDataChanged) {
       SCMD_QueuePacketForClient((uint8_t*)&aPacket, 10, pClient);
     }
@@ -1425,7 +1398,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x7F_AllyPartyInfo_0x90_PartyAutoMapInfo(D2
       return;
     }
 
-    pPlayer = Clients::CLIENTS_GetControlUnit(pClient, 0);
+    D2UnitStrc* pPlayer = Clients::CLIENTS_GetControlUnit(pClient, 0);
     nErrLineOrAddr = D2Common::Collision::GetCollisionDistance(pPlayer, pUnit);
     if (nErrLineOrAddr <= 0x32) {
       return;
@@ -1641,11 +1614,7 @@ void __fastcall Send0x9DItemMoveToBodyLoc(D2ClientStrc * pClient, D2UnitStrc * p
 
 // S2C packet 0x47 (11 bytes): [opcode:1][unitType:1][unused:1][unitGUID:u32][pad:4]. Tells the client to recalculate all equipped item states for the specified unit. Checks item requirements (str/dex/level) against current stats — disables items that no longer qualify, re-enables items that now qualify. Triggers charm validation and set bonus recalculation. Sent on level-up and periodic unit updates.
 void __fastcall NET_D2GS_SERVER_Send_0x47_ITEMUPDATEMODIFIERS(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
-    D2GSPacketSrv0x47 local_10;
-    local_10.nActionByte = '\0';
-    local_10.nReserved7 = '\0';
-    local_10.wPad1 = 0;
-    local_10.byPad2 = '\0';
+    D2GSPacketSrv0x47 local_10 = {0};
     local_10.nPacketId = 0x47;
     local_10.eUnitType = '\x06';
     if (pUnit) {
@@ -1660,10 +1629,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x47_ITEMUPDATEMODIFIERS(D2ClientStrc * pCl
 
 // S2C packet 0x48 (11 bytes): [opcode:1][unitType:1][actionByte:1][unitGUID:u32][pad:4]. Same as 0x47 — tells client to recalculate equipped item states. Extra actionByte at offset 2 (purpose TBD). Sent after server-side item state recalculation (ITEMS_RecalcEquippedItemStates) and periodic unit updates.
 void __fastcall NET_D2GS_SERVER_Send_0x48_ITEMUPDATEREQUIREMENTSMET(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint8_t byActionByte) {
-    D2GSPacketSrv0x48 local_10;
-    local_10.byPad0 = '\0';
-    local_10.wPad1 = 0;
-    local_10.byPad2 = '\0';
+    D2GSPacketSrv0x48 local_10 = {0};
     local_10.byActionByte = byActionByte;
     local_10.nPacketId = 0x48;
     local_10.eUnitType = '\x06';
@@ -2800,21 +2766,15 @@ void __fastcall Send0x9CItemHandleInShop(D2ClientStrc * pClient, D2UnitStrc * pP
 }
 
 BOOL __fastcall STRING_CheckIfStringLengthDoNotExceedSize(char * szText, int32_t nMaxLength) {
-    int nCharsRead = 0;
-    if (nMaxLength <= 0) {
-      return 0;
-    }
-
-    do {
+    int nCharsRead;
+    for (nCharsRead = 0; nCharsRead < nMaxLength; nCharsRead++) {
       char cCurrent;
       cCurrent = *szText;
       szText++;
       if (cCurrent == '\0') {
         return 1;
       }
-
-      nCharsRead++;
-    } while (nCharsRead < nMaxLength);
+    }
 
     return 0;
 }

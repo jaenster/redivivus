@@ -310,11 +310,7 @@ void __stdcall CMD_AutomapCenterOnPlayer() {
 
 void __stdcall CMD_AutomapCycleFade() {
     int32_t iVar1 = UI::Automap::AUTOMAP_GetFade();
-    uint32_t nAutomapFade = iVar1 + 1U & 0x80000003;
-    if ((int)nAutomapFade < 0) {
-      nAutomapFade = (nAutomapFade - 1 | -4) + 1;
-    }
-
+    uint32_t nAutomapFade = (int)(iVar1 + 1U) % 4;
     UI::Automap::AUTOMAP_SetFade(nAutomapFade);
 }
 
@@ -810,20 +806,12 @@ void __stdcall ClientLight_UpdateRoomLightPulse() {
     Draw::LightMap::ROOM_GetAmbientLightColor(pRoom, &nAmbientColor, (char*)pRed, (char*)pGreen, (char*)pBlue, nAmbientArg);
     if ((int)gRoomLightPulse.nCurrentTick < (int)gRoomLightPulse.nFadeInDuration) {
       fVar1 = Fog::MATH_sinTable_f32_LookupOffset(gRoomLightPulse.nSinOffset);
-      fAmbientColorF = (float)(int)nAmbientColor;
-      if ((int)nAmbientColor < 0) {
-        fAmbientColorF += 4.2949673e+09;
-      }
-
+      fAmbientColorF = (float)nAmbientColor;
       gRoomLightPulse.nLightPulseIntensity = (uint32_t)(fAmbientColorF * fVar1);
       gRoomLightPulse.nSinOffset = (int)(gRoomLightPulse.nCurrentTick << 7) / (int)gRoomLightPulse.nFadeInDuration;
     } else if (!((int)gRoomLightPulse.nCurrentTick < (int)(gRoomLightPulse.nTotalDuration - gRoomLightPulse.nFadeOutDuration))) {
       fVar1 = Fog::MATH_sinTable_f32_LookupOffset(gRoomLightPulse.nSinOffset);
-      fAmbientColorF = (float)(int)nAmbientColor;
-      if ((int)nAmbientColor < 0) {
-        fAmbientColorF += 4.2949673e+09;
-      }
-
+      fAmbientColorF = (float)nAmbientColor;
       gRoomLightPulse.nLightPulseIntensity = (uint32_t)(fAmbientColorF * fVar1);
       nFadeOutBase = gRoomLightPulse.nFadeOutDuration - gRoomLightPulse.nTotalDuration;
       if (!gRoomLightPulse.nFadeOutDuration) {
@@ -1048,10 +1036,9 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
     nExitCodeEcx3 = nCutsceneId;
     int bMpqLoaded;
     char szInstallPath[260];
-    uint32_t szSoundPath[65];
+    char szSoundPath[260];
     char szVideoPath[260];
     int bVideoLoaded;
-    char cChar;
     int32_t nErrorLine;
     int nCurrentCutsceneId;
     nCurrentCutsceneId = nCutsceneId;
@@ -1082,12 +1069,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
       }
     } else {
       pszSrcName = gdwSoundHeaderCacheIndex[nCutsceneId].pszVideoPath;
-      bMpqLoaded = -(int)pszSrcName;
-      do {
-        cChar = *pszSrcName;
-        pszSrcName[(int)(szVideoPath + bMpqLoaded)] = cChar;
-        pszSrcName++;
-      } while (cChar != '\0');
+      strcpy(szVideoPath, pszSrcName);
     }
 
     Sound::SoundHdr::Cleanup();
@@ -1138,7 +1120,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
         if (gdwSoundHeaderCacheIndex[nCutsceneId].bHasAltSoundPath) {
           Sound::SOUND_LocalizeSoundPath("%s\\video\\%s\\%s", szSoundPath, szVideoPath);
         } else {
-          sprintf((char*)szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
+          sprintf(szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
         }
 
         bExitCutsceneActive = '\x01';
@@ -1147,9 +1129,9 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
         dwResult = D2Win::D2GFX::BeginCutSceneAtResolutionMode0();
         if (dwResult) {
           if (gbCutsceneActive == '\0') {
-            D2gfx::D2GFX::D2GFX_PlayCutScene((char*)szSoundPath, nPlayMode, (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING);
+            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING);
           } else {
-            D2gfx::D2GFX::D2GFX_PlayCutScene((char*)szSoundPath, nPlayMode, 0);
+            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, 0);
           }
 
           bCutscenePlayed = 1;
@@ -1185,12 +1167,12 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
           if (gdwSoundHeaderCacheIndex[6].bHasAltSoundPath) {
             Sound::SOUND_LocalizeSoundPath("%s\\video\\%s\\%s", szSoundPath, szVideoPath);
           } else {
-            sprintf((char*)szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
+            sprintf(szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
           }
 
           dwResult = D2Win::D2GFX::BeginCutSceneAtResolutionMode0();
           if (dwResult) {
-            D2gfx::D2GFX::D2GFX_PlayCutScene((char*)szSoundPath, nPlayMode, (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING);
+            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING);
             Sound::SoundHdr::SOUNDHDR_UpdateRegistryVersion(6);
           }
         }
@@ -1435,14 +1417,12 @@ int __stdcall D2CLIENT_GetTradePlayerGoldAmount() {
 }
 
 void __fastcall TRADE_SendGoldToPartner(uint32_t nParam) {
-    eD2UnitStat eUnitStat;
     uint16_t nLayer;
     if (g_nTradeWindowState != 4 && g_nTradeWindowState != 5 && g_nTradeWindowState != 6) {
-      D2UnitStrc* pUnit;
+      eD2UnitStat eUnitStat;
       nLayer = 0;
       eUnitStat = UNITSTAT_gold;
-      pUnit = UNIT::Player::GetPlayerUnit_UI();
-      gnTradePlayerGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, nLayer);
+      gnTradePlayerGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, nLayer);
       if (nParam >= gnTradePlayerGoldAmount) {
         GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 8, (int16_t)(gnTradePlayerGoldAmount >> 0x10), (int16_t)gnTradePlayerGoldAmount);
         return;

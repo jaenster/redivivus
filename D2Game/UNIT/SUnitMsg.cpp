@@ -490,7 +490,7 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
 
 // Send stat changes (buffs/debuffs) to client. Iterates state flags, checks which are new/ending, encodes changed stats into bit buffer with ItemStatCost config, sends via 0xA7/0xA8/0xA9 opcodes.
 void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
-    void* _Src;
+    int* _Src;
     int nFlagDwordCountTmp;
     uint32_t nSetBitIdx;
     eD2States eCurState;

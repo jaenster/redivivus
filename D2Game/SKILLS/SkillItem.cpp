@@ -441,7 +441,7 @@ int32_t __fastcall MONSTERREGION_CheckSpawnDensity(D2MonsterRegionStrc * pMonter
 
     sNextSeed = D2_SEED_NEXT(*pSeed);
     *pSeed = sNextSeed;
-    return ((int)(sNextSeed.nSeedLow % 100) > 0x23) + 1;
+    return (int)(sNextSeed.nSeedLow % 100) > 0x23 ? 2 : 1;
 }
 
 // @sourcefile .\SKILLS\SkillItem.cpp
@@ -706,8 +706,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
             nPotionDelay = pGame->dwGameFrame + nBuffRemainingFrames + nItemClassId;
             if (!pActiveStatList) {
               nOwnerGUID = D2Client::UNIT::GetGUID(pUnit);
-              eUnitType = D2Client::Units::GetType(pUnit);
-              pActiveStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nPotionDelay, eUnitType, nOwnerGUID);
+              pActiveStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nPotionDelay, D2Client::Units::GetType(pUnit), nOwnerGUID);
               if (!pActiveStatList) {
                 continue;
               }
@@ -845,8 +844,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
             nCurStatVal = pGame->dwGameFrame + nBuffRemainingFrames + nItemClassId;
             if (!pActiveStatList) {
               nOwnerGUID = D2Client::UNIT::GetGUID(pUnit);
-              eUnitType = D2Client::Units::GetType(pUnit);
-              pActiveStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nCurStatVal, eUnitType, nOwnerGUID);
+              pActiveStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nCurStatVal, D2Client::Units::GetType(pUnit), nOwnerGUID);
               if (!pActiveStatList) {
                 continue;
               }
@@ -977,8 +975,7 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
             pExpireFrame = pGame->dwGameFrame + nBuffRemainingFrames + nItemDuration;
             if (!pActiveStatList) {
               nOwnerGUID = D2Client::UNIT::GetGUID(pUnit);
-              eUnitType = D2Client::Units::GetType(pUnit);
-              pActiveStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, pExpireFrame, eUnitType, nOwnerGUID);
+              pActiveStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, pExpireFrame, D2Client::Units::GetType(pUnit), nOwnerGUID);
               if (!pActiveStatList) {
                 continue;
               }
@@ -1040,10 +1037,7 @@ BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     eD2States eState = (eD2States)pItemTxt->wState;
-    if ((int)eState <= 0) {
-      return 0;
-    }
-    if ((int)eState >= sgptDataTable->nTxtStatesSize) {
+    if ((int)eState <= 0 || (int)eState >= sgptDataTable->nTxtStatesSize) {
       return 0;
     }
 
@@ -1998,7 +1992,6 @@ BOOL __fastcall ITEMEVENT_LifeDrainDemon(::SGAMEDATA * pGame, uint32_t nUnitEven
 // Server-side item hit-event handler that applies a slow state to a target. Reads the slow percentage from the item's stat (via ITEM_GetMinimalStatValueShifted). Clamps the slow to 50% for players/bosses/mercs/champions, 75% for normal monsters, 90% for others. Applies STATE_slowed with UNITSTAT_velocitypercent, attackrate, and other_animrate for 750 frames. Returns 1 if state was successfully applied.
 // @sourcefile .\SKILLS\SkillItem.cpp
 BOOL __fastcall ITEMEVENT_SlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
-    D2StateExArgStrc sStateArg;
     if (!pUnit || !pTarget) {
       return 0;
     }
@@ -2051,10 +2044,9 @@ BOOL __fastcall ITEMEVENT_SlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D
     }
 
     nSlowAmount = -nSlowAmount;
-    sStateArg.pFunction = 0;
+    D2StateExArgStrc sStateArg = {0};
     sStateArg.pUnit = pUnit;
     sStateArg.pTarget = pTarget;
-    sStateArg.eSkill = SKILL_Attack;
     sStateArg.nSkillLvl = 1;
     sStateArg.nDurationInFrames = 0x2ee;
     sStateArg.eStat = UNITSTAT_velocitypercent;

@@ -2136,6 +2136,7 @@ void __fastcall SKILLS_DropItemByCode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
 void __fastcall SKILLS_ForEachUnitInRangeCallback(::SGAMEDATA * pGame, int32_t nUnitFindFlags, D2UnitStrc * pUnit, int32_t nSkillLevel, int32_t nDistance, fnSkillUnitProc ppfnProc) {
     bool _bIsBadCode;
     bool bIsBadCode;
+    int nUnitIdx;
     D2UnitFindArgStrc sUnitFindArg;
     D2UnitFindDataStrc sUnitFindData;
     uint32_t nCursorYPos;
@@ -2173,13 +2174,9 @@ void __fastcall SKILLS_ForEachUnitInRangeCallback(::SGAMEDATA * pGame, int32_t n
       exit(-1);
     }
 
-    int nUnitIdx = 0;
-    if (sUnitFindData.nCountedUnits > 0) {
+    for (nUnitIdx = 0; nUnitIdx < sUnitFindData.nCountedUnits; nUnitIdx++) {
       ::SGAMEDATA* pGame_00 = pGameCopy;
-      do {
-        (*ppfnProc)(pGame_00, pUnit_00, sUnitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx], nSkillLevel);
-        nUnitIdx++;
-      } while (nUnitIdx < sUnitFindData.nCountedUnits);
+      (*ppfnProc)(pGame_00, pUnit_00, sUnitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx], nSkillLevel);
     }
 
     D2Common::Units::UnitFinds::FreeUnitFindData(&sUnitFindData);
@@ -2233,12 +2230,8 @@ void __fastcall SKILLS_ForEachUnitBaalWave(::SGAMEDATA * pGame, D2BaalWaveParamS
         exit(-1);
       }
 
-      iUnit = 0;
-      if (sParam.nCountedUnits > 0) {
-        do {
-          pBaalWaveParam->fpFunction(pGame, pBaalWaveParam->pAttacker, sParam.pUnitsArray->aFoundUnitsList[iUnit], pBaalWaveParam->nSkillLevel, pBaalWaveParam->nCallbackArg);
-          iUnit++;
-        } while (iUnit < sParam.nCountedUnits);
+      for (iUnit = 0; iUnit < sParam.nCountedUnits; iUnit++) {
+        pBaalWaveParam->fpFunction(pGame, pBaalWaveParam->pAttacker, sParam.pUnitsArray->aFoundUnitsList[iUnit], pBaalWaveParam->nSkillLevel, pBaalWaveParam->nCallbackArg);
       }
 
       D2Common::Units::UnitFinds::FreeUnitFindData(&sParam);
@@ -2731,6 +2724,7 @@ uint32_t __fastcall SKILLS_ApplyEffectToUnitsInRange(::SGAMEDATA * pGame, uint32
     int nCurUnitX;
     int32_t nDistanceSq;
     uint32_t bPassedTargetFlags;
+    int iVar1;
     int nAdjacentRooms;
     uint32_t nTargetX;
     uint32_t nTargetY;
@@ -2754,12 +2748,7 @@ uint32_t __fastcall SKILLS_ApplyEffectToUnitsInRange(::SGAMEDATA * pGame, uint32
     }
 
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppRoomList, &nAdjacentRooms);
-    int iVar1 = 0;
-    if (nAdjacentRooms <= 0) {
-      return 1;
-    }
-
-    do {
+    for (iVar1 = 0; iVar1 < nAdjacentRooms; iVar1++) {
       if (!(nTargetFlags & 0x2000) || (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(ppRoomList[iVar1]) , !bIsInTown)) {
         bIsInTown = SKILLS_IsRoomInRange(ppRoomList[iVar1], nTargetX, nRadius, nTargetY);
         if (bIsInTown) {
@@ -2792,9 +2781,7 @@ uint32_t __fastcall SKILLS_ApplyEffectToUnitsInRange(::SGAMEDATA * pGame, uint32
           }
         }
       }
-
-      iVar1++;
-    } while (iVar1 < nAdjacentRooms);
+    }
 
     return 1;
 }
@@ -3229,9 +3216,7 @@ BOOL __fastcall Skills_SrvDoFunc_001_ShootArrow(::SGAMEDATA * pGame, D2UnitStrc 
     }
 
     memset(&DStack_74, 0, 0x70);
-    int32_t nExtraRange = 0;
-    int nToHitBonusExtra = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_progressive_tohit, 0);
-    DStack_74.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pWeapon, nToHitBonusExtra, nExtraRange);
+    DStack_74.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pWeapon, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_progressive_tohit, 0), 0);
     DStack_74.dwHitFlags |= 2;
     SkillAss::SKILLASS_ApplyProgressiveDamageToTarget(pUnit, &DStack_74);
     UNIT::SUnitDmg::DAMAGE_CalculateOffensiveDamage(pGame, pUnit, pWeapon, &DStack_74, 0, 0x80);

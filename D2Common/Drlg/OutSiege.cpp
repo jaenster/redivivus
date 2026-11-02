@@ -95,7 +95,7 @@ static void DRLGOUTROOM_PlaceAct5SpecialPresets(D2DrlgLevelStrc * pLevel) {
 BOOL __stdcall DRLGOUTROOM_SpawnPresetIfGridFlagged(int nY, int nX, D2DrlgLevelStrc * pLevel, D2DrlgLevelDataWildernessLevel * pWildData, int nPresetId) {
     uint32_t nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nX, nY);
     if (nGridFlags & 0x400) {
-      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, nPresetId, (uint32_t)(pLevel->eD2LevelId == 0x6e) * 2 - 1, 0);
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, nPresetId, pLevel->eD2LevelId == 0x6e ? 0x1U : 0xffffffff, 0);
       return 1;
     }
 
@@ -105,18 +105,14 @@ BOOL __stdcall DRLGOUTROOM_SpawnPresetIfGridFlagged(int nY, int nX, D2DrlgLevelS
 // Scans grid edges for 0x400 flag and spawns border connector presets (0x38B-0x38E).
 void __stdcall DRLGOUTROOM_PlaceAct5BorderPresets(D2DrlgLevelStrc * pLevel) {
     uint32_t nGridFlags;
+    int nXCur;
     D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
-    int nXCur = 0;
-    if (pWildData->nGridCoordsWidth > 0) {
-      do {
-        nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nXCur, 0);
-        if (nGridFlags & 0x400) {
-          Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXCur, 0, 0x38d, (uint32_t)(pLevel->eD2LevelId == 0x6e) * 2 - 1, 0);
-          break;
-        }
-
-        nXCur++;
-      } while (nXCur < pWildData->nGridCoordsWidth);
+    for (nXCur = 0; nXCur < pWildData->nGridCoordsWidth; nXCur++) {
+      nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nXCur, 0);
+      if (nGridFlags & 0x400) {
+        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXCur, 0, 0x38d, pLevel->eD2LevelId == 0x6e ? 0x1U : 0xffffffff, 0);
+        break;
+      }
     }
 
     int nXIter = 0;
@@ -125,7 +121,7 @@ void __stdcall DRLGOUTROOM_PlaceAct5BorderPresets(D2DrlgLevelStrc * pLevel) {
       do {
         nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nXIter, nXCur);
         if (nGridFlags & 0x400) {
-          Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXIter, nXCur, 0x38c, (uint32_t)(pLevel->eD2LevelId == 0x6e) * 2 - 1, 0);
+          Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXIter, nXCur, 0x38c, pLevel->eD2LevelId == 0x6e ? 0x1U : 0xffffffff, 0);
           break;
         }
 
@@ -133,17 +129,12 @@ void __stdcall DRLGOUTROOM_PlaceAct5BorderPresets(D2DrlgLevelStrc * pLevel) {
       } while (nXIter < pWildData->nGridCoordsWidth);
     }
 
-    nXCur = 0;
-    if (pWildData->nGridCoordsHeight > 0) {
-      do {
-        nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, 0, nXCur);
-        if (nGridFlags & 0x400) {
-          Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 0, nXCur, 0x38e, (uint32_t)(pLevel->eD2LevelId == 0x6e) * 2 - 1, 0);
-          break;
-        }
-
-        nXCur++;
-      } while (nXCur < pWildData->nGridCoordsHeight);
+    for (nXCur = 0; nXCur < pWildData->nGridCoordsHeight; nXCur++) {
+      nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, 0, nXCur);
+      if (nGridFlags & 0x400) {
+        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 0, nXCur, 0x38e, pLevel->eD2LevelId == 0x6e ? 0x1U : 0xffffffff, 0);
+        break;
+      }
     }
 
     nXIter = 0;
@@ -164,12 +155,12 @@ void __stdcall DRLGOUTROOM_PlaceAct5BorderPresets(D2DrlgLevelStrc * pLevel) {
       }
     }
 
-    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXCur, nXIter, 0x38b, (uint32_t)(pLevel->eD2LevelId == 0x6e) * 2 - 1, 0);
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXCur, nXIter, 0x38b, pLevel->eD2LevelId == 0x6e ? 0x1U : 0xffffffff, 0);
 }
 
 // Returns the base preset ID for Act 5 outer wall tiles. Returns 5 for the Bloody Foothills (level 0x75) or 4 for other Act 5 levels. Called by PlaceAct1245OutdoorBorders. Trivial getter.
 int32_t __fastcall DRLGOUTROOM_GetGridDivisionSize(D2DrlgLevelStrc * pLevel) {
-    return (pLevel->eD2LevelId == 0x75) + 4;
+    return pLevel->eD2LevelId == 0x75 ? 5 : 4;
 }
 
 // Lays down road presets along the DrlgVertex path chain for Act5 outdoor levels.
@@ -190,7 +181,7 @@ void __stdcall DRLGOUTROOM_PlaceAct5RoadPath(D2DrlgLevelStrc * pLevel) {
     int nAbsDy;
     int nDx;
     D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
-    int nBasePresetId = (pLevel->eD2LevelId == 0x75) + 4;
+    int nBasePresetId = pLevel->eD2LevelId == 0x75 ? 5 : 4;
     D2DrlgVertexStrc* pDrlgVertex = pWildData->pVertices;
     D2DrlgVertexStrc* pNextVertex = pWildData->pVertices->pNext;
     do {
@@ -529,37 +520,29 @@ static void DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets(D2DrlgLevelStrc *
         }
       }
 
-      nAttempts = 0;
-      if (pLevelData->nGridCoordsHeight > 0) {
-        do {
+      for (nAttempts = 0; nAttempts < pLevelData->nGridCoordsHeight; nAttempts++) {
+        if (nPlacedCount >= 3) {
+          return;
+        }
+
+        nGridWidth = pLevelData->nGridCoordsWidth;
+        for (nXIter = 0; nXIter < nGridWidth; nXIter++) {
           if (nPlacedCount >= 3) {
-            return;
+            break;
+          }
+
+          nGridWidth = (int)(nXIter + nStartX * 2) % nGridWidth;
+          nY = (int)(nAttempts + nStartY * 2) % pLevelData->nGridCoordsHeight;
+          iVar2 = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridWidth, nY);
+          if (iVar2 - 0x393U <= 7) {
+            Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridWidth, nY, iVar2 + 0x10, -1, 0);
+            nPlacedCount++;
           }
 
           nGridWidth = pLevelData->nGridCoordsWidth;
-          nXIter = 0;
-          if (nGridWidth > 0) {
-            do {
-              if (nPlacedCount >= 3) {
-                break;
-              }
-
-              nGridWidth = (int)(nXIter + nStartX * 2) % nGridWidth;
-              nY = (int)(nAttempts + nStartY * 2) % pLevelData->nGridCoordsHeight;
-              iVar2 = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridWidth, nY);
-              if (iVar2 - 0x393U <= 7) {
-                Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridWidth, nY, iVar2 + 0x10, -1, 0);
-                nPlacedCount++;
-              }
-
-              nGridWidth = pLevelData->nGridCoordsWidth;
-              nXIter++;
-            } while (nXIter < nGridWidth);
-          }
-
-          nAttempts++;
-        } while (nAttempts < pLevelData->nGridCoordsHeight);
+        }
       }
+
       if (!(nPlacedCount >= 3)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x259);
         exit(-1);

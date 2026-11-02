@@ -601,14 +601,10 @@ static void CreateObjectPresets(int nWorldX, int nWorldY, D2DrlgMapStrc * pMap, 
 // Populates a vertical strip of the preset map with a row of five object presets per Y tile (IDs 0x28, 0x29, 0x29, 0x29, 0x2A at X offsets 0/+5/+10/+15/+20). Skips ahead by +3 rows when the grid cell has specific floor-type flags (type 4, certain subtypes), all linked into pMapStrc->pPresetUnit.
 static void __stdcall CreateObjectPresets2(uint32_t xOffset, D2DrlgGridStrc * pGrid, D2PoolManagerStrc * pMemory, D2DrlgMapStrc * pMapStrc) {
     uint32_t cellFlags;
+    int yIndex;
     int32_t worldY;
     int worldX;
-    int yIndex = 0;
-    if (pMapStrc->nSizeY <= 0) {
-      return;
-    }
-
-    do {
+    for (yIndex = 0; yIndex < pMapStrc->nSizeY; yIndex++) {
       D2PresetUnitStrc* pPreset;
       worldX = pMapStrc->nRealOffsetX + xOffset;
       worldY = pMapStrc->nRealOffsetY + yIndex;
@@ -651,9 +647,7 @@ static void __stdcall CreateObjectPresets2(uint32_t xOffset, D2DrlgGridStrc * pG
             yIndex += 3;
         }
       }
-
-      yIndex++;
-    } while (yIndex < pMapStrc->nSizeY);
+    }
 }
 
 // Scans floor layer flags to decide object preset placement. Builds a sub-grid view, checks for a specific cell flag pattern (type 2, subtype 0x18), and invokes CreateObjectPresets/CreateObjectPresets2. Special-cases Def==0x1b to place globally.
@@ -942,23 +936,18 @@ static void DRLGROOMEX_AllocRoomExData_WorldPointsBurialGrounds(D2PoolManagerStr
     if (pRoomEx->sCoords.WorldSize.y > 0) {
       uint32_t dwGridFlags;
       do {
-        nOffsetX = 0;
-        if (pRoomEx->sCoords.WorldSize.x > 0) {
-          do {
-            /* Is sub 0x10 is a POINT ? Maybe ? Seems like it is but i cant be sure so leave
+        for (nOffsetX = 0; nOffsetX < pRoomEx->sCoords.WorldSize.x; nOffsetX++) {
+          /* Is sub 0x10 is a POINT ? Maybe ? Seems like it is but i cant be sure so leave
                          it for now. */ dwGridFlags = DrlgGrid::GetGridFlags(pRoomData->pWallGrid, nOffsetX, nOffsetY);
-            if (((uint8_t)(dwGridFlags >> 0x14) & 0x3f) == 10 && (uint8_t)((char)(dwGridFlags >> 8) - 0x17U) <= 4 && nIndex < 6) {
-              nY = pRoomEx->sCoords.WorldPosition.y + nOffsetY;
-              nX = pRoomEx->sCoords.WorldPosition.x + nOffsetX;
-              Transform::CoordsRoomToWorld(&nX, &nY);
-              nY += 2;
-              pRoomData->pNavigationPoints[nIndex].x = nX + 2;
-              pRoomData->pNavigationPoints[nIndex].y = nY;
-              nIndex++;
-            }
-
-            nOffsetX++;
-          } while (nOffsetX < pRoomEx->sCoords.WorldSize.x);
+          if (((uint8_t)(dwGridFlags >> 0x14) & 0x3f) == 10 && (uint8_t)((char)(dwGridFlags >> 8) - 0x17U) <= 4 && nIndex < 6) {
+            nY = pRoomEx->sCoords.WorldPosition.y + nOffsetY;
+            nX = pRoomEx->sCoords.WorldPosition.x + nOffsetX;
+            Transform::CoordsRoomToWorld(&nX, &nY);
+            nY += 2;
+            pRoomData->pNavigationPoints[nIndex].x = nX + 2;
+            pRoomData->pNavigationPoints[nIndex].y = nY;
+            nIndex++;
+          }
         }
 
         nOffsetY++;
@@ -1362,7 +1351,7 @@ void __fastcall UpdatePops(D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY, BOOL 
       if (pPresetRoomData->nPops > 0) {
         do {
           pDVar1 = pPresetRoomData;
-          pPopEntry = (D2DrlgCoordsStrc*)((uintptr_t)&pPresetRoomData->pPosLocation->nPosX + nPopBoundsOffset);
+          pPopEntry = (D2DrlgCoordsStrc*)&pPresetRoomData->pPosLocation[nNearIdx].nPosX;
           coordsPopBounds.WorldPosition.x = pPopEntry->WorldPosition.x * 5;
           coordsPopBounds.WorldPosition.y = pPopEntry->WorldPosition.y * 5;
           coordsPopBounds.WorldSize.x = pPopEntry->WorldSize.x * 5 + pPresetRoomData->pTxtLevelPrest->PopPad;
@@ -1433,18 +1422,13 @@ void __fastcall UpdatePops(D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY, BOOL 
     do {
       if (pRoomEx->ppDrlgRoomsExNear[nNearIdx]->nPresetType == 2) {
         pDVar1 = pRoomEx->ppDrlgRoomsExNear[nNearIdx]->pRoomExData.pRoomExDataPreset->pMap;
-        nPopBoundsOffset = 0;
-        if (pDVar1->nPops > 0) {
-          do {
-            if (pDVar1 != pPresetRoomData || pDVar1->pPopsIndex[nPopBoundsOffset] != nMatchedPop) {
-              pDVar1->pPopsOrientation[nPopBoundsOffset] = 0;
-            }
-            if (pDVar1 == pPresetRoomData && pDVar1->pPopsIndex[nPopBoundsOffset] == nMatchedPop) {
-              pDVar1->pPopsOrientation[nPopBoundsOffset] = nDeadline;
-            }
-
-            nPopBoundsOffset++;
-          } while (nPopBoundsOffset < pDVar1->nPops);
+        for (nPopBoundsOffset = 0; nPopBoundsOffset < pDVar1->nPops; nPopBoundsOffset++) {
+          if (pDVar1 != pPresetRoomData || pDVar1->pPopsIndex[nPopBoundsOffset] != nMatchedPop) {
+            pDVar1->pPopsOrientation[nPopBoundsOffset] = 0;
+          }
+          if (pDVar1 == pPresetRoomData && pDVar1->pPopsIndex[nPopBoundsOffset] == nMatchedPop) {
+            pDVar1->pPopsOrientation[nPopBoundsOffset] = nDeadline;
+          }
         }
       }
 

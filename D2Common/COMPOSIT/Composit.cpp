@@ -430,16 +430,12 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
             }
           }
 
-          i = 0;
-          if (gnPlayerCompositeOverrideCount > 0) {
-            do {
-              if (nResolvedClass == gaPlayerCompositeOverrideGfx[i].nMode) {
-                nMonModeItemCode = gaPlayerCompositeOverrideGfx[i].dwToken;
-              }
-
-              i++;
-            } while (i < gnPlayerCompositeOverrideCount);
+          for (i = 0; i < gnPlayerCompositeOverrideCount; i++) {
+            if (nResolvedClass == gaPlayerCompositeOverrideGfx[i].nMode) {
+              nMonModeItemCode = gaPlayerCompositeOverrideGfx[i].dwToken;
+            }
           }
+
           if (nResolvedClass == 0xb) {
             nWeaponClassCode = *pnWeaponClass;
             if (nWeaponClassCode != 0x20736831 && nWeaponClassCode != 0x20746831 && nWeaponClassCode != 0x20736a31 && nWeaponClassCode != 0x20746a31 && nWeaponClassCode != 0x20737331 && nWeaponClassCode != 0x20747331) {
@@ -499,15 +495,10 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
             *pOutWeaponClass = uVar1;
           }
 
-          i = 0;
-          if (gnMonsterCompositeOverrideCount > 0) {
-            do {
-              if (nResolvedClass == gaMonsterCompositeOverrideGfx[i].nMode) {
-                dwModeToken = gaMonsterCompositeOverrideGfx[i].dwToken;
-              }
-
-              i++;
-            } while (i < gnMonsterCompositeOverrideCount);
+          for (i = 0; i < gnMonsterCompositeOverrideCount; i++) {
+            if (nResolvedClass == gaMonsterCompositeOverrideGfx[i].nMode) {
+              dwModeToken = gaMonsterCompositeOverrideGfx[i].dwToken;
+            }
           }
 
           nItemCode = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint8_t)(*(uint8_t*)((int)pOutWeaponClass + 2) == 0x20 ? 0 : *(uint8_t*)((int)pOutWeaponClass + 2)) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)(*(uint8_t*)((int)pOutWeaponClass + 1) == 0x20 ? 0 : *(uint8_t*)((int)pOutWeaponClass + 1)) << 8 | (uint16_t)(uint8_t)((uint8_t)*pOutWeaponClass == 0x20 ? 0 : (uint8_t)*pOutWeaponClass))) & 0xffffffu);

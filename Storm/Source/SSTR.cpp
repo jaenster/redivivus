@@ -1337,11 +1337,7 @@ double __stdcall SStrToDouble(char * pStr) {
               dScale = 1.0 / dScale;
             }
 
-            dAccum = (double)(int)nExp;
-            if ((int)nExp < 0) {
-              dAccum += 4294967296.0;
-            }
-
+            dAccum = (double)nExp;
             dAccum *= dScale;
           } else {
             dAccum = gdPow10Table[nTmp + nExp];

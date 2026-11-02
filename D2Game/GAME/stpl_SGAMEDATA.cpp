@@ -185,7 +185,7 @@ template<> uint32_t TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::GenerateUn
 
 template<> ::SGAMEDATA * TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::Lock(uint32_t nHandle, int32_t * pLockedHandle, int32_t bForWriting) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&this->tSync.m_critsect);
-    *pLockedHandle = (uint32_t)(bForWriting != 0) * 2 - 1;
+    *pLockedHandle = bForWriting != 0 ? 0x1U : 0xffffffff;
     ::SGAMEDATA* pGame = this->TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Ptr(nHandle, &this->tKey);
     if (pGame) {
       return pGame;

@@ -233,10 +233,9 @@ void __thiscall SetNumber(::EditBoxImplementation * pThis, int nNumber) {
     char szNumBuf[20];
     char cCh;
     sprintf(szNumBuf, "%d", nNumber);
-    char* pszEnd = szNumBuf;
-    pszEnd = pszEnd + strlen(pszEnd) + 1;
+    int nLen = (int)strlen(szNumBuf);
     uint32_t nMaxLen = (uint32_t)pThis->nMaxLength;
-    if ((uint32_t)((int)pszEnd - (int)(szNumBuf + 1)) > nMaxLen) {
+    if ((uint32_t)nLen > nMaxLen) {
       ((uint8_t*)&szNumBuf - 1)[nMaxLen] = 0;
     }
 

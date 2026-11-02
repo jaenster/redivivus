@@ -502,7 +502,6 @@ BOOL __fastcall SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void 
 BOOL __fastcall Q36_SendCompletionNotification(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     BOOL _bJustCompleted;
     bool bJustCompleted;
-    D2GSPacketSrv0x5D abyQuestPacket;
     /* GetQuestState(QUEST_EveOfDestruction, 0xd=JustCompleted) — only send
                          completion FX/packet if just killed Baal */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     _bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_EveOfDestruction, QUESTSTATE_JustCompleted);
@@ -511,11 +510,10 @@ BOOL __fastcall Q36_SendCompletionNotification(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q6.cpp", 0x1d8);
-    abyQuestPacket.nExtra = 0;
+    D2GSPacketSrv0x5D abyQuestPacket = {0};
     abyQuestPacket.nPacketId = ']';
     abyQuestPacket.nQuestId = '$';
     abyQuestPacket.nAlertFlags = '\x02';
-    abyQuestPacket.nFilterStatus = '\0';
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &abyQuestPacket);
     UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x53, pUnit);
     return 0;

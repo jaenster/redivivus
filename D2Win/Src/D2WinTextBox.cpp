@@ -76,7 +76,7 @@ static void D2WINTEXTBOX_ComputeLineSpacingForLanguage(int32_t nFontIndex) {
       }
 
       nLangCode = D2WinFont::D2WINFONT_GetCurrentFontHeight();
-      gnTextBoxLineSpacing = ((int)nLangCode > 7) + 6;
+      gnTextBoxLineSpacing = (int)nLangCode > 7 ? 7 : 6;
       D2WinFont::SetAndReturnLastFont(nPrevFont);
       return;
     }
@@ -89,7 +89,7 @@ static void D2WINTEXTBOX_ComputeLineSpacingForLanguage(int32_t nFontIndex) {
         gnTextBoxLineSpacing = 8;
       } else {
         nLangCode = D2WinFont::D2WINFONT_GetCurrentFontHeight();
-        gnTextBoxLineSpacing = ((int)nLangCode > 7) + 6;
+        gnTextBoxLineSpacing = (int)nLangCode > 7 ? 7 : 6;
       }
       if (gbCompactLineSpacingMode) {
         gnTextBoxLineSpacing = 3;
@@ -186,17 +186,14 @@ int __fastcall D2WINTEXTBOX_SetLineCellTextW(::D2WinTextBox * pnTextBox, uint16_
       Fog::File::CONTAINER_InitializeBuffer(wszLocalBuf, 2, 0x400, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLocalBuf, wszText);
       nCurLineNode = pnTextBox->sStyleControl.dwState;
-      nLineNode = 0;
-      if (nRow > 0) {
-        do {
-          if (!nCurLineNode) {
-            return 1;
-          }
+      for (nLineNode = 0; nLineNode < nRow; nLineNode++) {
+        if (!nCurLineNode) {
+          return 1;
+        }
 
-          nCurLineNode = *(int*)(nCurLineNode + 0x1c);
-          nLineNode++;
-        } while (nLineNode < nRow);
+        nCurLineNode = *(int*)(nCurLineNode + 0x1c);
       }
+
       if (!nCurLineNode) {
         return 1;
       }
@@ -804,103 +801,99 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
       nLineIndex = 0;
       if (pCurLine) {
         do {
-          nColIndex = 0;
-          if ((int)pTextBox->sStyleControl.fpPush > 0) {
-            do {
-              pCellText = (uint16_t*)pCurLine[nColIndex];
-              if (!pCellText) {
-                break;
+          for (nColIndex = 0; nColIndex < (int)pTextBox->sStyleControl.fpPush; nColIndex++) {
+            pCellText = (uint16_t*)pCurLine[nColIndex];
+            if (!pCellText) {
+              break;
+            }
+
+            nNumCols = pTextBox->sStyleControl.fpPush;
+            nBaseX = (::ListCheck)pTextBox->sControl.dwSizeX;
+            pColWidth = nBaseX;
+            if (nColIndex < (int)((uint8_t*)nNumCols - 1)) {
+              pColWidth = (&pTextBox->sStyleControl.fpListCheck)[nColIndex];
+            }
+
+            nColOffsetX = (&pTextBox->sStyleControl.fpMouse)[nColIndex];
+            if (nColOffsetX) {
+              nColDrawX = (::ListCheck)((uint8_t*)nUsableWidth2 + (int)nColOffsetX);
+              if (nColIndex + 1 < (int)nNumCols) {
+                pColWidth = (::ListCheck)((uint8_t*)(&pTextBox->sStyleControl.fpListCheck)[nColIndex] - (int)nColOffsetX);
+              } else {
+                pColWidth = (::ListCheck)((uint8_t*)nBaseX - (int)nColOffsetX);
               }
 
-              nNumCols = pTextBox->sStyleControl.fpPush;
-              nBaseX = (::ListCheck)pTextBox->sControl.dwSizeX;
-              pColWidth = nBaseX;
-              if (nColIndex < (int)((uint8_t*)nNumCols - 1)) {
-                pColWidth = (&pTextBox->sStyleControl.fpListCheck)[nColIndex];
-              }
-
-              nColOffsetX = (&pTextBox->sStyleControl.fpMouse)[nColIndex];
-              if (nColOffsetX) {
-                nColDrawX = (::ListCheck)((uint8_t*)nUsableWidth2 + (int)nColOffsetX);
-                if (nColIndex + 1 < (int)nNumCols) {
-                  pColWidth = (::ListCheck)((uint8_t*)(&pTextBox->sStyleControl.fpListCheck)[nColIndex] - (int)nColOffsetX);
-                } else {
-                  pColWidth = (::ListCheck)((uint8_t*)nBaseX - (int)nColOffsetX);
+              pStyleFlags = (&pTextBox->sStyleControl.pNext)[nColIndex];
+              if ((uint32_t)pStyleFlags & 2) {
+                nTextWidth = D2WinFont::DRAW_text0(pCellText);
+                nLineStride = ((int)pColWidth - nTextWidth) / 2;
+                if (nLineStride < 0) {
+                  nLineStride = 0;
                 }
 
-                pStyleFlags = (&pTextBox->sStyleControl.pNext)[nColIndex];
-                if ((uint32_t)pStyleFlags & 2) {
-                  nTextWidth = D2WinFont::DRAW_text0(pCellText);
-                  nLineStride = ((int)pColWidth - nTextWidth) / 2;
+                nColDrawX = (::ListCheck)((uint8_t*)nColDrawX + nLineStride);
+              } else {
+                if ((uint32_t)pStyleFlags & 0x10) {
+                  nLineStride = D2WinFont::DRAW_text0(pCellText);
                   if (nLineStride < 0) {
                     nLineStride = 0;
                   }
 
-                  nColDrawX = (::ListCheck)((uint8_t*)nColDrawX + nLineStride);
-                } else {
-                  if ((uint32_t)pStyleFlags & 0x10) {
-                    nLineStride = D2WinFont::DRAW_text0(pCellText);
-                    if (nLineStride < 0) {
-                      nLineStride = 0;
-                    }
-
-                    nColDrawX = (::ListCheck)((uint8_t*)pColWidth + ((int)nColDrawX - nLineStride));
-                  }
+                  nColDrawX = (::ListCheck)((uint8_t*)pColWidth + ((int)nColDrawX - nLineStride));
                 }
+              }
+            } else {
+              pColStyleFlags = pTextBox->sStyleControl.fpDraw;
+              if ((uint32_t)pColStyleFlags & 2) {
+                nTextWidth = D2WinFont::DRAW_text0((uint16_t*)*pCurLine);
+                nLineStride = (pTextBox->sControl.dwSizeX - nTextWidth) / 2;
+                if (nLineStride < 0) {
+                  nLineStride = 0;
+                }
+
+                nColDrawX = (::ListCheck)(pTextBox->sControl.dwPosX + nLineStride);
               } else {
-                pColStyleFlags = pTextBox->sStyleControl.fpDraw;
-                if ((uint32_t)pColStyleFlags & 2) {
-                  nTextWidth = D2WinFont::DRAW_text0((uint16_t*)*pCurLine);
-                  nLineStride = (pTextBox->sControl.dwSizeX - nTextWidth) / 2;
+                nColDrawX = nUsableWidth2;
+                if ((uint32_t)pColStyleFlags & 0x10) {
+                  nLineStride = D2WinFont::DRAW_text0((uint16_t*)*pCurLine);
                   if (nLineStride < 0) {
                     nLineStride = 0;
                   }
 
-                  nColDrawX = (::ListCheck)(pTextBox->sControl.dwPosX + nLineStride);
-                } else {
-                  nColDrawX = nUsableWidth2;
-                  if ((uint32_t)pColStyleFlags & 0x10) {
-                    nLineStride = D2WinFont::DRAW_text0((uint16_t*)*pCurLine);
-                    if (nLineStride < 0) {
-                      nLineStride = 0;
-                    }
-
-                    nColDrawX = (::ListCheck)(pTextBox->sControl.dwPosX - nLineStride);
-                  }
+                  nColDrawX = (::ListCheck)(pTextBox->sControl.dwPosX - nLineStride);
                 }
               }
+            }
 
-              for (nLineStride = 0; nLineStride < 0x400; nLineStride++) {
-                local_87c[nLineStride] = L'\0';
-              }
+            for (nLineStride = 0; nLineStride < 0x400; nLineStride++) {
+              local_87c[nLineStride] = L'\0';
+            }
 
-              D2Lang::Unicode::UNISYS::STRING_CopyWideString(local_87c, (uint16_t*)pCurLine[nColIndex]);
-              D2WINTEXTBOX_TruncateStringToFitWidth((int32_t)pColWidth, local_87c);
-              nLineStride = nCurY;
-              if (pTextBox->sStyleControl.fpDrawEx == (::DrawEx)(pTextBox->sStyleControl.dwSizeY + nLineIndex) && (uint32_t)pTextBox->sStyleControl.fpDraw & 1) {
-                dwColor = pCurLine[5] != PALETTE_GOLD ? pCurLine[5] : 0;
-                if (!nColIndex) {
-                  D2WinFont::D2WINFONT_DrawTextWithOffsetBackground(local_87c, (int32_t)nColDrawX, nCurY, uFontHeight, (uint32_t)bVar2, DRAW_SOLID, dwColor);
-                } else {
-                  D2WinFont::DRAW_text(local_87c, (int32_t)nColDrawX, nLineStride, dwColor, 0);
-                }
+            D2Lang::Unicode::UNISYS::STRING_CopyWideString(local_87c, (uint16_t*)pCurLine[nColIndex]);
+            D2WINTEXTBOX_TruncateStringToFitWidth((int32_t)pColWidth, local_87c);
+            nLineStride = nCurY;
+            if (pTextBox->sStyleControl.fpDrawEx == (::DrawEx)(pTextBox->sStyleControl.dwSizeY + nLineIndex) && (uint32_t)pTextBox->sStyleControl.fpDraw & 1) {
+              dwColor = pCurLine[5] != PALETTE_GOLD ? pCurLine[5] : 0;
+              if (!nColIndex) {
+                D2WinFont::D2WINFONT_DrawTextWithOffsetBackground(local_87c, (int32_t)nColDrawX, nCurY, uFontHeight, (uint32_t)bVar2, DRAW_SOLID, dwColor);
               } else {
-                pColStyleFlags = pTextBox->sStyleControl.fpDraw;
-                if ((uint32_t)pColStyleFlags & 0x40) {
-                  D2WinFont::D2WINFONT_DrawWideStringRightToLeft((uint16_t*)pCurLine[nColIndex], (int32_t)nColDrawX, nCurY, pCurLine[5], pTextBox->nExtraLineSpacingA, uFontHeight);
-                } else {
-                  dwColor = pCurLine[5];
-                  if ((char)(uintptr_t)pColStyleFlags < '\0') {
-                    nLineStride = pTextBox->nExtraLineSpacingA + nCurY;
-                  }
-
-                  D2WinFont::DRAW_text(local_87c, (int32_t)nColDrawX, nLineStride, dwColor, 0);
-                }
+                D2WinFont::DRAW_text(local_87c, (int32_t)nColDrawX, nLineStride, dwColor, 0);
               }
+            } else {
+              pColStyleFlags = pTextBox->sStyleControl.fpDraw;
+              if ((uint32_t)pColStyleFlags & 0x40) {
+                D2WinFont::D2WINFONT_DrawWideStringRightToLeft((uint16_t*)pCurLine[nColIndex], (int32_t)nColDrawX, nCurY, pCurLine[5], pTextBox->nExtraLineSpacingA, uFontHeight);
+              } else {
+                dwColor = pCurLine[5];
+                if ((char)(uintptr_t)pColStyleFlags < '\0') {
+                  nLineStride = pTextBox->nExtraLineSpacingA + nCurY;
+                }
 
-              nColIndex++;
-            } while (nColIndex < (int)pTextBox->sStyleControl.fpPush);
+                D2WinFont::DRAW_text(local_87c, (int32_t)nColDrawX, nLineStride, dwColor, 0);
+              }
+            }
           }
+
           if (*(char*)(pCurLine + 6) == '\0') {
             nLineStride = pTextBox->nExtraLineSpacingC;
           } else {

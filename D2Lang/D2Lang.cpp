@@ -207,17 +207,12 @@ int32_t __fastcall UTF8_GetStringLength(char * szUtf8, int32_t nMaxBytes) {
       int32_t nWidth;
       nWidth = UTF8_GetNextCharWidth((uint8_t*)szUtf8, nMaxBytes);
       if (nWidth != -1) {
-        nBytesRead = 0;
-        if (nWidth > 0) {
-          do {
-            byCurByte = *szUtf8;
-            szUtf8++;
-            if (!byCurByte) {
-              return nCharCount;
-            }
-
-            nBytesRead++;
-          } while (nBytesRead < nWidth);
+        for (nBytesRead = 0; nBytesRead < nWidth; nBytesRead++) {
+          byCurByte = *szUtf8;
+          szUtf8++;
+          if (!byCurByte) {
+            return nCharCount;
+          }
         }
 
         nCharCount++;

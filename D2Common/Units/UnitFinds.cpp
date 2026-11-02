@@ -90,18 +90,11 @@ BOOL __stdcall AreUnitsInNeighboredRooms(D2UnitStrc * pUnit, D2UnitStrc * pSrcUn
       }
 
       /* Both arguments are reused here */ DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pSrcRoom, (D2RoomStrc***)&pSrcUnit, (int*)&pUnit);
-      nRoomIdx = 0;
-      if ((int)pUnit <= 0) {
-        return 0;
-      }
-
-      do {
+      for (nRoomIdx = 0; nRoomIdx < (int)pUnit; nRoomIdx++) {
         if (*(D2RoomStrc**)(pSrcUnit->unk0x19 + nRoomIdx * 4 - 0x19) == pUnitRoom) {
           return 1;
         }
-
-        nRoomIdx++;
-      } while (nRoomIdx < (int)pUnit);
+      }
 
       return 0;
     }
@@ -231,12 +224,7 @@ D2UnitStrc * __stdcall GetNearestTestedUnit(D2UnitStrc * pUnit, int32_t nX, int3
         exit(-1);
       }
 
-      nRoomIdx = 0;
-      if (nRoomCount <= 0) {
-        return pBestUnit;
-      }
-
-      do {
+      for (nRoomIdx = 0; nRoomIdx < nRoomCount; nRoomIdx++) {
         bBadPtr = CheckRoomIfInRange(ppRoomList[nRoomIdx], nX, nY, nLine);
         if (bBadPtr) {
           for (pCandUnit = ppRoomList[nRoomIdx]->pUnitList; pCandUnit; pCandUnit = pCandUnit->pRoomNext) {
@@ -250,9 +238,7 @@ D2UnitStrc * __stdcall GetNearestTestedUnit(D2UnitStrc * pUnit, int32_t nX, int3
             }
           }
         }
-
-        nRoomIdx++;
-      } while (nRoomIdx < nRoomCount);
+      }
 
       return pBestUnit;
     }

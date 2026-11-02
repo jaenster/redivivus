@@ -1519,7 +1519,7 @@ void __stdcall SKILLTREE_DrawBackground() {
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
     sGfxData.nDirection = 0;
-    sGfxData.nFrameNumber = (gbSpellSelSkillTreeBackground != 0) + 10;
+    sGfxData.nFrameNumber = gbSpellSelSkillTreeBackground != 0 ? 11 : 10;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nTabHighlightX + nScreenX, gnPanelOffsetY - 0x3f + ScreenSizeY, -1, DRAW_SOLID, nullptr);
 }
 

@@ -819,7 +819,7 @@ bool __fastcall Q10_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
       }
       if (pItemTsh) {
         /* GetQuestState Step0x10 (have Staff of Kings 'tsh ': status = 6 - bit) */ BVar2 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheHoradricStaff, QUESTSTATE_Step0x10);
-        *nUnknown = '\x06' - (BVar2 != 0);
+        *nUnknown = BVar2 != 0 ? 5 : 6;
         return true;
       }
       if (pItemRt1) {
@@ -846,12 +846,12 @@ bool __fastcall Q10_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
       BVar2 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheSevenTombs, QUESTSTATE_Completed);
       if (!BVar2) {
         BVar2 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheHoradricStaff, QUESTSTATE_Step0x10);
-        *nUnknown = '\x06' - (BVar2 != 0);
+        *nUnknown = BVar2 != 0 ? 5 : 6;
         return true;
       }
 
       BVar2 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheHoradricStaff, QUESTSTATE_JustCompleted);
-      *nUnknown = (BVar2 != 0) * '\x02' + '\v';
+      *nUnknown = BVar2 != 0 ? 13 : 11;
     }
 
     return true;

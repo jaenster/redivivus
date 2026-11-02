@@ -89,7 +89,6 @@
 #include "Storm/Source/SSTR.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
-#include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/MiniPanel.h"
 #include "D2Client/UI/QuestLog.h"
@@ -100,10 +99,6 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-#ifndef RECON_FPTD_pfnItemTransactionCb
-#define RECON_FPTD_pfnItemTransactionCb
-typedef void (__fastcall *pfnItemTransactionCb)(::SGAMEDATA * pGame, D2UnitStrc * pItem, D2UnitStrc * pPlayer);
-#endif
 #ifndef RECON_FPTD_fnUnitIterCallback
 #define RECON_FPTD_fnUnitIterCallback
 typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
@@ -4021,16 +4016,13 @@ void __stdcall DRAW_UI_Inventory_DrawShop() {
 }
 
 void __stdcall INV_DrawNpcButtonTooltip() {
-    D2UnitStrc* pUnit;
     D2UnitStrc* pNpcUnit;
-    D2BitBufferStrc* pQuestInfo;
     int nTooltipX;
     uint16_t wszTooltipText[256];
     int nButtonAreaTop;
     int32_t nRepairAllCost;
     int32_t nNpcTypeId;
     int32_t nTooltipColor;
-    pfnItemTransactionCb pNullQuestFlags;
     if (!(gnInvMouseX >= pNpcInventoryScreenCoordinates.nLeft && gnInvMouseX <= pNpcInventoryScreenCoordinates.nRight)) {
       return;
     }
@@ -4053,16 +4045,13 @@ void __stdcall INV_DrawNpcButtonTooltip() {
     }
 
     if (gaNpcShopButtons[nButtonIdx].wStringId == 0x276f) {
-      uint8_t bVar1;
+      D2UnitStrc* pUnit;
       Fog::File::CONTAINER_InitializeBuffer(wszTooltipText, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
       pUnit = UNIT::Player::GetPlayerUnit_UI();
       pNpcUnit = npcmenu::GetInteractedUnit();
       if (pUnit && pNpcUnit) {
         nNpcTypeId = pNpcUnit->nClassId;
-        pNullQuestFlags = 0;
-        pQuestInfo = npcmenu::GetQuestInfo();
-        bVar1 = GAME::Game::GetDificulity();
-        nRepairAllCost = D2Common::ITEMS::Items::ITEMS_CalculateRepairAllCost(nullptr, pUnit, nNpcTypeId, (uint32_t)bVar1, pQuestInfo, pNullQuestFlags);
+        nRepairAllCost = D2Common::ITEMS::Items::ITEMS_CalculateRepairAllCost(nullptr, pUnit, nNpcTypeId, (uint32_t)GAME::Game::GetDificulity(), npcmenu::GetQuestInfo(), 0);
         D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszTooltipText, D2Lang::StrTable::strtable::GetLocaleString(0x276f), nRepairAllCost);
         D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltipText, NPCButtonArray[nButtonIdx + CurrentNpcButtonSelection * 4] + gnPanelOffsetX, gnPanelOffsetY - 100 + ScreenSizeY, 0, 0);
         return;
@@ -6823,7 +6812,6 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
     char szEarLevelStr[20];
     uint8_t* wszEarLevel[2];
     D2MagicAffixTxt* pPrefixAffix2;
-    char cChar;
     D2InventoryStrc* pInventory;
     if (!pUnit) {
       return;
@@ -6940,14 +6928,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
             D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize((uint16_t*)wszEarLevel, szEarLevelStr, 3);
             Fog::File::CONTAINER_InitializeBuffer(wszPlayerName, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
             pcNameSrc = D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pUnit);
-            pwLocaleStr2 = __frame0.szPlayerNameCopy;
-            do {
-              cChar = *pcNameSrc;
-              *pwLocaleStr2 = cChar;
-              pcNameSrc++;
-              pwLocaleStr2++;
-            } while (cChar != '\0');
-
+            strcpy(__frame0.szPlayerNameCopy, pcNameSrc);
             D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize((uint16_t*)__frame0.szUtf8Buf, __frame0.szPlayerNameCopy, 0x100);
             bFlagCheck = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_HARDCORE, 0x775, ".\\UI\\inv.cpp");
             if (bFlagCheck) {
@@ -8155,13 +8136,7 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
         }
       }
     }
-    if (!gbInvBodySlotUnderCursorExists && !gpInvItemUnderCursor) {
-      return;
-    }
-    if (!pItemToDescribe) {
-      return;
-    }
-    if (!pUnit->pInventory) {
+    if (!gbInvBodySlotUnderCursorExists && !gpInvItemUnderCursor || !pItemToDescribe || !pUnit->pInventory) {
       return;
     }
 
@@ -9055,7 +9030,7 @@ void __stdcall DRAW_UI_Inventory() {
 
     DRAW_UI_INVENTORY_Gold(1);
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
-    sGfxData.nFrameNumber = (gbInvPanelButtonPressed != 0) + 10;
+    sGfxData.nFrameNumber = gbInvPanelButtonPressed != 0 ? 11 : 10;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x12e, gnPanelOffsetY - 0x40 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     pSlotItem = UNIT::Player::GetPlayerUnit_UI();
     nDrawTextWidth = 0;
@@ -11291,7 +11266,7 @@ void __stdcall DrawMercInventory() {
     sGfxData.nFrameNumber = 3;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + 0x100, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
-    sGfxData.nFrameNumber = (gnInvMercBodySlot2 != 0) + 10;
+    sGfxData.nFrameNumber = gnInvMercBodySlot2 != 0 ? 11 : 10;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + 0x110, gnPanelOffsetY - 0x3f + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     INV_DrawHirelingName(pMercUnit);
     INV_DrawHirelingStatLabels();

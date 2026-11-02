@@ -660,7 +660,7 @@ int32_t __fastcall deflate_stored(deflate_state * pDeflateState, int32_t nFlush)
           trees::_tr_flush_block(pDeflateState, (char*)pBlockStart, pDeflateState->strstart - nBlockStartOff, 1);
           pDeflateState->block_start = pDeflateState->strstart;
           flush_pending(pDeflateState->strm);
-          return (pDeflateState->strm->avail_out != 0) + 2;
+          return pDeflateState->strm->avail_out != 0 ? 3 : 2;
         }
       }
 
@@ -782,7 +782,7 @@ int32_t __fastcall deflate_fast(deflate_state * pDeflateState, int32_t nFlush) {
             trees::_tr_flush_block(pDeflateState, (char*)pBlockStart, nHashHead - nBlockStartOff, 1);
             pDeflateState->block_start = pDeflateState->strstart;
             flush_pending(pDeflateState->strm);
-            return (pDeflateState->strm->avail_out != 0) + 2;
+            return pDeflateState->strm->avail_out != 0 ? 3 : 2;
           }
           if (!pDeflateState->last_lit) {
             return 1;
@@ -974,7 +974,7 @@ int32_t __fastcall deflate_slow(deflate_state * pDeflateState, int32_t nFlush) {
           trees::_tr_flush_block(pDeflateState, (char*)pBlockStart, nLookahead - nBlockStartOff2, 1);
           pDeflateState->block_start = pDeflateState->strstart;
           flush_pending(pDeflateState->strm);
-          return (pDeflateState->strm->avail_out != 0) + 2;
+          return pDeflateState->strm->avail_out != 0 ? 3 : 2;
         }
       }
 
@@ -1488,10 +1488,7 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
     }
 
     deflate_state* pDeflateState = (deflate_state*)pStream->state;
-    if (!pDeflateState) {
-      return -2;
-    }
-    if ((uint32_t)nFlush > 5) {
+    if (!pDeflateState || (uint32_t)nFlush > 5) {
       return -2;
     }
     if (!pStream->next_out || !pStream->next_in && pStream->avail_in || pDeflateState->status == 0x29a && nFlush != 4) {
@@ -1586,7 +1583,7 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
           if (nLevelFlag < 6) {
             nLevelFlag = 1;
           } else {
-            nLevelFlag = (nLevelFlag != 6) + 2;
+            nLevelFlag = nLevelFlag != 6 ? 3 : 2;
           }
         } else {
           nLevelFlag = 0;

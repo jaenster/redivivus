@@ -543,7 +543,7 @@ void __thiscall Draw(::ListBoxImplementation * pThis) {
     nScrollOffset = 0;
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = gpMessageLogDC6;
-    sGfxData.nFrameNumber = (uint32_t)(pThis->bScrollUpPressed != 0) * 2 + 9;
+    sGfxData.nFrameNumber = pThis->bScrollUpPressed != 0 ? 0xbU : 0x9U;
     sGfxData.nDirection = 0;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pThis->nScrollBarX, pThis->nScrollBarY, -1, DRAW_SOLID, nullptr);
     int nVisibleLineCount;
@@ -557,7 +557,7 @@ void __thiscall Draw(::ListBoxImplementation * pThis) {
       } while (nVisibleLineCount < (int)pThis->field_0x180762);
     }
 
-    sGfxData.nFrameNumber = (uint32_t)(pThis->bScrollDownPressed != 0) * 2 + 8;
+    sGfxData.nFrameNumber = pThis->bScrollDownPressed != 0 ? 0xaU : 0x8U;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pThis->nScrollBarX, pThis->nScrollBarY + nVisibleLineCount * 0xc, -1, DRAW_SOLID, nullptr);
     nVisibleLineCount = 0;
     int nVisibleItemCount;

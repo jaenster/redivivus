@@ -332,16 +332,7 @@ int __fastcall SKILLSNEC_CltCreateTeethMissiles(D2UnitStrc * pUnit, eD2Skills eS
 
     eMissilesId eCltMissileId;
     eCltMissileId = (eMissilesId)pSkillsTxt->cltmissile[1];
-    if ((int)eCltMissileId < 0) {
-      return 0;
-    }
-    if ((int)eCltMissileId >= sgptDataTable->nTxtMissilesSize) {
-      return 0;
-    }
-    if (!nTargetX) {
-      return 0;
-    }
-    if (!nParam1) {
+    if ((int)eCltMissileId < 0 || (int)eCltMissileId >= sgptDataTable->nTxtMissilesSize || !nTargetX || !nParam1) {
       return 0;
     }
 
