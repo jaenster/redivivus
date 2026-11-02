@@ -173,7 +173,8 @@ void __fastcall Q33_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 // Used as the AI-sub clear callback when the frozen-Anya monster (0x20f) is killed.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q3.cpp
 void __fastcall Q33_SendQuestStatePacket(D2UnitStrc * pUnit) {
-    D2GSPacketSrv0x5D aPacketBuf = {0};
+    D2GSPacketSrv0x5D aPacketBuf;
+    memset(&aPacketBuf, 0, sizeof(aPacketBuf));
     aPacketBuf.nPacketId = ']';
     aPacketBuf.nQuestId = '!';
     aPacketBuf.nAlertFlags = ' ';

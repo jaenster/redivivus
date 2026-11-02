@@ -1597,7 +1597,7 @@ void __fastcall SKILLMONST_RandomizeMissilePath(D2UnitStrc * pUnit, int32_t nPar
     D2Common::Seed::InitSeed_Param_666(pSeed, nSeedX + nParam);
     D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
     *pSeed = sNewSeed;
-    if (!(0x13 < sNewSeed.nSeedLow % 100)) {
+    if (!(0x13 < (int32_t)(sNewSeed.nSeedLow % 100))) {
       return;
     }
 

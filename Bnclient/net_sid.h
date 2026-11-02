@@ -29,6 +29,22 @@ struct D2SHA1ContextStrc {
     /* 0x14 */ uint32_t aBlock[16];
 };
 
+struct D2SrpSaltVerifierStrc {
+    /* 0x00 */ uint8_t aSalt[32]; // new-password SRP salt s
+    /* 0x20 */ uint8_t aVerifier[32]; // new-password SRP verifier v
+};
+
+struct SID_C2S_AuthAccountCreate {
+    /* 0x00 */ uint8_t aSalt[32];
+    /* 0x20 */ uint8_t aVerifier[32];
+    /* 0x40 */ char szUsername[256];
+};
+
+struct SID_C2S_AuthAccountLogon {
+    /* 0x00 */ uint8_t aClientPublicKeyA[32];
+    /* 0x20 */ char szUsername[256];
+};
+
 struct SID_C2S_AuthInfo {
     /* 0x00 */ uint32_t dwProtocolId;
     /* 0x04 */ char szPlatform[4]; // '68XI' = IX86 as a little-endian dword
@@ -66,6 +82,11 @@ struct __attribute__((packed)) D2SidAuthCheckPacketStrc {
     /* 0x14 */ D2CDKeyHashStrc sClassicKeyHash;
     /* 0x38 */ D2CDKeyHashStrc sExpansionKeyHash; // classic build overwrites this with the exe-info string instead
     /* 0x5C */ char szTail[512]; // exe-info string then CD-key owner name, both NUL terminated
+};
+
+struct __attribute__((packed)) SID_C2S_AuthAccountChangeProof {
+    /* 0x00 */ uint8_t aClientProofM1[20];
+    /* 0x14 */ D2SrpSaltVerifierStrc sNewSaltVerifier;
 };
 
 namespace Bnclient::_net_sid {

@@ -24,7 +24,7 @@ namespace Fog::Source::SFile {
 static double gdFogJulianDaysPerYear = 365.25; D2_STATIC_GUARD(gdFogJulianDaysPerYear, "Fog::Source::SFile::gdFogJulianDaysPerYear");
 static double gdFogJulianDaysPerMonth = 30.6001000000000; D2_STATIC_GUARD(gdFogJulianDaysPerMonth, "Fog::Source::SFile::gdFogJulianDaysPerMonth");
 
-void __fastcall SFILE_InitializeFileSystem(BOOL bResult, uint32_t bSeekOptimization) {
+void __fastcall SFILE_InitializeFileSystem(BOOL bResult, BOOL bSeekOptimization) {
     uint32_t dwSysOptionBuf[2];
     Storm::Source::SFile::SFileSetBasePath(".\\");
     Storm::Source::SFile::SFileEnableDirectAccess(bResult);

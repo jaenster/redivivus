@@ -1588,7 +1588,8 @@ void __fastcall Send0x9DItemMoveToBodyLoc(D2ClientStrc * pClient, D2UnitStrc * p
 
 // S2C packet 0x47 (11 bytes): [opcode:1][unitType:1][unused:1][unitGUID:u32][pad:4]. Tells the client to recalculate all equipped item states for the specified unit. Checks item requirements (str/dex/level) against current stats — disables items that no longer qualify, re-enables items that now qualify. Triggers charm validation and set bonus recalculation. Sent on level-up and periodic unit updates.
 void __fastcall NET_D2GS_SERVER_Send_0x47_ITEMUPDATEMODIFIERS(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
-    D2GSPacketSrv0x47 local_10 = {0};
+    D2GSPacketSrv0x47 local_10;
+    memset(&local_10, 0, sizeof(local_10));
     local_10.nPacketId = 0x47;
     local_10.eUnitType = '\x06';
     if (pUnit) {
@@ -1603,7 +1604,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x47_ITEMUPDATEMODIFIERS(D2ClientStrc * pCl
 
 // S2C packet 0x48 (11 bytes): [opcode:1][unitType:1][actionByte:1][unitGUID:u32][pad:4]. Same as 0x47 — tells client to recalculate equipped item states. Extra actionByte at offset 2 (purpose TBD). Sent after server-side item state recalculation (ITEMS_RecalcEquippedItemStates) and periodic unit updates.
 void __fastcall NET_D2GS_SERVER_Send_0x48_ITEMUPDATEREQUIREMENTSMET(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint8_t byActionByte) {
-    D2GSPacketSrv0x48 local_10 = {0};
+    D2GSPacketSrv0x48 local_10;
+    memset(&local_10, 0, sizeof(local_10));
     local_10.byActionByte = byActionByte;
     local_10.nPacketId = 0x48;
     local_10.eUnitType = '\x06';

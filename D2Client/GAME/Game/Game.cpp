@@ -1110,7 +1110,7 @@ uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused) {
     }
 
     int iScreen = 0;
-    if (gnBetaScreenCount > 0) {
+    if ((int32_t)gnBetaScreenCount > 0) {
       ppCachedImage = &gBetaScreenEntries[0].cachedImage;
       nScreenCount = gnBetaScreenCount;
       do {

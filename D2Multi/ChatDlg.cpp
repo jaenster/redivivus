@@ -943,7 +943,7 @@ void CHATDLG_AppendChatToHistory(char * szText) {
     } while (cCurrent != '\0');
 
     gnChatHistoryEntryCount++;
-    if (gnChatHistoryEntryCount < 10) {
+    if ((int32_t)gnChatHistoryEntryCount < 10) {
       return;
     }
 

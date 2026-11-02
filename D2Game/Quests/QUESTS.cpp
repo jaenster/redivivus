@@ -828,7 +828,8 @@ void __fastcall QUEST_SendQuestUpdateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
       return;
     }
 
-    D2GSPacketSrv0x5D sPacket = {0};
+    D2GSPacketSrv0x5D sPacket;
+    memset(&sPacket, 0, sizeof(sPacket));
     sPacket.nQuestId = (uint8_t)nInternalQuestNo;
     sPacket.nPacketId = ']';
     sPacket.nAlertFlags = pQuestData->nQuestPacketFlags;
@@ -1978,7 +1979,8 @@ BOOL __fastcall PORTAL_ActivateOrDeactivatePortalObject(::SGAMEDATA * * ppGame) 
 
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall SendQuestState(D2UnitStrc * pUnit, int32_t nQuestId) {
-    D2GSPacketSrv0x5D sPacket = {0};
+    D2GSPacketSrv0x5D sPacket;
+    memset(&sPacket, 0, sizeof(sPacket));
     sPacket.nQuestId = (uint8_t)nQuestId;
     sPacket.nExtra = 0;
     sPacket.nPacketId = ']';
@@ -2005,7 +2007,8 @@ void __fastcall QUEST_SendQuestStatePacket(D2UnitStrc * pUnit, int bQuestId, uin
       }
     }
 
-    D2GSPacketSrv0x5D aPacketBuf = {0};
+    D2GSPacketSrv0x5D aPacketBuf;
+    memset(&aPacketBuf, 0, sizeof(aPacketBuf));
     aPacketBuf.nQuestId = (uint8_t)bQuestId;
     aPacketBuf.nPacketId = ']';
     aPacketBuf.nFilterStatus = '\f';

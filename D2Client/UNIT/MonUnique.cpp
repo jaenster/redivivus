@@ -412,7 +412,7 @@ void __fastcall SetResistances(D2UnitStrc * pUnit, int32_t eModifier, int32_t bA
     if (iVar1 >= 100) {
       bApply++;
     }
-    if ((uint32_t)bApply >= 2) {
+    if ((int32_t)(uint32_t)bApply >= 2) {
       return;
     }
     if (eModifier == 8) {
@@ -422,14 +422,14 @@ void __fastcall SetResistances(D2UnitStrc * pUnit, int32_t eModifier, int32_t bA
           bApply++;
         }
       }
-      if ((uint32_t)bApply < 2) {
+      if ((int32_t)(uint32_t)bApply < 2) {
         if (nFireRes < 100) {
           D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_fireresist, nFireRes + 0x28, 0);
           if (nFireRes + 0x28 >= 100) {
             bApply++;
           }
         }
-        if ((uint32_t)bApply < 2 && nLightRes < 100) {
+        if ((int32_t)(uint32_t)bApply < 2 && nLightRes < 100) {
           D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_lightresist, nLightRes + 0x28, 0);
           if (nLightRes + 0x28 >= 100) {
             return;
@@ -464,14 +464,14 @@ void __fastcall SetResistances(D2UnitStrc * pUnit, int32_t eModifier, int32_t bA
             bApply++;
           }
         }
-        if ((uint32_t)bApply < 2) {
+        if ((int32_t)(uint32_t)bApply < 2) {
           if (nFireRes < 0x4b) {
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_fireresist, nFireRes + 0x14, 0);
             if (nFireRes + 0x14 >= 100) {
               bApply++;
             }
           }
-          if ((uint32_t)bApply < 2 && nLightRes < 0x4b) {
+          if ((int32_t)(uint32_t)bApply < 2 && nLightRes < 0x4b) {
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_lightresist, nLightRes + 0x14, 0);
             if (nLightRes + 0x14 >= 100) {
               return;

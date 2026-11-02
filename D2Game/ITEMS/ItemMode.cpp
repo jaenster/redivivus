@@ -2909,7 +2909,7 @@ void __fastcall ITEMMODE_SortBeltColumn(::SGAMEDATA * pGameStrc, D2UnitStrc * pU
     D2InventoryStrc* pInventory = pUnit->pInventory;
     _nColumn = 0;
     nCurSlot = !byColumnMasked ? 0 : nCurSlot & 3;
-    if (2 < nCurSlot) {
+    if (2 < (int32_t)nCurSlot) {
       nCurSlot = 3;
     }
 

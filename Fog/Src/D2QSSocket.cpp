@@ -122,7 +122,7 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
         memcpy(pBuffer, pvVar4, _Size);
         return _Size;
       }
-      if (0x2063 < uVar3) {
+      if (0x2063 < (int32_t)uVar3) {
         ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0xfb);
         exit(-1);
       }

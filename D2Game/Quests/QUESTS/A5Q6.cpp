@@ -510,7 +510,8 @@ BOOL __fastcall Q36_SendCompletionNotification(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q6.cpp", 0x1d8);
-    D2GSPacketSrv0x5D abyQuestPacket = {0};
+    D2GSPacketSrv0x5D abyQuestPacket;
+    memset(&abyQuestPacket, 0, sizeof(abyQuestPacket));
     abyQuestPacket.nPacketId = ']';
     abyQuestPacket.nQuestId = '$';
     abyQuestPacket.nAlertFlags = '\x02';

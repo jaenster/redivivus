@@ -2288,7 +2288,7 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnStationarySubMissileAtPos(::SGAMEDATA *
     }
 
     sSkillArg.nTotalFrames = pMissileTxtTmp->sHitPar1;
-    if (sSkillArg.nTotalFrames <= 0) {
+    if ((int32_t)sSkillArg.nTotalFrames <= 0) {
       sSkillArg.nTotalFrames = D2Common::Skills::D2GetSkillCalc(pOwner, sgptDataTable->pTxtSkills[eSkill].calc[0], eSkill, nSkillLvl);
       if (sSkillArg.nTotalFrames < 5) {
         sSkillArg.nTotalFrames = 5;

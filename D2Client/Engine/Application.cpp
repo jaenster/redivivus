@@ -88,7 +88,7 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
       if (!bMpqLoaded) {
         return 0;
       }
-      if (pD2IniData->bPERSPECTIVE && RENDERED_DirectDraw < eD2ApplicationModeAndRenderer) {
+      if (pD2IniData->bPERSPECTIVE && (int32_t)RENDERED_DirectDraw < (int32_t)eD2ApplicationModeAndRenderer) {
         D2gfx::D2GFX::D2GFX_SetPerspective(1);
       }
 

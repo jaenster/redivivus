@@ -1288,7 +1288,7 @@ BOOL __stdcall SelectCharHandler(D2ControlMsg * pControlMsg) {
       if (OogCurrentCharSelectionMode != CHAR_SELECTION_BNET || !gnCharSelLoadedCharCount) {
         MainMenus::thunk_UIMENU_CreateHeroSinglePlayer(pControlMsg);
         gnCharSelCreateNewButtonClickCount--;
-        if (gnCharSelCreateNewButtonClickCount <= 0) {
+        if ((int32_t)gnCharSelCreateNewButtonClickCount <= 0) {
           gnCharSelLoadedCharCount = 1;
           return 1;
         }
@@ -1341,7 +1341,7 @@ BOOL __stdcall SelectCharHandler(D2ControlMsg * pControlMsg) {
               MainMenus::MAINMENU_ShowPopupWithCancel(pwszLocaleStr, MainMenus::FORMS_DestroyList);
               return 1;
             }
-            if ((OogCurrentCharSelectionMode == CHAR_SELECTION_SP || OogCurrentCharSelectionMode == CHAR_SELECTION_TCP_IP && D2IniData_launcher->nGAMETYPE == GAMETYPE_LAN_HOST) && ((nDifficultyUnlocked = pSelectedChar->nCharacterFlags >> 8 & 0x1f , !(pSelectedChar->nCharacterFlags & 0x20) && 3 < nDifficultyUnlocked) || 4 < nDifficultyUnlocked)) {
+            if ((OogCurrentCharSelectionMode == CHAR_SELECTION_SP || OogCurrentCharSelectionMode == CHAR_SELECTION_TCP_IP && D2IniData_launcher->nGAMETYPE == GAMETYPE_LAN_HOST) && ((nDifficultyUnlocked = pSelectedChar->nCharacterFlags >> 8 & 0x1f , !(pSelectedChar->nCharacterFlags & 0x20) && 3 < (int32_t)nDifficultyUnlocked) || 4 < (int32_t)nDifficultyUnlocked)) {
               UIMENU_SelectDifficultySinglePlayerOrTcpip(nDifficultyUnlocked, wCharFlags & 0x20);
               return 1;
             }

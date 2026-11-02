@@ -1168,10 +1168,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x18_PLAYERCOMMONSTATCHANGE_BIG(char * p
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_manarecovery, (uint32_t)sDecoded.nMPRegen, 0);
     uint32_t nDeltaX = (uint32_t)sDecoded.dX;
     uint32_t nDeltaY = (uint32_t)sDecoded.dY;
-    if (0x80 < nDeltaX) {
+    if (0x80 < (int32_t)nDeltaX) {
       nDeltaX -= 0x100;
     }
-    if (0x80 < nDeltaY) {
+    if (0x80 < (int32_t)nDeltaY) {
       nDeltaY -= 0x100;
     }
 
@@ -1219,10 +1219,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x95_PLAYERCOMMONSTATCHANGE_MEDIUM(char 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, (uint32_t)sDecoded.nStamina << 8, 0);
     uint32_t nDeltaX = (uint32_t)sDecoded.dX;
     uint32_t nDeltaY = (uint32_t)sDecoded.dY;
-    if (0x80 < nDeltaX) {
+    if (0x80 < (int32_t)nDeltaX) {
       nDeltaX -= 0x100;
     }
-    if (0x80 < nDeltaY) {
+    if (0x80 < (int32_t)nDeltaY) {
       nDeltaY -= 0x100;
     }
 
@@ -1264,10 +1264,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x96_UpdateStaminaAndPosition(char * pBy
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, (uint32_t)sDecoded.nStamina << 8, 0);
     uint32_t nDeltaX = (uint32_t)sDecoded.dX;
     uint32_t nDeltaY = (uint32_t)sDecoded.dY;
-    if (0x80 < nDeltaX) {
+    if (0x80 < (int32_t)nDeltaX) {
       nDeltaX -= 0x100;
     }
-    if (0x80 < nDeltaY) {
+    if (0x80 < (int32_t)nDeltaY) {
       nDeltaY -= 0x100;
     }
 
@@ -1290,7 +1290,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x21_SETSKILLLEVEL(char * pBytes) {
 // Client handler for S2C packet 0x93 (8 bytes). Reads player GUID, signed bonus delta, element type filter, and skill page filter. Finds the player unit client-side, then calls SKILLS_CltUpdateSkillList to walk all skills and adjust bonuses matching the element/page criteria. Removes skills whose level drops to 0. Dead code in 1.14d — server never sends this packet.
 void __fastcall NET_D2GS_CLIENT_RecvSkillTabBonusDelta(char * pBytes) {
     uint32_t nBonusDelta = (uint32_t)(uint8_t)pBytes[5];
-    if (0x80 < nBonusDelta) {
+    if (0x80 < (int32_t)nBonusDelta) {
       nBonusDelta -= 0x100;
     }
 
@@ -2363,7 +2363,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAC(char * pPacketData) {
       nComponentIdx = 0;
       do {
         nBitVal = (uint32_t)pMonStats2Txt[i].aComponents[nComponentIdx];
-        if (nBitVal < 3) {
+        if ((int32_t)nBitVal < 3) {
           nSignedBits = 1;
         } else {
           nNameId = nBitVal - 1;

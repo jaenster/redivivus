@@ -908,7 +908,7 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, uint32_t nParam1, in
     bVar2 = GAME::Game::GetDificulity();
     int nDifficulty;
     nDifficulty = (int)bVar2;
-    if (2 < (uint32_t)nDifficulty) {
+    if (2 < (int32_t)(uint32_t)nDifficulty) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1f0);
       exit(-1);
     }
@@ -1247,7 +1247,7 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
       }
 
       clamp_pal_shift:
-      if (nPalShiftIdx < 8) {
+      if ((int32_t)nPalShiftIdx < 8) {
         goto apply_pal_shift;
       }
     }

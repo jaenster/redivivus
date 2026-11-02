@@ -922,11 +922,11 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
 
         uVar4 = pCurUser->nFlags >> 8 & 0x1f;
         if (pCurUser->nFlags & 0x20) {
-          if (uVar4 >= 0xf) {
+          if ((int32_t)uVar4 >= 0xf) {
             bVar5 = 3;
             bInserted = true;
           } else {
-            if (uVar4 < 10) {
+            if ((int32_t)uVar4 < 10) {
               bSignedGreaterOrEqual = (int32_t)uVar4 >= 5;
               bVar5 = bSignedGreaterOrEqual;
               bInserted = (bool)bVar5;
@@ -936,11 +936,11 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
             }
           }
         } else {
-          if (uVar4 >= 0xc) {
+          if ((int32_t)uVar4 >= 0xc) {
             bVar5 = 3;
             bInserted = true;
           } else {
-            if (uVar4 < 8) {
+            if ((int32_t)uVar4 < 8) {
               bSignedGreaterOrEqual = (int32_t)uVar4 >= 4;
               bVar5 = bSignedGreaterOrEqual;
               bInserted = (bool)bVar5;
@@ -997,11 +997,11 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
 
         nClassId = pCurUser->nFlags >> 8 & 0x1f;
         if (pCurUser->nFlags & 0x20) {
-          if (nClassId >= 0xf) {
+          if ((int32_t)nClassId >= 0xf) {
             byTitleLevel = 3;
             bInserted = true;
           } else {
-            if (nClassId < 10) {
+            if ((int32_t)nClassId < 10) {
               bSignedGreaterOrEqual2 = (int32_t)nClassId >= 5;
               byTitleLevel = bSignedGreaterOrEqual2;
               bInserted = (bool)byTitleLevel;
@@ -1011,11 +1011,11 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
             }
           }
         } else {
-          if (nClassId >= 0xc) {
+          if ((int32_t)nClassId >= 0xc) {
             byTitleLevel = 3;
             bInserted = true;
           } else {
-            if (nClassId < 8) {
+            if ((int32_t)nClassId < 8) {
               bSignedGreaterOrEqual2 = (int32_t)nClassId >= 4;
               byTitleLevel = bSignedGreaterOrEqual2;
               bInserted = (bool)byTitleLevel;

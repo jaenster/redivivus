@@ -411,6 +411,7 @@ struct D2SpriteCache;
 struct D2SpriteCacheEntryStrc;
 struct D2Srp;
 struct D2SrpCredentialsStrc;
+struct D2SrpSaltVerifierStrc;
 struct D2StatDescRowStrc;
 struct D2StatScreenButtonStrc;
 struct D2StatesDataTbls;
@@ -1009,11 +1010,6 @@ struct D2SocketOffsetStrc {
 
     /* 0x00 */ int nX;
     /* 0x04 */ int nY;
-};
-
-struct D2SrpSaltVerifierStrc {
-    /* 0x00 */ uint8_t aSalt[32]; // new-password SRP salt s
-    /* 0x20 */ uint8_t aVerifier[32]; // new-password SRP verifier v
 };
 
 struct __attribute__((packed)) D2StatDescRowStrc {

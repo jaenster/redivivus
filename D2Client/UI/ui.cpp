@@ -1629,7 +1629,7 @@ void __stdcall UI_CloseCurrentDialog() {
       gpUiGoldDialogCancelButton = 0;
     }
     if (gnGoldDialogTransactionType) {
-      if (!(0 < gnGoldDialogTransactionType && gnGoldDialogTransactionType <= 4)) {
+      if (!(0 < gnGoldDialogTransactionType && (int32_t)gnGoldDialogTransactionType <= 4)) {
         return;
       }
 
@@ -4371,7 +4371,7 @@ void __fastcall UI_ScrollConfigListVertical(int32_t nSteps) {
     int iVar1 = (int)lRowCount;
     nNewOffset = gnUICtrlConfigScrollOffset;
     if (nSteps < 0) {
-      if (gnUICtrlConfigScrollOffset > 0) {
+      if ((int32_t)gnUICtrlConfigScrollOffset > 0) {
         nNewOffset = gnUICtrlConfigScrollOffset - 1;
       }
       if (nNewOffset < 0) {
@@ -4741,7 +4741,7 @@ void __stdcall UI_UpdateConfigControlsState(int32_t nMouseXStack, int32_t nMouse
           gbUICtrlConfigPendingKey = GetTickCount();
           nMaxScrollRows = UI_GetControlConfigRowCount();
           nMouseInTopScroll = gnUICtrlConfigScrollOffset;
-          if (gnUICtrlConfigScrollOffset > 0) {
+          if ((int32_t)gnUICtrlConfigScrollOffset > 0) {
             nMouseInTopScroll = gnUICtrlConfigScrollOffset - 1;
           }
           if (nMouseInTopScroll >= 0) {
@@ -6329,7 +6329,7 @@ int32_t __stdcall UI_GetStatValueForDisplay(int32_t nUnit) {
     bVar1 = GAME::Game::GetDificulity();
     uint32_t uVar6;
     uVar6 = (uint32_t)bVar1;
-    if (2 < uVar6) {
+    if (2 < (int32_t)uVar6) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x18e);
       exit(-1);
     }
@@ -6405,7 +6405,7 @@ int32_t __stdcall UI_BuildStatWindowDescriptions() {
     bVar1 = GAME::Game::GetDificulity();
     uint32_t uVar3;
     uVar3 = (uint32_t)bVar1;
-    if (2 < uVar3) {
+    if (2 < (int32_t)uVar3) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1d6);
       exit(-1);
     }

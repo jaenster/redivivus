@@ -111,7 +111,8 @@ D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_STA
     }
 
     pSafesockStrc->bInit = 1;
-    sockaddr_in connectAddr = {0};
+    sockaddr_in connectAddr;
+    memset(&connectAddr, 0, sizeof(connectAddr));
     connectAddr.sin_family = 2;
     u_short nPortBE = ntohs(nPort);
     connectAddr.sin_port = nPortBE;

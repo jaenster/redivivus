@@ -3797,8 +3797,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x58_MarkQuestDone(::SGAMEDATA * pGame, 
       return eStatus;
     }
 
-    uint16_t nQuest = pPacket->nQuestId;
-    if (nQuest < QUEST_ActIntroduced) {
+    int32_t nQuest = pPacket->nQuestId;
+    if (nQuest < (int32_t)QUEST_ActIntroduced) {
       D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
       D2Common::QuestRecord::SetQuestState(pQuestRecord, (eD2Quests)nQuest, QUESTSTATE_BoxGrayed);
       return SERVERSTATUS_OK;

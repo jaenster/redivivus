@@ -1722,7 +1722,7 @@ BOOL __fastcall Skills_SrvDoFunc_082_Redemption(::SGAMEDATA * pGame, D2UnitStrc 
     int* pPassiveCalcIter;
     short int* pPassiveStatIter;
     int nCurGameFrame;
-    short int sPassiveStat;
+    int32_t sPassiveStat;
     eD2Skills eSkill_00 = eSkill;
     pSkillRecord = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillRecord && pSkillRecord->aurastate >= 0 && (int)pSkillRecord->aurastate < sgptDataTable->nTxtStatesSize) {

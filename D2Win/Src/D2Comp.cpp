@@ -369,7 +369,7 @@ void __fastcall D2COMP_PopulateComponentFromCOF(int32_t pCOFData, D2GfxDataStrc 
         nLayerIndex = 0;
         if (*pCOFLayerData > 0) {
           do {
-            if (0xf < nComponentType) {
+            if (0xf < (int32_t)nComponentType) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50e);
               exit(-1);
             }

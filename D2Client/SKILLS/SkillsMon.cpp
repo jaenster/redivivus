@@ -1074,7 +1074,7 @@ void __fastcall SKILLSMON_SetMissilePathRandom(D2UnitStrc * pUnit, int32_t nPara
     D2Common::Seed::InitSeed_Param_666(pSeed, nXSP1 + nParam);
     D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
     *pSeed = sNewSeed;
-    if (!(0x13 < sNewSeed.nSeedLow % 100)) {
+    if (!(0x13 < (int32_t)(sNewSeed.nSeedLow % 100))) {
       return;
     }
 
@@ -1679,7 +1679,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_CurseCenter_StreamRange(D2UnitStrc * pUnit,
       return 0;
     }
 
-    short int nStreamMissile = pSkillTxt->cltmissile[2];
+    int32_t nStreamMissile = pSkillTxt->cltmissile[2];
     if (!(nStreamMissile >= 0 && (int)nStreamMissile < sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }

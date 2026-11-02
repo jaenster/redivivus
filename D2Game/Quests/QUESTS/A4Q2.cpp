@@ -456,7 +456,8 @@ BOOL __fastcall Q27_PlayerCheckCompletionSendState(::SGAMEDATA * pGame, D2UnitSt
     }
 
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q2.cpp", 0x1a4);
-    D2GSPacketSrv0x5D aQuestStatePacket = {0};
+    D2GSPacketSrv0x5D aQuestStatePacket;
+    memset(&aQuestStatePacket, 0, sizeof(aQuestStatePacket));
     aQuestStatePacket.nPacketId = ']';
     aQuestStatePacket.nQuestId = '\x17';
     aQuestStatePacket.nAlertFlags = '\x02';
@@ -470,7 +471,8 @@ BOOL __fastcall Q27_PlayerCheckCompletionSendState(::SGAMEDATA * pGame, D2UnitSt
 void __fastcall Q27_InitPandemoniumAndSendState(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GAME::Level::InitLevel(pGame, pUnit, LEVEL_ThePandemoniumFortress, 0);
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q2.cpp", 0x1b8);
-    D2GSPacketSrv0x5D aQuestStatePacket = {0};
+    D2GSPacketSrv0x5D aQuestStatePacket;
+    memset(&aQuestStatePacket, 0, sizeof(aQuestStatePacket));
     aQuestStatePacket.nPacketId = ']';
     aQuestStatePacket.nQuestId = '\x17';
     aQuestStatePacket.nAlertFlags = '\x01';
@@ -492,7 +494,8 @@ BOOL __fastcall Q27_PlayerEnterGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
     if (bJustCompleted) {
       GAME::Level::InitLevel(pGame, pUnit, LEVEL_ThePandemoniumFortress, 0);
       pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q2.cpp", 0x1b8);
-      D2GSPacketSrv0x5D sPacket5D = {0};
+      D2GSPacketSrv0x5D sPacket5D;
+      memset(&sPacket5D, 0, sizeof(sPacket5D));
       sPacket5D.nPacketId = ']';
       sPacket5D.nQuestId = '\x17';
       sPacket5D.nAlertFlags = '\x01';

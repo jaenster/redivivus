@@ -901,11 +901,11 @@ int __fastcall CalculateGetFlags(::SGAMEDATA * pGame, uint16_t dwCharacterStatus
     }
     uint32_t nTitleProgress = (dwCharacterStatus & 0x1f00) >> 8;
     if (pGame->nDifficulty > 1) {
-      if (dwCharacterStatus & 0x20 && nTitleProgress < 10 || nTitleProgress < 8) {
+      if (dwCharacterStatus & 0x20 && (int32_t)nTitleProgress < 10 || (int32_t)nTitleProgress < 8) {
         return 0xe;
       }
     } else {
-      if (pGame->nDifficulty > 0 && (dwCharacterStatus & 0x20 && nTitleProgress < 5 || nTitleProgress < 4)) {
+      if (pGame->nDifficulty > 0 && (dwCharacterStatus & 0x20 && (int32_t)nTitleProgress < 5 || (int32_t)nTitleProgress < 4)) {
         return 0xd;
       }
     }

@@ -1668,7 +1668,7 @@ void __stdcall SKILLS_GetStateTransformGfx(D2UnitStrc * pUnit, eD2UnitType * pUn
     eD2States eUnitState;
     int nValidatedAnimMode;
     eD2States eTransformState;
-    short int sGfxClass;
+    int32_t sGfxClass;
     if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1)) {
       return;
     }

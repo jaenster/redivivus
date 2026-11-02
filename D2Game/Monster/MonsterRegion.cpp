@@ -71,7 +71,7 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
     D2SeedStrc sRolledSeed;
     uint32_t nMaxMons;
     nMaxMons = (uint32_t)pTxtLevels->NumMon;
-    if (0xd < nMaxMons) {
+    if (0xd < (int32_t)nMaxMons) {
       nMaxMons = 0xd;
     }
 

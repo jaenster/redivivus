@@ -1428,8 +1428,7 @@ int32_t __stdcall NET_SID_CLIENT_Send_0x51_AuthCheck() {
 
 // SID_AUTH_ACCOUNTLOGON (0x53) sender — uppercases username and password, calls SRP_GenerateAccountCredentials to derive x = H(s, H(I:P)) and compute client public key A = g^a mod N (stored in g_srpPublicKey), then sends [A(32), username] to Battle.net. Stores username in g_szStoredUsername for later verification.
 int __fastcall NET_SID_CLIENT_Send_0x53_AuthAccountLogon(char * pUsername, char * pPassword) {
-    char srpClientPublicKeyA[32];
-    char usernameBuffer[256];
+    SID_C2S_AuthAccountLogon packet;
     char passwordUpper[256];
     char usernameUpper[256];
     g_bSIDFlag2 = 0;
@@ -1440,18 +1439,17 @@ int __fastcall NET_SID_CLIENT_Send_0x53_AuthAccountLogon(char * pUsername, char 
     Storm::Source::SSTR::SStrCopy(passwordUpper, pPassword, 0x100);
     Storm::Source::SSTR::SStrUpper(passwordUpper);
     SRP::SRP_GenerateAccountCredentials(&g_pSrpContext, g_srpCredentials.szUsername, usernameUpper, passwordUpper);
-    Storm::Source::SSystem::SMemCopy(srpClientPublicKeyA, g_srpCredentials.aClientPublicKey_A, 0x20);
-    uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(usernameBuffer, pUsername, 0x100);
-    BnSend::NET_SID_CLIENT_Send(0x53, srpClientPublicKeyA, nUsernameLen + 0x21);
+    Storm::Source::SSystem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, 0x20);
+    uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(packet.szUsername, pUsername, 0x100);
+    BnSend::NET_SID_CLIENT_Send(0x53, (char*)&packet, nUsernameLen + 0x21);
     return 1;
 }
 
 int32_t __stdcall NET_SID_CLIENT_Resend_0x53_AuthAccountLogon() {
-    char publicKey[32];
-    char usernameBuffer[256];
-    Storm::Source::SSystem::SMemCopy(publicKey, g_srpCredentials.aClientPublicKey_A, 0x20);
-    uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(usernameBuffer, g_szStoredUsername, 0x100);
-    BnSend::NET_SID_CLIENT_Send(0x53, publicKey, nUsernameLen + 0x21);
+    SID_C2S_AuthAccountLogon packet;
+    Storm::Source::SSystem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, 0x20);
+    uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(packet.szUsername, g_szStoredUsername, 0x100);
+    BnSend::NET_SID_CLIENT_Send(0x53, (char*)&packet, nUsernameLen + 0x21);
     return 1;
 }
 
@@ -1471,25 +1469,22 @@ int32_t __fastcall NET_SID_CLIENT_Send_0x54_AuthAccountLogonProof(void * pSalt, 
 
 // SID_AUTH_ACCOUNTCREATE (0x52) sender — generates a new SRP verifier: uppercases I and P, calls SRP_ClientGenerateVerifier to compute a random 32-byte salt and v = g^H(s, H(I:P)) mod N (the verifier), then sends [s(32), v(32), username] to register the account.
 int __fastcall NET_SID_CLIENT_Send_0x52_AuthAccountCreate(char * pUsername, char * pPassword) {
-    uint32_t salt[8];
-    uint8_t verifier[32];
-    char usernameBuffer[256];
+    SID_C2S_AuthAccountCreate packet;
     char passwordUpper[256];
     char usernameUpper[256];
     Storm::Source::SSTR::SStrCopy(usernameUpper, pUsername, 0x100);
     Storm::Source::SSTR::SStrUpper(usernameUpper);
     Storm::Source::SSTR::SStrCopy(passwordUpper, pPassword, 0x100);
     Storm::Source::SSTR::SStrUpper(passwordUpper);
-    SRP::SRP_ClientGenerateVerifier(&g_pSrpContext, usernameUpper, (uint32_t*)passwordUpper, salt, verifier);
-    uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(usernameBuffer, pUsername, 0x7fffffff);
-    BnSend::NET_SID_CLIENT_Send(0x52, (char*)salt, nUsernameLen + 0x41);
+    SRP::SRP_ClientGenerateVerifier(&g_pSrpContext, usernameUpper, (uint32_t*)passwordUpper, (uint32_t*)&packet, packet.aVerifier);
+    uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(packet.szUsername, pUsername, 0x7fffffff);
+    BnSend::NET_SID_CLIENT_Send(0x52, (char*)&packet, nUsernameLen + 0x41);
     return 1;
 }
 
 // SID_AUTH_ACCOUNTCHANGE (0x55) sender — password change flow. Generates new verifier (v, s) for newPassword stored in g_srpSalt/g_srpVerifier, then computes SRP credentials for oldPassword to prove ownership. Sends [A(32), username] like the logon flow; the verifier data is sent separately in the proof packet.
 int __fastcall NET_SID_CLIENT_Send_0x55_AuthAccountChange(char * pUsername, char * pOldPassword, char * pNewPassword) {
-    char srpClientPublicKeyA[32];
-    char usernameBuffer[256];
+    SID_C2S_AuthAccountLogon packet;
     char oldPasswordUpper[256];
     char newPasswordUpperBuf[256];
     char usernameUpper[256];
@@ -1503,22 +1498,21 @@ int __fastcall NET_SID_CLIENT_Send_0x55_AuthAccountChange(char * pUsername, char
     Storm::Source::SSTR::SStrUpper(newPasswordUpperBuf);
     SRP::SRP_ClientGenerateVerifier(&g_pSrpContext, usernameUpper, (uint32_t*)newPasswordUpperBuf, (uint32_t*)&g_srpSaltVerifier, g_srpSaltVerifier.aVerifier);
     SRP::SRP_GenerateAccountCredentials(&g_pSrpContext, g_srpCredentials.szUsername, usernameUpper, oldPasswordUpper);
-    Storm::Source::SSystem::SMemCopy(srpClientPublicKeyA, g_srpCredentials.aClientPublicKey_A, 0x20);
-    uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(usernameBuffer, pUsername, 0x100);
-    BnSend::NET_SID_CLIENT_Send(0x55, srpClientPublicKeyA, nUsernameLen + 0x21);
+    Storm::Source::SSystem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, 0x20);
+    uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(packet.szUsername, pUsername, 0x100);
+    BnSend::NET_SID_CLIENT_Send(0x55, (char*)&packet, nUsernameLen + 0x21);
     return 0;
 }
 
 int32_t __fastcall NET_SID_CLIENT_Send_0x56_AuthAccountChangeProof(void * pSalt, void * pServerPublicKeyB) {
-    char M1ClientProof[20];
-    uint8_t abNewSrpSalt[64];
     BOOL bKeyExchangeOk = SRP::SRP_ClientKeyExchange(&g_pSrpContext, &g_srpCredentials, pSalt, pServerPublicKeyB);
     Storm::Source::SSystem::SMemZero(g_srpCredentials.szPassword, 0x20);
     if (bKeyExchangeOk) {
-      Storm::Source::SSystem::SMemCopy(M1ClientProof, g_srpCredentials.aClientProof_M1, 0x14);
-      Storm::Source::SSystem::SMemCopy(abNewSrpSalt, &g_srpSaltVerifier, 0x40);
+      SID_C2S_AuthAccountChangeProof packet;
+      Storm::Source::SSystem::SMemCopy(&packet, g_srpCredentials.aClientProof_M1, 0x14);
+      Storm::Source::SSystem::SMemCopy(&packet.sNewSaltVerifier, &g_srpSaltVerifier, 0x40);
       Storm::Source::SSystem::SMemZero(&g_srpSaltVerifier, 0x40);
-      BnSend::NET_SID_CLIENT_Send(0x56, M1ClientProof, 0x54);
+      BnSend::NET_SID_CLIENT_Send(0x56, (char*)&packet, 0x54);
       return 1;
     }
 

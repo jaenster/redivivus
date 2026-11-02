@@ -583,8 +583,8 @@ uint16_t __fastcall CMD_GetKeyForCommand(int32_t nCmdIndex, int32_t nSlot) {
 
 BOOL __fastcall CMD_IsBindableKey(uint16_t nParam) {
     uint32_t nKeyCode = (uint32_t)nParam;
-    if (nKeyCode < 0x105) {
-      if (0xff < nKeyCode) {
+    if ((int32_t)nKeyCode < 0x105) {
+      if (0xff < (int32_t)nKeyCode) {
         return 1;
       }
 

@@ -1224,7 +1224,7 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
       }
 
       nModuleCount = nBytesNeeded >> 2;
-      if (nModuleCount < 0x101) {
+      if ((int32_t)nModuleCount < 0x101) {
         Src::LogManager::LOGMANAGER_TraceToModuleLog("", "\nEnumerate modules...");
         iVar1 = 0;
         if ((int)nModuleCount > 0) {
@@ -1722,7 +1722,7 @@ int __stdcall InitializeSymbolsWithRefcount() {
       int nRefcount;
       bResult = 1;
       nRefcount = gnDbgSymInitRefcount + 1;
-      bNeedsInit = gnDbgSymInitRefcount <= 0;
+      bNeedsInit = (int32_t)gnDbgSymInitRefcount <= 0;
       gnDbgSymInitRefcount = nRefcount;
       if (bNeedsInit) {
         if (szDbgSymbolSearchPath[0] == '\0') {

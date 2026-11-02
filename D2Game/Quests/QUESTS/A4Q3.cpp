@@ -195,7 +195,8 @@ BOOL __fastcall OBJOP_A4Q2_PandemoniumFortressGate(D2ObjectOperateFnArg * pOpera
         if (!nTradeTick) {
           UNIT::SUnit::ClearInteractInfo(pOperation->pAttacker);
           pPlayerData->bCutscenePending = 1;
-          D2GSPacketSrv0x5D aQuestStatePacket = {0};
+          D2GSPacketSrv0x5D aQuestStatePacket;
+          memset(&aQuestStatePacket, 0, sizeof(aQuestStatePacket));
           aQuestStatePacket.nPacketId = ']';
           aQuestStatePacket.nQuestId = '\x17';
           aQuestStatePacket.nAlertFlags = '\x02';

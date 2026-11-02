@@ -517,7 +517,7 @@ void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int
     nSlot = (sSeedNew.nSeedLow & 1) + 2;
     *pSeed = sSeedNew;
     *(uint32_t*)((int)nYOffset + nSplashSlotIndex * 0x18 + 0xc) = nSlot;
-    if (false || 3 < nSlot) {
+    if (false || 3 < (int32_t)nSlot) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ea);
       exit(-1);
     }

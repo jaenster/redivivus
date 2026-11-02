@@ -161,7 +161,8 @@ BOOL __fastcall Q11_SendDarknessPacket(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     sPacket53.nCycleIndex = 5;
     sPacket53.nTicks = 0;
     GAME::SCmd::NET_D2GS_SERVER_Send_0x53_ACTTIMEOFDAY(pClient, &sPacket53);
-    D2GSPacketSrv0x5D sPacket5D = {0};
+    D2GSPacketSrv0x5D sPacket5D;
+    memset(&sPacket5D, 0, sizeof(sPacket5D));
     sPacket5D.nPacketId = ']';
     sPacket5D.nQuestId = '\n';
     sPacket5D.nAlertFlags = '\x10';
@@ -418,7 +419,8 @@ static void __stdcall Q11_OnPlayerInteract(D2QuestDataStrc * pQuestData, D2UnitS
     if (!bTaintedSunStarted) {
       D2ClientStrc* pClient;
       pA2Q3Data->bViperAmuletInitPending = '\x01';
-      D2GSPacketSrv0x5D abyQuestStatePacket = {0};
+      D2GSPacketSrv0x5D abyQuestStatePacket;
+      memset(&abyQuestStatePacket, 0, sizeof(abyQuestStatePacket));
       abyQuestStatePacket.nPacketId = ']';
       abyQuestStatePacket.nQuestId = '\n';
       abyQuestStatePacket.nAlertFlags = '\x01';

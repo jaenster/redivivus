@@ -3425,7 +3425,7 @@ void __stdcall ITEM_RollSocketCount(D2UnitStrc * pUnit, uint32_t nMaxSocksRandom
 
     uint32_t nSocketArea = (nUnit >> 0x18) * (uint32_t)bDim;
     uint32_t nMaxAllowed = 6;
-    if (nSocketArea < 7) {
+    if ((int32_t)nSocketArea < 7) {
       nMaxAllowed = nSocketArea;
     }
     if (!nSocketArea) {
@@ -3452,19 +3452,19 @@ void __stdcall ITEM_RollSocketCount(D2UnitStrc * pUnit, uint32_t nMaxSocksRandom
 
       break;
       case QUALITY_RARE:
-        if (1 < nMaxAllowed) {
+        if (1 < (int32_t)nMaxAllowed) {
           nMaxAllowed = 2;
         }
       break;
       case QUALITY_MAGIC:
-        if (3 < nMaxAllowed) {
+        if (3 < (int32_t)nMaxAllowed) {
           nMaxAllowed = 4;
         }
       break;
       case QUALITY_CRAFTED:
 
       case QUALITY_TAMPERED:
-        if (2 < nMaxAllowed) {
+        if (2 < (int32_t)nMaxAllowed) {
           nMaxAllowed = 3;
         }
     }
@@ -3510,7 +3510,7 @@ void __stdcall ITEM_SetSocketCount(D2UnitStrc * pUnit, uint32_t nSockCount) {
 
     uint32_t nSocketArea = (nUnit >> 0x18) * (uint32_t)bDim;
     uint32_t nMaxAllowed = 6;
-    if (!(6 < nSocketArea || (nMaxAllowed = nSocketArea , nSocketArea != 0))) {
+    if (!(6 < (int32_t)nSocketArea || (nMaxAllowed = nSocketArea , nSocketArea != 0))) {
       return;
     }
 
@@ -4789,7 +4789,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
         if (nStatVal == 1) {
           if (pItemsTxt->nMaxDam) {
             nTmpVal2 = (int)((uint32_t)pItemsTxt->nMaxDam * 3) >> 2;
-            if (nTmpVal2 < 2) {
+            if ((int32_t)nTmpVal2 < 2) {
               nTmpVal2 = 2;
             }
 
@@ -4805,7 +4805,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
           }
           if (pItemsTxt->n2HandMaxDam) {
             nTmpVal2 = (int)((uint32_t)pItemsTxt->n2HandMaxDam * 3) >> 2;
-            if (nTmpVal2 < 2) {
+            if ((int32_t)nTmpVal2 < 2) {
               nTmpVal2 = 2;
             }
 
@@ -4827,7 +4827,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
 
             Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, nClassId, 0);
             nTmpVal2 = (int)((uint32_t)(uint8_t)pItemsTxt->nMaxMisDam * 3) >> 2;
-            if (nTmpVal2 < 2) {
+            if ((int32_t)nTmpVal2 < 2) {
               nTmpVal2 = 2;
             }
 
@@ -7507,7 +7507,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
               }
 
               Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, eStatIdClamped, 9);
-              if (eUnitStat < UNITSTAT_firemaxdam) {
+              if ((int32_t)eUnitStat < (int32_t)UNITSTAT_firemaxdam) {
                 if (eUnitStat != UNITSTAT_firemindam) {
                   if (eUnitStat != UNITSTAT_item_maxdamage_percent) {
                     goto write_generic_stat;
@@ -7566,7 +7566,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
 
                 Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nSaveValue, nBitValue);
               } else {
-                if (UNITSTAT_poison_count < eUnitStat) {
+                if ((int32_t)UNITSTAT_poison_count < (int32_t)eUnitStat) {
                   goto write_generic_stat;
                 }
                 if (eUnitStat == UNITSTAT_poison_count) {

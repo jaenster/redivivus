@@ -383,7 +383,7 @@ void __fastcall MagicResist(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     if (nMagicRes >= 100) {
       bUnknown++;
     }
-    if ((uint32_t)bUnknown >= 2) {
+    if ((int32_t)(uint32_t)bUnknown >= 2) {
       return;
     }
     if (nIndex == 8) {
@@ -393,14 +393,14 @@ void __fastcall MagicResist(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
           bUnknown++;
         }
       }
-      if ((uint32_t)bUnknown < 2) {
+      if ((int32_t)(uint32_t)bUnknown < 2) {
         if (nFireRes < 100) {
           D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_fireresist, nFireRes + 0x28, 0);
           if (nFireRes + 0x28 >= 100) {
             bUnknown++;
           }
         }
-        if ((uint32_t)bUnknown < 2 && nLightRes < 100) {
+        if ((int32_t)(uint32_t)bUnknown < 2 && nLightRes < 100) {
           D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_lightresist, nLightRes + 0x28, 0);
           if (nLightRes + 0x28 >= 100) {
             return;
@@ -435,14 +435,14 @@ void __fastcall MagicResist(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
             bUnknown++;
           }
         }
-        if ((uint32_t)bUnknown < 2) {
+        if ((int32_t)(uint32_t)bUnknown < 2) {
           if (nFireRes < 0x4b) {
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_fireresist, nFireRes + 0x14, 0);
             if (nFireRes + 0x14 >= 100) {
               bUnknown++;
             }
           }
-          if ((uint32_t)bUnknown < 2 && nLightRes < 0x4b) {
+          if ((int32_t)(uint32_t)bUnknown < 2 && nLightRes < 0x4b) {
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_lightresist, nLightRes + 0x14, 0);
             if (nLightRes + 0x14 >= 100) {
               return;

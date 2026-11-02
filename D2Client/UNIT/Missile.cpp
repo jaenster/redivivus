@@ -775,7 +775,7 @@ D2UnitStrc * __fastcall MakeMissile(D2SkillArgStrc * pSkillArg) {
     int32_t nDestX;
     int32_t nDestY;
     int32_t nDestXLocal;
-    short int sTravelSoundId;
+    int32_t sTravelSoundId;
     eMissilesId eMissileId;
     eMissileId = pSkillArg->nMissileTxtNo;
     D2MissilesTxt* pMissileTxt;
@@ -1760,7 +1760,7 @@ void __fastcall MISSILE_CreateSubWithSound(D2UnitStrc * pUnit, D2UnitStrc * pUni
 
     int nOffsetX = 0;
     nLevel = 0;
-    if (1 < nSpawnCountByLevel) {
+    if (1 < (int32_t)nSpawnCountByLevel) {
       uint32_t nRandOffset;
       nRandOffset = Archive::RANDOM_RandomNumberSelector(&pUnit2->sSeed, nSpawnCountByLevel);
       nOffsetX = nRandOffset - nSpawnCountByLevel / 2;

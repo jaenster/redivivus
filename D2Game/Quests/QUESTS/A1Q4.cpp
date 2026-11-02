@@ -547,7 +547,8 @@ static void __stdcall QuestStartDebugNotify(D2QuestDataStrc * pQuestData) {
 // (opcode 0x5d, quest 4) to a single unit's client. Pure network notify, no state change.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
 void __fastcall Q04_SendQuestStatePacket(D2UnitStrc * pUnit) {
-    D2GSPacketSrv0x5D abyPacketBuf = {0};
+    D2GSPacketSrv0x5D abyPacketBuf;
+    memset(&abyPacketBuf, 0, sizeof(abyPacketBuf));
     abyPacketBuf.nPacketId = ']';
     abyPacketBuf.nQuestId = '\x04';
     abyPacketBuf.nAlertFlags = '\x01';

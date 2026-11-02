@@ -910,8 +910,8 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
               nOutItemLevel = (int)uSourceFileIndex / 100 * nItemLevelClamped;
             }
           } else {
-            if (nItemLevelClamped >= 0x10001) {
-              if ((nItemLevelClamped & -16) < 0x640) {
+            if ((int32_t)nItemLevelClamped >= 0x10001) {
+              if ((int32_t)(nItemLevelClamped & -16) < 0x640) {
                 nMulDivResult = (int64_t)(int)uSourceFileIndex * (int64_t)(int)nItemLevelClamped / 100;
                 nOutItemLevel = (uint32_t)nMulDivResult;
                 pOutputEntry = pOutput;
@@ -936,8 +936,8 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
               nAffixIdx = (int)nItemLevelClamped / 100 * uVar3;
             }
           } else {
-            if (uVar3 >= 0x10001) {
-              if ((uVar3 & -16) < 0x640) {
+            if ((int32_t)uVar3 >= 0x10001) {
+              if ((int32_t)(uVar3 & -16) < 0x640) {
                 nMulDivResult = (int64_t)(int)nItemLevelClamped * (int64_t)(int)uVar3 / 100;
                 nAffixIdx = (int)nMulDivResult;
               } else {
@@ -1236,7 +1236,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           case 4:
 
           case 9:
-            if (uSourceFileIndex < 4) {
+            if ((int32_t)uSourceFileIndex < 4) {
               break;
             }
           uSourceFileIndex = 3;
@@ -1250,7 +1250,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           case 7:
 
           case 8:
-            if (1 < uSourceFileIndex) {
+            if (1 < (int32_t)uSourceFileIndex) {
               uSourceFileIndex = 1;
               D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pDVar2, ITEMFLAG_SOCKETED, 1);
               D2Common::ITEMS::Items::ITEM_RollSocketCount(pDVar2, uSourceFileIndex);

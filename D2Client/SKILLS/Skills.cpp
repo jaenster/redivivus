@@ -265,6 +265,7 @@ D2UnitStrc * __fastcall CastAttackWithDistanceCheck(D2UnitStrc * pUnit, eMissile
 BOOL __fastcall SKILLS_CltCheckThrowableAmmo(D2UnitStrc * pUnit) {
     int32_t nQuantity;
     BOOL nMagicArrowStat;
+    BOOL bAmmoMustBeWeapon;
     char* szName;
     /* Attack / Left Hand Swing / Power Strike / Impale /  */ if (!pUnit) {
       return 0;

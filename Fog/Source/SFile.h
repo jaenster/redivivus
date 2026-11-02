@@ -38,7 +38,7 @@ struct D2SFileSignatureKeyStrc {
 namespace Fog::Source::SFile {
 
 // Function declarations
-void __fastcall SFILE_InitializeFileSystem(BOOL bResult, uint32_t bSeekOptimization);
+void __fastcall SFILE_InitializeFileSystem(BOOL bResult, BOOL bSeekOptimization);
 int32_t __fastcall ARCHIVE_OpenD2FileWrap(char * szFilename, struct D2MPQFileStrc * * ppFile);
 void __fastcall ERRORMANAGER_FCloseFile(struct D2MPQFileStrc * pMPQFile);
 // NOTE: Register params: pFileHandle (ECX): D2MPQFileStrc *, pOutputBuffer (EDX): void *

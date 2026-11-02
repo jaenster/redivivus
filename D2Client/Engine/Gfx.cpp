@@ -1675,7 +1675,7 @@ void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFl
     D2MonStats2Txt* pSavedMonStatsEx = pMonStatsEx;
     int32_t nSavedFlags = nFlags;
     int32_t nSavedClassId = nMonsterClassId;
-    if (gnMonsterModePrecacheCount <= 0) {
+    if ((int32_t)gnMonsterModePrecacheCount <= 0) {
       return;
     }
 
@@ -3272,7 +3272,7 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
     draw_shadow:
     pGfxInfoUnk = GFX_IsUnitOnScreen(pUnit, nCoordTmp, nResult, 0, 1);
     if (pGfxInfoUnk) {
-      uint8_t byLayerComponent;
+      int32_t byLayerComponent;
       eUnitTypeGfx = UNIT_COUNT;
       if (pUnit) {
         eUnitTypeGfx = pUnit->eUnitType;

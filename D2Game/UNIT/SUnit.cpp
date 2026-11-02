@@ -1270,7 +1270,7 @@ void __fastcall SetAlignment(D2UnitStrc * pUnit, uint8_t nAlignment, int32_t nOl
     if (!pUnit) {
       return;
     }
-    if (2 < nValue_00) {
+    if (2 < (int32_t)nValue_00) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xbb2);
       exit(-1);
     }

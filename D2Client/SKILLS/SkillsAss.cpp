@@ -437,7 +437,7 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_StreamMissile(D2UnitStrc * pUnit,
       return 0;
     }
 
-    short int sCltMissileA = pSkillTxt->cltmissile[1];
+    int32_t sCltMissileA = pSkillTxt->cltmissile[1];
     if (!(sCltMissileA >= 0 && pSkillTxt->cltmissile[2] >= 0)) {
       return 0;
     }

@@ -837,18 +837,18 @@ void __stdcall ITEM_RollSocketCount(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2I
     nDifficulty = (int)pGame->nDifficulty;
     if (nDifficulty) {
       if (nDifficulty != 1) {
-        if (nDifficulty == 2 && 5 < nMaxSockCount) {
+        if (nDifficulty == 2 && 5 < (int32_t)nMaxSockCount) {
           nMaxSockCount = 6;
           goto roll_sockets;
         }
       } else {
-        if (3 < nMaxSockCount) {
+        if (3 < (int32_t)nMaxSockCount) {
           nMaxSockCount = 4;
           goto roll_sockets;
         }
       }
     } else {
-      if (2 < nMaxSockCount) {
+      if (2 < (int32_t)nMaxSockCount) {
         nMaxSockCount = 3;
         goto roll_sockets;
       }
@@ -883,12 +883,12 @@ void __stdcall ITEM_RollSocketCount(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2I
       D2Common::ITEMS::Items::ITEM_RollSocketCount(pUnit, nModSeed % nMaxSockCount + 1);
       return;
     }
-    if (3 < nMaxSockCount) {
+    if (3 < (int32_t)nMaxSockCount) {
       nMaxSockCount = 3;
     }
 
     uint32_t bIsHelm = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Helm);
-    if (bIsHelm && 2 < nMaxSockCount) {
+    if (bIsHelm && 2 < (int32_t)nMaxSockCount) {
       nMaxSockCount = 2;
     }
 
