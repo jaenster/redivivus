@@ -2907,7 +2907,7 @@ static int __stdcall SKILLDESC_FormatStringWithCalc(uint32_t dwSkillCalcCtx, uin
     return 1;
 }
 
-static void __stdcall SKILLDESC_FormatSignedValue(int32_t nSignedValue, uint16_t nStatLabelId, int32_t nValue, uint16_t * wszText) {
+static BOOL __stdcall SKILLDESC_FormatSignedValue(int32_t nSignedValue, uint16_t nStatLabelId, int32_t nValue, uint16_t * wszText) {
     uint16_t wszNumBuf[32];
     char szBuf[32];
     for (int iFill = 0; iFill < 32; iFill++) {
@@ -2915,7 +2915,7 @@ static void __stdcall SKILLDESC_FormatSignedValue(int32_t nSignedValue, uint16_t
     }
 
     if (!nSignedValue) {
-      return;
+      return 0;
     }
     if (!nValue || nSignedValue < 0) {
       /* LPCSTR param_2 for wsprintfA */ wsprintfA(szBuf, "%d", nSignedValue);
@@ -2929,6 +2929,7 @@ static void __stdcall SKILLDESC_FormatSignedValue(int32_t nSignedValue, uint16_t
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszNumBuf);
     pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
+    return 1;
 }
 
 static void __stdcall SKILLDESC_FormatDecimalWithStrings(uint16_t nPrefixLabelId, uint16_t nSuffixLabelId, int32_t nDivisor, uint32_t nRawValue, uint16_t * wszText, int32_t bPrefixSign) {
@@ -3167,7 +3168,7 @@ static int __stdcall SKILLDESC_FormatDamageMinMax(int32_t nMinDmg, int32_t nMaxD
     char szMinMaxA[32];
     if (nMinDmg == nMaxDmg) {
       int32_t nResult;
-      SKILLDESC_FormatSignedValue(nMinDmg, nLabelId, bPrefixSign, wszText);
+      nResult = SKILLDESC_FormatSignedValue(nMinDmg, nLabelId, bPrefixSign, wszText);
       return nResult;
     }
 
@@ -6645,8 +6646,7 @@ static BOOL __stdcall SKILLDESC_DescLine30_DamageMinMax(D2UnitStrc * pUnit, uint
     return 1;
 }
 
-BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOutput, D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nDescLineIndex, char cCharClass) {
-    char _cCharClass;
+BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOutput, D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nDescLineIndex, int cCharClass) {
     uint8_t bVar1;
     D2MissilesTxt* pMissileTxt;
     D2DifficultyLevelsTxt* pDifficultyTxt;
@@ -6826,7 +6826,7 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
       D2Lang::Unicode::UNISYS::AppendToBuffer(pwszOutput, wszMidBuf);
       pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszMidBuf, pWszLocale);
-      ui::AppendAsWideChar(wszMidBuf, _cCharClass);
+      ui::AppendAsWideChar(wszMidBuf, cCharClass);
       D2Lang::Unicode::UNISYS::AppendToBuffer(pwszOutput, wszMidBuf);
       return 1;
       case 0x13:
@@ -7242,7 +7242,7 @@ void __fastcall SKILLDESC_BuildSkillTooltip(D2UnitStrc * pUnit, eD2Skills eSkill
     int bAnyDescLine = 0;
     nIter = 0x10;
     do {
-      nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nNextSkillLevel, nCalcIndex, nIter, '\0');
+      nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nNextSkillLevel, nCalcIndex, nIter, 0);
       if (nLineResult) {
         bAnyDescLine = 1;
       }
@@ -7258,7 +7258,7 @@ void __fastcall SKILLDESC_BuildSkillTooltip(D2UnitStrc * pUnit, eD2Skills eSkill
       bSectionHasDescLine = false;
       nIter = 0;
       do {
-        nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nNextSkillLevel, nCalcIndex, nIter, '\0');
+        nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nNextSkillLevel, nCalcIndex, nIter, 0);
         if (nLineResult) {
           bSectionHasDescLine = true;
         }
@@ -7285,7 +7285,7 @@ void __fastcall SKILLDESC_BuildSkillTooltip(D2UnitStrc * pUnit, eD2Skills eSkill
     if (nSkillLevel > 0) {
       bSectionHasDescLine = false;
       do {
-        nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nSkillLevel, nCalcIndex, nIter, '\0');
+        nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nSkillLevel, nCalcIndex, nIter, 0);
         if (nLineResult) {
           bSectionHasDescLine = true;
         }
@@ -7314,7 +7314,7 @@ void __fastcall SKILLDESC_BuildSkillTooltip(D2UnitStrc * pUnit, eD2Skills eSkill
     bSectionHasDescLine = false;
     nIter = 6;
     do {
-      nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nNextSkillLevel, nCalcIndex, nIter, '\0');
+      nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nNextSkillLevel, nCalcIndex, nIter, 0);
       if (nLineResult) {
         bSectionHasDescLine = true;
       }
@@ -7437,7 +7437,7 @@ void __fastcall SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck(D2UnitStrc * pUnit, 
     bAnyDescLine = 0;
     nIter = 0x10;
     do {
-      nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nSkillLevel + 1, nCalcIndex, nIter, '\x01');
+      nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nSkillLevel + 1, nCalcIndex, nIter, 1);
       if (nLineResult) {
         bAnyDescLine = 1;
       }
@@ -7459,7 +7459,7 @@ void __fastcall SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck(D2UnitStrc * pUnit, 
         nClampedLevel = 1;
       }
 
-      nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nClampedLevel, nCalcIndex, nIter, '\x01');
+      nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nClampedLevel, nCalcIndex, nIter, 1);
       if (nLineResult) {
         bSectionHasDescLine = true;
       }
@@ -7498,7 +7498,7 @@ void __fastcall SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck(D2UnitStrc * pUnit, 
         nClampedLevel = 1;
       }
 
-      nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nClampedLevel, nCalcIndex, nIter, '\x01');
+      nLineResult = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxt, eSkill, nClampedLevel, nCalcIndex, nIter, 1);
       if (nLineResult) {
         bSectionHasDescLine = true;
       }
@@ -7630,7 +7630,7 @@ void __fastcall SKILLDESC_BuildSkillShortTooltip(D2UnitStrc * pUnit, eD2Skills e
     int bAnyDescLine = 0;
     do {
       BOOL BVar1;
-      BVar1 = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxtBase + eSkill, eSkillLocal, nSkillLevel, nCalcIndex, nDescLineIdx, (char)nParam1);
+      BVar1 = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxtBase + eSkill, eSkillLocal, nSkillLevel, nCalcIndex, nDescLineIdx, nParam1);
       if (BVar1) {
         bAnyDescLine = 1;
       }

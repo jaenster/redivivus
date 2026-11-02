@@ -243,7 +243,7 @@ void __stdcall UIMENU_JoinGame();
 // Opens the Battle.net CREATE GAME dialog (title string 0x141e): if isServerDown() returns -1 shows "Server Down" (0x1413) instead; if an MCP join is in progress runs UIMENU_WaitInLine instead. Otherwise creates the dialog forms (game name edit box, max players when HasPeerName(), level restriction, difficulty) and loads LVL_REST and MAX_PLAYER via OOGUTIL_LoadLevelRestrictionSetting and OOGUTIL_LoadMaxPlayersSetting.
 // Provenance: asm 00445ff0; called from CHATDLG_DestroyFormsAndOpenCreateGameDialog, the OnPress of the lobby CREATE button (gaPredefinedForms_b[6], string 0x14c0).
 void __stdcall OOGUTIL_OpenCreateGameDialog();
-void OOGUTIL_Unused12(uint32_t * pnParam, char cParam);
+char * OOGUTIL_Unused12(uint32_t * pnParam, int cParam);
 // Returns the account part of a Battle.net user string "Character*Account": the text after '*', or szUserName itself when there is no '*' or nothing follows it.
 // Provenance: SStrChr(szUserName,'*') at 00446820; OOGUTIL_SendChatMessage whispers "/whisper *%s" with its result (00442905).
 char * __fastcall OOGUTIL_GetAccountName(char * szUserName);

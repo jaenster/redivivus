@@ -3601,9 +3601,9 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
     OOGUTIL_OnPressLevelRestrictionCheckbox(nullptr);
 }
 
-void OOGUTIL_Unused12(uint32_t * pnParam, char cParam) {
-    char _cParam;
-    strchr((char*)pnParam, _cParam);
+char * OOGUTIL_Unused12(uint32_t * pnParam, int cParam) {
+    char* pcVar1 = strchr((char*)pnParam, cParam);
+    return pcVar1;
 }
 
 // Returns the account part of a Battle.net user string "Character*Account": the text after '*', or szUserName itself when there is no '*' or nothing follows it.
