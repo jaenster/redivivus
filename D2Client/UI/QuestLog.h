@@ -124,6 +124,7 @@ void __stdcall GameOverWtf();
 // Draws quest log UI. Uses gQuestIconsPerActTable to map act to quest icon ranges, draws quest list with completion status, highlights selected quest. Main rendering loop for quest UI panel.
 void __stdcall DRAW_UI_Quest();
 // QuestLog.cpp - Main mouse down handler for quest screen: act tabs, quest icons, buttons
+// QUESTLOG_HitTestCloseButton returns a bool; only AL is tested after the call (004a3f9d).
 void __stdcall QUESTLOG_OnMouseDown(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall QUESTLOG_ToggleQuestScreen(DWORD bAdjustMouse);
 void __fastcall NET_D2GS_CLIENT_Incoming0x52_QUESTSTATUS(char * pBytes);

@@ -629,13 +629,12 @@ void __stdcall QUESTLOG_FreeQuestImages_Thunk() {
     ::D2Client::UI::QuestLog::FreeQuestImages();
 }
 
-static int32_t QUESTLOG_HitTestCloseButton(int32_t nPanelY, int32_t nPanelX) {
-    uint32_t dwHitResult = (uint32_t)(nPanelX - 0xe6U >> 8) & 0xffffffu;
-    if (nPanelX - 0xe6U <= 0x1d && nPanelY >= 0x187 && nPanelY <= 0x1a7) {
-      return (uint32_t)((uint32_t)((uint32_t)dwHitResult & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+static bool QUESTLOG_HitTestCloseButton(int32_t nPanelY, int32_t nPanelX) {
+    if (nPanelX >= 0xe6 && nPanelX <= 0x103 && nPanelY >= 0x187 && nPanelY <= 0x1a7) {
+      return true;
     }
 
-    return (uint32_t)dwHitResult << 8;
+    return false;
 }
 
 static int32_t QUESTLOG_HitTestQuestIcon(int32_t nX, int32_t nY) {
@@ -1765,13 +1764,15 @@ void __stdcall DRAW_UI_Quest() {
 }
 
 // QuestLog.cpp - Main mouse down handler for quest screen: act tabs, quest icons, buttons
+// QUESTLOG_HitTestCloseButton returns a bool; only AL is tested after the call (004a3f9d).
 void __stdcall QUESTLOG_OnMouseDown(D2UIMouseMsgStrc * pMsg) {
     int nClickThresholdY;
+    BOOL bIsExpansion;
     int nQuestCountCopy;
     int32_t bHitButton;
     uint8_t* pQuestEntry;
-    uint32_t uVar1;
-    uVar1 = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t uVar2;
+    uVar2 = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
     int32_t nMouseYRaw;
     nMouseYRaw = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
     uint8_t bItemDescDirty;
@@ -1779,7 +1780,7 @@ void __stdcall QUESTLOG_OnMouseDown(D2UIMouseMsgStrc * pMsg) {
     if (bItemDescDirty != '\0') {
       return;
     }
-    if ((int)uVar1 > ScreenSizeX / 2) {
+    if ((int)uVar2 > ScreenSizeX / 2) {
       return;
     }
 
@@ -1795,11 +1796,11 @@ void __stdcall QUESTLOG_OnMouseDown(D2UIMouseMsgStrc * pMsg) {
     }
 
     uint32_t nPanelRelX;
-    nPanelRelX = uVar1 - gnPanelOffsetX;
+    nPanelRelX = uVar2 - gnPanelOffsetX;
     uint32_t nPanelRelY;
     nPanelRelY = nMouseYRaw + gnPanelOffsetY;
     if (gQuestLog.bQuestLogButtonDown == '\0') {
-      BOOL bIsExpansion;
+      bool bVar1;
       bHitButton = QUESTLOG_HitTestActTab(nPanelRelY, nPanelRelX);
       if (bHitButton != -1) {
         if (bHitButton < 5 && bHitButton != gQuestLog.nQuestLogActiveAct_b && ((bIsExpansion = Fog::D2CheckExpansionGame() , bIsExpansion && (bIsExpansion = GAME::Game::CLIENT_CheckExpansion() , bIsExpansion != 0)) || bHitButton != 4)) {
@@ -1809,14 +1810,14 @@ void __stdcall QUESTLOG_OnMouseDown(D2UIMouseMsgStrc * pMsg) {
           QUESTLOG_ResetState();
         }
       } else {
-        uVar1 = QUESTLOG_HitTestQuestIcon(nPanelRelY, nPanelRelX);
-        if (uVar1 == -1 || (int)uVar1 >= gQuestLog.nQuestLogQuestCount) {
+        uVar2 = QUESTLOG_HitTestQuestIcon(nPanelRelY, nPanelRelX);
+        if (uVar2 == -1 || (int)uVar2 >= gQuestLog.nQuestLogQuestCount) {
           bHitButton = QUESTLOG_HitTestOpenButton(nPanelRelY, nPanelRelX);
           if ((char)bHitButton != '\0') {
             gQuestLog.bQuestLogOpenBtnPressed = 1;
           } else {
-            bHitButton = QUESTLOG_HitTestCloseButton(nPanelRelY, nPanelRelX);
-            if ((char)bHitButton == '\0') {
+            bVar1 = QUESTLOG_HitTestCloseButton(nPanelRelY, nPanelRelX);
+            if (!bVar1) {
               goto consume_click;
             }
 
@@ -1830,9 +1831,9 @@ void __stdcall QUESTLOG_OnMouseDown(D2UIMouseMsgStrc * pMsg) {
             pQuestEntry = &gQuestLog.aQuestLogEntries[0].bHasDescription;
             nQuestCountCopy = gQuestLog.nQuestLogQuestCount;
             do {
-              if (uVar1 == pQuestEntry[-3] && *pQuestEntry != '\0') {
+              if (uVar2 == pQuestEntry[-3] && *pQuestEntry != '\0') {
                 gQuestLog.bQuestLogIconPressed = 1;
-                gQuestLog.nQuestLogSelectedIcon = uVar1;
+                gQuestLog.nQuestLogSelectedIcon = uVar2;
                 Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
                 nQuestCountCopy = gQuestLog.nQuestLogQuestCount;
               }
