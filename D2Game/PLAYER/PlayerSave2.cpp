@@ -852,6 +852,7 @@ int __fastcall MakeSaveFile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * p
 }
 
 // Computes the character-title/flag index (0–0x1a) used when saving or loading a character's title progress. Checks expansion/classic match between the character status bits and the game's bExpansion flag (returns 8 or 9 on mismatch). On BattleNet servers, validates file-time freshness and game type (returns 0x19/0x1a). Then checks hardcore arena flag and character status bit 2 to return the hardcore-normal title codes (0xb/0xc/10). Finally maps difficulty + title-progress bits to the levelled codes (0xd/0xe), returning 0 when fully progressed.
+// The file-time check calls BattleNetServerService->fpGetDatabaseFileTime with ECX = &ftDatabase (00569dcd), a __fastcall out-parameter, then compares it with the client's stored time.
 int __fastcall CalculateGetFlags(::SGAMEDATA * pGame, uint16_t dwCharacterStatus, D2ClientStrc * pClient) {
     eD2ArenaFlags eArenaFlags;
     FILETIME ftDatabase;
@@ -866,7 +867,7 @@ int __fastcall CalculateGetFlags(::SGAMEDATA * pGame, uint16_t dwCharacterStatus
     }
     if (IsBattleNetServer) {
       LONG nFiletimeCmpResult;
-      BattleNetServerService->fpGetDatabaseFileTime();
+      BattleNetServerService->fpGetDatabaseFileTime(&ftDatabase);
       if (dwCharacterStatus & 0x40) {
         /* FILETIME * lpFileTime2 for CompareFileTime */ /* FILETIME * lpFileTime1 for CompareFileTime */ nFiletimeCmpResult = CompareFileTime(&pClient->ftFileTime, &ftDatabase);
         if (nFiletimeCmpResult > 0) {

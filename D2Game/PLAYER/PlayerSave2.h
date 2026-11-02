@@ -52,6 +52,7 @@ BOOL __fastcall SaveGolemItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, c
 // Explicit GuardStack(0) tail on success, GuardStack(nItemsSpaceAvail) on failure - an int error code propagated from whichever Save* sub-step failed.
 int __fastcall MakeSaveFile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * pSaveBuffer, int * nStartOffset, int32_t nBufferSize, int32_t bUnk1, int32_t bUnk2);
 // Computes the character-title/flag index (0–0x1a) used when saving or loading a character's title progress. Checks expansion/classic match between the character status bits and the game's bExpansion flag (returns 8 or 9 on mismatch). On BattleNet servers, validates file-time freshness and game type (returns 0x19/0x1a). Then checks hardcore arena flag and character status bit 2 to return the hardcore-normal title codes (0xb/0xc/10). Finally maps difficulty + title-progress bits to the levelled codes (0xd/0xe), returning 0 when fully progressed.
+// The file-time check calls BattleNetServerService->fpGetDatabaseFileTime with ECX = &ftDatabase (00569dcd), a __fastcall out-parameter, then compares it with the client's stored time.
 int __fastcall CalculateGetFlags(::SGAMEDATA * pGame, uint16_t dwCharacterStatus, struct D2ClientStrc * pClient);
 void __fastcall SetHotkey(struct D2SaveHotKeyStrc * pSaveHotKey, uint32_t * pnSkillId, uint32_t * pnHand, uint32_t * nItemIndex);
 void __fastcall PLAYERSAVE_LinkPlayerToUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient);

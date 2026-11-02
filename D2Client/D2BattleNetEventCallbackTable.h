@@ -29,7 +29,7 @@ typedef void (__fastcall *fnGetDatabaseCharacter)(struct D2ClientStrc * nClient,
 #endif
 #ifndef RECON_FPTD_fnGetDatabaseFileTime
 #define RECON_FPTD_fnGetDatabaseFileTime
-typedef void (*fnGetDatabaseFileTime)();
+typedef void (__fastcall *fnGetDatabaseFileTime)(FILETIME * pFileTime);
 #endif
 #ifndef RECON_FPTD_fnLeaveGame
 #define RECON_FPTD_fnLeaveGame
@@ -91,7 +91,7 @@ struct D2BattleNetEventCallbackTable {
     /* 0x48 */ uint8_t * fpReserved5; // slot 18, offset 0x48 - never referenced in Game.exe
     /* 0x4C */ uint8_t * fpReserved6; // slot 19, offset 0x4C - never referenced in Game.exe
     /* 0x50 */ uint8_t * fpReserved7; // slot 20, offset 0x50 - never referenced in Game.exe
-    /* 0x54 */ void (*fpGetDatabaseFileTime)(); // slot 21, offset 0x54 - called in CalculateGetFlags when IsBattleNetServer, retrieves FILETIME for character timestamp comparison
+    /* 0x54 */ void (__fastcall *fpGetDatabaseFileTime)(FILETIME *); // slot 21, offset 0x54 - called in CalculateGetFlags when IsBattleNetServer, retrieves FILETIME for character timestamp comparison
     /* 0x58 */ uint8_t * fpReserved8; // slot 22, offset 0x58 - never referenced in Game.exe
     /* 0x5C */ uint8_t * fpReserved9; // slot 23, offset 0x5C - never referenced in Game.exe
     /* 0x60 */ uint8_t * fpReserved10; // slot 24, offset 0x60 - never referenced in Game.exe
