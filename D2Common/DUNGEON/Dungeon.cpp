@@ -1030,7 +1030,7 @@ static int DRLGROOM_SortClientList(D2RoomStrc * pRoom) {
 
 // Adds nClientId to the room's pClients array. Grows the array by 4 slots via ReAllocServerMemory when at capacity (nClientsMax). Appends the client ID, increments nClientsCount, then re-sorts the client list. Validates the room and client ID are non-null/non-zero before proceeding; halts on assertion failure. Called when a client enters a room's visibility range.
 // @sourcefile .\DUNGEON\Dungeon.cpp
-void __stdcall DRLGROOM_AddClientToRoom(D2RoomStrc * pRoom, int32_t nClientId) {
+void __stdcall DRLGROOM_AddClientToRoom(D2RoomStrc * pRoom, D2ClientStrc * nClientId) {
     BOOL bValidated;
     D2ClientStrc** pNewClients;
     uint32_t nClientsMaxSnapshot;
@@ -1057,7 +1057,7 @@ void __stdcall DRLGROOM_AddClientToRoom(D2RoomStrc * pRoom, int32_t nClientId) {
           pRoom->pClients = pNewClients;
         }
 
-        pRoom->pClients[pRoom->nClientsCount] = (D2ClientStrc*)nClientId;
+        pRoom->pClients[pRoom->nClientsCount] = nClientId;
         pRoom->nClientsCount++;
         DRLGROOM_SortClientList(pRoom);
         return;
@@ -1066,7 +1066,7 @@ void __stdcall DRLGROOM_AddClientToRoom(D2RoomStrc * pRoom, int32_t nClientId) {
 }
 
 // Removes nClientId from the room's pClients array by linear search. Fills the vacated slot with the last element, decrements nClientsCount, then re-sorts the client list. Halts if the room pointer is null, the client ID is zero, the client is not found (assertion 0x490), or validation fails. Each halt pushes its __LINE__ and enters the shared tail DRLGROOM_RemoveClientFromRoom_HaltTail.
-void __stdcall DRLGROOM_RemoveClientFromRoom(D2RoomStrc * pRoom, int32_t nClientId) {
+void __stdcall DRLGROOM_RemoveClientFromRoom(D2RoomStrc * pRoom, D2ClientStrc * nClientId) {
     D2ClientStrc** pClientSearch;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x487);
@@ -1086,7 +1086,7 @@ void __stdcall DRLGROOM_RemoveClientFromRoom(D2RoomStrc * pRoom, int32_t nClient
     if (uVar1 > 0) {
       pClientSearch = pRoom->pClients;
       do {
-        if (*pClientSearch == (D2ClientStrc*)nClientId) {
+        if (*pClientSearch == nClientId) {
           break;
         }
 

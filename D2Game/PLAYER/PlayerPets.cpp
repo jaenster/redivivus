@@ -351,10 +351,10 @@ void __fastcall SummonAndAssign(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2PetAr
     GAME::SCmd::NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(pClient, '\x01', byIndexId2, dwPetGUID, nMercFlags, wMinionClassId2, uVar2, uVar1);
 }
 
-void __fastcall PETS_UpdatePetData(D2UnitStrc * pUnit, int32_t nParam, int32_t nTargetPetGUID, D2PetDataStrc * pNewPetData) {
+void __fastcall PETS_UpdatePetData(D2UnitStrc * pUnit, ePetType nPetType, int32_t nTargetPetGUID, D2PetDataStrc * pNewPetData) {
     D2PetStrc* pPet;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    D2PetListStrc* pDVar1 = pPlayerData->pPets && nParam >= 0 && nParam < sgptDataTable->nTxtPetTypeSize ? pPlayerData->pPets->pPetList + nParam : nullptr;
+    D2PetListStrc* pDVar1 = pPlayerData->pPets && (int)nPetType >= 0 && (int)nPetType < sgptDataTable->nTxtPetTypeSize ? pPlayerData->pPets->pPetList + nPetType : nullptr;
     if (!pDVar1) {
       return;
     }

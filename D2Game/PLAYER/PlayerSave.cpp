@@ -2212,7 +2212,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint32_t *
           sPetData.nSeed = *(int*)((int)puVar2 + 6);
           sPetData.nNameId = (int)*(uint16_t*)((int)puVar2 + 10);
           sPetData.nType = (int)(uint16_t)puVar2[3];
-          PlayerPets::PETS_UpdatePetData(pUnit, 7, pMercUnit->nUnitGUID, &sPetData);
+          PlayerPets::PETS_UpdatePetData(pUnit, PETTYPE_hireable, pMercUnit->nUnitGUID, &sPetData);
           D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
           nErrorLine = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
           dwStatValue = *(uint32_t*)((int)puVar2 + 0xe);

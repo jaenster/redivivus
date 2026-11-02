@@ -520,7 +520,7 @@ static int32_t __stdcall MONUMOD_RollRandomModifier(D2UnitStrc * pUnit, uint8_t 
 
 // Rolls and assigns unique-modifier (UMod) enchantments to a newly spawned monster. If bResult is set, first rolls against the champion threshold (MonUMod.txt constants row 0) to potentially make the monster a champion instead; if champion, calls MONSTER_SelectChampionMod and returns. Otherwise rolls 1+difficulty extra UMod slots, calls MONUMOD_RollRandomModifier up to that count (avoiding already-assigned mods via a local dedup table), and appends each selected UMod ID to pUnitDataMonster->MonUModList. Guards against stack overflow via security cookie.
 // [override: patch]
-void __thiscall MONSTER_RollAndAssignUMods(void * pThis, ::SGAMEDATA * pGame, BOOL bResult) {
+void __thiscall MONSTER_RollAndAssignUMods(D2UnitStrc * pThis, ::SGAMEDATA * pGame, BOOL bResult) {
     int32_t nActiveUMods;
     uint32_t nRoll;
     int nSlotIdx;
@@ -532,13 +532,13 @@ void __thiscall MONSTER_RollAndAssignUMods(void * pThis, ::SGAMEDATA * pGame, BO
     uint8_t aUsedUmodTable[256];
     uint16_t* pMonType;
     uint8_t* pUModWritePtr;
-    if (pGame && pGame->nDifficulty < 3 && pThis && *(int*)pThis == 1 && *(int*)((int)pThis + 0x14)) {
+    if (pGame && pGame->nDifficulty < 3 && pThis && pThis->eUnitType == UNIT_MONSTER && pThis->pUnitData.pUnitDataMonster) {
       D2SeedStrc* pSeed;
-      pUModList = (uint8_t*)(*(int*)((int)pThis + 0x14) + 0x1c);
+      pUModList = pThis->pUnitData.pUnitDataMonster->MonUModList;
       if (pUModList) {
         nActiveUMods = CountActiveUMods(pUModList);
         if (nActiveUMods < 8) {
-          pSeed = (D2SeedStrc*)((int)pThis + 0x20);
+          pSeed = &pThis->sSeed;
           if (pSeed != (D2SeedStrc*)0) {
             if (bResult != 0) {
               nConstantsThreshold = 0;
@@ -548,13 +548,13 @@ void __thiscall MONSTER_RollAndAssignUMods(void * pThis, ::SGAMEDATA * pGame, BO
 
               nRoll = D2Client::Archive::UNIT_GetModuloFromSeed(pSeed, 100);
               if ((int)nRoll < nConstantsThreshold) {
-                if (*(int*)pThis == 1 && *(int*)((int)pThis + 0x14)) {
-                  pMonType = (uint16_t*)(*(int*)((int)pThis + 0x14) + 0x16);
+                if (pThis->eUnitType == UNIT_MONSTER && pThis->pUnitData.pUnitDataMonster) {
+                  pMonType = &pThis->pUnitData.pUnitDataMonster->eMonsterType;
                   *pMonType |= 4;
                 }
 
-                nActiveUMods = MONSTER_SelectChampionMod((D2UnitStrc*)pThis, pGame);
-                MONSTER_AddEnchantmentToList((uint8_t)nActiveUMods, (D2UnitStrc*)pThis);
+                nActiveUMods = MONSTER_SelectChampionMod(pThis, pGame);
+                MONSTER_AddEnchantmentToList((uint8_t)nActiveUMods, pThis);
                 return;
               }
             }
@@ -581,7 +581,7 @@ void __thiscall MONSTER_RollAndAssignUMods(void * pThis, ::SGAMEDATA * pGame, BO
                 break;
               }
 
-              nActiveUMods = MONUMOD_RollRandomModifier((D2UnitStrc*)pThis, aUsedUmodTable, pGame);
+              nActiveUMods = MONUMOD_RollRandomModifier(pThis, aUsedUmodTable, pGame);
               if (!nActiveUMods) {
                 break;
               }

@@ -1501,7 +1501,7 @@ D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Merc
     sPetData.nNameId = (int)sMercSave.wNameIndex;
     sPetData.nType = (int)sMercSave.wHirelingId;
     sPetData.nSeed = sMercSave.dwSeed;
-    PlayerPets::PETS_UpdatePetData(pUnit, 7, pMerc->nUnitGUID, &sPetData);
+    PlayerPets::PETS_UpdatePetData(pUnit, PETTYPE_hireable, pMerc->nUnitGUID, &sPetData);
     D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     iVar1 = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
     pMercSaveData = (D2MercSaveDataStrc*)0x1;

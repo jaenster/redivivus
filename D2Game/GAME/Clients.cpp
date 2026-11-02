@@ -2511,7 +2511,7 @@ void __fastcall CLIENT_RevealRoomAndSendUnits(::SGAMEDATA * pGame, D2RoomStrc * 
       eD2UnitType eUnitType;
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
       SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)sRoomCoords.sTileRect.left, (uint16_t)sRoomCoords.sTileRect.top);
-      D2Common::DUNGEON::Dungeon::DRLGROOM_AddClientToRoom(pRoom, (int32_t)pClient);
+      D2Common::DUNGEON::Dungeon::DRLGROOM_AddClientToRoom(pRoom, pClient);
       if ((uint32_t)pRoom->nClientsCount <= 1) {
         for (pRoomUnit = pRoom->pUnitList; pRoomUnit; pRoomUnit = pRoomUnit->pRoomNext) {
           eUnitType = UNIT_COUNT;
@@ -2554,7 +2554,7 @@ void __fastcall RoomClearForClientAndHideMap(::SGAMEDATA * pGame, D2RoomStrc * p
         UNIT::SUnitMsg::SendRemoveObject(pRoomUnit, pClient);
       }
 
-      D2Common::DUNGEON::Dungeon::DRLGROOM_RemoveClientFromRoom(pRoom, (int32_t)pClient);
+      D2Common::DUNGEON::Dungeon::DRLGROOM_RemoveClientFromRoom(pRoom, pClient);
       if (!pRoom->nClientsCount) {
         pRoomUnit = pRoom->pUnitList;
         while (true) {
@@ -2638,7 +2638,7 @@ void __fastcall CLIENT_RemoveFromAdjacentRooms(D2RoomStrc * pRoom, D2ClientStrc 
 
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nRoomCount);
     for (nRoomIdx = 0; nRoomIdx < nRoomCount; nRoomIdx++) {
-      D2Common::DUNGEON::Dungeon::DRLGROOM_RemoveClientFromRoom(ppAdjacentRooms[nRoomIdx], (int32_t)nClientId);
+      D2Common::DUNGEON::Dungeon::DRLGROOM_RemoveClientFromRoom(ppAdjacentRooms[nRoomIdx], nClientId);
     }
 }
 
