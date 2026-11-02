@@ -282,7 +282,7 @@ D2UnitStrc * __fastcall MakeRandomSparklyChest(::SGAMEDATA * pGame, D2RoomStrc *
       }
     }
 
-    UNIT::SUnit::SetSparklyChestFlag(pUnit, true);
+    UNIT::SUnit::SetSparklyChestFlag(pUnit, '\x01');
     if (eLevelId == LEVEL_TowerCellarLevel5) {
       pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = '\x03';
     }
@@ -460,7 +460,7 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       pUnit->nUnitGUID = nAnimModeOrGUID;
     }
 
-    UNIT::SUnit::SetSparklyChestFlag(pUnit, false);
+    UNIT::SUnit::SetSparklyChestFlag(pUnit, '\0');
     if (pUnit) {
       nAnimModeOrGUID = pUnit->eAnimMode.ePlayerMode;
       pUnit->eUnitFlags &= ~UNITFLAG_ISVALIDTARGET;
@@ -798,7 +798,7 @@ void __fastcall Objects_InitFn03(D2ObjectInitFnArg * pInitArg) {
 
 void __fastcall Objects_InitFn57(D2ObjectInitFnArg * pInitArg) {
     Objects_InitFn03(pInitArg);
-    UNIT::SUnit::SetSparklyChestFlag(pInitArg->pObject, true);
+    UNIT::SUnit::SetSparklyChestFlag(pInitArg->pObject, '\x01');
 }
 
 void __fastcall Objects_InitFn58(D2ObjectInitFnArg * pInitArg) {
@@ -963,18 +963,14 @@ void __fastcall Objects_InitFn51(D2ObjectInitFnArg * pInitArg) {
 static BOOL __stdcall ROOM_CheckSpawnCollision(D2RoomStrc * pRoom, uint32_t nSizeY, int * pnSpawnCoord, uint32_t nSizeX, int * pnRoomCoords) {
     if (pnRoomCoords[2] >= (int)(nSizeX + 2) && pnRoomCoords[3] >= (int)(nSizeY + 2)) {
       eCollisionFlags wCollisionSpawn;
-      if (!((int)(uint32_t)(uint16_t)*pnSpawnCoord > *pnRoomCoords + 1 && (int)(uint32_t)*(uint16_t*)(pnSpawnCoord + 1) > pnRoomCoords[1] + 1 && (int)(uint32_t)(uint16_t)*pnSpawnCoord < (int)(*pnRoomCoords - nSizeX - 2 + pnRoomCoords[2]) && (int)(uint32_t)*(uint16_t*)(pnSpawnCoord + 1) < (int)(pnRoomCoords[1] - nSizeY - 2 + pnRoomCoords[3]))) {
-        return 0;
-      }
-
-      wCollisionSpawn = D2Common::Collision::CheckCollision_Vector(pRoom, *pnSpawnCoord, pnSpawnCoord[1], nSizeX + 7, nSizeY + 7, 0xc01);
-      if (wCollisionSpawn != COLBIT_NONE) {
-        return 0;
-      }
-
-      wCollisionSpawn = D2Common::Collision::CheckCollision_Vector(pRoom, *pnSpawnCoord, pnSpawnCoord[1], nSizeX, nSizeY, 0x3f11);
-      if (wCollisionSpawn == COLBIT_NONE) {
-        return 1;
+      if ((int)(uint32_t)(uint16_t)*pnSpawnCoord > *pnRoomCoords + 1 && (int)(uint32_t)*(uint16_t*)(pnSpawnCoord + 1) > pnRoomCoords[1] + 1 && (int)(uint32_t)(uint16_t)*pnSpawnCoord < (int)(*pnRoomCoords - nSizeX - 2 + pnRoomCoords[2]) && (int)(uint32_t)*(uint16_t*)(pnSpawnCoord + 1) < (int)(pnRoomCoords[1] - nSizeY - 2 + pnRoomCoords[3])) {
+        wCollisionSpawn = D2Common::Collision::CheckCollision_Vector(pRoom, *pnSpawnCoord, pnSpawnCoord[1], nSizeX + 7, nSizeY + 7, 0xc01);
+        if (wCollisionSpawn == COLBIT_NONE) {
+          wCollisionSpawn = D2Common::Collision::CheckCollision_Vector(pRoom, *pnSpawnCoord, pnSpawnCoord[1], nSizeX, nSizeY, 0x3f11);
+          if (wCollisionSpawn == COLBIT_NONE) {
+            return 1;
+          }
+        }
       }
 
       return 0;
@@ -986,13 +982,11 @@ static BOOL __stdcall ROOM_CheckSpawnCollision(D2RoomStrc * pRoom, uint32_t nSiz
 static BOOL __stdcall ROOM_CheckSpawnCollisionSimple(D2RoomStrc * pRoom, int32_t nSizeX, int32_t nSizeY, int * pnSpawnCoord, int * pnRoomCoords) {
     if (pnRoomCoords[2] >= 2 && pnRoomCoords[3] >= 2) {
       eCollisionFlags wCollisionResult;
-      if (!((int)(uint32_t)(uint16_t)*pnSpawnCoord > *pnRoomCoords + 2 && (int)(uint32_t)*(uint16_t*)(pnSpawnCoord + 1) > pnRoomCoords[1] + 2 && (int)(uint32_t)(uint16_t)*pnSpawnCoord < *pnRoomCoords - nSizeX + pnRoomCoords[2] && (int)(uint32_t)*(uint16_t*)(pnSpawnCoord + 1) < pnRoomCoords[1] - nSizeY + pnRoomCoords[3])) {
-        return 0;
-      }
-
-      wCollisionResult = D2Common::Collision::CheckCollision_Vector(pRoom, *pnSpawnCoord, pnSpawnCoord[1], nSizeX + 2, nSizeY + 2, 0x3f11);
-      if (wCollisionResult == COLBIT_NONE) {
-        return 1;
+      if ((int)(uint32_t)(uint16_t)*pnSpawnCoord > *pnRoomCoords + 2 && (int)(uint32_t)*(uint16_t*)(pnSpawnCoord + 1) > pnRoomCoords[1] + 2 && (int)(uint32_t)(uint16_t)*pnSpawnCoord < *pnRoomCoords - nSizeX + pnRoomCoords[2] && (int)(uint32_t)*(uint16_t*)(pnSpawnCoord + 1) < pnRoomCoords[1] - nSizeY + pnRoomCoords[3]) {
+        wCollisionResult = D2Common::Collision::CheckCollision_Vector(pRoom, *pnSpawnCoord, pnSpawnCoord[1], nSizeX + 2, nSizeY + 2, 0x3f11);
+        if (wCollisionResult == COLBIT_NONE) {
+          return 1;
+        }
       }
 
       return 0;
@@ -1679,17 +1673,16 @@ D2UnitStrc * __stdcall OBJECT_SpawnBonusChest(::SGAMEDATA * pGame, D2UnitStrc * 
     D2SeedStrc DVar1 = D2_SEED_NEXT(*pCtrlSeed);
     D2UnitStrc* pSpawnedUnit = (D2UnitStrc*)((uint64_t)DVar1.nSeedLow * 0x51eb851f);
     *pCtrlSeed = DVar1;
-    if (!(DVar1.nSeedLow % 100 > 0x46)) {
-      return pSpawnedUnit;
+    if (DVar1.nSeedLow % 100 > 0x46) {
+      D2Common::Units::GetCoords(pUnit, &ptUnitPos);
+      if (!pRoom) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x79a);
+        exit(-1);
+      }
+
+      pSpawnedUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x67, ptUnitPos.x, ptUnitPos.y, pGame, pRoom, 1, 0, nullptr);
     }
 
-    D2Common::Units::GetCoords(pUnit, &ptUnitPos);
-    if (!pRoom) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x79a);
-      exit(-1);
-    }
-
-    pSpawnedUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x67, ptUnitPos.x, ptUnitPos.y, pGame, pRoom, 1, 0, nullptr);
     return pSpawnedUnit;
 }
 
@@ -1903,11 +1896,10 @@ D2UnitStrc * __fastcall Objects_PopulateFn9(::SGAMEDATA * pGame, D2RoomStrc * pR
 
 D2UnitStrc * __fastcall Objects_PopulateFn6(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
     D2UnitStrc* pUnit = Objects_PopulateFn3(pGame, pRoom, nDensity, nObjectClassId, nChancePercent);
-    if (!pUnit) {
-      return pUnit;
+    if (pUnit) {
+      OBJECT_SpawnBonusChest(pGame, pUnit);
     }
 
-    OBJECT_SpawnBonusChest(pGame, pUnit);
     return pUnit;
 }
 
@@ -1918,6 +1910,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn8(::SGAMEDATA * pGame, D2RoomStrc * pR
     int nX;
     D2SeedStrc* pRoomSeed;
     D2DrlgRoomCoordsStrc sRoomCoords;
+    eD2UnitType eUnitType;
     ::SGAMEDATA* pGameSave = pGame;
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::GetLevelIdFromPopulatedRoom(pRoom);
     int32_t nErrLine = ObjectsRgn::QUEST_GetLevelQuestStatus(pGame, eLevelId);
@@ -1949,34 +1942,34 @@ D2UnitStrc * __fastcall Objects_PopulateFn8(::SGAMEDATA * pGame, D2RoomStrc * pR
     }
 
     D2UnitStrc* pSpawnedUnit = OBJECT_PlaceWithCallback(pGameSave, nObjectClassId, nObjSizeX * 2 + 1, nObjSizeY * 2 + 1, pRoom, eLevelId, ObjectsRgn::OBJECT_IsPositionNearSpawnPoint2);
-    if (!pSpawnedUnit) {
-      return pSpawnedUnit;
-    }
-    if (pObjectsTxt->Selectable[pSpawnedUnit->eAnimMode.ePlayerMode]) {
-      pSpawnedUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
-    } else {
-      pSpawnedUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
+    if (pSpawnedUnit) {
+      if (pObjectsTxt->Selectable[pSpawnedUnit->eAnimMode.ePlayerMode]) {
+        pSpawnedUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
+      } else {
+        pSpawnedUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
+      }
+
+      eUnitType = pSpawnedUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nY = pSpawnedUnit->pPath.pStaticPath->nPosY;
+      } else if (pSpawnedUnit->pPath.pDynamicPath) {
+        nY = D2Common::PATH::DynamicPath::GetYPos(pSpawnedUnit->pPath.pDynamicPath);
+      } else {
+        nY = 0;
+      }
+
+      eUnitType = pSpawnedUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nX = pSpawnedUnit->pPath.pStaticPath->nPosX;
+      } else if (pSpawnedUnit->pPath.pDynamicPath) {
+        nX = D2Common::PATH::DynamicPath::GetXPos(pSpawnedUnit->pPath.pDynamicPath);
+      } else {
+        nX = 0;
+      }
+
+      ObjectsRgn::AddPointsToLevelRngPoints2(pGameTmp, eLevelId, nX, nY);
     }
 
-    eD2UnitType eUnitType = pSpawnedUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nY = pSpawnedUnit->pPath.pStaticPath->nPosY;
-    } else if (pSpawnedUnit->pPath.pDynamicPath) {
-      nY = D2Common::PATH::DynamicPath::GetYPos(pSpawnedUnit->pPath.pDynamicPath);
-    } else {
-      nY = 0;
-    }
-
-    eUnitType = pSpawnedUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nX = pSpawnedUnit->pPath.pStaticPath->nPosX;
-    } else if (pSpawnedUnit->pPath.pDynamicPath) {
-      nX = D2Common::PATH::DynamicPath::GetXPos(pSpawnedUnit->pPath.pDynamicPath);
-    } else {
-      nX = 0;
-    }
-
-    ObjectsRgn::AddPointsToLevelRngPoints2(pGameTmp, eLevelId, nX, nY);
     return pSpawnedUnit;
 }
 

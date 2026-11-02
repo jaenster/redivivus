@@ -32,11 +32,10 @@ template<> TSLink<::CELLIST>* TSLink<CELLIST>::NextLink(int32_t nLinkOffset) {
     if ((int)nOffsetOrRef < 0) {
       return (TSLink<::CELLIST>*)~nOffsetOrRef;
     }
-    if (nLinkOffset >= 0) {
-      return (TSLink<::CELLIST>*)(nOffsetOrRef + nLinkOffset);
+    if (nLinkOffset < 0) {
+      nLinkOffset = (int)this - this->m_prevlink->m_next;
     }
 
-    nLinkOffset = (int)this - this->m_prevlink->m_next;
     return (TSLink<::CELLIST>*)(nOffsetOrRef + nLinkOffset);
 }
 
@@ -46,11 +45,10 @@ TSLink<::CELLIST>* __thiscall NextLink_Unreferenced(TSLink<::CELLIST>* pThis, in
     if ((int)nOffsetOrRef < 0) {
       return (TSLink<::CELLIST>*)~nOffsetOrRef;
     }
-    if (nLinkOffset >= 0) {
-      return (TSLink<::CELLIST>*)(nOffsetOrRef + nLinkOffset);
+    if (nLinkOffset < 0) {
+      nLinkOffset = (int)pThis - pThis->m_prevlink->m_next;
     }
 
-    nLinkOffset = (int)pThis - pThis->m_prevlink->m_next;
     return (TSLink<::CELLIST>*)(nOffsetOrRef + nLinkOffset);
 }
 
@@ -72,11 +70,10 @@ TSLink<::CELLIST>* __thiscall NextLink_Unreferenced2(TSLink<::CELLIST>* pThis, i
     if ((int)nOffsetOrRef < 0) {
       return (TSLink<::CELLIST>*)~nOffsetOrRef;
     }
-    if (nLinkOffset >= 0) {
-      return (TSLink<::CELLIST>*)(nOffsetOrRef + nLinkOffset);
+    if (nLinkOffset < 0) {
+      nLinkOffset = (int)pThis - pThis->m_prevlink->m_next;
     }
 
-    nLinkOffset = (int)pThis - pThis->m_prevlink->m_next;
     return (TSLink<::CELLIST>*)(nOffsetOrRef + nLinkOffset);
 }
 
@@ -802,15 +799,14 @@ template<> TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* TSHashTableReuse<CELLIS
     this->tChunkList.m_linkoffset = 0x10;
     this->tChunkList.m_terminator.m_next = ~(uint32_t)pTVar2;
     this->nChunkSize = 0x10;
-    if (this_00->m_linkoffset == 4) {
-      return this;
+    if (this_00->m_linkoffset != 4) {
+      this_00->UnlinkAll();
+      pTVar1 = &this->tReuseList.m_terminator;
+      pTVar1->m_prevlink = pTVar1;
+      this_00->m_linkoffset = 4;
+      this->tReuseList.m_terminator.m_next = ~(uint32_t)pTVar1;
     }
 
-    this_00->UnlinkAll();
-    pTVar1 = &this->tReuseList.m_terminator;
-    pTVar1->m_prevlink = pTVar1;
-    this_00->m_linkoffset = 4;
-    this->tReuseList.m_terminator.m_next = ~(uint32_t)pTVar1;
     return this;
 }
 

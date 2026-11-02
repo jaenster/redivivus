@@ -275,13 +275,12 @@ BOOL __stdcall DRLGENV_UpdatePeriodOfDay(D2DrlgActStrc * pDrlgAct, D2RoomStrc * 
     DRLGENV_UpdateEnvironmentCycle(pEnv, dwActNo);
     DRLGENV_UpdateLightIntensity(nDrlgAct, pEnv, dwActNo);
     DRLGENV_UpdateLightColor(dwActNo, pEnv);
-    if ((D2DrlgActStrc*)nDrlgAct != (D2DrlgActStrc*)LEVEL_ArreatSummit) {
-      return (uint32_t)(nPrevEnvironmentData != pEnv->nEnvironmentData);
+    if ((D2DrlgActStrc*)nDrlgAct == (D2DrlgActStrc*)LEVEL_ArreatSummit) {
+      pEnv->nGlobalLightRed = 0xf5;
+      pEnv->nGlobalLightGreen = 0xf0;
+      pEnv->nGlobalLightBlue = 0xff;
     }
 
-    pEnv->nGlobalLightRed = 0xf5;
-    pEnv->nGlobalLightGreen = 0xf0;
-    pEnv->nGlobalLightBlue = 0xff;
     return (uint32_t)(nPrevEnvironmentData != pEnv->nEnvironmentData);
 }
 

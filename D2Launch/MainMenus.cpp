@@ -1083,11 +1083,10 @@ int16_t __stdcall MAINMENU_FilterNewlineKey(int16_t wChar) {
 
 int __stdcall MAINMENU_PollRevisionCheckPump(int nFrameIndex) {
     int nDownloadProgress = gpBNetCallbacks->pfnGetDownloadProgress();
-    if (!(nDownloadProgress == 0x65 || gbTermsOfServiceCancelled)) {
-      return 1;
+    if (nDownloadProgress == 0x65 || gbTermsOfServiceCancelled) {
+      D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     }
 
-    D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;
 }
 
@@ -1114,11 +1113,10 @@ BOOL __stdcall MAINMENU_ScrollListExUp(D2ControlMsg * pControlMsg) {
 
       if (ppForm) {
         nLine = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(ppForm);
-        if (nLine <= 0) {
-          return 1;
+        if (nLine > 0) {
+          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(ppForm, nLine - 1);
         }
 
-        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(ppForm, nLine - 1);
         return 1;
       }
     }
@@ -1381,39 +1379,40 @@ void __stdcall MAINMENU_AddRealmToList(D2BNetRealmEntryStrc * pRealmEntry) {
 
 // @sourcefile .\Src\MainMenus.cpp
 BOOL __stdcall MAINMENU_FreeRealmList() {
-    if (!g_pBNetRealmList) {
-      return 1;
-    }
-
-    int i = 0;
-    D2BNetRealmEntryStrc** pList = g_pBNetRealmList;
-    if (gnRealmListCount > 0) {
+    D2BNetRealmEntryStrc** pList;
+    int i;
+    if (g_pBNetRealmList) {
       char* pMemoryToFree;
-      do {
-        if (pList[i]) {
-          pMemoryToFree = pList[i]->szDescription;
-          if (!pMemoryToFree) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1139);
-            exit(-1);
+      i = 0;
+      pList = g_pBNetRealmList;
+      if (gnRealmListCount > 0) {
+        do {
+          if (pList[i]) {
+            pMemoryToFree = pList[i]->szDescription;
+            if (!pMemoryToFree) {
+              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1139);
+              exit(-1);
+            }
+
+            D2_FREE_AT(pMemoryToFree, ".\\Src\\MainMenus.cpp", 0x113a);
+            if (!g_pBNetRealmList[i]->szName) {
+              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x113b);
+              exit(-1);
+            }
+
+            D2_FREE_AT(g_pBNetRealmList[i]->szName, ".\\Src\\MainMenus.cpp", 0x113c);
+            D2_FREE_AT(g_pBNetRealmList[i], ".\\Src\\MainMenus.cpp", 0x113e);
+            pList = g_pBNetRealmList;
           }
 
-          D2_FREE_AT(pMemoryToFree, ".\\Src\\MainMenus.cpp", 0x113a);
-          if (!g_pBNetRealmList[i]->szName) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x113b);
-            exit(-1);
-          }
+          i++;
+        } while (i < gnRealmListCount);
+      }
 
-          D2_FREE_AT(g_pBNetRealmList[i]->szName, ".\\Src\\MainMenus.cpp", 0x113c);
-          D2_FREE_AT(g_pBNetRealmList[i], ".\\Src\\MainMenus.cpp", 0x113e);
-          pList = g_pBNetRealmList;
-        }
-
-        i++;
-      } while (i < gnRealmListCount);
+      D2_FREE_AT(pList, ".\\Src\\MainMenus.cpp", 0x1141);
+      g_pBNetRealmList = 0;
     }
 
-    D2_FREE_AT(pList, ".\\Src\\MainMenus.cpp", 0x1141);
-    g_pBNetRealmList = 0;
     return 1;
 }
 
@@ -1461,7 +1460,6 @@ char * __fastcall MAINMENU_GetRealmName(int32_t nIndex) {
     }
 
     return g_pBNetRealmList[nIndex]->szName;
-    return g_pBNetRealmList[nIndex]->szName;
 }
 
 // Returns the description string of realm entry nIndex (g_pBNetRealmList[nIndex][1], filled by MAINMENU_QueryAndBuildRealmList); halts (MainMenus.cpp line 4450) on an empty slot.
@@ -1472,7 +1470,6 @@ char * __fastcall MAINMENU_GetRealmDescription(int nIndex) {
       exit(-1);
     }
 
-    return g_pBNetRealmList[nIndex]->szDescription;
     return g_pBNetRealmList[nIndex]->szDescription;
 }
 
@@ -1982,11 +1979,10 @@ BOOL __stdcall MAINMENU_ShowCinematicsMenuAndSetFlag(D2ControlMsg * pControlMsg)
 }
 
 int __stdcall MAINMENU_PollDisconnectFlagPump(int nFrameIndex) {
-    if (!(gbCinematicsMenuShown || ::fpInsertPlayCd)) {
-      return 1;
+    if (gbCinematicsMenuShown || ::fpInsertPlayCd) {
+      D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     }
 
-    D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;
 }
 
@@ -2223,11 +2219,10 @@ BOOL __stdcall MAINMENU_CheckCharacterSaveFileExists() {
 }
 
 BOOL __stdcall MAINMENU_OnPressInvokeCurrentMenuInstance(D2ControlMsg * pControlMsg) {
-    if (!gpCurrentUIMenuInstance) {
-      return 1;
+    if (gpCurrentUIMenuInstance) {
+      (*gpCurrentUIMenuInstance)();
     }
 
-    (*gpCurrentUIMenuInstance)();
     return 1;
 }
 
@@ -2336,30 +2331,28 @@ static BOOL MAINMENU_IsD2GSJoinErrorRecoverable(int32_t nErrorCode) {
 
 uint32_t __stdcall MAINMENU_PollMCPThreadStatus() {
     BOOL bRecoverable;
+    DWORD dwWaitResult;
     if (gnMCPConnectThreadHandle) {
       return 1;
     }
 
     HANDLE hHandle = D2Multi::McpConnect::GetMCPThread();
-    if (!hHandle) {
-      return 2;
-    }
-
-    DWORD dwWaitResult = 0;
-    hHandle = D2Multi::McpConnect::GetMCPThread();
-    /* HANDLE hHandle for WaitForSingleObject */ dwWaitResult = WaitForSingleObject(hHandle, dwWaitResult);
-    if (dwWaitResult) {
-      if (dwWaitResult != 0x102) {
-        return 2;
+    if (hHandle) {
+      int32_t nJoinResult;
+      /* DWORD dwMilliseconds for WaitForSingleObject */ dwWaitResult = 0;
+      hHandle = D2Multi::McpConnect::GetMCPThread();
+      /* HANDLE hHandle for WaitForSingleObject */ dwWaitResult = WaitForSingleObject(hHandle, dwWaitResult);
+      if (!dwWaitResult) {
+        nJoinResult = D2MCPClient::McpConnect::GetD2GSJoinResult();
+        bRecoverable = MAINMENU_IsD2GSJoinErrorRecoverable(nJoinResult);
+        return bRecoverable ? 2 : 0;
       }
-
-      return 3;
+      if (dwWaitResult == 0x102) {
+        return 3;
+      }
     }
 
-    int32_t nJoinResult;
-    nJoinResult = D2MCPClient::McpConnect::GetD2GSJoinResult();
-    bRecoverable = MAINMENU_IsD2GSJoinErrorRecoverable(nJoinResult);
-    return bRecoverable ? 2 : 0;
+    return 2;
 }
 
 int __stdcall MAINMENU_PollMCPThreadStatusPump(int nFrameIndex) {
@@ -2368,11 +2361,10 @@ int __stdcall MAINMENU_PollMCPThreadStatusPump(int nFrameIndex) {
     }
 
     uint32_t nMcpThreadStatus = MAINMENU_PollMCPThreadStatus();
-    if (nMcpThreadStatus == 3) {
-      return 1;
+    if (nMcpThreadStatus != 3) {
+      D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     }
 
-    D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;
 }
 
@@ -2405,11 +2397,10 @@ uint32_t __fastcall MAINMENU_ConnectToRealm(uint8_t * pszRealmName, int32_t bSil
     if (!*pszRealmName) {
       D2IniData_launcher->szCharacterRealm[0] = '\0';
       D2IniData_launcher->szREALM[0] = '\0';
-      if (bSilent) {
-        return 0;
+      if (!bSilent) {
+        FORMS_DestroyList();
       }
 
-      FORMS_DestroyList();
       return 0;
     }
     if (gpBNetCallbacks) {
@@ -2419,21 +2410,19 @@ uint32_t __fastcall MAINMENU_ConnectToRealm(uint8_t * pszRealmName, int32_t bSil
         Storm::Source::SSTR::SStrCopy(D2IniData_launcher->szREALM, (char*)pszRealmName, 0x100);
         D2MCPClient::McpConnect::MCPCONNECT_CreateThread((uint32_t*)(pnLogonResult + 1));
         nResult = 3;
-        if (bSilent) {
-          return nResult;
+        if (!bSilent) {
+          D2Win::Src::D2WinMain::MessagePump(MAINMENU_PollMCPThreadStatusPump);
+          nResult = MAINMENU_PollMCPThreadStatus();
+          FORMS_DestroyList();
         }
 
-        D2Win::Src::D2WinMain::MessagePump(MAINMENU_PollMCPThreadStatusPump);
-        nResult = MAINMENU_PollMCPThreadStatus();
-        FORMS_DestroyList();
         return nResult;
       }
     }
-    if (bSilent) {
-      return 2;
+    if (!bSilent) {
+      FORMS_DestroyList();
     }
 
-    FORMS_DestroyList();
     return 2;
 }
 
@@ -2683,26 +2672,23 @@ static int __stdcall MAINMENU_SetMultilineText(uint16_t * wszText, ::D2WinTextBo
 
     D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszBuffer, wszText, 0x400);
     uint16_t* pwszLineStart = wszBuffer;
-    uint16_t* pwszCursor = pwszLineStart;
-    if (wszBuffer[0] == L'\0') {
-      return 1;
-    }
+    if (wszBuffer[0] != L'\0') {
+      uint16_t* pwszCursor = pwszLineStart;
+      do {
+        if (*pwszCursor == L'\n') {
+          *pwszCursor = L'\0';
+          D2Win::Src::D2WinTextBox::SetText(pTextBox, pwszLineStart, nColor, (bool)bCentered, 0);
+          pwszLineStart = pwszCursor + 1;
+        }
 
-    do {
-      if (*pwszCursor == L'\n') {
-        *pwszCursor = L'\0';
+        pwszCursor++;
+      } while (*pwszCursor != L'\0');
+
+      if (pwszLineStart < pwszCursor) {
         D2Win::Src::D2WinTextBox::SetText(pTextBox, pwszLineStart, nColor, (bool)bCentered, 0);
-        pwszLineStart = pwszCursor + 1;
       }
-
-      pwszCursor++;
-    } while (*pwszCursor != L'\0');
-
-    if (pwszLineStart >= pwszCursor) {
-      return 1;
     }
 
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, pwszLineStart, nColor, (bool)bCentered, 0);
     return 1;
 }
 
@@ -3365,11 +3351,10 @@ void __stdcall MAINMENU_QueryAndBuildRealmList() {
 
 BOOL __stdcall MAINMENU_OnPressCreditsEndCheck(D2ControlMsg * pControlMsg) {
     int32_t nScrollPos = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(gpMainMenuCreditsLineTextBox);
-    if (!(gnMainMenuCreditsFrameIndex <= nScrollPos + 10)) {
-      return 1;
+    if (gnMainMenuCreditsFrameIndex <= nScrollPos + 10) {
+      UIMENU_MainMenu();
     }
 
-    UIMENU_MainMenu();
     return 1;
 }
 
@@ -4883,6 +4868,7 @@ void __stdcall MAINMENU_BnetConnectionProgress() {
 
 static BOOL MAINMENU_Unused17(char * szText) {
     bool _bIsValidEmail;
+    uint32_t nTextLen;
     bool bIsValidEmail;
     if (!szText) {
       return 0;
@@ -4890,21 +4876,17 @@ static BOOL MAINMENU_Unused17(char * szText) {
 
     _bIsValidEmail = 0;
     char* pszAtSign = Storm::Source::SSTR::SStrChr(szText, '@');
-    if (!pszAtSign) {
-      return _bIsValidEmail;
+    if (pszAtSign) {
+      char* pszDot;
+      pszDot = Storm::Source::SSTR::SStrChr(pszAtSign, '.');
+      if (pszDot && pszAtSign > szText && pszDot > pszAtSign + 1) {
+        nTextLen = Storm::Source::SSTR::SStrLen(szText);
+        if ((int)nTextLen > (int)(pszDot + (1 - (int)szText))) {
+          _bIsValidEmail = 1;
+        }
+      }
     }
 
-    char* pszDot = Storm::Source::SSTR::SStrChr(pszAtSign, '.');
-    if (!(pszDot && pszAtSign > szText && pszDot > pszAtSign + 1)) {
-      return _bIsValidEmail;
-    }
-
-    uint32_t nTextLen = Storm::Source::SSTR::SStrLen(szText);
-    if ((int)nTextLen <= (int)(pszDot + (1 - (int)szText))) {
-      return _bIsValidEmail;
-    }
-
-    _bIsValidEmail = 1;
     return _bIsValidEmail;
 }
 

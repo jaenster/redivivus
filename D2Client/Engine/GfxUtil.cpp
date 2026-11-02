@@ -1271,11 +1271,10 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2GfxDataStrc * pGfxData, D2UnitStr
         nOverlayId = pGfxData->nOverlayId;
       pGfxData->dwFlags |= 2;
       D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < sgptDataTable->nTxtOverlaySize ? sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
-      if (!pOverlayTxt) {
-        return 1;
+      if (pOverlayTxt) {
+        pGfxData->szFilename = pOverlayTxt->Filename;
       }
 
-      pGfxData->szFilename = pOverlayTxt->Filename;
       return 1;
     }
 }
@@ -1378,11 +1377,10 @@ static BOOL __stdcall GFXUTIL_BuildMonsterCofParams(void * pCofFile, int32_t nAn
           if (!pGfxData->nArmorToken) {
             pGfxData->nArmorToken = 0x20787878;
           }
-          if (pGfxData->nModeToken) {
-            return 1;
+          if (!pGfxData->nModeToken) {
+            pGfxData->nModeToken = 0x20787878;
           }
 
-          pGfxData->nModeToken = 0x20787878;
           return 1;
         }
       }
@@ -1415,43 +1413,41 @@ int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(D2UnitStrc * pUnit, uint8_t * pby
     int nLoadedCount = 0;
     int nLayerIdx = 0;
     uint8_t* pLayerArrayBase = pbyLayerCount;
-    if (*pbyLayerCount <= 0) {
-      return nLoadedCount;
-    }
-
-    do {
+    if (*pbyLayerCount > 0) {
       int nBuilt;
-      nCurLayerIdx = nLayerIdx;
-      byLayerIdCheck = pLayerArray[nLayerIdx];
-      if (0xf < byLayerIdCheck) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x59d);
-        exit(-1);
-      }
-
-      memset(&sGfxData, 0, 0x48);
-      sGfxData.nDirection = nPaletteShift;
-      sGfxData.nFrameNumber = nFrame;
-      sGfxData.pDC6 = 0;
-      sGfxData.nComponentType = byLayerIdCheck;
-      nBuilt = GFXUTIL_BuildCofParams(&sGfxData, pUnit, (D2UnitStrc*)-1, &nOutItemClassId);
-      if (nBuilt) {
-        nSpriteLoaded = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
-        if (nSpriteLoaded && sGfxData.pDC6Block) {
-          nOffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(sGfxData.pDC6Block);
-          nDrawWorldOffsetY = UI::Path::DRAW_GetWorldOffsetY();
-          nWorldOffsetY = D2Common::Units::GetTargetY(pUnit);
-          nSpriteY = nWorldOffsetY + (nOffsetY - nDrawWorldOffsetY);
-          if (nSpriteY > *pOutMaxY) {
-            *pOutMaxY = nSpriteY;
-          }
-
-          nLoadedCount++;
-          nCurLayerIdx = nLayerIdx;
+      do {
+        nCurLayerIdx = nLayerIdx;
+        byLayerIdCheck = pLayerArray[nLayerIdx];
+        if (0xf < byLayerIdCheck) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x59d);
+          exit(-1);
         }
-      }
 
-      nLayerIdx = nCurLayerIdx + 1;
-    } while (nLayerIdx < (int)(uint32_t)*pLayerArrayBase);
+        memset(&sGfxData, 0, 0x48);
+        sGfxData.nDirection = nPaletteShift;
+        sGfxData.nFrameNumber = nFrame;
+        sGfxData.pDC6 = 0;
+        sGfxData.nComponentType = byLayerIdCheck;
+        nBuilt = GFXUTIL_BuildCofParams(&sGfxData, pUnit, (D2UnitStrc*)-1, &nOutItemClassId);
+        if (nBuilt) {
+          nSpriteLoaded = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
+          if (nSpriteLoaded && sGfxData.pDC6Block) {
+            nOffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(sGfxData.pDC6Block);
+            nDrawWorldOffsetY = UI::Path::DRAW_GetWorldOffsetY();
+            nWorldOffsetY = D2Common::Units::GetTargetY(pUnit);
+            nSpriteY = nWorldOffsetY + (nOffsetY - nDrawWorldOffsetY);
+            if (nSpriteY > *pOutMaxY) {
+              *pOutMaxY = nSpriteY;
+            }
+
+            nLoadedCount++;
+            nCurLayerIdx = nLayerIdx;
+          }
+        }
+
+        nLayerIdx = nCurLayerIdx + 1;
+      } while (nLayerIdx < (int)(uint32_t)*pLayerArrayBase);
+    }
 
     return nLoadedCount;
 }

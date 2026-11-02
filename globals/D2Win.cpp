@@ -23,7 +23,7 @@ D2WinWndHandlerStrc gaUIWindowHandlers[33] = {
     {
         /* .nType = */ 0x0,
         /* .nMessage = */ 0xa0,
-        /* .pfnCallback = */ (D2WinWndHandlerFn)&D2Win::Src::D2WinMain::D2WIN_HandleCursorHide
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::D2WIN_HandleCursorHide
     },
     {
         /* .nType = */ 0x0,

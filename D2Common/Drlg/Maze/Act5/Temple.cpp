@@ -71,15 +71,15 @@ int32_t ReplaceRooms(D2DrlgLevelStrc * pLevel) {
     if (pLevel->eD2LevelId != 0x7c) {
       nRetValAfterA = (int32_t)ReplaceRoom(gaDrlgRoomReplacementsA + nRollMod3, pLevel, &nRoll);
     }
-    if (pLevel->eD2LevelId != 0x7b) {
-      return nRetValAfterA;
-    }
-    if (nRoll == nRollMod3) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5fc);
-      exit(-1);
+    if (pLevel->eD2LevelId == 0x7b) {
+      if (nRoll == nRollMod3) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5fc);
+        exit(-1);
+      }
+
+      nRetValAfterA = (int32_t)ReplaceRoom(gaDrlgRoomReplacementsB + nRoll, pLevel, &nRoll);
     }
 
-    nRetValAfterA = (int32_t)ReplaceRoom(gaDrlgRoomReplacementsB + nRoll, pLevel, &nRoll);
     return nRetValAfterA;
 }
 

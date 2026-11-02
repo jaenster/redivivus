@@ -116,9 +116,9 @@ void __fastcall PARTYSCREEN_SetCorpseLootPermission(::SGAMEDATA * pGame, D2UnitS
 
     SendPlayerInfo(1, bNewState, pUnit, pGame, pTarget);
     if (!pUnit || (uint32_t)pUnit->nClassId > 1 && pUnit->nClassId != 6) {
-      nPartyEventCode = bNewState ? 0x101 : 0xa;
+      nPartyEventCode = bNewState ? 0x1 : 0xa;
     } else {
-      nPartyEventCode = bNewState ? 0x102 : 0xb;
+      nPartyEventCode = bNewState ? 0x2 : 0xb;
     }
     if (!pUnit) {
       bIsConnected = -1;

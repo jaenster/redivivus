@@ -138,6 +138,7 @@ static D2MonSeqMonsterTbls * __stdcall GetMonsterSequenceTable(D2UnitStrc * pUni
 }; D2_STATIC_GUARD(apFixedSequenceTable, "D2Common::Merc::GetMonsterSequenceTable::apFixedSequenceTable");
 
     int32_t nWeaponClass;
+    D2MonStatsTxt* pMonStatsTxt;
     D2MonSeqMonsterTbls* pFixedSeqTable;
     D2SkillStrc* pCurSkill = Units::GetCurrentSkill(pUnit);
     if (!pCurSkill) {
@@ -164,23 +165,20 @@ static D2MonSeqMonsterTbls * __stdcall GetMonsterSequenceTable(D2UnitStrc * pUni
       }
 
       return pFixedSeqTable + nWeaponClass;
-      return pFixedSeqTable + nWeaponClass;
     }
-    if (eUnitType != UNIT_MONSTER) {
-      return pSeqTable;
-    }
-    if (!pUnit) {
-      nWeaponClass = -1;
-    } else {
-      nWeaponClass = pUnit->nClassId;
+    if (eUnitType == UNIT_MONSTER) {
+      if (!pUnit) {
+        nWeaponClass = -1;
+      } else {
+        nWeaponClass = pUnit->nClassId;
+      }
+
+      pMonStatsTxt = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(nWeaponClass);
+      if (pMonStatsTxt) {
+        pSeqTable = DATATBLS::MonsterTbls::GetMonsterSequenceTableByIndex(nSequenceId);
+      }
     }
 
-    D2MonStatsTxt* pMonStatsTxt = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(nWeaponClass);
-    if (!pMonStatsTxt) {
-      return pSeqTable;
-    }
-
-    pSeqTable = DATATBLS::MonsterTbls::GetMonsterSequenceTableByIndex(nSequenceId);
     return pSeqTable;
 }
 
@@ -587,18 +585,17 @@ uint32_t __fastcall MERC_GenerateStatsFromSeed(int32_t nSeed, D2MercRolledStatsS
 
       pMercStats->nDefense += gaMercQuinaryTable[nTableIdx].nArmorBonus;
       pMercStats->nAttackRating += gaMercQuinaryTable[nTableIdx].nHealthBonus;
-      if (!nDifficulty) {
-        return 1;
+      if (nDifficulty) {
+        nMercClass = (uint32_t)nDifficulty;
+        pMercStats->nSecArmor += gaMercDifficultyTable[nMercClass].nExpModifier;
+        pMercStats->nTerDefense += gaMercDifficultyTable[nMercClass].nArmorModifier;
+        pMercStats->nDefense += gaMercDifficultyTable[nMercClass].nDamageModifier;
+        pMercStats->nQuatDamageBonus = gaMercDifficultyTable[nMercClass].nResistMult * pMercStats->nQuatDamageBonus;
+        pMercStats->nQuatArmorBonus = gaMercDifficultyTable[nMercClass].nHealthMult * pMercStats->nQuatArmorBonus;
+        pMercStats->nQuinSecondary += gaMercDifficultyTable[nMercClass].nLifeModifier;
+        pMercStats->nAttackRating = gaMercDifficultyTable[nMercClass].nDamageFinalMult * pMercStats->nAttackRating;
       }
 
-      nMercClass = (uint32_t)nDifficulty;
-      pMercStats->nSecArmor += gaMercDifficultyTable[nMercClass].nExpModifier;
-      pMercStats->nTerDefense += gaMercDifficultyTable[nMercClass].nArmorModifier;
-      pMercStats->nDefense += gaMercDifficultyTable[nMercClass].nDamageModifier;
-      pMercStats->nQuatDamageBonus = gaMercDifficultyTable[nMercClass].nResistMult * pMercStats->nQuatDamageBonus;
-      pMercStats->nQuatArmorBonus = gaMercDifficultyTable[nMercClass].nHealthMult * pMercStats->nQuatArmorBonus;
-      pMercStats->nQuinSecondary += gaMercDifficultyTable[nMercClass].nLifeModifier;
-      pMercStats->nAttackRating = gaMercDifficultyTable[nMercClass].nDamageFinalMult * pMercStats->nAttackRating;
       return 1;
     }
 
@@ -653,11 +650,10 @@ int32_t __stdcall GetBaseExperience(int32_t nLevel, int32_t nExpPerLevel) {
 uint32_t __stdcall GetReviveCost(D2UnitStrc * pUnit) {
     int nLevel = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     uint32_t nCost = nLevel * nLevel / 2 * 0xf;
-    if (nCost <= 50000) {
-      return nCost;
+    if (nCost > 50000) {
+      nCost = 50000;
     }
 
-    nCost = 50000;
     return nCost;
 }
 

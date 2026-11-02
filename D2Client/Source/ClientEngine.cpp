@@ -1225,26 +1225,25 @@ int32_t __fastcall CLIENT_ForEachUnitInAdjacentRooms(D2UnitStrc * pUnit, D2UnitS
 }
 
 int __fastcall CLIENT_FindClosestDeadUnitCallback(D2UnitStrc * pSourceUnit, D2UnitStrc * pCandidate, D2UnitStrc * * ppBestUnit, int * pnBestDistance) {
-    if (!(pSourceUnit != pCandidate && pCandidate && (pCandidate->eUnitType == UNIT_PLAYER || pCandidate->eUnitType == UNIT_MONSTER && pCandidate->nClassId != 0x95 && pCandidate->nClassId != 0x22c))) {
-      return 0;
+    int32_t nDistance;
+    if (pSourceUnit != pCandidate && pCandidate && (pCandidate->eUnitType == UNIT_PLAYER || pCandidate->eUnitType == UNIT_MONSTER && pCandidate->nClassId != 0x95 && pCandidate->nClassId != 0x22c)) {
+      int bIsActive;
+      bIsActive = UNIT::CUnit::IsActive(pSourceUnit);
+      if (!bIsActive) {
+        nDistance = D2Common::Collision::GetCollisionDistance(pSourceUnit, pCandidate);
+        if (nDistance < *pnBestDistance) {
+          *ppBestUnit = pCandidate;
+          *pnBestDistance = nDistance;
+        }
+      }
     }
 
-    int bIsActive = UNIT::CUnit::IsActive(pSourceUnit);
-    if (bIsActive) {
-      return 0;
-    }
-
-    int32_t nDistance = D2Common::Collision::GetCollisionDistance(pSourceUnit, pCandidate);
-    if (nDistance >= *pnBestDistance) {
-      return 0;
-    }
-
-    *ppBestUnit = pCandidate;
-    *pnBestDistance = nDistance;
     return 0;
 }
 
 eD2UnitType __fastcall CLIENT_FindNearbyCorpseCallback(D2UnitStrc * pSourceUnit, D2UnitStrc * pCandidate, D2UnitStrc * * ppBestUnit, int * pnBestDistance) {
+    int32_t nPlayerDistance;
+    uint32_t nRandPick;
     if (!pCandidate) {
       return UNIT_PLAYER;
     }
@@ -1264,23 +1263,19 @@ eD2UnitType __fastcall CLIENT_FindNearbyCorpseCallback(D2UnitStrc * pSourceUnit,
     }
 
     int32_t nDistance = D2Common::Collision::GetCollisionDistance(pSourceUnit, pCandidate);
-    if (!(nDistance - 3U <= 0x16)) {
-      return UNIT_PLAYER;
+    if (nDistance >= 0x3 && nDistance <= 0x19) {
+      D2UnitStrc* pPlayerUnit_lcl;
+      pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
+      nPlayerDistance = D2Common::Collision::GetCollisionDistance(pCandidate, pPlayerUnit_lcl);
+      if (nPlayerDistance > 7) {
+        nRandPick = Archive::UNIT_GetModuloFromSeed(&pSourceUnit->sSeed, 2);
+        if (nRandPick) {
+          *pnBestDistance = nDistance;
+          *ppBestUnit = pCandidate;
+        }
+      }
     }
 
-    D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    int32_t nPlayerDistance = D2Common::Collision::GetCollisionDistance(pCandidate, pPlayerUnit_lcl);
-    if (nPlayerDistance <= 7) {
-      return UNIT_PLAYER;
-    }
-
-    uint32_t nRandPick = Archive::UNIT_GetModuloFromSeed(&pSourceUnit->sSeed, 2);
-    if (!nRandPick) {
-      return UNIT_PLAYER;
-    }
-
-    *pnBestDistance = nDistance;
-    *ppBestUnit = pCandidate;
     return UNIT_PLAYER;
 }
 

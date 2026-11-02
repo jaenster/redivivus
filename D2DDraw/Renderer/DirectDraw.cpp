@@ -198,7 +198,7 @@ int32_t CheckGamma() {
     return 1;
 }
 
-void __fastcall SetGlobalLight(BYTE nRed, BYTE nGreen, BYTE nBlue) {
+void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue) {
 
 }
 
@@ -998,33 +998,32 @@ BOOL Release() {
     // Static local variables (originally global data)
     static IUnknown * gpDDrawComObject; D2_STATIC_GUARD_BSS(gpDDrawComObject, "D2DDraw::Renderer::DirectDraw::Release::gpDDrawComObject");
 
-    if (!gnDDrawSurfaceHeight) {
-      return 1;
+    if (gnDDrawSurfaceHeight) {
+      InternalReleaseWindow();
+      if (pDirectDrawPalette) {
+        pDirectDrawPalette->lpVtbl->Release(pDirectDrawPalette);
+        pDirectDrawPalette = 0;
+      }
+
+      gnGlideWindowHandle = 0;
+      if (gpDDrawComObject) {
+        gpDDrawComObject->Release();
+        gpDDrawComObject = 0;
+      }
+      if (pWindowHandleBuffer) {
+        pWindowHandleBuffer->lpVtbl->Release((IDirectDraw*)pWindowHandleBuffer);
+        pWindowHandleBuffer = 0;
+      }
+      if (RENDERER_SelectedRendererCore) {
+        /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&RENDERER_SelectedRendererCore->sLock);
+        D2_FREE_AT(RENDERER_SelectedRendererCore, ".\\Src\\ddCore.cpp", 0x125);
+        RENDERER_SelectedRendererCore = 0;
+      }
+
+      D2ddDebugFont_Free();
+      gnDDrawSurfaceHeight = 0;
     }
 
-    InternalReleaseWindow();
-    if (pDirectDrawPalette) {
-      pDirectDrawPalette->lpVtbl->Release(pDirectDrawPalette);
-      pDirectDrawPalette = 0;
-    }
-
-    gnGlideWindowHandle = 0;
-    if (gpDDrawComObject) {
-      gpDDrawComObject->Release();
-      gpDDrawComObject = 0;
-    }
-    if (pWindowHandleBuffer) {
-      pWindowHandleBuffer->lpVtbl->Release((IDirectDraw*)pWindowHandleBuffer);
-      pWindowHandleBuffer = 0;
-    }
-    if (RENDERER_SelectedRendererCore) {
-      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&RENDERER_SelectedRendererCore->sLock);
-      D2_FREE_AT(RENDERER_SelectedRendererCore, ".\\Src\\ddCore.cpp", 0x125);
-      RENDERER_SelectedRendererCore = 0;
-    }
-
-    D2ddDebugFont_Free();
-    gnDDrawSurfaceHeight = 0;
     return 1;
 }
 
@@ -1127,13 +1126,11 @@ uint32_t __stdcall RENDERER_DDRAW_IsDC6OffScreen(int32_t nX, int32_t nY, int32_t
     }
 
     int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nX + nOffsetX < RENDERER_nWindowWidth && -1 < nWidth + nX + nOffsetX)) {
-      return 1;
-    }
-
-    nWidth = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
-    if (-1 < nY + nWidth && nY + nWidth - nHeight < RENDERER_nWindowHeight) {
-      return 0;
+    if (nX + nOffsetX < RENDERER_nWindowWidth && -1 < nWidth + nX + nOffsetX) {
+      nWidth = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
+      if (-1 < nY + nWidth && nY + nWidth - nHeight < RENDERER_nWindowHeight) {
+        return 0;
+      }
     }
 
     return 1;
@@ -1181,12 +1178,11 @@ static BOOL __stdcall RENDERER_DDRAW_ComputeDC6ClipRect(int32_t nY, DC6Block * p
       } else {
         pOutClipRect[3] = nDrawBottom - pOutClipRect[2] - nClipTop + 1;
       }
-      if (!((int)pOutClipRect[3] > 0)) {
+      if ((int)pOutClipRect[3] <= 0) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xab);
         exit(-1);
       }
 
-      return 0;
       return 0;
     }
 
@@ -2009,49 +2005,48 @@ BOOL __fastcall DrawShadowTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, in
 }
 
 BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, D2GfxLightStrc * pLight, int32_t nScreenPanels, int32_t nAlpha) {
-    int nLightIndex;
+    int iVar1;
+    int a3;
     int nSubtileX;
     short int* pSubtileEntry;
     uint32_t aCornerLight[4];
+    int nClipLeft;
+    int nClipRight;
     BOOL bTileDrawn = 0;
     BOOL nSubtileY = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0);
-    if (!nSubtileY) {
-      return bTileDrawn;
-    }
-
-    int iVar1 = RENDERER_nWindowHeight + 0x20;
-    int nClipLeft = -0x20;
-    int nClipRight = RENDERER_nWindowWidth;
-    if (nScreenPanels != 1) {
-      if (nScreenPanels == 2) {
-        nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
-      }
-    } else {
-      nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
-    }
-
-    nScreenPanels = 0;
-    if (pTile->nSubTiles <= 0) {
-      return bTileDrawn;
-    }
-
-    do {
-      int a3;
-      a3 = pTile->pSubTiles[nScreenPanels].nOffsetY + nPosY;
-      nSubtileX = pTile->pSubTiles[nScreenPanels].nOffsetX + nPosX;
-      if (nSubtileX >= nClipLeft && nSubtileX < nClipRight && a3 >= -0x20 && a3 < iVar1) {
-        pSubtileEntry = &pTile->pSubTiles[nScreenPanels].nOffsetX;
-        nLightIndex = (int)*pSubtileEntry >> 5;
-        aCornerLight[0] = (uint32_t)pLight[nLightIndex].nIntensity;
-        aCornerLight[1] = (uint32_t)pLight[nLightIndex + 1].nIntensity;
-        aCornerLight[2] = aCornerLight[1];
-        aCornerLight[3] = aCornerLight[0];
-        D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile(*(int*)(pSubtileEntry + 8), nSubtileX, a3, (int)aCornerLight, (uint8_t)nAlpha);
-        bTileDrawn = 1;
+    if (nSubtileY) {
+      int nLightIndex;
+      iVar1 = RENDERER_nWindowHeight + 0x20;
+      nClipLeft = -0x20;
+      nClipRight = RENDERER_nWindowWidth;
+      if (nScreenPanels != 1) {
+        if (nScreenPanels == 2) {
+          nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
+        }
+      } else {
+        nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
       }
 
-      nScreenPanels++;
-    } while (nScreenPanels < pTile->nSubTiles);
+      nScreenPanels = 0;
+      if (pTile->nSubTiles > 0) {
+        do {
+          a3 = pTile->pSubTiles[nScreenPanels].nOffsetY + nPosY;
+          nSubtileX = pTile->pSubTiles[nScreenPanels].nOffsetX + nPosX;
+          if (nSubtileX >= nClipLeft && nSubtileX < nClipRight && a3 >= -0x20 && a3 < iVar1) {
+            pSubtileEntry = &pTile->pSubTiles[nScreenPanels].nOffsetX;
+            nLightIndex = (int)*pSubtileEntry >> 5;
+            aCornerLight[0] = (uint32_t)pLight[nLightIndex].nIntensity;
+            aCornerLight[1] = (uint32_t)pLight[nLightIndex + 1].nIntensity;
+            aCornerLight[2] = aCornerLight[1];
+            aCornerLight[3] = aCornerLight[0];
+            D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile(*(int*)(pSubtileEntry + 8), nSubtileX, a3, (int)aCornerLight, (uint8_t)nAlpha);
+            bTileDrawn = 1;
+          }
+
+          nScreenPanels++;
+        } while (nScreenPanels < pTile->nSubTiles);
+      }
+    }
 
     return bTileDrawn;
 }

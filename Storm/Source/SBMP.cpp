@@ -834,6 +834,9 @@ static int __stdcall SBMP_DetermineImageType(short magic) {
 
 // @blizzard DecodeBmpFile (SBMP.CPP)
 static int __thiscall SBMP_DecodeBmpFile(int * pWidth, void * palette, D2MPQFileStrc * hFile, void * pixels, int nDstStride, int * pHeight, uint32_t * pBpp) {
+    void* pRawBits;
+    uint32_t rowWidth;
+    uint32_t srcStride;
     tagRGBQUAD aPaletteScratch[256];
     BITMAPFILEHEADER sBmpFileHeader;
     BITMAPINFOHEADER aBmpInfoExtraBuf;
@@ -877,24 +880,22 @@ static int __thiscall SBMP_DecodeBmpFile(int * pWidth, void * palette, D2MPQFile
         } while (nResult < 0x100);
       }
     }
-    if (!pixels) {
-      return 1;
-    }
+    if (pixels) {
+      SFile::SFileSetFilePointer(hFile, sBmpFileHeader.bfOffBits - (palette ? 0x400 : 0) - 0x36, nullptr, 1);
+      pHeight = 0;
+      pRawBits = SMem::SMemAlloc(aBmpInfoExtraBuf.biSizeImage, ".\\SOURCE\\SBMP.CPP", 0x1ff, 0);
+      SFile::SFileReadFile(hFile, pRawBits, aBmpInfoExtraBuf.biSizeImage, (uint32_t*)&pHeight, 0);
+      rowWidth = (int)((uint32_t)aBmpInfoExtraBuf.biBitCount * aBmpInfoExtraBuf.biWidth) >> 3;
+      srcStride = rowWidth;
+      if (rowWidth & 3) {
+        srcStride = rowWidth - (rowWidth & 3) + 4;
+      }
 
-    SFile::SFileSetFilePointer(hFile, sBmpFileHeader.bfOffBits - (palette ? 0x400 : 0) - 0x36, nullptr, 1);
-    pHeight = 0;
-    void* pRawBits = SMem::SMemAlloc(aBmpInfoExtraBuf.biSizeImage, ".\\SOURCE\\SBMP.CPP", 0x1ff, 0);
-    SFile::SFileReadFile(hFile, pRawBits, aBmpInfoExtraBuf.biSizeImage, (uint32_t*)&pHeight, 0);
-    uint32_t rowWidth = (int)((uint32_t)aBmpInfoExtraBuf.biBitCount * aBmpInfoExtraBuf.biWidth) >> 3;
-    uint32_t srcStride = rowWidth;
-    if (rowWidth & 3) {
-      srcStride = rowWidth - (rowWidth & 3) + 4;
-    }
-
-    SBMP_FlipImage(aBmpInfoExtraBuf.biHeight, pixels, pRawBits, nDstStride, rowWidth, srcStride);
-    SMem::SMemFree(pRawBits, ".\\SOURCE\\SBMP.CPP", 0x20b, 0);
-    if ((uintptr_t)pHeight < aBmpInfoExtraBuf.biSizeImage) {
-      return 0;
+      SBMP_FlipImage(aBmpInfoExtraBuf.biHeight, pixels, pRawBits, nDstStride, rowWidth, srcStride);
+      SMem::SMemFree(pRawBits, ".\\SOURCE\\SBMP.CPP", 0x20b, 0);
+      if ((uintptr_t)pHeight < aBmpInfoExtraBuf.biSizeImage) {
+        return 0;
+      }
     }
 
     return 1;
@@ -903,7 +904,9 @@ static int __thiscall SBMP_DecodeBmpFile(int * pWidth, void * palette, D2MPQFile
 // Load a BMP from a raw in-memory file blob; pData points at the BITMAPFILEHEADER (14 bytes) followed immediately by BITMAPINFOHEADER and palette/pixel data
 // @blizzard DecodeBmpMem (SBMP.CPP)
 static int __fastcall SBMP_DecodeBmpMem(int * pWidth, int * pHeight, uint32_t * pBpp, uint8_t * pData, int palette, void * pixels, int dstSize) {
+    uint32_t rowWidth;
     int nPaletteByteOffset;
+    uint32_t srcStride;
     uint8_t* pDstPaletteByte;
     int bHasPalette = palette;
     if (pWidth) {
@@ -935,17 +938,16 @@ static int __fastcall SBMP_DecodeBmpMem(int * pWidth, int * pHeight, uint32_t * 
         } while (palette);
       }
     }
-    if (!pixels) {
-      return 1;
+    if (pixels) {
+      rowWidth = (int)((uint32_t)*(uint16_t*)(pData + 0x1c) * *(int*)(pData + 0x12)) >> 3;
+      srcStride = rowWidth;
+      if (rowWidth & 3) {
+        srcStride = rowWidth - (rowWidth & 3) + 4;
+      }
+
+      SBMP_FlipImage(*(int*)(pData + 0x16), pixels, pData + (*(int*)(pData + 10) - (bHasPalette ? 0x400 : 0)) - 0x36, dstSize, rowWidth, srcStride);
     }
 
-    uint32_t rowWidth = (int)((uint32_t)*(uint16_t*)(pData + 0x1c) * *(int*)(pData + 0x12)) >> 3;
-    uint32_t srcStride = rowWidth;
-    if (rowWidth & 3) {
-      srcStride = rowWidth - (rowWidth & 3) + 4;
-    }
-
-    SBMP_FlipImage(*(int*)(pData + 0x16), pixels, pData + (*(int*)(pData + 10) - (bHasPalette ? 0x400 : 0)) - 0x36, dstSize, rowWidth, srcStride);
     return 1;
 }
 
@@ -1227,6 +1229,8 @@ static int __fastcall SBMP_DecodePcxFile(D2MPQFileStrc * hFile, uint8_t * pixels
 
 // @blizzard DecodePcxMem (SBMP.CPP)
 static int __thiscall SBMP_DecodePcxMem(uint32_t * pWidth, void * gifData, int dataSize, uint8_t * palette, uint8_t * pixels, int dstSize, int * pHeight, int * pBpp) {
+    uint8_t* pDstPalette;
+    uint8_t* pSrcPalette;
     uint32_t width = (uint32_t)*(uint16_t*)((int)gifData + 8) - (uint32_t)*(uint16_t*)((int)gifData + 4) + 1;
     int nBpp = (uint32_t)*(uint8_t*)((int)gifData + 3) * (uint32_t)*(uint8_t*)((int)gifData + 0x41);
     int nHeight = (uint32_t)*(uint16_t*)((int)gifData + 10) - (uint32_t)*(uint16_t*)((int)gifData + 6) + 1;
@@ -1248,22 +1252,20 @@ static int __thiscall SBMP_DecodePcxMem(uint32_t * pWidth, void * gifData, int d
 
       SBMP_UncompressPcxImage(dstSize_00, pixels, dataSize - (nBpp != 8 ? 0 : 0x301) - 0x80, (uint8_t*)((int)gifData + 0x80), width, (uint32_t)*(uint16_t*)((int)gifData + 0x42), (uint32_t)*(uint8_t*)((int)gifData + 0x41));
     }
-    if (!(palette && nBpp == 8)) {
-      return 1;
+    if (palette && nBpp == 8) {
+      pSrcPalette = (uint8_t*)((int)gifData + dataSize - 0x2fe);
+      pDstPalette = palette + 2;
+      nHeight = 0x100;
+      do {
+        pDstPalette[-2] = pSrcPalette[-2];
+        pDstPalette[-1] = pSrcPalette[-1];
+        *pDstPalette = *pSrcPalette;
+        pDstPalette[1] = '\0';
+        pSrcPalette += 3;
+        pDstPalette += 4;
+        nHeight--;
+      } while (nHeight);
     }
-
-    uint8_t* pSrcPalette = (uint8_t*)((int)gifData + dataSize - 0x2fe);
-    uint8_t* pDstPalette = palette + 2;
-    nHeight = 0x100;
-    do {
-      pDstPalette[-2] = pSrcPalette[-2];
-      pDstPalette[-1] = pSrcPalette[-1];
-      *pDstPalette = *pSrcPalette;
-      pDstPalette[1] = '\0';
-      pSrcPalette += 3;
-      pDstPalette += 4;
-      nHeight--;
-    } while (nHeight);
 
     return 1;
 }

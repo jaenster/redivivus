@@ -229,11 +229,10 @@ int * __thiscall BNCLIENT_InitFilestream(int * pStream, char * szFilePath) {
 
 void * __thiscall BNCLIENT_DestroyCompressor(void * pCompressor, uint8_t bFreeMemory) {
     Storm::Source::SLog::SLogClose(*(uint32_t*)pCompressor);
-    if (!(bFreeMemory & 1)) {
-      return pCompressor;
+    if (bFreeMemory & 1) {
+      Storm::Source::SMem::SMemFree(pCompressor, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pCompressor, "delete", -1, 0);
     return pCompressor;
 }
 
@@ -249,13 +248,12 @@ D2BNetClientCallbacksStrc * __stdcall NET_GetLobbyChatQueue() {
 }
 
 void * __stdcall BNCLIENT_GetBnetLogFilestream() {
-    if (gbBnetLogInitialized & 1) {
-      return &gnBnetLogFileHandle;
+    if (!(gbBnetLogInitialized & 1)) {
+      gbBnetLogInitialized |= 1;
+      Storm::Source::SLog::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
+      atexit(Bnet::StaticFini_gnBnetLogFileHandle);
     }
 
-    gbBnetLogInitialized |= 1;
-    Storm::Source::SLog::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
-    atexit(Bnet::StaticFini_gnBnetLogFileHandle);
     return &gnBnetLogFileHandle;
 }
 

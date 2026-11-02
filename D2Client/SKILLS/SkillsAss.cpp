@@ -61,7 +61,7 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetLivingAndOutOfTown(D2UnitStrc * pUni
 
     pRoom = D2Common::Units::UNITS_GetRoom(pUnit_00);
     bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (!bIsInTown && pUnit_00->eUnitType < UNIT_OBJECT) {
+    if (!bIsInTown && pUnit_00->eUnitType <= UNIT_MONSTER) {
       uint32_t bCanInteract;
       bCanInteract = UNIT::CUnit::CanInteractWith(pUnit, pUnit_00);
       return (uint32_t)(bCanInteract != 0);
@@ -84,7 +84,7 @@ BOOL __fastcall Skills_CltDoFunc_Ass_Melee_TargetValidate(D2UnitStrc * pUnit, eD
 
     pRoom = D2Common::Units::UNITS_GetRoom(pUnit_00);
     bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (!(!bIsInTown && pUnit_00->eUnitType < UNIT_OBJECT)) {
+    if (!(!bIsInTown && pUnit_00->eUnitType <= UNIT_MONSTER)) {
       return 0;
     }
 
@@ -92,11 +92,10 @@ BOOL __fastcall Skills_CltDoFunc_Ass_Melee_TargetValidate(D2UnitStrc * pUnit, eD
     if (!bCanInteract) {
       return 0;
     }
-    if (!pUnit) {
-      return 1;
+    if (pUnit) {
+      pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     return 1;
 }
 
@@ -133,12 +132,11 @@ BOOL __fastcall Skills_CltDoFunc_Ass_Blade_DecrementCharge(D2UnitStrc * pUnit, e
     }
 
     int32_t nChargeCount = D2Common::Skills::SKILL_GetParam1(pSkill);
-    if (!(nChargeCount - 1 > 0)) {
-      return 1;
+    if (nChargeCount - 1 > 0) {
+      D2Common::Skills::SKILL_SetParam1(pSkill, nChargeCount - 1);
+      Skills::SKILLS_ApplyDamageReduction(pUnit, 100);
     }
 
-    D2Common::Skills::SKILL_SetParam1(pSkill, nChargeCount - 1);
-    Skills::SKILLS_ApplyDamageReduction(pUnit, 100);
     return 1;
 }
 
@@ -161,11 +159,10 @@ int32_t __fastcall SKILLSASS_GetCltMissileByAuraLevel(D2UnitStrc * pUnit, int32_
       int nAuraStatVal;
       nAuraStatVal = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, (int)pSkillTxt->aurastat[0], 0);
       if (nAuraStatVal > 1) {
-        if (nAuraStatVal < 3) {
-          return (int)pSkillTxt->cltmissile[nAuraStatVal];
+        if (nAuraStatVal >= 3) {
+          nAuraStatVal = 3;
         }
 
-        nAuraStatVal = 3;
         return (int)pSkillTxt->cltmissile[nAuraStatVal];
       }
 
@@ -372,12 +369,11 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileCharge(D2UnitStrc * p
 
     D2Common::Skills::SKILL_SetParam1(pSkill, nAuraCalcVal);
     eD2States eInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-    if (eInfernoState == STATE_none) {
-      return 1;
+    if (eInfernoState != STATE_none) {
+      D2Common::Units::SetSequenceFrame(pUnit, pSkillTxt[eSkill].seqinput - 1);
+      pUnit->nFrameCount = 0x800;
     }
 
-    D2Common::Units::SetSequenceFrame(pUnit, pSkillTxt[eSkill].seqinput - 1);
-    pUnit->nFrameCount = 0x800;
     return 1;
 }
 
@@ -413,11 +409,10 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_CastAttackTarget(D2UnitStrc * pUn
     }
 
     Skills::CastAttackWithDistanceCheck(pUnit, eMissileId, eSkill, nSkillLvl);
-    if (!pUnit) {
-      return 1;
+    if (pUnit) {
+      pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     return 1;
 }
 
@@ -452,12 +447,11 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_StreamMissile(D2UnitStrc * pUnit,
     sSkillArg.nMissileTxtNo = (int)sCltMissileA;
     sSkillArg.eSkillNo = eSkill;
     D2UnitStrc* pMissileUnit = UNIT::Missile::MakeMissile(&sSkillArg);
-    if (!pMissileUnit) {
-      return 1;
+    if (pMissileUnit) {
+      D2Common::Units::Missile::SetStreamMissile(pMissileUnit, pSkillTxt->cltmissile[2]);
+      D2Common::Units::Missile::SetStreamRange(pMissileUnit, (int16_t)nAuraRange);
     }
 
-    D2Common::Units::Missile::SetStreamMissile(pMissileUnit, pSkillTxt->cltmissile[2]);
-    D2Common::Units::Missile::SetStreamRange(pMissileUnit, (int16_t)nAuraRange);
     return 1;
 }
 

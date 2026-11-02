@@ -103,42 +103,37 @@ namespace D2Game::PLAYER::PlayerTrade {
 // Object operate callback (fn index 32) for the player stash (class ID 0x10B). Validates that both the player and the stash object are in town, then sets the player's interact info to the stash GUID, sends trade-action packet 0x10 (open stash) to the client, and checks item levels. Returns 0 always.
 // @sourcefile .\PLAYER\PlrTrade.cpp
 BOOL __fastcall Objects_OperateFn32_OpenStash(D2ObjectOperateFnArg * pOperation) {
+    BOOL bIsInTown;
     uint32_t nStashGUID;
-    if (pOperation->nObjectClassId != 0x10b) {
-      return 0;
+    D2ClientStrc* pClient;
+    D2UnitStrc* pStashUnit;
+    if (pOperation->nObjectClassId == 0x10b) {
+      D2RoomStrc* pRoom;
+      pRoom = D2Common::Units::UNITS_GetRoom(pOperation->pAttacker);
+      if (pRoom) {
+        bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
+        if (bIsInTown) {
+          pRoom = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
+          if (pRoom) {
+            bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
+            if (bIsInTown) {
+              pStashUnit = pOperation->sArg.pVictim;
+              if (!pStashUnit) {
+                nStashGUID = -1;
+              } else {
+                nStashGUID = pStashUnit->nUnitGUID;
+              }
+
+              UNIT::SUnit::SetInteractInfo(pOperation->pAttacker, UNIT_OBJECT, nStashGUID);
+              pClient = UNIT::SUnit::SUNIT_GetClient(pOperation->pAttacker, ".\\PLAYER\\PlrTrade.cpp", 0x65);
+              GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 0x10);
+              ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pOperation->sArg.pGame, pOperation->pAttacker);
+            }
+          }
+        }
+      }
     }
 
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pOperation->pAttacker);
-    if (!pRoom) {
-      return 0;
-    }
-
-    BOOL bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (!bIsInTown) {
-      return 0;
-    }
-
-    pRoom = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
-    if (!pRoom) {
-      return 0;
-    }
-
-    bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (!bIsInTown) {
-      return 0;
-    }
-
-    D2UnitStrc* pStashUnit = pOperation->sArg.pVictim;
-    if (!pStashUnit) {
-      nStashGUID = -1;
-    } else {
-      nStashGUID = pStashUnit->nUnitGUID;
-    }
-
-    UNIT::SUnit::SetInteractInfo(pOperation->pAttacker, UNIT_OBJECT, nStashGUID);
-    D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pOperation->pAttacker, ".\\PLAYER\\PlrTrade.cpp", 0x65);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 0x10);
-    ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pOperation->sArg.pGame, pOperation->pAttacker);
     return 0;
 }
 
@@ -2233,13 +2228,12 @@ BOOL __fastcall IsInteractingWithPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     uint32_t nInteractGUID;
     eD2UnitType eInteractType;
     BOOL bHasInteract = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractType, &nInteractGUID);
-    if (!(bHasInteract && eInteractType == UNIT_PLAYER)) {
-      return 0;
-    }
-
-    D2UnitStrc* pOtherUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, nInteractGUID);
-    if (pOtherUnit) {
-      return 1;
+    if (bHasInteract && eInteractType == UNIT_PLAYER) {
+      D2UnitStrc* pOtherUnit;
+      pOtherUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, nInteractGUID);
+      if (pOtherUnit) {
+        return 1;
+      }
     }
 
     return 0;

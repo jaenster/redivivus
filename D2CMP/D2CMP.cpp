@@ -70,11 +70,10 @@ uint32_t __stdcall CELCMP_AllocateCelListKey(uint32_t nFormat, uint32_t dwNumDir
         pCelEntry->pRawData = (void*)*ppRawData;
       }
     }
-    if (!dwNumDirections) {
-      return nFormat;
+    if (dwNumDirections) {
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
     return nFormat;
 }
 
@@ -85,7 +84,6 @@ uint32_t __stdcall TILEPROJECT_GetSoundIndexIndex(int32_t pComp8) {
     }
 
     return *(uint32_t*)(pComp8 + 0x10);
-    return *(uint32_t*)(pComp8 + 0x10);
 }
 
 uint32_t __stdcall TILEPROJECT_GetMainIndex(uint32_t pComp24) {
@@ -95,7 +93,6 @@ uint32_t __stdcall TILEPROJECT_GetMainIndex(uint32_t pComp24) {
     }
 
     return (uint32_t)((uint32_t)(uint16_t)(short int)(pComp24 >> 0x10) << 16 | (uint32_t)(uint16_t)*(uint16_t*)(pComp24 + 4));
-    return (uint32_t)((uint32_t)(uint16_t)(short int)(pComp24 >> 0x10) << 16 | (uint32_t)(uint16_t)*(uint16_t*)(pComp24 + 4));
 }
 
 uint32_t __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(int32_t pComp24) {
@@ -104,7 +101,6 @@ uint32_t __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(int32_t pComp24) {
       exit(-1);
     }
 
-    return *(uint32_t*)(pComp24 + 0x58);
     return *(uint32_t*)(pComp24 + 0x58);
 }
 

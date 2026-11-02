@@ -193,11 +193,10 @@ static BOOL __stdcall SCMD_ProcessFile(char * filename, int * pnCmdCtx, uint32_t
     DWORD dwBytesRead;
     HANDLE hFile = CreateFileA(filename, 0x80000000, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x8000000, (HANDLE)0x0);
     if (hFile == (HANDLE)-1) {
-      if (!pfnErrorCallback) {
-        return 0;
+      if (pfnErrorCallback) {
+        SCMD_GenerateError(0x6e, pfnErrorCallback, filename);
       }
 
-      SCMD_GenerateError(0x6e, pfnErrorCallback, filename);
       return 0;
     }
 
@@ -217,20 +216,18 @@ uint32_t __thiscall SCMD_GetListOffset(::SCMD * pThis, int nBaseOffset) {
     if ((int)uOffset < 0) {
       return ~uOffset;
     }
-    if (nBaseOffset >= 0) {
-      return uOffset + nBaseOffset;
+    if (nBaseOffset < 0) {
+      nBaseOffset = (int)pThis - *(int*)(*(int*)pThis + 4);
     }
 
-    nBaseOffset = (int)pThis - *(int*)(*(int*)pThis + 4);
     return uOffset + nBaseOffset;
 }
 
 ::SCMD * __thiscall SCMD_GetListHead(::SCMD * pThis, ::SCMD * pNode) {
-    if (pNode) {
-      return pNode;
+    if (!pNode) {
+      pNode = (::SCMD*)(pThis + 4);
     }
 
-    pNode = (::SCMD*)(pThis + 4);
     return pNode;
 }
 
@@ -293,11 +290,10 @@ void __thiscall SCMD_MoveToList(::SCMD * pThis, ::SCMD * pNode, int nInsertMode,
 }
 
 uint32_t __thiscall SCMD_GetNextOffset(::SCMD * pThis, ::SCMD * pNode) {
-    if (pNode) {
-      return (int)*(uint32_t*)(pNode + 4) <= 0 ? 0 : *(uint32_t*)(pNode + 4);
+    if (!pNode) {
+      pNode = (::SCMD*)(pThis + 4);
     }
 
-    pNode = (::SCMD*)(pThis + 4);
     return (int)*(uint32_t*)(pNode + 4) <= 0 ? 0 : *(uint32_t*)(pNode + 4);
 }
 
@@ -422,11 +418,10 @@ void __fastcall SCMD_ClearAll(D2StormListHead * nListPtr) {
     } else {
       pNewNode = 0;
     }
-    if (!nInsertMode) {
-      return pNewNode;
+    if (nInsertMode) {
+      SCMD_MoveToList((::SCMD*)pThis, pNewNode, nInsertMode, nullptr);
     }
 
-    SCMD_MoveToList((::SCMD*)pThis, pNewNode, nInsertMode, nullptr);
     return pNewNode;
 }
 
@@ -447,11 +442,10 @@ void __fastcall SCMD_ClearAll(D2StormListHead * nListPtr) {
       *(uint32_t*)pThis = 0;
       *(uint32_t*)(pThis + 4) = 0;
     }
-    if (!(bFreeMemory & 1)) {
-      return (::SCMD*)pThis;
+    if (bFreeMemory & 1) {
+      SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    SMem::SMemFree(pThis, "delete", -1, 0);
     return (::SCMD*)pThis;
 }
 
@@ -578,11 +572,10 @@ BOOL __stdcall SCmdRegisterArgument(uint32_t dwFlags, uint32_t dwId, char * szTe
     } else {
       pPrevLink->uValue.bValue = 0;
     }
-    if (bValidArgType != 0x1000000) {
-      return 1;
+    if (bValidArgType == 0x1000000) {
+      gbScmdHasPriorityCommand = 1;
     }
 
-    gbScmdHasPriorityCommand = 1;
     return 1;
 }
 
@@ -978,11 +971,10 @@ uint32_t __stdcall SCmdGetString(int dwCmdId, char * szText, int dwBufferSize) {
 
       for (pCmdNode = pListHead->pNext; pCmdNode > 0; pCmdNode = *(int*)(pCmdNode + 4)) {
         if (*(int*)(pCmdNode + 0xc) == dwCmdId) {
-          if (!*(char**)(pCmdNode + 0x3c)) {
-            return 1;
+          if (*(char**)(pCmdNode + 0x3c)) {
+            SSTR::SStrCopy(szText, *(char**)(pCmdNode + 0x3c), dwBufferSize);
           }
 
-          SSTR::SStrCopy(szText, *(char**)(pCmdNode + 0x3c), dwBufferSize);
           return 1;
         }
       }

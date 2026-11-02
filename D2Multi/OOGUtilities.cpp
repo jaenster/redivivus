@@ -80,11 +80,10 @@ int __stdcall OOG_WaitMCPThreadDonePump(int nFrameIndex) {
     DWORD DVar1 = 0;
     HANDLE hHandle = McpConnect::GetMCPThread();
     DVar1 = WaitForSingleObject(hHandle, DVar1);
-    if (!(!DVar1 || gnMCPConnectionRestoreResult)) {
-      return 1;
+    if (!DVar1 || gnMCPConnectionRestoreResult) {
+      D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     }
 
-    D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;
 }
 
@@ -266,19 +265,18 @@ void __fastcall OOGUTIL_JoinChannelAndDestroyForms(char * szChannelName) {
 }
 
 int __stdcall OOGUTIL_JoinChannelFromInput(D2ControlStrc * dwUnused) {
-    char szChannel[256];
     BOOL bVisible = D2Win::Src::D2WinMain::D2WINMAIN_GetControlVisible(gpCtlChannelOkButton);
     if (!bVisible) {
       return 0;
     }
 
     uint16_t* pwszInput = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCtlChannelNameEditBox->sControl);
-    if (!pwszInput) {
-      return 1;
+    if (pwszInput) {
+      char szChannel[256];
+      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szChannel, (uint16_t*)pwszInput, 0x100);
+      OOGUTIL_JoinChannelAndDestroyForms(szChannel);
     }
 
-    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szChannel, (uint16_t*)pwszInput, 0x100);
-    OOGUTIL_JoinChannelAndDestroyForms(szChannel);
     return 1;
 }
 
@@ -967,11 +965,10 @@ static uint32_t OOGUTIL_HandleReplyCommand(char * szText1, char * szText2) {
       }
 
       D2Lang::UTF8_ConvertToWideChar(wszOutputBuffer, szMessageBuffer, 0x100);
-      if (!gpChatMessagesTextBox) {
-        return 1;
+      if (gpChatMessagesTextBox) {
+        D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszOutputBuffer, 1, false, 1);
       }
 
-      D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszOutputBuffer, 1, false, 1);
       return 1;
     }
 
@@ -1165,11 +1162,10 @@ int __stdcall CHAT_SendOutOfGameMessage() {
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpChatDlgInputEditBox, nullptr);
     int32_t nVisibleLines = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetVisibleLineCount(gpChatMessagesTextBox);
     int32_t nTotalLines = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetLineCount(gpChatMessagesTextBox);
-    if (nTotalLines <= nVisibleLines) {
-      return 1;
+    if (nTotalLines > nVisibleLines) {
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpChatMessagesTextBox, nTotalLines - nVisibleLines);
     }
 
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpChatMessagesTextBox, nTotalLines - nVisibleLines);
     return 1;
 }
 
@@ -1839,11 +1835,10 @@ void __stdcall OOGUTIL_SetJoinGameError() {
 int __stdcall OOGUTIL_Unused11(int nFrameIndex) {
     uint32_t bTmp;
     BOOL nResult = pNetworkUnknown->pfnGetEnterChatResponseFlags(&bTmp);
-    if (!nResult) {
-      return 1;
+    if (nResult) {
+      D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     }
 
-    D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;
 }
 
@@ -3610,11 +3605,10 @@ char * OOGUTIL_Unused12(uint32_t * szString, int nChar) {
 char * __fastcall OOGUTIL_GetAccountName(char * szUserName) {
     char* pszAccountName;
     char* pszSep = Storm::Source::SSTR::SStrChr(szUserName, '*');
-    if (!(!pszSep || (pszAccountName = pszSep + 1 , pszSep[1] == '\0'))) {
-      return pszAccountName;
+    if (!pszSep || (pszAccountName = pszSep + 1 , pszSep[1] == '\0')) {
+      pszAccountName = szUserName;
     }
 
-    pszAccountName = szUserName;
     return pszAccountName;
 }
 
@@ -3669,31 +3663,26 @@ int __stdcall OOGUTIL_ValidateUsername2(D2ControlMsg * pControlMsg) {
 }
 
 int __stdcall OOGUTIL_ValidateUsername3(D2ControlMsg * pControlMsg) {
+    DWORD dwTickNow;
     char szFormattedMsg[300];
     char szMessage[300];
     uint16_t* pwszInput = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpChatDlgInputEditBox->sControl);
-    if (!pwszInput) {
-      return 1;
+    if (pwszInput) {
+      int32_t nLength;
+      nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszInput);
+      if (nLength) {
+        D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szMessage, (uint16_t*)pwszInput, 300);
+        if (szMessage[0] != '/') {
+          dwTickNow = GetTickCount();
+          if (dwTickNow >= gdwLastChatSendTick + 1000) {
+            gdwLastChatSendTick = dwTickNow;
+            sprintf(szFormattedMsg, "/me %s", szMessage);
+            OOGUTIL_SendChatMessage(szFormattedMsg, 0);
+          }
+        }
+      }
     }
 
-    int32_t nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszInput);
-    if (!nLength) {
-      return 1;
-    }
-
-    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szMessage, (uint16_t*)pwszInput, 300);
-    if (szMessage[0] == '/') {
-      return 1;
-    }
-
-    DWORD dwTickNow = GetTickCount();
-    if (!(dwTickNow >= gdwLastChatSendTick + 1000)) {
-      return 1;
-    }
-
-    gdwLastChatSendTick = dwTickNow;
-    sprintf(szFormattedMsg, "/me %s", szMessage);
-    OOGUTIL_SendChatMessage(szFormattedMsg, 0);
     return 1;
 }
 

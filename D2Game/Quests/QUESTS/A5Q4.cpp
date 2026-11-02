@@ -207,12 +207,11 @@ BOOL __fastcall Q34_UpdateQuestStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
                          into player quest log */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_Step0x02);
       return 0;
     }
-    if (pQuestData->nStateFlag != 3) {
-      return 0;
+    if (pQuestData->nStateFlag == 3) {
+      /* SetQuestState(Betrayal q0x26, Step0x03=3): mirror in-memory nStateFlag==3
+                         into player quest log */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_Step0x03);
     }
 
-    /* SetQuestState(Betrayal q0x26, Step0x03=3): mirror in-memory nStateFlag==3
-                         into player quest log */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_Step0x03);
     return 0;
 }
 
@@ -220,11 +219,10 @@ BOOL __fastcall Q34_UpdateQuestStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q4.cpp
 bool __fastcall Q34_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (pQuestData->nStateFlag < 4 && pQuestData->bIsNotIntroduction != '\0') {
-      if (pQuestData->nStateFlag) {
-        return true;
+      if (!pQuestData->nStateFlag) {
+        QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q4.cpp", 0xff);
       }
 
-      QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q4.cpp", 0xff);
       return true;
     }
 
@@ -374,66 +372,57 @@ void __fastcall Q34_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 
 // Q34_CheckNearNihlathak (Betrayal of Harrogath). Per-player proximity check: if the player's room (or an adjacent room) is the stored Nihlathak room AND Prison of Ice is done AND Betrayal not yet complete/reward, sets the player's RewardAwaits + JustCompleted bits — i.e. completes the quest when a player is near the dying/dead Nihlathak. Skipped if CannotComplete or already Completed.
 BOOL __fastcall Q34_CheckNearNihlathak(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    D2QuestDataStrc* pPlayerData;
+    uint32_t nAdjacentIdx;
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nAdjacentRoomCount;
+    char bIsNearNihlathak;
+    D2QuestDataA5Q4Strc* pBetrayalQuest;
     D2UnitDataPlayerStrc* pA5Q4Data = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pA5Q4Data->pQuestRecord[pGame->nDifficulty];
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return 0;
-    }
+    if (pRoom) {
+      BOOL bQuestState;
+      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_CannotCompleteQuestInGame);
+      if (!bQuestState) {
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_Completed);
+        if (!bQuestState) {
+          pPlayerData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_BetrayalOfHaggorath);
+          pBetrayalQuest = pPlayerData->pQuestSpecificData.pA5Q4;
+          bIsNearNihlathak = '\0';
+          if (pRoom == (D2RoomStrc*)pBetrayalQuest->pRoomTarget) {
+            bIsNearNihlathak = '\x01';
+          } else {
+            D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nAdjacentRoomCount);
+            for (nAdjacentIdx = 0; nAdjacentIdx < nAdjacentRoomCount; nAdjacentIdx++) {
+              if (ppAdjacentRooms[nAdjacentIdx] == (D2RoomStrc*)pBetrayalQuest->pRoomTarget) {
+                bIsNearNihlathak = '\x01';
+                break;
+              }
+            }
+          }
 
-    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_CannotCompleteQuestInGame);
-    if (bQuestState) {
-      return 0;
-    }
-
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_Completed);
-    if (bQuestState) {
-      return 0;
-    }
-
-    D2QuestDataStrc* pPlayerData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_BetrayalOfHaggorath);
-    D2QuestDataA5Q4Strc* pBetrayalQuest = pPlayerData->pQuestSpecificData.pA5Q4;
-    char bIsNearNihlathak = '\0';
-    if (pRoom == (D2RoomStrc*)pBetrayalQuest->pRoomTarget) {
-      bIsNearNihlathak = '\x01';
-    } else {
-      uint32_t nAdjacentIdx;
-      D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nAdjacentRoomCount);
-      for (nAdjacentIdx = 0; nAdjacentIdx < nAdjacentRoomCount; nAdjacentIdx++) {
-        if (ppAdjacentRooms[nAdjacentIdx] == (D2RoomStrc*)pBetrayalQuest->pRoomTarget) {
-          bIsNearNihlathak = '\x01';
-          break;
+          pA5Q4Data = D2Common::Units::GetPlayerData(pUnit);
+          pBitBuffer = pA5Q4Data->pQuestRecord[pGame->nDifficulty];
+          if (bIsNearNihlathak != '\0') {
+            bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_Completed);
+            if (bQuestState || (bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_RewardAwaits) , bQuestState != 0)) {
+              bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_Completed);
+              if (!bQuestState) {
+                bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_RewardAwaits);
+                if (!bQuestState) {
+                  /* SetQuestState(Betrayal q0x26, RewardAwaits=1): player near dead Nihlathak ->
+                         grant completion */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_RewardAwaits);
+                  /* SetQuestState(Betrayal q0x26, JustCompleted=0xd): fire completion FX for
+                         nearby player */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_JustCompleted);
+                }
+              }
+            }
+          }
         }
       }
     }
 
-    pA5Q4Data = D2Common::Units::GetPlayerData(pUnit);
-    pBitBuffer = pA5Q4Data->pQuestRecord[pGame->nDifficulty];
-    if (bIsNearNihlathak == '\0') {
-      return 0;
-    }
-
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_Completed);
-    if (!(bQuestState || (bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_RewardAwaits) , bQuestState != 0))) {
-      return 0;
-    }
-
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_Completed);
-    if (bQuestState) {
-      return 0;
-    }
-
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_RewardAwaits);
-    if (bQuestState) {
-      return 0;
-    }
-
-    /* SetQuestState(Betrayal q0x26, RewardAwaits=1): player near dead Nihlathak ->
-                         grant completion */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_RewardAwaits);
-    /* SetQuestState(Betrayal q0x26, JustCompleted=0xd): fire completion FX for
-                         nearby player */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_JustCompleted);
     return 0;
 }
 
@@ -441,16 +430,14 @@ BOOL __fastcall Q34_CheckNearNihlathak(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 BOOL __fastcall Q34_PropagateCompleteToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_BetrayalOfHaggorath, QUESTSTATE_JustCompleted);
-    if (!BVar2) {
-      return 0;
+    if (BVar2) {
+      uint16_t nPartyId;
+      nPartyId = UNIT::SUnit::GetPartyId(pUnit);
+      if (nPartyId != 0xffff) {
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q34_SetCompleteForPartyMember, 0);
+      }
     }
 
-    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    if (nPartyId == 0xffff) {
-      return 0;
-    }
-
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q34_SetCompleteForPartyMember, 0);
     return 0;
 }
 
@@ -459,23 +446,18 @@ BOOL __fastcall Q34_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_Completed);
-    if (bQuestState == 1) {
-      return 0;
-    }
-
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_RewardAwaits);
-    if (bQuestState == 1) {
-      return 0;
-    }
-
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_JustCompleted);
-    if (bQuestState == 1) {
-      return 0;
-    }
-
-    /* SetQuestState(Betrayal q0x26, CannotCompleteQuestInGame=0xe): player absent
+    if (bQuestState != 1) {
+      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_RewardAwaits);
+      if (bQuestState != 1) {
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_JustCompleted);
+        if (bQuestState != 1) {
+          /* SetQuestState(Betrayal q0x26, CannotCompleteQuestInGame=0xe): player absent
                          at Nihlathak kill forfeits self game */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_CannotCompleteQuestInGame);
-    QUEST_SendQuestStatePacket(pUnit, 0x22, 0);
+          QUEST_SendQuestStatePacket(pUnit, 0x22, 0);
+        }
+      }
+    }
+
     return 0;
 }
 
@@ -483,11 +465,10 @@ BOOL __fastcall Q34_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 BOOL __fastcall Q34_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_BetrayalOfHaggorath, QUESTSTATE_JustCompleted);
-    if (!bQuestState) {
-      return 0;
+    if (bQuestState) {
+      UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x52, pUnit);
     }
 
-    UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x52, pUnit);
     return 0;
 }
 
@@ -534,44 +515,43 @@ void __fastcall Q34_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
 // A5Q4 (Betrayal of Harrogath) NPC active-filter predicate for Nihlathak (classId 0x200). When nStateFlag!=0: returns true if Prison of Ice is done and Betrayal is neither Completed nor RewardAwaits. When nStateFlag==0: returns true if JustCompleted is set and Step0x04 is NOT set. Read-only on QuestRecord; controls whether Nihlathak shows as an active quest NPC for this player.
 bool __fastcall Q34_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    BOOL BVar1;
     eD2Quests nQuestId;
     eD2QuestState eQuestState;
-    if (nTargetClassId != 0x200) {
-      return false;
-    }
-    if (pQuestData->nStateFlag == 1) {
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_Completed);
-      if (!BVar1) {
-        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_RewardAwaits);
+    if (nTargetClassId == 0x200) {
+      BOOL BVar1;
+      if (pQuestData->nStateFlag == 1) {
+        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_Completed);
+        if (!BVar1) {
+          BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_RewardAwaits);
+          if (!BVar1) {
+            return false;
+          }
+        }
+
+        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
+        if (BVar1) {
+          return false;
+        }
+
+        nQuestId = pQuestData->nQuestIdReal;
+        eQuestState = QUESTSTATE_RewardAwaits;
+      } else {
+        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
         if (!BVar1) {
           return false;
         }
+
+        eQuestState = QUESTSTATE_Step0x04;
+        nQuestId = QUEST_BetrayalOfHaggorath;
       }
 
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
-      if (BVar1) {
-        return false;
-      }
-
-      nQuestId = pQuestData->nQuestIdReal;
-      eQuestState = QUESTSTATE_RewardAwaits;
-    } else {
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
+      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, nQuestId, eQuestState);
       if (!BVar1) {
-        return false;
+        return true;
       }
-
-      eQuestState = QUESTSTATE_Step0x04;
-      nQuestId = QUEST_BetrayalOfHaggorath;
     }
 
-    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, nQuestId, eQuestState);
-    if (BVar1) {
-      return false;
-    }
-
-    return true;
+    return false;
 }
 
 // Q34_SetAnyaTimerEvent (Betrayal of Harrogath). If the quest's bNotifiedCompletion flag is set, schedules a delayed event (type 7, +0xc frames) on the unit — drives the post-kill follow-up (Anya's reward / personalized item + Larzuk arrival). No QuestRecord access.

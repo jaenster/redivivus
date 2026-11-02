@@ -71,11 +71,10 @@ BOOL __stdcall NET_MCP_CLIENT_ReadAndParsePacket() {
     }
 
     size_t nSize = Fog::Src::D2QSSocket::ReadBytesFromSocket(D2Client::MCP::MCPD2QSSocket, szPacketBuf, 0x400);
-    if (!(short int)nSize) {
-      return 1;
+    if ((short int)nSize) {
+      /* At self point nSize is removed from packet structure */ HandleIncomingPacket(szPacketBuf, (uint16_t)nSize);
     }
 
-    /* At self point nSize is removed from packet structure */ HandleIncomingPacket(szPacketBuf, (uint16_t)nSize);
     return 1;
 }
 
@@ -739,13 +738,12 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x07(char * pBytes, size_t nSize) {
 
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x03(char * pBytes, size_t nSize) {
     uint32_t dwGameToken = *(uint32_t*)(pBytes + 3);
-    if (*(uint16_t*)(pBytes + 1) != nMcpPacketSequence) {
-      return 1;
+    if (*(uint16_t*)(pBytes + 1) == nMcpPacketSequence) {
+      SetD2GSJoinResult(*(int32_t*)(pBytes + 7));
+      D2Client::MCP::D2GSRequestId = nMcpPacketSequence;
+      D2Client::MCP::D2GSGameToken = dwGameToken;
     }
 
-    SetD2GSJoinResult(*(int32_t*)(pBytes + 7));
-    D2Client::MCP::D2GSRequestId = nMcpPacketSequence;
-    D2Client::MCP::D2GSGameToken = dwGameToken;
     return 1;
 }
 
@@ -774,6 +772,8 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x04(MCPPacketSrv0x04 * pBytes, size_t nS
 }
 
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x06(char * pBytes, size_t nSize) {
+    uint16_t* pwGameNameLenDst;
+    int pszGameNameDst;
     char cByte;
     int nCopyOffset = *(int*)(pBytes + 3);
     uint32_t dwJoinStatusPart4 = *(uint32_t*)(pBytes + 7);
@@ -807,30 +807,29 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x06(char * pBytes, size_t nSize) {
       pszSrc++;
     } while (cByte != '\0');
 
-    if (pBytes[0xe] == '\0') {
-      return 1;
-    }
-
-    uint8_t* pbGameNameSrc = (uint8_t*)(pBytes + 0x1f);
-    int pszGameNameDst = (int)(uintptr_t)((char*)&g_CharSelectBuffer + 140);
-    uint16_t* pwGameNameLenDst = g_CharSelectBuffer.awPlayerLevel;
-    do {
-      pwGameNameLenDst[-0x10] = (uint16_t)pbGameNameSrc[-0x10];
-      *pwGameNameLenDst = (uint16_t)*pbGameNameSrc;
-      pszSrc = pszScan;
-      pszSrc = pszSrc + strlen(pszSrc) + 1;
-      nCopyOffset = pszGameNameDst - (int)pszScan;
+    if (pBytes[0xe] != '\0') {
+      uint8_t* pbGameNameSrc;
+      pbGameNameSrc = (uint8_t*)(pBytes + 0x1f);
+      pszGameNameDst = (int)(uintptr_t)((char*)&g_CharSelectBuffer + 140);
+      pwGameNameLenDst = g_CharSelectBuffer.awPlayerLevel;
       do {
-        cByte = *pszScan;
-        pszScan[nCopyOffset] = cByte;
-        pszScan++;
-      } while (cByte != '\0');
+        pwGameNameLenDst[-0x10] = (uint16_t)pbGameNameSrc[-0x10];
+        *pwGameNameLenDst = (uint16_t)*pbGameNameSrc;
+        pszSrc = pszScan;
+        pszSrc = pszSrc + strlen(pszSrc) + 1;
+        nCopyOffset = pszGameNameDst - (int)pszScan;
+        do {
+          cByte = *pszScan;
+          pszScan[nCopyOffset] = cByte;
+          pszScan++;
+        } while (cByte != '\0');
 
-      pszGameNameDst += 0x10;
-      pbGameNameSrc++;
-      pwGameNameLenDst++;
-      pszScan = pszSrc;
-    } while ((int)(pbGameNameSrc + (-0x1f - (int)pBytes)) < (int)(uint32_t)(uint8_t)pBytes[0xe]);
+        pszGameNameDst += 0x10;
+        pbGameNameSrc++;
+        pwGameNameLenDst++;
+        pszScan = pszSrc;
+      } while ((int)(pbGameNameSrc + (-0x1f - (int)pBytes)) < (int)(uint32_t)(uint8_t)pBytes[0xe]);
+    }
 
     return 1;
 }
@@ -839,11 +838,10 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x08(char * pBytes, size_t nSize) {
     // Static local variables (originally global data)
     static pfnVoidNoArgCallback g_pfnMCPCallback1; D2_STATIC_GUARD_BSS(g_pfnMCPCallback1, "D2MCPClient::McpConnect::NET_MCP_CLIENT_Incoming0x08::g_pfnMCPCallback1");
 
-    if (!g_pfnMCPCallback1) {
-      return 1;
+    if (g_pfnMCPCallback1) {
+      (*g_pfnMCPCallback1)();
     }
 
-    (*g_pfnMCPCallback1)();
     return 1;
 }
 
@@ -851,21 +849,19 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x09(char * pBytes, size_t nSize) {
     // Static local variables (originally global data)
     static pfnVoidNoArgCallback g_pfnMCPCallback2; D2_STATIC_GUARD_BSS(g_pfnMCPCallback2, "D2MCPClient::McpConnect::NET_MCP_CLIENT_Incoming0x09::g_pfnMCPCallback2");
 
-    if (!g_pfnMCPCallback2) {
-      return 1;
+    if (g_pfnMCPCallback2) {
+      (*g_pfnMCPCallback2)();
     }
 
-    (*g_pfnMCPCallback2)();
     return 1;
 }
 
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x0A(char * pBytes, size_t nSize) {
-    if (*(uint16_t*)(pBytes + 1) != nMcpPacketSequence) {
-      return 1;
+    if (*(uint16_t*)(pBytes + 1) == nMcpPacketSequence) {
+      SetD2GSJoinResult(*(int32_t*)(pBytes + 3));
+      MCPSTATE_SetJoinGameSuccess(1);
     }
 
-    SetD2GSJoinResult(*(int32_t*)(pBytes + 3));
-    MCPSTATE_SetJoinGameSuccess(1);
     return 1;
 }
 
@@ -972,32 +968,32 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x11(char * pBytes, size_t nSize) {
 
     memcpy(gMCPGameListBuffer + gnMCPGameListWriteOffset, pBytes + 8, (uint32_t)wChunkLen);
     gnMCPGameListWriteOffset = nWriteEndOffset;
-    if ((int)nWriteEndOffset < (int)nRemaining) {
-      return 1;
-    }
-    if (g_pfnMCPGameListCompleteCallback) {
-      (*g_pfnMCPGameListCompleteCallback)();
-      nRemaining = gnMCPGameListBufferSize;
-    }
-
-    do {
+    if ((int)nWriteEndOffset >= (int)nRemaining) {
       uint32_t nEntryCount;
-      nEntryCount = pnEntry[1];
-      nEntryField2 = pnEntry[2];
-      gnMCPGameListBufferSize = nRemaining - 0xc;
-      nTotalSize = (nEntryField2 + 0xc) * nEntryCount;
-      if ((int)nEntryCount < 0 || (int)nEntryField2 < 0 || (int)nEntryCount > 0x100 || (int)nEntryField2 > 0x10 || nTotalSize - gnMCPGameListBufferSize && (int)gnMCPGameListBufferSize <= (int)nTotalSize || (int)*pnEntry > 2000) {
-        break;
-      }
-      if (g_pfnMCPGameListCallback) {
-        (*g_pfnMCPGameListCallback)(*pnEntry, nEntryCount, nEntryField2, dwListFlag, pnEntry + 3);
+      if (g_pfnMCPGameListCompleteCallback) {
+        (*g_pfnMCPGameListCompleteCallback)();
+        nRemaining = gnMCPGameListBufferSize;
       }
 
-      nRemaining = gnMCPGameListBufferSize - (uint16_t)nTotalSize;
-      pnEntry = (uint32_t*)((int)(pnEntry + 3) + nTotalSize);
-    } while ((int)nRemaining > 0);
+      do {
+        nEntryCount = pnEntry[1];
+        nEntryField2 = pnEntry[2];
+        gnMCPGameListBufferSize = nRemaining - 0xc;
+        nTotalSize = (nEntryField2 + 0xc) * nEntryCount;
+        if ((int)nEntryCount < 0 || (int)nEntryField2 < 0 || (int)nEntryCount > 0x100 || (int)nEntryField2 > 0x10 || nTotalSize - gnMCPGameListBufferSize && (int)gnMCPGameListBufferSize <= (int)nTotalSize || (int)*pnEntry > 2000) {
+          break;
+        }
+        if (g_pfnMCPGameListCallback) {
+          (*g_pfnMCPGameListCallback)(*pnEntry, nEntryCount, nEntryField2, dwListFlag, pnEntry + 3);
+        }
 
-    gnMCPGameListBufferSize = 0;
+        nRemaining = gnMCPGameListBufferSize - (uint16_t)nTotalSize;
+        pnEntry = (uint32_t*)((int)(pnEntry + 3) + nTotalSize);
+      } while ((int)nRemaining > 0);
+
+      gnMCPGameListBufferSize = 0;
+    }
+
     return 1;
 }
 
@@ -1005,11 +1001,10 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x12(char * pBytes, size_t nSize) {
     if (nSize < 2) {
       return 0;
     }
-    if (!g_pfnMCPMessageCallback) {
-      return 1;
+    if (g_pfnMCPMessageCallback) {
+      (*g_pfnMCPMessageCallback)((uint32_t)(uint8_t)pBytes[1], nSize - 2, pBytes + 2);
     }
 
-    (*g_pfnMCPMessageCallback)((uint32_t)(uint8_t)pBytes[1], nSize - 2, pBytes + 2);
     return 1;
 }
 
@@ -1071,11 +1066,10 @@ BOOL __fastcall HandleIncomingPacket(char * pBytes, size_t nSize) {
     if ((uint8_t)*pBytes >= 0x1a) {
       return 0;
     }
-    if (!INCOMING[(uint8_t)*pBytes]) {
-      return bResult;
+    if (INCOMING[(uint8_t)*pBytes]) {
+      bResult = (*INCOMING[(uint8_t)*pBytes])(pBytes, nSize);
     }
 
-    bResult = (*INCOMING[(uint8_t)*pBytes])(pBytes, nSize);
     return bResult;
 }
 

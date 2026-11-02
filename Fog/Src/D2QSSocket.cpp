@@ -354,25 +354,24 @@ D2QSSocketStrc * __stdcall STRUCT_D2QSSocket_Init(char * szIpAddress, int nPort,
       }
 
       pD2QSSocket = D2_NEW_AT(D2QSSocketStrc, ".\\Src\\D2QSSocket.cpp", 0x245);
-      if (!pD2QSSocket) {
-        return pD2QSSocket;
+      if (pD2QSSocket) {
+        memset(pD2QSSocket, 0, 0x194);
+        Storm::Source::SSTR::SStrCopy(pD2QSSocket->szIpAddress, szIpAddress, 0x104);
+        if (szName) {
+          dwErrorCode = 4;
+          Storm::Source::SSTR::SStrCopy(pD2QSSocket->szName, szName, 4);
+        } else {
+          dwErrorCode = 0x40;
+          szName = "UNKNOWN";
+          Storm::Source::SSTR::SStrCopy(pD2QSSocket->szName, szName, 0x40);
+        }
+
+        pD2QSSocket->nPort = nPort;
+        D2QSQueue::D2QSQUEUE_Initialize(&pD2QSSocket->aQueue);
+        pD2QSSocket->nHeaderSize = 2;
+        pD2QSSocket->nSizeFieldOffset = 0;
       }
 
-      memset(pD2QSSocket, 0, 0x194);
-      Storm::Source::SSTR::SStrCopy(pD2QSSocket->szIpAddress, szIpAddress, 0x104);
-      if (szName) {
-        dwErrorCode = 4;
-        Storm::Source::SSTR::SStrCopy(pD2QSSocket->szName, szName, 4);
-      } else {
-        dwErrorCode = 0x40;
-        szName = "UNKNOWN";
-        Storm::Source::SSTR::SStrCopy(pD2QSSocket->szName, szName, 0x40);
-      }
-
-      pD2QSSocket->nPort = nPort;
-      D2QSQueue::D2QSQUEUE_Initialize(&pD2QSSocket->aQueue);
-      pD2QSSocket->nHeaderSize = 2;
-      pD2QSSocket->nSizeFieldOffset = 0;
       return pD2QSSocket;
     }
 }

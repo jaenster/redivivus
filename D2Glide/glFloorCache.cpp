@@ -65,37 +65,34 @@ int __fastcall GLFLOOR_Initialize(GlFloorCacheStrc * pCache, int nVramStart, int
     pCache->pActiveTail = 0;
     pCache->pFreeHead = pNodes;
     pCache->pFreeTail = pNodes + (pCache->nMaxEntries - 1);
-    if (gbGlideIsDebugBuild) {
-      return pCache->nMaxEntries * dwFloorSize + nVramStart;
+    if (!gbGlideIsDebugBuild) {
+      nVramAddr = 1;
+      if (1 < (int)(pCache->nMaxEntries - 1)) {
+        pVramAddr = &pNodes[1].dwAddress;
+        do {
+          if (*pVramAddr < 0x200000 && pCache->dwEntrySize + *pVramAddr > 0x200000) {
+            pNodes[nVramAddr - 1].pNext = pNodes + nVramAddr + 1;
+            pCache->pNodes[nVramAddr + 1].pPrev = pCache->pNodes + nVramAddr - 1;
+            pCache->pNodes[nVramAddr].pPrev = 0;
+            pCache->pNodes[nVramAddr].pNext = 0;
+            pCache->nUsedCount++;
+            break;
+          }
+
+          nVramAddr++;
+          pVramAddr += 5;
+        } while (nVramAddr < (int)(pCache->nMaxEntries - 1));
+      }
+
+      nEntryCount = pCache->pNodes[pCache->nMaxEntries - 1].dwAddress;
+      if (nEntryCount < 0x200000 && pCache->dwEntrySize + nEntryCount > 0x200000) {
+        pCache->pNodes[pCache->nMaxEntries - 1].pPrev = 0;
+        pCache->pNodes[pCache->nMaxEntries - 2].pNext = 0;
+        pCache->pFreeTail = pCache->pNodes + (pCache->nMaxEntries - 2);
+        pCache->nMaxEntries--;
+      }
     }
 
-    nVramAddr = 1;
-    if (1 < (int)(pCache->nMaxEntries - 1)) {
-      pVramAddr = &pNodes[1].dwAddress;
-      do {
-        if (*pVramAddr < 0x200000 && pCache->dwEntrySize + *pVramAddr > 0x200000) {
-          pNodes[nVramAddr - 1].pNext = pNodes + nVramAddr + 1;
-          pCache->pNodes[nVramAddr + 1].pPrev = pCache->pNodes + nVramAddr - 1;
-          pCache->pNodes[nVramAddr].pPrev = 0;
-          pCache->pNodes[nVramAddr].pNext = 0;
-          pCache->nUsedCount++;
-          break;
-        }
-
-        nVramAddr++;
-        pVramAddr += 5;
-      } while (nVramAddr < (int)(pCache->nMaxEntries - 1));
-    }
-
-    nEntryCount = pCache->pNodes[pCache->nMaxEntries - 1].dwAddress;
-    if (!(nEntryCount < 0x200000 && pCache->dwEntrySize + nEntryCount > 0x200000)) {
-      return pCache->nMaxEntries * dwFloorSize + nVramStart;
-    }
-
-    pCache->pNodes[pCache->nMaxEntries - 1].pPrev = 0;
-    pCache->pNodes[pCache->nMaxEntries - 2].pNext = 0;
-    pCache->pFreeTail = pCache->pNodes + (pCache->nMaxEntries - 2);
-    pCache->nMaxEntries--;
     return pCache->nMaxEntries * dwFloorSize + nVramStart;
 }
 
@@ -313,18 +310,15 @@ void __fastcall GLFLOOR_Destroy(uint32_t * pCacheData, GlFloorCacheStrc * pCache
 // Ensures cache has free capacity by allocating a node. If cache is full, evicts LRU entry first. Returns success status.
 short __fastcall GLFLOOR_EnsureCapacity(GlFloorCacheStrc * pCache) {
     int nNodeIndex = GLFLOOR_AllocateNode(pCache);
-    if (nNodeIndex) {
-      return (short int)nNodeIndex;
-    }
-
-    GLFLOOR_EvictLRU(pCache);
-    nNodeIndex = GLFLOOR_AllocateNode(pCache);
     if (!nNodeIndex) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8b);
-      exit(-1);
+      GLFLOOR_EvictLRU(pCache);
+      nNodeIndex = GLFLOOR_AllocateNode(pCache);
+      if (!nNodeIndex) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8b);
+        exit(-1);
+      }
     }
 
-    return (short int)nNodeIndex;
     return (short int)nNodeIndex;
 }
 

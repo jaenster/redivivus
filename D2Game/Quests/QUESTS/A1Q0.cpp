@@ -73,13 +73,13 @@ bool __fastcall Q00_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 
 // Q00_ActiveFilter (QUEST_SpokeToWarriv). Returns true (gossip/quest active) only for Warriv (class 0x9b) while the "spoke to Warriv" flag is still unset; false once greeted or for any other NPC. Gates whether Warriv's intro gossip is offered.
 bool __fastcall Q00_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    /* If target is Wariv (Act 1) */ if (nTargetClassId != 0x9b) {
-      /* Otherwise: inactive */ return false;
-    }
-
-    BOOL bIsQuestInState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SpokeToWarriv, QUESTSTATE_Completed);
-    if (!bIsQuestInState) {
-      return true;
+    /* If target is Wariv (Act 1) */ if (nTargetClassId == 0x9b) {
+      BOOL bIsQuestInState;
+      /* GetQuestState(QUEST_SpokeToWarriv, QUESTSTATE_Completed): Warriv's intro
+                         gossip stays active only while self "greeted" bit is clear. */ /* If state 0 (completed): active */ bIsQuestInState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SpokeToWarriv, QUESTSTATE_Completed);
+      if (!bIsQuestInState) {
+        return true;
+      }
     }
 
     /* Otherwise: inactive */ return false;

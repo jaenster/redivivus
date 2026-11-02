@@ -407,55 +407,46 @@ BOOL __fastcall Q12_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed);
-    if (BVar2 == 1) {
-      return 0;
+    if (BVar2 != 1) {
+      BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
+      if (BVar2 != 1) {
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_CannotCompleteQuestInGame);
+      }
     }
 
-    BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
-    if (BVar2 == 1) {
-      return 0;
-    }
-
-    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_CannotCompleteQuestInGame);
     return 0;
 }
 
 // A2Q4 - CheckArcaneAndReward. Per-player iterator callback: the actual quest-COMPLETE grant. If not already Completed(0)/RewardAwaits(1) and the player is standing in LEVEL_ArcaneSanctuary, sets the full completion bit set on the record: JustCompleted(0xd), RewardAwaits(1), Completed(0), clears all step bits, then re-sets Step0x08+Step0x07; finally propagates completion to every party member via Q12_SetArcaneCompleteOnPartyMember.
 BOOL __fastcall Q12_CheckArcaneAndReward(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    D2RoomStrc* pRoom;
+    eD2LevelId eLevel;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed);
-    if (BVar1 == 1) {
-      return 0;
+    if (BVar1 != 1) {
+      uint16_t nPartyId;
+      /* GetQuestState RewardAwaits(1) - skip if reward already pending */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
+      if (BVar1 != 1) {
+        pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+        if (pRoom) {
+          eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+          if (eLevel == LEVEL_ArcaneSanctuary) {
+            /* SetQuestState JustCompleted(0xd) - triggers completion fanfare self game */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_JustCompleted);
+            /* SetQuestState RewardAwaits(1) - reward owed to player */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
+            /* SetQuestState Completed(0) - mark Sanctuary done */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed);
+            /* UnsetQuestStepStates (0x65c3e0) - clear all step bits before final flags */ D2Common::QuestRecord::UnsetQuestStepStates(pBitBuffer, QUEST_TheArcaneSanctuary);
+            /* SetQuestState Step0x08 - re-set journal sub-state after step clear */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x08);
+            /* SetQuestState Step0x07 - re-set journal sub-state after step clear */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x07);
+            nPartyId = UNIT::SUnit::GetPartyId(pUnit);
+            if (nPartyId != 0xffff) {
+              UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q12_SetArcaneCompleteOnPartyMember, 0);
+            }
+          }
+        }
+      }
     }
 
-    /* GetQuestState RewardAwaits(1) - skip if reward already pending */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
-    if (BVar1 == 1) {
-      return 0;
-    }
-
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return 0;
-    }
-
-    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if (eLevel != LEVEL_ArcaneSanctuary) {
-      return 0;
-    }
-
-    /* SetQuestState JustCompleted(0xd) - triggers completion fanfare self game */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_JustCompleted);
-    /* SetQuestState RewardAwaits(1) - reward owed to player */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
-    /* SetQuestState Completed(0) - mark Sanctuary done */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed);
-    /* UnsetQuestStepStates (0x65c3e0) - clear all step bits before final flags */ D2Common::QuestRecord::UnsetQuestStepStates(pBitBuffer, QUEST_TheArcaneSanctuary);
-    /* SetQuestState Step0x08 - re-set journal sub-state after step clear */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x08);
-    /* SetQuestState Step0x07 - re-set journal sub-state after step clear */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x07);
-    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    if (nPartyId == 0xffff) {
-      return 0;
-    }
-
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q12_SetArcaneCompleteOnPartyMember, 0);
     return 0;
 }
 
@@ -478,12 +469,11 @@ static bool __fastcall Q12_SequenceFilterInlined(D2QuestDataStrc * pQuestData) {
 
 // A2Q4 - SequenceFilter (entry). On first activation (stateFlag==0 and intro done) sets stateFlag 1, then chains into the sequence quest (The Summoner) by calling its fpSequenceFilter. Halts via ErrorManager if the fn ptr is bad.
 bool __fastcall Q12_SequenceFilter(D2QuestDataStrc * pQuestData) {
-    if (!(!pQuestData->nStateFlag && pQuestData->bIsNotIntroduction == '\x01')) {
-      return true;
+    if (!pQuestData->nStateFlag && pQuestData->bIsNotIntroduction == '\x01') {
+      QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x35a);
+      Q12_SequenceFilterInlined(pQuestData);
     }
 
-    QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x35a);
-    Q12_SequenceFilterInlined(pQuestData);
     return true;
 }
 
@@ -740,6 +730,8 @@ BOOL __fastcall Q12_CheckJustCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // A2Q4 - OBJOP_StaffOfKingsAltar (object operate fn 42). Operating the Staff/Sanctuary altar object: sets the object death/update event, sends NPC-info packet 0x18c, records the room, and if quest is introduced and not yet at stateFlag 5 advances to 5 and runs the per-player iterators CheckArcaneAndReward (grant), SetCannotComplete, and CheckJustCompleted.
 BOOL __fastcall OBJOP_A2Q4_StaffOfKingsAltar(D2ObjectOperateFnArg * pOperation) {
     ::SGAMEDATA* pGame;
+    D2RoomStrc* pAltarRoom;
+    D2QuestDataA2Q4Strc* pA2Q4Specific;
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
       D2ObjectsTxt* pTxtObjects;
@@ -750,22 +742,19 @@ BOOL __fastcall OBJOP_A2Q4_StaffOfKingsAltar(D2ObjectOperateFnArg * pOperation) 
     }
 
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TheArcaneSanctuary);
-    if (!pQuestData) {
-      return 0;
+    if (pQuestData) {
+      pA2Q4Specific = pQuestData->pQuestSpecificData.pA2Q4;
+      QUEST_SendNpcInfoPacket(pOperation->pAttacker, pOperation->sArg.pVictim, 0x18c);
+      pAltarRoom = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
+      pA2Q4Specific->pPortalSpawnRoom = pAltarRoom;
+      if (pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlag != 5) {
+        QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x5ed);
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q12_CheckArcaneAndReward);
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q12_SetCannotComplete);
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q12_CheckJustCompleted);
+      }
     }
 
-    D2QuestDataA2Q4Strc* pA2Q4Specific = pQuestData->pQuestSpecificData.pA2Q4;
-    QUEST_SendNpcInfoPacket(pOperation->pAttacker, pOperation->sArg.pVictim, 0x18c);
-    D2RoomStrc* pAltarRoom = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
-    pA2Q4Specific->pPortalSpawnRoom = pAltarRoom;
-    if (!(pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlag != 5)) {
-      return 0;
-    }
-
-    QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x5ed);
-    UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q12_CheckArcaneAndReward);
-    UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q12_SetCannotComplete);
-    UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q12_CheckJustCompleted);
     return 0;
 }
 

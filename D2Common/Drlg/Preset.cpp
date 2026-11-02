@@ -1474,6 +1474,8 @@ void __fastcall DRLGPRESET_FreePresetLevelData(D2DrlgLevelStrc * pLevel, BOOL bK
 // Allocates and copies a preset unit, applying (nX,nY) offset. If the preset has a path/object list, deep-copies it and offsets each point by (nX,nY).
 // @sourcefile .\DRLG\Preset.cpp
 D2PresetUnitStrc * __fastcall CopyPresetUnit(D2PoolManagerStrc * pMemory, D2PresetUnitStrc * pPresetUnit, int32_t nX, int32_t nY) {
+    uint32_t pathIndex;
+    int* pCoordField;
     D2PresetUnitStrc* pNewPreset = D2_NEW_POOL_AT(pMemory, D2PresetUnitStrc, ".\\DRLG\\Preset.cpp", 0x54a);
     pNewPreset->nMode = 0;
     pNewPreset->nClassId = 0;
@@ -1489,25 +1491,21 @@ D2PresetUnitStrc * __fastcall CopyPresetUnit(D2PoolManagerStrc * pMemory, D2Pres
     pNewPreset->nPosX = pPresetUnit->nPosX + nX;
     pNewPreset->nPosY = pPresetUnit->nPosY + nY;
     pNewPreset->nFlags = pPresetUnit->nFlags;
-    if (!pPresetUnit->pMapAI) {
-      return pNewPreset;
+    if (pPresetUnit->pMapAI) {
+      D2MapAIStrc* pPresetPathCopy;
+      pPresetPathCopy = DRLGPRESET_CopyMapAI(pMemory, pPresetUnit->pMapAI);
+      pathIndex = 0;
+      pNewPreset->pMapAI = pPresetPathCopy;
+      if ((uint32_t)pPresetPathCopy->nSize > 0) {
+        do {
+          pCoordField = &pNewPreset->pMapAI->pPosition[pathIndex].nXpos;
+          *pCoordField += nX;
+          pCoordField = &pNewPreset->pMapAI->pPosition[pathIndex].nYpos;
+          *pCoordField += nY;
+          pathIndex++;
+        } while (pathIndex < (uint32_t)pNewPreset->pMapAI->nSize);
+      }
     }
-
-    D2MapAIStrc* pPresetPathCopy = DRLGPRESET_CopyMapAI(pMemory, pPresetUnit->pMapAI);
-    uint32_t pathIndex = 0;
-    pNewPreset->pMapAI = pPresetPathCopy;
-    if ((uint32_t)pPresetPathCopy->nSize <= 0) {
-      return pNewPreset;
-    }
-
-    do {
-      int* pCoordField;
-      pCoordField = &pNewPreset->pMapAI->pPosition[pathIndex].nXpos;
-      *pCoordField += nX;
-      pCoordField = &pNewPreset->pMapAI->pPosition[pathIndex].nYpos;
-      *pCoordField += nY;
-      pathIndex++;
-    } while (pathIndex < (uint32_t)pNewPreset->pMapAI->nSize);
 
     return pNewPreset;
 }

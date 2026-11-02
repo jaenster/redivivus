@@ -216,6 +216,8 @@ void __fastcall SUBTILE_ConvertToIndexed(uint32_t * pDstFrame, uint32_t * pSrcFr
 }
 
 char * __stdcall SUBTILE_ConvertRGBToIndexed(char * pSrcRGBData, uint32_t nRGBDataSize, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex) {
+    uint8_t* pDstIdx;
+    uint8_t* pSrcRGB;
     size_t nAllocSize = (int)nRGBDataSize / 3;
     uint8_t* pIndexedBuf = (uint8_t*)D2_ALLOC_AT(nAllocSize, ".\\SRC\\SubTile.cpp", 0xd8);
     if (!pIndexedBuf) {
@@ -225,29 +227,27 @@ char * __stdcall SUBTILE_ConvertRGBToIndexed(char * pSrcRGBData, uint32_t nRGBDa
 
     memset(pIndexedBuf, 0, nAllocSize);
     nRGBDataSize = 0;
-    if ((int)nAllocSize <= 0) {
-      return (char*)pIndexedBuf;
-    }
-
-    uint8_t* pSrcRGB = (uint8_t*)(pSrcRGBData + 1);
-    uint8_t* pDstIdx = pIndexedBuf;
-    do {
+    if ((int)nAllocSize > 0) {
       uint8_t cIndexed;
-      if (pSrcRGB[-1] == (uint8_t)dwColorKey && *pSrcRGB == (uint8_t)(dwColorKey >> 8) && pSrcRGB[1] == *(uint8_t*)((char*)&dwColorKey + 2)) {
-        cIndexed = 0;
-      } else {
-        cIndexed = (*pfnGetPaletteIndex)(pSrcRGB[-1], *pSrcRGB, pSrcRGB[1]);
-        if (!cIndexed) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe4);
-          exit(-1);
+      pSrcRGB = (uint8_t*)(pSrcRGBData + 1);
+      pDstIdx = pIndexedBuf;
+      do {
+        if (pSrcRGB[-1] == (uint8_t)dwColorKey && *pSrcRGB == (uint8_t)(dwColorKey >> 8) && pSrcRGB[1] == *(uint8_t*)((char*)&dwColorKey + 2)) {
+          cIndexed = 0;
+        } else {
+          cIndexed = (*pfnGetPaletteIndex)(pSrcRGB[-1], *pSrcRGB, pSrcRGB[1]);
+          if (!cIndexed) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe4);
+            exit(-1);
+          }
         }
-      }
 
-      *pDstIdx = cIndexed;
-      nRGBDataSize++;
-      pDstIdx++;
-      pSrcRGB += 3;
-    } while ((int)nRGBDataSize < (int)nAllocSize);
+        *pDstIdx = cIndexed;
+        nRGBDataSize++;
+        pDstIdx++;
+        pSrcRGB += 3;
+      } while ((int)nRGBDataSize < (int)nAllocSize);
+    }
 
     return (char*)pIndexedBuf;
 }

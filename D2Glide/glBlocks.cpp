@@ -161,43 +161,43 @@ void __stdcall GLBLOCKS_RenderTileSubBlocks(D2TileLibraryEntryStrc * pTileEntry,
 
 BOOL __fastcall GLBLOCKS_LoadFloorTileTexture(D2TileLibraryEntryStrc * pTileLibraryEntry) {
     FxU32 startAddress;
+    int nNodeIndex;
     BOOL bResult = 0;
     BOOL bAllocOk = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTileLibraryEntry, 1, 0);
-    if (!bAllocOk) {
-      return bResult;
-    }
-
-    short int nCacheSlot = pTileLibraryEntry->nTextureCacheIndex;
-    if (nCacheSlot < 0) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd8);
-      exit(-1);
-    }
-    if (!nCacheSlot) {
-      int nNodeIndex;
-      GLBLOCKS_RenderTileSubBlocks(pTileLibraryEntry, (uint8_t*)gpGlBlocksFloorBuffer);
-      nCacheSlot = glFloorCache::GLFLOOR_EnsureCapacity(&gGlideFloorTextureCache);
-      pTileLibraryEntry->nTextureCacheIndex = nCacheSlot;
-      nNodeIndex = nCacheSlot - 1;
-      if (nNodeIndex < 0) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe5);
+    if (bAllocOk) {
+      short int nCacheSlot;
+      nCacheSlot = pTileLibraryEntry->nTextureCacheIndex;
+      if (nCacheSlot < 0) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd8);
         exit(-1);
       }
-      if (nNodeIndex >= (int)gGlideFloorTextureCache.nMaxEntries) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe6);
-        exit(-1);
+      if (!nCacheSlot) {
+        GLBLOCKS_RenderTileSubBlocks(pTileLibraryEntry, (uint8_t*)gpGlBlocksFloorBuffer);
+        nCacheSlot = glFloorCache::GLFLOOR_EnsureCapacity(&gGlideFloorTextureCache);
+        pTileLibraryEntry->nTextureCacheIndex = nCacheSlot;
+        nNodeIndex = nCacheSlot - 1;
+        if (nNodeIndex < 0) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe5);
+          exit(-1);
+        }
+        if (nNodeIndex >= (int)gGlideFloorTextureCache.nMaxEntries) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe6);
+          exit(-1);
+        }
+
+        gGlideFloorTextureCache.pNodes[nCacheSlot - 1].pTile = pTileLibraryEntry;
+        startAddress = gGlideFloorTextureCache.pNodes[pTileLibraryEntry->nTextureCacheIndex - 1].dwAddress;
+        (*GLIDEDLL_grTexDownloadMipMap_16)(gnGlideTMUId, startAddress, 3, &gTexInfoGlideSurfaceBlocks);
+      } else {
+        glFloorCache::GLFLOOR_PromoteNodeToMRU(&gGlideFloorTextureCache, (int)nCacheSlot);
+        startAddress = gGlideFloorTextureCache.pNodes[pTileLibraryEntry->nTextureCacheIndex - 1].dwAddress;
       }
 
-      gGlideFloorTextureCache.pNodes[nCacheSlot - 1].pTile = pTileLibraryEntry;
-      startAddress = gGlideFloorTextureCache.pNodes[pTileLibraryEntry->nTextureCacheIndex - 1].dwAddress;
-      (*GLIDEDLL_grTexDownloadMipMap_16)(gnGlideTMUId, startAddress, 3, &gTexInfoGlideSurfaceBlocks);
-    } else {
-      glFloorCache::GLFLOOR_PromoteNodeToMRU(&gGlideFloorTextureCache, (int)nCacheSlot);
-      startAddress = gGlideFloorTextureCache.pNodes[pTileLibraryEntry->nTextureCacheIndex - 1].dwAddress;
+      (*GLIDEDLL_grTexSource_16)(gnGlideTMUId, startAddress, 3, &gTexInfoGlideSurfaceBlocks);
+      Renderer::Glide::RENDERER_GLIDE_SetTextureMode(gnGlideTMUId);
+      bResult = 1;
     }
 
-    (*GLIDEDLL_grTexSource_16)(gnGlideTMUId, startAddress, 3, &gTexInfoGlideSurfaceBlocks);
-    Renderer::Glide::RENDERER_GLIDE_SetTextureMode(gnGlideTMUId);
-    bResult = 1;
     return bResult;
 }
 

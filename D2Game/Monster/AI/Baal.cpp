@@ -179,11 +179,10 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
     }
 
     nPhysRes = (int)((nLifePercent >= 0x14 ? 0 : 0x64) * 3 + (nColdRes + nLightRes + (nPhysRes + nMagicRes * 2) * 4 + nFireRes) / 0xf + (nAnchorBonus + nMeleeScore) * 5 + (nSkillThreatScore / 4 + (eUnitState != STATE_none ? 100 : 0) * 2 + ((nPoisonMaxDam >> 8) + nColdMaxDam + nMagicMaxDam + nLightMaxDam + nFireMaxDam + nTotalMaxDam) / 2) * 2) / 0x16;
-    if (nPhysRes) {
-      return nPhysRes;
+    if (!nPhysRes) {
+      nPhysRes = 1;
     }
 
-    nPhysRes = 1;
     return nPhysRes;
 }
 
@@ -345,32 +344,31 @@ uint32_t __fastcall AI_BAAL_IsUnitInRange(D2UnitStrc * pUnit, int * pCandidate) 
 
 // @sourcefile .\Ai\AiBaal.cpp
 static BOOL AI_BAAL_IsSkillPowerful(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
-    int nSkillLevel;
     bool bSignedLessOrEqual;
     if (!pSkill) {
       return 0;
     }
 
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\Ai\\AiBaal.cpp", 0x131);
-    if (!(eSkillId != SKILL_Blizzard && eSkillId != SKILL_Meteor)) {
-      return 1;
-    }
-    if (eSkillId == SKILL_FireWall) {
-      nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-      bSignedLessOrEqual = nSkillLevel <= 3;
-    } else {
-      if (eSkillId != SKILL_ImmolationArrow) {
+    if (eSkillId != SKILL_Blizzard && eSkillId != SKILL_Meteor) {
+      int nSkillLevel;
+      if (eSkillId == SKILL_FireWall) {
+        nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
+        bSignedLessOrEqual = nSkillLevel <= 3;
+      } else {
+        if (eSkillId != SKILL_ImmolationArrow) {
+          return 0;
+        }
+
+        nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
+        bSignedLessOrEqual = nSkillLevel <= 7;
+      }
+      if (bSignedLessOrEqual) {
         return 0;
       }
-
-      nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-      bSignedLessOrEqual = nSkillLevel <= 7;
-    }
-    if (!bSignedLessOrEqual) {
-      return 1;
     }
 
-    return 0;
+    return 1;
 }
 
 // @sourcefile .\Ai\AiBaal.cpp

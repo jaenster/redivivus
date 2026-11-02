@@ -276,6 +276,7 @@ D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManager
 }
 
 uint32_t __fastcall ASYNCDATA_IsComplete(D2AsyncData_Line0x128 * pAsyncData) {
+    DWORD dwWaitResult;
     if (!pAsyncData) {
       return 0;
     }
@@ -283,16 +284,13 @@ uint32_t __fastcall ASYNCDATA_IsComplete(D2AsyncData_Line0x128 * pAsyncData) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x1c4);
       exit(-1);
     }
-    if (pAsyncData->nFlags & 1U) {
-      return pAsyncData->nFlags & 1;
+    if (!(pAsyncData->nFlags & 1U)) {
+      /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ dwWaitResult = WaitForSingleObject(pAsyncData->pSlot->hEvent, 0);
+      if (!dwWaitResult) {
+        ASYNCDATA_CancelAndCleanup(pAsyncData);
+      }
     }
 
-    DWORD dwWaitResult = WaitForSingleObject(pAsyncData->pSlot->hEvent, 0);
-    if (dwWaitResult) {
-      return pAsyncData->nFlags & 1;
-    }
-
-    ASYNCDATA_CancelAndCleanup(pAsyncData);
     return pAsyncData->nFlags & 1;
 }
 

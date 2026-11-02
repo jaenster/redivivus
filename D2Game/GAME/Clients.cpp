@@ -178,11 +178,10 @@ D2UnitStrc * __stdcall CLIENTS_GetControlUnit(D2ClientStrc * pClient, int32_t al
     }
 
     D2UnitStrc* pPlayer = UNIT::SUnit::FindUnitFromTable(pClient->pGame, pClient->nPlayerType, pClient->dwPlayerGUID);
-    if (pPlayer) {
-      return pPlayer;
+    if (!pPlayer) {
+      pClient->pPlayer = 0;
     }
 
-    pClient->pPlayer = 0;
     return pPlayer;
 }
 
@@ -668,7 +667,6 @@ D2RoomStrc * __fastcall CLIENT_GetRoom(D2ClientStrc * pClient) {
     }
 
     return pClient->pRoom;
-    return pClient->pRoom;
 }
 
 void __fastcall AttachUnitType(D2ClientStrc * pClient, uint32_t * pUnitDesc) {
@@ -693,7 +691,6 @@ uint8_t __fastcall GetAct(D2ClientStrc * pClient) {
       exit(-1);
     }
 
-    return pClient->nAct;
     return pClient->nAct;
 }
 
@@ -729,7 +726,6 @@ void * __fastcall GetSavePacketList(D2ClientStrc * pClient) {
     }
 
     return pClient->pSavePacketList;
-    return pClient->pSavePacketList;
 }
 
 // @wasnamed GetSavePacketList - one name on two different functions.
@@ -752,7 +748,6 @@ uint8_t __fastcall CLIENT_GetUnk0x1AD(D2ClientStrc * pClient) {
       exit(-1);
     }
 
-    return pClient->unk0x1AD;
     return pClient->unk0x1AD;
 }
 
@@ -865,7 +860,6 @@ int32_t __fastcall GetClientNo(D2ClientStrc * pClient) {
     }
 
     return pClient->nClientNo;
-    return pClient->nClientNo;
 }
 
 int __stdcall ReturnFFFFFFFF() {
@@ -882,7 +876,6 @@ uint32_t __fastcall GetPlayerClassId(D2ClientStrc * pClient) {
       exit(-1);
     }
 
-    return (uint32_t)pClient->nClass;
     return (uint32_t)pClient->nClass;
 }
 
@@ -948,7 +941,6 @@ int __fastcall CLIENT_GetGolemGUID(D2ClientStrc * pClient) {
     }
 
     return pClient->dwGolemGUID;
-    return pClient->dwGolemGUID;
 }
 
 void __fastcall SetCreateTime(D2ClientStrc * pClient, __time32_t nCreateTime) {
@@ -967,7 +959,6 @@ int32_t __fastcall GetCreateTime(D2ClientStrc * pClient) {
     }
 
     return pClient->dwCreateTime;
-    return pClient->dwCreateTime;
 }
 
 ::SGAMEDATA * __fastcall CLIENT_GetGame(D2ClientStrc * pClient) {
@@ -976,7 +967,6 @@ int32_t __fastcall GetCreateTime(D2ClientStrc * pClient) {
       exit(-1);
     }
 
-    return pClient->pGame;
     return pClient->pGame;
 }
 
@@ -1002,7 +992,6 @@ char * __fastcall GetCharName(D2ClientStrc * pClient) {
       exit(-1);
     }
 
-    return pClient->szCharName;
     return pClient->szCharName;
 }
 
@@ -1030,7 +1019,6 @@ uint32_t __fastcall ARENA_IsClientDead(D2ClientStrc * pClient) {
     }
 
     return (uint8_t)((uint8_t)pClient->fClientFlags >> 2) & 1;
-    return (uint8_t)((uint8_t)pClient->fClientFlags >> 2) & 1;
 }
 
 // Returns pClient->nCharTemplate; halts (line 2577) on NULL.
@@ -1041,7 +1029,6 @@ uint8_t __fastcall CLIENT_GetCharTemplate(D2ClientStrc * pClient) {
       exit(-1);
     }
 
-    return pClient->nCharTemplate;
     return pClient->nCharTemplate;
 }
 
@@ -1287,7 +1274,6 @@ D2SaveFileHeaderStrc * __fastcall GetSaveGame(D2ClientStrc * pClient) {
     }
 
     return pClient->pSaveGame;
-    return pClient->pSaveGame;
 }
 
 size_t __fastcall GetSaveGameSize(D2ClientStrc * pClient) {
@@ -1296,7 +1282,6 @@ size_t __fastcall GetSaveGameSize(D2ClientStrc * pClient) {
       exit(-1);
     }
 
-    return pClient->nSaveOpenSize;
     return pClient->nSaveOpenSize;
 }
 
@@ -1375,7 +1360,6 @@ uint32_t __fastcall CLIENT_GetSaveCompleteFlag(D2ClientStrc * pClient) {
       exit(-1);
     }
 
-    return (uint8_t)((uint8_t)pClient->fClientFlags >> 5) & 1;
     return (uint8_t)((uint8_t)pClient->fClientFlags >> 5) & 1;
 }
 
@@ -1507,11 +1491,10 @@ D2PacketListStrc * __fastcall CLIENT_ClearDispatchList(D2ClientStrc * pClient) {
       pClient->pPacketList = 0;
       pClient->pDispatchList = 0;
     }
-    if (!pDispatchList) {
-      return pDispatchList;
+    if (pDispatchList) {
+      pClient->pDispatchList = pDispatchList->pNext;
     }
 
-    pClient->pDispatchList = pDispatchList->pNext;
     return pDispatchList;
 }
 
@@ -1545,7 +1528,6 @@ D2PlayerBasicsData * __fastcall CLIENT_GetPlayerBasicsData(D2ClientStrc * pClien
       exit(-1);
     }
 
-    return (D2PlayerBasicsData*)&pClient->pPlayerBasicsData;
     return (D2PlayerBasicsData*)&pClient->pPlayerBasicsData;
 }
 
@@ -1616,7 +1598,6 @@ int __fastcall CLIENT_GetLangId(D2ClientStrc * pClient) {
       exit(-1);
     }
 
-    return pClient->dwLangId;
     return pClient->dwLangId;
 }
 
@@ -1834,11 +1815,10 @@ int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, :
       D2Common::Stats::StatsEx::STATLIST_IterateChangedStats(pPlayerUnitOut, pPlayerUnitOut, PLAYER::PlayerMsg::SendAttributeUpdate);
       PLAYER::PlayerMsg::NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate(pPlayerUnitOut, pPlayerUnitOut, 1);
       UNIT::ITEM_ProcessInventoryUpdates(pGame, pPlayerUnitOut);
-      if (!pGame->bExpansion) {
-        return 0;
+      if (pGame->bExpansion) {
+        Quests::QUESTS::A5Q3::CalculateBonusResistances(pGame, pPlayerUnitOut);
       }
 
-      Quests::QUESTS::A5Q3::CalculateBonusResistances(pGame, pPlayerUnitOut);
       return 0;
     }
 }

@@ -383,7 +383,6 @@ BOOL __fastcall D2WINMAIN_GetControlVisible(D2ControlStrc * pControl) {
     }
 
     return pControl->dwState & gadwBitMasks[0];
-    return pControl->dwState & gadwBitMasks[0];
 }
 
 // Sets (bActive != 0) or clears bit 2 (gadwBitMasks[2] = 4) of pControl->dwState (+0x8); halts (line 844) on NULL.
@@ -410,7 +409,6 @@ BOOL __fastcall D2WINMAIN_IsControlActive(D2ControlStrc * pControl) {
       exit(-1);
     }
 
-    return pControl->dwState & gadwBitMasks[2];
     return pControl->dwState & gadwBitMasks[2];
 }
 
@@ -1101,14 +1099,14 @@ D2ControlStrc * __stdcall D2WINMAIN_GetFormImage() {
     return D2Client::Forms::pFormImage;
 }
 
-void __stdcall D2WIN_HandleCursorHide(int32_t pMsg) {
+void __stdcall D2WIN_HandleCursorHide(D2UIMouseMsgStrc * pMsg) {
     gbCursorVisible = 0;
-    if (*(int*)(pMsg + 8) == 2) {
+    if (pMsg->nWParam == 2) {
       D2gfx::D2GFX::UpdateOSCursorVisibilty(0);
     }
 
-    *(uint32_t*)(pMsg + 0x1c) = 0;
-    *(uint32_t*)(pMsg + 0x18) = 0;
+    pMsg->dwResult = 0;
+    pMsg->bHandled = 0;
 }
 
 void __stdcall D2WIN_HandleMouseLeave(int32_t pMsg) {

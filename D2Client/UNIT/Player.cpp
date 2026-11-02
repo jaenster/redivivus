@@ -1214,20 +1214,19 @@ static void __stdcall PLAYER_ExecuteSkillAtUnit(eD2UnitType eTargetUnitType, int
 }
 
 BOOL __stdcall PLAYER_CheckPendingInteraction(int32_t nTargetType, int32_t nTargetGUID) {
+    int eQueuedTargetType;
+    D2UnitDataPlayerStrc* pPlayerData;
     D2UnitStrc* pPlayerUnit_lcl = GetPlayerUnit_UI();
-    if (!(pPlayerUnit_lcl && pPlayerUnit_lcl->eUnitType == UNIT_PLAYER)) {
-      return 0;
-    }
-
-    D2UnitDataPlayerStrc* pPlayerData = pPlayerUnit_lcl->pUnitData.pUnitDataPlayer;
-    if (!(pPlayerData && pPlayerData->eQueuedSkillId == 0x13)) {
-      return 0;
-    }
-
-    int eQueuedTargetType = pPlayerData->eTargetUnitType;
-    int nQueuedTargetGUID = pPlayerData->nTargetUnitGUID;
-    if (eQueuedTargetType == nTargetType && nQueuedTargetGUID == nTargetGUID) {
-      return 1;
+    if (pPlayerUnit_lcl && pPlayerUnit_lcl->eUnitType == UNIT_PLAYER) {
+      int nQueuedTargetGUID;
+      pPlayerData = pPlayerUnit_lcl->pUnitData.pUnitDataPlayer;
+      if (pPlayerData && pPlayerData->eQueuedSkillId == 0x13) {
+        eQueuedTargetType = pPlayerData->eTargetUnitType;
+        nQueuedTargetGUID = pPlayerData->nTargetUnitGUID;
+        if (eQueuedTargetType == nTargetType && nQueuedTargetGUID == nTargetGUID) {
+          return 1;
+        }
+      }
     }
 
     return 0;
@@ -1499,11 +1498,10 @@ static uint32_t INPUT_ValidateSkillAction(D2UnderMouseStrc * pUnderMouse) {
     }
 
     nQueuedSkill = UI::ui::GetItemType();
-    if (nQueuedSkill != 8) {
-      return 1;
+    if (nQueuedSkill == 8) {
+      GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, -1);
     }
 
-    GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, -1);
     return 1;
 }
 
@@ -1634,18 +1632,17 @@ static BOOL __stdcall PLAYER_CalculateMovementTarget(D2UnitStrc * pPlayerUnit, D
 // @sourcefile .\UNIT\Player.cpp
 static uint32_t SKILL_IsPassiveSkill(D2SkillStrc * pSkill) {
     D2SkillsTxt* pSkillsTxt;
-    if (!pSkill) {
-      return 0;
-    }
-
-    eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\Player.cpp", 0x75a);
-    if ((int)eSkillId < 0 || (int)eSkillId >= sgptDataTable->nTxtSkillsCount) {
-      pSkillsTxt = 0;
-    } else {
-      pSkillsTxt = sgptDataTable->pTxtSkills + eSkillId;
-    }
-    if (*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)gadwBitMasks[0]) {
-      return 1;
+    if (pSkill) {
+      eD2Skills eSkillId;
+      eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\Player.cpp", 0x75a);
+      if ((int)eSkillId < 0 || (int)eSkillId >= sgptDataTable->nTxtSkillsCount) {
+        pSkillsTxt = 0;
+      } else {
+        pSkillsTxt = sgptDataTable->pTxtSkills + eSkillId;
+      }
+      if (*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)gadwBitMasks[0]) {
+        return 1;
+      }
     }
 
     return 0;
@@ -1980,59 +1977,57 @@ static BOOL INPUT_HandleLeftClickWithPet(D2UnderMouseStrc * pUnderMouse) {
 
 // @sourcefile .\UNIT\Player.cpp
 static BOOL ClickMapRightSkill(D2UnderMouseStrc * pUnderMouse) {
+    eD2Skills eSkillId;
     D2SkillsTxt* pSkillsTxt;
     BOOL bCanAct = IsUnitNotMoving(pUnderMouse);
-    if (!bCanAct) {
-      return 1;
+    if (bCanAct) {
+      D2SkillStrc* pRightSkill;
+      pRightSkill = D2Common::Units::GetRightSkill(pUnderMouse->pPlayer);
+      pUnderMouse->pSkill = pRightSkill;
+      bCanAct = CUnit::PlayerCanBeInterrupted(pUnderMouse->pPlayer, pRightSkill);
+      if (bCanAct) {
+        eSkillId = D2Common::Skills::GetSkillId(pUnderMouse->pSkill, ".\\UNIT\\Player.cpp", 0x9dd);
+        if ((int)eSkillId < 0 || (int)eSkillId >= sgptDataTable->nTxtSkillsCount) {
+          pSkillsTxt = 0;
+        } else {
+          pSkillsTxt = sgptDataTable->pTxtSkills + eSkillId;
+        }
+        if (pSkillsTxt->range == '\x01' && !(pUnderMouse->flags & 0x40)) {
+          pUnderMouse->flags |= 0x80;
+        }
+
+        INPUT_ExecuteSkillCommand(pUnderMouse);
+      }
     }
 
-    D2SkillStrc* pRightSkill = D2Common::Units::GetRightSkill(pUnderMouse->pPlayer);
-    pUnderMouse->pSkill = pRightSkill;
-    bCanAct = CUnit::PlayerCanBeInterrupted(pUnderMouse->pPlayer, pRightSkill);
-    if (!bCanAct) {
-      return 1;
-    }
-
-    eD2Skills eSkillId = D2Common::Skills::GetSkillId(pUnderMouse->pSkill, ".\\UNIT\\Player.cpp", 0x9dd);
-    if ((int)eSkillId < 0 || (int)eSkillId >= sgptDataTable->nTxtSkillsCount) {
-      pSkillsTxt = 0;
-    } else {
-      pSkillsTxt = sgptDataTable->pTxtSkills + eSkillId;
-    }
-    if (pSkillsTxt->range == '\x01' && !(pUnderMouse->flags & 0x40)) {
-      pUnderMouse->flags |= 0x80;
-    }
-
-    INPUT_ExecuteSkillCommand(pUnderMouse);
     return 1;
 }
 
 // @sourcefile .\UNIT\Player.cpp
 static BOOL INPUT_HandleRightClickRepeat(D2UnderMouseStrc * pUnderMouse) {
+    eD2Skills eSkillId;
     D2SkillsTxt* pSkillsTxt;
     BOOL bCanAct = IsUnitNotMoving(pUnderMouse);
-    if (!bCanAct) {
-      return 1;
+    if (bCanAct) {
+      D2SkillStrc* pRightSkill;
+      pRightSkill = D2Common::Units::GetRightSkill(pUnderMouse->pPlayer);
+      pUnderMouse->pSkill = pRightSkill;
+      bCanAct = CUnit::PlayerCanBeInterrupted(pUnderMouse->pPlayer, pRightSkill);
+      if (bCanAct) {
+        eSkillId = D2Common::Skills::GetSkillId(pUnderMouse->pSkill, ".\\UNIT\\Player.cpp", 0x9fd);
+        if ((int)eSkillId < 0 || (int)eSkillId >= sgptDataTable->nTxtSkillsCount) {
+          pSkillsTxt = 0;
+        } else {
+          pSkillsTxt = sgptDataTable->pTxtSkills + eSkillId;
+        }
+        if (pSkillsTxt->range == '\x01' && !(pUnderMouse->flags & 0x40)) {
+          pUnderMouse->flags |= 0x80;
+        }
+
+        INPUT_ExecuteSkillCommand(pUnderMouse);
+      }
     }
 
-    D2SkillStrc* pRightSkill = D2Common::Units::GetRightSkill(pUnderMouse->pPlayer);
-    pUnderMouse->pSkill = pRightSkill;
-    bCanAct = CUnit::PlayerCanBeInterrupted(pUnderMouse->pPlayer, pRightSkill);
-    if (!bCanAct) {
-      return 1;
-    }
-
-    eD2Skills eSkillId = D2Common::Skills::GetSkillId(pUnderMouse->pSkill, ".\\UNIT\\Player.cpp", 0x9fd);
-    if ((int)eSkillId < 0 || (int)eSkillId >= sgptDataTable->nTxtSkillsCount) {
-      pSkillsTxt = 0;
-    } else {
-      pSkillsTxt = sgptDataTable->pTxtSkills + eSkillId;
-    }
-    if (pSkillsTxt->range == '\x01' && !(pUnderMouse->flags & 0x40)) {
-      pUnderMouse->flags |= 0x80;
-    }
-
-    INPUT_ExecuteSkillCommand(pUnderMouse);
     return 1;
 }
 
@@ -2043,16 +2038,13 @@ static BOOL INPUT_HandleRightClickWithPet(D2UnderMouseStrc * pUnderMouse) {
     if (nUnitGUID != -1) {
       D2UnitStrc* pPetUnit;
       pPetUnit = UNITS_FindClientSideUnit(nUnitGUID, UNIT_MONSTER);
-      if (!pPetUnit) {
-        return 0;
+      if (pPetUnit) {
+        pSeed = GAME::RosterPets::GetSeed(nUnitGUID);
+        if (pSeed->nState == 2) {
+          GAME::Select::SELECT_SetPetSeedTimestamp((int32_t)pUnderMouse->pPlayer, pPetUnit, 0);
+        }
       }
 
-      pSeed = GAME::RosterPets::GetSeed(nUnitGUID);
-      if (pSeed->nState != 2) {
-        return 0;
-      }
-
-      GAME::Select::SELECT_SetPetSeedTimestamp((int32_t)pUnderMouse->pPlayer, pPetUnit, 0);
       return 0;
     }
 
@@ -2744,11 +2736,10 @@ int __fastcall PLAYER_GetMonsterOwnerId(D2UnitStrc * pUnit) {
 
 int32_t __fastcall TXT_MonStats_GetBaseId_NoChecks(int32_t nMonsterId) {
     D2MonStatsTxt* pMonStatsTxt = nMonsterId >= 0 && nMonsterId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonsterId : nullptr;
-    if (!pMonStatsTxt) {
-      return nMonsterId;
+    if (pMonStatsTxt) {
+      nMonsterId = (int32_t)pMonStatsTxt->BaseId;
     }
 
-    nMonsterId = (int32_t)pMonStatsTxt->BaseId;
     return nMonsterId;
 }
 
@@ -2782,11 +2773,10 @@ BOOL __fastcall TXT_MonStats_MonStats2_GetFlagsByBitOffset(int32_t nMonStatsId, 
 }
 
 int32_t __fastcall ValidateClassId(int32_t nClassId) {
-    if (!(nClassId < 0 || nClassId >= sgptDataTable->nTxtMonStatsSize)) {
-      return nClassId;
+    if (nClassId < 0 || nClassId >= sgptDataTable->nTxtMonStatsSize) {
+      nClassId = -1;
     }
 
-    nClassId = -1;
     return nClassId;
 }
 

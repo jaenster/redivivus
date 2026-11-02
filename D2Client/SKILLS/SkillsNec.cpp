@@ -62,11 +62,10 @@ BOOL __fastcall Skills_CltStFunc_SpawnCltMissileC(D2UnitStrc * pUnit, eD2Skills 
     }
 
     eMissilesId eCltMissileC = (eMissilesId)pSkillsTxt->cltmissile[3];
-    if (!((int)eCltMissileC >= 0 && (int)eCltMissileC < sgptDataTable->nTxtMissilesSize)) {
-      return 1;
+    if ((int)eCltMissileC >= 0 && (int)eCltMissileC < sgptDataTable->nTxtMissilesSize) {
+      Skills::MakeMissileAtSkillTarget(pUnit, eCltMissileC, eSkill, nSkillLvl);
     }
 
-    Skills::MakeMissileAtSkillTarget(pUnit, eCltMissileC, eSkill, nSkillLvl);
     return 1;
 }
 
@@ -408,11 +407,10 @@ int __fastcall SKILLSNEC_CltCreateTeethMissiles(D2UnitStrc * pUnit, eD2Skills eS
     }
 
     D2UnitStrc* pConfirmedTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
-    if (!(!pConfirmedTarget && pTargetUnit && pSkillsTxt->tgtsound > 0)) {
-      return 1;
+    if (!pConfirmedTarget && pTargetUnit && pSkillsTxt->tgtsound > 0) {
+      Sound::SOUND_PlaySound((int)pSkillsTxt->tgtsound, pTargetUnit, 0, 0, 0);
     }
 
-    Sound::SOUND_PlaySound((int)pSkillsTxt->tgtsound, pTargetUnit, 0, 0, 0);
     return 1;
 }
 
@@ -477,19 +475,17 @@ int __fastcall SKILLSNEC_CltCreateBoneSpearMissile(D2UnitStrc * pUnit, eD2Skills
       }
 
       eMissileId = (eMissilesId)pSkillTxt->cltmissile[2];
-      if (!pMissileUnit) {
-        return 1;
-      }
-      if ((int)eMissileId > 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
-        UNIT::Missile::MISSILE_CreateRadialBurst(pMissileUnit, eMissileId, 0, 2, 0);
+      if (pMissileUnit) {
+        if ((int)eMissileId > 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
+          UNIT::Missile::MISSILE_CreateRadialBurst(pMissileUnit, eMissileId, 0, 2, 0);
+        }
+
+        pConfirmedTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
+        if (!pConfirmedTarget && pSkillTxt->tgtsound > 0) {
+          Sound::SOUND_PlaySound((int)pSkillTxt->tgtsound, pMissileUnit, 0, 0, 0);
+        }
       }
 
-      pConfirmedTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
-      if (!(!pConfirmedTarget && pSkillTxt->tgtsound > 0)) {
-        return 1;
-      }
-
-      Sound::SOUND_PlaySound((int)pSkillTxt->tgtsound, pMissileUnit, 0, 0, 0);
       return 1;
     }
 

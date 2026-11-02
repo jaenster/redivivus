@@ -131,13 +131,12 @@ bool __fastcall Q39_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 }
 
 bool __fastcall Q39_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    if (nTargetClassId != 0xf5) {
-      return false;
-    }
-
-    BOOL BVar1 = PLAYER::PlayerIntro::PLAYER_CheckIfSpokenWithNPC(pUnit, pQuestData->pGame, 0xf5);
-    if (!BVar1) {
-      return true;
+    if (nTargetClassId == 0xf5) {
+      BOOL BVar1;
+      BVar1 = PLAYER::PlayerIntro::PLAYER_CheckIfSpokenWithNPC(pUnit, pQuestData->pGame, 0xf5);
+      if (!BVar1) {
+        return true;
+      }
     }
 
     return false;

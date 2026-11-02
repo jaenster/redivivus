@@ -22,16 +22,15 @@ namespace Fog::Src::DataArrays {
 // @sourcefile .\Src\DataArrays.cpp
 D2DataArrayStrc * __fastcall FOG_CreateDataArray(char * pszName, int numObjects, int nObjectSize) {
     D2DataArrayStrc* local_EAX_31 = (D2DataArrayStrc*)D2_ALLOC_AT(numObjects * nObjectSize + 0x120, ".\\Src\\DataArrays.cpp", 0x34);
-    if (!local_EAX_31) {
-      return local_EAX_31;
+    if (local_EAX_31) {
+      memset(local_EAX_31, 0, 0x120);
+      strncpy(local_EAX_31->szName, pszName, 0x100);
+      local_EAX_31->nObjectSize = nObjectSize;
+      local_EAX_31->numObjects = numObjects;
+      local_EAX_31->pData = local_EAX_31 + 1;
+      local_EAX_31->bInitialized = 0;
     }
 
-    memset(local_EAX_31, 0, 0x120);
-    strncpy(local_EAX_31->szName, pszName, 0x100);
-    local_EAX_31->nObjectSize = nObjectSize;
-    local_EAX_31->numObjects = numObjects;
-    local_EAX_31->pData = local_EAX_31 + 1;
-    local_EAX_31->bInitialized = 0;
     return local_EAX_31;
 }
 
@@ -148,7 +147,6 @@ short * __fastcall FOG_GetDataArrayEntryOrHalt(D2DataArrayStrc * pDataArray, int
       exit(-1);
     }
 
-    return pEntry;
     return pEntry;
 }
 

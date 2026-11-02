@@ -117,13 +117,13 @@ bool __fastcall Q08_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 
 // A2Q0 QUEST_SpokeToJerhyn — fpActiveFilter. For Jerhyn (nTargetClassId 0xc9): quest is "active" (return true) only while SpokeToJerhyn is not yet Completed. All other NPCs / completed -> false.
 bool __fastcall Q08_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    if (nTargetClassId != 0xc9) {
-      /* Otherwise: inactive */ return false;
-    }
-
-    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SpokeToJerhyn, QUESTSTATE_Completed);
-    /* If not state completed: active */ if (!BVar1) {
-      return true;
+    if (nTargetClassId == 0xc9) {
+      BOOL BVar1;
+      /* GetQuestState(pBitBuffer, QUEST_SpokeToJerhyn, QUESTSTATE_Completed=0) —
+                         active iff not yet completed */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SpokeToJerhyn, QUESTSTATE_Completed);
+      /* If not state completed: active */ if (!BVar1) {
+        return true;
+      }
     }
 
     /* Otherwise: inactive */ return false;

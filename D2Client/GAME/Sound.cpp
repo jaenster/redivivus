@@ -217,16 +217,15 @@ uint32_t __fastcall SOUND_GetStreamProgress(D2ClientSoundChannelStrc * pChannel)
 }
 
 BOOL __stdcall SOUND_Is3DMixerActive() {
-    if (!pAudioMixerInterface) {
-      return 0;
+    if (pAudioMixerInterface) {
+      int nMixerMode;
+      nMixerMode = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
+      if (nMixerMode == 1 || nMixerMode == 2) {
+        return 1;
+      }
     }
 
-    int nMixerMode = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
-    if (!(nMixerMode == 1 || nMixerMode == 2)) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 uint32_t __stdcall SOUND_IsEaxMixerActive() {
@@ -383,13 +382,12 @@ static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(D2SoundCh
 
           D2Sound::Src::D2SoundSmp::SOUNDSMP_Stop(pBestChannel->pSoundSmp);
         }
-        if (!pBestChannel->pActiveSound) {
-          return pBestChannel;
+        if (pBestChannel->pActiveSound) {
+          pBestChannel->pActiveSound->nPlayMode = 2;
+          pBestChannel->pActiveSound->pClientChannel = 0;
+          pBestChannel->pActiveSound = 0;
         }
 
-        pBestChannel->pActiveSound->nPlayMode = 2;
-        pBestChannel->pActiveSound->pClientChannel = 0;
-        pBestChannel->pActiveSound = 0;
         return pBestChannel;
       }
     } while (true);
@@ -557,11 +555,10 @@ BOOL __fastcall SOUND_SetSoundMixer(int32_t nMixer) {
     }
 
     int nActiveMixer = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
-    if (nActiveMixer == nMixer) {
-      return 1;
+    if (nActiveMixer != nMixer) {
+      D2Sound::Src::D2SoundFast::SOUND_SetSoundMixer(nMixer);
     }
 
-    D2Sound::Src::D2SoundFast::SOUND_SetSoundMixer(nMixer);
     return 1;
 }
 

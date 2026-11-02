@@ -38,11 +38,10 @@ BOOL __fastcall SendToClientOnline(D2QServerStrc * pQServer, D2QServerClientConn
 // NOTE: Callee-saved register params inferred (medium confidence): pQServerStrc (ESI): D2QServerStrc*
 void * __fastcall QSERVER_AllocateConnectionStruct(int nSocket, uint32_t nIpAddress, D2QServerStrc * pQServerStrc) {
     D2QServerClientContainerStrc* pClientContainer = AddClient(pQServerStrc, nSocket, nIpAddress);
-    if (!pQServerStrc->pfnOnClientAcceptedHook) {
-      return pClientContainer;
+    if (pQServerStrc->pfnOnClientAcceptedHook) {
+      pClientContainer = (D2QServerClientContainerStrc*)pQServerStrc->pfnOnClientAcceptedHook(pQServerStrc, pClientContainer->client.nClientToken, ".\\Src\\QServer\\QServer98.cpp", 0x91);
     }
 
-    pClientContainer = (D2QServerClientContainerStrc*)pQServerStrc->pfnOnClientAcceptedHook(pQServerStrc, pClientContainer->client.nClientToken, ".\\Src\\QServer\\QServer98.cpp", 0x91);
     return pClientContainer;
 }
 

@@ -50,11 +50,10 @@ void __thiscall Destructor(::EditBoxWrapper * pThis) {
 
 ::EditBoxWrapper * __thiscall ScalarDeletingDestructor(::EditBoxWrapper * pThis, uint32_t nFlags) {
     EditBoxWrapper::Destructor(pThis);
-    if (!(nFlags & 1 && pThis)) {
-      return pThis;
+    if (nFlags & 1 && pThis) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

@@ -89,11 +89,10 @@ static sockaddr * name_00882b38; D2_STATIC_GUARD_BSS(name_00882b38, "D2Net::SRC:
     char* szResolvedIp = Fog::Src::Safesock::inet_nameToIp((char*)lpThreadParam);
     /* char * cp for inet_addr */ nClientSockAddrIn = inet_addr(szResolvedIp);
     int nConnectResult = connect(CLIENT_SocketToServer, (sockaddr*)&name_00882b38, 0x10);
-    if (nConnectResult != -1) {
-      return 1;
+    if (nConnectResult == -1) {
+      CLIENT_SocketToServer = -1;
     }
 
-    CLIENT_SocketToServer = -1;
     return 1;
 }
 
@@ -385,19 +384,19 @@ void __fastcall NET_CLIENT_SendPacketToServer(void * pUnused, uint16_t nPacketSi
 
 static int32_t NET_SendPacketToD2GSOnline(char * pBytes, size_t * nSize) {
     int32_t nSendResult = send(CLIENT_SocketToServer, pBytes, (int)nSize, 0);
-    if (nSendResult != -1) {
-      return nSendResult;
+    if (nSendResult == -1) {
+      BOOL BVar1;
+      WSAGetLastError();
+      BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
+      if (!BVar1) {
+        /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
+        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnNetConnectionTimeoutMs = 0;
+        LeaveCriticalSection(&lpCriticalSection_00882ce8);
+      }
+
+      nSendResult = 0;
     }
 
-    WSAGetLastError();
-    BOOL BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
-    if (!BVar1) {
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnNetConnectionTimeoutMs = 0;
-      LeaveCriticalSection(&lpCriticalSection_00882ce8);
-    }
-
-    nSendResult = 0;
     return nSendResult;
 }
 

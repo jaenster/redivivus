@@ -204,7 +204,6 @@ int __fastcall D2WINLIST_GetItemCount(::D2WinList * pList) {
     }
 
     return pList->sEntriesControl.nItemCount;
-    return pList->sEntriesControl.nItemCount;
 }
 
 // Loads pentagram spinner cursor for list scrolling. Loads DC6 from DATA\GLOBAL\UI\CURSOR\Pentspin and stores in global gpPentSpinCursorDC6. Errors if already loaded.

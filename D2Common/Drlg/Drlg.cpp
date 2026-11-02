@@ -701,7 +701,6 @@ BOOL __fastcall DRLGACTMISC_CheckFlag0x1(D2DrlgStrc * pDrlg) {
     }
 
     return pDrlg->dwFlags & 1;
-    return pDrlg->dwFlags & 1;
 }
 
 // Initializes the per-act tile cache entry (D2DrlgTileDataStrc) for a given D2DrlgStrc by looking up the first matching tile from all tile projects using TILEPROJECT_LookupTilesInAllProjects, then populating pDrlgActSub18 via DRLGROOMTILE_FillTileData. Act 0 uses tile type 0/subtype 0, Act 1 uses subtype 1, Act 2 uses type 0x1d/subtype 0xC. Halts on null inputs or no tile found.
@@ -1200,11 +1199,11 @@ void __fastcall DRLGANIM_PropagateAnimationData(D2RoomExStrc * pRoomExSrc, D2Roo
 // @blizzard FindHTile
 int __fastcall DRLG_FindHTile(D2RoomExStrc * pRoomEx, int nTileType, uint32_t nGridFlags) {
     int nRarityEntry;
-    int nEntryRarity;
     uint8_t nMainIndex;
     uint32_t nRaritySum;
     uint32_t nRandom;
     int aTileResults[40];
+    D2SeedStrc sNewSeed;
     if (nGridFlags) {
       nMainIndex = (uint8_t)(nGridFlags >> 0x14) & 0x3f;
       nRaritySum = nGridFlags >> 8;
@@ -1241,7 +1240,6 @@ int __fastcall DRLG_FindHTile(D2RoomExStrc * pRoomEx, int nTileType, uint32_t nG
     if ((int)nRaritySum <= 0) {
       nRandom = 0;
     } else {
-      D2SeedStrc sNewSeed;
       nRandom = pRoomEx->sSeed.nSeedLow;
       if (nRaritySum & nRaritySum - 1) {
         sNewSeed = D2_SEED_NEXT(pRoomEx->sSeed);
@@ -1258,20 +1256,18 @@ int __fastcall DRLG_FindHTile(D2RoomExStrc * pRoomEx, int nTileType, uint32_t nG
 
     int nSelectedIndex = 0;
     nRarityEntry = nRandom + 1;
-    if (!nRaritySum) {
-      return aTileResults[nSelectedIndex];
+    if (nRaritySum) {
+      int nEntryRarity;
+      for (; nTileMatchCount > 1 && nRarityEntry > 0; nRarityEntry -= nEntryRarity) {
+        nEntryRarity = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetAnimatedTileDataPtr(aTileResults[nSelectedIndex]);
+        nSelectedIndex++;
+      }
+
+      if (nSelectedIndex) {
+        nSelectedIndex--;
+      }
     }
 
-    for (; nTileMatchCount > 1 && nRarityEntry > 0; nRarityEntry -= nEntryRarity) {
-      nEntryRarity = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetAnimatedTileDataPtr(aTileResults[nSelectedIndex]);
-      nSelectedIndex++;
-    }
-
-    if (!nSelectedIndex) {
-      return aTileResults[nSelectedIndex];
-    }
-
-    nSelectedIndex--;
     return aTileResults[nSelectedIndex];
 }
 
@@ -2705,19 +2701,14 @@ int __fastcall DRLGPLACE_ACT1_ValidatePlacementList2WithGap(D2DrlgLevelPlacement
     }
 
     nPrevId = 1;
-    if (!nIndexMax) {
-      return nPrevId;
+    if (nIndexMax) {
+      pLevelUnknown->aCoordsAndSize[0].WorldSize.y += 200;
+      pLevelUnknown->aCoordsAndSize[0].WorldPosition.y += -200;
+      nPrevId = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize, pLevelUnknown->aCoordsAndSize + i, 0);
+      pLevelUnknown->aCoordsAndSize[0].WorldSize.y += -200;
+      pLevelUnknown->aCoordsAndSize[0].WorldPosition.y += 200;
     }
 
-    LONG* pWorldSizeY = &pLevelUnknown->aCoordsAndSize[0].WorldSize.y;
-    *pWorldSizeY += 200;
-    pWorldSizeY = &pLevelUnknown->aCoordsAndSize[0].WorldPosition.y;
-    *pWorldSizeY += -200;
-    nPrevId = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize, pLevelUnknown->aCoordsAndSize + i, 0);
-    pWorldSizeY = &pLevelUnknown->aCoordsAndSize[0].WorldSize.y;
-    *pWorldSizeY += -200;
-    pWorldSizeY = &pLevelUnknown->aCoordsAndSize[0].WorldPosition.y;
-    *pWorldSizeY += 200;
     return nPrevId;
 }
 
@@ -4107,22 +4098,20 @@ int __stdcall DRLGOUTROOM_EstimatePathDistance(int nX1, int nY1, int nX2, int nY
     }
 
     int nMin = nDx;
-    if (!(nDx < nDy || (nDist = nDy + nDx * 2 , nMin = nDy , nDx <= nDy))) {
-      return nDist;
+    if (nDx < nDy || (nDist = nDy + nDx * 2 , nMin = nDy , nDx <= nDy)) {
+      nDist = nMin + nDy * 2;
     }
 
-    nDist = nMin + nDy * 2;
     return nDist;
 }
 
 // NOTE: Register params: pint (EAX): int *
 int32_t __stdcall DRLGOUTROOM_GetDirectionChangeCost(int * pint, int dwParam2, int dwParam3) {
     int32_t nCost;
-    if (!(pint[3] == dwParam2 || (nCost = 3 , pint[4] == dwParam3))) {
-      return nCost;
+    if (pint[3] == dwParam2 || (nCost = 3 , pint[4] == dwParam3)) {
+      nCost = 2;
     }
 
-    nCost = 2;
     return nCost;
 }
 

@@ -3410,11 +3410,10 @@ int32_t __stdcall ClickItemRight(D2UnitStrc * pItem, D2InventoryStrc * pGridCoor
       if (nPosX) {
         pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pItemAtCell->nClassId);
         nItemCode = pItemsTxt->dwCode;
-        if (!(nItemCode == 0x20737274 || nItemCode == 0x20736b62 || nItemCode == 0x20646b62)) {
-          return 1;
+        if (nItemCode == 0x20737274 || nItemCode == 0x20736b62 || nItemCode == 0x20646b62) {
+          Text::TEXT_OpenQuestScroll(pItemAtCell, pItemsTxt);
         }
 
-        Text::TEXT_OpenQuestScroll(pItemAtCell, pItemsTxt);
         return 1;
       }
     }
@@ -4070,22 +4069,20 @@ void __stdcall INV_DrawNpcButtonTooltip() {
 }
 
 BOOL __stdcall INV_CanReturnToShop() {
-    if (!(g_nCurrentInventoryPage == 1 || g_nCurrentInventoryPage == 2 || g_nCurrentInventoryPage == 4 || g_nCurrentInventoryPage == 3)) {
-      return 0;
+    int nItemType;
+    if (g_nCurrentInventoryPage == 1 || g_nCurrentInventoryPage == 2 || g_nCurrentInventoryPage == 4 || g_nCurrentInventoryPage == 3) {
+      D2UnitStrc* pCursorItem_lcl;
+      pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
+      pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
+      if (!pCursorItem_lcl) {
+        nItemType = ui::GetItemType();
+        if (nItemType == 7 || nItemType == 1 || nItemType == 4) {
+          return 1;
+        }
+      }
     }
 
-    D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
-    pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
-    if (pCursorItem_lcl) {
-      return 0;
-    }
-
-    int nItemType = ui::GetItemType();
-    if (!(nItemType == 7 || nItemType == 1 || nItemType == 4)) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 void __stdcall INV_HandleShopEscapeKey(D2UIMouseMsgStrc * pMsg) {
@@ -4390,8 +4387,8 @@ void __stdcall INV_HandleShopReturnAction() {
 
 void __stdcall INV_HandleInventoryMouseMove(D2UIMouseMsgStrc * pMsg) {
     gnInvMouseX = (int)pMsg->uLParam.sMousePos.nMouseX;
-    gpInvCursorItem = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    if (!(gnInvMouseX >= pInventoryScreenCoordinates.nLeft && gnInvMouseX < pInventoryScreenCoordinates.nRight && (int)gpInvCursorItem >= pInventoryScreenCoordinates.nTop && (int)gpInvCursorItem <= pInventoryScreenCoordinates.nBottom)) {
+    gpInvCursorItem = (int)pMsg->uLParam.sMousePos.nMouseY;
+    if (!(gnInvMouseX >= pInventoryScreenCoordinates.nLeft && gnInvMouseX < pInventoryScreenCoordinates.nRight && gpInvCursorItem >= pInventoryScreenCoordinates.nTop && gpInvCursorItem <= pInventoryScreenCoordinates.nBottom)) {
       return;
     }
 
@@ -4543,8 +4540,8 @@ void __stdcall INV_HandleTradeMouseMove(D2UIMouseMsgStrc * pMsg) {
     }
 
     gnInvMouseX = (int)pMsg->uLParam.sMousePos.nMouseX;
-    gpInvCursorItem = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    if (gnInvMouseX >= pInventoryScreenCoordinates.nLeft && gnInvMouseX < pInventoryScreenCoordinates.nRight && (int)gpInvCursorItem >= pInventoryScreenCoordinates.nTop && (int)gpInvCursorItem <= pInventoryScreenCoordinates.nBottom || gnInvMouseX > pTradePage2GridScreenCoordinates.nPixelLeft && gnInvMouseX < pTradePage2GridScreenCoordinates.nRight && (int)gpInvCursorItem >= pTradePage2GridScreenCoordinates.nTop && (int)gpInvCursorItem <= pTradePage2GridScreenCoordinates.nBottom || gnInvMouseX > pTradePage1GridScreenCoordinates.nPixelLeft && gnInvMouseX < pTradePage1GridScreenCoordinates.nRight && (int)gpInvCursorItem >= pTradePage1GridScreenCoordinates.nTop && (int)gpInvCursorItem <= pTradePage1GridScreenCoordinates.nBottom) {
+    gpInvCursorItem = (int)pMsg->uLParam.sMousePos.nMouseY;
+    if (gnInvMouseX >= pInventoryScreenCoordinates.nLeft && gnInvMouseX < pInventoryScreenCoordinates.nRight && gpInvCursorItem >= pInventoryScreenCoordinates.nTop && gpInvCursorItem <= pInventoryScreenCoordinates.nBottom || gnInvMouseX > pTradePage2GridScreenCoordinates.nPixelLeft && gnInvMouseX < pTradePage2GridScreenCoordinates.nRight && gpInvCursorItem >= pTradePage2GridScreenCoordinates.nTop && gpInvCursorItem <= pTradePage2GridScreenCoordinates.nBottom || gnInvMouseX > pTradePage1GridScreenCoordinates.nPixelLeft && gnInvMouseX < pTradePage1GridScreenCoordinates.nRight && gpInvCursorItem >= pTradePage1GridScreenCoordinates.nTop && gpInvCursorItem <= pTradePage1GridScreenCoordinates.nBottom) {
       INV_HandleMouseMove(pMsg);
       return;
     }
@@ -4802,33 +4799,28 @@ static BOOL INV_IsMouseOverStashGoldBtn(int32_t nMouseY, int32_t nMouseX) {
     } else {
       nBtnBound = gnPanelOffsetX + 0x110;
     }
-    if (nMouseX <= nBtnBound) {
-      return 0;
-    }
-
-    bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-    if (!bIsExpansion) {
-      nBtnBound = gnPanelOffsetX + 0x113;
-    } else {
-      nBtnBound = gnPanelOffsetX + 0x110;
-    }
-    if (!(nMouseX < nBtnBound + 0x28)) {
-      return 0;
-    }
-
-    bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-    if (!bIsExpansion) {
-      nBtnBound = gnPanelOffsetY - 0x41;
-    } else {
-      nBtnBound = gnPanelOffsetY - 0x40;
-    }
-    if (!(nMouseY > nBtnBound + ScreenSizeY - 0x23)) {
-      return 0;
-    }
-
-    int32_t nGoldButtonY = INV_GetGoldButtonY();
-    if (nMouseY < nGoldButtonY + 5) {
-      return 1;
+    if (nMouseX > nBtnBound) {
+      int32_t nGoldButtonY;
+      bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
+      if (!bIsExpansion) {
+        nBtnBound = gnPanelOffsetX + 0x113;
+      } else {
+        nBtnBound = gnPanelOffsetX + 0x110;
+      }
+      if (nMouseX < nBtnBound + 0x28) {
+        bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
+        if (!bIsExpansion) {
+          nBtnBound = gnPanelOffsetY - 0x41;
+        } else {
+          nBtnBound = gnPanelOffsetY - 0x40;
+        }
+        if (nMouseY > nBtnBound + ScreenSizeY - 0x23) {
+          nGoldButtonY = INV_GetGoldButtonY();
+          if (nMouseY < nGoldButtonY + 5) {
+            return 1;
+          }
+        }
+      }
     }
 
     return 0;
@@ -4840,8 +4832,8 @@ void __stdcall INV_HandleStashMouseMove(D2UIMouseMsgStrc * pMsg) {
     }
 
     gnInvMouseX = (int)pMsg->uLParam.sMousePos.nMouseX;
-    gpInvCursorItem = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    if (gnInvMouseX < pInventoryScreenCoordinates.nLeft || gnInvMouseX >= pInventoryScreenCoordinates.nRight || (int)gpInvCursorItem < pInventoryScreenCoordinates.nTop || (int)gpInvCursorItem > pInventoryScreenCoordinates.nBottom) {
+    gpInvCursorItem = (int)pMsg->uLParam.sMousePos.nMouseY;
+    if (gnInvMouseX < pInventoryScreenCoordinates.nLeft || gnInvMouseX >= pInventoryScreenCoordinates.nRight || gpInvCursorItem < pInventoryScreenCoordinates.nTop || gpInvCursorItem > pInventoryScreenCoordinates.nBottom) {
       D2UnitStrc* pBankRangeResult;
       pBankRangeResult = (D2UnitStrc*)IsInBankPageScreenRange(gnInvMouseX, gpInvCursorItem);
       if (!pBankRangeResult) {
@@ -5143,8 +5135,8 @@ void __stdcall INV_HandleCubeMouseMove(D2UIMouseMsgStrc * pMsg) {
     }
 
     gnInvMouseX = (int)pMsg->uLParam.sMousePos.nMouseX;
-    gpInvCursorItem = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    if ((gnInvMouseX < pInventoryScreenCoordinates.nLeft || gnInvMouseX >= pInventoryScreenCoordinates.nRight || (int)gpInvCursorItem < pInventoryScreenCoordinates.nTop || (int)gpInvCursorItem > pInventoryScreenCoordinates.nBottom) && (gnInvMouseX < pTransmogrifyBoxGridScreenCoordinates.nPixelLeft || gnInvMouseX >= pTransmogrifyBoxGridScreenCoordinates.nRight || (int)gpInvCursorItem < pTransmogrifyBoxGridScreenCoordinates.nTop || (int)gpInvCursorItem > pTransmogrifyBoxGridScreenCoordinates.nBottom)) {
+    gpInvCursorItem = (int)pMsg->uLParam.sMousePos.nMouseY;
+    if ((gnInvMouseX < pInventoryScreenCoordinates.nLeft || gnInvMouseX >= pInventoryScreenCoordinates.nRight || gpInvCursorItem < pInventoryScreenCoordinates.nTop || gpInvCursorItem > pInventoryScreenCoordinates.nBottom) && (gnInvMouseX < pTransmogrifyBoxGridScreenCoordinates.nPixelLeft || gnInvMouseX >= pTransmogrifyBoxGridScreenCoordinates.nRight || gpInvCursorItem < pTransmogrifyBoxGridScreenCoordinates.nTop || gpInvCursorItem > pTransmogrifyBoxGridScreenCoordinates.nBottom)) {
       gpInvItemUnderCursor = 0;
       gbInvBodySlotUnderCursorExists = 0;
       pItemToDescribe = 0;
@@ -6235,11 +6227,10 @@ static int32_t __stdcall INV_CanHirelingEquipItem(D2UnitStrc * pUnit, D2UnitStrc
     pbSlotMatch[3] = false;
     check_requirements:
     bCheckResult = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pItem, pUnit, 0, nullptr, nullptr, nullptr);
-    if (bCheckResult) {
-      return bCanEquip;
+    if (!bCheckResult) {
+      bCanEquip = 0;
     }
 
-    bCanEquip = 0;
     return bCanEquip;
 }
 

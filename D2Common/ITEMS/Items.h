@@ -42,8 +42,7 @@ struct D2RunesTxt {
     /* 0x040 */ char rune_name[64]; // d2bs binfields FIELDTYPE_ASCII
     /* 0x080 */ char complete; // d2bs binfields FIELDTYPE_CHAR
     /* 0x081 */ char server; // d2bs binfields FIELDTYPE_CHAR
-    /* 0x082 */ uint8_t field_0x82;
-    /* 0x083 */ uint8_t field_0x83;
+    /* 0x082 */ uint16_t field4_0x82;
     /* 0x084 */ uint8_t field_0x84;
     /* 0x085 */ uint8_t field_0x85;
     /* 0x086 */ short itype1; // d2bs binfields FIELDTYPE_CODE_SHORT

@@ -75,32 +75,31 @@ void __stdcall SaveAndUnload(D2BNetGatewayAccessStr * pGatewayAccess) {
 }
 
 char * __thiscall Nth(void * pThis, int nIndex) {
+    int nFieldIdx;
+    int nTargetField;
     char* szDataCursor = *(char**)((int)pThis + 0x10);
-    if (!(szDataCursor && nIndex >= 1 && nIndex <= *(int*)((int)pThis + 8))) {
-      return (char*)pThis;
-    }
-
-    int nFieldIdx = 1;
-    int nTargetField = nIndex * 3;
-    nIndex = 0;
-    if (1 < nTargetField) {
+    if (szDataCursor && nIndex >= 1 && nIndex <= *(int*)((int)pThis + 8)) {
       uint32_t nEntryStrLen;
-      do {
-        if (nIndex >= *(int*)((int)pThis + 0x14)) {
-          break;
-        }
+      nFieldIdx = 1;
+      nTargetField = nIndex * 3;
+      nIndex = 0;
+      if (1 < nTargetField) {
+        do {
+          if (nIndex >= *(int*)((int)pThis + 0x14)) {
+            break;
+          }
 
-        nEntryStrLen = Storm::Source::SSTR::SStrLen(szDataCursor);
-        nIndex = nIndex + nEntryStrLen + 1;
-        szDataCursor = szDataCursor + nEntryStrLen + 1;
-        nFieldIdx++;
-      } while (nFieldIdx < nTargetField);
-    }
-    if (!(nIndex < *(int*)((int)pThis + 0x14) && nFieldIdx <= nTargetField)) {
-      return (char*)pThis;
+          nEntryStrLen = Storm::Source::SSTR::SStrLen(szDataCursor);
+          nIndex = nIndex + nEntryStrLen + 1;
+          szDataCursor = szDataCursor + nEntryStrLen + 1;
+          nFieldIdx++;
+        } while (nFieldIdx < nTargetField);
+      }
+      if (nIndex < *(int*)((int)pThis + 0x14) && nFieldIdx <= nTargetField) {
+        pThis = (void*)szDataCursor;
+      }
     }
 
-    pThis = (void*)szDataCursor;
     return (char*)pThis;
 }
 

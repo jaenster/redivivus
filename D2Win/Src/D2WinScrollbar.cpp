@@ -55,7 +55,6 @@ int32_t __fastcall D2WINSCROLLBAR_GetMaxValue(::D2WinScrollbar * pScrollbar) {
     }
 
     return pScrollbar->nMaxValue;
-    return pScrollbar->nMaxValue;
 }
 
 // Sets scrollbar maximum value (field 0x12). Clamps to non-negative. Validates form type FORM_Scrollbar (5).
@@ -91,7 +90,6 @@ int32_t __fastcall D2WINSCROLLBAR_GetPosition(::D2WinScrollbar * pScrollbar) {
     }
 
     return pScrollbar->nPosition;
-    return pScrollbar->nPosition;
 }
 
 // Links scrollbar to text box control (field 0x15). Scrollbar changes auto-update linked text box. Validates form type FORM_Scrollbar (5).
@@ -122,31 +120,29 @@ BOOL __fastcall D2WINSCROLLBAR_HandleMouseWheel(D2UIMouseMsgStrc * pMsg, ::D2Win
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x99);
       exit(-1);
     }
-    if (pScrollbar->nWheelLockFlag) {
-      return 0;
-    }
-    if (nWheelDelta > 0) {
-      pScrollbar->nPosition--;
-      pScrollbar->bUpArrowPressed = 1;
-    } else {
-      if (nWheelDelta < 0) {
-        pScrollbar->nPosition++;
-        pScrollbar->bDownArrowPressed = 1;
+    if (!pScrollbar->nWheelLockFlag) {
+      if (nWheelDelta > 0) {
+        pScrollbar->nPosition--;
+        pScrollbar->bUpArrowPressed = 1;
+      } else {
+        if (nWheelDelta < 0) {
+          pScrollbar->nPosition++;
+          pScrollbar->bDownArrowPressed = 1;
+        }
+      }
+      if (pScrollbar->nPosition < 0) {
+        pScrollbar->nPosition = 0;
+      } else if (pScrollbar->nPosition > pScrollbar->nMaxValue) {
+        pScrollbar->nPosition = pScrollbar->nMaxValue;
+      }
+      if (pScrollbar->pLinkedTextBox) {
+        D2WinTextBox::D2WINTEXTBOX_ScrollToLine(pScrollbar->pLinkedTextBox, pScrollbar->nPosition);
+      }
+      if (pScrollbar->pfnOnChange) {
+        pScrollbar->pfnOnChange(pMsg);
       }
     }
-    if (pScrollbar->nPosition < 0) {
-      pScrollbar->nPosition = 0;
-    } else if (pScrollbar->nPosition > pScrollbar->nMaxValue) {
-      pScrollbar->nPosition = pScrollbar->nMaxValue;
-    }
-    if (pScrollbar->pLinkedTextBox) {
-      D2WinTextBox::D2WINTEXTBOX_ScrollToLine(pScrollbar->pLinkedTextBox, pScrollbar->nPosition);
-    }
-    if (!pScrollbar->pfnOnChange) {
-      return 0;
-    }
 
-    pScrollbar->pfnOnChange(pMsg);
     return 0;
 }
 
@@ -167,7 +163,6 @@ int32_t __fastcall D2WINSCROLLBAR_GetStyle(::D2WinScrollbar * pScrollbar) {
       exit(-1);
     }
 
-    return pScrollbar->nStyle;
     return pScrollbar->nStyle;
 }
 
@@ -318,40 +313,39 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
         pDC6 = pScrollbar->sControl.pDC6;
         nLine = pScrollbar->sControl.dwPosX;
         nDrawY = pScrollbar->sControl.dwPosY - 1;
-        if (!pScrollbar->nMaxValue) {
-          return 1;
+        if (pScrollbar->nMaxValue) {
+          nGlobalTickCount = D2WinMain::D2WINMAIN_GetWinMainState();
+          if (!nGlobalTickCount) {
+            pScrollbar->nWheelLockFlag = 0;
+          }
+          if (pScrollbar->nWheelLockFlag) {
+            pScrollbarArg.uMsg = 0x201;
+            pScrollbarArg.pControl = &pScrollbar->sControl;
+            D2WinScrollbar::Push(&pScrollbarArg);
+          }
+
+          memset(&sGfxData, 0, 0x48);
+          sGfxData.pDC6 = pDC6;
+          sGfxData.nFrameNumber = pScrollbar->bDownArrowPressed != 0 ? 0x3U : 0x1U;
+          sGfxData.nDirection = 0;
+          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nLine, nDrawY, -1, DRAW_SOLID, nullptr);
+          sGfxData.nFrameNumber = 5;
+          if (pScrollbar->sControl.dwSizeY - 10 > 10) {
+            pDC6 = (DC6*)0xa;
+            do {
+              pDC6 = (DC6*)((uintptr_t)&pDC6->nFormat + 2);
+              nDrawY += -10;
+              D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nLine, nDrawY, -1, DRAW_SOLID, nullptr);
+            } while ((int)pDC6 < pScrollbar->sControl.dwSizeY - 10);
+          }
+
+          sGfxData.nFrameNumber = pScrollbar->bUpArrowPressed ? 2 : 0;
+          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nLine, pScrollbar->sControl.dwPosY - pScrollbar->sControl.dwSizeY + 9, -1, DRAW_SOLID, nullptr);
+          nDrawY = pScrollbar->sControl.dwSizeY;
+          sGfxData.nFrameNumber = 4;
+          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nLine, (nDrawY - 0x1e) * pScrollbar->nPosition / pScrollbar->nMaxValue - nDrawY + 0x13 + pScrollbar->sControl.dwPosY, -1, DRAW_SOLID, nullptr);
         }
 
-        nGlobalTickCount = D2WinMain::D2WINMAIN_GetWinMainState();
-        if (!nGlobalTickCount) {
-          pScrollbar->nWheelLockFlag = 0;
-        }
-        if (pScrollbar->nWheelLockFlag) {
-          pScrollbarArg.uMsg = 0x201;
-          pScrollbarArg.pControl = &pScrollbar->sControl;
-          D2WinScrollbar::Push(&pScrollbarArg);
-        }
-
-        memset(&sGfxData, 0, 0x48);
-        sGfxData.pDC6 = pDC6;
-        sGfxData.nFrameNumber = pScrollbar->bDownArrowPressed != 0 ? 0x3U : 0x1U;
-        sGfxData.nDirection = 0;
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nLine, nDrawY, -1, DRAW_SOLID, nullptr);
-        sGfxData.nFrameNumber = 5;
-        if (pScrollbar->sControl.dwSizeY - 10 > 10) {
-          pDC6 = (DC6*)0xa;
-          do {
-            pDC6 = (DC6*)((uintptr_t)&pDC6->nFormat + 2);
-            nDrawY += -10;
-            D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nLine, nDrawY, -1, DRAW_SOLID, nullptr);
-          } while ((int)pDC6 < pScrollbar->sControl.dwSizeY - 10);
-        }
-
-        sGfxData.nFrameNumber = pScrollbar->bUpArrowPressed ? 2 : 0;
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nLine, pScrollbar->sControl.dwPosY - pScrollbar->sControl.dwSizeY + 9, -1, DRAW_SOLID, nullptr);
-        nDrawY = pScrollbar->sControl.dwSizeY;
-        sGfxData.nFrameNumber = 4;
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nLine, (nDrawY - 0x1e) * pScrollbar->nPosition / pScrollbar->nMaxValue - nDrawY + 0x13 + pScrollbar->sControl.dwPosY, -1, DRAW_SOLID, nullptr);
         return 1;
       }
 

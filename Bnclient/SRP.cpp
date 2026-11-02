@@ -278,9 +278,9 @@ BOOL __thiscall SRP_ExportPublicValues(D2Srp * * ppSrp, uint32_t * pnGeneratorLe
       return 0;
     }
 
-    uint32_t nByteLen = SHA::SHA1_ToBigIntBytes((*ppSrp)->pGenerator, pGeneratorOut, 0x20);
+    uint32_t nByteLen = SHA::SHA1_ToBigIntBytes((*ppSrp)->pGenerator, (uint8_t*)pGeneratorOut, 0x20);
     *pnGeneratorLen = nByteLen;
-    nByteLen = SHA::SHA1_ToBigIntBytes((*ppSrp)->pModulusN, pModulusOut, 0x20);
+    nByteLen = SHA::SHA1_ToBigIntBytes((*ppSrp)->pModulusN, (uint8_t*)pModulusOut, 0x20);
     *pnModulusLen = nByteLen;
     return 1;
 }
@@ -333,7 +333,7 @@ void __thiscall SRP_ClientGenerateVerifier(void * pThis, char * szUsername, uint
     BigData* pVerifier = SHA::SHA1_BigIntFromUnsigned(0);
     szPassword = (uint32_t*)pVerifier;
     SRP_ComputeScramblingParam(*(int32_t*)pThis, (BigData**)&pSaltOut, (BigData**)&szPassword);
-    SHA::SHA1_ToBigIntBytes(pVerifier, pVerifierOut, 0x20);
+    SHA::SHA1_ToBigIntBytes(pVerifier, (uint8_t*)pVerifierOut, 0x20);
     SHA::SHA1_BigIntFree((BigData*)pSaltOut);
     SHA::SHA1_BigIntFree(pVerifier);
 }
@@ -346,7 +346,7 @@ void __thiscall SRP_GenerateAccountCredentials(void * pThis, char * pCredsBuf, c
     BigData* pVerifier = SHA::SHA1_BigIntFromUnsigned(0);
     SHA::SHA1_BigIntPowMod(pVerifier, *(BigData**)(*(int*)pThis + 4), pPasswordHash, *(BigData**)(*(int*)pThis + 8));
     SHA::SHA1_BigIntFree(pPasswordHash);
-    SHA::SHA1_ToBigIntBytes(pVerifier, pCredsBuf + 0x60, 0x20);
+    SHA::SHA1_ToBigIntBytes(pVerifier, (uint8_t*)(pCredsBuf + 0x60), 0x20);
     SHA::SHA1_BigIntFree(pVerifier);
 }
 
@@ -356,7 +356,7 @@ BOOL __thiscall SRP_ClientKeyExchange(void * pThis, D2SrpCredentialsStrc * pCont
     BigData* pServerPublicB;
     BigData* pPasswordHash;
     BigData* pSharedSecretOut;
-    char sessionKeyBytes[32];
+    uint8_t sessionKeyBytes[32];
     void* pSalt = pSaltBytes;
     BigData* pSharedSecret = SHA::SHA1_FromBigIntBytes(pServerPublicBytes, 0x20);
     BigData* pClientPublicA = pSharedSecret;
@@ -372,7 +372,7 @@ BOOL __thiscall SRP_ClientKeyExchange(void * pThis, D2SrpCredentialsStrc * pCont
       SHA::SHA1_BigIntFree(pPasswordHash);
       if (bSharedSecretOk) {
         nSecretByteLen = SHA::SHA1_ToBigIntBytes(pSharedSecret, sessionKeyBytes, 0x20);
-        SHA::SHA1_HashWideString(pContext->aSessionKey_K, sessionKeyBytes, nSecretByteLen);
+        SHA::SHA1_HashWideString(pContext->aSessionKey_K, (char*)sessionKeyBytes, nSecretByteLen);
         SHA::SHA1_BigIntFree(pSharedSecretOut);
         SRP_ComputeClientProof(*(int32_t*)pThis, pContext->szUsername, pSalt, pContext->aClientPublicKey_A, pServerPublicBytes, pContext->aSessionKey_K, (int32_t)pContext->aClientProof_M1);
         return 1;
@@ -481,7 +481,7 @@ void __thiscall SRP_ServerComputePublicB(void * pThis, int32_t nContextBase) {
 
     SHA::SHA1_BigIntFree(pRandomKeyBigInt);
     SHA::SHA1_BigIntFree(pSmallKeyBigInt);
-    SHA::SHA1_ToBigIntBytes(pPublicB, (void*)(nContextBase + 0xa0), 0x20);
+    SHA::SHA1_ToBigIntBytes(pPublicB, (uint8_t*)(nContextBase + 0xa0), 0x20);
     SHA::SHA1_BigIntFree(pPublicB);
 }
 
@@ -492,7 +492,7 @@ void __thiscall SRP_ClientVerifyAndComputeKey(void * pThis, void * pContext, uin
       BigData* pServerPublicB;
       BigData* pRandomKey;
       BigData* pClientProofBuf;
-      char sessionKeyBytes[32];
+      uint8_t sessionKeyBytes[32];
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 44, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
@@ -509,7 +509,7 @@ void __thiscall SRP_ClientVerifyAndComputeKey(void * pThis, void * pContext, uin
     SHA::SHA1_BigIntFree(pSmallKey);
     __frame0.pClientProofBuf = (BigData*)SHA::SHA1_ToBigIntBytes(pSharedSecret, __frame0.sessionKeyBytes, 0x20);
     SHA::SHA1_BigIntFree(pSharedSecret);
-    SHA::SHA1_HashWideString((uint8_t*)((int)pContext + 0xc0), __frame0.sessionKeyBytes, (int32_t)__frame0.pClientProofBuf);
+    SHA::SHA1_HashWideString((uint8_t*)((int)pContext + 0xc0), (char*)__frame0.sessionKeyBytes, (int32_t)__frame0.pClientProofBuf);
     __frame0.pClientProofBuf = (BigData*)((int)pContext + 0xe8);
     SRP_ComputeClientProof(*(int32_t*)pThis, (char*)((int)pContext + 0x40), pContext, (void*)((int)pContext + 0x60), (void*)((int)pContext + 0xa0), (uint8_t*)((int)pContext + 0xc0), (int32_t)__frame0.pClientProofBuf);
     uint32_t nRemaining = 0x14;

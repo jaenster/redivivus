@@ -1222,14 +1222,13 @@ uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t
         pbCur = szSource;
       } while (i < nSize);
     }
-    if (*szSource) {
-      return wszText;
+    if (!*szSource) {
+      terminate_output:
+      if (i < nSize) {
+        wszText[i] = L'\0';
+      }
     }
 
-    terminate_output:
-    if (i < nSize) {
-      wszText[i] = L'\0';
-    }
     return wszText;
 }
 
@@ -1275,14 +1274,13 @@ uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * szDest, uint16_t *
         wszSource++;
       } while (i < nSize);
     }
-    if (*wszSource) {
-      return szDest;
+    if (!*wszSource) {
+      terminate_output:
+      if (i < nSize) {
+        szDest[i] = 0;
+      }
     }
 
-    terminate_output:
-    if (i < nSize) {
-      szDest[i] = 0;
-    }
     return szDest;
 }
 

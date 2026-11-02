@@ -617,11 +617,10 @@ void * __thiscall SSIGNATURE_RsaExportZeroPadded(BigData * * ppBig, void * pOutB
     uint32_t nOrigLen = nBufLen;
     BigData* ppBigValue = *ppBig;
     SBig::SBigToBinaryBuffer(ppBigValue, pOutBuf, nBufLen, &nBufLen);
-    if (nBufLen >= nOrigLen) {
-      return pOutBuf;
+    if (nBufLen < nOrigLen) {
+      SMem::SMemZero((void*)(nBufLen + (int)pOutBuf), nOrigLen - nBufLen);
     }
 
-    SMem::SMemZero((void*)(nBufLen + (int)pOutBuf), nOrigLen - nBufLen);
     return pOutBuf;
 }
 

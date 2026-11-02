@@ -74,11 +74,10 @@ static DWORD GetSndUnitClassId(D2UnitStrc * pUnit) {
     }
 
     int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
-    if (eUnitType != UNIT_PLAYER) {
-      return nClassId;
+    if (eUnitType == UNIT_PLAYER) {
+      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, (int*)&nClassId, &nAnimMode, ".\\UNIT\\UnitSnd.cpp", 0xb01);
     }
 
-    D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, (int*)&nClassId, &nAnimMode, ".\\UNIT\\UnitSnd.cpp", 0xb01);
     return nClassId;
 }
 
@@ -93,11 +92,10 @@ static eD2UnitType GetSndUnitType(D2UnitStrc * pUnit) {
     }
 
     int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
-    if (eUnitType != UNIT_PLAYER) {
-      return eUnitType;
+    if (eUnitType == UNIT_PLAYER) {
+      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nAnimMode, ".\\UNIT\\UnitSnd.cpp", 0xb0d);
     }
 
-    D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nAnimMode, ".\\UNIT\\UnitSnd.cpp", 0xb0d);
     return eUnitType;
 }
 
@@ -112,21 +110,19 @@ static int32_t GetSndUnitMode(D2UnitStrc * pUnit) {
     }
 
     int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
-    if (eUnitType != UNIT_PLAYER) {
-      return nAnimMode;
+    if (eUnitType == UNIT_PLAYER) {
+      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nAnimMode, ".\\UNIT\\UnitSnd.cpp", 0xb19);
     }
 
-    D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nAnimMode, ".\\UNIT\\UnitSnd.cpp", 0xb19);
     return nAnimMode;
 }
 
 static int * UNITSND_GetBaseSoundId(uint32_t nUnitClassId) {
-    if (!(nUnitClassId < 7)) {
+    if (nUnitClassId >= 7) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb22);
       exit(-1);
     }
 
-    return gaUnitSoundTableByClassId[nUnitClassId];
     return gaUnitSoundTableByClassId[nUnitClassId];
 }
 
@@ -207,11 +203,10 @@ uint32_t __fastcall UNITSND_GetSkillStartSound(D2UnitStrc * pUnit, uint32_t nAni
       uint32_t nAnimFrames;
       if ((nAnimMode & 0xf) <= 0xd) {
         nAnimFrames = (uint32_t)pUnit->nAnimSpeed;
-        if (nAnimFrames) {
-          return (gaUnitSoundTable[(nAnimMode & 0xf) * 2 + 1] * 0x100 + 0x80U) / nAnimFrames;
+        if (!nAnimFrames) {
+          nAnimFrames = 1;
         }
 
-        nAnimFrames = 1;
         return (gaUnitSoundTable[(nAnimMode & 0xf) * 2 + 1] * 0x100 + 0x80U) / nAnimFrames;
       }
 
@@ -363,7 +358,6 @@ static inline void * * __stdcall UNITSND_GetSfxDataListHead(D2UnitStrc * pUnit) 
     }
 
     return (void**)((uintptr_t)&pUnit->uSideData + 0x14);
-    return (void**)((uintptr_t)&pUnit->uSideData + 0x14);
 }
 
 void __fastcall AllocUnitSfxData(D2UnitStrc * pUnit, int32_t nChannelHandle) {
@@ -466,7 +460,6 @@ static inline int __stdcall UNITSND_GetUnitSfxFlag(D2UnitStrc * pUnit) {
     }
 
     return (uint32_t)pUnit->uSideData.pClientSide.bUnitSfx;
-    return (uint32_t)pUnit->uSideData.pClientSide.bUnitSfx;
 }
 
 void __stdcall UNITSND_Unused_Placeholder_3(uint8_t bParam, int32_t pUnit) {
@@ -487,7 +480,6 @@ uint32_t __stdcall UNITSND_GetSfxMode(D2UnitStrc * pUnit) {
     }
 
     return pUnit->uSideData.pClientSide.nSfxMode;
-    return pUnit->uSideData.pClientSide.nSfxMode;
 }
 
 void __stdcall UNITSND_Unused_Placeholder_4(uint32_t dwParam, int32_t pUnit) {
@@ -506,7 +498,6 @@ static uint32_t GetSfxTicks(int32_t pUnit) {
     }
 
     return *(uint32_t*)(pUnit + 0x7c);
-    return *(uint32_t*)(pUnit + 0x7c);
 }
 
 static void __stdcall SetSfxTicks(uint32_t dwSfxTicks, D2UnitStrc * pUnit) {
@@ -524,7 +515,6 @@ static uint32_t GetSfxAsyncTicks(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    return pUnit->uSideData.pClientSide.dwSfxAsyncTicks;
     return pUnit->uSideData.pClientSide.dwSfxAsyncTicks;
 }
 
@@ -546,7 +536,6 @@ uint32_t __stdcall UNITSND_GetSfxStepTicks(D2UnitStrc * pUnit) {
     }
 
     return pUnit->uSideData.pClientSide.dwSfxStepTicks;
-    return pUnit->uSideData.pClientSide.dwSfxStepTicks;
 }
 
 static void __stdcall SetSfxStepTicks(uint32_t dwSfxStepTicks, D2UnitStrc * pUnit) {
@@ -566,7 +555,6 @@ static inline BOOL __stdcall UNITSND_HasActiveSound(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    return pUnit->uSideData.pClientSide.bHasActiveSound;
     return pUnit->uSideData.pClientSide.bHasActiveSound;
 }
 
@@ -750,11 +738,10 @@ int32_t __fastcall UNITSND_GetFootstepSound(D2UnitStrc * pUnit, int32_t bIsRunni
       break;
     }
 
-    if (!bIsRunning) {
-      return nFootstepSound;
+    if (bIsRunning) {
+      nFootstepSound += 0x18;
     }
 
-    nFootstepSound += 0x18;
     return nFootstepSound;
 }
 

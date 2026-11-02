@@ -1566,7 +1566,6 @@ static BOOL __stdcall ITEMMODE_AutoStackItem(::SGAMEDATA * pGame, D2UnitStrc * p
     }
 
     return 0;
-    return 0;
 }
 
 // Server-side auto-stacking of a stackable item (pUnit2) into a matching tome/book in the player (pUnit) inventory. Finds the matching scroll-book via INVENTORY_FindMatchingScrollBook, reads both quantity stats and the book's max stack. If the combined quantity exceeds max, fills the book to max and leaves the remainder on the source item, sending 0x3E item-stat updates for both. If it fits entirely, adds the full amount to the book, then removes the now-empty source item from its room, clears its targetable flag and deletes/frees the unit (CopyInventoryOfPlayerOrFree). Updates the book's tome skill quantity. Returns 1 on a successful stack, 0 when no matching book exists; halts via ErrorManager on invalid quantities/max-stack.
@@ -2270,6 +2269,7 @@ static void __stdcall ITEMMODE_ConsumeItem(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
 static eD2Skills ITEMMODE_GetItemCastSkill(D2UnitStrc * pUnit) {
     uint16_t uVar1;
+    D2BooksTxt* pBooksTxtLine;
     eD2Skills eSkillId = ~SKILL_Attack;
     uint32_t bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Book);
     if (bIsType) {
@@ -2285,18 +2285,17 @@ static eD2Skills ITEMMODE_GetItemCastSkill(D2UnitStrc * pUnit) {
     }
 
     bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Scroll);
-    if (!bIsType) {
-      return eSkillId;
+    if (bIsType) {
+      uVar1 = D2Common::ITEMS::Items::GetMagicSuffix(pUnit, 0);
+      pBooksTxtLine = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar1);
+      if (!pBooksTxtLine) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfab);
+        exit(-1);
+      }
+
+      eSkillId = pBooksTxtLine->scrollskill;
     }
 
-    uVar1 = D2Common::ITEMS::Items::GetMagicSuffix(pUnit, 0);
-    D2BooksTxt* pBooksTxtLine = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar1);
-    if (!pBooksTxtLine) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfab);
-      exit(-1);
-    }
-
-    eSkillId = pBooksTxtLine->scrollskill;
     return eSkillId;
 }
 
@@ -2640,14 +2639,13 @@ BOOL __fastcall StackItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGU
 
             bIsSocketable = D2Common::ITEMS::Items::IsItemSocketable(pSrcItem, pDstItem);
             if (bIsSocketable) {
-              if (pSrcItem->nClassId != pDstItem->nClassId) {
-                return 1;
+              if (pSrcItem->nClassId == pDstItem->nClassId) {
+                ITEMMODE_MergeStackableItems(pGame, pSrcItem, pDstItem, pUnit);
+                D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pDstItem, ITEMCMD_CURSOR_STACK_ITEM, 1);
+                D2Common::INVENTORY::Inventory::UpsertToUpdateList(pUnit->pInventory, pDstItem);
+                D2Common::Units::RefreshInventory(pUnit, 1);
               }
 
-              ITEMMODE_MergeStackableItems(pGame, pSrcItem, pDstItem, pUnit);
-              D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pDstItem, ITEMCMD_CURSOR_STACK_ITEM, 1);
-              D2Common::INVENTORY::Inventory::UpsertToUpdateList(pUnit->pInventory, pDstItem);
-              D2Common::Units::RefreshInventory(pUnit, 1);
               return 1;
             }
           }
@@ -3316,18 +3314,15 @@ void __fastcall ITEMMODE_RecalcAllEquippedStats(::SGAMEDATA * pGameStrc, D2UnitS
 }
 
 BOOL __fastcall ITEMMODE_HasSocketedItems(D2UnitStrc * pUnit, char * szFile, int32_t nLine) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
-      return 0;
-    }
-
-    int32_t nSocketedCount = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bHasInv(pUnit);
-    if (!(nSocketedCount && pUnit->pInventory)) {
-      return 0;
-    }
-
-    nSocketedCount = D2Common::INVENTORY::Inventory::ITEM_ItemsInItem(pUnit->pInventory);
-    if ((uint32_t)nSocketedCount > 0) {
-      return 1;
+    if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
+      int32_t nSocketedCount;
+      nSocketedCount = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bHasInv(pUnit);
+      if (nSocketedCount && pUnit->pInventory) {
+        nSocketedCount = D2Common::INVENTORY::Inventory::ITEM_ItemsInItem(pUnit->pInventory);
+        if ((uint32_t)nSocketedCount > 0) {
+          return 1;
+        }
+      }
     }
 
     return 0;
@@ -3440,6 +3435,7 @@ D2UnitStrc * __fastcall ITEMMODE_HandleItemDurability(uint32_t dwParam, D2UnitSt
     int nScrollQty;
     int nBookQty;
     int nMaxStack;
+    uint16_t wStatLayer;
     uint32_t nNewBookQty = D2Common::ITEMS::Items::ITEMS_IsA(pScroll, ITEMTYPE_Scroll);
     if (!nNewBookQty) {
       return nullptr;
@@ -3469,16 +3465,16 @@ D2UnitStrc * __fastcall ITEMMODE_HandleItemDurability(uint32_t dwParam, D2UnitSt
       nMaxStack = D2Common::ITEMS::Items::ITEM_GetMaxStack(pBookItem);
     } while (nBookQty + nScrollQty > nMaxStack);
 
-    if (bDryRun) {
-      return pBookItem;
+    if (!bDryRun) {
+      eD2UnitStat eStatId;
+      nNewBookQty = nBookQty + nScrollQty;
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pBookItem, UNITSTAT_quantity, nNewBookQty, 0);
+      wStatLayer = 0;
+      eStatId = UNITSTAT_quantity;
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1905), pBookItem, true, eStatId, nNewBookQty, wStatLayer);
+      ITEMMODE_UpdateBookSkillQuantity(nScrollQty, pUnit, pBookItem);
     }
 
-    nNewBookQty = nBookQty + nScrollQty;
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pBookItem, UNITSTAT_quantity, nNewBookQty, 0);
-    uint16_t wStatLayer = 0;
-    eD2UnitStat eStatId = UNITSTAT_quantity;
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1905), pBookItem, true, eStatId, nNewBookQty, wStatLayer);
-    ITEMMODE_UpdateBookSkillQuantity(nScrollQty, pUnit, pBookItem);
     return pBookItem;
 }
 
@@ -3634,6 +3630,8 @@ BOOL __fastcall ITEMMODE_ApplyQuestReward(::SGAMEDATA * pGameStrc, D2UnitStrc * 
 // Randomly selects an item code from a weighted pickup table (pbParam encodes two pools: normal and good), using the unit's seed RNG. For the selected item, checks difficulty-based upgrade odds (UberCode / UltraCode from DifficultyLevels.txt) and potentially promotes the code to its uber or ultra variant. Returns the final item code string pointer.
 uint32_t __fastcall ITEMMODE_HandleItemPickup(int32_t nParam, uint8_t * pbParam, D2UnitStrc * pUnit, int32_t bPreferGood) {
     D2SeedStrc DVar1;
+    D2DifficultyLevelsTxt* pDiffLevels;
+    uint32_t nRand;
     int nUltraOdds;
     uint32_t dwItemCode;
     int nClassId;
@@ -3666,42 +3664,36 @@ uint32_t __fastcall ITEMMODE_HandleItemPickup(int32_t nParam, uint8_t * pbParam,
 
     ::SGAMEDATA* pGame = (::SGAMEDATA*)nParam;
     D2ItemsTxt* pItemTxtLine = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(dwItemCode, &nClassId);
-    if (!pItemTxtLine) {
-      return dwItemCode;
-    }
-    if ((uint16_t)pItemTxtLine->wVersion > pGame->wItemFormat) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19c9);
-      exit(-1);
-    }
-    if (!(pItemTxtLine->dwUberCode != 0x20202030 && pItemTxtLine->dwUberCode)) {
-      return dwItemCode;
+    if (pItemTxtLine) {
+      if ((uint16_t)pItemTxtLine->wVersion > pGame->wItemFormat) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19c9);
+        exit(-1);
+      }
+      if (pItemTxtLine->dwUberCode != 0x20202030 && pItemTxtLine->dwUberCode) {
+        pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)pGame->nDifficulty);
+        if (bPreferGood) {
+          nUnit = pDiffLevels->UberCodeOddsGood;
+        } else {
+          nUnit = pDiffLevels->UberCodeOddsNormal;
+        }
+
+        nRand = D2Client::Archive::UNIT_GetModuloFromSeed(pSeed, 100);
+        if ((int)nRand < nUnit) {
+          dwItemCode = pItemTxtLine->dwUberCode;
+          if (bPreferGood) {
+            nUltraOdds = pDiffLevels->UltraCodeOddsGood;
+          } else {
+            nUltraOdds = pDiffLevels->UltraCodeOddsNormal;
+          }
+
+          nRand = D2Client::Archive::UNIT_GetModuloFromSeed(pSeed, 100);
+          if ((int)nRand < nUltraOdds) {
+            dwItemCode = pItemTxtLine->dwUltraCode;
+          }
+        }
+      }
     }
 
-    D2DifficultyLevelsTxt* pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)pGame->nDifficulty);
-    if (bPreferGood) {
-      nUnit = pDiffLevels->UberCodeOddsGood;
-    } else {
-      nUnit = pDiffLevels->UberCodeOddsNormal;
-    }
-
-    uint32_t nRand = D2Client::Archive::UNIT_GetModuloFromSeed(pSeed, 100);
-    if ((int)nRand >= nUnit) {
-      return dwItemCode;
-    }
-
-    dwItemCode = pItemTxtLine->dwUberCode;
-    if (bPreferGood) {
-      nUltraOdds = pDiffLevels->UltraCodeOddsGood;
-    } else {
-      nUltraOdds = pDiffLevels->UltraCodeOddsNormal;
-    }
-
-    nRand = D2Client::Archive::UNIT_GetModuloFromSeed(pSeed, 100);
-    if ((int)nRand >= nUltraOdds) {
-      return dwItemCode;
-    }
-
-    dwItemCode = pItemTxtLine->dwUltraCode;
     return dwItemCode;
 }
 
@@ -3942,12 +3934,11 @@ static BOOL __stdcall ITEMMODE_PlaceItemInInventoryPage(::SGAMEDATA * pGame, int
             D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pUnit2, (eInventoryPage)nInvPage);
             Quests::QUESTS::QUEST_OnItemPickedUp(pGame, pUnit, pUnit2);
             bIsActiveCharm = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pUnit2, pUnit);
-            if (!bIsActiveCharm) {
-              return 1;
+            if (bIsActiveCharm) {
+              ITEMS_RecalcEquippedItemStates(pGame, pUnit, 0);
+              D2Common::Units::RefreshInventory(pUnit, 1);
             }
 
-            ITEMS_RecalcEquippedItemStates(pGame, pUnit, 0);
-            D2Common::Units::RefreshInventory(pUnit, 1);
             return 1;
           }
 
@@ -4061,12 +4052,11 @@ int __fastcall SERVER_ItemToInventory(char * szSourceFile, int32_t bAutoPlaceGri
     }
 
     bIsActiveCharm2 = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pItem, pOwnerUnit);
-    if (!bIsActiveCharm2) {
-      return 1;
+    if (bIsActiveCharm2) {
+      ITEMS_RecalcEquippedItemStates(pGame, pOwnerUnit, 0);
+      D2Common::Units::RefreshInventory(pOwnerUnit, 1);
     }
 
-    ITEMS_RecalcEquippedItemStates(pGame, pOwnerUnit, 0);
-    D2Common::Units::RefreshInventory(pOwnerUnit, 1);
     return 1;
 }
 
@@ -4176,29 +4166,29 @@ BOOL __fastcall SERVER_TakeItemToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
         }
 
         D2Common::Units::SetupUpdateFlag(pItem, 4);
-        if (nParam1 != 1) {
-          return 1;
-        }
-        if (bSetRemovedFlag) {
-          D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_REMOVED, 1);
-        }
-        if (bIsMercPage) {
-          PLAYER::PlayerTrade::SERVER_TradeTransferItemToCursor(pGame, pUnit, (D2UnitDataPlayerStrc*)pItem);
+        if (nParam1 == 1) {
+          if (bSetRemovedFlag) {
+            D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_REMOVED, 1);
+          }
+          if (bIsMercPage) {
+            PLAYER::PlayerTrade::SERVER_TradeTransferItemToCursor(pGame, pUnit, (D2UnitDataPlayerStrc*)pItem);
+          }
+
+          D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pItem, ITEMCMD_INVENTORY_TAKE_ITEM, 1);
+          bHasSocketedItems = ITEMMODE_HasSocketedItems(pItem, ".\\ITEMS\\ItemMode.cpp", 0x975);
+          if (bHasSocketedItems) {
+            D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_RELOAD, 1);
+          }
+
+          bItemDisabled = D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_DISABLED, 0x978, ".\\ITEMS\\ItemMode.cpp");
+          if (bItemDisabled) {
+            D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_DISABLED, 0);
+          }
+
+          D2Common::INVENTORY::Inventory::UpsertToUpdateList(pTargetInventory, pItem);
+          D2Common::Units::RefreshInventory(pUnit, 1);
         }
 
-        D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pItem, ITEMCMD_INVENTORY_TAKE_ITEM, 1);
-        bHasSocketedItems = ITEMMODE_HasSocketedItems(pItem, ".\\ITEMS\\ItemMode.cpp", 0x975);
-        if (bHasSocketedItems) {
-          D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_RELOAD, 1);
-        }
-
-        bItemDisabled = D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_DISABLED, 0x978, ".\\ITEMS\\ItemMode.cpp");
-        if (bItemDisabled) {
-          D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_DISABLED, 0);
-        }
-
-        D2Common::INVENTORY::Inventory::UpsertToUpdateList(pTargetInventory, pItem);
-        D2Common::Units::RefreshInventory(pUnit, 1);
         return 1;
       }
     } else {
@@ -4241,11 +4231,10 @@ BOOL __fastcall SERVER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUni
         if (pItem->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::GetHit) {
           pConflictItem = D2Common::INVENTORY::Inventory::INVENTORY_GetEquipActionForBodySlot(pUnit, (eD2BodyLocDWORD)eTargetBodyLoc, pItem, bSkipRequirementsCheck);
           if (pConflictItem != 1) {
-            if (!pbBadParams) {
-              return 0;
+            if (pbBadParams) {
+              *pbBadParams = 0;
             }
 
-            *pbBadParams = 0;
             return 0;
           }
           if (bSkipRequirementsCheck || (bIsDisabled = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pItem, pUnit, 0, nullptr, nullptr, nullptr) , bIsDisabled != 0)) {
@@ -4292,20 +4281,18 @@ BOOL __fastcall SERVER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUni
               ITEMS_RecalcEquippedItemStates(pGame, pUnit, 0);
               return 1;
             }
-            if (!pbBadParams) {
-              return 0;
+            if (pbBadParams) {
+              *pbBadParams = 1;
             }
 
-            *pbBadParams = 1;
             return 0;
           }
         }
       }
-      if (!pbBadParams) {
-        return 0;
+      if (pbBadParams) {
+        *pbBadParams = 1;
       }
 
-      *pbBadParams = 1;
       return 0;
     }
 }
@@ -5233,12 +5220,11 @@ int __fastcall ITEMMODE_ExchangeInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * 
 
               D2Common::Units::RefreshInventory(pUnit, 1);
               bCharmActive = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pDestItem, pUnit);
-              if (!bCharmActive) {
-                return 1;
+              if (bCharmActive) {
+                ITEMS_RecalcEquippedItemStates(pGame, pUnit, 0);
+                D2Common::Units::RefreshInventory(pUnit, 1);
               }
 
-              ITEMS_RecalcEquippedItemStates(pGame, pUnit, 0);
-              D2Common::Units::RefreshInventory(pUnit, 1);
               return 1;
             }
 
@@ -5761,12 +5747,11 @@ BOOL __fastcall PutItemInItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nIt
           if (_bFlagResult) {
             D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pContainer, ITEMFLAG_DISABLED, 0);
           }
-          if (!pUnit) {
-            return 1;
+          if (pUnit) {
+            D2Common::Units::RefreshInventory(pUnit, 1);
+            D2Common::INVENTORY::Inventory::UpsertToUpdateList(pUnit->pInventory, pContainer);
           }
 
-          D2Common::Units::RefreshInventory(pUnit, 1);
-          D2Common::INVENTORY::Inventory::UpsertToUpdateList(pUnit->pInventory, pContainer);
           return 1;
         }
       }
@@ -5935,6 +5920,7 @@ BOOL __fastcall ITEMMODE_ProcessItemBuy(D2UnitStrc * * ppUnit, D2UnitStrc * pUni
 // Replenishment tick handler: increments eUnitStat on pUnit by 1 if it is below nParam, then sends a 0x3E stat-update to the item owner's client. If the item was broken and the new value is positive, restores it via ITEMMODE_ProcessItemFlags. Schedules the next replenishment event based on eStat replenish rate. Returns 1 if incremented, 0 if already at max.
 // @sourcefile .\ITEMS\ItemMode.cpp
 static BOOL __stdcall ITEMMODE_HandleItemGamble(::SGAMEDATA * pGame, int32_t nStatMax, D2UnitStrc * pUnit, eD2UnitStat eUnitStat, eD2UnitStat eStat) {
+    D2UnitStrc* pOwner;
     D2ClientStrc* pClient;
     BOOL bIsBroken;
     int nReplenishRate = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eStat, 0);
@@ -5944,35 +5930,34 @@ static BOOL __stdcall ITEMMODE_HandleItemGamble(::SGAMEDATA * pGame, int32_t nSt
 
     int nCurrentStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0);
     uint32_t nNewCount = nCurrentStat + 1;
-    if ((int)nNewCount > nStatMax) {
-      return 1;
-    }
-
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nNewCount, 0);
-    uint32_t nOwnerGUID = D2Common::ITEMS::Items::ITEM_GetItemData_nPlayerGUID(pUnit);
-    if (nOwnerGUID != -1) {
-      D2UnitStrc* pOwner;
-      pOwner = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, nOwnerGUID);
-      if (pOwner) {
-        pClient = UNIT::SUnit::SUNIT_GetClient(pOwner, ".\\ITEMS\\ItemMode.cpp", 0x1580);
-        if (pClient) {
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pUnit, '\x01', eUnitStat, nNewCount, 0);
-          if ((int)nNewCount >= 1) {
-            bIsBroken = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_BROKEN, 0x1586, ".\\ITEMS\\ItemMode.cpp");
-            if (bIsBroken) {
-              ITEMMODE_ProcessItemFlags(pGame, pOwner, pUnit);
+    if ((int)nNewCount <= nStatMax) {
+      uint32_t nOwnerGUID;
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nNewCount, 0);
+      nOwnerGUID = D2Common::ITEMS::Items::ITEM_GetItemData_nPlayerGUID(pUnit);
+      if (nOwnerGUID != -1) {
+        pOwner = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, nOwnerGUID);
+        if (pOwner) {
+          pClient = UNIT::SUnit::SUNIT_GetClient(pOwner, ".\\ITEMS\\ItemMode.cpp", 0x1580);
+          if (pClient) {
+            GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pUnit, '\x01', eUnitStat, nNewCount, 0);
+            if ((int)nNewCount >= 1) {
+              bIsBroken = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_BROKEN, 0x1586, ".\\ITEMS\\ItemMode.cpp");
+              if (bIsBroken) {
+                ITEMMODE_ProcessItemFlags(pGame, pOwner, pUnit);
+              }
             }
           }
         }
       }
+
+      nReplenishRate = (int)(0x9c4 / (int64_t)nReplenishRate) + 1;
+      if (nReplenishRate < 0x7d) {
+        nReplenishRate = 0x7d;
+      }
+
+      GAME::Event::SetEvent(pGame, pUnit, 3, pGame->dwGameFrame + nReplenishRate, 0, 0);
     }
 
-    nReplenishRate = (int)(0x9c4 / (int64_t)nReplenishRate) + 1;
-    if (nReplenishRate < 0x7d) {
-      nReplenishRate = 0x7d;
-    }
-
-    GAME::Event::SetEvent(pGame, pUnit, 3, pGame->dwGameFrame + nReplenishRate, 0, 0);
     return 1;
 }
 

@@ -2926,24 +2926,20 @@ int __fastcall MONSTER_CanBeConverted(D2UnitStrc * pUnit) {
     if (!bCanSwitch) {
       return 0;
     }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
-      return 1;
+    if (pUnit->eUnitType == UNIT_MONSTER) {
+      bCanSwitch = MonUnique::CheckMonTypeForMonster(pUnit, 8);
+      if (bCanSwitch) {
+        return 0;
+      }
+      if (pUnit->eUnitType == UNIT_MONSTER) {
+        bCanSwitch = MonUnique::CheckMonTypeForMonster(pUnit, 2);
+        if (bCanSwitch) {
+          return 0;
+        }
+      }
     }
 
-    bCanSwitch = MonUnique::CheckMonTypeForMonster(pUnit, 8);
-    if (bCanSwitch) {
-      return 0;
-    }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
-      return 1;
-    }
-
-    bCanSwitch = MonUnique::CheckMonTypeForMonster(pUnit, 2);
-    if (!bCanSwitch) {
-      return 1;
-    }
-
-    return 0;
+    return 1;
 }
 
 void __fastcall NPCMENU_HandleQuestUpdate(int32_t pPacket) {

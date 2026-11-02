@@ -12,16 +12,14 @@ namespace Fog::Save {
 DWORD __stdcall CalculateChecksum(uint8_t * pSaveFile, int32_t nSize) {
     DWORD dwChecksum = 0;
     int nIndex = 0;
-    if (nSize <= 0) {
-      return dwChecksum;
-    }
-
-    do {
+    if (nSize > 0) {
       uint8_t* pbCur;
-      pbCur = pSaveFile + nIndex;
-      nIndex++;
-      dwChecksum = (uint32_t)*pbCur + (uint32_t)((int)dwChecksum < 0) + dwChecksum * 2;
-    } while (nIndex < nSize);
+      do {
+        pbCur = pSaveFile + nIndex;
+        nIndex++;
+        dwChecksum = (uint32_t)*pbCur + (uint32_t)((int)dwChecksum < 0) + dwChecksum * 2;
+      } while (nIndex < nSize);
+    }
 
     return dwChecksum;
 }

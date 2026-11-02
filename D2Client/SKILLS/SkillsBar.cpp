@@ -382,11 +382,10 @@ static BOOL __stdcall SKILL_ValidateTeleportDestination(D2UnitStrc * pUnit, int3
           }
         case 0:
           {
-            if (pUnit->eUnitType != UNIT_PLAYER) {
-              return 0;
+            if (pUnit->eUnitType == UNIT_PLAYER) {
+              UNIT::UnitSnd::UNITSND_PlayPlayerSound(pUnit, 0x13);
             }
 
-            UNIT::UnitSnd::UNITSND_PlayPlayerSound(pUnit, 0x13);
             return 0;
           }
       }
@@ -898,11 +897,10 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Leap_ArcParticle(D2DynamicPathStrc * pUnit,
         SKILL_CreateLeapArcParticle((D2UnitStrc*)pUnit, pSkill);
         return 1;
       }
-      if (!(!pUnit || pUnit->Coords.tFixed.x != 1)) {
-        return 1;
+      if (!pUnit || pUnit->Coords.tFixed.x != 1) {
+        D2Common::Skills::SKILL_SetFlags(pSkill, 0x1000);
       }
 
-      D2Common::Skills::SKILL_SetFlags(pSkill, 0x1000);
       return 1;
     }
 
@@ -1257,12 +1255,11 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_EndCollision(D2UnitStrc * pUnit, 
         Sound::SOUND_StopById(nParam1X);
         return 1;
       }
-      if (!(nSkillFlags & 1)) {
-        return 1;
+      if (nSkillFlags & 1) {
+        D2Common::Units::SetSequenceFrame(pUnit, 3);
+        pUnit->nFrameCount = 0x500;
       }
 
-      D2Common::Units::SetSequenceFrame(pUnit, 3);
-      pUnit->nFrameCount = 0x500;
       return 1;
     }
 

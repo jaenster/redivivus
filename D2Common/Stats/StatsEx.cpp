@@ -270,16 +270,14 @@ static int32_t __stdcall STATLIST_LookupBaseStatWithMinAccr(D2ItemStatCostTxt * 
     }
 
     int nLo = pDVar1->nStatValue;
-    if (!(pItemStatCostLine && *(uint8_t*)((uintptr_t)&pItemStatCostLine->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[2] && pStatList->sStatList.nFlags & 0x80000000U)) {
-      return nLo;
+    if (pItemStatCostLine && *(uint8_t*)((uintptr_t)&pItemStatCostLine->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[2] && pStatList->sStatList.nFlags & 0x80000000U) {
+      D2UnitStrc* pOwner;
+      pOwner = pStatList->pOwner;
+      if (pOwner && (pOwner->eUnitType == UNIT_PLAYER || pOwner && pOwner->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr) {
+        nLo = pItemStatCostLine->minaccr << (pItemStatCostLine->valshift & 0x1fU);
+      }
     }
 
-    D2UnitStrc* pOwner = pStatList->pOwner;
-    if (!(pOwner && (pOwner->eUnitType == UNIT_PLAYER || pOwner && pOwner->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr)) {
-      return nLo;
-    }
-
-    nLo = pItemStatCostLine->minaccr << (pItemStatCostLine->valshift & 0x1fU);
     return nLo;
 }
 
@@ -306,16 +304,14 @@ static int32_t __stdcall TXT_ItemStatCost_GetMinimumStatValueShifted(D2ItemStatC
     }
 
     int nLo = pStatInfoRecord->nStatValue;
-    if (!(pItemStatCostLine && *(uint8_t*)((uintptr_t)&pItemStatCostLine->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[2] && bIsFullList)) {
-      return nLo;
+    if (pItemStatCostLine && *(uint8_t*)((uintptr_t)&pItemStatCostLine->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[2] && bIsFullList) {
+      D2UnitStrc* pUnit;
+      pUnit = pStatEx->pOwner;
+      if (pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit && pUnit->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr) {
+        nLo = pItemStatCostLine->minaccr << (pItemStatCostLine->valshift & 0x1fU);
+      }
     }
 
-    D2UnitStrc* pUnit = pStatEx->pOwner;
-    if (!(pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit && pUnit->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr)) {
-      return nLo;
-    }
-
-    nLo = pItemStatCostLine->minaccr << (pItemStatCostLine->valshift & 0x1fU);
     return nLo;
 }
 
@@ -405,11 +401,10 @@ static int32_t __stdcall STATLIST_PropagateStatDelta(int32_t nShiftedStat, int32
       pPoolManager1 = pSkillsTxt->sStatList.pMemory;
       STATLIST_RemoveStatFromArray(pPoolManager1, pStatEntry, pPoolManager1, (void**)&pStatInfo->pStatInfo);
     }
-    if (!(pSkillsTxt->fpCallback && *(uint8_t*)((uintptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[3])) {
-      return nNewValue;
+    if (pSkillsTxt->fpCallback && *(uint8_t*)((uintptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[3]) {
+      pSkillsTxt->fpCallback(pSkillsTxt->pGame, pSkillsTxt->pOwner, nCallbackArg, nShiftedStat, nOldValue, nNewValue);
     }
 
-    pSkillsTxt->fpCallback(pSkillsTxt->pGame, pSkillsTxt->pOwner, nCallbackArg, nShiftedStat, nOldValue, nNewValue);
     return nNewValue;
 }
 
@@ -804,20 +799,18 @@ D2UnitStrc * __stdcall SEVER_ITEM_GetOwner(D2UnitStrc * pUnit, uint32_t * pnPara
       if (pStatsEx) {
         pParentList = pStatsEx->sStatList.pParent;
         if (pParentList && pParentList->sStatList.nFlags & 0x80000000U) {
-          if (!pnParam) {
-            return pParentList->pOwner;
+          if (pnParam) {
+            *pnParam = ~((uint32_t)pStatsEx->sStatList.nFlags >> 0x1e) & 1;
           }
 
-          *pnParam = ~((uint32_t)pStatsEx->sStatList.nFlags >> 0x1e) & 1;
           return pParentList->pOwner;
         }
       }
     }
-    if (!pnParam) {
-      return nullptr;
+    if (pnParam) {
+      *pnParam = 0;
     }
 
-    *pnParam = 0;
     return nullptr;
 }
 
@@ -2143,21 +2136,19 @@ BOOL __stdcall STATLIST_SetStatValue(D2StatListExStrc * pStatEx, eD2UnitStat eUn
     }
 
     STATLIST_PropagateStatChange(pStatEx, nShiftedStat, nValueDelta, nullptr);
-    if (!(pStatEx->sStatList.nFlags & 0x80000000U && pStatEx->sStatList.eOwnerType == UNIT_PLAYER)) {
-      return 1;
+    if (pStatEx->sStatList.nFlags & 0x80000000U && pStatEx->sStatList.eOwnerType == UNIT_PLAYER) {
+      STATLIST_TrackChangedStat(nShiftedStat, pStatEx);
     }
 
-    STATLIST_TrackChangedStat(nShiftedStat, pStatEx);
     return 1;
 }
 
 BOOL __stdcall D2AddStatToStatsListEx(D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer) {
     BOOL BVar1 = 0;
-    if (!pStatsEx) {
-      return BVar1;
+    if (pStatsEx) {
+      BVar1 = STATLIST_SetStatValue(pStatsEx, eUnitStat, nValue, (uint16_t)nLayer);
     }
 
-    BVar1 = STATLIST_SetStatValue(pStatsEx, eUnitStat, nValue, (uint16_t)nLayer);
     return BVar1;
 }
 
@@ -2747,20 +2738,18 @@ int __fastcall nullsub(int32_t nCalcCode, void * pContext) {
 }
 
 int32_t __fastcall MATH_Min(int32_t nLeft, int32_t nRight, uint32_t dwParam1, uint32_t dwParam2) {
-    if (nLeft < nRight) {
-      return nLeft;
+    if (nLeft >= nRight) {
+      nLeft = nRight;
     }
 
-    nLeft = nRight;
     return nLeft;
 }
 
 int32_t __fastcall MATH_Max(int32_t nLeft, int32_t nRight, uint32_t dwParam1, uint32_t dwParam2) {
-    if (nLeft > nRight) {
-      return nLeft;
+    if (nLeft <= nRight) {
+      nLeft = nRight;
     }
 
-    nLeft = nRight;
     return nLeft;
 }
 

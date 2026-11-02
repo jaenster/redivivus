@@ -138,19 +138,17 @@ BOOL __stdcall MPQ_LoadAllDataMpqFiles() {
     if (bDirectMode) {
       return 1;
     }
-    if (!(MPQ_d2data && MPQ_d2sfx && MPQ_d2speech)) {
-      return 0;
+    if (MPQ_d2data && MPQ_d2sfx && MPQ_d2speech) {
+      bDirectMode = Fog::D2CheckExpansionGame();
+      if (!bDirectMode) {
+        return 1;
+      }
+      if (MPQ_d2exp) {
+        return 1;
+      }
     }
 
-    bDirectMode = Fog::D2CheckExpansionGame();
-    if (!bDirectMode) {
-      return 1;
-    }
-    if (!MPQ_d2exp) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 D2PoolManagerStrc * __stdcall ReturnZero() {

@@ -475,7 +475,6 @@ D2RoomCoordListStrc * __fastcall GetCoordList(D2RoomExStrc * pRoomEx) {
     }
 
     return pRoomEx->pDrlgCoordList->pCoord;
-    return pRoomEx->pDrlgCoordList->pCoord;
 }
 
 // Links the DRLG coordinate-list grids of two adjacent rooms at border point (nX,nY). Looks up each room's coord-list grid index at the border point, validates that both grids exist, are different, belong to the same level, and share the same node flag, then calls InitializeDrlgCoordList to merge them. Halts fatally if pSrcRoom has no coord list.

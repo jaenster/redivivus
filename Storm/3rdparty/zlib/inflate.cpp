@@ -130,12 +130,11 @@ int32_t __fastcall inflateInit2_(z_stream * pStream, uint32_t nWindowBits, char 
     pStream->state = pState;
     pState->window = 0;
     int nResetRet = inflateReset2(pStream, nWindowBits);
-    if (!nResetRet) {
-      return nResetRet;
+    if (nResetRet) {
+      pStream->zfree(pStream->opaque, pState);
+      pStream->state = 0;
     }
 
-    pStream->zfree(pStream->opaque, pState);
-    pStream->state = 0;
     return nResetRet;
 }
 
@@ -225,11 +224,10 @@ static BOOL __stdcall updatewindow(uint32_t nCopy, uint8_t * pEnd, z_stream * pS
     if (pState->wnext == pState->wsize) {
       pState->wnext = 0;
     }
-    if (pState->whave >= pState->wsize) {
-      return 0;
+    if (pState->whave < pState->wsize) {
+      pState->whave += nDist;
     }
 
-    pState->whave += nDist;
     return 0;
 }
 
@@ -1444,11 +1442,10 @@ uint32_t __fastcall inflateGetDictionary(z_stream * pStream, void * pDictionary,
           memcpy(pDictionary, pState->window + pState->wnext, pState->whave - pState->wnext);
           memcpy((void*)(pState->whave - pState->wnext + (int)pDictionary), pState->window, pState->wnext);
         }
-        if (!pnDictLength) {
-          return 0;
+        if (pnDictLength) {
+          *pnDictLength = pState->whave;
         }
 
-        *pnDictLength = pState->whave;
         return 0;
       }
     }

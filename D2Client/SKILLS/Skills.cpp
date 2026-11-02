@@ -180,11 +180,10 @@ BOOL __fastcall GetCooordinates(D2UnitStrc * pUnit, int32_t * pX, int32_t * pY) 
     }
 
     *pY = nBuffer;
-    if (!(!*pX || !nBuffer)) {
-      return 1;
+    if (!*pX || !nBuffer) {
+      GetPositionNextToPlayerDirection(pUnit, pX, pY);
     }
 
-    GetPositionNextToPlayerDirection(pUnit, pX, pY);
     return 1;
 }
 
@@ -505,16 +504,17 @@ uint32_t __fastcall SKILLS_GetTargetTypeForSkill(D2UnitStrc * pUnit, D2UnitStrc 
 // Tests whether pUnit2 is a legal skill target for caster pUnit under the skill's target-flags bitmask (nTargetFlags). Switches on the target's unit type, requiring the matching allow-bit (player/monster/object/missile/item) and checking liveness/anim-mode (e.g. dead/death rejected unless the corpse-target bit 0x1000 is set). Applies optional filters per bit: undead-only (0x4), exclude-boss (0x4000), monster-stat flag (0x40000), not-in-town (0x100), skill-target-type & non-NPC (0x10000), CanInteractWith (0x8000), in-melee-range (0x20000), not just-hit (0x80000), and line-of-sight wall collision (0x200). Returns 1 if the target passes all applicable checks, 0 otherwise.
 uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t nTargetFlags) {
     D2MissilesTxt* pMissileTxt;
-    D2RoomStrc* pCasterRoom;
     BOOL bInTown;
     uint32_t bTargetCheck;
     D2MonStatsTxt* pMonStats;
     eD2States eState;
+    D2RoomStrc* pTargetRoom;
     bool bShouldReturn;
     POINT ptCaster;
     POINT ptTarget;
     eD2PlayerAnimMode eAnimMode;
     eD2PlayerAnimMode ePlayerMode;
+    D2UnitStrc* pCasterForY;
     if (!pUnit2) {
       return 0;
     }
@@ -611,56 +611,39 @@ uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2
         return 0;
     }
 
-    if (!((char)nTargetFlags >= 0 || pUnit2->eUnitFlags >> 2 & 1)) {
-      return 0;
-    }
-    if (!(!(nTargetFlags & 0x400) || pUnit2->eUnitFlags >> 3 & 1)) {
-      return 0;
-    }
-    if (nTargetFlags & 0x100) {
-      pCasterRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
-      bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pCasterRoom);
-      if (bInTown) {
-        return 0;
+    if (((char)nTargetFlags >= 0 || pUnit2->eUnitFlags >> 2 & 1) && (!(nTargetFlags & 0x400) || pUnit2->eUnitFlags >> 3 & 1)) {
+      D2RoomStrc* pCasterRoom;
+      if (nTargetFlags & 0x100) {
+        pCasterRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
+        bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pCasterRoom);
+        if (bInTown) {
+          return 0;
+        }
+      }
+      if ((!(nTargetFlags & 0x10000) || (bTargetCheck = SKILLS_GetTargetTypeForSkill(pUnit, pUnit2) , bTargetCheck && (pUnit2->eUnitType != UNIT_MONSTER || (pMonStats = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit2->nClassId) , pMonStats && !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[0]))))) && (!(nTargetFlags & 0x8000) || (bTargetCheck = UNIT::CUnit::CanInteractWith(pUnit, pUnit2) , bTargetCheck != 0)) && (!(nTargetFlags & 0x20000) || (bInTown = D2Common::Units::IsInMeleeRange(pUnit, pUnit2, 0) , bInTown != 0)) && (!(nTargetFlags & 0x80000) || (eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_justhit) , eState == STATE_none))) {
+        if (!(nTargetFlags & 0x200)) {
+          return 1;
+        }
+
+        pCasterRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+        if (pCasterRoom) {
+          pTargetRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
+          pCasterForY = pCasterSaved;
+          if (pTargetRoom) {
+            ptCaster.x = Units::GetXPosFromDynamicPathUnit(pCasterSaved);
+            ptCaster.y = Units::GetYPosFromDynamicPathUnit(pCasterForY);
+            ptTarget.x = Units::GetXPosFromDynamicPathUnit(pUnit2);
+            ptTarget.y = Units::GetYPosFromDynamicPathUnit(pUnit2);
+            bInTown = D2Common::Collision::TestCollision(pCasterRoom, &ptCaster, &ptTarget, 4);
+            if (!bInTown) {
+              return 1;
+            }
+          }
+        }
       }
     }
-    if (!(!(nTargetFlags & 0x10000) || (bTargetCheck = SKILLS_GetTargetTypeForSkill(pUnit, pUnit2) , bTargetCheck && (pUnit2->eUnitType != UNIT_MONSTER || (pMonStats = DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit2->nClassId) , pMonStats && !(*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[0])))))) {
-      return 0;
-    }
-    if (!(!(nTargetFlags & 0x8000) || (bTargetCheck = UNIT::CUnit::CanInteractWith(pUnit, pUnit2) , bTargetCheck != 0))) {
-      return 0;
-    }
-    if (!(!(nTargetFlags & 0x20000) || (bInTown = D2Common::Units::IsInMeleeRange(pUnit, pUnit2, 0) , bInTown != 0))) {
-      return 0;
-    }
-    if (!(!(nTargetFlags & 0x80000) || (eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_justhit) , eState == STATE_none))) {
-      return 0;
-    }
-    if (!(nTargetFlags & 0x200)) {
-      return 1;
-    }
 
-    pCasterRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pCasterRoom) {
-      return 0;
-    }
-
-    D2RoomStrc* pTargetRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
-    D2UnitStrc* pCasterForY = pCasterSaved;
-    if (!pTargetRoom) {
-      return 0;
-    }
-
-    ptCaster.x = Units::GetXPosFromDynamicPathUnit(pCasterSaved);
-    ptCaster.y = Units::GetYPosFromDynamicPathUnit(pCasterForY);
-    ptTarget.x = Units::GetXPosFromDynamicPathUnit(pUnit2);
-    ptTarget.y = Units::GetYPosFromDynamicPathUnit(pUnit2);
-    bInTown = D2Common::Collision::TestCollision(pCasterRoom, &ptCaster, &ptTarget, 4);
-    if (bInTown) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 static uint32_t ROOM_IsPointInRadius(D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nRadius) {
@@ -822,11 +805,10 @@ D2UnitStrc * __fastcall SKILL_FindClosestTargetWithStats(D2UnitStrc * pUnit, int
     if (!callbackData.pNextUnit) {
       callbackData.pNextUnit = callbackData.pWrapUnit;
     }
-    if (!pdwResultCount) {
-      return callbackData.pNextUnit;
+    if (pdwResultCount) {
+      *pdwResultCount = callbackData.nCount;
     }
 
-    *pdwResultCount = callbackData.nCount;
     return callbackData.pNextUnit;
 }
 
@@ -1246,11 +1228,10 @@ int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * pUnit, i
         Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eCastOverlayId, 2, 0, 0, 0, 0, 0);
       }
     }
-    if (!(eSkillResult != SKILL_Attack && pSkillTxt->cltmissile[0] > 0)) {
-      return eSkillResult;
+    if (eSkillResult != SKILL_Attack && pSkillTxt->cltmissile[0] > 0) {
+      AssignProperLight(pUnit, (int)pSkillTxt->cltmissile[0]);
     }
 
-    AssignProperLight(pUnit, (int)pSkillTxt->cltmissile[0]);
     return eSkillResult;
 }
 
@@ -1373,23 +1354,19 @@ uint32_t __fastcall SKILL_ExecuteClientDoFunc(D2UnitStrc * pUnit, eD2Skills eSki
     }
 
     nTargetX = D2Common::Skills::D2GetSkillCalc(pMissileUnit, pSkillTxt->delay, eSkillId, nSkillLevel);
-    if (nTargetX <= 0) {
-      return 1;
+    if (nTargetX > 0) {
+      pTargetUnit = UNIT::Player::GetPlayerUnit_UI();
+      if (pTargetUnit == pMissileUnit) {
+        if (nTargetX > 0xc) {
+          nTargetX = 0xc;
+        }
+        if (pSkillTxt->anim != '\x12' || !(pMissileUnit->nSeqFrame & 0xffffff00U)) {
+          nTargetY = GAME::Game::GetEntryIndex();
+          GAME::Game::GAME_SetSkillDelayEndFrame(nTargetY + nTargetX);
+        }
+      }
     }
 
-    pTargetUnit = UNIT::Player::GetPlayerUnit_UI();
-    if (pTargetUnit != pMissileUnit) {
-      return 1;
-    }
-    if (nTargetX > 0xc) {
-      nTargetX = 0xc;
-    }
-    if (!(pSkillTxt->anim != '\x12' || !(pMissileUnit->nSeqFrame & 0xffffff00U))) {
-      return 1;
-    }
-
-    nTargetY = GAME::Game::GetEntryIndex();
-    GAME::Game::GAME_SetSkillDelayEndFrame(nTargetY + nTargetX);
     return 1;
 }
 
@@ -2034,12 +2011,15 @@ void __fastcall SKILLS_ApplyDamageReduction(D2UnitStrc * pUnit, int32_t nReducti
 // Spawns nCount missiles at random positions within nRadius of the casting unit. Seeds the unit's RNG from its current map coordinates, then for each spawn picks a random (X,Y) offset within the diameter, rejects positions within 3 distance units of the caster, and calls MISSILE_CreateFromUnitWithOffset with the given missile ID array, skill, and skill level. Returns 1 on success, 0 if coordinates could not be retrieved.
 uint32_t __fastcall SKILL_SpawnRandomMissilesInArea(D2UnitStrc * pUnit, uint8_t * pMissileId, int32_t nCount, int32_t nRadius, eD2Skills eSkill, int32_t nSkillLevel) {
     uint32_t nDiameter;
+    D2UnitStrc* pUnitCur;
     int nBaseY;
+    int nCountdown;
     uint32_t nSpawnY;
     uint32_t nSpawnX;
     int32_t nBaseX;
     eD2UnitType eUnitType;
     int64_t llRandProduct;
+    uint32_t nDiameterRange;
     D2SeedStrc newSeed;
     D2UnitStrc* pUnitOrig = pUnit;
     BOOL bGotCoords = GetCooordinates(pUnit, &nBaseX, &nBaseY);
@@ -2049,78 +2029,76 @@ uint32_t __fastcall SKILL_SpawnRandomMissilesInArea(D2UnitStrc * pUnit, uint8_t 
 
     D2SeedStrc* pSeed = &pUnit->sSeed;
     D2Common::Seed::InitSeed_Param_666(pSeed, nBaseX);
-    if (nCount <= 0) {
-      return 1;
-    }
-
-    uint32_t nDiameterRange = nRadius * 2;
-    int nCountdown = nCount;
-    D2UnitStrc* pUnitCur = pUnit;
-    do {
+    if (nCount > 0) {
       int32_t nDist;
-      if ((int)nDiameterRange <= 0) {
-        nDiameter = 0;
-      } else {
-        llRandProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-        nDiameter = pUnit->sSeed.nSeedHigh;
-        if (nDiameterRange & nDiameterRange - 1) {
-          newSeed = (D2SeedStrc)(llRandProduct + (uint64_t)nDiameter);
+      nDiameterRange = nRadius * 2;
+      nCountdown = nCount;
+      pUnitCur = pUnit;
+      do {
+        if ((int)nDiameterRange <= 0) {
+          nDiameter = 0;
+        } else {
+          llRandProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
+          nDiameter = pUnit->sSeed.nSeedHigh;
+          if (nDiameterRange & nDiameterRange - 1) {
+            newSeed = (D2SeedStrc)(llRandProduct + (uint64_t)nDiameter);
+            pSeed->nSeedHigh = newSeed.nSeedHigh;
+            pSeed->nSeedLow = newSeed.nSeedLow;
+            nDiameter = (uint32_t)(newSeed.nSeedLow % nDiameterRange);
+            pUnitCur = pUnitOrig;
+          } else {
+            newSeed = (D2SeedStrc)(llRandProduct + (uint64_t)nDiameter);
+            pSeed->nSeedHigh = newSeed.nSeedHigh;
+            pSeed->nSeedLow = newSeed.nSeedLow;
+            nDiameter = nDiameterRange - 1 & newSeed.nSeedLow;
+            pUnitCur = pUnitOrig;
+          }
+        }
+
+        nSpawnY = nDiameter - nRadius + nBaseX;
+        if ((int)nDiameterRange <= 0) {
+          nDiameter = 0;
+        } else if (nDiameterRange & nDiameterRange - 1) {
+          newSeed = D2_SEED_NEXT(*pSeed);
           pSeed->nSeedHigh = newSeed.nSeedHigh;
           pSeed->nSeedLow = newSeed.nSeedLow;
           nDiameter = (uint32_t)(newSeed.nSeedLow % nDiameterRange);
           pUnitCur = pUnitOrig;
         } else {
-          newSeed = (D2SeedStrc)(llRandProduct + (uint64_t)nDiameter);
+          newSeed = D2_SEED_NEXT(*pSeed);
           pSeed->nSeedHigh = newSeed.nSeedHigh;
           pSeed->nSeedLow = newSeed.nSeedLow;
           nDiameter = nDiameterRange - 1 & newSeed.nSeedLow;
           pUnitCur = pUnitOrig;
         }
-      }
 
-      nSpawnY = nDiameter - nRadius + nBaseX;
-      if ((int)nDiameterRange <= 0) {
-        nDiameter = 0;
-      } else if (nDiameterRange & nDiameterRange - 1) {
-        newSeed = D2_SEED_NEXT(*pSeed);
-        pSeed->nSeedHigh = newSeed.nSeedHigh;
-        pSeed->nSeedLow = newSeed.nSeedLow;
-        nDiameter = (uint32_t)(newSeed.nSeedLow % nDiameterRange);
-        pUnitCur = pUnitOrig;
-      } else {
-        newSeed = D2_SEED_NEXT(*pSeed);
-        pSeed->nSeedHigh = newSeed.nSeedHigh;
-        pSeed->nSeedLow = newSeed.nSeedLow;
-        nDiameter = nDiameterRange - 1 & newSeed.nSeedLow;
-        pUnitCur = pUnitOrig;
-      }
+        eUnitType = pUnitCur->eUnitType;
+        nSpawnX = nDiameter - nRadius + nBaseY;
+        if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+          nCount = pUnitCur->pPath.pStaticPath->nPosY;
+        } else if (pUnitCur->pPath.pDynamicPath) {
+          nCount = D2Common::PATH::DynamicPath::GetYPos(pUnitCur->pPath.pDynamicPath);
+        } else {
+          nCount = 0;
+        }
 
-      eUnitType = pUnitCur->eUnitType;
-      nSpawnX = nDiameter - nRadius + nBaseY;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nCount = pUnitCur->pPath.pStaticPath->nPosY;
-      } else if (pUnitCur->pPath.pDynamicPath) {
-        nCount = D2Common::PATH::DynamicPath::GetYPos(pUnitCur->pPath.pDynamicPath);
-      } else {
-        nCount = 0;
-      }
+        eUnitType = pUnitCur->eUnitType;
+        if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+          nDist = pUnitCur->pPath.pStaticPath->nPosX;
+        } else if (pUnitCur->pPath.pDynamicPath) {
+          nDist = D2Common::PATH::DynamicPath::GetXPos(pUnitCur->pPath.pDynamicPath);
+        } else {
+          nDist = 0;
+        }
 
-      eUnitType = pUnitCur->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nDist = pUnitCur->pPath.pStaticPath->nPosX;
-      } else if (pUnitCur->pPath.pDynamicPath) {
-        nDist = D2Common::PATH::DynamicPath::GetXPos(pUnitCur->pPath.pDynamicPath);
-      } else {
-        nDist = 0;
-      }
+        nDist = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nDist, nCount, nSpawnY, nSpawnX);
+        if (nDist >= 4) {
+          UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnitCur, (eMissilesId)pMissileId, 0, 0, nSpawnY, nSpawnX, eSkill, nSkillLevel, 0);
+        }
 
-      nDist = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nDist, nCount, nSpawnY, nSpawnX);
-      if (nDist >= 4) {
-        UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnitCur, (eMissilesId)pMissileId, 0, 0, nSpawnY, nSpawnX, eSkill, nSkillLevel, 0);
-      }
-
-      nCountdown--;
-    } while (nCountdown);
+        nCountdown--;
+      } while (nCountdown);
+    }
 
     return 1;
 }

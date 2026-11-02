@@ -1694,13 +1694,12 @@ static void gf2_matrix_square(uint32_t * pdwMatA, uint32_t * pdwMatB) {
     } while (nRowCount);
 }
 
-uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int32_t nLengthLo, int32_t nLengthHi) {
+uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int64_t nLength) {
     uint32_t* pdwCol;
     uint32_t dwAccum;
     uint32_t adwMatOdd[32];
     uint32_t adwMatEven[32];
-    uint64_t qwLength = (uint64_t)((uint64_t)(uint32_t)nLengthHi << 32 | (uint64_t)(uint32_t)nLengthLo);
-    if (nLengthHi <= 0 && (nLengthHi < 0 || (uint32_t)nLengthLo <= 0)) {
+    if (nLength < 1 && true) {
       return dwCrc;
     }
 
@@ -1716,6 +1715,7 @@ uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int32_t n
     gf2_matrix_square(adwMatOdd, adwMatEven);
     gf2_matrix_square(adwMatEven, adwMatOdd);
     do {
+      uint64_t qwLength;
       nIndex = 0;
       do {
         dwAccum = 0;
@@ -1732,7 +1732,7 @@ uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int32_t n
         nIndex += 4;
       } while (nIndex < 0x80);
 
-      if (qwLength & 1) {
+      if (nLength & 1U) {
         pdwCol = adwMatOdd;
         dwAccum = 0;
         for (dwBits = dwCrc; dwCrc = dwAccum , dwBits != 0; dwBits >>= 1) {
@@ -1745,7 +1745,7 @@ uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int32_t n
         }
       }
 
-      qwLength = _allshr(1, qwLength);
+      qwLength = _allshr(1, nLength);
       if (!qwLength) {
         break;
       }
@@ -1779,18 +1779,18 @@ uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int32_t n
         }
       }
 
-      qwLength = _allshr(1, qwLength);
-    } while (qwLength);
+      nLength = _allshr(1, qwLength);
+    } while (nLength);
 
     return dwCrc ^ dwFinalXor;
 }
 
 void __fastcall crc32_combine(uint32_t dwCrc, uint32_t dwFinalXor, int32_t nExp) {
-    crc32_combine_(dwCrc, dwFinalXor, nExp, nExp >> 0x1f);
+    crc32_combine_(dwCrc, dwFinalXor, (int64_t)nExp);
 }
 
 void __fastcall crc32_combine64(uint32_t dwCrc, uint32_t dwFinalXor, int32_t nExpLo, int32_t nExpHi) {
-    crc32_combine_(dwCrc, dwFinalXor, nExpLo, nExpHi);
+    crc32_combine_(dwCrc, dwFinalXor, (uint64_t)((uint64_t)(uint32_t)nExpHi << 32 | (uint64_t)(uint32_t)nExpLo));
 }
 
 uint32_t __fastcall crc32(uint32_t dwCrcSeed, uint8_t * pBuffer, uint32_t nLength) {

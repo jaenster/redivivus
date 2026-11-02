@@ -193,13 +193,12 @@ int32_t __fastcall WSASocket2_Read(D2NetDataStrc * pNetData, char * pBuffer, siz
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pNetData->pSync);
       /* int flags for recv */ /* int len for recv */ /* char * buf for recv */ /* SOCKET s for recv */ nBytesRead = recv(pNetData->hSocket, pBuffer, nSize, 0);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pNetData->pSync);
-      if (nBytesRead > 0) {
-        return nBytesRead;
+      if (nBytesRead <= 0) {
+        nWSAError = WSAGetLastError();
+        pNetData->nWSALastError = nWSAError;
+        pNetData->nError = 4;
       }
 
-      nWSAError = WSAGetLastError();
-      pNetData->nWSALastError = nWSAError;
-      pNetData->nError = 4;
       return nBytesRead;
     }
 
@@ -242,13 +241,12 @@ int32_t __fastcall WSASocket2_Send(D2NetDataStrc * pNetData, char * pBytes, size
 int32_t __fastcall WSASocket2_SendOrCloseOnTimeout(D2NetDataStrc * pNetData, char * pBytes, size_t nSize) {
     int nBytesSent = send(pNetData->hSocket, pBytes, nSize, 0);
     int nWSAError = WSAGetLastError();
-    if (!(nBytesSent == -1 && nWSAError == 0x274c)) {
-      return nBytesSent;
+    if (nBytesSent == -1 && nWSAError == 0x274c) {
+      nBytesSent = 0;
+      LogManager::LOGFILE_WriteStringToFile("ERROR: Disconnecting socket due to WSAETIMEDOUT\n");
+      /* SOCKET s for closesocket */ closesocket(pNetData->hSocket);
     }
 
-    nBytesSent = 0;
-    LogManager::LOGFILE_WriteStringToFile("ERROR: Disconnecting socket due to WSAETIMEDOUT\n");
-    /* SOCKET s for closesocket */ closesocket(pNetData->hSocket);
     return nBytesSent;
 }
 
@@ -404,11 +402,10 @@ char * __fastcall inet_nameToIp(char * szText) {
         pDstIp++;
       } while (cChar != '\0');
 
-      if (!bDidStartUp) {
-        return cp_0075d040;
+      if (bDidStartUp) {
+        WSACleanup();
       }
 
-      WSACleanup();
       return cp_0075d040;
     }
 

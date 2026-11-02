@@ -1257,6 +1257,8 @@ void __fastcall COMCALLBACK_BroadcastChatMessage(char * szMessageBody) {
 // Handles incoming BNet whisper message. Checks ignore list, finds sender in channel user list for status flags, formats sender/message and appends to chat with appropriate color.
 BOOL __fastcall COMCALLBACK_HandleWhisperMessage(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szUsername, char * szText) {
     int nCmpResult;
+    int nColor_lcl;
+    char szOutput[256];
     char szClanTag[256];
     char szFormattedSender[260];
     char cScan;
@@ -1266,59 +1268,56 @@ BOOL __fastcall COMCALLBACK_HandleWhisperMessage(uint32_t dwCbArg1, uint32_t dwC
     COMCALLBACK_FormatChatMessage(szUsername, szClanTag, szFormattedSender);
     ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
     int32_t pszTmp = pIgnoreList->_vfptr->CheckIgnored(pIgnoreList, szUsername);
-    if (pszTmp) {
-      return 1;
-    }
+    if (!pszTmp) {
+      char* pszScan;
+      pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+      pszTmp = pIgnoreList->_vfptr->CheckAccountNameIgnored(pIgnoreList, szText);
+      if (!pszTmp) {
+        nColor_lcl = 4;
+        pszScan = 0;
+        for (pCurUser = gpChannelUserListHead; pCurUser; pCurUser = pCurUser->pNext) {
+          nCmpResult = strcmp(pCurUser->szUsername, (char*)(uint8_t*)szUsername);
+          if (!nCmpResult) {
+            dwStatusFlags = pCurUser->nStatusFlags;
+            if (dwStatusFlags & 2) {
+              nColor_lcl = 0;
+            } else {
+              if (dwStatusFlags & 1 || dwStatusFlags & 8) {
+                nColor_lcl = 3;
+                szUsername = (char*)0x3;
+                pszScan = szUsername;
+              }
+            }
 
-    pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-    pszTmp = pIgnoreList->_vfptr->CheckAccountNameIgnored(pIgnoreList, szText);
-    if (pszTmp) {
-      return 1;
-    }
-
-    int nColor_lcl = 4;
-    char* pszScan = 0;
-    for (pCurUser = gpChannelUserListHead; pCurUser; pCurUser = pCurUser->pNext) {
-      nCmpResult = strcmp(pCurUser->szUsername, (char*)(uint8_t*)szUsername);
-      if (!nCmpResult) {
-        dwStatusFlags = pCurUser->nStatusFlags;
-        if (dwStatusFlags & 2) {
-          nColor_lcl = 0;
-        } else {
-          if (dwStatusFlags & 1 || dwStatusFlags & 8) {
-            nColor_lcl = 3;
-            szUsername = (char*)0x3;
-            pszScan = szUsername;
+            break;
           }
         }
 
-        break;
+        szUsername = pszScan;
+        pszScan = szFormattedSender;
+        pszScan = pszScan + strlen(pszScan) + 1;
+        if (pszScan != szFormattedSender + 1) {
+          pszOutput = szClanTag;
+          pszOutput = pszOutput + strlen(pszOutput) + 1;
+          if (pszOutput != szClanTag + 1) {
+            sprintf(szOutput, "%s%s", szClanTag, szFormattedSender);
+            pszOutput = szOutput;
+          } else {
+            nCmpResult = 0;
+            do {
+              pszOutput = szFormattedSender + nCmpResult;
+              szOutput[nCmpResult] = *pszOutput;
+              nCmpResult++;
+            } while (*pszOutput != '\0');
+
+            pszOutput = szOutput;
+          }
+        }
+
+        COMCALLBACK_AppendChatWithColor(pszOutput, (int)szUsername, szText, nColor_lcl);
       }
     }
 
-    szUsername = pszScan;
-    pszScan = szFormattedSender;
-    pszScan = pszScan + strlen(pszScan) + 1;
-    if (pszScan != szFormattedSender + 1) {
-      char szOutput[256];
-      pszOutput = szClanTag;
-      pszOutput = pszOutput + strlen(pszOutput) + 1;
-      if (pszOutput != szClanTag + 1) {
-        sprintf(szOutput, "%s%s", szClanTag, szFormattedSender);
-        pszOutput = szOutput;
-      } else {
-        nCmpResult = 0;
-        do {
-          pszOutput = szFormattedSender + nCmpResult;
-          szOutput[nCmpResult] = *pszOutput;
-          nCmpResult++;
-        } while (*pszOutput != '\0');
-
-        pszOutput = szOutput;
-      }
-    }
-
-    COMCALLBACK_AppendChatWithColor(pszOutput, (int)szUsername, szText, nColor_lcl);
     return 1;
 }
 
@@ -1715,6 +1714,7 @@ BOOL __stdcall COMCALLBACK_HandleUserListClick(int * pnClickMsg) {
 
 // Handles Battle.net game list errors by auto-squelching spamming users. When chat room context exists and throttle timer expires (1000ms cooldown), extracts username from context (strips clan tag *prefix), formats "/squelch *username" command, sends to network layer, clears channel view, and optionally adds user to ignore list if not self-squelching. Returns 1 on success, 0 if network send fails.
 uint32_t __stdcall COMCALLBACK_HandleGameListError1(D2ControlMsg * pControlMsg) {
+    ::IgnoreList* pIgnoreList;
     char szSquelchCommand[256];
     char szUsername[256];
     if (!gpCurrentChatRoomContext) {
@@ -1751,12 +1751,11 @@ uint32_t __stdcall COMCALLBACK_HandleGameListError1(D2ControlMsg * pControlMsg) 
     }
 
     int32_t nCmpResult = Storm::Source::SSTR::SStrCmpI(pchScan, D2IniData_multiplayer->szLastBnetAccount, 0x7fffffff);
-    if (!nCmpResult) {
-      return 1;
+    if (nCmpResult) {
+      pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+      pIgnoreList->_vfptr->AddByPattern(pIgnoreList, szUsername);
     }
 
-    ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-    pIgnoreList->_vfptr->AddByPattern(pIgnoreList, szUsername);
     return 1;
 }
 

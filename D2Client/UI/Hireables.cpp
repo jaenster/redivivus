@@ -284,7 +284,7 @@ void __stdcall UI_DrawHirelingGoldCost(int nGoldCost, int32_t nDrawPositionX) {
 
 DC6 * __fastcall GetRosterIcon(D2UnitStrc * pUnit, int32_t nSkillId, int32_t * pRosterGUID, uint32_t * pFlagOut) {
     int nIconIndex;
-    char szIconPath[256];
+    DC6* pIcon;
     D2PetTypeTxt* pPetType = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtPetTypeSize ? sgptDataTable->pTxtPetType + nSkillId : nullptr;
     if (!pPetType) {
       return nullptr;
@@ -320,14 +320,14 @@ DC6 * __fastcall GetRosterIcon(D2UnitStrc * pUnit, int32_t nSkillId, int32_t * p
     } while (i < 5);
 
     DC6** ppIcon = &gpHireablesList[nSkillIdSaved].pIcon + nIconIndex;
-    if ((&gpHireablesList[nSkillIdSaved].pIcon)[nIconIndex]) {
-      return *ppIcon;
+    if (!(&gpHireablesList[nSkillIdSaved].pIcon)[nIconIndex]) {
+      char szIconPath[256];
+      sprintf(szIconPath, "hireables\\%s", pPetType->baseicon + nIconIndex * 0x20);
+      ppIcon = &gpHireablesList[nRosterGUID].pIcon + nIconIndex;
+      pIcon = ui::ARCHIVE_LoadOverlayImageUsedInGame(szIconPath);
+      *ppIcon = pIcon;
     }
 
-    sprintf(szIconPath, "hireables\\%s", pPetType->baseicon + nIconIndex * 0x20);
-    ppIcon = &gpHireablesList[nRosterGUID].pIcon + nIconIndex;
-    DC6* pIcon = ui::ARCHIVE_LoadOverlayImageUsedInGame(szIconPath);
-    *ppIcon = pIcon;
     return *ppIcon;
 }
 
@@ -438,11 +438,10 @@ int32_t __stdcall UI_CheckItemCanEquipToHireling(int32_t bPlaySound) {
     uint32_t bIsType;
     bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pCursorItem_lcl, ITEMTYPE_HealingPotion);
     if (bIsType || (bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pCursorItem_lcl, ITEMTYPE_AntidotePotion) , bIsType != 0) || (bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pCursorItem_lcl, ITEMTYPE_ThawingPotion) , bIsType != 0)) {
-      if (!bPlaySound) {
-        return 1;
+      if (bPlaySound) {
+        UNIT::UnitSnd::UNITSND_PlaySoundForMercenary(nMercGUID, '\x01', 0x54);
       }
 
-      UNIT::UnitSnd::UNITSND_PlaySoundForMercenary(nMercGUID, '\x01', 0x54);
       return 1;
     }
 
@@ -522,11 +521,10 @@ int32_t __stdcall UI_CheckItemCanEquipToHireling(int32_t bPlaySound) {
     }
 
     bMeetsReqs = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pCursorItem_lcl, pPlayer, 0, nullptr, nullptr, nullptr);
-    if (bMeetsReqs) {
-      return bCanEquip;
+    if (!bMeetsReqs) {
+      bCanEquip = 0;
     }
 
-    bCanEquip = 0;
     return bCanEquip;
 }
 
@@ -742,6 +740,7 @@ static void __stdcall UI_DrawHirelingNameFromUnit(int32_t nX, int32_t nY, D2Unit
 }
 
 static BOOL __stdcall UI_DrawPartyMembersHirelingIcons(int * pnY, int * pnYOffset, int * pnX, D2UnitStrc * pUnit) {
+    D2RosterStrc* pRoster;
     uint32_t nRosterGUID;
     int32_t nRosterCharClass;
     DC6* pClassIcon;
@@ -756,76 +755,72 @@ static BOOL __stdcall UI_DrawPartyMembersHirelingIcons(int * pnY, int * pnYOffse
     } else {
       nPlayerGUID = pUnit->nUnitGUID;
     }
-    if (!(nPartyId != 0xffff && !gnHireDisplayMode)) {
-      return 0;
-    }
-
-    D2RosterStrc* pRoster = GAME::Roster::GetNextRosterPlayer(nullptr);
-    if (!pRoster) {
-      return 0;
-    }
-
-    for (; pRoster; pRoster = GAME::Roster::GetNextRosterPlayer(pRoster)) {
+    if (nPartyId != 0xffff && !gnHireDisplayMode) {
       uint16_t nRosterPartyId;
-      nRosterPartyId = GAME::Roster::GetRosterPartyId(pRoster);
-      if (nPartyId == nRosterPartyId) {
-        nRosterGUID = GAME::Roster::GetRosterGUID(pRoster);
-        if (nRosterGUID != nPlayerGUID) {
-          nRosterCharClass = GAME::Roster::GetRosterCharType(pRoster);
-          switch (nRosterCharClass) {
-            case 0:
-              pClassIcon = ClassIcons[0];
-            break;
-            case 1:
-              pClassIcon = ClassIcons[1];
-            break;
-            case 4:
-              pClassIcon = ClassIcons[2];
-            break;
-            case 3:
-              pClassIcon = ClassIcons[3];
-            break;
-            case 2:
-              pClassIcon = ClassIcons[4];
-            break;
-            case 6:
-              pClassIcon = ClassIcons[5];
-            break;
-            default:
-              continue;
-            case 5:
-              pClassIcon = ClassIcons[6];
-            break;
-          }
+      pRoster = GAME::Roster::GetNextRosterPlayer(nullptr);
+      if (pRoster) {
+        for (; pRoster; pRoster = GAME::Roster::GetNextRosterPlayer(pRoster)) {
+          nRosterPartyId = GAME::Roster::GetRosterPartyId(pRoster);
+          if (nPartyId == nRosterPartyId) {
+            nRosterGUID = GAME::Roster::GetRosterGUID(pRoster);
+            if (nRosterGUID != nPlayerGUID) {
+              nRosterCharClass = GAME::Roster::GetRosterCharType(pRoster);
+              switch (nRosterCharClass) {
+                case 0:
+                  pClassIcon = ClassIcons[0];
+                break;
+                case 1:
+                  pClassIcon = ClassIcons[1];
+                break;
+                case 4:
+                  pClassIcon = ClassIcons[2];
+                break;
+                case 3:
+                  pClassIcon = ClassIcons[3];
+                break;
+                case 2:
+                  pClassIcon = ClassIcons[4];
+                break;
+                case 6:
+                  pClassIcon = ClassIcons[5];
+                break;
+                default:
+                  continue;
+                case 5:
+                  pClassIcon = ClassIcons[6];
+                break;
+              }
 
-          if (pClassIcon) {
-            DrawHealthBar(nRosterGUID, 0, *pnX);
-            nIconDrawX = *pnY;
-            nX = *pnX;
-            UI_DrawHirelingNameFromString(GAME::Roster::GetRosterName(pRoster), nX, nIconDrawX);
-            if (*pnYOffset) {
-              *pnY -= *pnYOffset;
-              *pnYOffset = 0;
-            } else {
-              *pnYOffset = 10;
-              *pnY += 10;
+              if (pClassIcon) {
+                DrawHealthBar(nRosterGUID, 0, *pnX);
+                nIconDrawX = *pnY;
+                nX = *pnX;
+                UI_DrawHirelingNameFromString(GAME::Roster::GetRosterName(pRoster), nX, nIconDrawX);
+                if (*pnYOffset) {
+                  *pnY -= *pnYOffset;
+                  *pnYOffset = 0;
+                } else {
+                  *pnYOffset = 10;
+                  *pnY += 10;
+                }
+
+                memset(&sGfxData, 0, 0x48);
+                sGfxData.pDC6 = pClassIcon;
+                D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, *pnX, 0x3c, -1, DRAW_TRANSPARENT, nullptr);
+                *pnX += 0x38;
+                bDrewAny = true;
+              }
             }
-
-            memset(&sGfxData, 0, 0x48);
-            sGfxData.pDC6 = pClassIcon;
-            D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, *pnX, 0x3c, -1, DRAW_TRANSPARENT, nullptr);
-            *pnX += 0x38;
-            bDrewAny = true;
           }
+        }
+
+        if (bDrewAny) {
+          return 1;
         }
       }
     }
 
-    if (!bDrewAny) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 static BOOL __stdcall HIRELING_DrawPortraitIcon(D2UnitStrc * pUnit, int * pnYToggle, int * pnY, int * pnX) {

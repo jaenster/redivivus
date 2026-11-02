@@ -1194,6 +1194,8 @@ static BOOL TEXT_FormatEventMessage(int32_t pEventData, uint16_t * wszText) {
     uint16_t nStrId;
     uint16_t awszPlayerName[16];
     char szRosterName[16];
+    uint32_t nIgnoreFlag;
+    int32_t nPlayerGUID;
     uint16_t* pwszArg;
     D2RosterStrc* pRoster;
     pRoster = GAME::Roster::GetRosterByGUID(*(int32_t*)(pEventData + 3));
@@ -1263,18 +1265,16 @@ static BOOL TEXT_FormatEventMessage(int32_t pEventData, uint16_t * wszText) {
       D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, wszText, pwszLocale, pwszArg);
     }
 
-    if (!pPlayerUnit_lcl) {
-      return 1;
+    if (pPlayerUnit_lcl) {
+      nPlayerGUID = pPlayerUnit_lcl->nUnitGUID;
+      nIgnoreFlag = 4;
+      nIgnoreFlag = UNIT::PlayerList::GetFlag(nPlayerGUID, GAME::Roster::GetRosterGUID(pRoster), nIgnoreFlag);
+      if (nIgnoreFlag) {
+        return 0;
+      }
     }
 
-    int32_t nPlayerGUID = pPlayerUnit_lcl->nUnitGUID;
-    uint32_t nIgnoreFlag = 4;
-    nIgnoreFlag = UNIT::PlayerList::GetFlag(nPlayerGUID, GAME::Roster::GetRosterGUID(pRoster), nIgnoreFlag);
-    if (!nIgnoreFlag) {
-      return 1;
-    }
-
-    return 0;
+    return 1;
 }
 
 // Handles the 0x5a event message packet: switches on pMessageCtx->nMessageType, formats the localized message from the packet's names and argument, and prints it in pMessageCtx->nColor. pEventData is the format argument for message type 0x12, which also shakes the view and plays sound 0x1220.
@@ -5165,13 +5165,12 @@ static int __stdcall TEXT_UpdateScrollingText(int32_t bClose, void * pParam) {
     ui::UI_UpdateCursorAnimationTimer();
     gnTextNpcInteractGuid = 0;
     GAME::Select::SELECT_SetExclusionRect(nullptr);
-    if (gbTextEventHandlersRegistered != 1) {
-      return 0;
+    if (gbTextEventHandlersRegistered == 1) {
+      nCount = 7;
+      gbTextEventHandlersRegistered = 0;
+      _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUITextFlagInit, nCount);
     }
 
-    nCount = 7;
-    gbTextEventHandlersRegistered = 0;
-    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUITextFlagInit, nCount);
     return 0;
 }
 

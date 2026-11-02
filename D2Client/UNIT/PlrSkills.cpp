@@ -339,11 +339,10 @@ int32_t __stdcall STATES_CalcDamageSeverityTier(int32_t nParam1, int32_t nParam2
     if (nParam2 < nParam1 / 3) {
       nTier = 2;
     }
-    if (!(nParam2 < nParam1 / 3 * 2)) {
-      return nTier;
+    if (nParam2 < nParam1 / 3 * 2) {
+      nTier--;
     }
 
-    nTier--;
     return nTier;
 }
 
@@ -491,11 +490,10 @@ int32_t __stdcall PLRSKILLS_CalcDamageSeverityTier_Unreferenced(int32_t nParam1,
     if (nParam2 < nParam1 / 3) {
       nTier = 2;
     }
-    if (!(nParam2 < nParam1 / 3 * 2)) {
-      return nTier;
+    if (nParam2 < nParam1 / 3 * 2) {
+      nTier--;
     }
 
-    nTier--;
     return nTier;
 }
 
@@ -1278,11 +1276,10 @@ D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUn
     } else if ((int)eUnitStat < 0) {
       return pStatList;
     }
-    if (!((int)eUnitStat < sgptDataTable->nTxtItemStatCostSize && sgptDataTable->pTxtItemStatCost + eUnitStat && *(uint8_t*)((uintptr_t)&sgptDataTable->pTxtItemStatCost[eUnitStat].dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1])) {
-      return pStatList;
+    if ((int)eUnitStat < sgptDataTable->nTxtItemStatCostSize && sgptDataTable->pTxtItemStatCost + eUnitStat && *(uint8_t*)((uintptr_t)&sgptDataTable->pTxtItemStatCost[eUnitStat].dwItemStatFlags + 1) & (uint8_t)gadwBitMasks[1]) {
+      D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\PlrSkills.cpp", 0x5d2);
     }
 
-    D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\PlrSkills.cpp", 0x5d2);
     return pStatList;
 }
 

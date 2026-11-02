@@ -29,13 +29,12 @@ namespace D2Sound::Src::D2SoundFast {
 static D2SoundSmpStrc * nSoundEffectIndexValue[8] = { 0 }; D2_STATIC_GUARD(nSoundEffectIndexValue, "D2Sound::Src::D2SoundFast::nSoundEffectIndexValue");
 
 BOOL __stdcall SOUND_IsAmbientStreaming() {
-    if (!gpMusicStreamBuffer) {
-      return 0;
-    }
-
-    uint32_t bIsStreaming = D2SoundSmp::SOUNDSMP_IsStreaming(gpMusicStreamBuffer);
-    if (bIsStreaming) {
-      return 1;
+    if (gpMusicStreamBuffer) {
+      uint32_t bIsStreaming;
+      bIsStreaming = D2SoundSmp::SOUNDSMP_IsStreaming(gpMusicStreamBuffer);
+      if (bIsStreaming) {
+        return 1;
+      }
     }
 
     return 0;

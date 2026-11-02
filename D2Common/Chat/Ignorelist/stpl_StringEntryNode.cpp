@@ -82,11 +82,10 @@ template<> TSExplicitList<::StringEntryNode, -572662307>* TSExplicitList<StringE
       pTVar1->m_prevlink = 0;
       this->m_terminator.m_next = 0;
     }
-    if (!(dwFlags & 1 && this)) {
-      return this;
+    if (dwFlags & 1 && this) {
+      Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     return this;
 }
 
@@ -439,11 +438,10 @@ template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::NewN
     } else {
       pNode = 0;
     }
-    if (!nLocation) {
-      return pNode;
+    if (nLocation) {
+      this->LinkNode(pNode, nLocation, nullptr);
     }
 
-    this->LinkNode(pNode, nLocation, nullptr);
     return pNode;
 }
 
@@ -507,11 +505,10 @@ template<> void __thiscall TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalD
 
 template<> TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>> * TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::ScalarDeletingDestructor(uint32_t dwFlags) {
     this->Destructor();
-    if (!(dwFlags & 1 && this)) {
-      return this;
+    if (dwFlags & 1 && this) {
+      Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     return this;
 }
 
@@ -536,11 +533,10 @@ template<> void __thiscall TSHashTable<StringEntryNode, HASHKEY_STRI>::Destroy(T
 // @blizzard TSHashTable<StringEntryNode,HASHKEY_STRI> scalar deleting destructor (STORM.H)
 template<> TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* __thiscall TSHashTable<StringEntryNode, HASHKEY_STRI>::ScalarDeletingDestructor(TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pThis, uint32_t dwFlags) {
     pThis->Destructor();
-    if (!(dwFlags & 1 && pThis)) {
-      return pThis;
+    if (dwFlags & 1 && pThis) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

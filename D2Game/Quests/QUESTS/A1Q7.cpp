@@ -92,40 +92,39 @@ bool __fastcall Q07_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 
 // A1Q7 Q07_ActiveFilter: decides whether this slot's Akara gossip is "active" (selectable). Mirror of Callback_00's gate. Active (return true) ONLY when target is Akara (0x10a), Q1 DenOfEvil is past intro, Q1 not flagged JustCompleted-in-game (record state 0xd), and for THIS player Q1 is not Completed/JustCompleted/RewardAwaits — i.e. while the Den of Evil quest is still open. Once Q1 is finished, returns false and Akara stops offering this chatter. Reads only; writes no state.
 bool __fastcall Q07_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    if (nTargetClassId != 0x10a) {
-      return false;
-    }
-
-    D2QuestDataStrc* pQ1Data = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_DenOfEvil);
-    /* If not introduction to Q1 */ if (pQ1Data->bIsNotIntroduction == '\0') {
-      return false;
-    }
-
-    int nQ1RecordState = QUEST_GetQuestRecordState(pQuestData->pGame, QUEST_DenOfEvil, 0xd);
-    /* If yes ? */ if (nQ1RecordState) {
-      return false;
-    }
-
-    ::SGAMEDATA* pGame = pQuestData->pGame;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pPlayerBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pPlayerBitBuffer, QUEST_DenOfEvil, QUESTSTATE_Completed);
-    /* If NPC quest 1 state is different of just completed, completed, reward
+    int nQ1RecordState;
+    D2UnitDataPlayerStrc* pPlayerData;
+    BOOL bQuestState;
+    ::SGAMEDATA* pGame;
+    D2BitBufferStrc* pPlayerBitBuffer;
+    if (nTargetClassId == 0x10a) {
+      D2QuestDataStrc* pQ1Data;
+      pQ1Data = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_DenOfEvil);
+      /* If not introduction to Q1 */ if (pQ1Data->bIsNotIntroduction != '\0') {
+        /* QUEST_GetQuestRecordState(Q1 DenOfEvil, 0xd): game-wide JustCompleted-in-game
+                         flag; if set, gossip inactive. */ /* Check if game quest state for Q1 contains 13 (completed and reward used in
+                         same game ?) */ nQ1RecordState = QUEST_GetQuestRecordState(pQuestData->pGame, QUEST_DenOfEvil, 0xd);
+        /* If yes ? */ if (!nQ1RecordState) {
+          pGame = pQuestData->pGame;
+          pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+          pPlayerBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+          /* GetQuestState(player, Q1 DenOfEvil, QUESTSTATE_Completed=0): Q1 fully done
+                         for self player? */ bQuestState = D2Common::QuestRecord::GetQuestState(pPlayerBitBuffer, QUEST_DenOfEvil, QUESTSTATE_Completed);
+          /* If NPC quest 1 state is different of just completed, completed, reward
                          awaits: active.
-                         Otherwise: inactive */ if (bQuestState) {
-      return false;
-    }
-
-    /* GetQuestState(player, Q1 DenOfEvil, QUESTSTATE_JustCompleted=0xd): Q1 just
+                         Otherwise: inactive */ if (!bQuestState) {
+            /* GetQuestState(player, Q1 DenOfEvil, QUESTSTATE_JustCompleted=0xd): Q1 just
                          turned in self session? */ bQuestState = D2Common::QuestRecord::GetQuestState(pPlayerBitBuffer, QUEST_DenOfEvil, QUESTSTATE_JustCompleted);
-    if (bQuestState) {
-      return false;
-    }
-
-    /* GetQuestState(player, Q1 DenOfEvil, QUESTSTATE_RewardAwaits=1): Q1 done,
+            if (!bQuestState) {
+              /* GetQuestState(player, Q1 DenOfEvil, QUESTSTATE_RewardAwaits=1): Q1 done,
                          reward unclaimed? All 3 zero -> Q1 still open -> gossip ACTIVE. */ bQuestState = D2Common::QuestRecord::GetQuestState(pPlayerBitBuffer, QUEST_DenOfEvil, QUESTSTATE_RewardAwaits);
-    if (!bQuestState) {
-      return true;
+              if (!bQuestState) {
+                return true;
+              }
+            }
+          }
+        }
+      }
     }
 
     return false;

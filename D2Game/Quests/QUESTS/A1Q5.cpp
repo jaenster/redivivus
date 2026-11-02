@@ -550,21 +550,16 @@ BOOL __fastcall OBJOP_A1Q5_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
     }
 
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_ForgottenTower);
-    if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
-      return 0;
+    if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
+      QUEST_SendNpcInfoPacket(pOperation->pAttacker, pOperation->sArg.pVictim, 0x7f);
+      if (pQuestData->nStateFlag <= 1) {
+        QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q5.cpp", 0x202);
+        if (pQuestData->nStateFlagPrev < 1) {
+          pQuestData->pQuestSpecificData.pA1Q5->bTalkedToNPC = '\x01';
+        }
+      }
     }
 
-    QUEST_SendNpcInfoPacket(pOperation->pAttacker, pOperation->sArg.pVictim, 0x7f);
-    if (pQuestData->nStateFlag > 1) {
-      return 0;
-    }
-
-    QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q5.cpp", 0x202);
-    if (pQuestData->nStateFlagPrev >= 1) {
-      return 0;
-    }
-
-    pQuestData->pQuestSpecificData.pA1Q5->bTalkedToNPC = '\x01';
     return 0;
 }
 
@@ -794,28 +789,25 @@ BOOL __fastcall Q05_SetCannotCompleteInGame(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_Completed);
-    if (bCompleted == 1) {
-      return 0;
+    if (bCompleted != 1) {
+      D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_CannotCompleteQuestInGame);
+      QUEST_SendQuestStatePacket(pUnit, 5, 0);
     }
 
-    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_CannotCompleteQuestInGame);
-    QUEST_SendQuestStatePacket(pUnit, 5, 0);
     return 0;
 }
 
 BOOL __fastcall Q05_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_ForgottenTower, QUESTSTATE_JustCompleted);
-    if (!bJustCompleted) {
-      return 0;
+    if (bJustCompleted) {
+      uint16_t nPartyId;
+      nPartyId = UNIT::SUnit::GetPartyId(pUnit);
+      if (nPartyId != 0xffff) {
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q05_SetPartyMemberRewardStates, 0);
+      }
     }
 
-    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    if (nPartyId == 0xffff) {
-      return 0;
-    }
-
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q05_SetPartyMemberRewardStates, 0);
     return 0;
 }
 

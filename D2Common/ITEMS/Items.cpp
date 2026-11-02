@@ -386,11 +386,10 @@ int32_t __stdcall ITEM_GetItemData_nItemLevel(D2UnitStrc * pUnit) {
       D2UnitDataItemStrc* temp_5f060235c5;
       temp_5f060235c5 = pUnit->pUnitData.pUnitDataItem;
       if (temp_5f060235c5) {
-        if (temp_5f060235c5->nItemLevel >= 1) {
-          return temp_5f060235c5->nItemLevel;
+        if (temp_5f060235c5->nItemLevel < 1) {
+          temp_5f060235c5->nItemLevel = 1;
         }
 
-        temp_5f060235c5->nItemLevel = 1;
         return temp_5f060235c5->nItemLevel;
       }
     }
@@ -658,7 +657,6 @@ eD2ItemTypes __stdcall TXT_Items_GetType(uint32_t nItemClassId) {
     }
 
     return (int)pItemsTxt->wType;
-    return (int)pItemsTxt->wType;
 }
 
 uint8_t __stdcall ITEM_GetItemsTxt_nLevel(D2UnitStrc * pUnit) {
@@ -718,20 +716,13 @@ int32_t __stdcall IITEM_GetItemsTxt_dwNormCode(D2UnitStrc * pUnit) {
 }
 
 static int __stdcall ITEMS_nullsub(int nMaxLvlReq, D2MagicAffixTxt * pAffixTxt, D2UnitStrc * pPlayer) {
-    uint8_t byLevelReq;
-    if (!pAffixTxt) {
-      return nMaxLvlReq;
-    }
-    if (pAffixTxt->class_ == 0xff || !pPlayer || (uint32_t)pAffixTxt->class_ != pPlayer->nClassId) {
-      byLevelReq = pAffixTxt->levelreq;
-    } else {
-      byLevelReq = pAffixTxt->classlevelreq;
-    }
-    if (nMaxLvlReq > (int)(uint32_t)byLevelReq) {
-      return nMaxLvlReq;
+    if (pAffixTxt) {
+      uint8_t byLevelReq = pAffixTxt->class_ == 0xff || !pPlayer || (uint32_t)pAffixTxt->class_ != pPlayer->nClassId ? pAffixTxt->levelreq : pAffixTxt->classlevelreq;
+      if (nMaxLvlReq <= (int)(uint32_t)byLevelReq) {
+        nMaxLvlReq = (uint32_t)byLevelReq;
+      }
     }
 
-    nMaxLvlReq = (uint32_t)byLevelReq;
     return nMaxLvlReq;
 }
 
@@ -774,7 +765,6 @@ BOOL __stdcall TXT_Items_ConfirmWClass(uint32_t nClassId, int32_t dwWClass) {
     }
 
     return (uint32_t)(pItemsTxt->dwWClass == dwWClass);
-    return (uint32_t)(pItemsTxt->dwWClass == dwWClass);
 }
 
 BOOL __stdcall HasWeaponClass(D2UnitStrc * pUnit, int32_t dwWClass) {
@@ -795,7 +785,6 @@ BOOL __stdcall TXT_Items_Getb2Handed(uint32_t nClassId) {
       exit(-1);
     }
 
-    return (uint32_t)pItemsTxt->b2Handed;
     return (uint32_t)pItemsTxt->b2Handed;
 }
 
@@ -822,7 +811,6 @@ BOOL __stdcall IsStackable(D2UnitStrc * pUnit) {
         exit(-1);
       }
 
-      return (uint32_t)pItemsTxt->bStackable;
       return (uint32_t)pItemsTxt->bStackable;
     }
 
@@ -911,13 +899,11 @@ BOOL __stdcall INVENTORY_CheckIfItemCanBeAutoBelted(D2InventoryStrc * pInventory
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9a9);
         exit(-1);
       }
-      if (pItemsTxt->bAutoBelt != '\0') {
-        return 1;
-      }
-
-      BVar1 = INVENTORY::Inventory::INVENTORY_CanAutoBeltItem(pInventory, pUnit);
-      if (BVar1 == -1) {
-        return 0;
+      if (pItemsTxt->bAutoBelt == '\0') {
+        BVar1 = INVENTORY::Inventory::INVENTORY_CanAutoBeltItem(pInventory, pUnit);
+        if (BVar1 == -1) {
+          return 0;
+        }
       }
 
       return 1;
@@ -935,7 +921,6 @@ int32_t __stdcall IsUseable(D2UnitStrc * pUnit) {
         exit(-1);
       }
 
-      return (uint32_t)pItemsTxt->bUseable;
       return (uint32_t)pItemsTxt->bUseable;
     }
 
@@ -1277,7 +1262,6 @@ int32_t __stdcall TXT_Items_GetMaxStack(uint32_t nItemClassId) {
     }
 
     return pItemsTxt->dwMaxStack;
-    return pItemsTxt->dwMaxStack;
 }
 
 // Returns max stack size (base from ItemsTxt + stat bonus), capped at 511. Halts if unit is null or not an item.
@@ -1296,11 +1280,10 @@ int __stdcall ITEM_GetMaxStack(D2UnitStrc * pUnit) {
       nLine = TXT_Items_GetMaxStack(pUnit->nClassId);
       nMaxStack = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_extra_stack, 0);
       nMaxStack = nLine + nMaxStack;
-      if (nMaxStack < 0x1ff) {
-        return nMaxStack;
+      if (nMaxStack >= 0x1ff) {
+        nMaxStack = 0x1ff;
       }
 
-      nMaxStack = 0x1ff;
       return nMaxStack;
     }
 }
@@ -1312,7 +1295,6 @@ int32_t __stdcall TXT_Items_GetSpawnStack(uint32_t nItemClassId) {
       exit(-1);
     }
 
-    return pItemsTxt->dwSpawnStack;
     return pItemsTxt->dwSpawnStack;
 }
 
@@ -1342,7 +1324,6 @@ int32_t __stdcall TXT_Items_GetMinStack(uint32_t nItemClassId) {
       exit(-1);
     }
 
-    return pItemsTxt->dwMinStack;
     return pItemsTxt->dwMinStack;
 }
 
@@ -1530,7 +1511,6 @@ uint32_t __stdcall TXT_Items_GetGemApplyType(uint32_t nItemClassId) {
     }
 
     return (uint32_t)pItemsTxt->bGemApplyType;
-    return (uint32_t)pItemsTxt->bGemApplyType;
 }
 
 // Returns the full 32-bit gem/rune apply type: 00629a79 tail-calls 00629a00 and returns its EAX unchanged. Typed bool, the decompiler split EAX into a byte plus a phantom upper-24-bit local, and callers composed the index from an unassigned value.
@@ -1623,7 +1603,6 @@ uint32_t __stdcall TXT_Items_GetBitFieldAnd0x01(uint32_t nItemClassId) {
     }
 
     return pItemsTxt->dwBitfield1 & 1;
-    return pItemsTxt->dwBitfield1 & 1;
 }
 
 uint32_t __stdcall TXT_Items_GetBitFieldAnd0x02(uint32_t nItemClassId) {
@@ -1634,7 +1613,6 @@ uint32_t __stdcall TXT_Items_GetBitFieldAnd0x02(uint32_t nItemClassId) {
     }
 
     return pItemsTxt->dwBitfield1 & 2;
-    return pItemsTxt->dwBitfield1 & 2;
 }
 
 uint32_t __stdcall TXT_Items_GetBitFieldAnd0x04(uint32_t nItemClassId) {
@@ -1644,7 +1622,6 @@ uint32_t __stdcall TXT_Items_GetBitFieldAnd0x04(uint32_t nItemClassId) {
       exit(-1);
     }
 
-    return pItemsTxt->dwBitfield1 & 4;
     return pItemsTxt->dwBitfield1 & 4;
 }
 
@@ -1850,7 +1827,6 @@ BOOL __stdcall TXT_Items_CheckTransmogrify(uint32_t nItemClassId) {
     }
 
     return (uint32_t)(pItemsTxt->bTransmogrify != '\0');
-    return (uint32_t)(pItemsTxt->bTransmogrify != '\0');
 }
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
@@ -1937,17 +1913,15 @@ int32_t __stdcall BARBARIAN_CheckItemData_b1or2Handed_isTrue(D2UnitStrc * pUnit,
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x119d);
         exit(-1);
       }
-      if (!(pUnit->eUnitType == UNIT_PLAYER && pUnit->nClassId == 4)) {
-        return 0;
-      }
-
-      pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(pItem->nClassId);
-      if (!pItemsTxt) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11a5);
-        exit(-1);
-      }
-      if (pItemsTxt->b1or2Handed) {
-        return 1;
+      if (pUnit->eUnitType == UNIT_PLAYER && pUnit->nClassId == 4) {
+        pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(pItem->nClassId);
+        if (!pItemsTxt) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11a5);
+          exit(-1);
+        }
+        if (pItemsTxt->b1or2Handed) {
+          return 1;
+        }
       }
 
       return 0;
@@ -1983,14 +1957,19 @@ static BOOL ITEMS_HasSocketedItems(D2UnitStrc * pItem) {
 }
 
 static BOOL ITEMS_GetCompactSaveFlag(D2UnitStrc * pItem) {
-    uint32_t nItemClassId = !pItem ? -1 : pItem->nClassId;
+    uint32_t nItemClassId;
+    if (!pItem) {
+      nItemClassId = -1;
+    } else {
+      nItemClassId = pItem->nClassId;
+    }
+
     D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
     if (!pItemsTxt) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x12e0);
       exit(-1);
     }
 
-    return (uint32_t)pItemsTxt->bCompactSave;
     return (uint32_t)pItemsTxt->bCompactSave;
 }
 
@@ -2112,39 +2091,37 @@ int32_t __stdcall PLAYER_GetUnidentifiedItemsCount(D2UnitStrc * pUnit) {
     int32_t nCount = 0;
     D2InventoryStrc* pInventory = pUnit->pInventory;
     D2UnitStrc* pCurItem = INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
-    if (!pCurItem) {
-      return nCount;
-    }
-
-    nCount = 0;
-    do {
+    if (pCurItem) {
       D2UnitStrc* pCarriedItem;
-      pCarriedItem = INVENTORY::Inventory::GetCarriedItem(pCurItem);
-      if (!pCarriedItem || pCarriedItem->eUnitType != UNIT_ITEM || !pCarriedItem->pUnitData.pUnitDataMissile || (pCarriedItem->pUnitData.pUnitDataMissile->eOwnerType & ITEMFLAG_IDENTIFIED) == UNIT_PLAYER) {
-        iVar1 = INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pCurItem);
-        if (iVar1 == INVENTORY_GRID_TYPE_INVENTORY) {
-          if ((pCarriedItem ? pCarriedItem->eUnitType : UNIT_COUNT) == UNIT_ITEM) {
-            if (pCarriedItem->pUnitData.pUnitDataItem && pCarriedItem->pUnitData.pUnitDataItem->ePage == INVPAGE_INVENTORY) {
-              nCount++;
-            } else {
-              if (true && pCarriedItem->pUnitData.pUnitDataItem) {
-                bOnValidPage = pCarriedItem->pUnitData.pUnitDataItem->ePage == INVPAGE_CUBE;
-                if (bOnValidPage) {
-                  nCount++;
+      nCount = 0;
+      do {
+        pCarriedItem = INVENTORY::Inventory::GetCarriedItem(pCurItem);
+        if (!pCarriedItem || pCarriedItem->eUnitType != UNIT_ITEM || !pCarriedItem->pUnitData.pUnitDataMissile || (pCarriedItem->pUnitData.pUnitDataMissile->eOwnerType & ITEMFLAG_IDENTIFIED) == UNIT_PLAYER) {
+          iVar1 = INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pCurItem);
+          if (iVar1 == INVENTORY_GRID_TYPE_INVENTORY) {
+            if ((pCarriedItem ? pCarriedItem->eUnitType : UNIT_COUNT) == UNIT_ITEM) {
+              if (pCarriedItem->pUnitData.pUnitDataItem && pCarriedItem->pUnitData.pUnitDataItem->ePage == INVPAGE_INVENTORY) {
+                nCount++;
+              } else {
+                if (true && pCarriedItem->pUnitData.pUnitDataItem) {
+                  bOnValidPage = pCarriedItem->pUnitData.pUnitDataItem->ePage == INVPAGE_CUBE;
+                  if (bOnValidPage) {
+                    nCount++;
+                  }
                 }
               }
             }
-          }
-        } else {
-          bOnValidPage = iVar1 == INVENTORY_GRID_TYPE_BODYLOC;
-          if (bOnValidPage) {
-            nCount++;
+          } else {
+            bOnValidPage = iVar1 == INVENTORY_GRID_TYPE_BODYLOC;
+            if (bOnValidPage) {
+              nCount++;
+            }
           }
         }
-      }
 
-      pCurItem = INVENTORY::Inventory::INVENTORY_GetNextItem(pCurItem);
-    } while (pCurItem);
+        pCurItem = INVENTORY::Inventory::INVENTORY_GetNextItem(pCurItem);
+      } while (pCurItem);
+    }
 
     return nCount;
 }
@@ -2509,17 +2486,15 @@ static int __stdcall ITEMS_DeserializeItemHeader(int32_t bIsOnGround, uint32_t n
 
     pItem->nInitSeed = 0;
     Seed::InitSeed_Param_666(&pItem->sSeed, 0);
-    if (pItem->eUnitType != UNIT_ITEM) {
-      return 1;
-    }
-    if (pItem->pUnitData.pUnitDataPlayer) {
-      pItem->pUnitData.pUnitDataPlayer->nPortalFlags = 1;
-    }
-    if (!(pItem->eUnitType == UNIT_ITEM && pItem->pUnitData.pUnitDataMissile)) {
-      return 1;
+    if (pItem->eUnitType == UNIT_ITEM) {
+      if (pItem->pUnitData.pUnitDataPlayer) {
+        pItem->pUnitData.pUnitDataPlayer->nPortalFlags = 1;
+      }
+      if (pItem->eUnitType == UNIT_ITEM && pItem->pUnitData.pUnitDataMissile) {
+        pItem->pUnitData.pUnitDataMissile->unk0x00 = 2;
+      }
     }
 
-    pItem->pUnitData.pUnitDataMissile->unk0x00 = 2;
     return 1;
 }
 
@@ -3399,11 +3374,10 @@ uint8_t __stdcall ITEM_GetMaxSockCount(D2UnitStrc * pUnit) {
     } else {
       nLvlMaxSock = (int)(uint8_t)pItemTypesTxt->maxsock40;
     }
-    if ((uint32_t)nLvlMaxSock > (uint32_t)byMaxSockets) {
-      return byMaxSockets;
+    if ((uint32_t)nLvlMaxSock <= (uint32_t)byMaxSockets) {
+      byMaxSockets = (uint8_t)nLvlMaxSock;
     }
 
-    byMaxSockets = (uint8_t)nLvlMaxSock;
     return byMaxSockets;
 }
 
@@ -3929,7 +3903,10 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
 // @sourcefile .\ITEMS\Items.cpp
 BOOL __stdcall IsValidImbumeItem(D2UnitStrc * pUnit) {
     eD2ItemTypes eItemType;
+    D2ItemsTxt* pItemsTxt;
     uint32_t dwItemCode;
+    BOOL bSocketFlagged;
+    int nQuality;
     int32_t nErrLine;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x67d);
@@ -3947,40 +3924,35 @@ BOOL __stdcall IsValidImbumeItem(D2UnitStrc * pUnit) {
 
     uint32_t nClassId = pUnit->nClassId;
     uint32_t bEquippable = TXT_Items_GetBitFieldAnd0x01(nClassId);
-    if (!bEquippable) {
-      return 0;
-    }
-    if (!(pUnit->eUnitFlagsEx >> 0x19 & 1)) {
-      nErrLine = ITEM_GetTxtItemTypes_throwable(pUnit);
-      if (nErrLine) {
-        return 0;
+    if (bEquippable) {
+      if (!(pUnit->eUnitFlagsEx >> 0x19 & 1)) {
+        nErrLine = ITEM_GetTxtItemTypes_throwable(pUnit);
+        if (nErrLine) {
+          return 0;
+        }
+      }
+
+      pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nClassId);
+      if (pItemsTxt->bQuest != '\0') {
+        dwItemCode = ITEM_GetItemsTxt_szCode(pUnit);
+        if (dwItemCode != 0x2067656c) {
+          return 0;
+        }
+      }
+
+      bSocketFlagged = ITEMS_HasSocketedItems(pUnit);
+      if (!bSocketFlagged) {
+        bSocketFlagged = CheckItemFlag(pUnit, ITEMFLAG_SOCKETED, 0x12c7, ".\\ITEMS\\Items.cpp");
+        if (!bSocketFlagged) {
+          nQuality = GetItemQuality(pUnit);
+          if (nQuality != 5 && nQuality != 4 && nQuality != 6 && nQuality != 8 && nQuality != 7 && nQuality != 9) {
+            return 1;
+          }
+        }
       }
     }
 
-    D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nClassId);
-    if (pItemsTxt->bQuest != '\0') {
-      dwItemCode = ITEM_GetItemsTxt_szCode(pUnit);
-      if (dwItemCode != 0x2067656c) {
-        return 0;
-      }
-    }
-
-    BOOL bSocketFlagged = ITEMS_HasSocketedItems(pUnit);
-    if (bSocketFlagged) {
-      return 0;
-    }
-
-    bSocketFlagged = CheckItemFlag(pUnit, ITEMFLAG_SOCKETED, 0x12c7, ".\\ITEMS\\Items.cpp");
-    if (bSocketFlagged) {
-      return 0;
-    }
-
-    int nQuality = GetItemQuality(pUnit);
-    if (!(nQuality != 5 && nQuality != 4 && nQuality != 6 && nQuality != 8 && nQuality != 7 && nQuality != 9)) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 // Returns true if the item is eligible to receive a custom player name. Rejects gold, body-parts, quivers, broken items, items already named (ITEMFLAG_PLAYERNAME set), compact-save items, and items whose Items.txt bNameable flag is false.
@@ -4089,6 +4061,10 @@ BOOL __stdcall ITEM_CheckIfItemCanHaveSockets(D2UnitStrc * pUnit) {
 BOOL __stdcall IsItemSocketable(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     int nClassId2;
     D2UnitDataItemStrc* pItemData2;
+    uint32_t bEthereal;
+    uint32_t bIsEthereal2;
+    eD2ItemQuality eQuality;
+    int32_t nSockets;
     int nClassId;
     D2UnitDataItemStrc* pItemData;
     uint32_t bIsEthereal;
@@ -4121,77 +4097,54 @@ BOOL __stdcall IsItemSocketable(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
 
     nClassId = ITEM_GetItemData_nFileIndex(pUnit);
     nClassId2 = ITEM_GetItemData_nFileIndex(pUnit2);
-    if (nClassId != nClassId2) {
-      return 0;
-    }
-
-    BOOL bIsStackable = IsStackable(pUnit);
-    if (!bIsStackable) {
-      return 0;
-    }
-
-    uint32_t bEthereal = ITEM_GetItemData_eD2ItemFlag_IsEthereal(pUnit);
-    uint32_t bIsEthereal2 = ITEM_GetItemData_eD2ItemFlag_IsEthereal(pUnit2);
-    if (bEthereal != bIsEthereal2) {
-      return 0;
-    }
-
-    eD2ItemQuality eQuality = GetItemQuality(pUnit);
-    bIsStackable = QualityCanHaveSockets(eQuality);
-    if (!bIsStackable) {
-      return 0;
-    }
-
-    eQuality = GetItemQuality(pUnit2);
-    bIsStackable = QualityCanHaveSockets(eQuality);
-    if (!bIsStackable) {
-      return 0;
-    }
-
-    nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mindamage, 0);
-    nClassId2 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_mindamage, 0);
-    if (nClassId != nClassId2) {
-      return 0;
-    }
-
-    nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_maxdamage, 0);
-    nClassId2 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_maxdamage, 0);
-    if (nClassId != nClassId2) {
-      return 0;
-    }
-
-    nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_secondary_mindamage, 0);
-    nClassId2 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_secondary_mindamage, 0);
-    if (nClassId != nClassId2) {
-      return 0;
-    }
-
-    nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_secondary_maxdamage, 0);
-    nClassId2 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_secondary_maxdamage, 0);
-    if (nClassId != nClassId2) {
-      return 0;
-    }
-
-    nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_throw_mindamage, 0);
-    nClassId2 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_item_throw_mindamage, 0);
-    if (nClassId != nClassId2) {
-      return 0;
-    }
-
-    nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_throw_maxdamage, 0);
-    nClassId2 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_item_throw_maxdamage, 0);
-    if (nClassId != nClassId2) {
-      return 0;
-    }
-
-    int32_t nSockets = ITEM_GetSocketsCount(pUnit);
-    if ((uint8_t)(char)nSockets > '\0') {
-      return 0;
-    }
-
-    nSockets = ITEM_GetSocketsCount(pUnit2);
-    if ((uint8_t)(char)nSockets <= '\0') {
-      return 1;
+    if (nClassId == nClassId2) {
+      BOOL bIsStackable;
+      bIsStackable = IsStackable(pUnit);
+      if (bIsStackable) {
+        bEthereal = ITEM_GetItemData_eD2ItemFlag_IsEthereal(pUnit);
+        bIsEthereal2 = ITEM_GetItemData_eD2ItemFlag_IsEthereal(pUnit2);
+        if (bEthereal == bIsEthereal2) {
+          eQuality = GetItemQuality(pUnit);
+          bIsStackable = QualityCanHaveSockets(eQuality);
+          if (bIsStackable) {
+            eQuality = GetItemQuality(pUnit2);
+            bIsStackable = QualityCanHaveSockets(eQuality);
+            if (bIsStackable) {
+              nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mindamage, 0);
+              nClassId2 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_mindamage, 0);
+              if (nClassId == nClassId2) {
+                nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_maxdamage, 0);
+                nClassId2 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_maxdamage, 0);
+                if (nClassId == nClassId2) {
+                  nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_secondary_mindamage, 0);
+                  nClassId2 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_secondary_mindamage, 0);
+                  if (nClassId == nClassId2) {
+                    nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_secondary_maxdamage, 0);
+                    nClassId2 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_secondary_maxdamage, 0);
+                    if (nClassId == nClassId2) {
+                      nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_throw_mindamage, 0);
+                      nClassId2 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_item_throw_mindamage, 0);
+                      if (nClassId == nClassId2) {
+                        nClassId = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_throw_maxdamage, 0);
+                        nClassId2 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_item_throw_maxdamage, 0);
+                        if (nClassId == nClassId2) {
+                          nSockets = ITEM_GetSocketsCount(pUnit);
+                          if ((uint8_t)(char)nSockets <= '\0') {
+                            nSockets = ITEM_GetSocketsCount(pUnit2);
+                            if ((uint8_t)(char)nSockets <= '\0') {
+                              return 1;
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
 
     return 0;
@@ -4388,17 +4341,15 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
       pUnit->nClassId = nClassId;
     }
     if (pItemStatCostTxt) {
-      if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
-        return 1;
-      }
-      if (pUnit->pUnitData.pUnitDataItem) {
-        pUnit->pUnitData.pUnitDataItem->nItemLevel = 1;
-      }
-      if (!(pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataMissile)) {
-        return 1;
+      if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
+        if (pUnit->pUnitData.pUnitDataItem) {
+          pUnit->pUnitData.pUnitDataItem->nItemLevel = 1;
+        }
+        if (pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataMissile) {
+          pUnit->pUnitData.pUnitDataMissile->unk0x00 = 1;
+        }
       }
 
-      pUnit->pUnitData.pUnitDataMissile->unk0x00 = 1;
       return 1;
     }
 
@@ -5738,11 +5689,10 @@ D2Row_char_32 * __stdcall ITEM_GetTxtItemTypes_invgfx(D2UnitStrc * pUnit, uint32
       uint32_t nMaxGfxIdx;
       nMaxGfxIdx = (uint8_t)pItemTypesTxt->varinvgfx - 1;
       nClampedGfxIdx = (int)nGfxIndex <= 0 ? 0 : nGfxIndex;
-      if ((int)nClampedGfxIdx >= (int)nMaxGfxIdx) {
-        return pItemTypesTxt->invgfx + nMaxGfxIdx;
+      if ((int)nClampedGfxIdx < (int)nMaxGfxIdx) {
+        nMaxGfxIdx = nClampedGfxIdx;
       }
 
-      nMaxGfxIdx = nClampedGfxIdx;
       return pItemTypesTxt->invgfx + nMaxGfxIdx;
     }
 
@@ -5938,17 +5888,16 @@ int32_t __stdcall ITEMS_CheckBodyLocationFit(D2UnitStrc * pItem, uint32_t eBodyL
     pItem = (D2UnitStrc*)((uint32_t)pItem & 0xffffff);
     uint32_t dwBodyLoc2Scratch = (uint32_t)0;
     ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(pItemSaved, (eD2BodyLoc*)((uintptr_t)&pItem + 3), (eD2BodyLoc*)((uintptr_t)&dwBodyLoc2Scratch + 3));
-    if (!(*(uint8_t*)((char*)&pItem + 3) != eBodyLoc && *(uint8_t*)((char*)&dwBodyLoc2Scratch + 3) != eBodyLoc)) {
-      return 1;
-    }
-    if (eBodyLoc != 0xb && eBodyLoc != 0xc) {
-      return 0;
-    }
-    if (!(*(uint8_t*)((char*)&pItem + 3) != 4 && *(uint8_t*)((char*)&dwBodyLoc2Scratch + 3) != 4 && *(uint8_t*)((char*)&pItem + 3) != 5 && *(uint8_t*)((char*)&dwBodyLoc2Scratch + 3) != 5)) {
-      return 1;
+    if (*(uint8_t*)((char*)&pItem + 3) != eBodyLoc && *(uint8_t*)((char*)&dwBodyLoc2Scratch + 3) != eBodyLoc) {
+      if (eBodyLoc != 0xb && eBodyLoc != 0xc) {
+        return 0;
+      }
+      if (*(uint8_t*)((char*)&pItem + 3) != 4 && *(uint8_t*)((char*)&dwBodyLoc2Scratch + 3) != 4 && *(uint8_t*)((char*)&pItem + 3) != 5 && *(uint8_t*)((char*)&dwBodyLoc2Scratch + 3) != 5) {
+        return 0;
+      }
     }
 
-    return 0;
+    return 1;
 }
 
 // Adjusts buy/sell/repair prices in-place for items whose type has a staffmods class restriction. Iterates the item's skill-bonus stat list (stat 0x6b), and for each qualifying skill entry scales the price deltas using the skill's costmult/costadd fields and the skill level (2*lvl-1). The accumulated deltas are divided by nDivisor before being added to *pBuy, *pSell, and *pRepair. No-ops if pItem is null, not an item unit, or the item type has no staffmods class.

@@ -556,7 +556,7 @@ void __stdcall DRAW_UI_ChatInput() {
 
         case 5:
           wszModeLabel[0] = L'\0';
-        wszModeLabel[1] = L'漢';
+        wszModeLabel[1] = L'\x6f22';
         wszModeLabel[2] = L'\0';
         wszModeLabel[3] = L'\0';
         D2Win::Src::D2WinFont::DRAW_text(wszModeLabel, 0x14, ScreenSizeY - 0x80, 0, 0);
@@ -564,8 +564,8 @@ void __stdcall DRAW_UI_ChatInput() {
         default:
           goto draw_input_box;
         case 1:
-          wszModeLabel[0] = L'한';
-        wszModeLabel[1] = L'글';
+          wszModeLabel[0] = L'\xd55c';
+        wszModeLabel[1] = L'\xae00';
         wszModeLabel[2] = L'\0';
         wszModeLabel[3] = L'\0';
         break;
@@ -866,11 +866,10 @@ void __stdcall CHAT_InitHistoryIndices() {
 static char * CHAT_ExtractWhisperTarget(char * szText) {
     char* pszWhisperName;
     char* pszStarPos = Storm::Source::SSTR::SStrChr(szText, '*');
-    if (!(!pszStarPos || (pszWhisperName = pszStarPos + 1 , pszStarPos[1] == '\0'))) {
-      return pszWhisperName;
+    if (!pszStarPos || (pszWhisperName = pszStarPos + 1 , pszStarPos[1] == '\0')) {
+      pszWhisperName = szText;
     }
 
-    pszWhisperName = szText;
     return pszWhisperName;
 }
 
@@ -1064,11 +1063,10 @@ static BOOL CHAT_HandleResignCommand(char * szCommandName, char * szInput) {
 
       if (nCopyCount == 1) {
         pCallbacks = ClientModeInGame::CLIENT_GetGameVersionInfo();
-        if (!pCallbacks) {
-          return 1;
+        if (pCallbacks) {
+          pCallbacks->pfnSendChatCommand((uint8_t*)szInput);
         }
 
-        pCallbacks->pfnSendChatCommand((uint8_t*)szInput);
         return 1;
       }
     }
@@ -1152,11 +1150,10 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
         }
         sprintf(szInput, "%s %s %s", szCommandName, szTargetName, szMessageText);
         pCallbacks = ClientModeInGame::CLIENT_GetGameVersionInfo();
-        if (!pCallbacks) {
-          return 1;
+        if (pCallbacks) {
+          pCallbacks->pfnSendChatCommand((uint8_t*)szInput);
         }
 
-        pCallbacks->pfnSendChatCommand((uint8_t*)szInput);
         return 1;
       }
     }

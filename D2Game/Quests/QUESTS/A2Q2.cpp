@@ -143,11 +143,10 @@ static BOOL __stdcall Q10_CheckHoradricStaffState(D2UnitStrc * pUnit, ::SGAMEDAT
 // notification wrapper; no state changes.
 static int __stdcall Q10_NotifyHoradricStaffActive(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     BOOL bIsQuestLive = Q10_CheckHoradricStaffState(pUnit, pGame);
-    if (!bIsQuestLive) {
-      return 0;
+    if (bIsQuestLive) {
+      QUEST_SendQuestUpdateToPlayer(pGame, pUnit, 9);
     }
 
-    QUEST_SendQuestUpdateToPlayer(pGame, pUnit, 9);
     return 0;
 }
 
@@ -253,21 +252,17 @@ BOOL __fastcall Q10_OnScrollPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Completed);
-    if (bQuestState == 1) {
-      return 0;
+    if (bQuestState != 1) {
+      D2QuestDataStrc* pQuestData;
+      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x03);
+      if (!bQuestState) {
+        pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheHoradricStaff);
+        if (pQuestData) {
+          pQuestData->pQuestSpecificData.pA2Q2->nQuestItemPickupNotifyCount++;
+        }
+      }
     }
 
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x03);
-    if (bQuestState) {
-      return 0;
-    }
-
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheHoradricStaff);
-    if (!pQuestData) {
-      return 0;
-    }
-
-    pQuestData->pQuestSpecificData.pA2Q2->nQuestItemPickupNotifyCount++;
     return 0;
 }
 
@@ -275,28 +270,23 @@ BOOL __fastcall Q10_OnScrollPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void
 // ('msf ') drop path. For each player not yet Completed who holds neither 'msf ' nor
 // 'tsh ' (Staff of Kings), bumps the A2Q2 drop counter. No QuestRecord writes.
 BOOL __fastcall Q10_OnStaffOrViperPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    D2QuestDataStrc* pQuestItem;
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheHoradricStaff, QUESTSTATE_Completed);
-    if (bCompleted) {
-      return 0;
+    if (!bCompleted) {
+      D2UnitStrc* pPlayerData;
+      pPlayerData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x2066736d);
+      if (!pPlayerData) {
+        pPlayerData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20747368);
+        if (!pPlayerData) {
+          pQuestItem = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheHoradricStaff);
+          if (pQuestItem) {
+            pQuestItem->pQuestSpecificData.pA2Q2->nQuestItemPickupNotifyCount++;
+          }
+        }
+      }
     }
 
-    D2UnitStrc* pPlayerData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x2066736d);
-    if (pPlayerData) {
-      return 0;
-    }
-
-    pPlayerData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20747368);
-    if (pPlayerData) {
-      return 0;
-    }
-
-    D2QuestDataStrc* pQuestItem = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheHoradricStaff);
-    if (!pQuestItem) {
-      return 0;
-    }
-
-    pQuestItem->pQuestSpecificData.pA2Q2->nQuestItemPickupNotifyCount++;
     return 0;
 }
 
@@ -305,13 +295,12 @@ BOOL __fastcall Q10_OnStaffOrViperPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 // holding the cube. No QuestRecord writes.
 BOOL __fastcall Q10_OnHoradricCubePickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pQuestData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20786f62);
-    if (pQuestData) {
-      return 0;
-    }
-
-    D2QuestDataStrc* pCubeItem = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheHoradricStaff);
-    if (pCubeItem) {
-      pCubeItem->pQuestSpecificData.pA2Q2->nQuestItemPickupNotifyCount++;
+    if (!pQuestData) {
+      D2QuestDataStrc* pCubeItem;
+      pCubeItem = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheHoradricStaff);
+      if (pCubeItem) {
+        pCubeItem->pQuestSpecificData.pA2Q2->nQuestItemPickupNotifyCount++;
+      }
     }
 
     return 0;
@@ -595,14 +584,12 @@ BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2(D2ObjectOperateFnArg * 
       D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
       *pSeed = sNewSeed;
       nDropCount = sNewSeed.nSeedLow % 5 + 5;
-      if (nDropCount <= 0) {
-        return 0;
+      if (nDropCount > 0) {
+        do {
+          Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
+          nDropCount--;
+        } while (nDropCount);
       }
-
-      do {
-        Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-        nDropCount--;
-      } while (nDropCount);
 
       return 0;
     }
@@ -647,14 +634,12 @@ BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3(D2ObjectOperateFnArg * 
       D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
       *pSeed = sNewSeed;
       int nGoldDropsLeft = sNewSeed.nSeedLow % 5 + 5;
-      if (nGoldDropsLeft <= 0) {
-        return 0;
+      if (nGoldDropsLeft > 0) {
+        do {
+          Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
+          nGoldDropsLeft--;
+        } while (nGoldDropsLeft);
       }
-
-      do {
-        Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-        nGoldDropsLeft--;
-      } while (nGoldDropsLeft);
 
       return 0;
     }
@@ -697,14 +682,12 @@ BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop1(D2ObjectOperateFnArg * 
       D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
       *pSeed = sNewSeed;
       int nGoldDropsLeft = sNewSeed.nSeedLow % 5 + 5;
-      if (nGoldDropsLeft <= 0) {
-        return 0;
+      if (nGoldDropsLeft > 0) {
+        do {
+          Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
+          nGoldDropsLeft--;
+        } while (nGoldDropsLeft);
       }
-
-      do {
-        Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-        nGoldDropsLeft--;
-      } while (nGoldDropsLeft);
 
       return 0;
     }

@@ -63,11 +63,10 @@ static uint32_t CODEC_ReadBits(D2CodecBitStateStrc * pBitState, int nNumBits) {
 uint32_t __stdcall CODEC_ReadBitsWithTransparency(uint32_t pCharSelComp, D2CodecBitStateStrc * pBitState, int32_t bSigned, int32_t nBitWidthCode) {
     uint32_t nNumBits = g_aCodecBitMaskLookupTable[nBitWidthCode];
     uint32_t nBitsRead = CODEC_ReadBits(pBitState, nNumBits);
-    if (!(nNumBits && bSigned && g_aCodecBitMaskLookupTable[nNumBits + 0xf] & nBitsRead)) {
-      return nBitsRead;
+    if (nNumBits && bSigned && g_aCodecBitMaskLookupTable[nNumBits + 0xf] & nBitsRead) {
+      nBitsRead |= gdwD2CMPCodecTab1[nNumBits];
     }
 
-    nBitsRead |= gdwD2CMPCodecTab1[nNumBits];
     return nBitsRead;
 }
 

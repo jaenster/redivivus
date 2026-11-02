@@ -97,7 +97,6 @@ static void * D2COMP_AssertNotNull(void * pValue) {
     }
 
     return pValue;
-    return pValue;
 }
 
 static void * __stdcall D2COMP_LoadAndValidateCOFFile(char * szCOFFilePath, uint32_t * pnSize) {
@@ -162,7 +161,6 @@ static int __stdcall D2COMP_FindOrAllocCOFCacheEntry(int32_t nPlayerClassId, cha
       exit(-1);
     }
 
-    return (int)pCacheNode;
     return (int)pCacheNode;
 }
 
@@ -924,38 +922,36 @@ static int32_t __stdcall D2COMP_LoadLayerSpritesAndCalcHeight(uint8_t * pbLayerC
     }
 
     int nLoadedSpriteCount = 0;
-    if (*pbLayerCount <= 0) {
-      return nLoadedSpriteCount;
-    }
-
-    do {
+    if (*pbLayerCount > 0) {
       int nLoadedCount;
-      byComponentType = *(uint8_t*)(nLayerIndex + nLayerTypeArray);
-      if (0xf < byComponentType) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x58e);
-        exit(-1);
-      }
-
-      memset(&sGfxData, 0, 0x48);
-      sGfxData.nFrameNumber = nFrameNumber;
-      sGfxData.pDC6 = 0;
-      sGfxData.nDirection = (int)bPaletteShift;
-      sGfxData.nComponentType = byComponentType;
-      D2COMP_PopulateComponentFromCOF(nCOFContext, &sGfxData);
-      sGfxData.dwRenderFlags |= 2;
-      nLoadedCount = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
-      if (nLoadedCount && sGfxData.pDC6Block) {
-        nOffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(sGfxData.pDC6Block);
-        nLoadedCount = nOffsetY + *(int*)(nCOFContext + 0x14);
-        if (nLoadedCount > *pnMaxHeight) {
-          *pnMaxHeight = nLoadedCount;
+      do {
+        byComponentType = *(uint8_t*)(nLayerIndex + nLayerTypeArray);
+        if (0xf < byComponentType) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x58e);
+          exit(-1);
         }
 
-        nLoadedSpriteCount++;
-      }
+        memset(&sGfxData, 0, 0x48);
+        sGfxData.nFrameNumber = nFrameNumber;
+        sGfxData.pDC6 = 0;
+        sGfxData.nDirection = (int)bPaletteShift;
+        sGfxData.nComponentType = byComponentType;
+        D2COMP_PopulateComponentFromCOF(nCOFContext, &sGfxData);
+        sGfxData.dwRenderFlags |= 2;
+        nLoadedCount = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
+        if (nLoadedCount && sGfxData.pDC6Block) {
+          nOffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(sGfxData.pDC6Block);
+          nLoadedCount = nOffsetY + *(int*)(nCOFContext + 0x14);
+          if (nLoadedCount > *pnMaxHeight) {
+            *pnMaxHeight = nLoadedCount;
+          }
 
-      nLayerIndex++;
-    } while (nLayerIndex < (int)(uint32_t)*pbLayerCount);
+          nLoadedSpriteCount++;
+        }
+
+        nLayerIndex++;
+      } while (nLayerIndex < (int)(uint32_t)*pbLayerCount);
+    }
 
     return nLoadedSpriteCount;
 }
@@ -1272,20 +1268,17 @@ static BOOL D2COMP_ValidateAndLoadCOFForUnit(D2CharSelCompStrc * pCompUnit) {
       }
 
       nCOFResult = D2COMP_GetOrLoadCOF(ppCOFList, pCompUnit->nPlayerClassId, pCompUnit->nAnimMode, gaCompWeaponClassTokens[pCompUnit->nWeaponClass]);
-      if (nCOFResult) {
-        return 1;
-      }
-
-      pCompUnit->nPlayerClassId = 7;
-      pCompUnit->nAnimMode = 5;
-      pCompUnit->nWeaponClass = 1;
-      nCOFResult = D2COMP_GetOrLoadCOF(ppCOFList, 7, 5, gaCompWeaponClassTokens[1]);
       if (!nCOFResult) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x836);
-        exit(-1);
+        pCompUnit->nPlayerClassId = 7;
+        pCompUnit->nAnimMode = 5;
+        pCompUnit->nWeaponClass = 1;
+        nCOFResult = D2COMP_GetOrLoadCOF(ppCOFList, 7, 5, gaCompWeaponClassTokens[1]);
+        if (!nCOFResult) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x836);
+          exit(-1);
+        }
       }
 
-      return 1;
       return 1;
     } else {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x81a);
@@ -1473,11 +1466,10 @@ void * __stdcall LoadTxt(D2PoolManagerStrc * pMemory, char * szTxtName, D2BinFie
       Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinFieldExcel, pBinFields, (char*)pRecord, (size_t)pRowCountOrData, nLineLength);
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinFieldExcel);
     }
-    if (!pSize) {
-      return pRecord;
+    if (pSize) {
+      *pSize = (size_t)pRowCountOrData;
     }
 
-    *pSize = (size_t)pRowCountOrData;
     return pRecord;
 }
 
@@ -1989,7 +1981,6 @@ uint32_t * __stdcall D2COMP_GetNextCompositeUnit(uint32_t * pCompUnit) {
     }
 
     return (uint32_t*)pCompUnit[0x31];
-    return (uint32_t*)pCompUnit[0x31];
 }
 
 void __stdcall D2COMP_SetAnimationSpeed(D2CharSelCompStrc * pCompUnit, uint8_t bySpeed) {
@@ -2023,7 +2014,6 @@ uint32_t __stdcall D2COMP_GetNumDirections(uint32_t pCompUnit) {
     }
 
     return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)(pCompUnit >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)*(uint8_t*)(pCompUnit + 5));
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)(pCompUnit >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)*(uint8_t*)(pCompUnit + 5));
 }
 
 int __stdcall D2COMP_GetNumFrames(int32_t pCompUnit) {
@@ -2032,7 +2022,6 @@ int __stdcall D2COMP_GetNumFrames(int32_t pCompUnit) {
       exit(-1);
     }
 
-    return *(int*)(pCompUnit + 0xc);
     return *(int*)(pCompUnit + 0xc);
 }
 
@@ -2075,7 +2064,6 @@ uint32_t __stdcall D2COMP_GetFlags(D2CharSelCompStrc * pCompUnit) {
       exit(-1);
     }
 
-    return pCompUnit->nFlags;
     return pCompUnit->nFlags;
 }
 
@@ -2362,12 +2350,17 @@ int __fastcall D2COMP_DrawUnitNameAndTitle(uint32_t * pCompUnit) {
 
     char* szTitlePrefix;
     int j;
+    uint16_t* pWCharClear;
     uint16_t wszTitlePrefix[256];
     uint16_t wszTempAppend[256];
     uint16_t wszTitleText[256];
     int nTextHeight;
     int nTextWidth;
+    int bDrawShadow;
+    int32_t nDrawColor;
     uint32_t dwProductCode;
+    uint32_t dwGameType;
+    uint32_t nCharClass;
     int32_t nLine;
     if (!pCompUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6bb);
@@ -2376,75 +2369,74 @@ int __fastcall D2COMP_DrawUnitNameAndTitle(uint32_t * pCompUnit) {
 
     uint32_t dwUnitFlags = *pCompUnit;
     int bDrawn = 0;
-    if (!(gadwBitMasks[1] & dwUnitFlags)) {
-      return bDrawn;
-    }
+    if (gadwBitMasks[1] & dwUnitFlags) {
+      nCharClass = pCompUnit[6];
+      pWCharClear = wszTitleText;
+      for (bDrawn = 0x80; bDrawn; bDrawn--) {
+        pWCharClear[0] = L'\0';
+        pWCharClear[1] = L'\0';
+        pWCharClear += 2;
+      }
 
-    uint32_t nCharClass = pCompUnit[6];
-    uint16_t* pWCharClear = wszTitleText;
-    for (bDrawn = 0x80; bDrawn; bDrawn--) {
-      pWCharClear[0] = L'\0';
-      pWCharClear[1] = L'\0';
-      pWCharClear += 2;
-    }
-
-    uint32_t dwGameType = pCompUnit[7];
-    bDrawn = nCharClass + 6;
-    int32_t nDrawColor = 0;
-    int bDrawShadow = 0;
-    if (dwGameType == 0x14) {
-      bDrawShadow = 1;
-      nDrawColor = 3;
-    } else if (dwGameType == 0x12) {
-      nDrawColor = 3;
-      bDrawShadow = 1;
-    } else if (gadwBitMasks[5] & dwUnitFlags) {
-      nDrawColor = 1;
-    }
-    if (gadwBitMasks[8] & dwUnitFlags) {
-      bDrawn = nCharClass + 0x15;
-    }
-    if (!(gadwBitMasks[6] & dwUnitFlags) && !(gadwBitMasks[7] & dwUnitFlags)) {
-      dwProductCode = pCompUnit[0x8c];
-      if (dwProductCode == 0x44324456 || dwProductCode == 0x44325354 || dwProductCode == 0x44325850) {
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTitleText, (uint16_t*)(pCompUnit + 0x53));
+      dwGameType = pCompUnit[7];
+      bDrawn = nCharClass + 6;
+      nDrawColor = 0;
+      bDrawShadow = 0;
+      if (dwGameType == 0x14) {
+        bDrawShadow = 1;
+        nDrawColor = 3;
+      } else if (dwGameType == 0x12) {
+        nDrawColor = 3;
+        bDrawShadow = 1;
+      } else if (gadwBitMasks[5] & dwUnitFlags) {
+        nDrawColor = 1;
+      }
+      if (gadwBitMasks[8] & dwUnitFlags) {
+        bDrawn = nCharClass + 0x15;
+      }
+      if (!(gadwBitMasks[6] & dwUnitFlags) && !(gadwBitMasks[7] & dwUnitFlags)) {
+        dwProductCode = pCompUnit[0x8c];
+        if (dwProductCode == 0x44324456 || dwProductCode == 0x44325354 || dwProductCode == 0x44325850) {
+          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTitleText, (uint16_t*)(pCompUnit + 0x53));
+        } else {
+          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTitleText, (uint16_t*)(pCompUnit + 0x33));
+        }
       } else {
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTitleText, (uint16_t*)(pCompUnit + 0x33));
+        szTitlePrefix = D2COMP_GetTitlePrefix(dwGameType, (dwUnitFlags >> 5 & 1) * 3 + (dwUnitFlags >> 7 & 1) * 2 + (dwUnitFlags >> 6 & 1), dwUnitFlags >> 0xc & 1);
+        for (j = 0; j < 0x100; j++) {
+          wszTitlePrefix[j] = L'\0';
+        }
+
+        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTitlePrefix, szTitlePrefix, 0xff);
+        memset(wszTitleText, 0, 0x200);
+        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTitleText, wszTitlePrefix);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszTitleText, (uint16_t*)(pCompUnit + 0x53));
       }
-    } else {
-      szTitlePrefix = D2COMP_GetTitlePrefix(dwGameType, (dwUnitFlags >> 5 & 1) * 3 + (dwUnitFlags >> 7 & 1) * 2 + (dwUnitFlags >> 6 & 1), dwUnitFlags >> 0xc & 1);
+
       for (j = 0; j < 0x100; j++) {
-        wszTitlePrefix[j] = L'\0';
+        wszTempAppend[j] = L'\0';
       }
 
-      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTitlePrefix, szTitlePrefix, 0xff);
-      memset(wszTitleText, 0, 0x200);
-      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTitleText, wszTitlePrefix);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszTitleText, (uint16_t*)(pCompUnit + 0x53));
+      nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength((uint16_t*)(pCompUnit + 0x73));
+      if (nLine) {
+        D2Lang::UTF8_ConvertToWideChar(wszTempAppend, " {", 0x100);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszTitleText, wszTempAppend);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszTitleText, (uint16_t*)(pCompUnit + 0x73));
+        D2Lang::UTF8_ConvertToWideChar(wszTempAppend, (char*)&gnItemQuality_Set, 0x100);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszTitleText, wszTempAppend);
+      }
+
+      D2WinFont::SetAndReturnLastFont(0xc);
+      D2COMP_TruncateStringToFitWidth(wszTitleText, 0x78);
+      D2WinFont::TEXT_CalcTextDimensions(wszTitleText, &nTextWidth, &nTextHeight);
+      if (bDrawShadow) {
+        D2WinFont::DRAW_text(wszTitleText, pCompUnit[5] - (nTextWidth >> 1) - 1, bDrawn - 1, 6, 0);
+      }
+
+      D2WinFont::DRAW_text(wszTitleText, pCompUnit[5] - (nTextWidth >> 1), bDrawn, nDrawColor, 0);
+      bDrawn = 1;
     }
 
-    for (j = 0; j < 0x100; j++) {
-      wszTempAppend[j] = L'\0';
-    }
-
-    nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength((uint16_t*)(pCompUnit + 0x73));
-    if (nLine) {
-      D2Lang::UTF8_ConvertToWideChar(wszTempAppend, " {", 0x100);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszTitleText, wszTempAppend);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszTitleText, (uint16_t*)(pCompUnit + 0x73));
-      D2Lang::UTF8_ConvertToWideChar(wszTempAppend, (char*)&gnItemQuality_Set, 0x100);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszTitleText, wszTempAppend);
-    }
-
-    D2WinFont::SetAndReturnLastFont(0xc);
-    D2COMP_TruncateStringToFitWidth(wszTitleText, 0x78);
-    D2WinFont::TEXT_CalcTextDimensions(wszTitleText, &nTextWidth, &nTextHeight);
-    if (bDrawShadow) {
-      D2WinFont::DRAW_text(wszTitleText, pCompUnit[5] - (nTextWidth >> 1) - 1, bDrawn - 1, 6, 0);
-    }
-
-    D2WinFont::DRAW_text(wszTitleText, pCompUnit[5] - (nTextWidth >> 1), bDrawn, nDrawColor, 0);
-    bDrawn = 1;
     return bDrawn;
 }
 

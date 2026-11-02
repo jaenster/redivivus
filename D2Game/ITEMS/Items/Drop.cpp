@@ -152,25 +152,24 @@ static BOOL __stdcall ITEMDROP_IsItemClassEligible(D2SeedStrc * pSeed, int32_t b
     if ((int)eLevel <= 0) {
       eLevel = LEVEL_RogueEncampment;
     }
-    if (!((uint8_t)pItemsTxt->bSpawnable > '\0' && pItemsTxt->bQuest == '\0' && (int)(uint32_t)(uint8_t)pItemsTxt->nLevel <= (int)eLevel)) {
-      return 0;
-    }
-    if (!bSkipRarityRoll) {
+    if ((uint8_t)pItemsTxt->bSpawnable > '\0' && pItemsTxt->bQuest == '\0' && (int)(uint32_t)(uint8_t)pItemsTxt->nLevel <= (int)eLevel) {
       eAct neAct;
-      neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-      nActDelta = (uint32_t)(uint8_t)pItemsTxt->nRarity - (uint32_t)neAct;
-      if ((int)nActDelta > 0) {
-        nActDelta = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, nActDelta);
-        if (nActDelta) {
-          return 0;
+      if (!bSkipRarityRoll) {
+        neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+        nActDelta = (uint32_t)(uint8_t)pItemsTxt->nRarity - (uint32_t)neAct;
+        if ((int)nActDelta > 0) {
+          nActDelta = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, nActDelta);
+          if (nActDelta) {
+            return 0;
+          }
         }
       }
-    }
-    if (!(nItemTypeFilter == -1 || pItemsTxt->wType == nItemTypeFilter)) {
-      return 0;
+      if (nItemTypeFilter == -1 || pItemsTxt->wType == nItemTypeFilter) {
+        return 1;
+      }
     }
 
-    return 1;
+    return 0;
 }
 
 // Selects a random exceptional-tier item class index for a drop roll. Iterates the exceptional slice of the Items txt table (between the exceptional and elite size offsets), filters candidates via MONSTER_ShouldSpawnSuperUnique against level/TC constraints, respects the expansion flag, then picks one uniformly at random using the D2SeedStrc PRNG (power-of-two fast path or modulo). Returns the Items txt index of the chosen class, or -1 if none qualify.
@@ -1300,7 +1299,6 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
     D2SeedStrc* pSeed;
     uint32_t uVar2;
     uint32_t nAutoMagicAffixId;
-    D2MagicAffixTxt* pMagicAffixLine;
     uint32_t nSeedLowBackup;
     D2UnitStrc* pItem;
     pItem = *ppItem;
@@ -1553,33 +1551,32 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
     }
 
     wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(*ppItem);
-    if (wItemVersion < 100) {
-      return 1;
-    }
+    if (wItemVersion >= 100) {
+      D2MagicAffixTxt* pMagicAffixLine;
+      nAffixLoopIdx = D2Common::ITEMS::Items::GetItemQuality(*ppItem);
+      switch (nAffixLoopIdx) {
+        case 1:
 
-    nAffixLoopIdx = D2Common::ITEMS::Items::GetItemQuality(*ppItem);
-    switch (nAffixLoopIdx) {
-      case 1:
+        case 2:
 
-      case 2:
+        case 3:
 
-      case 3:
+        case 4:
 
-      case 4:
+        case 6:
 
-      case 6:
+        case 8:
 
-      case 8:
-
-      case 9:
-        if ((uint16_t)pItemTxt->wAutoPrefix) {
-          nAutoMagicAffixId = SKILLS::Items::ITEMMOD_RollMagicAffixVersionedEx(*ppItem, 0, 1, 0, 1, 0, (uint32_t)(uint16_t)pItemTxt->wAutoPrefix);
-          if ((uint16_t)(short int)nAutoMagicAffixId > 0) {
-            D2Common::ITEMS::Items::SetAutoMagic(*ppItem, (short int)nAutoMagicAffixId);
-            pMagicAffixLine = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint16_t)nAutoMagicAffixId);
-            D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(0, nullptr, *ppItem, pMagicAffixLine, 0, 0);
+        case 9:
+          if ((uint16_t)pItemTxt->wAutoPrefix) {
+            nAutoMagicAffixId = SKILLS::Items::ITEMMOD_RollMagicAffixVersionedEx(*ppItem, 0, 1, 0, 1, 0, (uint32_t)(uint16_t)pItemTxt->wAutoPrefix);
+            if ((uint16_t)(short int)nAutoMagicAffixId > 0) {
+              D2Common::ITEMS::Items::SetAutoMagic(*ppItem, (short int)nAutoMagicAffixId);
+              pMagicAffixLine = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint16_t)nAutoMagicAffixId);
+              D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(0, nullptr, *ppItem, pMagicAffixLine, 0, 0);
+            }
           }
-        }
+      }
     }
 
     return 1;
@@ -1604,6 +1601,7 @@ int __fastcall ITEM_InitItemBaseStats(::SGAMEDATA * pGame, D2UnitStrc * * ppItem
     BOOL bIsStackable;
     int32_t nMinStackMiscCount;
     D2ItemsTxt* pItemsTxt;
+    D2StatListExStrc* pStatsEx;
     D2PoolManagerStrc* pMemory;
     uint32_t nMaxDurability;
     int nAmount;
@@ -1767,39 +1765,36 @@ int __fastcall ITEM_InitItemBaseStats(::SGAMEDATA * pGame, D2UnitStrc * * ppItem
     }
 
     nAmount = 1;
-    if (!(bApplyQuality && pItemGenCtx)) {
-      return nAmount;
-    }
-
-    nAmount = ITEM_ApplyQualityAndAffixes(pGame, ppItem, pItemGenCtx);
-    if (!*ppItem) {
-      nTmp = -1;
-    } else {
-      nTmp = (*ppItem)->nClassId;
-    }
-
-    pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nTmp);
-    if (!(pItemsTxt && pItemsTxt->bQuest != '\0' && pItemsTxt->bQuestDiffCheck != '\0')) {
-      return nAmount;
-    }
-
-    D2StatListExStrc* pStatsEx = D2Common::Stats::StatsEx::GetStatListByStateOrFlagsIfNotExists(*ppItem, STATE_none, 0x40);
-    if (!pStatsEx) {
-      eUnitType = *ppItem;
-      if (!eUnitType) {
-        nMinStackQuiverCount = -1;
-        pMemory = 0;
+    if (bApplyQuality && pItemGenCtx) {
+      nAmount = ITEM_ApplyQualityAndAffixes(pGame, ppItem, pItemGenCtx);
+      if (!*ppItem) {
+        nTmp = -1;
       } else {
-        nMinStackQuiverCount = eUnitType->nUnitGUID;
-        pMemory = eUnitType->pMemory;
+        nTmp = (*ppItem)->nClassId;
       }
 
-      pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pMemory, 0x40, 0, UNIT_ITEM, nMinStackQuiverCount);
-      D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(*ppItem, pStatsEx, 1);
+      pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nTmp);
+      if (pItemsTxt && pItemsTxt->bQuest != '\0' && pItemsTxt->bQuestDiffCheck != '\0') {
+        pStatsEx = D2Common::Stats::StatsEx::GetStatListByStateOrFlagsIfNotExists(*ppItem, STATE_none, 0x40);
+        if (!pStatsEx) {
+          eUnitType = *ppItem;
+          if (!eUnitType) {
+            nMinStackQuiverCount = -1;
+            pMemory = 0;
+          } else {
+            nMinStackQuiverCount = eUnitType->nUnitGUID;
+            pMemory = eUnitType->pMemory;
+          }
+
+          pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pMemory, 0x40, 0, UNIT_ITEM, nMinStackQuiverCount);
+          D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(*ppItem, pStatsEx, 1);
+        }
+
+        D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_questitemdifficulty, (uint32_t)pGame->nDifficulty, 0);
+        D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(*ppItem, ITEMFLAG_IDENTIFIED, 1);
+      }
     }
 
-    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_questitemdifficulty, (uint32_t)pGame->nDifficulty, 0);
-    D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(*ppItem, ITEMFLAG_IDENTIFIED, 1);
     return nAmount;
 }
 
@@ -2217,16 +2212,15 @@ void __fastcall RefreshQuantity(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 static int32_t ITEM_GetTotalMagicFind(D2UnitStrc * pUnit) {
     D2UnitStrc* pOwner;
     int32_t nOwnerMagicFind;
-    if (pUnit && pUnit->eUnitType < UNIT_OBJECT) {
+    if (pUnit && pUnit->eUnitType <= UNIT_MONSTER) {
       int32_t nMagicFind;
       nMagicFind = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_magicbonus, 0);
       pOwner = Ai::AiGeneral::GetOwnerUnit(pUnit);
-      if (!pOwner) {
-        return nMagicFind;
+      if (pOwner) {
+        nOwnerMagicFind = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pOwner, UNITSTAT_item_magicbonus, 0);
+        nMagicFind += nOwnerMagicFind;
       }
 
-      nOwnerMagicFind = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pOwner, UNITSTAT_item_magicbonus, 0);
-      nMagicFind += nOwnerMagicFind;
       return nMagicFind;
     }
 

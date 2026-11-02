@@ -292,12 +292,11 @@ uint32_t __stdcall GetCpuBrandId() {
     uint64_t nVersionInfo = GetCpuVersionInfo();
     uint32_t nFamily = (uint32_t)nVersionInfo >> 8 & 0xf;
     int nVendor = DetectCpuVendor();
-    if (!(nVendor == 1 && (nFamily >= 7 || nFamily == 6 && ((uint32_t)nVersionInfo & 0xf0) >= 0x80))) {
-      return nBrandId;
+    if (nVendor == 1 && (nFamily >= 7 || nFamily == 6 && ((uint32_t)nVersionInfo & 0xf0) >= 0x80)) {
+      nVendor = D2_Cpuid(1);
+      nBrandId = *(uint32_t*)(nVendor + 4);
     }
 
-    nVendor = D2_Cpuid(1);
-    nBrandId = *(uint32_t*)(nVendor + 4);
     return nBrandId;
 }
 
@@ -657,14 +656,13 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
     }
 
     pOpenedFile = globalOpenFileHandleArray[nSlot];
-    if (!pOpenedFile) {
-      return pOpenedFile;
+    if (pOpenedFile) {
+      report_slot:
+      if (pnSlotIndexOut) {
+        *pnSlotIndexOut = nSlot;
+      }
     }
 
-    report_slot:
-    if (pnSlotIndexOut) {
-      *pnSlotIndexOut = nSlot;
-    }
     return pOpenedFile;
 }
 
@@ -892,11 +890,10 @@ uint32_t __thiscall ComputeAbsoluteFromRelative(int * pNode, int * pBase) {
     if ((int)nOffset < 0) {
       return ~nOffset;
     }
-    if ((int)pBase >= 0) {
-      return nOffset + (int)pBase;
+    if ((int)pBase < 0) {
+      pBase = (int*)((int)pNode - *(int*)(*pNode + 4));
     }
 
-    pBase = (int*)((int)pNode - *(int*)(*pNode + 4));
     return nOffset + (int)pBase;
 }
 
@@ -990,11 +987,10 @@ void __fastcall UnlinkListNode(int * pNode) {
 }
 
 int32_t __thiscall NormalizeListNodePointer(int32_t pThis, int32_t pNodePtr) {
-    if (pNodePtr) {
-      return pNodePtr;
+    if (!pNodePtr) {
+      pNodePtr = pThis + 4;
     }
 
-    pNodePtr = pThis + 4;
     return pNodePtr;
 }
 
@@ -1794,24 +1790,25 @@ void InitHighResTimer() {
 
 // Returns the current wall-clock second count in EAX (base seconds + elapsed ticks/1000). Takes no arguments: the former EBX parameter was a phantom propagated from AtomicExchange64's don't-care comparand.
 uint32_t LOGMGR_GetHighResolutionTime() {
+    int nPriority;
     D2HighResTimestampStrc tRefresh;
     D2HighResTimestampStrc tBase;
     DWORD dwNowTick = GetTickCount();
     Atomic64Load((int64_t*)&tBase, (int64_t*)&gHighResTimerInitTimestamp);
-    if (!(dwNowTick - tBase.dwTick > 30000)) {
-      return (dwNowTick - tBase.dwTick) / 1000 + tBase.nSeconds;
+    if (dwNowTick - tBase.dwTick > 30000) {
+      HANDLE hThread;
+      hThread = GetCurrentThread();
+      /* HANDLE hThread for GetThreadPriority */ nPriority = GetThreadPriority(hThread);
+      if (nPriority != 0x7fffffff) {
+        /* int nPriority for SetThreadPriority */ hThread = GetCurrentThread();
+        /* HANDLE hThread for SetThreadPriority */ SetThreadPriority(hThread, nPriority);
+      }
+
+      tRefresh.nSeconds = _time32(nullptr);
+      tRefresh.dwTick = GetTickCount();
+      Atomic64Store((int64_t*)&gHighResTimerInitTimestamp, (int64_t*)&tRefresh);
     }
 
-    HANDLE hThread = GetCurrentThread();
-    int nPriority = GetThreadPriority(hThread);
-    if (nPriority != 0x7fffffff) {
-      /* int nPriority for SetThreadPriority */ hThread = GetCurrentThread();
-      /* HANDLE hThread for SetThreadPriority */ SetThreadPriority(hThread, nPriority);
-    }
-
-    tRefresh.nSeconds = _time32(nullptr);
-    tRefresh.dwTick = GetTickCount();
-    Atomic64Store((int64_t*)&gHighResTimerInitTimestamp, (int64_t*)&tRefresh);
     return (dwNowTick - tBase.dwTick) / 1000 + tBase.nSeconds;
 }
 

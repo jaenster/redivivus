@@ -158,21 +158,19 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
     } while (nShrineClassIdxLoop < 8);
 
     iShrineIdx = 0;
-    if (nShrinesTxtCount <= 0) {
-      return aShrineClassCounts[8];
+    if (nShrinesTxtCount > 0) {
+      do {
+        pShrinesTxt = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine(iShrineIdx);
+        byEffectClass = pShrinesTxt->nEffectClass;
+        if (byEffectClass < 8) {
+          *(int*)((uint8_t*)pObjectControl->sShrinesRng.aShrinesRng[byEffectClass] + pObjectControl->sShrinesRng.nShrinesCount[byEffectClass] * 4) = iShrineIdx;
+          pnShrineClassCount = pObjectControl->sShrinesRng.nShrinesCount + byEffectClass;
+          (*pnShrineClassCount)++;
+        }
+
+        iShrineIdx++;
+      } while (iShrineIdx < nShrinesCount);
     }
-
-    do {
-      pShrinesTxt = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine(iShrineIdx);
-      byEffectClass = pShrinesTxt->nEffectClass;
-      if (byEffectClass < 8) {
-        *(int*)((uint8_t*)pObjectControl->sShrinesRng.aShrinesRng[byEffectClass] + pObjectControl->sShrinesRng.nShrinesCount[byEffectClass] * 4) = iShrineIdx;
-        pnShrineClassCount = pObjectControl->sShrinesRng.nShrinesCount + byEffectClass;
-        (*pnShrineClassCount)++;
-      }
-
-      iShrineIdx++;
-    } while (iShrineIdx < nShrinesCount);
 
     return aShrineClassCounts[8];
 }

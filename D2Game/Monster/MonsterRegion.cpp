@@ -390,18 +390,15 @@ short * __fastcall InitializeSpawnCount(D2MonsterRegionStrc * * ppMonsterRegion,
     }
 
     pMatchedMonData = pMonData;
-    if (!(nMonStatId >= 0 && nMonStatId < sgptDataTable->nTxtMonStatsSize)) {
-      return (short int*)pMatchedMonData;
+    if (nMonStatId >= 0 && nMonStatId < sgptDataTable->nTxtMonStatsSize) {
+      nMonStatId = (int)sgptDataTable->pTxtMonStats[nMonStatId].MonStatsEx;
+      if (nMonStatId >= 0 && nMonStatId < sgptDataTable->nTxtMonStatsExSize && sgptDataTable->pTxtMonStatsEx + nMonStatId && (uint8_t)sgptDataTable->pTxtMonStatsEx[nMonStatId].TotalPieces > 2) {
+        pMatchedMonData->nClassId = nClassId;
+        pMonsterRegion->nSpawnCount++;
+        SKILLS::SkillItem::SEED_RollChampionPack(&pUnit->sSeed, pMatchedMonData, 3);
+      }
     }
 
-    nMonStatId = (int)sgptDataTable->pTxtMonStats[nMonStatId].MonStatsEx;
-    if (!(nMonStatId >= 0 && nMonStatId < sgptDataTable->nTxtMonStatsExSize && sgptDataTable->pTxtMonStatsEx + nMonStatId && (uint8_t)sgptDataTable->pTxtMonStatsEx[nMonStatId].TotalPieces > 2)) {
-      return (short int*)pMatchedMonData;
-    }
-
-    pMatchedMonData->nClassId = nClassId;
-    pMonsterRegion->nSpawnCount++;
-    SKILLS::SkillItem::SEED_RollChampionPack(&pUnit->sSeed, pMatchedMonData, 3);
     return (short int*)pMatchedMonData;
 }
 

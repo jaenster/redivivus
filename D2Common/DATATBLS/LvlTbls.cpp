@@ -584,7 +584,6 @@ D2LvlTypesTxt * __stdcall TXT_LvlTypes_GetLine(int32_t nLvlTypeId) {
     }
 
     return pTxtLvlTypes + nLvlTypeId;
-    return pTxtLvlTypes + nLvlTypeId;
 }
 
 BOOL __stdcall TXT_LvlTypes_CheckIfTypeIsAssignedToAct(int32_t nLvlTypeId, char nAct) {

@@ -125,7 +125,6 @@ BOOL __fastcall SKILLPAL_SrvStFn29_Sacrifice(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Sacrifice do-func: deals a percentage of the hit damage back to the casting paladin as self-damage. Finds the combat entry for the (pUnit, pTarget) pair, caps nDmgFromHit at target's current HP, applies calc[1]% of that as physical damage to the caster via DAMAGE_ApplyDamageToUnit + SERVER_GetHitCalculation, then processes the combat queue entry to complete the hit against pTarget.
 BOOL __fastcall Skills_SrvDoFunc_064_Sacrifice(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int nTargetHp;
     D2DamageStrc sDamage;
     int32_t nDmgFromHit;
     D2SkillsTxt* pSkillsTxtBase = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -139,23 +138,23 @@ BOOL __fastcall Skills_SrvDoFunc_064_Sacrifice(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     uint8_t* pCombatEntry = (uint8_t*)UNIT::SUnitDmg::DAMAGE_FindCombatEntry(pUnit, pTarget);
-    if (!pCombatEntry) {
-      return 1;
+    if (pCombatEntry) {
+      int nTargetHp;
+      memset(&sDamage, 0, 0x70);
+      sDamage.dwHitFlags |= 0x1000;
+      nDmgFromHit = *(int32_t*)(pCombatEntry + 8);
+      nTargetHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
+      if (nTargetHp < nDmgFromHit) {
+        nDmgFromHit = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
+      }
+
+      sDamage.dwPhysDamage = D2Client::Stats::D2ApplyPercent(nDmgFromHit, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxtBase->calc[1], eSkill, nSkillLvl), 100);
+      sDamage.dwDmgTotal = sDamage.dwPhysDamage;
+      UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pUnit, pUnit, 0, &sDamage);
+      UNIT::SUnitDmg::SERVER_GetHitCalculation(pGame, pUnit, pUnit, &sDamage);
+      UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
     }
 
-    memset(&sDamage, 0, 0x70);
-    sDamage.dwHitFlags |= 0x1000;
-    nDmgFromHit = *(int32_t*)(pCombatEntry + 8);
-    nTargetHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
-    if (nTargetHp < nDmgFromHit) {
-      nDmgFromHit = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
-    }
-
-    sDamage.dwPhysDamage = D2Client::Stats::D2ApplyPercent(nDmgFromHit, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxtBase->calc[1], eSkill, nSkillLvl), 100);
-    sDamage.dwDmgTotal = sDamage.dwPhysDamage;
-    UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pUnit, pUnit, 0, &sDamage);
-    UNIT::SUnitDmg::SERVER_GetHitCalculation(pGame, pUnit, pUnit, &sDamage);
-    UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
     return 1;
 }
 
@@ -433,18 +432,15 @@ int __fastcall SKILLPAL_ApplyAuraStateToTarget(D2SkillCallbackContextStrc * pCon
     D2StatListExStrc* pCasterStatList = pNewStatList;
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pNewStatList, UNITSTAT_modifierlist_skill, pAuraArgs->eSkill, 0);
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pCasterStatList, UNITSTAT_modifierlist_level, pAuraArgs->nSkillLvl, 0);
-    if (pAuraArgs->nFlag <= 0) {
-      return 1;
+    if (pAuraArgs->nFlag > 0) {
+      pCasterStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, pAuraArgs->nFlag);
+      if (pCasterStatList) {
+        D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pCasterStatList);
+        D2Common::Stats::StatsEx::FreeStatList(&pCasterStatList->sStatList);
+        D2Common::DATATBLS::ItemStats::D2StatesTogglegfx(pUnit, pAuraArgs->nFlag, 1);
+      }
     }
 
-    pCasterStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, pAuraArgs->nFlag);
-    if (!pCasterStatList) {
-      return 1;
-    }
-
-    D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pCasterStatList);
-    D2Common::Stats::StatsEx::FreeStatList(&pCasterStatList->sStatList);
-    D2Common::DATATBLS::ItemStats::D2StatesTogglegfx(pUnit, pAuraArgs->nFlag, 1);
     return 1;
 }
 
@@ -537,13 +533,14 @@ BOOL __fastcall Skills_SrvDoFunc_065_Prayer(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 // Applies Fist of the Heavens lightning-bolt damage to pUnit. Reads pre-computed damage params from pContext: copies all D2DamageStrc fields, calls SKILLPAL_ApplyAuraStateToTarget if aura flag set, then applies and calculates hit via DAMAGE_ApplyDamageToUnit + SERVER_GetHitCalculation. Returns 1 always.
 uint32_t __fastcall SKILLPAL_HandleFistOfHeavensLightningBolt(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
-    int nCopyCount;
+    uint32_t* pCopySrc;
+    uint32_t* pCopyDst;
     D2DamageAuraArgUnion uScratch;
+    D2SkillCallbackContextStrc sContext;
     D2UnitStrc* pCaster = pContext->pUnit;
     D2SkillAuraArgStrc* pAuraArgs = (D2SkillAuraArgStrc*)pContext->pCallbackArg;
     ::SGAMEDATA* pGame = pContext->pGame;
     if (pAuraArgs->nFlag) {
-      D2SkillCallbackContextStrc sContext;
       memset(&uScratch.sAura.sAuraArg, 0, 0x50);
       uScratch.sAura.sAuraArg.nAuraState = pAuraArgs->nAuraState;
       uScratch.sAura.sAuraArg.nSkillLvl = pAuraArgs->nSkillLvl;
@@ -566,20 +563,20 @@ uint32_t __fastcall SKILLPAL_HandleFistOfHeavensLightningBolt(D2SkillCallbackCon
       sContext.pGame = pGame;
       SKILLPAL_ApplyAuraStateToTarget(&sContext, pUnit);
     }
-    if (!pAuraArgs->pExtra) {
-      return 1;
+    if (pAuraArgs->pExtra) {
+      int nCopyCount;
+      pCopySrc = (uint32_t*)pAuraArgs->pExtra;
+      pCopyDst = (uint32_t*)&uScratch;
+      for (nCopyCount = 0x1c; nCopyCount; nCopyCount--) {
+        *pCopyDst = *pCopySrc;
+        pCopySrc++;
+        pCopyDst++;
+      }
+
+      UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pCaster, pUnit, 1, &uScratch.sDamage);
+      UNIT::SUnitDmg::SERVER_GetHitCalculation(pGame, pCaster, pUnit, &uScratch.sDamage);
     }
 
-    uint32_t* pCopySrc = (uint32_t*)pAuraArgs->pExtra;
-    uint32_t* pCopyDst = (uint32_t*)&uScratch;
-    for (nCopyCount = 0x1c; nCopyCount; nCopyCount--) {
-      *pCopyDst = *pCopySrc;
-      pCopySrc++;
-      pCopyDst++;
-    }
-
-    UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pCaster, pUnit, 1, &uScratch.sDamage);
-    UNIT::SUnitDmg::SERVER_GetHitCalculation(pGame, pCaster, pUnit, &uScratch.sDamage);
     return 1;
 }
 
@@ -926,51 +923,48 @@ BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pHitTarget, nAttackFrameIdx);
-    if (!bInMeleeRange) {
-      return 1;
-    }
-
-    bInMeleeRange = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (bInMeleeRange) {
-      return 1;
-    }
-
-    memset(&sDamage, 0, 0x70);
-    if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
-      sDamage.wResultFlags = 9;
-    } else {
-      wHitResult = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pHitTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
-      sDamage.wResultFlags = wHitResult | 8;
-    }
-
-    sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->calc[0], eSkill, nSkillLvl);
-    if (pDVar1->EType != ELEMENTAL_NONE) {
-      sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->calc[3], eSkill, nSkillLvl);
-      if (sDamage.dwConvPct > 0) {
-        sDamage.nConvType = pDVar1->EType;
-      }
-    }
-
-    SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-      nAttackFrameIdx = D2Client::UNIT::Player::ValidateClassId(pUnit->nClassId);
-      if (nAttackFrameIdx != 0x49) {
-        if (nAttackFrameIdx == 0xd3 || nAttackFrameIdx == 0x1b4) {
-          nCombatType = 5;
+      bInMeleeRange = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+      if (!bInMeleeRange) {
+        memset(&sDamage, 0, 0x70);
+        if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
+          sDamage.wResultFlags = 9;
         } else {
-          nCombatType = 4;
+          wHitResult = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pHitTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
+          sDamage.wResultFlags = wHitResult | 8;
         }
-      } else {
-        nCombatType = 8;
-      }
 
-      Monsters::MONSTER_RecalculateCombatStats(pUnit, nCombatType);
+        sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->calc[0], eSkill, nSkillLvl);
+        if (pDVar1->EType != ELEMENTAL_NONE) {
+          sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->calc[3], eSkill, nSkillLvl);
+          if (sDamage.dwConvPct > 0) {
+            sDamage.nConvType = pDVar1->EType;
+          }
+        }
+
+        SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
+        if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+          nAttackFrameIdx = D2Client::UNIT::Player::ValidateClassId(pUnit->nClassId);
+          if (nAttackFrameIdx != 0x49) {
+            if (nAttackFrameIdx == 0xd3 || nAttackFrameIdx == 0x1b4) {
+              nCombatType = 5;
+            } else {
+              nCombatType = 4;
+            }
+          } else {
+            nCombatType = 8;
+          }
+
+          Monsters::MONSTER_RecalculateCombatStats(pUnit, nCombatType);
+        }
+
+        sDamage.dwHitClass = 0x70;
+        UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pHitTarget, &sDamage, pDVar1->SrcDam);
+        UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pHitTarget, 0);
+        D2Common::Units::SetOverlay(pHitTarget, 0x93, 0);
+      }
     }
 
-    sDamage.dwHitClass = 0x70;
-    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pHitTarget, &sDamage, pDVar1->SrcDam);
-    UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pHitTarget, 0);
-    D2Common::Units::SetOverlay(pHitTarget, 0x93, 0);
     return 1;
 }
 
@@ -1127,6 +1121,7 @@ BOOL __fastcall SKILPAL_SrvStFn35_Vengeance(::SGAMEDATA * pGame, D2UnitStrc * pU
 BOOL __fastcall Skills_SrvDoFunc_073_BlessedHammer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, D2DynamicPathStrc * nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     uint32_t nTargetY;
+    uint32_t nPctBase;
     eD2Skills eSkillSaved = eSkill;
     if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || !(sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
@@ -1164,16 +1159,16 @@ BOOL __fastcall Skills_SrvDoFunc_073_BlessedHammer(::SGAMEDATA * pGame, D2UnitSt
     D2Common::PATH::DynamicPath::PATH_SetPathType(nSkillLvl, 0xe);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(nSkillLvl, pUnit_00, 0);
     int32_t nConcentrationBonusPct = D2Common::Skills::SKILL_GetConcentrationDamageBonus(pUnit, eSkillSaved);
-    if (!nConcentrationBonusPct) {
-      return 1;
+    if (nConcentrationBonusPct) {
+      int32_t nConcentrationBonus;
+      nPctBase = 100;
+      nConcentrationBonus = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_magicmindam, 0);
+      nConcentrationBonus = D2Client::Stats::D2ApplyPercent(nConcentrationBonus, nConcentrationBonusPct + 100, nPctBase);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_magicmindam, nConcentrationBonus, 0);
+      nConcentrationBonusPct = D2Client::Stats::D2ApplyPercent(D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_magicmaxdam, 0), nConcentrationBonusPct + 100, 100);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_magicmaxdam, nConcentrationBonusPct, 0);
     }
 
-    uint32_t nPctBase = 100;
-    int32_t nConcentrationBonus = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_magicmindam, 0);
-    nConcentrationBonus = D2Client::Stats::D2ApplyPercent(nConcentrationBonus, nConcentrationBonusPct + 100, nPctBase);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_magicmindam, nConcentrationBonus, 0);
-    nConcentrationBonusPct = D2Client::Stats::D2ApplyPercent(D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_magicmaxdam, 0), nConcentrationBonusPct + 100, 100);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_magicmaxdam, nConcentrationBonusPct, 0);
     return 1;
 }
 
@@ -1333,50 +1328,45 @@ BOOL __fastcall Skills_SrvDoFunc_079_Conversion(::SGAMEDATA * pGame, D2UnitStrc 
 
       nTargetLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit_00, UNITSTAT_level, 0);
       nConvertCheckOrFrame = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-      if (!(nTargetLevel && nConvertCheckOrFrame < (int)nTargetLevel)) {
-        return 1;
-      }
+      if (nTargetLevel && nConvertCheckOrFrame < (int)nTargetLevel) {
+        pConvStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit_00, STATE_conversion_save);
+        if (!pConvStatList) {
+          pConvStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0, 0, pUnit_00->eUnitType, pUnit_00->nUnitGUID);
+          if (pConvStatList) {
+            D2Common::Stats::StatsEx::SetState(pConvStatList, STATE_conversion_save);
+            D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit_00, pConvStatList, 1);
+            nCurHpRaw = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit_00, UNITSTAT_hitpoints, 0);
+            nDuration = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit_00);
+            D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pConvStatList, UNITSTAT_conversion_level, nTargetLevel, 0);
+            D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pConvStatList, UNITSTAT_conversion_maxhp, nDuration >> 8, 0);
+            nHpScaleResult = D2Client::Stats::D2ApplyPercent(nCurHpRaw >> 8, nConvertCheckOrFrame, nTargetLevel);
+            nCurHp = nHpScaleResult * 0x100;
+            nDuration = D2Client::Stats::D2ApplyPercent(nDuration >> 8, nConvertCheckOrFrame, nTargetLevel);
+            nCurHpRaw = nDuration * 0x100;
+            if (nCurHpRaw < 1) {
+              nCurHpRaw = 1;
+            }
 
-      pConvStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit_00, STATE_conversion_save);
-      if (pConvStatList) {
-        return 1;
-      }
+            nScaledMaxHp = nCurHp;
+            if (nCurHp <= 1) {
+              nScaledMaxHp = 1;
+            }
 
-      pConvStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0, 0, pUnit_00->eUnitType, pUnit_00->nUnitGUID);
-      if (!pConvStatList) {
-        return 1;
-      }
+            nFinalHp = nCurHpRaw;
+            if (nScaledMaxHp < nCurHpRaw) {
+              nFinalHp = nCurHp;
+              if (nCurHp <= 1) {
+                nFinalHp = 1;
+              }
+            }
 
-      D2Common::Stats::StatsEx::SetState(pConvStatList, STATE_conversion_save);
-      D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit_00, pConvStatList, 1);
-      nCurHpRaw = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit_00, UNITSTAT_hitpoints, 0);
-      nDuration = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit_00);
-      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pConvStatList, UNITSTAT_conversion_level, nTargetLevel, 0);
-      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pConvStatList, UNITSTAT_conversion_maxhp, nDuration >> 8, 0);
-      nHpScaleResult = D2Client::Stats::D2ApplyPercent(nCurHpRaw >> 8, nConvertCheckOrFrame, nTargetLevel);
-      nCurHp = nHpScaleResult * 0x100;
-      nDuration = D2Client::Stats::D2ApplyPercent(nDuration >> 8, nConvertCheckOrFrame, nTargetLevel);
-      nCurHpRaw = nDuration * 0x100;
-      if (nCurHpRaw < 1) {
-        nCurHpRaw = 1;
-      }
-
-      nScaledMaxHp = nCurHp;
-      if (nCurHp <= 1) {
-        nScaledMaxHp = 1;
-      }
-
-      nFinalHp = nCurHpRaw;
-      if (nScaledMaxHp < nCurHpRaw) {
-        nFinalHp = nCurHp;
-        if (nCurHp <= 1) {
-          nFinalHp = 1;
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_level, nConvertCheckOrFrame, 0);
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_hitpoints, nFinalHp, 0);
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_maxhp, nCurHpRaw, 0);
+          }
         }
       }
 
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_level, nConvertCheckOrFrame, 0);
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_hitpoints, nFinalHp, 0);
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_maxhp, nCurHpRaw, 0);
       return 1;
     }
 
@@ -1418,11 +1408,10 @@ BOOL __fastcall Skills_SrvDoFunc_080_FistOfTheHeavens(::SGAMEDATA * pGame, D2Uni
     D2Common::Units::Missile::SetTargetX(pUnit_01, pUnit_00->eUnitType);
     D2Common::Units::Missile::SetTargetY(pUnit_01, pUnit_00->nUnitGUID);
     short int nOverlayId = pSkillsTxt->srvoverlay;
-    if (!(nOverlayId >= 0 && (int)nOverlayId < sgptDataTable->nTxtOverlaySize)) {
-      return 1;
+    if (nOverlayId >= 0 && (int)nOverlayId < sgptDataTable->nTxtOverlaySize) {
+      D2Common::Units::SetOverlay(pUnit_00, (int)nOverlayId, 0);
     }
 
-    D2Common::Units::SetOverlay(pUnit_00, (int)nOverlayId, 0);
     return 1;
 }
 

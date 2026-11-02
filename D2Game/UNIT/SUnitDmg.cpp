@@ -127,20 +127,19 @@ uint32_t __fastcall DAMAGE_CheckMonsterTypeVsMonsterType(uint32_t nMonTypeA, int
 
 static uint32_t __stdcall DAMAGE_RollPhysicalDamageRange(int32_t nDamageRange, int32_t nMinPctBonus, D2UnitStrc * pUnit, int32_t nDamageMin, int32_t nRangePctBonus, uint32_t nDamageAccum) {
     uint32_t nRandRoll;
-    if (nDamageRange <= 0) {
-      return (int)nDamageAccum < 0 ? 0 : nDamageAccum;
+    int nAdjustedMin;
+    if (nDamageRange > 0) {
+      int32_t nMinBonusAmt;
+      nMinBonusAmt = D2Client::Stats::D2ApplyPercent(nDamageMin, nMinPctBonus, 100);
+      nAdjustedMin = nDamageMin + nMinBonusAmt;
+      nMinBonusAmt = D2Client::Stats::D2ApplyPercent(nDamageRange, nRangePctBonus, 100);
+      nDamageAccum += nAdjustedMin;
+      if (nDamageRange + nMinBonusAmt > nAdjustedMin) {
+        nRandRoll = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, nDamageRange + nMinBonusAmt - nAdjustedMin);
+        nDamageAccum += nRandRoll;
+      }
     }
 
-    int32_t nMinBonusAmt = D2Client::Stats::D2ApplyPercent(nDamageMin, nMinPctBonus, 100);
-    int nAdjustedMin = nDamageMin + nMinBonusAmt;
-    nMinBonusAmt = D2Client::Stats::D2ApplyPercent(nDamageRange, nRangePctBonus, 100);
-    nDamageAccum += nAdjustedMin;
-    if (!(nDamageRange + nMinBonusAmt > nAdjustedMin)) {
-      return (int)nDamageAccum < 0 ? 0 : nDamageAccum;
-    }
-
-    nRandRoll = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, nDamageRange + nMinBonusAmt - nAdjustedMin);
-    nDamageAccum += nRandRoll;
     return (int)nDamageAccum < 0 ? 0 : nDamageAccum;
 }
 
@@ -701,11 +700,10 @@ uint32_t __fastcall DAMAGE_CalculatePhysicalDamage(D2UnitStrc * pUnit, int32_t b
     }
 
     nRandRoll = (int)nFlatDamage < 0 ? 0 : nFlatDamage;
-    if (byScale == 0x80) {
-      return nRandRoll;
+    if (byScale != 0x80) {
+      nRandRoll = D2Client::Stats::D2ApplyPercent(nRandRoll, (uint32_t)byScale, 0x80);
     }
 
-    nRandRoll = D2Client::Stats::D2ApplyPercent(nRandRoll, (uint32_t)byScale, 0x80);
     return nRandRoll;
 }
 
@@ -1129,16 +1127,16 @@ static int32_t DAMAGE_AbsorbDamageByPercent(D2DamageContext * pCtx, D2ResistTabl
     apply_flat_absorb:
     nFlatAbsorbAmt = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCtx->pDefender, pEntry->eAbsorbFlatStat, 0);
     nFlatAbsorbAmt *= 0x100;
-    if (nFlatAbsorbAmt <= 0) {
-      return nDamage;
-    }
-    if (nFlatAbsorbAmt >= nDamage) {
-      nFlatAbsorbAmt = nDamage;
+    if (nFlatAbsorbAmt > 0) {
+      if (nFlatAbsorbAmt >= nDamage) {
+        nFlatAbsorbAmt = nDamage;
+      }
+
+      pAbsLifePool = &pCtx->pDamage->dwAbsLife;
+      *pAbsLifePool += nFlatAbsorbAmt;
+      nDamage -= nFlatAbsorbAmt;
     }
 
-    pAbsLifePool = &pCtx->pDamage->dwAbsLife;
-    *pAbsLifePool += nFlatAbsorbAmt;
-    nDamage -= nFlatAbsorbAmt;
     return nDamage;
 }
 
@@ -1192,27 +1190,21 @@ static int32_t DAMAGE_CalculateExperienceMultiplier(D2DamageContext * pCtx) {
       return 100;
     }
     if (pDefender->eUnitType == UNIT_PLAYER) {
-      if (pAttackerSave->eUnitType == UNIT_PLAYER) {
-        return 0x11;
+      if (pAttackerSave->eUnitType != UNIT_PLAYER) {
+        uMercType = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pAttackerSave);
+        if (!uMercType) {
+          pAttackerSave = pCtx->pAttacker;
+          uMercType = D2Client::UNIT::CheckFlags(pAttackerSave, UNITFLAG_ISREVIVE);
+          if (!uMercType) {
+            uMercType = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pAttackerSave);
+            if (!uMercType) {
+              return 100;
+            }
+          }
+        }
       }
 
-      uMercType = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pAttackerSave);
-      if (uMercType) {
-        return 0x11;
-      }
-
-      pAttackerSave = pCtx->pAttacker;
-      uMercType = D2Client::UNIT::CheckFlags(pAttackerSave, UNITFLAG_ISREVIVE);
-      if (uMercType) {
-        return 0x11;
-      }
-
-      uMercType = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pAttackerSave);
-      if (uMercType) {
-        return 0x11;
-      }
-
-      return 100;
+      return 0x11;
     }
 
     uMercType = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pDefender);
@@ -2175,11 +2167,10 @@ static uint32_t DAMAGE_GetElementalDamageTypeFlags(uint32_t nParam, int32_t pDam
       uDmgTypeIdx++;
     } while (true);
 
-    if (nParam) {
-      return uDmgTypeFlags | nParam;
+    if (!nParam) {
+      nParam = 0xd;
     }
 
-    nParam = 0xd;
     return uDmgTypeFlags | nParam;
 }
 
@@ -2958,20 +2949,18 @@ static int32_t DAMAGE_GetSkillDamageBonus(D2UnitStrc * pUnit) {
 
     int32_t iVar1 = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0x15c, aStatEntries, 0x20);
     int32_t nBestBonus = 0;
-    if (iVar1 <= 0) {
-      return nBestBonus;
-    }
-
-    do {
+    if (iVar1 > 0) {
       uint32_t bTypeMatch;
-      eItemType = (eD2ItemTypes)(uint16_t)aStatEntries[i].wSubIndex;
-      nBonusVal = aStatEntries[i].nStatValue;
-      if (eItemType == ITEMTYPE_None1 || (pLeftWeapon && (bTypeMatch = D2Common::ITEMS::Items::ITEMS_IsA(pLeftWeapon, eItemType) , bTypeMatch != 0) || pRightWeapon && (bTypeMatch = D2Common::ITEMS::Items::ITEMS_IsA(pRightWeapon, eItemType) , bTypeMatch != 0)) && nBonusVal > nBestBonus) {
-        nBestBonus = nBonusVal;
-      }
+      do {
+        eItemType = (eD2ItemTypes)(uint16_t)aStatEntries[i].wSubIndex;
+        nBonusVal = aStatEntries[i].nStatValue;
+        if (eItemType == ITEMTYPE_None1 || (pLeftWeapon && (bTypeMatch = D2Common::ITEMS::Items::ITEMS_IsA(pLeftWeapon, eItemType) , bTypeMatch != 0) || pRightWeapon && (bTypeMatch = D2Common::ITEMS::Items::ITEMS_IsA(pRightWeapon, eItemType) , bTypeMatch != 0)) && nBonusVal > nBestBonus) {
+          nBestBonus = nBonusVal;
+        }
 
-      i++;
-    } while (i < iVar1);
+        i++;
+      } while (i < iVar1);
+    }
 
     return nBestBonus;
 }
@@ -3011,11 +3000,10 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
           nParryBonus = bIsMissile;
           nullsub_4Arg(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nParryBonus, nAvoidChance, (uint32_t)nSeedMod);
           nRandRoll = 8;
-          if (nAvoidChance < bIsMissile) {
-            return nRandRoll;
+          if (nAvoidChance >= bIsMissile) {
+            nRandRoll = nWeaponClass2;
           }
 
-          nRandRoll = nWeaponClass2;
           return nRandRoll;
         }
 
@@ -3785,16 +3773,14 @@ uint16_t __fastcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * p
     if (wHitFlags & 0x10) {
       wHitFlags &= 0xfffe;
     }
-    if (!(wHitFlags & 1)) {
-      return wHitFlags;
+    if (wHitFlags & 1) {
+      eD2States eUninterruptableState;
+      eUninterruptableState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_uninterruptable);
+      if (eUninterruptableState == STATE_none) {
+        wHitFlags |= 4;
+      }
     }
 
-    eD2States eUninterruptableState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_uninterruptable);
-    if (eUninterruptableState != STATE_none) {
-      return wHitFlags;
-    }
-
-    wHitFlags |= 4;
     return wHitFlags;
 }
 

@@ -322,12 +322,11 @@ uint32_t __fastcall SKILLS_AreaEffect_FindNearestUnit(D2SkillCallbackContextStrc
 
     nUnitY -= pSearchContext->nY;
     nDistSq = nUnitY * nUnitY + nDeltaX * nDeltaX;
-    if (nDistSq >= pSearchContext->nBestDistSq) {
-      return 1;
+    if (nDistSq < pSearchContext->nBestDistSq) {
+      pSearchContext->nBestDistSq = nDistSq;
+      pSearchContext->pNearest = pTargetUnit;
     }
 
-    pSearchContext->nBestDistSq = nDistSq;
-    pSearchContext->pNearest = pTargetUnit;
     return 1;
 }
 
@@ -754,28 +753,24 @@ BOOL __fastcall Q26_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStr
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_Completed);
-    if (BVar2 == 1) {
-      return 0;
+    if (BVar2 != 1) {
+      BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_RewardAwaits);
+      if (BVar2 != 1) {
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_CannotCompleteQuestInGame);
+        Quests::QUESTS::QUEST_SendQuestStatePacket(pUnit, 0x16, 0);
+      }
     }
 
-    BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_RewardAwaits);
-    if (BVar2 == 1) {
-      return 0;
-    }
-
-    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_CannotCompleteQuestInGame);
-    Quests::QUESTS::QUEST_SendQuestStatePacket(pUnit, 0x16, 0);
     return 0;
 }
 
 BOOL __fastcall Q26_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheFallenAngel, QUESTSTATE_JustCompleted);
-    if (!BVar2) {
-      return 0;
+    if (BVar2) {
+      UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x4a, pUnit);
     }
 
-    UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x4a, pUnit);
     return 0;
 }
 
@@ -815,16 +810,14 @@ void __fastcall Q26_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * p
 BOOL __fastcall Q26_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheFallenAngel, QUESTSTATE_JustCompleted);
-    if (!BVar2) {
-      return 0;
+    if (BVar2) {
+      uint16_t nPartyId;
+      nPartyId = UNIT::SUnit::GetPartyId(pUnit);
+      if (nPartyId != 0xffff) {
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q26_PartyMember_SetCompleted, 0);
+      }
     }
 
-    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    if (nPartyId == 0xffff) {
-      return 0;
-    }
-
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q26_PartyMember_SetCompleted, 0);
     return 0;
 }
 
@@ -836,19 +829,16 @@ BOOL __fastcall Q28_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStr
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_Completed);
-    if (BVar2 == 1) {
-      return 0;
-    }
-
-    /* GetQuestState(QUEST_HellsForge=0x1b, RewardAwaits=1): skip members who
+    if (BVar2 != 1) {
+      /* GetQuestState(QUEST_HellsForge=0x1b, RewardAwaits=1): skip members who
                          already have the reward pending */ BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_RewardAwaits);
-    if (BVar2 == 1) {
-      return 0;
+      if (BVar2 != 1) {
+        /* SetQuestState(QUEST_HellsForge=0x1b, CannotCompleteQuestInGame=0xe): other
+                         party members who didn't smash it can no longer complete it self game */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_CannotCompleteQuestInGame);
+        Quests::QUESTS::QUEST_SendQuestStatePacket(pUnit, 0x18, 0);
+      }
     }
 
-    /* SetQuestState(QUEST_HellsForge=0x1b, CannotCompleteQuestInGame=0xe): other
-                         party members who didn't smash it can no longer complete it self game */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_CannotCompleteQuestInGame);
-    Quests::QUESTS::QUEST_SendQuestStatePacket(pUnit, 0x18, 0);
     return 0;
 }
 
@@ -922,16 +912,14 @@ void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * p
 BOOL __fastcall Q22_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
-    if (!BVar2) {
-      return 0;
+    if (BVar2) {
+      uint16_t nPartyId;
+      nPartyId = UNIT::SUnit::GetPartyId(pUnit);
+      if (nPartyId != 0xffff) {
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q22_PartyMember_SetCompleted, 0);
+      }
     }
 
-    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    if (nPartyId == 0xffff) {
-      return 0;
-    }
-
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q22_PartyMember_SetCompleted, 0);
     return 0;
 }
 
@@ -939,56 +927,48 @@ BOOL __fastcall Q22_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStr
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
-    if (BVar2 == 1) {
-      return 0;
+    if (BVar2 != 1) {
+      BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
+      if (BVar2 != 1) {
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_CannotCompleteQuestInGame);
+        Quests::QUESTS::QUEST_SendQuestStatePacket(pUnit, 0x13, 0);
+      }
     }
 
-    BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
-    if (BVar2 == 1) {
-      return 0;
-    }
-
-    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_CannotCompleteQuestInGame);
-    Quests::QUESTS::QUEST_SendQuestStatePacket(pUnit, 0x13, 0);
     return 0;
 }
 
 BOOL __fastcall Q22_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
-    if (!BVar2) {
-      return 0;
+    if (BVar2) {
+      UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x40, pUnit);
     }
 
-    UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x40, pUnit);
     return 0;
 }
 
 BOOL __fastcall Q24_PartyMember_SetAbleGoToAct4(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    D2RoomStrc* pRoom;
+    eD2LevelId eLevel;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_UnknownDuplicate1, QUESTSTATE_Completed);
-    if (BVar1) {
-      return 0;
+    if (!BVar1) {
+      eAct eActNo;
+      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+      if (pRoom) {
+        pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+        eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+        if (eLevel != LEVEL_None) {
+          eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+          if (eActNo == ACT_III) {
+            D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_UnknownDuplicate1, QUESTSTATE_Completed);
+          }
+        }
+      }
     }
 
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return 0;
-    }
-
-    pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if (eLevel == LEVEL_None) {
-      return 0;
-    }
-
-    eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-    if (eActNo != ACT_III) {
-      return 0;
-    }
-
-    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_UnknownDuplicate1, QUESTSTATE_Completed);
     return 0;
 }
 

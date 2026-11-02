@@ -138,11 +138,10 @@ BOOL __fastcall Q32_UpdateQuestStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
       D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_Step0x02);
       return 0;
     }
-    if (pQuestData->nStateFlag != 3) {
-      return 0;
+    if (pQuestData->nStateFlag == 3) {
+      D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_Step0x03);
     }
 
-    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_Step0x03);
     return 0;
 }
 
@@ -443,22 +442,17 @@ BOOL __fastcall Q32_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_Completed);
-    if (bQuestState == 1) {
-      return 0;
+    if (bQuestState != 1) {
+      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_RewardAwaits);
+      if (bQuestState != 1) {
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_JustCompleted);
+        if (bQuestState != 1) {
+          D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_CannotCompleteQuestInGame);
+          QUEST_SendQuestStatePacket(pUnit, 0x20, 0);
+        }
+      }
     }
 
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_RewardAwaits);
-    if (bQuestState == 1) {
-      return 0;
-    }
-
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_JustCompleted);
-    if (bQuestState == 1) {
-      return 0;
-    }
-
-    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_CannotCompleteQuestInGame);
-    QUEST_SendQuestStatePacket(pUnit, 0x20, 0);
     return 0;
 }
 
@@ -697,11 +691,10 @@ bool __fastcall Q32_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 bool __fastcall Q32_SequenceFilter(D2QuestDataStrc * pQuestData) {
     bool bBadPtr;
     if (pQuestData->nStateFlag != 5 && pQuestData->bIsNotIntroduction != '\0') {
-      if (pQuestData->nStateFlag) {
-        return true;
+      if (!pQuestData->nStateFlag) {
+        pQuestData->nStateFlag = 1;
       }
 
-      pQuestData->nStateFlag = 1;
       return true;
     }
 
@@ -891,16 +884,14 @@ void __fastcall Objects_InitFn62(D2ObjectInitFnArg * pInitArg) {
 BOOL __fastcall Q32_PropagateCompleteToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_RescueOnMountArreat, QUESTSTATE_JustCompleted);
-    if (!bJustCompleted) {
-      return 0;
+    if (bJustCompleted) {
+      uint16_t nPartyId;
+      nPartyId = UNIT::SUnit::GetPartyId(pUnit);
+      if (nPartyId != 0xffff) {
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q32_SetCompleteForPartyMember, 0);
+      }
     }
 
-    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    if (nPartyId == 0xffff) {
-      return 0;
-    }
-
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q32_SetCompleteForPartyMember, 0);
     return 0;
 }
 
@@ -910,11 +901,10 @@ BOOL __fastcall Q32_PropagateCompleteToParty(::SGAMEDATA * pGame, D2UnitStrc * p
 BOOL __fastcall Q32_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_RescueOnMountArreat, QUESTSTATE_JustCompleted);
-    if (!bJustCompleted) {
-      return 0;
+    if (bJustCompleted) {
+      UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x51, pUnit);
     }
 
-    UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x51, pUnit);
     return 0;
 }
 
@@ -924,13 +914,12 @@ BOOL __fastcall Q32_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // detect a botched ("wussie") group. Quest must be in log (bIsNotIntroduction).
 BOOL __fastcall Q32_CheckWussieBarricade(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RescueOnMountArreat);
-    if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
-      return 0;
-    }
-
-    int32_t nBarricadeGroup = Q32_FindBarricadeGroup(pQuestData, pUnit);
-    if (nBarricadeGroup >= 0 && pQuestData->pQuestSpecificData.pA1Q4->sQuestGUID1.aPlayerGUID[nBarricadeGroup + 0x18]) {
-      return 1;
+    if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
+      int32_t nBarricadeGroup;
+      nBarricadeGroup = Q32_FindBarricadeGroup(pQuestData, pUnit);
+      if (nBarricadeGroup >= 0 && pQuestData->pQuestSpecificData.pA1Q4->sQuestGUID1.aPlayerGUID[nBarricadeGroup + 0x18]) {
+        return 1;
+      }
     }
 
     return 0;
@@ -1151,11 +1140,10 @@ int32_t __fastcall Q32_GetRemainingPrisonersCount(D2QuestDataStrc * pQuestData) 
     }
 
     int32_t nRemainingTotal = nCount + (pSpecificData->nTotalPrisonersToFree - pSpecificData->nPrisonersFreed - pSpecificData->nPrisonersKilledByMonsters);
-    if (nRemainingTotal >= 0) {
-      return nRemainingTotal;
+    if (nRemainingTotal < 0) {
+      nRemainingTotal = 0;
     }
 
-    nRemainingTotal = 0;
     return nRemainingTotal;
 }
 

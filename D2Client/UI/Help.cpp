@@ -27,12 +27,11 @@
 namespace D2Client::UI::Help {
 
 int32_t __stdcall GetSeenHelpMenuValue() {
-    if (bSeenHelpMenu != -1) {
-      return bSeenHelpMenu;
+    if (bSeenHelpMenu == -1) {
+      bSeenHelpMenu = 0;
+      Storm::Source::SReg::SRegLoadValue("Diablo II", "Help Menu", 1, &bSeenHelpMenu);
     }
 
-    bSeenHelpMenu = 0;
-    Storm::Source::SReg::SRegLoadValue("Diablo II", "Help Menu", 1, &bSeenHelpMenu);
     return bSeenHelpMenu;
 }
 

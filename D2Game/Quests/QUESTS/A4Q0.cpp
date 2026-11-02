@@ -70,13 +70,13 @@ bool __fastcall Q25_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 
 // Q25_ActiveFilter — returns true (quest interaction active) only for target class 0x16f (Tyrael) while QUEST_SpokeToTyrael is not yet Completed; false otherwise. Governs whether the quest icon/interaction shows on Tyrael.
 bool __fastcall Q25_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    if (nTargetClassId != 0x16f) {
-      return false;
-    }
-
-    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SpokeToTyrael, QUESTSTATE_Completed);
-    if (!BVar1) {
-      return true;
+    if (nTargetClassId == 0x16f) {
+      BOOL BVar1;
+      /* GetQuestState(record, 0x18=QUEST_SpokeToTyrael, 0=QUESTSTATE_Completed):
+                         filter stays active only until the quest is completed */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SpokeToTyrael, QUESTSTATE_Completed);
+      if (!BVar1) {
+        return true;
+      }
     }
 
     return false;

@@ -221,11 +221,10 @@ void __fastcall SPRITECACHE_ReleaseHashEntry(int * pHashEntry) {
 
 char * __stdcall IMAGE_ReturnImageExtension(int32_t bUseDcc) {
     char* pszExtension;
-    if (!(!bUseDcc || (pszExtension = (char*)gpszExtDcc , !bUseCompressedData))) {
-      return pszExtension;
+    if (!bUseDcc || (pszExtension = (char*)gpszExtDcc , !bUseCompressedData)) {
+      pszExtension = (char*)gpszExtDc6;
     }
 
-    pszExtension = (char*)gpszExtDc6;
     return pszExtension;
 }
 
@@ -1189,33 +1188,32 @@ static void SPRITECACHE_RemoveFromLRU(int32_t pGfxMemory, int32_t pEntry) {
 // Counts the LRU cache blocks whose async load has not completed (ASYNCDATA_IsComplete == 0); halts on a block with no pAsyncData.
 // It frees nothing, it only counts (returns nPendingCount).
 int32_t __stdcall SPRITECACHE_CountPendingLoads() {
-    D2AsyncData_Line0x128* pAsyncData;
     uint32_t bIsComplete;
+    D2SpriteCacheEntryStrc* pLruEntry;
+    D2CelCacheBlockStrc* pCacheBlock;
     int32_t nPendingCount = 0;
-    if (!D2GfxMemoryStrc_0089db60.pPriorityLruHead) {
-      return nPendingCount;
+    if (D2GfxMemoryStrc_0089db60.pPriorityLruHead) {
+      D2AsyncData_Line0x128* pAsyncData;
+      nPendingCount = 0;
+      pLruEntry = D2GfxMemoryStrc_0089db60.pPriorityLruHead;
+      do {
+        pCacheBlock = (D2CelCacheBlockStrc*)pLruEntry->pData;
+        if (pCacheBlock && !(pCacheBlock->tDecode.nFlags & 1)) {
+          pAsyncData = pCacheBlock->tDecode.pAsyncData;
+          if (!pAsyncData) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb5b);
+            exit(-1);
+          }
+
+          bIsComplete = Fog::Src::AsyncData::ASYNCDATA_IsComplete(pAsyncData);
+          if (!bIsComplete) {
+            nPendingCount++;
+          }
+        }
+
+        pLruEntry = pLruEntry->pNext;
+      } while (pLruEntry);
     }
-
-    nPendingCount = 0;
-    D2SpriteCacheEntryStrc* pLruEntry = D2GfxMemoryStrc_0089db60.pPriorityLruHead;
-    do {
-      D2CelCacheBlockStrc* pCacheBlock;
-      pCacheBlock = (D2CelCacheBlockStrc*)pLruEntry->pData;
-      if (pCacheBlock && !(pCacheBlock->tDecode.nFlags & 1)) {
-        pAsyncData = pCacheBlock->tDecode.pAsyncData;
-        if (!pAsyncData) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb5b);
-          exit(-1);
-        }
-
-        bIsComplete = Fog::Src::AsyncData::ASYNCDATA_IsComplete(pAsyncData);
-        if (!bIsComplete) {
-          nPendingCount++;
-        }
-      }
-
-      pLruEntry = pLruEntry->pNext;
-    } while (pLruEntry);
 
     return nPendingCount;
 }

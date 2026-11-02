@@ -183,25 +183,25 @@ void __thiscall Q17_SetupHratliMapAi(void * pThis, int32_t pMapAI) {
 
 // Q18_ActiveFilter — Lam Esen's Tome (QUEST_LamEsensTome). Decides whether the quest is "active" for gossip on Alkor (target monstats 0xfe = Alkor). Returns true if: quest in-progress (nStateFlag==1) and the player's record shows the quest NOT Completed and NOT FinishedInPreviousGame; OR the player currently carries Lam Esen's Tome item (code 0x20626262). Read-only.
 bool __fastcall Q18_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    if (nTargetClassId != 0xfe) {
-      return false;
-    }
-    /* GetQuestState(LamEsensTome[q0x11], state 0=Completed) — active only if not
+    D2UnitStrc* pTomeItem;
+    if (nTargetClassId == 0xfe) {
+      BOOL bIsQuestCompleted;
+      /* GetQuestState(LamEsensTome[q0x11], state 0=Completed) — active only if not
                          yet completed */ /* GetQuestState(LamEsensTome, state 0xf=FinishedInPreviousGame) — and not
                          finished in a prior game */ if (pQuestData->nStateFlag == 1) {
-      BOOL bIsQuestCompleted;
-      bIsQuestCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_Completed);
-      if (!bIsQuestCompleted) {
-        bIsQuestCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_FinishedInPreviousGame);
+        bIsQuestCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_Completed);
         if (!bIsQuestCompleted) {
-          return true;
+          bIsQuestCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_FinishedInPreviousGame);
+          if (!bIsQuestCompleted) {
+            return true;
+          }
         }
       }
-    }
 
-    D2UnitStrc* pTomeItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20626262);
-    if (pTomeItem) {
-      return true;
+      pTomeItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20626262);
+      if (pTomeItem) {
+        return true;
+      }
     }
 
     return false;
@@ -247,23 +247,19 @@ BOOL __fastcall Q18_PlayerUpdateTomeState(::SGAMEDATA * pGame, D2UnitStrc * pUni
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_Completed);
-    if (bQuestState == 1) {
-      return 0;
-    }
-
-    /* GetQuestState(LamEsensTome, state 1=RewardAwaits) — skip if reward already
+    if (bQuestState != 1) {
+      D2QuestDataStrc* pQuestData;
+      /* GetQuestState(LamEsensTome, state 1=RewardAwaits) — skip if reward already
                          pending */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_RewardAwaits);
-    if (bQuestState == 1) {
-      return 0;
-    }
-
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_LamEsensTome);
-    if (!(pQuestData && (pQuestData->nStateFlag == 2 || pQuestData->nStateFlag == 3))) {
-      return 0;
-    }
-
-    /* SetQuestState(LamEsensTome, state 2=Step0x02) — persist "in progress" when
+      if (bQuestState != 1) {
+        pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_LamEsensTome);
+        if (pQuestData && (pQuestData->nStateFlag == 2 || pQuestData->nStateFlag == 3)) {
+          /* SetQuestState(LamEsensTome, state 2=Step0x02) — persist "in progress" when
                          live state is 2/3 */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_Step0x02);
+        }
+      }
+    }
+
     return 0;
 }
 
@@ -340,29 +336,24 @@ BOOL __fastcall CompleteQuestStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
       pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
       /* GetQuestState(LamEsensTome, state 0=Completed) — bail if player already
                          completed */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_Completed);
-      if (bQuestState) {
-        return 0;
-      }
-
-      /* GetQuestState(LamEsensTome, state 1=RewardAwaits) — bail if reward already
+      if (!bQuestState) {
+        /* GetQuestState(LamEsensTome, state 1=RewardAwaits) — bail if reward already
                          pending */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_RewardAwaits);
-      if (bQuestState) {
-        return 0;
-      }
-
-      eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      ePlayerAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-      if (ePlayerAct != ACT_III) {
-        return 0;
-      }
-
-      /* SetQuestState(LamEsensTome, state 0xd=JustCompleted) — mark fresh-this-game
+        if (!bQuestState) {
+          eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+          ePlayerAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+          if (ePlayerAct == ACT_III) {
+            /* SetQuestState(LamEsensTome, state 0xd=JustCompleted) — mark fresh-this-game
                          completion */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_JustCompleted);
-      /* SetQuestState(LamEsensTome, state 0=Completed) — mark quest permanently
+            /* SetQuestState(LamEsensTome, state 0=Completed) — mark quest permanently
                          done */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_Completed);
-      /* SetQuestState(LamEsensTome, state 1=RewardAwaits) — arm the +5 stat-point
+            /* SetQuestState(LamEsensTome, state 1=RewardAwaits) — arm the +5 stat-point
                          reward for RewardStatPoints */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_RewardAwaits);
-      QUEST_SendQuestInfoToUnit(pGame, pUnit);
+            QUEST_SendQuestInfoToUnit(pGame, pUnit);
+          }
+        }
+      }
+
       return 0;
     }
 
@@ -374,14 +365,13 @@ BOOL __fastcall RewardStatPoints(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void *
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_RewardAwaits);
-    if (BVar2 != 1) {
-      return 0;
+    if (BVar2 == 1) {
+      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_statpts, 5, 0);
+      SendQuestState(pUnit, 0xf);
+      /* UnsetQuestState(LamEsensTome, state 1=RewardAwaits) — consume the reward so
+                         +5 stats granted once */ D2Common::QuestRecord::UnsetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_RewardAwaits);
     }
 
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_statpts, 5, 0);
-    SendQuestState(pUnit, 0xf);
-    /* UnsetQuestState(LamEsensTome, state 1=RewardAwaits) — consume the reward so
-                         +5 stats granted once */ D2Common::QuestRecord::UnsetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_RewardAwaits);
     return 0;
 }
 
@@ -390,18 +380,15 @@ BOOL __fastcall LockCompletingQuest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_Completed);
-    if (BVar2 == 1) {
-      return 0;
-    }
-
-    /* GetQuestState(LamEsensTome, state 1=RewardAwaits) — skip lock if reward
+    if (BVar2 != 1) {
+      /* GetQuestState(LamEsensTome, state 1=RewardAwaits) — skip lock if reward
                          still pending */ BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_RewardAwaits);
-    if (BVar2 == 1) {
-      return 0;
+      if (BVar2 != 1) {
+        /* SetQuestState(LamEsensTome, state 0xe=CannotCompleteQuestInGame) — bar
+                         latecomers from completing self session */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_CannotCompleteQuestInGame);
+      }
     }
 
-    /* SetQuestState(LamEsensTome, state 0xe=CannotCompleteQuestInGame) — bar
-                         latecomers from completing self session */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_CannotCompleteQuestInGame);
     return 0;
 }
 
@@ -571,8 +558,9 @@ void __fastcall Q18_Callback05_ItemDropped(D2QuestDataStrc * pQuestData, D2Quest
 // OBJOP_A3Q1_KhalimsRelicAltar — Lam Esen's Tome object-operate fn (despite the "KhalimsRelicAltar" label this drops Lam Esen's Tome). When the source unit is dead/absent and the attacker has NOT yet Completed the quest: set the drop item code to the Tome (0x20626262) and ITEM_RewardItemToDrop it; on success update the quest-specific struct, install gossip/NPC handlers (Q18_Callback_00/_11), advance live state flag to 3, and broadcast state 1. If already Completed, just play the Moo sound. Reads record (Completed); does not write record bits.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
 BOOL __fastcall OBJOP_A3Q1_KhalimsRelicAltar(D2ObjectOperateFnArg * pOperation) {
-    int32_t nVictimGUID;
     D2ObjectOperateFnArg* pDropCountOut;
+    D2QuestDataA3Q1Strc* pA1Q3Data;
+    uint8_t nPrevStateFlag;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_LamEsensTome);
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
       return 0;
@@ -593,36 +581,34 @@ BOOL __fastcall OBJOP_A3Q1_KhalimsRelicAltar(D2ObjectOperateFnArg * pOperation) 
 
     pOperation->sArg.pVictim->dwDropItemCode = 0x20626262;
     pVictim = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pDropCountOut, nullptr, -1, 0);
-    if (!pVictim) {
-      return 0;
+    if (pVictim) {
+      int32_t nVictimGUID;
+      D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 2);
+      pA1Q3Data = pQuestData->pQuestSpecificData.pA3Q1;
+      pA1Q3Data->nPlayersInArea++;
+      pA1Q3Data->bNotifiedPlayers = '\x01';
+      pA1Q3Data->bCheckPartyForTome = true;
+      pA1Q3Data->nTomeObjectMode = 2;
+      pVictim = pOperation->sArg.pVictim;
+      if (!pVictim) {
+        nVictimGUID = -1;
+      } else {
+        nVictimGUID = pVictim->nUnitGUID;
+      }
+
+      pA1Q3Data->nTomeObjectGUID = nVictimGUID;
+      nPrevStateFlag = pQuestData->nStateFlag;
+      pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q18_Callback00_NpcActivate;
+      pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q18_Callback11_ScrollMessage;
+      if (nPrevStateFlag != 3) {
+        QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q1.cpp", 699);
+      }
+      if (pQuestData->nStateFlagPrev != 1) {
+        pQuestData->nQuestPacketFlags = '\0';
+        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, false);
+      }
     }
 
-    D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 2);
-    D2QuestDataA3Q1Strc* pA1Q3Data = pQuestData->pQuestSpecificData.pA3Q1;
-    pA1Q3Data->nPlayersInArea++;
-    pA1Q3Data->bNotifiedPlayers = '\x01';
-    pA1Q3Data->bCheckPartyForTome = true;
-    pA1Q3Data->nTomeObjectMode = 2;
-    pVictim = pOperation->sArg.pVictim;
-    if (!pVictim) {
-      nVictimGUID = -1;
-    } else {
-      nVictimGUID = pVictim->nUnitGUID;
-    }
-
-    pA1Q3Data->nTomeObjectGUID = nVictimGUID;
-    uint8_t nPrevStateFlag = pQuestData->nStateFlag;
-    pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q18_Callback00_NpcActivate;
-    pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q18_Callback11_ScrollMessage;
-    if (nPrevStateFlag != 3) {
-      QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q1.cpp", 699);
-    }
-    if (pQuestData->nStateFlagPrev == 1) {
-      return 0;
-    }
-
-    pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, false);
     return 0;
 }
 

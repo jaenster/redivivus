@@ -59,7 +59,6 @@ static inline bool __stdcall ARENA_TestFlag(::SGAMEDATA * pGame, uint32_t dwFlag
     }
 
     return (pGame->pArenaCtrl->eArenaFlags & dwFlagMask) != 0;
-    return (pGame->pArenaCtrl->eArenaFlags & dwFlagMask) != 0;
 }
 
 // @sourcefile .\GAME\Arena.cpp
@@ -120,7 +119,6 @@ eD2LevelId __fastcall GetTownLevelFromArenaCtrl(::SGAMEDATA * pGame) {
     }
 
     return pGame->pArenaCtrl->eLevelId;
-    return pGame->pArenaCtrl->eLevelId;
 }
 
 // pGame in EAX: returns pArenaCtrl->nArenaTxtRecord; halts (Arena.cpp line 108, ptArena) when there is no arena control.
@@ -131,7 +129,6 @@ static inline int __stdcall ARENA_GetArenaTxtRecord(::SGAMEDATA * pGame) {
       exit(-1);
     }
 
-    return pGame->pArenaCtrl->nArenaTxtRecord;
     return pGame->pArenaCtrl->nArenaTxtRecord;
 }
 
@@ -417,7 +414,6 @@ static int ARENA_IsScoreDirty(D2UnitStrc * pUnit) {
     }
 
     return pPlayerData->pArena->bScoreDirty;
-    return pPlayerData->pArena->bScoreDirty;
 }
 
 static void __stdcall UpdatePlayerKillCount(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
@@ -509,7 +505,6 @@ uint32_t __fastcall ARENA_GetClientUpdateFlag(::SGAMEDATA * pGame) {
     }
 
     return (uint8_t)(char)pGame->pArenaCtrl->eArenaFlags >> 2 & 1;
-    return (uint8_t)(char)pGame->pArenaCtrl->eArenaFlags >> 2 & 1;
 }
 
 uint32_t __fastcall ARENA_IsArenaLevel(::SGAMEDATA * pGame) {
@@ -518,7 +513,6 @@ uint32_t __fastcall ARENA_IsArenaLevel(::SGAMEDATA * pGame) {
       exit(-1);
     }
 
-    return (uint8_t)(char)pGame->pArenaCtrl->eArenaFlags >> 1 & 1;
     return (uint8_t)(char)pGame->pArenaCtrl->eArenaFlags >> 1 & 1;
 }
 
@@ -529,7 +523,6 @@ uint32_t __fastcall ARENA_IsNoCubeRecipes(::SGAMEDATA * pGame) {
     }
 
     return pGame->pArenaCtrl->eArenaFlags >> 0x10 & 1;
-    return pGame->pArenaCtrl->eArenaFlags >> 0x10 & 1;
 }
 
 eD2ArenaFlags __fastcall ARENA_GetFlags(::SGAMEDATA * pGame) {
@@ -538,7 +531,6 @@ eD2ArenaFlags __fastcall ARENA_GetFlags(::SGAMEDATA * pGame) {
       exit(-1);
     }
 
-    return pGame->pArenaCtrl->eArenaFlags;
     return pGame->pArenaCtrl->eArenaFlags;
 }
 
@@ -550,7 +542,6 @@ int __fastcall ARENA_TestFlags(::SGAMEDATA * pGame, eD2ArenaFlags eMask) {
       exit(-1);
     }
 
-    return pGame->pArenaCtrl->eArenaFlags & eMask;
     return pGame->pArenaCtrl->eArenaFlags & eMask;
 }
 
@@ -581,7 +572,6 @@ BOOL __fastcall ARENA_IsFlag0x40Set(::SGAMEDATA * pGame) {
     }
 
     return (uint8_t)(char)pGame->pArenaCtrl->eArenaFlags >> 6 & 1;
-    return (uint8_t)(char)pGame->pArenaCtrl->eArenaFlags >> 6 & 1;
 }
 
 // Returns bit 0x80 of pArenaCtrl->eArenaFlags (no enum name yet); halts (Arena.cpp line 39, ptArena) when there is no arena control.
@@ -592,7 +582,6 @@ BOOL __fastcall ARENA_IsFlag0x80Set(::SGAMEDATA * pGame) {
       exit(-1);
     }
 
-    return (uint32_t)((uint8_t)(char)pGame->pArenaCtrl->eArenaFlags >> 7);
     return (uint32_t)((uint8_t)(char)pGame->pArenaCtrl->eArenaFlags >> 7);
 }
 
@@ -606,7 +595,6 @@ uint32_t __fastcall ARENA_GetTemplate(::SGAMEDATA * pGame) {
       exit(-1);
     }
 
-    return (uint32_t)(uint8_t)pGame->pArenaCtrl->nTemplateLevel;
     return (uint32_t)(uint8_t)pGame->pArenaCtrl->nTemplateLevel;
 }
 

@@ -582,18 +582,16 @@ BOOL __fastcall Skills_SrvDoFunc_008_MultipleShot(::SGAMEDATA * pGame, D2UnitStr
 
     sSkillArg.nFlags |= 0x10000;
     iVar1 = nArrowSpread - nSideCount - nCenterCount;
-    if (iVar1 <= 0) {
-      return 1;
+    if (iVar1 > 0) {
+      do {
+        sSkillArg.nUnitX = nTargetX;
+        sSkillArg.nUnitY = nTargetY;
+        MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+        nTargetX += nDirX;
+        nTargetY += nDirY;
+        iVar1--;
+      } while (iVar1);
     }
-
-    do {
-      sSkillArg.nUnitX = nTargetX;
-      sSkillArg.nUnitY = nTargetY;
-      MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-      nTargetX += nDirX;
-      nTargetY += nDirY;
-      iVar1--;
-    } while (iVar1);
 
     return 1;
 }
@@ -656,19 +654,19 @@ BOOL __fastcall Skills_SrvDoFunc_010_GuidedArrowLaunch(::SGAMEDATA * pGame, D2Un
       sSkillArg.nMissileTxtNo = eMissileId;
       sSkillArg.nFunctionParam = nUnitX;
       pDamagePctMissile = MISSILES::Missiles::CreatingMissile(pGameSave, &sSkillArg);
-      if (!pDamagePctMissile) {
-        return 1;
-      }
-      if (pInitTarget) {
-        nUnitX = 1;
-      } else {
-        nUnitX = 2;
+      if (pDamagePctMissile) {
+        if (pInitTarget) {
+          nUnitX = 1;
+        } else {
+          nUnitX = 2;
+        }
+
+        D2Common::Units::Missile::SetTargetX(pDamagePctMissile, nUnitX);
+        nUnitX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+        nUnitY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+        D2Common::Units::Missile::SetTargetY(pDamagePctMissile, (short int)((short int)nCursorY - (short int)nUnitY) * 0x10000 + (int)(short int)((short int)nCursorX - (short int)nUnitX));
       }
 
-      D2Common::Units::Missile::SetTargetX(pDamagePctMissile, nUnitX);
-      nUnitX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-      nUnitY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-      D2Common::Units::Missile::SetTargetY(pDamagePctMissile, (short int)((short int)nCursorY - (short int)nUnitY) * 0x10000 + (int)(short int)((short int)nCursorX - (short int)nUnitX));
       return 1;
     }
 
@@ -748,15 +746,13 @@ BOOL __fastcall Skills_SrvDoFunc_011_ChargedStrike(::SGAMEDATA * pGame, D2UnitSt
       sSkillArg.eSkillNo = eSkill;
       sSkillArg.nSkillLevel = nSkillLvl;
       sSkillArg.fpFunction = SkillSor::SKILL_InitChargedBoltPath;
-      if (nChargedBoltCount <= 0) {
-        return 1;
+      if (nChargedBoltCount > 0) {
+        do {
+          sSkillArg.nFunctionParam = nBoltIdx;
+          MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+          nBoltIdx++;
+        } while (nBoltIdx < nChargedBoltCount);
       }
-
-      do {
-        sSkillArg.nFunctionParam = nBoltIdx;
-        MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-        nBoltIdx++;
-      } while (nBoltIdx < nChargedBoltCount);
 
       return 1;
     }
@@ -821,7 +817,6 @@ BOOL __fastcall Skills_SrvDoFunc_012_StrafeContinue(::SGAMEDATA * pGame, D2UnitS
     sSkillArg.fpFunction = SKILLS_AmazonDamagePercentCallback;
     sSkillArg.nFunctionParam = pDmgPctMissile;
     MISSILES::Missiles::CreatingMissile(pGameSave, &sSkillArg);
-    D2SkillStrc* pSkill = pActiveSkill;
     D2Common::Skills::SKILL_SetParam1(pActiveSkill, nArrowsLeft - 1);
     if (!(nArrowsLeft - 1 > 0)) {
       return 0;
@@ -833,80 +828,78 @@ BOOL __fastcall Skills_SrvDoFunc_012_StrafeContinue(::SGAMEDATA * pGame, D2UnitS
     }
 
     D2UnitStrc* pNextTargetUnit = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGameSave, pUnit, 0, 0, nStrafeRadius, 3, nTargetGUID, nullptr);
-    if (!pNextTargetUnit) {
-      return 1;
+    if (pNextTargetUnit) {
+      D2SkillStrc* pSkill = pActiveSkill;
+      D2Common::Skills::SKILL_SetParam2(pSkill, pNextTargetUnit->eUnitType);
+      D2Common::Skills::SKILL_SetParam3(pSkill, pNextTargetUnit->nUnitGUID);
+      nStrafeRadius = D2Client::SKILLS::SkillsAma::GetTxtSkillParam5(eSkill);
+      SkillsServer::SKILLS_SetupAnimTimerPercent(pUnit, nStrafeRadius);
     }
 
-    D2Common::Skills::SKILL_SetParam2(pSkill, pNextTargetUnit->eUnitType);
-    D2Common::Skills::SKILL_SetParam3(pSkill, pNextTargetUnit->nUnitGUID);
-    nStrafeRadius = D2Client::SKILLS::SkillsAma::GetTxtSkillParam5(eSkill);
-    SkillsServer::SKILLS_SetupAnimTimerPercent(pUnit, nStrafeRadius);
     return 1;
 }
 
 // Server-side hit handler for Amazon Impale/Fend multi-hit sequence. Locates the current target (by stored GUID or by melee-range area search), performs a to-hit/damage calculation with optional elemental conversion, decrements the remaining hit counter (skill param1), then searches for the next target in melee range and updates skill params 2/3 accordingly, scheduling the next swing via SKILLS_SetupAnimTimerPercent. Always returns 0 (result communicated via damage queue).
 BOOL __fastcall Skills_SrvDoFunc_013_MultiHitAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+    int32_t nMeleeSearchRange;
+    uint32_t nPrevTargetGUID;
     BOOL bInMeleeRange;
     uint32_t nHitResult;
+    D2UnitStrc* pNextTarget;
+    D2SkillsTxt* pSkillTxt;
     D2DamageStrc sDamage;
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pSkillTxt) {
-      return 0;
-    }
+    int32_t nHitsLeft;
+    pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (pSkillTxt) {
+      D2SkillStrc* pSkill;
+      pSkill = D2Common::Units::GetCurrentSkill(pUnit);
+      if (pSkill) {
+        nMeleeSearchRange = SkillsServer::GetMeleeRangePlusFour(pUnit);
+        nPrevTargetGUID = D2Common::Skills::SKILL_GetParam3(pSkill);
+        pNextTarget = UNIT::SUnit::FindUnitFromTable(pGame, D2Common::Skills::SKILL_GetParam2(pSkill), nPrevTargetGUID);
+        if (pNextTarget && (bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pNextTarget, 0) , bInMeleeRange != 0) || (pNextTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, nMeleeSearchRange, 0x20003, nPrevTargetGUID, nullptr) , pNextTarget != 0)) {
+          memset(&sDamage, 0, 0x70);
+          sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pNextTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
+          if (sDamage.wResultFlags & 1U) {
+            sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
+            if (pSkillTxt->EType != ELEMENTAL_NONE) {
+              sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[3], eSkill, nSkillLvl);
+              if (sDamage.dwConvPct > 0) {
+                sDamage.nConvType = pSkillTxt->EType;
+              }
 
-    D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
-    if (!pSkill) {
-      return 0;
-    }
+              SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
+            }
+          }
 
-    int32_t nMeleeSearchRange = SkillsServer::GetMeleeRangePlusFour(pUnit);
-    uint32_t nPrevTargetGUID = D2Common::Skills::SKILL_GetParam3(pSkill);
-    D2UnitStrc* pNextTarget = UNIT::SUnit::FindUnitFromTable(pGame, D2Common::Skills::SKILL_GetParam2(pSkill), nPrevTargetGUID);
-    if (!(pNextTarget && (bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pNextTarget, 0) , bInMeleeRange != 0) || (pNextTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, nMeleeSearchRange, 0x20003, nPrevTargetGUID, nullptr) , pNextTarget != 0))) {
-      return 0;
-    }
+          *(uint8_t*)(char*)&nSkillLvl = pSkillTxt->SrcDam;
+          if (!(uint8_t)nSkillLvl) {
+            *(uint8_t*)(char*)&nSkillLvl = 0x80;
+          }
 
-    memset(&sDamage, 0, 0x70);
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pNextTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
-    if (sDamage.wResultFlags & 1U) {
-      sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
-      if (pSkillTxt->EType != ELEMENTAL_NONE) {
-        sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[3], eSkill, nSkillLvl);
-        if (sDamage.dwConvPct > 0) {
-          sDamage.nConvType = pSkillTxt->EType;
+          UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pNextTarget, &sDamage, (uint8_t)nSkillLvl);
+          UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pNextTarget, 4);
+          nHitsLeft = D2Common::Skills::SKILL_GetParam1(pSkill);
+          D2Common::Skills::SKILL_SetParam1(pSkill, nHitsLeft - 1);
+          if (nHitsLeft - 1 > 0) {
+            if (!pNextTarget) {
+              nHitResult = -1;
+            } else {
+              nHitResult = pNextTarget->nUnitGUID;
+            }
+
+            pNextTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, nMeleeSearchRange, 0x20003, nHitResult, nullptr);
+            if (pNextTarget) {
+              D2Common::Skills::SKILL_SetParam2(pSkill, pNextTarget->eUnitType);
+              D2Common::Skills::SKILL_SetParam3(pSkill, pNextTarget->nUnitGUID);
+              nMeleeSearchRange = D2Client::SKILLS::GetSkilParam1(eSkill);
+              SkillsServer::SKILLS_SetupAnimTimerPercent(pUnit, nMeleeSearchRange);
+            }
+          }
         }
-
-        SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
       }
     }
 
-    *(uint8_t*)(char*)&nSkillLvl = pSkillTxt->SrcDam;
-    if (!(uint8_t)nSkillLvl) {
-      *(uint8_t*)(char*)&nSkillLvl = 0x80;
-    }
-
-    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pNextTarget, &sDamage, (uint8_t)nSkillLvl);
-    UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pNextTarget, 4);
-    int32_t nHitsLeft = D2Common::Skills::SKILL_GetParam1(pSkill);
-    D2Common::Skills::SKILL_SetParam1(pSkill, nHitsLeft - 1);
-    if (!(nHitsLeft - 1 > 0)) {
-      return 0;
-    }
-    if (!pNextTarget) {
-      nHitResult = -1;
-    } else {
-      nHitResult = pNextTarget->nUnitGUID;
-    }
-
-    pNextTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, nMeleeSearchRange, 0x20003, nHitResult, nullptr);
-    if (!pNextTarget) {
-      return 0;
-    }
-
-    D2Common::Skills::SKILL_SetParam2(pSkill, pNextTarget->eUnitType);
-    D2Common::Skills::SKILL_SetParam3(pSkill, pNextTarget->nUnitGUID);
-    nMeleeSearchRange = D2Client::SKILLS::GetSkilParam1(eSkill);
-    SkillsServer::SKILLS_SetupAnimTimerPercent(pUnit, nMeleeSearchRange);
     return 0;
 }
 
@@ -966,11 +959,10 @@ BOOL __fastcall Skills_SrvDoFunc_014_LightningStrike(::SGAMEDATA * pGame, D2Unit
       sSkillArg.nUnitX = D2Client::Units::GetXPosFromDynamicPathUnit(pAreaHitUnit);
       sSkillArg.nUnitY = D2Client::Units::GetYPosFromDynamicPathUnit(pAreaHitUnit);
       pTarget = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-      if (!pTarget) {
-        return 1;
+      if (pTarget) {
+        D2Common::Units::Missile::SetTargetX(pTarget, nMissileTargetX);
       }
 
-      D2Common::Units::Missile::SetTargetX(pTarget, nMissileTargetX);
       return 1;
     }
 

@@ -178,18 +178,17 @@ BOOL __stdcall LAUNCHER_StartGameWithSelectedCharacter(D2ControlMsg * pControlMs
 }
 
 int __fastcall LAUNCHER_InitNetworkLobbyQueue(D2IniConfigStrc * pIniConfig) {
-    if (pIniConfig->pBNetClientCallbacks) {
-      return 1;
+    if (!pIniConfig->pBNetClientCallbacks) {
+      gpBNetCallbacks = Bnclient::NET_InitAndGetLobbyChatQueue();
+      if (!gpBNetCallbacks) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x94);
+        exit(-1);
+      }
+
+      pIniConfig->pBNetClientCallbacks = gpBNetCallbacks;
+      gpBNetCallbacks->pfnSetLoggingFlag((uint32_t)pIniConfig);
     }
 
-    gpBNetCallbacks = Bnclient::NET_InitAndGetLobbyChatQueue();
-    if (!gpBNetCallbacks) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x94);
-      exit(-1);
-    }
-
-    pIniConfig->pBNetClientCallbacks = gpBNetCallbacks;
-    gpBNetCallbacks->pfnSetLoggingFlag((uint32_t)pIniConfig);
     return 1;
 }
 
@@ -503,12 +502,11 @@ int __fastcall ShowOogErrorDialog(D2OogErrorDataStrc * pErrorData) {
     } else {
       MainMenus::UIMENU_CreatePopupWithContentAndFooter(awszTitle, awszBody, awszFooter, pfnOnClose);
     }
-    if (!bDisconnectOnClose) {
-      return 0;
+    if (bDisconnectOnClose) {
+      D2MCPClient::McpConnect::FreeMCP();
+      gpBNetCallbacks->pfnDisconnect();
     }
 
-    D2MCPClient::McpConnect::FreeMCP();
-    gpBNetCallbacks->pfnDisconnect();
     return 0;
 }
 

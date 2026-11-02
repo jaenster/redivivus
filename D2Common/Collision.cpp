@@ -301,11 +301,10 @@ int32_t __stdcall GetCollisionDistance(D2UnitStrc * pUnit, D2UnitStrc * pTarget)
     }
 
     nHalfSizeSum = nDy + nDx * 2;
-    if (nDx > nDy) {
-      return nHalfSizeSum / 2;
+    if (nDx <= nDy) {
+      nHalfSizeSum = nDx + nDy * 2;
     }
 
-    nHalfSizeSum = nDx + nDy * 2;
     return nHalfSizeSum / 2;
 }
 
@@ -381,11 +380,10 @@ uint32_t __stdcall COLLISION_IsUnitInRange(D2UnitStrc * pUnit, int * pnPosition,
     }
 
     int nAbsDy = pnPosition[1] - nDy;
-    if (nAbsDy >= 0) {
-      return (uint32_t)(nAbsDy * nAbsDy + nAbsDx * nAbsDx <= nRange * nRange);
+    if (nAbsDy < 0) {
+      nAbsDy = -nAbsDy;
     }
 
-    nAbsDy = -nAbsDy;
     return (uint32_t)(nAbsDy * nAbsDy + nAbsDx * nAbsDx <= nRange * nRange);
 }
 
@@ -1215,6 +1213,8 @@ static int32_t __stdcall BoundnigBox_AdaptBoundingBoxToGrid(D2RoomStrc * pRoom, 
 
 // The two stack locals at -0x38 and -0x28 are ONE D2BoundingBoxStrc[3]. BoundnigBox_AdaptBoundingBoxToGrid (0064cdf0) writes up to 3 sub-boxes through the pointer it is handed and the loop here walks elements 1..n-1 from it; naming only the first two elements made the callee's third write land on whatever local the compiler put next, which smashed pCollisionGrid with a tile coordinate.
 int16_t __fastcall CheckCollision_BoundingBox(D2RoomStrc * pRoom, D2BoundingBoxStrc * pBoundingBox, int32_t eCollisionFlag) {
+    D2BoundingBoxStrc* pBoundingBox_00;
+    int nBboxRemaining;
     D2BoundingBoxStrc aBboxSplit[3];
     D2RoomStrc* pRoom_00 = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, pBoundingBox->nLeft, pBoundingBox->nBottom);
     if (!pRoom_00) {
@@ -1232,19 +1232,17 @@ int16_t __fastcall CheckCollision_BoundingBox(D2RoomStrc * pRoom, D2BoundingBoxS
     }
 
     short int eCollisionAccum = CollisionGrid_CheckCollision_BoundingBox(pCollisionGrid, aBboxSplit, (eCollisionFlags)eCollisionFlag);
-    if (nBboxCount <= 1) {
-      return eCollisionAccum;
-    }
-
-    D2BoundingBoxStrc* pBoundingBox_00 = aBboxSplit;
-    int nBboxRemaining = nBboxCount - 1;
-    do {
+    if (nBboxCount > 1) {
       uint16_t eCollisionResult;
-      pBoundingBox_00++;
-      eCollisionResult = CheckCollision_BoundingBox(pRoom_00, pBoundingBox_00, eCollisionFlag);
-      eCollisionAccum |= eCollisionResult;
-      nBboxRemaining--;
-    } while (nBboxRemaining);
+      pBoundingBox_00 = aBboxSplit;
+      nBboxRemaining = nBboxCount - 1;
+      do {
+        pBoundingBox_00++;
+        eCollisionResult = CheckCollision_BoundingBox(pRoom_00, pBoundingBox_00, eCollisionFlag);
+        eCollisionAccum |= eCollisionResult;
+        nBboxRemaining--;
+      } while (nBboxRemaining);
+    }
 
     return eCollisionAccum;
 }
@@ -2010,11 +2008,10 @@ D2RoomStrc * __stdcall GetFreeCoordinates(D2RoomStrc * pRoom, POINT * pPoint, PO
       eCollisionFlags eCollisionResult;
       eCollisionResult = CheckCollision_BlockAll_Width(pRoom, pPoint->x, pPoint->y, nUnitSize, eCollisionFlag);
       if (eCollisionResult == COLBIT_NONE && (!pFieldCoords || (nAbsDeltaX = DATATBLS::FieldTbls::FIELDTBLS_TracePathCheckCollision(pFieldPath, pRoom, pPoint->x, pPoint->y, eCollisionFlagField) , !nAbsDeltaX))) {
-        if (!pFieldPath) {
-          return pRoom;
+        if (pFieldPath) {
+          DATATBLS::FieldTbls::FIELDTBLS_FreePoint(pFieldPath);
         }
 
-        DATATBLS::FieldTbls::FIELDTBLS_FreePoint(pFieldPath);
         return pRoom;
       }
     }
@@ -2750,11 +2747,10 @@ int32_t __fastcall UpdateGetCollision_Type(D2RoomStrc * pOldRoom, int32_t nOldX,
       AddCollision_Type(pRoom, nX, nY, nType, eCollisionFlag);
       return 0;
     }
-    if (!pOldRoom) {
-      return _eCheckResult;
+    if (pOldRoom) {
+      AddCollision_Type(pOldRoom, nOldX, nOldY, nType, eCollisionFlag);
     }
 
-    AddCollision_Type(pOldRoom, nOldX, nOldY, nType, eCollisionFlag);
     return _eCheckResult;
 }
 

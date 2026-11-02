@@ -1401,34 +1401,34 @@ BOOL __stdcall UIMENU_Callback_HellButtonSingleplayerTcpIp(D2ControlMsg * pContr
 }
 
 BOOL __stdcall MAINMENU_OnPressShowExpansionCreditsPage(D2ControlMsg * pControlMsg) {
+    ::D2WinTextBox* pTextBox;
     BOOL bIsExpansionGame = Fog::D2CheckExpansionGame();
-    if (!bIsExpansionGame) {
-      return 1;
+    if (bIsExpansionGame) {
+      D2ControlStrc* pFormControl;
+      MainMenus::FORMS_DestroyList();
+      pFormControl = MainMenus::FORMS_CreateAnyFormFromList(0xda);
+      D2Win::Src::D2WinMain::FORMS_SetGlobalFormImage(pFormControl, 1);
+      D2Win::Src::D2WinMain::SetUnsetFlag0x08(pFormControl, 1);
+      pFormControl = MainMenus::FORMS_CreateAnyFormFromList(0xdb);
+      D2Win::Src::D2WinMain::SetUnsetFlag0x08(pFormControl, 1);
+      pFormControl = MainMenus::FORMS_CreateAnyFormFromList(0xdc);
+      D2Win::Src::D2WinMain::SetUnsetFlag0x08(pFormControl, 1);
+      pTextBox = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromList(0xdd);
+      D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
+      D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x58ce), 0, false, 0);
+      D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x58cf), 0, false, 0);
+      D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x58d0), 0, false, 0);
     }
 
-    MainMenus::FORMS_DestroyList();
-    D2ControlStrc* pFormControl = MainMenus::FORMS_CreateAnyFormFromList(0xda);
-    D2Win::Src::D2WinMain::FORMS_SetGlobalFormImage(pFormControl, 1);
-    D2Win::Src::D2WinMain::SetUnsetFlag0x08(pFormControl, 1);
-    pFormControl = MainMenus::FORMS_CreateAnyFormFromList(0xdb);
-    D2Win::Src::D2WinMain::SetUnsetFlag0x08(pFormControl, 1);
-    pFormControl = MainMenus::FORMS_CreateAnyFormFromList(0xdc);
-    D2Win::Src::D2WinMain::SetUnsetFlag0x08(pFormControl, 1);
-    ::D2WinTextBox* pTextBox = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromList(0xdd);
-    D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x58ce), 0, false, 0);
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x58cf), 0, false, 0);
-    D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x58d0), 0, false, 0);
     return 1;
 }
 
 BOOL __stdcall MAINMENU_OnPressDestroyFormListIfExpansion(D2ControlMsg * pControlMsg) {
     BOOL BVar1 = Fog::D2CheckExpansionGame();
-    if (!BVar1) {
-      return 1;
+    if (BVar1) {
+      MainMenus::FORMS_DestroyList();
     }
 
-    MainMenus::FORMS_DestroyList();
     return 1;
 }
 
@@ -1470,16 +1470,16 @@ BOOL __stdcall CHARSEL_OnPressScrollCharListUp(D2ControlMsg * pControlMsg) {
 }
 
 BOOL __stdcall CHARSEL_OnPressScrollCharListDown(D2ControlMsg * pControlMsg) {
-    if (!(gnCharSelScreenSlotCount + g_nCharSelNavigationIndex < D2Client::CharScreen::TotalCurrentChars)) {
-      return 1;
-    }
-    if (D2Client::CharScreen::nSelectedCharIndex < D2Client::CharScreen::TotalCurrentChars - 1) {
-      D2Client::CharScreen::nSelectedCharIndex++;
+    if (gnCharSelScreenSlotCount + g_nCharSelNavigationIndex < D2Client::CharScreen::TotalCurrentChars) {
+      if (D2Client::CharScreen::nSelectedCharIndex < D2Client::CharScreen::TotalCurrentChars - 1) {
+        D2Client::CharScreen::nSelectedCharIndex++;
+      }
+
+      g_nCharSelNavigationIndex++;
+      DRAW_LocalCharsInSelectionScreen0();
+      CHARSEL_UpdateSelectedCharDisplay();
     }
 
-    g_nCharSelNavigationIndex++;
-    DRAW_LocalCharsInSelectionScreen0();
-    CHARSEL_UpdateSelectedCharDisplay();
     return 1;
 }
 

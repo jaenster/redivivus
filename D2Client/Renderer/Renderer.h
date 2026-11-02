@@ -222,7 +222,7 @@ typedef void (__fastcall *fpSetGamma)(int nGamma);
 #endif
 #ifndef RECON_FPTD_fpSetGlobalLight
 #define RECON_FPTD_fpSetGlobalLight
-typedef void (__fastcall *fpSetGlobalLight)(BYTE nRed, BYTE nGreen, BYTE nBlue);
+typedef void (__fastcall *fpSetGlobalLight)(int nRed, int nGreen, int nBlue);
 #endif
 #ifndef RECON_FPTD_fpSetOption
 #define RECON_FPTD_fpSetOption
@@ -281,7 +281,7 @@ struct D2RendererFunctionsStrc {
     /* 0x6C */ void (*nfpSetDefaultPerspectiveFactor)();
     /* 0x70 */ void (__fastcall *nfpSetPalette)(LPPALETTEENTRY);
     /* 0x74 */ void (__fastcall *nfpSetPaletteTable)(BYTE * *);
-    /* 0x78 */ void (__fastcall *nfpSetGlobalLight)(BYTE, BYTE, BYTE);
+    /* 0x78 */ void (__fastcall *nfpSetGlobalLight)(int, int, int);
     /* 0x7C */ void (__fastcall *nfpDrawGroundTile)(struct D2TileLibraryEntryStrc *, struct D2GfxLightExStrc *, int, int, int, int, BYTE, int, void *);
     /* 0x80 */ void (__fastcall *nfpDrawPerspectiveImage)(struct D2GfxDataStrc *, int, int, DWORD, int, int, BYTE *);
     /* 0x84 */ BOOL (__fastcall *nfpDrawImage)(struct D2GfxDataStrc *, int, int, DWORD, int, BYTE *);

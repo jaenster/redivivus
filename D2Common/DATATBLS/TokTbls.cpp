@@ -265,7 +265,6 @@ D2CompositTxt * __stdcall TxtCompositGetLine(int32_t nId) {
     }
 
     return pTxtComposit + nId;
-    return pTxtComposit + nId;
 }
 
 D2ArmTypeTxt * __stdcall TxtGetArmTypeLine(int32_t nId) {
@@ -274,7 +273,6 @@ D2ArmTypeTxt * __stdcall TxtGetArmTypeLine(int32_t nId) {
       exit(-1);
     }
 
-    return pTxtArmType + nId;
     return pTxtArmType + nId;
 }
 

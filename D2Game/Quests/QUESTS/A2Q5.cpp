@@ -57,13 +57,13 @@ namespace D2Game::Quests::QUESTS::A2Q5 {
 
 // A2Q5 "The Summoner" - fpActiveFilter. Returns true only when the target monster is one of the Arcane Sanctuary gossip NPCs/spirits (classIds 0xaf,0xb0,0xb1,0xb2,0xc7,0xc8,0xc9,0xca,0xd2,0xf4 - 199/200) AND this player's quest record has RewardAwaits set, i.e. the Summoner is already dead and the journal reward is pending. Gates whether the quest is "active" for monster-gossip purposes.
 bool __fastcall Q13_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    if (!(nTargetClassId == 0xb0 || nTargetClassId == 0xaf || nTargetClassId == 199 || nTargetClassId == 0xb1 || nTargetClassId == 0xca || nTargetClassId == 0xf4 || nTargetClassId == 0xd2 || nTargetClassId == 0xc9 || nTargetClassId == 200 || nTargetClassId == 0xb2)) {
-      return false;
-    }
-
-    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_RewardAwaits);
-    if (BVar1 == 1) {
-      return true;
+    if (nTargetClassId == 0xb0 || nTargetClassId == 0xaf || nTargetClassId == 199 || nTargetClassId == 0xb1 || nTargetClassId == 0xca || nTargetClassId == 0xf4 || nTargetClassId == 0xd2 || nTargetClassId == 0xc9 || nTargetClassId == 200 || nTargetClassId == 0xb2) {
+      BOOL BVar1;
+      /* GetQuestState(TheSummoner, RewardAwaits=1): true if Summoner killed and
+                         journal/reward pending */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_RewardAwaits);
+      if (BVar1 == 1) {
+        return true;
+      }
     }
 
     return false;
@@ -152,22 +152,18 @@ BOOL __fastcall Q13_UpdateQuestRecord(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_Completed);
-    if (bQuestState == 1) {
-      return 0;
-    }
-
-    /* GetQuestState(TheSummoner, RewardAwaits=1): bail if reward already pending */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_RewardAwaits);
-    if (bQuestState == 1) {
-      return 0;
-    }
-
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSummoner);
-    if (!(pQuestData && pQuestData->nStateFlag == 1)) {
-      return 0;
-    }
-
-    /* SetQuestState(TheSummoner, Step0x02=2): mark "quest in progress" in player's
+    if (bQuestState != 1) {
+      D2QuestDataStrc* pQuestData;
+      /* GetQuestState(TheSummoner, RewardAwaits=1): bail if reward already pending */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_RewardAwaits);
+      if (bQuestState != 1) {
+        pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSummoner);
+        if (pQuestData && pQuestData->nStateFlag == 1) {
+          /* SetQuestState(TheSummoner, Step0x02=2): mark "quest in progress" in player's
                          saved record */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_Step0x02);
+        }
+      }
+    }
+
     return 0;
 }
 
@@ -210,56 +206,55 @@ void __fastcall Q13_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
 // A2Q5 "The Summoner" - per-player kill-credit check (iterated over players when the Summoner dies). Determines if this player is in the Summoner's room or an adjacent room (pA2Q5->sQuestGUID.aPlayerGUID[1] holds the Summoner room ptr); checks the room and its DRLG adjacent-room list. If the player is in/near the Summoner room AND the quest is not already Completed/RewardAwaits, it sets JustCompleted (0xd) and RewardAwaits (1) in the player's record - granting kill credit and arming the reward. (Halts with internal error 0x10d/0x11c if quest data or room is missing.)
 BOOL __fastcall Q13_CheckSummonerKillAndReward(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    D2QuestDataStrc* pDVar4;
+    uint32_t iAdjacentRoom;
+    BOOL BVar5;
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nAdjacentRoomCount;
+    int bPlayerNearSummoner;
     D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pGame->nDifficulty];
     D2RoomStrc* pDVar3 = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pDVar3) {
-      return 0;
-    }
-
-    D2QuestDataStrc* pDVar4 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSummoner);
-    if (!pDVar4) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x10d);
-      exit(-1);
-    }
-
-    D2QuestDataA2Q5Strc* pDVar1 = pDVar4->pQuestSpecificData.pA2Q5;
-    int bPlayerNearSummoner = 0;
-    if (pDVar3 == pDVar1->pSummonerRoom) {
-      bPlayerNearSummoner = 1;
-    } else {
-      uint32_t iAdjacentRoom;
-      pDVar3 = D2Common::Units::UNITS_GetRoom(pUnit);
-      if (!pDVar3) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11c);
+    if (pDVar3) {
+      D2QuestDataA2Q5Strc* pDVar1;
+      pDVar4 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSummoner);
+      if (!pDVar4) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x10d);
         exit(-1);
       }
 
-      D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pDVar3, &ppAdjacentRooms, (int*)&nAdjacentRoomCount);
-      for (iAdjacentRoom = 0; iAdjacentRoom < nAdjacentRoomCount; iAdjacentRoom++) {
-        if (ppAdjacentRooms[iAdjacentRoom] == pDVar1->pSummonerRoom) {
-          bPlayerNearSummoner = 1;
-          break;
+      pDVar1 = pDVar4->pQuestSpecificData.pA2Q5;
+      bPlayerNearSummoner = 0;
+      if (pDVar3 == pDVar1->pSummonerRoom) {
+        bPlayerNearSummoner = 1;
+      } else {
+        pDVar3 = D2Common::Units::UNITS_GetRoom(pUnit);
+        if (!pDVar3) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11c);
+          exit(-1);
+        }
+
+        D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pDVar3, &ppAdjacentRooms, (int*)&nAdjacentRoomCount);
+        for (iAdjacentRoom = 0; iAdjacentRoom < nAdjacentRoomCount; iAdjacentRoom++) {
+          if (ppAdjacentRooms[iAdjacentRoom] == pDVar1->pSummonerRoom) {
+            bPlayerNearSummoner = 1;
+            break;
+          }
+        }
+      }
+
+      /* GetQuestState(TheSummoner, Completed=0): bail if already complete */ BVar5 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_Completed);
+      /* GetQuestState(TheSummoner, RewardAwaits=1): bail if reward already pending */ if (!BVar5) {
+        BVar5 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_RewardAwaits);
+        if (!BVar5 && bPlayerNearSummoner) {
+          /* SetQuestState(TheSummoner, JustCompleted=0xd): grant kill credit (only if
+                         bInSummonerRoom) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_JustCompleted);
+          /* SetQuestState(TheSummoner, RewardAwaits=1): arm reward-pending now that
+                         Summoner is dead */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_RewardAwaits);
         }
       }
     }
 
-    BOOL BVar5 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_Completed);
-    /* GetQuestState(TheSummoner, RewardAwaits=1): bail if reward already pending */ if (BVar5) {
-      return 0;
-    }
-
-    BVar5 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_RewardAwaits);
-    if (!(!BVar5 && bPlayerNearSummoner)) {
-      return 0;
-    }
-
-    /* SetQuestState(TheSummoner, JustCompleted=0xd): grant kill credit (only if
-                         bInSummonerRoom) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_JustCompleted);
-    /* SetQuestState(TheSummoner, RewardAwaits=1): arm reward-pending now that
-                         Summoner is dead */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_RewardAwaits);
     return 0;
 }
 
@@ -270,24 +265,21 @@ void __fastcall Q13_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 
 // A2Q5 "The Summoner" - per-player completion-sound trigger. If this player's record has JustCompleted (0xd) set and the player is currently in the Arcane Sanctuary (level 0x4a), it attaches the quest-complete "Moo" update event/sound (event 0x33) to the player. Cosmetic feedback on Summoner kill. nParam is the quest data ptr; [nParam+0x6d] is the difficulty index into pQuestRecordPool.
 BOOL __fastcall Q13_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    eD2LevelId eLevelId;
     /* GetQuestState(TheSummoner, JustCompleted=0xd): only play sound on a fresh
                          kill self game */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bIsJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheSummoner, QUESTSTATE_JustCompleted);
-    if (!bIsJustCompleted) {
-      return 0;
+    if (bIsJustCompleted) {
+      D2RoomStrc* pRoom;
+      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+      if (pRoom) {
+        eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+        if (eLevelId == LEVEL_ArcaneSanctuary) {
+          UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x33, pUnit);
+        }
+      }
     }
 
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return 0;
-    }
-
-    eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if (eLevelId != LEVEL_ArcaneSanctuary) {
-      return 0;
-    }
-
-    UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x33, pUnit);
     return 0;
 }
 
@@ -351,16 +343,14 @@ BOOL __fastcall Q13_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUn
     /* GetQuestState(TheSummoner, JustCompleted=0xd): only fan out reward if self
                          player just got the kill */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheSummoner, QUESTSTATE_JustCompleted);
-    if (!BVar2) {
-      return 0;
+    if (BVar2) {
+      uint16_t nPartyId;
+      nPartyId = UNIT::SUnit::GetPartyId(pUnit);
+      if (nPartyId != 0xffff) {
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q13_SetSummonerRewardOnPartyMember, 0);
+      }
     }
 
-    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    if (nPartyId == 0xffff) {
-      return 0;
-    }
-
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q13_SetSummonerRewardOnPartyMember, 0);
     return 0;
 }
 

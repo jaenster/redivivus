@@ -185,11 +185,10 @@ uint32_t __thiscall TSGrowableArray_Ui_CalcChunkSize(BigBuffer * pThis, uint32_t
 // @oracle-method CONFIRMED. 'if (n % m) n += m - n % m; return n' - round up to a multiple, matching the oracle's .RoundToChunk__34TSGrowableArray<3RGN,10TSCD<3RGN>>FUi @100419a0. Declared const in the oracle, and MSVC dropped the unused this here, which is why it presents as a free 2-argument function.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 uint32_t __stdcall TSGrowableArray_Ui_RoundToChunk(uint32_t nValue, uint32_t nMultiple) {
-    if (!(nValue % nMultiple)) {
-      return nValue;
+    if (nValue % nMultiple) {
+      nValue += nMultiple - nValue % nMultiple;
     }
 
-    nValue += nMultiple - nValue % nMultiple;
     return nValue;
 }
 
@@ -241,11 +240,10 @@ uint32_t __thiscall TSGrowableArray_Uc_CalcChunkSize(BigBuffer * pThis, uint32_t
 // @oracle-method CONFIRMED. Same body as TSGrowableArray_Ui_RoundToChunk 004210e0; byte instantiation, SMem tag 0x708880.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 uint32_t __stdcall TSGrowableArray_Uc_RoundToChunk(uint32_t nValue, uint32_t nMultiple) {
-    if (!(nValue % nMultiple)) {
-      return nValue;
+    if (nValue % nMultiple) {
+      nValue += nMultiple - nValue % nMultiple;
     }
 
-    nValue += nMultiple - nValue % nMultiple;
     return nValue;
 }
 
@@ -314,11 +312,10 @@ uint32_t __thiscall TSGrowableArray_UcAlt_CalcChunkSize(BigBuffer * pThis, uint3
 // @oracle-method CONFIRMED. Identical to 004211a0; second byte instantiation, SMem tag 0x70888c.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 uint32_t __stdcall TSGrowableArray_UcAlt_RoundToChunk(uint32_t nValue, uint32_t nMultiple) {
-    if (!(nValue % nMultiple)) {
-      return nValue;
+    if (nValue % nMultiple) {
+      nValue += nMultiple - nValue % nMultiple;
     }
 
-    nValue += nMultiple - nValue % nMultiple;
     return nValue;
 }
 
@@ -688,11 +685,10 @@ void __fastcall TSFixedArray_Ui_Destructor(void * pArray) {
 // @oracle-method PLAUSIBLE. The oracle's operator= body MINUS the trailing chunk-field copy - i.e. the TSFixedArray form, which has no chunk field, as against TSGrowableArray_Ui_Assign 00421ba0 which has it.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void * __thiscall TSFixedArray_Ui_Assign(uint32_t * pArray, void * pSrcArray) {
-    if (pArray == (unsigned int*)pSrcArray) {
-      return pArray;
+    if (pArray != (unsigned int*)pSrcArray) {
+      TSBaseArray_Ui_Copy(pArray, *(uint32_t*)((int)pSrcArray + 4), *(uint32_t**)((int)pSrcArray + 8));
     }
 
-    TSBaseArray_Ui_Copy(pArray, *(uint32_t*)((int)pSrcArray + 4), *(uint32_t**)((int)pSrcArray + 8));
     return pArray;
 }
 
@@ -2627,11 +2623,10 @@ void __stdcall SBigDec(BigData * pDstBignum, BigData * pSrcBignum) {
 // @oracle-note 2026-08-28 pass 4. NOT SBigDel - that is 00424e40. This takes 'this' in ECX plus a delete-flags byte on the stack, which is MSVC's compiler-generated scalar deleting destructor for the BigBuffer object, not a Storm C API entry point. It sits inside the alphabetical SBig* export run purely by linker layout.
 void * __thiscall SBIG_Destructor(BigData * pBigData, uint8_t byDeleteFlags) {
     BigData_Destructor(pBigData);
-    if (!(byDeleteFlags & 1 && pBigData)) {
-      return pBigData;
+    if (byDeleteFlags & 1 && pBigData) {
+      SMem::SMemFree(pBigData, "delete", -1, 0);
     }
 
-    SMem::SMemFree(pBigData, "delete", -1, 0);
     return pBigData;
 }
 

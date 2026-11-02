@@ -110,13 +110,12 @@ bool __fastcall Q40_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 }
 
 bool __fastcall Q40_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    if (nTargetClassId != 0x201) {
-      return false;
-    }
-
-    BOOL bSpokenWithNpc = PLAYER::PlayerIntro::PLAYER_CheckIfSpokenWithNPC(pUnit, pQuestData->pGame, 0x201);
-    if (!bSpokenWithNpc) {
-      return true;
+    if (nTargetClassId == 0x201) {
+      BOOL bSpokenWithNpc;
+      bSpokenWithNpc = PLAYER::PlayerIntro::PLAYER_CheckIfSpokenWithNPC(pUnit, pQuestData->pGame, 0x201);
+      if (!bSpokenWithNpc) {
+        return true;
+      }
     }
 
     return false;

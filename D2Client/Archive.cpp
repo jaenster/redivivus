@@ -29,29 +29,26 @@ uint32_t __thiscall ARCHIVE_ComputeAddress(int * pNode, int32_t nBaseAddr) {
     if ((int)nOffset < 0) {
       return ~nOffset;
     }
-    if (nBaseAddr >= 0) {
-      return nOffset + nBaseAddr;
+    if (nBaseAddr < 0) {
+      nBaseAddr = (int)pNode - *(int*)(*pNode + 4);
     }
 
-    nBaseAddr = (int)pNode - *(int*)(*pNode + 4);
     return nOffset + nBaseAddr;
 }
 
 int32_t __thiscall ARCHIVE_GetNodeOrDefault(int32_t pThis, int32_t nNode) {
-    if (nNode) {
-      return nNode;
+    if (!nNode) {
+      nNode = pThis + 4;
     }
 
-    nNode = pThis + 4;
     return nNode;
 }
 
 uint32_t __thiscall ARCHIVE_GetNodeValue(int32_t pThis, int32_t nNode) {
-    if (nNode) {
-      return (int)*(uint32_t*)(nNode + 4) <= 0 ? 0 : *(uint32_t*)(nNode + 4);
+    if (!nNode) {
+      nNode = pThis + 4;
     }
 
-    nNode = pThis + 4;
     return (int)*(uint32_t*)(nNode + 4) <= 0 ? 0 : *(uint32_t*)(nNode + 4);
 }
 
@@ -204,11 +201,10 @@ int * * __thiscall ARCHIVE_AllocNode(int * * ppList, int32_t nLinkMode, int32_t 
     } else {
       ppNode = 0;
     }
-    if (!nLinkMode) {
-      return ppNode;
+    if (nLinkMode) {
+      ARCHIVE_LinkNode(ppList, ppNode, nLinkMode, nullptr);
     }
 
-    ARCHIVE_LinkNode(ppList, ppNode, nLinkMode, nullptr);
     return ppNode;
 }
 
@@ -229,11 +225,10 @@ int * __thiscall ARCHIVE_FreeNode(int * pNode, uint8_t byFree) {
       *pNode = 0;
       pNode[1] = 0;
     }
-    if (!(byFree & 1)) {
-      return pNode;
+    if (byFree & 1) {
+      Storm::Source::SMem::SMemFree(pNode, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pNode, "delete", -1, 0);
     return pNode;
 }
 

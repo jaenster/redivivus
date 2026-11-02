@@ -542,30 +542,27 @@ void __stdcall INPUT_DialogPageDown(D2UIMouseMsgStrc * pMsg) {
 }
 
 static int DIALOG_HandleEnterKeyEvent(void * pDialog, uint32_t nKeyCode) {
-    uint16_t wKeyCode;
-    if (*(int*)((int)pDialog + 0x20)) {
-      return 0;
-    }
+    uint32_t dwCmdBound;
+    if (!*(int*)((int)pDialog + 0x20)) {
+      uint16_t wKeyCode;
+      dwCmdBound = CmdTbl::CMD_IsCommandBound(5, 1);
+      if (dwCmdBound) {
+        wKeyCode = CmdTbl::CMD_GetKeyForCommand(5, 1);
+        if (wKeyCode == nKeyCode) {
+          return 1;
+        }
+      }
 
-    uint32_t dwCmdBound = CmdTbl::CMD_IsCommandBound(5, 1);
-    if (dwCmdBound) {
-      wKeyCode = CmdTbl::CMD_GetKeyForCommand(5, 1);
-      if (wKeyCode == nKeyCode) {
-        return 1;
+      dwCmdBound = CmdTbl::CMD_IsCommandBound(5, 0);
+      if (dwCmdBound) {
+        wKeyCode = CmdTbl::CMD_GetKeyForCommand(5, 0);
+        if (wKeyCode == nKeyCode) {
+          return 1;
+        }
       }
     }
 
-    dwCmdBound = CmdTbl::CMD_IsCommandBound(5, 0);
-    if (!dwCmdBound) {
-      return 0;
-    }
-
-    wKeyCode = CmdTbl::CMD_GetKeyForCommand(5, 0);
-    if (wKeyCode != nKeyCode) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 void __stdcall INPUT_DialogEnterKey(D2UIMouseMsgStrc * pMsg) {
@@ -846,7 +843,6 @@ D2DialogStrc * __fastcall AllocDialogStrc(int32_t nX, int32_t nY, fpDialogFunc f
       exit(-1);
     }
 
-    return pDialog;
     return pDialog;
 }
 

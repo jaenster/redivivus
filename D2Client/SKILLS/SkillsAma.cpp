@@ -245,11 +245,10 @@ BOOL __fastcall Skills_CltDoFunc_Ama_PlayDoSound(D2UnitStrc * pUnit, eD2Skills e
     if (pUnit->eUnitType == UNIT_PLAYER && pSkillTxt->dosounda > 0) {
       Sound::SOUND_PlaySound((int)pSkillTxt->dosounda, pUnit, 0, 0, 0);
     }
-    if (!(pUnit->eUnitType == UNIT_MONSTER && pSkillTxt->dosoundb > 0)) {
-      return 1;
+    if (pUnit->eUnitType == UNIT_MONSTER && pSkillTxt->dosoundb > 0) {
+      Sound::SOUND_PlaySound((int)pSkillTxt->dosoundb, pUnit, 0, 0, 0);
     }
 
-    Sound::SOUND_PlaySound((int)pSkillTxt->dosoundb, pUnit, 0, 0, 0);
     return 1;
 }
 
@@ -298,18 +297,16 @@ BOOL __fastcall Skills_CltDoFunc_Ama_MultiShotArrows(D2UnitStrc * pUnit, eD2Skil
       sSkillArg.nSkillLevel = nSkillLvl;
       sSkillArg.nMissileTxtNo = eCltMissileId;
       sSkillArg.nActivateFrame = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
-      if (nArrowCount <= 0) {
-        return 1;
+      if (nArrowCount > 0) {
+        do {
+          sSkillArg.nUnitX = nTargetX;
+          sSkillArg.nUnitY = nTargetY;
+          UNIT::Missile::MakeMissile(&sSkillArg);
+          nTargetX += nDirX;
+          nTargetY += nDirY;
+          nArrowCount--;
+        } while (nArrowCount);
       }
-
-      do {
-        sSkillArg.nUnitX = nTargetX;
-        sSkillArg.nUnitY = nTargetY;
-        UNIT::Missile::MakeMissile(&sSkillArg);
-        nTargetX += nDirX;
-        nTargetY += nDirY;
-        nArrowCount--;
-      } while (nArrowCount);
 
       return 1;
     }
@@ -355,19 +352,19 @@ BOOL __fastcall Skills_CltDoFunc_Ama_GuidedArrow(D2UnitStrc * pUnit, eD2Skills e
       sSkillArg.pTarget = pTarget;
       sSkillArg.eSkillNo = eSkill;
       pMissileUnit = UNIT::Missile::MakeMissile(&sSkillArg);
-      if (!pMissileUnit) {
-        return 1;
-      }
-      if (pTarget) {
-        nTargetMode = 1;
-      } else {
-        nTargetMode = 2;
+      if (pMissileUnit) {
+        if (pTarget) {
+          nTargetMode = 1;
+        } else {
+          nTargetMode = 2;
+        }
+
+        D2Common::Units::Missile::SetTargetX(pMissileUnit, nTargetMode);
+        nTargetMode = Units::GetXPosFromDynamicPathUnit(pUnit);
+        nUnitPosY = Units::GetYPosFromDynamicPathUnit(pUnit);
+        D2Common::Units::Missile::SetTargetY(pMissileUnit, (short int)((short int)nTargetY - (short int)nUnitPosY) * 0x10000 + (int)(short int)((short int)nTargetX - (short int)nTargetMode));
       }
 
-      D2Common::Units::Missile::SetTargetX(pMissileUnit, nTargetMode);
-      nTargetMode = Units::GetXPosFromDynamicPathUnit(pUnit);
-      nUnitPosY = Units::GetYPosFromDynamicPathUnit(pUnit);
-      D2Common::Units::Missile::SetTargetY(pMissileUnit, (short int)((short int)nTargetY - (short int)nUnitPosY) * 0x10000 + (int)(short int)((short int)nTargetX - (short int)nTargetMode));
       return 1;
     }
 
@@ -411,15 +408,13 @@ BOOL __fastcall Skills_CltDoFunc_Ama_LinearMissileSpray(D2UnitStrc * pUnit, eD2S
       sSkillArg.eSkillNo = eSkill;
       sSkillArg.nSkillLevel = nSkillLvl;
       sSkillArg.fpFunction = SkillsMon::SKILLSMON_SetMissilePathLinear;
-      if (nMissileCount <= 0) {
-        return 1;
+      if (nMissileCount > 0) {
+        do {
+          sSkillArg.nFunctionParam = nMissileIdx;
+          UNIT::Missile::MakeMissile(&sSkillArg);
+          nMissileIdx++;
+        } while (nMissileIdx < nMissileCount);
       }
-
-      do {
-        sSkillArg.nFunctionParam = nMissileIdx;
-        UNIT::Missile::MakeMissile(&sSkillArg);
-        nMissileIdx++;
-      } while (nMissileIdx < nMissileCount);
 
       return 1;
     }
@@ -597,11 +592,10 @@ BOOL __fastcall Skills_CltDoFunc_Ama_PiercingShot(D2UnitStrc * pUnit, eD2Skills 
     sSkillArg.nUnitX = Units::GetXPosFromDynamicPathUnit(pSecondaryTarget);
     sSkillArg.nUnitY = Units::GetYPosFromDynamicPathUnit(pSecondaryTarget);
     pConfirmedTarget = UNIT::Missile::MakeMissile(&sSkillArg);
-    if (!pConfirmedTarget) {
-      return 1;
+    if (pConfirmedTarget) {
+      D2Common::Units::Missile::SetTargetX(pConfirmedTarget, nSearchRange);
     }
 
-    D2Common::Units::Missile::SetTargetX(pConfirmedTarget, nSearchRange);
     return 1;
 }
 

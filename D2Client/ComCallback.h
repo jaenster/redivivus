@@ -11,6 +11,6 @@
 namespace D2Client::ComCallback {
 
 // Function declarations
-void __fastcall COMCALLBACK_UpdateUserFlags(uint8_t * pbHexChar, uint8_t byKeyByte, uint32_t * pdwShiftReg);
+void __fastcall COMCALLBACK_UpdateUserFlags(uint8_t * pbHexChar, int byKeyByte, uint32_t * pdwShiftReg);
 
 } // namespace D2Client::ComCallback

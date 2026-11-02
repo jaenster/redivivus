@@ -86,20 +86,18 @@ uint32_t __thiscall WND_ResolveListOffset(int * pNode, int * pBase) {
     if ((int)nOffset < 0) {
       return ~nOffset;
     }
-    if ((int)pBase >= 0) {
-      return nOffset + (int)pBase;
+    if ((int)pBase < 0) {
+      pBase = (int*)((int)pNode - *(int*)(*pNode + 4));
     }
 
-    pBase = (int*)((int)pNode - *(int*)(*pNode + 4));
     return nOffset + (int)pBase;
 }
 
 int32_t __thiscall WND_GetNodeOrDefault(int32_t pThis, int32_t pNode) {
-    if (pNode) {
-      return pNode;
+    if (!pNode) {
+      pNode = pThis + 4;
     }
 
-    pNode = pThis + 4;
     return pNode;
 }
 
@@ -161,11 +159,10 @@ void __thiscall WND_InsertListNode(int * * ppList, int * * pNode, int32_t nMode,
 }
 
 uint32_t __thiscall WND_GetNodeMaskedOffset(int32_t pThis, int32_t pNode) {
-    if (pNode) {
-      return (int)*(uint32_t*)(pNode + 4) <= 0 ? 0 : *(uint32_t*)(pNode + 4);
+    if (!pNode) {
+      pNode = pThis + 4;
     }
 
-    pNode = pThis + 4;
     return (int)*(uint32_t*)(pNode + 4) <= 0 ? 0 : *(uint32_t*)(pNode + 4);
 }
 
@@ -261,11 +258,10 @@ int * * __thiscall WND_AllocRecord(int * * ppList, int32_t nMode, int32_t nSize,
     } else {
       ppRecord = 0;
     }
-    if (!nMode) {
-      return ppRecord;
+    if (nMode) {
+      WND_InsertListNode(ppList, ppRecord, nMode, nullptr);
     }
 
-    WND_InsertListNode(ppList, ppRecord, nMode, nullptr);
     return ppRecord;
 }
 
@@ -286,11 +282,10 @@ int * __thiscall WND_UnlinkAndFreeRecord(int * pRecord, uint8_t byFreeFlags) {
       *pRecord = 0;
       pRecord[1] = 0;
     }
-    if (!(byFreeFlags & 1)) {
-      return pRecord;
+    if (byFreeFlags & 1) {
+      Source::SMem::SMemFree(pRecord, "delete", -1, 0);
     }
 
-    Source::SMem::SMemFree(pRecord, "delete", -1, 0);
     return pRecord;
 }
 

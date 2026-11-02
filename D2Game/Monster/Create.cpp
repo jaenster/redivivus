@@ -510,6 +510,7 @@ BOOL __fastcall SpawnMinions_ByPattern(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     D2UnitStrc* pMinion;
     int32_t nClampedPattern;
     D2UnknownCreateMonsterStrc sCreateMonsterParams;
+    int nPatternSlotBase;
     int32_t nSpawnY;
     if (!pUnit) {
       return 0;
@@ -543,34 +544,32 @@ BOOL __fastcall SpawnMinions_ByPattern(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     D2SeedStrc sNextSeed = D2_SEED_NEXT(pUnit->sSeed);
     pUnit->sSeed = sNextSeed;
     int nRandSlot = sNextSeed.nSeedLow % 6;
-    if (nMinionCount <= 0) {
-      return bSpawnedAny;
-    }
-
-    int nPatternSlotBase = nClampedPattern * 6;
-    do {
+    if (nMinionCount > 0) {
       int nPatternEntryIdx;
-      nPatternEntryIdx = nPatternSlotBase + nRandSlot;
-      nRandSlot = (nRandSlot + 5) % 6;
-      sCreateMonsterParams.nX = POINT_ARRAY_006e2cf0[nPatternEntryIdx].x + nSpawnX;
-      sCreateMonsterParams.nY = POINT_ARRAY_006e2cf0[nPatternEntryIdx].y + nSpawnY;
-      sCreateMonsterParams.nGUID = 0;
-      sCreateMonsterParams.pCoordList = 0;
-      sCreateMonsterParams.nSpawnRadius = -1;
-      sCreateMonsterParams.nFlags = wFlags;
-      sCreateMonsterParams.nClassId = nClassId;
-      sCreateMonsterParams.eMode = eMode;
-      sCreateMonsterParams.pRoom = pRoom;
-      sCreateMonsterParams.pGame = pGameSaved;
-      pMinion = CreateMonster(&sCreateMonsterParams);
-      if (pMinion) {
-        bSpawnedAny = 1;
-        Ai::AiGeneral::AssignMinionOwner(pGameSaved, pMinion, nSpawnerGUID, UNIT_MONSTER, 0, 0);
-        Ai::AiGeneral::AddMinionToList(pGameSaved, pUnit, pMinion);
-      }
+      nPatternSlotBase = nClampedPattern * 6;
+      do {
+        nPatternEntryIdx = nPatternSlotBase + nRandSlot;
+        nRandSlot = (nRandSlot + 5) % 6;
+        sCreateMonsterParams.nX = POINT_ARRAY_006e2cf0[nPatternEntryIdx].x + nSpawnX;
+        sCreateMonsterParams.nY = POINT_ARRAY_006e2cf0[nPatternEntryIdx].y + nSpawnY;
+        sCreateMonsterParams.nGUID = 0;
+        sCreateMonsterParams.pCoordList = 0;
+        sCreateMonsterParams.nSpawnRadius = -1;
+        sCreateMonsterParams.nFlags = wFlags;
+        sCreateMonsterParams.nClassId = nClassId;
+        sCreateMonsterParams.eMode = eMode;
+        sCreateMonsterParams.pRoom = pRoom;
+        sCreateMonsterParams.pGame = pGameSaved;
+        pMinion = CreateMonster(&sCreateMonsterParams);
+        if (pMinion) {
+          bSpawnedAny = 1;
+          Ai::AiGeneral::AssignMinionOwner(pGameSaved, pMinion, nSpawnerGUID, UNIT_MONSTER, 0, 0);
+          Ai::AiGeneral::AddMinionToList(pGameSaved, pUnit, pMinion);
+        }
 
-      nMinionCount--;
-    } while (nMinionCount);
+        nMinionCount--;
+      } while (nMinionCount);
+    }
 
     return bSpawnedAny;
 }
@@ -752,6 +751,7 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
     int nRingBottomY;
     BOOL bPtInRect;
     int32_t nCandidateZoneIdx;
+    uint32_t nFlagsFiltered;
     uint32_t nAlignPad;
     int nWalkY;
     bool bRngOdd;
@@ -982,59 +982,57 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
     }
 
     uint8_t bPlaceInRoom = 1;
-    if (nSpawnFlags & 1) {
-      return (D2UnitStrc*)0x1;
-    }
-    if (nSpawnFlags & 0x20) {
-      bPlaceInRoom = 3;
-    }
+    if (!(nSpawnFlags & 1)) {
+      if (nSpawnFlags & 0x20) {
+        bPlaceInRoom = 3;
+      }
 
-    D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_MONSTER, pMonsterSpawnData->nClassId, nSpawnX, nSpawnY, pMonsterSpawnData->pGame, pRoom, bPlaceInRoom, pMonsterSpawnData->eMode, (void*)pMonsterSpawnData->nGUID);
-    if (!pUnit) {
+      D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_MONSTER, pMonsterSpawnData->nClassId, nSpawnX, nSpawnY, pMonsterSpawnData->pGame, pRoom, bPlaceInRoom, pMonsterSpawnData->eMode, (void*)pMonsterSpawnData->nGUID);
+      if (pUnit) {
+        nFlagsFiltered = nSpawnFlags & 8;
+        if (*((uint8_t*)pMonStatsTxt + 0xe) & (uint8_t)gadwBitMasks[2]) {
+          nFlagsFiltered = 1;
+        }
+
+        MonsterRegion::IncreaseMonsterSpawnCount(pMonsterSpawnData->pGame->pMonsterRegion, pWorkingRoom, pUnit, nFlagsFiltered);
+        pCoordList = pMonsterSpawnData->pCoordList;
+        if (!pCoordList) {
+          pCoordList = D2Common::DUNGEON::Dungeon::DRLGROOM_GetCoordListFromSubtilePos(pWorkingRoom, nSpawnX, nSpawnY);
+        }
+
+        Objects::MONSTER_SetSpawnCoordList(pUnit, pCoordList);
+        switch (pMonStatsTxt->Align) {
+          case '\x01':
+            {
+              UNIT::SUnit::SetAlignment(pUnit, '\x02', 1);
+              pUnit->eUnitFlags |= UNITFLAG_NOTC;
+              break;
+            }
+          case '\x02':
+            {
+              UNIT::SUnit::SetAlignment(pUnit, '\x01', 1);
+              break;
+            }
+          default:
+            {
+              UNIT::SUnit::SetAlignment(pUnit, '\0', 1);
+            }
+        }
+
+        if (!(nSpawnFlags & 2)) {
+          MONSTER_ApplySpecialUmods(pUnit, pMonsterSpawnData);
+        }
+
+        MONSTER_OnCreateAttachQuests(pMonsterSpawnData, pUnit);
+        if (!(nSpawnFlags & 0x40)) {
+          MONSTER_SpawnMinionGroup(pMonsterSpawnData, pUnit);
+        }
+      }
+
       return pUnit;
     }
 
-    uint32_t nFlagsFiltered = nSpawnFlags & 8;
-    if (*((uint8_t*)pMonStatsTxt + 0xe) & (uint8_t)gadwBitMasks[2]) {
-      nFlagsFiltered = 1;
-    }
-
-    MonsterRegion::IncreaseMonsterSpawnCount(pMonsterSpawnData->pGame->pMonsterRegion, pWorkingRoom, pUnit, nFlagsFiltered);
-    pCoordList = pMonsterSpawnData->pCoordList;
-    if (!pCoordList) {
-      pCoordList = D2Common::DUNGEON::Dungeon::DRLGROOM_GetCoordListFromSubtilePos(pWorkingRoom, nSpawnX, nSpawnY);
-    }
-
-    Objects::MONSTER_SetSpawnCoordList(pUnit, pCoordList);
-    switch (pMonStatsTxt->Align) {
-      case '\x01':
-        {
-          UNIT::SUnit::SetAlignment(pUnit, '\x02', 1);
-          pUnit->eUnitFlags |= UNITFLAG_NOTC;
-          break;
-        }
-      case '\x02':
-        {
-          UNIT::SUnit::SetAlignment(pUnit, '\x01', 1);
-          break;
-        }
-      default:
-        {
-          UNIT::SUnit::SetAlignment(pUnit, '\0', 1);
-        }
-    }
-
-    if (!(nSpawnFlags & 2)) {
-      MONSTER_ApplySpecialUmods(pUnit, pMonsterSpawnData);
-    }
-
-    MONSTER_OnCreateAttachQuests(pMonsterSpawnData, pUnit);
-    if (nSpawnFlags & 0x40) {
-      return pUnit;
-    }
-
-    MONSTER_SpawnMinionGroup(pMonsterSpawnData, pUnit);
-    return pUnit;
+    return (D2UnitStrc*)0x1;
 }
 
 D2UnitStrc * __fastcall SpawnMonsterAtRoomPos(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, uint32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int16_t nFlags) {
@@ -1157,11 +1155,10 @@ D2UnitStrc * __fastcall SpawnMonsterSetOwnOwner(::SGAMEDATA * pGame, D2RoomStrc 
     sCreateParams.nFlags = wFlags;
     sCreateParams.nY = nY;
     D2UnitStrc* pUnit = CreateMonster(&sCreateParams);
-    if (!pUnit) {
-      return pUnit;
+    if (pUnit) {
+      Ai::AiGeneral::AssignMinionOwner(pGame, pUnit, pUnit->nUnitGUID, UNIT_MONSTER, 1, bTransferBoss);
     }
 
-    Ai::AiGeneral::AssignMinionOwner(pGame, pUnit, pUnit->nUnitGUID, UNIT_MONSTER, 1, bTransferBoss);
     return pUnit;
 }
 
@@ -1174,31 +1171,29 @@ BOOL __fastcall SpawnMinions_AtXY(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32
 
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     int nOwnerGUID = pUnit->nUnitGUID;
-    if (nMinionCount <= 0) {
-      return bAnySpawned;
-    }
-
-    do {
+    if (nMinionCount > 0) {
       D2UnitStrc* pSpawnedMinion;
-      sMonsterSpawnData.nClassId = nClassId;
-      sMonsterSpawnData.nSpawnRadius = nSpawnRadius;
-      sMonsterSpawnData.eMode = eMode;
-      sMonsterSpawnData.pRoom = pRoom;
-      sMonsterSpawnData.nY = nX;
-      sMonsterSpawnData.nGUID = 0;
-      sMonsterSpawnData.pGame = pGame;
-      sMonsterSpawnData.pCoordList = 0;
-      sMonsterSpawnData.nFlags = nFlags;
-      sMonsterSpawnData.nX = nY;
-      pSpawnedMinion = CreateMonster(&sMonsterSpawnData);
-      if (pSpawnedMinion) {
-        bAnySpawned = 1;
-        Ai::AiGeneral::AssignMinionOwner(pGame, pSpawnedMinion, nOwnerGUID, UNIT_MONSTER, 0, 0);
-        Ai::AiGeneral::AddMinionToList(pGame, pUnit, pSpawnedMinion);
-      }
+      do {
+        sMonsterSpawnData.nClassId = nClassId;
+        sMonsterSpawnData.nSpawnRadius = nSpawnRadius;
+        sMonsterSpawnData.eMode = eMode;
+        sMonsterSpawnData.pRoom = pRoom;
+        sMonsterSpawnData.nY = nX;
+        sMonsterSpawnData.nGUID = 0;
+        sMonsterSpawnData.pGame = pGame;
+        sMonsterSpawnData.pCoordList = 0;
+        sMonsterSpawnData.nFlags = nFlags;
+        sMonsterSpawnData.nX = nY;
+        pSpawnedMinion = CreateMonster(&sMonsterSpawnData);
+        if (pSpawnedMinion) {
+          bAnySpawned = 1;
+          Ai::AiGeneral::AssignMinionOwner(pGame, pSpawnedMinion, nOwnerGUID, UNIT_MONSTER, 0, 0);
+          Ai::AiGeneral::AddMinionToList(pGame, pUnit, pSpawnedMinion);
+        }
 
-      nMinionCount--;
-    } while (nMinionCount);
+        nMinionCount--;
+      } while (nMinionCount);
+    }
 
     return bAnySpawned;
 }

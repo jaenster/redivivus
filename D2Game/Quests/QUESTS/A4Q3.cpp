@@ -122,16 +122,15 @@ void __fastcall Q35_SpawnAncientsWave(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // A4Q3 Hell's Forge — Q27_IsClassicGameCompleted: returns 1 only in a CLASSIC (non-expansion) game once Terror's End (Diablo killed) is done, i.e. the game's victory condition for classic D2. Reads TerrorsEnd quest data field_0x14 (Diablo-killed flag). No quest-state writes; pure predicate.
 BOOL __fastcall Q27_IsClassicGameCompleted(::SGAMEDATA * pGame) {
-    if (pGame->bExpansion) {
-      return 0;
+    if (!pGame->bExpansion) {
+      D2QuestDataStrc* pQuestData;
+      pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TerrorsEnd);
+      if (!pQuestData || pQuestData->pQuestSpecificData.pA4Q2->bDiabloKilledBroadcast) {
+        return 1;
+      }
     }
 
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TerrorsEnd);
-    if (!(!pQuestData || pQuestData->pQuestSpecificData.pA4Q2->bDiabloKilledBroadcast)) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 // A4Q3 Hell's Forge — Objects_InitFn78: object init for an Act4 quest object keyed off TerrorsEnd (Diablo) quest data. First touch sets the object's per-quest marker to 2 and update-flag 1 (un-touched/active visual); subsequent touches set update-flag 2 (completed/depleted visual). State stored in pA4Q3 quest-specific GUID scratch, not in the QuestRecord bitfield.
@@ -459,18 +458,15 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
 
 // A4Q3 Hell's Forge — Q28_ActiveFilter (fpActiveFilter): predicate deciding if the quest is "active" for a target. True only for Deckard Cain (monstats 0xf6) when Hell's Forge is not Completed/RewardAwaits, the quest is introduced, the internal stateFlag is set, and the player hasn't yet received the hammer (bGotHammer==0). Gates Cain's give-the-hammer gossip. No state writes.
 bool __fastcall Q28_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    if (nTargetClassId != 0xf6) {
-      return false;
-    }
-
-    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_Completed);
-    if (bQuestState) {
-      return false;
-    }
-
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_RewardAwaits);
-    if (!bQuestState && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlag == 1 && !pQuestData->pQuestSpecificData.pA4Q3->bGotHammer) {
-      return true;
+    if (nTargetClassId == 0xf6) {
+      BOOL bQuestState;
+      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_Completed);
+      if (!bQuestState) {
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_RewardAwaits);
+        if (!bQuestState && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlag == 1 && !pQuestData->pQuestSpecificData.pA4Q3->bGotHammer) {
+          return true;
+        }
+      }
     }
 
     return false;
@@ -533,12 +529,11 @@ BOOL __fastcall Q28_PlayerUpdateForgeState(::SGAMEDATA * pGame, D2UnitStrc * pUn
                          yet -> "talk to Cain / get hammer" step bit */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_Step0x02);
       return 0;
     }
-    if (pForgeQuestData->nStateFlag != 3) {
-      return 0;
+    if (pForgeQuestData->nStateFlag == 3) {
+      /* SetQuestState(QUEST_HellsForge=0x1b, Step0x03=3): internal flag 3 ->
+                         "soulstone on anvil, smash it" step bit */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_Step0x03);
     }
 
-    /* SetQuestState(QUEST_HellsForge=0x1b, Step0x03=3): internal flag 3 ->
-                         "soulstone on anvil, smash it" step bit */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_Step0x03);
     return 0;
 }
 

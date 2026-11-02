@@ -231,29 +231,30 @@ uint16_t * __fastcall AppendAsWideChar(uint16_t * wszText, int nColor) {
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 2052, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     int nFillCount;
+    uint32_t* pFill;
     uint16_t wszDigit[4];
-    if (*wszText == L'\0') {
-      return wszText;
+    if (*wszText != L'\0') {
+      uint16_t* wSource;
+      __frame0.wszBuffer = L'\0';
+      pFill = __frame0.wszBufferTail;
+      for (nFillCount = 0x1ff; nFillCount; nFillCount--) {
+        *pFill = 0;
+        pFill++;
+      }
+
+      *(uint16_t*)pFill = 0;
+      wSource = D2Lang::StrTable::strtable::GetLocaleString(0xf9a);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(&__frame0.wszBuffer, wSource);
+      wszDigit[0] = L'\0';
+      wszDigit[1] = 0;
+      wszDigit[2] = 0;
+      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(__frame0.szDigit, "%c", (int)(char)((char)nColor + '0'));
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDigit, __frame0.szDigit, 2);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszDigit);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszText);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, &__frame0.wszBuffer);
     }
 
-    __frame0.wszBuffer = L'\0';
-    uint32_t* pFill = __frame0.wszBufferTail;
-    for (nFillCount = 0x1ff; nFillCount; nFillCount--) {
-      *pFill = 0;
-      pFill++;
-    }
-
-    *(uint16_t*)pFill = 0;
-    uint16_t* wSource = D2Lang::StrTable::strtable::GetLocaleString(0xf9a);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(&__frame0.wszBuffer, wSource);
-    wszDigit[0] = L'\0';
-    wszDigit[1] = 0;
-    wszDigit[2] = 0;
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(__frame0.szDigit, "%c", (int)(char)((char)nColor + '0'));
-    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDigit, __frame0.szDigit, 2);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszDigit);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszText);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, &__frame0.wszBuffer);
     return wszText;
 }
 
@@ -312,42 +313,44 @@ uint16_t * __fastcall UI_WrapStringWithColorCodes(uint16_t * wszText, char cStar
     #pragma pack(pop)
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1022, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
+    uint16_t* pColorCode;
     int nFillCount;
+    uint32_t* pFill;
     uint16_t wszDigit[4];
     char szDigit[4];
-    if (*wszText == L'\0') {
-      return wszText;
+    if (*wszText != L'\0') {
+      int32_t nLength;
+      nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
+      if (nLength >= 500) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x39a);
+        exit(-1);
+      }
+
+      __frame0.wszBuffer = L'\0';
+      pFill = __frame0.wszBufferTail;
+      for (nFillCount = 0xff; nFillCount; nFillCount--) {
+        *pFill = 0;
+        pFill++;
+      }
+
+      *(uint16_t*)pFill = 0;
+      wszDigit[0] = L'\0';
+      wszDigit[1] = 0;
+      wszDigit[2] = 0;
+      pColorCode = D2Lang::StrTable::strtable::GetLocaleString(0xf9a);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(&__frame0.wszBuffer, pColorCode);
+      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDigit, "%c", (int)(char)(cStartColor + '0'));
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDigit, szDigit, 2);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszDigit);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszText);
+      pColorCode = D2Lang::StrTable::strtable::GetLocaleString(0xf9a);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, pColorCode);
+      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDigit, "%c", (int)(char)(cEndColor + '0'));
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDigit, szDigit, 2);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszDigit);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, &__frame0.wszBuffer);
     }
 
-    int32_t nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
-    if (nLength >= 500) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x39a);
-      exit(-1);
-    }
-
-    __frame0.wszBuffer = L'\0';
-    uint32_t* pFill = __frame0.wszBufferTail;
-    for (nFillCount = 0xff; nFillCount; nFillCount--) {
-      *pFill = 0;
-      pFill++;
-    }
-
-    *(uint16_t*)pFill = 0;
-    wszDigit[0] = L'\0';
-    wszDigit[1] = 0;
-    wszDigit[2] = 0;
-    uint16_t* pColorCode = D2Lang::StrTable::strtable::GetLocaleString(0xf9a);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(&__frame0.wszBuffer, pColorCode);
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDigit, "%c", (int)(char)(cStartColor + '0'));
-    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDigit, szDigit, 2);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszDigit);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszText);
-    pColorCode = D2Lang::StrTable::strtable::GetLocaleString(0xf9a);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, pColorCode);
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDigit, "%c", (int)(char)(cEndColor + '0'));
-    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDigit, szDigit, 2);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszDigit);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, &__frame0.wszBuffer);
     return wszText;
 }
 
@@ -772,11 +775,10 @@ static uint32_t __stdcall UI_GetRosterPlayerInfoForDisplay(uint16_t * wszText, i
     }
 
     uint32_t bIsPartied = GAME::Roster::CheckRostersArePartied(nRoster1GUID, nRosterGUID);
-    if (!bIsPartied) {
-      return 1;
+    if (bIsPartied) {
+      *pbIsPartied = 1;
     }
 
-    *pbIsPartied = 1;
     return 1;
 }
 
@@ -1296,7 +1298,6 @@ BOOL __fastcall GetUIFlag(eD2UIvars eUI) {
     }
 
     return (&GFX_bShowUIFlag.Game)[eUI];
-    return (&GFX_bShowUIFlag.Game)[eUI];
 }
 
 // Handles key input and dismisses UI panels based on gUIFlagDismissModeTable. Scans all active UI flags and applies dismiss action (0=ignore, 1=close, 2=block, 4=close NPC). Special handling for quest log (index 5) and quest resurrect (index 9) with tick throttle. Returns 0 if action was blocked or consumed, 1 if input should propagate.
@@ -1629,7 +1630,7 @@ void __stdcall UI_CloseCurrentDialog() {
       gpUiGoldDialogCancelButton = 0;
     }
     if (gnGoldDialogTransactionType) {
-      if (!(0 < gnGoldDialogTransactionType && (int32_t)gnGoldDialogTransactionType <= 4)) {
+      if (!(0 < gnGoldDialogTransactionType && gnGoldDialogTransactionType <= 4)) {
         return;
       }
 
@@ -1681,11 +1682,10 @@ int __stdcall UI_GoldDialogScrollCallback() {
     }
 
     gnGoldDialogTransactionMode = uGoldAmount;
-    if (!gpDialogDefaultActionCallback) {
-      return 0;
+    if (gpDialogDefaultActionCallback) {
+      gpDialogDefaultActionCallback->pVtable->SetNumber(gpDialogDefaultActionCallback, uGoldAmount);
     }
 
-    gpDialogDefaultActionCallback->pVtable->SetNumber(gpDialogDefaultActionCallback, uGoldAmount);
     return 0;
 }
 
@@ -1926,13 +1926,12 @@ void __fastcall UI_RegisterAutoMapEventHandlers(int32_t bRegister) {
 }
 
 DC6 * __stdcall GetBuySellBtnDC6() {
-    char szPath[260];
-    if (pUi_Panel_buysellbtn) {
-      return pUi_Panel_buysellbtn;
+    if (!pUi_Panel_buysellbtn) {
+      char szPath[260];
+      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\ui\\panel\\buysellbtn", "DATA\\GLOBAL");
+      pUi_Panel_buysellbtn = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
     }
 
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\ui\\panel\\buysellbtn", "DATA\\GLOBAL");
-    pUi_Panel_buysellbtn = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
     return pUi_Panel_buysellbtn;
 }
 
@@ -2048,11 +2047,10 @@ uint32_t __fastcall DRAW_GetVisibleViewportBounds(int * pnBounds) {
       if (GFX_bShowUIFlag._x1D || GFX_bShowUIFlag.PartyMenu || GFX_bShowUIFlag.CharStat || GFX_bShowUIFlag.Quest || GFX_bShowUIFlag.MercMenu || GFX_bShowUIFlag.UnusedScroll || GFX_bShowUIFlag.WaypointMenu) {
         *pnBounds = ScreenSizeX / 2;
       }
-      if (!(GFX_bShowUIFlag.Inventory || GFX_bShowUIFlag.Skill)) {
-        return (uint32_t)(*pnBounds != pnBounds[2]);
+      if (GFX_bShowUIFlag.Inventory || GFX_bShowUIFlag.Skill) {
+        pnBounds[2] = ScreenSizeX / 2;
       }
 
-      pnBounds[2] = ScreenSizeX / 2;
       return (uint32_t)(*pnBounds != pnBounds[2]);
     }
 
@@ -4506,11 +4504,10 @@ static int32_t UI_GetControlConfigRowAtY(int32_t nMouseY) {
     }
 
     i = gnUICtrlConfigTotalRows;
-    if (gnUICtrlConfigTotalRows < 0) {
-      return i;
+    if (gnUICtrlConfigTotalRows >= 0) {
+      i = gnUICtrlConfigTotalRows - 1;
     }
 
-    i = gnUICtrlConfigTotalRows - 1;
     return i;
 }
 
@@ -4609,18 +4606,15 @@ BOOL UI_IsMouseOverControlConfigTab(int32_t nMouseX, int32_t nMouseY) {
 
 static uint32_t UI_IsControlConfigCellClickable(int32_t nMousePosY, int32_t nMousePosX) {
     int bInArea = UI_IsMouseInControlConfigArea(nMousePosX, nMousePosY);
-    if (!bInArea) {
-      return 0;
-    }
-
-    int32_t nRowIndex = UI_GetControlConfigRowAtY(nMousePosY);
-    if (nRowIndex != g_ControlConfigUIState) {
-      return 0;
-    }
-
-    bInArea = (ScreenSizeX - 0x26c) / 2;
-    if ((uint32_t)(nMousePosX < bInArea + 0x12 + (ScreenSizeX + bInArea * -2 - 0x31) / 3 * 2) == nConfigControlSelected) {
-      return 1;
+    if (bInArea) {
+      int32_t nRowIndex;
+      nRowIndex = UI_GetControlConfigRowAtY(nMousePosY);
+      if (nRowIndex == g_ControlConfigUIState) {
+        bInArea = (ScreenSizeX - 0x26c) / 2;
+        if ((uint32_t)(nMousePosX < bInArea + 0x12 + (ScreenSizeX + bInArea * -2 - 0x31) / 3 * 2) == nConfigControlSelected) {
+          return 1;
+        }
+      }
     }
 
     return 0;
@@ -4630,13 +4624,12 @@ static uint32_t UI_IsControlConfigCellClickable(int32_t nMousePosY, int32_t nMou
 // Was code outside any function; no direct reference reaches it in 1.14d.
 BOOL UI_IsMouseOverActiveControlConfigButton(int32_t nMouseX, int32_t nMouseY) {
     int nActiveButton = gnUICtrlConfigActiveButton;
-    if (gnUICtrlConfigActiveButton == 3) {
-      return 0;
-    }
-
-    int32_t nTabIndex = UI_GetControlConfigTabIndex(nMouseX, nMouseY);
-    if (nTabIndex == nActiveButton) {
-      return 1;
+    if (gnUICtrlConfigActiveButton != 3) {
+      int32_t nTabIndex;
+      nTabIndex = UI_GetControlConfigTabIndex(nMouseX, nMouseY);
+      if (nTabIndex == nActiveButton) {
+        return 1;
+      }
     }
 
     return 0;
@@ -5803,8 +5796,8 @@ void __stdcall INPUT_SkillTreeButtonDown(D2UIMouseMsgStrc * pMsg) {
 void __stdcall INPUT_StatScreenButtonUp(D2UIMouseMsgStrc * pMsg) {
     BOOL bEscMenuOpen;
     uint32_t eBorderType;
-    uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
-    uint16_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
+    uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
     DWORD eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode == 2) {
       bEscMenuOpen = GetUIFlag(UI_ESCMENU);
@@ -5818,7 +5811,7 @@ void __stdcall INPUT_StatScreenButtonUp(D2UIMouseMsgStrc * pMsg) {
     if (eResMode != 2) {
       if (gbUIStatButtonHovered) {
         eBorderType = Path::DRAW_GetTypeOfBorder();
-        bEscMenuOpen = UI_IsMouseOnStatButton(eBorderType, (uint32_t)nMouseX, (uint32_t)nMouseY);
+        bEscMenuOpen = UI_IsMouseOnStatButton(eBorderType, nMouseX, nMouseY);
         if (bEscMenuOpen) {
           gbUIStatButtonHovered = 0;
           SetUIFlag(UI_NEWSTATS, UI_RESET, 0);
@@ -6224,20 +6217,18 @@ static int32_t UI_GetStatDescriptionStringId(D2UnitStrc * nUnit) {
 
     int32_t iVar1 = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(nUnit, 0x15c, aBonusStringIds, 0x20);
     int nBestStringId = 0;
-    if (iVar1 <= 0) {
-      return nBestStringId;
-    }
-
-    do {
+    if (iVar1 > 0) {
       uint32_t bIsOfType;
-      eItemType = (eD2ItemTypes)(uint16_t)aBonusStringIds[i].wSubIndex;
-      nCandidateStringId = aBonusStringIds[i].nStatValue;
-      if (eItemType == ITEMTYPE_None1 || (pLeftHandItem && (bIsOfType = D2Common::ITEMS::Items::ITEMS_IsA(pLeftHandItem, eItemType) , bIsOfType != 0) || pRightHandItem && (bIsOfType = D2Common::ITEMS::Items::ITEMS_IsA(pRightHandItem, eItemType) , bIsOfType != 0)) && nCandidateStringId > nBestStringId) {
-        nBestStringId = nCandidateStringId;
-      }
+      do {
+        eItemType = (eD2ItemTypes)(uint16_t)aBonusStringIds[i].wSubIndex;
+        nCandidateStringId = aBonusStringIds[i].nStatValue;
+        if (eItemType == ITEMTYPE_None1 || (pLeftHandItem && (bIsOfType = D2Common::ITEMS::Items::ITEMS_IsA(pLeftHandItem, eItemType) , bIsOfType != 0) || pRightHandItem && (bIsOfType = D2Common::ITEMS::Items::ITEMS_IsA(pRightHandItem, eItemType) , bIsOfType != 0)) && nCandidateStringId > nBestStringId) {
+          nBestStringId = nCandidateStringId;
+        }
 
-      i++;
-    } while (i < iVar1);
+        i++;
+      } while (i < iVar1);
+    }
 
     return nBestStringId;
 }
@@ -6296,17 +6287,15 @@ static void __fastcall DRAW_UI_StatWindow_III(int32_t nX, int32_t nY, int32_t nV
 }
 
 static int32_t __stdcall CHAR_AddClassToHitFactor(D2UnitStrc * pUnit, int32_t nValue) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
-      return nValue;
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
+      int nCharClassId;
+      nCharClassId = pUnit->nClassId;
+      D2CharStatsTxt* pCharStatsTxt = nCharClassId >= 0 && nCharClassId < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nCharClassId : nullptr;
+      if (pCharStatsTxt) {
+        nValue += pCharStatsTxt->ToHitFactor;
+      }
     }
 
-    int nCharClassId = pUnit->nClassId;
-    D2CharStatsTxt* pCharStatsTxt = nCharClassId >= 0 && nCharClassId < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nCharClassId : nullptr;
-    if (!pCharStatsTxt) {
-      return nValue;
-    }
-
-    nValue += pCharStatsTxt->ToHitFactor;
     return nValue;
 }
 
@@ -6382,11 +6371,10 @@ int32_t __stdcall UI_GetStatValueForDisplay(int32_t nUnit) {
     if (iVar3 < 5) {
       return 5;
     }
-    if (iVar3 <= 0x5f) {
-      return iVar3;
+    if (iVar3 > 0x5f) {
+      iVar3 = 0x5f;
     }
 
-    iVar3 = 0x5f;
     return iVar3;
 }
 
@@ -7829,18 +7817,17 @@ static BOOL NPCSHOP_GetActiveTabIndex(int32_t nMouseY, int32_t nMouseX) {
       }
     }
 
-    if (nCashDisplayItemCount <= 0) {
-      return bHandled;
+    if (nCashDisplayItemCount > 0) {
+      uint8_t* pHitTestState;
+      pHitTestState = &gaNpcCashTabs[0].nHitTestState;
+      nTabIdx = nCashDisplayItemCount;
+      do {
+        pHitTestState[1] = 0;
+        *pHitTestState = 0;
+        pHitTestState += 0x28;
+        nTabIdx--;
+      } while (nTabIdx);
     }
-
-    uint8_t* pHitTestState = &gaNpcCashTabs[0].nHitTestState;
-    nTabIdx = nCashDisplayItemCount;
-    do {
-      pHitTestState[1] = 0;
-      *pHitTestState = 0;
-      pHitTestState += 0x28;
-      nTabIdx--;
-    } while (nTabIdx);
 
     return bHandled;
 }

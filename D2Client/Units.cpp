@@ -25,11 +25,10 @@ namespace D2Client::Units {
 
 eD2UnitType __fastcall GetType(D2UnitStrc * pUnit) {
     eD2UnitType eUnitType = UNIT_COUNT;
-    if (!pUnit) {
-      return eUnitType;
+    if (pUnit) {
+      eUnitType = pUnit->eUnitType;
     }
 
-    eUnitType = pUnit->eUnitType;
     return eUnitType;
 }
 

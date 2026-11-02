@@ -147,11 +147,12 @@ namespace D2Game::SKILLS::SkillsServer {
 uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t nTargetFlags) {
     bool bCanTarget;
     D2MissilesTxt* pMissileTxt;
-    D2RoomStrc* pRoom;
     BOOL bInTown;
     ::SGAMEDATA* pGame;
+    D2MonStatsTxt* pMonStats;
     uint32_t nCheckResult;
     eD2States eState;
+    D2RoomStrc* pRoom2;
     bool bFlagCheck;
     POINT ptSrc;
     POINT ptDst;
@@ -252,100 +253,91 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
         return 0;
     }
 
-    if (!((char)nTargetFlags >= 0 || pUnit2->eUnitFlags >> 2 & 1)) {
-      return 0;
-    }
-    if (!(!(nTargetFlags & 0x400) || pUnit2->eUnitFlags >> 3 & 1)) {
-      return 0;
-    }
-    if (nTargetFlags & 0x100) {
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
-      bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-      if (bInTown) {
-        return 0;
-      }
-    }
-    if (nTargetFlags & 0x10000) {
-      D2MonStatsTxt* pMonStats;
-      if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
-        pGame = UNIT::SUnit::GetGamePointer(pUnit);
-        pUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-        if (!pUnit) {
+    if (((char)nTargetFlags >= 0 || pUnit2->eUnitFlags >> 2 & 1) && (!(nTargetFlags & 0x400) || pUnit2->eUnitFlags >> 3 & 1)) {
+      D2RoomStrc* pRoom;
+      if (nTargetFlags & 0x100) {
+        pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
+        bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
+        if (bInTown) {
           return 0;
         }
       }
+      if (nTargetFlags & 0x10000) {
+        if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
+          pGame = UNIT::SUnit::GetGamePointer(pUnit);
+          pUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
+          if (!pUnit) {
+            return 0;
+          }
+        }
 
-      pTargetUnit = pUnit2;
-      bInTown = UNIT::SUnit::SKILL_CanUnitTargetAlly(UNIT::SUnit::GetGamePointer(pUnit), pUnit, pTargetUnit);
-      if (!bInTown) {
-        return 0;
-      }
-      if (pUnit2->eUnitType == UNIT_MONSTER) {
-        pMonStats = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit2->nClassId);
-        if (!pMonStats) {
+        pTargetUnit = pUnit2;
+        bInTown = UNIT::SUnit::SKILL_CanUnitTargetAlly(UNIT::SUnit::GetGamePointer(pUnit), pUnit, pTargetUnit);
+        if (!bInTown) {
           return 0;
         }
-        if (*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[0]) {
+        if (pUnit2->eUnitType == UNIT_MONSTER) {
+          pMonStats = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetLine(pUnit2->nClassId);
+          if (!pMonStats) {
+            return 0;
+          }
+          if (*((uint8_t*)pMonStats + 0xd) & (uint8_t)gadwBitMasks[0]) {
+            return 0;
+          }
+        }
+      }
+      if (nTargetFlags & 0x8000) {
+        if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
+          pGame = UNIT::SUnit::GetGamePointer(pUnit);
+          pUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
+          if (!pUnit) {
+            return 0;
+          }
+        }
+
+        pTargetUnit = pUnit2;
+        nCheckResult = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(UNIT::SUnit::GetGamePointer(pUnit), pUnit, pTargetUnit);
+        if (!nCheckResult) {
           return 0;
         }
       }
-    }
-    if (nTargetFlags & 0x8000) {
-      if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
-        pGame = UNIT::SUnit::GetGamePointer(pUnit);
-        pUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-        if (!pUnit) {
+      if (nTargetFlags & 0x20000) {
+        if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
+          pGame = UNIT::SUnit::GetGamePointer(pUnit);
+          pUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
+          if (!pUnit) {
+            return 0;
+          }
+        }
+
+        bInTown = D2Common::Units::IsInMeleeRange(pUnit, pUnit2, 0);
+        if (!bInTown) {
           return 0;
         }
       }
+      if (!(nTargetFlags & 0x80000) || (eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_justhit) , eState == STATE_none)) {
+        if (!(nTargetFlags & 0x200)) {
+          return 1;
+        }
 
-      pTargetUnit = pUnit2;
-      nCheckResult = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(UNIT::SUnit::GetGamePointer(pUnit), pUnit, pTargetUnit);
-      if (!nCheckResult) {
-        return 0;
-      }
-    }
-    if (nTargetFlags & 0x20000) {
-      if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
-        pGame = UNIT::SUnit::GetGamePointer(pUnit);
-        pUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-        if (!pUnit) {
-          return 0;
+        pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+        if (pRoom) {
+          pRoom2 = D2Common::Units::UNITS_GetRoom(pUnit2);
+          if (pRoom2) {
+            ptSrc.x = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+            ptSrc.y = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+            ptDst.x = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit2);
+            ptDst.y = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit2);
+            bInTown = D2Common::Collision::TestCollision(pRoom, &ptSrc, &ptDst, 4);
+            if (!bInTown) {
+              return 1;
+            }
+          }
         }
       }
-
-      bInTown = D2Common::Units::IsInMeleeRange(pUnit, pUnit2, 0);
-      if (!bInTown) {
-        return 0;
-      }
-    }
-    if (!(!(nTargetFlags & 0x80000) || (eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_justhit) , eState == STATE_none))) {
-      return 0;
-    }
-    if (!(nTargetFlags & 0x200)) {
-      return 1;
     }
 
-    pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return 0;
-    }
-
-    D2RoomStrc* pRoom2 = D2Common::Units::UNITS_GetRoom(pUnit2);
-    if (!pRoom2) {
-      return 0;
-    }
-
-    ptSrc.x = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-    ptSrc.y = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-    ptDst.x = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit2);
-    ptDst.y = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit2);
-    bInTown = D2Common::Collision::TestCollision(pRoom, &ptSrc, &ptDst, 4);
-    if (bInTown) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
@@ -560,11 +552,10 @@ BOOL __fastcall SKILLS_ApplyAreaDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     if (!nCollisionFlags) {
       nCollisionFlags = 0x8583;
     }
-    if (!pUnit) {
-      return 1;
+    if (pUnit) {
+      SKILLS_ApplyAreaEffect(pGame, pUnit, nX, nY, nRadius, nCollisionFlags, SKILLS_ApplyDamageCallback, pDamage, 0, ".\\SKILLS\\Skills.cpp", 0x21b);
     }
 
-    SKILLS_ApplyAreaEffect(pGame, pUnit, nX, nY, nRadius, nCollisionFlags, SKILLS_ApplyDamageCallback, pDamage, 0, ".\\SKILLS\\Skills.cpp", 0x21b);
     return 1;
 }
 
@@ -621,11 +612,10 @@ D2UnitStrc * __fastcall SKILLS_FindNextUnitInAreaByGUID(::SGAMEDATA * pGame, D2U
     if (!sNextGUID.pNext) {
       sNextGUID.pNext = sNextGUID.pLowest;
     }
-    if (!pnUnitCount) {
-      return sNextGUID.pNext;
+    if (pnUnitCount) {
+      *pnUnitCount = sNextGUID.nCount;
     }
 
-    *pnUnitCount = sNextGUID.nCount;
     return sNextGUID.pNext;
 }
 
@@ -1083,39 +1073,37 @@ BOOL __fastcall D2UpdateState(D2UnitStrc * pUnit, eD2States eState, int32_t bRem
         if (sStateGroup) {
           eState_00 = STATE_none;
           bDidRemoveState = 0;
-          if (nStateCount <= 0) {
-            return bDidRemoveState;
-          }
-
-          nStateTxtStride = 0;
-          pDataTable = sgptDataTable;
-          do {
-            if (eState_00 != eState || bRemoveOnly) {
-              if ((int)eState_00 < 0 || (int)eState_00 >= pDataTable->nTxtStatesSize) {
-                pStateTxtRaw = 0;
-              } else {
-                pStateTxtRaw = (int)pDataTable->pTxtStates->overlay + nStateTxtStride - 2;
-              }
-              if (*(short int*)(pStateTxtRaw + 0x1e) == sStateGroup) {
-                nStateGroup = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState_00);
-                pDataTable = sgptDataTable;
-                if (nStateGroup != STATE_none) {
-                  bDidRemoveState = 1;
-                  D2Common::DATATBLS::ItemStats::SetState(pUnit, eState_00, 0);
-                  pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState_00);
+          if (nStateCount > 0) {
+            nStateTxtStride = 0;
+            pDataTable = sgptDataTable;
+            do {
+              if (eState_00 != eState || bRemoveOnly) {
+                if ((int)eState_00 < 0 || (int)eState_00 >= pDataTable->nTxtStatesSize) {
+                  pStateTxtRaw = 0;
+                } else {
+                  pStateTxtRaw = (int)pDataTable->pTxtStates->overlay + nStateTxtStride - 2;
+                }
+                if (*(short int*)(pStateTxtRaw + 0x1e) == sStateGroup) {
+                  nStateGroup = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState_00);
                   pDataTable = sgptDataTable;
-                  if (pStatList) {
-                    D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
-                    D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
+                  if (nStateGroup != STATE_none) {
+                    bDidRemoveState = 1;
+                    D2Common::DATATBLS::ItemStats::SetState(pUnit, eState_00, 0);
+                    pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState_00);
                     pDataTable = sgptDataTable;
+                    if (pStatList) {
+                      D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
+                      D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
+                      pDataTable = sgptDataTable;
+                    }
                   }
                 }
               }
-            }
 
-            nStateTxtStride += 0x3c;
-            eState_00 += STATE_freeze;
-          } while ((int)eState_00 < nStateCount);
+              nStateTxtStride += 0x3c;
+              eState_00 += STATE_freeze;
+            } while ((int)eState_00 < nStateCount);
+          }
 
           return bDidRemoveState;
         }
@@ -1358,11 +1346,10 @@ static BOOL __stdcall SKILLS_ValidateSkillTarget(::SGAMEDATA * pGame, D2UnitStrc
 
 int32_t __fastcall SKILLS_CalcPerDelayInterval(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SkillsTxt * pSkillData, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nPerDelay = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillData->perdelay, eSkill, nSkillLvl);
-    if (nPerDelay > 5) {
-      return (pGame->dwGameFrame - 1 + nPerDelay) / nPerDelay * nPerDelay + 1;
+    if (nPerDelay <= 5) {
+      nPerDelay = 5;
     }
 
-    nPerDelay = 5;
     return (pGame->dwGameFrame - 1 + nPerDelay) / nPerDelay * nPerDelay + 1;
 }
 
@@ -2272,12 +2259,12 @@ void __fastcall SKILLS_UpdatePassivesAndPets(D2UnitStrc * pUnit) {
 D2SkillStrc * __fastcall SKILLS_AllocSkillAndUpdatePassives(D2UnitStrc * pUnit, eD2Skills eSkill) {
     D2SkillStrc* pNewSkill = D2Common::Skills::AllocSkill(pUnit, eSkill);
     D2Common::Skills::SKILLS_UpdateAllPassiveSkills(pUnit);
-    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
-      return pNewSkill;
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
+      ::SGAMEDATA* pGame;
+      pGame = UNIT::SUnit::GetGamePointer(pUnit);
+      PLAYER::PlayerPets::PETS_RecalculateAllPetLimits(pGame, pUnit);
     }
 
-    ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
-    PLAYER::PlayerPets::PETS_RecalculateAllPetLimits(pGame, pUnit);
     return pNewSkill;
 }
 
@@ -2613,16 +2600,13 @@ int32_t __fastcall SKILLS_GetUnitWalkVelocity(D2UnitStrc * pUnit) {
 
 int32_t __fastcall SKILLS_GetSummonMonsterClassId(D2UnitStrc * pUnit, int32_t bUseMonsterSpawnData, int32_t nSkillId, int32_t nSummonParam, int * pPtr, int * pnSpawnX, int * pnSpawnY) {
     int32_t nMonsterClassId = D2Common::Monsters::MONSTERS::SummonOrSpawnMode(pUnit, bUseMonsterSpawnData, nSkillId, nSummonParam, pPtr, pnSpawnX, pnSpawnY);
-    if (!(nMonsterClassId < 0 || nMonsterClassId >= sgptDataTable->nTxtMonStatsSize)) {
-      return nMonsterClassId;
+    if (nMonsterClassId < 0 || nMonsterClassId >= sgptDataTable->nTxtMonStatsSize) {
+      nMonsterClassId = Ai::AiGeneral::MONSTER_GetUnitData_AiGeneral_Offset0x3C(pUnit);
+      if (nMonsterClassId <= 0 || nMonsterClassId >= sgptDataTable->nTxtMonStatsSize) {
+        nMonsterClassId = -1;
+      }
     }
 
-    nMonsterClassId = Ai::AiGeneral::MONSTER_GetUnitData_AiGeneral_Offset0x3C(pUnit);
-    if (!(nMonsterClassId <= 0 || nMonsterClassId >= sgptDataTable->nTxtMonStatsSize)) {
-      return nMonsterClassId;
-    }
-
-    nMonsterClassId = -1;
     return nMonsterClassId;
 }
 
@@ -2649,11 +2633,10 @@ uint16_t __fastcall SKILLS_CalcMissileToHit(::SGAMEDATA * pGame, D2UnitStrc * pU
       uint16_t uVar1;
       uVar1 = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit2, pUnit, nToHitBonusExtra, nExtraRange);
       *(uint16_t*)(pDamage + 4) = uVar1;
-      if (!(uVar1 & 1)) {
-        return *(uint16_t*)(pDamage + 4);
+      if (uVar1 & 1) {
+        *(uint16_t*)(pDamage + 4) = uVar1 | wResultFlags;
       }
 
-      *(uint16_t*)(pDamage + 4) = uVar1 | wResultFlags;
       return *(uint16_t*)(pDamage + 4);
     }
 
@@ -2901,13 +2884,12 @@ D2StatListExStrc * __fastcall SetStateWithExpiryTime(D2StateExArgStrc * pStateEx
         if (pStateExArg->eSkill == eExistingState) {
           nClassId = D2Common::Stats::StatsEx::GetSkillLevel(pExistingStatList);
           if (pStateExArg->nSkillLvl == nClassId) {
-            if (!pStateExArg->nDurationInFrames) {
-              return pExistingStatList;
+            if (pStateExArg->nDurationInFrames) {
+              nNewExpiryFrame = pGame->dwGameFrame + pStateExArg->nDurationInFrames;
+              D2Common::Stats::StatsEx::SetTimeout_WithFlag(pExistingStatList, nNewExpiryFrame);
+              GAME::Event::SetEvent(pGame, pUnit_00, 0xc, nNewExpiryFrame, 0, 0);
             }
 
-            nNewExpiryFrame = pGame->dwGameFrame + pStateExArg->nDurationInFrames;
-            D2Common::Stats::StatsEx::SetTimeout_WithFlag(pExistingStatList, nNewExpiryFrame);
-            GAME::Event::SetEvent(pGame, pUnit_00, 0xc, nNewExpiryFrame, 0, 0);
             return pExistingStatList;
           }
           if (pStateExArg->nSkillLvl < nClassId) {
@@ -3532,11 +3514,10 @@ BOOL __fastcall SKILLS_SrvStartSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD
             CalculateManaUse(pGameCtx, pUnit, eSkill, nSkillLvl);
           }
         }
-        if (!(*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)gadwBitMasks[6])) {
-          return bHasLOS;
+        if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)gadwBitMasks[6]) {
+          GAME::Event::EVENT_RemoveUnitTimersByType(pGameCtx, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, 0);
         }
 
-        GAME::Event::EVENT_RemoveUnitTimersByType(pGameCtx, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, 0);
         return bHasLOS;
       }
     }
@@ -3769,11 +3750,10 @@ int32_t __fastcall SKILLS_OnModeComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
     ::SGAMEDATA* pGameForMove = pGameLocal;
     _bTargetValid = SKILLS_SrvStartSkill(pGameLocal, pUnit, eSkill, nSkillLevel, 0);
-    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && !_bTargetValid)) {
-      return _bTargetValid;
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER && !_bTargetValid) {
+      PLAYER::PlayerModes::PLRMODES_MoveToLocation(pGameForMove, pUnit, nullptr, 5, 0, 0, 1);
     }
 
-    PLAYER::PlayerModes::PLRMODES_MoveToLocation(pGameForMove, pUnit, nullptr, 5, 0, 0, 1);
     return _bTargetValid;
 }
 

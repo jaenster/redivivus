@@ -133,7 +133,6 @@ D2UnitStrc * __fastcall GetNextUnit(D2UnitStrc * pUnit) {
     }
 
     return pUnit->pListNext;
-    return pUnit->pListNext;
 }
 
 void __fastcall SetSeed(D2UnitStrc * pUnit, D2SeedStrc * pSeed) {
@@ -193,7 +192,7 @@ uint32_t __fastcall UNITS_IncrementUnitGUIDCounter(::SGAMEDATA * pGame, eD2UnitT
 }
 
 int32_t __stdcall UNITS_GetHashTableSlot(eD2UnitType eUnitType, ::SGAMEDATA * pGame, uint32_t nUnitGUID) {
-    if (eUnitType < UNIT_WARP) {
+    if (eUnitType <= UNIT_ITEM) {
       return (int32_t)(pGame->szGameName + ganUnitHashTableBaseOffsets[eUnitType] + (nUnitGUID & 0x7f) * 4 - 0x2a);
     }
 
@@ -209,7 +208,7 @@ D2UnitStrc * __fastcall FindUnitFromTable(::SGAMEDATA * pGame, eD2UnitType eUnit
     }
     if (eUnitType == UNIT_WARP) {
       ppHashSlot = &pGame->pWarpTileList;
-    } else if (eUnitType < UNIT_WARP) {
+    } else if (eUnitType <= UNIT_ITEM) {
       ppHashSlot = (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eUnitType] + (nUnitGUID & 0x7f) * 4 - 0x2a);
     } else {
       ppHashSlot = 0;
@@ -265,7 +264,7 @@ void __fastcall UNITS_InsertUnitIntoHashTable(D2UnitStrc * pUnit, ::SGAMEDATA * 
     eD2UnitType eCachedUnitType = pUnit->eUnitType;
     if (eCachedUnitType == UNIT_WARP) {
       ppHashSlot = &pGame->pWarpTileList;
-    } else if (eCachedUnitType < UNIT_WARP) {
+    } else if (eCachedUnitType <= UNIT_ITEM) {
       ppHashSlot = (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eCachedUnitType] + (pUnit->nUnitGUID & 0x7fU) * 4 - 0x2a);
     } else {
       ppHashSlot = 0;
@@ -307,7 +306,7 @@ static void UNITS_NotifyClientsUnitRemoved(::SGAMEDATA * pGame, D2UnitStrc * pUn
     eD2UnitType eUnitTypeSwitch = pUnit->eUnitType;
     if (eUnitTypeSwitch == UNIT_WARP) {
       ppHashSlot = &pGame->pWarpTileList;
-    } else if (eUnitTypeSwitch < UNIT_WARP) {
+    } else if (eUnitTypeSwitch <= UNIT_ITEM) {
       ppHashSlot = (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eUnitTypeSwitch] + (pUnit->nUnitGUID & 0x7fU) * 4 - 0x2a);
     } else {
       ppHashSlot = 0;
@@ -1059,7 +1058,6 @@ void __fastcall GetTypeAndMode(D2UnitStrc * pUnit, D2QServerUnitRecordStrc * pOu
     }
 
     return (::SGAMEDATA*)pUnit->uSideData.pClientSide.dwSfxAsyncTicks;
-    return (::SGAMEDATA*)pUnit->uSideData.pClientSide.dwSfxAsyncTicks;
 }
 
 // 2022.01.09 - dzik
@@ -1079,11 +1077,10 @@ int32_t __fastcall GetNecroPet(D2UnitStrc * pUnit) {
     }
 
     return pUnit->pUnitData.pUnitDataMonster->nNecroPetGUID;
-    return pUnit->pUnitData.pUnitDataMonster->nNecroPetGUID;
 }
 
 // 2022.01.09 - dzik
-void __fastcall SetSparklyChestFlag(D2UnitStrc * pUnit, bool bIsSparklyChest) {
+void __fastcall SetSparklyChestFlag(D2UnitStrc * pUnit, uint8_t bIsSparklyChest) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa47);
       exit(-1);
@@ -1099,7 +1096,6 @@ uint8_t __fastcall GetSparklyChestFlag(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    return pUnit->uSideData.pServerSide.bSparkChest;
     return pUnit->uSideData.pServerSide.bSparkChest;
 }
 
@@ -1140,31 +1136,30 @@ void __stdcall ClearInteractInfo(D2UnitStrc * pUnit) {
 }
 
 BOOL __fastcall CheckForModeZeroDeath(D2UnitStrc * pUnit) {
-    bool bIsDeadMode;
-    if (!(pUnit && !(pUnit->eUnitFlags & UNITFLAG_ISDEAD))) {
-      return 1;
-    }
-    if (pUnit->eUnitType != UNIT_PLAYER) {
-      if (pUnit->eUnitType != UNIT_MONSTER) {
-        return 1;
-      }
-      if (pUnit->eAnimMode.ePlayerMode == Death) {
-        return 1;
-      }
+    if (pUnit && !(pUnit->eUnitFlags & UNITFLAG_ISDEAD)) {
+      bool bIsDeadMode;
+      if (pUnit->eUnitType != UNIT_PLAYER) {
+        if (pUnit->eUnitType != UNIT_MONSTER) {
+          return 1;
+        }
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          return 1;
+        }
 
-      bIsDeadMode = pUnit->eAnimMode.ePlayerMode == Kick;
-    } else {
-      if (pUnit->eAnimMode.ePlayerMode == Death) {
-        return 1;
+        bIsDeadMode = pUnit->eAnimMode.ePlayerMode == Kick;
+      } else {
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          return 1;
+        }
+
+        bIsDeadMode = pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead;
       }
-
-      bIsDeadMode = pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead;
-    }
-    if (bIsDeadMode) {
-      return 1;
+      if (!bIsDeadMode) {
+        return 0;
+      }
     }
 
-    return 0;
+    return 1;
 }
 
 // Determines whether pAttacker may attack pUnit, resolving owner chains for monsters and reflected missiles. If both resolved units are players, delegates to PLAYERLIST_GetFlagsMasked with the hostile flag (bit 3). Otherwise calls Path::IsAllyOf; returns 0 if allied, 1 if hostile. Returns 0 for self-attack.
@@ -1214,13 +1209,11 @@ uint32_t __fastcall UNITS_CheckIfCanAttackTarget(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill) {
-    if (!(pUnit && pTarget && (pUnit->eUnitType == UNIT_PLAYER || pTarget->eUnitType == UNIT_MONSTER) && (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&sgptDataTable->pTxtSkills[eSkill] + 0x7) & (uint8_t)gadwBitMasks[1])) {
-      return 0;
-    }
-
-    Ai::AiGeneral::GetMonsterNameAndAi(pTarget, &eSkill, (int*)&pTarget);
-    if (!pTarget && eSkill == pUnit->nUnitGUID) {
-      return 1;
+    if (pUnit && pTarget && (pUnit->eUnitType == UNIT_PLAYER || pTarget->eUnitType == UNIT_MONSTER) && (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&sgptDataTable->pTxtSkills[eSkill] + 0x7) & (uint8_t)gadwBitMasks[1]) {
+      Ai::AiGeneral::GetMonsterNameAndAi(pTarget, &eSkill, (int*)&pTarget);
+      if (!pTarget && eSkill == pUnit->nUnitGUID) {
+        return 1;
+      }
     }
 
     return 0;
@@ -1714,11 +1707,10 @@ int32_t __fastcall UNITS_ProcessUnitMovement(::SGAMEDATA * pGame, D2UnitStrc * p
     GetTarget(pGame, pUnit);
     BOOL nAdvanceResult = D2Common::PATH::Path::PATH_AdvanceUnitAlongPath(pUnit, 0x400);
     _bNeedsRoomUpdate = D2Common::Units::NeedsRoomUpdate(pUnit);
-    if (!_bNeedsRoomUpdate) {
-      return nAdvanceResult != 0 ? 0x1U : 0x2U;
+    if (_bNeedsRoomUpdate) {
+      UNITS_UpdateRoomClientVisibility(pGame, pUnit, nullptr);
     }
 
-    UNITS_UpdateRoomClientVisibility(pGame, pUnit, nullptr);
     return nAdvanceResult != 0 ? 0x1U : 0x2U;
 }
 
@@ -1778,10 +1770,10 @@ uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * 
 // Returns 1 if pUnit and pOther are allies (same unit = always ally). For monsters, resolves to owner player first. For two players, checks that both share the same party ID (via GetPartyIdFromUnit) and neither has party ID -1. Falls back to Path::IsAllyOf for non-player pairs. Used to gate friendly-fire vs. ally-targeted skill application.
 BOOL __fastcall SKILL_CanUnitTargetAlly(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pOther) {
     BOOL _bIsAlly;
-    int16_t nUnitPartyId;
     int16_t nOtherPartyId;
     bool bIsAlly;
     D2UnitStrc* pOwnerUnit;
+    ::SGAMEDATA* pOwnerGame;
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       pOwnerUnit = Ai::AiGeneral::GetOwnerUnit(pUnit);
       if (pOwnerUnit) {
@@ -1794,32 +1786,32 @@ BOOL __fastcall SKILL_CanUnitTargetAlly(::SGAMEDATA * pGameStrc, D2UnitStrc * pU
         pOther = pOwnerUnit;
       }
     }
-    if (pUnit == pOther) {
-      return 1;
-    }
-    if (!pUnit || pUnit->eUnitType != UNIT_PLAYER || !pOther || pOther->eUnitType != UNIT_PLAYER) {
-      _bIsAlly = D2Common::PATH::Path::IsAllyOf(pUnit, pOther);
-      return _bIsAlly;
+    if (pUnit != pOther) {
+      int16_t nUnitPartyId;
+      if (!pUnit || pUnit->eUnitType != UNIT_PLAYER || !pOther || pOther->eUnitType != UNIT_PLAYER) {
+        _bIsAlly = D2Common::PATH::Path::IsAllyOf(pUnit, pOther);
+        return _bIsAlly;
+      }
+
+      pOwnerGame = pUnit->uSideData.pServerSide.pGame;
+      if (!pOwnerGame || false) {
+        nUnitPartyId = -1;
+      } else {
+        nUnitPartyId = Party::GetPartyIdFromUnit(pOwnerGame, pUnit);
+      }
+
+      pOwnerGame = pOther->uSideData.pServerSide.pGame;
+      if (!pOwnerGame || pOther->eUnitType != UNIT_PLAYER) {
+        nOtherPartyId = -1;
+      } else {
+        nOtherPartyId = Party::GetPartyIdFromUnit(pOwnerGame, pOther);
+      }
+      if (nUnitPartyId != nOtherPartyId || nOtherPartyId == -1) {
+        return 0;
+      }
     }
 
-    ::SGAMEDATA* pOwnerGame = pUnit->uSideData.pServerSide.pGame;
-    if (!pOwnerGame || false) {
-      nUnitPartyId = -1;
-    } else {
-      nUnitPartyId = Party::GetPartyIdFromUnit(pOwnerGame, pUnit);
-    }
-
-    pOwnerGame = pOther->uSideData.pServerSide.pGame;
-    if (!pOwnerGame || pOther->eUnitType != UNIT_PLAYER) {
-      nOtherPartyId = -1;
-    } else {
-      nOtherPartyId = Party::GetPartyIdFromUnit(pOwnerGame, pOther);
-    }
-    if (!(nUnitPartyId != nOtherPartyId || nOtherPartyId == -1)) {
-      return 1;
-    }
-
-    return 0;
+    return 1;
 }
 
 // Server-side teleport/relocate of a unit to (nX,nY) in pRoom. Resolves a destination room (FindBetterNearbyRoom, or GetFreeCoordinates_WithNeighboorRooms when bFindFreeSpace==0), verifies the target tile is walkable via PATH_GetCollisionMaskAt, then re-links the unit to the room update list and sets UNITFLAGEX_TELEPORTED (nRelocMode==0) or flag 0x800. For players it also sends 0x07 MapReveal, records the reveal coords in player data (ring buffer of up to 0x14 entries), schedules a PLAYER_CancelMapReveal event (+0x32 frames) and updates pets. Returns 1 on success, 0 if no valid room/tile. Halts via ErrorManager on null pUnit/path.
@@ -2050,7 +2042,7 @@ D2UnitStrc * __fastcall CreateUnit(eD2UnitType eUnitType, int32_t nClassId, int3
 
     pAllocUnit->eUnitFlags |= UNITFLAG_INITSEEDSET;
     pAllocUnit->nNodeTableIndex = 0xb;
-    if (eUnitType == UNIT_MONSTER && bPlaceInRoom & 2 || (pMonsterData = (void*)UNITS_IncrementUnitGUIDCounter(pGame, eUnitType) , eUnitType < UNIT_COUNT)) {
+    if (eUnitType == UNIT_MONSTER && bPlaceInRoom & 2 || (pMonsterData = (void*)UNITS_IncrementUnitGUIDCounter(pGame, eUnitType) , eUnitType <= UNIT_WARP)) {
       D2UnitDataObjectStrc* pObjectData;
       switch (eUnitType) {
         case UNIT_PLAYER:

@@ -28,11 +28,10 @@ namespace D2CMP::SRC::CelCmp::TCELENTRY {
       pThis->m_link.m_prevlink = 0;
       pThis->m_link.m_next = 0;
     }
-    if (!(dwFlags & 1)) {
-      return pThis;
+    if (dwFlags & 1) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

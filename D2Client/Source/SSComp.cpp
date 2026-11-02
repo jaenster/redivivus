@@ -52,11 +52,10 @@ uint32_t __fastcall ZLIB_Adler32(uint32_t nAdler, uint8_t * pbData, uint32_t nLe
           nSum2 += nSum1;
         }
 
-        if (nSum1 < 0xfff1) {
-          return (nSum2 / 0xfff1 * 0xf + nSum2) * 0x10000 | nSum1;
+        if (nSum1 >= 0xfff1) {
+          nSum1 -= 0xfff1;
         }
 
-        nSum1 -= 0xfff1;
         return (nSum2 / 0xfff1 * 0xf + nSum2) * 0x10000 | nSum1;
       }
 
@@ -153,11 +152,10 @@ static uint32_t __stdcall ZLIB_Adler32Combine(uint32_t nAdler1, uint32_t nLen2Lo
     if (nSum2 >= 0x1ffe2) {
       nSum2 -= 0x1ffe2;
     }
-    if (nSum2 < 0xfff1) {
-      return nSum2 << 0x10 | nSum1Mod;
+    if (nSum2 >= 0xfff1) {
+      nSum2 -= 0xfff1;
     }
 
-    nSum2 -= 0xfff1;
     return nSum2 << 0x10 | nSum1Mod;
 }
 

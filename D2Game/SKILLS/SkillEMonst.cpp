@@ -163,11 +163,10 @@ BOOL __fastcall SKILLEMONST_SrvStFn59_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc
 
     D2Common::Skills::SKILL_SetParam1(pSkill, pGame->dwGameFrame + nCalcDuration);
     eD2States eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-    if (eUnitState != STATE_none) {
-      return 1;
+    if (eUnitState == STATE_none) {
+      D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 1);
     }
 
-    D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 1);
     return 1;
 }
 
@@ -261,24 +260,24 @@ BOOL __fastcall SKILLEMONST_SrvStFn60_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc 
 
     memset(&sDamage, 0, 0x70);
     SkillsServer::SKILLS_CalcToHitAndApply(pGameLocal, pUnit, pTargetUnit, pSkillRecord, eSkill, nSkillLvl, &sDamage, 0);
-    if (!((uint8_t)sDamage.wResultFlags & 1)) {
-      return 1;
+    if ((uint8_t)sDamage.wResultFlags & 1) {
+      int32_t nCalcResult;
+      sDamage.dwHitFlags = sDamage.dwHitFlags | 2U | pSkillRecord->HitFlags;
+      if (pSkillRecord->HitClass) {
+        sDamage.dwHitClass = pSkillRecord->HitClass;
+      }
+
+      UNIT::SUnitDmg::SKILL_CalculateDamageForEvent(pGameLocal, pUnit, pTargetUnit, eSkill, nSkillLvl, &sDamage);
+      nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[0], eSkill, nSkillLvl);
+      nCalcResult = D2Client::Stats::D2ApplyPercent(sDamage.dwPhysDamage, nCalcResult, 100);
+      sDamage.dwPhysDamage += nCalcResult;
+      nLifeLeech = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
+      nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[2], eSkill, nSkillLvl);
+      sDamage.dwManaLeech += nCalcResult;
+      sDamage.dwLifeLeech += nLifeLeech;
+      UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGameLocal, pUnit, pTargetUnit, &sDamage, 0x80);
     }
 
-    sDamage.dwHitFlags = sDamage.dwHitFlags | 2U | pSkillRecord->HitFlags;
-    if (pSkillRecord->HitClass) {
-      sDamage.dwHitClass = pSkillRecord->HitClass;
-    }
-
-    UNIT::SUnitDmg::SKILL_CalculateDamageForEvent(pGameLocal, pUnit, pTargetUnit, eSkill, nSkillLvl, &sDamage);
-    int32_t nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[0], eSkill, nSkillLvl);
-    nCalcResult = D2Client::Stats::D2ApplyPercent(sDamage.dwPhysDamage, nCalcResult, 100);
-    sDamage.dwPhysDamage += nCalcResult;
-    nLifeLeech = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
-    nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[2], eSkill, nSkillLvl);
-    sDamage.dwManaLeech += nCalcResult;
-    sDamage.dwLifeLeech += nLifeLeech;
-    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGameLocal, pUnit, pTargetUnit, &sDamage, 0x80);
     return 1;
 }
 
@@ -372,11 +371,10 @@ BOOL __fastcall Skills_SrvDoFunc_128_MonsterCreateMinion(::SGAMEDATA * pGame, D2
     sAiCmd.nCmdArg3 = pGameLocal->dwGameFrame + sAiCmd.nCmdArg3;
     Ai::AiGeneral::CreateMinion(pGameLocal, pUnit, &sAiCmd);
     short int nOverlayId = pSkillRecord->srvoverlay;
-    if (!(nOverlayId > 0 && (int)nOverlayId < sgptDataTable->nTxtOverlaySize)) {
-      return 1;
+    if (nOverlayId > 0 && (int)nOverlayId < sgptDataTable->nTxtOverlaySize) {
+      D2Common::Units::SetOverlay(pTargetUnit, (int)nOverlayId, 0);
     }
 
-    D2Common::Units::SetOverlay(pTargetUnit, (int)nOverlayId, 0);
     return 1;
 }
 
@@ -905,11 +903,10 @@ BOOL __fastcall Skills_SrvDoFunc_135_SpawnMinionFromParams(::SGAMEDATA * pGame, 
     pSpawnedUnit->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC;
     D2Common::Units::StoreOwner(pSpawnedUnit, pUnit);
     sSumOverlay = pSkillTxt->sumoverlay;
-    if (!(sSumOverlay >= 0 && (int)sSumOverlay < sgptDataTable->nTxtOverlaySize)) {
-      return 1;
+    if (sSumOverlay >= 0 && (int)sSumOverlay < sgptDataTable->nTxtOverlaySize) {
+      D2Common::Units::SetOverlay(pSpawnedUnit, (int)sSumOverlay, 0);
     }
 
-    D2Common::Units::SetOverlay(pSpawnedUnit, (int)sSumOverlay, 0);
     return 1;
 }
 
@@ -1011,46 +1008,43 @@ BOOL __fastcall Skills_SrvDoFunc_138_FirePerpendicularMissileLine(::SGAMEDATA * 
       eMissileId = (eMissilesId)pSkillRecord->srvmissile[1];
       if ((int)eMissileId > 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize) {
         bGotTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nCursorX, &nCursorY);
-        if (!bGotTargetPos) {
-          return 1;
+        if (bGotTargetPos) {
+          nUnitPosX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
+          nDirX = nCursorX - nUnitPosX;
+          nLineCount = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
+          nDirY = nCursorY - nLineCount;
+          SkillsServer::SKILLS_NormalizeDirectionMin(&nDirX, &nDirY);
+          SkillsServer::SKILLS_NormalizeDirectionPerp(&nDirX, &nDirY);
+          nLineCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[0], eSkill, nSkillLvl);
+          nCursorX -= nLineCount * nDirX / 2;
+          nCursorY -= nLineCount * nDirY / 2;
+          nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
+          memset(&sSkillArg, 0, 0x5c);
+          sSkillArg.nFlags = 0x20;
+          sSkillArg.pOwner = pUnit;
+          sSkillArg.pMissile = pUnit;
+          sSkillArg.eSkillNo = eSkill;
+          sSkillArg.nSkillLevel = nSkillLvl;
+          sSkillArg.nMissileTxtNo = eMissileId;
+          sSkillArg.nTotalFrames = nTotalFrames;
+          if (nLineCount > 0) {
+            do {
+              sSkillArg.nUnitX = nCursorX;
+              sSkillArg.nUnitY = nCursorY;
+              MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+              nCursorX += nDirX;
+              nCursorY += nDirY;
+              nLineCount--;
+            } while (nLineCount);
+          }
+
+          eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+          if (eUnitState != STATE_none) {
+            D2Common::Units::SetSequenceFrame(pUnit, 8);
+            pUnit->nFrameCount = 0x600;
+          }
         }
 
-        nUnitPosX = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-        nDirX = nCursorX - nUnitPosX;
-        nLineCount = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-        nDirY = nCursorY - nLineCount;
-        SkillsServer::SKILLS_NormalizeDirectionMin(&nDirX, &nDirY);
-        SkillsServer::SKILLS_NormalizeDirectionPerp(&nDirX, &nDirY);
-        nLineCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[0], eSkill, nSkillLvl);
-        nCursorX -= nLineCount * nDirX / 2;
-        nCursorY -= nLineCount * nDirY / 2;
-        nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillRecord->calc[1], eSkill, nSkillLvl);
-        memset(&sSkillArg, 0, 0x5c);
-        sSkillArg.nFlags = 0x20;
-        sSkillArg.pOwner = pUnit;
-        sSkillArg.pMissile = pUnit;
-        sSkillArg.eSkillNo = eSkill;
-        sSkillArg.nSkillLevel = nSkillLvl;
-        sSkillArg.nMissileTxtNo = eMissileId;
-        sSkillArg.nTotalFrames = nTotalFrames;
-        if (nLineCount > 0) {
-          do {
-            sSkillArg.nUnitX = nCursorX;
-            sSkillArg.nUnitY = nCursorY;
-            MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-            nCursorX += nDirX;
-            nCursorY += nDirY;
-            nLineCount--;
-          } while (nLineCount);
-        }
-
-        eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-        if (eUnitState == STATE_none) {
-          return 1;
-        }
-
-        D2Common::Units::SetSequenceFrame(pUnit, 8);
-        pUnit->nFrameCount = 0x600;
         return 1;
       }
     }
@@ -1141,11 +1135,10 @@ BOOL __fastcall SKILLEMONST_SrvStFn63_CorpseCycler(::SGAMEDATA * pGame, D2UnitSt
 
 BOOL __fastcall Skills_SrvDoFunc_147_ReturnToOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-    if (!pOwner) {
-      return 1;
+    if (pOwner) {
+      D2Common::PATH::Path::PATH_SetPathTarget(pUnit, pOwner);
     }
 
-    D2Common::PATH::Path::PATH_SetPathTarget(pUnit, pOwner);
     return 1;
 }
 
@@ -1254,33 +1247,31 @@ BOOL __fastcall Skills_SrvDoFunc_140_BaalTentacle(::SGAMEDATA * pGame, D2UnitStr
         nSpawnY = D2Common::PATH::DynamicPath::GetYPos(pSpawnedMinion->pPath.pDynamicPath);
       }
     }
-    if (nSpawnCount <= 0) {
-      return 1;
-    }
-
-    do {
+    if (nSpawnCount > 0) {
       D2RoomStrc* pSpawnRoom;
-      uSeedRoll = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
-      nOffsetX = (int)uSeedRoll + (int)((uSeedRoll & 0xffffffff) / 0x12) * -0x12 - 9 + nBaseX;
-      sNewSeed = D2_SEED_NEXT_VAL(uSeedRoll);
-      pUnit->sSeed = sNewSeed;
-      nSpawnYOffset = sNewSeed.nSeedLow % 0x12 - 9 + nSpawnY;
-      nOffsetY = nSpawnYOffset;
-      pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, nOffsetX, nSpawnYOffset);
-      if (pSpawnRoom) {
-        nSpawnYOffset = nOffsetY;
-        D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nOffsetX, nSpawnYOffset);
-        pSpawnedMinion = Monster::Create::SpawnMonsterAtRoomPos(pGameLocal, pSpawnRoom, nOffsetX, nOffsetY, nMonStatsId, eSpawnAnimMode, -1, 0);
-        if (pSpawnedMinion) {
-          pSpawnedMinion->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC;
-          Monster::AI::RestartAiThink(pGameLocal, pSpawnedMinion, 0xf);
-          D2Common::Units::StoreOwner(pSpawnedMinion, pUnit);
+      do {
+        uSeedRoll = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
+        nOffsetX = (int)uSeedRoll + (int)((uSeedRoll & 0xffffffff) / 0x12) * -0x12 - 9 + nBaseX;
+        sNewSeed = D2_SEED_NEXT_VAL(uSeedRoll);
+        pUnit->sSeed = sNewSeed;
+        nSpawnYOffset = sNewSeed.nSeedLow % 0x12 - 9 + nSpawnY;
+        nOffsetY = nSpawnYOffset;
+        pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+        pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, nOffsetX, nSpawnYOffset);
+        if (pSpawnRoom) {
+          nSpawnYOffset = nOffsetY;
+          D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nOffsetX, nSpawnYOffset);
+          pSpawnedMinion = Monster::Create::SpawnMonsterAtRoomPos(pGameLocal, pSpawnRoom, nOffsetX, nOffsetY, nMonStatsId, eSpawnAnimMode, -1, 0);
+          if (pSpawnedMinion) {
+            pSpawnedMinion->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC;
+            Monster::AI::RestartAiThink(pGameLocal, pSpawnedMinion, 0xf);
+            D2Common::Units::StoreOwner(pSpawnedMinion, pUnit);
+          }
         }
-      }
 
-      nSpawnCount--;
-    } while (nSpawnCount);
+        nSpawnCount--;
+      } while (nSpawnCount);
+    }
 
     return 1;
 }

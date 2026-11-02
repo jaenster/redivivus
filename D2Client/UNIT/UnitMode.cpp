@@ -195,13 +195,12 @@ void __fastcall ClickWithSkillOnUnitOrCoord(eD2UnitModeAction eModeAction, D2Uni
 // @sourcefile .\UNIT\UnitMode.cpp
 uint32_t UNITMODE_CanInterruptSkill(D2UnitStrc * pUnit) {
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
-    if (!pSkill) {
-      return 1;
-    }
-
-    eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\UnitMode.cpp", 0x2cc);
-    if ((int)eSkillId >= 0 && (int)eSkillId < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkillId && !(*((uint8_t*)&sgptDataTable->pTxtSkills[eSkillId] + 0x7) & (uint8_t)gadwBitMasks[7]) && (!pUnit || pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral && pUnit->eAnimMode.ePlayerMode != TownNeutral)) {
-      return 0;
+    if (pSkill) {
+      eD2Skills eSkillId;
+      eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\UnitMode.cpp", 0x2cc);
+      if ((int)eSkillId >= 0 && (int)eSkillId < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkillId && !(*((uint8_t*)&sgptDataTable->pTxtSkills[eSkillId] + 0x7) & (uint8_t)gadwBitMasks[7]) && (!pUnit || pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral && pUnit->eAnimMode.ePlayerMode != TownNeutral)) {
+        return 0;
+      }
     }
 
     return 1;
@@ -254,13 +253,11 @@ static BOOL UNITMODE_IsTargetInActionRange(D2UnitStrc * pUnit, D2UnitStrc * pUni
     check_interact_range:
     if (pUnit && pUnit->eUnitType == UNIT_OBJECT) {
       bResult = D2Common::Units::IsObjectInInteractRange(pUnit2, pUnit);
-      if (!bResult) {
-        return 1;
-      }
-
-      bResult = D2Common::Units::TestCollisionBetweenInteractingUnits(pUnit2, pUnit, 0x804);
-      if (!bResult) {
-        return 0;
+      if (bResult) {
+        bResult = D2Common::Units::TestCollisionBetweenInteractingUnits(pUnit2, pUnit, 0x804);
+        if (!bResult) {
+          return 0;
+        }
       }
 
       return 1;

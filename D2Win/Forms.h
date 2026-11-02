@@ -11,7 +11,7 @@
 // Forward declarations
 struct D2ControlMsg;
 struct D2WinList;
-struct D2WinTextBox;
+struct D2WinProgressBar;
 #ifndef RECON_FPTD_fpListEntryCallback
 #define RECON_FPTD_fpListEntryCallback
 typedef BOOL (__stdcall *fpListEntryCallback)(struct D2ControlMsg * pControlMsg);
@@ -31,6 +31,6 @@ void __fastcall D2WIN_UnregisterWindowHandlerArray(int32_t hHandle, void * pHand
 // Adds list item from narrow character string. Converts szCharName to wide string (max 256 chars), forwards to AddListItem.
 void __fastcall D2WINLIST_AddListItemFromCharName(::D2WinList * pList, char * szCharName, fpListEntryCallback nItemData, uint8_t bItemFlags, int32_t nUserData, int32_t bPrepend, int32_t bSelect);
 // Sets custom user data field 0x10 on D2WinTextBox. Validates form type FORM_TextBox (10).
-BOOL __stdcall D2WINTEXTBOX_SetCustomData(::D2WinTextBox * pTextBox, int32_t nCustomData);
+BOOL __stdcall D2WINTEXTBOX_SetCustomData(::D2WinProgressBar * pTextBox, float nCustomData);
 
 } // namespace D2Win::Forms

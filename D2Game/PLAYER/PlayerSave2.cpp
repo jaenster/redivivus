@@ -144,12 +144,11 @@ int16_t __fastcall GetItemIndexInList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
       nItemIdx++;
     }
 
-    if (!(nItemIdx < 0x7fff)) {
+    if (nItemIdx >= 0x7fff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x185);
       exit(-1);
     }
 
-    return (int16_t)nItemIdx;
     return (int16_t)nItemIdx;
 }
 
@@ -1333,11 +1332,10 @@ int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pUn
     ppItemList = 0;
     int32_t nLoadResult = PlayerSave::PLRSAVE_DispatchItemLoadByFormat(pGame, pUnit, (uint8_t*)pBufStart, nFormat, nItemMode - (int)pBufStart, 0, (short int**)&ppItemList);
     if (nLoadResult) {
-      if (!pnLoadResult) {
-        return 0x14;
+      if (pnLoadResult) {
+        *pnLoadResult = nLoadResult;
       }
 
-      *pnLoadResult = nLoadResult;
       return 0x14;
     }
 
@@ -1363,38 +1361,34 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2UnitStrc* pCorpseUnit = *ppCorpseList;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave2.cpp", 0x733);
     if (!pClient) {
-      if (!pnErrorCode) {
-        return 0x15;
+      if (pnErrorCode) {
+        *pnErrorCode = 0x65;
       }
 
-      *pnErrorCode = 0x65;
       return 0x15;
     }
     if (&pCorpseUnit->nClassId > (int*)pOwnerUnit) {
-      if (!pnErrorCode) {
-        return 0x15;
+      if (pnErrorCode) {
+        *pnErrorCode = 0x66;
       }
 
-      *pnErrorCode = 0x66;
       return 0x15;
     }
     if ((short int)pCorpseUnit->eUnitType != 0x4d4a) {
-      if (!pnErrorCode) {
-        return 0x15;
+      if (pnErrorCode) {
+        *pnErrorCode = 0x67;
       }
 
-      *pnErrorCode = 0x67;
       return 0x15;
     }
 
     uint16_t wCorpseCount = *(uint16_t*)((uintptr_t)&pCorpseUnit->eUnitType + 2);
     D2UnitStrc* pReadPtr = (D2UnitStrc*)&pCorpseUnit->nClassId;
     if (wCorpseCount > 1) {
-      if (!pnErrorCode) {
-        return 0x15;
+      if (pnErrorCode) {
+        *pnErrorCode = 0x68;
       }
 
-      *pnErrorCode = 0x68;
       return 0x15;
     }
 
@@ -1404,11 +1398,10 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
       do {
         pReadPtr = (D2UnitStrc*)&pReadPtr->nUnitGUID;
         if (pReadPtr > pOwnerUnit) {
-          if (!pnErrorCode) {
-            return 0x15;
+          if (pnErrorCode) {
+            *pnErrorCode = 0x69;
           }
 
-          *pnErrorCode = 0x69;
           return 0x15;
         }
 
@@ -1422,11 +1415,10 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
         nClassId = D2Client::UNIT::GetClassId(pUnit);
         pCorpseUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, nClassId, nOwnerGUID, nPosY, pGame_00, pRoom, bCorpseInit, arg6, pReserved);
         if (!pCorpseUnit) {
-          if (!pnErrorCode) {
-            return 0x15;
+          if (pnErrorCode) {
+            *pnErrorCode = 0x6a;
           }
 
-          *pnErrorCode = 0x6a;
           return 0x15;
         }
 
@@ -1442,11 +1434,10 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
         nItemLoadError = 0;
         nResult = PLRSAVE_LoadItemsFromBuffer(pGame, pCorpseUnit, &pReadPtr, (int32_t)pOwnerUnit, dwFileVersion, 1, &nItemLoadError);
         if (nResult) {
-          if (!pnErrorCode) {
-            return 0x15;
+          if (pnErrorCode) {
+            *pnErrorCode = nItemLoadError;
           }
 
-          *pnErrorCode = nItemLoadError;
           return 0x15;
         }
 
@@ -1523,11 +1514,10 @@ D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Merc
           UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pMerc, 0xc);
           Monster::MONSTER_StartAiAndRegenTimers(pGame, pMerc);
         }
-        if (pMerc->pInventory) {
-          return pMerc;
+        if (!pMerc->pInventory) {
+          D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(nullptr, pMerc);
         }
 
-        D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(nullptr, pMerc);
         return pMerc;
       }
 
@@ -1554,11 +1544,10 @@ int __fastcall LoadMerc2(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc *
       return 0;
     }
     if ((short int)(*ppUnit)->eUnitType != 0x666a) {
-      if (!pnErrorCode) {
-        return 0x16;
+      if (pnErrorCode) {
+        *pnErrorCode = 0x65;
       }
 
-      *pnErrorCode = 0x65;
       return 0x16;
     }
 
@@ -1568,11 +1557,10 @@ int __fastcall LoadMerc2(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc *
       ppUnit = 0;
       nLoadResult = PLRSAVE_LoadItemsFromBuffer(pGame, pUnit, &pUnit2, (int32_t)pMercUnit, dwFileVersion, 0, (int*)&ppUnit);
       if (nLoadResult) {
-        if (!pnErrorCode) {
-          return 0x16;
+        if (pnErrorCode) {
+          *pnErrorCode = (int)ppUnit;
         }
 
-        *pnErrorCode = (int)ppUnit;
         return 0x16;
       }
 

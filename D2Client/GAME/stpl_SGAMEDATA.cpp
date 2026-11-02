@@ -29,11 +29,10 @@ template<> TSLink<::SGAMEDATA>* TSLink<SGAMEDATA>::NextLink(int32_t nLinkOffset)
     if ((int)nOffset < 0) {
       return (TSLink<::SGAMEDATA>*)~nOffset;
     }
-    if (nLinkOffset >= 0) {
-      return (TSLink<::SGAMEDATA>*)(nOffset + nLinkOffset);
+    if (nLinkOffset < 0) {
+      nLinkOffset = (int)this - this->m_prevlink->m_next;
     }
 
-    nLinkOffset = (int)this - this->m_prevlink->m_next;
     return (TSLink<::SGAMEDATA>*)(nOffset + nLinkOffset);
 }
 
@@ -51,11 +50,10 @@ TSLink<::SGAMEDATA>* __thiscall NextLink_Unreferenced(TSLink<::SGAMEDATA>* pThis
     if ((int)nOffset < 0) {
       return (TSLink<::SGAMEDATA>*)~nOffset;
     }
-    if (nLinkOffset >= 0) {
-      return (TSLink<::SGAMEDATA>*)(nOffset + nLinkOffset);
+    if (nLinkOffset < 0) {
+      nLinkOffset = (int)pThis - pThis->m_prevlink->m_next;
     }
 
-    nLinkOffset = (int)pThis - pThis->m_prevlink->m_next;
     return (TSLink<::SGAMEDATA>*)(nOffset + nLinkOffset);
 }
 
@@ -88,11 +86,10 @@ template<> uint32_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Calc
 // Static: rounds nValue up to a multiple of nMultiple.
 // Byte-identical to 0060e2e0; T by adjacency to this instantiation's CalcChunkSize 0044df30 (no xrefs).
 template<> uint32_t __stdcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::RoundToMultiple(uint32_t nValue, uint32_t nMultiple) {
-    if (!(nValue % nMultiple)) {
-      return nValue;
+    if (nValue % nMultiple) {
+      nValue += nMultiple - nValue % nMultiple;
     }
 
-    nValue += nMultiple - nValue % nMultiple;
     return nValue;
 }
 
@@ -569,11 +566,10 @@ template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSExplicitList<TSHashOb
     } else {
       pChunk = 0;
     }
-    if (!nLocation) {
-      return pChunk;
+    if (nLocation) {
+      this->LinkNode(pChunk, nLocation, nullptr);
     }
 
-    this->LinkNode(pChunk, nLocation, nullptr);
     return pChunk;
 }
 
@@ -638,11 +634,10 @@ template<> void __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destroy
 // @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0> scalar deleting destructor (STORM.H)
 template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::ScalarDeletingDestructor(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, uint32_t dwFlags) {
     pThis->Destructor();
-    if (!(dwFlags & 1 && pThis)) {
-      return pThis;
+    if (dwFlags & 1 && pThis) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -661,15 +656,14 @@ template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* TSHashTableReuse<SGAM
     this->tChunkList.m_linkoffset = 0x10;
     this->tChunkList.m_terminator.m_next = ~(uint32_t)pTVar1;
     this->nChunkSize = 0x10;
-    if (pReuseList->m_linkoffset == 4) {
-      return this;
+    if (pReuseList->m_linkoffset != 4) {
+      pReuseList->UnlinkAll();
+      pListHead = &this->tReuseList.m_terminator;
+      pListHead->m_prevlink = pListHead;
+      pReuseList->m_linkoffset = 4;
+      this->tReuseList.m_terminator.m_next = ~(uint32_t)pListHead;
     }
 
-    pReuseList->UnlinkAll();
-    pListHead = &this->tReuseList.m_terminator;
-    pListHead->m_prevlink = pListHead;
-    pReuseList->m_linkoffset = 4;
-    this->tReuseList.m_terminator.m_next = ~(uint32_t)pListHead;
     return this;
 }
 
@@ -684,11 +678,10 @@ template<> TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>* TSExportTableSimp
 // @blizzard TSExportTableSimple<SGAMEDATA,HSGAMEDATA__*,0> scalar deleting destructor (STORM.H)
 template<> TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>* __thiscall TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::ScalarDeletingDestructor(TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>* pThis, uint32_t dwFlags) {
     pThis->Destructor();
-    if (!(dwFlags & 1 && pThis)) {
-      return pThis;
+    if (dwFlags & 1 && pThis) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -710,11 +703,10 @@ template<> TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCri
 template<> TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* __thiscall TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::ScalarDeletingDestructor(TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* pThis, uint32_t dwFlags) {
     /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pThis->tSync.m_critsect);
     pThis->TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>::Destructor();
-    if (!(dwFlags & 1 && pThis)) {
-      return pThis;
+    if (dwFlags & 1 && pThis) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

@@ -216,11 +216,10 @@ void __stdcall InitBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pBytes, siz
 
 int32_t __stdcall GetNextPositon(D2BitBufferStrc * pBitBuffer) {
     size_t nNextPos = pBitBuffer->nCurrentPos;
-    if (!pBitBuffer->nBitsAtPos) {
-      return nNextPos;
+    if (pBitBuffer->nBitsAtPos) {
+      nNextPos++;
     }
 
-    nNextPos++;
     return nNextPos;
 }
 
@@ -322,11 +321,10 @@ uint32_t __stdcall ReadUnsigned(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
 
 int32_t __stdcall ReadSigned(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
     uint32_t dwValue = Read(pBitBuffer, nSize);
-    if (!(nSize < 0x20 && dwValue & 1 << ((uint8_t)nSize - 1 & 0x1f))) {
-      return dwValue;
+    if (nSize < 0x20 && dwValue & 1 << ((uint8_t)nSize - 1 & 0x1f)) {
+      dwValue |= ~((1 << ((uint8_t)nSize & 0x1f)) - 1U);
     }
 
-    dwValue |= ~((1 << ((uint8_t)nSize & 0x1f)) - 1U);
     return dwValue;
 }
 

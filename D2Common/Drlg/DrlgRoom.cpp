@@ -103,11 +103,10 @@ D2RoomStrc * __fastcall DRLGWARP_GetWarpDestinationRoom(D2RoomExStrc * pRoomEx, 
       if (pTileGrid->pRoomEx == pRoomEx) {
         *ppOrth = pTileGrid->pLvlWarpTxt->Id;
         *ppRoomEx = pTileGrid->pLvlWarpTxt;
-        if (pDestRoomEx->pRoom) {
-          return pDestRoomEx->pRoom;
+        if (!pDestRoomEx->pRoom) {
+          DUNGEON::Dungeon::InitRoomEx(pDestRoomEx);
         }
 
-        DUNGEON::Dungeon::InitRoomEx(pDestRoomEx);
         return pDestRoomEx->pRoom;
       }
 
@@ -1109,7 +1108,6 @@ BOOL __fastcall HasWaypoint(D2RoomExStrc * pRoomEx) {
       exit(-1);
     }
 
-    return (uint32_t)((pRoomEx->eRoomExFlags & 0x30000U) != 0);
     return (uint32_t)((pRoomEx->eRoomExFlags & 0x30000U) != 0);
 }
 

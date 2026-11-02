@@ -55,13 +55,12 @@ BOOL __fastcall InitPerspective(D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc
 
 // @sourcefile .\Src\gdiCore.cpp
 BOOL Release() {
-    if (!RENDERER_SelectedRendererCore) {
-      return 1;
+    if (RENDERER_SelectedRendererCore) {
+      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&RENDERER_SelectedRendererCore->sLock);
+      D2_FREE_AT(RENDERER_SelectedRendererCore, ".\\Src\\gdiCore.cpp", 0x59);
+      RENDERER_SelectedRendererCore = 0;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&RENDERER_SelectedRendererCore->sLock);
-    D2_FREE_AT(RENDERER_SelectedRendererCore, ".\\Src\\gdiCore.cpp", 0x59);
-    RENDERER_SelectedRendererCore = 0;
     return 1;
 }
 
@@ -161,11 +160,10 @@ BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue) {
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&RENDERER_SelectedRendererCore->sLock);
-    if (!bClear) {
-      return 1;
+    if (bClear) {
+      RENDERER_WINDOWED_ClearScreen(1, nGreen, nBlue);
     }
 
-    RENDERER_WINDOWED_ClearScreen(1, nGreen, nBlue);
     return 1;
 }
 
@@ -204,32 +202,30 @@ BOOL __fastcall GetBackBuffer(BYTE * pBuffer) {
     int nRow = 0;
     int nWindowWidth = RENDERER_nWindowWidth;
     uint8_t* ppvSrcCol = gpRenderBackBufferBits;
-    if (RENDERER_nWindowHeight <= 0) {
-      return 1;
-    }
-
-    do {
+    if (RENDERER_nWindowHeight > 0) {
       uint8_t* pbPixel;
-      nCol = 0;
-      pbPixel = pBuffer;
-      ppvSrcRow = ppvSrcCol;
-      if (nWindowWidth > 0) {
-        do {
-          byPaletteIndex = *ppvSrcRow;
-          *pbPixel = prgbq_00989c40[byPaletteIndex].rgbRed;
-          pbPixel[1] = prgbq_00989c40[byPaletteIndex].rgbGreen;
-          pbPixel[2] = prgbq_00989c40[byPaletteIndex].rgbBlue;
-          nCol++;
-          ppvSrcRow++;
-          pbPixel += 3;
-          nWindowWidth = RENDERER_nWindowWidth;
-        } while (nCol < RENDERER_nWindowWidth);
-      }
+      do {
+        nCol = 0;
+        pbPixel = pBuffer;
+        ppvSrcRow = ppvSrcCol;
+        if (nWindowWidth > 0) {
+          do {
+            byPaletteIndex = *ppvSrcRow;
+            *pbPixel = prgbq_00989c40[byPaletteIndex].rgbRed;
+            pbPixel[1] = prgbq_00989c40[byPaletteIndex].rgbGreen;
+            pbPixel[2] = prgbq_00989c40[byPaletteIndex].rgbBlue;
+            nCol++;
+            ppvSrcRow++;
+            pbPixel += 3;
+            nWindowWidth = RENDERER_nWindowWidth;
+          } while (nCol < RENDERER_nWindowWidth);
+        }
 
-      pBuffer += nWindowWidth * 3;
-      nRow++;
-      ppvSrcCol += nWindowWidth;
-    } while (nRow < RENDERER_nWindowHeight);
+        pBuffer += nWindowWidth * 3;
+        nRow++;
+        ppvSrcCol += nWindowWidth;
+      } while (nRow < RENDERER_nWindowHeight);
+    }
 
     return 1;
 }
@@ -291,7 +287,7 @@ int CheckGamma() {
     return 0;
 }
 
-void __fastcall SetGlobalLight(BYTE nRed, BYTE nGreen, BYTE nBlue) {
+void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue) {
 
 }
 
@@ -509,12 +505,11 @@ static int __fastcall RENDERER_WINDOWED_CalculateCropRect(uint32_t * pCropRect, 
       } else {
         pOutput[3] = nOffsetY - pOutput[2] - uClampedBottom + 1;
       }
-      if (!((int)pOutput[3] > 0)) {
+      if ((int)pOutput[3] <= 0) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd1);
         exit(-1);
       }
 
-      return 0;
       return 0;
     }
 
@@ -1222,49 +1217,48 @@ BOOL __fastcall DrawShadowTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, in
 }
 
 BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, D2GfxLightStrc * pLight, int nScreenPanels, BYTE nAlpha) {
-    int bAllocOk;
+    int iVar1;
+    int a3;
     int nScreenX;
     short int* psTileEntry;
     uint32_t aCornerLight[4];
+    int nClipLeft;
+    int nClipRight;
     BOOL nLightIdx = 0;
     BOOL nTileY = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0);
-    if (!nTileY) {
-      return nLightIdx;
-    }
-
-    int iVar1 = RENDERER_nWindowHeight + 0x20;
-    int nClipLeft = -0x20;
-    int nClipRight = RENDERER_nWindowWidth;
-    if (nScreenPanels != 1) {
-      if (nScreenPanels == 2) {
-        nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
-      }
-    } else {
-      nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
-    }
-
-    nScreenPanels = 0;
-    if (pTile->nSubTiles <= 0) {
-      return nLightIdx;
-    }
-
-    do {
-      int a3;
-      a3 = pTile->pSubTiles[nScreenPanels].nOffsetY + nPosY;
-      nScreenX = pTile->pSubTiles[nScreenPanels].nOffsetX + nPosX;
-      if (nScreenX >= nClipLeft && nScreenX < nClipRight && a3 >= -0x20 && a3 < iVar1) {
-        psTileEntry = &pTile->pSubTiles[nScreenPanels].nOffsetX;
-        bAllocOk = (int)*psTileEntry >> 5;
-        aCornerLight[0] = (uint32_t)pLight[bAllocOk].nIntensity;
-        aCornerLight[1] = (uint32_t)pLight[bAllocOk + 1].nIntensity;
-        aCornerLight[2] = aCornerLight[1];
-        aCornerLight[3] = aCornerLight[0];
-        D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile(*(int*)(psTileEntry + 8), nScreenX, a3, (int)aCornerLight, nAlpha);
-        nLightIdx = 1;
+    if (nTileY) {
+      int bAllocOk;
+      iVar1 = RENDERER_nWindowHeight + 0x20;
+      nClipLeft = -0x20;
+      nClipRight = RENDERER_nWindowWidth;
+      if (nScreenPanels != 1) {
+        if (nScreenPanels == 2) {
+          nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
+        }
+      } else {
+        nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
       }
 
-      nScreenPanels++;
-    } while (nScreenPanels < pTile->nSubTiles);
+      nScreenPanels = 0;
+      if (pTile->nSubTiles > 0) {
+        do {
+          a3 = pTile->pSubTiles[nScreenPanels].nOffsetY + nPosY;
+          nScreenX = pTile->pSubTiles[nScreenPanels].nOffsetX + nPosX;
+          if (nScreenX >= nClipLeft && nScreenX < nClipRight && a3 >= -0x20 && a3 < iVar1) {
+            psTileEntry = &pTile->pSubTiles[nScreenPanels].nOffsetX;
+            bAllocOk = (int)*psTileEntry >> 5;
+            aCornerLight[0] = (uint32_t)pLight[bAllocOk].nIntensity;
+            aCornerLight[1] = (uint32_t)pLight[bAllocOk + 1].nIntensity;
+            aCornerLight[2] = aCornerLight[1];
+            aCornerLight[3] = aCornerLight[0];
+            D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile(*(int*)(psTileEntry + 8), nScreenX, a3, (int)aCornerLight, nAlpha);
+            nLightIdx = 1;
+          }
+
+          nScreenPanels++;
+        } while (nScreenPanels < pTile->nSubTiles);
+      }
+    }
 
     return nLightIdx;
 }

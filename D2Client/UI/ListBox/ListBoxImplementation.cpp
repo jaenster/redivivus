@@ -397,17 +397,15 @@ int __thiscall OnDownArrow(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
         pThis->nSelectedIndex = pThis->nItemCount - 1;
       }
     }
-    if (pThis->nSelectedIndex >= (int)(pThis->nItemCount - 1)) {
-      return 1;
-    }
-
-    pThis->nSelectedIndex++;
-    Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
-    if (pThis->nSelectedIndex < pThis->nFirstVisibleIndex) {
-      pThis->nFirstVisibleIndex = pThis->nSelectedIndex;
-    }
-    if (pThis->nSelectedIndex >= pThis->nVisibleRows + pThis->nFirstVisibleIndex) {
-      pThis->nFirstVisibleIndex++;
+    if (pThis->nSelectedIndex < (int)(pThis->nItemCount - 1)) {
+      pThis->nSelectedIndex++;
+      Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
+      if (pThis->nSelectedIndex < pThis->nFirstVisibleIndex) {
+        pThis->nFirstVisibleIndex = pThis->nSelectedIndex;
+      }
+      if (pThis->nSelectedIndex >= pThis->nVisibleRows + pThis->nFirstVisibleIndex) {
+        pThis->nFirstVisibleIndex++;
+      }
     }
 
     return 1;
@@ -472,11 +470,10 @@ int __thiscall HitTestItem(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
 int __thiscall OnMouseMove(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
-    if (!(nMouseX > pThis->nPosX && nMouseX < pThis->nWidth + pThis->nPosX && nMouseY > pThis->nPosY && nMouseY < pThis->nHeight + pThis->nPosY)) {
-      return 0;
+    if (nMouseX > pThis->nPosX && nMouseX < pThis->nWidth + pThis->nPosX && nMouseY > pThis->nPosY && nMouseY < pThis->nHeight + pThis->nPosY) {
+      HitTestItem(pThis, pMsg);
     }
 
-    HitTestItem(pThis, pMsg);
     return 0;
 }
 
@@ -488,11 +485,10 @@ int __thiscall OnChar(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) 
       if (pThis->nDrawCount < 2) {
         return 0;
       }
-      if (!(pThis->nSelectedIndex != -1 && pMsg->nWParam == 0xd)) {
-        return 1;
+      if (pThis->nSelectedIndex != -1 && pMsg->nWParam == 0xd) {
+        pThis->pfnOnItemActivated();
       }
 
-      pThis->pfnOnItemActivated();
       return 1;
     }
 
@@ -713,6 +709,7 @@ int __thiscall HandleScrollTrackClick(::ListBoxImplementation * pThis, D2UIMouse
 }
 
 int __thiscall OnMouseDown(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
+    uint16_t uMouseY;
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
     if (nMouseX <= pThis->nPosX || nMouseX >= pThis->nWidth + pThis->nPosX || nMouseY <= pThis->nPosY || nMouseY >= pThis->nHeight + pThis->nPosY) {
@@ -737,18 +734,17 @@ int __thiscall OnMouseDown(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
 
     nHitResult = IsMouseOnScrollTrack(pThis, pMsg);
     if (nHitResult == 1) {
-      uint16_t uMouseY;
       uMouseY = pMsg->uLParam.sMousePos.nMouseY;
       pThis->bScrollTrackPressed = 1;
       pThis->nTrackPressMouseY = (uint32_t)uMouseY;
       return 1;
     }
-    if (!pThis->pfnOnItemActivated) {
-      return 1;
+    if (pThis->pfnOnItemActivated) {
+      int nHitItemIdx;
+      nHitItemIdx = HitTestItem(pThis, pMsg);
+      pThis->nPressedItemIndex = nHitItemIdx;
     }
 
-    int nHitItemIdx = HitTestItem(pThis, pMsg);
-    pThis->nPressedItemIndex = nHitItemIdx;
     return 1;
 }
 
@@ -884,11 +880,10 @@ int __thiscall OnMouseUp(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMs
 
 ::ListBoxImplementation * __thiscall ScalarDeletingDestructor(::ListBoxImplementation * pThis, uint32_t nFlags) {
     pThis->pVtable = (ListBoxImplementationVtable*)(void*)UI::vftable;
-    if (!(nFlags & 1)) {
-      return pThis;
+    if (nFlags & 1) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

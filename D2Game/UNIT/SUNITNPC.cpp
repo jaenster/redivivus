@@ -1952,13 +1952,12 @@ void __fastcall SUNITNPC_HandleIdentify(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 static BOOL __stdcall UnitHasItemInInventory(int32_t guid, D2UnitStrc * pUnit) {
-    if (!pUnit->pInventory) {
-      return 0;
-    }
-
-    D2UnitStrc* pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory);
-    if (pDVar1 && pDVar1->nUnitGUID == guid) {
-      return 1;
+    if (pUnit->pInventory) {
+      D2UnitStrc* pDVar1;
+      pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory);
+      if (pDVar1 && pDVar1->nUnitGUID == guid) {
+        return 1;
+      }
     }
 
     return 0;
@@ -2268,32 +2267,31 @@ BOOL __fastcall SUNITNPC_HandleHireableAction(D2UnitStrc * pUnit) {
     bool bAnyStateRemoved;
     uint32_t bHasStateFlag;
     D2StatListExStrc* pStatList;
+    eD2States eState;
     bool bStateRemoved;
     _bStateRemoved = 0;
     _bAnyStateRemoved = 0;
-    if (sgptDataTable->nTxtStatesSize <= 0) {
-      return _bAnyStateRemoved;
-    }
-
-    eD2States eState = STATE_none;
-    do {
+    if (sgptDataTable->nTxtStatesSize > 0) {
       eD2States eActiveState;
-      eActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
-      if (eActiveState != STATE_none) {
-        bHasStateFlag = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckStateFlagArray12(eState);
-        if (bHasStateFlag) {
-          pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
-          if (pStatList) {
-            D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
-            D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
-            _bStateRemoved = 1;
+      eState = STATE_none;
+      do {
+        eActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
+        if (eActiveState != STATE_none) {
+          bHasStateFlag = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckStateFlagArray12(eState);
+          if (bHasStateFlag) {
+            pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
+            if (pStatList) {
+              D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
+              D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
+              _bStateRemoved = 1;
+            }
           }
         }
-      }
 
-      eState += STATE_freeze;
-      _bAnyStateRemoved = _bStateRemoved;
-    } while ((int)eState < sgptDataTable->nTxtStatesSize);
+        eState += STATE_freeze;
+        _bAnyStateRemoved = _bStateRemoved;
+      } while ((int)eState < sgptDataTable->nTxtStatesSize);
+    }
 
     return _bAnyStateRemoved;
 }

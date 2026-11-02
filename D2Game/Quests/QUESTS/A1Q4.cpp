@@ -158,11 +158,10 @@ BOOL __fastcall Q04_SyncQuestStepToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUni
       D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Step0x02);
       return 0;
     }
-    if (!(nStateFlag >= 3 && nStateFlag <= 5)) {
-      return 0;
+    if (nStateFlag >= 3 && nStateFlag <= 5) {
+      D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Step0x03);
     }
 
-    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Step0x03);
     return 0;
 }
 
@@ -584,11 +583,10 @@ BOOL __fastcall Q04_DespawnRogueGuards(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     Monster::MonsterMode::SetCurrentSkill(pUnit, Death, &sKill);
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKill, 1);
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSearchForCain);
-    if (!pQuestData) {
-      return 1;
+    if (pQuestData) {
+      pQuestData->pQuestSpecificData.pA1Q4->sSub.bPortalArmed = '\x01';
     }
 
-    pQuestData->pQuestSpecificData.pA1Q4->sSub.bPortalArmed = '\x01';
     return 1;
 }
 
@@ -1036,37 +1034,31 @@ void __fastcall Q04_AutoCompleteForActIPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
 // RewardAwaits, push quest info, then credit every party member via
 // Q04_AutoCompleteForActIPlayer. This is the "rescued Cain by reaching Tristram" path.
 BOOL __fastcall Q04_CompleteOnEnterTristram(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    D2RoomStrc* pRoom;
+    eD2LevelId eLevelId;
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Completed);
-    if (BVar2 == 1) {
-      return 0;
+    if (BVar2 != 1) {
+      uint16_t nPartyId;
+      BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_RewardAwaits);
+      if (BVar2 != 1) {
+        pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+        if (pRoom) {
+          eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+          if (eLevelId == LEVEL_Tristram) {
+            D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_JustCompleted);
+            D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_RewardAwaits);
+            QUEST_SendQuestInfoToUnit(pGame, pUnit);
+            nPartyId = UNIT::SUnit::GetPartyId(pUnit);
+            if (nPartyId != 0xffff) {
+              UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q04_AutoCompleteForActIPlayer, 0);
+            }
+          }
+        }
+      }
     }
 
-    BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_RewardAwaits);
-    if (BVar2 == 1) {
-      return 0;
-    }
-
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return 0;
-    }
-
-    eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if (eLevelId != LEVEL_Tristram) {
-      return 0;
-    }
-
-    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_JustCompleted);
-    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_RewardAwaits);
-    QUEST_SendQuestInfoToUnit(pGame, pUnit);
-    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    if (nPartyId == 0xffff) {
-      return 0;
-    }
-
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q04_AutoCompleteForActIPlayer, 0);
     return 0;
 }
 
@@ -1077,17 +1069,14 @@ BOOL __fastcall Q04_SetQuestCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUn
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Completed);
-    if (bQuestState == 1) {
-      return 0;
+    if (bQuestState != 1) {
+      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_RewardAwaits);
+      if (bQuestState != 1) {
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_CannotCompleteQuestInGame);
+        QUEST_SendQuestStatePacket(pUnit, 4, 0);
+      }
     }
 
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_RewardAwaits);
-    if (bQuestState == 1) {
-      return 0;
-    }
-
-    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_CannotCompleteQuestInGame);
-    QUEST_SendQuestStatePacket(pUnit, 4, 0);
     return 0;
 }
 
@@ -1741,19 +1730,17 @@ void __fastcall Q04_SetCainRescuedFlag(::SGAMEDATA * pGame) {
 // The Cow Level state piggybacks on the "Search for Cain" quest slot.
 BOOL __fastcall Q04_SetSecretCowLevelDiscovered(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return 0;
-    }
-
-    eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if (eLevelId != LEVEL_MooMooFarm) {
-      return 0;
-    }
-
-    /* SetQuestState(Step0x10=10): Secret Cow Level "discovered" flag — Cow Level
+    if (pRoom) {
+      eD2LevelId eLevelId;
+      eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+      if (eLevelId == LEVEL_MooMooFarm) {
+        /* SetQuestState(Step0x10=10): Secret Cow Level "discovered" flag — Cow Level
                          state is stored in the A1Q4 (Search for Cain) quest record, not its own quest
                           */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
-    D2Common::QuestRecord::SetQuestState(pQuestRecord, QUEST_TheSearchForCain, QUESTSTATE_Step0x10);
+        D2Common::QuestRecord::SetQuestState(pQuestRecord, QUEST_TheSearchForCain, QUESTSTATE_Step0x10);
+      }
+    }
+
     return 0;
 }
 
@@ -2128,12 +2115,11 @@ BOOL __fastcall Q04_SpawnCainCage(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 
     D2UnitStrc* pCageUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xbd, pDVar2->ptCainPos.x, pDVar2->ptCainPos.y, pGame, pSpawnRoom, 1, 1, nullptr);
-    if (!pCageUnit) {
-      return 1;
+    if (pCageUnit) {
+      *(uint8_t*)((uintptr_t)&pDVar2->sSub.field_0x7C + 1) = 1;
+      pDVar2->nCainPortalGUID = pCageUnit->nUnitGUID;
     }
 
-    *(uint8_t*)((uintptr_t)&pDVar2->sSub.field_0x7C + 1) = 1;
-    pDVar2->nCainPortalGUID = pCageUnit->nUnitGUID;
     return 1;
 }
 

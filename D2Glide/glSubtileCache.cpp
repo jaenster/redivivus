@@ -63,37 +63,34 @@ int __fastcall GLSUBTILE_Initialize(GlSubtileCacheStrc * pCache, int nVramStart,
     pCache->pActiveTail = 0;
     pCache->pFreeHead = pNodesBase;
     pCache->pFreeTail = pNodesBase + (pCache->nMaxEntries - 1);
-    if (gbGlideIsDebugBuild) {
-      return pCache->nMaxEntries * dwSubtileSize + nVramStart;
+    if (!gbGlideIsDebugBuild) {
+      nVramAddr = 1;
+      if (1 < (int)(pCache->nMaxEntries - 1)) {
+        pDebugScan = &pNodesBase[1].dwAddress;
+        do {
+          if (*pDebugScan < 0x200000 && pCache->dwEntrySize + *pDebugScan > 0x200000) {
+            pNodesBase[nVramAddr - 1].pNext = pNodesBase + nVramAddr + 1;
+            pCache->pNodes[nVramAddr + 1].pPrev = pCache->pNodes + nVramAddr - 1;
+            pCache->pNodes[nVramAddr].pPrev = 0;
+            pCache->pNodes[nVramAddr].pNext = 0;
+            pCache->nUsedCount++;
+            break;
+          }
+
+          nVramAddr++;
+          pDebugScan += 5;
+        } while (nVramAddr < (int)(pCache->nMaxEntries - 1));
+      }
+
+      nEntryCount = pCache->pNodes[pCache->nMaxEntries - 1].dwAddress;
+      if (nEntryCount < 0x200000 && pCache->dwEntrySize + nEntryCount > 0x200000) {
+        pCache->pNodes[pCache->nMaxEntries - 1].pPrev = 0;
+        pCache->pNodes[pCache->nMaxEntries - 2].pNext = 0;
+        pCache->pFreeTail = pCache->pNodes + (pCache->nMaxEntries - 2);
+        pCache->nMaxEntries--;
+      }
     }
 
-    nVramAddr = 1;
-    if (1 < (int)(pCache->nMaxEntries - 1)) {
-      pDebugScan = &pNodesBase[1].dwAddress;
-      do {
-        if (*pDebugScan < 0x200000 && pCache->dwEntrySize + *pDebugScan > 0x200000) {
-          pNodesBase[nVramAddr - 1].pNext = pNodesBase + nVramAddr + 1;
-          pCache->pNodes[nVramAddr + 1].pPrev = pCache->pNodes + nVramAddr - 1;
-          pCache->pNodes[nVramAddr].pPrev = 0;
-          pCache->pNodes[nVramAddr].pNext = 0;
-          pCache->nUsedCount++;
-          break;
-        }
-
-        nVramAddr++;
-        pDebugScan += 5;
-      } while (nVramAddr < (int)(pCache->nMaxEntries - 1));
-    }
-
-    nEntryCount = pCache->pNodes[pCache->nMaxEntries - 1].dwAddress;
-    if (!(nEntryCount < 0x200000 && pCache->dwEntrySize + nEntryCount > 0x200000)) {
-      return pCache->nMaxEntries * dwSubtileSize + nVramStart;
-    }
-
-    pCache->pNodes[pCache->nMaxEntries - 1].pPrev = 0;
-    pCache->pNodes[pCache->nMaxEntries - 2].pNext = 0;
-    pCache->pFreeTail = pCache->pNodes + (pCache->nMaxEntries - 2);
-    pCache->nMaxEntries--;
     return pCache->nMaxEntries * dwSubtileSize + nVramStart;
 }
 

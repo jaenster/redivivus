@@ -56,22 +56,18 @@ static int32_t ComputeSizeClassIndex(int32_t nSize) {
     }
 
     int nBitIndex = 0x1f;
-    if (!nValue) {
-      return nBitIndex - 3;
+    if (nValue) {
+      for (; !(nValue >> nBitIndex); nBitIndex--) {}
     }
-
-    for (; !(nValue >> nBitIndex); nBitIndex--) {}
 
     return nBitIndex - 3;
 }
 
 int32_t __fastcall FindFirstFreeBit(uint32_t dwBits) {
     int nBitIndex = 0;
-    if (!~dwBits) {
-      return nBitIndex;
+    if (~dwBits) {
+      for (; !(~dwBits >> nBitIndex & 1); nBitIndex++) {}
     }
-
-    for (; !(~dwBits >> nBitIndex & 1); nBitIndex++) {}
 
     return nBitIndex;
 }
@@ -170,12 +166,11 @@ static int32_t FindFreeSlotInBitmap(uint32_t * pnBitmap, uint32_t nTotalBits) {
 
       test_tail_word_or_advance:
       if (nWordCount <= 8) {
-        if (!(nTotalBits & 0x1f && pnBitmap[nWordCount] != gdwFogMemoryAllocFlags[nTotalBits & 0x1f])) {
-          return nFreeSlot;
+        if (nTotalBits & 0x1f && pnBitmap[nWordCount] != gdwFogMemoryAllocFlags[nTotalBits & 0x1f]) {
+          nFreeSlot = FindFirstFreeBit(pnBitmap[nWordCount]);
+          nFreeSlot = nWordCount * 0x20 + nFreeSlot + nBaseOffset;
         }
 
-        nFreeSlot = FindFirstFreeBit(pnBitmap[nWordCount]);
-        nFreeSlot = nWordCount * 0x20 + nFreeSlot + nBaseOffset;
         return nFreeSlot;
       }
       nWordCount += -8;
@@ -923,11 +918,10 @@ void * __fastcall ReAlloc(D2PoolManagerStrc * pMemory, void * pMemoryToRealloc, 
 
 void * __fastcall AllocClientMemory(size_t nAllocSize, char * szFile, int32_t nLine, int32_t nNull) {
     void* pMemory = Memory::Alloc(nullptr, nAllocSize, szFile, nLine);
-    if (pMemory) {
-      return pMemory;
+    if (!pMemory) {
+      Src::ErrorManager::FOG_ErrorHandler(ERROR_OutOfMemoryError, szFile, nLine, "");
     }
 
-    Src::ErrorManager::FOG_ErrorHandler(ERROR_OutOfMemoryError, szFile, nLine, "");
     return pMemory;
 }
 
@@ -939,22 +933,20 @@ BOOL __fastcall FreeClientMemory(void * pMemoryToFree, char * szFile, int32_t nL
 
 void * __fastcall ReAllocClientMemory(void * pMemory, size_t nSize, char * szFile, size_t nLine, uint32_t nUnused) {
     void* pNewMemory = ReAlloc(nullptr, pMemory, nSize, szFile, nLine);
-    if (pNewMemory) {
-      return pNewMemory;
+    if (!pNewMemory) {
+      Src::ErrorManager::FOG_ErrorHandler(ERROR_OutOfMemoryError, szFile, nLine, "");
     }
 
-    Src::ErrorManager::FOG_ErrorHandler(ERROR_OutOfMemoryError, szFile, nLine, "");
     return pNewMemory;
 }
 
 // Allocates server-side memory from the pool manager. Returns void* to allocated memory. Calls FOG_ErrorHandler on allocation failure.
 void * __fastcall AllocServerMemory(D2PoolManagerStrc * pPoolManagerStrc, size_t nSize, char * szFile, int32_t nLine, int32_t nNull) {
     void* pMemory = Memory::Alloc(gpServerMemHeap ? (D2PoolManagerStrc*)pPoolManagerStrc : nullptr, nSize, szFile, nLine);
-    if (pMemory) {
-      return pMemory;
+    if (!pMemory) {
+      Src::ErrorManager::FOG_ErrorHandler(ERROR_OutOfMemoryError, szFile, nLine, "");
     }
 
-    Src::ErrorManager::FOG_ErrorHandler(ERROR_OutOfMemoryError, szFile, nLine, "");
     return pMemory;
 }
 
@@ -967,11 +959,10 @@ BOOL __fastcall FreeServerMemory(D2PoolManagerStrc * pPoolManagerStrc, void * pM
 // Reallocates server-side memory to a new size. Returns void* to reallocated memory block. Calls FOG_ErrorHandler on reallocation failure.
 void * __fastcall ReAllocServerMemory(D2PoolManagerStrc * pPoolManagerStrc, void * pMemory, size_t nNewSize, char * szFile, int nLine, int nUnused) {
     void* pResult = ReAlloc(gpServerMemHeap ? (D2PoolManagerStrc*)pPoolManagerStrc : nullptr, pMemory, nNewSize, szFile, nLine);
-    if (pResult) {
-      return pResult;
+    if (!pResult) {
+      Src::ErrorManager::FOG_ErrorHandler(ERROR_OutOfMemoryError, szFile, nLine, "");
     }
 
-    Src::ErrorManager::FOG_ErrorHandler(ERROR_OutOfMemoryError, szFile, nLine, "");
     return pResult;
 }
 

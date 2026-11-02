@@ -348,11 +348,9 @@ int32_t D2MEM_FindLowestSetBit(uint32_t dwMask) {
     }
 
     int nBitPos = 0;
-    if (!dwMask) {
-      return nBitPos + 1;
+    if (dwMask) {
+      for (; !(dwMask >> nBitPos & 1); nBitPos++) {}
     }
-
-    for (; !(dwMask >> nBitPos & 1); nBitPos++) {}
 
     return nBitPos + 1;
 }

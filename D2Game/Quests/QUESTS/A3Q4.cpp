@@ -346,11 +346,10 @@ void __fastcall Q21_PlayerSetGoldenBirdQuestState(::SGAMEDATA * pGame, D2UnitStr
 // Q21_PlayerSetGoldenBirdQuestState over all members (ExecuteFunctionForEveryPartyMember). No-op solo.
 int __thiscall Q21_PartySetGoldenBirdState(void * pThis, ::SGAMEDATA * pGame) {
     uint16_t nPartyId = UNIT::SUnit::GetPartyId((D2UnitStrc*)pThis);
-    if (nPartyId == 0xffff) {
-      return 0;
+    if (nPartyId != 0xffff) {
+      UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q21_PlayerSetGoldenBirdQuestState, 0);
     }
 
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q21_PlayerSetGoldenBirdQuestState, 0);
     return 0;
 }
 

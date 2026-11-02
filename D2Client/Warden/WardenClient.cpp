@@ -147,11 +147,10 @@ void __fastcall WARDEN_CbFreeModuleStruct(void * pModuleStruct) {
 // @sourcefile .\WARDEN\WardenClient.cpp
 LPVOID * __thiscall WARDEN_DestroyModuleObject(LPVOID * ppModule, uint8_t bFreeStruct) {
     WARDEN_FreeModuleLibraries(ppModule);
-    if (!(bFreeStruct & 1)) {
-      return ppModule;
+    if (bFreeStruct & 1) {
+      Storm::Source::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
     }
 
-    Storm::Source::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
     return ppModule;
 }
 

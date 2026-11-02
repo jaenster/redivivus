@@ -199,11 +199,10 @@ int __fastcall PLRSAVE_RestoreItemFromSaveData(::SGAMEDATA * pGame, D2UnitStrc *
     if (pSavedItemData->nStorageType > '\0') {
       *ppItemOut = pItem;
     }
-    if (!pnStorageTypeOut) {
-      return 0;
+    if (pnStorageTypeOut) {
+      *pnStorageTypeOut = (uint32_t)pSavedItemData->nStorageType;
     }
 
-    *pnStorageTypeOut = (uint32_t)pSavedItemData->nStorageType;
     return 0;
 }
 
@@ -823,17 +822,16 @@ uint32_t __fastcall PLAYERSAVE_CRC32MissileTable(D2MissilesTxt * pMissilesTxt, i
     }
 
     uint32_t dwCrc = Storm::Source::SFile::CRC32_Calculate((uint8_t*)pMissilesTxt, nCrcSeed);
-    if (nFieldCount <= 0x5b) {
-      return dwCrc;
+    if (nFieldCount > 0x5b) {
+      pMissilesTxt->CltHitSubMissile3 = (uint16_t)savedCltHitSubs;
+      pMissilesTxt->CltHitSubMissile4 = (uint16_t)((uint32_t)savedCltHitSubs >> 16);
+      pMissilesTxt->nSrvDoFunc = (short int)savedFuncIds;
+      pMissilesTxt->nSrvHitFunc = (short int)((uint32_t)savedFuncIds >> 0x10);
+      pMissilesTxt->ProgSound = (uint16_t)savedProgSounds;
+      pMissilesTxt->ProgOverlay = (uint16_t)((uint32_t)savedProgSounds >> 16);
+      *(uint32_t*)((uintptr_t)&pMissilesTxt->HitFlags + 3) = savedHitFlagsExtra;
     }
 
-    pMissilesTxt->CltHitSubMissile3 = (uint16_t)savedCltHitSubs;
-    pMissilesTxt->CltHitSubMissile4 = (uint16_t)((uint32_t)savedCltHitSubs >> 16);
-    pMissilesTxt->nSrvDoFunc = (short int)savedFuncIds;
-    pMissilesTxt->nSrvHitFunc = (short int)((uint32_t)savedFuncIds >> 0x10);
-    pMissilesTxt->ProgSound = (uint16_t)savedProgSounds;
-    pMissilesTxt->ProgOverlay = (uint16_t)((uint32_t)savedProgSounds >> 16);
-    *(uint32_t*)((uintptr_t)&pMissilesTxt->HitFlags + 3) = savedHitFlagsExtra;
     return dwCrc;
 }
 
@@ -1931,11 +1929,10 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
         nItemIndex++;
       } while (nItemIndex < (int)nItemCount);
     }
-    if (!ppnBytesConsumed) {
-      return 0;
+    if (ppnBytesConsumed) {
+      *ppnBytesConsumed = (short int*)((int)pStreamCursor - (int)pItemLocal);
     }
 
-    *ppnBytesConsumed = (short int*)((int)pStreamCursor - (int)pItemLocal);
     return 0;
 }
 
@@ -1958,7 +1955,6 @@ int __fastcall PLRSAVE_DispatchItemLoadByFormat(::SGAMEDATA * pGame, D2UnitStrc 
 static int32_t __stdcall _oldSaveGameLoadingPart7_part1(uint8_t * pCorpseData, uint32_t nFormat, int32_t nSize, uint32_t * pnBytesConsumed, D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     char* szCharName;
     int32_t nItemLoadResult;
-    uint8_t* pCorpseBytesRead;
     int nClassId;
     D2ClientStrc* pClientLocal;
     *pnBytesConsumed = 0;
@@ -1998,15 +1994,15 @@ static int32_t __stdcall _oldSaveGameLoadingPart7_part1(uint8_t * pCorpseData, u
 
       nItemLoadResult = PLRSAVE_LoadItemListFromStream(pGame, pCorpseUnit, (D2UnitStrc*)(pCorpseData + 0xc), nFormat, nSize - 0xc, 1, (short int**)&pClientLocal);
     }
-    if (nItemLoadResult) {
-      return nItemLoadResult;
+    if (!nItemLoadResult) {
+      uint8_t* pCorpseBytesRead;
+      pCorpseBytesRead = &pClientLocal->nCharTemplate;
+      D2Common::INVENTORY::Inventory::INVENTORY_AddCorpse(pUnit->pInventory, pCorpseUnit->nUnitGUID, 0, UNIT_MONSTER);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame, pUnit->nUnitGUID, pCorpseUnit->nUnitGUID, 1);
+      *pnBytesConsumed = (uint32_t)pCorpseBytesRead;
+      nItemLoadResult = 0;
     }
 
-    pCorpseBytesRead = &pClientLocal->nCharTemplate;
-    D2Common::INVENTORY::Inventory::INVENTORY_AddCorpse(pUnit->pInventory, pCorpseUnit->nUnitGUID, 0, UNIT_MONSTER);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame, pUnit->nUnitGUID, pCorpseUnit->nUnitGUID, 1);
-    *pnBytesConsumed = (uint32_t)pCorpseBytesRead;
-    nItemLoadResult = 0;
     return nItemLoadResult;
 }
 
@@ -2143,11 +2139,10 @@ uint32_t __fastcall _oldSaveGameLoadingPart8_part1(int32_t pGame, uint16_t wHire
     }
 
     D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(*(int32_t*)(pGame + 0x70), (uint32_t)wHirelingId, nMercLevel);
-    if (!(!pHirelingTxt || (nExpThreshold = D2Common::Merc::GetBaseExperience(nMercLevel, pHirelingTxt->expPerLvl) , nExpThreshold <= dwExperience))) {
-      return nExpThreshold;
+    if (!pHirelingTxt || (nExpThreshold = D2Common::Merc::GetBaseExperience(nMercLevel, pHirelingTxt->expPerLvl) , nExpThreshold <= dwExperience)) {
+      nExpThreshold = dwExperience;
     }
 
-    nExpThreshold = dwExperience;
     return nExpThreshold;
 }
 
@@ -2257,16 +2252,15 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint32_t *
 
           puVar1 = pdwReadPos;
           nErrorLine = PLRSAVE_DispatchItemLoadByFormat(pGame, pMercUnit, (uint8_t*)pdwReadPos, nVersion, (int)pdwSectionStart + (nBytesRemaining - (int)pdwReadPos), 0, (short int**)&pdwReadPos);
-          if (nErrorLine) {
-            return nErrorLine;
+          if (!nErrorLine) {
+            ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pMercUnit, 0, 0);
+            ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pMercUnit, 0);
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMercUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pMercUnit), 0);
+            Monster::MonsterAI::SendMercPackets(pGame, pUnit, 1);
+            *ppnBytesConsumed = (uint32_t*)((int)pdwReadPos - (int)pdwSectionStart + (int)puVar1);
+            nErrorLine = 0;
           }
 
-          ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pMercUnit, 0, 0);
-          ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pMercUnit, 0);
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMercUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pMercUnit), 0);
-          Monster::MonsterAI::SendMercPackets(pGame, pUnit, 1);
-          *ppnBytesConsumed = (uint32_t*)((int)pdwReadPos - (int)pdwSectionStart + (int)puVar1);
-          nErrorLine = 0;
           return nErrorLine;
         }
       }
@@ -2280,41 +2274,39 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint32_t *
 // Restores skill hotkeys and active left/right skill assignments from a legacy save stream. Reads up to 8 hotkey entries (indices 8-15) from pbParam, remapping raw skill byte values (0x9C-0xD8 range shifted +0x41, 0xFF → -1) via SetGotkeyInfo. If stream is long enough also restores shift-left/right skill slots. Outputs bytes consumed in *pnParam.
 // @sourcefile .\PLAYER\PlrSave.cpp
 int __stdcall _oldSaveGameLoadingPart9(D2UnitStrc * pUnit, uint8_t * pbParam, uint32_t nParam, int * pnBytesConsumed) {
+    int nHotkeyIndex;
+    uint8_t* pHotkeyEntry;
+    eD2Skills eSkill;
     *pnBytesConsumed = 0;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave.cpp", 0x16a1);
-    if (!pClient) {
-      return 0;
-    }
-
-    *pnBytesConsumed = 0x30;
-    if (nParam <= 0x48) {
-      return 0;
-    }
-
-    int nHotkeyIndex = 8;
-    uint8_t* pHotkeyEntry = pbParam;
-    do {
+    if (pClient) {
       uint32_t nRawSkillId;
-      nRawSkillId = (uint32_t)*pHotkeyEntry;
-      if (nRawSkillId >= 0x9c && nRawSkillId <= 0xd8) {
-        nRawSkillId += 0x41;
-      } else if (nRawSkillId == 0xff) {
-        nRawSkillId = -1;
+      *pnBytesConsumed = 0x30;
+      if (nParam > 0x48) {
+        nHotkeyIndex = 8;
+        pHotkeyEntry = pbParam;
+        do {
+          nRawSkillId = (uint32_t)*pHotkeyEntry;
+          if (nRawSkillId >= 0x9c && nRawSkillId <= 0xd8) {
+            nRawSkillId += 0x41;
+          } else if (nRawSkillId == 0xff) {
+            nRawSkillId = -1;
+          }
+
+          GAME::Clients::SetGotkeyInfo(pClient, nHotkeyIndex, (uint16_t)nRawSkillId, pHotkeyEntry[1], -1);
+          nHotkeyIndex++;
+          pHotkeyEntry += 6;
+        } while (nHotkeyIndex < 0x10);
+
+        if (nParam > 0x51) {
+          eSkill = *(eD2Skills*)((int)(pbParam + *pnBytesConsumed) + 4);
+          D2Common::Units::SetShiftLeftSkillData(pUnit, *(eD2Skills*)(pbParam + *pnBytesConsumed), -1);
+          D2Common::Units::SetShiftRightSkillData(pUnit, eSkill, -1);
+          *pnBytesConsumed += 8;
+        }
       }
-
-      GAME::Clients::SetGotkeyInfo(pClient, nHotkeyIndex, (uint16_t)nRawSkillId, pHotkeyEntry[1], -1);
-      nHotkeyIndex++;
-      pHotkeyEntry += 6;
-    } while (nHotkeyIndex < 0x10);
-
-    if (nParam <= 0x51) {
-      return 0;
     }
 
-    eD2Skills eSkill = *(eD2Skills*)((int)(pbParam + *pnBytesConsumed) + 4);
-    D2Common::Units::SetShiftLeftSkillData(pUnit, *(eD2Skills*)(pbParam + *pnBytesConsumed), -1);
-    D2Common::Units::SetShiftRightSkillData(pUnit, eSkill, -1);
-    *pnBytesConsumed += 8;
     return 0;
 }
 
@@ -2336,7 +2328,7 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame1_t) == 8, "frame group __frame1_t must reproduce the Ghidra frame layout");
     __frame1_t __frame1;
-    uint8_t bIsWeaponSwapped;
+    BOOL nResult;
     int32_t iVar1;
     D2UnitDataPlayerStrc* pPlayerData;
     int32_t nLevel;
@@ -2367,7 +2359,6 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
       return nLoadResult;
     }
     if (__frame0.nSavedHp) {
-      BOOL nResult;
       nResult = SERVER_CreatePlayerUnit(__frame1.pGameLocal, pClient, ppUnitOut);
       return nResult;
     }
@@ -2424,60 +2415,60 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
     pSkillsData = (short int*)((int)pSkillsData + (int)ppUnit);
     nBytesRemaining -= (int)ppUnit;
     iVar1 = _oldSaveGameLoadingPart6(pUnit, pSkillsData, nSkillMax, nSavefileSize, (uint32_t*)&ppUnit, __frame0.pClientOrig);
-    if (iVar1) {
-      return iVar1;
-    }
+    if (!iVar1) {
+      uint8_t bIsWeaponSwapped;
+      PlayerSave2::PLAYERSAVE2_LoadOldSavegame_ReturnZero();
+      if (rightSkill != SKILL_Attack) {
+        SKILLS::SkillsServer::Server_SelectSkill(pUnit, 1, rightSkill, -1);
+      }
+      if (leftSkill != SKILL_Attack) {
+        SKILLS::SkillsServer::Server_SelectSkill(pUnit, 0, leftSkill, -1);
+      }
 
-    PlayerSave2::PLAYERSAVE2_LoadOldSavegame_ReturnZero();
-    if (rightSkill != SKILL_Attack) {
-      SKILLS::SkillsServer::Server_SelectSkill(pUnit, 1, rightSkill, -1);
-    }
-    if (leftSkill != SKILL_Attack) {
-      SKILLS::SkillsServer::Server_SelectSkill(pUnit, 0, leftSkill, -1);
-    }
-
-    pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    pPlayerData->eLeftSkillId = rightSkill;
-    pPlayerData->eRightSkillId = leftSkill;
-    nBytesRemaining -= (int)ppUnit;
-    pItemsData = (uint8_t*)((int)pSkillsData + (int)ppUnit);
-    nLoadResult = PLRSAVE_DispatchItemLoadByFormat(__frame1.pGameLocal, pUnit, pItemsData, nSavefileSize, nBytesRemaining, 0, (short int**)&ppUnit);
-    if (!nLoadResult) {
-      nGoldLimit = nBytesRemaining - (int)ppUnit;
-      pSkillsData = (short int*)(pItemsData + (int)ppUnit);
-      iVar1 = _oldSaveGameLoadingPart7(__frame1.pGameLocal, pUnit, pSkillsData, nSavefileSize, nGoldLimit, (uint32_t*)&ppUnit);
-      if (!iVar1) {
-        pCorpseData = (uint32_t*)((int)pSkillsData + (int)ppUnit);
-        ppUnitOut = (D2UnitStrc**)_oldSaveGameLoadingPart8(pUnit, pCorpseData, nSavefileSize, nGoldLimit - (int)ppUnit, (uint32_t**)&ppUnit, __frame1.pGameLocal);
-        if (!ppUnitOut) {
-          pWaypointsData = (uint8_t*)((int)pCorpseData + (int)ppUnit);
-          ppUnit = ppUnitOut;
-          _oldSaveGameLoadingPart9(pUnit, pWaypointsData, nSavefileSize, (int*)&ppUnit);
+      pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+      pPlayerData->eLeftSkillId = rightSkill;
+      pPlayerData->eRightSkillId = leftSkill;
+      nBytesRemaining -= (int)ppUnit;
+      pItemsData = (uint8_t*)((int)pSkillsData + (int)ppUnit);
+      nLoadResult = PLRSAVE_DispatchItemLoadByFormat(__frame1.pGameLocal, pUnit, pItemsData, nSavefileSize, nBytesRemaining, 0, (short int**)&ppUnit);
+      if (!nLoadResult) {
+        nGoldLimit = nBytesRemaining - (int)ppUnit;
+        pSkillsData = (short int*)(pItemsData + (int)ppUnit);
+        iVar1 = _oldSaveGameLoadingPart7(__frame1.pGameLocal, pUnit, pSkillsData, nSavefileSize, nGoldLimit, (uint32_t*)&ppUnit);
+        if (!iVar1) {
+          pCorpseData = (uint32_t*)((int)pSkillsData + (int)ppUnit);
+          ppUnitOut = (D2UnitStrc**)_oldSaveGameLoadingPart8(pUnit, pCorpseData, nSavefileSize, nGoldLimit - (int)ppUnit, (uint32_t**)&ppUnit, __frame1.pGameLocal);
+          if (!ppUnitOut) {
+            pWaypointsData = (uint8_t*)((int)pCorpseData + (int)ppUnit);
+            ppUnit = ppUnitOut;
+            _oldSaveGameLoadingPart9(pUnit, pWaypointsData, nSavefileSize, (int*)&ppUnit);
+          }
         }
       }
+
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, __frame0.nSavedHp, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, (int32_t)__frame1.pSavedMana, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_attackrate, 100, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_velocitypercent, 100, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_other_animrate, 100, 0);
+      if (!pUnit) {
+        iVar1 = -1;
+      } else {
+        iVar1 = pUnit->nClassId;
+      }
+
+      nLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_level, 0);
+      nNextExpRequired = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(iVar1, nLevel);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_nextexp, nNextExpRequired, 0);
+      pClientForSwitch = __frame0.pClientOrig;
+      bIsWeaponSwapped = GAME::Clients::HasWeaponSwapped(__frame0.pClientOrig);
+      if (bIsWeaponSwapped != '\0') {
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x97_WeaponSwitch(pClientForSwitch);
+      }
+
+      iVar1 = 0;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, __frame0.nSavedHp, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, (int32_t)__frame1.pSavedMana, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_attackrate, 100, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_velocitypercent, 100, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_other_animrate, 100, 0);
-    if (!pUnit) {
-      iVar1 = -1;
-    } else {
-      iVar1 = pUnit->nClassId;
-    }
-
-    nLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_level, 0);
-    nNextExpRequired = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(iVar1, nLevel);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_nextexp, nNextExpRequired, 0);
-    pClientForSwitch = __frame0.pClientOrig;
-    bIsWeaponSwapped = GAME::Clients::HasWeaponSwapped(__frame0.pClientOrig);
-    if (bIsWeaponSwapped != '\0') {
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x97_WeaponSwitch(pClientForSwitch);
-    }
-
-    iVar1 = 0;
     return iVar1;
 }
 
@@ -2569,14 +2560,14 @@ static int32_t __stdcall CLIENT_LoadPlayerFromNetworkSave(::SGAMEDATA * pGame, D
       *ppUnit = 0;
       return nResult;
     }
-    if (!*ppUnit) {
-      return 0;
-    }
-    if (pGame->nGameType == SGAMETYPE_OBNET_HOST || pGame->nGameType == SGAMETYPE_LAN_HOST) {
-      GAME::Clients::DeleteCurrentSave(pClient);
+    if (*ppUnit) {
+      if (pGame->nGameType == SGAMETYPE_OBNET_HOST || pGame->nGameType == SGAMETYPE_LAN_HOST) {
+        GAME::Clients::DeleteCurrentSave(pClient);
+      }
+
+      Quests::QUESTS::QUEST_OnPlayerJoinGame(pGame, *ppUnit, 0);
     }
 
-    Quests::QUESTS::QUEST_OnPlayerJoinGame(pGame, *ppUnit, 0);
     return 0;
 }
 

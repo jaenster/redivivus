@@ -1201,7 +1201,7 @@ void __stdcall RENDERER_D3D_ReleaseGroundTileCache();
 void __fastcall DrawGroundTile(struct D2TileLibraryEntryStrc * pTile, struct D2GfxLightExStrc * pLight, int nPosX, int nPosY, int nWorldXpos, int nWorldYpos, uint32_t nAlpha, int nScreenPanels, void * pTileData);
 // Builds 256x256 lighting lookup table at 0x00971740 for color modulation. Each entry[row][col] = clamp((row+col) / 255, 0, 255). Used by RENDERER_D3D_ApplyShadowTextureCoords and RENDERER_D3D_SetTextureStageColor to apply dynamic lighting to vertices. Total table size: 64KB.
 void __stdcall RENDERER_D3D_InitLightingTable();
-void __fastcall SetGlobalLight(BYTE nRed, BYTE nGreen, BYTE nBlue);
+void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue);
 void __fastcall RENDERER_D3D_ApplyShadowTextureCoords(void * pVertex, uint8_t nLightIndex, uint8_t byAlpha);
 void __fastcall RENDERER_D3D_SetTextureStageColor(void * pVertex, uint32_t dwGamma, uint8_t byAlpha);
 // Initializes perspective Z-division table at 0x00981748 (8192 entries). For each Z coordinate in range [-4096, 4095], calculates perspective factor as 3059712 / (Z - 3000), clamped to range Z=[-2999, 2999] to prevent divide-by-zero. Used for depth-based vertex scaling in 3D tile rendering.

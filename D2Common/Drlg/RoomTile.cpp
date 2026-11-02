@@ -400,11 +400,10 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateShadowTileData(D2RoomExStrc *
     if (nLibFlags & 1) {
       pTileData->nFlags |= 4;
     }
-    if (!(nLibFlags & 4)) {
-      return pTileData;
+    if (nLibFlags & 4) {
+      pTileData->nFlags |= 0x800;
     }
 
-    pTileData->nFlags |= 0x800;
     return pTileData;
 }
 
@@ -748,11 +747,10 @@ static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_AddTileData(D2RoomExStrc * pR
 
     DRLGROOMTILE_CreateWallTileData(pRoomEx, &pTileLink->pTileData, nX, nY, nGridInfo, nTileLibEntry, nTileType);
     pTileData = pTileLink->pTileData;
-    if (!(nTileType == 0xb || nTileType == 10)) {
-      return pTileData;
+    if (nTileType == 0xb || nTileType == 10) {
+      DRLGROOMTILE_SetupWarpTile(pRoomEx, pTileData, nGridInfo, nTileType);
     }
 
-    DRLGROOMTILE_SetupWarpTile(pRoomEx, pTileData, nGridInfo, nTileType);
     return pTileData;
 }
 

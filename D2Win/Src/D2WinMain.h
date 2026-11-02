@@ -137,7 +137,7 @@ BOOL __stdcall FORMS_SetGlobalFormImage(struct D2ControlStrc * pControl, int32_t
 void * __stdcall D2WINMAIN_GetFirstElement(void * * ppHead);
 // Returns pFormImage global control pointer
 struct D2ControlStrc * __stdcall D2WINMAIN_GetFormImage();
-void __stdcall D2WIN_HandleCursorHide(int32_t pMsg);
+void __stdcall D2WIN_HandleCursorHide(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall D2WIN_HandleMouseLeave(int32_t pMsg);
 BOOL __stdcall D2GFX_PreSetupBeforeCreatingWindow(HINSTANCE hInstance, eD2RendererMode eRenderedMode, BOOL bWindowed, BOOL bDontUseCompression);
 BOOL __stdcall FreeInGameGFX();

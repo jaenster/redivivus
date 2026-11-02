@@ -243,59 +243,59 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetInAuraRange(D2UnitStrc * pUnit, eD2S
     BOOL bIsInTown;
     uint32_t bCanInteractWith;
     int32_t nTargetX;
+    eD2UnitType eUnitType;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
     D2UnitStrc* pTargetUnit = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
-    if (!pTargetUnit) {
-      return 0;
+    if (pTargetUnit) {
+      int32_t nAuraRange;
+      nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, nTargetY);
+      eUnitType = pTargetUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nTargetY = pTargetUnit->pPath.pStaticPath->nPosY;
+      } else if (pTargetUnit->pPath.pDynamicPath) {
+        nTargetY = D2Common::PATH::DynamicPath::GetYPos(pTargetUnit->pPath.pDynamicPath);
+      } else {
+        nTargetY = 0;
+      }
+
+      eUnitType = pTargetUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nTargetX = pTargetUnit->pPath.pStaticPath->nPosX;
+      } else if (pTargetUnit->pPath.pDynamicPath) {
+        nTargetX = D2Common::PATH::DynamicPath::GetXPos(pTargetUnit->pPath.pDynamicPath);
+      } else {
+        nTargetX = 0;
+      }
+
+      eUnitType = pUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nCasterY = pUnit->pPath.pStaticPath->nPosY;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nCasterY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      } else {
+        nCasterY = 0;
+      }
+
+      eUnitType = pUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nDistSq = pUnit->pPath.pStaticPath->nPosX;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nDistSq = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      } else {
+        nDistSq = 0;
+      }
+
+      nDistSq = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nDistSq, nCasterY, nTargetX, nTargetY);
+      if (nDistSq <= nAuraRange * nAuraRange && (pTargetUnit->eUnitType > UNIT_MONSTER || (pRoom = D2Common::Units::UNITS_GetRoom(pUnit) , pRoom && (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , !bIsInTown)) && (pRoom = D2Common::Units::UNITS_GetRoom(pTargetUnit) , pRoom != 0) && (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , !bIsInTown && (bCanInteractWith = UNIT::CUnit::CanInteractWith(pUnit, pTargetUnit) , bCanInteractWith != 0)))) {
+        return 1;
+      }
     }
 
-    int32_t nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, nTargetY);
-    eD2UnitType eUnitType = pTargetUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nTargetY = pTargetUnit->pPath.pStaticPath->nPosY;
-    } else if (pTargetUnit->pPath.pDynamicPath) {
-      nTargetY = D2Common::PATH::DynamicPath::GetYPos(pTargetUnit->pPath.pDynamicPath);
-    } else {
-      nTargetY = 0;
-    }
-
-    eUnitType = pTargetUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nTargetX = pTargetUnit->pPath.pStaticPath->nPosX;
-    } else if (pTargetUnit->pPath.pDynamicPath) {
-      nTargetX = D2Common::PATH::DynamicPath::GetXPos(pTargetUnit->pPath.pDynamicPath);
-    } else {
-      nTargetX = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nCasterY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nCasterY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nCasterY = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nDistSq = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nDistSq = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nDistSq = 0;
-    }
-
-    nDistSq = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nDistSq, nCasterY, nTargetX, nTargetY);
-    if (!(nDistSq <= nAuraRange * nAuraRange && (pTargetUnit->eUnitType > UNIT_MONSTER || (pRoom = D2Common::Units::UNITS_GetRoom(pUnit) , pRoom && (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , !bIsInTown)) && (pRoom = D2Common::Units::UNITS_GetRoom(pTargetUnit) , pRoom != 0) && (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , !bIsInTown && (bCanInteractWith = UNIT::CUnit::CanInteractWith(pUnit, pTargetUnit) , bCanInteractWith != 0))))) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 BOOL __fastcall Skills_CltDoFunc_Sor_HomingMissileVelocity(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
@@ -650,11 +650,10 @@ BOOL __fastcall Skills_CltDoFunc_Sor_Blizzard(D2UnitStrc * pUnit, eD2Skills eSki
       }
 
       Draw::Weather::WEATHER_InitBlizzardState(0);
-      if (pSkillTxt->prgoverlay <= 0) {
-        return 1;
+      if (pSkillTxt->prgoverlay > 0) {
+        Engine::Gfx::GFX_AddOverlayToUnit(pTargetUnit, (int)pSkillTxt->prgoverlay, 2, 0, 0, 0, 0, 0);
       }
 
-      Engine::Gfx::GFX_AddOverlayToUnit(pTargetUnit, (int)pSkillTxt->prgoverlay, 2, 0, 0, 0, 0, 0);
       return 1;
     }
 
@@ -707,11 +706,10 @@ int32_t __fastcall SKILLSSOR_StateCltEventFn01_ChillingArmor(int32_t nParam1, D2
         sSkillArg.nUnitY = Units::GetYPosFromDynamicPathUnit(pOwnerUnit);
         UNIT::Missile::MakeMissile(&sSkillArg);
         nOverlayId = pSkillTxt->cltoverlaya;
-        if (!(nOverlayId >= 0 && (int)nOverlayId < sgptDataTable->nTxtOverlaySize)) {
-          return 1;
+        if (nOverlayId >= 0 && (int)nOverlayId < sgptDataTable->nTxtOverlaySize) {
+          Engine::Gfx::GFX_AddOverlayToUnit(pUnit, (int)nOverlayId, 2, 0, 0, 0, 0, 0);
         }
 
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, (int)nOverlayId, 2, 0, 0, 0, 0, 0);
         return 1;
       }
 

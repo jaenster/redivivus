@@ -116,20 +116,18 @@ D2InventoryStrc * __fastcall CLIENT_GetEffectiveInventory(D2UnitStrc * pUnit, in
       if (bHasStateFlag) {
         pOwnerUnit = UNIT::Player::MISSILE_GetOwnerUnit(pUnit);
         if (pOwnerUnit) {
-          if (!pUnit2) {
-            return pOwnerUnit->pInventory;
+          if (pUnit2) {
+            *pUnit2 = 1;
           }
 
-          *pUnit2 = 1;
           return pOwnerUnit->pInventory;
         }
       }
     }
-    if (!pUnit2) {
-      return pUnit->pInventory;
+    if (pUnit2) {
+      *pUnit2 = 0;
     }
 
-    *pUnit2 = 0;
     return pUnit->pInventory;
 }
 
@@ -1362,7 +1360,6 @@ int32_t __fastcall GFX_GetCofDataFlags(D2GfxInfoStrc * pGfxInfo) {
     }
 
     return pGfxInfo->dwCofDataFlags;
-    return pGfxInfo->dwCofDataFlags;
 }
 
 void __fastcall GFX_SetPalShiftIndex(D2GfxInfoStrc * pGfxInfo, int32_t nPalShiftIndex) {
@@ -1380,7 +1377,6 @@ int32_t __fastcall GFX_GetPalShiftIndex(D2GfxInfoStrc * pGfxInfo) {
       exit(-1);
     }
 
-    return pGfxInfo->nPalShiftIndex;
     return pGfxInfo->nPalShiftIndex;
 }
 
@@ -3016,11 +3012,10 @@ static D2GfxInfoUnkStrc * __stdcall GFX_DrawUnitComponents(int32_t nWorldX, uint
               if (bDrawStates) {
                 DRAW_UNIT_States(pUnit, nLightColor, 0, -1, -1, bPerspToggled);
               }
-              if (!bPerspToggled) {
-                return (D2GfxInfoUnkStrc*)0x1;
+              if (bPerspToggled) {
+                D2gfx::D2GFX::D2GFX_SetPerspectiveCapable(nPerspCapable);
               }
 
-              D2gfx::D2GFX::D2GFX_SetPerspectiveCapable(nPerspCapable);
               return (D2GfxInfoUnkStrc*)0x1;
             }
           }
@@ -3342,11 +3337,10 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
             pCofData = pCofLayerDataBase;
           } while (nLayerIdx < *pZHalfOffset);
         }
-        if (!bPerspToggled) {
-          return 1;
+        if (bPerspToggled) {
+          D2gfx::D2GFX::D2GFX_SetPerspectiveCapable(nPerspCapable);
         }
 
-        D2gfx::D2GFX::D2GFX_SetPerspectiveCapable(nPerspCapable);
         return 1;
       }
     }
@@ -3585,24 +3579,22 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
     nCoord = GfxUtil::GFXUTIL_CalcMaxSpriteHeight(pUnit, pCofIdentity, pCofData, &nMaxSpriteHeight, nDirection, nFrameMetricX);
     if (nCoord > 0) {
       nLayerIdx = 0;
-      if (*pCofIdentityBase <= 0) {
-        return 1;
-      }
-
-      do {
-        byLayerComponent = pCofData[nLayerIdx];
-        nCallResult = GfxUtil::GFXUTIL_GetUnitCofDirectionOnScreen(pUnit, (uint32_t)byLayerComponent);
-        if (nCallResult) {
-          memset(&sGfxData, 0, 0x48);
-          nCoord = GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, nDirection, nFrameMetricX, &nFrameResult, byLayerComponent, (D2UnitStrc*)-1);
-          if (nCoord) {
-            D2gfx::D2GFX::D2GFX_DrawImageColoredShape(&sGfxData, __frame0.nScreenX, __frame0.nScreenY, nHealthBarColor);
+      if (*pCofIdentityBase > 0) {
+        do {
+          byLayerComponent = pCofData[nLayerIdx];
+          nCallResult = GfxUtil::GFXUTIL_GetUnitCofDirectionOnScreen(pUnit, (uint32_t)byLayerComponent);
+          if (nCallResult) {
+            memset(&sGfxData, 0, 0x48);
+            nCoord = GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, nDirection, nFrameMetricX, &nFrameResult, byLayerComponent, (D2UnitStrc*)-1);
+            if (nCoord) {
+              D2gfx::D2GFX::D2GFX_DrawImageColoredShape(&sGfxData, __frame0.nScreenX, __frame0.nScreenY, nHealthBarColor);
+            }
           }
-        }
 
-        nLayerIdx++;
-        pCofData = pCofLayerData;
-      } while (nLayerIdx < *pCofIdentityBase);
+          nLayerIdx++;
+          pCofData = pCofLayerData;
+        } while (nLayerIdx < *pCofIdentityBase);
+      }
 
       return 1;
     }
@@ -3804,11 +3796,10 @@ BOOL __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t 
     }
 
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nCallResult, nDrawY, nGammaCopy, nScreenY, pActPalShift);
-    if (!bDrawStates) {
-      return 1;
+    if (bDrawStates) {
+      DRAW_UNIT_States(pUnit, nGammaCopy, 0, -1, -1, 0);
     }
 
-    DRAW_UNIT_States(pUnit, nGammaCopy, 0, -1, -1, 0);
     return 1;
 }
 

@@ -60,7 +60,6 @@ int32_t __fastcall D2WINANIMIMAGE_GetCurrentState(::D2WinAnimImage * pAnimImage)
     }
 
     return pAnimImage->nAnimState;
-    return pAnimImage->nAnimState;
 }
 
 // Attempts to transition animation from state 3 (loaded) to state 4 (playing). Resets frame counter and updates tick timestamp. Returns 1 if transitioned, 0 if already playing or stopped.
@@ -186,13 +185,12 @@ static BOOL D2WINANIMIMAGE_UpdateFrame(::D2WinAnimImage * pAnimImage) {
     if (nAnimState != pAnimImage->nAnimState && (pFrameEntry = (uint32_t*)pAnimImage->pAnimFrames[pAnimImage->nAnimState].ppBaseImage , pFrameEntry != 0) && (pDC6Next = (DC6*)*pFrameEntry , pDC6Next != 0)) {
       D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pDC6Next);
     }
-    if (pAnimImage->nCurrentFrame <= nFrames) {
-      return 1;
+    if (pAnimImage->nCurrentFrame > nFrames) {
+      pAnimImage->nCurrentFrame = 0;
+      dwTick = GetTickCount();
+      pAnimImage->dwAnimStartTick = dwTick;
     }
 
-    pAnimImage->nCurrentFrame = 0;
-    dwTick = GetTickCount();
-    pAnimImage->dwAnimStartTick = dwTick;
     return 1;
 }
 

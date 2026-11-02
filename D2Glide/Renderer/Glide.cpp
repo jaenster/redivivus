@@ -492,33 +492,32 @@ BOOL __stdcall RENDERER_GLIDE_InitTextureMemory() {
 
 BOOL __stdcall RENDERER_GLIDE_DestroyWindow() {
     int nCloseAttempt;
-    if (!ghGlideWindow) {
-      return 1;
-    }
-
-    ghGlideWindow = 0;
-    (*GLIDEDLL_grFinish_0)();
-    if (gbGlidePerspectiveMode) {
-      glFloorCache::GLFLOOR_Destroy(&gGlideFloorTextureCache.dwEntrySize, (GlFloorCacheStrc*)0x1);
-      glSubtileCache::GLSUBTILE_Destroy(&gGlideSubtileTextureCache.dwEntrySize, (GlSubtileCacheStrc*)0x1);
-    } else {
-      GLSMACK_DestroyNoop();
-    }
-
-    glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache, (GlTextureCacheStrc*)0x1);
-    glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache + 1, (GlTextureCacheStrc*)0x1);
-    glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache + 2, (GlTextureCacheStrc*)0x1);
-    RENDERER_GLIDE_FreeSpriteBuffers();
-    for (nCloseAttempt = 0; nCloseAttempt < 100; nCloseAttempt++) {
+    if (ghGlideWindow) {
       FxBool bCloseResult;
-      bCloseResult = (*_GLIDEDLL_grSstWinClose_4)(ghGlideSstWindow);
-      if (bCloseResult == 1) {
-        break;
+      ghGlideWindow = 0;
+      (*GLIDEDLL_grFinish_0)();
+      if (gbGlidePerspectiveMode) {
+        glFloorCache::GLFLOOR_Destroy(&gGlideFloorTextureCache.dwEntrySize, (GlFloorCacheStrc*)0x1);
+        glSubtileCache::GLSUBTILE_Destroy(&gGlideSubtileTextureCache.dwEntrySize, (GlSubtileCacheStrc*)0x1);
+      } else {
+        GLSMACK_DestroyNoop();
       }
+
+      glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache, (GlTextureCacheStrc*)0x1);
+      glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache + 1, (GlTextureCacheStrc*)0x1);
+      glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache + 2, (GlTextureCacheStrc*)0x1);
+      RENDERER_GLIDE_FreeSpriteBuffers();
+      for (nCloseAttempt = 0; nCloseAttempt < 100; nCloseAttempt++) {
+        bCloseResult = (*_GLIDEDLL_grSstWinClose_4)(ghGlideSstWindow);
+        if (bCloseResult == 1) {
+          break;
+        }
+      }
+
+      RENDERER_GLIDE_FreeDebugFont();
+      gnGlideWindowHandle = 0;
     }
 
-    RENDERER_GLIDE_FreeDebugFont();
-    gnGlideWindowHandle = 0;
     return 1;
 }
 
@@ -661,11 +660,10 @@ BOOL Release() {
       D2_FREE_AT(RENDERER_SelectedRendererCore, ".\\Src\\glCore.cpp", 0x30d);
       RENDERER_SelectedRendererCore = 0;
     }
-    if (!lpGLIDE3x_dll) {
-      return 1;
+    if (lpGLIDE3x_dll) {
+      /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(lpGLIDE3x_dll);
     }
 
-    /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(lpGLIDE3x_dll);
     return 1;
 }
 
@@ -2452,35 +2450,33 @@ BOOL __fastcall RENDERER_GLIDE_DrawShadowTileSimple(D2TileLibraryEntryStrc * pTi
     }
 
     nSubtileIdx = 0;
-    if (pTile->nSubTiles <= 0) {
-      return _bDrawn;
-    }
-
-    do {
+    if (pTile->nSubTiles > 0) {
       int nSubtileX;
-      psSubtile = &pTile->pSubTiles[nSubtileIdx].nOffsetX;
-      nSubtileX = *psSubtile + nPosX;
-      nScreenY = (int)psSubtile[1] + nPosY + 0x20;
-      if (nSubtileX >= nWindowMinX && nSubtileX < nWindowMaxX && nScreenY >= 0 && nScreenY < nWindowMaxY) {
-        _bDrawn = 1;
-        glBlocks::GLBLOCKS_LoadWallSubtileTexture(&pTile->pSubTiles[nSubtileIdx]);
-        gGlidePerspectiveVertexBuffer[0].fX = (float)nSubtileX;
-        gGlidePerspectiveVertexBuffer[0].fY = (float)(nScreenY - 0x20);
-        gGlidePerspectiveVertexBuffer[1].fY = (float)nScreenY;
-        gGlidePerspectiveVertexBuffer[2].fX = (float)(nSubtileX + 0x20);
-        gGlidePerspectiveVertexBuffer[1].fX = gGlidePerspectiveVertexBuffer[0].fX;
-        gGlidePerspectiveVertexBuffer[2].fY = gGlidePerspectiveVertexBuffer[1].fY;
-        gGlidePerspectiveVertexBuffer[3].fX = gGlidePerspectiveVertexBuffer[2].fX;
-        gGlidePerspectiveVertexBuffer[3].fY = gGlidePerspectiveVertexBuffer[0].fY;
-        RENDERER_GLIDE_ApplyShadowLighting(gGlidePerspectiveVertexBuffer, nAlpha);
-        gGlidePerspectiveVertexBuffer[1].dwColor = gGlidePerspectiveVertexBuffer[0].dwColor;
-        gGlidePerspectiveVertexBuffer[2].dwColor = gGlidePerspectiveVertexBuffer[0].dwColor;
-        gGlidePerspectiveVertexBuffer[3].dwColor = gGlidePerspectiveVertexBuffer[0].dwColor;
-        (*GLIDEDLL_grDrawVertexArrayContiguous_16)(5, 4, gGlidePerspectiveVertexBuffer, 0x1c);
-      }
+      do {
+        psSubtile = &pTile->pSubTiles[nSubtileIdx].nOffsetX;
+        nSubtileX = *psSubtile + nPosX;
+        nScreenY = (int)psSubtile[1] + nPosY + 0x20;
+        if (nSubtileX >= nWindowMinX && nSubtileX < nWindowMaxX && nScreenY >= 0 && nScreenY < nWindowMaxY) {
+          _bDrawn = 1;
+          glBlocks::GLBLOCKS_LoadWallSubtileTexture(&pTile->pSubTiles[nSubtileIdx]);
+          gGlidePerspectiveVertexBuffer[0].fX = (float)nSubtileX;
+          gGlidePerspectiveVertexBuffer[0].fY = (float)(nScreenY - 0x20);
+          gGlidePerspectiveVertexBuffer[1].fY = (float)nScreenY;
+          gGlidePerspectiveVertexBuffer[2].fX = (float)(nSubtileX + 0x20);
+          gGlidePerspectiveVertexBuffer[1].fX = gGlidePerspectiveVertexBuffer[0].fX;
+          gGlidePerspectiveVertexBuffer[2].fY = gGlidePerspectiveVertexBuffer[1].fY;
+          gGlidePerspectiveVertexBuffer[3].fX = gGlidePerspectiveVertexBuffer[2].fX;
+          gGlidePerspectiveVertexBuffer[3].fY = gGlidePerspectiveVertexBuffer[0].fY;
+          RENDERER_GLIDE_ApplyShadowLighting(gGlidePerspectiveVertexBuffer, nAlpha);
+          gGlidePerspectiveVertexBuffer[1].dwColor = gGlidePerspectiveVertexBuffer[0].dwColor;
+          gGlidePerspectiveVertexBuffer[2].dwColor = gGlidePerspectiveVertexBuffer[0].dwColor;
+          gGlidePerspectiveVertexBuffer[3].dwColor = gGlidePerspectiveVertexBuffer[0].dwColor;
+          (*GLIDEDLL_grDrawVertexArrayContiguous_16)(5, 4, gGlidePerspectiveVertexBuffer, 0x1c);
+        }
 
-      nSubtileIdx++;
-    } while (nSubtileIdx < pTile->nSubTiles);
+        nSubtileIdx++;
+      } while (nSubtileIdx < pTile->nSubTiles);
+    }
 
     return _bDrawn;
 }
@@ -2495,6 +2491,7 @@ BOOL __fastcall RENDERER_GLIDE_DrawShadowTilePerspective(D2TileLibraryEntryStrc 
     int nWorldYFixed2;
     int nWorldYFixed;
     int nAdjX;
+    float fBoundsLeft;
     float fScreenXOffset;
     BOOL bAnyDrawn = 0;
     int nScreenXOffset = 0;
@@ -2504,63 +2501,61 @@ BOOL __fastcall RENDERER_GLIDE_DrawShadowTilePerspective(D2TileLibraryEntryStrc 
     int nWorldXFixed = nPosX * 0x2000;
     int nSubtileIdx = 0;
     BOOL bDrawn = 0;
-    if (pTileStrc->nSubTiles <= 0) {
-      return bDrawn;
-    }
-
-    float fBoundsLeft = (float)nScreenXMax.left;
-    do {
+    if (pTileStrc->nSubTiles > 0) {
       short int* psSubtile;
-      psSubtile = &pTileStrc->pSubTiles[nSubtileIdx].nOffsetX;
-      nSubtileRow = psSubtile[1] + 0x60 >> 5;
-      nSubtileCol = (int)*psSubtile >> 5;
-      nCornerFixedX = (nSubtileCol + nSubtileRow * 2) * 0x10000 - 0x38000;
-      nSubtileRow = (nSubtileRow * 2 - nSubtileCol) * 0x10000 + 0x18000;
-      nWorldYFixed = nCornerFixedX + nWorldXFixed;
-      Glide::AdjustPerspectivePosition(nWorldYFixed, nCornerFixedY + nSubtileRow, 0, &nAdjX, &nScreenPanels);
-      gaGlidePerspectiveVertices[0].fX = (float)nAdjX;
-      gaGlidePerspectiveVertices[0].fY = (float)nScreenPanels;
-      Glide::AdjustPerspectivePosition(nWorldXFixed + 0x20000 + nCornerFixedX, nCornerFixedY + 0x20000 + nSubtileRow, 0, &nAdjX, &nScreenPanels);
-      gaGlidePerspectiveVertices[0xc].fX = (float)nAdjX;
-      gaGlidePerspectiveVertices[0xc].fY = (float)nScreenPanels;
-      Glide::AdjustPerspectivePosition(nWorldXFixed + 0x30000 + nCornerFixedX, nCornerFixedY + 0x10000 + nSubtileRow, 0, &nAdjX, &nScreenPanels);
-      gaGlidePerspectiveVertices[0xe].fX = (float)nAdjX;
-      gaGlidePerspectiveVertices[0xe].fY = (float)nScreenPanels;
-      Glide::AdjustPerspectivePosition(nWorldXFixed + 0x10000 + nCornerFixedX, nCornerFixedY - 0x10000 + nSubtileRow, 0, &nAdjX, &nScreenPanels);
-      gaGlidePerspectiveVertices[2].fX = (float)nAdjX;
-      gaGlidePerspectiveVertices[2].fY = (float)nScreenPanels;
-      if (fBoundsLeft < gaGlidePerspectiveVertices[0].fX != (fBoundsLeft == gaGlidePerspectiveVertices[0].fX) && gaGlidePerspectiveVertices[0].fX < (float)nScreenXMax.right && (float)nScreenXMax.top < gaGlidePerspectiveVertices[0].fY != ((float)nScreenXMax.top == gaGlidePerspectiveVertices[0].fY) && gaGlidePerspectiveVertices[0].fY < (float)nScreenXMax.bottom || fBoundsLeft <= gaGlidePerspectiveVertices[0xc].fX && gaGlidePerspectiveVertices[0xc].fX < (float)nScreenXMax.right && (float)nScreenXMax.top < gaGlidePerspectiveVertices[0xc].fY != ((float)nScreenXMax.top == gaGlidePerspectiveVertices[0xc].fY) && gaGlidePerspectiveVertices[0xc].fY < (float)nScreenXMax.bottom || fBoundsLeft <= gaGlidePerspectiveVertices[0xe].fX && gaGlidePerspectiveVertices[0xe].fX < (float)nScreenXMax.right && (float)nScreenXMax.top < gaGlidePerspectiveVertices[0xe].fY != ((float)nScreenXMax.top == gaGlidePerspectiveVertices[0xe].fY) && gaGlidePerspectiveVertices[0xe].fY < (float)nScreenXMax.bottom || fBoundsLeft <= gaGlidePerspectiveVertices[2].fX && gaGlidePerspectiveVertices[2].fX < (float)nScreenXMax.right && (float)nScreenXMax.top < gaGlidePerspectiveVertices[2].fY != ((float)nScreenXMax.top == gaGlidePerspectiveVertices[2].fY) && gaGlidePerspectiveVertices[2].fY < (float)nScreenXMax.bottom) {
-        glBlocks::GLBLOCKS_LoadWallSubtileTexture(&pTileStrc->pSubTiles[nSubtileIdx]);
-        fScreenXOffset = (float)nScreenXOffset;
-        pfVertexSlot = gaGlidePerspectiveVertices;
-        bAnyDrawn = nCornerFixedY + nSubtileRow;
-        do {
-          nWorldYFixed2 = 3;
-          bDrawn = bAnyDrawn;
-          nSubtileRow = nWorldYFixed;
+      fBoundsLeft = (float)nScreenXMax.left;
+      do {
+        psSubtile = &pTileStrc->pSubTiles[nSubtileIdx].nOffsetX;
+        nSubtileRow = psSubtile[1] + 0x60 >> 5;
+        nSubtileCol = (int)*psSubtile >> 5;
+        nCornerFixedX = (nSubtileCol + nSubtileRow * 2) * 0x10000 - 0x38000;
+        nSubtileRow = (nSubtileRow * 2 - nSubtileCol) * 0x10000 + 0x18000;
+        nWorldYFixed = nCornerFixedX + nWorldXFixed;
+        Glide::AdjustPerspectivePosition(nWorldYFixed, nCornerFixedY + nSubtileRow, 0, &nAdjX, &nScreenPanels);
+        gaGlidePerspectiveVertices[0].fX = (float)nAdjX;
+        gaGlidePerspectiveVertices[0].fY = (float)nScreenPanels;
+        Glide::AdjustPerspectivePosition(nWorldXFixed + 0x20000 + nCornerFixedX, nCornerFixedY + 0x20000 + nSubtileRow, 0, &nAdjX, &nScreenPanels);
+        gaGlidePerspectiveVertices[0xc].fX = (float)nAdjX;
+        gaGlidePerspectiveVertices[0xc].fY = (float)nScreenPanels;
+        Glide::AdjustPerspectivePosition(nWorldXFixed + 0x30000 + nCornerFixedX, nCornerFixedY + 0x10000 + nSubtileRow, 0, &nAdjX, &nScreenPanels);
+        gaGlidePerspectiveVertices[0xe].fX = (float)nAdjX;
+        gaGlidePerspectiveVertices[0xe].fY = (float)nScreenPanels;
+        Glide::AdjustPerspectivePosition(nWorldXFixed + 0x10000 + nCornerFixedX, nCornerFixedY - 0x10000 + nSubtileRow, 0, &nAdjX, &nScreenPanels);
+        gaGlidePerspectiveVertices[2].fX = (float)nAdjX;
+        gaGlidePerspectiveVertices[2].fY = (float)nScreenPanels;
+        if (fBoundsLeft < gaGlidePerspectiveVertices[0].fX != (fBoundsLeft == gaGlidePerspectiveVertices[0].fX) && gaGlidePerspectiveVertices[0].fX < (float)nScreenXMax.right && (float)nScreenXMax.top < gaGlidePerspectiveVertices[0].fY != ((float)nScreenXMax.top == gaGlidePerspectiveVertices[0].fY) && gaGlidePerspectiveVertices[0].fY < (float)nScreenXMax.bottom || fBoundsLeft <= gaGlidePerspectiveVertices[0xc].fX && gaGlidePerspectiveVertices[0xc].fX < (float)nScreenXMax.right && (float)nScreenXMax.top < gaGlidePerspectiveVertices[0xc].fY != ((float)nScreenXMax.top == gaGlidePerspectiveVertices[0xc].fY) && gaGlidePerspectiveVertices[0xc].fY < (float)nScreenXMax.bottom || fBoundsLeft <= gaGlidePerspectiveVertices[0xe].fX && gaGlidePerspectiveVertices[0xe].fX < (float)nScreenXMax.right && (float)nScreenXMax.top < gaGlidePerspectiveVertices[0xe].fY != ((float)nScreenXMax.top == gaGlidePerspectiveVertices[0xe].fY) && gaGlidePerspectiveVertices[0xe].fY < (float)nScreenXMax.bottom || fBoundsLeft <= gaGlidePerspectiveVertices[2].fX && gaGlidePerspectiveVertices[2].fX < (float)nScreenXMax.right && (float)nScreenXMax.top < gaGlidePerspectiveVertices[2].fY != ((float)nScreenXMax.top == gaGlidePerspectiveVertices[2].fY) && gaGlidePerspectiveVertices[2].fY < (float)nScreenXMax.bottom) {
+          glBlocks::GLBLOCKS_LoadWallSubtileTexture(&pTileStrc->pSubTiles[nSubtileIdx]);
+          fScreenXOffset = (float)nScreenXOffset;
+          pfVertexSlot = gaGlidePerspectiveVertices;
+          bAnyDrawn = nCornerFixedY + nSubtileRow;
           do {
-            Glide::AdjustPerspectivePosition(nSubtileRow, bDrawn, 0, &nAdjX, &nScreenPanels);
-            pfVertexSlot->fY = (float)nScreenPanels;
-            pfVertexSlot->fX = (float)nAdjX + fScreenXOffset;
-            RENDERER_GLIDE_ApplyShadowLighting(pfVertexSlot, nAlpha);
-            nSubtileRow += 0x8000;
-            pfVertexSlot++;
-            bDrawn += -0x8000;
-            nWorldYFixed2--;
-          } while (nWorldYFixed2);
+            nWorldYFixed2 = 3;
+            bDrawn = bAnyDrawn;
+            nSubtileRow = nWorldYFixed;
+            do {
+              Glide::AdjustPerspectivePosition(nSubtileRow, bDrawn, 0, &nAdjX, &nScreenPanels);
+              pfVertexSlot->fY = (float)nScreenPanels;
+              pfVertexSlot->fX = (float)nAdjX + fScreenXOffset;
+              RENDERER_GLIDE_ApplyShadowLighting(pfVertexSlot, nAlpha);
+              nSubtileRow += 0x8000;
+              pfVertexSlot++;
+              bDrawn += -0x8000;
+              nWorldYFixed2--;
+            } while (nWorldYFixed2);
 
-          nWorldYFixed += 0x8000;
-          bAnyDrawn += 0x8000;
-        } while ((int)pfVertexSlot < (intptr_t)((char*)&gaGlidePerspectiveVertices + sizeof(gaGlidePerspectiveVertices)));
+            nWorldYFixed += 0x8000;
+            bAnyDrawn += 0x8000;
+          } while ((int)pfVertexSlot < (intptr_t)((char*)&gaGlidePerspectiveVertices + sizeof(gaGlidePerspectiveVertices)));
 
-        (*GLIDEDLL_grDrawVertexArray_12)(4, 10, gapGlideStripVertexPtrsA);
-        (*GLIDEDLL_grDrawVertexArray_12)(4, 10, gapGlideStripVertexPtrsB);
-        bAnyDrawn = 1;
-      }
+          (*GLIDEDLL_grDrawVertexArray_12)(4, 10, gapGlideStripVertexPtrsA);
+          (*GLIDEDLL_grDrawVertexArray_12)(4, 10, gapGlideStripVertexPtrsB);
+          bAnyDrawn = 1;
+        }
 
-      nSubtileIdx++;
-      bDrawn = bAnyDrawn;
-    } while (nSubtileIdx < pTileStrc->nSubTiles);
+        nSubtileIdx++;
+        bDrawn = bAnyDrawn;
+      } while (nSubtileIdx < pTileStrc->nSubTiles);
+    }
 
     return bDrawn;
 }
@@ -2647,7 +2642,7 @@ BOOL __thiscall RENDERER_GLIDE_DrawWallTileSimple(int32_t nScreenPanels, D2TileL
 
 // Draw wall tile with perspective projection in Glide renderer. Calculates 4 corner positions, tests screen bounds, applies color averaging and texturing. Returns 1 if tile was drawn, 0 otherwise.
 static int32_t __stdcall RENDERER_GLIDE_DrawWallTilePerspective(int32_t nScreenPanels, D2TileLibraryEntryStrc * pTile, int nScreenX, int nScreenY, int pColorTable) {
-    D2FloatIntUnion DVar1;
+    int nCornerFixedX;
     short int* pSubtile;
     int nCornerFixedY;
     D2GlideVertexStrc* pfVertexSlot;
@@ -2673,91 +2668,89 @@ static int32_t __stdcall RENDERER_GLIDE_DrawWallTilePerspective(int32_t nScreenP
     uint32_t dwTileType = pTile->nDirection;
     if (dwTileType <= 9) {
       int nSubtileCount = 0;
-      if (pTile->nSubTiles <= 0) {
-        return nZMid;
-      }
+      if (pTile->nSubTiles > 0) {
+        D2FloatIntUnion DVar1;
+        do {
+          pSubtile = &pTile->pSubTiles[nSubtileCount].nOffsetX;
+          fScreenMinX = d2_bits_as<D2FloatIntUnion>((int)pSubtile[1]);
+          fSubtileIndex = (float)((int)*pSubtile >> 5);
+          if ((uint32_t)fSubtileIndex > 4) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1bc);
+            exit(-1);
+          }
 
-      do {
-        int nCornerFixedX;
-        pSubtile = &pTile->pSubTiles[nSubtileCount].nOffsetX;
-        fScreenMinX = d2_bits_as<D2FloatIntUnion>((int)pSubtile[1]);
-        fSubtileIndex = (float)((int)*pSubtile >> 5);
-        if ((uint32_t)fSubtileIndex > 4) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1bc);
-          exit(-1);
-        }
-
-        nCornerFixedY = (int)fSubtileIndex + dwTileType * 6;
-        nWorldYFixed = gaGlideWallCornerTable[nCornerFixedY].nY + nScreenY * 0x2000;
-        nCornerFixedX = gaGlideWallCornerTable[nCornerFixedY].nZ - (int)d2_bits_of(fScreenMinX);
-        nLeftFixedX = gaGlideWallCornerTable[nCornerFixedY + 1].nX + nScreenX * 0x2000;
-        nRightFixedZ = gaGlideWallCornerTable[nCornerFixedY + 1].nZ - (int)d2_bits_of(fScreenMinX);
-        nLeftFixedY = gaGlideWallCornerTable[nCornerFixedY + 1].nY + nScreenY * 0x2000;
-        nCornerFixedY = gaGlideWallCornerTable[nCornerFixedY].nX + nScreenX * 0x2000;
-        nScreenXMax = nCornerFixedY;
-        nScreenYMin = nWorldYFixed;
-        nScreenYMax = nCornerFixedX;
-        Glide::AdjustPerspectivePosition(nCornerFixedY, nWorldYFixed, nCornerFixedX, &nAdjX, &nAdjY);
-        gaGlidePerspectiveVertices[0].fX = (float)nAdjX;
-        gaGlidePerspectiveVertices[0].fY = (float)nAdjY;
-        Glide::AdjustPerspectivePosition(nCornerFixedY, nWorldYFixed, nCornerFixedX - 0x20, &nAdjX, &nAdjY);
-        gaGlidePerspectiveVertices[0xc].fX = (float)nAdjX;
-        gaGlidePerspectiveVertices[0xc].fY = (float)nAdjY;
-        Glide::AdjustPerspectivePosition(nLeftFixedX, nLeftFixedY, nRightFixedZ - 0x20, &nAdjX, &nAdjY);
-        gaGlidePerspectiveVertices[0xe].fX = (float)nAdjX;
-        gaGlidePerspectiveVertices[0xe].fY = (float)nAdjY;
-        Glide::AdjustPerspectivePosition(nLeftFixedX, nLeftFixedY, nRightFixedZ, &nAdjX, &nAdjY);
-        gaGlidePerspectiveVertices[2].fX = (float)nAdjX;
-        gaGlidePerspectiveVertices[2].fY = (float)nAdjY;
-        fScreenMinX.fValue = (float)nBoundsXMin.left;
-        if (fScreenMinX.fValue < gaGlidePerspectiveVertices[0].fX != (fScreenMinX.fValue == gaGlidePerspectiveVertices[0].fX) && gaGlidePerspectiveVertices[0].fX < (float)nBoundsXMin.right && (float)nBoundsXMin.top < gaGlidePerspectiveVertices[0].fY != ((float)nBoundsXMin.top == gaGlidePerspectiveVertices[0].fY) && gaGlidePerspectiveVertices[0].fY < (float)nBoundsXMin.bottom || fScreenMinX.fValue <= gaGlidePerspectiveVertices[0xc].fX && gaGlidePerspectiveVertices[0xc].fX < (float)nBoundsXMin.right && (float)nBoundsXMin.top < gaGlidePerspectiveVertices[0xc].fY != ((float)nBoundsXMin.top == gaGlidePerspectiveVertices[0xc].fY) && gaGlidePerspectiveVertices[0xc].fY < (float)nBoundsXMin.bottom || fScreenMinX.fValue <= gaGlidePerspectiveVertices[0xe].fX && gaGlidePerspectiveVertices[0xe].fX < (float)nBoundsXMin.right && (float)nBoundsXMin.top < gaGlidePerspectiveVertices[0xe].fY != ((float)nBoundsXMin.top == gaGlidePerspectiveVertices[0xe].fY) && gaGlidePerspectiveVertices[0xe].fY < (float)nBoundsXMin.bottom || fScreenMinX.fValue <= gaGlidePerspectiveVertices[2].fX && gaGlidePerspectiveVertices[2].fX < (float)nBoundsXMin.right && (float)nBoundsXMin.top < gaGlidePerspectiveVertices[2].fY != ((float)nBoundsXMin.top == gaGlidePerspectiveVertices[2].fY) && gaGlidePerspectiveVertices[2].fY < (float)nBoundsXMin.bottom) {
-          adwColors[0] = *(uint32_t*)(pColorTable + (int)fSubtileIndex * 4);
-          adwColors[2] = *(uint32_t*)(pColorTable + 4 + (int)fSubtileIndex * 4);
-          nZMid = nCornerFixedX + nRightFixedZ >> 1;
-          adwColors[3] = nCornerFixedY + nLeftFixedX >> 1;
-          adwColors[1] = ((((int)((adwColors[2] >> 0x18) + (adwColors[0] >> 0x18)) >> 1) * 0x100 + ((int)((uint8_t)(adwColors[2] >> 0x10) + (uint8_t)(adwColors[0] >> 0x10)) >> 1)) * 0x100 + ((int)((adwColors[2] >> 8 & 0xff) + (adwColors[0] >> 8 & 0xff)) >> 1)) * 0x100 + ((int)((uint8_t)adwColors[0] + (uint8_t)adwColors[2]) >> 1);
-          nYMid = nWorldYFixed + nLeftFixedY >> 1;
-          fSubtileIndex = (float)adwColors[2];
-          glBlocks::GLBLOCKS_LoadWallSubtileTexture(&pTile->pSubTiles[nSubtileCount]);
-          fSubtileIndex = (float)nScreenXOffset;
-          fScreenMinX.fValue = 0.0;
-          pfVertexSlot = gaGlidePerspectiveVertices + 2;
-          do {
-            DVar1 = fScreenMinX;
-            if (fScreenMinX.nValue && fScreenMinX.nValue != 4) {
-              nCornerFixedY = fScreenMinX.nValue * -8;
-              Glide::AdjustPerspectivePosition(nScreenXMax, nScreenYMin, nCornerFixedY + nScreenYMax, &nAdjX, &nAdjY);
-              pfVertexSlot[-2].fX = (float)nAdjX;
-              pfVertexSlot[-2].fY = (float)nAdjY;
-              Glide::AdjustPerspectivePosition(nLeftFixedX, nLeftFixedY, nCornerFixedY + nRightFixedZ, &nAdjX, &nAdjY);
-              pfVertexSlot->fX = (float)nAdjX;
-              pfVertexSlot->fY = (float)nAdjY;
-            }
-
-            Glide::AdjustPerspectivePosition(adwColors[3], nYMid, nZMid + DVar1.nValue * -8, &nAdjX, &nAdjY);
-            nCornerFixedY = 0;
-            pfColorVertex = pfVertexSlot - 2;
-            pfVertexSlot[-1].fX = (float)nAdjX;
-            pfVertexSlot[-1].fY = (float)nAdjY;
+          nCornerFixedY = (int)fSubtileIndex + dwTileType * 6;
+          nWorldYFixed = gaGlideWallCornerTable[nCornerFixedY].nY + nScreenY * 0x2000;
+          nCornerFixedX = gaGlideWallCornerTable[nCornerFixedY].nZ - (int)d2_bits_of(fScreenMinX);
+          nLeftFixedX = gaGlideWallCornerTable[nCornerFixedY + 1].nX + nScreenX * 0x2000;
+          nRightFixedZ = gaGlideWallCornerTable[nCornerFixedY + 1].nZ - (int)d2_bits_of(fScreenMinX);
+          nLeftFixedY = gaGlideWallCornerTable[nCornerFixedY + 1].nY + nScreenY * 0x2000;
+          nCornerFixedY = gaGlideWallCornerTable[nCornerFixedY].nX + nScreenX * 0x2000;
+          nScreenXMax = nCornerFixedY;
+          nScreenYMin = nWorldYFixed;
+          nScreenYMax = nCornerFixedX;
+          Glide::AdjustPerspectivePosition(nCornerFixedY, nWorldYFixed, nCornerFixedX, &nAdjX, &nAdjY);
+          gaGlidePerspectiveVertices[0].fX = (float)nAdjX;
+          gaGlidePerspectiveVertices[0].fY = (float)nAdjY;
+          Glide::AdjustPerspectivePosition(nCornerFixedY, nWorldYFixed, nCornerFixedX - 0x20, &nAdjX, &nAdjY);
+          gaGlidePerspectiveVertices[0xc].fX = (float)nAdjX;
+          gaGlidePerspectiveVertices[0xc].fY = (float)nAdjY;
+          Glide::AdjustPerspectivePosition(nLeftFixedX, nLeftFixedY, nRightFixedZ - 0x20, &nAdjX, &nAdjY);
+          gaGlidePerspectiveVertices[0xe].fX = (float)nAdjX;
+          gaGlidePerspectiveVertices[0xe].fY = (float)nAdjY;
+          Glide::AdjustPerspectivePosition(nLeftFixedX, nLeftFixedY, nRightFixedZ, &nAdjX, &nAdjY);
+          gaGlidePerspectiveVertices[2].fX = (float)nAdjX;
+          gaGlidePerspectiveVertices[2].fY = (float)nAdjY;
+          fScreenMinX.fValue = (float)nBoundsXMin.left;
+          if (fScreenMinX.fValue < gaGlidePerspectiveVertices[0].fX != (fScreenMinX.fValue == gaGlidePerspectiveVertices[0].fX) && gaGlidePerspectiveVertices[0].fX < (float)nBoundsXMin.right && (float)nBoundsXMin.top < gaGlidePerspectiveVertices[0].fY != ((float)nBoundsXMin.top == gaGlidePerspectiveVertices[0].fY) && gaGlidePerspectiveVertices[0].fY < (float)nBoundsXMin.bottom || fScreenMinX.fValue <= gaGlidePerspectiveVertices[0xc].fX && gaGlidePerspectiveVertices[0xc].fX < (float)nBoundsXMin.right && (float)nBoundsXMin.top < gaGlidePerspectiveVertices[0xc].fY != ((float)nBoundsXMin.top == gaGlidePerspectiveVertices[0xc].fY) && gaGlidePerspectiveVertices[0xc].fY < (float)nBoundsXMin.bottom || fScreenMinX.fValue <= gaGlidePerspectiveVertices[0xe].fX && gaGlidePerspectiveVertices[0xe].fX < (float)nBoundsXMin.right && (float)nBoundsXMin.top < gaGlidePerspectiveVertices[0xe].fY != ((float)nBoundsXMin.top == gaGlidePerspectiveVertices[0xe].fY) && gaGlidePerspectiveVertices[0xe].fY < (float)nBoundsXMin.bottom || fScreenMinX.fValue <= gaGlidePerspectiveVertices[2].fX && gaGlidePerspectiveVertices[2].fX < (float)nBoundsXMin.right && (float)nBoundsXMin.top < gaGlidePerspectiveVertices[2].fY != ((float)nBoundsXMin.top == gaGlidePerspectiveVertices[2].fY) && gaGlidePerspectiveVertices[2].fY < (float)nBoundsXMin.bottom) {
+            adwColors[0] = *(uint32_t*)(pColorTable + (int)fSubtileIndex * 4);
+            adwColors[2] = *(uint32_t*)(pColorTable + 4 + (int)fSubtileIndex * 4);
+            nZMid = nCornerFixedX + nRightFixedZ >> 1;
+            adwColors[3] = nCornerFixedY + nLeftFixedX >> 1;
+            adwColors[1] = ((((int)((adwColors[2] >> 0x18) + (adwColors[0] >> 0x18)) >> 1) * 0x100 + ((int)((uint8_t)(adwColors[2] >> 0x10) + (uint8_t)(adwColors[0] >> 0x10)) >> 1)) * 0x100 + ((int)((adwColors[2] >> 8 & 0xff) + (adwColors[0] >> 8 & 0xff)) >> 1)) * 0x100 + ((int)((uint8_t)adwColors[0] + (uint8_t)adwColors[2]) >> 1);
+            nYMid = nWorldYFixed + nLeftFixedY >> 1;
+            fSubtileIndex = (float)adwColors[2];
+            glBlocks::GLBLOCKS_LoadWallSubtileTexture(&pTile->pSubTiles[nSubtileCount]);
+            fSubtileIndex = (float)nScreenXOffset;
+            fScreenMinX.fValue = 0.0;
+            pfVertexSlot = gaGlidePerspectiveVertices + 2;
             do {
-              dwColorMid = adwColors[nCornerFixedY];
-              pfColorVertex->fX = fSubtileIndex + pfColorVertex->fX;
-              RENDERER_GLIDE_ApplyColorLighting(pfColorVertex, dwColorMid);
-              nCornerFixedY++;
-              pfColorVertex++;
-            } while (nCornerFixedY < 3);
+              DVar1 = fScreenMinX;
+              if (fScreenMinX.nValue && fScreenMinX.nValue != 4) {
+                nCornerFixedY = fScreenMinX.nValue * -8;
+                Glide::AdjustPerspectivePosition(nScreenXMax, nScreenYMin, nCornerFixedY + nScreenYMax, &nAdjX, &nAdjY);
+                pfVertexSlot[-2].fX = (float)nAdjX;
+                pfVertexSlot[-2].fY = (float)nAdjY;
+                Glide::AdjustPerspectivePosition(nLeftFixedX, nLeftFixedY, nCornerFixedY + nRightFixedZ, &nAdjX, &nAdjY);
+                pfVertexSlot->fX = (float)nAdjX;
+                pfVertexSlot->fY = (float)nAdjY;
+              }
 
-            fScreenMinX.nValue++;
-            pfVertexSlot += 3;
-          } while ((int)pfVertexSlot < (intptr_t)((char*)&gGlidePerspectiveVertexBuffer + 52));
+              Glide::AdjustPerspectivePosition(adwColors[3], nYMid, nZMid + DVar1.nValue * -8, &nAdjX, &nAdjY);
+              nCornerFixedY = 0;
+              pfColorVertex = pfVertexSlot - 2;
+              pfVertexSlot[-1].fX = (float)nAdjX;
+              pfVertexSlot[-1].fY = (float)nAdjY;
+              do {
+                dwColorMid = adwColors[nCornerFixedY];
+                pfColorVertex->fX = fSubtileIndex + pfColorVertex->fX;
+                RENDERER_GLIDE_ApplyColorLighting(pfColorVertex, dwColorMid);
+                nCornerFixedY++;
+                pfColorVertex++;
+              } while (nCornerFixedY < 3);
 
-          (*GLIDEDLL_grDrawVertexArray_12)(4, 10, gapGlideStripVertexPtrsA);
-          (*GLIDEDLL_grDrawVertexArray_12)(4, 10, gapGlideStripVertexPtrsB);
-          nZMid = 1;
-        }
+              fScreenMinX.nValue++;
+              pfVertexSlot += 3;
+            } while ((int)pfVertexSlot < (intptr_t)((char*)&gGlidePerspectiveVertexBuffer + 52));
 
-        nSubtileCount++;
-      } while (nSubtileCount < pTile->nSubTiles);
+            (*GLIDEDLL_grDrawVertexArray_12)(4, 10, gapGlideStripVertexPtrsA);
+            (*GLIDEDLL_grDrawVertexArray_12)(4, 10, gapGlideStripVertexPtrsB);
+            nZMid = 1;
+          }
+
+          nSubtileCount++;
+        } while (nSubtileCount < pTile->nSubTiles);
+      }
 
       return nZMid;
     }
@@ -3013,10 +3006,10 @@ void __stdcall RENDERER_GLIDE_BuildLightingTable() {
     } while (nIntensity < 0x100);
 }
 
-void __fastcall SetGlobalLight(BYTE nRed, BYTE nGreen, BYTE nBlue) {
-    gbGlideGlobalLightRed = nRed;
-    gbGlideGlobalLightGreen = nGreen;
-    gbGlideGlobalLightBlue = nBlue;
+void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue) {
+    gbGlideGlobalLightRed = (char)nRed;
+    gbGlideGlobalLightGreen = (char)nGreen;
+    gbGlideGlobalLightBlue = (uint8_t)nBlue;
 }
 
 void __fastcall RENDERER_GLIDE_ApplyShadowLighting(D2GlideVertexStrc * pVertex, uint8_t nIntensity) {

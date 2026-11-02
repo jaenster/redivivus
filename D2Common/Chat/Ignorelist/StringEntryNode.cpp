@@ -13,11 +13,10 @@ namespace D2Common::Chat::Ignorelist::StringEntryNode {
 
 ::StringEntryNode * __thiscall ScalarDeletingDestructor(::StringEntryNode * pThis, uint32_t dwFlags) {
     pThis->Destructor();
-    if (!(dwFlags & 1 && pThis)) {
-      return pThis;
+    if (dwFlags & 1 && pThis) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

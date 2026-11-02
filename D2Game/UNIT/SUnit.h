@@ -110,7 +110,7 @@ void __fastcall GetTypeAndMode(struct D2UnitStrc * pUnit, struct D2QServerUnitRe
 void __fastcall SetNecroPet(struct D2UnitStrc * pUnit, uint32_t nNecroPetGUID);
 int32_t __fastcall GetNecroPet(struct D2UnitStrc * pUnit);
 // 2022.01.09 - dzik
-void __fastcall SetSparklyChestFlag(struct D2UnitStrc * pUnit, bool bIsSparklyChest);
+void __fastcall SetSparklyChestFlag(struct D2UnitStrc * pUnit, uint8_t bIsSparklyChest);
 // 2022.01.09 - dzik
 uint8_t __fastcall GetSparklyChestFlag(struct D2UnitStrc * pUnit);
 // Reads pUnit's server-side interaction state: *pnUnitGUID = dwInteractGUID (+0x64), *peUnitType = dwInteractType (+0x68); returns the byte bInteracting (+0x6c).

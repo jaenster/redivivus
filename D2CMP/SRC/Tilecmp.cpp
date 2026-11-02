@@ -730,26 +730,24 @@ static int32_t __fastcall TILECMP_CalculateCacheSize(D2TileLibraryHeaderStrc * p
       int nTotalBytes;
       nTotalSize = pTileCmpHdr->nTiles;
       nTotalBytes = nTotalSize * 0x60 + 0x114;
-      if (nTotalSize <= 0) {
-        return nTotalBytes;
+      if (nTotalSize > 0) {
+        pTileSetEntry = &pTileCmpHdr->pTiles->nSubTiles;
+        do {
+          nNodeCount = *pTileSetEntry;
+          nTotalBytes += nNodeCount * 0x14;
+          if (nNodeCount > 0) {
+            pNodeEntry = &((D2GroundSubTileStrc*)pTileSetEntry[1])->dwField0A;
+            do {
+              nTotalBytes += (uint32_t)(uint16_t)*pNodeEntry;
+              pNodeEntry += 5;
+              nNodeCount--;
+            } while (nNodeCount);
+          }
+
+          pTileSetEntry += 0x18;
+          nTotalSize--;
+        } while (nTotalSize);
       }
-
-      pTileSetEntry = &pTileCmpHdr->pTiles->nSubTiles;
-      do {
-        nNodeCount = *pTileSetEntry;
-        nTotalBytes += nNodeCount * 0x14;
-        if (nNodeCount > 0) {
-          pNodeEntry = &((D2GroundSubTileStrc*)pTileSetEntry[1])->dwField0A;
-          do {
-            nTotalBytes += (uint32_t)(uint16_t)*pNodeEntry;
-            pNodeEntry += 5;
-            nNodeCount--;
-          } while (nNodeCount);
-        }
-
-        pTileSetEntry += 0x18;
-        nTotalSize--;
-      } while (nTotalSize);
 
       return nTotalBytes;
     }
@@ -970,14 +968,12 @@ D2TileLibraryHashStrc * __fastcall TILECMP_RegisterTilesForLookup(D2TileLibraryH
       }
 
       iTileIdx = 0;
-      if (pTileCmpHdr->nTiles <= 0) {
-        return pHashTable;
+      if (pTileCmpHdr->nTiles > 0) {
+        do {
+          FindTiles::FINDTILE_Register(pHashTable, &pTileCmpHdr->pTiles[iTileIdx]);
+          iTileIdx++;
+        } while (iTileIdx < pTileCmpHdr->nTiles);
       }
-
-      do {
-        FindTiles::FINDTILE_Register(pHashTable, &pTileCmpHdr->pTiles[iTileIdx]);
-        iTileIdx++;
-      } while (iTileIdx < pTileCmpHdr->nTiles);
 
       return pHashTable;
     }

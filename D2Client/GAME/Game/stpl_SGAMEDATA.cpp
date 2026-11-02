@@ -147,11 +147,10 @@ template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -5
       pTVar1->m_prevlink = 0;
       this->m_terminator.m_next = 0;
     }
-    if (!(dwFlags & 1 && this)) {
-      return this;
+    if (dwFlags & 1 && this) {
+      Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     return this;
 }
 
@@ -370,11 +369,10 @@ template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSHashObjectChunk<SGAME
     }
 
     ((TSGrowableArray<::SGAMEDATA>*)this)->Destructor();
-    if (!(dwFlags & 1 && this)) {
-      return this;
+    if (dwFlags & 1 && this) {
+      Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     return this;
 }
 
@@ -564,11 +562,10 @@ template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::NewNode(uint32_t
     } else {
       pChunk = 0;
     }
-    if (!nLocation) {
-      return pChunk;
+    if (nLocation) {
+      this->LinkNode(pChunk, nLocation, nullptr);
     }
 
-    this->LinkNode(pChunk, nLocation, nullptr);
     return pChunk;
 }
 
@@ -631,11 +628,10 @@ template<> ::SGAMEDATA * __thiscall TSHashTable<SGAMEDATA, HASHKEY_NONE>::Intern
 
 template<> TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>> * TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::ScalarDeletingDestructor(uint32_t dwFlags) {
     this->Destructor();
-    if (!(dwFlags & 1 && this)) {
-      return this;
+    if (dwFlags & 1 && this) {
+      Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     return this;
 }
 
@@ -660,11 +656,10 @@ template<> void __thiscall TSHashTable<SGAMEDATA, HASHKEY_NONE>::Destroy(TSHashT
 // @blizzard TSHashTable<SGAMEDATA,HASHKEY_NONE> scalar deleting destructor (STORM.H)
 template<> TSHashTable<::SGAMEDATA, HASHKEY_NONE>* __thiscall TSHashTable<SGAMEDATA, HASHKEY_NONE>::ScalarDeletingDestructor(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, uint32_t dwFlags) {
     pThis->Destructor();
-    if (!(dwFlags & 1 && pThis)) {
-      return pThis;
+    if (dwFlags & 1 && pThis) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 
@@ -876,11 +871,10 @@ template<> uint32_t TSGrowableArray<SGAMEDATA>::CalcChunkSize(uint32_t nCount) {
 // Static: rounds nValue up to a multiple of nMultiple.
 // Byte-identical to 0060e2e0; T by adjacency to this instantiation's CalcChunkSize 00450810 (no xrefs).
 template<> uint32_t __stdcall TSGrowableArray<SGAMEDATA>::RoundToMultiple(uint32_t nValue, uint32_t nMultiple) {
-    if (!(nValue % nMultiple)) {
-      return nValue;
+    if (nValue % nMultiple) {
+      nValue += nMultiple - nValue % nMultiple;
     }
 
-    nValue += nMultiple - nValue % nMultiple;
     return nValue;
 }
 

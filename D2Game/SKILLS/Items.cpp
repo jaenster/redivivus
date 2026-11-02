@@ -47,13 +47,12 @@ namespace D2Game::SKILLS::Items {
 // Appends one {affixIndex, affixTxt} pair to a weighted-roll candidate list and RETURNS THE NEW COUNT. Writes pAffixTxt at [pCandidatePairs + nCount*8 + 4] and nAffixIndex at [pCandidatePairs + nCount*8], then returns nCount + 1. At the 0x1ff cap it writes nothing and returns nCount unchanged.
 // The return is the count: nCount arrives in EAX and 005c0d14 ADD EAX,0x1 falls into the RET.
 static int32_t __stdcall SKILLITEMS_SetDispatchTableEntry(int32_t pCandidatePairs, int32_t pAffixTxt, int32_t nAffixIndex, int32_t nCount) {
-    if (nCount >= 0x1ff) {
-      return nCount;
+    if (nCount < 0x1ff) {
+      *(int32_t*)(pCandidatePairs + 4 + nCount * 8) = pAffixTxt;
+      *(int32_t*)(pCandidatePairs + nCount * 8) = nAffixIndex;
+      nCount++;
     }
 
-    *(int32_t*)(pCandidatePairs + 4 + nCount * 8) = pAffixTxt;
-    *(int32_t*)(pCandidatePairs + nCount * 8) = nAffixIndex;
-    nCount++;
     return nCount;
 }
 
@@ -68,11 +67,10 @@ int32_t __stdcall SKILLITEMS_GetDispatchTableRange(int32_t pDispatchTable, int32
 // Returns max(nValue * nPercent / 100, nMinimum): nValue in EAX, nMinimum in ESI, nPercent on the stack (RET 4); the throw-damage scaling of the crude-quality item mods. Was named SKILLITEMS_NoOp.
 static int32_t __stdcall SKILLITEMS_ApplyPercentWithMinimum(int32_t nValue, int32_t nMinimum, int32_t nPercent) {
     int iVar1 = nValue * nPercent / 100;
-    if (iVar1 >= nMinimum) {
-      return iVar1;
+    if (iVar1 < nMinimum) {
+      iVar1 = nMinimum;
     }
 
-    iVar1 = nMinimum;
     return iVar1;
 }
 
@@ -117,71 +115,69 @@ eD2Skills __stdcall ITEMMOD_RollStaffModSkills(D2UnitStrc * pUnit, eD2Skills eSk
     }
 
     eD2Skills iSkillRollSlot = SKILL_Attack;
-    if (!anSkillIds[3]) {
-      return eSkill;
-    }
-
-    do {
+    if (anSkillIds[3]) {
       D2StatListExStrc* pStatsEx;
-      pItemSeed = D2Common::ITEMS::Items::GetItemSeed(pUnit);
-      sSeed = D2_SEED_NEXT(*pItemSeed);
-      *pItemSeed = sSeed;
-      nSeedMod100 = sSeed.nSeedLow % 100;
-      if (nSeedMod100 > 0x50) {
-        eSkill = eSkillTierCount + SKILL_Kick;
-      } else {
-        eSkill = eSkillTierCount;
-        if (nSeedMod100 <= 0x1e) {
-          if (nSeedMod100 > 0xa) {
-            eSkill = eSkillTierCount - SKILL_Kick;
-          } else {
-            eSkill = eSkillTierCount - SKILL_Throw;
+      do {
+        pItemSeed = D2Common::ITEMS::Items::GetItemSeed(pUnit);
+        sSeed = D2_SEED_NEXT(*pItemSeed);
+        *pItemSeed = sSeed;
+        nSeedMod100 = sSeed.nSeedLow % 100;
+        if (nSeedMod100 > 0x50) {
+          eSkill = eSkillTierCount + SKILL_Kick;
+        } else {
+          eSkill = eSkillTierCount;
+          if (nSeedMod100 <= 0x1e) {
+            if (nSeedMod100 > 0xa) {
+              eSkill = eSkillTierCount - SKILL_Kick;
+            } else {
+              eSkill = eSkillTierCount - SKILL_Throw;
+            }
           }
         }
-      }
-      if ((int)eSkill < 1) {
-        eSkill = SKILL_Kick;
-      }
-
-      do {
-        do {
-          pItemSeed = D2Common::ITEMS::Items::GetItemSeed(pUnit);
-          sSeed = D2_SEED_NEXT(*pItemSeed);
-          *pItemSeed = sSeed;
-          nPickedSkillId = sSeed.nSeedLow + (eSkill - (int)(sSeed.nSeedLow / 5) - 1) * 5 + nSkillBaseId;
-        } while (nPickedSkillId == 0x49);
-      } while (nPickedSkillId == anSkillIds[0] || nPickedSkillId == anSkillIds[1] || nPickedSkillId == anSkillIds[2]);
-
-      anSkillIds[iSkillRollSlot] = nPickedSkillId;
-      eSkill = SKILL_Kick;
-      pItemSeed = D2Common::ITEMS::Items::GetItemSeed(pUnit);
-      sSeed = D2_SEED_NEXT(*pItemSeed);
-      *pItemSeed = sSeed;
-      nSeedMod100 = sSeed.nSeedLow % 100;
-      if (nSeedMod100 >= 0x5a) {
-        eSkill = SKILL_Unsummon;
-      } else {
-        if (nSeedMod100 >= 0x3c) {
-          eSkill = SKILL_Throw;
+        if ((int)eSkill < 1) {
+          eSkill = SKILL_Kick;
         }
-      }
 
-      pStatsEx = D2Common::Stats::StatsEx::GetStatList(pUnit, STATE_none, 0x40);
-      if (!pStatsEx) {
-        dwUnitGUID = D2Client::UNIT::GetGUID(pUnit);
-        eUnitType = UNIT_ITEM;
-        pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(D2Client::UNIT::CUnitEvent::GetMemPool(pUnit), 0x40, (int32_t)pStatsEx, eUnitType, dwUnitGUID);
-        D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
-        if (pStatsEx) {
+        do {
+          do {
+            pItemSeed = D2Common::ITEMS::Items::GetItemSeed(pUnit);
+            sSeed = D2_SEED_NEXT(*pItemSeed);
+            *pItemSeed = sSeed;
+            nPickedSkillId = sSeed.nSeedLow + (eSkill - (int)(sSeed.nSeedLow / 5) - 1) * 5 + nSkillBaseId;
+          } while (nPickedSkillId == 0x49);
+        } while (nPickedSkillId == anSkillIds[0] || nPickedSkillId == anSkillIds[1] || nPickedSkillId == anSkillIds[2]);
+
+        anSkillIds[iSkillRollSlot] = nPickedSkillId;
+        eSkill = SKILL_Kick;
+        pItemSeed = D2Common::ITEMS::Items::GetItemSeed(pUnit);
+        sSeed = D2_SEED_NEXT(*pItemSeed);
+        *pItemSeed = sSeed;
+        nSeedMod100 = sSeed.nSeedLow % 100;
+        if (nSeedMod100 >= 0x5a) {
+          eSkill = SKILL_Unsummon;
+        } else {
+          if (nSeedMod100 >= 0x3c) {
+            eSkill = SKILL_Throw;
+          }
+        }
+
+        pStatsEx = D2Common::Stats::StatsEx::GetStatList(pUnit, STATE_none, 0x40);
+        if (!pStatsEx) {
+          dwUnitGUID = D2Client::UNIT::GetGUID(pUnit);
+          eUnitType = UNIT_ITEM;
+          pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(D2Client::UNIT::CUnitEvent::GetMemPool(pUnit), 0x40, (int32_t)pStatsEx, eUnitType, dwUnitGUID);
+          D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
+          if (pStatsEx) {
+            D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_item_singleskill, eSkill, nPickedSkillId);
+          }
+        } else {
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_item_singleskill, eSkill, nPickedSkillId);
         }
-      } else {
-        D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_item_singleskill, eSkill, nPickedSkillId);
-      }
 
-      eSkill = iSkillRollSlot + SKILL_Kick;
-      iSkillRollSlot = eSkill;
-    } while ((int)eSkill < (int)anSkillIds[3]);
+        eSkill = iSkillRollSlot + SKILL_Kick;
+        iSkillRollSlot = eSkill;
+      } while ((int)eSkill < (int)anSkillIds[3]);
+    }
 
     return eSkill;
 }

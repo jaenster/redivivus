@@ -136,60 +136,58 @@ static int __stdcall DRLGOUTDOOR_ValidateSubTilePlacement(D2UnkOutdoorStrc * pOu
 }
 
 int __stdcall DRLGOUTDOOR_ApplySubTileToGrid(int nBaseX, int nBaseY, D2UnkOutdoorStrc * pOutdoorCtx, D2DrlgCoordStrc * pCoords, D2LvlSubTxt * pLvlSub, int nOffset) {
-    uint32_t uWallFlags;
     uint32_t uFloorFlags;
     int nPresetId;
     int nX;
     int nCol;
     int nWallMainIndex;
+    D2DrlgLevelStrc* pDrlgLevel = pOutdoorCtx->pLevel;
     int nWorldX = pCoords->nPosX + nOffset;
     int nWorldY = pCoords->nPosY;
     int nGridSize = pLvlSub->GridSize;
     nOffset = 0;
     int nResult = nBaseY / nGridSize;
-    if (pCoords->nHeight <= 0) {
-      return nResult;
+    if (pCoords->nHeight > 0) {
+      uint32_t uWallFlags;
+      do {
+        for (nCol = 0; nCol < pCoords->nWidth; nCol++) {
+          if (pLvlSub->pDrlgFile->nWallLayers) {
+            uWallFlags = DrlgGrid::GetGridFlags(pLvlSub->pWallGrid, nCol + nWorldX, nOffset + nWorldY);
+          } else {
+            uWallFlags = 0;
+          }
+          if (pLvlSub->pDrlgFile->nFloorLayers) {
+            uFloorFlags = DrlgGrid::GetGridFlags(&pLvlSub->pFloorGrid, nCol + nWorldX, nOffset + nWorldY);
+          } else {
+            uFloorFlags = 0;
+          }
+
+          nResult = pLvlSub->GridSize * nOffset + (nBaseY - nBaseY % nGridSize);
+          nX = pLvlSub->GridSize * nCol + (nBaseX - nBaseX % nGridSize);
+          if (uWallFlags & 1) {
+            uFloorFlags = uWallFlags >> 8 & 0xff;
+            nWallMainIndex = uFloorFlags - 1;
+            if (pOutdoorCtx->pfnGetBorderPreset) {
+              nPresetId = pOutdoorCtx->pfnGetBorderPreset(pDrlgLevel, uWallFlags >> 0x14 & 0x3f, uFloorFlags);
+            } else {
+              nPresetId = pOutdoorCtx->nLevelPrestId + nWallMainIndex;
+            }
+            if (nPresetId != -5 && nWallMainIndex != pOutdoorCtx->nPrevBorderPresetId) {
+              pOutdoorCtx->pfnSpawnPreset(pDrlgLevel, nX, nResult, nPresetId, 0, 1);
+            }
+          } else {
+            if (uFloorFlags & 2) {
+              pOutdoorCtx->pfnAlterAdjacentCells(pDrlgLevel, nX, nResult);
+            } else {
+              pOutdoorCtx->pfnSetBlankCell(pDrlgLevel, nX, nResult);
+            }
+          }
+        }
+
+        nResult = nOffset + 1;
+        nOffset = nResult;
+      } while (nResult < pCoords->nHeight);
     }
-
-    do {
-      D2DrlgLevelStrc* pDrlgLevel = pOutdoorCtx->pLevel;
-      for (nCol = 0; nCol < pCoords->nWidth; nCol++) {
-        if (pLvlSub->pDrlgFile->nWallLayers) {
-          uWallFlags = DrlgGrid::GetGridFlags(pLvlSub->pWallGrid, nCol + nWorldX, nOffset + nWorldY);
-        } else {
-          uWallFlags = 0;
-        }
-        if (pLvlSub->pDrlgFile->nFloorLayers) {
-          uFloorFlags = DrlgGrid::GetGridFlags(&pLvlSub->pFloorGrid, nCol + nWorldX, nOffset + nWorldY);
-        } else {
-          uFloorFlags = 0;
-        }
-
-        nResult = pLvlSub->GridSize * nOffset + (nBaseY - nBaseY % nGridSize);
-        nX = pLvlSub->GridSize * nCol + (nBaseX - nBaseX % nGridSize);
-        if (uWallFlags & 1) {
-          uFloorFlags = uWallFlags >> 8 & 0xff;
-          nWallMainIndex = uFloorFlags - 1;
-          if (pOutdoorCtx->pfnGetBorderPreset) {
-            nPresetId = pOutdoorCtx->pfnGetBorderPreset(pDrlgLevel, uWallFlags >> 0x14 & 0x3f, uFloorFlags);
-          } else {
-            nPresetId = pOutdoorCtx->nLevelPrestId + nWallMainIndex;
-          }
-          if (nPresetId != -5 && nWallMainIndex != pOutdoorCtx->nPrevBorderPresetId) {
-            pOutdoorCtx->pfnSpawnPreset(pDrlgLevel, nX, nResult, nPresetId, 0, 1);
-          }
-        } else {
-          if (uFloorFlags & 2) {
-            pOutdoorCtx->pfnAlterAdjacentCells(pDrlgLevel, nX, nResult);
-          } else {
-            pOutdoorCtx->pfnSetBlankCell(pDrlgLevel, nX, nResult);
-          }
-        }
-      }
-
-      nResult = nOffset + 1;
-      nOffset = nResult;
-    } while (nResult < pCoords->nHeight);
 
     return nResult;
 }

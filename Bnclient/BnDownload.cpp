@@ -87,11 +87,10 @@ static BOOL __stdcall NET_CopyDllFromArchive(D2ArchiveStrc * pArchive, char * ps
         }
       }
     }
-    if (!pMpqFileLocal) {
-      return (BOOL)(uintptr_t)pMpqFile;
+    if (pMpqFileLocal) {
+      Storm::Source::SFile::SFileCloseFile(pMpqFileLocal);
     }
 
-    Storm::Source::SFile::SFileCloseFile(pMpqFileLocal);
     return (BOOL)(uintptr_t)pMpqFile;
 }
 
@@ -350,11 +349,10 @@ static BOOL __stdcall BnetDownloadFile(SOCKET hSocket, char * szText, FILETIME *
     if (bWriteFlags & 1) {
       BNGatewayAccess::CACHE_WriteData(szText, (LPCVOID)*ppOutBuffer, nFileSize, (uint32_t*)&pTimestamp->dwLowDateTime, 0x13c680, 0x278d00);
     }
-    if (!(bWriteFlags & 2)) {
-      return 1;
+    if (bWriteFlags & 2) {
+      BNDOWNLOAD_WriteFileWithTimestamp(szText, (LPCVOID)*ppOutBuffer, nFileSize, pTimestamp);
     }
 
-    BNDOWNLOAD_WriteFileWithTimestamp(szText, (LPCVOID)*ppOutBuffer, nFileSize, pTimestamp);
     return 1;
 }
 

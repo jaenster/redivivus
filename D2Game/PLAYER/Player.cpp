@@ -304,38 +304,38 @@ uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t nParam, D
 }
 
 static D2UnitStrc * __stdcall PLAYER_CreateRewardItemFromTemplate(::SGAMEDATA * nGamePtr, int32_t bNoSkill, int32_t nItemClassId, int32_t pTemplateTxt, D2UnitStrc * pUnit) {
+    BOOL bIsStackable;
+    int nValue;
     if (!pUnit) {
       return nullptr;
     }
 
     int32_t nItemLevel = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
     D2UnitStrc* pCreatedItem = ITEMS::Items::Drop::ITEM_CreateFromTemplate(pUnit, nItemClassId, nGamePtr, 4, QUALITY_NORMAL, 1, 1, nItemLevel, 0, 0, 0);
-    if (!pCreatedItem) {
-      return pCreatedItem;
-    }
-
-    D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatList(pCreatedItem, STATE_none, 0x40);
-    if (pStatList) {
-      D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pCreatedItem, pStatList);
-      D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
-    }
-    if (!bNoSkill && *(short int*)(pTemplateTxt + 0xac) >= 0 && (int)*(short int*)(pTemplateTxt + 0xac) < sgptDataTable->nTxtSkillsCount) {
+    if (pCreatedItem) {
+      D2StatListExStrc* pStatList;
       pStatList = D2Common::Stats::StatsEx::GetStatList(pCreatedItem, STATE_none, 0x40);
-      if (!pStatList) {
-        pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pCreatedItem->pMemory, 0x40, 0, UNIT_ITEM, pCreatedItem->nUnitGUID);
-        D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pCreatedItem, pStatList, 1);
+      if (pStatList) {
+        D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pCreatedItem, pStatList);
+        D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
+      }
+      if (!bNoSkill && *(short int*)(pTemplateTxt + 0xac) >= 0 && (int)*(short int*)(pTemplateTxt + 0xac) < sgptDataTable->nTxtSkillsCount) {
+        pStatList = D2Common::Stats::StatsEx::GetStatList(pCreatedItem, STATE_none, 0x40);
+        if (!pStatList) {
+          pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pCreatedItem->pMemory, 0x40, 0, UNIT_ITEM, pCreatedItem->nUnitGUID);
+          D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pCreatedItem, pStatList, 1);
+        }
+
+        D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_item_singleskill, 1, (uint32_t)*(uint16_t*)(pTemplateTxt + 0xac));
       }
 
-      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_item_singleskill, 1, (uint32_t)*(uint16_t*)(pTemplateTxt + 0xac));
+      bIsStackable = D2Common::ITEMS::Items::IsStackable(pCreatedItem);
+      if (bIsStackable) {
+        nValue = D2Common::ITEMS::Items::ITEM_GetMaxStack(pCreatedItem);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pCreatedItem, UNITSTAT_quantity, nValue, 0);
+      }
     }
 
-    BOOL bIsStackable = D2Common::ITEMS::Items::IsStackable(pCreatedItem);
-    if (!bIsStackable) {
-      return pCreatedItem;
-    }
-
-    int nValue = D2Common::ITEMS::Items::ITEM_GetMaxStack(pCreatedItem);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pCreatedItem, UNITSTAT_quantity, nValue, 0);
     return pCreatedItem;
 }
 
@@ -732,7 +732,7 @@ void __fastcall PLAYER_DestroyPortalPair(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 // Validates and executes a gold-drop request: confirms the requester matches the acting player, checks the requested amount against current gold and inventory gold limit, spawns gold pile units via DROP_SpawnGoldPiles, marks them owned by the player, and deducts each pile's value from the player's UNITSTAT_gold.
 BOOL __fastcall GOLD_DropGoldFromInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD dwRequesterId, uint32_t nGoldAmount) {
-    eD2UnitType eUnitType;
+    int nItemGold;
     int nPlayerGold;
     D2UnitStrc* pGoldPiles[32];
     POINT ptCoords;
@@ -751,37 +751,33 @@ BOOL __fastcall GOLD_DropGoldFromInventory(::SGAMEDATA * pGame, D2UnitStrc * pUn
     if ((int)nClampedGold > (int)nGoldLimit) {
       return 0;
     }
-    if (nClampedGold <= 0) {
-      return 1;
-    }
-
-    D2Common::Units::GetCoords(pUnit, &ptCoords);
-    if (nClampedGold > 2000000000) {
-      nClampedGold = 2000000000;
-    }
-
-    i = 0;
-    dwRequesterId = 0;
-    ITEMS::Items::Drop::DROP_SpawnGoldPiles(pGame, pUnit, nClampedGold, pGoldPiles, (int*)&dwRequesterId, 0x20);
-    if (!(dwRequesterId && (int)dwRequesterId > 0)) {
-      return 1;
-    }
-
-    do {
-      int nItemGold;
-      pRequester = pGoldPiles[i];
-      if (pUnit) {
-        eUnitType = D2Client::Units::GetType(pUnit);
-        if (eUnitType == UNIT_PLAYER) {
-          D2Common::Units::StoreOwner(pRequester, pUnit);
-        }
+    if (nClampedGold > 0) {
+      eD2UnitType eUnitType;
+      D2Common::Units::GetCoords(pUnit, &ptCoords);
+      if (nClampedGold > 2000000000) {
+        nClampedGold = 2000000000;
       }
 
-      nItemGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pRequester, UNITSTAT_gold, 0);
-      nPlayerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-      GAME::Server::SetStat(pUnit, UNITSTAT_gold, nPlayerGold - nItemGold);
-      i++;
-    } while (i < (int)dwRequesterId);
+      i = 0;
+      dwRequesterId = 0;
+      ITEMS::Items::Drop::DROP_SpawnGoldPiles(pGame, pUnit, nClampedGold, pGoldPiles, (int*)&dwRequesterId, 0x20);
+      if (dwRequesterId && (int)dwRequesterId > 0) {
+        do {
+          pRequester = pGoldPiles[i];
+          if (pUnit) {
+            eUnitType = D2Client::Units::GetType(pUnit);
+            if (eUnitType == UNIT_PLAYER) {
+              D2Common::Units::StoreOwner(pRequester, pUnit);
+            }
+          }
+
+          nItemGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pRequester, UNITSTAT_gold, 0);
+          nPlayerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
+          GAME::Server::SetStat(pUnit, UNITSTAT_gold, nPlayerGold - nItemGold);
+          i++;
+        } while (i < (int)dwRequesterId);
+      }
+    }
 
     return 1;
 }
@@ -885,11 +881,10 @@ int32_t __fastcall SERVER_GAME_CountPlayers(::SGAMEDATA * pGame) {
     DWORD PlayerCountFixed;
     DWORD ModeZeroCount = 0;
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)CountModeZeroDeath, &ModeZeroCount);
-    if (!((uint8_t)(pGame->nGameType - SGAMETYPE_OBNET_HOST) > 2 || (PlayerCountFixed = PlayerCountOverride , (int)PlayerCountOverride <= (int)ModeZeroCount))) {
-      return PlayerCountFixed;
+    if ((uint8_t)(pGame->nGameType - SGAMETYPE_OBNET_HOST) > 2 || (PlayerCountFixed = PlayerCountOverride , (int)PlayerCountOverride <= (int)ModeZeroCount)) {
+      PlayerCountFixed = ModeZeroCount;
     }
 
-    PlayerCountFixed = ModeZeroCount;
     return PlayerCountFixed;
 }
 

@@ -133,7 +133,7 @@
         "exit"
       ],
       "usedTypes": [
-        "D2WinTextBox",
+        "D2WinProgressBar",
         "int32_t"
       ]
     }

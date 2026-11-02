@@ -33,11 +33,10 @@ template<> TSLink<::StringEntryNode>* TSLink<StringEntryNode>::NextLink(int32_t 
     if ((int)nNextOffset < 0) {
       return (TSLink<::StringEntryNode>*)~nNextOffset;
     }
-    if (nLinkOffset >= 0) {
-      return (TSLink<::StringEntryNode>*)(nNextOffset + nLinkOffset);
+    if (nLinkOffset < 0) {
+      nLinkOffset = (int)this - this->m_prevlink->m_next;
     }
 
-    nLinkOffset = (int)this - this->m_prevlink->m_next;
     return (TSLink<::StringEntryNode>*)(nNextOffset + nLinkOffset);
 }
 
@@ -73,11 +72,10 @@ template<> uint32_t TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>
 }
 
 template<> uint32_t __stdcall TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::RoundToMultiple(uint32_t nValue, uint32_t nMultiple) {
-    if (!(nValue % nMultiple)) {
-      return nValue;
+    if (nValue % nMultiple) {
+      nValue += nMultiple - nValue % nMultiple;
     }
 
-    nValue += nMultiple - nValue % nMultiple;
     return nValue;
 }
 

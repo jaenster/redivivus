@@ -394,7 +394,6 @@ uint32_t __stdcall TXT_Items_GetVersion(int32_t nItemClassId) {
     }
 
     return (uint32_t)(uint16_t)pTxtItemsVersion[nItemClassId];
-    return (uint32_t)(uint16_t)pTxtItemsVersion[nItemClassId];
 }
 
 D2ItemsTxt * __stdcall TXT_Items_GetLine(uint32_t nItemClassId) {
@@ -406,7 +405,6 @@ D2ItemsTxt * __stdcall TXT_Items_GetLine(uint32_t nItemClassId) {
       exit(-1);
     }
 
-    return gsItemsTable.pItems + nItemClassId;
     return gsItemsTable.pItems + nItemClassId;
 }
 
@@ -641,7 +639,6 @@ D2RareAffixTxt * __stdcall TXT_RareAffixes_GetLine(int32_t nIndex) {
         exit(-1);
       }
 
-      return gsRareAffixTable.pTable + nIndex - 1;
       return gsRareAffixTable.pTable + nIndex - 1;
     }
 

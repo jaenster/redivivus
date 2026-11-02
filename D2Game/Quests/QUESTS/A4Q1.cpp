@@ -332,8 +332,11 @@ uint8_t __fastcall Q26_QuestUpdate_SpawnIzual(::SGAMEDATA * pGame, D2QuestDataSt
 BOOL __fastcall Q26_PlayerCheckNearIzual(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     BOOL _bQuestState;
     bool bQuestState;
+    uint32_t nRoomIdx;
+    D2UnitDataPlayerStrc* pIzualRoom;
     D2RoomStrc** pAdjacentRooms;
     uint32_t nAdjacentRoomCount;
+    int bIsNearIzual;
     D2RoomStrc* pPlayerRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     D2QuestDataStrc* pPlayerData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheFallenAngel);
     if (!pPlayerData) {
@@ -342,46 +345,41 @@ BOOL __fastcall Q26_PlayerCheckNearIzual(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     D2RoomStrc* pQuestData = D2Common::Units::UNITS_GetRoom(pPlayerData->pQuestSpecificData.pA4Q1->pIzualUnit);
-    if (!pPlayerRoom) {
-      return 0;
-    }
+    if (pPlayerRoom) {
+      D2BitBufferStrc* pBitBuffer;
+      bIsNearIzual = 0;
+      if (pPlayerRoom == pQuestData) {
+        bIsNearIzual = 1;
+      } else {
+        pPlayerRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+        if (!pPlayerRoom) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1d9);
+          exit(-1);
+        }
 
-    int bIsNearIzual = 0;
-    if (pPlayerRoom == pQuestData) {
-      bIsNearIzual = 1;
-    } else {
-      uint32_t nRoomIdx;
-      pPlayerRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      if (!pPlayerRoom) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1d9);
-        exit(-1);
+        D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pPlayerRoom, &pAdjacentRooms, (int*)&nAdjacentRoomCount);
+        for (nRoomIdx = 0; nRoomIdx < nAdjacentRoomCount; nRoomIdx++) {
+          if (pAdjacentRooms[nRoomIdx] == pQuestData) {
+            bIsNearIzual = 1;
+            break;
+          }
+        }
       }
 
-      D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pPlayerRoom, &pAdjacentRooms, (int*)&nAdjacentRoomCount);
-      for (nRoomIdx = 0; nRoomIdx < nAdjacentRoomCount; nRoomIdx++) {
-        if (pAdjacentRooms[nRoomIdx] == pQuestData) {
-          bIsNearIzual = 1;
-          break;
+      pIzualRoom = D2Common::Units::GetPlayerData(pUnit);
+      pBitBuffer = pIzualRoom->pQuestRecord[pGame->nDifficulty];
+      _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_Completed);
+      if (!_bQuestState) {
+        _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_RewardAwaits);
+        if (!_bQuestState && bIsNearIzual) {
+          /* SetQuestState(rec=0x19 FallenAngel, JustCompleted=0xd) — Izual died nearby:
+                         credit self player as having completed it now */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_JustCompleted);
+          /* SetQuestState(rec=0x19 FallenAngel, RewardAwaits=1) — nearby player: mark
+                         reward (+2 skills) pending until Jerhyn turn-in */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_RewardAwaits);
         }
       }
     }
 
-    D2UnitDataPlayerStrc* pIzualRoom = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pIzualRoom->pQuestRecord[pGame->nDifficulty];
-    _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_Completed);
-    if (_bQuestState) {
-      return 0;
-    }
-
-    _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_RewardAwaits);
-    if (!(!_bQuestState && bIsNearIzual)) {
-      return 0;
-    }
-
-    /* SetQuestState(rec=0x19 FallenAngel, JustCompleted=0xd) — Izual died nearby:
-                         credit self player as having completed it now */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_JustCompleted);
-    /* SetQuestState(rec=0x19 FallenAngel, RewardAwaits=1) — nearby player: mark
-                         reward (+2 skills) pending until Jerhyn turn-in */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_RewardAwaits);
     return 0;
 }
 

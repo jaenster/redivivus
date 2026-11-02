@@ -135,7 +135,7 @@ BOOL __fastcall DrawGroundTile(struct D2TileLibraryEntryStrc * pTile, struct D2G
 void __stdcall RENDERER_GLIDE_AllocLightingTable();
 void __stdcall RENDERER_GLIDE_FreeLightingTable();
 void __stdcall RENDERER_GLIDE_BuildLightingTable();
-void __fastcall SetGlobalLight(BYTE nRed, BYTE nGreen, BYTE nBlue);
+void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue);
 void __fastcall RENDERER_GLIDE_ApplyShadowLighting(struct D2GlideVertexStrc * pVertex, uint8_t nIntensity);
 void __fastcall RENDERER_GLIDE_ApplyColorLighting(struct D2GlideVertexStrc * pVertex, uint32_t dwPackedColor);
 // @sourcefile .\Src\glPerspective.cpp

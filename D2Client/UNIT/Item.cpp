@@ -198,10 +198,10 @@ void __fastcall ITEM_RemoveItemStatsFromOwner(D2UnitStrc * pUnit, D2UnitStrc * p
 // Creates a client-side item unit from a ground-drop network packet (pbParam). Extracts item details from the packet payload, creates the unit via UNIT_CreateWarp, loads save data via ITEM_LoadFromSaveData. On load failure, removes the item from the server object table and returns null. If the item has ITEMFLAG_BOUGHT and bSendIdentRequest is set, sends a 0x37 ident-request packet for unidentified items.
 // @sourcefile .\UNIT\Item.cpp
 static D2UnitStrc * __stdcall ITEM_CreateItemFromGroundPacket(uint16_t nItemX, uint16_t nItemY, int32_t bSendIdentRequest, uint8_t * pPacketData, D2UnitDataItemDetailsStrc * pUnitDataItemDetails) {
+    D2UnitDataItemDetailsStrc itemDetails;
     int32_t bLoadFailed;
     uint8_t byPacketSize = pPacketData[2];
     if (!pUnitDataItemDetails) {
-      D2UnitDataItemDetailsStrc itemDetails;
       D2Common::ITEMS::Items::ExtractItemDetails(pPacketData + 8, byPacketSize - 8, 0, &itemDetails);
       pUnitDataItemDetails = &itemDetails;
     }
@@ -214,30 +214,26 @@ static D2UnitStrc * __stdcall ITEM_CreateItemFromGroundPacket(uint16_t nItemX, u
     }
 
     uint32_t bBoughtFlag = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(pUnitDataItemDetails->flags, ITEMFLAG_BOUGHT);
-    if (!bBoughtFlag) {
-      return pUnit;
+    if (bBoughtFlag) {
+      BOOL bIdentified;
+      D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_BOUGHT, 0);
+      if (bSendIdentRequest) {
+        bIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0xd8, ".\\UNIT\\Item.cpp");
+        if (!bIdentified) {
+          GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x37, *(int32_t*)(pPacketData + 4));
+        }
+      }
     }
 
-    D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_BOUGHT, 0);
-    if (!bSendIdentRequest) {
-      return pUnit;
-    }
-
-    BOOL bIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0xd8, ".\\UNIT\\Item.cpp");
-    if (bIdentified) {
-      return pUnit;
-    }
-
-    GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x37, *(int32_t*)(pPacketData + 4));
     return pUnit;
 }
 
 // @sourcefile .\UNIT\Item.cpp
 static D2UnitStrc * __stdcall ITEM_CreateItemFromBodyPacket(uint16_t nItemX, uint32_t nItemY, int32_t bSendIdentRequest, uint8_t * pPacketData, D2UnitDataItemDetailsStrc * pUnitDataItemDetails) {
+    D2UnitDataItemDetailsStrc itemDetails;
     int32_t bLoadFailed;
     uint8_t byPacketSize = pPacketData[2];
     if (!pUnitDataItemDetails) {
-      D2UnitDataItemDetailsStrc itemDetails;
       D2Common::ITEMS::Items::ExtractItemDetails(pPacketData + 0xd, byPacketSize - 0xd, 0, &itemDetails);
       pUnitDataItemDetails = &itemDetails;
     }
@@ -250,21 +246,17 @@ static D2UnitStrc * __stdcall ITEM_CreateItemFromBodyPacket(uint16_t nItemX, uin
     }
 
     uint32_t bBoughtFlag = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(pUnitDataItemDetails->flags, ITEMFLAG_BOUGHT);
-    if (!bBoughtFlag) {
-      return pUnit;
+    if (bBoughtFlag) {
+      BOOL bIdentified;
+      D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_BOUGHT, 0);
+      if (bSendIdentRequest) {
+        bIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0xfe, ".\\UNIT\\Item.cpp");
+        if (!bIdentified) {
+          GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x37, *(int32_t*)(pPacketData + 4));
+        }
+      }
     }
 
-    D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_BOUGHT, 0);
-    if (!bSendIdentRequest) {
-      return pUnit;
-    }
-
-    BOOL bIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0xfe, ".\\UNIT\\Item.cpp");
-    if (bIdentified) {
-      return pUnit;
-    }
-
-    GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x37, *(int32_t*)(pPacketData + 4));
     return pUnit;
 }
 
@@ -623,11 +615,10 @@ static int32_t ITEM_GetItemDropSound(uint32_t * pnDropSfxFrame, D2UnitStrc * pUn
         eItemQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
         pUniqueItemsTxt = eItemQuality >= 0 && eItemQuality < sgptDataTable->nTxtUniqueItemsSize ? sgptDataTable->pTxtUniqueItems + eItemQuality : nullptr;
         if (pUniqueItemsTxt && pUniqueItemsTxt->dropsound > 0) {
-          if (!(pnDropSfxFrame && (uint8_t)pUniqueItemsTxt->dropsfxframe > 0)) {
-            return (int)pUniqueItemsTxt->dropsound;
+          if (pnDropSfxFrame && (uint8_t)pUniqueItemsTxt->dropsfxframe > 0) {
+            *pnDropSfxFrame = (uint32_t)(uint8_t)pUniqueItemsTxt->dropsfxframe;
           }
 
-          *pnDropSfxFrame = (uint32_t)(uint8_t)pUniqueItemsTxt->dropsfxframe;
           return (int)pUniqueItemsTxt->dropsound;
         }
       }
@@ -995,11 +986,10 @@ int32_t __fastcall SOUND_GetIdFromUnit(D2UnitStrc * pUnit) {
 
       nDropSound = sgptDataTable->pTxtSetItems[eQuality].dropsound;
     }
-    if (nDropSound <= 0) {
-      return nSoundId;
+    if (nDropSound > 0) {
+      nSoundId = (int32_t)nDropSound;
     }
 
-    nSoundId = (int32_t)nDropSound;
     return nSoundId;
 }
 
@@ -1880,7 +1870,7 @@ void __fastcall HandleItemEquip(uint8_t * pBytes) {
     }
 
     Engine::Gfx::GFX_SetAllGfxInfoFlags(pOwnerUnit, '\0');
-    if (!(pOwnerUnit->eUnitType < UNIT_OBJECT)) {
+    if (!(pOwnerUnit->eUnitType <= UNIT_MONSTER)) {
       return;
     }
 

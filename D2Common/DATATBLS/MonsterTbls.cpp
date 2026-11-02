@@ -173,11 +173,10 @@ int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, ui
       if (pUpgradeCount) {
         *pUpgradeCount = (uint32_t)sgtDataTable.pTxtMonStats[nMonStatsId].nMaxChainId;
       }
-      if (!eSkill) {
-        return (uint32_t)sgtDataTable.pTxtMonStats[nMonStatsId].nChainId;
+      if (eSkill) {
+        *eSkill = (uint32_t)sgtDataTable.pTxtMonStats[nMonStatsId].nChainId;
       }
 
-      *eSkill = (uint32_t)sgtDataTable.pTxtMonStats[nMonStatsId].nChainId;
       return (uint32_t)sgtDataTable.pTxtMonStats[nMonStatsId].nChainId;
     }
     if (pUpgradeCount) {
@@ -620,20 +619,20 @@ BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bI
 
       pOutStats->nElDur = (int)pMonStatsTxt->aEl2Dur[nClampedDiff];
     }
-    if (!(nStatFlags & 0x100)) {
-      return 1;
-    }
-    if (*((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)gadwBitMasks[2]) {
-      pOutStats->nS1MinD = (int)pMonStatsTxt->aEl3MinD[nClampedDiff];
-      pOutStats->nS1MaxD = (int)pMonStatsTxt->aEl3MaxD[nClampedDiff];
-    } else {
-      nScaledStat = D2Client::Stats::D2ApplyPercent(pMonLvlEntry->DM[nChampionIdx * 3 + nClampedDiff], (int)pMonStatsTxt->aEl3MinD[nClampedDiff], 100);
-      pOutStats->nElMinD = nScaledStat;
-      nScaledStat = D2Client::Stats::D2ApplyPercent(pMonLvlEntry->DM[nChampionIdx * 3 + nClampedDiff], (int)pMonStatsTxt->aEl3MaxD[nClampedDiff], 100);
-      pOutStats->nElMaxD = nScaledStat;
+    if (nStatFlags & 0x100) {
+      if (*((uint8_t*)pMonStatsTxt + 0xc) & (uint8_t)gadwBitMasks[2]) {
+        pOutStats->nS1MinD = (int)pMonStatsTxt->aEl3MinD[nClampedDiff];
+        pOutStats->nS1MaxD = (int)pMonStatsTxt->aEl3MaxD[nClampedDiff];
+      } else {
+        nScaledStat = D2Client::Stats::D2ApplyPercent(pMonLvlEntry->DM[nChampionIdx * 3 + nClampedDiff], (int)pMonStatsTxt->aEl3MinD[nClampedDiff], 100);
+        pOutStats->nElMinD = nScaledStat;
+        nScaledStat = D2Client::Stats::D2ApplyPercent(pMonLvlEntry->DM[nChampionIdx * 3 + nClampedDiff], (int)pMonStatsTxt->aEl3MaxD[nClampedDiff], 100);
+        pOutStats->nElMaxD = nScaledStat;
+      }
+
+      pOutStats->nElDur = (int)pMonStatsTxt->aEl3Dur[nClampedDiff];
     }
 
-    pOutStats->nElDur = (int)pMonStatsTxt->aEl3Dur[nClampedDiff];
     return 1;
 }
 
@@ -1318,11 +1317,10 @@ D2ParsedTreasureClassStrc * __stdcall RollTreasureClass(int32_t nDifficulty, int
     }
 
     uint32_t nClampedChest = nLevel <= 0 ? 0 : nLevel;
-    if ((int)nClampedChest < 2) {
-      return sgtDataTable.pParsedTreasureClassDiffActChestABC.Difficulty[nClampedDiff].Act[nClampedAct].Chest[nClampedChest];
+    if ((int)nClampedChest >= 2) {
+      nClampedChest = 2;
     }
 
-    nClampedChest = 2;
     return sgtDataTable.pParsedTreasureClassDiffActChestABC.Difficulty[nClampedDiff].Act[nClampedAct].Chest[nClampedChest];
 }
 

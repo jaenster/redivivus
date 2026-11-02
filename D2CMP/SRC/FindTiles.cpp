@@ -35,12 +35,11 @@ namespace D2CMP::SRC::FindTiles {
 // Computes a 0-127 hash byte in AL/EAX (masked and range-checked before the halt-on-overflow guard); the caller reads it as a hash-table index (nHashIdx).
 int __fastcall FINDTILE_ComputeHash(char cSubIndex, char cIndex, char cTileSubType) {
     uint32_t uVar1 = (uint8_t)(cSubIndex * '\x02' - cTileSubType + cIndex) & 0x8000007f;
-    if (!((uint8_t)uVar1 < 0x80)) {
+    if ((uint8_t)uVar1 >= 0x80) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1e);
       exit(-1);
     }
 
-    return uVar1;
     return uVar1;
 }
 
@@ -222,16 +221,14 @@ int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, int32_t pResultArray, uin
         }
       } while (pEntry);
 
-      if (!bMatched) {
-        return nResultCount;
-      }
-
-      copy_matches:
-      pChainNode = (void*)pEntry[3];
-      for (i = 0; pChainNode && i < nMaxResults; i++) {
-        nResultCount++;
-        *(uint32_t*)(pResultArray + i * 4) = *(uint32_t*)pChainNode;
-        pChainNode = *(void**)((int)pChainNode + 4);
+      if (bMatched) {
+        copy_matches:
+        pChainNode = (void*)pEntry[3];
+        for (i = 0; pChainNode && i < nMaxResults; i++) {
+          nResultCount++;
+          *(uint32_t*)(pResultArray + i * 4) = *(uint32_t*)pChainNode;
+          pChainNode = *(void**)((int)pChainNode + 4);
+        }
       }
 
       return nResultCount;

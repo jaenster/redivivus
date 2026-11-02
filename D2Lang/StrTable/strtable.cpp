@@ -297,13 +297,12 @@ uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbKey, uint16_t * * ppwszText
 
         uVar1 = STRTABLE_FindStringByKey(gpStringIndexBase, pbKey, (int*)ppwszText, gpStringTableBase);
         nBaseResult = (uint32_t)uVar1;
-        if (uVar1 != 0xffff) {
-          return nBaseResult;
+        if (uVar1 == 0xffff) {
+          pTranslated = STRTABLE_GetTranslatedString(pbKey);
+          *ppwszText = pTranslated;
+          nBaseResult = (uint32_t)pTranslated & -65536;
         }
 
-        pTranslated = STRTABLE_GetTranslatedString(pbKey);
-        *ppwszText = pTranslated;
-        nBaseResult = (uint32_t)pTranslated & -65536;
         return nBaseResult;
       }
     } else {
@@ -861,24 +860,23 @@ static uint16_t * __fastcall STRTABLE_LoadStringTableFile(char * szFileName) {
     }
 
     int i = 0;
-    if (pArchive->nNodeCount <= 0) {
-      return &pArchive->wCRC;
+    if (pArchive->nNodeCount > 0) {
+      uint32_t* pdwNodeStringOffset;
+      pdwNodeStringOffset = (uint32_t*)((uintptr_t)&pArchive[1].dwDataStartOffset + (uint32_t)pArchive->wIndexCount * 2 + 2);
+      do {
+        if (pdwNodeStringOffset[-1] >= pArchive->dwFileSize) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe0);
+          exit(-1);
+        }
+        if (*pdwNodeStringOffset >= pArchive->dwFileSize) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe1);
+          exit(-1);
+        }
+
+        i++;
+        pdwNodeStringOffset = (uint32_t*)((int)pdwNodeStringOffset + 0x11);
+      } while (i < pArchive->nNodeCount);
     }
-
-    uint32_t* pdwNodeStringOffset = (uint32_t*)((uintptr_t)&pArchive[1].dwDataStartOffset + (uint32_t)pArchive->wIndexCount * 2 + 2);
-    do {
-      if (pdwNodeStringOffset[-1] >= pArchive->dwFileSize) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe0);
-        exit(-1);
-      }
-      if (*pdwNodeStringOffset >= pArchive->dwFileSize) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe1);
-        exit(-1);
-      }
-
-      i++;
-      pdwNodeStringOffset = (uint32_t*)((int)pdwNodeStringOffset + 0x11);
-    } while (i < pArchive->nNodeCount);
 
     return &pArchive->wCRC;
 }

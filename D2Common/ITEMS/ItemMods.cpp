@@ -500,11 +500,10 @@ static int32_t __stdcall ITEMMOD_ApplyRandomStatValue(D2UnitStrc * pUnit, int32_
     }
 
     Stats::StatsEx::STATLIST_AddStatValue(pStatList, eUnitStat, nStatValue, 0);
-    if (eUnitStat != UNITSTAT_poisonmaxdam) {
-      return 1;
+    if (eUnitStat == UNITSTAT_poisonmaxdam) {
+      Stats::StatsEx::STATLIST_AddStatValue(pStatList, UNITSTAT_poison_count, 1, 0);
     }
 
-    Stats::StatsEx::STATLIST_AddStatValue(pStatList, UNITSTAT_poison_count, 1, 0);
     return 1;
 }
 
@@ -846,11 +845,10 @@ int32_t __fastcall PropertyFunc_MinDamage(int32_t nType, D2UnitStrc * pUnit, D2U
     }
 
     nRolled = Items::ITEMS_IsA(pItemUnit, ITEMTYPE_Weapon);
-    if (!(!nRolled || (nErrLine = Items::ITEM_GetTxtItemTypes_throwable(pItemUnit) , nErrLine != 0))) {
-      return 1;
+    if (!nRolled || (nErrLine = Items::ITEM_GetTxtItemTypes_throwable(pItemUnit) , nErrLine != 0)) {
+      PropertyFunc_SimpleStat(nType, pUnit, nProperty, bClearStat, 0, nState, pItemUnit, UNITSTAT_item_throw_mindamage, dwStatListFlags);
     }
 
-    PropertyFunc_SimpleStat(nType, pUnit, nProperty, bClearStat, 0, nState, pItemUnit, UNITSTAT_item_throw_mindamage, dwStatListFlags);
     return 1;
 }
 
@@ -930,11 +928,10 @@ int32_t __fastcall PropertyFunc_MaxDamage(int32_t nType, D2UnitStrc * pUnit, D2U
     }
 
     nRolled = Items::ITEMS_IsA(pItemUnit, ITEMTYPE_Weapon);
-    if (!(!nRolled || (nErrLine = Items::ITEM_GetTxtItemTypes_throwable(pItemUnit) , nErrLine != 0))) {
-      return 1;
+    if (!nRolled || (nErrLine = Items::ITEM_GetTxtItemTypes_throwable(pItemUnit) , nErrLine != 0)) {
+      PropertyFunc_SimpleStat(nType, pUnit, nProperty, bClearStat, 0, nState, pItemUnit, UNITSTAT_item_throw_maxdamage, dwStatListFlags);
     }
 
-    PropertyFunc_SimpleStat(nType, pUnit, nProperty, bClearStat, 0, nState, pItemUnit, UNITSTAT_item_throw_maxdamage, dwStatListFlags);
     return 1;
 }
 
@@ -1347,11 +1344,10 @@ int32_t __fastcall ITEMMOD_ApplyTripleStat(int32_t nType, D2UnitStrc * pUnit, D2
     Stats::StatsEx::STATLIST_AddStatValue(pStatList, eMinStat, nMinVal, 0);
     Stats::StatsEx::STATLIST_AddStatValue(pStatList, eMinStat + UNITSTAT_energy, eStatCode, 0);
     Stats::StatsEx::STATLIST_AddStatValue(pStatList, eMinStat + UNITSTAT_dexterity, (int32_t)pProperty, 0);
-    if (eMinStat != UNITSTAT_poisonmindam) {
-      return 1;
+    if (eMinStat == UNITSTAT_poisonmindam) {
+      Stats::StatsEx::STATLIST_AddStatValue(pStatList, UNITSTAT_poison_count, 1, 0);
     }
 
-    Stats::StatsEx::STATLIST_AddStatValue(pStatList, UNITSTAT_poison_count, 1, 0);
     return 1;
 }
 
@@ -1971,11 +1967,10 @@ uint32_t __fastcall ITEMPROP_AddMinDamage(uint32_t nType, D2UnitStrc * pUnit, D2
     if (byBaseDam > 0 && (int)(byBaseDam + nRolledValue) <= 0) {
       nClassId = 1 - byBaseDam;
     }
-    if (!nClassId) {
-      return nRolledValue;
+    if (nClassId) {
+      ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, (int32_t)pProperty, nSet, 0x9f, 0, nClassId, nState);
     }
 
-    ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, (int32_t)pProperty, nSet, 0x9f, 0, nClassId, nState);
     return nRolledValue;
 }
 
@@ -2041,11 +2036,10 @@ uint32_t __fastcall ITEMPROP_AddMaxDamage(uint32_t nType, D2UnitStrc * pUnit, D2
     if (byBaseDam > 0 && (int)(byBaseDam + nRolledValue) <= 0) {
       nClassId = -(uint32_t)byBaseDam;
     }
-    if (!nClassId) {
-      return nRolledValue;
+    if (nClassId) {
+      ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, (int32_t)pProperty, nSet, 0xa0, 0, nClassId, nState);
     }
 
-    ITEMMOD_AddStatToItem(pUnit2, dwFlags, pUnit, (int32_t)pProperty, nSet, 0xa0, 0, nClassId, nState);
     return nRolledValue;
 }
 
@@ -2546,11 +2540,10 @@ uint32_t __fastcall ITEMPROP_AddStat_WithMaxDurabilityReset(int32_t nType, D2Uni
     uint32_t uRetVal = ITEMMOD_AddStatToItem(pUnit2, nStatLayer, pUnit, (int32_t)nPropPtr, nSet, (short int)nStatId, 0, nMaxDurability, nState);
     if (uRetVal) {
       nMaxDurability = Stats::StatsEx::GetTxtMaxDurability(pUnit2);
-      if (nMaxDurability <= 0) {
-        return uRetVal;
+      if (nMaxDurability > 0) {
+        Stats::StatsEx::STATLIST_SetUnitStat(pUnit2, UNITSTAT_durability, nMaxDurability, 0);
       }
 
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit2, UNITSTAT_durability, nMaxDurability, 0);
       return uRetVal;
     }
 

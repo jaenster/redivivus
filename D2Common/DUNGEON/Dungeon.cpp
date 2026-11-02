@@ -307,11 +307,10 @@ D2RoomStrc * __fastcall AllocRoom(D2DrlgActStrc * pDrlgAct, D2RoomExStrc * pRoom
     Drlg::DrlgRoom::SetRoom(pRoomEx, pDrlgRoom);
     DRLGROOM_UpdateRoomsNearAndCount(pDrlgAct->pMemory, pDrlgRoom);
     Collision::AllocRoomCollisionGrid(pDrlgAct->pMemory, pDrlgRoom);
-    if (!pDrlgAct->pCallback) {
-      return pDrlgRoom;
+    if (pDrlgAct->pCallback) {
+      pDrlgAct->pCallback(pDrlgRoom);
     }
 
-    pDrlgAct->pCallback(pDrlgRoom);
     return pDrlgRoom;
 }
 
@@ -353,13 +352,11 @@ BOOL __stdcall AreTileCoordinatesInsideRoom(D2RoomStrc * pRoom, int32_t nX, int3
     }
 
     int nRectEdge = pRoom->sCoords.sTileRect.left;
-    if (!(nX >= nRectEdge && nX < pRoom->sCoords.sTileRect.right + nRectEdge)) {
-      return 0;
-    }
-
-    nRectEdge = pRoom->sCoords.sTileRect.top;
-    if (nY >= nRectEdge && nY < pRoom->sCoords.sTileRect.bottom + nRectEdge) {
-      return 1;
+    if (nX >= nRectEdge && nX < pRoom->sCoords.sTileRect.right + nRectEdge) {
+      nRectEdge = pRoom->sCoords.sTileRect.top;
+      if (nY >= nRectEdge && nY < pRoom->sCoords.sTileRect.bottom + nRectEdge) {
+        return 1;
+      }
     }
 
     return 0;
@@ -561,13 +558,11 @@ BOOL __fastcall AreSubtileCoordinatesInsideRoom(D2DrlgCoordsStrc * pDrlgCoords, 
     }
 
     int nEdgePos = pDrlgCoords->WorldPosition.x;
-    if (!(nX >= nEdgePos && nX < pDrlgCoords->WorldSize.x + nEdgePos)) {
-      return 0;
-    }
-
-    nEdgePos = pDrlgCoords->WorldPosition.y;
-    if (nY >= nEdgePos && nY < pDrlgCoords->WorldSize.y + nEdgePos) {
-      return 1;
+    if (nX >= nEdgePos && nX < pDrlgCoords->WorldSize.x + nEdgePos) {
+      nEdgePos = pDrlgCoords->WorldPosition.y;
+      if (nY >= nEdgePos && nY < pDrlgCoords->WorldSize.y + nEdgePos) {
+        return 1;
+      }
     }
 
     return 0;
@@ -628,7 +623,6 @@ D2UnitStrc * * __fastcall DRLGROOM_GetUnitListFromRoom(D2RoomStrc * pRoom) {
     }
 
     return &pRoom->pUnitList;
-    return &pRoom->pUnitList;
 }
 
 D2UnitStrc * * __fastcall DRLGROOM_GetUnitUpdateListFromRoom(D2RoomStrc * pRoom, BOOL bUpdate) {
@@ -636,11 +630,10 @@ D2UnitStrc * * __fastcall DRLGROOM_GetUnitUpdateListFromRoom(D2RoomStrc * pRoom,
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ad);
       exit(-1);
     }
-    if (!bUpdate) {
-      return &pRoom->pUnitUpdate;
+    if (bUpdate) {
+      pRoom->pDrlgAct->eLevelIdFirst = LEVEL_RogueEncampment;
     }
 
-    pRoom->pDrlgAct->eLevelIdFirst = LEVEL_RogueEncampment;
     return &pRoom->pUnitUpdate;
 }
 
@@ -660,7 +653,6 @@ D2RoomCollisionGridStrc * __fastcall DRLGROOM_GetCollisionGridFromRoom(D2RoomStr
       exit(-1);
     }
 
-    return pRoom->pCollisionGrid;
     return pRoom->pCollisionGrid;
 }
 
@@ -734,7 +726,6 @@ D2RoomStrc * __stdcall DRLGROOM_GetRoomFromAct(D2DrlgActStrc * pDrlgAct) {
       exit(-1);
     }
 
-    return pDrlgAct->pRoom;
     return pDrlgAct->pRoom;
 }
 
@@ -834,7 +825,6 @@ D2DrlgDeleteStrc * __stdcall GetDrlgDeleteFromRoom(D2RoomStrc * pRoom) {
     }
 
     return pRoom->pDrlgDelete;
-    return pRoom->pDrlgDelete;
 }
 
 // Gets the current ActMiscSubA0 data from a DrlgAct's Drlg pointer. Wrapper around DRLGROOMEX_GetCurrentSubA0 with null check.
@@ -926,7 +916,6 @@ int32_t __stdcall DRLGROOM_IsUnitInactiveProcessed(D2RoomStrc * pRoom) {
     }
 
     return pRoom->eFlags & 2;
-    return pRoom->eFlags & 2;
 }
 
 void __stdcall DRLGROOM_SetUnitInactiveProcessed(D2RoomStrc * pRoom, BOOL bSet) {
@@ -944,21 +933,20 @@ void __stdcall DRLGROOM_SetUnitInactiveProcessed(D2RoomStrc * pRoom, BOOL bSet) 
 
 // Validates the client list of a room by checking that all entries in the client array (offset 0x48) are non-null. Halts if any entry is null.
 static BOOL __fastcall DRLGROOM_ValidateClientList(D2RoomStrc * pRoom) {
+    D2ClientStrc** pClientIter;
     uint32_t i = 0;
-    if ((uint32_t)pRoom->nClientsCount <= 0) {
-      return 1;
+    if ((uint32_t)pRoom->nClientsCount > 0) {
+      pClientIter = pRoom->pClients;
+      do {
+        if (!*pClientIter) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x453);
+          exit(-1);
+        }
+
+        i++;
+        pClientIter++;
+      } while (i < (uint32_t)pRoom->nClientsCount);
     }
-
-    D2ClientStrc** pClientIter = pRoom->pClients;
-    do {
-      if (!*pClientIter) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x453);
-        exit(-1);
-      }
-
-      i++;
-      pClientIter++;
-    } while (i < (uint32_t)pRoom->nClientsCount);
 
     return 1;
 }
@@ -1298,7 +1286,6 @@ D2DrlgEnvironmentStrc * __fastcall DRLGENV_GetEnvironmentFromAct(D2DrlgActStrc *
     }
 
     return pDrlgAct->pEnvironment;
-    return pDrlgAct->pEnvironment;
 }
 
 D2DrlgStrc * __stdcall GetDrlgFromAct(D2DrlgActStrc * pDrlgAct) {
@@ -1307,7 +1294,6 @@ D2DrlgStrc * __stdcall GetDrlgFromAct(D2DrlgActStrc * pDrlgAct) {
       exit(-1);
     }
 
-    return pDrlgAct->pDrlg;
     return pDrlgAct->pDrlg;
 }
 
@@ -1358,12 +1344,11 @@ eD2LevelId __stdcall GetTownLevelIdFromActNo(uint8_t nAct) {
     // Static local variables (originally global data)
     static eD2LevelId gaTownLevelIdByAct[5] = { LEVEL_RogueEncampment, LEVEL_LutGholein, LEVEL_KurastDocktown, LEVEL_ThePandemoniumFortress, LEVEL_Harrogath }; D2_STATIC_GUARD(gaTownLevelIdByAct, "D2Common::DUNGEON::Dungeon::GetTownLevelIdFromActNo::gaTownLevelIdByAct");
 
-    if (!(nAct < 5)) {
+    if (nAct >= 5) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x59a);
       exit(-1);
     }
 
-    return gaTownLevelIdByAct[nAct];
     return gaTownLevelIdByAct[nAct];
 }
 
@@ -1500,7 +1485,6 @@ eD2LevelId __stdcall GetTownLevelIdFromAct(D2DrlgActStrc * pDrlgAct) {
       exit(-1);
     }
 
-    return pDrlgAct->nLevelId;
     return pDrlgAct->nLevelId;
 }
 
@@ -1657,25 +1641,24 @@ static void DRLGROOMEX_InitRoomExData(D2PoolManagerStrc * pMemory, D2RoomExStrc 
 
 // Moves a D2RoomExStrc to a different activation priority list. Unlinks from current pStatusPrev/pStatusNext chain and relinks into the sentinel list at pDrlg->aSubA0[nNewStatus].
 static D2RoomExStrc * DRLGROOMEX_MoveToActivationList(D2RoomExStrc * pRoomEx, uint8_t nNewStatus) {
-    if (pRoomEx->fRoomStatus == nNewStatus) {
-      return pRoomEx;
-    }
-    if (pRoomEx->pStatusPrev && pRoomEx->pStatusNext) {
-      pRoomEx->pStatusPrev->pStatusNext = pRoomEx->pStatusNext;
-      pRoomEx->pStatusNext->pStatusPrev = pRoomEx->pStatusPrev;
-      pRoomEx->pStatusPrev = 0;
-      pRoomEx->pStatusNext = 0;
-    }
-    if (nNewStatus >= 4) {
-      return pRoomEx;
+    if (pRoomEx->fRoomStatus != nNewStatus) {
+      D2RoomExStrc* pSentinel;
+      if (pRoomEx->pStatusPrev && pRoomEx->pStatusNext) {
+        pRoomEx->pStatusPrev->pStatusNext = pRoomEx->pStatusNext;
+        pRoomEx->pStatusNext->pStatusPrev = pRoomEx->pStatusPrev;
+        pRoomEx->pStatusPrev = 0;
+        pRoomEx->pStatusNext = 0;
+      }
+      if (nNewStatus < 4) {
+        pSentinel = pRoomEx->pLevel->pDrlg->aSubA0 + nNewStatus;
+        pRoomEx->pStatusNext = pSentinel;
+        pRoomEx->pStatusPrev = pSentinel->pStatusPrev;
+        pSentinel->pStatusPrev->pStatusNext = pRoomEx;
+        pSentinel->pStatusPrev = pRoomEx;
+        pRoomEx->fRoomStatus = nNewStatus;
+      }
     }
 
-    D2RoomExStrc* pSentinel = pRoomEx->pLevel->pDrlg->aSubA0 + nNewStatus;
-    pRoomEx->pStatusNext = pSentinel;
-    pRoomEx->pStatusPrev = pSentinel->pStatusPrev;
-    pSentinel->pStatusPrev->pStatusNext = pRoomEx;
-    pSentinel->pStatusPrev = pRoomEx;
-    pRoomEx->fRoomStatus = nNewStatus;
     return pRoomEx;
 }
 
@@ -1959,20 +1942,20 @@ D2RoomStrc * __fastcall InitRoomEx(D2RoomExStrc * pRoomEx) {
     if (!(pRoomEx->eRoomExFlags & 0x2000000U) && pRoomEx->nPresetType == 2) {
       Drlg::Preset::DRLGPRESET_CreateMonsterPresets(pRoomEx);
     }
-    if (pRoomEx->eRoomExFlags & 0x100000U) {
-      return pRoomEx->pRoom;
+    if (!(pRoomEx->eRoomExFlags & 0x100000U)) {
+      D2DrlgStrc* pDrlg;
+      pDrlg = pRoomEx->pLevel->pDrlg;
+      if (!pRoomEx->nDrlgRoomsExNearCount) {
+        Drlg::DrlgRoom::DRLGROOMEX_InitNearRoomsAndVisTiles(pDrlg->pMemoryPool, pRoomEx);
+      }
+
+      Drlg::RoomTile::InitGridCells(pRoomEx);
+      Drlg::RoomTile::InitializorForDrlgType(pRoomEx);
+      Drlg::RollSeed(pDrlg, pRoomEx);
+      pDrlg->nRoomInitBatchCount++;
+      pDrlg->nRoomDataGeneration++;
     }
 
-    D2DrlgStrc* pDrlg = pRoomEx->pLevel->pDrlg;
-    if (!pRoomEx->nDrlgRoomsExNearCount) {
-      Drlg::DrlgRoom::DRLGROOMEX_InitNearRoomsAndVisTiles(pDrlg->pMemoryPool, pRoomEx);
-    }
-
-    Drlg::RoomTile::InitGridCells(pRoomEx);
-    Drlg::RoomTile::InitializorForDrlgType(pRoomEx);
-    Drlg::RollSeed(pDrlg, pRoomEx);
-    pDrlg->nRoomInitBatchCount++;
-    pDrlg->nRoomDataGeneration++;
     return pRoomEx->pRoom;
 }
 

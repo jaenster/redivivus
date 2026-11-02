@@ -510,11 +510,10 @@ uint32_t __stdcall SStrToInt(char * szText) {
     } else {
       nValue = 0;
     }
-    if (cSign != '-') {
-      return nValue;
+    if (cSign == '-') {
+      nValue = -nValue;
     }
 
-    nValue = -nValue;
     return nValue;
 }
 
@@ -717,11 +716,10 @@ uint32_t __stdcall SStrHash(char * pszText, uint8_t bCaseSensitive, uint32_t nSe
         nChar = (uint32_t)(uint8_t)*pszText;
       }
     }
-    if (nSeed) {
-      return nSeed;
+    if (!nSeed) {
+      nSeed = 1;
     }
 
-    nSeed = 1;
     return nSeed;
 }
 
@@ -839,11 +837,10 @@ ULONGLONG __stdcall SSTR_HashString64(uint8_t * pszText, uint8_t bCaseSensitive,
         nChar = (uint32_t)*pszText;
       }
     }
-    if (UVar1) {
-      return UVar1;
+    if (!UVar1) {
+      UVar1 = 1;
     }
 
-    UVar1 = 1;
     return UVar1;
 }
 
@@ -1386,11 +1383,10 @@ double __stdcall SStrToDouble(char * pStr) {
 
       dAccumSlot = dAccum * dAccumSlot;
     }
-    if (cChar != '-') {
-      return dAccumSlot;
+    if (cChar == '-') {
+      dAccumSlot = -dAccumSlot;
     }
 
-    dAccumSlot = -dAccumSlot;
     return dAccumSlot;
 }
 
@@ -1779,11 +1775,10 @@ int __stdcall UTF16_ToUTF8(uint8_t * pbUTF8, int nOutMaxChars, uint16_t * pszUTF
     if (pnBytesRead) {
       *pnBytesRead = (int)pInCur - (int)pInEnd >> 1;
     }
-    if (!pnCharsWritten) {
-      return iResult;
+    if (pnCharsWritten) {
+      *pnCharsWritten = (int)pInStart - (int)pbUTF8;
     }
 
-    *pnCharsWritten = (int)pInStart - (int)pbUTF8;
     return iResult;
 }
 
@@ -1793,11 +1788,10 @@ int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnBy
     uint32_t uCodepoint;
     char cByte;
     if (!nMaxBytes || !szText) {
-      if (!pnBytesRead) {
-        return -1;
+      if (pnBytesRead) {
+        *pnBytesRead = 0;
       }
 
-      *pnBytesRead = 0;
       return -1;
     }
     if (nMaxBytes == 0x7fffffff) {
@@ -1861,11 +1855,10 @@ int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnBy
       }
     }
 
-    if (!pnBytesRead) {
-      return nUTF16Len;
+    if (pnBytesRead) {
+      *pnBytesRead = (int)pEndInner - (int)szText;
     }
 
-    *pnBytesRead = (int)pEndInner - (int)szText;
     return nUTF16Len;
 }
 
@@ -1962,11 +1955,10 @@ int __stdcall UTF8_ToUTF16(short * pszUTF16Out, int nOutMaxChars, uint8_t * pbUT
     if (pnBytesRead) {
       *pnBytesRead = (int)pOutStart - (int)pInEnd;
     }
-    if (!pnCharsWritten) {
-      return iAccum;
+    if (pnCharsWritten) {
+      *pnCharsWritten = (int)pInStart - (int)pszUTF16Out >> 1;
     }
 
-    *pnCharsWritten = (int)pInStart - (int)pszUTF16Out >> 1;
     return iAccum;
 }
 
@@ -2094,8 +2086,10 @@ void __stdcall UTF8_EncodeChar(uint32_t uCodepoint, uint8_t * pbOut) {
     *pbOut = 0;
 }
 
-static void __fastcall UTF8_AdvanceToCharBoundary(uint8_t * pszBase, int nPosition, int nDirection) {
+static int __fastcall UTF8_AdvanceToCharBoundary(uint8_t * pszBase, int nPosition, int nDirection) {
     for (; nPosition > 0 && pszBase[nPosition] && (pszBase[nPosition] & 0xc0) == 0x80; nPosition += nDirection) {}
+
+    return nPosition;
 }
 
 // ECX is not an argument: neither this body nor UTF8_AdvanceToCharBoundary reads it.
@@ -2167,12 +2161,11 @@ static int __thiscall TRANSTBL_UnicodeToSingleByte(void * pThis, uint16_t * pXla
       uCodepoint = *pSearchEntry;
     }
 
-    if (!nCount) {
-      return (int)pOutCur - (int)pbOut;
+    if (nCount) {
+      *pOutCur = 0;
+      pOutCur++;
     }
 
-    *pOutCur = 0;
-    pOutCur++;
     return (int)pOutCur - (int)pbOut;
 }
 
@@ -2195,12 +2188,11 @@ static int __fastcall TRANSTBL_SingleByteToUnicode(uint8_t * pbSrc, int nCount, 
       byCur = *pbSrc;
     }
 
-    if (!nCount) {
-      return (int)puVar1 - (int)pDest >> 1;
+    if (nCount) {
+      *puVar1 = 0;
+      puVar1++;
     }
 
-    *puVar1 = 0;
-    puVar1++;
     return (int)puVar1 - (int)pDest >> 1;
 }
 

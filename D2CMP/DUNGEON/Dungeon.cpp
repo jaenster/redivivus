@@ -103,7 +103,6 @@ int32_t __stdcall GetOrientation(D2TileLibraryEntryStrc * pTileLibraryEntry) {
     }
 
     return pTileLibraryEntry->nOrientation;
-    return pTileLibraryEntry->nOrientation;
 }
 
 int32_t __stdcall GetIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {
@@ -112,7 +111,6 @@ int32_t __stdcall GetIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {
       exit(-1);
     }
 
-    return pTileLibraryEntry->nIndex;
     return pTileLibraryEntry->nIndex;
 }
 
@@ -123,7 +121,6 @@ uint32_t __stdcall TILEPROJECT_GetTileCount(int32_t nParam) {
     }
 
     return (uint32_t)*(uint16_t*)(nParam + 6);
-    return (uint32_t)*(uint16_t*)(nParam + 6);
 }
 
 uint32_t __stdcall TILEPROJECT_GetTileDataPtr(int32_t nParam) {
@@ -132,7 +129,6 @@ uint32_t __stdcall TILEPROJECT_GetTileDataPtr(int32_t nParam) {
       exit(-1);
     }
 
-    return *(uint32_t*)(nParam + 0xc);
     return *(uint32_t*)(nParam + 0xc);
 }
 
@@ -143,7 +139,6 @@ uint32_t __stdcall TILEPROJECT_GetAnimatedTileDataPtr(int32_t nParam) {
     }
 
     return *(uint32_t*)(nParam + 0x20);
-    return *(uint32_t*)(nParam + 0x20);
 }
 
 int32_t __stdcall GetSubIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {
@@ -152,7 +147,6 @@ int32_t __stdcall GetSubIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {
       exit(-1);
     }
 
-    return pTileLibraryEntry->nSubIndex;
     return pTileLibraryEntry->nSubIndex;
 }
 
@@ -163,7 +157,6 @@ uint32_t __stdcall TILEPROJECT_GetTileOrientationIndex(uint32_t * pnOrientationI
     }
 
     return *pnOrientationIndex;
-    return *pnOrientationIndex;
 }
 
 int __stdcall TILEPROJECT_GetRoofHeightIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {
@@ -173,7 +166,6 @@ int __stdcall TILEPROJECT_GetRoofHeightIndex(D2TileLibraryEntryStrc * pTileLibra
     }
 
     return pTileLibraryEntry->nHeight;
-    return pTileLibraryEntry->nHeight;
 }
 
 BYTE * __stdcall TILE_GetTileFlags(D2TileLibraryEntryStrc * pTileLibraryEntry) {
@@ -182,7 +174,6 @@ BYTE * __stdcall TILE_GetTileFlags(D2TileLibraryEntryStrc * pTileLibraryEntry) {
       exit(-1);
     }
 
-    return pTileLibraryEntry->abSubTileFlags;
     return pTileLibraryEntry->abSubTileFlags;
 }
 

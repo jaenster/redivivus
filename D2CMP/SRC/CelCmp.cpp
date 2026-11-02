@@ -1728,7 +1728,6 @@ int32_t __stdcall GetDC6Width(DC6Block * pDC6Block) {
     }
 
     return pDC6Block->nWidth;
-    return pDC6Block->nWidth;
 }
 
 int32_t __stdcall GetDC6Height(DC6Block * pDC6Block) {
@@ -1737,7 +1736,6 @@ int32_t __stdcall GetDC6Height(DC6Block * pDC6Block) {
       exit(-1);
     }
 
-    return pDC6Block->nHeight;
     return pDC6Block->nHeight;
 }
 
@@ -1748,7 +1746,6 @@ int32_t __stdcall GetDC6OffsetX(DC6Block * pDC6Block) {
     }
 
     return pDC6Block->nOffsetX;
-    return pDC6Block->nOffsetX;
 }
 
 int32_t __stdcall GetDC6OffsetY(DC6Block * pDC6Block) {
@@ -1757,7 +1754,6 @@ int32_t __stdcall GetDC6OffsetY(DC6Block * pDC6Block) {
       exit(-1);
     }
 
-    return pDC6Block->nOffsetY;
     return pDC6Block->nOffsetY;
 }
 
@@ -1768,7 +1764,6 @@ int32_t __stdcall CELCMP_GetDC6BlockDataPointer(int32_t pFrameBlock) {
     }
 
     return pFrameBlock + 0x20;
-    return pFrameBlock + 0x20;
 }
 
 int32_t __stdcall CELCMP_GetDC6DirectionCount(int * pDC6File) {
@@ -1778,7 +1773,6 @@ int32_t __stdcall CELCMP_GetDC6DirectionCount(int * pDC6File) {
     }
 
     return pDC6File[4];
-    return pDC6File[4];
 }
 
 int32_t __stdcall IMAGE_GetFramesCount(DC6 * pDC6) {
@@ -1787,7 +1781,6 @@ int32_t __stdcall IMAGE_GetFramesCount(DC6 * pDC6) {
       exit(-1);
     }
 
-    return pDC6->nFrames;
     return pDC6->nFrames;
 }
 
@@ -1852,15 +1845,13 @@ int __stdcall CELCMP_GetDC6BlockPixelData(DC6Block * pDC6Block) {
     }
 
     return pDC6Block->nNextBlock;
-    return pDC6Block->nNextBlock;
 }
 
 uint32_t __stdcall CELCMP_RoundUpToMultiple(uint32_t nParam1, uint32_t nParam2) {
-    if (!(nParam1 % nParam2)) {
-      return nParam1;
+    if (nParam1 % nParam2) {
+      nParam1 += nParam2 - nParam1 % nParam2;
     }
 
-    nParam1 += nParam2 - nParam1 % nParam2;
     return nParam1;
 }
 
@@ -2025,11 +2016,10 @@ uint32_t __stdcall CELCMP_CreateCelFileFromCache(uint32_t nCelListKey, uint32_t 
 }
 
 uint32_t __stdcall CELCMP_RoundUpToMultiple_Unreferenced(uint32_t nValue, uint32_t nMultiple) {
-    if (!(nValue % nMultiple)) {
-      return nValue;
+    if (nValue % nMultiple) {
+      nValue += nMultiple - nValue % nMultiple;
     }
 
-    nValue += nMultiple - nValue % nMultiple;
     return nValue;
 }
 

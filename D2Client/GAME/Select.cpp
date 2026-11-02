@@ -220,13 +220,12 @@ static BOOL __stdcall SELECT_IsWarpDoubleClicked(uint32_t dwUnused, int32_t nCli
       Game::GAME_SetSyncTickCount(uTickCount + 500);
       return 1;
     }
-    if (*pnDoubleClickState) {
-      return 0;
+    if (!*pnDoubleClickState) {
+      uTickCount = Game::GAMEDATA_GetGlobalTickCount();
+      Game::GAME_SetSyncTickCount(uTickCount + 500);
+      *pnDoubleClickState = 1;
     }
 
-    uTickCount = Game::GAMEDATA_GetGlobalTickCount();
-    Game::GAME_SetSyncTickCount(uTickCount + 500);
-    *pnDoubleClickState = 1;
     return 0;
 }
 

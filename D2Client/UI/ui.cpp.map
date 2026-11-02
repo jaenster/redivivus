@@ -3497,7 +3497,6 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc",
-        "uint16_t",
         "uint32_t"
       ]
     },

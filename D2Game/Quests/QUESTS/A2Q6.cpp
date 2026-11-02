@@ -256,17 +256,15 @@ BOOL __fastcall Q14_UpdateQuestRecordStep(::SGAMEDATA * pGame, D2UnitStrc * pUni
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Completed);
-    if (bQuestState == 1) {
-      return 0;
-    }
-
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
-    if (!(pQuestData && pQuestData->nStateFlag >= 2)) {
-      return 0;
-    }
-
-    /* SetQuestState(TheSevenTombs, 2=Step0x02) — stamp "quest in progress" once
+    if (bQuestState != 1) {
+      D2QuestDataStrc* pQuestData;
+      pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
+      if (pQuestData && pQuestData->nStateFlag >= 2) {
+        /* SetQuestState(TheSevenTombs, 2=Step0x02) — stamp "quest in progress" once
                          live flag>1 */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x02);
+      }
+    }
+
     return 0;
 }
 
@@ -275,11 +273,10 @@ BOOL __fastcall Q14_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     /* GetQuestState(TheSevenTombs, 0xd=JustCompleted) — play complete sound only
                          for just-completed */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheSevenTombs, QUESTSTATE_JustCompleted);
-    if (!BVar2) {
-      return 0;
+    if (BVar2) {
+      UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x36, pUnit);
     }
 
-    UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x36, pUnit);
     return 0;
 }
 
@@ -333,37 +330,34 @@ static void __stdcall Q14_SetDurielComplete(::SGAMEDATA * pQuestControl, D2UnitS
 
 // A2Q6 "The Seven Tombs" — per-player check: if this player is standing in Duriel's Lair and their record has none of JustCompleted/Step0x03/Step0x04 set yet, stamp completion via Q14_SetDurielComplete. Iterated after Duriel dies so anyone present in the lair gets credit. Asserts the quest-data pointer is non-null.
 BOOL __fastcall Q14_CheckDurielLairAndComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    eD2LevelId eLevelId;
+    BOOL bQuestState;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return 0;
+    if (pRoom) {
+      D2QuestDataStrc* pQuestData;
+      pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
+      if (!pQuestData) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x191);
+        exit(-1);
+      }
+
+      eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+      /* GetQuestState(TheSevenTombs, 0xd=JustCompleted) — skip if already credited
+                          */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_JustCompleted);
+      /* GetQuestState(TheSevenTombs, 3=Step0x03=Duriel-dead) */ /* GetQuestState(TheSevenTombs, 4=Step0x04) — only stamp if in DurielsLair &
+                         no progress bits yet */ if (!bQuestState) {
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x03);
+        if (!bQuestState) {
+          bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x04);
+          if (!bQuestState && eLevelId == LEVEL_DurielsLair) {
+            Q14_SetDurielComplete(pGame, pUnit, pBitBuffer);
+          }
+        }
+      }
     }
 
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
-    if (!pQuestData) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x191);
-      exit(-1);
-    }
-
-    eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_JustCompleted);
-    /* GetQuestState(TheSevenTombs, 3=Step0x03=Duriel-dead) */ /* GetQuestState(TheSevenTombs, 4=Step0x04) — only stamp if in DurielsLair &
-                         no progress bits yet */ if (bQuestState) {
-      return 0;
-    }
-
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x03);
-    if (bQuestState) {
-      return 0;
-    }
-
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x04);
-    if (!(!bQuestState && eLevelId == LEVEL_DurielsLair)) {
-      return 0;
-    }
-
-    Q14_SetDurielComplete(pGame, pUnit, pBitBuffer);
     return 0;
 }
 
@@ -428,24 +422,19 @@ BOOL __fastcall Q14_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Completed);
-    if (BVar2 == 1) {
-      return 0;
-    }
-
-    /* GetQuestState(TheSevenTombs, 3=Step0x03=Duriel-dead) */ BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x03);
-    if (BVar2 == 1) {
-      return 0;
-    }
-
-    /* GetQuestState(TheSevenTombs, 4=Step0x04) — only mark cannot-complete if
+    if (BVar2 != 1) {
+      /* GetQuestState(TheSevenTombs, 3=Step0x03=Duriel-dead) */ BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x03);
+      if (BVar2 != 1) {
+        /* GetQuestState(TheSevenTombs, 4=Step0x04) — only mark cannot-complete if
                          zero progress */ BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x04);
-    if (BVar2 == 1) {
-      return 0;
+        if (BVar2 != 1) {
+          /* SetQuestState(TheSevenTombs, 0xe=CannotCompleteQuestInGame) — latecomer
+                         locked out self game */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_CannotCompleteQuestInGame);
+          QUEST_SendQuestStatePacket(pUnit, 0xd, 0);
+        }
+      }
     }
 
-    /* SetQuestState(TheSevenTombs, 0xe=CannotCompleteQuestInGame) — latecomer
-                         locked out self game */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_CannotCompleteQuestInGame);
-    QUEST_SendQuestStatePacket(pUnit, 0xd, 0);
     return 0;
 }
 
@@ -708,47 +697,37 @@ void __fastcall Q14_SetTombEntryOnPartyMember(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // A2Q6 "The Seven Tombs" — per-player: if standing in Duriel's Lair and record has none of Completed/Step0x03/Step0x04/Step0x05, set record Step0x05 (true tomb entered) and propagate it to the whole party via Q14_SetTombEntryOnPartyMember. The "entered Duriel's chamber" record trigger.
 BOOL __fastcall Q14_CheckTombEntryAndPropagate(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    eD2LevelId eLevelId;
+    BOOL bQuestState;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return 0;
-    }
-
-    eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if (eLevelId != LEVEL_DurielsLair) {
-      return 0;
-    }
-
-    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Completed);
-    if (bQuestState) {
-      return 0;
-    }
-
-    /* GetQuestState(TheSevenTombs, 3=Step0x03=Duriel-dead) */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x03);
-    if (bQuestState) {
-      return 0;
-    }
-
-    /* GetQuestState(TheSevenTombs, 4=Step0x04) */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x04);
-    if (bQuestState) {
-      return 0;
-    }
-
-    /* GetQuestState(TheSevenTombs, 5=Step0x05=tomb-entered) — only act if no
+    if (pRoom) {
+      uint16_t nPartyId;
+      eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+      if (eLevelId == LEVEL_DurielsLair) {
+        /* GetQuestState(TheSevenTombs, 0=Completed) */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Completed);
+        if (!bQuestState) {
+          /* GetQuestState(TheSevenTombs, 3=Step0x03=Duriel-dead) */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x03);
+          if (!bQuestState) {
+            /* GetQuestState(TheSevenTombs, 4=Step0x04) */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x04);
+            if (!bQuestState) {
+              /* GetQuestState(TheSevenTombs, 5=Step0x05=tomb-entered) — only act if no
                          progress bits yet */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x05);
-    if (bQuestState) {
-      return 0;
-    }
-
-    /* SetQuestState(TheSevenTombs, 5=Step0x05) — entered Duriel's Lair (level
+              if (!bQuestState) {
+                /* SetQuestState(TheSevenTombs, 5=Step0x05) — entered Duriel's Lair (level
                          0x49): mark tomb-entered, then propagate to party */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x05);
-    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    if (nPartyId == 0xffff) {
-      return 0;
+                nPartyId = UNIT::SUnit::GetPartyId(pUnit);
+                if (nPartyId != 0xffff) {
+                  UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q14_SetTombEntryOnPartyMember, 0);
+                }
+              }
+            }
+          }
+        }
+      }
     }
 
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q14_SetTombEntryOnPartyMember, 0);
     return 0;
 }
 

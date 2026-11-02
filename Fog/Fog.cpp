@@ -49,11 +49,9 @@ int32_t __fastcall BitScanReverse(uint32_t dwBits) {
     }
 
     int nBitIndex = 0x1f;
-    if (!dwBits) {
-      return nBitIndex + 1;
+    if (dwBits) {
+      for (; !(dwBits >> nBitIndex); nBitIndex--) {}
     }
-
-    for (; !(dwBits >> nBitIndex); nBitIndex--) {}
 
     return nBitIndex + 1;
 }

@@ -104,46 +104,45 @@ static BOOL __stdcall CheckWarpSpawnCoords(D2RoomStrc * pRoom, ::SGAMEDATA * pGa
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
+    D2LevelsTxt* pLevelsTxt;
+    int nDX;
     int nDY;
     int i;
+    int nWarpDistSq;
+    int* pActSpawnX;
+    int* pActSpawnY;
     if (!pRoom) {
       return 0;
     }
 
     eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if (eLevel == LEVEL_None) {
-      return 0;
-    }
+    if (eLevel != LEVEL_None) {
+      D2DrlgLevelWarpCoordinatesStrc* pWarpCoords;
+      pWarpCoords = D2Common::DUNGEON::Dungeon::GetWarpCoordinatesFromRoom(pRoom);
+      if (pWarpCoords) {
+        pLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
+        nWarpDistSq = pLevelsTxt->WarpDist;
+        for (i = 0; i < pWarpCoords->nEntriesCount; i++) {
+          nDX = nX - pWarpCoords->anX[i];
+          nDY = nY - pWarpCoords->anY[i];
+          if (nDY * nDY + nDX * nDX < nWarpDistSq) {
+            return 1;
+          }
+        }
 
-    D2DrlgLevelWarpCoordinatesStrc* pWarpCoords = D2Common::DUNGEON::Dungeon::GetWarpCoordinatesFromRoom(pRoom);
-    if (!pWarpCoords) {
-      return 0;
-    }
-
-    D2LevelsTxt* pLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
-    int nWarpDistSq = pLevelsTxt->WarpDist;
-    for (i = 0; i < pWarpCoords->nEntriesCount; i++) {
-      int nDX;
-      nDX = nX - pWarpCoords->anX[i];
-      nDY = nY - pWarpCoords->anY[i];
-      if (nDY * nDY + nDX * nDX < nWarpDistSq) {
-        return 1;
+        pActSpawnY = &__frame0.nActSpawnY;
+        pActSpawnX = &__frame0.nActSpawnX;
+        D2Common::DUNGEON::Dungeon::FindActSpawnLocation(pGame->pAct[D2Common::Drlg::GetActNoFromLevelNumber(eLevel)], eLevel, 0xb, pActSpawnX, pActSpawnY);
+        if (__frame0.nActSpawnX > 0 && __frame0.nActSpawnY > 0) {
+          D2Common::Drlg::Transform::CoordsRoomToWorld(&__frame0.nActSpawnX, &__frame0.nActSpawnY);
+          if ((nY - __frame0.nActSpawnY) * (nY - __frame0.nActSpawnY) + (nX - __frame0.nActSpawnX) * (nX - __frame0.nActSpawnX) < nWarpDistSq) {
+            return 1;
+          }
+        }
       }
     }
 
-    int* pActSpawnY = &__frame0.nActSpawnY;
-    int* pActSpawnX = &__frame0.nActSpawnX;
-    D2Common::DUNGEON::Dungeon::FindActSpawnLocation(pGame->pAct[D2Common::Drlg::GetActNoFromLevelNumber(eLevel)], eLevel, 0xb, pActSpawnX, pActSpawnY);
-    if (!(__frame0.nActSpawnX > 0 && __frame0.nActSpawnY > 0)) {
-      return 0;
-    }
-
-    D2Common::Drlg::Transform::CoordsRoomToWorld(&__frame0.nActSpawnX, &__frame0.nActSpawnY);
-    if (!((nY - __frame0.nActSpawnY) * (nY - __frame0.nActSpawnY) + (nX - __frame0.nActSpawnX) * (nX - __frame0.nActSpawnX) < nWarpDistSq)) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 // Tries up to 20 times (nTryCount &lt; 20) to find a valid spawn position for a monster in pRoom. Each attempt draws a random (nX, nY) from the room's seed within the room bounding box. If nParam!=0 it additionally validates the position via CheckWarpSpawnCoords. On success calls SpawnMonster at that location (optionally using pCoordList for grid-index matching), writes the position to *pX/*pY, and returns TRUE. Returns FALSE after 20 failed attempts.
@@ -589,11 +588,10 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithCollisionObj(::SGAMEDATA * p
     }
 
     int32_t nValidatedClassId = D2Client::UNIT::Player::ValidateClassId(nClassId);
-    if (nValidatedClassId != 0x1b1) {
-      return pMonster;
+    if (nValidatedClassId == 0x1b1) {
+      UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x23c, D2Client::Units::GetXPosFromDynamicPathUnit(pMonster), D2Client::Units::GetYPosFromDynamicPathUnit(pMonster), pGame, pRoom, true, 0, 0);
     }
 
-    UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x23c, D2Client::Units::GetXPosFromDynamicPathUnit(pMonster), D2Client::Units::GetYPosFromDynamicPathUnit(pMonster), pGame, pRoom, true, 0, 0);
     return pMonster;
 }
 

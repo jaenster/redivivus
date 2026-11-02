@@ -901,6 +901,7 @@ static void __stdcall SKILLDESC_BuildStatListDesc(D2UnitStrc * pUnit, D2StatList
 
 static int32_t __stdcall SKILLDESC_CalcStatGroupValue(D2UnitStrc * pUnit, eD2UnitStat eStat, int32_t nStatValue, D2ItemStatCostTxt * pItemStatCostTxt) {
     int nRawStatValue;
+    uint32_t nBluntBonus;
     D2ItemStatCostTxt* pStatCostLine;
     if (pItemStatCostTxt->op >= 2 && pItemStatCostTxt->op <= 5) {
       eD2UnitStat eUnitStat;
@@ -915,16 +916,13 @@ static int32_t __stdcall SKILLDESC_CalcStatGroupValue(D2UnitStrc * pUnit, eD2Uni
     }
 
     int32_t nShiftedValue = nStatValue >> (pItemStatCostTxt->valshift & 0x1fU);
-    if (!(eStat == UNITSTAT_item_undeaddamage_percent && pUnit && pUnit->eUnitType == UNIT_ITEM)) {
-      return nShiftedValue;
+    if (eStat == UNITSTAT_item_undeaddamage_percent && pUnit && pUnit->eUnitType == UNIT_ITEM) {
+      nBluntBonus = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Blunt);
+      if (nBluntBonus) {
+        nShiftedValue += 0x32;
+      }
     }
 
-    uint32_t nBluntBonus = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Blunt);
-    if (!nBluntBonus) {
-      return nShiftedValue;
-    }
-
-    nShiftedValue += 0x32;
     return nShiftedValue;
 }
 
@@ -2269,12 +2267,11 @@ uint16_t * __fastcall SKILLDESC_FormatMagicPrefixDesc(D2UnitStrc * pUnit, D2Gems
 
     int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
     uint16_t* pStrEnd = wszText1 + nStrLen - 1;
-    if (wszText1[nStrLen - 1] != L'\n') {
-      return pStrEnd;
+    if (wszText1[nStrLen - 1] == L'\n') {
+      pStrEnd = (uint16_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
+      wszText1[(int)pStrEnd - 1] = L'\0';
     }
 
-    pStrEnd = (uint16_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
-    wszText1[(int)pStrEnd - 1] = L'\0';
     return pStrEnd;
 }
 
@@ -2289,12 +2286,11 @@ uint16_t * __fastcall SKILLDESC_FormatMagicSuffixDesc(D2UnitStrc * pUnit, D2Gems
 
     int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
     uint16_t* wszOutputEnd = wszText1 + nStrLen - 1;
-    if (wszText1[nStrLen - 1] != L'\n') {
-      return wszOutputEnd;
+    if (wszText1[nStrLen - 1] == L'\n') {
+      wszOutputEnd = (uint16_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
+      wszText1[(int)wszOutputEnd - 1] = L'\0';
     }
 
-    wszOutputEnd = (uint16_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
-    wszText1[(int)wszOutputEnd - 1] = L'\0';
     return wszOutputEnd;
 }
 
@@ -3680,11 +3676,10 @@ int __stdcall SKILLDESC_CalcElemDamageRange(D2UnitStrc * pUnit, int * pnMinDamag
     }
 
     bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasAuraState(pUnit);
-    if (!bHasAttackSpeedState) {
-      return 1;
+    if (bHasAttackSpeedState) {
+      *pnColor = 1;
     }
 
-    *pnColor = 1;
     return 1;
 }
 
@@ -3955,11 +3950,10 @@ static D2UnitStrc * SKILLDESC_GetPrimaryWeapon(D2UnitStrc * pUnit) {
       }
 
       pEquippedWeapon = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pOffhandWeapon, nullptr);
-      if (!pEquippedWeapon) {
-        return pOffhandWeapon;
+      if (pEquippedWeapon) {
+        D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pOffhandWeapon, 1);
       }
 
-      D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pOffhandWeapon, 1);
       return pOffhandWeapon;
     }
 
@@ -4001,11 +3995,10 @@ static D2UnitStrc * SKILLDESC_GetSecondaryWeapon(D2UnitStrc * pUnit) {
     }
 
     bCanDualWield = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pEquippedWeapon);
-    if (!bCanDualWield) {
-      return pEquippedWeapon;
+    if (bCanDualWield) {
+      D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pEquippedWeapon, 1);
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pEquippedWeapon, 1);
     return pEquippedWeapon;
 }
 
@@ -5942,23 +5935,23 @@ static void __stdcall SKILLDESC_DescLine45_DecimalLabel(uint16_t wValuePrefixStr
 static int __stdcall SKILLDESC_DescLine42_CalcByIndex(int32_t nCalcResult, uint16_t wFormatStringId, short * pSkillDescShort, uint16_t * wszText) {
     uint16_t wszFormattedW[256];
     int nInitLoop = 0;
-    if (wFormatStringId == 0x1506) {
-      return nInitLoop;
+    if (wFormatStringId != 0x1506) {
+      uint16_t* pLocalStr;
+      pLocalStr = wszFormattedW;
+      for (nInitLoop = 0x80; nInitLoop; nInitLoop--) {
+        pLocalStr[0] = L'\0';
+        pLocalStr[1] = L'\0';
+        pLocalStr += 2;
+      }
+
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wFormatStringId);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszFormattedW, pLocalStr, pSkillDescShort);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszFormattedW);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      nInitLoop = 1;
     }
 
-    uint16_t* pLocalStr = wszFormattedW;
-    for (nInitLoop = 0x80; nInitLoop; nInitLoop--) {
-      pLocalStr[0] = L'\0';
-      pLocalStr[1] = L'\0';
-      pLocalStr += 2;
-    }
-
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wFormatStringId);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszFormattedW, pLocalStr, pSkillDescShort);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszFormattedW);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    nInitLoop = 1;
     return nInitLoop;
 }
 
@@ -6120,22 +6113,23 @@ void __stdcall SKILLDESC_DescLine29_FormatMonster(uint16_t * wszText, D2SkillsTx
 }
 
 static int SKILLDESC_DescLine2D_SkillPassive(int32_t nSkillLevel, uint16_t * wszText, int32_t nSkillId) {
-    D2SkillsTxt* pSkillsTxt;
+    uint16_t* pLocalStr;
     int32_t nPassivePct;
-    if (nSkillLevel <= 1) {
-      return 1;
-    }
-    if (nSkillId < 0 || nSkillId >= sgptDataTable->nTxtSkillsCount || (pSkillsTxt = sgptDataTable->pTxtSkills + nSkillId , !pSkillsTxt) || nSkillLevel - 1 <= 0) {
-      nPassivePct = 0;
-    } else {
-      nPassivePct = (nSkillLevel - 2) * pSkillsTxt->Param[1] + pSkillsTxt->Param[0];
+    if (nSkillLevel > 1) {
+      D2SkillsTxt* pSkillsTxt;
+      if (nSkillId < 0 || nSkillId >= sgptDataTable->nTxtSkillsCount || (pSkillsTxt = sgptDataTable->pTxtSkills + nSkillId , !pSkillsTxt) || nSkillLevel - 1 <= 0) {
+        nPassivePct = 0;
+      } else {
+        nPassivePct = (nSkillLevel - 2) * pSkillsTxt->Param[1] + pSkillsTxt->Param[0];
+      }
+
+      SKILLDESC_FormatValuePercentage(nPassivePct, 0x10d5, 0, wszText);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0x110d);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
     }
 
-    SKILLDESC_FormatValuePercentage(nPassivePct, 0x10d5, 0, wszText);
-    uint16_t* pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0x110d);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
     return 1;
 }
 
@@ -6518,12 +6512,12 @@ BOOL __fastcall SKILLDESC_GetSkillBonusText(D2UnitStrc * pUnit, int32_t bLeftSki
 
     __frame0.nMinDmgOut = 0;
     __frame0.nMaxDmgOut = 0;
-    if (!(pSkillDescTxt->descatt < 0x48 && gpSkillDescAttackFuncTable[pSkillDescTxt->descatt])) {
-      return __frame0.nMinDmgOut;
+    if (pSkillDescTxt->descatt < 0x48 && gpSkillDescAttackFuncTable[pSkillDescTxt->descatt]) {
+      int nSkillLevel;
+      nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
+      (*gpSkillDescAttackFuncTable[pSkillDescTxt->descatt])(pUnit, pSkill, __frame0.pSkillsTxt, nSkillLevel, &__frame0.nMinDmgOut, &__frame0.nMaxColorOut, &__frame0.nMaxDmgOut, &__frame0.nMinColorOut);
     }
 
-    int nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-    (*gpSkillDescAttackFuncTable[pSkillDescTxt->descatt])(pUnit, pSkill, __frame0.pSkillsTxt, nSkillLevel, &__frame0.nMinDmgOut, &__frame0.nMaxColorOut, &__frame0.nMaxDmgOut, &__frame0.nMinColorOut);
     return __frame0.nMinDmgOut;
 }
 
@@ -6596,26 +6590,27 @@ static int __stdcall SKILLDESC_DescLineE_PerLevelBonus(int32_t nSkillId, D2UnitS
     }
 
     uint16_t nStringIndex = GetDamageTypeLocale((uint32_t)pSkillsTxt->EType);
-    if (!nStringIndex) {
-      return 1;
-    }
-    if (!nMinDamage) {
-      bMinEqualsMax = !nMaxDmgScaled;
-    } else {
-      bMinEqualsMax = nMinDamage == nMaxDmgScaled;
-    }
-    if (!bMinEqualsMax) {
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDamageRange, "%d-%d", nMinDamage, nMaxDmgScaled);
-    } else {
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDamageRange, "%d", nMinDamage);
+    if (nStringIndex) {
+      uint16_t* pWszLocale;
+      if (!nMinDamage) {
+        bMinEqualsMax = !nMaxDmgScaled;
+      } else {
+        bMinEqualsMax = nMinDamage == nMaxDmgScaled;
+      }
+      if (!bMinEqualsMax) {
+        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDamageRange, "%d-%d", nMinDamage, nMaxDmgScaled);
+      } else {
+        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDamageRange, "%d", nMinDamage);
+      }
+
+      D2Lang::UTF8_ConvertToWideChar(wszDamageRange, szDamageRange, 0x20);
+      pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(nStringIndex);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLocale);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszDamageRange);
+      pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLocale);
     }
 
-    D2Lang::UTF8_ConvertToWideChar(wszDamageRange, szDamageRange, 0x20);
-    uint16_t* pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(nStringIndex);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLocale);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszDamageRange);
-    pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLocale);
     return 1;
 }
 

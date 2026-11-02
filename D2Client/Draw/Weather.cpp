@@ -967,16 +967,13 @@ static int WEATHER_UpdateParticleCount(D2SeedStrc * pSeed) {
         gnWeatherRngParam = DVar1.nSeedLow % 0x47 + 0x5c;
       }
     }
-    if (!gnWeatherTransitionProgress) {
-      return nChangeRate;
+    if (gnWeatherTransitionProgress) {
+      gnWeatherTransitionCountdown--;
+      if (!gnWeatherTransitionCountdown) {
+        gbWeatherTransitionTriggered = 1;
+      }
     }
 
-    gnWeatherTransitionCountdown--;
-    if (gnWeatherTransitionCountdown) {
-      return nChangeRate;
-    }
-
-    gbWeatherTransitionTriggered = 1;
     return nChangeRate;
 }
 
@@ -1141,21 +1138,23 @@ void __stdcall DRAW_WORLD_RainEffectOnFloor() {
 }
 
 uint32_t __stdcall WEATHER_CanHaveRain() {
+    D2RoomStrc* pRoom;
+    eD2LevelId eLevel;
     if (nWeatherParticleCountAct5) {
       return 0;
     }
 
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_Net();
     uint32_t bCanRain = 0;
-    if (!pUnit) {
-      return bCanRain;
+    if (pUnit) {
+      uint8_t bCanRainResult;
+      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+      eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+      bCanRainResult = D2Common::DATATBLS::LvlTbls::LEVEL_CanHaveRain(eLevel);
+      bCanRain = (uint32_t)(bCanRainResult != '\0');
+      D2Common::DATATBLS::LvlTbls::LEVEL_CanHaveMud(eLevel);
     }
 
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    uint8_t bCanRainResult = D2Common::DATATBLS::LvlTbls::LEVEL_CanHaveRain(eLevel);
-    bCanRain = (uint32_t)(bCanRainResult != '\0');
-    D2Common::DATATBLS::LvlTbls::LEVEL_CanHaveMud(eLevel);
     return bCanRain;
 }
 

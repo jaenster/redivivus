@@ -335,11 +335,10 @@ D2MonsterAiCmdStrc * __fastcall FindMonsterAiCmd(D2UnitStrc * pUnit, int nCmdArg
         return nullptr;
       }
     }
-    if (!bSetCurrent) {
-      return pNext;
+    if (bSetCurrent) {
+      pAiGeneral->pCmdCurrent = pNext;
     }
 
-    pAiGeneral->pCmdCurrent = pNext;
     return pNext;
 }
 

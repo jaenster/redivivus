@@ -264,12 +264,12 @@ BOOL __fastcall Skills_SrvDoFunc_069_FindPotion(::SGAMEDATA * pGame, D2UnitStrc 
     D2Common::Unit::ROOM_LinkUnitToUpdateList(pCorpse);
     int32_t nDropChance = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
     nRoll = D2Client::Archive::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-    if ((int)nRoll >= nDropChance) {
-      return 1;
+    if ((int)nRoll < nDropChance) {
+      uint32_t szItemCode;
+      szItemCode = SKILLAMZ_CreateLightningFuryBolts(pGame, eSkill, pUnit);
+      SkillsServer::SKILLS_DropItemByCode(pGame, pCorpse, szItemCode, QUALITY_NORMAL);
     }
 
-    uint32_t szItemCode = SKILLAMZ_CreateLightningFuryBolts(pGame, eSkill, pUnit);
-    SkillsServer::SKILLS_DropItemByCode(pGame, pCorpse, szItemCode, QUALITY_NORMAL);
     return 1;
 }
 
@@ -370,26 +370,21 @@ BOOL __fastcall Skills_SrvDoFunc_070_DoubleSwing(::SGAMEDATA * pGame, D2UnitStrc
 BOOL __fastcall SKILL_CheckCorpseCanBeConsumed(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int eMonsterUnitType;
     uint32_t eMonsterQuestId;
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
-      return 0;
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
+      BOOL bCorpseConsumed;
+      bCorpseConsumed = SkillsServer::D2CheckCorpseConsumed(pUnit, 0xc);
+      if (bCorpseConsumed) {
+        bCorpseConsumed = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+        if (!bCorpseConsumed) {
+          Ai::AiGeneral::GetMonsterNameAndAi(pUnit, &eMonsterQuestId, &eMonsterUnitType);
+          if (eMonsterQuestId == -1 || eMonsterUnitType) {
+            return 1;
+          }
+        }
+      }
     }
 
-    BOOL bCorpseConsumed = SkillsServer::D2CheckCorpseConsumed(pUnit, 0xc);
-    if (!bCorpseConsumed) {
-      return 0;
-    }
-
-    bCorpseConsumed = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-    if (bCorpseConsumed) {
-      return 0;
-    }
-
-    Ai::AiGeneral::GetMonsterNameAndAi(pUnit, &eMonsterQuestId, &eMonsterUnitType);
-    if (!(eMonsterQuestId == -1 || eMonsterUnitType)) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 // Generic server-side handler for targeted necromancer curses (Lower Resist, Amplify Damage, Life Tap, Iron Maiden, Weaken, Terror, etc). Reads curse stats and state from skills.txt aurastat/aurastatcalc/auratargetstate, applies via SKILLNEC_ApplyCurseToUnit, then forces monster AI re-evaluation.
@@ -565,13 +560,12 @@ BOOL __fastcall Skills_SrvDoFunc_074_DoubleThrow(::SGAMEDATA * pGame, D2UnitStrc
       } else {
         pWeaponOrMissile = SkillsServer::CreatingAMissile(pGame, eMissileType, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 1);
       }
-      if (!pWeaponOrMissile) {
-        return 1;
+      if (pWeaponOrMissile) {
+        D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pWeaponOrMissile, UNITSTAT_tohit, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
+        nValue = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
+        D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pWeaponOrMissile, UNITSTAT_damagepercent, nValue, 0);
       }
 
-      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pWeaponOrMissile, UNITSTAT_tohit, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
-      nValue = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pWeaponOrMissile, UNITSTAT_damagepercent, nValue, 0);
       return 1;
     }
 
@@ -952,18 +946,15 @@ static BOOL SKILLAMZ_GetPlagueJavelinCloudCount(int32_t pUnit) {
 
     D2UnitStrc* pMainHand = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 6);
     D2UnitStrc* pOffHand = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 5);
-    if (!pMainHand) {
-      return 0;
-    }
-
-    uint32_t bIsMeleeWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pMainHand, ITEMTYPE_MeleeWeapon);
-    if (!(bIsMeleeWeapon && pOffHand)) {
-      return 0;
-    }
-
-    bIsMeleeWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pOffHand, ITEMTYPE_MeleeWeapon);
-    if (bIsMeleeWeapon) {
-      return 1;
+    if (pMainHand) {
+      uint32_t bIsMeleeWeapon;
+      bIsMeleeWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pMainHand, ITEMTYPE_MeleeWeapon);
+      if (bIsMeleeWeapon && pOffHand) {
+        bIsMeleeWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pOffHand, ITEMTYPE_MeleeWeapon);
+        if (bIsMeleeWeapon) {
+          return 1;
+        }
+      }
     }
 
     return 0;
@@ -1792,16 +1783,13 @@ BOOL __fastcall SKILLBAR_SrvStFn41_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc * 
 
         D2Common::Skills::SKILL_SetFlags(pSkill, 0x1080);
         D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 1);
-        if (!pUnit_00) {
-          return 1;
+        if (pUnit_00) {
+          eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_uninterruptable);
+          if (eUnitState != STATE_none) {
+            SkillsServer::SKILL_ApplyStunState(pGame, pUnit_00, STATE_healthpot);
+          }
         }
 
-        eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_uninterruptable);
-        if (eUnitState == STATE_none) {
-          return 1;
-        }
-
-        SkillsServer::SKILL_ApplyStunState(pGame, pUnit_00, STATE_healthpot);
         return 1;
       }
     }
@@ -1811,7 +1799,6 @@ BOOL __fastcall SKILLBAR_SrvStFn41_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Server-side hit cycle for the Whirlwind skill. Acquires the next target in the spin arc via SKILLBAR_AcquireNextTarget, performs a to-hit check, and if it lands: calculates and applies physical + elemental damage, removes any stun state list from the target, and applies the skill's server overlay. Returns 1 if a target was hit, 0 if no valid target or skill entry found.
 static BOOL __stdcall SKILLBAR_WhirlwindHitCycle(::SGAMEDATA * pGame, eD2Skills eSkill, int32_t nSkillLvl, D2UnitStrc * pUnit) {
-    D2StatListExStrc* pStatList;
     D2DamageStrc sDamage;
     short int nHitOverlayId;
     if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
@@ -1835,41 +1822,39 @@ static BOOL __stdcall SKILLBAR_WhirlwindHitCycle(::SGAMEDATA * pGame, eD2Skills 
 
     memset(&sDamage, 0, 0x70);
     uint16_t uVar1 = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
-    if (!(uVar1 & 1)) {
-      return 1;
-    }
+    if (uVar1 & 1) {
+      D2StatListExStrc* pStatList;
+      sDamage.wResultFlags = uVar1 | 8;
+      sDamage.dwHitClass = D2Common::Units::GetHitClassForPlayerOrMonster(pUnit);
+      sDamage.dwHitFlags |= 0x20;
+      sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
+      if (pSkillsTxt->EType != ELEMENTAL_NONE) {
+        sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[3], eSkill, nSkillLvl);
+        if (sDamage.dwConvPct > 0) {
+          sDamage.nConvType = pSkillsTxt->EType;
+        }
+      }
 
-    sDamage.wResultFlags = uVar1 | 8;
-    sDamage.dwHitClass = D2Common::Units::GetHitClassForPlayerOrMonster(pUnit);
-    sDamage.dwHitFlags |= 0x20;
-    sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-    if (pSkillsTxt->EType != ELEMENTAL_NONE) {
-      sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[3], eSkill, nSkillLvl);
-      if (sDamage.dwConvPct > 0) {
-        sDamage.nConvType = pSkillsTxt->EType;
+      SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
+      *(uint8_t*)(char*)&eSkill = pSkillsTxt->SrcDam;
+      if ((uint8_t)eSkill == SKILL_Attack) {
+        *(uint8_t*)(char*)&eSkill = SKILL_AxeMastery;
+      }
+
+      UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, (uint8_t)eSkill);
+      UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
+      nHitOverlayId = pSkillsTxt->srvoverlay;
+      if (nHitOverlayId > 0 && (int)nHitOverlayId <= sgptDataTable->nTxtOverlaySize) {
+        D2Common::Units::SetOverlay(pTarget, (int)nHitOverlayId, 0);
+      }
+
+      pStatList = D2Common::Stats::StatsEx::GetStatsByState(pTarget, STATE_stunned);
+      if (pStatList) {
+        D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pTarget, pStatList);
+        D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
       }
     }
 
-    SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
-    *(uint8_t*)(char*)&eSkill = pSkillsTxt->SrcDam;
-    if ((uint8_t)eSkill == SKILL_Attack) {
-      *(uint8_t*)(char*)&eSkill = SKILL_AxeMastery;
-    }
-
-    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, (uint8_t)eSkill);
-    UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
-    nHitOverlayId = pSkillsTxt->srvoverlay;
-    if (nHitOverlayId > 0 && (int)nHitOverlayId <= sgptDataTable->nTxtOverlaySize) {
-      D2Common::Units::SetOverlay(pTarget, (int)nHitOverlayId, 0);
-    }
-
-    pStatList = D2Common::Stats::StatsEx::GetStatsByState(pTarget, STATE_stunned);
-    if (!pStatList) {
-      return 1;
-    }
-
-    D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pTarget, pStatList);
-    D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
     return 1;
 }
 

@@ -430,11 +430,10 @@ BOOL __stdcall RENDERER_GLIDE_LoadLibrarySymbols() {
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ GLIDEDLL_grGlideShutdown_0 = (grGlideShutdown)GetProcAddress(lpGLIDE3x_dll, "_grGlideShutdown@0");
-    if (GLIDEDLL_grGlideShutdown_0) {
-      return 1;
+    if (!GLIDEDLL_grGlideShutdown_0) {
+      RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xcd);
     }
 
-    RENDERER_GLIDE_LoadLibrarySymbols_HaltTail(0xcd);
     return 1;
 }
 

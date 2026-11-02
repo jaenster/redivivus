@@ -490,17 +490,14 @@ int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t bUseMonStatsSpaw
           nPosXY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
           *pnSpawnY = nPosXY;
         }
-        if (!pnMode) {
-          return (int)pSkillsTxt->summon;
+        if (pnMode) {
+          nSumModeOrSpawnMode = (int)pSkillsTxt->summode;
+          *pnMode = nSumModeOrSpawnMode;
+          if (nSumModeOrSpawnMode < 0 || nSumModeOrSpawnMode >= 0x10) {
+            *pnMode = 1;
+          }
         }
 
-        nSumModeOrSpawnMode = (int)pSkillsTxt->summode;
-        *pnMode = nSumModeOrSpawnMode;
-        if (!(nSumModeOrSpawnMode < 0 || nSumModeOrSpawnMode >= 0x10)) {
-          return (int)pSkillsTxt->summon;
-        }
-
-        *pnMode = 1;
         return (int)pSkillsTxt->summon;
       }
     } else {
@@ -517,17 +514,14 @@ int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t bUseMonStatsSpaw
           nPosXY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
           *pnSpawnY = nPosXY + pMonStatsTxt->spawny;
         }
-        if (!pnMode) {
-          return (int)nSpawnId;
+        if (pnMode) {
+          nSumModeOrSpawnMode = (int)pMonStatsTxt->spawnmode;
+          *pnMode = nSumModeOrSpawnMode;
+          if (nSumModeOrSpawnMode < 0 || nSumModeOrSpawnMode >= 0x10) {
+            *pnMode = 1;
+          }
         }
 
-        nSumModeOrSpawnMode = (int)pMonStatsTxt->spawnmode;
-        *pnMode = nSumModeOrSpawnMode;
-        if (!(nSumModeOrSpawnMode < 0 || nSumModeOrSpawnMode >= 0x10)) {
-          return (int)nSpawnId;
-        }
-
-        *pnMode = 1;
         return (int)nSpawnId;
       }
     }

@@ -420,32 +420,24 @@ BOOL __fastcall Q20_PlayerCheckBladeQuestCannotComplete(::SGAMEDATA * pGame, D2U
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Completed);
-    if (BVar1) {
-      return 0;
-    }
-
-    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06);
-    if (BVar1) {
-      return 0;
-    }
-
-    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08);
-    if (BVar1) {
-      return 0;
-    }
-
-    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x07);
-    if (BVar1) {
-      return 0;
-    }
-
-    D2UnitStrc* pBladeItem = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20333367);
-    if (pBladeItem) {
-      return 0;
-    }
-
-    /* SetQuestState CannotCompleteQuestInGame(0xe): player lacks the Will item and
+    if (!BVar1) {
+      D2UnitStrc* pBladeItem;
+      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06);
+      if (!BVar1) {
+        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08);
+        if (!BVar1) {
+          BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x07);
+          if (!BVar1) {
+            pBladeItem = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20333367);
+            if (!pBladeItem) {
+              /* SetQuestState CannotCompleteQuestInGame(0xe): player lacks the Will item and
                          quest not advanced -> locked out self game */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_CannotCompleteQuestInGame);
+            }
+          }
+        }
+      }
+    }
+
     return 0;
 }
 
@@ -698,11 +690,10 @@ void __fastcall Q20_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
 // filter, propagating the completion forward in the quest chain.
 bool __fastcall Q20_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (pQuestData->nStateFlag != 5 && pQuestData->bIsNotIntroduction != '\0') {
-      if (pQuestData->nStateFlag) {
-        return true;
+      if (!pQuestData->nStateFlag) {
+        pQuestData->nStateFlag = 1;
       }
 
-      pQuestData->nStateFlag = 1;
       return true;
     }
 
@@ -1013,25 +1004,23 @@ BOOL __fastcall OBJOP_A3Q5_NihlathakPortalTrigger(D2ObjectOperateFnArg * pOperat
         bQuestState = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08);
         if (!bQuestState) {
           pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_BladeOfTheOldReligion);
-          if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
-            return 0;
-          }
-          if (!pQuestData->nStateFlag) {
-            pQuestData->nStateFlag = 1;
+          if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
+            if (!pQuestData->nStateFlag) {
+              pQuestData->nStateFlag = 1;
+            }
+
+            pA2Q3Data = pQuestData->pQuestSpecificData.pA2Q3;
+            D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
+            pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
+            pGame = pOperation->sArg.pGame;
+            GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
+            pA2Q3Data->bViperAmuletInitPending = '\x01';
+            if (!pA2Q3Data->bViperAmuletInitialized) {
+              pA2Q3Data->bViperAmuletInitialized = true;
+              AddQuestTimer(pQuestData, Q20_QuestUpdate, 7);
+            }
           }
 
-          pA2Q3Data = pQuestData->pQuestSpecificData.pA2Q3;
-          D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
-          pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
-          pGame = pOperation->sArg.pGame;
-          GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
-          pA2Q3Data->bViperAmuletInitPending = '\x01';
-          if (pA2Q3Data->bViperAmuletInitialized) {
-            return 0;
-          }
-
-          pA2Q3Data->bViperAmuletInitialized = true;
-          AddQuestTimer(pQuestData, Q20_QuestUpdate, 7);
           return 0;
         }
       }

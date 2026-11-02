@@ -164,11 +164,10 @@ int __fastcall SFILE_GetExecutableDirectory(char * szText, DWORD nSize) {
     if (dwLength && dwLength != nSize) {
       char* pszLastSlash;
       pszLastSlash = Storm::Source::SSTR::SStrChrR(szText, '\\');
-      if (!pszLastSlash) {
-        return 1;
+      if (pszLastSlash) {
+        pszLastSlash[1] = '\0';
       }
 
-      pszLastSlash[1] = '\0';
       return 1;
     }
 
@@ -491,12 +490,12 @@ int32_t __fastcall SFILE_JulianDayNumber(int32_t nYear, int32_t nMonth, int32_t 
     long double fMonthDays = CRT_Floor((double)nJulian * 30.6001);
     long double fYearDays = CRT_Floor((double)nYearAdj * 365.25);
     nJulian = (int)(fYearDays + (long double)(double)fMonthDays + (long double)nDay + (long double)1720995.0);
-    if (!((nMonth + nYear * 0xc) * 0x1f + nDay >= 0x8fc1d)) {
-      return nJulian;
+    if ((nMonth + nYear * 0xc) * 0x1f + nDay >= 0x8fc1d) {
+      int nCentury;
+      nCentury = (int)((double)nYearAdj * 0.01);
+      nJulian += 2 - (int)((double)nCentury * -0.25) - nCentury;
     }
 
-    int nCentury = (int)((double)nYearAdj * 0.01);
-    nJulian += 2 - (int)((double)nCentury * -0.25) - nCentury;
     return nJulian;
 }
 

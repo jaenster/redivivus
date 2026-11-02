@@ -334,11 +334,10 @@ int * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
     }
 
     pAmbientEntry = gaAmbientSoundEntryTable + nIndex * 2;
-    if (gnAmbientSoundLanguageCode) {
-      return pAmbientEntry;
+    if (!gnAmbientSoundLanguageCode) {
+      pAmbientEntry = gAmbientSoundTable + nIndex * 2;
     }
 
-    pAmbientEntry = gAmbientSoundTable + nIndex * 2;
     return pAmbientEntry;
 }
 

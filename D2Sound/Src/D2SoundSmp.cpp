@@ -180,7 +180,6 @@ int __fastcall SOUNDSMP_GetVolume(D2SoundSmpStrc * pSoundSmp) {
     }
 
     return pSoundSmp->nVolume;
-    return pSoundSmp->nVolume;
 }
 
 void __fastcall SOUNDSMP_SetPan(D2SoundSmpStrc * ppSoundSmp, int32_t nPan) {
@@ -317,7 +316,6 @@ uint32_t __fastcall SOUNDSMP_IsStreaming(D2SoundSmpStrc * pSound) {
       exit(-1);
     }
 
-    return (uint32_t)(pSound->pStreamFile != 0);
     return (uint32_t)(pSound->pStreamFile != 0);
 }
 

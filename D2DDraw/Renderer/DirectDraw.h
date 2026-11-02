@@ -409,7 +409,7 @@ void __fastcall SetPaletteTable(BYTE * * ppPaletteTable);
 void __fastcall UpdateScaleFactor(int32_t nScaleFactor);
 BOOL __fastcall SetGamma(int32_t nGamma);
 int32_t CheckGamma();
-void __fastcall SetGlobalLight(BYTE nRed, BYTE nGreen, BYTE nBlue);
+void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue);
 void __fastcall SetPerspectiveScale(int32_t nScaleX, int32_t nScaleY);
 void __fastcall AdjustPerspectivePosition(int32_t nPosX, int32_t nPosY, int32_t nBais, int * pXAdjust, int * pYAdjust);
 void __fastcall PerspectiveScalePosition(int32_t nPosX, int32_t nPosY, int32_t nAngle, int * pXAdjust, int * pYAdjust, BOOL bOrder);

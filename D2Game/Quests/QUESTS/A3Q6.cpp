@@ -104,13 +104,12 @@ uint32_t __fastcall Q23_CheckDuranceOfHateLevel2(::SGAMEDATA * pGame, D2UnitStrc
 bool __fastcall Q23_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     bool bResult;
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Completed);
-    if (!(bQuestState || nTargetClassId != 0xff || (bResult = true , pQuestData->nStateFlag != 1))) {
-      return bResult;
+    if (bQuestState || nTargetClassId != 0xff || (bResult = true , pQuestData->nStateFlag != 1)) {
+      /* GetQuestState(Guardian=0x16, Step0x11=0x0b): ...or if quest finalized (Act4
+                         unlocked) */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Step0x11);
+      bResult = bQuestState != 0;
     }
 
-    /* GetQuestState(Guardian=0x16, Step0x11=0x0b): ...or if quest finalized (Act4
-                         unlocked) */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Step0x11);
-    bResult = bQuestState != 0;
     return bResult;
 }
 
@@ -197,33 +196,28 @@ static void __stdcall Q23_SetGuardianQuestComplete(::SGAMEDATA * pGame, D2UnitSt
 BOOL __fastcall Q23_PlayerCheckDuranceLevel3Complete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     BOOL _bQuestState;
     bool bQuestState;
+    D2QuestDataStrc* pGuardianQuestData;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      return 0;
-    }
-
-    /* GetQuestState(Guardian=0x16, Completed=0): skip players who already finished
+    if (pRoom) {
+      eD2LevelId eLevelId;
+      /* GetQuestState(Guardian=0x16, Completed=0): skip players who already finished
                           */ _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Completed);
-    if (_bQuestState) {
-      return 0;
-    }
-
-    eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if (eLevelId != LEVEL_DuranceOfHateLevel3) {
-      return 0;
-    }
-
-    D2QuestDataStrc* pGuardianQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheGuardian);
-    /* GetQuestState(Guardian=0x16, Step0x11=0x0b): skip if quest already finalized
+      if (!_bQuestState) {
+        eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+        if (eLevelId == LEVEL_DuranceOfHateLevel3) {
+          pGuardianQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheGuardian);
+          /* GetQuestState(Guardian=0x16, Step0x11=0x0b): skip if quest already finalized
                          (Act4 unlocked) */ _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Step0x11);
-    if (_bQuestState) {
-      return 0;
+          if (!_bQuestState) {
+            Q23_SetGuardianQuestComplete(pGame, pUnit, pBitBuffer);
+            pGuardianQuestData->pQuestSpecificData.pA3Q6->nPlayerCount++;
+          }
+        }
+      }
     }
 
-    Q23_SetGuardianQuestComplete(pGame, pUnit, pBitBuffer);
-    pGuardianQuestData->pQuestSpecificData.pA3Q6->nPlayerCount++;
     return 0;
 }
 
@@ -566,16 +560,14 @@ BOOL __fastcall Q23_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc *
     /* GetQuestState(Guardian=0x16, JustCompleted=0x0d): only propagate from a
                          player who just completed */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheGuardian, QUESTSTATE_JustCompleted);
-    if (!bJustCompleted) {
-      return 0;
+    if (bJustCompleted) {
+      uint16_t nPartyId;
+      nPartyId = UNIT::SUnit::GetPartyId(pUnit);
+      if (nPartyId != 0xffff) {
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q23_PartyMember_SetCompleted, 0);
+      }
     }
 
-    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    if (nPartyId == 0xffff) {
-      return 0;
-    }
-
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q23_PartyMember_SetCompleted, 0);
     return 0;
 }
 
@@ -587,19 +579,16 @@ BOOL __fastcall Q23_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStr
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Completed);
-    if (bQuestState == 1) {
-      return 0;
-    }
-
-    /* GetQuestState(Guardian=0x16, Step0x11=0x0b): skip if finalized (got credit)
+    if (bQuestState != 1) {
+      /* GetQuestState(Guardian=0x16, Step0x11=0x0b): skip if finalized (got credit)
                           */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Step0x11);
-    if (bQuestState == 1) {
-      return 0;
+      if (bQuestState != 1) {
+        /* SetQuestState(Guardian=0x16, CannotCompleteQuestInGame=0x0e): mark absent
+                         player can't finish self game */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_CannotCompleteQuestInGame);
+        QUEST_SendQuestStatePacket(pUnit, 0x14, 0);
+      }
     }
 
-    /* SetQuestState(Guardian=0x16, CannotCompleteQuestInGame=0x0e): mark absent
-                         player can't finish self game */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_CannotCompleteQuestInGame);
-    QUEST_SendQuestStatePacket(pUnit, 0x14, 0);
     return 0;
 }
 
@@ -609,11 +598,10 @@ BOOL __fastcall Q23_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStr
     /* GetQuestState(Guardian=0x16, JustCompleted=0x0d): only play sound for players
                          who just completed */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheGuardian, QUESTSTATE_JustCompleted);
-    if (!bJustCompleted) {
-      return 0;
+    if (bJustCompleted) {
+      UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x42, pUnit);
     }
 
-    UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x42, pUnit);
     return 0;
 }
 
@@ -804,12 +792,11 @@ void __fastcall Objects_InitFn44(D2ObjectInitFnArg * pInitArg) {
 // [The Guardian (Q23)] fpSequenceFilter: when the player has the intro done (bIsNotIntroduction) but no
 // state flag yet, sets nStateFlag=1 and arms slot[2] (Q23_Callback_02). Bootstraps the acceptance step.
 bool __fastcall Q23_SequenceFilter(D2QuestDataStrc * pQuestData) {
-    if (!(!pQuestData->nStateFlag && pQuestData->bIsNotIntroduction != '\0')) {
-      return true;
+    if (!pQuestData->nStateFlag && pQuestData->bIsNotIntroduction != '\0') {
+      pQuestData->nStateFlag = 1;
+      pQuestData->sStateFunctions.fpQuestStateHandler[2] = Q23_Callback02_NpcDeactivate;
     }
 
-    pQuestData->nStateFlag = 1;
-    pQuestData->sStateFunctions.fpQuestStateHandler[2] = Q23_Callback02_NpcDeactivate;
     return true;
 }
 

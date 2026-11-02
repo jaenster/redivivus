@@ -65,18 +65,17 @@ BOOL __stdcall FindLevelIdByWaypointId(uint16_t nWaypointId, eD2LevelId * pLevel
 }
 
 BOOL __stdcall FindWaypointIdByLevelId(eD2LevelId eLevel, int16_t * pWaypointId) {
+    uint8_t byWaypointId;
     *pWaypointId = 0xff;
-    if ((int)eLevel >= sgptDataTable->nTxtLevelsSize) {
-      return 0;
-    }
-
-    D2LevelsTxt* pLevelsTxt = DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
-    if (pLevelsTxt) {
-      uint8_t byWaypointId;
-      byWaypointId = pLevelsTxt->Waypoint;
-      *pWaypointId = (uint16_t)byWaypointId;
-      if (byWaypointId != 0xff) {
-        return 1;
+    if ((int)eLevel < sgptDataTable->nTxtLevelsSize) {
+      D2LevelsTxt* pLevelsTxt;
+      pLevelsTxt = DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
+      if (pLevelsTxt) {
+        byWaypointId = pLevelsTxt->Waypoint;
+        *pWaypointId = (uint16_t)byWaypointId;
+        if (byWaypointId != 0xff) {
+          return 1;
+        }
       }
     }
 

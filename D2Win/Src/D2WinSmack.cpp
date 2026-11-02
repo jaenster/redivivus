@@ -96,11 +96,10 @@ BOOL __stdcall D2WINSMACK_CloseAndDeleteFile(::D2WinSmack * pSmack) {
     }
 
     D2gfx::D2GFX::D2GFX_CloseSmacker(&pSmack->sSmackerCtx);
-    if (gbSmackerKeepTempFile) {
-      return 1;
+    if (!gbSmackerKeepTempFile) {
+      /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(pSmack->szFilePath);
     }
 
-    /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(pSmack->szFilePath);
     return 1;
 }
 

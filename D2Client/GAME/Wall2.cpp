@@ -1122,6 +1122,7 @@ static void __stdcall WALL2_InsertUnitShadowDraw(D2Wall2CellStrc * pWall2Cell, D
 // Client-side draw-list builder for a single dungeon room within the wall2 (low-perspective wall/roof culling) view. Given pRoom and pnParam (game-view ptr + screen cull rectangle), early-rejects rooms outside the minimap rect, then walks the room's wall tiles and roof tiles: for each on-screen tile it computes iso grid coords (DRLG_OrthToIsoCoordsDiv160), clears the grid cell's dwFlags, and dispatches to WALL2_AddShadowPassTile/AddRoofTile/AddLowerWallTile/AddWallTile by tile type/flags. Then (when pnParam[6]==0) inserts each unit in the room into its grid cell (draw/draw-below/shadow) based on alive state and unit flags. Halts via Fog error if a unit's grid index is out of range. Always returns 1.
 BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawContextStrc * pDrawContext) {
     int nRoofHeightIdx2;
+    int nScreenYAdj;
     BOOL bInDrawGrid;
     D2UnitStrc* pUnit;
     int nRoofHeightIdx;
@@ -1129,6 +1130,7 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
     int nIsoY;
     int nIsoX;
     uint32_t nTileCount;
+    uint32_t nTileIdx;
     int32_t nLine;
     D2Wall2CellStrc* pGridCellVoid;
     D2TileLibraryEntryStrc* pTileLibEntry;
@@ -1137,110 +1139,106 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
     D2GameViewStrc* pGameView = pDrawContext->pGameView;
     D2Wall2DrawListStrc* pAllocBase = &pGameView->sWall2;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetMinimapRect((uint32_t)pDrawContext, pRoom, (int32_t*)&nMinimapLeft.left);
-    if (!(nMinimapLeft.left <= pParamTmp->rcCull.right && nMinimapLeft.top <= pParamTmp->rcCull.bottom + 400 && nMinimapLeft.right >= pParamTmp->rcCull.left - 200 && nMinimapLeft.bottom >= pParamTmp->rcCull.top)) {
-      return 1;
-    }
-
-    D2DrlgTileDataStrc* pTileData = D2Common::DUNGEON::Dungeon::DRLGROOM_GetWallTilesFromRoom(pRoomTmp, (int*)&nTileCount);
-    uint32_t nTileIdx = 0;
-    if (nTileCount > 0) {
-      int nScreenYAdj;
-      do {
-        pTileLibEntry = pTileData->pTileLibraryEntry;
-        nRoofHeightIdx2 = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetRoofHeightIndex(pTileLibEntry);
-        D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160(pTileData->nScreenX, pTileData->nScreenY, &nIsoX, &nIsoY);
-        nRoofHeightIdx = nIsoY - 1;
-        nIsoY = nRoofHeightIdx;
-        if (pTileData->nScreenX <= pDrawContext->rcCull.right && pTileData->nScreenX + 0xa0 >= pDrawContext->rcCull.left) {
-          nScreenYAdj = pTileData->nScreenY - (uint32_t)pTileLibEntry->nRoofHeight;
-          if (nRoofHeightIdx2 + nScreenYAdj <= pDrawContext->rcCull.bottom && nScreenYAdj - nRoofHeightIdx2 >= pDrawContext->rcCull.top) {
-            bInDrawGrid = WALL2_IsInDrawGrid(nIsoX, nRoofHeightIdx, pAllocBase);
-            if (bInDrawGrid) {
-              nIsoY = nRoofHeightIdx - pGameView->sWall2.nWall2GridOriginY;
-              nIsoX -= pGameView->sWall2.nWall2GridOriginX;
-              pGridCellVoid = pGameView->sWall2.pWall2 + pGameView->sWall2.nWall2GridDim * nIsoY + nIsoX;
-              pGridCellVoid->dwFlags = 0;
-              if (!(pTileData->nFlags & 0x1c000U)) {
-                WALL2_AddShadowPassTile(pGridCellVoid, pRoom, pTileData, pAllocBase);
-              } else if (pTileData->nTileType != 0xf) {
-                if (pTileData->nTileType - 0x10U <= 3) {
-                  WALL2_AddLowerWallTile(pAllocBase, pGridCellVoid, pRoom, pTileData);
+    if (nMinimapLeft.left <= pParamTmp->rcCull.right && nMinimapLeft.top <= pParamTmp->rcCull.bottom + 400 && nMinimapLeft.right >= pParamTmp->rcCull.left - 200 && nMinimapLeft.bottom >= pParamTmp->rcCull.top) {
+      D2DrlgTileDataStrc* pTileData;
+      pTileData = D2Common::DUNGEON::Dungeon::DRLGROOM_GetWallTilesFromRoom(pRoomTmp, (int*)&nTileCount);
+      nTileIdx = 0;
+      if (nTileCount > 0) {
+        do {
+          pTileLibEntry = pTileData->pTileLibraryEntry;
+          nRoofHeightIdx2 = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetRoofHeightIndex(pTileLibEntry);
+          D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160(pTileData->nScreenX, pTileData->nScreenY, &nIsoX, &nIsoY);
+          nRoofHeightIdx = nIsoY - 1;
+          nIsoY = nRoofHeightIdx;
+          if (pTileData->nScreenX <= pDrawContext->rcCull.right && pTileData->nScreenX + 0xa0 >= pDrawContext->rcCull.left) {
+            nScreenYAdj = pTileData->nScreenY - (uint32_t)pTileLibEntry->nRoofHeight;
+            if (nRoofHeightIdx2 + nScreenYAdj <= pDrawContext->rcCull.bottom && nScreenYAdj - nRoofHeightIdx2 >= pDrawContext->rcCull.top) {
+              bInDrawGrid = WALL2_IsInDrawGrid(nIsoX, nRoofHeightIdx, pAllocBase);
+              if (bInDrawGrid) {
+                nIsoY = nRoofHeightIdx - pGameView->sWall2.nWall2GridOriginY;
+                nIsoX -= pGameView->sWall2.nWall2GridOriginX;
+                pGridCellVoid = pGameView->sWall2.pWall2 + pGameView->sWall2.nWall2GridDim * nIsoY + nIsoX;
+                pGridCellVoid->dwFlags = 0;
+                if (!(pTileData->nFlags & 0x1c000U)) {
+                  WALL2_AddShadowPassTile(pGridCellVoid, pRoom, pTileData, pAllocBase);
+                } else if (pTileData->nTileType != 0xf) {
+                  if (pTileData->nTileType - 0x10U <= 3) {
+                    WALL2_AddLowerWallTile(pAllocBase, pGridCellVoid, pRoom, pTileData);
+                  } else {
+                    WALL2_AddWallTile(pAllocBase, pGridCellVoid, pRoom, pTileData);
+                  }
                 } else {
-                  WALL2_AddWallTile(pAllocBase, pGridCellVoid, pRoom, pTileData);
+                  WALL2_AddRoofTile(pAllocBase, pGridCellVoid, pRoom, pTileData);
                 }
-              } else {
-                WALL2_AddRoofTile(pAllocBase, pGridCellVoid, pRoom, pTileData);
               }
             }
           }
-        }
 
-        nTileIdx++;
-        pTileData++;
-        pParamTmp = pDrawContext;
-        pRoomTmp = pRoom;
-      } while (nTileIdx < nTileCount);
-    }
+          nTileIdx++;
+          pTileData++;
+          pParamTmp = pDrawContext;
+          pRoomTmp = pRoom;
+        } while (nTileIdx < nTileCount);
+      }
 
-    pTileData = D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoofTilesFromRoom(pRoomTmp, (int*)&nTileCount);
-    nTileIdx = 0;
-    if (nTileCount > 0) {
-      do {
-        nRoofHeightIdx2 = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetRoofHeightIndex(pTileData->pTileLibraryEntry);
-        D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160(pTileData->nScreenX, pTileData->nScreenY, &nIsoY, &nIsoX);
-        nRoofHeightIdx = nIsoX - 1;
-        nIsoX = nRoofHeightIdx;
-        if (pTileData->nScreenX <= pDrawContext->rcCull.right && pTileData->nScreenX + 0xa0 >= pDrawContext->rcCull.left && nRoofHeightIdx2 + pTileData->nScreenY <= pDrawContext->rcCull.bottom && pTileData->nScreenY - nRoofHeightIdx2 >= pDrawContext->rcCull.top) {
-          bInDrawGrid = WALL2_IsInDrawGrid(nIsoY, nRoofHeightIdx, pAllocBase);
-          if (bInDrawGrid) {
-            nIsoX = nRoofHeightIdx - pGameView->sWall2.nWall2GridOriginY;
-            nIsoY -= pGameView->sWall2.nWall2GridOriginX;
-            WALL2_AddShadowPassTile(pGameView->sWall2.pWall2 + pGameView->sWall2.nWall2GridDim * nIsoX + nIsoY, pRoom, pTileData, pAllocBase);
-          }
-        }
-
-        nTileIdx++;
-        pTileData++;
-        pParamTmp = pDrawContext;
-        pRoomTmp = pRoom;
-      } while (nTileIdx < nTileCount);
-    }
-    if (pParamTmp->nTickCount) {
-      return 1;
-    }
-
-    for (pUnit = D2Common::DUNGEON::Dungeon::DRLGROOM_GetFirstUnitInRoom(pRoomTmp); pUnit; pUnit = pUnit->pRoomNext) {
-      pRoom = (D2RoomStrc*)D2Common::Units::GetTargetX(pUnit);
-      pDrawContext = (D2Wall2DrawContextStrc*)D2Common::Units::GetTargetY(pUnit);
-      D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160((int32_t)pRoom, (int32_t)pDrawContext, (int32_t*)&pRoom, (int32_t*)&pDrawContext);
-      pRoomTmp = (D2RoomStrc*)((int)pRoom - pGameView->sWall2.nWall2GridOriginX);
-      pParamTmp = (D2Wall2DrawContextStrc*)((int)pDrawContext - pGameView->sWall2.nWall2GridOriginY);
-      if ((int)pRoomTmp >= 0 && (int)pParamTmp >= 0) {
-        nRoofHeightIdx2 = pGameView->sWall2.nWall2GridDim;
-        if ((int)pRoomTmp < nRoofHeightIdx2 && (int)pParamTmp < nRoofHeightIdx2) {
-          pRoom = pRoomTmp;
-          pDrawContext = pParamTmp;
-          if ((int)pRoomTmp < 0 || (int)pRoomTmp >= nRoofHeightIdx2) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x300);
-            exit(-1);
-          }
-          if ((int)pParamTmp < 0 || (int)pParamTmp >= nRoofHeightIdx2) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x301);
-            exit(-1);
+      pTileData = D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoofTilesFromRoom(pRoomTmp, (int*)&nTileCount);
+      nTileIdx = 0;
+      if (nTileCount > 0) {
+        do {
+          nRoofHeightIdx2 = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetRoofHeightIndex(pTileData->pTileLibraryEntry);
+          D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160(pTileData->nScreenX, pTileData->nScreenY, &nIsoY, &nIsoX);
+          nRoofHeightIdx = nIsoX - 1;
+          nIsoX = nRoofHeightIdx;
+          if (pTileData->nScreenX <= pDrawContext->rcCull.right && pTileData->nScreenX + 0xa0 >= pDrawContext->rcCull.left && nRoofHeightIdx2 + pTileData->nScreenY <= pDrawContext->rcCull.bottom && pTileData->nScreenY - nRoofHeightIdx2 >= pDrawContext->rcCull.top) {
+            bInDrawGrid = WALL2_IsInDrawGrid(nIsoY, nRoofHeightIdx, pAllocBase);
+            if (bInDrawGrid) {
+              nIsoX = nRoofHeightIdx - pGameView->sWall2.nWall2GridOriginY;
+              nIsoY -= pGameView->sWall2.nWall2GridOriginX;
+              WALL2_AddShadowPassTile(pGameView->sWall2.pWall2 + pGameView->sWall2.nWall2GridDim * nIsoX + nIsoY, pRoom, pTileData, pAllocBase);
+            }
           }
 
-          pGridCellVoid = pGameView->sWall2.pWall2 + (int)pRoomTmp->nLastDeadGUIDs + nRoofHeightIdx2 * (int)pParamTmp - 0x38;
-          nLine = UNIT::CUnit::IsAlive(pUnit);
-          if (nLine) {
-            WALL2_InsertUnitDraw(pGridCellVoid, pUnit, pAllocBase);
-          } else {
-            if (!pUnit || !(pUnit->eUnitFlags >> 0x14 & 1)) {
-              WALL2_InsertUnitDrawBelow(pAllocBase, pUnit, pGridCellVoid);
-              if (pUnit && pUnit->eUnitFlagsEx >> 7 & 1) {
-                WALL2_InsertUnitShadowDraw(pGridCellVoid, pUnit, pAllocBase);
+          nTileIdx++;
+          pTileData++;
+          pParamTmp = pDrawContext;
+          pRoomTmp = pRoom;
+        } while (nTileIdx < nTileCount);
+      }
+      if (!pParamTmp->nTickCount) {
+        for (pUnit = D2Common::DUNGEON::Dungeon::DRLGROOM_GetFirstUnitInRoom(pRoomTmp); pUnit; pUnit = pUnit->pRoomNext) {
+          pRoom = (D2RoomStrc*)D2Common::Units::GetTargetX(pUnit);
+          pDrawContext = (D2Wall2DrawContextStrc*)D2Common::Units::GetTargetY(pUnit);
+          D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160((int32_t)pRoom, (int32_t)pDrawContext, (int32_t*)&pRoom, (int32_t*)&pDrawContext);
+          pRoomTmp = (D2RoomStrc*)((int)pRoom - pGameView->sWall2.nWall2GridOriginX);
+          pParamTmp = (D2Wall2DrawContextStrc*)((int)pDrawContext - pGameView->sWall2.nWall2GridOriginY);
+          if ((int)pRoomTmp >= 0 && (int)pParamTmp >= 0) {
+            nRoofHeightIdx2 = pGameView->sWall2.nWall2GridDim;
+            if ((int)pRoomTmp < nRoofHeightIdx2 && (int)pParamTmp < nRoofHeightIdx2) {
+              pRoom = pRoomTmp;
+              pDrawContext = pParamTmp;
+              if ((int)pRoomTmp < 0 || (int)pRoomTmp >= nRoofHeightIdx2) {
+                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x300);
+                exit(-1);
               }
-            } else {
-              WALL2_InsertUnitDraw(pGridCellVoid, pUnit, pAllocBase);
+              if ((int)pParamTmp < 0 || (int)pParamTmp >= nRoofHeightIdx2) {
+                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x301);
+                exit(-1);
+              }
+
+              pGridCellVoid = pGameView->sWall2.pWall2 + (int)pRoomTmp->nLastDeadGUIDs + nRoofHeightIdx2 * (int)pParamTmp - 0x38;
+              nLine = UNIT::CUnit::IsAlive(pUnit);
+              if (nLine) {
+                WALL2_InsertUnitDraw(pGridCellVoid, pUnit, pAllocBase);
+              } else {
+                if (!pUnit || !(pUnit->eUnitFlags >> 0x14 & 1)) {
+                  WALL2_InsertUnitDrawBelow(pAllocBase, pUnit, pGridCellVoid);
+                  if (pUnit && pUnit->eUnitFlagsEx >> 7 & 1) {
+                    WALL2_InsertUnitShadowDraw(pGridCellVoid, pUnit, pAllocBase);
+                  }
+                } else {
+                  WALL2_InsertUnitDraw(pGridCellVoid, pUnit, pAllocBase);
+                }
+              }
             }
           }
         }

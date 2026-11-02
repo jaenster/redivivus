@@ -426,12 +426,11 @@ int32_t __fastcall CountPartyControlSubSize(::SGAMEDATA * pGame, int16_t nPartyI
 
 BOOL __fastcall CountAliveUnitsLevelSum(int32_t nContext, D2UnitStrc * pUnit, int * pLevelSum) {
     BOOL bIsDead = SUnit::CheckForModeZeroDeath(pUnit);
-    if (bIsDead) {
-      return bIsDead;
+    if (!bIsDead) {
+      bIsDead = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
+      *pLevelSum += bIsDead;
     }
 
-    bIsDead = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    *pLevelSum += bIsDead;
     return bIsDead;
 }
 

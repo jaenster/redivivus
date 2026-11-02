@@ -669,30 +669,28 @@ void __stdcall SetupMiniPanel() {
 }
 
 BOOL __stdcall WAYPOINT_IsMouseInMiniPanel() {
-    int nPanelX;
+    int nButtonCount;
     int nMouseX = ui::GetMouseX();
     int nMouseY = ui::GetMouseY();
     BOOL bFlagSet = ui::GetUIFlag(UI_WAYPOINT);
-    if (!bFlagSet) {
-      return 0;
-    }
+    if (bFlagSet) {
+      int nPanelX;
+      bFlagSet = ui::GetUIFlag(UI_MINIPANEL);
+      if (bFlagSet) {
+        if (gbMiniPanelSinglePlayer) {
+          nPanelX = ScreenSizeX / 2 + 0x38;
+        } else {
+          nPanelX = ScreenSizeX / 2 + 0x23;
+        }
 
-    bFlagSet = ui::GetUIFlag(UI_MINIPANEL);
-    if (!bFlagSet) {
-      return 0;
-    }
-    if (gbMiniPanelSinglePlayer) {
-      nPanelX = ScreenSizeX / 2 + 0x38;
-    } else {
-      nPanelX = ScreenSizeX / 2 + 0x23;
-    }
-
-    int nButtonCount = 8;
-    if (gbMiniPanelSinglePlayer) {
-      nButtonCount = 7;
-    }
-    if (nMouseX > nPanelX && nMouseX < nPanelX + nButtonCount * 0x14 && nMouseY > ScreenSizeY - 0x4c && nMouseY < ScreenSizeY - 0x32) {
-      return 1;
+        nButtonCount = 8;
+        if (gbMiniPanelSinglePlayer) {
+          nButtonCount = 7;
+        }
+        if (nMouseX > nPanelX && nMouseX < nPanelX + nButtonCount * 0x14 && nMouseY > ScreenSizeY - 0x4c && nMouseY < ScreenSizeY - 0x32) {
+          return 1;
+        }
+      }
     }
 
     return 0;

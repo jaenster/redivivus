@@ -47,11 +47,10 @@ BOOL __fastcall MCPCONNECT_SocketCallback_Dispatch(uint8_t * pPacketBuf, int nPa
     if (*pPacketBuf >= 0x1a) {
       return 0;
     }
-    if (!gaMcpSocketCallbackHandlers[*pPacketBuf]) {
-      return BVar1;
+    if (gaMcpSocketCallbackHandlers[*pPacketBuf]) {
+      BVar1 = (*gaMcpSocketCallbackHandlers[*pPacketBuf])((char*)pPacketBuf, nPacketSize);
     }
 
-    BVar1 = (*gaMcpSocketCallbackHandlers[*pPacketBuf])((char*)pPacketBuf, nPacketSize);
     return BVar1;
 }
 

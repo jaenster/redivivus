@@ -85,11 +85,10 @@ static unsigned int gpD3DGroundTileVertexBuffer = {}; D2_STATIC_GUARD(gpD3DGroun
 // D3DEnumPixelFormatsCallback. Parameter 1 is an LPDDPIXELFORMAT; parameter 2 is the device-caps flag word, and the 0x200 bit
 // it sets is the one Direct3DCallBack tests for "Supports 1555 textures".
 HRESULT __stdcall D3D_EnumTextureFormatsCallback(void * lpDDPixFmt, DWORD * pnDeviceFlags) {
-    if (!(pnDeviceFlags && *(uint32_t*)((int)lpDDPixFmt + 4) == gsD3DTextureDescTemplate[1] && *(uint32_t*)((int)lpDDPixFmt + 0xc) == gsD3DTextureDescTemplate[3] && *(uint32_t*)((int)lpDDPixFmt + 0x10) == gsD3DTextureDescTemplate[4] && *(uint32_t*)((int)lpDDPixFmt + 0x14) == gsD3DTextureDescTemplate[5] && *(uint32_t*)((int)lpDDPixFmt + 0x18) == gsD3DTextureDescTemplate[6] && *(uint32_t*)((int)lpDDPixFmt + 0x1c) == gsD3DTextureDescTemplate[7])) {
-      return 1;
+    if (pnDeviceFlags && *(uint32_t*)((int)lpDDPixFmt + 4) == gsD3DTextureDescTemplate[1] && *(uint32_t*)((int)lpDDPixFmt + 0xc) == gsD3DTextureDescTemplate[3] && *(uint32_t*)((int)lpDDPixFmt + 0x10) == gsD3DTextureDescTemplate[4] && *(uint32_t*)((int)lpDDPixFmt + 0x14) == gsD3DTextureDescTemplate[5] && *(uint32_t*)((int)lpDDPixFmt + 0x18) == gsD3DTextureDescTemplate[6] && *(uint32_t*)((int)lpDDPixFmt + 0x1c) == gsD3DTextureDescTemplate[7]) {
+      *pnDeviceFlags |= gadwBitMasks[9];
     }
 
-    *pnDeviceFlags |= gadwBitMasks[9];
     return 1;
 }
 
@@ -1293,11 +1292,10 @@ HRESULT __stdcall RENDERER_D3D_EnumDisplayModeCallback(int * pDisplayModeDesc, i
     if (__frame0.pEnumBackbuffer) {
       __frame0.pEnumBackbuffer = 0;
     }
-    if (!__frame0.pTestSurface) {
-      return 1;
+    if (__frame0.pTestSurface) {
+      __frame0.pTestSurface->lpVtbl->Release(__frame0.pTestSurface);
     }
 
-    __frame0.pTestSurface->lpVtbl->Release(__frame0.pTestSurface);
     return 1;
 }
 
@@ -1827,17 +1825,15 @@ BOOL __fastcall Initialize(HINSTANCE hInstance) {
       if (nLoadResult) {
         nResult = Storm::Source::SReg::SRegLoadValue(szRegPath, "dwFlags", 0, (int32_t*)&gnD3DTextureCapFlags);
         if (nResult) {
-          if (gnD3DTextureCapFlags & gadwBitMasks[0]) {
-            return 1;
-          }
-
-          pnGuidSize = (uint32_t*)0x10;
-          nLoadResult = Storm::Source::SReg::SRegLoadData((uint32_t*)szRegPath, "GUID", 0, (LPBYTE)&gsD3DAdapterGuid, 0x10, &pnGuidSize);
-          if (!nLoadResult) {
-            return 0;
-          }
-          if (pnGuidSize != (uint32_t*)0x10) {
-            return 0;
+          if (!(gnD3DTextureCapFlags & gadwBitMasks[0])) {
+            pnGuidSize = (uint32_t*)0x10;
+            nLoadResult = Storm::Source::SReg::SRegLoadData((uint32_t*)szRegPath, "GUID", 0, (LPBYTE)&gsD3DAdapterGuid, 0x10, &pnGuidSize);
+            if (!nLoadResult) {
+              return 0;
+            }
+            if (pnGuidSize != (uint32_t*)0x10) {
+              return 0;
+            }
           }
 
           return 1;
@@ -2321,28 +2317,27 @@ static BOOL __stdcall RENDERER_D3D_InitializeDevice(int nResolutionMode, int hWn
 
 // @sourcefile .\Src\d3dCore.cpp
 BOOL Release() {
-    if (!g_bD3DCoreInitialized) {
-      return 1;
+    if (g_bD3DCoreInitialized) {
+      RENDERER_D3D_ReleaseSmackerBuffer();
+      RENDERER_D3D_ReleaseDevice();
+      gnGlideWindowHandle = 0;
+      if (g_pDirect3D7) {
+        g_pDirect3D7->lpVtbl->Release(g_pDirect3D7);
+        g_pDirect3D7 = 0;
+      }
+      if (g_pDirectDraw7) {
+        g_pDirectDraw7->lpVtbl->Release(g_pDirectDraw7);
+        g_pDirectDraw7 = 0;
+      }
+      if (RENDERER_SelectedRendererCore) {
+        /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&RENDERER_SelectedRendererCore->sLock);
+        D2_FREE_AT(RENDERER_SelectedRendererCore, ".\\Src\\d3dCore.cpp", 0x71d);
+        RENDERER_SelectedRendererCore = 0;
+      }
+
+      g_bD3DCoreInitialized = 0;
     }
 
-    RENDERER_D3D_ReleaseSmackerBuffer();
-    RENDERER_D3D_ReleaseDevice();
-    gnGlideWindowHandle = 0;
-    if (g_pDirect3D7) {
-      g_pDirect3D7->lpVtbl->Release(g_pDirect3D7);
-      g_pDirect3D7 = 0;
-    }
-    if (g_pDirectDraw7) {
-      g_pDirectDraw7->lpVtbl->Release(g_pDirectDraw7);
-      g_pDirectDraw7 = 0;
-    }
-    if (RENDERER_SelectedRendererCore) {
-      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&RENDERER_SelectedRendererCore->sLock);
-      D2_FREE_AT(RENDERER_SelectedRendererCore, ".\\Src\\d3dCore.cpp", 0x71d);
-      RENDERER_SelectedRendererCore = 0;
-    }
-
-    g_bD3DCoreInitialized = 0;
     return 1;
 }
 
@@ -2425,11 +2420,10 @@ BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue) {
     g_nCurrentFilterMode = 0;
     Renderer::SetGlobalLight(0xff, 0xff, 0xff);
     DWORD dwHResult = g_pD3DDevice->lpVtbl->BeginScene(g_pD3DDevice);
-    if (!dwHResult) {
-      return 1;
+    if (dwHResult) {
+      RENDERER_DIRECT3D_ErrorLog("BeginScene failed!", dwHResult);
     }
 
-    RENDERER_DIRECT3D_ErrorLog("BeginScene failed!", dwHResult);
     return 1;
 }
 
@@ -2485,11 +2479,10 @@ BOOL __fastcall RENDERER_D3D_CreateSurfaceWithTexture(IDirectDrawSurface7 * * pp
     ddsdSize.dwCaps = (g_bSupportsTextureCachingInternal ? -268435456 : 0) + 0x10005000;
     DWORD dwHResult = g_pDirectDraw7->lpVtbl->CreateSurface(g_pDirectDraw7, &ddsdSize, (void**)ppSurface, nullptr);
     if (dwHResult) {
-      if (dwHResult == 0x8876017c) {
-        return 0;
+      if (dwHResult != 0x8876017c) {
+        DIRECTD3D_LogError("CreateSurface (device surface)", dwHResult);
       }
 
-      DIRECTD3D_LogError("CreateSurface (device surface)", dwHResult);
       return 0;
     }
 
@@ -2703,11 +2696,10 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
     if (*pnCacheNodeIdx && (*(uint8_t**)(*pnCacheNodeIdx * 0x20 - 0x14 + ((int*)((uint8_t*)&gD3DGenericTextureCache - 0x4))[iMipLevel * 7]) == pPalette || nMode == 4)) {
       d3dTextureCache::D3DTEXCACHE_InvalidateByIndex(pCache, *pnCacheNodeIdx);
       dwHResult = g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, *(void**)(*pnCacheNodeIdx * 0x20 + ((int*)((uint8_t*)&gD3DGenericTextureCache - 0x4))[iMipLevel * 7] - 0xc));
-      if (!dwHResult) {
-        return 1;
+      if (dwHResult) {
+        RENDERER_DIRECT3D_ErrorLog("Failed to set texture", dwHResult);
       }
 
-      RENDERER_DIRECT3D_ErrorLog("Failed to set texture", dwHResult);
       return 1;
     }
 
@@ -2830,11 +2822,10 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
           }
 
           dwHResult = g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, *(void**)(iMipLevel + 0x14));
-          if (!dwHResult) {
-            return 1;
+          if (dwHResult) {
+            RENDERER_DIRECT3D_ErrorLog("Failed to set texture", dwHResult);
           }
 
-          RENDERER_DIRECT3D_ErrorLog("Failed to set texture", dwHResult);
           return 1;
         }
       } else {
@@ -3021,11 +3012,10 @@ static uint8_t __stdcall SetDrawModeAndGetAlpha(int nDrawMode) {
     }
 
     uint8_t uVar1 = 0xc0;
-    if (nDrawMode == 2) {
-      return uVar1;
+    if (nDrawMode != 2) {
+      uVar1 = 0xff;
     }
 
-    uVar1 = 0xff;
     return uVar1;
 }
 
@@ -3150,11 +3140,10 @@ BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwG
     }
 
     int32_t bUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&aSpriteInfo, pPalette, 0, nUploadMode);
-    if (!bUploaded) {
-      return 1;
+    if (bUploaded) {
+      RENDERER_DIRECT3D_DrawPalettedQuad(&aSpriteInfo, nPosX, nPosY, dwGamma, 0, nAlpha, 0);
     }
 
-    RENDERER_DIRECT3D_DrawPalettedQuad(&aSpriteInfo, nPosX, nPosY, dwGamma, 0, nAlpha, 0);
     return 1;
 }
 
@@ -4140,35 +4129,33 @@ int32_t __fastcall RENDERER_D3D_BuildShadowTileVertices(D2TileLibraryEntryStrc *
     }
 
     nScreenSplitIndex = 0;
-    if (pTileLibraryEntryStrc->nSubTiles <= 0) {
-      return _bRendered;
-    }
-
-    do {
+    if (pTileLibraryEntryStrc->nSubTiles > 0) {
       int nSubtileX;
-      pSubtileCoords = &pTileLibraryEntryStrc->pSubTiles[nScreenSplitIndex].nOffsetX;
-      nSubtileX = *pSubtileCoords + nTilePosX;
-      nSubtileY = (int)pSubtileCoords[1] + nTilePosY + 0x20;
-      if (nSubtileX >= nPanelXOffset && nSubtileX < nPanelWidth && nSubtileY >= 0 && nSubtileY < nSubtileIter) {
-        _bRendered = 1;
-        d3dFloorCache::D3D_RenderSubtileToTexture(&pTileLibraryEntryStrc->pSubTiles[nScreenSplitIndex]);
-        gaD3DPerspectiveVertices[0].fX = (float)nSubtileX;
-        gaD3DPerspectiveVertices[0].fY = (float)(nSubtileY - 0x20);
-        gaD3DPerspectiveVertices[1].fY = (float)nSubtileY;
-        gaD3DPerspectiveVertices[2].fX = (float)(nSubtileX + 0x20);
-        gaD3DPerspectiveVertices[1].fX = gaD3DPerspectiveVertices[0].fX;
-        gaD3DPerspectiveVertices[2].fY = gaD3DPerspectiveVertices[1].fY;
-        gaD3DPerspectiveVertices[3].fX = gaD3DPerspectiveVertices[2].fX;
-        gaD3DPerspectiveVertices[3].fY = gaD3DPerspectiveVertices[0].fY;
-        RENDERER_D3D_ApplyShadowTextureCoords(gaD3DPerspectiveVertices, byLightRow, (uint8_t)dwAlpha);
-        gaD3DPerspectiveVertices[1].dwDiffuse = gaD3DPerspectiveVertices[0].dwDiffuse;
-        gaD3DPerspectiveVertices[2].dwDiffuse = gaD3DPerspectiveVertices[0].dwDiffuse;
-        gaD3DPerspectiveVertices[3].dwDiffuse = gaD3DPerspectiveVertices[0].dwDiffuse;
-        g_pD3DDevice->lpVtbl->DrawPrimitive(g_pD3DDevice, 6, 0x1c4, gaD3DPerspectiveVertices, 4, 0x1c);
-      }
+      do {
+        pSubtileCoords = &pTileLibraryEntryStrc->pSubTiles[nScreenSplitIndex].nOffsetX;
+        nSubtileX = *pSubtileCoords + nTilePosX;
+        nSubtileY = (int)pSubtileCoords[1] + nTilePosY + 0x20;
+        if (nSubtileX >= nPanelXOffset && nSubtileX < nPanelWidth && nSubtileY >= 0 && nSubtileY < nSubtileIter) {
+          _bRendered = 1;
+          d3dFloorCache::D3D_RenderSubtileToTexture(&pTileLibraryEntryStrc->pSubTiles[nScreenSplitIndex]);
+          gaD3DPerspectiveVertices[0].fX = (float)nSubtileX;
+          gaD3DPerspectiveVertices[0].fY = (float)(nSubtileY - 0x20);
+          gaD3DPerspectiveVertices[1].fY = (float)nSubtileY;
+          gaD3DPerspectiveVertices[2].fX = (float)(nSubtileX + 0x20);
+          gaD3DPerspectiveVertices[1].fX = gaD3DPerspectiveVertices[0].fX;
+          gaD3DPerspectiveVertices[2].fY = gaD3DPerspectiveVertices[1].fY;
+          gaD3DPerspectiveVertices[3].fX = gaD3DPerspectiveVertices[2].fX;
+          gaD3DPerspectiveVertices[3].fY = gaD3DPerspectiveVertices[0].fY;
+          RENDERER_D3D_ApplyShadowTextureCoords(gaD3DPerspectiveVertices, byLightRow, (uint8_t)dwAlpha);
+          gaD3DPerspectiveVertices[1].dwDiffuse = gaD3DPerspectiveVertices[0].dwDiffuse;
+          gaD3DPerspectiveVertices[2].dwDiffuse = gaD3DPerspectiveVertices[0].dwDiffuse;
+          gaD3DPerspectiveVertices[3].dwDiffuse = gaD3DPerspectiveVertices[0].dwDiffuse;
+          g_pD3DDevice->lpVtbl->DrawPrimitive(g_pD3DDevice, 6, 0x1c4, gaD3DPerspectiveVertices, 4, 0x1c);
+        }
 
-      nScreenSplitIndex++;
-    } while (nScreenSplitIndex < pTileLibraryEntryStrc->nSubTiles);
+        nScreenSplitIndex++;
+      } while (nScreenSplitIndex < pTileLibraryEntryStrc->nSubTiles);
+    }
 
     return _bRendered;
 }
@@ -4183,6 +4170,7 @@ int __fastcall RENDERER_D3D_RenderShadowTileWithPerspective(D2TileLibraryEntrySt
     int nFixedScreenX;
     int nScreenXAdj;
     float fPanelXOffset;
+    float fViewportLeft;
     int bRendered = 0;
     int nPanelXOffset = 0;
     D2TileLibraryEntryStrc* pTileLibraryEntryPtr = pTileEntry;
@@ -4191,62 +4179,60 @@ int __fastcall RENDERER_D3D_RenderShadowTileWithPerspective(D2TileLibraryEntrySt
     int nFixedWorldX = nTilePosX * 0x2000;
     int nSubtileIndex = 0;
     int bRenderedAny = 0;
-    if (pTileLibraryEntryPtr->nSubTiles <= 0) {
-      return bRenderedAny;
-    }
-
-    float fViewportLeft = (float)nViewportLeft.left;
-    do {
+    if (pTileLibraryEntryPtr->nSubTiles > 0) {
       short int* psSubtileCoords;
-      psSubtileCoords = &pTileLibraryEntryPtr->pSubTiles[nSubtileIndex].nOffsetX;
-      bRenderedAny = psSubtileCoords[1] + 0x60 >> 5;
-      nSubtileScreenY = (int)*psSubtileCoords >> 5;
-      nVertexIter = (nSubtileScreenY + bRenderedAny * 2) * 0x10000 - 0x38000;
-      bRenderedAny = (bRenderedAny * 2 - nSubtileScreenY) * 0x10000 + 0x18000;
-      nFixedScreenX = nVertexIter + nFixedWorldX;
-      Renderer::AdjustPerspectivePosition(nFixedScreenX, nFixedWorldY + bRenderedAny, 0, &nScreenXAdj, &nScreenSplitIndex);
-      gaD3DPerspectiveStripVertices[0].fX = (float)nScreenXAdj;
-      gaD3DPerspectiveStripVertices[0].fY = (float)nScreenSplitIndex;
-      Renderer::AdjustPerspectivePosition(nFixedWorldX + 0x20000 + nVertexIter, nFixedWorldY + 0x20000 + bRenderedAny, 0, &nScreenXAdj, &nScreenSplitIndex);
-      gaD3DPerspectiveStripVertices[0xc].fX = (float)nScreenXAdj;
-      gaD3DPerspectiveStripVertices[0xc].fY = (float)nScreenSplitIndex;
-      Renderer::AdjustPerspectivePosition(nFixedWorldX + 0x30000 + nVertexIter, nFixedWorldY + 0x10000 + bRenderedAny, 0, &nScreenXAdj, &nScreenSplitIndex);
-      gaD3DPerspectiveStripVertices[0xe].fX = (float)nScreenXAdj;
-      gaD3DPerspectiveStripVertices[0xe].fY = (float)nScreenSplitIndex;
-      Renderer::AdjustPerspectivePosition(nFixedWorldX + 0x10000 + nVertexIter, nFixedWorldY - 0x10000 + bRenderedAny, 0, &nScreenXAdj, &nScreenSplitIndex);
-      gaD3DPerspectiveStripVertices[2].fX = (float)nScreenXAdj;
-      gaD3DPerspectiveStripVertices[2].fY = (float)nScreenSplitIndex;
-      if (fViewportLeft < gaD3DPerspectiveStripVertices[0].fX != (fViewportLeft == gaD3DPerspectiveStripVertices[0].fX) && gaD3DPerspectiveStripVertices[0].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0].fY) && gaD3DPerspectiveStripVertices[0].fY < (float)nViewportLeft.bottom || fViewportLeft <= gaD3DPerspectiveStripVertices[0xc].fX && gaD3DPerspectiveStripVertices[0xc].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0xc].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0xc].fY) && gaD3DPerspectiveStripVertices[0xc].fY < (float)nViewportLeft.bottom || fViewportLeft <= gaD3DPerspectiveStripVertices[0xe].fX && gaD3DPerspectiveStripVertices[0xe].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0xe].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0xe].fY) && gaD3DPerspectiveStripVertices[0xe].fY < (float)nViewportLeft.bottom || fViewportLeft <= gaD3DPerspectiveStripVertices[2].fX && gaD3DPerspectiveStripVertices[2].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[2].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[2].fY) && gaD3DPerspectiveStripVertices[2].fY < (float)nViewportLeft.bottom) {
-        d3dFloorCache::D3D_RenderSubtileToTexture(&pTileLibraryEntryPtr->pSubTiles[nSubtileIndex]);
-        fPanelXOffset = (float)nPanelXOffset;
-        pfVertex = gaD3DPerspectiveStripVertices;
-        bRendered = nFixedWorldY + bRenderedAny;
-        do {
-          nFixedScreenY = 3;
-          bRenderedAny = bRendered;
-          nSubtileScreenY = nFixedScreenX;
+      fViewportLeft = (float)nViewportLeft.left;
+      do {
+        psSubtileCoords = &pTileLibraryEntryPtr->pSubTiles[nSubtileIndex].nOffsetX;
+        bRenderedAny = psSubtileCoords[1] + 0x60 >> 5;
+        nSubtileScreenY = (int)*psSubtileCoords >> 5;
+        nVertexIter = (nSubtileScreenY + bRenderedAny * 2) * 0x10000 - 0x38000;
+        bRenderedAny = (bRenderedAny * 2 - nSubtileScreenY) * 0x10000 + 0x18000;
+        nFixedScreenX = nVertexIter + nFixedWorldX;
+        Renderer::AdjustPerspectivePosition(nFixedScreenX, nFixedWorldY + bRenderedAny, 0, &nScreenXAdj, &nScreenSplitIndex);
+        gaD3DPerspectiveStripVertices[0].fX = (float)nScreenXAdj;
+        gaD3DPerspectiveStripVertices[0].fY = (float)nScreenSplitIndex;
+        Renderer::AdjustPerspectivePosition(nFixedWorldX + 0x20000 + nVertexIter, nFixedWorldY + 0x20000 + bRenderedAny, 0, &nScreenXAdj, &nScreenSplitIndex);
+        gaD3DPerspectiveStripVertices[0xc].fX = (float)nScreenXAdj;
+        gaD3DPerspectiveStripVertices[0xc].fY = (float)nScreenSplitIndex;
+        Renderer::AdjustPerspectivePosition(nFixedWorldX + 0x30000 + nVertexIter, nFixedWorldY + 0x10000 + bRenderedAny, 0, &nScreenXAdj, &nScreenSplitIndex);
+        gaD3DPerspectiveStripVertices[0xe].fX = (float)nScreenXAdj;
+        gaD3DPerspectiveStripVertices[0xe].fY = (float)nScreenSplitIndex;
+        Renderer::AdjustPerspectivePosition(nFixedWorldX + 0x10000 + nVertexIter, nFixedWorldY - 0x10000 + bRenderedAny, 0, &nScreenXAdj, &nScreenSplitIndex);
+        gaD3DPerspectiveStripVertices[2].fX = (float)nScreenXAdj;
+        gaD3DPerspectiveStripVertices[2].fY = (float)nScreenSplitIndex;
+        if (fViewportLeft < gaD3DPerspectiveStripVertices[0].fX != (fViewportLeft == gaD3DPerspectiveStripVertices[0].fX) && gaD3DPerspectiveStripVertices[0].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0].fY) && gaD3DPerspectiveStripVertices[0].fY < (float)nViewportLeft.bottom || fViewportLeft <= gaD3DPerspectiveStripVertices[0xc].fX && gaD3DPerspectiveStripVertices[0xc].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0xc].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0xc].fY) && gaD3DPerspectiveStripVertices[0xc].fY < (float)nViewportLeft.bottom || fViewportLeft <= gaD3DPerspectiveStripVertices[0xe].fX && gaD3DPerspectiveStripVertices[0xe].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0xe].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0xe].fY) && gaD3DPerspectiveStripVertices[0xe].fY < (float)nViewportLeft.bottom || fViewportLeft <= gaD3DPerspectiveStripVertices[2].fX && gaD3DPerspectiveStripVertices[2].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[2].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[2].fY) && gaD3DPerspectiveStripVertices[2].fY < (float)nViewportLeft.bottom) {
+          d3dFloorCache::D3D_RenderSubtileToTexture(&pTileLibraryEntryPtr->pSubTiles[nSubtileIndex]);
+          fPanelXOffset = (float)nPanelXOffset;
+          pfVertex = gaD3DPerspectiveStripVertices;
+          bRendered = nFixedWorldY + bRenderedAny;
           do {
-            Renderer::AdjustPerspectivePosition(nSubtileScreenY, bRenderedAny, 0, &nScreenXAdj, &nScreenSplitIndex);
-            pfVertex->fY = (float)nScreenSplitIndex;
-            pfVertex->fX = (float)nScreenXAdj + fPanelXOffset;
-            RENDERER_D3D_ApplyShadowTextureCoords(pfVertex, byLightRow, (uint8_t)dwAlpha);
-            pfVertex++;
-            nSubtileScreenY += 0x8000;
-            bRenderedAny += -0x8000;
-            nFixedScreenY--;
-          } while (nFixedScreenY);
+            nFixedScreenY = 3;
+            bRenderedAny = bRendered;
+            nSubtileScreenY = nFixedScreenX;
+            do {
+              Renderer::AdjustPerspectivePosition(nSubtileScreenY, bRenderedAny, 0, &nScreenXAdj, &nScreenSplitIndex);
+              pfVertex->fY = (float)nScreenSplitIndex;
+              pfVertex->fX = (float)nScreenXAdj + fPanelXOffset;
+              RENDERER_D3D_ApplyShadowTextureCoords(pfVertex, byLightRow, (uint8_t)dwAlpha);
+              pfVertex++;
+              nSubtileScreenY += 0x8000;
+              bRenderedAny += -0x8000;
+              nFixedScreenY--;
+            } while (nFixedScreenY);
 
-          nFixedScreenX += 0x8000;
-          bRendered += 0x8000;
-        } while ((int)pfVertex < (intptr_t)((char*)&gaD3DPerspectiveStripVertices + sizeof(gaD3DPerspectiveStripVertices)));
+            nFixedScreenX += 0x8000;
+            bRendered += 0x8000;
+          } while ((int)pfVertex < (intptr_t)((char*)&gaD3DPerspectiveStripVertices + sizeof(gaD3DPerspectiveStripVertices)));
 
-        g_pD3DDevice->lpVtbl->DrawIndexedPrimitive(g_pD3DDevice, 5, 0x1c4, gaD3DPerspectiveStripVertices, 0xf, gaD3DPerspectiveStripIndices, 0x16, 0x1c);
-        bRendered = 1;
-      }
+          g_pD3DDevice->lpVtbl->DrawIndexedPrimitive(g_pD3DDevice, 5, 0x1c4, gaD3DPerspectiveStripVertices, 0xf, gaD3DPerspectiveStripIndices, 0x16, 0x1c);
+          bRendered = 1;
+        }
 
-      nSubtileIndex++;
-      bRenderedAny = bRendered;
-    } while (nSubtileIndex < pTileLibraryEntryPtr->nSubTiles);
+        nSubtileIndex++;
+        bRenderedAny = bRendered;
+      } while (nSubtileIndex < pTileLibraryEntryPtr->nSubTiles);
+    }
 
     return bRenderedAny;
 }
@@ -4303,41 +4289,39 @@ BOOL __thiscall RENDERER_D3D_BuildWallTileVerticesNoPerspective(void * pThis, D2
     }
 
     int nSubtileCount = 0;
-    if (pTile->nSubTiles <= 0) {
-      return bRendered;
-    }
-
-    _nParam4 = 0;
-    do {
+    if (pTile->nSubTiles > 0) {
       int nViewportBottom;
-      psSubtileCoords = (short int*)((uintptr_t)&pTile->pSubTiles->nOffsetX + _nParam4);
-      nViewportBottom = (int)*psSubtileCoords;
-      nSubtileScreenX = (int)psSubtileCoords[1] + nPosY + 0x20;
-      nSubtileX = nPosX + nViewportBottom;
-      if (nSubtileX >= nPanelXOffset && nSubtileX < nPanelWidth && nSubtileScreenX >= 0 && nSubtileScreenX < nSubtileScreenY) {
-        nViewportBottom >>= 5;
-        nTexColor0 = *(uint32_t*)(pTexColorTable + nViewportBottom * 4);
-        nTexColor1 = *(uint32_t*)(pTexColorTable + 4 + nViewportBottom * 4);
-        bRendered = 1;
-        d3dFloorCache::D3D_RenderSubtileToTexture((D2GroundSubTileStrc*)((uintptr_t)&pTile->pSubTiles->nOffsetX + _nParam4));
-        gaD3DPerspectiveVertices[0].fX = (float)nSubtileX;
-        gaD3DPerspectiveVertices[0].fY = (float)(nSubtileScreenX - 0x20);
-        gaD3DPerspectiveVertices[1].fY = (float)nSubtileScreenX;
-        gaD3DPerspectiveVertices[2].fX = (float)(nSubtileX + 0x20);
-        gaD3DPerspectiveVertices[1].fX = gaD3DPerspectiveVertices[0].fX;
-        gaD3DPerspectiveVertices[2].fY = gaD3DPerspectiveVertices[1].fY;
-        gaD3DPerspectiveVertices[3].fX = gaD3DPerspectiveVertices[2].fX;
-        gaD3DPerspectiveVertices[3].fY = gaD3DPerspectiveVertices[0].fY;
-        RENDERER_D3D_SetTextureStageColor(gaD3DPerspectiveVertices, nTexColor0, byAlpha);
-        RENDERER_D3D_SetTextureStageColor(gaD3DPerspectiveVertices + 1, nTexColor0, byAlpha);
-        RENDERER_D3D_SetTextureStageColor(gaD3DPerspectiveVertices + 2, nTexColor1, byAlpha);
-        RENDERER_D3D_SetTextureStageColor(gaD3DPerspectiveVertices + 3, nTexColor1, byAlpha);
-        g_pD3DDevice->lpVtbl->DrawPrimitive(g_pD3DDevice, 6, 0x1c4, gaD3DPerspectiveVertices, 4, 0x1c);
-      }
+      _nParam4 = 0;
+      do {
+        psSubtileCoords = (short int*)((uintptr_t)&pTile->pSubTiles->nOffsetX + _nParam4);
+        nViewportBottom = (int)*psSubtileCoords;
+        nSubtileScreenX = (int)psSubtileCoords[1] + nPosY + 0x20;
+        nSubtileX = nPosX + nViewportBottom;
+        if (nSubtileX >= nPanelXOffset && nSubtileX < nPanelWidth && nSubtileScreenX >= 0 && nSubtileScreenX < nSubtileScreenY) {
+          nViewportBottom >>= 5;
+          nTexColor0 = *(uint32_t*)(pTexColorTable + nViewportBottom * 4);
+          nTexColor1 = *(uint32_t*)(pTexColorTable + 4 + nViewportBottom * 4);
+          bRendered = 1;
+          d3dFloorCache::D3D_RenderSubtileToTexture((D2GroundSubTileStrc*)((uintptr_t)&pTile->pSubTiles->nOffsetX + _nParam4));
+          gaD3DPerspectiveVertices[0].fX = (float)nSubtileX;
+          gaD3DPerspectiveVertices[0].fY = (float)(nSubtileScreenX - 0x20);
+          gaD3DPerspectiveVertices[1].fY = (float)nSubtileScreenX;
+          gaD3DPerspectiveVertices[2].fX = (float)(nSubtileX + 0x20);
+          gaD3DPerspectiveVertices[1].fX = gaD3DPerspectiveVertices[0].fX;
+          gaD3DPerspectiveVertices[2].fY = gaD3DPerspectiveVertices[1].fY;
+          gaD3DPerspectiveVertices[3].fX = gaD3DPerspectiveVertices[2].fX;
+          gaD3DPerspectiveVertices[3].fY = gaD3DPerspectiveVertices[0].fY;
+          RENDERER_D3D_SetTextureStageColor(gaD3DPerspectiveVertices, nTexColor0, byAlpha);
+          RENDERER_D3D_SetTextureStageColor(gaD3DPerspectiveVertices + 1, nTexColor0, byAlpha);
+          RENDERER_D3D_SetTextureStageColor(gaD3DPerspectiveVertices + 2, nTexColor1, byAlpha);
+          RENDERER_D3D_SetTextureStageColor(gaD3DPerspectiveVertices + 3, nTexColor1, byAlpha);
+          g_pD3DDevice->lpVtbl->DrawPrimitive(g_pD3DDevice, 6, 0x1c4, gaD3DPerspectiveVertices, 4, 0x1c);
+        }
 
-      _nParam4 += 0x14;
-      nSubtileCount++;
-    } while (nSubtileCount < pTile->nSubTiles);
+        _nParam4 += 0x14;
+        nSubtileCount++;
+      } while (nSubtileCount < pTile->nSubTiles);
+    }
 
     return bRendered;
 }
@@ -4370,90 +4354,88 @@ static BOOL __stdcall RENDERER_D3D_RenderWallTileWithPerspective(int nScreenPane
     uint32_t nTileType = pTile->nDirection;
     if (nTileType <= 9) {
       int nTileIndex = 0;
-      if (pTile->nSubTiles <= 0) {
-        return nMidZ;
-      }
-
-      do {
+      if (pTile->nSubTiles > 0) {
         int nBias;
-        pSubtileOffset = &pTile->pSubTiles[nTileIndex].nOffsetX;
-        fLayerIndex = d2_bits_as<D2FloatIntUnion>((int)pSubtileOffset[1]);
-        fSubtileIndex = (float)((int)*pSubtileOffset >> 5);
-        if ((uint32_t)fSubtileIndex > 4) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x21b);
-          exit(-1);
-        }
+        do {
+          pSubtileOffset = &pTile->pSubTiles[nTileIndex].nOffsetX;
+          fLayerIndex = d2_bits_as<D2FloatIntUnion>((int)pSubtileOffset[1]);
+          fSubtileIndex = (float)((int)*pSubtileOffset >> 5);
+          if ((uint32_t)fSubtileIndex > 4) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x21b);
+            exit(-1);
+          }
 
-        nTileTableIdx = (int)fSubtileIndex + nTileType * 6;
-        nFixedY0 = gaD3DWallCornerTable[nTileTableIdx].nY + nPosY * 0x2000;
-        nBias = gaD3DWallCornerTable[nTileTableIdx].nZ - (int)d2_bits_of(fLayerIndex);
-        nX1 = gaD3DWallCornerTable[nTileTableIdx + 1].nX + nPosX * 0x2000;
-        nZ1 = gaD3DWallCornerTable[nTileTableIdx + 1].nZ - (int)d2_bits_of(fLayerIndex);
-        nY1 = gaD3DWallCornerTable[nTileTableIdx + 1].nY + nPosY * 0x2000;
-        nTileTableIdx = gaD3DWallCornerTable[nTileTableIdx].nX + nPosX * 0x2000;
-        nX0 = nTileTableIdx;
-        nY0 = nFixedY0;
-        nZ0 = nBias;
-        Renderer::AdjustPerspectivePosition(nTileTableIdx, nFixedY0, nBias, &nScreenX, &nScreenY);
-        gaD3DPerspectiveStripVertices[0].fX = (float)nScreenX;
-        gaD3DPerspectiveStripVertices[0].fY = (float)nScreenY;
-        Renderer::AdjustPerspectivePosition(nTileTableIdx, nFixedY0, nBias - 0x20, &nScreenX, &nScreenY);
-        gaD3DPerspectiveStripVertices[0xc].fX = (float)nScreenX;
-        gaD3DPerspectiveStripVertices[0xc].fY = (float)nScreenY;
-        Renderer::AdjustPerspectivePosition(nX1, nY1, nZ1 - 0x20, &nScreenX, &nScreenY);
-        gaD3DPerspectiveStripVertices[0xe].fX = (float)nScreenX;
-        gaD3DPerspectiveStripVertices[0xe].fY = (float)nScreenY;
-        Renderer::AdjustPerspectivePosition(nX1, nY1, nZ1, &nScreenX, &nScreenY);
-        gaD3DPerspectiveStripVertices[2].fX = (float)nScreenX;
-        gaD3DPerspectiveStripVertices[2].fY = (float)nScreenY;
-        fLayerIndex.fValue = (float)nViewportLeft.left;
-        if (fLayerIndex.fValue < gaD3DPerspectiveStripVertices[0].fX != (fLayerIndex.fValue == gaD3DPerspectiveStripVertices[0].fX) && gaD3DPerspectiveStripVertices[0].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0].fY) && gaD3DPerspectiveStripVertices[0].fY < (float)nViewportLeft.bottom || fLayerIndex.fValue <= gaD3DPerspectiveStripVertices[0xc].fX && gaD3DPerspectiveStripVertices[0xc].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0xc].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0xc].fY) && gaD3DPerspectiveStripVertices[0xc].fY < (float)nViewportLeft.bottom || fLayerIndex.fValue <= gaD3DPerspectiveStripVertices[0xe].fX && gaD3DPerspectiveStripVertices[0xe].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0xe].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0xe].fY) && gaD3DPerspectiveStripVertices[0xe].fY < (float)nViewportLeft.bottom || fLayerIndex.fValue <= gaD3DPerspectiveStripVertices[2].fX && gaD3DPerspectiveStripVertices[2].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[2].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[2].fY) && gaD3DPerspectiveStripVertices[2].fY < (float)nViewportLeft.bottom) {
-          aVertexColors[0] = *(uint32_t*)(pLightColors + (int)fSubtileIndex * 4);
-          aVertexColors[2] = *(uint32_t*)(pLightColors + 4 + (int)fSubtileIndex * 4);
-          nMidZ = nBias + nZ1 >> 1;
-          aVertexColors[3] = nTileTableIdx + nX1 >> 1;
-          aVertexColors[1] = ((((int)((aVertexColors[2] >> 0x18) + (aVertexColors[0] >> 0x18)) >> 1) * 0x100 + ((int)((uint8_t)(aVertexColors[2] >> 0x10) + (uint8_t)(aVertexColors[0] >> 0x10)) >> 1)) * 0x100 + ((int)((aVertexColors[2] >> 8 & 0xff) + (aVertexColors[0] >> 8 & 0xff)) >> 1)) * 0x100 + ((int)((uint8_t)aVertexColors[0] + (uint8_t)aVertexColors[2]) >> 1);
-          nMidY = nFixedY0 + nY1 >> 1;
-          fSubtileIndex = (float)aVertexColors[2];
-          d3dFloorCache::D3D_RenderSubtileToTexture(&pTile->pSubTiles[nTileIndex]);
-          fSubtileIndex = (float)nPanelOffset;
-          fLayerIndex.fValue = 0.0;
-          pfVertexOuter = gaD3DPerspectiveStripVertices + 2;
-          do {
-            fLayerIter = fLayerIndex;
-            if (fLayerIndex.nValue && fLayerIndex.nValue != 4) {
-              nTileTableIdx = fLayerIndex.nValue * -8;
-              Renderer::AdjustPerspectivePosition(nX0, nY0, nTileTableIdx + nZ0, &nScreenX, &nScreenY);
-              pfVertexOuter[-2].fX = (float)nScreenX;
-              pfVertexOuter[-2].fY = (float)nScreenY;
-              Renderer::AdjustPerspectivePosition(nX1, nY1, nTileTableIdx + nZ1, &nScreenX, &nScreenY);
-              pfVertexOuter->fX = (float)nScreenX;
-              pfVertexOuter->fY = (float)nScreenY;
-            }
-
-            Renderer::AdjustPerspectivePosition(aVertexColors[3], nMidY, nMidZ + fLayerIter.nValue * -8, &nScreenX, &nScreenY);
-            nTileTableIdx = 0;
-            pfVertex = pfVertexOuter - 2;
-            pfVertexOuter[-1].fX = (float)nScreenX;
-            pfVertexOuter[-1].fY = (float)nScreenY;
+          nTileTableIdx = (int)fSubtileIndex + nTileType * 6;
+          nFixedY0 = gaD3DWallCornerTable[nTileTableIdx].nY + nPosY * 0x2000;
+          nBias = gaD3DWallCornerTable[nTileTableIdx].nZ - (int)d2_bits_of(fLayerIndex);
+          nX1 = gaD3DWallCornerTable[nTileTableIdx + 1].nX + nPosX * 0x2000;
+          nZ1 = gaD3DWallCornerTable[nTileTableIdx + 1].nZ - (int)d2_bits_of(fLayerIndex);
+          nY1 = gaD3DWallCornerTable[nTileTableIdx + 1].nY + nPosY * 0x2000;
+          nTileTableIdx = gaD3DWallCornerTable[nTileTableIdx].nX + nPosX * 0x2000;
+          nX0 = nTileTableIdx;
+          nY0 = nFixedY0;
+          nZ0 = nBias;
+          Renderer::AdjustPerspectivePosition(nTileTableIdx, nFixedY0, nBias, &nScreenX, &nScreenY);
+          gaD3DPerspectiveStripVertices[0].fX = (float)nScreenX;
+          gaD3DPerspectiveStripVertices[0].fY = (float)nScreenY;
+          Renderer::AdjustPerspectivePosition(nTileTableIdx, nFixedY0, nBias - 0x20, &nScreenX, &nScreenY);
+          gaD3DPerspectiveStripVertices[0xc].fX = (float)nScreenX;
+          gaD3DPerspectiveStripVertices[0xc].fY = (float)nScreenY;
+          Renderer::AdjustPerspectivePosition(nX1, nY1, nZ1 - 0x20, &nScreenX, &nScreenY);
+          gaD3DPerspectiveStripVertices[0xe].fX = (float)nScreenX;
+          gaD3DPerspectiveStripVertices[0xe].fY = (float)nScreenY;
+          Renderer::AdjustPerspectivePosition(nX1, nY1, nZ1, &nScreenX, &nScreenY);
+          gaD3DPerspectiveStripVertices[2].fX = (float)nScreenX;
+          gaD3DPerspectiveStripVertices[2].fY = (float)nScreenY;
+          fLayerIndex.fValue = (float)nViewportLeft.left;
+          if (fLayerIndex.fValue < gaD3DPerspectiveStripVertices[0].fX != (fLayerIndex.fValue == gaD3DPerspectiveStripVertices[0].fX) && gaD3DPerspectiveStripVertices[0].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0].fY) && gaD3DPerspectiveStripVertices[0].fY < (float)nViewportLeft.bottom || fLayerIndex.fValue <= gaD3DPerspectiveStripVertices[0xc].fX && gaD3DPerspectiveStripVertices[0xc].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0xc].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0xc].fY) && gaD3DPerspectiveStripVertices[0xc].fY < (float)nViewportLeft.bottom || fLayerIndex.fValue <= gaD3DPerspectiveStripVertices[0xe].fX && gaD3DPerspectiveStripVertices[0xe].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[0xe].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[0xe].fY) && gaD3DPerspectiveStripVertices[0xe].fY < (float)nViewportLeft.bottom || fLayerIndex.fValue <= gaD3DPerspectiveStripVertices[2].fX && gaD3DPerspectiveStripVertices[2].fX < (float)nViewportLeft.right && (float)nViewportLeft.top < gaD3DPerspectiveStripVertices[2].fY != ((float)nViewportLeft.top == gaD3DPerspectiveStripVertices[2].fY) && gaD3DPerspectiveStripVertices[2].fY < (float)nViewportLeft.bottom) {
+            aVertexColors[0] = *(uint32_t*)(pLightColors + (int)fSubtileIndex * 4);
+            aVertexColors[2] = *(uint32_t*)(pLightColors + 4 + (int)fSubtileIndex * 4);
+            nMidZ = nBias + nZ1 >> 1;
+            aVertexColors[3] = nTileTableIdx + nX1 >> 1;
+            aVertexColors[1] = ((((int)((aVertexColors[2] >> 0x18) + (aVertexColors[0] >> 0x18)) >> 1) * 0x100 + ((int)((uint8_t)(aVertexColors[2] >> 0x10) + (uint8_t)(aVertexColors[0] >> 0x10)) >> 1)) * 0x100 + ((int)((aVertexColors[2] >> 8 & 0xff) + (aVertexColors[0] >> 8 & 0xff)) >> 1)) * 0x100 + ((int)((uint8_t)aVertexColors[0] + (uint8_t)aVertexColors[2]) >> 1);
+            nMidY = nFixedY0 + nY1 >> 1;
+            fSubtileIndex = (float)aVertexColors[2];
+            d3dFloorCache::D3D_RenderSubtileToTexture(&pTile->pSubTiles[nTileIndex]);
+            fSubtileIndex = (float)nPanelOffset;
+            fLayerIndex.fValue = 0.0;
+            pfVertexOuter = gaD3DPerspectiveStripVertices + 2;
             do {
-              nVertexColor = aVertexColors[nTileTableIdx];
-              pfVertex->fX = fSubtileIndex + pfVertex->fX;
-              RENDERER_D3D_SetTextureStageColor(pfVertex, nVertexColor, nAlpha);
-              nTileTableIdx++;
-              pfVertex++;
-            } while (nTileTableIdx < 3);
+              fLayerIter = fLayerIndex;
+              if (fLayerIndex.nValue && fLayerIndex.nValue != 4) {
+                nTileTableIdx = fLayerIndex.nValue * -8;
+                Renderer::AdjustPerspectivePosition(nX0, nY0, nTileTableIdx + nZ0, &nScreenX, &nScreenY);
+                pfVertexOuter[-2].fX = (float)nScreenX;
+                pfVertexOuter[-2].fY = (float)nScreenY;
+                Renderer::AdjustPerspectivePosition(nX1, nY1, nTileTableIdx + nZ1, &nScreenX, &nScreenY);
+                pfVertexOuter->fX = (float)nScreenX;
+                pfVertexOuter->fY = (float)nScreenY;
+              }
 
-            fLayerIndex.nValue++;
-            pfVertexOuter += 3;
-          } while ((int)pfVertexOuter < (intptr_t)((char*)&gaD3DPerspectiveVertices + 64));
+              Renderer::AdjustPerspectivePosition(aVertexColors[3], nMidY, nMidZ + fLayerIter.nValue * -8, &nScreenX, &nScreenY);
+              nTileTableIdx = 0;
+              pfVertex = pfVertexOuter - 2;
+              pfVertexOuter[-1].fX = (float)nScreenX;
+              pfVertexOuter[-1].fY = (float)nScreenY;
+              do {
+                nVertexColor = aVertexColors[nTileTableIdx];
+                pfVertex->fX = fSubtileIndex + pfVertex->fX;
+                RENDERER_D3D_SetTextureStageColor(pfVertex, nVertexColor, nAlpha);
+                nTileTableIdx++;
+                pfVertex++;
+              } while (nTileTableIdx < 3);
 
-          g_pD3DDevice->lpVtbl->DrawIndexedPrimitive(g_pD3DDevice, 5, 0x1c4, gaD3DPerspectiveStripVertices, 0xf, gaD3DPerspectiveStripIndices, 0x16, 0x1c);
-          nMidZ = 1;
-        }
+              fLayerIndex.nValue++;
+              pfVertexOuter += 3;
+            } while ((int)pfVertexOuter < (intptr_t)((char*)&gaD3DPerspectiveVertices + 64));
 
-        nTileIndex++;
-      } while (nTileIndex < pTile->nSubTiles);
+            g_pD3DDevice->lpVtbl->DrawIndexedPrimitive(g_pD3DDevice, 5, 0x1c4, gaD3DPerspectiveStripVertices, 0xf, gaD3DPerspectiveStripIndices, 0x16, 0x1c);
+            nMidZ = 1;
+          }
+
+          nTileIndex++;
+        } while (nTileIndex < pTile->nSubTiles);
+      }
 
       return nMidZ;
     }
@@ -4790,10 +4772,10 @@ void __stdcall RENDERER_D3D_InitLightingTable() {
     } while ((int)pTableRow < (intptr_t)((char*)&g_aLightingTable + sizeof(g_aLightingTable)));
 }
 
-void __fastcall SetGlobalLight(BYTE nRed, BYTE nGreen, BYTE nBlue) {
-    GlobalRed = nRed;
-    GlobalGreen = nGreen;
-    GlobalBlue = nBlue;
+void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue) {
+    GlobalRed = (uint8_t)nRed;
+    GlobalGreen = (uint8_t)nGreen;
+    GlobalBlue = (uint8_t)nBlue;
 }
 
 void __fastcall RENDERER_D3D_ApplyShadowTextureCoords(void * pVertex, uint8_t nLightIndex, uint8_t byAlpha) {

@@ -46,23 +46,19 @@ void * __fastcall D2FILE_AllocAndLoadD2File(D2PoolManagerStrc * pMemory, char * 
     __frame0.pFile = (D2MPQFileStrc*)pMemory;
     BOOL bFileExistsResult = D2Common::DATATBLS::DataTbls::CheckIfFileExists(pMemory, szFilename, &__frame0.pFile, 0);
     void* pBuffer = 0;
-    if (!bFileExistsResult) {
-      return pBuffer;
+    if (bFileExistsResult) {
+      DWORD dwFileSize;
+      dwFileSize = D2Hell::D2FILE_GetFileSize(pMemory, __frame0.pFile, &__frame0.dwFileSizeOut);
+      pBuffer = D2_ALLOC_AT(dwFileSize + 800, ".\\SRC\\Archive.cpp", 0xcf);
+      if (pBuffer) {
+        D2Hell::D2FILE_ReadFile(pMemory, __frame0.pFile, pBuffer, dwFileSize);
+        D2Hell::D2FILE_CloseFile(pMemory, __frame0.pFile);
+        if (pSize) {
+          *pSize = dwFileSize;
+        }
+      }
     }
 
-    DWORD dwFileSize = D2Hell::D2FILE_GetFileSize(pMemory, __frame0.pFile, &__frame0.dwFileSizeOut);
-    pBuffer = D2_ALLOC_AT(dwFileSize + 800, ".\\SRC\\Archive.cpp", 0xcf);
-    if (!pBuffer) {
-      return pBuffer;
-    }
-
-    D2Hell::D2FILE_ReadFile(pMemory, __frame0.pFile, pBuffer, dwFileSize);
-    D2Hell::D2FILE_CloseFile(pMemory, __frame0.pFile);
-    if (!pSize) {
-      return pBuffer;
-    }
-
-    *pSize = dwFileSize;
     return pBuffer;
 }
 
@@ -162,12 +158,11 @@ static int * __stdcall FindMpqFromDiskOrCd(char * pszMpqName, int * pnPriority, 
 
     Storm::Source::SSTR::SStrPack(szText, pszMpqName, 0x7fffffff);
     bOpenedFromCd = Storm::Source::SFile::SFileOpenArchive(szText, pnPriority, nFlags, (D2ArchiveStrc**)&ppArchive);
-    if (bOpenedFromCd) {
-      return ppArchive;
+    if (!bOpenedFromCd) {
+      bOpenedFromCd = FindMPQOnCd(pszMpqName, pnPriority, (D2ArchiveStrc**)&ppArchive, szText);
+      ppArchive = bOpenedFromCd ? (int*)ppArchive : nullptr;
     }
 
-    bOpenedFromCd = FindMPQOnCd(pszMpqName, pnPriority, (D2ArchiveStrc**)&ppArchive, szText);
-    ppArchive = bOpenedFromCd ? (int*)ppArchive : nullptr;
     return ppArchive;
 }
 

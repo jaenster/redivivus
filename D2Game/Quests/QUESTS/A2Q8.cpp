@@ -93,32 +93,32 @@ bool __fastcall Q16_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 
 // Q16_ActiveFilter - A2Q8 gossip ELIGIBILITY predicate. Returns true (offer the guard 0x17a gossip) when: Seven Tombs active & stateFlag<2, Tainted Sun reached state 0xd (JustCompleted), and Seven Tombs reward NOT awaiting & NOT completed. Same window as Q16_Callback_00, used to decide whether the gossip topic is available. StatusFilter (0x59e4a0) is a hard stub returning false (no journal status).
 bool __fastcall Q16_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    if (nTargetClassId != 0x17a) {
-      return false;
-    }
-
-    ::SGAMEDATA* pGame = pQuestData->pGame;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer_00 = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    D2QuestDataStrc* pSevenTombsQuest = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_TheSevenTombs);
-    if (!(pSevenTombsQuest && pSevenTombsQuest->bIsNotIntroduction != '\0' && pSevenTombsQuest->nStateFlag < 2)) {
-      return false;
-    }
-
-    int nTaintedSunState = QUEST_GetQuestRecordState(pQuestData->pGame, QUEST_TheTaintedSun, 0xd);
-    if (!nTaintedSunState) {
-      return false;
-    }
-
-    BOOL bQuestStateCheck = D2Common::QuestRecord::GetQuestState(pBitBuffer_00, QUEST_TheSevenTombs, QUESTSTATE_RewardAwaits);
-    if (bQuestStateCheck) {
-      return false;
-    }
-
-    /* GetQuestState(QUEST_TheSevenTombs, Completed): gate - not eligible once Seven
+    D2UnitDataPlayerStrc* pPlayerData;
+    D2QuestDataStrc* pSevenTombsQuest;
+    int nTaintedSunState;
+    BOOL bQuestStateCheck;
+    ::SGAMEDATA* pGame;
+    if (nTargetClassId == 0x17a) {
+      D2BitBufferStrc* pBitBuffer_00;
+      pGame = pQuestData->pGame;
+      pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+      pBitBuffer_00 = pPlayerData->pQuestRecord[pGame->nDifficulty];
+      pSevenTombsQuest = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_TheSevenTombs);
+      if (pSevenTombsQuest && pSevenTombsQuest->bIsNotIntroduction != '\0' && pSevenTombsQuest->nStateFlag < 2) {
+        /* QUEST_GetQuestRecordState(QUEST_TheTaintedSun, 0xd=JustCompleted): require
+                         Tainted Sun just-finished before guard will gossip */ nTaintedSunState = QUEST_GetQuestRecordState(pQuestData->pGame, QUEST_TheTaintedSun, 0xd);
+        if (nTaintedSunState) {
+          /* GetQuestState(QUEST_TheSevenTombs, RewardAwaits): gate - not eligible if
+                         Seven Tombs reward pending */ bQuestStateCheck = D2Common::QuestRecord::GetQuestState(pBitBuffer_00, QUEST_TheSevenTombs, QUESTSTATE_RewardAwaits);
+          if (!bQuestStateCheck) {
+            /* GetQuestState(QUEST_TheSevenTombs, Completed): gate - not eligible once Seven
                          Tombs completed */ bQuestStateCheck = D2Common::QuestRecord::GetQuestState(pBitBuffer_00, QUEST_TheSevenTombs, QUESTSTATE_Completed);
-    if (!bQuestStateCheck) {
-      return true;
+            if (!bQuestStateCheck) {
+              return true;
+            }
+          }
+        }
+      }
     }
 
     return false;

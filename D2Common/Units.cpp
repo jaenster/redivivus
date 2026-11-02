@@ -415,11 +415,10 @@ int32_t __stdcall GetAbsoluteXDistance(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) 
     }
 
     int32_t nAbsDiff = nX1 - nX2;
-    if (nAbsDiff >= 0) {
-      return nAbsDiff;
+    if (nAbsDiff < 0) {
+      nAbsDiff = -nAbsDiff;
     }
 
-    nAbsDiff = -nAbsDiff;
     return nAbsDiff;
 }
 
@@ -445,11 +444,10 @@ int32_t __stdcall GetAbsoluteYDistance(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) 
     }
 
     int32_t nAbsDiff = nY1 - nY2;
-    if (nAbsDiff >= 0) {
-      return nAbsDiff;
+    if (nAbsDiff < 0) {
+      nAbsDiff = -nAbsDiff;
     }
 
-    nAbsDiff = -nAbsDiff;
     return nAbsDiff;
 }
 
@@ -1441,16 +1439,14 @@ BOOL __fastcall CheckIfObjectOrientationIs1(D2UnitStrc * pUnit) {
     }
 
     return (uint32_t)(pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Orientation == '\x01');
-    return (uint32_t)(pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Orientation == '\x01');
 }
 
 BOOL __stdcall IsShrine(D2UnitStrc * pUnit) {
     BOOL bResult;
-    if (!(pUnit->eUnitType != UNIT_OBJECT || (bResult = 1 , !(pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->SubClass & 1U)))) {
-      return bResult;
+    if (pUnit->eUnitType != UNIT_OBJECT || (bResult = 1 , !(pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->SubClass & 1U))) {
+      bResult = 0;
     }
 
-    bResult = 0;
     return bResult;
 }
 
@@ -1948,12 +1944,11 @@ int32_t __stdcall GetDefense(D2UnitStrc * pUnit) {
 
     nSkillArmorPct = nBaseArmor + nDexBonus;
     nBaseArmor = Stats::StatsEx::STATSEX_GetCurrentStat(pUnitOrig, UNITSTAT_armor_override_percent, 0);
-    if (!nBaseArmor) {
-      return nSkillArmorPct;
+    if (nBaseArmor) {
+      nItemArmorPct = D2Client::Stats::D2ApplyPercent(nSkillArmorPct, nBaseArmor, 100);
+      nSkillArmorPct += nItemArmorPct;
     }
 
-    nItemArmorPct = D2Client::Stats::D2ApplyPercent(nSkillArmorPct, nBaseArmor, 100);
-    nSkillArmorPct += nItemArmorPct;
     return nSkillArmorPct;
 }
 
@@ -2322,11 +2317,10 @@ BOOL __stdcall TestCollisionBetweenInteractingUnits(D2UnitStrc * pUnit, D2UnitSt
       if ((D2UnitStrc*)nUnit) {
         PATH::DynamicPath::PATH_AddUnitCollision(pUnitB);
       }
-      if (!(D2UnitStrc*)nUnit2) {
-        return bCollides;
+      if ((D2UnitStrc*)nUnit2) {
+        PATH::DynamicPath::PATH_AddUnitCollision(pUnitA);
       }
 
-      PATH::DynamicPath::PATH_AddUnitCollision(pUnitA);
       return bCollides;
     }
 
@@ -2760,7 +2754,6 @@ D2TimerArgStrc * __fastcall GetTimerArg(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    return (D2TimerArgStrc*)pUnit->uSideData.pClientSide.dwSfxTicks;
     return (D2TimerArgStrc*)pUnit->uSideData.pClientSide.dwSfxTicks;
 }
 
@@ -3261,12 +3254,11 @@ uint32_t __stdcall GetWeaponAnimClass(D2UnitStrc * pUnit) {
       if (bCanDualWield) {
         pUnitOrg = GetWeaponBySkill(pUnitOrg, 1);
         nWeaponAnimClass = 0;
-        if (!pUnitOrg) {
-          return gdwUnitStrucFieldMask[(int)(pUnit->unk0x19 + nWeaponAnimClass * 7 - 0x19)];
+        if (pUnitOrg) {
+          wAnimClass = ITEMS::Items::ITEM_GetWeaponAnimClass(pUnitOrg);
+          nWeaponAnimClass = (uint32_t)wAnimClass;
         }
 
-        wAnimClass = ITEMS::Items::ITEM_GetWeaponAnimClass(pUnitOrg);
-        nWeaponAnimClass = (uint32_t)wAnimClass;
         return gdwUnitStrucFieldMask[(int)(pUnit->unk0x19 + nWeaponAnimClass * 7 - 0x19)];
       }
     }
@@ -3849,12 +3841,11 @@ int32_t __stdcall SetupUpdateFlag(D2UnitStrc * pUnit, int32_t nAnimMode) {
         InitAnimMode(pUnit);
         return 1;
       }
-      if (!(pUnit->eUnitType != UNIT_MONSTER || pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral)) {
-        return 0;
+      if (pUnit->eUnitType != UNIT_MONSTER || pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
+        Unit::ROOM_LinkUnitToUpdateList(pUnit);
+        pUnit->eUnitFlags |= UNITFLAG_DOUPDATE;
       }
 
-      Unit::ROOM_LinkUnitToUpdateList(pUnit);
-      pUnit->eUnitFlags |= UNITFLAG_DOUPDATE;
       return 0;
     }
 

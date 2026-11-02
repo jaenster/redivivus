@@ -140,13 +140,11 @@ bool __fastcall Q37_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
     ::SGAMEDATA* pGame = pQuestData->pGame;
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_DenOfEvil, QUESTSTATE_Completed);
-    if (!(bQuestCompleted != 1 && nTargetClassId == 0x94)) {
-      return false;
-    }
-
-    bQuestCompleted = PLAYER::PlayerIntro::PLAYER_CheckIfSpokenWithNPC(pUnit, pQuestData->pGame, 0x94);
-    if (!bQuestCompleted) {
-      return true;
+    if (bQuestCompleted != 1 && nTargetClassId == 0x94) {
+      bQuestCompleted = PLAYER::PlayerIntro::PLAYER_CheckIfSpokenWithNPC(pUnit, pQuestData->pGame, 0x94);
+      if (!bQuestCompleted) {
+        return true;
+      }
     }
 
     return false;

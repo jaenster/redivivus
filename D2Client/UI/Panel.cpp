@@ -435,11 +435,10 @@ static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
     if (nCurValue < 0) {
       return 0;
     }
-    if (nCurValue <= nMaxValue) {
-      return nCurValue;
+    if (nCurValue > nMaxValue) {
+      nCurValue = nMaxValue;
     }
 
-    nCurValue = nMaxValue;
     return nCurValue;
 }
 

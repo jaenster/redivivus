@@ -304,31 +304,30 @@ void __fastcall NPCMENU_AddHandledMessageId(short wMsgId) {
 // Runs the NPC quest-dependent menu-option enablers. For each of nEntryCount entries of pCallbackTable whose nNpcClassId matches: reads GetQuestState(pBitBuffer, nQuestId, nQuestFlag); with bCheckState != 0 calls pfnCallback when the state is set, with bCheckState == 0 when it is clear.
 // Returns the last called callback's result, or 1 when none ran (EDI starts at 1). Custom storage: table in ECX, count in EAX, RET 8.
 static int32_t __stdcall NPCMENU_CheckQuestDependentCallbacks(D2NpcQuestCallbackEntry * pCallbackTable, int32_t nNpcClassId, D2BitBufferStrc * pBitBuffer, int32_t nEntryCount) {
-    BOOL bQuestState;
+    int32_t* peEntry;
     int nResult = 1;
-    if (nEntryCount <= 0) {
-      return nResult;
-    }
-
-    int32_t* peEntry = &pCallbackTable->nQuestFlag;
-    do {
-      if (((D2NpcQuestCallbackEntry*)(peEntry - 2))->nNpcClassId == nNpcClassId) {
-        if (peEntry[1] != QUESTSTATE_Completed) {
-          bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, peEntry[-1], *peEntry);
-          if (bQuestState) {
-            nResult = (*(D2NpcMenuOptionFunc)peEntry[2])();
-          }
-        } else {
-          bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, peEntry[-1], *peEntry);
-          if (!bQuestState) {
-            nResult = (*(D2NpcMenuOptionFunc)peEntry[2])();
+    if (nEntryCount > 0) {
+      BOOL bQuestState;
+      peEntry = &pCallbackTable->nQuestFlag;
+      do {
+        if (((D2NpcQuestCallbackEntry*)(peEntry - 2))->nNpcClassId == nNpcClassId) {
+          if (peEntry[1] != QUESTSTATE_Completed) {
+            bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, peEntry[-1], *peEntry);
+            if (bQuestState) {
+              nResult = (*(D2NpcMenuOptionFunc)peEntry[2])();
+            }
+          } else {
+            bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, peEntry[-1], *peEntry);
+            if (!bQuestState) {
+              nResult = (*(D2NpcMenuOptionFunc)peEntry[2])();
+            }
           }
         }
-      }
 
-      peEntry += 5;
-      nEntryCount--;
-    } while (nEntryCount);
+        peEntry += 5;
+        nEntryCount--;
+      } while (nEntryCount);
+    }
 
     return nResult;
 }
@@ -382,48 +381,46 @@ int __stdcall NPCMENU_ShowSelectedDialogOption() {
 }
 
 int __stdcall NPCMENU_ShowGossipDialog() {
-    if (!_Interaction::bInteractingWithNpc) {
-      return 1;
-    }
-
-    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-    if (!pNpcUnit) {
-      return 1;
-    }
     if (_Interaction::bInteractingWithNpc) {
+      D2UnitStrc* pNpcUnit;
       pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-    } else {
-      pNpcUnit = 0;
+      if (pNpcUnit) {
+        if (_Interaction::bInteractingWithNpc) {
+          pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+        } else {
+          pNpcUnit = 0;
+        }
+
+        Text::TEXT_ShowNpcDialog(pNpcUnit, 0xfe, 0);
+        gnNpcMenuActiveMode = 1;
+        Text::TEXT_SetScrollCompleteCallback(NPCMENU_ScrollCompleteShowNextMessage, nullptr);
+        Dialog::FreeDialogStrc(Dialog::gpNpcGossipDialog);
+        Dialog::gpNpcGossipDialog = 0;
+      }
     }
 
-    Text::TEXT_ShowNpcDialog(pNpcUnit, 0xfe, 0);
-    gnNpcMenuActiveMode = 1;
-    Text::TEXT_SetScrollCompleteCallback(NPCMENU_ScrollCompleteShowNextMessage, nullptr);
-    Dialog::FreeDialogStrc(Dialog::gpNpcGossipDialog);
-    Dialog::gpNpcGossipDialog = 0;
     return 1;
 }
 
 int __stdcall NPCMENU_ShowIntroduceDialog() {
-    if (!_Interaction::bInteractingWithNpc) {
-      return 1;
-    }
-
-    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-    if (!pNpcUnit) {
-      return 1;
-    }
     if (_Interaction::bInteractingWithNpc) {
+      D2UnitStrc* pNpcUnit;
       pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-    } else {
-      pNpcUnit = 0;
+      if (pNpcUnit) {
+        if (_Interaction::bInteractingWithNpc) {
+          pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+        } else {
+          pNpcUnit = 0;
+        }
+
+        Text::TEXT_ShowNpcDialog(pNpcUnit, 0x152, 0);
+        gnNpcMenuActiveMode = 1;
+        Text::TEXT_SetScrollCompleteCallback(NPCMENU_ScrollCompleteShowNextMessage, nullptr);
+        Dialog::FreeDialogStrc(Dialog::gpNpcGossipDialog);
+        Dialog::gpNpcGossipDialog = 0;
+      }
     }
 
-    Text::TEXT_ShowNpcDialog(pNpcUnit, 0x152, 0);
-    gnNpcMenuActiveMode = 1;
-    Text::TEXT_SetScrollCompleteCallback(NPCMENU_ScrollCompleteShowNextMessage, nullptr);
-    Dialog::FreeDialogStrc(Dialog::gpNpcGossipDialog);
-    Dialog::gpNpcGossipDialog = 0;
     return 1;
 }
 
@@ -1542,13 +1539,12 @@ void __stdcall ResetNPCSpeeches() {
 // Returns 1 when the player is interacting with an NPC that still exists client-side and the NPC UI state (nUnknownUiRelatedMaybe) is 1, the NPC menu/talk state. Otherwise 0.
 // Callers: INPUT_StatScreenButtonDown and INPUT_SkillTreeButtonDown.
 int __stdcall NPCMENU_IsNpcMenuStateActive() {
-    if (!_Interaction::bInteractingWithNpc) {
-      return 0;
-    }
-
-    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-    if (pNpcUnit && _Interaction::geNpcUiState == NPCUI_MENU) {
-      return 1;
+    if (_Interaction::bInteractingWithNpc) {
+      D2UnitStrc* pNpcUnit;
+      pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      if (pNpcUnit && _Interaction::geNpcUiState == NPCUI_MENU) {
+        return 1;
+      }
     }
 
     return 0;
@@ -2060,16 +2056,15 @@ int __stdcall NPCMENU_EmptyDrawCallback1() {
     if (gnNpcMenuActiveMode != '\0') {
       return 0;
     }
-    if (!Dialog::gpNpcGossipDialog) {
-      return 1;
+    if (Dialog::gpNpcGossipDialog) {
+      Dialog::FreeDialogStrc(Dialog::gpNpcGossipDialog);
+      Dialog::gpNpcGossipDialog = 0;
+      _Interaction::geNpcUiState = NPCUI_NONE;
+      Inv::INV_ResetHoverAndContextState();
+      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+      ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
     }
 
-    Dialog::FreeDialogStrc(Dialog::gpNpcGossipDialog);
-    Dialog::gpNpcGossipDialog = 0;
-    _Interaction::geNpcUiState = NPCUI_NONE;
-    Inv::INV_ResetHoverAndContextState();
-    NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-    ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
     return 1;
 }
 
@@ -2078,16 +2073,15 @@ int __stdcall NPCMENU_CloseConfirmDialogAndInteraction() {
     if (gnNpcMenuActiveMode != '\0') {
       return 0;
     }
-    if (!Dialog::gpNpcActionConfirmDialog) {
-      return 1;
+    if (Dialog::gpNpcActionConfirmDialog) {
+      Dialog::FreeDialogStrc(Dialog::gpNpcActionConfirmDialog);
+      Dialog::gpNpcActionConfirmDialog = 0;
+      _Interaction::geNpcUiState = NPCUI_NONE;
+      Inv::INV_ResetHoverAndContextState();
+      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+      ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
     }
 
-    Dialog::FreeDialogStrc(Dialog::gpNpcActionConfirmDialog);
-    Dialog::gpNpcActionConfirmDialog = 0;
-    _Interaction::geNpcUiState = NPCUI_NONE;
-    Inv::INV_ResetHoverAndContextState();
-    NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-    ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
     return 1;
 }
 
@@ -3130,14 +3124,13 @@ int __stdcall NPCMENU_MercDrawCallback1() {
     if (gnNpcMenuActiveMode != '\0') {
       return 0;
     }
-    if (!Dialog::gpNpcGossipDialog) {
-      return 1;
+    if (Dialog::gpNpcGossipDialog) {
+      Dialog::FreeDialogStrc(Dialog::gpNpcGossipDialog);
+      Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
+      Dialog::gpNpcGossipDialog = 0;
+      NPCMENU_OpenInteractionDialog();
     }
 
-    Dialog::FreeDialogStrc(Dialog::gpNpcGossipDialog);
-    Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
-    Dialog::gpNpcGossipDialog = 0;
-    NPCMENU_OpenInteractionDialog();
     return 1;
 }
 
@@ -3147,14 +3140,13 @@ int __stdcall NPCMENU_ConfirmDialogCancelCallback() {
     if (gnNpcMenuActiveMode != '\0') {
       return 0;
     }
-    if (!Dialog::gpNpcActionConfirmDialog) {
-      return 1;
+    if (Dialog::gpNpcActionConfirmDialog) {
+      Dialog::FreeDialogStrc(Dialog::gpNpcActionConfirmDialog);
+      Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
+      Dialog::gpNpcActionConfirmDialog = 0;
+      NPCMENU_OpenInteractionDialog();
     }
 
-    Dialog::FreeDialogStrc(Dialog::gpNpcActionConfirmDialog);
-    Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
-    Dialog::gpNpcActionConfirmDialog = 0;
-    NPCMENU_OpenInteractionDialog();
     return 1;
 }
 
@@ -3711,13 +3703,12 @@ int __stdcall NPCMENU_EnableQualKehkHireOption() {
 // NPC quest table entry 8: quest 28, state flag 0.
 int __stdcall NPCMENU_EnableTyraelTravelToHarrogathOption() {
     BOOL BVar1 = GAME::Game::CLIENT_CheckExpansion();
-    if (!BVar1) {
-      return 1;
+    if (BVar1) {
+      NPC::D2NpcMenuOptions[0x15].nOptionsCount = 3;
+      NPC::D2NpcMenuOptions[0x15].nOptionCallback[1] = NPCMENU_TyraelTravelToHarrogathOptionCallback;
+      NPC::D2NpcMenuOptions[0x15].nOptionStringId[1] = 0x58d2;
     }
 
-    NPC::D2NpcMenuOptions[0x15].nOptionsCount = 3;
-    NPC::D2NpcMenuOptions[0x15].nOptionCallback[1] = NPCMENU_TyraelTravelToHarrogathOptionCallback;
-    NPC::D2NpcMenuOptions[0x15].nOptionStringId[1] = 0x58d2;
     return 1;
 }
 

@@ -35,7 +35,7 @@ D2HoverTextStrc * __stdcall Alloc(D2PoolManagerStrc * pMemory, char * szMessage,
       return nullptr;
     }
 
-    int nClampedLen = L'þ';
+    int nClampedLen = L'\xfe';
     if (nMsgLen < 0xff) {
       nClampedLen = nMsgLen;
     }

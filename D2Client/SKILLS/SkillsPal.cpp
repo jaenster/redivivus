@@ -252,28 +252,26 @@ BOOL __fastcall Skills_CltDoFunc_Pal_RandomRadiusMissileField(D2UnitStrc * pUnit
                 sSkillArg.pOwner = pUnit;
                 sSkillArg.nMissileTxtNo = eMissileId;
                 sSkillArg.eSkillNo = eSkill;
-                if (nCenterX <= 0) {
-                  return 1;
-                }
-
-                do {
-                  nRandSector = nRadius * 2 + 1;
-                  nRandY = Archive::RANDOM_RandomNumberSelector(pSeed, nRandSector);
-                  nOffsetX = nRandY - nRadius;
-                  nRandSector = Archive::RANDOM_RandomNumberSelector(pSeed, nRandSector);
-                  nCenterX = nRandSector - nRadius;
-                  if (nCenterX * nCenterX + nOffsetX * nOffsetX < nRadius * nRadius) {
-                    sSkillArg.nX = nOffsetX + 2 + nBaseRangeCalc;
-                    sSkillArg.nY = nCenterX + 2 + nBaseRadius;
-                    pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
-                    if (pMissile) {
-                      nRandSector = Archive::UNIT_GetModuloFromSeed(pSeed, 0x40);
-                      D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pMissile->pPath.pDynamicPath, (uint8_t)nRandSector);
+                if (nCenterX > 0) {
+                  do {
+                    nRandSector = nRadius * 2 + 1;
+                    nRandY = Archive::RANDOM_RandomNumberSelector(pSeed, nRandSector);
+                    nOffsetX = nRandY - nRadius;
+                    nRandSector = Archive::RANDOM_RandomNumberSelector(pSeed, nRandSector);
+                    nCenterX = nRandSector - nRadius;
+                    if (nCenterX * nCenterX + nOffsetX * nOffsetX < nRadius * nRadius) {
+                      sSkillArg.nX = nOffsetX + 2 + nBaseRangeCalc;
+                      sSkillArg.nY = nCenterX + 2 + nBaseRadius;
+                      pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
+                      if (pMissile) {
+                        nRandSector = Archive::UNIT_GetModuloFromSeed(pSeed, 0x40);
+                        D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pMissile->pPath.pDynamicPath, (uint8_t)nRandSector);
+                      }
                     }
-                  }
 
-                  nSkillLvl--;
-                } while (nSkillLvl);
+                    nSkillLvl--;
+                  } while (nSkillLvl);
+                }
 
                 return 1;
               }
@@ -644,12 +642,11 @@ BOOL __fastcall Skills_CltDoFunc_Pal_RateThrottledBloodParticles(D2UnitStrc * pU
     static uint32_t gdwBloodParticleThrottleNextTick; D2_STATIC_GUARD_BSS(gdwBloodParticleThrottleNextTick, "D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_Pal_RateThrottledBloodParticles::gdwBloodParticleThrottleNextTick");
 
     uint32_t nCurrentTick = GAME::Game::GetEntryIndex();
-    if (nCurrentTick <= gdwBloodParticleThrottleNextTick) {
-      return 1;
+    if (nCurrentTick > gdwBloodParticleThrottleNextTick) {
+      gdwBloodParticleThrottleNextTick = nCurrentTick + 5;
+      UNIT::Monster::MONSTER_SpawnBloodParticles(pUnit, (D2MonStats2Txt*)0x1, 0);
     }
 
-    gdwBloodParticleThrottleNextTick = nCurrentTick + 5;
-    UNIT::Monster::MONSTER_SpawnBloodParticles(pUnit, (D2MonStats2Txt*)0x1, 0);
     return 1;
 }
 

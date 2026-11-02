@@ -304,11 +304,10 @@ char * __fastcall StripPathPrefixToRelative(char * szText) {
 
     pResult = Storm::Source::SSTR::SStrLen(szText);
     char* pszResult = szText + g_nPathStripOffset;
-    if (pResult > g_nPathStripOffset) {
-      return pszResult;
+    if (pResult <= g_nPathStripOffset) {
+      pszResult = szText;
     }
 
-    pszResult = szText;
     return pszResult;
 }
 

@@ -107,7 +107,6 @@ D2GameNpcStrc * __fastcall GetGameNpcbyClassId(::SGAMEDATA * pGame, int32_t nNpc
     }
 
     return nullptr;
-    return nullptr;
 }
 
 D2GameNpcStrc * __fastcall GetGameNpcByUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int * pNpcIndex) {

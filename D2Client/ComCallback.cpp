@@ -8,7 +8,7 @@
 
 namespace D2Client::ComCallback {
 
-void __fastcall COMCALLBACK_UpdateUserFlags(uint8_t * pbHexChar, uint8_t byKeyByte, uint32_t * pdwShiftReg) {
+void __fastcall COMCALLBACK_UpdateUserFlags(uint8_t * pbHexChar, int byKeyByte, uint32_t * pdwShiftReg) {
     int nUpper = toupper((int)(char)*pbHexChar);
     uint8_t byUpper = (uint8_t)nUpper;
     *pbHexChar = byUpper;
@@ -21,7 +21,7 @@ void __fastcall COMCALLBACK_UpdateUserFlags(uint8_t * pbHexChar, uint8_t byKeyBy
       return;
     }
 
-    *pbHexChar = byKeyByte & 1 ^ byUpper;
+    *pbHexChar = (uint8_t)byKeyByte & 1 ^ byUpper;
 }
 
 } // namespace D2Client::ComCallback

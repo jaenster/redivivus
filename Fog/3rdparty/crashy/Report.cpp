@@ -26,11 +26,10 @@ namespace Fog::_3rdparty::crashy {
       fclose(pThis->pFile);
       pThis->pFile = 0;
     }
-    if (!(nFlags & 1)) {
-      return pThis;
+    if (nFlags & 1) {
+      Engine::Application::MISC_OperatorDeleteShim(pThis);
     }
 
-    Engine::Application::MISC_OperatorDeleteShim(pThis);
     return pThis;
 }
 
@@ -83,12 +82,11 @@ int8_t __thiscall Open(::Report * pThis, char * szFileName) {
 }
 
 int8_t __thiscall Close(::Report * pThis) {
-    if (!pThis->pFile) {
-      return '\x01';
+    if (pThis->pFile) {
+      fclose(pThis->pFile);
+      pThis->pFile = 0;
     }
 
-    fclose(pThis->pFile);
-    pThis->pFile = 0;
     return '\x01';
 }
 

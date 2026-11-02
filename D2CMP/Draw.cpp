@@ -182,49 +182,48 @@ uint8_t __stdcall D2GFX_GetColorWithAlphaFromPallete(LPPALETTEENTRY pPallete, ui
     uint32_t nMinDistance = -1;
     uint32_t nBestIndex = 0;
     uint32_t nCurrentIndex = 0;
-    if (nAlpha <= 0) {
-      return bVar1;
+    if (nAlpha > 0) {
+      uint32_t nColorDistance;
+      do {
+        nRedDiff = (uint32_t)pPallete[nCurrentIndex].peRed - nRed;
+        nColorDistance = ((uint32_t)pPallete[nCurrentIndex].peBlue - nBlue) * ((uint32_t)pPallete[nCurrentIndex].peBlue - nBlue) + ((uint32_t)pPallete[nCurrentIndex].peGreen - Green) * ((uint32_t)pPallete[nCurrentIndex].peGreen - Green) + nRedDiff * nRedDiff;
+        if (nColorDistance < nMinDistance) {
+          nBestIndex = nCurrentIndex;
+          nMinDistance = nColorDistance;
+        }
+
+        nCurrentIndex++;
+      } while (nCurrentIndex < nAlpha);
+
+      bVar1 = (uint8_t)nBestIndex;
     }
 
-    do {
-      uint32_t nColorDistance;
-      nRedDiff = (uint32_t)pPallete[nCurrentIndex].peRed - nRed;
-      nColorDistance = ((uint32_t)pPallete[nCurrentIndex].peBlue - nBlue) * ((uint32_t)pPallete[nCurrentIndex].peBlue - nBlue) + ((uint32_t)pPallete[nCurrentIndex].peGreen - Green) * ((uint32_t)pPallete[nCurrentIndex].peGreen - Green) + nRedDiff * nRedDiff;
-      if (nColorDistance < nMinDistance) {
-        nBestIndex = nCurrentIndex;
-        nMinDistance = nColorDistance;
-      }
-
-      nCurrentIndex++;
-    } while (nCurrentIndex < nAlpha);
-
-    bVar1 = (uint8_t)nBestIndex;
     return bVar1;
 }
 
 uint8_t __stdcall DRAW_FindFarthestPaletteColor(uint8_t * pPalette, int nPaletteSize, int nRed, int nGreen, int nBlue) {
+    uint8_t* pbCurEntry;
     uint8_t byBestIndex = '\0';
     uint32_t nMaxDistance = 0;
     uint32_t nBestIndex = 0;
     uint32_t nCurrentIndex = 0;
-    if ((uint32_t)nPaletteSize <= 0) {
-      return byBestIndex;
+    if ((uint32_t)nPaletteSize > 0) {
+      uint32_t nDistance;
+      pbCurEntry = pPalette + 2;
+      do {
+        nDistance = ((uint32_t)*pbCurEntry - nBlue) * ((uint32_t)*pbCurEntry - nBlue) + ((uint32_t)pbCurEntry[-1] - nGreen) * ((uint32_t)pbCurEntry[-1] - nGreen) + ((uint32_t)pbCurEntry[-2] - nRed) * ((uint32_t)pbCurEntry[-2] - nRed);
+        if (nDistance > nMaxDistance) {
+          nBestIndex = nCurrentIndex;
+          nMaxDistance = nDistance;
+        }
+
+        nCurrentIndex++;
+        pbCurEntry += 4;
+      } while (nCurrentIndex < (uint32_t)nPaletteSize);
+
+      byBestIndex = (uint8_t)nBestIndex;
     }
 
-    uint8_t* pbCurEntry = pPalette + 2;
-    do {
-      uint32_t nDistance;
-      nDistance = ((uint32_t)*pbCurEntry - nBlue) * ((uint32_t)*pbCurEntry - nBlue) + ((uint32_t)pbCurEntry[-1] - nGreen) * ((uint32_t)pbCurEntry[-1] - nGreen) + ((uint32_t)pbCurEntry[-2] - nRed) * ((uint32_t)pbCurEntry[-2] - nRed);
-      if (nDistance > nMaxDistance) {
-        nBestIndex = nCurrentIndex;
-        nMaxDistance = nDistance;
-      }
-
-      nCurrentIndex++;
-      pbCurEntry += 4;
-    } while (nCurrentIndex < (uint32_t)nPaletteSize);
-
-    byBestIndex = (uint8_t)nBestIndex;
     return byBestIndex;
 }
 
@@ -680,19 +679,22 @@ void __stdcall DRAW_BuildDarkenTable(LPPALETTEENTRY pPalette) {
 
 void __stdcall DRAW_BuildBrightenTable(LPPALETTEENTRY pPalette) {
     uint8_t bVar1;
+    uint8_t* pbPaletteEntry;
     uint32_t nBrightenLevel = 0;
-    LPPALETTEENTRY pDestTable = pPalette + 0x900;
+    uint8_t* pDestTable = &pPalette[0x900].peRed;
     do {
       uint32_t nColorIndex;
       nColorIndex = 0;
       nBrightenLevel++;
+      pbPaletteEntry = &pPalette->peGreen;
       do {
-        bVar1 = D2GFX_GetColorWithAlphaFromPallete(pPalette, 0x100, ((0xff - (uint32_t)pPalette[nColorIndex].peRed) * nBrightenLevel >> 4) + (uint32_t)pPalette[nColorIndex].peRed, ((0xff - (uint32_t)pPalette[nColorIndex].peGreen) * nBrightenLevel >> 4) + (uint32_t)pPalette[nColorIndex].peGreen, ((0xff - (uint32_t)pPalette[nColorIndex].peBlue) * nBrightenLevel >> 4) + (uint32_t)pPalette[nColorIndex].peBlue);
-        (&pDestTable->peRed)[nColorIndex] = bVar1;
+        bVar1 = D2GFX_GetColorWithAlphaFromPallete(pPalette, 0x100, ((0xff - (uint32_t)((tagPALETTEENTRY*)(pbPaletteEntry - 1))->peRed) * nBrightenLevel >> 4) + (uint32_t)((tagPALETTEENTRY*)(pbPaletteEntry - 1))->peRed, ((0xff - (uint32_t)*pbPaletteEntry) * nBrightenLevel >> 4) + (uint32_t)*pbPaletteEntry, ((0xff - (uint32_t)pbPaletteEntry[1]) * nBrightenLevel >> 4) + (uint32_t)pbPaletteEntry[1]);
+        pDestTable[nColorIndex] = bVar1;
         nColorIndex++;
+        pbPaletteEntry += 4;
       } while (nColorIndex < 0x100);
 
-      pDestTable += 0x40;
+      pDestTable += 0x100;
     } while (nBrightenLevel < 0x10);
 }
 

@@ -246,11 +246,10 @@ BOOL PATH_FindAlternateAroundObstacle(D2PathTypeArg * pPathState) {
     if (nAltX == nStartX && nAltY == nStartY) {
       return 0;
     }
-    if (nPathMode != UNIT_PLAYER) {
-      return 1;
+    if (nPathMode == UNIT_PLAYER) {
+      PATH_ExtendPathEndpoint(pPathState);
     }
 
-    PATH_ExtendPathEndpoint(pPathState);
     return 1;
 }
 
@@ -1160,11 +1159,10 @@ int32_t __fastcall DRLGPATH_AdvanceAlongPathPoints(D2DynamicPathStrc * pDynamicP
     } else {
       bReachedWaypoint = 0;
     }
-    if (!(bForceDirection || bReachedWaypoint && bSetDir)) {
-      return bReachedWaypoint;
+    if (bForceDirection || bReachedWaypoint && bSetDir) {
+      DynamicPath::PATH_SetDirection(pDynamicPath, (uint8_t)nNewDirIndex);
     }
 
-    DynamicPath::PATH_SetDirection(pDynamicPath, (uint8_t)nNewDirIndex);
     return bReachedWaypoint;
 }
 
@@ -1488,21 +1486,20 @@ uint32_t __fastcall PATH_CheckPathCollision(D2UnitStrc * pUnit, D2DynamicPathStr
 
 BOOL __stdcall PATH_HasReachedTarget(D2UnitStrc * pUnit) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    if (!pDynamicPath) {
-      return 1;
-    }
-    if (pDynamicPath->pTargetUnit) {
+    if (pDynamicPath) {
       int32_t nDistance;
-      nDistance = Collision::GetDistanceBetweenUnits(pDynamicPath->pTargetUnit, pUnit);
-      if (nDistance <= (int)(uint32_t)pDynamicPath->nStepNum) {
-        return 1;
+      if (pDynamicPath->pTargetUnit) {
+        nDistance = Collision::GetDistanceBetweenUnits(pDynamicPath->pTargetUnit, pUnit);
+        if (nDistance <= (int)(uint32_t)pDynamicPath->nStepNum) {
+          return 1;
+        }
+      }
+      if (pDynamicPath->Coords.tSubtile.nPosX != pDynamicPath->nTargetX || pDynamicPath->Coords.tSubtile.nPosY != pDynamicPath->nTargetY) {
+        return 0;
       }
     }
-    if (!(pDynamicPath->Coords.tSubtile.nPosX != pDynamicPath->nTargetX || pDynamicPath->Coords.tSubtile.nPosY != pDynamicPath->nTargetY)) {
-      return 1;
-    }
 
-    return 0;
+    return 1;
 }
 
 void __stdcall PATH_SnapPositionToTile(D2DynamicPathStrc * pDynamicPath) {

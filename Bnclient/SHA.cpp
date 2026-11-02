@@ -556,14 +556,13 @@ BigData * __fastcall SHA1_FromBigIntBytes(void * pData, uint32_t nByteCount) {
     return pNewBigInt;
 }
 
-uint32_t __fastcall SHA1_ToBigIntBytes(BigData * pBigNum, void * pOutBuf, uint32_t nBufSize) {
+uint32_t __fastcall SHA1_ToBigIntBytes(BigData * pBigNum, uint8_t * pOutBuf, uint32_t nBufSize) {
     uint32_t nOrigBufSize = nBufSize;
     Storm::Source::SBig::SBigToBinaryBuffer(pBigNum, pOutBuf, nBufSize, &nBufSize);
-    if (nBufSize >= nOrigBufSize) {
-      return nBufSize;
+    if (nBufSize < nOrigBufSize) {
+      Storm::Source::SMem::SMemZero(pOutBuf + nBufSize, nOrigBufSize - nBufSize);
     }
 
-    Storm::Source::SMem::SMemZero((void*)(nBufSize + (int)pOutBuf), nOrigBufSize - nBufSize);
     return nBufSize;
 }
 

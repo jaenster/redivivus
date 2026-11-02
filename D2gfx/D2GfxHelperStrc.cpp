@@ -36,7 +36,7 @@ void __fastcall D2GFXHELPER_DrawGroundTileDispatch2(int32_t nSubTilePtr, uint8_t
 
 // Renders a single ground tile at isometric coordinates with perspective lighting. Checks collision bounds and dispatches to perspective or flat-shaded path based on RenderMode and quality settings.
 BOOL __fastcall fpDrawGroundTile(int32_t nTileBlockPtr, int32_t nScreenX, int32_t nScreenY, int32_t nLightTablePtr) {
-    int iVar1;
+    uint8_t* pDst_00;
     D2GroundSubTileStrc* pSubTile;
     uint8_t byLightVal;
     int nScreenX_00;
@@ -50,82 +50,81 @@ BOOL __fastcall fpDrawGroundTile(int32_t nTileBlockPtr, int32_t nScreenX, int32_
     uint32_t nLightTableBase;
     int32_t aLightCorners[4];
     uint8_t* pDst;
+    int nSubTileY;
     uint32_t nSubTileIdx;
     bool bFlatShaded;
     uint32_t nLightShiftedHi;
     int nDstRowBase = gRenderBufferPitch * nScreenY + pRenderSurfaceBuffer;
     BOOL BVar2 = 0;
     int nSubTileCount = 0;
-    if (*(int*)(nTileBlockPtr + 0x50) <= 0) {
-      return BVar2;
-    }
-
-    int nSubTileY = 0;
-    do {
-      uint8_t* pDst_00;
-      pSubTile = (D2GroundSubTileStrc*)(*(int*)(nTileBlockPtr + 0x54) + nSubTileY);
-      pDst_00 = (uint8_t*)(pSubTile->nOffsetY * gRenderBufferPitch + (int)pSubTile->nOffsetX + nDstRowBase + nScreenX);
-      if (pSubTile->wFormat & 1) {
-        nScreenX_00 = pSubTile->nOffsetX + nScreenX;
-        nScreenY_00 = nScreenY + pSubTile->nOffsetY;
-        if (nScreenY_00 >= gnTileClipZMin && nScreenY_00 < gnTileClipBottom && nScreenX_00 >= gnTileClipXMin && nScreenX_00 < gnTileInnerXMax) {
-          nLightShiftedHi = nSubTileIdx >> 8;
-          nSubTileIdx &= -256;
-          if (gbPerspectiveRenderEnabled) {
-            byLightVal = *(uint8_t*)(nLightTablePtr + (pSubTile->nSubIdxLo + 9 + (uint32_t)pSubTile->nSubIdxHi * 8) * 0xc);
-            nSubTileIdx = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)nLightShiftedHi << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byLightVal);
-            bFlatShaded = true;
-          } else {
-            iVar1 = (uint32_t)pSubTile->nSubIdxLo + (uint32_t)pSubTile->nSubIdxHi * 8;
-            uVar4 = (uint32_t)*(uint8_t*)(nLightTablePtr + 0xd8 + iVar1 * 0xc);
-            uVar3 = (uint32_t)*(uint8_t*)(nLightTablePtr + 0x78 + iVar1 * 0xc);
-            nLightTableBase = (uint32_t)*(uint8_t*)(nLightTablePtr + 0xcc + iVar1 * 0xc);
-            iVar1 = nLightTablePtr + iVar1 * 0xc;
-            byLightVal = *(uint8_t*)(iVar1 + 0x6c);
-            nLightIndex = (uint32_t)byLightVal;
-            nLightDiff1 = uVar3 - nLightIndex;
-            if (nLightDiff1 < 0) {
-              nLightDiff1 = -nLightDiff1;
-            }
-
-            nLightDiff2 = nLightTableBase - nLightIndex;
-            if (nLightDiff2 < 0) {
-              nLightDiff2 = -nLightDiff2;
-            }
-
-            nLightTableIdx = uVar4 - uVar3;
-            if (nLightTableIdx < 0) {
-              nLightTableIdx = -nLightTableIdx;
-            }
-            if (D2GFXRenderedData.bLowQuality || nLightTableIdx + nLightDiff2 + nLightDiff1 < 10) {
+    if (*(int*)(nTileBlockPtr + 0x50) > 0) {
+      int iVar1;
+      nSubTileY = 0;
+      do {
+        pSubTile = (D2GroundSubTileStrc*)(*(int*)(nTileBlockPtr + 0x54) + nSubTileY);
+        pDst_00 = (uint8_t*)(pSubTile->nOffsetY * gRenderBufferPitch + (int)pSubTile->nOffsetX + nDstRowBase + nScreenX);
+        if (pSubTile->wFormat & 1) {
+          nScreenX_00 = pSubTile->nOffsetX + nScreenX;
+          nScreenY_00 = nScreenY + pSubTile->nOffsetY;
+          if (nScreenY_00 >= gnTileClipZMin && nScreenY_00 < gnTileClipBottom && nScreenX_00 >= gnTileClipXMin && nScreenX_00 < gnTileInnerXMax) {
+            nLightShiftedHi = nSubTileIdx >> 8;
+            nSubTileIdx &= -256;
+            if (gbPerspectiveRenderEnabled) {
+              byLightVal = *(uint8_t*)(nLightTablePtr + (pSubTile->nSubIdxLo + 9 + (uint32_t)pSubTile->nSubIdxHi * 8) * 0xc);
               nSubTileIdx = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)nLightShiftedHi << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byLightVal);
               bFlatShaded = true;
             } else {
-              aLightCorners[0] = (int)(nLightTableBase + *(uint8_t*)(iVar1 + 0xc0) + nLightIndex + (uint32_t)*(uint8_t*)(iVar1 + 0x60)) >> 2;
-              aLightCorners[2] = (int)(*(uint8_t*)(iVar1 + 0xe4) + nLightTableBase + (uint32_t)*(uint8_t*)(iVar1 + 0x84) + uVar3) >> 2;
-              aLightCorners[1] = (int)((uint32_t)*(uint8_t*)(iVar1 + 0xc) + *(uint8_t*)(iVar1 + 0x18) + uVar3 + nLightIndex) >> 2;
-              aLightCorners[3] = (int)((uint32_t)*(uint8_t*)(iVar1 + 300) + *(uint8_t*)(iVar1 + 0x138) + uVar4 + nLightTableBase) >> 2;
-              bFlatShaded = false;
+              iVar1 = (uint32_t)pSubTile->nSubIdxLo + (uint32_t)pSubTile->nSubIdxHi * 8;
+              uVar4 = (uint32_t)*(uint8_t*)(nLightTablePtr + 0xd8 + iVar1 * 0xc);
+              uVar3 = (uint32_t)*(uint8_t*)(nLightTablePtr + 0x78 + iVar1 * 0xc);
+              nLightTableBase = (uint32_t)*(uint8_t*)(nLightTablePtr + 0xcc + iVar1 * 0xc);
+              iVar1 = nLightTablePtr + iVar1 * 0xc;
+              byLightVal = *(uint8_t*)(iVar1 + 0x6c);
+              nLightIndex = (uint32_t)byLightVal;
+              nLightDiff1 = uVar3 - nLightIndex;
+              if (nLightDiff1 < 0) {
+                nLightDiff1 = -nLightDiff1;
+              }
+
+              nLightDiff2 = nLightTableBase - nLightIndex;
+              if (nLightDiff2 < 0) {
+                nLightDiff2 = -nLightDiff2;
+              }
+
+              nLightTableIdx = uVar4 - uVar3;
+              if (nLightTableIdx < 0) {
+                nLightTableIdx = -nLightTableIdx;
+              }
+              if (D2GFXRenderedData.bLowQuality || nLightTableIdx + nLightDiff2 + nLightDiff1 < 10) {
+                nSubTileIdx = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)nLightShiftedHi << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byLightVal);
+                bFlatShaded = true;
+              } else {
+                aLightCorners[0] = (int)(nLightTableBase + *(uint8_t*)(iVar1 + 0xc0) + nLightIndex + (uint32_t)*(uint8_t*)(iVar1 + 0x60)) >> 2;
+                aLightCorners[2] = (int)(*(uint8_t*)(iVar1 + 0xe4) + nLightTableBase + (uint32_t)*(uint8_t*)(iVar1 + 0x84) + uVar3) >> 2;
+                aLightCorners[1] = (int)((uint32_t)*(uint8_t*)(iVar1 + 0xc) + *(uint8_t*)(iVar1 + 0x18) + uVar3 + nLightIndex) >> 2;
+                aLightCorners[3] = (int)((uint32_t)*(uint8_t*)(iVar1 + 300) + *(uint8_t*)(iVar1 + 0x138) + uVar4 + nLightTableBase) >> 2;
+                bFlatShaded = false;
+              }
             }
-          }
-          if (nScreenY_00 < gnTileInnerClipZMin || nScreenY_00 >= gnTileClipZMax || nScreenX_00 < gnTileViewportXOffset || nScreenX_00 >= gnTileInnerClipXMax) {
-            if (bFlatShaded) {
-              D2Client::D2GFXHELPER_DrawGroundTileWithLight(pSubTile, nScreenX_00, nScreenY_00, pDst_00, nSubTileIdx);
+            if (nScreenY_00 < gnTileInnerClipZMin || nScreenY_00 >= gnTileClipZMax || nScreenX_00 < gnTileViewportXOffset || nScreenX_00 >= gnTileInnerClipXMax) {
+              if (bFlatShaded) {
+                D2Client::D2GFXHELPER_DrawGroundTileWithLight(pSubTile, nScreenX_00, nScreenY_00, pDst_00, nSubTileIdx);
+              } else {
+                D2Client::D2GFXHELPER_DrawGroundTileWithPerspectiveLight(pSubTile, nScreenX_00, nScreenY_00, pDst_00, aLightCorners);
+              }
+            } else if (bFlatShaded) {
+              D2GFXHELPER_DrawGroundTileDispatch1(pSubTile, pDst_00, (uint8_t)nSubTileIdx);
             } else {
-              D2Client::D2GFXHELPER_DrawGroundTileWithPerspectiveLight(pSubTile, nScreenX_00, nScreenY_00, pDst_00, aLightCorners);
+              D2GFXHELPER_DrawGroundTileDispatch2((int32_t)pSubTile, pDst_00, aLightCorners);
             }
-          } else if (bFlatShaded) {
-            D2GFXHELPER_DrawGroundTileDispatch1(pSubTile, pDst_00, (uint8_t)nSubTileIdx);
-          } else {
-            D2GFXHELPER_DrawGroundTileDispatch2((int32_t)pSubTile, pDst_00, aLightCorners);
           }
         }
-      }
 
-      nSubTileY += 0x14;
-      BVar2 = nSubTileCount + 1;
-      nSubTileCount = BVar2;
-    } while (BVar2 < *(int*)(nTileBlockPtr + 0x50));
+        nSubTileY += 0x14;
+        BVar2 = nSubTileCount + 1;
+        nSubTileCount = BVar2;
+      } while (BVar2 < *(int*)(nTileBlockPtr + 0x50));
+    }
 
     return BVar2;
 }

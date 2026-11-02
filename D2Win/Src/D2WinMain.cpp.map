@@ -811,7 +811,7 @@
         "UpdateOSCursorVisibilty"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2UIMouseMsgStrc"
       ]
     },
     {

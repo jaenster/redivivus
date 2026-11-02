@@ -328,7 +328,6 @@ int32_t __stdcall GetXPos(D2DynamicPathStrc * pDynamicPath) {
     }
 
     return (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosX;
-    return (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosX;
 }
 
 int32_t __stdcall GetYPos(D2DynamicPathStrc * pDynamicPath) {
@@ -337,7 +336,6 @@ int32_t __stdcall GetYPos(D2DynamicPathStrc * pDynamicPath) {
       exit(-1);
     }
 
-    return (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosY;
     return (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosY;
 }
 
@@ -348,7 +346,6 @@ int32_t __stdcall GetPrecisionX(D2DynamicPathStrc * pDynamicPath) {
     }
 
     return pDynamicPath->Coords.tFixed.x;
-    return pDynamicPath->Coords.tFixed.x;
 }
 
 int32_t __stdcall GetPrecisionY(D2DynamicPathStrc * pDynamicPath) {
@@ -357,7 +354,6 @@ int32_t __stdcall GetPrecisionY(D2DynamicPathStrc * pDynamicPath) {
       exit(-1);
     }
 
-    return pDynamicPath->Coords.tFixed.y;
     return pDynamicPath->Coords.tFixed.y;
 }
 
@@ -669,12 +665,12 @@ uint8_t __stdcall GetMaxDistance(D2DynamicPathStrc * pDynamicPath) {
 }
 
 eCollisionFlags __stdcall CheckAndGetCollisionFlag(D2DynamicPathStrc * pDynamicPath) {
-    if (pDynamicPath->dwVelocity) {
-      return pDynamicPath->eCollisionFlag;
+    if (!pDynamicPath->dwVelocity) {
+      eCollisionFlags eCollisionResult;
+      eCollisionResult = Collision::CheckCollision_BlockAll_Width(pDynamicPath->pRoom, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosX, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosY, pDynamicPath->nUnitSize, 0x7fff);
+      pDynamicPath->eCollisionFlag = eCollisionResult;
     }
 
-    eCollisionFlags eCollisionResult = Collision::CheckCollision_BlockAll_Width(pDynamicPath->pRoom, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosX, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosY, pDynamicPath->nUnitSize, 0x7fff);
-    pDynamicPath->eCollisionFlag = eCollisionResult;
     return pDynamicPath->eCollisionFlag;
 }
 

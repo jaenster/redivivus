@@ -652,16 +652,15 @@ int32_t __fastcall PETS_GetTotalPetCount(D2UnitStrc * pUnit) {
     }
 
     int nPetTypeSize = sgptDataTable->nTxtPetTypeSize;
-    if (nPetTypeSize <= 0) {
-      return nTotal;
+    if (nPetTypeSize > 0) {
+      int* pnPetsCount;
+      pnPetsCount = &pPlayerData->pPets->pPetList->nPets2;
+      do {
+        nTotal += *pnPetsCount;
+        pnPetsCount += 3;
+        nPetTypeSize--;
+      } while (nPetTypeSize);
     }
-
-    int* pnPetsCount = &pPlayerData->pPets->pPetList->nPets2;
-    do {
-      nTotal += *pnPetsCount;
-      pnPetsCount += 3;
-      nPetTypeSize--;
-    } while (nPetTypeSize);
 
     return nTotal;
 }

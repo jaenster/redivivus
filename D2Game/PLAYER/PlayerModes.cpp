@@ -1421,12 +1421,11 @@ static BOOL PLRMODES_RegenHp(D2UnitStrc * pUnit) {
     if (nHpRegen < 0) {
       nHpRegen = -nHpRegen;
     }
-    if (nHpRegen <= 4) {
-      return 1;
+    if (nHpRegen > 4) {
+      UNIT::SUnitMsg::UnitQueuePacket0xAB(pUnit, (uint8_t)nNewHpPct128);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, (uint8_t)nNewHpPct128, 0);
     }
 
-    UNIT::SUnitMsg::UnitQueuePacket0xAB(pUnit, (uint8_t)nNewHpPct128);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, (uint8_t)nNewHpPct128, 0);
     return 1;
 }
 

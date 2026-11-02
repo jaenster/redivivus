@@ -68,6 +68,7 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
     uint32_t nBoolRunLen;
     int nOutputCount;
     D2BinFieldHashNodeStrc* pDVar2;
+    D2BinFieldInputStrc** pHashNodeSlot;
     D2BinFieldHashNodeStrc aFieldHashNodes[280];
     D2BinFieldHashNodeStrc* aHashBuckets[256];
     D2BinFieldHashNodeStrc* pHashNode;
@@ -164,21 +165,19 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
         nOutputIndex = nErrorAddress;
       } while (nColumnIndex < (uint32_t)pBinFieldExcel->nColumnCount);
     }
-    if (nFieldCount <= 0) {
-      return nErrorAddress;
+    if (nFieldCount > 0) {
+      pHashNodeSlot = &aFieldHashNodes[0].pField;
+      do {
+        if (pHashNodeSlot[-1]) {
+          nOutputCount = (int)*pHashNodeSlot - (int)pBinFieldInput;
+          pOutMapping[nErrorAddress] = (short int)(nOutputCount / 0x14) + (short int)(nOutputCount >> 0x1f) - (short int)((int64_t)nOutputCount * 0x66666667 >> 0x3f);
+          nErrorAddress++;
+        }
+
+        pHashNodeSlot += 3;
+        nFieldCount--;
+      } while (nFieldCount);
     }
-
-    D2BinFieldInputStrc** pHashNodeSlot = &aFieldHashNodes[0].pField;
-    do {
-      if (pHashNodeSlot[-1]) {
-        nOutputCount = (int)*pHashNodeSlot - (int)pBinFieldInput;
-        pOutMapping[nErrorAddress] = (short int)(nOutputCount / 0x14) + (short int)(nOutputCount >> 0x1f) - (short int)((int64_t)nOutputCount * 0x66666667 >> 0x3f);
-        nErrorAddress++;
-      }
-
-      pHashNodeSlot += 3;
-      nFieldCount--;
-    } while (nFieldCount);
 
     return nErrorAddress;
 }
@@ -507,18 +506,17 @@ int __fastcall FOG_ParseTxtLink(D2TxtLinkStrc * pTxtLink, char * szText) {
       }
 
       nRecordIndex = GetLinkNodeIndex(pTxtLink, szText, 0);
-      if (nRecordIndex >= 0) {
-        return nRecordIndex;
+      if (nRecordIndex < 0) {
+        pKey = (uint8_t*)D2_ALLOC_POOL_AT(nullptr, 0x2c, ".\\Src\\Excel\\Excel.cpp", 0x4d9);
+        memset(pKey, 0, 0x2c);
+        Storm::Source::SSTR::SStrCopy((char*)pKey, szText, 0x20);
+        String::FogString::SMemStringToUppercase((char*)pKey, 0x20);
+        *(int*)(pKey + 0x20) = pTxtLink->nRecords;
+        FOG_ValidateBytePtr((uint8_t*)&pTxtLink->pTxtLinkNode, pKey);
+        nRecordIndex = pTxtLink->nRecords;
+        pTxtLink->nRecords = nRecordIndex + 1;
       }
 
-      pKey = (uint8_t*)D2_ALLOC_POOL_AT(nullptr, 0x2c, ".\\Src\\Excel\\Excel.cpp", 0x4d9);
-      memset(pKey, 0, 0x2c);
-      Storm::Source::SSTR::SStrCopy((char*)pKey, szText, 0x20);
-      String::FogString::SMemStringToUppercase((char*)pKey, 0x20);
-      *(int*)(pKey + 0x20) = pTxtLink->nRecords;
-      FOG_ValidateBytePtr((uint8_t*)&pTxtLink->pTxtLinkNode, pKey);
-      nRecordIndex = pTxtLink->nRecords;
-      pTxtLink->nRecords = nRecordIndex + 1;
       return nRecordIndex;
     }
 }

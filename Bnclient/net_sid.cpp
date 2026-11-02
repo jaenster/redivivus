@@ -306,11 +306,10 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_CreateAccount2(char * pBytes, size_t nSi
 BOOL __fastcall NET_SID_CLIENT_Incoming_ChangePassword(char * pBytes, size_t nSize) {
     g_nSIDResponseCount1 = *(int*)pBytes;
     g_SIDPacketResponseFlags[0x31] = 1;
-    if (g_nSIDResponseCount1) {
-      return 1;
+    if (!g_nSIDResponseCount1) {
+      BNMESSQUEUE_SetStateIfZero(0xe);
     }
 
-    BNMESSQUEUE_SetStateIfZero(0xe);
     return 1;
 }
 
@@ -347,11 +346,10 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_LogonChallenge(char * pBytes, size_t nSi
 // BATTLE.NET SID_STARTADVEX3 (0x1C) HANDLER
 // Receives game creation/start result from Battle.net server. The 4-byte status code indicates success (0) or various failure reasons (name taken, invalid settings, etc.). On success, sets global flag at 0x00882318 to signal the connection state machine to proceed with game join sequence.
 BOOL __fastcall NET_SID_CLIENT_Incoming_StartAdvEx3(char * pBytes, size_t nSize) {
-    if (*(int*)pBytes) {
-      return 1;
+    if (!*(int*)pBytes) {
+      g_SIDPacketResponseFlags[0x1c] = 1;
     }
 
-    g_SIDPacketResponseFlags[0x1c] = 1;
     return 1;
 }
 
@@ -546,11 +544,10 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_CheckAd(char * pBytes, size_t nSize) {
       szFilenameScan = szText1;
       szFilenameScan = szFilenameScan + strlen(szFilenameScan) + 1;
       g_dwLastAdId = dwAdIdReg;
-      if (!(*szText1 != '\0' && szText1[(int)(szFilenameScan + (1 - (int)(pBytes + 0x11)))] != '\0')) {
-        return 1;
+      if (*szText1 != '\0' && szText1[(int)(szFilenameScan + (1 - (int)(pBytes + 0x11)))] != '\0') {
+        BnDownload::BNDOWNLOAD_InitiateFileDownload((D2BnetDownloadStateStrc*)0x80000003, 5, dwAdIdReg, *(uint32_t*)(pBytes + 4), (FILETIME*)(pBytes + 8), szText1, szText1 + (int)(szFilenameScan + (1 - (int)(pBytes + 0x11))));
       }
 
-      BnDownload::BNDOWNLOAD_InitiateFileDownload((D2BnetDownloadStateStrc*)0x80000003, 5, dwAdIdReg, *(uint32_t*)(pBytes + 4), (FILETIME*)(pBytes + 8), szText1, szText1 + (int)(szFilenameScan + (1 - (int)(pBytes + 0x11))));
       return 1;
     }
 
@@ -1084,22 +1081,20 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_SetEmail(char * pPacketData, size_t nPac
 // BATTLE.NET SID_OPTIONALWORK (0x4A) HANDLER
 // Receives optional patch/work filename from Battle.net server (null-terminated string). If the filename is non-empty and packet has data, sends SID_GETFILETIME (0x33) request with file_id=0x80000005 to query the file's timestamp and initiate optional patch download for background updating.
 BOOL __fastcall NET_SID_CLIENT_Incoming_OptionalWork(char * pBytes, size_t nSize) {
-    if (!(pBytes && *pBytes != '\0' && nSize)) {
-      return 1;
+    if (pBytes && *pBytes != '\0' && nSize) {
+      BnSend::NET_SID_CLIENT_Send_0x33_GetFileTime(pBytes, 0x80000005);
     }
 
-    BnSend::NET_SID_CLIENT_Send_0x33_GetFileTime(pBytes, 0x80000005);
     return 1;
 }
 
 // BATTLE.NET SID_REQUIREDWORK (0x4C) HANDLER
 // Receives required patch/work filename from Battle.net server (null-terminated string). If the filename is non-empty and packet has data, sends SID_GETFILETIME (0x33) request with file_id=0x80000006 to query the file's timestamp and initiate required patch download, which must complete before client can continue.
 BOOL __fastcall NET_SID_CLIENT_Incoming_RequiredWork(char * pBytes, size_t nSize) {
-    if (!(pBytes && *pBytes != '\0' && nSize)) {
-      return 1;
+    if (pBytes && *pBytes != '\0' && nSize) {
+      BnSend::NET_SID_CLIENT_Send_0x33_GetFileTime(pBytes, 0x80000006);
     }
 
-    BnSend::NET_SID_CLIENT_Send_0x33_GetFileTime(pBytes, 0x80000006);
     return 1;
 }
 
@@ -1207,14 +1202,14 @@ BOOL __fastcall NET_SID_CLIENT_IncomingPacketHandler(uint8_t nPacketId, char * p
 }; D2_STATIC_GUARD(NET_SID_CLIENT_INCOMING, "Bnclient::_net_sid::NET_SID_CLIENT_IncomingPacketHandler::NET_SID_CLIENT_INCOMING");
 
     BOOL bResult = 0;
-    if (nPacketId >= 0x5e) {
-      return bResult;
-    }
-    if (NET_SID_CLIENT_INCOMING[nPacketId]) {
-      bResult = (*NET_SID_CLIENT_INCOMING[nPacketId])(pBytes, nSize);
+    if (nPacketId < 0x5e) {
+      if (NET_SID_CLIENT_INCOMING[nPacketId]) {
+        bResult = (*NET_SID_CLIENT_INCOMING[nPacketId])(pBytes, nSize);
+      }
+
+      NET_SID_INCOMING_CLIENT_PacketRequireAnswer[nPacketId] = 1;
     }
 
-    NET_SID_INCOMING_CLIENT_PacketRequireAnswer[nPacketId] = 1;
     return bResult;
 }
 
@@ -2271,11 +2266,10 @@ int32_t __fastcall NET_SID_CLIENT_CalculateAlignedBufferSize(uint32_t nDataSize)
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf2);
       exit(-1);
     }
-    if (!(nDataSize & 0x3f)) {
-      return nDataSize + 8;
+    if (nDataSize & 0x3f) {
+      nDataSize += 0x40 - (nDataSize & 0x3f);
     }
 
-    nDataSize += 0x40 - (nDataSize & 0x3f);
     return nDataSize + 8;
 }
 
@@ -2416,11 +2410,10 @@ static uint32_t * NET_SID_CLIENT_LoadAndDecodeCDKeyFile(uint32_t * szFileName, D
 
     int32_t bDecodeResult = NET_SID_CLIENT_DecodeAndValidateBuffer((int*)pLoadedKeyBuf, *pdwFileSize);
     if (!bDecodeResult) {
-      if (!pLoadedKeyBuf) {
-        return nullptr;
+      if (pLoadedKeyBuf) {
+        Storm::Source::SFile::SFileUnloadFile(pLoadedKeyBuf);
       }
 
-      Storm::Source::SFile::SFileUnloadFile(pLoadedKeyBuf);
       return nullptr;
     }
 
@@ -2622,11 +2615,10 @@ char * __stdcall NET_SID_CLIENT_GetCdKeyOwner() {
 
 char * __fastcall NET_SID_CLIENT_GetCdKeyByType(int32_t nProductType) {
     char* pKey = D2Client::_CdKey::KeyExpansion;
-    if (nProductType) {
-      return pKey;
+    if (!nProductType) {
+      pKey = D2Client::_CdKey::KeyClassic;
     }
 
-    pKey = D2Client::_CdKey::KeyClassic;
     return pKey;
 }
 

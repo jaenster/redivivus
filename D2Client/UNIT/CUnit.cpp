@@ -182,8 +182,11 @@ int32_t __fastcall GetPalShiftIndex(D2UnitStrc * pUnit) {
 
 // Tests whether screen point (nClickX, nClickY) falls within the clickable bounding box of a warp unit. Fetches the room's shadow/bounds data, transforms the warp's map position to screen coords, and returns 1 if the point is inside the bounds rectangle defined by pShadowBounds[1..4]. Halts fatally if called on a non-UNIT_WARP unit.
 BOOL __fastcall WARP_IsPointInClickArea(D2UnitStrc * pUnit, int32_t nClickX, int32_t nClickY) {
+    int nAreaLeft;
+    int iVar1;
     int nPosY;
     int32_t nPosX;
+    eD2UnitType eUnitType;
     if (pUnit->eUnitType != UNIT_WARP) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x58b);
       exit(-1);
@@ -191,33 +194,31 @@ BOOL __fastcall WARP_IsPointInClickArea(D2UnitStrc * pUnit, int32_t nClickX, int
 
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     D2LvlWarpTxt* pShadowBounds = D2Common::DUNGEON::Dungeon::DUNGEON_GetLvlWarpTxtForWarpUnit(pRoom, pUnit);
-    if (!pShadowBounds) {
-      return 0;
-    }
+    if (pShadowBounds) {
+      eUnitType = pUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nPosX = pUnit->pPath.pStaticPath->nPosX;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      } else {
+        nPosX = 0;
+      }
 
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPosX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nPosX = 0;
-    }
+      eUnitType = pUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nPosY = pUnit->pPath.pStaticPath->nPosY;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      } else {
+        nPosY = 0;
+      }
 
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPosY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nPosY = 0;
-    }
-
-    D2Common::Drlg::Transform::CoordsMapToScreen(&nPosX, &nPosY);
-    int nAreaLeft = pShadowBounds->SelectX + nPosX;
-    int iVar1 = pShadowBounds->SelectY + nPosY;
-    if (nClickX >= nAreaLeft && nClickY >= iVar1 && nClickX <= pShadowBounds->SelectDX + nAreaLeft && nClickY <= pShadowBounds->SelectDY + iVar1) {
-      return 1;
+      D2Common::Drlg::Transform::CoordsMapToScreen(&nPosX, &nPosY);
+      nAreaLeft = pShadowBounds->SelectX + nPosX;
+      iVar1 = pShadowBounds->SelectY + nPosY;
+      if (nClickX >= nAreaLeft && nClickY >= iVar1 && nClickX <= pShadowBounds->SelectDX + nAreaLeft && nClickY <= pShadowBounds->SelectDY + iVar1) {
+        return 1;
+      }
     }
 
     return 0;
@@ -340,19 +341,17 @@ static uint32_t __stdcall SKILL_ExecuteSelectProc(D2UnitStrc * pUnit, eD2Skills 
     static SkillSelectProcFn g_aSkillSelectProcHandlers[7] = { nullptr, &D2Client::SKILL_SelectProc_IsSelectableCorpse2, &D2Client::SKILL_SelectProc_IsCorpseConsumableBasic, &D2Client::SKILL_SelectProc_IsConvertibleCorpse, &D2Client::SKILL_SelectProc_IsCorpseValidForRevive, &D2Client::SKILL_SelectProc_IsSelectableCorpse, &D2Client::SKILL_SelectProc_CanReviveMonster }; D2_STATIC_GUARD(g_aSkillSelectProcHandlers, "D2Client::UNIT::CUnit::SKILL_ExecuteSelectProc::g_aSkillSelectProcHandlers");
     static int g_nSkillSelectProcCount = 0x7; D2_STATIC_GUARD(g_nSkillSelectProcCount, "D2Client::UNIT::CUnit::SKILL_ExecuteSelectProc::g_nSkillSelectProcCount");
 
+    uint8_t bySelectProc;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pSkillsTxt) {
-      return 0;
-    }
-
-    uint8_t bySelectProc = pSkillsTxt->SelectProc;
-    if (!(bySelectProc > 0 && (int)(uint32_t)bySelectProc < g_nSkillSelectProcCount)) {
-      return 0;
-    }
-
-    int nProcResult = (*g_aSkillSelectProcHandlers[bySelectProc])(pUnit, pTargetUnit);
-    if (nProcResult) {
-      return 1;
+    if (pSkillsTxt) {
+      int nProcResult;
+      bySelectProc = pSkillsTxt->SelectProc;
+      if (bySelectProc > 0 && (int)(uint32_t)bySelectProc < g_nSkillSelectProcCount) {
+        nProcResult = (*g_aSkillSelectProcHandlers[bySelectProc])(pUnit, pTargetUnit);
+        if (nProcResult) {
+          return 1;
+        }
+      }
     }
 
     return 0;
@@ -641,7 +640,6 @@ D2ServerCmdStrc * __fastcall GetServerCmd(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    return pUnit->pServerCmd;
     return pUnit->pServerCmd;
 }
 
@@ -944,7 +942,6 @@ uint32_t __fastcall CUNIT_GetStartLight(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    return pUnit->uSideData.pClientSide.dwStartLight;
     return pUnit->uSideData.pClientSide.dwStartLight;
 }
 
@@ -2010,11 +2007,10 @@ static D2UnitStrc * __stdcall InitCommonData(D2UnitStrc * pUnit, int32_t nUnitGU
 
     finalize_unit:
     pFinalUnit = FinalizeCreation(pUnit);
-    if (!(pFinalUnit && eUnitType == UNIT_OBJECT)) {
-      return pFinalUnit;
+    if (pFinalUnit && eUnitType == UNIT_OBJECT) {
+      Object::OBJECT_AddVisualOverlay(pFinalUnit);
     }
 
-    Object::OBJECT_AddVisualOverlay(pFinalUnit);
     return pFinalUnit;
 }
 
@@ -2077,11 +2073,10 @@ D2UnitStrc * __fastcall UNIT_CreatePlayer(int32_t nUnitGuid, int32_t nClassId, i
     GAME::Wall2::WALL2_InitUnitGfx(pUnit);
     D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\CUnit.cpp", 0x21d);
     pUnit = FinalizeCreation(pUnit);
-    if (!pUnit) {
-      return pUnit;
+    if (pUnit) {
+      D2Common::Units::SetNameInPlayerData(pUnit, szName);
     }
 
-    D2Common::Units::SetNameInPlayerData(pUnit, szName);
     return pUnit;
 }
 
@@ -2092,17 +2087,15 @@ D2UnitStrc * __fastcall CreateObject(int32_t nUnitGUID, int32_t nClassId, int32_
     }
 
     pUnit = InitCommonData(pUnit, nUnitGUID, nClassId, nX, nY, eUnitType, nUnused, nState);
-    if (!pUnit) {
-      return pUnit;
+    if (pUnit) {
+      BOOL bIsShrine;
+      pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = nInteraction;
+      bIsShrine = D2Common::Units::IsShrine(pUnit);
+      if (bIsShrine) {
+        Object::SetShrineTextInfo(pUnit);
+      }
     }
 
-    pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = nInteraction;
-    BOOL bIsShrine = D2Common::Units::IsShrine(pUnit);
-    if (!bIsShrine) {
-      return pUnit;
-    }
-
-    Object::SetShrineTextInfo(pUnit);
     return pUnit;
 }
 

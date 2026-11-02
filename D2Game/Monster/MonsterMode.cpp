@@ -809,11 +809,10 @@ BOOL __fastcall MONSTER_FireSpecialMissile(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 
     D2UnitStrc* pMissileUnit = SKILLS::SkillsServer::CreatingAMissile(pGame, eMissileId, pUnit, SKILL_Attack, nSkillBonus, 0, 0, 0, 0, 1);
-    if (!pMissileUnit) {
-      return 1;
+    if (pMissileUnit) {
+      MISSILE_SpawnFromMaggot(pGame, pUnit, eMissileId);
     }
 
-    MISSILE_SpawnFromMaggot(pGame, pUnit, eMissileId);
     return 1;
 }
 
@@ -1096,6 +1095,7 @@ BOOL __fastcall MONMODE_CompleteCastAndReset(::SGAMEDATA * pGame, D2MonsterKillS
 BOOL __fastcall PlanExecutionOfMonster(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
     BOOL _bTimerExists;
     bool bTimerExists;
+    uint32_t nFrame;
     uint8_t byAiDel;
     D2UnitStrc* pUnit = pMonsterKill->pVictim;
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 1);
@@ -1109,26 +1109,25 @@ BOOL __fastcall PlanExecutionOfMonster(::SGAMEDATA * pGame, D2MonsterKillStrc * 
       GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + 0x2d, 0, 0);
       return 1;
     }
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
-      return 1;
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+      D2MonStatsTxt* pDVar1;
+      pDVar1 = pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;
+      if (pDVar1) {
+        if (pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER) {
+          byAiDel = pDVar1->aidel[0];
+        } else {
+          byAiDel = pDVar1->aidel[pGame->nDifficulty];
+        }
+
+        nFrame = (uint32_t)byAiDel;
+        if (!nFrame) {
+          nFrame = 0xf;
+        }
+
+        GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + nFrame, 0, 0);
+      }
     }
 
-    D2MonStatsTxt* pDVar1 = pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;
-    if (!pDVar1) {
-      return 1;
-    }
-    if (pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER) {
-      byAiDel = pDVar1->aidel[0];
-    } else {
-      byAiDel = pDVar1->aidel[pGame->nDifficulty];
-    }
-
-    uint32_t nFrame = (uint32_t)byAiDel;
-    if (!nFrame) {
-      nFrame = 0xf;
-    }
-
-    GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + nFrame, 0, 0);
     return 1;
 }
 
@@ -1141,11 +1140,10 @@ BOOL __fastcall MONMODE_RecoverToNeutral(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     UNIT::SUnit::UNITS_ProcessUnitMovement(pGame, pUnit);
     D2Common::Units::AdvanceAnimFrame(pUnit);
     uint32_t bAtEndOfCycle = D2Common::Units::IsAtEndOfFrameCycle(pUnit);
-    if (!bAtEndOfCycle) {
-      return 1;
+    if (bAtEndOfCycle) {
+      UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 0xb);
     }
 
-    UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 0xb);
     return 1;
 }
 
@@ -1222,11 +1220,10 @@ BOOL __fastcall DropHandlerGeneric(::SGAMEDATA * pGame, D2MonsterKillStrc * pMon
 
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, pMonsterKill->nUnitMode);
     D2SkillStrc* pCurrentSkill = D2Common::Units::GetCurrentSkill(pUnit);
-    if (!pCurrentSkill) {
-      return 1;
+    if (pCurrentSkill) {
+      SKILLS::SkillsServer::SKILLS_OnModeComplete(pGame, pUnit);
     }
 
-    SKILLS::SkillsServer::SKILLS_OnModeComplete(pGame, pUnit);
     return 1;
 }
 
@@ -1264,17 +1261,14 @@ BOOL __fastcall MONMODE_ProcessSkillCast(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       }
 
       nFireResult = MONSTER_FireSpecialMissile(pGame, pUnit, nSkillLevel);
-      if (nFireResult) {
-        return 1;
+      if (!nFireResult) {
+        Monsters::MONSTER_AttackTarget(pUnit, pGame);
+        pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+        if (pTarget) {
+          UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
+        }
       }
 
-      Monsters::MONSTER_AttackTarget(pUnit, pGame);
-      pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-      if (!pTarget) {
-        return 1;
-      }
-
-      UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
       return 1;
     }
 
@@ -1311,6 +1305,7 @@ BOOL __fastcall thunk_FreeCombatAndChangeAnimMode_B(::SGAMEDATA * pGame, D2Monst
 
 // Attempts to make a monster flee from its current target. Checks MonStatsTxt flags 3 and 0xD (flee-capable); if both set and unit is not in Death mode, sets path type 8 (flee), calculates flee distance (10 for classId 0x4E/Andariel, else 5), computes a new path, and transitions to Flee anim mode (0xD). Returns 1 if flee was attempted, 0 if monster cannot flee.
 BOOL __fastcall MONMODE_TryFleeFromTarget(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
+    int32_t nMonStatsRow;
     int nClassId;
     uint8_t nDistance;
     D2UnitStrc* pUnit = pMonsterKill->pVictim;
@@ -1334,22 +1329,22 @@ BOOL __fastcall MONMODE_TryFleeFromTarget(::SGAMEDATA * pGame, D2MonsterKillStrc
     if (!bStatFlagSet) {
       return 0;
     }
-    if (!(pUnit && pUnit->eAnimMode.ePlayerMode != Death)) {
-      return 1;
+    if (pUnit && pUnit->eAnimMode.ePlayerMode != Death) {
+      D2DynamicPathStrc* pDynamicPath;
+      pDynamicPath = pUnit->pPath.pDynamicPath;
+      D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 8);
+      nMonStatsRow = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit);
+      if (nMonStatsRow < 0 || nMonStatsRow >= sgptDataTable->nTxtMonStatsSize || nMonStatsRow != 0x4e) {
+        nDistance = 5;
+      } else {
+        nDistance = 10;
+      }
+
+      D2Common::PATH::DynamicPath::SetDistance(pDynamicPath, nDistance);
+      D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
+      UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 0xd);
     }
 
-    D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 8);
-    int32_t nMonStatsRow = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit);
-    if (nMonStatsRow < 0 || nMonStatsRow >= sgptDataTable->nTxtMonStatsSize || nMonStatsRow != 0x4e) {
-      nDistance = 5;
-    } else {
-      nDistance = 10;
-    }
-
-    D2Common::PATH::DynamicPath::SetDistance(pDynamicPath, nDistance);
-    D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
-    UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 0xd);
     return 1;
 }
 
@@ -1697,12 +1692,11 @@ int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2Mo
             UNIT::SUnit::UNITS_SetupAnimTimerEvents(pGame, pUnit);
           }
         }
-        if (eActualAnimMode != eD2MonsterAnimMode_ns::GetHit) {
-          return _bIsModeZeroDeath;
+        if (eActualAnimMode == eD2MonsterAnimMode_ns::GetHit) {
+          D2Common::PATH::DynamicPath::PATH_SetPathType(pDynPath, 0);
+          D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynPath, 0);
         }
 
-        D2Common::PATH::DynamicPath::PATH_SetPathType(pDynPath, 0);
-        D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynPath, 0);
         return _bIsModeZeroDeath;
       }
     }

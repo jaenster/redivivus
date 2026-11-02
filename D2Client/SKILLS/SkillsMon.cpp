@@ -561,11 +561,10 @@ BOOL __fastcall Skills_CltDoFunc_Mon_JumpMissileTowardTarget(D2UnitStrc * pUnit,
 }
 
 BOOL __fastcall Skills_CltStFunc_ClearTargetableFlags(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!pUnit) {
-      return 1;
+    if (pUnit) {
+      pUnit->eUnitFlags &= ~(UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE);
     }
 
-    pUnit->eUnitFlags &= ~(UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE);
     return 1;
 }
 
@@ -784,11 +783,10 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RandomDualMissile(D2UnitStrc * pUnit, eD2Sk
 }
 
 BOOL __fastcall Skills_CltStFunc_SetTargetableFlags(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!pUnit) {
-      return 1;
+    if (pUnit) {
+      pUnit->eUnitFlags |= UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
     }
 
-    pUnit->eUnitFlags |= UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
     return 1;
 }
 
@@ -884,17 +882,15 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RingMissileSpray(D2UnitStrc * pUnit, eD2Ski
       } while (nSpreadOffset < 0x40);
 
       sSkillArg.nVelocityOverride = pMissileTxt->Param2 << 6;
-      if (nNumRings <= 1) {
-        return 1;
+      if (nNumRings > 1) {
+        nSpreadOffset = 0;
+        do {
+          sSkillArg.nUnitX = *(int*)((int)gaSkillRingMissileSpreadConstY + nSpreadOffset + 4);
+          sSkillArg.nUnitY = *(int*)((int)gaSkillRingMissileSpreadConstZ + nSpreadOffset + 4);
+          UNIT::Missile::MakeMissile(&sSkillArg);
+          nSpreadOffset += nNumRings * 4;
+        } while (nSpreadOffset < 0x3c);
       }
-
-      nSpreadOffset = 0;
-      do {
-        sSkillArg.nUnitX = *(int*)((int)gaSkillRingMissileSpreadConstY + nSpreadOffset + 4);
-        sSkillArg.nUnitY = *(int*)((int)gaSkillRingMissileSpreadConstZ + nSpreadOffset + 4);
-        UNIT::Missile::MakeMissile(&sSkillArg);
-        nSpreadOffset += nNumRings * 4;
-      } while (nSpreadOffset < 0x3c);
 
       return 1;
     }
@@ -1053,11 +1049,10 @@ BOOL __fastcall Skills_CltDoFunc_Mon_DirectionalBeam(D2UnitStrc * pUnit, eD2Skil
       nSrcY = Units::GetYPosFromDynamicPathUnit(pUnit);
       sSkillArg.nUnitY = nSP1Coord - nSrcY;
       pTarget = UNIT::Missile::MakeMissile(&sSkillArg);
-      if (!pTarget) {
-        return 1;
+      if (pTarget) {
+        D2Common::Units::Missile::SetTargetX(pTarget, nSkillLvl);
       }
 
-      D2Common::Units::Missile::SetTargetX(pTarget, nSkillLvl);
       return 1;
     }
 
@@ -1315,23 +1310,21 @@ BOOL __fastcall Skills_CltDoFunc_Mon_LineMissileSpread(D2UnitStrc * pUnit, eD2Sk
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 3;
     nMissileCountDown = nOriginY;
-    if (nOriginY <= 0) {
-      return 1;
+    if (nOriginY > 0) {
+      do {
+        sSkillArg.pOwner = pUnitOrig;
+        sSkillArg.nX = nMissileCount / 6 + nSrcX;
+        sSkillArg.nSkillLevel = nSkillLvl;
+        sSkillArg.nUnitX = nMissileCount;
+        sSkillArg.nUnitY = nDirY;
+        sSkillArg.nY = nDirY / 6 + nSrcY;
+        sSkillArg.nMissileTxtNo = eMissileId;
+        UNIT::Missile::MakeMissile(&sSkillArg);
+        nMissileCount += nStepY;
+        nDirY += nStepX;
+        nMissileCountDown--;
+      } while (nMissileCountDown);
     }
-
-    do {
-      sSkillArg.pOwner = pUnitOrig;
-      sSkillArg.nX = nMissileCount / 6 + nSrcX;
-      sSkillArg.nSkillLevel = nSkillLvl;
-      sSkillArg.nUnitX = nMissileCount;
-      sSkillArg.nUnitY = nDirY;
-      sSkillArg.nY = nDirY / 6 + nSrcY;
-      sSkillArg.nMissileTxtNo = eMissileId;
-      UNIT::Missile::MakeMissile(&sSkillArg);
-      nMissileCount += nStepY;
-      nDirY += nStepX;
-      nMissileCountDown--;
-    } while (nMissileCountDown);
 
     return 1;
 }
@@ -1638,11 +1631,10 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ScatterDoubleMissile(D2UnitStrc * pUnit, eD
       sSkillArg.eSkillNo = eSkill;
       Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 2, 1);
       sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[2];
-      if (!((int)sSkillArg.nMissileTxtNo >= 0 && (int)sSkillArg.nMissileTxtNo < sgptDataTable->nTxtMissilesSize)) {
-        return 1;
+      if ((int)sSkillArg.nMissileTxtNo >= 0 && (int)sSkillArg.nMissileTxtNo < sgptDataTable->nTxtMissilesSize) {
+        Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 4, 5);
       }
 
-      Skills::SKILLS_CreateMissileScatter(pUnit, &sSkillArg, 4, 5);
       return 1;
     }
 
@@ -1815,12 +1807,11 @@ BOOL __fastcall Skills_CltStFunc_CastHellMeteorMissiles(D2UnitStrc * pUnit, eD2S
       Engine::Particle::SetPosVectorShifted(pMissileBall, 0, 0, 0x15f9);
       Engine::Particle::SetOffsetVector(pMissileBall, 0, 0, -0x19, 1);
     }
-    if (!pMissileLaunch2) {
-      return 1;
+    if (pMissileLaunch2) {
+      D2Common::Units::SetAnimationSpeed(pMissileLaunch1, 0x80);
+      D2Common::Units::SetAnimationSpeed(pMissileLaunch2, 0x80);
     }
 
-    D2Common::Units::SetAnimationSpeed(pMissileLaunch1, 0x80);
-    D2Common::Units::SetAnimationSpeed(pMissileLaunch2, 0x80);
     return 1;
 }
 

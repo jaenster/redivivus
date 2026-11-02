@@ -234,48 +234,45 @@ static int32_t TEXT_CalculateTextWidth(uint16_t * szBuffer) {
     nStrLen = 0;
     int nMaxLineWidth = 0;
     int32_t nLineWidth = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(szBuffer);
-    if (nLineWidth <= 0) {
-      return nStrLen;
-    }
-
-    do {
+    if (nLineWidth > 0) {
       uint16_t wCharCode;
-      wCharCode = *szBuffer;
-      if (wCharCode == L'\0') {
-        break;
-      }
-      if (wCharCode == L'\n') {
-        if (nStrLen > nMaxLineWidth) {
-          nMaxLineWidth = nStrLen;
+      do {
+        wCharCode = *szBuffer;
+        if (wCharCode == L'\0') {
+          break;
         }
-
-        nStrLen = 0;
-        szBuffer++;
-      } else {
-        if ((uint16_t)wCharCode >= 0x100 || wCharCode != L'ÿ') {
-          pGlyphEntry = (*gpfnFontGetCharWidth)(wCharCode);
-          nStrLen += (uint32_t)pGlyphEntry->abUnverified[1];
-          szBuffer++;
-        } else {
-          nColorCmpResult = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsNNoCase((uint16_t*)(szBuffer + 1), gnFontTableCharWidthCache, 1);
-          if (!nColorCmpResult) {
-            pGlyphEntry = (*gpfnFontGetCharWidth)(gnFontTableCharWidthCache[0]);
-            nStrLen += (uint32_t)pGlyphEntry->abUnverified[1];
+        if (wCharCode == L'\n') {
+          if (nStrLen > nMaxLineWidth) {
+            nMaxLineWidth = nStrLen;
           }
 
-          szBuffer += 3;
-          nCharPos += 2;
+          nStrLen = 0;
+          szBuffer++;
+        } else {
+          if ((uint16_t)wCharCode >= 0x100 || wCharCode != L'\xff') {
+            pGlyphEntry = (*gpfnFontGetCharWidth)(wCharCode);
+            nStrLen += (uint32_t)pGlyphEntry->abUnverified[1];
+            szBuffer++;
+          } else {
+            nColorCmpResult = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsNNoCase((uint16_t*)(szBuffer + 1), gnFontTableCharWidthCache, 1);
+            if (!nColorCmpResult) {
+              pGlyphEntry = (*gpfnFontGetCharWidth)(gnFontTableCharWidthCache[0]);
+              nStrLen += (uint32_t)pGlyphEntry->abUnverified[1];
+            }
+
+            szBuffer += 3;
+            nCharPos += 2;
+          }
         }
+
+        nCharPos++;
+      } while (nCharPos < nLineWidth);
+
+      if (nMaxLineWidth > nStrLen) {
+        nStrLen = nMaxLineWidth;
       }
-
-      nCharPos++;
-    } while (nCharPos < nLineWidth);
-
-    if (nMaxLineWidth <= nStrLen) {
-      return nStrLen;
     }
 
-    nStrLen = nMaxLineWidth;
     return nStrLen;
 }
 
@@ -324,18 +321,16 @@ static int32_t TEXT_CalculateTextHeight(uint16_t * szBuffer) {
 
     int nLineCount = 1;
     int nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(szBuffer);
-    if (nStrLen <= 0) {
-      return (int)((uint32_t)gaFontCache[gnLastUsedFontId].pFontTableHeader->nLineHeight * gnFontIdLarge * nLineCount) / 10;
+    if (nStrLen > 0) {
+      do {
+        if (*szBuffer == L'\n') {
+          nLineCount++;
+        }
+
+        szBuffer++;
+        nStrLen--;
+      } while (nStrLen);
     }
-
-    do {
-      if (*szBuffer == L'\n') {
-        nLineCount++;
-      }
-
-      szBuffer++;
-      nStrLen--;
-    } while (nStrLen);
 
     return (int)((uint32_t)gaFontCache[gnLastUsedFontId].pFontTableHeader->nLineHeight * gnFontIdLarge * nLineCount) / 10;
 }
@@ -377,7 +372,7 @@ static void __stdcall D2WINFONT_DrawWideString(uint16_t * wszText, int32_t nX, i
       wCharCode = *wszText;
       pwszNext = wszText + 1;
       nStrLen = iVar1 + 1;
-      if ((uint16_t)*wszText < 0x100 && *wszText == L'ÿ') {
+      if ((uint16_t)*wszText < 0x100 && *wszText == L'\xff') {
         wszColorMarker[0] = *pwszNext;
         nStrLen = iVar1 + 2;
         pwszNext = wszText + 2;
@@ -442,62 +437,60 @@ static void * __stdcall D2WINFONT_DrawWideStringWithDrawMode(int32_t nX, uint16_
     sGfxData.pDC6 = *gppDC6FontCache;
     sGfxData.nDirection = 0;
     D2FontGlyphStrc* pCurGlyphEntry = (D2FontGlyphStrc*)gppDC6FontCache;
-    if (nStrLen <= 0) {
-      return pCurGlyphEntry;
-    }
-
-    do {
+    if (nStrLen > 0) {
       uint16_t wCharCode;
-      wCharCode = ((D2FontGlyphStrc*)wszText)->wCharCode;
-      pNextChar = (D2FontGlyphStrc*)((D2FontGlyphStrc*)wszText)->abUnverified;
-      if (((D2FontGlyphStrc*)wszText)->wCharCode < 0x100 && ((D2FontGlyphStrc*)wszText)->wCharCode == 0xff) {
-        wszColorMarker[0] = *(uint16_t*)pNextChar;
-        pColorArgChar = (D2FontGlyphStrc*)(((D2FontGlyphStrc*)wszText)->abUnverified + 2);
-        nLineWidth = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsN(wszColorMarker, gwFontHeightDefault, 1);
-        if (!nLineWidth) {
-          if (!(nCharIndex + 2 < nStrLen)) {
-            eGlobalPalette = 0;
-            pCurGlyphEntry = 0;
-            pNextChar = pColorArgChar;
-            nCharIndex += 2;
-          } else {
-            nCharIndex += 3;
-            eGlobalPalette = pColorArgChar->wCharCode - 0x30;
-            pNextChar = (D2FontGlyphStrc*)(((D2FontGlyphStrc*)wszText)->abUnverified + 4);
-            pCurGlyphEntry = pColorArgChar;
-            if ((int)eGlobalPalette >= 0xd) {
+      do {
+        wCharCode = ((D2FontGlyphStrc*)wszText)->wCharCode;
+        pNextChar = (D2FontGlyphStrc*)((D2FontGlyphStrc*)wszText)->abUnverified;
+        if (((D2FontGlyphStrc*)wszText)->wCharCode < 0x100 && ((D2FontGlyphStrc*)wszText)->wCharCode == 0xff) {
+          wszColorMarker[0] = *(uint16_t*)pNextChar;
+          pColorArgChar = (D2FontGlyphStrc*)(((D2FontGlyphStrc*)wszText)->abUnverified + 2);
+          nLineWidth = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsN(wszColorMarker, gwFontHeightDefault, 1);
+          if (!nLineWidth) {
+            if (!(nCharIndex + 2 < nStrLen)) {
               eGlobalPalette = 0;
+              pCurGlyphEntry = 0;
+              pNextChar = pColorArgChar;
+              nCharIndex += 2;
+            } else {
+              nCharIndex += 3;
+              eGlobalPalette = pColorArgChar->wCharCode - 0x30;
+              pNextChar = (D2FontGlyphStrc*)(((D2FontGlyphStrc*)wszText)->abUnverified + 4);
+              pCurGlyphEntry = pColorArgChar;
+              if ((int)eGlobalPalette >= 0xd) {
+                eGlobalPalette = 0;
+              }
             }
+          } else {
+            pNextChar = (D2FontGlyphStrc*)((D2FontGlyphStrc*)wszText)->abUnverified;
+            pCurGlyphEntry = (*gpfnFontGetCharWidth)(wCharCode);
+            sGfxData.nFrameNumber = (int)*(uint16_t*)(pCurGlyphEntry->abUnverified + 6);
+            D2gfx::D2GFX::D2GFX_DrawShiftedImage(&sGfxData, nPositionX, nY, -1, eDrawMode, eGlobalPalette);
+            nPositionX += (uint32_t)pCurGlyphEntry->abUnverified[1];
+            nCharIndex++;
           }
-        } else {
-          pNextChar = (D2FontGlyphStrc*)((D2FontGlyphStrc*)wszText)->abUnverified;
+        } else if (wCharCode != 10) {
           pCurGlyphEntry = (*gpfnFontGetCharWidth)(wCharCode);
           sGfxData.nFrameNumber = (int)*(uint16_t*)(pCurGlyphEntry->abUnverified + 6);
           D2gfx::D2GFX::D2GFX_DrawShiftedImage(&sGfxData, nPositionX, nY, -1, eDrawMode, eGlobalPalette);
           nPositionX += (uint32_t)pCurGlyphEntry->abUnverified[1];
           nCharIndex++;
-        }
-      } else if (wCharCode != 10) {
-        pCurGlyphEntry = (*gpfnFontGetCharWidth)(wCharCode);
-        sGfxData.nFrameNumber = (int)*(uint16_t*)(pCurGlyphEntry->abUnverified + 6);
-        D2gfx::D2GFX::D2GFX_DrawShiftedImage(&sGfxData, nPositionX, nY, -1, eDrawMode, eGlobalPalette);
-        nPositionX += (uint32_t)pCurGlyphEntry->abUnverified[1];
-        nCharIndex++;
-      } else {
-        nPositionX = nX;
-        if (bCenterHorizontally) {
-          nLineWidth = D2WINFONT_GetFirstLinePixelWidth((uint16_t*)pNextChar);
-          nPositionX = (nWidth - nLineWidth >> 1) + nX;
+        } else {
+          nPositionX = nX;
+          if (bCenterHorizontally) {
+            nLineWidth = D2WINFONT_GetFirstLinePixelWidth((uint16_t*)pNextChar);
+            nPositionX = (nWidth - nLineWidth >> 1) + nX;
+          }
+
+          nFontHeight = (uint32_t)gaFontCache[gnLastUsedFontId].pFontTableHeader->nLineHeight;
+          pCurGlyphEntry = (D2FontGlyphStrc*)(nFontHeight * -0x66666670);
+          nY += (int)(nFontHeight * -0x10) / 10;
+          nCharIndex++;
         }
 
-        nFontHeight = (uint32_t)gaFontCache[gnLastUsedFontId].pFontTableHeader->nLineHeight;
-        pCurGlyphEntry = (D2FontGlyphStrc*)(nFontHeight * -0x66666670);
-        nY += (int)(nFontHeight * -0x10) / 10;
-        nCharIndex++;
-      }
-
-      wszText = (uint16_t*)pNextChar;
-    } while (nCharIndex < nStrLen);
+        wszText = (uint16_t*)pNextChar;
+      } while (nCharIndex < nStrLen);
+    }
 
     return pCurGlyphEntry;
 }
@@ -537,7 +530,7 @@ void __fastcall D2WINFONT_DrawVerticalCroppedText(uint16_t * wszText, int32_t nX
     do {
       pNextChar = pCurChar + 1;
       nNextIdx = nCharIndex + 1;
-      if ((uint16_t)pCurChar[1] < 0x100 && pCurChar[1] == L'ÿ') {
+      if ((uint16_t)pCurChar[1] < 0x100 && pCurChar[1] == L'\xff') {
         nY = (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&nY + 2) << 16 | (uint32_t)(uint16_t)wszText[nNextIdx]);
         nNextIdx = nCharIndex + 2;
         pNextChar = pCurChar + 2;
@@ -616,7 +609,7 @@ void * __fastcall D2WINFONT_DrawWideStringRightToLeft(uint16_t * wszText, int32_
       wCharCode = *wszText;
       pNextChar = wszText + 1;
       nRightBound = (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&nRightBound + 2) << 16 | (uint32_t)(uint16_t)wCharCode);
-      if ((uint16_t)*wszText < 0x100 && *wszText == L'ÿ') {
+      if ((uint16_t)*wszText < 0x100 && *wszText == L'\xff') {
         nLeftBound = (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&nLeftBound + 2) << 16 | (uint32_t)(uint16_t)*pNextChar);
         pCurGlyph = wszText + 2;
         nGlyphCmp = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsN((uint16_t*)&nLeftBound, gwFontHeightDefault, 1);
@@ -687,7 +680,7 @@ static void D2WINFONT_DrawWideStringSimple(uint16_t * wszText, int32_t nX, int32
     do {
       while (true) {
         wCharCode = *pCurChar;
-        if ((uint16_t)wCharCode >= 0x100 || wCharCode != L'ÿ') {
+        if ((uint16_t)wCharCode >= 0x100 || wCharCode != L'\xff') {
           break;
         }
 
@@ -847,7 +840,6 @@ BOOL __fastcall D2WINFONT_IsFontCharacterValid(uint8_t nCharCode) {
       exit(-1);
     }
 
-    return gaFontCharValidBits[nCharCode >> 5] >> (nCharCode & 0x1f) & 1;
     return gaFontCharValidBits[nCharCode >> 5] >> (nCharCode & 0x1f) & 1;
 }
 
@@ -1333,16 +1325,13 @@ int32_t __fastcall SetAndReturnLastFont(int32_t nFontId) {
     }
 
     gppDC6FontCache = (DC6**)&pNewCacheEntry->pFontDC6;
-    if (gbFontIsKoreanChatMode == '\0') {
-      return pReturnFont;
+    if (gbFontIsKoreanChatMode != '\0') {
+      gpfnFontGetCharWidth = D2WINFONT_LookupGlyphEntry;
+      if (nFontId != 0xd) {
+        gpfnFontGetCharWidth = FONT_GetCharWidthCallback;
+      }
     }
 
-    gpfnFontGetCharWidth = D2WINFONT_LookupGlyphEntry;
-    if (nFontId == 0xd) {
-      return pReturnFont;
-    }
-
-    gpfnFontGetCharWidth = FONT_GetCharWidthCallback;
     return pReturnFont;
 }
 

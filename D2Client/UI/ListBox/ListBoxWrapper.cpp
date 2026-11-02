@@ -43,11 +43,10 @@ void __thiscall Destructor(::ListBoxWrapper * pThis) {
 
 ::ListBoxWrapper * __thiscall ScalarDeletingDestructor(::ListBoxWrapper * pThis, uint32_t nFlags) {
     ListBoxWrapper::Destructor(pThis);
-    if (!(nFlags & 1 && pThis)) {
-      return pThis;
+    if (nFlags & 1 && pThis) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

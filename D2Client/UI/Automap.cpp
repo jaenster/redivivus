@@ -187,11 +187,10 @@ void __fastcall AUTOMAP_CenterOnPlayer(int32_t bForceCenter) {
 }
 
 int32_t __stdcall AUTOMAP_GetFade() {
-    if (!(MiniMapType == 1 && nAutoMapFade == 1)) {
-      return nAutoMapFade;
+    if (MiniMapType == 1 && nAutoMapFade == 1) {
+      nAutoMapFade = (bAutoMapFade ? -2 : 0) + 2;
     }
 
-    nAutoMapFade = (bAutoMapFade ? -2 : 0) + 2;
     return nAutoMapFade;
 }
 

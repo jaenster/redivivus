@@ -156,7 +156,6 @@ uint32_t __stdcall FIELDTBLS_GetFieldValueAtCoords(int * pnFieldOrigin, int32_t 
     }
 
     return (uint32_t)*(uint8_t*)((int)gpFieldDataTable + nX + ((nY - pnFieldOrigin[1]) * 0x100 - *pnFieldOrigin));
-    return (uint32_t)*(uint8_t*)((int)gpFieldDataTable + nX + ((nY - pnFieldOrigin[1]) * 0x100 - *pnFieldOrigin));
 }
 
 // Steps one cell through the field towards a target point, adjusting pX/pY

@@ -54,12 +54,7 @@ D2TimerStrc * * __stdcall _UnusedGetFromList(eD2UnitType eUnitType, uint32_t nUn
       return nullptr;
     }
 
-    uint32_t nBucketIndex = nUnitGUID & 0x8000003f;
-    if ((int)nBucketIndex >= 0) {
-      return pGame->pTimerQueue->pDispatchedTimersByType[Dispatch::aTimerIndexUnitTypeLookupTable[eUnitType]] + nBucketIndex;
-    }
-
-    nBucketIndex = (nBucketIndex - 1 | -64) + 1;
+    uint32_t nBucketIndex = (int)nUnitGUID % 64;
     return pGame->pTimerQueue->pDispatchedTimersByType[Dispatch::aTimerIndexUnitTypeLookupTable[eUnitType]] + nBucketIndex;
 }
 

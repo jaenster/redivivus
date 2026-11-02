@@ -166,11 +166,10 @@ uint32_t __stdcall GetMouseClickFlags() {
     if (D2Game::GameData::gnAlwaysRun) {
       flags = 8;
     }
-    if (!gClickModifierDown) {
-      return flags;
+    if (gClickModifierDown) {
+      flags |= 4;
     }
 
-    flags |= 4;
     return flags;
 }
 
@@ -654,7 +653,6 @@ int __stdcall GAMEDATA_GetCurrentLevelBlankScreen() {
     }
 
     return pDVar1->BlankScreen;
-    return pDVar1->BlankScreen;
 }
 
 // Main render entry point. Called per-frame from CLIENT_GameLoopFrame.
@@ -856,11 +854,10 @@ uint32_t __thiscall ComputeFrameSkipLevel(int32_t nElapsedTicks, int32_t nFpsDra
     if (nElapsedTicks > 0x13) {
       nSkipLevel++;
     }
-    if (nElapsedTicks <= 0x1d) {
-      return nSkipLevel;
+    if (nElapsedTicks > 0x1d) {
+      nSkipLevel++;
     }
 
-    nSkipLevel++;
     return nSkipLevel;
 }
 
@@ -960,11 +957,10 @@ eD2ClientAppMode __stdcall pfModes_Save() {
     // Static local variables (originally global data)
     static eD2ClientAppMode eD2ClientAppMode_0070ef18 = APPMODE_HOST; D2_STATIC_GUARD(eD2ClientAppMode_0070ef18, "D2Client::GAME::Game::pfModes_Save::eD2ClientAppMode_0070ef18");
 
-    if (eD2ClientAppMode_0070ef18 != APPMODE_HOST) {
-      return eD2ClientAppMode_0070ef18;
+    if (eD2ClientAppMode_0070ef18 == APPMODE_HOST) {
+      ClientModeInGame::ClientAppModeQueue(APPMODE_ENTERGAME);
     }
 
-    ClientModeInGame::ClientAppModeQueue(APPMODE_ENTERGAME);
     return eD2ClientAppMode_0070ef18;
 }
 
@@ -1757,11 +1753,10 @@ void __fastcall CLIENT_SetLadder(BOOL bLadder) {
 
 uint32_t __stdcall GAMEDATA_GetLadderOrGameType() {
     uint32_t bResult = gClientGameData.CLIENT_bLadder;
-    if (!((uint32_t)(eD2GSGameType_007a0610 - GAMETYPE_BNET_BETA) > 1)) {
-      return bResult;
+    if ((uint32_t)(eD2GSGameType_007a0610 - GAMETYPE_BNET_BETA) > 1) {
+      bResult = 1;
     }
 
-    bResult = 1;
     return bResult;
 }
 
@@ -2470,15 +2465,14 @@ uint32_t __stdcall CLIENT_GameLoopFrame(uint32_t dwUnused) {
     if (eD2GSGameType_007a0610 == GAMETYPE_SINGLEPLAYER || eD2GSGameType_007a0610 == GAMETYPE_SINGLEPLAYER_UNCAPPED) {
       D2Game::GAME::Server::QSERVER_ShutdownAllGames();
     }
-    if (!(eD2GSGameType_007a0610 == GAMETYPE_OBNET_HOST || eD2GSGameType_007a0610 == GAMETYPE_LAN_HOST)) {
-      return 1;
+    if (eD2GSGameType_007a0610 == GAMETYPE_OBNET_HOST || eD2GSGameType_007a0610 == GAMETYPE_LAN_HOST) {
+      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gHostGameStateCs);
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ExitingGame = 1;
+      LeaveCriticalSection(&gHostGameStateCs);
+      /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ WaitForSingleObject(HostGameThread, 10000);
+      HostGameThread = (HANDLE)0x0;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gHostGameStateCs);
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ExitingGame = 1;
-    LeaveCriticalSection(&gHostGameStateCs);
-    /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ WaitForSingleObject(HostGameThread, 10000);
-    HostGameThread = (HANDLE)0x0;
     return 1;
 }
 
@@ -2789,11 +2783,10 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
         }
       }
     }
-    if (!((eD2GSGameType_007a0610 == GAMETYPE_BNET_BETA || eD2GSGameType_007a0610 == GAMETYPE_OBNET_HOST || eD2GSGameType_007a0610 == GAMETYPE_BNET || eD2GSGameType_007a0610 == GAMETYPE_OBNET_JOIN) && gpBNetClientCallbacks)) {
-      return APPMODE_RENDER;
+    if ((eD2GSGameType_007a0610 == GAMETYPE_BNET_BETA || eD2GSGameType_007a0610 == GAMETYPE_OBNET_HOST || eD2GSGameType_007a0610 == GAMETYPE_BNET || eD2GSGameType_007a0610 == GAMETYPE_OBNET_JOIN) && gpBNetClientCallbacks) {
+      gpBNetClientCallbacks->pfnSendLeaveGame();
     }
 
-    gpBNetClientCallbacks->pfnSendLeaveGame();
     return APPMODE_RENDER;
 }
 

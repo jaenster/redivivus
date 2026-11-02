@@ -215,6 +215,7 @@ static uint32_t __stdcall DEBUG_ParseDebugDataDirectory(uint32_t nCount, int32_t
 }
 
 static uint8_t __stdcall DEBUG_ParseModuleHeaders(short * * ppModuleBase, short * pModuleBase) {
+    void* pDebugDir;
     /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ *ppModuleBase = pModuleBase;
     BOOL bIsBadPtr = IsBadReadPtr(pModuleBase, 0x40);
     if (!(!bIsBadPtr && *pModuleBase == 0x5a4d)) {
@@ -257,17 +258,14 @@ static uint8_t __stdcall DEBUG_ParseModuleHeaders(short * * ppModuleBase, short 
     uint32_t nDirSize = 0;
     bIsValidImage = DEBUG_ParsePEDebugDirectory(&nDirSize, &nDirRVA, (short int*)(pNtHeader + 6));
     uint32_t nCount = nDirSize;
-    if (!((char)bIsValidImage != '\0' && nDirRVA && nDirSize)) {
-      return 1;
+    if ((char)bIsValidImage != '\0' && nDirRVA && nDirSize) {
+      pDebugDir = (void*)(nDirRVA + (int)pModuleBase);
+      /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pDebugDir, nDirSize);
+      if (!bIsBadPtr && nCount >= 0x1c) {
+        DEBUG_ParseDebugDataDirectory(nCount, (int32_t)pModuleBase, (int32_t)pDebugDir, (D2FogDebugModuleEntryStrc*)ppModuleBase);
+      }
     }
 
-    void* pDebugDir = (void*)(nDirRVA + (int)pModuleBase);
-    /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pDebugDir, nDirSize);
-    if (!(!bIsBadPtr && nCount >= 0x1c)) {
-      return 1;
-    }
-
-    DEBUG_ParseDebugDataDirectory(nCount, (int32_t)pModuleBase, (int32_t)pDebugDir, (D2FogDebugModuleEntryStrc*)ppModuleBase);
     return 1;
 }
 
@@ -1302,20 +1300,19 @@ int32_t __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lp
     // Static local variables (originally global data)
     static BOOL WinMain_nShowCmd = 0x0; D2_STATIC_GUARD(WinMain_nShowCmd, "Fog::Engine::Application::WinMain::WinMain_nShowCmd");
 
-    char* aszArgv[2];
     WinMain_hInstance = hInstance;
     WinMain_nShowCmd = nShowCmd;
     D2TRACE("WinMain enter");
     BOOL bStartedAsService = Service::StartDiablo2ServerAsService();
     D2TRACE("StartDiablo2ServerAsService returned");
-    if (bStartedAsService) {
-      return 0;
+    if (!bStartedAsService) {
+      char* aszArgv[2];
+      aszArgv[0] = "d2server";
+      aszArgv[1] = lpCmdLine;
+      Storm::Engine::Application::LIB_LoadAdvapi32();
+      PreInitApplication(2, aszArgv);
     }
 
-    aszArgv[0] = "d2server";
-    aszArgv[1] = lpCmdLine;
-    Storm::Engine::Application::LIB_LoadAdvapi32();
-    PreInitApplication(2, aszArgv);
     return 0;
 }
 

@@ -60,38 +60,35 @@ int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart
     pNodeArray = pCache->pNodes;
     pCache->pFreeHead = pNodeArray;
     pCache->pFreeTail = pNodeArray + pCache->nMaxEntries * 0x1c - 0x1c;
-    if (gbGlideIsDebugBuild) {
-      return pCache->nMaxEntries * dwTextureSize + nVramStart;
+    if (!gbGlideIsDebugBuild) {
+      iNode = 1;
+      if (1 < (int)(pCache->nMaxEntries - 1)) {
+        pDebugScan = (uint32_t*)(pNodeArray + 0x20);
+        do {
+          if (*pDebugScan < 0x200000 && pCache->dwEntrySize + *pDebugScan > 0x200000) {
+            iNode *= 0x1c;
+            *(uint8_t**)(pNodeArray + iNode - 8) = pNodeArray + iNode + 0x1c;
+            *(uint8_t**)(pCache->pNodes + iNode + 0x34) = pCache->pNodes + iNode - 0x1c;
+            *(uint32_t*)(pCache->pNodes + iNode + 0x18) = 0;
+            *(uint32_t*)(pCache->pNodes + iNode + 0x14) = 0;
+            pCache->nUsedCount++;
+            break;
+          }
+
+          iNode++;
+          pDebugScan += 7;
+        } while (iNode < (int)(pCache->nMaxEntries - 1));
+      }
+
+      nEntryCount = *(uint32_t*)(pCache->pNodes + pCache->nMaxEntries * 0x1c - 0x18);
+      if (nEntryCount < 0x200000 && pCache->dwEntrySize + nEntryCount > 0x200000) {
+        *(uint32_t*)(pCache->pNodes + pCache->nMaxEntries * 0x1c - 4) = 0;
+        *(uint32_t*)(pCache->pNodes + pCache->nMaxEntries * 0x1c - 0x24) = 0;
+        pCache->pFreeTail = pCache->pNodes + (pCache->nMaxEntries - 2) * 0x1c;
+        pCache->nMaxEntries--;
+      }
     }
 
-    iNode = 1;
-    if (1 < (int)(pCache->nMaxEntries - 1)) {
-      pDebugScan = (uint32_t*)(pNodeArray + 0x20);
-      do {
-        if (*pDebugScan < 0x200000 && pCache->dwEntrySize + *pDebugScan > 0x200000) {
-          iNode *= 0x1c;
-          *(uint8_t**)(pNodeArray + iNode - 8) = pNodeArray + iNode + 0x1c;
-          *(uint8_t**)(pCache->pNodes + iNode + 0x34) = pCache->pNodes + iNode - 0x1c;
-          *(uint32_t*)(pCache->pNodes + iNode + 0x18) = 0;
-          *(uint32_t*)(pCache->pNodes + iNode + 0x14) = 0;
-          pCache->nUsedCount++;
-          break;
-        }
-
-        iNode++;
-        pDebugScan += 7;
-      } while (iNode < (int)(pCache->nMaxEntries - 1));
-    }
-
-    nEntryCount = *(uint32_t*)(pCache->pNodes + pCache->nMaxEntries * 0x1c - 0x18);
-    if (!(nEntryCount < 0x200000 && pCache->dwEntrySize + nEntryCount > 0x200000)) {
-      return pCache->nMaxEntries * dwTextureSize + nVramStart;
-    }
-
-    *(uint32_t*)(pCache->pNodes + pCache->nMaxEntries * 0x1c - 4) = 0;
-    *(uint32_t*)(pCache->pNodes + pCache->nMaxEntries * 0x1c - 0x24) = 0;
-    pCache->pFreeTail = pCache->pNodes + (pCache->nMaxEntries - 2) * 0x1c;
-    pCache->nMaxEntries--;
     return pCache->nMaxEntries * dwTextureSize + nVramStart;
 }
 

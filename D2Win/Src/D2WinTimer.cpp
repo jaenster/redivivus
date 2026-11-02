@@ -60,17 +60,14 @@ BOOL __fastcall DrawEx(::D2WinTimer * pTimer) {
     uint32_t uVar1 = pTimer->sControl.dwState;
     if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
       dwTickCount = GetTickCount();
-      if (!(dwTickCount / 1000 - (uint32_t)pTimer->nCreationTickCount / 1000 > (uint32_t)pTimer->nTimeoutInSeconds)) {
-        return 1;
+      if (dwTickCount / 1000 - (uint32_t)pTimer->nCreationTickCount / 1000 > (uint32_t)pTimer->nTimeoutInSeconds) {
+        pfnOnPress = pTimer->sControl.fpOnPress;
+        if (pfnOnPress) {
+          sMsg.pControl = &pTimer->sControl;
+          (*pfnOnPress)(&sMsg);
+        }
       }
 
-      pfnOnPress = pTimer->sControl.fpOnPress;
-      if (!pfnOnPress) {
-        return 1;
-      }
-
-      sMsg.pControl = &pTimer->sControl;
-      (*pfnOnPress)(&sMsg);
       return 1;
     }
 
@@ -92,17 +89,16 @@ int __fastcall D2WINTIMER_GetElapsed(::D2WinTimer * pTimer) {
     if (gadwBitMasks[2] & dwState && gadwBitMasks[0] & dwState) {
       OnPress pOVar1;
       dwTickCount = GetTickCount();
-      if (dwTickCount < gnTimerNextFireTick) {
-        return 1;
+      if (dwTickCount >= gnTimerNextFireTick) {
+        pOVar1 = pTimer->sControl.fpOnPress;
+        if (pOVar1) {
+          pCallbackArg.pControl = &pTimer->sControl;
+          (*pOVar1)(&pCallbackArg);
+        }
+
+        gnTimerNextFireTick = pTimer->nTimeoutInSeconds + dwTickCount;
       }
 
-      pOVar1 = pTimer->sControl.fpOnPress;
-      if (pOVar1) {
-        pCallbackArg.pControl = &pTimer->sControl;
-        (*pOVar1)(&pCallbackArg);
-      }
-
-      gnTimerNextFireTick = pTimer->nTimeoutInSeconds + dwTickCount;
       return 1;
     }
 
@@ -118,11 +114,10 @@ BOOL __stdcall Key(D2ControlMsg * pTimer) {
     }
     if (pTimer->uMsg != 0x102 && pTimer->wParam == 0x20) {
       pfnTimerCb = pControlRaw->sControl.fpOnPress;
-      if (!pfnTimerCb) {
-        return 1;
+      if (pfnTimerCb) {
+        (*pfnTimerCb)(pTimer);
       }
 
-      (*pfnTimerCb)(pTimer);
       return 1;
     }
 

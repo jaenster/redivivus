@@ -843,11 +843,10 @@ BOOL __fastcall CMD_SetKeyBinding(int32_t nCmdIndex, int32_t nSlot, uint32_t nKe
         return 1;
       }
     }
-    if (!pErrorCode) {
-      return 0;
+    if (pErrorCode) {
+      *pErrorCode = 0xf8b;
     }
 
-    *pErrorCode = 0xf8b;
     return 0;
 }
 

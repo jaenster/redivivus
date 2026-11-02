@@ -427,14 +427,14 @@ static D2RoomExStrc * __stdcall DRLGMAZE_AllocRoomExAndPickPreset(eDrlgDirection
 // the absolute and rel32 forms); only its sibling 00670de0 is called.
 D2RoomExStrc * __stdcall DRLGMAZE_AllocRoomAndPickPreset(eDrlgDirection eDirection, D2RoomExStrc * pSourceRoom, int bPickPresets) {
     D2RoomExStrc* pNewRoom = AllocateRoomEx(pSourceRoom, eDirection, bPickPresets);
-    if (!pNewRoom) {
-      return pNewRoom;
-    }
-    if (bPickPresets) {
-      DRLGMAZE_PickRoomPreset(pSourceRoom, 1);
+    if (pNewRoom) {
+      if (bPickPresets) {
+        DRLGMAZE_PickRoomPreset(pSourceRoom, 1);
+      }
+
+      DRLGMAZE_PickRoomPreset(pNewRoom, 1);
     }
 
-    DRLGMAZE_PickRoomPreset(pNewRoom, 1);
     return pNewRoom;
 }
 
@@ -1345,11 +1345,10 @@ static BOOL DRLGMAZE_CanPlaceRoomInDirection(eDrlgDirection param_eax, int * pRo
           DrlgRoom::AddRoomExToLevel((D2DrlgLevelStrc*)pRoomEx[0x16], pTestRoom);
           DRLGMAZE_PickRoomPreset(pTestRoom, 1);
         }
-        if (!pTestRoom) {
-          return (uint32_t)(pTestRoom != 0);
+        if (pTestRoom) {
+          DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pTestRoom);
         }
 
-        DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pTestRoom);
         return (uint32_t)(pTestRoom != 0);
       }
       if (*(eDrlgDirection*)(bReplaced + 4) == param_eax) {
@@ -1432,6 +1431,7 @@ D2RoomExStrc * __fastcall DRLGMAZE_FindBottomMostRoom(D2DrlgLevelStrc * pLevel) 
 
 // Finds the room in pLevel whose pRoomExData preset ID matches pDrlgReplaceRoom->nSourceLevelPrestId and replaces it in-place with the destination preset/file IDs from pDrlgReplaceRoom. If no matching room exists, falls back to ReplaceRoomWith to allocate a new adjacent room. Increments *pRoll (wrapping at 4) after any successful replacement.
 uint32_t * __stdcall ReplaceRoom(D2DrlgReplaceRoomStrc * pDrlgReplaceRoom, D2DrlgLevelStrc * pLevel, uint32_t * pRoll) {
+    uint32_t nNextRoll;
     D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst;
     int32_t nDestPresetId = pDrlgReplaceRoom->nDestLevelPrestId;
     int32_t nDestPickedFile = pDrlgReplaceRoom->nDestPickedFile;
@@ -1453,12 +1453,11 @@ uint32_t * __stdcall ReplaceRoom(D2DrlgReplaceRoomStrc * pDrlgReplaceRoom, D2Drl
       pRoomEx = pRoomEx->pRoomExNext;
     } while (true);
 
-    if (!pRoll) {
-      return pRoll;
+    if (pRoll) {
+      nNextRoll = (int)(*pRoll + 1) % 4;
+      *pRoll = nNextRoll;
     }
 
-    uint32_t nNextRoll = (int)(*pRoll + 1) % 4;
-    *pRoll = nNextRoll;
     return pRoll;
 }
 

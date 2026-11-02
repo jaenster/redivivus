@@ -192,29 +192,23 @@ int __fastcall SKILL_SelectProc_IsCorpseConsumableBasic(D2UnitStrc * pUnit, D2Un
 
 // SelectProc=3 handler: target must be a consumable corpse that can be converted and is not monsterId 0x4e (Bone Golem/special). Used for Raise Skeleton-type skills. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
 int __fastcall SKILL_SelectProc_IsConvertibleCorpse(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
-    if (!pTargetUnit) {
-      return 0;
+    int bCanBeConverted;
+    int32_t nMonStatsId;
+    if (pTargetUnit) {
+      uint32_t bIsConsumable;
+      bIsConsumable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTargetUnit, 0);
+      if (bIsConsumable) {
+        bCanBeConverted = UNIT::Monster::MONSTER_CanBeConverted(pTargetUnit);
+        if (bCanBeConverted && pTargetUnit->eUnitType == UNIT_MONSTER) {
+          nMonStatsId = UNIT::Player::TXT_MonStats_GetBaseId(pTargetUnit);
+          if (nMonStatsId < 0 || nMonStatsId >= sgptDataTable->nTxtMonStatsSize || nMonStatsId != 0x4e) {
+            return 1;
+          }
+        }
+      }
     }
 
-    uint32_t bIsConsumable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTargetUnit, 0);
-    if (!bIsConsumable) {
-      return 0;
-    }
-
-    int bCanBeConverted = UNIT::Monster::MONSTER_CanBeConverted(pTargetUnit);
-    if (!bCanBeConverted) {
-      return 0;
-    }
-    if (pTargetUnit->eUnitType != UNIT_MONSTER) {
-      return 0;
-    }
-
-    int32_t nMonStatsId = UNIT::Player::TXT_MonStats_GetBaseId(pTargetUnit);
-    if (!(nMonStatsId < 0 || nMonStatsId >= sgptDataTable->nTxtMonStatsSize || nMonStatsId != 0x4e)) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 // SelectProc=4 handler: target must be a corpse valid for revive (Necromancer Revive). Thunk forwarding to SKILLS_IsCorpseValidForRevive. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
@@ -236,14 +230,13 @@ int __fastcall SKILL_SelectProc_IsSelectableCorpse(D2UnitStrc * pUnit, D2UnitStr
 }
 
 BOOL __fastcall ITEM_IsQuestItem(D2UnitStrc * pItem, D2UnitFindArgStrc * pUnitFindArg) {
-    if (!(pItem && pItem->eUnitType == UNIT_ITEM)) {
-      return 0;
-    }
-
-    int nClassId = pItem->nClassId;
-    uint32_t bIsQuest = D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x02(nClassId);
-    if (bIsQuest) {
-      return 1;
+    if (pItem && pItem->eUnitType == UNIT_ITEM) {
+      uint32_t bIsQuest;
+      int nClassId = pItem->nClassId;
+      bIsQuest = D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x02(nClassId);
+      if (bIsQuest) {
+        return 1;
+      }
     }
 
     return 0;
@@ -1440,22 +1433,19 @@ void __fastcall TRADE_SendGoldToPartner(uint32_t nGoldAmount) {
 int __stdcall TRADE_IsTradeThrottled() {
     if (g_nTradeWindowState == 7) {
       DWORD dwTickCount;
-      if (gdwTradeThrottleTimestamp == -1) {
-        return 1;
+      if (gdwTradeThrottleTimestamp != -1) {
+        dwTickCount = GetTickCount();
+        if (dwTickCount > gdwTradeThrottleTimestamp + 30000U) {
+          UI::Inv::INV_ResetShopState();
+          g_nTradeWindowState = 0;
+          UI::ui::UI_CloseTradeWindow(0);
+          GAME::Msg::NET_D2GS_CLIENT_Send_0x69();
+          ClientModeInGame::D2CLIENT_SetExitVar1(0);
+          GAME::Game::D2CLIENT_SetExitVar2(1);
+          GAME::Game::D2CLIENT_SetExitVar3ToTrue();
+        }
       }
 
-      dwTickCount = GetTickCount();
-      if (!(dwTickCount > gdwTradeThrottleTimestamp + 30000U)) {
-        return 1;
-      }
-
-      UI::Inv::INV_ResetShopState();
-      g_nTradeWindowState = 0;
-      UI::ui::UI_CloseTradeWindow(0);
-      GAME::Msg::NET_D2GS_CLIENT_Send_0x69();
-      ClientModeInGame::D2CLIENT_SetExitVar1(0);
-      GAME::Game::D2CLIENT_SetExitVar2(1);
-      GAME::Game::D2CLIENT_SetExitVar3ToTrue();
       return 1;
     }
 
@@ -1717,22 +1707,21 @@ void __stdcall DRAW_WORLD_ClearWarpFadeTimer() {
 }
 
 int __fastcall CUNITEVENT_DispatchCallbacks(D2UnitStrc * pUnit, D2UnitStrc * pOwnerUnit, uint32_t dwParam3, uint32_t dwParam4) {
+    D2CUnitEventStrc* pNextCallback;
     int32_t dwResult = 0;
-    if (!pOwnerUnit) {
-      return dwResult;
-    }
-
-    D2CUnitEventStrc* pNextCallback = pOwnerUnit->uSideData.pClientSide.pCUnitEventList;
-    while (true) {
+    if (pOwnerUnit) {
       D2CUnitEventStrc* pDVar1;
-      pDVar1 = pNextCallback;
-      if (!pDVar1) {
-        break;
-      }
+      pNextCallback = pOwnerUnit->uSideData.pClientSide.pCUnitEventList;
+      while (true) {
+        pDVar1 = pNextCallback;
+        if (!pDVar1) {
+          break;
+        }
 
-      pNextCallback = pDVar1->pPrev;
-      if (pDVar1->pUnit == pUnit) {
-        dwResult = pDVar1->pfnCallback(pUnit, pOwnerUnit, dwParam3, dwParam4, pDVar1->dwEventData1, pDVar1->dwEventData2);
+        pNextCallback = pDVar1->pPrev;
+        if (pDVar1->pUnit == pUnit) {
+          dwResult = pDVar1->pfnCallback(pUnit, pOwnerUnit, dwParam3, dwParam4, pDVar1->dwEventData1, pDVar1->dwEventData2);
+        }
       }
     }
 
@@ -1740,20 +1729,19 @@ int __fastcall CUNITEVENT_DispatchCallbacks(D2UnitStrc * pUnit, D2UnitStrc * pOw
 }
 
 uint32_t __stdcall DRAW_ShouldDrawEdges(int32_t nParam) {
+    D2LevelsTxt* pLevelTxt;
+    DWORD dwResMode;
     D2RoomStrc* pRoom = UNIT::CUnit::GetCurrentRoom();
-    if (!pRoom) {
-      return 0;
-    }
-
-    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    D2LevelsTxt* pLevelTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
-    if (!(pLevelTxt->DrawEdges != '\0' && !nParam)) {
-      return 0;
-    }
-
-    DWORD dwResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
-    if (dwResMode == 2) {
-      return 1;
+    if (pRoom) {
+      eD2LevelId eLevel;
+      eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+      pLevelTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
+      if (pLevelTxt->DrawEdges != '\0' && !nParam) {
+        dwResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
+        if (dwResMode == 2) {
+          return 1;
+        }
+      }
     }
 
     return 0;

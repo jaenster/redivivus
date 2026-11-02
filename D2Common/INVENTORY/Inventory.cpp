@@ -272,11 +272,10 @@ BOOL __fastcall INVENTORY_RemoveItemFromInventory(D2UnitStrc * pItem) {
     if (pInventory->pOwner) {
       Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pInventory->pOwner, pItem);
     }
-    if (pInventory->dwPrimaryWeaponGUID != pItem->nUnitGUID) {
-      return 1;
+    if (pInventory->dwPrimaryWeaponGUID == pItem->nUnitGUID) {
+      pInventory->dwPrimaryWeaponGUID = -1;
     }
 
-    pInventory->dwPrimaryWeaponGUID = -1;
     return 1;
 }
 
@@ -295,12 +294,11 @@ D2InventoryStrc * __stdcall STRUCT_CreatePlayerInventory(D2PoolManagerStrc * pMe
     pInventoryStrc->nSignatureMagic = 0x1020304;
     pInventoryStrc->pMemory = pMemory;
     pInventoryStrc->pOwner = pUnit;
-    if (!pUnit) {
-      return pInventoryStrc;
+    if (pUnit) {
+      pUnit->pInventory = pInventoryStrc;
+      pInventoryStrc->nOwnerGUID = pUnit->nUnitGUID;
     }
 
-    pUnit->pInventory = pInventoryStrc;
-    pInventoryStrc->nOwnerGUID = pUnit->nUnitGUID;
     return pInventoryStrc;
 }
 
@@ -834,11 +832,10 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemWidth, 
     } else {
       nScore += byItemHeight;
     }
-    if ((int)nScore < (int)((byItemHeight + nItemWidth) * 2)) {
-      return nScore;
+    if ((int)nScore >= (int)((byItemHeight + nItemWidth) * 2)) {
+      nScore = 0xff;
     }
 
-    nScore = 0xff;
     return nScore;
 }
 
@@ -2145,11 +2142,10 @@ BOOL __stdcall INVENTORY_GetEquippedWeaponInfo(D2InventoryStrc * pInventory, D2U
       if (bIsWeapon) {
         *ppUnit = pItem;
         *eBodyLoc = 4;
-        if (pItem != pDVar7) {
-          return 1;
+        if (pItem == pDVar7) {
+          *bResult = 1;
         }
 
-        *bResult = 1;
         return 1;
       }
     }
@@ -2170,11 +2166,10 @@ BOOL __stdcall INVENTORY_GetEquippedWeaponInfo(D2InventoryStrc * pInventory, D2U
       if (bIsWeapon) {
         *ppUnit = pItem;
         *eBodyLoc = 5;
-        if (pItem != pDVar7) {
-          return 1;
+        if (pItem == pDVar7) {
+          *bResult = 1;
         }
 
-        *bResult = 1;
         return 1;
       }
     }
@@ -2184,18 +2179,16 @@ BOOL __stdcall INVENTORY_GetEquippedWeaponInfo(D2InventoryStrc * pInventory, D2U
 }
 
 uint32_t __stdcall INVENTORY_CheckHasArmorEquipped(D2InventoryStrc * pInventory) {
-    if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
-      return 0;
-    }
-
-    D2InventoryGridInfoStrc* pGridInfo = ReinitializeInventoryGrid(pInventory, &gsInventoryBodyLocGridSize, 0);
-    if (!(pGridInfo && pGridInfo->pGridCells[3])) {
-      return 0;
-    }
-
-    uint32_t bIsArmor = ITEMS::Items::ITEMS_IsA(pGridInfo->pGridCells[3], ITEMTYPE_Armor);
-    if (bIsArmor) {
-      return 1;
+    uint32_t bIsArmor;
+    if (pInventory && pInventory->nSignatureMagic == 0x1020304) {
+      D2InventoryGridInfoStrc* pGridInfo;
+      pGridInfo = ReinitializeInventoryGrid(pInventory, &gsInventoryBodyLocGridSize, 0);
+      if (pGridInfo && pGridInfo->pGridCells[3]) {
+        bIsArmor = ITEMS::Items::ITEMS_IsA(pGridInfo->pGridCells[3], ITEMTYPE_Armor);
+        if (bIsArmor) {
+          return 1;
+        }
+      }
     }
 
     return 0;
@@ -4594,13 +4587,11 @@ static uint32_t __stdcall INVENTORY_GetEquipSwapAction(D2UnitStrc * pUnit, D2Uni
     if (pUnit2) {
       return 3;
     }
-    if (!pUnit) {
-      return 0;
-    }
-
-    bIsSocketable = ITEMS::Items::IsTwoHanded(pUnit);
-    if (bIsSocketable) {
-      return 4;
+    if (pUnit) {
+      bIsSocketable = ITEMS::Items::IsTwoHanded(pUnit);
+      if (bIsSocketable) {
+        return 4;
+      }
     }
 
     return 0;

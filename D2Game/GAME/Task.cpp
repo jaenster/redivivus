@@ -149,11 +149,10 @@ uint32_t __stdcall TASK_GetTimestamp() {
 D2TaskQueueSlotStrc * __stdcall TASK_EnterQueueCriticalSection(uint32_t nSlotToken) {
     EnterCriticalSection(aTaskQueueCriticalSections + (nSlotToken & 0x1f));
     D2TaskQueueSlotStrc* pDVar1 = gaTaskQueueHeadArray[nSlotToken & 0x1f];
-    if (pDVar1) {
-      return pDVar1;
+    if (!pDVar1) {
+      LeaveCriticalSection(aTaskQueueCriticalSections + (nSlotToken & 0x1f));
     }
 
-    LeaveCriticalSection(aTaskQueueCriticalSections + (nSlotToken & 0x1f));
     return pDVar1;
 }
 

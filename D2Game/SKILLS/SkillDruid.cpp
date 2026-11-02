@@ -324,11 +324,10 @@ BOOL __fastcall Skills_SrvDoFunc_116_Werewolf(::SGAMEDATA * pGame, D2UnitStrc * 
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_modifierlist_skill, eSkill, 0);
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_modifierlist_level, nSkillLvl, 0);
           pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
-          if (!pSkill) {
-            return 1;
+          if (pSkill) {
+            D2Common::Skills::SetSkillMode(pSkill, 10);
           }
 
-          D2Common::Skills::SetSkillMode(pSkill, 10);
           return 1;
         }
       }
@@ -380,20 +379,17 @@ BOOL __fastcall SKILLDRUID_CastMultiMissile(::SGAMEDATA * pGame, D2UnitStrc * pU
     sSkillArg.nMissileTxtNo = pMissileId;
     sSkillArg.fpFunction = SkillSor::SKILL_InitChargedBoltPath;
     _bHasTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
-    if (!_bHasTarget) {
-      return 1;
+    if (_bHasTarget) {
+      int32_t nMissileIdx;
+      nMissileIdx = 0;
+      if (nMissileCount > 0) {
+        do {
+          sSkillArg.nFunctionParam = nMissileIdx;
+          MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+          nMissileIdx++;
+        } while (nMissileIdx < nMissileCount);
+      }
     }
-
-    int32_t nMissileIdx = 0;
-    if (nMissileCount <= 0) {
-      return 1;
-    }
-
-    do {
-      sSkillArg.nFunctionParam = nMissileIdx;
-      MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-      nMissileIdx++;
-    } while (nMissileIdx < nMissileCount);
 
     return 1;
 }
@@ -423,54 +419,48 @@ BOOL __fastcall Skills_SrvDoFunc_117_Firestorm(::SGAMEDATA * pGame, D2UnitStrc *
       int32_t nMissileIdx;
       SkillsServer::CreatingAMissile(pGame, nSrvMissle, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       nRemainingMissiles = nMissileCount - 1;
-      if (nRemainingMissiles <= 0) {
-        return 1;
-      }
+      if (nRemainingMissiles > 0) {
+        memset(&sSkillArg, 0, 0x5c);
+        eUnitType = pUnit->eUnitType;
+        sSkillArg.nFlags = 0x21;
+        sSkillArg.pOwner = pUnit;
+        int nXValue;
+        if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+          nXValue = pUnit->pPath.pStaticPath->nPosX;
+        } else if (pUnit->pPath.pDynamicPath) {
+          nXValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+        } else {
+          nXValue = 0;
+        }
 
-      memset(&sSkillArg, 0, 0x5c);
-      eUnitType = pUnit->eUnitType;
-      sSkillArg.nFlags = 0x21;
-      sSkillArg.pOwner = pUnit;
-      int nXValue;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nXValue = pUnit->pPath.pStaticPath->nPosX;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nXValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nXValue = 0;
-      }
+        sSkillArg.nX = nXValue;
+        eUnitType = pUnit->eUnitType;
+        int nYValue;
+        if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+          nYValue = pUnit->pPath.pStaticPath->nPosY;
+        } else if (pUnit->pPath.pDynamicPath) {
+          nYValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+        } else {
+          nYValue = 0;
+        }
 
-      sSkillArg.nX = nXValue;
-      eUnitType = pUnit->eUnitType;
-      int nYValue;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nYValue = pUnit->pPath.pStaticPath->nPosY;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nYValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nYValue = 0;
+        sSkillArg.nY = nYValue;
+        sSkillArg.nSkillLevel = nSkillLvl;
+        sSkillArg.eSkillNo = eSkill;
+        sSkillArg.nMissileTxtNo = nSrvMissle;
+        sSkillArg.fpFunction = SkillSor::SKILL_InitChargedBoltPath;
+        _bHasTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
+        if (_bHasTarget) {
+          nMissileIdx = 0;
+          if (nRemainingMissiles > 0) {
+            do {
+              sSkillArg.nFunctionParam = nMissileIdx;
+              MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+              nMissileIdx++;
+            } while (nMissileIdx < nRemainingMissiles);
+          }
+        }
       }
-
-      sSkillArg.nY = nYValue;
-      sSkillArg.nSkillLevel = nSkillLvl;
-      sSkillArg.eSkillNo = eSkill;
-      sSkillArg.nMissileTxtNo = nSrvMissle;
-      sSkillArg.fpFunction = SkillSor::SKILL_InitChargedBoltPath;
-      _bHasTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
-      if (!_bHasTarget) {
-        return 1;
-      }
-
-      nMissileIdx = 0;
-      if (nRemainingMissiles <= 0) {
-        return 1;
-      }
-
-      do {
-        sSkillArg.nFunctionParam = nMissileIdx;
-        MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-        nMissileIdx++;
-      } while (nMissileIdx < nRemainingMissiles);
 
       return 1;
     }
@@ -924,26 +914,25 @@ BOOL __fastcall SKILLDRUID_SrvStFn58_FireClaws(::SGAMEDATA * pGame, D2UnitStrc *
 
     memset(&sDamage, 0, 0x70);
     SkillsServer::SKILLS_CalcToHitAndApply(pGameLocal, pUnit, pTarget, pSkillTxt, eSkill, nSkillLvl, &sDamage, 0);
-    if (!((uint8_t)sDamage.wResultFlags & 1)) {
-      return 1;
+    if ((uint8_t)sDamage.wResultFlags & 1) {
+      ::SGAMEDATA* pGameAfterHit;
+      sDamage.dwHitFlags = sDamage.dwHitFlags | 2U | pSkillTxt->HitFlags;
+      if (pSkillTxt->HitClass) {
+        sDamage.dwHitClass = pSkillTxt->HitClass;
+      }
+
+      sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
+      pGameAfterHit = pGameLocal;
+      UNIT::SUnitDmg::DAMAGE_CalculateOffensiveDamage(pGameLocal, pUnit, pTarget, &sDamage, 0, pSkillTxt->SrcDam);
+      SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
+      UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGameAfterHit, pUnit, pTarget, &sDamage, 0x80);
     }
 
-    sDamage.dwHitFlags = sDamage.dwHitFlags | 2U | pSkillTxt->HitFlags;
-    if (pSkillTxt->HitClass) {
-      sDamage.dwHitClass = pSkillTxt->HitClass;
-    }
-
-    sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
-    ::SGAMEDATA* pGameAfterHit = pGameLocal;
-    UNIT::SUnitDmg::DAMAGE_CalculateOffensiveDamage(pGameLocal, pUnit, pTarget, &sDamage, 0, pSkillTxt->SrcDam);
-    SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
-    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGameAfterHit, pUnit, pTarget, &sDamage, 0x80);
     return 1;
 }
 
 // Server DoFunc for Druid skill 122 (Maul, Werebear). Sets UNITFLAG_SKSRVDOFUNC, performs a standard to-hit/damage check via SKILLS_CalcToHitAndApply. On hit: applies HitFlags, ResultFlags, HitClass from txt, calculates offensive damage, then adds a percent bonus to physical damage (calc[0]), life leech (calc[1]), and mana leech (calc[2]) bonuses before final damage application and combat queue processing.
 BOOL __fastcall Skills_SrvDoFunc_122_Hunger(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nBonusDmg;
     int32_t nManaLeechBonus;
     D2DamageStrc sDamage;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -961,27 +950,27 @@ BOOL __fastcall Skills_SrvDoFunc_122_Hunger(::SGAMEDATA * pGame, D2UnitStrc * pU
 
     memset(&sDamage, 0, 0x70);
     SkillsServer::SKILLS_CalcToHitAndApply(pGame, pUnit, pTarget, pSkillTxt, eSkill, nSkillLvl, &sDamage, 0);
-    if (!(sDamage.wResultFlags & 1U)) {
-      return 1;
+    if (sDamage.wResultFlags & 1U) {
+      int32_t nBonusDmg;
+      sDamage.dwHitFlags = sDamage.dwHitFlags | 2U | pSkillTxt->HitFlags;
+      sDamage.wResultFlags |= pSkillTxt->ResultFlags;
+      if (pSkillTxt->HitClass) {
+        sDamage.dwHitClass = pSkillTxt->HitClass;
+      }
+
+      UNIT::SUnitDmg::DAMAGE_CalculateOffensiveDamage(pGame, pUnit, pTarget, &sDamage, 0, pSkillTxt->SrcDam);
+      SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
+      nBonusDmg = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
+      nBonusDmg = D2Client::Stats::D2ApplyPercent(sDamage.dwPhysDamage, nBonusDmg, 100);
+      sDamage.dwPhysDamage += nBonusDmg;
+      nBonusDmg = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
+      nManaLeechBonus = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[2], eSkill, nSkillLvl);
+      sDamage.dwLifeLeech += nBonusDmg;
+      sDamage.dwManaLeech += nManaLeechBonus;
+      UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, 0x80);
+      UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
     }
 
-    sDamage.dwHitFlags = sDamage.dwHitFlags | 2U | pSkillTxt->HitFlags;
-    sDamage.wResultFlags |= pSkillTxt->ResultFlags;
-    if (pSkillTxt->HitClass) {
-      sDamage.dwHitClass = pSkillTxt->HitClass;
-    }
-
-    UNIT::SUnitDmg::DAMAGE_CalculateOffensiveDamage(pGame, pUnit, pTarget, &sDamage, 0, pSkillTxt->SrcDam);
-    SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
-    nBonusDmg = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
-    nBonusDmg = D2Client::Stats::D2ApplyPercent(sDamage.dwPhysDamage, nBonusDmg, 100);
-    sDamage.dwPhysDamage += nBonusDmg;
-    nBonusDmg = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
-    nManaLeechBonus = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[2], eSkill, nSkillLvl);
-    sDamage.dwLifeLeech += nBonusDmg;
-    sDamage.dwManaLeech += nManaLeechBonus;
-    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, 0x80);
-    UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
     return 1;
 }
 

@@ -27,11 +27,10 @@ void __thiscall Destructor(::MappingEntryNode * pThis) {
     }
 
     pThis->Destructor();
-    if (!(dwFlags & 1)) {
-      return pThis;
+    if (dwFlags & 1) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

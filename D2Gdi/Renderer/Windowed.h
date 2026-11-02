@@ -64,7 +64,7 @@ HBITMAP __stdcall RENDERER_WINDOWED_GetBitmapHandle();
 void __fastcall UpdateScaleFactor(int nScaleFactor);
 void __fastcall SetGamma(int nGamma);
 int CheckGamma();
-void __fastcall SetGlobalLight(BYTE nRed, BYTE nGreen, BYTE nBlue);
+void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue);
 void __fastcall SetPerspectiveScale(int nScaleX, int nScaleY);
 void __fastcall AdjustPerspectivePosition(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust);
 void __fastcall PerspecitveScalePosition(int nPosX, int nPosY, int nAngle, int * pXAdjust, int * pYAdjust, BOOL bOrder);

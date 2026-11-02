@@ -114,11 +114,10 @@ void __stdcall StartListening(D2QServerStrc * pQServer, uint32_t nToken) {
 
 int __stdcall SwapWorkerSlotValue(D2QServerStrc * pQServer, int nWorkerIndex, int nNewSlotValueOrZero) {
     int nOldSlotValue = pQServer->aWorkerSlotValues[nWorkerIndex];
-    if (!nNewSlotValueOrZero) {
-      return nOldSlotValue;
+    if (nNewSlotValueOrZero) {
+      pQServer->aWorkerSlotValues[nWorkerIndex] = nNewSlotValueOrZero;
     }
 
-    pQServer->aWorkerSlotValues[nWorkerIndex] = nNewSlotValueOrZero;
     return nOldSlotValue;
 }
 
@@ -558,11 +557,10 @@ uint32_t __stdcall GetClientLocalIpByToken(D2QServerStrc * pQServer, uint32_t nT
     if (pClient) {
       nLocalIp = pClient->localSockaddr.sin_addr.S_un.S_addr;
     }
-    if (!pQServerTokenHashMap) {
-      return nLocalIp;
+    if (pQServerTokenHashMap) {
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection((LPCRITICAL_SECTION)pQServerTokenHashMap);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection((LPCRITICAL_SECTION)pQServerTokenHashMap);
     return nLocalIp;
 }
 
@@ -573,11 +571,10 @@ uint16_t __stdcall GetClientLocalPortByToken(D2QServerStrc * pQServer, uint32_t 
     if (pClient) {
       /* u_short hostshort for htons */ uLocalPort = htons(pClient->localSockaddr.sin_port);
     }
-    if (!pBucketLock) {
-      return uLocalPort;
+    if (pBucketLock) {
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pBucketLock);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pBucketLock);
     return uLocalPort;
 }
 
@@ -588,11 +585,10 @@ uint32_t __stdcall GetClientPeerIpByToken(D2QServerStrc * pQServer, uint32_t nTo
     if (pClient) {
       nPeerIp = pClient->peerSockaddr.sin_addr.S_un.S_addr;
     }
-    if (!pBucketLock) {
-      return nPeerIp;
+    if (pBucketLock) {
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pBucketLock);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pBucketLock);
     return nPeerIp;
 }
 
@@ -603,11 +599,10 @@ uint16_t __stdcall GetClientPeerPortByToken(D2QServerStrc * pQServer, uint32_t n
     if (pClient) {
       /* u_short hostshort for htons */ uPeerPort = htons(pClient->peerSockaddr.sin_port);
     }
-    if (!pBucketLock) {
-      return uPeerPort;
+    if (pBucketLock) {
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pBucketLock);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pBucketLock);
     return uPeerPort;
 }
 
@@ -824,16 +819,16 @@ static int NET_QServer_DecrementPerIpConnectionCount(in_addr * pClientIp, D2QSer
     }
 
     pMemoryToFree->nActiveConnectionCount--;
-    if (pMemoryToFree->nActiveConnectionCount > 0) {
-      return 1;
-    }
-    if (pDVar1) {
-      pDVar1->pNext = pMemoryToFree->pNext;
-    } else {
-      pQServer->ppIpConnCountBuckets[nBucketIndex] = pMemoryToFree->pNext;
+    if (pMemoryToFree->nActiveConnectionCount <= 0) {
+      if (pDVar1) {
+        pDVar1->pNext = pMemoryToFree->pNext;
+      } else {
+        pQServer->ppIpConnCountBuckets[nBucketIndex] = pMemoryToFree->pNext;
+      }
+
+      D2_FREE_AT(pMemoryToFree, ".\\Src\\QServer\\QServer.cpp", 0x940);
     }
 
-    D2_FREE_AT(pMemoryToFree, ".\\Src\\QServer\\QServer.cpp", 0x940);
     return 1;
 }
 
@@ -924,19 +919,18 @@ int __stdcall SendPacketToClient(D2QServerStrc * pQServer, char * pBytes, int nS
     pModePacketNode->dwEnqueueTick = dwTick;
     pModePacketNode->pNext = 0;
     pModePacketNode->nClientToken = nClientId;
-    if ((int)nClassifierOuts[3] >= pQServer->nModeCount) {
-      return 1;
+    if ((int)nClassifierOuts[3] < pQServer->nModeCount) {
+      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csClientLifecycle);
+      if (!pQServer->ppModePacketQueueTails[nClassifierOuts[3]]) {
+        pQServer->ppModePacketQueueHeads[nClassifierOuts[3]] = pModePacketNode;
+      } else {
+        pQServer->ppModePacketQueueTails[nClassifierOuts[3]]->pNext = pModePacketNode;
+      }
+
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServer->ppModePacketQueueTails[nClassifierOuts[3]] = pModePacketNode;
+      LeaveCriticalSection(&pQServer->csClientLifecycle);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csClientLifecycle);
-    if (!pQServer->ppModePacketQueueTails[nClassifierOuts[3]]) {
-      pQServer->ppModePacketQueueHeads[nClassifierOuts[3]] = pModePacketNode;
-    } else {
-      pQServer->ppModePacketQueueTails[nClassifierOuts[3]]->pNext = pModePacketNode;
-    }
-
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServer->ppModePacketQueueTails[nClassifierOuts[3]] = pModePacketNode;
-    LeaveCriticalSection(&pQServer->csClientLifecycle);
     return 1;
 }
 
@@ -1218,30 +1212,29 @@ D2QServerStrc * __stdcall NET_QServer_Init(eD2GSConnectionType neD2GSConnectionT
 }
 
 int __stdcall BroadcastToAllClients(D2QServerStrc * pQServer, char * pBytes, int nSize) {
-    D2QServerClientConnectionStrc* pQServerClient;
+    int* pQServer2;
     D2QServerStrc* pQServer_00 = pQServer;
     uint32_t nBucketIndex = 0;
-    if ((uint32_t)pQServer->nClientBucketCount <= 0) {
-      return 1;
-    }
-
-    int* pQServer2 = 0;
-    do {
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)((uintptr_t)&((D2QServerStrc*)pQServer2)->aGameTokenFilters[0].nExpectedMaskedToken + (int)(pQServer_00->pClientBucketLocks - 3)));
-      for (pQServerClient = pQServer_00->pQServerClientList[nBucketIndex]; pQServerClient; pQServerClient = pQServerClient->pNextByToken) {
-        if (!pQServerClient->bClosePending) {
-          if (pQServer_00->bUseNtLocalMode) {
-            QServer::QServerNT::SendToClientLocal(pQServer_00, pQServerClient, pBytes, nSize);
-          } else {
-            QServer::QServer98::SendToClientOnline(pQServer_00, pQServerClient, pBytes, nSize);
+    if ((uint32_t)pQServer->nClientBucketCount > 0) {
+      D2QServerClientConnectionStrc* pQServerClient;
+      pQServer2 = 0;
+      do {
+        /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)((uintptr_t)&((D2QServerStrc*)pQServer2)->aGameTokenFilters[0].nExpectedMaskedToken + (int)(pQServer_00->pClientBucketLocks - 3)));
+        for (pQServerClient = pQServer_00->pQServerClientList[nBucketIndex]; pQServerClient; pQServerClient = pQServerClient->pNextByToken) {
+          if (!pQServerClient->bClosePending) {
+            if (pQServer_00->bUseNtLocalMode) {
+              QServer::QServerNT::SendToClientLocal(pQServer_00, pQServerClient, pBytes, nSize);
+            } else {
+              QServer::QServer98::SendToClientOnline(pQServer_00, pQServerClient, pBytes, nSize);
+            }
           }
         }
-      }
 
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection((LPCRITICAL_SECTION)((uintptr_t)&((D2QServerStrc*)pQServer2)->aGameTokenFilters[0].nExpectedMaskedToken + (int)(pQServer_00->pClientBucketLocks - 3)));
-      nBucketIndex++;
-      pQServer2 = &((D2QServerStrc*)pQServer2)->nClientBucketCountForScan;
-    } while (nBucketIndex < (uint32_t)pQServer_00->nClientBucketCount);
+        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection((LPCRITICAL_SECTION)((uintptr_t)&((D2QServerStrc*)pQServer2)->aGameTokenFilters[0].nExpectedMaskedToken + (int)(pQServer_00->pClientBucketLocks - 3)));
+        nBucketIndex++;
+        pQServer2 = &((D2QServerStrc*)pQServer2)->nClientBucketCountForScan;
+      } while (nBucketIndex < (uint32_t)pQServer_00->nClientBucketCount);
+    }
 
     return 1;
 }
@@ -1489,73 +1482,77 @@ static BOOL __stdcall QSSpamCheck(D2QServerClientConnectionStrc * pQServerClient
 // Shuts down and frees QServer structure. Optionally broadcasts final packet to all clients before cleanup. Closes all worker threads, frees hash-map buckets, deletes critical sections, closes sockets, and invokes WSACleanup. Iterates through mode packet free list and hacklist free list to release all pooled allocations.
 // @sourcefile .\Src\QServer\QServer.cpp
 int __stdcall Shutdown(D2QServerStrc * pQServer, char * pBytes, int nSize) {
-    if (!pQServer) {
-      return 1;
-    }
-    if (pBytes) {
-      BroadcastToAllClients(pQServer, pBytes, nSize);
-    }
-    if (pQServer->neD2GSConnectionType != CONNECTIONTYPE_SINGLEPLAYER && pQServer->neD2GSConnectionType != CONNECTIONTYPE_SINGLEPLAYERUNCAPPED) {
-      if (pQServer->bUseNtLocalMode) {
-        QServer::QServerNT::AwaitAndClose(pQServer);
-      } else {
-        QServer::QServer98::QSERVER_CloseAllConnections(pQServer);
+    int nLockByteOffset;
+    SOCKET* pListenSocketSlot;
+    D2QServerHacklistEntryStrc* pHacklistFreeEntry;
+    D2QServerModePacketNodeStrc* pModePacketFreeNode;
+    if (pQServer) {
+      int i;
+      if (pBytes) {
+        BroadcastToAllClients(pQServer, pBytes, nSize);
       }
-    }
-
-    FreeIpRateList(pQServer);
-    FreeHacklistBuckets(pQServer);
-    ClearModePacketQueues(pQServer);
-    SOCKET* pListenSocketSlot = pQServer->aListenSockets;
-    int i = 4;
-    do {
-      if (*pListenSocketSlot != -1) {
-        Safesock::closeSocket(*pListenSocketSlot);
-        *pListenSocketSlot = -1;
+      if (pQServer->neD2GSConnectionType != CONNECTIONTYPE_SINGLEPLAYER && pQServer->neD2GSConnectionType != CONNECTIONTYPE_SINGLEPLAYERUNCAPPED) {
+        if (pQServer->bUseNtLocalMode) {
+          QServer::QServerNT::AwaitAndClose(pQServer);
+        } else {
+          QServer::QServer98::QSERVER_CloseAllConnections(pQServer);
+        }
       }
 
-      pListenSocketSlot++;
-      i--;
-    } while (i);
-
-    WSACleanup();
-    /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pQServer->csClientLifecycle);
-    /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pQServer->csHacklist);
-    /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pQServer->csWorkerTelemetry);
-    D2QServerModePacketNodeStrc* pModePacketFreeNode = pQServer->pModePacketFreeList;
-    while (pModePacketFreeNode) {
-      pModePacketFreeNode = pQServer->pModePacketFreeList->pNext;
-      D2_FREE_AT(pQServer->pModePacketFreeList, ".\\Src\\QServer\\QServer.cpp", 0x183);
-      pQServer->pModePacketFreeList = pModePacketFreeNode;
-    }
-
-    D2QServerHacklistEntryStrc* pHacklistFreeEntry = pQServer->pHacklistEntryFreeList;
-    while (pHacklistFreeEntry) {
-      pHacklistFreeEntry = pQServer->pHacklistEntryFreeList->pNext;
-      D2_FREE_AT(pQServer->pHacklistEntryFreeList, ".\\Src\\QServer\\QServer.cpp", 0x189);
-      pQServer->pHacklistEntryFreeList = pHacklistFreeEntry;
-    }
-
-    D2_FREE_AT(pQServer->ppModePacketQueueHeads, ".\\Src\\QServer\\QServer.cpp", 0x18d);
-    D2_FREE_AT(pQServer->ppModePacketQueueTails, ".\\Src\\QServer\\QServer.cpp", 0x18e);
-    D2_FREE_AT(pQServer->ppIpConnCountBuckets, ".\\Src\\QServer\\QServer.cpp", 0x192);
-    D2_FREE_AT(pQServer->ppHacklistBuckets, ".\\Src\\QServer\\QServer.cpp", 0x193);
-    D2_FREE_AT(pQServer->pIpHashBuckets, ".\\Src\\QServer\\QServer.cpp", 0x195);
-    /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pQServer->csTokenHash);
-    D2_FREE_AT(pQServer->pQServerClientList, ".\\Src\\QServer\\QServer.cpp", 0x198);
-    i = 0;
-    if (TokenHashMapBucketSize > 0) {
-      int nLockByteOffset;
-      nLockByteOffset = 0;
+      FreeIpRateList(pQServer);
+      FreeHacklistBuckets(pQServer);
+      ClearModePacketQueues(pQServer);
+      pListenSocketSlot = pQServer->aListenSockets;
+      i = 4;
       do {
-        /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pQServer->pClientBucketLocks[nLockByteOffset]);
-        i++;
-        nLockByteOffset++;
-      } while (i < TokenHashMapBucketSize);
+        if (*pListenSocketSlot != -1) {
+          Safesock::closeSocket(*pListenSocketSlot);
+          *pListenSocketSlot = -1;
+        }
+
+        pListenSocketSlot++;
+        i--;
+      } while (i);
+
+      WSACleanup();
+      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pQServer->csClientLifecycle);
+      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pQServer->csHacklist);
+      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pQServer->csWorkerTelemetry);
+      pModePacketFreeNode = pQServer->pModePacketFreeList;
+      while (pModePacketFreeNode) {
+        pModePacketFreeNode = pQServer->pModePacketFreeList->pNext;
+        D2_FREE_AT(pQServer->pModePacketFreeList, ".\\Src\\QServer\\QServer.cpp", 0x183);
+        pQServer->pModePacketFreeList = pModePacketFreeNode;
+      }
+
+      pHacklistFreeEntry = pQServer->pHacklistEntryFreeList;
+      while (pHacklistFreeEntry) {
+        pHacklistFreeEntry = pQServer->pHacklistEntryFreeList->pNext;
+        D2_FREE_AT(pQServer->pHacklistEntryFreeList, ".\\Src\\QServer\\QServer.cpp", 0x189);
+        pQServer->pHacklistEntryFreeList = pHacklistFreeEntry;
+      }
+
+      D2_FREE_AT(pQServer->ppModePacketQueueHeads, ".\\Src\\QServer\\QServer.cpp", 0x18d);
+      D2_FREE_AT(pQServer->ppModePacketQueueTails, ".\\Src\\QServer\\QServer.cpp", 0x18e);
+      D2_FREE_AT(pQServer->ppIpConnCountBuckets, ".\\Src\\QServer\\QServer.cpp", 0x192);
+      D2_FREE_AT(pQServer->ppHacklistBuckets, ".\\Src\\QServer\\QServer.cpp", 0x193);
+      D2_FREE_AT(pQServer->pIpHashBuckets, ".\\Src\\QServer\\QServer.cpp", 0x195);
+      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pQServer->csTokenHash);
+      D2_FREE_AT(pQServer->pQServerClientList, ".\\Src\\QServer\\QServer.cpp", 0x198);
+      i = 0;
+      if (TokenHashMapBucketSize > 0) {
+        nLockByteOffset = 0;
+        do {
+          /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pQServer->pClientBucketLocks[nLockByteOffset]);
+          i++;
+          nLockByteOffset++;
+        } while (i < TokenHashMapBucketSize);
+      }
+
+      D2_FREE_AT(pQServer->pClientBucketLocks, ".\\Src\\QServer\\QServer.cpp", 0x19c);
+      D2_FREE_AT(pQServer, ".\\Src\\QServer\\QServer.cpp", 0x19f);
     }
 
-    D2_FREE_AT(pQServer->pClientBucketLocks, ".\\Src\\QServer\\QServer.cpp", 0x19c);
-    D2_FREE_AT(pQServer, ".\\Src\\QServer\\QServer.cpp", 0x19f);
     return 1;
 }
 
@@ -1746,6 +1743,7 @@ static void __stdcall HACKL_DisconnectAndBanClient(int nClientToken, char * pRea
 
 // @sourcefile .\Src\QServer\QServer.cpp
 int __fastcall CheckIfPlayerIsBannedByAddress(D2QServerStrc * pQServer, in_addr * pAddr, char * szFile, int32_t nLine) {
+    char* szIpStr;
     D2QServerClientConnectionStrc* pFoundClient;
     uint32_t nIpAddr = pAddr->S_un.S_addr;
     uint32_t nHashMask = pQServer->nClientHashMask;
@@ -1753,18 +1751,16 @@ int __fastcall CheckIfPlayerIsBannedByAddress(D2QServerStrc * pQServer, in_addr 
     for (pFoundClient = pQServer->pIpHashBuckets[nHashMask & nIpAddr]; pFoundClient && pFoundClient->ipAddress.S_un.S_addr != nIpAddr; pFoundClient = pFoundClient->pNextByIpHash) {}
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQServer->csTokenHash);
-    if (!pFoundClient) {
-      return 1;
+    if (pFoundClient) {
+      int nBanCheck;
+      nBanCheck = MatchesGameTokenFilter(pQServer, pFoundClient->ipAddress.S_un.S_addr);
+      if (!nBanCheck) {
+        /* in_addr in for inet_ntoa */ szIpStr = inet_ntoa((in_addr)pAddr->S_un.S_un_b);
+        LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  Client %d at %s banned via QSBanByAddr()", pFoundClient->nClientToken, szIpStr);
+        HACKL_DisconnectAndBanClient(pFoundClient->nClientToken, ".\\Src\\QServer\\QServer.cpp", 0x584, pQServer);
+      }
     }
 
-    int nBanCheck = MatchesGameTokenFilter(pQServer, pFoundClient->ipAddress.S_un.S_addr);
-    if (nBanCheck) {
-      return 1;
-    }
-
-    char* szIpStr = inet_ntoa((in_addr)pAddr->S_un.S_un_b);
-    LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  Client %d at %s banned via QSBanByAddr()", pFoundClient->nClientToken, szIpStr);
-    HACKL_DisconnectAndBanClient(pFoundClient->nClientToken, ".\\Src\\QServer\\QServer.cpp", 0x584, pQServer);
     return 1;
 }
 

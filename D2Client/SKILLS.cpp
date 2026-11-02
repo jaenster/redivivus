@@ -359,16 +359,14 @@ BOOL __fastcall Skills_CltDoFunc_MultiMissileDirected(D2UnitStrc * pUnit, eD2Ski
 
     spawn_missile_rounds:
     nSkillLvl = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->cltcalc[0], eSkill, nSkillLvl);
-    if (nSkillLvl <= 0) {
-      return 1;
+    if (nSkillLvl > 0) {
+      do {
+        SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
+        SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
+        SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
+        nSkillLvl--;
+      } while (nSkillLvl);
     }
-
-    do {
-      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
-      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
-      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
-      nSkillLvl--;
-    } while (nSkillLvl);
 
     return 1;
 }
@@ -430,18 +428,15 @@ BOOL __fastcall Skills_CltDoFunc_DualMissileWithZ(D2UnitStrc * pUnit, eD2Skills 
         Engine::Particle::SetOffsetVector(pMissile, -nAuraRange, 0, -nCalcB, 1);
       }
     }
-    if (pSkillTxt->cltmissile[2] < 0) {
-      return 1;
+    if (pSkillTxt->cltmissile[2] >= 0) {
+      sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[2];
+      pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
+      if (pMissile) {
+        Engine::Particle::SetPosVectorShifted(pMissile, nCalcA, 0, nOffsetX);
+        Engine::Particle::SetOffsetVector(pMissile, -nAuraRange, 0, -nCalcC, 1);
+      }
     }
 
-    sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[2];
-    pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
-    if (!pMissile) {
-      return 1;
-    }
-
-    Engine::Particle::SetPosVectorShifted(pMissile, nCalcA, 0, nOffsetX);
-    Engine::Particle::SetOffsetVector(pMissile, -nAuraRange, 0, -nCalcC, 1);
     return 1;
 }
 
@@ -473,21 +468,17 @@ BOOL __fastcall Skills_CltDoFunc_DualMissileAtCoords(D2UnitStrc * pUnit, eD2Skil
         UNIT::Missile::MakeMissile(&sSkillArg);
       }
     }
-    if (pSkillTxt->cltmissile[2] < 0) {
-      return 1;
+    if (pSkillTxt->cltmissile[2] >= 0) {
+      D2UnitStrc* pUnit_00;
+      sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[2];
+      if ((int)sSkillArg.nMissileTxtNo < sgptDataTable->nTxtMissilesSize) {
+        pUnit_00 = UNIT::Missile::MakeMissile(&sSkillArg);
+        if (pUnit_00) {
+          D2Common::Units::Missile::SetTargetX(pUnit_00, pUnit->nInitSeed);
+        }
+      }
     }
 
-    sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[2];
-    if ((int)sSkillArg.nMissileTxtNo >= sgptDataTable->nTxtMissilesSize) {
-      return 1;
-    }
-
-    D2UnitStrc* pUnit_00 = UNIT::Missile::MakeMissile(&sSkillArg);
-    if (!pUnit_00) {
-      return 1;
-    }
-
-    D2Common::Units::Missile::SetTargetX(pUnit_00, pUnit->nInitSeed);
     return 1;
 }
 
@@ -1284,25 +1275,21 @@ BOOL __fastcall Skills_CltDoFunc_AuraLevel_ProjectileMissile(D2UnitStrc * pUnit,
 }
 
 uint32_t __fastcall SKILLSCLT_ValidateSkillAndMissile(D2UnitStrc * pUnit, int32_t nMonId, uint32_t nMissileId, uint32_t dwUnused) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
-      return nMissileId;
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+      int nBaseId;
+      nBaseId = pUnit->nClassId;
+      if (nBaseId >= 0) {
+        D2MonStatsTxt* pMonStatsTxt = nBaseId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nBaseId : nullptr;
+        if (pMonStatsTxt) {
+          nBaseId = (int)pMonStatsTxt->BaseId;
+        }
+        if (nBaseId >= 0 && nBaseId < sgptDataTable->nTxtMonStatsSize && nBaseId == 0x10b && nMonId == 0xa7) {
+          Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_brraiseback, 2, 0, 0, 0, 0, 0);
+          nMissileId = 0x54;
+        }
+      }
     }
 
-    int nBaseId = pUnit->nClassId;
-    if (nBaseId < 0) {
-      return nMissileId;
-    }
-
-    D2MonStatsTxt* pMonStatsTxt = nBaseId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nBaseId : nullptr;
-    if (pMonStatsTxt) {
-      nBaseId = (int)pMonStatsTxt->BaseId;
-    }
-    if (!(nBaseId >= 0 && nBaseId < sgptDataTable->nTxtMonStatsSize && nBaseId == 0x10b && nMonId == 0xa7)) {
-      return nMissileId;
-    }
-
-    Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_brraiseback, 2, 0, 0, 0, 0, 0);
-    nMissileId = 0x54;
     return nMissileId;
 }
 

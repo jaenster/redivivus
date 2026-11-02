@@ -158,11 +158,10 @@ int __thiscall OnMouseWheel(::ButtonImplementation * pThis, D2UIMouseMsgStrc * p
 ::ButtonImplementation * __thiscall ScalarDeletingDestructor(::ButtonImplementation * pThis, uint32_t nFlags) {
     pThis->pVtable = (ButtonImplementationVtable*)(void*)ButtonImplementation::vftable;
     UI::Destructor((::UIWidget*)pThis);
-    if (!(nFlags & 1)) {
-      return pThis;
+    if (nFlags & 1) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
     return pThis;
 }
 

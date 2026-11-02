@@ -2350,23 +2350,23 @@ int32_t __stdcall GetUnitCountByServerId(uint16_t nServerId) {
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
     pGame = QSERVER_FindAndLockGame((uint32_t)nToken);
     int32_t nUnitCount = 0;
-    if (!pGame) {
-      return nUnitCount;
+    if (pGame) {
+      nUnitCount = GetUnitCount(pGame->pUnitList[0]);
+      if (!pGame->lpCriticalSection) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
+        exit(-1);
+      }
+
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
     }
 
-    nUnitCount = GetUnitCount(pGame->pUnitList[0]);
-    if (!pGame->lpCriticalSection) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
-      exit(-1);
-    }
-
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
     return nUnitCount;
 }
 
 // Exports up to nMaxCount unit type+mode records into pOutBuffer from the game currently assigned to nServerId. Looks up the game token via DATA_LastGameServer[nServerId] under the global hash lock, locks the game, then iterates all 128 player-unit buckets calling GetTypeAndMode for each unit (output stride 0x34 bytes). Returns the number of units exported. Used by external server-management queries.
 int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, void * pOutBuffer, int32_t nMaxCount) {
     D2QServerUnitRecordStrc* pOutCursor;
+    int nBucketIdx;
     int32_t nExported = 0;
     EnterCriticalSection(&gQServerGameListCs);
     ::SGAMEDATA* pGame = gaQServerGameByToken[nServerId & 0xffff];
@@ -2377,43 +2377,42 @@ int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, void * pO
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
     pGame = QSERVER_FindAndLockGame((uint32_t)nToken);
-    if (!pGame) {
-      return nExported;
-    }
-
-    nServerId = (uint32_t)pGame->pUnitList;
-    int nBucketIdx = 0;
-    do {
+    if (pGame) {
       D2UnitStrc* pUnit;
-      if (nExported >= nMaxCount) {
-        break;
+      nServerId = (uint32_t)pGame->pUnitList;
+      nBucketIdx = 0;
+      do {
+        if (nExported >= nMaxCount) {
+          break;
+        }
+
+        pUnit = *(D2UnitStrc**)nServerId;
+        if (pUnit) {
+          pOutCursor = (D2QServerUnitRecordStrc*)(nExported * 0x34 + (int)pOutBuffer);
+          do {
+            if (nExported >= nMaxCount) {
+              break;
+            }
+
+            UNIT::SUnit::GetTypeAndMode(pUnit, pOutCursor);
+            nExported++;
+            pOutCursor++;
+            pUnit = UNIT::SUnit::GetNextUnit(pUnit);
+          } while (pUnit);
+        }
+
+        nServerId += 4;
+        nBucketIdx++;
+      } while (nBucketIdx < 0x80);
+
+      if (!pGame->lpCriticalSection) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
+        exit(-1);
       }
 
-      pUnit = *(D2UnitStrc**)nServerId;
-      if (pUnit) {
-        pOutCursor = (D2QServerUnitRecordStrc*)(nExported * 0x34 + (int)pOutBuffer);
-        do {
-          if (nExported >= nMaxCount) {
-            break;
-          }
-
-          UNIT::SUnit::GetTypeAndMode(pUnit, pOutCursor);
-          nExported++;
-          pOutCursor++;
-          pUnit = UNIT::SUnit::GetNextUnit(pUnit);
-        } while (pUnit);
-      }
-
-      nServerId += 4;
-      nBucketIdx++;
-    } while (nBucketIdx < 0x80);
-
-    if (!pGame->lpCriticalSection) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
-      exit(-1);
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
     return nExported;
 }
 

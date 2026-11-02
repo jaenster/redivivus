@@ -64,17 +64,14 @@ BOOL __fastcall Q19_PlayerNotifyKhalimsWill(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Completed);
-    if (bQuestState) {
-      return 0;
-    }
-
-    /* GetQuestState(KhalimsWill, FinishedInPreviousGame): also skip if finished in
+    if (!bQuestState) {
+      /* GetQuestState(KhalimsWill, FinishedInPreviousGame): also skip if finished in
                          a prior game; else push turn-in update 0x10 */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_FinishedInPreviousGame);
-    if (bQuestState) {
-      return 0;
+      if (!bQuestState) {
+        QUEST_SendQuestUpdateToPlayer(pGame, pUnit, 0x10);
+      }
     }
 
-    QUEST_SendQuestUpdateToPlayer(pGame, pUnit, 0x10);
     return 0;
 }
 
@@ -149,11 +146,10 @@ void __fastcall Q19_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 // Q19_SequenceFilter (Khalim's Will). Sequence-chain filter: if this quest not yet at StateFlag 5 and is active, bumps StateFlag 0->1 and returns. Otherwise chains to the next quest's (nSequenceQuestId=QUEST_AbleGoToAct3) sequence filter, halting on a bad fn ptr. Pure StateFlag gating; no QuestRecord writes.
 bool __fastcall Q19_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (pQuestData->nStateFlag != 5 && pQuestData->bIsNotIntroduction != '\0') {
-      if (pQuestData->nStateFlag) {
-        return true;
+      if (!pQuestData->nStateFlag) {
+        pQuestData->nStateFlag = 1;
       }
 
-      pQuestData->nStateFlag = 1;
       return true;
     }
 
@@ -348,11 +344,10 @@ void __fastcall Q19_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // OBJOP_UseStairDirect (Khalim's Will object op). Stair/teleport object operate fn: if the operating unit is walking, delegates to A2Q7::TakeStairs. No quest-state logic.
 BOOL __fastcall OBJOP_UseStairDirect(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pVictim = pOperation->sArg.pVictim;
-    if (!(pVictim && pVictim->eAnimMode.ePlayerMode == Walk)) {
-      return 0;
+    if (pVictim && pVictim->eAnimMode.ePlayerMode == Walk) {
+      A2Q7::TakeStairs(pOperation);
     }
 
-    A2Q7::TakeStairs(pOperation);
     return 0;
 }
 
@@ -368,34 +363,31 @@ BOOL __fastcall Q19_IsKhalimsWillNotComplete(::SGAMEDATA * pGame) {
 
 // OBJOP_A3Q2_KhalimRelicPedestal (Khalim's Will object op, OperateFn45). Operate handler for the relic pedestal/Compelling Orb object. When triggered and the quest event flag is set, finds the associated object, schedules the orb's operate+death events, marks the GUID completion field (=2), and NotifyPlayersAboutEvent(9) (orb destroyed -> Mephisto path opens). Drives the physical quest-completion event; QuestRecord transition itself happens via the dialog/callbacks.
 BOOL __fastcall OBJOP_A3Q2_KhalimRelicPedestal(D2ObjectOperateFnArg * pOperation) {
+    D2ObjectsTxt* pKhalimsWillQuest;
+    D2QuestDataA3Q2Strc* pQuestSpecific;
+    ::SGAMEDATA* pGameInner;
     D2UnitStrc* pOrbUnit = pOperation->sArg.pVictim;
-    if (!(!pOrbUnit || pOrbUnit->eAnimMode.ePlayerMode == Death)) {
-      return 0;
+    if (!pOrbUnit || pOrbUnit->eAnimMode.ePlayerMode == Death) {
+      D2QuestDataStrc* pGame;
+      pGame = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
+      if (pGame) {
+        pQuestSpecific = pGame->pQuestSpecificData.pA3Q2;
+        if (pQuestSpecific->bOrbPlaced == '\x01') {
+          pOrbUnit = UNIT::SUnit::FindUnitFromTable(pOperation->sArg.pGame, UNIT_OBJECT, pQuestSpecific->nOrbGUID);
+          if (pOrbUnit) {
+            D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
+            pKhalimsWillQuest = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
+            pGameInner = pOperation->sArg.pGame;
+            GAME::Event::SetEvent(pGameInner, pOperation->sArg.pVictim, 1, (pKhalimsWillQuest->FrameCnt[1] >> 8) + pGameInner->dwGameFrame, 0, 0);
+            pQuestSpecific->nOrbUpdateMode = 2;
+            pGameInner = pOperation->sArg.pGame;
+            GAME::Event::SetEvent(pGameInner, pOperation->sArg.pVictim, 7, pGameInner->dwGameFrame + 0x1e, 0, 0);
+            NotifyPlayersAboutEvent(pGame->pGame, 9);
+          }
+        }
+      }
     }
 
-    D2QuestDataStrc* pGame = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
-    if (!pGame) {
-      return 0;
-    }
-
-    D2QuestDataA3Q2Strc* pQuestSpecific = pGame->pQuestSpecificData.pA3Q2;
-    if (pQuestSpecific->bOrbPlaced != '\x01') {
-      return 0;
-    }
-
-    pOrbUnit = UNIT::SUnit::FindUnitFromTable(pOperation->sArg.pGame, UNIT_OBJECT, pQuestSpecific->nOrbGUID);
-    if (!pOrbUnit) {
-      return 0;
-    }
-
-    D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
-    D2ObjectsTxt* pKhalimsWillQuest = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
-    ::SGAMEDATA* pGameInner = pOperation->sArg.pGame;
-    GAME::Event::SetEvent(pGameInner, pOperation->sArg.pVictim, 1, (pKhalimsWillQuest->FrameCnt[1] >> 8) + pGameInner->dwGameFrame, 0, 0);
-    pQuestSpecific->nOrbUpdateMode = 2;
-    pGameInner = pOperation->sArg.pGame;
-    GAME::Event::SetEvent(pGameInner, pOperation->sArg.pVictim, 7, pGameInner->dwGameFrame + 0x1e, 0, 0);
-    NotifyPlayersAboutEvent(pGame->pGame, 9);
     return 0;
 }
 
@@ -484,198 +476,198 @@ void __fastcall Q19_OnPlayerCubeKhalimsWill(::SGAMEDATA * pGame, D2UnitStrc * pU
 // Q19_CheckPlayerHasKhalimsEye (Khalim's Will). Per-player iterator predicate: if player lacks Khalim's Eye (0x20796571) and lacks the assembled Will (0x20326671), increments the quest GUID eye-needed counter. Used by the Eye relic portal drop to decide how many to spawn.
 BOOL __fastcall Q19_CheckPlayerHasKhalimsEye(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20796571);
-    if (pDVar1) {
-      return 0;
+    if (!pDVar1) {
+      D2QuestDataStrc* pDVar2;
+      pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20326671);
+      if (!pDVar1) {
+        pDVar2 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_KhalimsWill);
+        if (pDVar2) {
+          pDVar2->pQuestSpecificData.pA3Q2->nKhalimsEyeCount++;
+        }
+      }
     }
 
-    pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20326671);
-    if (pDVar1) {
-      return 0;
-    }
-
-    D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_KhalimsWill);
-    if (!pDVar2) {
-      return 0;
-    }
-
-    pDVar2->pQuestSpecificData.pA3Q2->nKhalimsEyeCount++;
     return 0;
 }
 
 // Q19_CheckPlayerHasKhalimsBrain (Khalim's Will). Per-player iterator predicate: if player lacks Khalim's Brain (0x20726271) and lacks the assembled Will (0x20326671), increments the quest GUID counter. Drives how many Brain relics the portal chest drops.
 BOOL __fastcall Q19_CheckPlayerHasKhalimsBrain(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20726271);
-    if (pDVar1) {
-      return 0;
+    if (!pDVar1) {
+      D2QuestDataStrc* pDVar2;
+      pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20326671);
+      if (!pDVar1) {
+        pDVar2 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_KhalimsWill);
+        if (pDVar2) {
+          pDVar2->pQuestSpecificData.pA3Q2->nKhalimsEyeCount++;
+        }
+      }
     }
 
-    pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20326671);
-    if (pDVar1) {
-      return 0;
-    }
-
-    D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_KhalimsWill);
-    if (!pDVar2) {
-      return 0;
-    }
-
-    pDVar2->pQuestSpecificData.pA3Q2->nKhalimsEyeCount++;
     return 0;
 }
 
 // Q19_CheckPlayerHasKhalimsHeart (Khalim's Will). Per-player iterator predicate: if player lacks Khalim's Heart (0x20726871) and lacks the assembled Will (0x20326671), increments the quest GUID counter. Drives how many Heart relics the portal chest drops.
 BOOL __fastcall Q19_CheckPlayerHasKhalimsHeart(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20726871);
-    if (pDVar1) {
-      return 0;
+    if (!pDVar1) {
+      D2QuestDataStrc* pDVar2;
+      pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20326671);
+      if (!pDVar1) {
+        pDVar2 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_KhalimsWill);
+        if (pDVar2) {
+          pDVar2->pQuestSpecificData.pA3Q2->nKhalimsEyeCount++;
+        }
+      }
     }
 
-    pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20326671);
-    if (pDVar1) {
-      return 0;
-    }
-
-    D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_KhalimsWill);
-    if (!pDVar2) {
-      return 0;
-    }
-
-    pDVar2->pQuestSpecificData.pA3Q2->nKhalimsEyeCount++;
     return 0;
 }
 
 // Operate handler (OperateFn57) for a Khalim's Will relic super-chest/portal. On activation: spawns 0–4 seeded gold piles, sets dwDropItemCode to Khalim's Heart (0x20726871), counts players still missing the Heart via Q19_CheckPlayerHasKhalimsHeart, drops that many reward items, then rolls normal chest drops. No QuestRecord state transitions.
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOperation) {
+    D2SeedStrc* pControlSeed;
+    D2QuestDataStrc* pKhalimsWillQuestData;
     D2UnitStrc* pDroppedUnit;
+    int iVar2;
+    int iHeartDropIdx;
+    D2SeedStrc seedNext;
     D2ObjectOperateFnArg* pOperationArg = pOperation;
     BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
-    if (!nGoldPiles) {
-      return 0;
-    }
-
-    D2SeedStrc* pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-    int iHeartDropIdx = 0;
-    D2SeedStrc seedNext = D2_SEED_NEXT(*pControlSeed);
-    *pControlSeed = seedNext;
-    int iVar2 = seedNext.nSeedLow % 5 + 5;
-    if (iVar2 > 0) {
-      do {
-        Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-        iVar2--;
-      } while (iVar2);
-    }
-
-    pOperation->sArg.pVictim->dwDropItemCode = 0x20726871;
-    D2QuestDataStrc* pKhalimsWillQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
-    if (pKhalimsWillQuestData) {
+    if (nGoldPiles) {
       D2QuestDataA3Q2Strc* pDVar1;
-      pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
-      pDVar1->nKhalimsEyeCount = 0;
-      UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsHeart);
-      if (pDVar1->nKhalimsEyeCount > 0) {
+      pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
+      iHeartDropIdx = 0;
+      seedNext = D2_SEED_NEXT(*pControlSeed);
+      *pControlSeed = seedNext;
+      iVar2 = seedNext.nSeedLow % 5 + 5;
+      if (iVar2 > 0) {
         do {
-          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
-          if (pDroppedUnit) {
-            pDVar1->nKhalimsBrainCount++;
-            pDVar1->bKhalimsBrainDropped = 1;
-          }
-
-          iHeartDropIdx++;
-        } while (iHeartDropIdx < pDVar1->nKhalimsEyeCount);
+          Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
+          iVar2--;
+        } while (iVar2);
       }
+
+      pOperation->sArg.pVictim->dwDropItemCode = 0x20726871;
+      pKhalimsWillQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
+      if (pKhalimsWillQuestData) {
+        pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
+        pDVar1->nKhalimsEyeCount = 0;
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsHeart);
+        if (pDVar1->nKhalimsEyeCount > 0) {
+          do {
+            pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
+            if (pDroppedUnit) {
+              pDVar1->nKhalimsBrainCount++;
+              pDVar1->bKhalimsBrainDropped = 1;
+            }
+
+            iHeartDropIdx++;
+          } while (iHeartDropIdx < pDVar1->nKhalimsEyeCount);
+        }
+      }
+
+      Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
     }
 
-    Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
     return 0;
 }
 
 // Operate handler (OperateFn58) for a Khalim's Will relic super-chest/portal. Same flow as Drop1 but drops Khalim's Eye (0x20796571), counting eligible players via Q19_CheckPlayerHasKhalimsEye. No QuestRecord state transitions.
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOperation) {
+    D2SeedStrc* pControlSeed;
+    D2QuestDataStrc* pKhalimsWillQuestData;
     D2UnitStrc* pDroppedUnit;
+    int iVar2;
+    int iEyeDropIdx;
+    D2SeedStrc seedNext;
     D2ObjectOperateFnArg* pOperationArg = pOperation;
     BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
-    if (!nGoldPiles) {
-      return 0;
-    }
-
-    D2SeedStrc* pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-    int iEyeDropIdx = 0;
-    D2SeedStrc seedNext = D2_SEED_NEXT(*pControlSeed);
-    *pControlSeed = seedNext;
-    int iVar2 = seedNext.nSeedLow % 5 + 5;
-    if (iVar2 > 0) {
-      do {
-        Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-        iVar2--;
-      } while (iVar2);
-    }
-
-    pOperation->sArg.pVictim->dwDropItemCode = 0x20796571;
-    D2QuestDataStrc* pKhalimsWillQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
-    if (pKhalimsWillQuestData) {
+    if (nGoldPiles) {
       D2QuestDataA3Q2Strc* pDVar1;
-      pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
-      pDVar1->nKhalimsEyeCount = 0;
-      UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsEye);
-      if (pDVar1->nKhalimsEyeCount > 0) {
+      pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
+      iEyeDropIdx = 0;
+      seedNext = D2_SEED_NEXT(*pControlSeed);
+      *pControlSeed = seedNext;
+      iVar2 = seedNext.nSeedLow % 5 + 5;
+      if (iVar2 > 0) {
         do {
-          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
-          if (pDroppedUnit) {
-            pDVar1->nKhalimsFlailCount++;
-            pDVar1->bKhalimsFlailDropped = 1;
-          }
-
-          iEyeDropIdx++;
-        } while (iEyeDropIdx < pDVar1->nKhalimsEyeCount);
+          Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
+          iVar2--;
+        } while (iVar2);
       }
+
+      pOperation->sArg.pVictim->dwDropItemCode = 0x20796571;
+      pKhalimsWillQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
+      if (pKhalimsWillQuestData) {
+        pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
+        pDVar1->nKhalimsEyeCount = 0;
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsEye);
+        if (pDVar1->nKhalimsEyeCount > 0) {
+          do {
+            pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
+            if (pDroppedUnit) {
+              pDVar1->nKhalimsFlailCount++;
+              pDVar1->bKhalimsFlailDropped = 1;
+            }
+
+            iEyeDropIdx++;
+          } while (iEyeDropIdx < pDVar1->nKhalimsEyeCount);
+        }
+      }
+
+      Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
     }
 
-    Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
     return 0;
 }
 
 // Operate handler (OperateFn59) for a Khalim's Will relic super-chest/portal. Same flow as Drop1 but drops Khalim's Brain (0x20726271), counting eligible players via Q19_CheckPlayerHasKhalimsBrain. No QuestRecord state transitions.
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop3(D2ObjectOperateFnArg * pOperation) {
+    D2SeedStrc* pControlSeed;
+    D2QuestDataStrc* pKhalimsWillQuestData;
     D2UnitStrc* pDroppedUnit;
+    int iVar2;
+    int iBrainDropIdx;
+    D2SeedStrc seedNext;
     D2ObjectOperateFnArg* pOperationArg = pOperation;
     BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject((::SGAMEDATA**)pOperation);
-    if (!nGoldPiles) {
-      return 0;
-    }
-
-    D2SeedStrc* pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-    int iBrainDropIdx = 0;
-    D2SeedStrc seedNext = D2_SEED_NEXT(*pControlSeed);
-    *pControlSeed = seedNext;
-    int iVar2 = seedNext.nSeedLow % 5 + 5;
-    if (iVar2 > 0) {
-      do {
-        Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
-        iVar2--;
-      } while (iVar2);
-    }
-
-    pOperation->sArg.pVictim->dwDropItemCode = 0x20726271;
-    D2QuestDataStrc* pKhalimsWillQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
-    if (pKhalimsWillQuestData) {
+    if (nGoldPiles) {
       D2QuestDataA3Q2Strc* pDVar1;
-      pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
-      pDVar1->nKhalimsEyeCount = 0;
-      UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsBrain);
-      if (pDVar1->nKhalimsEyeCount > 0) {
+      pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
+      iBrainDropIdx = 0;
+      seedNext = D2_SEED_NEXT(*pControlSeed);
+      *pControlSeed = seedNext;
+      iVar2 = seedNext.nSeedLow % 5 + 5;
+      if (iVar2 > 0) {
         do {
-          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
-          if (pDroppedUnit) {
-            pDVar1->nKhalimsHeartCount++;
-            pDVar1->bKhalimsHeartDropped = 1;
-          }
-
-          iBrainDropIdx++;
-        } while (iBrainDropIdx < pDVar1->nKhalimsEyeCount);
+          Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
+          iVar2--;
+        } while (iVar2);
       }
+
+      pOperation->sArg.pVictim->dwDropItemCode = 0x20726271;
+      pKhalimsWillQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
+      if (pKhalimsWillQuestData) {
+        pDVar1 = pKhalimsWillQuestData->pQuestSpecificData.pA3Q2;
+        pDVar1->nKhalimsEyeCount = 0;
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsBrain);
+        if (pDVar1->nKhalimsEyeCount > 0) {
+          do {
+            pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
+            if (pDroppedUnit) {
+              pDVar1->nKhalimsHeartCount++;
+              pDVar1->bKhalimsHeartDropped = 1;
+            }
+
+            iBrainDropIdx++;
+          } while (iBrainDropIdx < pDVar1->nKhalimsEyeCount);
+        }
+      }
+
+      Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
     }
 
-    Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
     return 0;
 }
 
@@ -694,74 +686,73 @@ void __fastcall Q19_UpdateOrbCount(::SGAMEDATA * pGame, int nCountDelta) {
 // A3Q2 (Khalim's Will) active-dialog filter for Meshif (NPC 0xf5). Returns true if Meshif should offer quest dialog: checks if any Khalim body-part item (eye/brain/heart/flail/assembled flail) is held and the corresponding step-flag has not yet been set, or if all 4 parts are held without Step0x05. Also returns true if quest is in progress (nStateFlag!=0) and Step0x02 is unset. Returns false for all other NPCs.
 bool __fastcall Q19_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     BOOL bQuestState;
-    if (nTargetClassId != 0xf5) {
-      return false;
-    }
-    if (pQuestData->nStateFlag >= 1) {
-      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x02);
-      if (!bQuestState) {
-        return true;
-      }
-    }
-
-    int nItemCount = 0;
-    D2UnitStrc* pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20316671);
-    if (pQuestItem) {
-      nItemCount = 1;
-      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x05);
-      if (!bQuestState) {
-        return true;
-      }
-    }
-
-    pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20796571);
-    if (pQuestItem) {
-      nItemCount++;
-      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x03);
-      if (!bQuestState) {
-        return true;
-      }
-    }
-
-    pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20726871);
-    if (pQuestItem) {
-      nItemCount++;
-      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x06);
-      if (!bQuestState) {
-        return true;
-      }
-    }
-
-    pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20726271);
-    if (pQuestItem) {
-      nItemCount++;
-      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x04);
-      if (!bQuestState) {
-        return true;
-      }
-    }
-
-    pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20326671);
-    if (pQuestItem) {
+    D2UnitStrc* pQuestItem;
+    int nItemCount;
+    if (nTargetClassId == 0xf5) {
       bool bTempleNotDone;
-      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x07);
-      if (!bQuestState) {
-        bTempleNotDone = (bool)A3Q6::Q23_IsBlackenedTempleNotDone(pQuestData->pGame);
-        if (bTempleNotDone) {
+      if (pQuestData->nStateFlag >= 1) {
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x02);
+        if (!bQuestState) {
+          return true;
+        }
+      }
+
+      nItemCount = 0;
+      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20316671);
+      if (pQuestItem) {
+        nItemCount = 1;
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x05);
+        if (!bQuestState) {
+          return true;
+        }
+      }
+
+      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20796571);
+      if (pQuestItem) {
+        nItemCount++;
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x03);
+        if (!bQuestState) {
+          return true;
+        }
+      }
+
+      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20726871);
+      if (pQuestItem) {
+        nItemCount++;
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x06);
+        if (!bQuestState) {
+          return true;
+        }
+      }
+
+      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20726271);
+      if (pQuestItem) {
+        nItemCount++;
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x04);
+        if (!bQuestState) {
+          return true;
+        }
+      }
+
+      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20326671);
+      if (pQuestItem) {
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x07);
+        if (!bQuestState) {
+          bTempleNotDone = (bool)A3Q6::Q23_IsBlackenedTempleNotDone(pQuestData->pGame);
+          if (bTempleNotDone) {
+            return true;
+          }
+        }
+      }
+      if (nItemCount == 4) {
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x05);
+        if (!bQuestState) {
           return true;
         }
       }
     }
-    if (nItemCount != 4) {
-      return false;
-    }
 
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Step0x05);
-    if (bQuestState) {
-      return false;
-    }
-
-    return true;
+    return false;
 }
 
 void __fastcall Q19_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {

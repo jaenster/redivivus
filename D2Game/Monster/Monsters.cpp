@@ -719,16 +719,14 @@ static int32_t MONSTER_GetMinion1MonstatId(D2UnitDataMonsterStrc * pMonData) {
 
     int nClassId = *(int*)pMonData->Components;
     D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
-    if (!pMonStatsTxt) {
-      return nClassId;
+    if (pMonStatsTxt) {
+      short int nMinion1Id;
+      nMinion1Id = pMonStatsTxt->minion1;
+      if (nMinion1Id >= 0 && (int)nMinion1Id < sgptDataTable->nTxtMonStatsSize) {
+        nClassId = (int)nMinion1Id;
+      }
     }
 
-    short int nMinion1Id = pMonStatsTxt->minion1;
-    if (!(nMinion1Id >= 0 && (int)nMinion1Id < sgptDataTable->nTxtMonStatsSize)) {
-      return nClassId;
-    }
-
-    nClassId = (int)nMinion1Id;
     return nClassId;
 }
 

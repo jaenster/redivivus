@@ -601,68 +601,68 @@ void __stdcall D3D_RenderTileComponentsToPixelBuffer(D2TileLibraryEntryStrc * pT
 }
 
 BOOL __fastcall D3D_RenderFloorTileToTexture(D2TileLibraryEntryStrc * pTileLibraryEntry) {
+    int32_t nAllocatedNode;
     int nNodeIndex;
     DWORD dwSurfaceOpResult;
     IDirect3DTexture2* pTexture;
     DDSURFACEDESC2 sSurfaceDesc;
+    short int sCacheSlotIndex;
     BOOL bResult = 0;
     BOOL nTextureCacheIndex = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTileLibraryEntry, 1, 0);
     D3DFloorCacheNodeStrc* pFloorCacheNodes = gD3DFloorTextureCache.pNodeBuffer;
-    if (!nTextureCacheIndex) {
-      return bResult;
-    }
-
-    short int sCacheSlotIndex = pTileLibraryEntry->nTextureCacheIndex;
-    if (sCacheSlotIndex < 0) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x191);
-      exit(-1);
-    }
-    if (!sCacheSlotIndex) {
-      int32_t nAllocatedNode;
-      nAllocatedNode = D3DFLOOR_EnsureAvailableNode(&gD3DFloorTextureCache);
-      pTileLibraryEntry->nTextureCacheIndex = (short int)nAllocatedNode;
-      pFloorCacheNodes = gD3DFloorTextureCache.pNodeBuffer;
-      nNodeIndex = (int)(short int)nAllocatedNode;
-      if (nNodeIndex - 1 < 0) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19c);
+    if (nTextureCacheIndex) {
+      sCacheSlotIndex = pTileLibraryEntry->nTextureCacheIndex;
+      if (sCacheSlotIndex < 0) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x191);
         exit(-1);
       }
-      if (nNodeIndex - 1 >= gD3DFloorTextureCache.nMaxNodes) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19d);
-        exit(-1);
-      }
+      if (!sCacheSlotIndex) {
+        nAllocatedNode = D3DFLOOR_EnsureAvailableNode(&gD3DFloorTextureCache);
+        pTileLibraryEntry->nTextureCacheIndex = (short int)nAllocatedNode;
+        pFloorCacheNodes = gD3DFloorTextureCache.pNodeBuffer;
+        nNodeIndex = (int)(short int)nAllocatedNode;
+        if (nNodeIndex - 1 < 0) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19c);
+          exit(-1);
+        }
+        if (nNodeIndex - 1 >= gD3DFloorTextureCache.nMaxNodes) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19d);
+          exit(-1);
+        }
 
-      gD3DFloorTextureCache.pNodeBuffer[nNodeIndex - 1].pTile = pTileLibraryEntry;
-      sSurfaceDesc.dwSize = 0x7c;
-      memset(&sSurfaceDesc.dwFlags, 0, 0x78);
-      dwSurfaceOpResult = gpD3DFloorTileSystemSurface->lpVtbl->Lock(gpD3DFloorTileSystemSurface, nullptr, &sSurfaceDesc, 0x21, nullptr);
-      if (dwSurfaceOpResult) {
-        Renderer::DIRECTD3D_LogError("Failed to lock memory surface", dwSurfaceOpResult);
-      }
-      if (!((uint8_t)sSurfaceDesc.dwFlags & 8)) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ad);
-        exit(-1);
-      }
+        gD3DFloorTextureCache.pNodeBuffer[nNodeIndex - 1].pTile = pTileLibraryEntry;
+        sSurfaceDesc.dwSize = 0x7c;
+        memset(&sSurfaceDesc.dwFlags, 0, 0x78);
+        dwSurfaceOpResult = gpD3DFloorTileSystemSurface->lpVtbl->Lock(gpD3DFloorTileSystemSurface, nullptr, &sSurfaceDesc, 0x21, nullptr);
+        if (dwSurfaceOpResult) {
+          Renderer::DIRECTD3D_LogError("Failed to lock memory surface", dwSurfaceOpResult);
+        }
+        if (!((uint8_t)sSurfaceDesc.dwFlags & 8)) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ad);
+          exit(-1);
+        }
 
-      D3D_RenderTileComponentsToPixelBuffer(pTileLibraryEntry, (uint16_t*)sSurfaceDesc.lpSurface, sSurfaceDesc.lPitch >> 1);
-      dwSurfaceOpResult = gpD3DFloorTileSystemSurface->lpVtbl->Unlock(gpD3DFloorTileSystemSurface, nullptr);
-      if (dwSurfaceOpResult) {
-        Renderer::DIRECTD3D_LogError("Failed to unlock memory surface", dwSurfaceOpResult);
-      }
-      if (Renderer::gnD3DTextureCapFlags & gadwBitMasks[10]) {
-        Renderer::RENDERER_D3D_CopySurfacePixels(pFloorCacheNodes[nNodeIndex - 1].pSurface, gpD3DFloorTileSystemSurface, gnD3DTextureCacheCount);
-        pTexture = pFloorCacheNodes[nNodeIndex - 1].pTexture;
+        D3D_RenderTileComponentsToPixelBuffer(pTileLibraryEntry, (uint16_t*)sSurfaceDesc.lpSurface, sSurfaceDesc.lPitch >> 1);
+        dwSurfaceOpResult = gpD3DFloorTileSystemSurface->lpVtbl->Unlock(gpD3DFloorTileSystemSurface, nullptr);
+        if (dwSurfaceOpResult) {
+          Renderer::DIRECTD3D_LogError("Failed to unlock memory surface", dwSurfaceOpResult);
+        }
+        if (Renderer::gnD3DTextureCapFlags & gadwBitMasks[10]) {
+          Renderer::RENDERER_D3D_CopySurfacePixels(pFloorCacheNodes[nNodeIndex - 1].pSurface, gpD3DFloorTileSystemSurface, gnD3DTextureCacheCount);
+          pTexture = pFloorCacheNodes[nNodeIndex - 1].pTexture;
+        } else {
+          pFloorCacheNodes[nNodeIndex - 1].pTexture->lpVtbl->Load(pFloorCacheNodes[nNodeIndex - 1].pTexture, gpD3DFloorTileMemoryTexture);
+          pTexture = pFloorCacheNodes[nNodeIndex - 1].pTexture;
+        }
       } else {
-        pFloorCacheNodes[nNodeIndex - 1].pTexture->lpVtbl->Load(pFloorCacheNodes[nNodeIndex - 1].pTexture, gpD3DFloorTileMemoryTexture);
-        pTexture = pFloorCacheNodes[nNodeIndex - 1].pTexture;
+        D3DFLOOR_PromoteNodeToMRU(&gD3DFloorTextureCache, (int)sCacheSlotIndex);
+        pTexture = pFloorCacheNodes[sCacheSlotIndex - 1].pTexture;
       }
-    } else {
-      D3DFLOOR_PromoteNodeToMRU(&gD3DFloorTextureCache, (int)sCacheSlotIndex);
-      pTexture = pFloorCacheNodes[sCacheSlotIndex - 1].pTexture;
+
+      g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, pTexture);
+      bResult = 1;
     }
 
-    g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, pTexture);
-    bResult = 1;
     return bResult;
 }
 

@@ -65,20 +65,18 @@ D2SkillDescTxt * __fastcall GetSkillDescription(eD2Skills eSkillId) {
 
 int32_t __fastcall SKILL_GetMaxLevelForSkill(int32_t skillId) {
     int32_t nMaxLevel;
-    if (!(skillId < 0 || skillId >= sgptDataTable->nTxtSkillsCount || (nMaxLevel = (int32_t)sgptDataTable->pTxtSkills[skillId].maxlvl , nMaxLevel <= 0))) {
-      return nMaxLevel;
+    if (skillId < 0 || skillId >= sgptDataTable->nTxtSkillsCount || (nMaxLevel = (int32_t)sgptDataTable->pTxtSkills[skillId].maxlvl , nMaxLevel <= 0)) {
+      nMaxLevel = 0x14;
     }
 
-    nMaxLevel = 0x14;
     return nMaxLevel;
 }
 
 int32_t __fastcall CheckMonStatId(int32_t nMonStatsId) {
-    if (!(nMonStatsId < 0 || nMonStatsId >= sgptDataTable->nTxtMonStatsSize)) {
-      return nMonStatsId;
+    if (nMonStatsId < 0 || nMonStatsId >= sgptDataTable->nTxtMonStatsSize) {
+      nMonStatsId = -1;
     }
 
-    nMonStatsId = -1;
     return nMonStatsId;
 }
 

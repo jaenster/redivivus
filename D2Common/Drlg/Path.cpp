@@ -75,11 +75,10 @@ int32_t __stdcall DRLGPATH_GetApproxDistancePacked(uint32_t nPackedCoord1, uint3
     }
 
     int nMin = nDx;
-    if (!(nDx < nDy || (nResult = nDy + nDx * 2 , nMin = nDy , nDx <= nDy))) {
-      return nResult;
+    if (nDx < nDy || (nResult = nDy + nDx * 2 , nMin = nDy , nDx <= nDy)) {
+      nResult = nMin + nDy * 2;
     }
 
-    nResult = nMin + nDy * 2;
     return nResult;
 }
 
@@ -130,11 +129,10 @@ static int32_t __stdcall DRLGPATH_GetDirectionIndex(int32_t nY2, int32_t nY1, in
     if ((int)nDy < -1) {
       return nDx * 5 + 10;
     }
-    if ((int)nDy <= 1) {
-      return nDx * 5 + 0xc + nDy;
+    if ((int)nDy > 1) {
+      nDy = 2;
     }
 
-    nDy = 2;
     return nDx * 5 + 0xc + nDy;
 }
 
@@ -184,11 +182,10 @@ int32_t __stdcall DRLGPATH_GetDirectionIndexPacked(uint32_t nPackedFrom, uint32_
     if ((int)nDeltaY < -1) {
       return nDeltaX * 5 + 10;
     }
-    if ((int)nDeltaY <= 1) {
-      return nDeltaX * 5 + 0xc + nDeltaY;
+    if ((int)nDeltaY > 1) {
+      nDeltaY = 2;
     }
 
-    nDeltaY = 2;
     return nDeltaX * 5 + 0xc + nDeltaY;
 }
 
@@ -1254,21 +1251,16 @@ int32_t __fastcall PATH_FindPathTowardWithAStarFallback(D2PathTypeArg * pPathTyp
     }
 
     nResult = nTowardResult;
-    if (!(nAbsDY * nAbsDY + nAbsDX * nAbsDX <= 0x144)) {
-      return nResult;
+    if (nAbsDY * nAbsDY + nAbsDX * nAbsDX <= 0x144) {
+      nResult = PATH_FindPathAStarLocalPool(pPathTypeArg);
+      if (!nResult) {
+        nResult = nTowardResult;
+        if (nTowardResult) {
+          nResult = PATH_FindPathToward(pPathTypeArg);
+        }
+      }
     }
 
-    nResult = PATH_FindPathAStarLocalPool(pPathTypeArg);
-    if (nResult) {
-      return nResult;
-    }
-
-    nResult = nTowardResult;
-    if (!nTowardResult) {
-      return nResult;
-    }
-
-    nResult = PATH_FindPathToward(pPathTypeArg);
     return nResult;
 }
 
@@ -1615,11 +1607,10 @@ int32_t __stdcall DRLGPATH_GetSimpleDistancePacked(uint32_t nPackedPosA, uint32_
     }
 
     int nDY = nDX;
-    if (!(nDX < nMinDelta || (nResult = nMinDelta + nDX * 2 , nDY = nMinDelta , nDX <= nMinDelta))) {
-      return nResult;
+    if (nDX < nMinDelta || (nResult = nMinDelta + nDX * 2 , nDY = nMinDelta , nDX <= nMinDelta)) {
+      nResult = nDY + nMinDelta * 2;
     }
 
-    nResult = nDY + nMinDelta * 2;
     return nResult;
 }
 
@@ -1980,16 +1971,13 @@ int32_t __thiscall DRLGPATH_FindPathAStar(D2DrlgRoomCoordsStrc * pRoomCoords, D2
     } while ((pFoundNode || true) && !pFoundNode && (int)nCostLimit < (int)nCostMax);
 
     nErrorLine = 0;
-    if (!pFoundNode) {
-      return nErrorLine;
+    if (pFoundNode) {
+      nErrorLine = DRLGPATH_ExtractPathFromResult((int32_t)pPathTypeArg, (int32_t)pFoundNode);
+      if (nErrorLine >= 0x4e) {
+        nErrorLine = 0;
+      }
     }
 
-    nErrorLine = DRLGPATH_ExtractPathFromResult((int32_t)pPathTypeArg, (int32_t)pFoundNode);
-    if (nErrorLine < 0x4e) {
-      return nErrorLine;
-    }
-
-    nErrorLine = 0;
     return nErrorLine;
 }
 
@@ -3170,12 +3158,11 @@ int32_t __fastcall DRLGPATH_SimplifyCollinearWaypoints(D2PathPointStrc * pDstPoi
         nPrevDeltaY = nDeltaY;
       } while (i < nPointCount - 1);
     }
-    if (i >= nPointCount) {
-      return nOutCount;
+    if (i < nPointCount) {
+      pDstPoints[nOutCount] = pSrcPoints[i];
+      nOutCount++;
     }
 
-    pDstPoints[nOutCount] = pSrcPoints[i];
-    nOutCount++;
     return nOutCount;
 }
 

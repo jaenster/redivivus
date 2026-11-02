@@ -52,17 +52,17 @@ void __stdcall D2WINPOPUP_Destroy() {
 
 // Returns TRUE if the popup control exists, is of type FORM_Popup (0xb), is active (state & 4), and is visible (state & 1). Used to check if popup is ready for interaction.
 BOOL __stdcall D2WINPOPUP_IsActiveAndVisible() {
-    if (!gpD2WinPopupControl) {
-      return 0;
-    }
-    if (gpD2WinPopupControl->sControl.neD2FormType != FORM_Popup) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x62);
-      exit(-1);
-    }
+    if (gpD2WinPopupControl) {
+      uint32_t uVar1;
+      if (gpD2WinPopupControl->sControl.neD2FormType != FORM_Popup) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x62);
+        exit(-1);
+      }
 
-    uint32_t uVar1 = gpD2WinPopupControl->sControl.dwState;
-    if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
-      return 1;
+      uVar1 = gpD2WinPopupControl->sControl.dwState;
+      if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
+        return 1;
+      }
     }
 
     return 0;
@@ -137,11 +137,10 @@ BOOL __fastcall DrawEx(::D2WinPopup * pPopup) {
       pPopup->bCentered = -1;
       nRelMouseX = D2Client::Mouse::nPosX - pPopup->sControl.dwPosX;
       nRelX = nSizeY - pPopup->sControl.dwPosY + D2Client::Mouse::nPosY;
-      if (!(nRelMouseX >= 0 && nRelMouseX <= pPopup->sControl.dwSizeX && nRelX >= 0 && nRelX <= nSizeY)) {
-        return 1;
+      if (nRelMouseX >= 0 && nRelMouseX <= pPopup->sControl.dwSizeX && nRelX >= 0 && nRelX <= nSizeY) {
+        pPopup->bCentered = nRelX / 0x14;
       }
 
-      pPopup->bCentered = nRelX / 0x14;
       return 1;
     }
 
@@ -174,18 +173,16 @@ BOOL __fastcall Draw(::D2WinPopup * pPopup) {
       D2gfx::D2GFX::D2GFX_DrawSolidRectEx(sPopupRect.left, sPopupRect.bottom, sPopupRect.right, sPopupRect.top, dwFillColor, DRAW_LESSTRANSPARENT);
       D2WinFont::SetAndReturnLastFont(1);
       nMsgIdx = pPopup->nMessageCount;
-      if (nMsgIdx <= 0) {
-        return 1;
+      if (nMsgIdx > 0) {
+        wMessage = pPopup->wszMessages;
+        nMsgCount = 0;
+        do {
+          D2WinFont::DRAW_text(wMessage->wszText, pPopup->sControl.dwPosX, pPopup->sControl.dwPosY + (nMsgCount - nMsgIdx + 1) * 0x14, nMsgCount != pPopup->bCentered ? 0 : 0x3, 0);
+          nMsgIdx = pPopup->nMessageCount;
+          nMsgCount++;
+          wMessage++;
+        } while (nMsgCount < nMsgIdx);
       }
-
-      wMessage = pPopup->wszMessages;
-      nMsgCount = 0;
-      do {
-        D2WinFont::DRAW_text(wMessage->wszText, pPopup->sControl.dwPosX, pPopup->sControl.dwPosY + (nMsgCount - nMsgIdx + 1) * 0x14, nMsgCount != pPopup->bCentered ? 0 : 0x3, 0);
-        nMsgIdx = pPopup->nMessageCount;
-        nMsgCount++;
-        wMessage++;
-      } while (nMsgCount < nMsgIdx);
 
       return 1;
     }

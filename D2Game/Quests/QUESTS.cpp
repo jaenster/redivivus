@@ -1572,21 +1572,19 @@ static BOOL __stdcall INTRONPC_FillInPacketWithIntroNpcIds(D2UnitDataPlayerInter
     pD2GSPacketSrv0x91->nNpcID[9] = 0xffff;
     pD2GSPacketSrv0x91->nNpcID[10] = 0xffff;
     pD2GSPacketSrv0x91->nNpcID[0xb] = 0xffff;
-    if (nListSize <= 0) {
-      return bNeedSend;
-    }
-
-    do {
+    if (nListSize > 0) {
       BOOL bResult;
-      bResult = PLAYER::PlayerIntro::INTRONPC_CheckIfSpokenWithNPC_Intro2(pInteractedNPCs, aNpcList[nIndex]);
-      if (bResult) {
-        *pNpcIdSlot = *(uint16_t*)(aNpcList + nIndex);
-        pNpcIdSlot++;
-        bNeedSend = 1;
-      }
+      do {
+        bResult = PLAYER::PlayerIntro::INTRONPC_CheckIfSpokenWithNPC_Intro2(pInteractedNPCs, aNpcList[nIndex]);
+        if (bResult) {
+          *pNpcIdSlot = *(uint16_t*)(aNpcList + nIndex);
+          pNpcIdSlot++;
+          bNeedSend = 1;
+        }
 
-      nIndex++;
-    } while (nIndex < nListSize);
+        nIndex++;
+      } while (nIndex < nListSize);
+    }
 
     return bNeedSend;
 }
@@ -2767,11 +2765,10 @@ D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitSt
     if (_bInventoryPlaced) {
       BOOL bIsIdentified;
       bIsIdentified = D2Common::ITEMS::Items::CheckItemFlag(pRewardItem, ITEMFLAG_IDENTIFIED, 0x9d2, ".\\QUESTS\\QUESTS.CPP");
-      if (bIsIdentified) {
-        return pRewardItem;
+      if (!bIsIdentified) {
+        ITEMS::ItemMode::ITEMMODE_ProcessItemSell(pGame, pUnit, pRewardItem);
       }
 
-      ITEMS::ItemMode::ITEMMODE_ProcessItemSell(pGame, pUnit, pRewardItem);
       return pRewardItem;
     }
     if (bMustDrop) {
@@ -3270,19 +3267,17 @@ void __fastcall PlaceGuardInFrontOfJerhyn(D2QuestDataStrc * pQuestData, D2Object
 }
 
 BYTE __fastcall QUEST_CheckJerhynShouldBlock(::SGAMEDATA * pGame) {
+    D2QuestDataStrc* pRadamentsLairQuest;
     D2QuestDataStrc* pArcaneSanctuaryQuest = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheArcaneSanctuary);
-    if (!(pArcaneSanctuaryQuest && pArcaneSanctuaryQuest->pQuestSpecificData.pA2Q4->bShouldSpawnJerhyn != '\0')) {
-      return '\x01';
-    }
-
-    D2QuestDataStrc* pRadamentsLairQuest = GetQuestDataByQuestNoInternal(pArcaneSanctuaryQuest->pGame, QUESTINT_RadamentsLair);
-    if (!(pRadamentsLairQuest && pRadamentsLairQuest->bIsNotIntroduction != '\0' && pRadamentsLairQuest->nStateFlag != 5)) {
-      return '\x01';
-    }
-
-    bool bSevenTombsBelow4 = A2Q7::Q14_IsSevenTombsLessThanState4(pArcaneSanctuaryQuest->pGame);
-    if (!bSevenTombsBelow4 && pArcaneSanctuaryQuest->bIsNotIntroduction == '\x01' && pArcaneSanctuaryQuest->nStateFlag < 2) {
-      return '\0';
+    if (pArcaneSanctuaryQuest && pArcaneSanctuaryQuest->pQuestSpecificData.pA2Q4->bShouldSpawnJerhyn != '\0') {
+      bool bSevenTombsBelow4;
+      pRadamentsLairQuest = GetQuestDataByQuestNoInternal(pArcaneSanctuaryQuest->pGame, QUESTINT_RadamentsLair);
+      if (pRadamentsLairQuest && pRadamentsLairQuest->bIsNotIntroduction != '\0' && pRadamentsLairQuest->nStateFlag != 5) {
+        bSevenTombsBelow4 = A2Q7::Q14_IsSevenTombsLessThanState4(pArcaneSanctuaryQuest->pGame);
+        if (!bSevenTombsBelow4 && pArcaneSanctuaryQuest->bIsNotIntroduction == '\x01' && pArcaneSanctuaryQuest->nStateFlag < 2) {
+          return '\0';
+        }
+      }
     }
 
     return '\x01';
@@ -3425,62 +3420,62 @@ static void CreateSealGlow(D2ObjectOperateFnArg * pOperateArg, POINT * pPoint, i
 }
 
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow1(D2ObjectOperateFnArg * pOperation) {
+    D2QuestDataA4Q2Strc* pA4Q2Data;
+    POINT* pGlowCoord;
     D2UnitStrc* pVictim = pOperation->sArg.pVictim;
-    if (!(!pVictim || pVictim->eAnimMode.ePlayerMode == Death)) {
-      return 0;
+    if (!pVictim || pVictim->eAnimMode.ePlayerMode == Death) {
+      D2QuestDataStrc* pQuestData;
+      pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TerrorsEnd);
+      if (pQuestData) {
+        pA4Q2Data = pQuestData->pQuestSpecificData.pA4Q2;
+        pGlowCoord = &pA4Q2Data->sInfectorCoords;
+        D2Common::Units::GetCoords(pOperation->sArg.pVictim, pGlowCoord);
+        pA4Q2Data->sInfectorCoords.y += -0x34;
+        pGlowCoord->x += -0xc;
+        CreateSealGlow(pOperation, pGlowCoord, 1);
+      }
     }
 
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TerrorsEnd);
-    if (!pQuestData) {
-      return 0;
-    }
-
-    D2QuestDataA4Q2Strc* pA4Q2Data = pQuestData->pQuestSpecificData.pA4Q2;
-    POINT* pGlowCoord = &pA4Q2Data->sInfectorCoords;
-    D2Common::Units::GetCoords(pOperation->sArg.pVictim, pGlowCoord);
-    pA4Q2Data->sInfectorCoords.y += -0x34;
-    pGlowCoord->x += -0xc;
-    CreateSealGlow(pOperation, pGlowCoord, 1);
     return 0;
 }
 
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow2(D2ObjectOperateFnArg * pOperation) {
+    D2QuestDataA4Q2Strc* pA4Q2Data;
+    POINT* pCoord;
     D2UnitStrc* pVictim = pOperation->sArg.pVictim;
-    if (!(!pVictim || pVictim->eAnimMode.ePlayerMode == Death)) {
-      return 0;
+    if (!pVictim || pVictim->eAnimMode.ePlayerMode == Death) {
+      D2QuestDataStrc* pQuestData;
+      pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TerrorsEnd);
+      if (pQuestData) {
+        pA4Q2Data = pQuestData->pQuestSpecificData.pA4Q2;
+        pCoord = &pA4Q2Data->sSeisCoords;
+        D2Common::Units::GetCoords(pOperation->sArg.pVictim, pCoord);
+        pA4Q2Data->sSeisCoords.y += 0x21;
+        pCoord->x += -0x27;
+        CreateSealGlow(pOperation, pCoord, 3);
+      }
     }
 
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TerrorsEnd);
-    if (!pQuestData) {
-      return 0;
-    }
-
-    D2QuestDataA4Q2Strc* pA4Q2Data = pQuestData->pQuestSpecificData.pA4Q2;
-    POINT* pCoord = &pA4Q2Data->sSeisCoords;
-    D2Common::Units::GetCoords(pOperation->sArg.pVictim, pCoord);
-    pA4Q2Data->sSeisCoords.y += 0x21;
-    pCoord->x += -0x27;
-    CreateSealGlow(pOperation, pCoord, 3);
     return 0;
 }
 
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow3(D2ObjectOperateFnArg * pOperation) {
+    D2QuestDataA4Q2Strc* pA4Q2Data;
+    POINT* pCoord;
     D2UnitStrc* pVictim = pOperation->sArg.pVictim;
-    if (!(!pVictim || pVictim->eAnimMode.ePlayerMode == Death)) {
-      return 0;
+    if (!pVictim || pVictim->eAnimMode.ePlayerMode == Death) {
+      D2QuestDataStrc* pQuestData;
+      pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TerrorsEnd);
+      if (pQuestData) {
+        pA4Q2Data = pQuestData->pQuestSpecificData.pA4Q2;
+        pCoord = &pA4Q2Data->sVisierCoords;
+        D2Common::Units::GetCoords(pOperation->sArg.pVictim, pCoord);
+        pA4Q2Data->sVisierCoords.y += 0x10;
+        pCoord->x += 0x20;
+        CreateSealGlow(pOperation, pCoord, 5);
+      }
     }
 
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TerrorsEnd);
-    if (!pQuestData) {
-      return 0;
-    }
-
-    D2QuestDataA4Q2Strc* pA4Q2Data = pQuestData->pQuestSpecificData.pA4Q2;
-    POINT* pCoord = &pA4Q2Data->sVisierCoords;
-    D2Common::Units::GetCoords(pOperation->sArg.pVictim, pCoord);
-    pA4Q2Data->sVisierCoords.y += 0x10;
-    pCoord->x += 0x20;
-    CreateSealGlow(pOperation, pCoord, 5);
     return 0;
 }
 

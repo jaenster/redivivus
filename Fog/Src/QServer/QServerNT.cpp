@@ -331,11 +331,10 @@ int __stdcall PopAndFreeCompletedSendPacket(D2QServerClientConnectionStrc * pCli
 
     pClient->dwWriteFlags &= ~QSRV_WRITEFLAG_PENDING_IO;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pClient->clientLock);
-    if (!pMemoryToFree) {
-      return 1;
+    if (pMemoryToFree) {
+      D2_FREE_AT(pMemoryToFree, ".\\Src\\QServer\\QServerNT.cpp", 0x578);
     }
 
-    D2_FREE_AT(pMemoryToFree, ".\\Src\\QServer\\QServerNT.cpp", 0x578);
     return 1;
 }
 
@@ -660,20 +659,20 @@ DWORD __stdcall IoWorkerThreadMain(void * lpThreadParam) {
 }
 
 int __fastcall PumpIoCompletionQueues(D2QServerStrc * pQServer, uint32_t dwTimeoutMs) {
-    if (pQServer->bUseDedicatedIoWorkers) {
-      return 1;
+    SOCKET* pSVar1;
+    if (!pQServer->bUseDedicatedIoWorkers) {
+      int nWorkerIndex;
+      nWorkerIndex = 0;
+      pSVar1 = pQServer->aListenSockets;
+      do {
+        if (*pSVar1 != -1) {
+          PumpIoCompletionQueueForWorker(pQServer, nWorkerIndex, dwTimeoutMs);
+        }
+
+        nWorkerIndex++;
+        pSVar1++;
+      } while (nWorkerIndex < 4);
     }
-
-    int nWorkerIndex = 0;
-    SOCKET* pSVar1 = pQServer->aListenSockets;
-    do {
-      if (*pSVar1 != -1) {
-        PumpIoCompletionQueueForWorker(pQServer, nWorkerIndex, dwTimeoutMs);
-      }
-
-      nWorkerIndex++;
-      pSVar1++;
-    } while (nWorkerIndex < 4);
 
     return 1;
 }

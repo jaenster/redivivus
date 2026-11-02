@@ -467,12 +467,11 @@ int __fastcall SOUND_PlaySound(eD2Sounds nSoundId, D2UnitStrc * pUnit, int32_t n
     if (pUnit == pPlayerUnit_lcl) {
       pChannel->nPriorityByte += 0x50;
     }
-    if (!pUnit) {
-      return pChannel->nChannelHandle;
+    if (pUnit) {
+      D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&pChannel->pGlobal3Ref, pUnit);
+      UNIT::UnitSnd::AllocUnitSfxData(pUnit, pChannel->nChannelHandle);
     }
 
-    D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&pChannel->pGlobal3Ref, pUnit);
-    UNIT::UnitSnd::AllocUnitSfxData(pUnit, pChannel->nChannelHandle);
     return pChannel->nChannelHandle;
 }
 
@@ -1536,16 +1535,13 @@ int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nParam1, uint32_t nParam2, u
     if (nAbsDiff >= nDiff) {
       nMinDist = nDiff;
     }
-    if (nMinDist >= nWrapDist) {
-      return nWrapDist;
+    if (nMinDist < nWrapDist) {
+      nWrapDist = nAbsDiff;
+      if (nAbsDiff >= nDiff) {
+        nWrapDist = nDiff;
+      }
     }
 
-    nWrapDist = nAbsDiff;
-    if (nAbsDiff < nDiff) {
-      return nWrapDist;
-    }
-
-    nWrapDist = nDiff;
     return nWrapDist;
 }
 

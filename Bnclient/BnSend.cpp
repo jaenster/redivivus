@@ -783,26 +783,24 @@ int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestI
     if (g_pBNetReadUserData && *(int*)g_pBNetReadUserData == 1 && *(int*)((int)g_pBNetReadUserData + 4) == nKeyCount && *(int*)((int)g_pBNetReadUserData + 8) == nRequestId) {
       uint32_t pNextSrc;
       pszSrcData = (char*)((int)g_pBNetReadUserData + 0xc);
-      if ((uint32_t)nKeyCount <= 0) {
-        return 1;
+      if ((uint32_t)nKeyCount > 0) {
+        nMaxLensOffset = pnMaxLens - (int)ppszOutBufs;
+        ppszOutBuf = ppszOutBufs;
+        ppszOutBufs = (char**)nKeyCount;
+        do {
+          if (*pszSrcData != '\0') {
+            strncpy(*ppszOutBuf, pszSrcData, *(size_t*)(nMaxLensOffset + (int)ppszOutBuf));
+            (*ppszOutBuf)[*(int*)(nMaxLensOffset + (int)ppszOutBuf)] = '\0';
+          } else {
+            **ppszOutBuf = '\0';
+          }
+
+          pNextSrc = Storm::Source::SSTR::SStrLen(pszSrcData);
+          ppszOutBuf++;
+          ppszOutBufs = (char**)((int)ppszOutBufs - 1);
+          pszSrcData = pszSrcData + pNextSrc + 1;
+        } while (ppszOutBufs);
       }
-
-      nMaxLensOffset = pnMaxLens - (int)ppszOutBufs;
-      ppszOutBuf = ppszOutBufs;
-      ppszOutBufs = (char**)nKeyCount;
-      do {
-        if (*pszSrcData != '\0') {
-          strncpy(*ppszOutBuf, pszSrcData, *(size_t*)(nMaxLensOffset + (int)ppszOutBuf));
-          (*ppszOutBuf)[*(int*)(nMaxLensOffset + (int)ppszOutBuf)] = '\0';
-        } else {
-          **ppszOutBuf = '\0';
-        }
-
-        pNextSrc = Storm::Source::SSTR::SStrLen(pszSrcData);
-        ppszOutBuf++;
-        ppszOutBufs = (char**)((int)ppszOutBufs - 1);
-        pszSrcData = pszSrcData + pNextSrc + 1;
-      } while (ppszOutBufs);
 
       return 1;
     }
@@ -1055,25 +1053,22 @@ DWORD __stdcall GetDnsResults(void * lpThreadParam) {
     ppAddrList = pHostEnt->h_addr_list;
     pInAddr = (_union_1226*)*ppAddrList;
     szWriteCursor = szOutBuf;
-    if (!pInAddr) {
-      return 1;
+    if (pInAddr) {
+      do {
+        nErrorAddress = 0x7fffffff;
+        /* in_addr in for inet_ntoa */ szAddrStr = inet_ntoa((in_addr)pInAddr->S_un_b);
+        nAddrLen = Storm::Source::SSTR::SStrCopy(szWriteCursor, szAddrStr, nErrorAddress);
+        nSepLen = Storm::Source::SSTR::SStrCopy(szWriteCursor + nAddrLen, ";", 0x7fffffff);
+        ppAddrList++;
+        szWriteCursor = szWriteCursor + nAddrLen + nSepLen;
+        pInAddr = (_union_1226*)*ppAddrList;
+      } while (pInAddr);
+
+      if (szWriteCursor > szOutBuf) {
+        szWriteCursor[-1] = '\0';
+      }
     }
 
-    do {
-      nErrorAddress = 0x7fffffff;
-      /* in_addr in for inet_ntoa */ szAddrStr = inet_ntoa((in_addr)pInAddr->S_un_b);
-      nAddrLen = Storm::Source::SSTR::SStrCopy(szWriteCursor, szAddrStr, nErrorAddress);
-      nSepLen = Storm::Source::SSTR::SStrCopy(szWriteCursor + nAddrLen, ";", 0x7fffffff);
-      ppAddrList++;
-      szWriteCursor = szWriteCursor + nAddrLen + nSepLen;
-      pInAddr = (_union_1226*)*ppAddrList;
-    } while (pInAddr);
-
-    if (szWriteCursor <= szOutBuf) {
-      return 1;
-    }
-
-    szWriteCursor[-1] = '\0';
     return 1;
 }
 
@@ -1536,13 +1531,12 @@ BOOL __stdcall BNCLIENT_IsSocketConnected() {
     int nSIDState[2];
     _net_sid::SID_GetState(nSIDState);
     BOOL nReadyFlag = _net_sid::SID_GetReadyFlag();
-    if (!(!nReadyFlag && !nSIDState[0])) {
-      return 0;
-    }
-
-    LONG lSocketData = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
-    if (lSocketData) {
-      return 1;
+    if (!nReadyFlag && !nSIDState[0]) {
+      LONG lSocketData;
+      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ lSocketData = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+      if (lSocketData) {
+        return 1;
+      }
     }
 
     return 0;
@@ -1968,11 +1962,10 @@ uint32_t __thiscall BNNEWS_RoundToPowerOfTwo(D2BnNewsTableStrc * pNewsTable, uin
 }
 
 DWORD __stdcall BNNEWS_RoundUpToMultiple(DWORD dwValue, DWORD dwMultiple) {
-    if (!(dwValue % dwMultiple)) {
-      return dwValue;
+    if (dwValue % dwMultiple) {
+      dwValue += dwMultiple - dwValue % dwMultiple;
     }
 
-    dwValue += dwMultiple - dwValue % dwMultiple;
     return dwValue;
 }
 
@@ -2084,11 +2077,10 @@ void * __thiscall BNNEWS_DestroyNewsTable(void * pNewsTable, uint8_t bFreeMemory
     if (*(void**)((int)pNewsTable + 8)) {
       Storm::Source::SMem::SMemFree(*(void**)((int)pNewsTable + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
     }
-    if (!(bFreeMemory & 1)) {
-      return pNewsTable;
+    if (bFreeMemory & 1) {
+      Storm::Source::SMem::SMemFree(pNewsTable, "delete", -1, 0);
     }
 
-    Storm::Source::SMem::SMemFree(pNewsTable, "delete", -1, 0);
     return pNewsTable;
 }
 

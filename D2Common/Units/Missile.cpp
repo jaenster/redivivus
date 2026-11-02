@@ -462,19 +462,15 @@ static BOOL __stdcall HasBonusStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
         return 1;
       }
     }
-    if (!pUnit) {
-      return 0;
-    }
-
-    nItemBonusDamage = Skills::SKILLS_GetItemBonusDamage(pItem, pUnit, nullptr, 2);
-    if (!nItemBonusDamage) {
-      return 0;
-    }
-
-    DVar1 = D2_SEED_NEXT(pItem->sSeed);
-    pItem->sSeed = DVar1;
-    if ((int)(DVar1.nSeedLow % 100) < nItemBonusDamage) {
-      return 1;
+    if (pUnit) {
+      nItemBonusDamage = Skills::SKILLS_GetItemBonusDamage(pItem, pUnit, nullptr, 2);
+      if (nItemBonusDamage) {
+        DVar1 = D2_SEED_NEXT(pItem->sSeed);
+        pItem->sSeed = DVar1;
+        if ((int)(DVar1.nSeedLow % 100) < nItemBonusDamage) {
+          return 1;
+        }
+      }
     }
 
     return 0;
@@ -690,6 +686,7 @@ void __stdcall SetDamageStats(D2UnitStrc * pUnit, D2UnitStrc * pMissile, D2Missi
 
 // Returns the minimum physical damage for a missile at a given level. Resolves nMissileId and nLevel from the pUnit missile if not provided. Looks up D2MissilesTxt base MinDamage + level breakpoint bonus (MinLevDam1), optionally scales by DmgSymPerCalc calc expression, then shifts result left by HitShift. Returns 0 for non-missile units or invalid missile IDs.
 int32_t __stdcall GetMinDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t nMissileId, int32_t nLevel) {
+    D2UnitDataMissileStrc* pUnitDataMissile;
     if (pUnit && pUnit->eUnitType != UNIT_MISSILE) {
       return 0;
     }
@@ -697,7 +694,6 @@ int32_t __stdcall GetMinDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
       nMissileId = pUnit->nClassId;
     }
     if (nLevel <= 0 && pUnit) {
-      D2UnitDataMissileStrc* pUnitDataMissile;
       if (pUnit->eUnitType == UNIT_MISSILE && (pUnitDataMissile = pUnit->pUnitData.pUnitDataMissile , pUnitDataMissile != 0)) {
         nLevel = (int32_t)pUnitDataMissile->nSkillLevel;
       } else {
@@ -712,17 +708,15 @@ int32_t __stdcall GetMinDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
 
     int32_t nLevDamBonus = Skills::SKILLS_GetValueByLevelBreakpoints(nLevel, &pMissileTxt->MinLevDam1);
     int nValue = nLevDamBonus + pMissileTxt->MinDamage;
-    if (pMissileTxt->DmgSymPerCalc == -1) {
-      return nValue << (pMissileTxt->HitShift & 0x1fU);
+    if (pMissileTxt->DmgSymPerCalc != -1) {
+      uint32_t nPercent;
+      nPercent = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->DmgSymPerCalc, nMissileId, nLevel);
+      if (nPercent) {
+        nLevDamBonus = D2Client::Stats::D2ApplyPercent(nValue, nPercent, 100);
+        nValue += nLevDamBonus;
+      }
     }
 
-    uint32_t nPercent = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->DmgSymPerCalc, nMissileId, nLevel);
-    if (!nPercent) {
-      return nValue << (pMissileTxt->HitShift & 0x1fU);
-    }
-
-    nLevDamBonus = D2Client::Stats::D2ApplyPercent(nValue, nPercent, 100);
-    nValue += nLevDamBonus;
     return nValue << (pMissileTxt->HitShift & 0x1fU);
 }
 
@@ -749,17 +743,15 @@ int32_t __stdcall GetMaxDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
 
     int32_t nLevDamBonus = Skills::SKILLS_GetValueByLevelBreakpoints(nLevel, &pMissileTxt->MaxLevDam1);
     int nValue = nLevDamBonus + pMissileTxt->MaxDamage;
-    if (pMissileTxt->DmgSymPerCalc == -1) {
-      return nValue << (pMissileTxt->HitShift & 0x1fU);
+    if (pMissileTxt->DmgSymPerCalc != -1) {
+      uint32_t nPercent;
+      nPercent = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->DmgSymPerCalc, nMissileId, nLevel);
+      if (nPercent) {
+        nLevDamBonus = D2Client::Stats::D2ApplyPercent(nValue, nPercent, 100);
+        nValue += nLevDamBonus;
+      }
     }
 
-    uint32_t nPercent = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->DmgSymPerCalc, nMissileId, nLevel);
-    if (!nPercent) {
-      return nValue << (pMissileTxt->HitShift & 0x1fU);
-    }
-
-    nLevDamBonus = D2Client::Stats::D2ApplyPercent(nValue, nPercent, 100);
-    nValue += nLevDamBonus;
     return nValue << (pMissileTxt->HitShift & 0x1fU);
 }
 
@@ -795,17 +787,15 @@ int32_t __stdcall GetMinElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
 
     int32_t nLevDamBonus = Skills::SKILLS_GetValueByLevelBreakpoints(nLevel, &pMissileTxt->MinELev1);
     int nValue = nLevDamBonus + pMissileTxt->EMin;
-    if (pMissileTxt->EDmgSymPerCalc == -1) {
-      return nValue << (pMissileTxt->HitShift & 0x1fU);
+    if (pMissileTxt->EDmgSymPerCalc != -1) {
+      uint32_t nPercent;
+      nPercent = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->EDmgSymPerCalc, nMissileId, nLevel);
+      if (nPercent) {
+        nLevDamBonus = D2Client::Stats::D2ApplyPercent(nValue, nPercent, 100);
+        nValue += nLevDamBonus;
+      }
     }
 
-    uint32_t nPercent = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->EDmgSymPerCalc, nMissileId, nLevel);
-    if (!nPercent) {
-      return nValue << (pMissileTxt->HitShift & 0x1fU);
-    }
-
-    nLevDamBonus = D2Client::Stats::D2ApplyPercent(nValue, nPercent, 100);
-    nValue += nLevDamBonus;
     return nValue << (pMissileTxt->HitShift & 0x1fU);
 }
 
@@ -832,17 +822,15 @@ int32_t __stdcall GetMaxElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
 
     int32_t nLevDamBonus = Skills::SKILLS_GetValueByLevelBreakpoints(nLevel, &pMissileTxt->MaxELev1);
     int nValue = nLevDamBonus + pMissileTxt->EMax;
-    if (pMissileTxt->EDmgSymPerCalc == -1) {
-      return nValue << (pMissileTxt->HitShift & 0x1fU);
+    if (pMissileTxt->EDmgSymPerCalc != -1) {
+      uint32_t nPercent;
+      nPercent = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->EDmgSymPerCalc, nMissileId, nLevel);
+      if (nPercent) {
+        nLevDamBonus = D2Client::Stats::D2ApplyPercent(nValue, nPercent, 100);
+        nValue += nLevDamBonus;
+      }
     }
 
-    uint32_t nPercent = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->EDmgSymPerCalc, nMissileId, nLevel);
-    if (!nPercent) {
-      return nValue << (pMissileTxt->HitShift & 0x1fU);
-    }
-
-    nLevDamBonus = D2Client::Stats::D2ApplyPercent(nValue, nPercent, 100);
-    nValue += nLevDamBonus;
     return nValue << (pMissileTxt->HitShift & 0x1fU);
 }
 
@@ -989,20 +977,18 @@ int32_t __stdcall GetSpecialParamValue(D2UnitStrc * pUnit, D2UnitStrc * pOwner, 
 }
 
 int __fastcall MISSILE_Min(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4) {
-    if (nLeft < nRight) {
-      return nLeft;
+    if (nLeft >= nRight) {
+      nLeft = nRight;
     }
 
-    nLeft = nRight;
     return nLeft;
 }
 
 int __fastcall MISSILE_Max(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4) {
-    if (nLeft > nRight) {
-      return nLeft;
+    if (nLeft <= nRight) {
+      nLeft = nRight;
     }
 
-    nLeft = nRight;
     return nLeft;
 }
 

@@ -21,11 +21,10 @@ uint32_t __stdcall SSYSTEM_Shutdown(uint32_t nShutdownCode) {
 
     SSYSTEM_SetShutdownFlag(1);
     SLog::SLogFlushAll();
-    if (!fpSSystemShutdownCallback) {
-      return 0;
+    if (fpSSystemShutdownCallback) {
+      (*fpSSystemShutdownCallback)(nShutdownCode);
     }
 
-    (*fpSSystemShutdownCallback)(nShutdownCode);
     return 0;
 }
 
@@ -164,20 +163,18 @@ uint32_t __thiscall SSYSTEM_ListOffsetToPointer(int * pNode, int * pBase) {
     if ((int)nOffset < 0) {
       return ~nOffset;
     }
-    if ((int)pBase >= 0) {
-      return nOffset + (int)pBase;
+    if ((int)pBase < 0) {
+      pBase = (int*)((int)pNode - *(int*)(*pNode + 4));
     }
 
-    pBase = (int*)((int)pNode - *(int*)(*pNode + 4));
     return nOffset + (int)pBase;
 }
 
 int32_t __thiscall SSYSTEM_ListGetPointer(int32_t pList, int32_t pNode) {
-    if (pNode) {
-      return pNode;
+    if (!pNode) {
+      pNode = pList + 4;
     }
 
-    pNode = pList + 4;
     return pNode;
 }
 
@@ -239,11 +236,10 @@ void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_
 }
 
 uint32_t __thiscall SSYSTEM_ListGetNext(int32_t pList, int32_t pNode) {
-    if (pNode) {
-      return (int)*(uint32_t*)(pNode + 4) <= 0 ? 0 : *(uint32_t*)(pNode + 4);
+    if (!pNode) {
+      pNode = pList + 4;
     }
 
-    pNode = pList + 4;
     return (int)*(uint32_t*)(pNode + 4) <= 0 ? 0 : *(uint32_t*)(pNode + 4);
 }
 
@@ -343,11 +339,10 @@ int * * __thiscall SSYSTEM_ListAllocNode(int * * pList, int32_t nInsertMode, int
     } else {
       pNode = 0;
     }
-    if (!nInsertMode) {
-      return pNode;
+    if (nInsertMode) {
+      SSYSTEM_ListUnlinkAndInsert(pList, pNode, nInsertMode, nullptr);
     }
 
-    SSYSTEM_ListUnlinkAndInsert(pList, pNode, nInsertMode, nullptr);
     return pNode;
 }
 
@@ -368,11 +363,10 @@ int * __thiscall SSYSTEM_ListFreeNode(int * pNode, uint8_t bFreeMemory) {
       *pNode = 0;
       pNode[1] = 0;
     }
-    if (!(bFreeMemory & 1)) {
-      return pNode;
+    if (bFreeMemory & 1) {
+      SMem::SMemFree(pNode, "delete", -1, 0);
     }
 
-    SMem::SMemFree(pNode, "delete", -1, 0);
     return pNode;
 }
 
@@ -498,11 +492,10 @@ void __thiscall LINKEDLIST_InsertNode(StormLinkedListStrc * pList, void * pNewIt
 int32_t __thiscall LINKEDLIST_GetNodeAt(int * pList, int32_t nOffset) {
     StormLinkStrc* pListNode = LINKEDLIST_GetOffset((StormLinkedListStrc*)pList, (void*)nOffset);
     int nNodeValue = pListNode->pNext;
-    if (nNodeValue > 0) {
-      return nNodeValue;
+    if (nNodeValue <= 0) {
+      nNodeValue = 0;
     }
 
-    nNodeValue = 0;
     return nNodeValue;
 }
 
@@ -552,21 +545,19 @@ void * __thiscall LINKEDLIST_AllocAndInsertNode(StormLinkedListStrc * pList, int
     } else {
       pNewNode = 0;
     }
-    if (!nInsertMode) {
-      return pNewNode;
+    if (nInsertMode) {
+      LINKEDLIST_InsertNode(pList, pNewNode, nInsertMode, nullptr);
     }
 
-    LINKEDLIST_InsertNode(pList, pNewNode, nInsertMode, nullptr);
     return pNewNode;
 }
 
 FILE * __thiscall LINKEDLIST_DetachNode(FILE * pFile, uint8_t bFree) {
     TSLink_TMESSAGESOURCE_Unlink((StormLinkStrc*)pFile);
-    if (!(bFree & 1)) {
-      return pFile;
+    if (bFree & 1) {
+      Fog::Engine::Application::MISC_OperatorDeleteShim(pFile);
     }
 
-    Fog::Engine::Application::MISC_OperatorDeleteShim(pFile);
     return pFile;
 }
 

@@ -149,11 +149,10 @@ uint16_t __fastcall DATATBLS_LookupStringId(char * szKey) {
     uint16_t* pwszResult = (uint16_t*)szKey;
     uint32_t nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)szKey, &pwszResult);
     uint16_t uVar1 = (uint16_t)nStringId;
-    if (uVar1) {
-      return uVar1;
+    if (!uVar1) {
+      uVar1 = 0x1506;
     }
 
-    uVar1 = 0x1506;
     return uVar1;
 }
 
@@ -166,11 +165,10 @@ uint32_t __stdcall DATATBLS_GetCompCodeByIndex(int32_t nIndex) {
 }
 
 DWORD __stdcall TXT_Experience_GetLineLevel(int32_t ePlayerClass, int32_t nLevel) {
-    if (!(ePlayerClass < 0 || ePlayerClass >= 7)) {
-      return sgtDataTable.pTxtExperience[nLevel + 1].Class[ePlayerClass];
+    if (ePlayerClass < 0 || ePlayerClass >= 7) {
+      ePlayerClass = 0;
     }
 
-    ePlayerClass = 0;
     return sgtDataTable.pTxtExperience[nLevel + 1].Class[ePlayerClass];
 }
 
@@ -361,11 +359,10 @@ D2AnimDataStrc * __stdcall TXT_AnimTbls_Get() {
 
 D2DifficultyLevelsTxt * __stdcall GetDifficultyLevels(uint32_t nDifficulty) {
     DWORD nIndex = (int)nDifficulty <= 0 ? 0 : nDifficulty;
-    if ((int)nIndex < (int)(sgtDataTable.nTxtDifficultyLevelsSize - 1U)) {
-      return sgtDataTable.pTxtDifficultyLevels + nIndex;
+    if ((int)nIndex >= (int)(sgtDataTable.nTxtDifficultyLevelsSize - 1U)) {
+      nIndex = sgtDataTable.nTxtDifficultyLevelsSize - 1U;
     }
 
-    nIndex = sgtDataTable.nTxtDifficultyLevelsSize - 1U;
     return sgtDataTable.pTxtDifficultyLevels + nIndex;
 }
 

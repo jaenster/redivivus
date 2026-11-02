@@ -311,30 +311,27 @@ void __stdcall CHATDLG_EnqueueClearMessage() {
 }
 
 int __fastcall CHATDLG_AppendTextToTextBox(uint16_t * wszText, int32_t nLineStyle) {
-    if (!gpChatMessagesTextBox) {
-      return 1;
+    if (gpChatMessagesTextBox) {
+      D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszText, nLineStyle, false, 1);
     }
 
-    D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszText, nLineStyle, false, 1);
     return 1;
 }
 
 uint32_t __fastcall CHATDLG_AppendTextToTextBox_ForComCallback(uint16_t * wszText, int32_t nLineStyle) {
-    if (!gpChatMessagesTextBox) {
-      return 1;
+    if (gpChatMessagesTextBox) {
+      D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszText, nLineStyle, false, 1);
     }
 
-    D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszText, nLineStyle, false, 1);
     return 1;
 }
 
 int __fastcall FORMS_DisplayBattleNetNews(uint16_t * wszText) {
-    if (!BattleNetNews) {
-      return 1;
+    if (BattleNetNews) {
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(BattleNetNews);
+      D2Win::Src::D2WinTextBox::SetText(BattleNetNews, wszText, 3, false, 0);
     }
 
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(BattleNetNews);
-    D2Win::Src::D2WinTextBox::SetText(BattleNetNews, wszText, 3, false, 0);
     return 1;
 }
 
@@ -404,45 +401,42 @@ BOOL CHATDLG_HandleNotifyCommand(char * szCommand, char * szInput) {
     if (!nCmpResult && (szInput[(int)pcCmdEnd - (int)(szCommand + 1)] == ' ' || szInput[(int)pcCmdEnd - (int)(szCommand + 1)] == '\0')) {
       int i;
       nCmpResult = someStrCompare(szInput, szCommand);
-      if (nCmpResult) {
-        return 1;
-      }
-
-      gnNotifyEnabled = (uint32_t)!gnNotifyEnabled;
-      pwszZeroFill = wszMessage;
-      for (i = 0x80; i; i--) {
-        pwszZeroFill[0] = L'\0';
-        pwszZeroFill[1] = L'\0';
-        pwszZeroFill += 2;
-      }
-
-      if (gnNotifyEnabled) {
-        pcCmdEnd = "Player entering/leaving notifications are enabled.";
-        pszMsgDst = szMessage;
-        for (i = 0xc; i; i--) {
-          *(uint32_t*)pszMsgDst = *(uint32_t*)pcCmdEnd;
-          pcCmdEnd += 4;
-          pszMsgDst += 4;
+      if (!nCmpResult) {
+        gnNotifyEnabled = (uint32_t)!gnNotifyEnabled;
+        pwszZeroFill = wszMessage;
+        for (i = 0x80; i; i--) {
+          pwszZeroFill[0] = L'\0';
+          pwszZeroFill[1] = L'\0';
+          pwszZeroFill += 2;
         }
 
-        *(uint16_t*)pszMsgDst = *(uint16_t*)pcCmdEnd;
-        pszMsgDst[2] = pcCmdEnd[2];
-      } else {
-        pcCmdEnd = "Player entering/leaving notifications are disabled.";
-        pszMsgDst = szMessage;
-        for (i = 0xd; i; i--) {
-          *(uint32_t*)pszMsgDst = *(uint32_t*)pcCmdEnd;
-          pcCmdEnd += 4;
-          pszMsgDst += 4;
+        if (gnNotifyEnabled) {
+          pcCmdEnd = "Player entering/leaving notifications are enabled.";
+          pszMsgDst = szMessage;
+          for (i = 0xc; i; i--) {
+            *(uint32_t*)pszMsgDst = *(uint32_t*)pcCmdEnd;
+            pcCmdEnd += 4;
+            pszMsgDst += 4;
+          }
+
+          *(uint16_t*)pszMsgDst = *(uint16_t*)pcCmdEnd;
+          pszMsgDst[2] = pcCmdEnd[2];
+        } else {
+          pcCmdEnd = "Player entering/leaving notifications are disabled.";
+          pszMsgDst = szMessage;
+          for (i = 0xd; i; i--) {
+            *(uint32_t*)pszMsgDst = *(uint32_t*)pcCmdEnd;
+            pcCmdEnd += 4;
+            pszMsgDst += 4;
+          }
+        }
+
+        D2Lang::UTF8_ConvertToWideChar(wszMessage, szMessage, 0x200);
+        if (gpChatMessagesTextBox) {
+          D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszMessage, 3, false, 1);
         }
       }
 
-      D2Lang::UTF8_ConvertToWideChar(wszMessage, szMessage, 0x200);
-      if (!gpChatMessagesTextBox) {
-        return 1;
-      }
-
-      D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszMessage, 3, false, 1);
       return 1;
     }
 
@@ -582,11 +576,10 @@ int __stdcall CHATDLG_DestroyListCallback(uint32_t dwParam) {
 }
 
 uint32_t __stdcall CHATDLG_InvokeCallbackIfSet(D2ControlMsg * pControlMsg) {
-    if (!gpfnChatDlgCallback) {
-      return 1;
+    if (gpfnChatDlgCallback) {
+      (*gpfnChatDlgCallback)((uint32_t)pControlMsg);
     }
 
-    (*gpfnChatDlgCallback)((uint32_t)pControlMsg);
     return 1;
 }
 
@@ -657,7 +650,7 @@ void __fastcall CHATDLG_RequestLadderRank(char * szText, int32_t nParam, int32_t
 // Provenance: asm 0043ece0 (RET 4); only pointer is the OnPress field of form 0070e610.
 BOOL __stdcall CHATDLG_OnPressLadderPageUp(D2ControlMsg * pControlMsg) {
     g_nLadderFilterMode = gnLadderCurrentFilterMode;
-    gnLadderBoardSelectedRank = (int)(gnLadderBoardSelectedRank - gnLadderScrollPageSize) <= 0 ? 0 : gnLadderBoardSelectedRank - gnLadderScrollPageSize;
+    gnLadderBoardSelectedRank = gnLadderBoardSelectedRank - gnLadderScrollPageSize <= 0 ? 0 : gnLadderBoardSelectedRank - gnLadderScrollPageSize;
     return 1;
 }
 
@@ -782,16 +775,16 @@ static int32_t __stdcall CHATDLG_GetLadderFilterForTab(int32_t nLadderTab, uint3
 BOOL __stdcall CHATDLG_OnPressLadderOverall(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnOverall, 1);
-    if (!(g_nLadderFilterMode != 9 && g_nLadderFilterMode)) {
-      return 1;
+    if (g_nLadderFilterMode != 9 && g_nLadderFilterMode) {
+      int32_t nFilterMode;
+      gnLadderListRowCount = 1000;
+      CHATDLG_ClearLadderBoard();
+      gbLadderFilterPending = 1;
+      nFilterMode = CHATDLG_GetLadderFilterForTab(0, (uint32_t)g_nLadderFilterMode);
+      g_nLadderFilterMode = (uint8_t)nFilterMode;
+      gnLadderBoardSelectedRank = 0;
     }
 
-    gnLadderListRowCount = 1000;
-    CHATDLG_ClearLadderBoard();
-    gbLadderFilterPending = 1;
-    int32_t nFilterMode = CHATDLG_GetLadderFilterForTab(0, (uint32_t)g_nLadderFilterMode);
-    g_nLadderFilterMode = (uint8_t)nFilterMode;
-    gnLadderBoardSelectedRank = 0;
     return 1;
 }
 
@@ -800,16 +793,16 @@ BOOL __stdcall CHATDLG_OnPressLadderOverall(D2ControlMsg * pControlMsg) {
 BOOL __stdcall CHATDLG_OnPressLadderAmazon(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnAmazon, 1);
-    if (!(g_nLadderFilterMode != 10 && g_nLadderFilterMode != 1)) {
-      return 1;
+    if (g_nLadderFilterMode != 10 && g_nLadderFilterMode != 1) {
+      int32_t nFilterMode;
+      gnLadderListRowCount = 200;
+      CHATDLG_ClearLadderBoard();
+      gbLadderFilterPending = 1;
+      nFilterMode = CHATDLG_GetLadderFilterForTab(1, (uint32_t)g_nLadderFilterMode);
+      g_nLadderFilterMode = (uint8_t)nFilterMode;
+      gnLadderBoardSelectedRank = 0;
     }
 
-    gnLadderListRowCount = 200;
-    CHATDLG_ClearLadderBoard();
-    gbLadderFilterPending = 1;
-    int32_t nFilterMode = CHATDLG_GetLadderFilterForTab(1, (uint32_t)g_nLadderFilterMode);
-    g_nLadderFilterMode = (uint8_t)nFilterMode;
-    gnLadderBoardSelectedRank = 0;
     return 1;
 }
 
@@ -818,16 +811,16 @@ BOOL __stdcall CHATDLG_OnPressLadderAmazon(D2ControlMsg * pControlMsg) {
 BOOL __stdcall CHATDLG_OnPressLadderSorceress(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnSorceress, 1);
-    if (!(g_nLadderFilterMode != 0xb && g_nLadderFilterMode != 2)) {
-      return 1;
+    if (g_nLadderFilterMode != 0xb && g_nLadderFilterMode != 2) {
+      int32_t nFilterMode;
+      gnLadderListRowCount = 200;
+      CHATDLG_ClearLadderBoard();
+      gbLadderFilterPending = 1;
+      nFilterMode = CHATDLG_GetLadderFilterForTab(2, (uint32_t)g_nLadderFilterMode);
+      g_nLadderFilterMode = (uint8_t)nFilterMode;
+      gnLadderBoardSelectedRank = 0;
     }
 
-    gnLadderListRowCount = 200;
-    CHATDLG_ClearLadderBoard();
-    gbLadderFilterPending = 1;
-    int32_t nFilterMode = CHATDLG_GetLadderFilterForTab(2, (uint32_t)g_nLadderFilterMode);
-    g_nLadderFilterMode = (uint8_t)nFilterMode;
-    gnLadderBoardSelectedRank = 0;
     return 1;
 }
 
@@ -836,16 +829,16 @@ BOOL __stdcall CHATDLG_OnPressLadderSorceress(D2ControlMsg * pControlMsg) {
 BOOL __stdcall CHATDLG_OnPressLadderNecromancer(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnNecromancer, 1);
-    if (!(g_nLadderFilterMode != 0xc && g_nLadderFilterMode != 3)) {
-      return 1;
+    if (g_nLadderFilterMode != 0xc && g_nLadderFilterMode != 3) {
+      int32_t nFilterMode;
+      gnLadderListRowCount = 200;
+      CHATDLG_ClearLadderBoard();
+      gbLadderFilterPending = 1;
+      nFilterMode = CHATDLG_GetLadderFilterForTab(3, (uint32_t)g_nLadderFilterMode);
+      g_nLadderFilterMode = (uint8_t)nFilterMode;
+      gnLadderBoardSelectedRank = 0;
     }
 
-    gnLadderListRowCount = 200;
-    CHATDLG_ClearLadderBoard();
-    gbLadderFilterPending = 1;
-    int32_t nFilterMode = CHATDLG_GetLadderFilterForTab(3, (uint32_t)g_nLadderFilterMode);
-    g_nLadderFilterMode = (uint8_t)nFilterMode;
-    gnLadderBoardSelectedRank = 0;
     return 1;
 }
 
@@ -854,16 +847,16 @@ BOOL __stdcall CHATDLG_OnPressLadderNecromancer(D2ControlMsg * pControlMsg) {
 BOOL __stdcall CHATDLG_OnPressLadderPaladin(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnPaladin, 1);
-    if (!(g_nLadderFilterMode != 0xd && g_nLadderFilterMode != 4)) {
-      return 1;
+    if (g_nLadderFilterMode != 0xd && g_nLadderFilterMode != 4) {
+      int32_t nFilterMode;
+      gnLadderListRowCount = 200;
+      CHATDLG_ClearLadderBoard();
+      gbLadderFilterPending = 1;
+      nFilterMode = CHATDLG_GetLadderFilterForTab(4, (uint32_t)g_nLadderFilterMode);
+      g_nLadderFilterMode = (uint8_t)nFilterMode;
+      gnLadderBoardSelectedRank = 0;
     }
 
-    gnLadderListRowCount = 200;
-    CHATDLG_ClearLadderBoard();
-    gbLadderFilterPending = 1;
-    int32_t nFilterMode = CHATDLG_GetLadderFilterForTab(4, (uint32_t)g_nLadderFilterMode);
-    g_nLadderFilterMode = (uint8_t)nFilterMode;
-    gnLadderBoardSelectedRank = 0;
     return 1;
 }
 
@@ -872,16 +865,16 @@ BOOL __stdcall CHATDLG_OnPressLadderPaladin(D2ControlMsg * pControlMsg) {
 BOOL __stdcall CHATDLG_OnPressLadderBarbarian(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnBarbarian, 1);
-    if (!(g_nLadderFilterMode != 0xe && g_nLadderFilterMode != 5)) {
-      return 1;
+    if (g_nLadderFilterMode != 0xe && g_nLadderFilterMode != 5) {
+      int32_t nFilterMode;
+      gnLadderListRowCount = 200;
+      CHATDLG_ClearLadderBoard();
+      gbLadderFilterPending = 1;
+      nFilterMode = CHATDLG_GetLadderFilterForTab(5, (uint32_t)g_nLadderFilterMode);
+      g_nLadderFilterMode = (uint8_t)nFilterMode;
+      gnLadderBoardSelectedRank = 0;
     }
 
-    gnLadderListRowCount = 200;
-    CHATDLG_ClearLadderBoard();
-    gbLadderFilterPending = 1;
-    int32_t nFilterMode = CHATDLG_GetLadderFilterForTab(5, (uint32_t)g_nLadderFilterMode);
-    g_nLadderFilterMode = (uint8_t)nFilterMode;
-    gnLadderBoardSelectedRank = 0;
     return 1;
 }
 
@@ -890,16 +883,16 @@ BOOL __stdcall CHATDLG_OnPressLadderBarbarian(D2ControlMsg * pControlMsg) {
 BOOL __stdcall CHATDLG_OnPressLadderDruid(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnDruid, 1);
-    if (!(g_nLadderFilterMode != 0xf && g_nLadderFilterMode != 6)) {
-      return 1;
+    if (g_nLadderFilterMode != 0xf && g_nLadderFilterMode != 6) {
+      int32_t nFilterMode;
+      gnLadderListRowCount = 200;
+      CHATDLG_ClearLadderBoard();
+      gbLadderFilterPending = 1;
+      nFilterMode = CHATDLG_GetLadderFilterForTab(6, (uint32_t)g_nLadderFilterMode);
+      g_nLadderFilterMode = (uint8_t)nFilterMode;
+      gnLadderBoardSelectedRank = 0;
     }
 
-    gnLadderListRowCount = 200;
-    CHATDLG_ClearLadderBoard();
-    gbLadderFilterPending = 1;
-    int32_t nFilterMode = CHATDLG_GetLadderFilterForTab(6, (uint32_t)g_nLadderFilterMode);
-    g_nLadderFilterMode = (uint8_t)nFilterMode;
-    gnLadderBoardSelectedRank = 0;
     return 1;
 }
 
@@ -908,16 +901,16 @@ BOOL __stdcall CHATDLG_OnPressLadderDruid(D2ControlMsg * pControlMsg) {
 BOOL __stdcall CHATDLG_OnPressLadderAssassin(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnAssassin, 1);
-    if (!(g_nLadderFilterMode != 0x10 && g_nLadderFilterMode != 7)) {
-      return 1;
+    if (g_nLadderFilterMode != 0x10 && g_nLadderFilterMode != 7) {
+      int32_t nFilterMode;
+      gnLadderListRowCount = 200;
+      CHATDLG_ClearLadderBoard();
+      gbLadderFilterPending = 1;
+      nFilterMode = CHATDLG_GetLadderFilterForTab(7, (uint32_t)g_nLadderFilterMode);
+      g_nLadderFilterMode = (uint8_t)nFilterMode;
+      gnLadderBoardSelectedRank = 0;
     }
 
-    gnLadderListRowCount = 200;
-    CHATDLG_ClearLadderBoard();
-    gbLadderFilterPending = 1;
-    int32_t nFilterMode = CHATDLG_GetLadderFilterForTab(7, (uint32_t)g_nLadderFilterMode);
-    g_nLadderFilterMode = (uint8_t)nFilterMode;
-    gnLadderBoardSelectedRank = 0;
     return 1;
 }
 
@@ -963,11 +956,10 @@ int __stdcall CHATDLG_PollUserProfileReply(int nFrameIndex) {
     anBufferSizes[1] = 0x28;
     anBufferSizes[2] = 200;
     int bReplyStored = pNetworkUnknown->pfnGetStoredReadUserData(3, 1, gapszProfileReadBuffers, (int)anBufferSizes);
-    if (!(bReplyStored || gbChatOptionButtonState)) {
-      return 1;
+    if (bReplyStored || gbChatOptionButtonState) {
+      D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     }
 
-    D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;
 }
 
@@ -1154,28 +1146,25 @@ int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char 
     if (*szText == '\x0e') {
       uint16_t* pwszInput;
       pwszInput = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpChatDlgInputEditBox->sControl);
-      if (!(pwszInput && gpCurrentChatRoomContext)) {
-        return 0;
+      if (pwszInput && gpCurrentChatRoomContext) {
+        OOGUtilities::OOGUTIL_CopyChannelName((char*)((int)gpCurrentChatRoomContext + 4), szChannelName);
+        Fog::File::CONTAINER_InitializeBuffer(wszResult, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+        D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szInputText, (uint16_t*)pwszInput, 0x100);
+        pcInputEnd = szInputText;
+        pcInputEnd = pcInputEnd + strlen(pcInputEnd) + 1;
+        pcChannelEnd = szChannelName;
+        pcChannelEnd = pcChannelEnd + strlen(pcChannelEnd) + 1;
+        if ((int)(pcInputEnd + (int)(pcChannelEnd + (-(int)(szChannelName + 1) - (int)(szInputText + 1)))) <= 0xff) {
+          strncpy(szArgPrefix, szInputText, nSize);
+          szArgPrefix[nSize] = '\0';
+          strncpy(szArgRemainder, szInputText + nSize, (size_t)(pcInputEnd + (-nSize - (int)(szInputText + 1))));
+          szArgRemainder[(int)(pcInputEnd + (-nSize - (int)(szInputText + 1)))] = '\0';
+          sprintf(szInputText, "%s%s%s", szArgPrefix, szChannelName, szArgRemainder);
+          D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszResult, szInputText, 0x100);
+          D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpChatDlgInputEditBox, wszResult);
+        }
       }
 
-      OOGUtilities::OOGUTIL_CopyChannelName((char*)((int)gpCurrentChatRoomContext + 4), szChannelName);
-      Fog::File::CONTAINER_InitializeBuffer(wszResult, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szInputText, (uint16_t*)pwszInput, 0x100);
-      pcInputEnd = szInputText;
-      pcInputEnd = pcInputEnd + strlen(pcInputEnd) + 1;
-      pcChannelEnd = szChannelName;
-      pcChannelEnd = pcChannelEnd + strlen(pcChannelEnd) + 1;
-      if ((int)(pcInputEnd + (int)(pcChannelEnd + (-(int)(szChannelName + 1) - (int)(szInputText + 1)))) > 0xff) {
-        return 0;
-      }
-
-      strncpy(szArgPrefix, szInputText, nSize);
-      szArgPrefix[nSize] = '\0';
-      strncpy(szArgRemainder, szInputText + nSize, (size_t)(pcInputEnd + (-nSize - (int)(szInputText + 1))));
-      szArgRemainder[(int)(pcInputEnd + (-nSize - (int)(szInputText + 1)))] = '\0';
-      sprintf(szInputText, "%s%s%s", szArgPrefix, szChannelName, szArgRemainder);
-      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszResult, szInputText, 0x100);
-      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpChatDlgInputEditBox, wszResult);
       return 0;
     }
     if (*szText == '\t') {
@@ -1520,22 +1509,20 @@ BOOL __stdcall CHATDLG_OnTimerRequestLadderData(D2ControlMsg * pControlMsg) {
     static uint32_t gnChatRoomListPrevSelectedBase = -0x1; D2_STATIC_GUARD(gnChatRoomListPrevSelectedBase, "D2Multi::ChatDlg::CHATDLG_OnTimerRequestLadderData::gnChatRoomListPrevSelectedBase");
 
     DWORD DVar1 = GetTickCount();
-    if (!(DVar1 > gdwLadderRankRequestTimeout && g_pLadderBoardTextBox)) {
-      return 1;
+    if (DVar1 > gdwLadderRankRequestTimeout && g_pLadderBoardTextBox) {
+      BOOL BVar2;
+      BVar2 = CHATDLG_UpdateChatRoomList();
+      if ((BVar2 || gbLadderFilterPending) && (gnLadderScrollPos != gnLadderBoardSelectedRank || gnChatRoomListSelectedBase != gnChatRoomListPrevSelectedBase)) {
+        gnLadderCurrentFilterMode = g_nLadderFilterMode;
+        gnLadderRequestedCharIndex = gnLadderBoardSelectedRank;
+        D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x11_RequestLadderData(g_nLadderFilterMode, (uint16_t)gnChatRoomListSelectedBase);
+        DVar1 = GetTickCount();
+        gdwLadderRankRequestTimeout = DVar1 + 1000;
+        gnLadderScrollPos = gnLadderRequestedCharIndex;
+        gnChatRoomListPrevSelectedBase = gnChatRoomListSelectedBase;
+      }
     }
 
-    BOOL BVar2 = CHATDLG_UpdateChatRoomList();
-    if (!((BVar2 || gbLadderFilterPending) && (gnLadderScrollPos != gnLadderBoardSelectedRank || gnChatRoomListSelectedBase != gnChatRoomListPrevSelectedBase))) {
-      return 1;
-    }
-
-    gnLadderCurrentFilterMode = g_nLadderFilterMode;
-    gnLadderRequestedCharIndex = gnLadderBoardSelectedRank;
-    D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x11_RequestLadderData(g_nLadderFilterMode, (uint16_t)gnChatRoomListSelectedBase);
-    DVar1 = GetTickCount();
-    gdwLadderRankRequestTimeout = DVar1 + 1000;
-    gnLadderScrollPos = gnLadderRequestedCharIndex;
-    gnChatRoomListPrevSelectedBase = gnChatRoomListSelectedBase;
     return 1;
 }
 

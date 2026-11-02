@@ -830,13 +830,11 @@ static uint32_t QUESTLOG_GetDrawPosition(int32_t nBorderType) {
     if (nBorderType != 2) {
       return nResolutionMode_lcl != 2 ? 2 : 0;
     }
-    if (nResolutionMode_lcl == 2) {
-      return 1;
-    }
-
-    bUIFlag = ui::GetUIFlag(UI_STATSCREEN);
-    if (!bUIFlag) {
-      return 3;
+    if (nResolutionMode_lcl != 2) {
+      bUIFlag = ui::GetUIFlag(UI_STATSCREEN);
+      if (!bUIFlag) {
+        return 3;
+      }
     }
 
     return 1;
@@ -1211,13 +1209,12 @@ uint8_t __stdcall QUESTLOG_GetZooSpawnFlag() {
 }
 
 bool QUESTLOG_FindZooDummyMonster() {
-    if (gQuestLog.bZooMonsterSpawned == '\0') {
-      return false;
-    }
-
-    D2UnitStrc* pMonster = UNIT::Player::UNITS_FindServerSideUnit(gQuestLog.nZooMonsterGUID, UNIT_MONSTER);
-    if (pMonster) {
-      return true;
+    if (gQuestLog.bZooMonsterSpawned != '\0') {
+      D2UnitStrc* pMonster;
+      pMonster = UNIT::Player::UNITS_FindServerSideUnit(gQuestLog.nZooMonsterGUID, UNIT_MONSTER);
+      if (pMonster) {
+        return true;
+      }
     }
 
     return false;
